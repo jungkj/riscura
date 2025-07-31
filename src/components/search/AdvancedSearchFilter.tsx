@@ -629,14 +629,14 @@ export function AdvancedSearchFilter({
             <DaisyCard>
               <DaisyCardHeader className="pb-3">
                 <DaisyCardTitle className="text-lg">Advanced Search & Filters</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 {/* Add New Filter */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <DaisySelect value={newFilter.field} onValueChange={(value) => setNewFilter({...newFilter, field: value})}>
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select field" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {searchableFields.map(field => (
                         <DaisySelectItem key={field.key} value={field.key}>
@@ -649,7 +649,7 @@ export function AdvancedSearchFilter({
                   <DaisySelect value={newFilter.operator} onValueChange={(value) => setNewFilter({...newFilter, operator: value as any})}>
                     <DaisySelectTrigger>
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="contains">Contains</SelectItem>
                       <DaisySelectItem value="equals">Equals</SelectItem>
@@ -724,7 +724,7 @@ export function AdvancedSearchFilter({
                     </div>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         )}

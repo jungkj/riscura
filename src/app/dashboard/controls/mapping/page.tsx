@@ -135,7 +135,7 @@ export default function ControlsMappingPage() {
                     <span className="text-[#2C1810] font-medium">{framework.coverage}%</span>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ))}
         </motion.div>
@@ -228,7 +228,7 @@ export default function ControlsMappingPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </Suspense>

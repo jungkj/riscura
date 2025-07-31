@@ -27,12 +27,13 @@ export default function SimpleOAuthTest() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
         <div className="text-lg">Loading...</div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

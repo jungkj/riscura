@@ -45,8 +45,8 @@ export const RiskByCategory: React.FC = () => {
     <DaisyCard>
       <DaisyCardHeader>
         <DaisyCardTitle>Risk by Category</DaisyCardTitle>
-      
-      <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -69,7 +69,7 @@ export const RiskByCategory: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

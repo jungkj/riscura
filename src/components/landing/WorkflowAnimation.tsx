@@ -192,7 +192,7 @@ const WorkflowAnimation = () => {
                         <Sparkles className="w-5 h-5 text-yellow-500 mx-auto animate-pulse" />
                       </motion.div>
                     )}
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
                 {/* Arrow connector */}

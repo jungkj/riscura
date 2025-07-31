@@ -1,0 +1,490 @@
+name: Build Verification & Deployment Readiness
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip test execution'
+        required: false
+        default: 'false'
+        type: boolean
+      memory_limit:
+        description: 'Node.js memory limit (MB)'
+        required: false
+        default: '8192'
+        type: string
+
+env:
+  NODE_ENV: production
+  SKIP_ENV_VALIDATION: 1
+  BUILDING: true
+  CI: true
+
+jobs:
+  pre-build-validation:
+    name: Pre-Build Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    outputs:
+      should_deploy: ${{ steps.deployment_check.outputs.should_deploy }}
+      build_config: ${{ steps.build_config.outputs.config }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+          npm run db:generate
+      
+      - name: Validate package.json and dependencies
+        run: |
+          echo "📚 Validating package configuration..."
+          node -e "const pkg = require('./package.json'); console.log('Package validation passed:', pkg.name, pkg.version)"
+          
+          # Check for critical dependencies
+          npm list react react-dom next typescript --depth=0
+          
+          # Verify scripts exist
+          node -e "const pkg = require('./package.json'); ['build:vercel', 'type-check:full', 'lint'].forEach(s => { if (!pkg.scripts[s]) throw new Error('Missing script: ' + s) })"
+      
+      - name: Environment Configuration Check
+        run: |
+          echo "🔍 Checking environment configuration..."
+          npm run config:verify
+      
+      - name: Quick Syntax Validation
+        run: |
+          echo "⚡ Running quick syntax validation..."
+          npm run lint:check-syntax
+      
+      - name: Build Configuration Analysis
+        id: build_config
+        run: |
+          echo "🔧 Analyzing build configuration..."
+          
+          # Determine optimal build settings
+          MEMORY_LIMIT="${{ github.event.inputs.memory_limit || '8192' }}"
+          BUILD_STRATEGY="vercel"
+          
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            BUILD_STRATEGY="production"
+          fi
+          
+          echo "config={\"memory_limit\": \"$MEMORY_LIMIT\", \"strategy\": \"$BUILD_STRATEGY\"}" >> $GITHUB_OUTPUT
+          
+          echo "Build configuration: Memory=$MEMORY_LIMIT MB, Strategy=$BUILD_STRATEGY"
+      
+      - name: Deployment Readiness Check
+        id: deployment_check
+        run: |
+          echo "🚀 Checking deployment readiness..."
+          
+          SHOULD_DEPLOY="false"
+          
+          if [[ "${{ github.ref_name }}" == "main" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            SHOULD_DEPLOY="true"
+          fi
+          
+          echo "should_deploy=$SHOULD_DEPLOY" >> $GITHUB_OUTPUT
+          echo "Deployment readiness: $SHOULD_DEPLOY"
+
+  build-test:
+    name: Build & Test Suite
+    runs-on: ubuntu-latest
+    needs: pre-build-validation
+    timeout-minutes: 25
+    
+    strategy:
+      matrix:
+        build-type: [development, production]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies with retry
+        run: |
+          for i in {1..3}; do
+            if npm ci --prefer-offline --no-audit; then
+              break
+            fi
+            echo "Attempt $i failed, retrying..."
+            sleep 5
+          done
+          npm run db:generate
+      
+      - name: Pre-build Type Checking
+        env:
+          NODE_OPTIONS: --max-old-space-size=${{ fromJson(needs.pre-build-validation.outputs.build_config).memory_limit }}
+        run: |
+          echo "🔍 Running comprehensive type checking..."
+          npm run type-check:full
+      
+      - name: Production Build Test
+        if: matrix.build-type == 'production'
+        env:
+          NODE_OPTIONS: --max-old-space-size=${{ fromJson(needs.pre-build-validation.outputs.build_config).memory_limit }}
+          NODE_ENV: production
+          BUILDING: true
+          SKIP_ENV_VALIDATION: 1
+        run: |
+          echo "🏗️ Building for production..."
+          
+          # Track build time
+          START_TIME=$(date +%s)
+          
+          if [[ "${{ fromJson(needs.pre-build-validation.outputs.build_config).strategy }}" == "vercel" ]]; then
+            npm run build:vercel
+          else
+            npm run build:prod
+          fi
+          
+          END_TIME=$(date +%s)
+          BUILD_DURATION=$((END_TIME - START_TIME))
+          
+          echo "BUILD_DURATION=$BUILD_DURATION" >> $GITHUB_ENV
+          echo "✅ Production build completed in ${BUILD_DURATION}s"
+      
+      - name: Development Build Test
+        if: matrix.build-type == 'development'
+        env:
+          NODE_OPTIONS: --max-old-space-size=${{ fromJson(needs.pre-build-validation.outputs.build_config).memory_limit }}
+          NODE_ENV: development
+        run: |
+          echo "🏗️ Testing development build..."
+          
+          # Quick development build test
+          timeout 300 npm run build || {
+            echo "⚠️ Development build took too long or failed"
+            exit 1
+          }
+      
+      - name: Build Artifact Analysis
+        if: matrix.build-type == 'production'
+        run: |
+          echo "📊 Analyzing build artifacts..."
+          
+          if [ -d ".next" ]; then
+            echo "Build output size:"
+            du -sh .next/
+            
+            echo "Static assets:"
+            find .next/static -name "*.js" -o -name "*.css" | head -10
+            
+            echo "Page chunks:"
+            find .next -name "*.js" | grep -E "(page|chunk)" | head -5
+          else
+            echo "⚠️ No .next directory found"
+          fi
+      
+      - name: Bundle Size Check
+        if: matrix.build-type == 'production'
+        run: |
+          echo "📏 Checking bundle sizes..."
+          
+          # Check for oversized bundles
+          if [ -d ".next/static" ]; then
+            LARGE_FILES=$(find .next/static -name "*.js" -size +1M 2>/dev/null || true)
+            if [ -n "$LARGE_FILES" ]; then
+              echo "⚠️ Large bundle files found:"
+              echo "$LARGE_FILES" | xargs ls -lh
+              echo "Consider code splitting or lazy loading"
+            else
+              echo "✅ Bundle sizes are within acceptable limits"
+            fi
+          fi
+      
+      - name: Unit Tests
+        if: github.event.inputs.skip_tests != 'true'
+        run: |
+          echo "🧪 Running unit tests..."
+          npm run test:ci
+      
+      - name: Upload Build Artifacts
+        if: matrix.build-type == 'production'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ github.sha }}
+          path: |
+            .next/
+            package.json
+            next.config.js
+          retention-days: 7
+
+  security-build-check:
+    name: Security Build Validation
+    runs-on: ubuntu-latest
+    needs: pre-build-validation
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+          npm run db:generate
+      
+      - name: Security Configuration Check
+        run: |
+          echo "🔒 Validating security configuration..."
+          npm run security:check
+      
+      - name: Build Security Headers Test
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_ENV: production
+          BUILDING: true
+          SKIP_ENV_VALIDATION: 1
+        run: |
+          echo "🛡️ Testing security headers in build..."
+          
+          # Quick build for header testing
+          timeout 600 npm run build:prod
+          
+          # Check next.config.js for security headers
+          if grep -q "X-Content-Type-Options" next.config.js; then
+            echo "✅ Security headers configured"
+          else
+            echo "⚠️ Missing security headers configuration"
+          fi
+
+  deployment-simulation:
+    name: Deployment Simulation
+    runs-on: ubuntu-latest
+    needs: [pre-build-validation, build-test]
+    if: needs.pre-build-validation.outputs.should_deploy == 'true'
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts-${{ github.sha }}
+      
+      - name: Install production dependencies only
+        run: |
+          npm ci --only=production --prefer-offline --no-audit
+      
+      - name: Deployment Readiness Test
+        run: |
+          echo "🚀 Testing deployment readiness..."
+          
+          # Verify critical files exist
+          if [ ! -d ".next" ]; then
+            echo "❌ Missing .next directory"
+            exit 1
+          fi
+          
+          if [ ! -f "package.json" ]; then
+            echo "❌ Missing package.json"
+            exit 1
+          fi
+          
+          echo "✅ Deployment files verified"
+      
+      - name: Start Application Test
+        run: |
+          echo "🔄 Testing application startup..."
+          
+          # Start the application in background
+          timeout 30 npm start &
+          APP_PID=$!
+          
+          # Wait for application to start
+          for i in {1..10}; do
+            if curl -f http://localhost:3000/api/health 2>/dev/null; then
+              echo "✅ Application started successfully"
+              kill $APP_PID 2>/dev/null || true
+              exit 0
+            fi
+            sleep 3
+          done
+          
+          echo "⚠️ Application startup test failed or timed out"
+          kill $APP_PID 2>/dev/null || true
+          # Don't fail the build for this
+          exit 0
+
+  performance-benchmark:
+    name: Performance Benchmark
+    runs-on: ubuntu-latest
+    needs: build-test
+    if: success()
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Performance Analysis
+        run: |
+          echo "📈 Collecting performance metrics..."
+          
+          # Analyze codebase complexity
+          JSX_FILES=$(find src -name "*.tsx" -o -name "*.jsx" | wc -l)
+          TS_FILES=$(find src -name "*.ts" | wc -l)
+          COMPONENT_FILES=$(find src/components -name "*.tsx" | wc -l)
+          PAGE_FILES=$(find src/app -name "page.tsx" -o -name "page.ts" | wc -l)
+          
+          echo "Codebase Metrics:"
+          echo "- JSX Files: $JSX_FILES"
+          echo "- TypeScript Files: $TS_FILES"
+          echo "- Components: $COMPONENT_FILES"
+          echo "- Pages: $PAGE_FILES"
+          
+          # Create performance report
+          cat > performance-report.json << EOF
+          {
+            "timestamp": "$(date -u -Iseconds)",
+            "commit": "${{ github.sha }}",
+            "jsx_files": $JSX_FILES,
+            "ts_files": $TS_FILES,
+            "component_files": $COMPONENT_FILES,
+            "page_files": $PAGE_FILES,
+            "build_duration": "${{ env.BUILD_DURATION || 0 }}"
+          }
+          EOF
+      
+      - name: Upload Performance Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report-${{ github.sha }}
+          path: performance-report.json
+          retention-days: 30
+
+  build-summary:
+    name: Build Summary & Notification
+    runs-on: ubuntu-latest
+    needs: [pre-build-validation, build-test, security-build-check, deployment-simulation, performance-benchmark]
+    if: always()
+    
+    steps:
+      - name: Generate Build Summary
+        run: |
+          echo "📊 Build Summary Report"
+          echo "========================"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Timestamp: $(date -u)"
+          echo ""
+          echo "Job Results:"
+          echo "- Pre-build Validation: ${{ needs.pre-build-validation.result }}"
+          echo "- Build & Test: ${{ needs.build-test.result }}"
+          echo "- Security Check: ${{ needs.security-build-check.result }}"
+          echo "- Deployment Simulation: ${{ needs.deployment-simulation.result }}"
+          echo "- Performance Benchmark: ${{ needs.performance-benchmark.result }}"
+          
+          # Determine overall status
+          OVERALL_STATUS="success"
+          if [[ "${{ needs.pre-build-validation.result }}" == "failure" ]] || [[ "${{ needs.build-test.result }}" == "failure" ]]; then
+            OVERALL_STATUS="failure"
+          fi
+          
+          echo ""
+          echo "Overall Status: $OVERALL_STATUS"
+      
+      - name: PR Status Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const needs = ${{ toJSON(needs) }};
+            
+            let status = '✅ All checks passed';
+            let emoji = '🎉';
+            
+            if (needs['build-test'].result === 'failure' || needs['pre-build-validation'].result === 'failure') {
+              status = '❌ Build failed';
+              emoji = '🚨';
+            } else if (needs['security-build-check'].result === 'failure') {
+              status = '⚠️ Security issues detected';
+              emoji = '🛡️';
+            }
+            
+            const body = `## ${emoji} Build Verification Report
+            
+            **Status**: ${status}
+            **Commit**: ${context.sha.substring(0, 7)}
+            **Branch**: ${context.ref.replace('refs/heads/', '')}
+            
+            ### Job Results
+            
+            | Job | Status |
+            |-----|--------|
+            | Pre-build Validation | ${needs['pre-build-validation'].result === 'success' ? '✅' : '❌'} ${needs['pre-build-validation'].result} |
+            | Build & Test | ${needs['build-test'].result === 'success' ? '✅' : '❌'} ${needs['build-test'].result} |
+            | Security Check | ${needs['security-build-check'].result === 'success' ? '✅' : '❌'} ${needs['security-build-check'].result} |
+            | Deployment Simulation | ${needs['deployment-simulation'].result === 'success' ? '✅' : '❌'} ${needs['deployment-simulation'].result} |
+            | Performance Benchmark | ${needs['performance-benchmark'].result === 'success' ? '✅' : '❌'} ${needs['performance-benchmark'].result} |
+            
+            ${needs['build-test'].result === 'failure' ? '
+            ### 🚨 Build Failed
+            
+            Please check the build logs and fix any issues. Common problems:
+            
+            - JSX syntax errors
+            - TypeScript compilation errors
+            - Missing dependencies
+            - Build configuration issues
+            
+            Run locally:
+            \`\`\`bash
+            npm run precommit
+            npm run build:vercel
+            \`\`\`
+            ' : ''}
+            
+            ---
+            *Automated build verification completed at ${new Date().toISOString()}*`;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body
+            });

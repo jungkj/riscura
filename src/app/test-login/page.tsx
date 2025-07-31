@@ -47,8 +47,8 @@ export default function TestLoginPage() {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Authentication Status</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="flex items-center space-x-4">
               <DaisyBadge variant={isAuthenticated ? "default" : "destructive"}>
                 {isAuthenticated ? "Authenticated" : "Not Authenticated"}
@@ -69,14 +69,14 @@ export default function TestLoginPage() {
                 Logout
               </DaisyButton>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Token Storage Debug Info</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="space-y-2 font-mono text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -91,14 +91,14 @@ export default function TestLoginPage() {
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Test Instructions</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h3 className="font-semibold">To test "Stay logged in" feature:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
@@ -121,7 +121,7 @@ export default function TestLoginPage() {
                 <li>Close the browser tab and reopen - you should be logged out</li>
               </ol>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

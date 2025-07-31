@@ -234,7 +234,7 @@ const HeroProcessCard = () => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -556,12 +556,13 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="p-6 space-y-6 md:space-y-8" data-tour="dashboard-main">
@@ -706,8 +707,8 @@ export default function DashboardPage() {
                 <Zap className="h-5 w-5 text-[#199BEC]" />
                 <span className="text-[#191919] font-bold text-base">Quick Actions</span>
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="pt-0">
+        </DaisyCardHeader>
+        <DaisyCardContent className="pt-0">
               <div className="grid grid-cols-2 gap-3 h-full">
                 {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
@@ -735,8 +736,8 @@ export default function DashboardPage() {
                     {recentImports.length} files
                   </DaisyBadge>
                 </DaisyCardTitle>
-              
-              <DaisyCardContent className="pt-0">
+        </DaisyCardHeader>
+        <DaisyCardContent className="pt-0">
                 <div className="space-y-2">
                   {recentImports.map((importItem, index) => (
                     <div 
@@ -820,8 +821,8 @@ export default function DashboardPage() {
                 {insights.length} Insights
               </DaisyBadge>
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
@@ -864,8 +865,8 @@ export default function DashboardPage() {
                 Live
               </DaisyBadge>
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="text-center py-8">
               <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 text-sm">No team members yet</p>
@@ -893,8 +894,8 @@ export default function DashboardPage() {
                 Small Team
               </DaisyBadge>
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
             <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
@@ -953,8 +954,8 @@ export default function DashboardPage() {
                 Optimized
               </DaisyBadge>
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Risk Resolution Rate</span>
@@ -1012,6 +1013,7 @@ function QuickActionCard({
   badge?: string;
   onClick: () => void;
 }) {
+
   return (
     <div 
       className="p-3 border border-gray-200 rounded-lg hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group bg-white h-full flex flex-col"

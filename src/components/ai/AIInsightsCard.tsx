@@ -307,8 +307,9 @@ export default function AIInsightsCard({
   };
 
   if (isLoading) {
-    return (
-      <DaisyCard className={className}>
+
+  return (
+    <DaisyCard className={className}>
         <DaisyCardHeader>
           <div className="flex items-center space-x-2">
             <Brain className="w-5 h-5 text-purple-600" />
@@ -325,10 +326,10 @@ export default function AIInsightsCard({
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <DaisyCard className={className}>
@@ -472,7 +473,7 @@ export default function AIInsightsCard({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardBody>
+      </DaisyCardContent>
 
       {/* Detailed Insight Modal/Panel */}
       {selectedInsight && (

@@ -243,7 +243,7 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
               </motion.div>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
 
         {/* Decorative gradient overlay */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-slate-100/40 to-transparent opacity-60 pointer-events-none" />

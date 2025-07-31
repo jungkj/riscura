@@ -4,6 +4,7 @@ import React from 'react';
 import { RiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 
 export default function TestHeatmapPage() {
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
       <div className="max-w-6xl mx-auto space-y-6">

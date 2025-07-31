@@ -489,7 +489,7 @@ export default function DragDropImport({
             <Zap className="h-5 w-5 text-blue-600" />
             Import Mode Selection
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {IMPORT_MODES.map((mode) => {
@@ -560,7 +560,7 @@ export default function DragDropImport({
               );
             })}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Processing Options */}
@@ -568,8 +568,8 @@ export default function DragDropImport({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="text-lg">Processing Options</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
@@ -632,7 +632,7 @@ export default function DragDropImport({
                 </DaisyLabel>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -680,7 +680,7 @@ export default function DragDropImport({
                 </div>
               </motion.div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -690,8 +690,8 @@ export default function DragDropImport({
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-lg">Select SharePoint Site</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               {isLoadingIntegrations ? (
                 <div className="flex items-center justify-center py-4">
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -727,7 +727,7 @@ export default function DragDropImport({
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* SharePoint File Browser */}
@@ -735,8 +735,8 @@ export default function DragDropImport({
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-lg">Select Excel Files</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <SharePointFileBrowser
                   integrationId={selectedIntegrationId}
                   onFileSelect={(file) => {
@@ -807,7 +807,7 @@ export default function DragDropImport({
                     </div>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </>
@@ -818,8 +818,8 @@ export default function DragDropImport({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="text-lg">Google Drive Connection</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             {!isGoogleDriveConnected ? (
               <div className="space-y-4">
                 <DaisyAlert>
@@ -896,7 +896,7 @@ export default function DragDropImport({
                 )}
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -915,8 +915,8 @@ export default function DragDropImport({
                 Clear All
               </DaisyButton>
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="space-y-3">
               {files.map((fileObj) => {
                 const FileIcon = getFileIcon(fileObj.file.type);
@@ -965,7 +965,7 @@ export default function DragDropImport({
                 );
               })}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -1023,8 +1023,8 @@ export default function DragDropImport({
                   <DaisyCardTitle className="text-lg">
                     {result.filename || `File ${idx + 1}`}
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <strong>Type:</strong> {result.type}
@@ -1045,7 +1045,7 @@ export default function DragDropImport({
                       </div>
                     )}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>

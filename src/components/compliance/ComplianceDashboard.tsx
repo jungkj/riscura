@@ -190,7 +190,7 @@ const ComplianceDashboard: React.FC = () => {
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -225,7 +225,7 @@ const ComplianceDashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground mt-2">
               Across {frameworks.length} frameworks
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -238,7 +238,7 @@ const ComplianceDashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">
               {highGaps} high priority gaps
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -251,7 +251,7 @@ const ComplianceDashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">
               {frameworks.filter(f => f.mandatory).length} mandatory
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -264,7 +264,7 @@ const ComplianceDashboard: React.FC = () => {
             <p className="text-xs text-muted-foreground">
               {insights.filter(i => i.severity === 'critical').length} critical insights
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -296,7 +296,7 @@ const ComplianceDashboard: React.FC = () => {
                     <Bar dataKey="maturity" fill="#10B981" name="Maturity %" />
                   </BarChart>
                 </ResponsiveContainer>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Gap Distribution */}
@@ -325,7 +325,7 @@ const ComplianceDashboard: React.FC = () => {
                     <DaisyTooltip />
                   </PieChart>
                 </ResponsiveContainer>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -372,7 +372,7 @@ const ComplianceDashboard: React.FC = () => {
                       View Details
                     </DaisyButton>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
@@ -412,7 +412,7 @@ const ComplianceDashboard: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 

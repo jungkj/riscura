@@ -22,12 +22,13 @@ export default function MainLayout({ children, showSidebar = true }: MainLayoutP
 
   // For dashboard pages, we don't show the traditional layout as they have their own navigation
   if (!showSidebar) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
         {children}
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-white to-gray-100">

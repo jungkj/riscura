@@ -101,8 +101,8 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <DaisyAlertTriangle className="h-5 w-5" />
               Risk Description
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <p className="text-foreground leading-relaxed">
               {risk.description}
             </p>
@@ -154,7 +154,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 />
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Related Controls */}
@@ -224,7 +224,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 ))}
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -237,8 +237,8 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <Target className="h-5 w-5" />
               Risk Score
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="text-center">
               <div className={`text-4xl font-bold rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4 ${getRiskLevelColor(riskLevel)}`}>
                 {riskScore}
@@ -262,7 +262,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <DaisyProgress value={(risk.impact / 5) * 100} className="mt-1 h-1" />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Control Effectiveness Summary */}
@@ -272,8 +272,8 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <TrendingUp className="h-5 w-5" />
               Control Effectiveness
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="text-center mb-4">
               <div className="text-3xl font-bold text-foreground">
                 {Math.round(averageEffectiveness * 100)}%
@@ -302,7 +302,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <span className="font-medium">{controlCounts['PLANNED'] || 0}</span>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Timeline Card */}
@@ -312,8 +312,8 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <Clock className="h-5 w-5" />
               Timeline
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Identified</span>
@@ -339,15 +339,15 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <DaisyCalendar className="h-4 w-4 mr-2" />
               Schedule Assessment
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Quick Actions */}
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Quick Actions</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-2">
             <DaisyButton className="w-full" variant="outline">
               <Edit className="h-4 w-4 mr-2" />
               Edit Risk
@@ -364,7 +364,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <TrendingUp className="h-4 w-4 mr-2" />
               View Analytics
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

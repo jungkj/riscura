@@ -365,9 +365,9 @@ export function useRealTimeData(options: UseRealTimeDataOptions) {
     
     if (autoSubscribe) {
       subscribe()
-    }
-    
-    return () => {
+    };
+
+  return () => {
       unsubscribe()
     }
   }, [loadInitialData, subscribe, unsubscribe, autoSubscribe])

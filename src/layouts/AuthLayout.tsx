@@ -21,7 +21,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
   if (isAuthenticated) {
     return null; // Don't render anything while redirecting
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center items-center p-4">

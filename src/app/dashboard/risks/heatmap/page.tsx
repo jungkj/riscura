@@ -9,6 +9,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Activity, Plus, Download, Filter } from 'lucide-react';
 
 export default function RiskHeatMapPage() {
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -40,7 +41,7 @@ export default function RiskHeatMapPage() {
             <Activity className="h-5 w-5 text-blue-600" />
             Interactive Risk Heat Map
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <Suspense 
             fallback={
@@ -51,7 +52,7 @@ export default function RiskHeatMapPage() {
           >
             <RiskHeatMap />
           </Suspense>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

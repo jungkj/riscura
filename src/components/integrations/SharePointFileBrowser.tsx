@@ -87,7 +87,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
         </div>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-4">

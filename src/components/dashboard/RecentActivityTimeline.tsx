@@ -98,8 +98,9 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
   };
 
   if (isLoading) {
-    return (
-      <div className="space-y-4">
+
+  return (
+    <div className="space-y-4">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="flex items-start space-x-3">
             <DaisySkeleton className="h-10 w-10 rounded-full" />
@@ -111,7 +112,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
         ))}
       </div>
     );
-  }
+  };
 
   return (
     <DaisyScrollArea className="h-[350px] pr-3">

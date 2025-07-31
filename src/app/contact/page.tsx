@@ -151,7 +151,7 @@ export default function ContactPage() {
                       <Send className="w-4 h-4 ml-2" />
                     </DaisyButton>
                   </form>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 
@@ -204,7 +204,7 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               <DaisyCard className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white">
@@ -234,7 +234,7 @@ export default function ContactPage() {
                       White-label options available
                     </li>
                   </ul>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           </div>

@@ -325,7 +325,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
           <DaisySelect value={selectedModel} onValueChange={setSelectedModel}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Select Model" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="ensemble">Ensemble Model</SelectItem>
               <DaisySelectItem value="arima">ARIMA</SelectItem>
@@ -337,7 +337,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
           <DaisySelect value={forecastHorizon.toString()} onValueChange={(v) => setForecastHorizon(Number(v))}>
             <DaisySelectTrigger className="w-32">
               <DaisySelectValue placeholder="Horizon" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="30">30 Days</SelectItem>
               <DaisySelectItem value="60">60 Days</SelectItem>
@@ -397,7 +397,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
               <DaisyBadge className="bg-green-100 text-green-800">{demoRisk.status}</DaisyBadge>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Main Analysis Tabs */}
@@ -479,15 +479,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Forecast Metrics */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Forecast Confidence</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm font-medium">Overall Confidence</span>
@@ -511,15 +511,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                   </div>
                   <DaisyProgress value={92.1} className="h-2" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* External Factors */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Influencing Factors</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                 {currentForecast?.externalFactors.slice(0, 5).map((factor, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="text-sm font-medium">{factor.name}</span>
@@ -555,7 +555,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     </div>
                   </div>
                 ))}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -588,15 +588,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     </ScatterChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Scenario Details */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Scenario Details</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 {currentForecast?.scenarios.map((scenario, index) => (
                   <div key={index} className="p-3 border rounded-lg space-y-2">
                     <div className="flex items-center justify-between">
@@ -621,15 +621,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     <p>Run forecast analysis to generate scenarios</p>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Mitigation Strategies */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Recommended Actions</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                 {currentForecast?.recommendations.map((rec, index) => (
                   <div key={index} className="p-3 border rounded-lg space-y-2">
                     <div className="flex items-center justify-between">
@@ -651,7 +651,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     <p>Recommendations will appear after forecast analysis</p>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -691,15 +691,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Simulation Results */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Simulation Results</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 {currentSimulation ? (
                   <>
                     <div className="grid grid-cols-2 gap-4">
@@ -743,15 +743,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     <p>Run Monte Carlo simulation to see results</p>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Sensitivity Analysis */}
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Sensitivity Analysis</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 {currentSimulation?.results.sensitivityAnalysis ? (
                   <div className="space-y-3">
                     {currentSimulation.results.sensitivityAnalysis.map((analysis, index) => (
@@ -774,7 +774,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                     <p>Sensitivity analysis will appear after simulation</p>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -806,7 +806,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                   
                   <DaisyCardContent>
                     <p className="text-gray-700 dark:text-gray-300">{insight.description}</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))
             ) : (
@@ -816,7 +816,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
                   <p className="text-gray-500">
                     Generate forecasts or run simulations to see AI insights
                   </p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
           </div>

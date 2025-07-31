@@ -174,7 +174,7 @@ const ImageErrorFallback = memo(({
         }}
       />
     );
-  }
+  };
 
   return (
     <div className={cn(
@@ -460,7 +460,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
         )}
       </div>
     );
-  }
+  };
 
   return (
     <div 

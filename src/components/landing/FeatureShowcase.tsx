@@ -77,8 +77,9 @@ export default function FeatureShowcase() {
                 const bgColor = intensity > 0.7 ? 'bg-red-500' : 
                                intensity > 0.5 ? 'bg-orange-400' :
                                intensity > 0.3 ? 'bg-yellow-400' : 'bg-green-400';
-                return (
-                  <div
+
+  return (
+    <div
                     key={i}
                     className={`w-6 h-6 rounded ${bgColor} flex items-center justify-center text-white text-xs`}
                   >

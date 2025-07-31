@@ -38,16 +38,17 @@ export default function ForgotPasswordPage() {
   };
 
   if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <DaisyCard className="w-full max-w-md">
           <DaisyCardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
             <DaisyCardTitle>Check your email</DaisyCardTitle>
-          
-          <DaisyCardContent className="text-center space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="text-center space-y-4">
             <p className="text-muted-foreground">
               We've sent a password reset link to <strong>{email}</strong>
             </p>
@@ -72,11 +73,11 @@ export default function ForgotPasswordPage() {
                 </DaisyButton>
               </Link>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -117,7 +118,7 @@ export default function ForgotPasswordPage() {
               </DaisyButton>
             </Link>
           </form>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

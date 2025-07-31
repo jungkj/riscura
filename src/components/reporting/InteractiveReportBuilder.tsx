@@ -450,10 +450,10 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               </DaisyButton>
             </div>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent className="pt-0">
           {renderComponentContent(component)}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   };

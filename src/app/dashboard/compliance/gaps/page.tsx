@@ -361,7 +361,7 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -408,7 +408,7 @@ export default function ComplianceGapsPage() {
                   </p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -418,7 +418,7 @@ export default function ComplianceGapsPage() {
             <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="Framework" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Frameworks</SelectItem>
                 <DaisySelectItem value="soc2">SOC 2</SelectItem>
@@ -431,7 +431,7 @@ export default function ComplianceGapsPage() {
             <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</SelectItem>
                 <DaisySelectItem value="critical">Critical</SelectItem>
@@ -444,7 +444,7 @@ export default function ComplianceGapsPage() {
             <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</SelectItem>
                 <DaisySelectItem value="open">Open</SelectItem>
@@ -595,7 +595,7 @@ export default function ComplianceGapsPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -654,7 +654,7 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}

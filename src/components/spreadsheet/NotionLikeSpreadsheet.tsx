@@ -272,9 +272,9 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
     if (resizingColumn) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-    }
+    };
 
-    return () => {
+  return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -463,7 +463,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                             >
                               <DaisySelectTrigger className="h-8 border-0 focus:ring-2 focus:ring-blue-500">
                                 <DaisySelectValue />
-                              </SelectTrigger>
+                              </DaisySelectTrigger>
                               <DaisySelectContent>
                                 {column.dropdownOptions?.map((option) => (
                                   <DaisySelectItem key={option} value={option}>

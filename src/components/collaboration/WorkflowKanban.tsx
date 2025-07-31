@@ -592,7 +592,7 @@ const TaskCard: React.FC<{
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -843,7 +843,7 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <Layers className="h-5 w-5 text-blue-600" />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -855,7 +855,7 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -867,7 +867,7 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <DaisyAlertTriangle className="h-5 w-5 text-red-600" />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -879,7 +879,7 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <TrendingUp className="h-5 w-5 text-blue-600" />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}

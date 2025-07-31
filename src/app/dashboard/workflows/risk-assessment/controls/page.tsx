@@ -164,7 +164,7 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <Shield className="h-8 w-8 text-gray-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -176,7 +176,7 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <CheckCircle2 className="h-8 w-8 text-green-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -188,7 +188,7 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <DaisyAlertTriangle className="h-8 w-8 text-yellow-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -200,7 +200,7 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <XCircle className="h-8 w-8 text-red-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -212,7 +212,7 @@ export default function ReviewRiskControlsPage() {
                   </div>
                   <TrendingUp className="h-8 w-8 text-blue-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
 
@@ -265,7 +265,7 @@ export default function ReviewRiskControlsPage() {
                       </DaisyButton>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Controls List */}
@@ -273,7 +273,7 @@ export default function ReviewRiskControlsPage() {
                 <DaisyCard>
                   <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading controls...</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : filteredControls.length === 0 ? (
                 <DaisyCard>
@@ -285,7 +285,7 @@ export default function ReviewRiskControlsPage() {
                         ? 'Try adjusting your filters'
                         : 'Add your first control to get started'}
                     </p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : (
                 <div className="grid gap-4">
@@ -339,7 +339,7 @@ export default function ReviewRiskControlsPage() {
                             Review
                           </DaisyButton>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   ))}
                 </div>
@@ -351,8 +351,8 @@ export default function ReviewRiskControlsPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Control Effectiveness Overview</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-6">
                     <div>
                       <h4 className="text-sm font-medium text-gray-700 mb-3">Effectiveness by Category</h4>
@@ -400,7 +400,7 @@ export default function ReviewRiskControlsPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
@@ -409,8 +409,8 @@ export default function ReviewRiskControlsPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Control Improvement Recommendations</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-4">
                     <div className="p-4 bg-red-50 rounded-lg">
                       <h4 className="font-medium text-red-900 mb-2">Critical Priority</h4>
@@ -448,7 +448,7 @@ export default function ReviewRiskControlsPage() {
                       </DaisyButton>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
           </DaisyTabs>

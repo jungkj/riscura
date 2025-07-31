@@ -218,7 +218,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className={cn("enterprise-data-table bg-surface-primary rounded-lg border border-border shadow-notion-sm", className)}>

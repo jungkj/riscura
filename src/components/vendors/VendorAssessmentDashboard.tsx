@@ -280,7 +280,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -365,7 +365,7 @@ export function VendorAssessmentDashboard() {
                       </div>
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Risk Categories */}
@@ -386,7 +386,7 @@ export function VendorAssessmentDashboard() {
                         <span className="text-xs text-[#A8A8A8]">/ 100</span>
                       </div>
                       <DaisyProgress value={category.score} className="h-2 mt-2" />
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
@@ -401,8 +401,8 @@ export function VendorAssessmentDashboard() {
                       {assessment.findings.length} findings
                     </DaisyBadge>
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   {assessment.findings.length > 0 ? (
                     <div className="space-y-4">
                       {assessment.findings.map((finding) => (
@@ -438,7 +438,7 @@ export function VendorAssessmentDashboard() {
                       <p className="text-[#A8A8A8] text-sm">This vendor appears to have good security practices</p>
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Actions */}
@@ -458,7 +458,7 @@ export function VendorAssessmentDashboard() {
                 <Search className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No assessment results</p>
                 <p className="text-[#A8A8A8] text-sm">Run a vendor assessment to see results here</p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </DaisyTabsContent>
@@ -507,7 +507,7 @@ export function VendorAssessmentDashboard() {
                   <p className="text-[#A8A8A8] text-sm">Start by assessing your first vendor</p>
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -522,7 +522,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <Building className="h-8 w-8 text-[#199BEC]" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
@@ -536,7 +536,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <DaisyAlertTriangle className="h-8 w-8 text-red-500" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
@@ -550,7 +550,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

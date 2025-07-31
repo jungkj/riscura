@@ -245,7 +245,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 >
                   <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
                     <DaisySelectValue placeholder="Select category" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {riskCategories.map((category) => (
                       <DaisySelectItem key={category} value={category}>
@@ -363,7 +363,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {treatmentOptions.map((option) => (
                         <DaisySelectItem key={option.value} value={option.value}>
@@ -376,7 +376,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     </SelectContent>
                   </DaisySelect>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -406,7 +406,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -420,7 +420,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select business unit" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {businessUnits.map((unit) => (
                       <DaisySelectItem key={unit} value={unit}>

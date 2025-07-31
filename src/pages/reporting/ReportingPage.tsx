@@ -146,7 +146,7 @@ export default function ReportingPage() {
       });
     }, 2000);
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -336,7 +336,7 @@ export default function ReportingPage() {
                     </ResponsiveContainer>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
               <DaisyCardFooter className="justify-end space-x-2">
                 <DaisyButton variant="outline">
                   <Download className="h-4 w-4 mr-2" />
@@ -362,8 +362,8 @@ export default function ReportingPage() {
             <DaisyCard className="lg:col-span-1">
               <DaisyCardHeader>
                 <DaisyCardTitle>Report Settings</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
                   <DaisyLabel>Report Title</DaisyLabel>
                   <input
@@ -379,7 +379,7 @@ export default function ReportingPage() {
                   <DaisySelect defaultValue="executive">
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select type" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="executive">Executive Summary</SelectItem>
                       <DaisySelectItem value="detailed">Detailed Analysis</SelectItem>
@@ -396,7 +396,7 @@ export default function ReportingPage() {
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select period" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="monthly">Last Month</SelectItem>
                       <DaisySelectItem value="quarterly">Last Quarter</SelectItem>
@@ -437,7 +437,7 @@ export default function ReportingPage() {
                   <DaisySelect defaultValue="all">
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select categories" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Categories</SelectItem>
                       <DaisySelectItem value="operational">Operational</SelectItem>
@@ -461,7 +461,7 @@ export default function ReportingPage() {
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -517,7 +517,7 @@ export default function ReportingPage() {
                     <FileText className="h-4 w-4" />
                     <span>By {report.createdBy}</span>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
                 <DaisyCardFooter>
                   <div className="flex gap-2 w-full">
                     <DaisyButton variant="outline" className="flex-1">
@@ -675,7 +675,7 @@ export default function ReportingPage() {
                   </DaisyTableRow>
                 </DaisyTableBody>
               </DaisyTable>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

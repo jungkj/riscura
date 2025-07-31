@@ -3,6 +3,7 @@
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function CompliancePage() {
+
   return (
     <ProtectedRoute>
       <div className="p-6">

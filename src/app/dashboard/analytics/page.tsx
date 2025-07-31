@@ -75,7 +75,7 @@ const MetricCard = ({
               <Icon className="h-6 w-6" />
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
               <DaisySelect value={timeRange} onValueChange={setTimeRange}>
                 <DaisySelectTrigger className="w-40">
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="7d">Last 7 days</SelectItem>
                   <DaisySelectItem value="30d">Last 30 days</SelectItem>
@@ -269,7 +269,7 @@ export default function AnalyticsPage() {
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Risk Distribution */}
@@ -303,7 +303,7 @@ export default function AnalyticsPage() {
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
 
@@ -311,8 +311,8 @@ export default function AnalyticsPage() {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-lg">Control Effectiveness Overview</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Average Effectiveness</span>
@@ -350,7 +350,7 @@ export default function AnalyticsPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Recent Activity */}
@@ -385,7 +385,7 @@ export default function AnalyticsPage() {
                     </motion.div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -395,8 +395,8 @@ export default function AnalyticsPage() {
               <DaisyCard className="lg:col-span-2">
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Risk Level Distribution</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={[
@@ -422,14 +422,14 @@ export default function AnalyticsPage() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Risk Metrics</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Critical Risks</span>
@@ -457,7 +457,7 @@ export default function AnalyticsPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>
@@ -467,8 +467,8 @@ export default function AnalyticsPage() {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-lg">Control Performance Matrix</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={[
@@ -488,7 +488,7 @@ export default function AnalyticsPage() {
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -498,8 +498,8 @@ export default function AnalyticsPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Framework Compliance</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="90%" data={[
@@ -514,14 +514,14 @@ export default function AnalyticsPage() {
                       </RadialBarChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Compliance Score Trend</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={[
@@ -540,7 +540,7 @@ export default function AnalyticsPage() {
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>

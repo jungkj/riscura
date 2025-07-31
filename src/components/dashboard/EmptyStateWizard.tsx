@@ -226,7 +226,7 @@ export default function EmptyStateWizard({
               {hoveredCard === 'import' && !uploadingFile && (
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-50 to-transparent opacity-0 animate-fade-in" />
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </div>
         </DaisyCard>
 
@@ -263,7 +263,7 @@ export default function EmptyStateWizard({
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Explore Demo Card */}
@@ -302,7 +302,7 @@ export default function EmptyStateWizard({
                 <Play className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -338,7 +338,7 @@ export default function EmptyStateWizard({
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Value Propositions */}

@@ -195,14 +195,14 @@ export default function ImportDataPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Import Configuration</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700">Data Type</label>
                     <DaisySelect value={dataType} onValueChange={setDataType}>
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="risks">Risks</SelectItem>
                         <DaisySelectItem value="controls">Controls</SelectItem>
@@ -227,15 +227,15 @@ export default function ImportDataPage() {
                       Download {dataType} template
                     </DaisyButton>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* File Upload */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Upload Files</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div
                     {...getRootProps()}
                     className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
@@ -321,7 +321,7 @@ export default function ImportDataPage() {
                       <DaisyProgress value={importProgress} className="h-2" />
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
 
@@ -331,8 +331,8 @@ export default function ImportDataPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Import Actions</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                   <DaisyButton
                     className="w-full"
                     size="lg"
@@ -366,15 +366,15 @@ export default function ImportDataPage() {
                   >
                     Clear All Files
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Import Guidelines */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Import Guidelines</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-3 text-sm">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3 text-sm">
                   <div>
                     <h4 className="font-medium mb-1">File Requirements</h4>
                     <ul className="space-y-1 text-gray-600">
@@ -402,17 +402,17 @@ export default function ImportDataPage() {
                       <li>• Partial imports allowed</li>
                     </ul>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Recent Imports */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Recent Imports</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <p className="text-sm text-gray-600">No recent imports</p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </div>

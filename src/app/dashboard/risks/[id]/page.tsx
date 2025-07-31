@@ -23,10 +23,10 @@ export default function RiskDetailPageRoute() {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Risk Information</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <p className="text-gray-500">Risk details for ID: {riskId} coming soon...</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>

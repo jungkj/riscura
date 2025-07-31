@@ -411,8 +411,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
 
   // Collapsed sidebar view
   if (!isOpen) {
-    return (
-      <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
+
+  return (
+    <div className="flex flex-col h-full w-16 bg-[#FAFAFA] border-r border-gray-200">
         {/* Collapsed Header with Logo and Toggle */}
         <div className="flex flex-col items-center h-20 border-b border-gray-200 py-2">
           <div className="flex-1 flex items-center justify-center">
@@ -487,7 +488,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200" data-tour="sidebar">

@@ -109,8 +109,9 @@ export function ChartWidget({
 
     switch (chartType) {
       case 'bar':
-        return (
-          <BarChart {...commonProps}>
+
+  return (
+    <BarChart {...commonProps}>
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
@@ -231,7 +232,7 @@ export function ChartWidget({
             </ResponsiveContainer>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

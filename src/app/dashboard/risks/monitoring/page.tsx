@@ -196,7 +196,7 @@ export default function RiskMonitoringPage() {
                 </span>
                 <span className="text-sm text-gray-500 ml-1">from last week</span>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>
@@ -219,8 +219,8 @@ export default function RiskMonitoringPage() {
                   <Shield className="h-5 w-5" />
                   Risk Status Distribution
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Critical</span>
@@ -246,7 +246,7 @@ export default function RiskMonitoringPage() {
                   </div>
                   <DaisyProgress value={17} className="h-2" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Recent Activity */}
@@ -256,8 +256,8 @@ export default function RiskMonitoringPage() {
                   <Clock className="h-5 w-5" />
                   Recent Activity
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
@@ -281,7 +281,7 @@ export default function RiskMonitoringPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -290,8 +290,8 @@ export default function RiskMonitoringPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Active Alerts</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {alerts.map((alert) => (
                   <div key={alert.id} className="flex items-start gap-4 p-4 border rounded-lg">
@@ -323,7 +323,7 @@ export default function RiskMonitoringPage() {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -331,10 +331,10 @@ export default function RiskMonitoringPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Risk Trends</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p className="text-gray-600">Risk trend analysis and historical data visualization will be displayed here.</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -342,10 +342,10 @@ export default function RiskMonitoringPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Monitoring Reports</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p className="text-gray-600">Automated monitoring reports and scheduled exports will be available here.</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

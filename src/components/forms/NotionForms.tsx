@@ -189,7 +189,7 @@ const NotionSelect: React.FC<{
           field.disabled && "bg-surface-secondary cursor-not-allowed opacity-60"
         )}>
           <DaisySelectValue placeholder={field.placeholder || `Select ${field.label.toLowerCase()}`} />
-        </SelectTrigger>
+        </DaisySelectTrigger>
         <DaisySelectContent className="max-h-64">
           {field.options?.map((option) => (
             <DaisySelectItem key={option.value} value={option.value}>

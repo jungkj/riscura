@@ -112,7 +112,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -262,7 +262,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -341,7 +341,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

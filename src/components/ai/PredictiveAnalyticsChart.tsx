@@ -327,7 +327,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
             <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
             {title}
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="h-64 flex items-center justify-center">
             <div className="text-center">
@@ -335,7 +335,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
               <p className="text-sm text-gray-500">Generating predictions...</p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -615,7 +615,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

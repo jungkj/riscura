@@ -222,7 +222,7 @@ export default function SpreadsheetsPage() {
             <span>{formatDate(spreadsheet.updatedAt)}</span>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 
@@ -274,8 +274,9 @@ export default function SpreadsheetsPage() {
   );
 
   if (loading) {
-    return (
-      <div className="container mx-auto p-6">
+
+  return (
+    <div className="container mx-auto p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-gray-200 rounded w-1/4"></div>
           <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -287,7 +288,7 @@ export default function SpreadsheetsPage() {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -340,7 +341,7 @@ export default function SpreadsheetsPage() {
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select a template type" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {templateTypes.map((template) => (
                       <DaisySelectItem key={template.value} value={template.value}>
@@ -382,7 +383,7 @@ export default function SpreadsheetsPage() {
             <DaisySelectTrigger className="w-48">
               <Filter className="h-4 w-4 mr-2" />
               <DaisySelectValue placeholder="Filter by type" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Types</SelectItem>
               {templateTypes.map((template) => (

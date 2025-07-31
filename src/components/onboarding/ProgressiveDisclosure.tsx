@@ -363,7 +363,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               })}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Feature filters */}
@@ -392,7 +392,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               <span>Show locked features</span>
             </label>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Features grid */}
@@ -504,7 +504,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                             </div>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   );
                 })}
@@ -546,7 +546,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         );
       })()}

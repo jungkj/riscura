@@ -146,7 +146,7 @@ export default function ImportPage() {
                         </div>
                       ))}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -165,8 +165,8 @@ export default function ImportPage() {
                 <Download className="h-5 w-5 text-blue-600" />
                 Sample Templates
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {SAMPLE_TEMPLATES.map((template, idx) => {
                   const IconComponent = template.icon;
@@ -201,7 +201,7 @@ export default function ImportPage() {
                   );
                 })}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -217,14 +217,14 @@ export default function ImportPage() {
                 <Upload className="h-5 w-5 text-blue-600" />
                 Import Your Files
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <DragDropImport
                 organizationId={mockUser.organizationId}
                 userId={mockUser.id}
                 onComplete={handleImportComplete}
               />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -246,8 +246,8 @@ export default function ImportPage() {
                       {result.type === 'bulk-upload' && <Upload className="h-5 w-5 text-purple-600" />}
                       <span className="truncate">{result.filename}</span>
                     </DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <DaisyBadge variant={result.status === 'completed' ? 'default' : 'destructive'}>
@@ -268,7 +268,7 @@ export default function ImportPage() {
                         </div>
                       )}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>

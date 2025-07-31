@@ -388,7 +388,7 @@ const ScenarioCard: React.FC<{
             {scenario.lastUpdated.toLocaleDateString()}
           </span>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -563,32 +563,32 @@ const SimulationInterface: React.FC<{
                       <DaisyCard>
                         <DaisyCardHeader className="pb-enterprise-2">
                           <DaisyCardTitle className="text-body-sm">Average Impact</DaisyCardTitle>
-                        
-                        <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-warning">
                             {results.averageImpact.toFixed(1)}%
                           </div>
-                        </DaisyCardBody>
+                        </DaisyCardContent>
                       </DaisyCard>
                       <DaisyCard>
                         <DaisyCardHeader className="pb-enterprise-2">
                           <DaisyCardTitle className="text-body-sm">Worst Case</DaisyCardTitle>
-                        
-                        <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-error">
                             {results.worstCase.toFixed(1)}%
                           </div>
-                        </DaisyCardBody>
+                        </DaisyCardContent>
                       </DaisyCard>
                       <DaisyCard>
                         <DaisyCardHeader className="pb-enterprise-2">
                           <DaisyCardTitle className="text-body-sm">Best Case</DaisyCardTitle>
-                        
-                        <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                           <div className="text-heading-base font-bold text-semantic-success">
                             {results.bestCase.toFixed(1)}%
                           </div>
-                        </DaisyCardBody>
+                        </DaisyCardContent>
                       </DaisyCard>
                     </div>
 
@@ -707,7 +707,7 @@ export const RiskScenarioModeling: React.FC = () => {
           
           <DaisyCardContent>
             <div className="text-heading-base font-bold">{activeScenarios}</div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardHeader className="pb-enterprise-2">
@@ -718,7 +718,7 @@ export const RiskScenarioModeling: React.FC = () => {
           
           <DaisyCardContent>
             <div className="text-heading-base font-bold text-semantic-error">{highRiskScenarios}</div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardHeader className="pb-enterprise-2">
@@ -729,7 +729,7 @@ export const RiskScenarioModeling: React.FC = () => {
           
           <DaisyCardContent>
             <div className="text-heading-base font-bold text-purple-600">{avgConfidence}%</div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardHeader className="pb-enterprise-2">
@@ -740,7 +740,7 @@ export const RiskScenarioModeling: React.FC = () => {
           
           <DaisyCardContent>
             <div className="text-heading-base font-bold">{scenarios.length}</div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 

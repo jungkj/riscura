@@ -362,7 +362,7 @@ export function AIQuestionSuggestions({
         <DaisySelect value={selectedContext} onValueChange={setSelectedContext}>
           <DaisySelectTrigger className="w-full">
             <DaisySelectValue placeholder="Select context" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="industry">Industry Best Practices</SelectItem>
             <DaisySelectItem value="framework">Compliance Framework</SelectItem>
@@ -421,7 +421,7 @@ export function AIQuestionSuggestions({
         <DaisySelect value={filterType} onValueChange={(value) => setFilterType(value as QuestionType | 'all')}>
           <DaisySelectTrigger>
             <DaisySelectValue placeholder="Type" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="all">All Types</SelectItem>
             <DaisySelectItem value="text">Text</SelectItem>
@@ -435,7 +435,7 @@ export function AIQuestionSuggestions({
         <DaisySelect value={filterPriority} onValueChange={(value) => setFilterPriority(value as 'high' | 'medium' | 'low' | 'all')}>
           <DaisySelectTrigger>
             <DaisySelectValue placeholder="Priority" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="all">All Priorities</SelectItem>
             <DaisySelectItem value="high">High</SelectItem>

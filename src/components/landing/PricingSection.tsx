@@ -217,7 +217,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                         No credit card required for trial
                       </p>
                     )}
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             );

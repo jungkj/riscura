@@ -67,7 +67,7 @@ export default function OAuthDebugPage() {
       <DaisyCard className="mb-6">
         <DaisyCardHeader>
           <DaisyCardTitle>OAuth Debug Information</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-800">
@@ -123,7 +123,7 @@ export default function OAuthDebugPage() {
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

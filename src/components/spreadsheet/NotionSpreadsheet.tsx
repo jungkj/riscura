@@ -291,8 +291,9 @@ export default function NotionSpreadsheet() {
     if (isEditing) {
       switch (column.type) {
         case 'select':
-          return (
-            <DaisySelect
+
+  return (
+    <DaisySelect
               value={String(cell.value)}
               onValueChange={(value) => {
                 updateCellValue(row.id, column.id, value);
@@ -301,7 +302,7 @@ export default function NotionSpreadsheet() {
             >
               <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {column.options?.map(option => (
                   <DaisySelectItem key={option} value={option}>{option}</SelectItem>
@@ -623,7 +624,7 @@ export default function NotionSpreadsheet() {
               }>
                 <DaisySelectTrigger className="mt-1">
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="text">Text</SelectItem>
                   <DaisySelectItem value="number">Number</SelectItem>
@@ -709,7 +710,7 @@ export default function NotionSpreadsheet() {
                             </div>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   );
                 })}

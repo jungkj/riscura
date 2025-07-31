@@ -354,10 +354,10 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
           </p>
           <DaisyProgress value={loadingProgress} className="h-3 mb-2" />
           <p className="text-sm text-gray-500">{loadingProgress}% complete</p>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -441,7 +441,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                         </div>
                       )}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -502,7 +502,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

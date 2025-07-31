@@ -133,8 +133,9 @@ function DefaultMobileCard<T>({
   const getValue = (column: TableColumn<T>, row: T) => {
     if (column.accessor) {
       return column.accessor(row);
-    }
-    return (row as any)[column.key];
+    };
+
+  return (row as any)[column.key];
   };
 
   return (
@@ -490,8 +491,8 @@ export function EnhancedResponsiveTable<T = any>({
     const rowId = getRowId(row, index);
     const isSelected = selectedRows.has(rowId);
 
-    return (
-      <tr
+  return (
+    <tr
         key={rowId}
         className={cn(
           'hover:bg-gray-50 transition-colors',
@@ -580,7 +581,7 @@ export function EnhancedResponsiveTable<T = any>({
         )}
       </div>
     );
-  }
+  };
 
   return (
     <MobileOptimized className={cn('space-y-4', className)}>

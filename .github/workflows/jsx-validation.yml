@@ -1,0 +1,355 @@
+name: JSX Syntax Validation & Code Quality
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.jsx'
+      - 'src/**/*.ts'
+      - 'src/**/*.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - '.eslintrc.json'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.jsx'
+      - 'src/**/*.ts'
+      - 'src/**/*.js'
+  workflow_dispatch:
+
+env:
+  NODE_ENV: development
+  SKIP_ENV_VALIDATION: 1
+  CI: true
+
+jobs:
+  jsx-validation:
+    name: JSX Syntax & Type Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Install dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+          npm run db:generate
+      
+      - name: Pre-validation diagnostics
+        run: |
+          echo "=== Environment Info ==="
+          node --version
+          npm --version
+          echo "=== Package Info ==="
+          npm list --depth=0 react react-dom typescript eslint
+          echo "=== TypeScript Config ==="
+          cat tsconfig.json | head -20
+      
+      - name: JSX Syntax Validation (Critical)
+        run: |
+          echo "🔍 Running comprehensive JSX syntax validation..."
+          # Check for common JSX syntax errors
+          node scripts/jsx-error-monitor.cjs scan
+          
+          # Strict JSX-specific linting
+          npx eslint src/ --ext .tsx,.jsx \
+            --rule 'react/jsx-closing-tag-location: error' \
+            --rule 'react/jsx-closing-bracket-location: error' \
+            --rule 'react/jsx-no-undef: error' \
+            --rule 'react/jsx-pascal-case: error' \
+            --rule 'react/jsx-no-duplicate-props: error' \
+            --rule 'react/jsx-tag-spacing: error' \
+            --rule 'react/jsx-curly-spacing: error' \
+            --rule 'react/jsx-equals-spacing: error' \
+            --format=compact
+      
+      - name: TypeScript Compilation Check
+        run: |
+          echo "🔧 Running TypeScript compilation check..."
+          npm run type-check
+          echo "✅ TypeScript compilation successful"
+      
+      - name: Full Type Check (Memory Optimized)
+        run: |
+          echo "🔍 Running comprehensive type checking..."
+          NODE_OPTIONS="--max-old-space-size=8192" npm run type-check:full
+      
+      - name: ESLint Validation
+        run: |
+          echo "📋 Running ESLint validation..."
+          npm run lint
+          echo "✅ ESLint validation passed"
+      
+      - name: Build Verification (Memory Optimized)
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BUILDING: true
+          SKIP_ENV_VALIDATION: 1
+        run: |
+          echo "🏗️ Running production build verification..."
+          npm run build:prod
+          echo "✅ Build verification successful"
+      
+      - name: JSX Error Pattern Detection
+        if: failure()
+        run: |
+          echo "🚨 Scanning for common JSX error patterns..."
+          
+          # Check for unclosed JSX tags
+          echo "Checking for unclosed JSX tags:"
+          find src -name "*.tsx" -o -name "*.jsx" | xargs grep -n "<[A-Za-z][^>]*$" || true
+          
+          # Check for missing closing brackets
+          echo "Checking for missing closing brackets:"
+          find src -name "*.tsx" -o -name "*.jsx" | xargs grep -n "<[^/>]*[^/>]$" || true
+          
+          # Check for invalid JSX expressions
+          echo "Checking for invalid JSX expressions:"
+          find src -name "*.tsx" -o -name "*.jsx" | xargs grep -n "{[^}]*$" || true
+          
+          # Check for component naming issues
+          echo "Checking for component naming issues:"
+          find src -name "*.tsx" -o -name "*.jsx" | xargs grep -n "<[a-z][A-Za-z]*" || true
+      
+      - name: Generate JSX Error Report
+        if: failure()
+        run: |
+          echo "📊 Generating detailed error report..."
+          cat > jsx-error-report.md << 'EOF'
+          # JSX Validation Failure Report
+          
+          **Build Date**: $(date)
+          **Commit**: ${{ github.sha }}
+          **Branch**: ${{ github.ref_name }}
+          
+          ## Common JSX Issues Found
+          
+          Please check the following in your JSX files:
+          
+          1. **Unclosed Tags**: Ensure all JSX tags are properly closed
+          2. **Component Naming**: Component names must start with uppercase letter
+          3. **Missing Imports**: Ensure React is imported where needed
+          4. **Bracket Matching**: Check for missing closing brackets
+          5. **Invalid Expressions**: Verify all JSX expressions are valid
+          
+          ## Quick Fixes
+          
+          Run locally:
+          ```bash
+          npm run lint:jsx-validator
+          npm run lint:fix
+          npm run type-check:full
+          ```
+          
+          ## Prevention
+          
+          - Use the pre-commit hook: `npm run precommit`
+          - Enable ESLint in your editor
+          - Install the React JSX extension
+          EOF
+          
+          echo "Error report generated. Please review jsx-error-report.md"
+      
+      - name: Upload Error Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsx-error-report-${{ github.sha }}
+          path: jsx-error-report.md
+          retention-days: 30
+      
+      - name: Performance Metrics Collection
+        if: success()
+        run: |
+          echo "📈 Collecting performance metrics..."
+          echo "BUILD_TIME=$(date +%s)" >> $GITHUB_ENV
+          
+          # Count files processed
+          JSX_FILES=$(find src -name "*.tsx" -o -name "*.jsx" | wc -l)
+          TS_FILES=$(find src -name "*.ts" | wc -l)
+          
+          echo "JSX_FILES_COUNT=$JSX_FILES" >> $GITHUB_ENV
+          echo "TS_FILES_COUNT=$TS_FILES" >> $GITHUB_ENV
+          
+          echo "📊 Processed $JSX_FILES JSX files and $TS_FILES TypeScript files"
+
+  format-check:
+    name: Code Formatting Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: Check Prettier formatting
+        run: |
+          echo "🎨 Checking code formatting..."
+          npm run format:check
+          echo "✅ Code formatting is consistent"
+      
+      - name: Suggest formatting fixes
+        if: failure()
+        run: |
+          echo "🔧 Formatting issues found. Run the following to fix:"
+          echo "npm run format"
+          echo "git add ."
+          echo "git commit -m 'fix: apply prettier formatting'"
+
+  security-scan:
+    name: Security & Dependency Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+      
+      - name: Run security audit
+        run: |
+          echo "🔒 Running security audit..."
+          npm run security:audit
+      
+      - name: Check for known vulnerabilities
+        run: |
+          echo "🛡️ Checking for known vulnerabilities..."
+          npm audit --audit-level high
+          echo "✅ Security scan completed"
+
+  metrics-collection:
+    name: Collect Build Metrics
+    runs-on: ubuntu-latest
+    needs: [jsx-validation, format-check, security-scan]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Collect and Report Metrics
+        run: |
+          echo "📊 Build Metrics Summary"
+          echo "========================"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "PR Number: ${{ github.event.number }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Job Status: ${{ needs.jsx-validation.result }}"
+          echo "Timestamp: $(date -u)"
+          
+          # File counts
+          JSX_COUNT=$(find src -name "*.tsx" -o -name "*.jsx" | wc -l)
+          TS_COUNT=$(find src -name "*.ts" | wc -l)
+          TOTAL_COUNT=$((JSX_COUNT + TS_COUNT))
+          
+          echo "Files Processed: $TOTAL_COUNT (JSX: $JSX_COUNT, TS: $TS_COUNT)"
+          
+          # Create metrics file for monitoring
+          cat > build-metrics.json << EOF
+          {
+            "timestamp": "$(date -u -Iseconds)",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "pr_number": "${{ github.event.number }}",
+            "actor": "${{ github.actor }}",
+            "jsx_validation_result": "${{ needs.jsx-validation.result }}",
+            "format_check_result": "${{ needs.format-check.result }}",
+            "security_scan_result": "${{ needs.security-scan.result }}",
+            "jsx_files": $JSX_COUNT,
+            "ts_files": $TS_COUNT,
+            "total_files": $TOTAL_COUNT
+          }
+          EOF
+      
+      - name: Upload Metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-metrics-${{ github.sha }}
+          path: build-metrics.json
+          retention-days: 90
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request' && needs.jsx-validation.result == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const body = `## 🚨 JSX Validation Failed
+            
+            This PR contains JSX syntax errors that need to be fixed before merging.
+            
+            ### Quick Fix Commands
+            
+            Run these commands locally to fix most issues:
+            
+            \`\`\`bash
+            npm run lint:jsx-validator
+            npm run lint:fix
+            npm run type-check:full
+            npm run precommit
+            \`\`\`
+            
+            ### Common Issues
+            
+            - Unclosed JSX tags
+            - Component naming (must start with uppercase)
+            - Missing imports
+            - Invalid JSX expressions
+            
+            Please fix these issues and push again. The CI will automatically re-run.
+            
+            ---
+            
+            📊 **Build Stats**: Processed ${process.env.JSX_FILES_COUNT || 0} JSX files and ${process.env.TS_FILES_COUNT || 0} TypeScript files`;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body
+            });

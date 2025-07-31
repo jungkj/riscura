@@ -639,9 +639,9 @@ export default function GuidedTour({
       interval = setTimeout(() => {
         nextStep();
       }, delay);
-    }
+    };
 
-    return () => {
+  return () => {
       if (interval) {
         clearTimeout(interval);
       }
@@ -669,7 +669,7 @@ export default function GuidedTour({
 
   if (!isActive || !currentStepData) {
     return null;
-  }
+  };
 
   return (
     <>
@@ -875,7 +875,7 @@ export default function GuidedTour({
                 />
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Arrow indicator */}
@@ -938,7 +938,7 @@ export default function GuidedTour({
                 <span>Exit</span>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -997,7 +997,7 @@ export function TourLauncher({
             <Play className="w-5 h-5 text-blue-600" />
             Guided Tours
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent className="p-6">
           <div className="space-y-4">
             {tours.map(tourId => {
@@ -1048,7 +1048,7 @@ export function TourLauncher({
               );
             })}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Render active tour */}

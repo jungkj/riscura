@@ -407,7 +407,7 @@ const AdvancedFilters: React.FC<{
                   >
                     <DaisySelectTrigger className="h-8">
                       <DaisySelectValue placeholder="Select..." />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="">All</SelectItem>
                       {column.filterOptions.map((option) => (

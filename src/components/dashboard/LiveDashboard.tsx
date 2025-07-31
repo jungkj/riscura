@@ -166,8 +166,9 @@ export function LiveDashboard() {
   }, [timeRange]);
 
   if (loading) {
-    return (
-      <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
         {/* Time Range Selector */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
@@ -191,7 +192,7 @@ export function LiveDashboard() {
               <DaisyCardContent>
                 <div className="h-8 bg-gray-200 rounded w-1/3 mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ))}
         </div>
@@ -201,10 +202,10 @@ export function LiveDashboard() {
           <DaisyCard className="col-span-4 animate-pulse">
             <DaisyCardHeader>
               <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
-            
-            <DaisyCardContent className="pl-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="pl-2">
               <div className="h-80 bg-gray-200 rounded"></div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard className="col-span-3 animate-pulse">
@@ -216,7 +217,7 @@ export function LiveDashboard() {
             
             <DaisyCardContent>
               <div className="h-80 bg-gray-200 rounded"></div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </div>
@@ -234,14 +235,14 @@ export function LiveDashboard() {
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
 
   if (!data) {
     return null;
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -274,7 +275,7 @@ export function LiveDashboard() {
                 {data.summary.risks.high} High
               </DaisyBadge>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -292,7 +293,7 @@ export function LiveDashboard() {
             <div className="text-xs text-muted-foreground mt-1">
               Avg. Effectiveness: {Math.round(data.summary.controls.averageEffectiveness * 100)}%
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -305,7 +306,7 @@ export function LiveDashboard() {
             <p className="text-xs text-muted-foreground">
               Policies, procedures & reports
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -316,7 +317,7 @@ export function LiveDashboard() {
           <DaisyCardContent>
             <div className="text-2xl font-bold">{data.summary.compliance.overall}%</div>
             <DaisyProgress value={data.summary.compliance.overall} className="mt-2" />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -325,8 +326,8 @@ export function LiveDashboard() {
         <DaisyCard className="col-span-4">
           <DaisyCardHeader>
             <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
-          
-          <DaisyCardContent className="pl-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="pl-2">
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.summary.risks.breakdown}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -336,7 +337,7 @@ export function LiveDashboard() {
                 <Bar dataKey="count" fill="#8884d8" />
               </BarChart>
             </ResponsiveContainer>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="col-span-3">
@@ -363,7 +364,7 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -372,8 +373,8 @@ export function LiveDashboard() {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Recent Risks</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="space-y-4">
               {data.recentRisks.map((risk) => (
                 <div key={risk.id} className="flex items-center justify-between">
@@ -387,14 +388,14 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Recent Controls</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="space-y-4">
               {data.recentControls.map((control) => (
                 <div key={control.id} className="flex items-center justify-between">
@@ -415,7 +416,7 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

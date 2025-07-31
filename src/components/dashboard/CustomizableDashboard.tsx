@@ -165,6 +165,7 @@ const sampleWidgets: DashboardWidget[] = [
 
 // Widget Components (simplified for demonstration)
 function RiskOverviewWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
@@ -191,6 +192,7 @@ function RiskOverviewWidget({ config, onConfigChange, size, isEditing }: WidgetP
 }
 
 function ComplianceStatusWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="space-y-3">
@@ -217,6 +219,7 @@ function ComplianceStatusWidget({ config, onConfigChange, size, isEditing }: Wid
 }
 
 function RecentActivitiesWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="space-y-3">
@@ -247,6 +250,7 @@ function RecentActivitiesWidget({ config, onConfigChange, size, isEditing }: Wid
 }
 
 function AIInsightsWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="space-y-3">
@@ -269,6 +273,7 @@ function AIInsightsWidget({ config, onConfigChange, size, isEditing }: WidgetPro
 }
 
 function QuickActionsWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="grid grid-cols-2 gap-2">
@@ -295,6 +300,7 @@ function QuickActionsWidget({ config, onConfigChange, size, isEditing }: WidgetP
 }
 
 function MetricsChartWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+
   return (
     <div className="p-4">
       <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
@@ -575,7 +581,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
         />
       </div>
     );
-  }
+  };
 
   return (
     <div className={`p-6 ${className}`}>

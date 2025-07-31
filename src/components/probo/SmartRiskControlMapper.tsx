@@ -353,7 +353,7 @@ export default function SmartRiskControlMapper({
               </DaisyBadge>
             </div>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
@@ -389,7 +389,7 @@ export default function SmartRiskControlMapper({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Filters and Search */}
@@ -417,7 +417,7 @@ export default function SmartRiskControlMapper({
               </DaisyButton>
             </div>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
@@ -433,7 +433,7 @@ export default function SmartRiskControlMapper({
               <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Severities</SelectItem>
                   <DaisySelectItem value="Critical">Critical</SelectItem>
@@ -448,7 +448,7 @@ export default function SmartRiskControlMapper({
               <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Categories</SelectItem>
                   {riskCategories.map((category) => (
@@ -473,7 +473,7 @@ export default function SmartRiskControlMapper({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Main Content */}
@@ -485,8 +485,8 @@ export default function SmartRiskControlMapper({
               <Target className="h-5 w-5" />
               Risks ({filteredRisks.length})
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-3 max-h-96 overflow-y-auto">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3 max-h-96 overflow-y-auto">
             {filteredRisks.map((risk) => {
               const coverage = calculateRiskCoverage(risk.id);
               const mappedControlsCount = getMappedControls(risk.id).length;
@@ -532,7 +532,7 @@ export default function SmartRiskControlMapper({
                 </motion.div>
               );
             })}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* AI Suggestions & Mapping */}
@@ -542,8 +542,8 @@ export default function SmartRiskControlMapper({
               <Brain className="h-5 w-5" />
               {selectedRisk ? `AI Suggestions for: ${selectedRisk.title}` : 'Select a Risk to View AI Suggestions'}
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             {!selectedRisk ? (
               <div className="text-center py-8">
                 <Target className="h-16 w-16 mx-auto text-gray-400 mb-4" />
@@ -695,7 +695,7 @@ export default function SmartRiskControlMapper({
                 </div>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

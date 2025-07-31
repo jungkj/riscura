@@ -172,8 +172,8 @@ export function SOC2Assessment() {
       'FAILED': 'bg-red-100 text-red-700'
     };
 
-    return (
-      <DaisyBadge className={cn('text-xs', colors[status])}>
+  return (
+    <DaisyBadge className={cn('text-xs', colors[status])}>
         {status.replace('_', ' ')}
       </DaisyBadge>
     );
@@ -250,10 +250,10 @@ export function SOC2Assessment() {
               )}
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -268,7 +268,7 @@ export function SOC2Assessment() {
               </div>
               <Shield className="h-8 w-8 text-[#199BEC]" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
@@ -280,7 +280,7 @@ export function SOC2Assessment() {
               </div>
               <CheckCircle className="h-8 w-8 text-blue-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
@@ -292,7 +292,7 @@ export function SOC2Assessment() {
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
@@ -304,7 +304,7 @@ export function SOC2Assessment() {
               </div>
               <DaisyAlertCircle className="h-8 w-8 text-red-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -316,7 +316,7 @@ export function SOC2Assessment() {
             <span className="text-sm text-[#A8A8A8]">{Math.round(progress.percentage)}% Complete</span>
           </div>
           <DaisyProgress value={progress.percentage} className="h-3" />
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Main Content Tabs */}
@@ -333,8 +333,8 @@ export function SOC2Assessment() {
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-[#191919] font-inter">Framework Information</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-[#A8A8A8]">Framework:</span>
@@ -353,14 +353,14 @@ export function SOC2Assessment() {
                     <span className="text-[#191919] font-medium">{framework.requirements.length}</span>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-[#191919] font-inter">Assessment Status</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">Not Assessed</span>
@@ -381,7 +381,7 @@ export function SOC2Assessment() {
                     </DaisyBadge>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -434,7 +434,7 @@ export function SOC2Assessment() {
                       </DaisyButton>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
@@ -457,7 +457,7 @@ export function SOC2Assessment() {
                   Upload Evidence
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -484,7 +484,7 @@ export function SOC2Assessment() {
                   Generate Gap Analysis Report
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

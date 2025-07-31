@@ -430,7 +430,7 @@ export default function LandingPage() {
                         </li>
                       ))}
                     </ul>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -512,7 +512,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 

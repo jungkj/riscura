@@ -322,9 +322,9 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           ))}
         </>
       );
-    }
+    };
 
-    return (
+  return (
       <div className="relative">
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
@@ -604,7 +604,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Cell Detail Dialog */}

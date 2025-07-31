@@ -567,7 +567,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

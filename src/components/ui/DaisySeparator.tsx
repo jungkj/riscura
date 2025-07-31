@@ -16,7 +16,7 @@ export const DaisySeparator = ({
         {children}
       </div>
     );
-  }
+  };
 
   return (
     <div

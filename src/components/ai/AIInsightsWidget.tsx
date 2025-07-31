@@ -305,7 +305,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
             AI Intelligence Loading...
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="space-y-3">
             {[...Array(3)].map((_, index) => (
@@ -315,10 +315,10 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <DaisyCard className={cn("w-full", className)}>
@@ -680,7 +680,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             )}
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

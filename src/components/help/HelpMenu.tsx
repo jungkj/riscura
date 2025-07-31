@@ -191,7 +191,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
             <Lightbulb className="w-5 h-5 text-yellow-500" />
             Guided Tours
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid gap-3">
             {helpResources.filter(r => r.type === 'tour').map((resource) => (
@@ -232,7 +232,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Other Resources */}
@@ -242,7 +242,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
             <BookOpen className="w-5 h-5 text-green-600" />
             Documentation & Guides
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid gap-3">
             {helpResources.filter(r => r.type !== 'tour').map((resource) => (
@@ -282,7 +282,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Quick Actions */}
@@ -292,7 +292,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
             <Settings className="w-5 h-5 text-purple-600" />
             Quick Actions
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-2 gap-3">
             <DaisyButton
@@ -321,7 +321,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -255,9 +255,9 @@ export default function TouchOptimizedTable({
     
     const config = statusConfig[status.toLowerCase() as keyof typeof statusConfig] || 
                   { variant: 'secondary' as const, label: status };
-    
-    return (
-      <DaisyBadge variant={config.variant} className="text-xs">
+
+  return (
+    <DaisyBadge variant={config.variant} className="text-xs">
         {config.label}
       </DaisyBadge>
     );
@@ -407,7 +407,7 @@ export default function TouchOptimizedTable({
               </DaisyButton>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   };

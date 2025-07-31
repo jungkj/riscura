@@ -267,7 +267,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                     className="mt-2 h-1"
                   />
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         ))}
@@ -318,7 +318,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
     </div>

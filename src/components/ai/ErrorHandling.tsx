@@ -92,7 +92,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
         </div>
       </DaisyAlert>
     );
-  }
+  };
 
   return (
     <motion.div
@@ -361,8 +361,8 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
             {state}
           </DaisyBadge>
         </DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
         <div className="flex justify-between text-sm">
           <span>Failure Count:</span>
           <span className="font-medium">{failures}</span>
@@ -383,7 +383,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
             Reset Circuit Breaker
           </DaisyButton>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

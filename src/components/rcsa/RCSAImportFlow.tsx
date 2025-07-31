@@ -183,8 +183,9 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
   // Virtual scrolling row renderer for risks
   const RiskRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
     const risk = editedRisks[index];
-    return (
-      <div style={style}>
+
+  return (
+    <div style={style}>
         <div className="border rounded-lg p-4 mx-4 mb-4">
           {editingRiskId === risk.externalId ? (
             <div className="space-y-3">

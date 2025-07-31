@@ -49,9 +49,9 @@ export default function AIFeaturesSection() {
 
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
-    }
+    };
 
-    return () => observer.disconnect();
+  return () => observer.disconnect();
   }, []);
 
   return (
@@ -104,7 +104,7 @@ export default function AIFeaturesSection() {
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
                   <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             );
           })}

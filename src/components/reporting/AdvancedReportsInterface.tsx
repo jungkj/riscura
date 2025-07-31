@@ -287,7 +287,7 @@ const FilterBar: React.FC<{
           <DaisySelect defaultValue="last-30-days">
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="today">Today</SelectItem>
               <DaisySelectItem value="yesterday">Yesterday</SelectItem>
@@ -312,7 +312,7 @@ const FilterBar: React.FC<{
               <DaisySelect onValueChange={(value) => onFilterChange(filter.id, value)}>
                 <DaisySelectTrigger className="w-40">
                   <DaisySelectValue placeholder={filter.placeholder} />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   {filter.options?.map((option) => (
                     <DaisySelectItem key={option.value} value={option.value}>

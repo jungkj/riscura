@@ -374,7 +374,7 @@ const TestingForm: React.FC<{
           >
             <DaisySelectTrigger className="mt-enterprise-1">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="passed">
                 <div className="flex items-center space-x-enterprise-2">
@@ -650,7 +650,7 @@ export const ControlTestingWorkflow: React.FC = () => {
         <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
           <DaisySelectTrigger className="w-40">
             <DaisySelectValue placeholder="Status" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="all">All Status</SelectItem>
             {statuses.map(status => (

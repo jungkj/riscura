@@ -357,13 +357,14 @@ const NetworkStatusIndicator: React.FC<{
   };
 
   if (compact) {
-    return (
-      <div className="flex items-center gap-2">
+
+  return (
+    <div className="flex items-center gap-2">
         {getStatusIcon()}
         <span className="text-sm font-medium">{getStatusText()}</span>
       </div>
     );
-  }
+  };
 
   return (
     <DaisyCard className="w-full max-w-sm">
@@ -372,8 +373,8 @@ const NetworkStatusIndicator: React.FC<{
           {getStatusIcon()}
           Network Status
         </DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Status:</span>
           <DaisyBadge variant={status === 'online' ? 'default' : 'destructive'}>
@@ -395,7 +396,7 @@ const NetworkStatusIndicator: React.FC<{
           <span>Last checked:</span>
           <span>{lastChecked.toLocaleTimeString()}</span>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -511,8 +512,8 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
                 <RefreshCw className="w-4 h-4 animate-spin" />
                 Retrying failed requests...
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <DaisyProgress 
                 value={(failedRequests.filter(r => r.retryCount > 0).length / failedRequests.length) * 100} 
                 className="h-2"
@@ -520,7 +521,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
               <p className="text-xs text-muted-foreground mt-2">
                 {failedRequests.length} request{failedRequests.length > 1 ? 's' : ''} in queue
               </p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}

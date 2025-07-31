@@ -154,7 +154,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         >
           <DaisySelectTrigger className={cn("mt-1", errors.category && "border-red-500")}>
             <DaisySelectValue placeholder="Select a category" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             {categories.map((cat) => (
               <DaisySelectItem key={cat.value} value={cat.value}>

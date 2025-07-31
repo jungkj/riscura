@@ -104,10 +104,11 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
   const avgCompletionRate = Math.round((totalCompletions / totalResponses) * 100);
   const avgScore = Math.round(data.performanceMetrics.reduce((sum, metric) => sum + metric.avgScore, 0) / data.performanceMetrics.length);
 
-  const CustomTooltip = ({ active, payload, label }: any): JSX.Element | null => {
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
-      return (
-        <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
+
+  return (
+    <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
           <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
@@ -135,13 +136,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
             <DaisySelectTrigger className="w-32">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
-              <DaisySelectItem value="7d">Last 7 days</SelectItem>
-              <DaisySelectItem value="30d">Last 30 days</SelectItem>
-              <DaisySelectItem value="90d">Last 90 days</SelectItem>
-              <DaisySelectItem value="1y">Last year</SelectItem>
-            </SelectContent>
+              <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
+              <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
+              <DaisySelectItem value="90d">Last 90 days</DaisySelectItem>
+              <DaisySelectItem value="1y">Last year</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
 
           <DaisyButton variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
@@ -193,7 +194,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -217,7 +218,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -241,7 +242,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Target className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -265,7 +266,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
       </div>
@@ -294,7 +295,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                     <span>Response Trends</span>
                     <DaisyBadge variant="outline">Last 30 days</DaisyBadge>
                   </DaisyCardTitle>
-                
+                </DaisyCardHeader>
                 <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={data.responsesTrend}>
@@ -326,7 +327,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </LineChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 
@@ -339,8 +340,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Daily Activity Pattern</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart data={data.responsesTrend.slice(-7)}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -367,7 +368,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </AreaChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           </div>
@@ -384,8 +385,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Completion Rates by Questionnaire</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data.completionRates}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -395,7 +396,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       <Bar dataKey="completionRate" fill="#10b981" name="Completion Rate %" />
                     </BarChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 
@@ -408,7 +409,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Completion Breakdown</DaisyCardTitle>
-                
+                </DaisyCardHeader>
                 <DaisyCardContent className="space-y-4">
                   <div className="space-y-3">
                     <div>
@@ -457,7 +458,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           </div>
@@ -474,8 +475,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Score Distribution</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data.scoreDistribution}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -485,7 +486,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       <Bar dataKey="count" fill="#6366f1" name="Count" />
                     </BarChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 
@@ -498,8 +499,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Score Trends</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={data.responsesTrend.map((item, index) => ({
                       ...item,
@@ -518,7 +519,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       />
                     </LineChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           </div>
@@ -535,8 +536,8 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Performance by Category</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <ComposedChart data={data.performanceMetrics}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -549,7 +550,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       <Line yAxisId="right" type="monotone" dataKey="completion" stroke="#10b981" strokeWidth={2} name="Completion %" />
                     </ComposedChart>
                   </ResponsiveContainer>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
 
@@ -562,7 +563,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Performance Summary</DaisyCardTitle>
-                
+                </DaisyCardHeader>
                 <DaisyCardContent className="space-y-4">
                   {data.performanceMetrics.map((metric, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-notion-bg-tertiary rounded-lg">
@@ -576,7 +577,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       </div>
                     </div>
                   ))}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           </div>

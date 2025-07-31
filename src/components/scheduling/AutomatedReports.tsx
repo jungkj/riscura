@@ -495,7 +495,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 
@@ -507,8 +507,8 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
           <History className="w-5 h-5 mr-2" />
           Execution History
         </DaisyCardTitle>
-      
-      <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
         <div className="space-y-4">
           {executions.map(execution => {
             const report = reports.find(r => r.id === execution.reportId);
@@ -579,7 +579,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
             );
           })}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 
@@ -657,7 +657,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
               </DaisyButton>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Reports List */}
@@ -675,14 +675,14 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
               <DaisyCalendar className="w-5 h-5 mr-2" />
               Report Schedule Calendar
             </DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="text-center py-12 text-gray-500">
               <DaisyCalendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p>Calendar view coming soon</p>
               <p className="text-sm">Visualize report schedules in calendar format</p>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -692,8 +692,8 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-sm">Report Statistics</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm">
@@ -714,14 +714,14 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-sm">Delivery Methods</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 {['email', 'slack', 'teams'].map(method => (
                   <div key={method} className="flex items-center justify-between">
@@ -732,14 +732,14 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-sm">Upcoming Reports</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 {reports
                   .filter(r => r.nextRun && r.status === 'active')
@@ -752,7 +752,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                     </div>
                   ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}
@@ -765,8 +765,8 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Create New Automated Report</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="text-center py-12 text-gray-500">
               <Plus className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <p>Report creation form coming soon</p>
@@ -778,7 +778,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                 Close
               </DaisyButton>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

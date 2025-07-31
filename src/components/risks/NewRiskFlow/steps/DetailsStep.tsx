@@ -96,7 +96,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
           >
             <DaisySelectTrigger className="mt-1">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {statuses.map((status) => (
                 <DaisySelectItem key={status.value} value={status.value}>

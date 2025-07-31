@@ -84,7 +84,7 @@ export default function ControlLibraryPage() {
             <p className="text-xs text-gray-600">
               Across all categories
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -99,7 +99,7 @@ export default function ControlLibraryPage() {
             <p className="text-xs text-gray-600">
               Performing optimally
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -114,7 +114,7 @@ export default function ControlLibraryPage() {
             <p className="text-xs text-gray-600">
               Risks with controls
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -129,7 +129,7 @@ export default function ControlLibraryPage() {
             <p className="text-xs text-gray-600">
               Need immediate attention
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -162,7 +162,7 @@ export default function ControlLibraryPage() {
               <p className="text-gray-600">
                 Control library interface will be available here.
               </p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -185,7 +185,7 @@ export default function ControlLibraryPage() {
                   This will show visual relationships between controls and risks
                 </p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -206,31 +206,31 @@ export default function ControlLibraryPage() {
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardHeader className="pb-2">
                       <DaisyCardTitle className="text-base text-gray-900">Overdue Tests</DaisyCardTitle>
-                    
-                    <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                       <div className="text-2xl font-bold text-red-600">{stats.overdueTests}</div>
                       <p className="text-xs text-gray-600">Require immediate attention</p>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                   
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardHeader className="pb-2">
                       <DaisyCardTitle className="text-base text-gray-900">Due This Week</DaisyCardTitle>
-                    
-                    <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                       <div className="text-2xl font-bold text-yellow-600">3</div>
                       <p className="text-xs text-gray-600">Scheduled for testing</p>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                   
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardHeader className="pb-2">
                       <DaisyCardTitle className="text-base text-gray-900">Completed This Month</DaisyCardTitle>
-                    
-                    <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                       <div className="text-2xl font-bold text-green-600">12</div>
                       <p className="text-xs text-gray-600">Tests completed</p>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </div>
                 
@@ -251,8 +251,8 @@ export default function ControlLibraryPage() {
             <DaisyCard className="bg-white border border-gray-100 shadow-sm">
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-base text-gray-900">Control Effectiveness Trends</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="text-center py-8 text-gray-600">
                     <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -283,14 +283,14 @@ export default function ControlLibraryPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             
             <DaisyCard className="bg-white border border-gray-100 shadow-sm">
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-base text-gray-900">Control Coverage Analysis</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   <div className="text-center py-8 text-gray-600">
                     <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -315,15 +315,15 @@ export default function ControlLibraryPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
           
           <DaisyCard className="bg-white border border-gray-100 shadow-sm">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-base text-gray-900">Control Type Distribution</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[#191919]">
@@ -353,7 +353,7 @@ export default function ControlLibraryPage() {
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

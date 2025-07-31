@@ -240,7 +240,7 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select risk category" />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="operational">Operational</SelectItem>
                         <DaisySelectItem value="financial">Financial</SelectItem>
@@ -276,7 +276,7 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select likelihood level" />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="low">Low - Unlikely to occur</SelectItem>
                         <DaisySelectItem value="medium">Medium - Possible occurrence</SelectItem>
@@ -294,7 +294,7 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select impact level" />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="low">Low - Minimal impact</SelectItem>
                         <DaisySelectItem value="medium">Medium - Moderate impact</SelectItem>
@@ -469,7 +469,7 @@ export default function NewRiskAssessmentPage() {
                   </DaisyButton>
                 )}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </div>

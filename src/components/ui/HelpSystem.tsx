@@ -390,9 +390,8 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
         </div>
         
         <DaisyCardTitle className="text-lg">{step.title}</DaisyCardTitle>
-      
-      
-      <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
         <div className="text-sm text-muted-foreground">
           {step.content}
         </div>
@@ -428,7 +427,7 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
             {!isLastStep && <ChevronRight className="w-4 h-4 ml-1" />}
           </DaisyButton>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -558,7 +557,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                           </div>
                           <ArrowRight className="w-4 h-4 text-muted-foreground" />
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   ))}
                 </div>
@@ -597,7 +596,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                           <Play className="w-4 h-4 mr-2" />
                           Start Tour
                         </DaisyButton>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   ))}
                 </div>
@@ -612,8 +611,8 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                       <MessageCircle className="w-4 h-4" />
                       Contact Support
                     </DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <p className="text-sm text-muted-foreground mb-3">
                       Get help from our support team
                     </p>
@@ -621,7 +620,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Open Support Ticket
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
                 
                 <DaisyCard>
@@ -630,8 +629,8 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                       <Video className="w-4 h-4" />
                       Video Tutorials
                     </DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <p className="text-sm text-muted-foreground mb-3">
                       Watch step-by-step video guides
                     </p>
@@ -639,7 +638,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Tutorials
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>
@@ -704,7 +703,7 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
         </DaisyPopoverContent>
       </DaisyPopover>
     );
-  }
+  };
 
   return (
     <DaisyTooltip content={tooltip}>

@@ -157,9 +157,9 @@ export const useFocusManagement = () => {
     // Focus first element
     if (firstElement) {
       firstElement.focus();
-    }
+    };
 
-    return () => {
+  return () => {
       container.removeEventListener('keydown', handleTabKey);
     };
   }, []);

@@ -341,7 +341,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
             <span>Pro tip: Use keyboard shortcuts for faster navigation</span>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

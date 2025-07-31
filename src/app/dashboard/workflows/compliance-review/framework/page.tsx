@@ -158,8 +158,9 @@ export default function FrameworkComplianceCheckPage() {
       interval = setInterval(() => {
         setTimeElapsed(prev => prev + 1);
       }, 1000);
-    }
-    return () => clearInterval(interval);
+    };
+
+  return () => clearInterval(interval);
   }, [assessmentInProgress]);
 
   const getAllRequirements = (framework: Framework) => {
@@ -309,7 +310,7 @@ export default function FrameworkComplianceCheckPage() {
                         </div>
                         <Shield className="h-8 w-8 text-gray-400" />
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
@@ -321,8 +322,8 @@ export default function FrameworkComplianceCheckPage() {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Ready to Start Assessment</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <h3 className="font-medium text-blue-900 mb-2">Selected Framework</h3>
                   <p className="text-blue-800">{selectedFramework.name} - {selectedFramework.description}</p>
@@ -350,7 +351,7 @@ export default function FrameworkComplianceCheckPage() {
                     Choose Different Framework
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
 
@@ -374,7 +375,7 @@ export default function FrameworkComplianceCheckPage() {
                   <p className="text-sm text-gray-600 mt-2">
                     Requirement {currentRequirementIndex + 1} of {getAllRequirements(selectedFramework).length}
                   </p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Current Requirement */}
@@ -451,7 +452,7 @@ export default function FrameworkComplianceCheckPage() {
                       Reset
                     </DaisyButton>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           )}
@@ -475,7 +476,7 @@ export default function FrameworkComplianceCheckPage() {
                     Start Over
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </div>

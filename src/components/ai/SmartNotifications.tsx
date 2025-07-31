@@ -410,7 +410,7 @@ const NotificationCard: React.FC<{
             ))}
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -664,10 +664,10 @@ export const SmartNotifications: React.FC<{
               )}
             </div>
           </DaisyScrollArea>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-enterprise-6">
@@ -702,7 +702,7 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">Unread</div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardContent className="p-enterprise-4">
@@ -713,7 +713,7 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">Critical</div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardContent className="p-enterprise-4">
@@ -724,7 +724,7 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">AI Generated</div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         <DaisyCard>
           <DaisyCardContent className="p-enterprise-4">
@@ -735,7 +735,7 @@ export const SmartNotifications: React.FC<{
                 <div className="text-caption text-text-secondary">Total Active</div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 

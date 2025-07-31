@@ -141,7 +141,7 @@ function ARIAChat() {
                       <p className="text-sm text-gray-600 font-inter leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
@@ -152,25 +152,25 @@ function ARIAChat() {
               <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">1,200+</div>
                 <div className="text-sm text-gray-600 font-inter">Risks Analyzed</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             <DaisyCard className="border border-gray-200">
               <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">94%</div>
                 <div className="text-sm text-gray-600 font-inter">Accuracy Rate</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             <DaisyCard className="border border-gray-200">
               <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">15min</div>
                 <div className="text-sm text-gray-600 font-inter">Avg Response</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             <DaisyCard className="border border-gray-200">
               <DaisyCardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-[#191919] font-inter mb-1">24/7</div>
                 <div className="text-sm text-gray-600 font-inter">Availability</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </div>
@@ -186,8 +186,8 @@ function ARIAChat() {
                 AI Powered
               </DaisyBadge>
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="p-0">
+        </DaisyCardHeader>
+        <DaisyCardContent className="p-0">
             {/* Messages Area */}
             <div className="h-[500px] overflow-y-auto p-6 space-y-6 bg-white">
               {messages.map((message) => (
@@ -272,7 +272,7 @@ function ARIAChat() {
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Help Section */}
@@ -321,6 +321,7 @@ function ARIAChat() {
 }
 
 export default function ARIAPage() {
+
   return (
     <ProtectedRoute>
       <ARIAChat />

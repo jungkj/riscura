@@ -193,8 +193,9 @@ export default function DocumentViewer({
     if (!previewUrl) return null;
 
     if (documentData.isImage) {
-      return (
-        <div className="flex items-center justify-center h-full bg-gray-100 rounded">
+
+  return (
+    <div className="flex items-center justify-center h-full bg-gray-100 rounded">
           <img
             src={previewUrl}
             alt={documentData.originalName}
@@ -218,9 +219,9 @@ export default function DocumentViewer({
           />
         </div>
       );
-    }
+    };
 
-    return (
+  return (
       <div className="flex items-center justify-center h-full">
         <p className="text-gray-500">Preview not available for this file type</p>
       </div>
@@ -458,7 +459,7 @@ export default function DocumentViewer({
               </div>
             </DaisyTabsContent>
           </DaisyTabs>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Preview Dialog */}

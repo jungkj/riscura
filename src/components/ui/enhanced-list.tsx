@@ -223,7 +223,7 @@ const ContactInfo: React.FC<{
         )}
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-1">
@@ -849,7 +849,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
                   <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
                     <Filter className="h-4 w-4" />
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {statusOptions.map(option => (
                       <DaisySelectItem key={option.value} value={option.value}>
@@ -863,7 +863,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
                   <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
                     <Star className="h-4 w-4" />
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {priorityOptions.map(option => (
                       <DaisySelectItem key={option.value} value={option.value}>
@@ -916,7 +916,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
               <DaisySelectTrigger className="w-32 gap-2">
                 <ArrowUpDown className="h-4 w-4" />
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {sortOptions.map(option => (
                   <DaisySelectItem key={option.value} value={option.value}>

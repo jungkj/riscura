@@ -187,7 +187,7 @@ function ProboPageContent() {
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.vendorAssessments === 0 ? 'No assessments yet' : 'Total assessments'}
                     </p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
                 <DaisyCard className="hover:shadow-md transition-shadow">
                   <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -199,7 +199,7 @@ function ProboPageContent() {
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.securityControls === 0 ? 'No controls added' : 'Active controls'}
                     </p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
                 <DaisyCard className="hover:shadow-md transition-shadow">
                   <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -211,7 +211,7 @@ function ProboPageContent() {
                     <p className="text-xs text-muted-foreground">
                       {loading ? 'Loading...' : stats.complianceScore === 0 ? 'Not assessed' : 'Average compliance'}
                     </p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
 
@@ -219,8 +219,8 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardHeader>
                     <DaisyCardTitle>Quick Start Actions</DaisyCardTitle>
-                  
-                  <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                     <DaisyButton 
                       className="w-full justify-start" 
                       variant="outline"
@@ -245,14 +245,14 @@ function ProboPageContent() {
                       <CheckCircle2 className="h-4 w-4 mr-2" />
                       Setup SOC 2 Framework
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
                 <DaisyCard>
                   <DaisyCardHeader>
                     <DaisyCardTitle>Platform Features</DaisyCardTitle>
-                  
-                  <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-green-100 rounded-lg">
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -280,7 +280,7 @@ function ProboPageContent() {
                         <p className="text-sm text-gray-600">Real-time regulatory tracking</p>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>
@@ -302,7 +302,7 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading vendor assessments...</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : vendorAssessmentData.length === 0 ? (
                 <DaisyCard>
@@ -314,7 +314,7 @@ function ProboPageContent() {
                       <Plus className="h-4 w-4 mr-2" />
                       Start First Assessment
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
@@ -363,7 +363,7 @@ function ProboPageContent() {
                             </DaisyBadge>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   ))}
                 </div>
@@ -398,7 +398,7 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading controls library...</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : filteredControls.length === 0 && searchQuery === '' ? (
                 <DaisyCard>
@@ -410,7 +410,7 @@ function ProboPageContent() {
                       <Plus className="h-4 w-4 mr-2" />
                       Add First Control
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : filteredControls.length === 0 ? (
                 <DaisyCard>
@@ -418,7 +418,7 @@ function ProboPageContent() {
                     <Search className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No controls found</h3>
                     <p className="text-gray-600">Try adjusting your search query</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
@@ -462,7 +462,7 @@ function ProboPageContent() {
                             </DaisyButton>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   ))}
                 </div>
@@ -486,7 +486,7 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardContent className="p-12 text-center">
                     <p className="text-gray-500">Loading SOC 2 assessment data...</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : soc2Score.overallScore === 0 && soc2Score.categories.length === 0 ? (
                 <DaisyCard>
@@ -498,7 +498,7 @@ function ProboPageContent() {
                       <Plus className="h-4 w-4 mr-2" />
                       Set Up SOC 2 Framework
                     </DaisyButton>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ) : (
                 <DaisyCard>
@@ -509,8 +509,8 @@ function ProboPageContent() {
                         {soc2Score.overallScore}%
                       </DaisyBadge>
                     </DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     {soc2Score.categories.length === 0 ? (
                       <div className="text-center py-8">
                         <p className="text-gray-600">No category data available yet</p>
@@ -540,7 +540,7 @@ function ProboPageContent() {
                                   <span className="font-bold">{category.controls}</span>
                                 </div>
                               </div>
-                            </DaisyCardBody>
+                            </DaisyCardContent>
                           </DaisyCard>
                         ))}
                       </div>
@@ -557,6 +557,7 @@ function ProboPageContent() {
 }
 
 export default function ProboPage() {
+
   return (
     <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
       <ProboPageContent />

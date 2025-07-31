@@ -244,7 +244,7 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
             
             <DaisyCardFooter className="flex justify-center">
               <p className="text-sm text-muted-foreground">

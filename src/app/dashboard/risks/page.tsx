@@ -5,6 +5,7 @@ import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function RisksPage() {
+
   return (
     <ProtectedRoute>
       <MainContentArea
@@ -18,10 +19,10 @@ export default function RisksPage() {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Risk Registry</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <p className="text-gray-500">Risk management interface coming soon...</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>

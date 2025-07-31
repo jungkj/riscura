@@ -270,9 +270,9 @@ export default function TrendAnalysisChart({
     
     const data = payload[0].payload;
     const config = metricConfigs[selectedMetric];
-    
-    return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
+
+  return (
+    <div className="bg-white p-3 border rounded-lg shadow-lg">
         <div className="font-medium text-sm mb-2">
           {format(new Date(label), 'MMM dd, yyyy')}
         </div>
@@ -531,7 +531,7 @@ export default function TrendAnalysisChart({
             <DaisySelect value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)}>
               <DaisySelectTrigger className="w-48">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {Object.entries(metricConfigs).map(([key, config]) => (
                   <DaisySelectItem key={key} value={key}>
@@ -544,7 +544,7 @@ export default function TrendAnalysisChart({
             <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
               <DaisySelectTrigger className="w-24">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="7d">7 days</SelectItem>
                 <DaisySelectItem value="30d">30 days</SelectItem>
@@ -717,7 +717,7 @@ export default function TrendAnalysisChart({
                       </div>
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               <DaisyCard>
@@ -746,7 +746,7 @@ export default function TrendAnalysisChart({
                       📊 Data points: {filteredData.length} | Range: {timeRange}
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>

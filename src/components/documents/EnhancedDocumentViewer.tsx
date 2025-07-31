@@ -216,8 +216,9 @@ export default function EnhancedDocumentViewer({
 
   const renderPreview = () => {
     if (!document || !canPreview(document.type)) {
-      return (
-        <div className="flex flex-col items-center justify-center h-96 text-gray-500">
+
+  return (
+    <div className="flex flex-col items-center justify-center h-96 text-gray-500">
           <FileText className="w-16 h-16 mb-4" />
           <p>Preview not available for this file type</p>
           <DaisyButton onClick={handleDownload} className="mt-4">
@@ -300,9 +301,9 @@ export default function EnhancedDocumentViewer({
           </pre>
         </DaisyScrollArea>
       );
-    }
+    };
 
-    return (
+  return (
       <div className="flex flex-col items-center justify-center h-96 text-gray-500">
         <FileText className="w-16 h-16 mb-4" />
         <p>Loading preview...</p>
@@ -390,7 +391,7 @@ export default function EnhancedDocumentViewer({
                   {formatFileSize(version.size)}
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))
       ) : (
@@ -436,7 +437,7 @@ export default function EnhancedDocumentViewer({
                     <p className="text-sm mt-1">{comment.text}</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ))
         ) : (
@@ -464,7 +465,7 @@ export default function EnhancedDocumentViewer({
         </DaisyButton>
       </div>
     );
-  }
+  };
 
   return (
     <>

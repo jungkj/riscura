@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks..."
+
+# Check if we're pushing to main or master
+protected_branch='main'
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ $protected_branch = $current_branch ]; then
+  echo "🛡️ Direct push to main branch detected!"
+  echo "Running comprehensive validation..."
+  
+  # Run full validation suite
+  npm run production:validate
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ Production validation failed! Push rejected."
+    exit 1
+  fi
+else
+  # For feature branches, run lighter checks
+  echo "🔧 Running feature branch validation..."
+  npm run verify:jsx
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ JSX validation failed! Push rejected."
+    exit 1
+  fi
+fi
+
+echo "✅ Pre-push checks completed successfully!"

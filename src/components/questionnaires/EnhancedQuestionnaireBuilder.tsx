@@ -724,15 +724,15 @@ export function EnhancedQuestionnaireBuilder({
                       <DaisySelect value={category} onValueChange={setCategory}>
                         <DaisySelectTrigger>
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
-                          <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
-                          <DaisySelectItem value="compliance">Compliance</SelectItem>
-                          <DaisySelectItem value="security">Security</SelectItem>
-                          <DaisySelectItem value="vendor_assessment">Vendor Assessment</SelectItem>
-                          <DaisySelectItem value="audit">Audit</SelectItem>
-                          <DaisySelectItem value="custom">Custom</SelectItem>
-                        </SelectContent>
+                          <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
+                          <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
+                          <DaisySelectItem value="security">Security</DaisySelectItem>
+                          <DaisySelectItem value="vendor_assessment">Vendor Assessment</DaisySelectItem>
+                          <DaisySelectItem value="audit">Audit</DaisySelectItem>
+                          <DaisySelectItem value="custom">Custom</DaisySelectItem>
+                        </DaisySelectContent>
                       </DaisySelect>
                     </div>
                   </div>
@@ -886,6 +886,7 @@ function BuilderContent({
   onDeleteSection,
   getQuestionTypeIcon
 }: any) {
+
   return (
     <div className="space-y-6">
       <Reorder.Group axis="y" values={sections} onReorder={onSectionReorder}>
@@ -1049,6 +1050,7 @@ function BuilderContent({
 }
 
 function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddBranchingLogic }: any) {
+
   return (
     <div className="space-y-6">
       <DaisyCard>
@@ -1057,7 +1059,7 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
             <GitBranch className="w-5 h-5 mr-2" />
             Conditional Logic & Branching
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           {selectedQuestion ? (
             <div className="space-y-4">
@@ -1065,7 +1067,7 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
                 <Info className="w-4 h-4" />
                 <DaisyAlertDescription>
                   Configure when this question should be shown or hidden based on other responses.
-                
+                </DaisyAlertDescription>
               </DaisyAlert>
               
               {/* Conditional rules UI would go here */}
@@ -1078,13 +1080,14 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
               Select a question to configure conditional logic
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
 }
 
 function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: any) {
+
   return (
     <div className="space-y-6">
       <DaisyCard>
@@ -1093,7 +1096,7 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
             <CheckCircle2 className="w-5 h-5 mr-2" />
             Question Validation
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           {selectedQuestion ? (
             <div className="space-y-4">
@@ -1114,19 +1117,20 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
               Select a question to configure validation rules
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
 }
 
 function AdvancedSettingsContent() {
+
   return (
     <div className="space-y-6">
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle>Advanced Configuration</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="space-y-4">
             <div>
@@ -1151,7 +1155,7 @@ function AdvancedSettingsContent() {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -1170,13 +1174,14 @@ function PreviewComponent({
   const visibleQuestions = currentSectionData ? getVisibleQuestions(currentSectionData.id) : [];
 
   if (!currentSectionData) {
-    return (
-      <div className="text-center py-8">
+
+  return (
+    <div className="text-center py-8">
         <h3 className="text-lg font-semibold">Preview Complete</h3>
         <p className="text-gray-600">You have completed the questionnaire preview.</p>
       </div>
     );
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -1239,7 +1244,7 @@ function PreviewComponent({
                   {/* Add more question types as needed */}
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>

@@ -101,7 +101,7 @@ const FrameworkCard: React.FC<{
             ))}
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -122,7 +122,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
             <p className="text-xs text-muted-foreground">
               σ = {results.standardDeviation.toFixed(2)}
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -134,7 +134,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
               {results.confidenceIntervals.find(ci => ci.level === 95)?.lower.toFixed(2)} -{' '}
               {results.confidenceIntervals.find(ci => ci.level === 95)?.upper.toFixed(2)}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -145,7 +145,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
             <div className="text-lg font-semibold text-red-600">
               {results.valueAtRisk.find(varItem => varItem.confidence === 95)?.value.toFixed(2)}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -163,14 +163,14 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
               <p className="text-sm">Bins: {results.distribution.bins.length}</p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Percentiles */}
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle>Key Percentiles</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(results.distribution.percentiles).map(([percentile, value]) => (
@@ -180,7 +180,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -214,7 +214,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
               <p className="text-2xl font-bold">{analysis.networkMetrics.criticalPaths.length}</p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Systemic Risk Indicators */}
@@ -249,7 +249,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Risk Clusters */}
@@ -282,7 +282,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>
@@ -372,7 +372,7 @@ const RecommendationsView: React.FC<{
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -478,7 +478,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                 <p className="text-xs text-muted-foreground">
                   {risks.filter(r => r.riskScore >= 15).length} high risk
                 </p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -490,7 +490,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                 <p className="text-xs text-muted-foreground">
                   {controls.filter(c => c.effectiveness === 'high').length} highly effective
                 </p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -500,7 +500,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
               <DaisyCardContent>
                 <div className="text-lg font-semibold">{selectedFramework.toUpperCase()}</div>
                 <p className="text-xs text-muted-foreground">Industry standard</p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -518,7 +518,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                     {currentReport ? 'Complete' : 'Pending'}
                   </span>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -564,7 +564,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                   >
                     <DaisySelectTrigger id="risk-select">
                       <DaisySelectValue placeholder="Choose a risk to analyze" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {risks.map((risk) => (
                         <DaisySelectItem key={risk.id} value={risk.id}>
@@ -630,7 +630,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -677,7 +677,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                       </div>
                     )}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           )}
@@ -698,7 +698,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                     recommendations={currentReport.recommendations}
                     onApply={handleApplyRecommendation}
                   />
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           )}

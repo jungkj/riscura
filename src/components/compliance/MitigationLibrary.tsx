@@ -199,12 +199,13 @@ export function MitigationLibrary() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
+
+  return (
+    <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -261,7 +262,7 @@ export function MitigationLibrary() {
                   <option value="ADVANCED">Advanced</option>
                 </select>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Selection Actions */}
@@ -343,7 +344,7 @@ export function MitigationLibrary() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>
@@ -370,7 +371,7 @@ export function MitigationLibrary() {
                   </div>
                   <h3 className="font-medium text-[#191919] mb-1">{category.name}</h3>
                   <p className="text-xs text-[#A8A8A8]">Security controls</p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
@@ -378,8 +379,8 @@ export function MitigationLibrary() {
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">Priority Distribution</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
@@ -403,7 +404,7 @@ export function MitigationLibrary() {
                   <p className="text-sm text-[#A8A8A8]">Advanced</p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -469,7 +470,7 @@ export function MitigationLibrary() {
                   <li>• Mapping to compliance requirements</li>
                 </ul>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -493,7 +494,7 @@ export function MitigationLibrary() {
                   Browse Library
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

@@ -12,6 +12,7 @@ const DEMO_ORGANIZATION_ID = 'org_demo_123'
 const DEMO_USER_ID = 'user_demo_123'
 
 export default function RealTimeDashboardPage() {
+
   return (
     <div className="container mx-auto py-8 space-y-8">
       {/* Header */}
@@ -71,7 +72,7 @@ export default function RealTimeDashboardPage() {
               <li>• Connection status monitoring</li>
               <li>• Offline mode detection</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -91,7 +92,7 @@ export default function RealTimeDashboardPage() {
               <li>• Document uploads/modifications</li>
               <li>• User activity tracking</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -111,7 +112,7 @@ export default function RealTimeDashboardPage() {
               <li>• Activity feed monitoring</li>
               <li>• Team collaboration metrics</li>
             </ul>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -178,7 +179,7 @@ export default function RealTimeDashboardPage() {
               
             </DaisyAlert>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   )

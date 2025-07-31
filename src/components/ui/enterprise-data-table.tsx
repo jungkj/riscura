@@ -464,8 +464,8 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         </div>
       </div>
     );
-  }
-  
+  };
+
   return (
     <div className={cn("enterprise-data-table bg-surface-primary rounded-lg border border-border shadow-notion-sm", className)}>
       {/* Toolbar */}
@@ -780,7 +780,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisySelect value={String(pageSize)} onValueChange={(value) => onPageSizeChange?.(Number(value))}>
               <DaisySelectTrigger className="w-24 h-8">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="25">25</SelectItem>
                 <DaisySelectItem value="50">50</SelectItem>

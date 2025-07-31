@@ -3,6 +3,7 @@
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function ActivityPage() {
+
   return (
     <ProtectedRoute>
       <div className="p-6">

@@ -468,10 +468,10 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               Contact your administrator to enable AI capabilities
             </p>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -490,7 +490,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
           <DaisySelect value={selectedAgent} onValueChange={setSelectedAgent}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Select agent" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {availableAgents.map((agent) => (
                 <DaisySelectItem key={agent.id} value={agent.id}>
@@ -587,7 +587,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                 );
               })}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -654,7 +654,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -367,7 +367,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

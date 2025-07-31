@@ -85,8 +85,8 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
     const item = processedData[index];
     const isEven = index % 2 === 0;
 
-    return (
-      <div
+  return (
+    <div
         style={style}
         className={`flex items-center border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${
           isEven ? 'bg-white' : 'bg-gray-50'

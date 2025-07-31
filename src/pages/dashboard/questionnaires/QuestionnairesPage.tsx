@@ -634,8 +634,9 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -657,7 +658,7 @@ export default function QuestionnairesPage({ view = 'list' }: QuestionnairesPage
         </motion.div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background">

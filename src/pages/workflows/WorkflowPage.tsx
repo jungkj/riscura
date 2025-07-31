@@ -216,8 +216,9 @@ export default function WorkflowPage() {
     };
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
-    return (
-      <DaisyBadge variant="outline" className={config.color}>
+
+  return (
+    <DaisyBadge variant="outline" className={config.color}>
         {config.label}
       </DaisyBadge>
     );
@@ -264,10 +265,10 @@ export default function WorkflowPage() {
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -297,7 +298,7 @@ export default function WorkflowPage() {
             <p className="text-xs text-muted-foreground">
               Across all types
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -310,7 +311,7 @@ export default function WorkflowPage() {
             <p className="text-xs text-muted-foreground">
               Currently running
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -323,7 +324,7 @@ export default function WorkflowPage() {
             <p className="text-xs text-muted-foreground">
               Successfully finished
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -336,7 +337,7 @@ export default function WorkflowPage() {
             <p className="text-xs text-muted-foreground">
               Past due date
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -471,7 +472,7 @@ export default function WorkflowPage() {
                   </DaisyTableBody>
                 </DaisyTable>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -549,7 +550,7 @@ export default function WorkflowPage() {
                               )}
                             </div>
                           </div>
-                        </DaisyCardBody>
+                        </DaisyCardContent>
                       </DaisyCard>
                     );
                   })}
@@ -582,7 +583,7 @@ export default function WorkflowPage() {
                     <p className="text-sm">Will show completion trends and bottlenecks</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -613,7 +614,7 @@ export default function WorkflowPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -772,7 +773,7 @@ const WorkflowSteps: React.FC<WorkflowStepsProps> = ({ workflow }) => {
                   )}
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>

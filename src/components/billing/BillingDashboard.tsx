@@ -508,7 +508,7 @@ const BillingDashboard: React.FC = () => {
             <CreditCard className="h-5 w-5" />
             Current Subscription
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -556,7 +556,7 @@ const BillingDashboard: React.FC = () => {
               )}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Usage Overview */}
@@ -601,7 +601,7 @@ const BillingDashboard: React.FC = () => {
               );
             })}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Tabs */}
@@ -622,8 +622,8 @@ const BillingDashboard: React.FC = () => {
                     <DaisyCalendar className="h-5 w-5" />
                     Upcoming Invoice
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Amount:</span>
@@ -645,7 +645,7 @@ const BillingDashboard: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
 
@@ -656,8 +656,8 @@ const BillingDashboard: React.FC = () => {
                   <CreditCard className="h-5 w-5" />
                   Payment Methods
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-3">
                   {billingData.paymentMethods.map((method) => (
                     <div key={method.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -683,7 +683,7 @@ const BillingDashboard: React.FC = () => {
                     Add Payment Method
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -695,8 +695,8 @@ const BillingDashboard: React.FC = () => {
                 <FileText className="h-5 w-5" />
                 Invoice History
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 {billingData.invoices.map((invoice) => (
                   <div key={invoice.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -735,7 +735,7 @@ const BillingDashboard: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -788,7 +788,7 @@ const BillingDashboard: React.FC = () => {
                   >
                     {billingData.subscription.plan === plan.name.toUpperCase() ? 'Current Plan' : 'Upgrade'}
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>

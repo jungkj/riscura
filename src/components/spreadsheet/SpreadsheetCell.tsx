@@ -157,7 +157,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
           >
             <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {column.dropdownOptions?.map((option) => (
                 <DaisySelectItem key={option} value={option}>
@@ -254,9 +254,9 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
               rows={1}
             />
           );
-        }
+        };
 
-        return (
+  return (
           <DaisyInput
             ref={inputRef}
             value={localValue}
@@ -275,7 +275,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
         {renderEditingInput()}
       </div>
     );
-  }
+  };
 
   return (
     <div

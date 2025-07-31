@@ -142,7 +142,7 @@ export default function AssessmentDetailPage() {
               </div>
               <FileCheck className="h-8 w-8 text-blue-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -154,7 +154,7 @@ export default function AssessmentDetailPage() {
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -166,7 +166,7 @@ export default function AssessmentDetailPage() {
               </div>
               <DaisyAlertTriangle className="h-8 w-8 text-red-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -178,7 +178,7 @@ export default function AssessmentDetailPage() {
               </div>
               <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -193,7 +193,7 @@ export default function AssessmentDetailPage() {
               </div>
               <DaisyProgress value={assessment.progress} className="h-3" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -215,8 +215,8 @@ export default function AssessmentDetailPage() {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Assessment Details</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div>
                   <h4 className="font-medium text-gray-900">Description</h4>
                   <p className="text-sm text-gray-600">{assessment.description}</p>
@@ -243,14 +243,14 @@ export default function AssessmentDetailPage() {
                     <p className="text-sm text-gray-600">{assessment.dueDate}</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Assessment Objectives</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <ul className="space-y-2">
                   {assessment.objectives.map((objective, index) => (
                     <li key={index} className="flex items-start space-x-2">
@@ -259,7 +259,7 @@ export default function AssessmentDetailPage() {
                     </li>
                   ))}
                 </ul>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -268,8 +268,8 @@ export default function AssessmentDetailPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Identified Risks</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {assessment.risks.map((risk) => (
                   <div key={risk.id} className="border rounded-lg p-4 hover:bg-gray-50">
@@ -298,7 +298,7 @@ export default function AssessmentDetailPage() {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -306,8 +306,8 @@ export default function AssessmentDetailPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Assessment Activities</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {assessment.activities.map((activity) => (
                   <div key={activity.id} className="flex items-start space-x-3 pb-4 border-b last:border-b-0">
@@ -324,7 +324,7 @@ export default function AssessmentDetailPage() {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -370,8 +370,8 @@ export default function AssessmentDetailPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Assessment Reports</DaisyCardTitle>
-            
-            <DaisyCardContent className="flex flex-col items-center justify-center p-12">
+        </DaisyCardHeader>
+        <DaisyCardContent className="flex flex-col items-center justify-center p-12">
               <FileText className="h-16 w-16 text-gray-400 mb-4" />
               <h3 className="text-lg font-medium mb-2">No Reports Generated</h3>
               <p className="text-sm text-gray-600 text-center mb-6 max-w-md">
@@ -381,7 +381,7 @@ export default function AssessmentDetailPage() {
                 <Download className="h-4 w-4 mr-2" />
                 Generate Interim Report
               </DaisyButton>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

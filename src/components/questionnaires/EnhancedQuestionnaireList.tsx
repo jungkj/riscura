@@ -424,7 +424,9 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   };
 
   // Render questionnaire card
-  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => {return (
+  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => {
+
+  return (
     <motion.div
       key={questionnaire.id}
       layout
@@ -506,7 +508,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
             {questionnaire.description}
           </p>
-        
+        </DaisyCardHeader>
         
         <DaisyCardContent className="space-y-4">
           {/* Status and Priority Badges */}
@@ -581,7 +583,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               <span>Due: {questionnaire.deadline.toLocaleDateString()}</span>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );}
@@ -698,7 +700,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             <DaisySelect value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="lastModified">Last Modified</SelectItem>
                 <DaisySelectItem value="title">Title</SelectItem>

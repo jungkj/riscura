@@ -318,15 +318,15 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <FileText className="h-5 w-5" />
                 Report Configuration
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               {/* Template Selection */}
               <div className="space-y-2">
                 <DaisyLabel htmlFor="template">Report Template</DaisyLabel>
                 <DaisySelect onValueChange={handleTemplateSelect}>
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select a report template" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {templates.map(template => (
                       <DaisySelectItem key={template.id} value={template.id}>
@@ -388,7 +388,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -400,8 +400,8 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <Settings className="h-5 w-5" />
                 Report Filters
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               {/* Date Range */}
               <div className="space-y-2">
                 <DaisyLabel>Date Range</DaisyLabel>
@@ -417,7 +417,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisySelect onValueChange={(value) => handleFilterChange('categories', [value])}>
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select categories" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     <DaisySelectItem value="security">Security</SelectItem>
                     <DaisySelectItem value="operational">Operational</SelectItem>
@@ -434,7 +434,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisySelect onValueChange={(value) => handleFilterChange('status', [value])}>
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select status" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     <DaisySelectItem value="active">Active</SelectItem>
                     <DaisySelectItem value="mitigated">Mitigated</SelectItem>
@@ -450,7 +450,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisySelect onValueChange={(value) => handleFilterChange('priority', [value])}>
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select priority" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     <DaisySelectItem value="critical">Critical</SelectItem>
                     <DaisySelectItem value="high">High</SelectItem>
@@ -459,7 +459,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </SelectContent>
                 </DaisySelect>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -471,8 +471,8 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <Mail className="h-5 w-5" />
                 Delivery Options
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               {/* Email Recipients */}
               <div className="space-y-2">
                 <DaisyLabel>Email Recipients</DaisyLabel>
@@ -527,7 +527,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                         >
                           <DaisySelectTrigger>
                             <DaisySelectValue placeholder="Select frequency" />
-                          </SelectTrigger>
+                          </DaisySelectTrigger>
                           <DaisySelectContent>
                             <DaisySelectItem value="daily">Daily</SelectItem>
                             <DaisySelectItem value="weekly">Weekly</SelectItem>
@@ -566,7 +566,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                       >
                         <DaisySelectTrigger>
                           <DaisySelectValue placeholder="Select timezone" />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="UTC">UTC</SelectItem>
                           <DaisySelectItem value="America/New_York">Eastern Time</SelectItem>
@@ -579,7 +579,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 )}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -591,8 +591,8 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <Eye className="h-5 w-5" />
                 Report Preview
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               <DaisyButton onClick={generatePreview} variant="outline" className="w-full">
                 Generate Preview
               </DaisyButton>
@@ -632,7 +632,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

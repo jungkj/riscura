@@ -138,7 +138,7 @@ export default function ThirdPartyAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">3</p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
@@ -150,7 +150,7 @@ export default function ThirdPartyAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
@@ -162,7 +162,7 @@ export default function ThirdPartyAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">2</p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
@@ -174,7 +174,7 @@ export default function ThirdPartyAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">92%</p>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 
@@ -265,7 +265,7 @@ export default function ThirdPartyAssessmentPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </Suspense>

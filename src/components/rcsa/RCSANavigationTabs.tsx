@@ -269,8 +269,9 @@ export function RCSANavigationTabs({
   );
 
   if (variant === 'pills') {
-    return (
-      <div className={cn("flex flex-wrap gap-2 mb-6", className)}>
+
+  return (
+    <div className={cn("flex flex-wrap gap-2 mb-6", className)}>
         {tabs.map((tab) => (
                      <DaisyButton
              key={tab.value}
@@ -286,7 +287,7 @@ export function RCSANavigationTabs({
         {children}
       </div>
     );
-  }
+  };
 
   return (
     <div className={cn("border-b border-border mb-6", className)}>
@@ -431,6 +432,7 @@ export function RCSATabContent({
   actions?: React.ReactNode;
   className?: string;
 }) {
+
   return (
     <div className={cn("space-y-6", className)}>
       {(title || description || actions) && (

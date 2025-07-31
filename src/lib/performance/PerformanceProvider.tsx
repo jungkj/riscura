@@ -340,8 +340,8 @@ export const LazyImage: React.FC<{
         <span className="text-gray-500 text-sm">Failed to load</span>
       </div>
     );
-  }
-  
+  };
+
   return (
     <div className={cn('relative', className)}>
       {!isLoaded && (

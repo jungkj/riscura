@@ -313,8 +313,8 @@ export default function CollaborativeQuestionnairePage({
                   <DaisyCardTitle>
                     {currentMode === 'view' ? 'Preview Mode' : 'Edit Mode'}
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-6">
                     <div>
                       <h2 className="text-2xl font-bold mb-2">{questionnaire.title}</h2>
@@ -365,7 +365,7 @@ export default function CollaborativeQuestionnairePage({
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
           </div>

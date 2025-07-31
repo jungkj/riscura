@@ -250,7 +250,7 @@ export function KPIWidget({
             <div className="text-sm text-gray-500">No data available</div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

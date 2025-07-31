@@ -409,7 +409,7 @@ export function QuestionnaireBuilder({
           >
             <DaisySelectTrigger>
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="text">Text Input</SelectItem>
               <DaisySelectItem value="textarea">Long Text</SelectItem>
@@ -633,8 +633,8 @@ export function QuestionnaireBuilder({
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Questionnaire Details</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                       <DaisyLabel htmlFor="title">Title</DaisyLabel>
@@ -650,7 +650,7 @@ export function QuestionnaireBuilder({
                       <DaisySelect value={category} onValueChange={(value) => setCategory(value as QuestionnaireCategory)}>
                         <DaisySelectTrigger>
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
                           <DaisySelectItem value="compliance_audit">Compliance Audit</SelectItem>
@@ -679,7 +679,7 @@ export function QuestionnaireBuilder({
                       onCheckedChange={setAiEnabled}
                     />
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Sections */}
@@ -839,7 +839,7 @@ export function QuestionnaireBuilder({
                       ))}
                     </div>
                   )}
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
@@ -847,8 +847,8 @@ export function QuestionnaireBuilder({
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Questionnaire Settings</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-6">
                     <DaisyAlert>
                       <Info className="w-4 h-4" />
@@ -862,7 +862,7 @@ export function QuestionnaireBuilder({
                       <p>Advanced settings panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
@@ -870,8 +870,8 @@ export function QuestionnaireBuilder({
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>AI Configuration</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-6">
                     <DaisyAlert>
                       <Brain className="w-4 h-4" />
@@ -885,7 +885,7 @@ export function QuestionnaireBuilder({
                       <p>AI configuration panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
 
@@ -893,8 +893,8 @@ export function QuestionnaireBuilder({
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle>Preview</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-6">
                     <DaisyAlert>
                       <Eye className="w-4 h-4" />
@@ -908,7 +908,7 @@ export function QuestionnaireBuilder({
                       <p>Preview mode coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </DaisyTabsContent>
           </DaisyTabs>

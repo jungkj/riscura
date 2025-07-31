@@ -97,12 +97,13 @@ export default function UpgradePage() {
   };
 
   if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
+
+  return (
+    <div className="container mx-auto px-4 py-8">
         <div className="text-center">Loading subscription information...</div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -177,7 +178,7 @@ export default function UpgradePage() {
                      {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
                    </DaisyButton>
                  )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}

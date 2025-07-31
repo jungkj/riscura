@@ -329,8 +329,8 @@ export function EnhancedMobileNavigation({ className, onNavigate }: MobileNaviga
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedGroups.has(item.id);
 
-    return (
-      <div key={item.id} className="space-y-1">
+  return (
+    <div key={item.id} className="space-y-1">
         <motion.button
           className={cn(
             'w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors duration-200',

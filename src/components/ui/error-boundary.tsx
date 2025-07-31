@@ -112,7 +112,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
             >
               Report this error
             </DaisyButton>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
     </div>

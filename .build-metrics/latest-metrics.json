@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-07-31T03:22:48.991Z",
+  "builds": {
+    "totalBuilds": 0,
+    "successRate": 0,
+    "averageDuration": 0
+  },
+  "deployments": {
+    "totalDeployments": 0,
+    "successRate": 0,
+    "averageTime": 0
+  },
+  "developer": {
+    "jsxErrorRate": 0,
+    "trendsImproving": false
+  },
+  "quality": {
+    "totalJSXFiles": 509,
+    "totalTSFiles": 458,
+    "componentFiles": 381,
+    "pageFiles": 77,
+    "totalFiles": 967,
+    "testCoverage": {
+      "lines": 0,
+      "statements": 0,
+      "functions": 0,
+      "branches": 0
+    },
+    "qualityScore": 50
+  },
+  "trends": {
+    "buildSuccess": [],
+    "deploymentSuccess": [],
+    "jsxQuality": []
+  }
+}

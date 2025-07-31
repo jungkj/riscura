@@ -402,8 +402,9 @@ export default function QuestionnairePage() {
     };
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
-    return (
-      <DaisyBadge variant="outline" className={config.color}>
+
+  return (
+    <DaisyBadge variant="outline" className={config.color}>
         {config.label}
       </DaisyBadge>
     );
@@ -429,7 +430,7 @@ export default function QuestionnairePage() {
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -442,7 +443,7 @@ export default function QuestionnairePage() {
         onCancel={() => setShowBuilder(false)}
       />
     );
-  }
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -472,7 +473,7 @@ export default function QuestionnairePage() {
             <p className="text-xs text-gray-600">
               Across all statuses
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -485,7 +486,7 @@ export default function QuestionnairePage() {
             <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -500,7 +501,7 @@ export default function QuestionnairePage() {
             <p className="text-xs text-gray-600">
               Average across all questionnaires
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
@@ -513,7 +514,7 @@ export default function QuestionnairePage() {
             <p className="text-xs text-gray-600">
               All-time responses collected
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -613,7 +614,7 @@ export default function QuestionnairePage() {
               ))}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Analytics Dialog */}

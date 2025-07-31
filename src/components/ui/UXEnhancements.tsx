@@ -97,9 +97,9 @@ export class ErrorBoundary extends Component<
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
-      }
+      };
 
-      return (
+  return (
         <div className="flex flex-col items-center justify-center p-8 text-center">
           <div className="mb-4 text-error">
             <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">

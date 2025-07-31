@@ -169,8 +169,8 @@ export default function NewAssessmentPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Basic Information</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="title">Assessment Title *</DaisyLabel>
                 <DaisyInput
@@ -215,7 +215,7 @@ export default function NewAssessmentPage() {
                   >
                     <DaisySelectTrigger className={errors.assessmentType ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assessment type" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="security">Security Assessment</SelectItem>
                       <DaisySelectItem value="operational">Operational Risk Assessment</SelectItem>
@@ -241,7 +241,7 @@ export default function NewAssessmentPage() {
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select framework" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="iso27001">ISO 27001</SelectItem>
                       <DaisySelectItem value="nist">NIST Cybersecurity Framework</SelectItem>
@@ -264,7 +264,7 @@ export default function NewAssessmentPage() {
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select priority" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Low">Low</SelectItem>
                       <DaisySelectItem value="Medium">Medium</SelectItem>
@@ -282,7 +282,7 @@ export default function NewAssessmentPage() {
                   >
                     <DaisySelectTrigger className={errors.assignee ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assignee" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Security Team">Security Team</SelectItem>
                       <DaisySelectItem value="Risk Team">Risk Team</SelectItem>
@@ -343,7 +343,7 @@ export default function NewAssessmentPage() {
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Objectives */}
@@ -385,7 +385,7 @@ export default function NewAssessmentPage() {
                   {errors.objectives}
                 </p>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
 
@@ -394,8 +394,8 @@ export default function NewAssessmentPage() {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Assessment Preview</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               <div>
                 <span className="text-sm font-medium text-gray-500">Title</span>
                 <p className="text-sm">{formData.title || 'Not specified'}</p>
@@ -416,14 +416,14 @@ export default function NewAssessmentPage() {
                 <span className="text-sm font-medium text-gray-500">Due Date</span>
                 <p className="text-sm">{formData.dueDate || 'Not set'}</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Getting Started</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-3 text-sm text-gray-600">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3 text-sm text-gray-600">
               <div className="flex items-start space-x-2">
                 <FileCheck className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Define clear objectives for your assessment</p>
@@ -440,7 +440,7 @@ export default function NewAssessmentPage() {
                 <Target className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Choose appropriate frameworks and standards</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </div>

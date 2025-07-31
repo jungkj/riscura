@@ -507,9 +507,9 @@ const VirtualizedTable = <T extends Record<string, any>>({
                   {ListRow}
                 </VariableSizeList>
               );
-            }
+            };
 
-            return (
+  return (
               <List
                 ref={listRef}
                 height={autoHeight}

@@ -383,7 +383,7 @@ const WorkflowCanvas: React.FC<{
           <DaisySelect defaultValue="100">
             <DaisySelectTrigger className="w-20 h-8">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="50">50%</SelectItem>
               <DaisySelectItem value="75">75%</SelectItem>
@@ -558,7 +558,7 @@ const StepPropertiesPanel: React.FC<{
             >
               <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Select assignee" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="role:risk-analyst">Risk Analyst</SelectItem>
                 <DaisySelectItem value="role:compliance-manager">Compliance Manager</SelectItem>
@@ -579,7 +579,7 @@ const StepPropertiesPanel: React.FC<{
             >
               <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Select SLA" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="2-hours">2 Hours</SelectItem>
                 <DaisySelectItem value="4-hours">4 Hours</SelectItem>
@@ -601,7 +601,7 @@ const StepPropertiesPanel: React.FC<{
             >
               <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Select escalation policy" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="auto-escalate-manager">Auto-escalate to Manager</SelectItem>
                 <DaisySelectItem value="auto-escalate-director">Auto-escalate to Director</SelectItem>
@@ -628,7 +628,7 @@ const StepPropertiesPanel: React.FC<{
               <DaisySelect>
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Select form template" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="risk-assessment-form">Risk Assessment Form</SelectItem>
                   <DaisySelectItem value="compliance-checklist">Compliance Checklist</SelectItem>
@@ -646,7 +646,7 @@ const StepPropertiesPanel: React.FC<{
               <DaisySelect>
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Select consensus type" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="unanimous">Unanimous Agreement</SelectItem>
                   <DaisySelectItem value="majority">Majority Rule</SelectItem>
@@ -664,7 +664,7 @@ const StepPropertiesPanel: React.FC<{
               <DaisySelect>
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Select AI engine" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="control-recommendation-ai">Control Recommendation AI</SelectItem>
                   <DaisySelectItem value="risk-scoring-ai">Risk Scoring AI</SelectItem>

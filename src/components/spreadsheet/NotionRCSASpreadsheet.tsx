@@ -280,8 +280,9 @@ export function NotionRCSASpreadsheet() {
       render: (row) => {
         if (row.type === 'risk') {
           const risk = row.data as Risk;
-          return (
-            <div className={cn(
+
+  return (
+    <div className={cn(
               'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
               risk.riskLevel === 'CRITICAL' && 'bg-red-100 text-red-700 dark:bg-red-900/30',
               risk.riskLevel === 'HIGH' && 'bg-orange-100 text-orange-700 dark:bg-orange-900/30',

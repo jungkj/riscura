@@ -436,9 +436,9 @@ export default function CustomDashboardBuilder({
     if (!widgetConfig) return null;
     
     const WidgetComponent = widgetConfig.component;
-    
-    return (
-      <div
+
+  return (
+    <div
         key={widget.id}
         className={`bg-white border rounded-lg shadow-sm overflow-hidden ${
           selectedWidget === widget.id ? 'ring-2 ring-blue-500' : ''

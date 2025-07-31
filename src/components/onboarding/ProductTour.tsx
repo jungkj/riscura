@@ -303,9 +303,9 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       autoPlayRef.current = setTimeout(() => {
         nextStep();
       }, duration);
-    }
+    };
 
-    return () => {
+  return () => {
       if (autoPlayRef.current) {
         clearTimeout(autoPlayRef.current);
       }
@@ -564,7 +564,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </p>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </>

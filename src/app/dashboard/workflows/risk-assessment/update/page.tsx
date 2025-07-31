@@ -135,7 +135,7 @@ export default function UpdateRiskAssessmentPage() {
                   className="pl-10"
                 />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Risk List */}
@@ -143,7 +143,7 @@ export default function UpdateRiskAssessmentPage() {
             <DaisyCard>
               <DaisyCardContent className="p-12 text-center">
                 <p className="text-gray-500">Loading risks...</p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ) : filteredRisks.length === 0 ? (
             <DaisyCard>
@@ -164,7 +164,7 @@ export default function UpdateRiskAssessmentPage() {
                     Create New Risk
                   </DaisyButton>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ) : (
             <div className="grid gap-4">
@@ -212,7 +212,7 @@ export default function UpdateRiskAssessmentPage() {
                         Update
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>
@@ -223,8 +223,8 @@ export default function UpdateRiskAssessmentPage() {
             <DaisyCard className="mt-6">
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-lg">Quick Overview</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{risks.length}</p>
@@ -254,7 +254,7 @@ export default function UpdateRiskAssessmentPage() {
                     <p className="text-sm text-gray-600">Need Review (&gt;30 days)</p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </div>

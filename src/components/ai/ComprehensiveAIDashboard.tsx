@@ -196,8 +196,8 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                   <Brain className="w-5 h-5" />
                   AI Analysis Query
                 </DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="md:col-span-2">
                     <DaisyLabel htmlFor="query">Query or Description</DaisyLabel>
@@ -215,7 +215,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                       <DaisySelect value={selectedAnalysisType} onValueChange={handleAnalysisTypeChange}>
                         <DaisySelectTrigger>
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="risk_analysis">Risk Analysis</SelectItem>
                           <DaisySelectItem value="compliance_check">Compliance Check</SelectItem>
@@ -244,7 +244,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                     </DaisyButton>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Results */}
@@ -308,7 +308,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                         </DaisyBadge>
                       )}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>
@@ -323,8 +323,8 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                 <Activity className="w-5 h-5" />
                 AI Services Health Status
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               {serviceHealth ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -366,7 +366,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                   <p className="text-gray-600 mt-2">Loading service health...</p>
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -375,10 +375,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Compliance Monitoring</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p>Compliance monitoring dashboard implementation...</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -386,10 +386,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>AI Insights & Analytics</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p>AI insights and analytics dashboard implementation...</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -397,10 +397,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Multi-Tenant Management</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p>Multi-tenant management dashboard implementation...</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -408,10 +408,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>AI Configuration Settings</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <p>AI configuration settings implementation...</p>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

@@ -84,7 +84,7 @@ const FrameworkSelector: React.FC<{
                     </p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}
@@ -192,7 +192,7 @@ const RecommendationCard: React.FC<{
             </DaisyButton>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -229,7 +229,7 @@ const GapAnalysisView: React.FC<{
               <p className="text-center text-muted-foreground py-4">No existing controls found</p>
             )}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Identified Gaps */}
@@ -259,7 +259,7 @@ const GapAnalysisView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Recommendations */}
@@ -279,7 +279,7 @@ const GapAnalysisView: React.FC<{
               />
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -304,7 +304,7 @@ const CostBenefitView: React.FC<{
             <p className="text-xs text-muted-foreground">
               5-year TCO
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -318,7 +318,7 @@ const CostBenefitView: React.FC<{
             <p className="text-xs text-muted-foreground">
               Annual return
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -332,7 +332,7 @@ const CostBenefitView: React.FC<{
             <p className="text-xs text-muted-foreground">
               Break-even time
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -346,7 +346,7 @@ const CostBenefitView: React.FC<{
             <p className="text-xs text-muted-foreground">
               5-year NPV
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -412,7 +412,7 @@ const CostBenefitView: React.FC<{
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Benefits Analysis */}
@@ -461,7 +461,7 @@ const CostBenefitView: React.FC<{
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Sensitivity Analysis */}
@@ -495,7 +495,7 @@ const CostBenefitView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -530,7 +530,7 @@ const ImplementationPlanView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Resource Requirements */}
@@ -583,7 +583,7 @@ const ImplementationPlanView: React.FC<{
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Milestones */}
@@ -607,7 +607,7 @@ const ImplementationPlanView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -765,7 +765,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                       <DaisySelect value={organizationSize} onValueChange={(value: 'small' | 'medium' | 'large' | 'enterprise') => setOrganizationSize(value)}>
                         <DaisySelectTrigger id="org-size">
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="small">Small (&lt; 100 employees)</SelectItem>
                           <DaisySelectItem value="medium">Medium (100-1000 employees)</SelectItem>
@@ -780,7 +780,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                       <DaisySelect value={riskTolerance} onValueChange={(value: 'low' | 'medium' | 'high') => setRiskTolerance(value)}>
                         <DaisySelectTrigger id="risk-tolerance">
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="low">Low - Conservative approach</SelectItem>
                           <DaisySelectItem value="medium">Medium - Balanced approach</SelectItem>
@@ -842,7 +842,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                   <DaisySelect value={priorityFocus} onValueChange={(value: 'cost' | 'time' | 'effectiveness' | 'compliance') => setPriorityFocus(value)}>
                     <DaisySelectTrigger id="priority-focus">
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="cost">Cost - Minimize investment</SelectItem>
                       <DaisySelectItem value="time">Time - Fastest implementation</SelectItem>
@@ -873,7 +873,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -927,7 +927,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                     </div>
                   )}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

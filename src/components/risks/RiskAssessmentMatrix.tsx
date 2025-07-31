@@ -543,7 +543,7 @@ const RiskAssessmentMatrix: React.FC = () => {
             <Calculator className="h-5 w-5" />
             Risk Score Summary
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
@@ -572,7 +572,7 @@ const RiskAssessmentMatrix: React.FC = () => {
               <div className="text-sm text-gray-600 mt-1">Risk Level</div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Assessment Form */}
@@ -612,7 +612,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select category" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="OPERATIONAL">Operational</SelectItem>
                       <DaisySelectItem value="FINANCIAL">Financial</SelectItem>
@@ -677,7 +677,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                   rows={3}
                 />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -713,7 +713,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                           >
                             <DaisySelectTrigger>
                               <DaisySelectValue />
-                            </SelectTrigger>
+                            </DaisySelectTrigger>
                             <DaisySelectContent>
                               <DaisySelectItem value="1">1 - Very Low</SelectItem>
                               <DaisySelectItem value="2">2 - Low</SelectItem>
@@ -737,7 +737,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                     ))}
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Impact Factors */}
@@ -770,7 +770,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                           >
                             <DaisySelectTrigger>
                               <DaisySelectValue />
-                            </SelectTrigger>
+                            </DaisySelectTrigger>
                             <DaisySelectContent>
                               <DaisySelectItem value="1">1 - Minimal</SelectItem>
                               <DaisySelectItem value="2">2 - Minor</SelectItem>
@@ -794,7 +794,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                     ))}
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -833,7 +833,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 Add Control
               </DaisyButton>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -893,7 +893,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                   )}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

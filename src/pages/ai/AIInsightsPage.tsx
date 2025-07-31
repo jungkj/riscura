@@ -244,8 +244,9 @@ export default function AIInsightsPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
+
+  return (
+    <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <Brain className="h-12 w-12 mx-auto mb-4 text-primary animate-pulse" />
           <p className="text-lg font-medium">AI is analyzing your data...</p>
@@ -253,7 +254,7 @@ export default function AIInsightsPage() {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <motion.div 
@@ -296,8 +297,8 @@ export default function AIInsightsPage() {
                 <Zap className="h-5 w-5 text-primary" />
                 Predictive Risk Analysis
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary mb-2">
@@ -346,7 +347,7 @@ export default function AIInsightsPage() {
               <div className="mt-4 p-3 bg-muted rounded-lg">
                 <p className="text-sm font-medium">{predictiveAnalysis.prediction}</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
       )}
@@ -399,7 +400,7 @@ export default function AIInsightsPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </motion.div>
@@ -448,7 +449,7 @@ export default function AIInsightsPage() {
                       Implement Recommendation
                     </DaisyButton>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </motion.div>
@@ -467,8 +468,8 @@ export default function AIInsightsPage() {
                   <Shield className="h-5 w-5" />
                   Risk Correlation Matrix
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <p className="text-muted-foreground mb-4">
                   AI-identified correlations between different risk categories
                 </p>
@@ -495,7 +496,7 @@ export default function AIInsightsPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -504,8 +505,8 @@ export default function AIInsightsPage() {
                   <Users className="h-5 w-5" />
                   Department Risk Profiles
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <p className="text-muted-foreground mb-4">
                   Risk distribution and patterns across departments
                 </p>
@@ -527,7 +528,7 @@ export default function AIInsightsPage() {
                     <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>

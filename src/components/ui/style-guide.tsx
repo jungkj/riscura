@@ -659,7 +659,7 @@ export const StyleGuide: React.FC = () => {
             
             <DaisyCardContent>
               <ColorPalette />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -676,7 +676,7 @@ export const StyleGuide: React.FC = () => {
             
             <DaisyCardContent>
               <Typography />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -693,7 +693,7 @@ export const StyleGuide: React.FC = () => {
             
             <DaisyCardContent>
               <SpacingGrid />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -710,7 +710,7 @@ export const StyleGuide: React.FC = () => {
             
             <DaisyCardContent>
               <ComponentVariations />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -727,7 +727,7 @@ export const StyleGuide: React.FC = () => {
             
             <DaisyCardContent>
               <IconPatterns />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
@@ -744,7 +744,7 @@ export const StyleGuide: React.FC = () => {
         
         <DaisyCardContent>
           <ResponsivePreview />
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

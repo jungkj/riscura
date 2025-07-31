@@ -388,7 +388,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -442,11 +442,11 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               We're customizing Riscura based on your preferences.
             </p>
             <DaisyProgress value={100} className="h-2" />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     );
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -496,7 +496,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               <ChevronRight className="w-4 h-4 ml-2" />
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

@@ -741,7 +741,7 @@ export default function GlobalSearch({
                 <p className="text-gray-500">Searching...</p>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
 
           {/* Footer with shortcuts */}
           <div className="border-t border-gray-200 p-3 bg-gray-50">
@@ -830,7 +830,7 @@ export function SearchTrigger({
         <GlobalSearch isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </>
     );
-  }
+  };
 
   return (
     <>

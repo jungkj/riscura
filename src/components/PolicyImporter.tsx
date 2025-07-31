@@ -334,7 +334,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
             <FileUp className="h-5 w-5 text-blue-600" />
             Policy Document Upload
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <AnimatePresence>
             {files.length === 0 ? (
@@ -454,7 +454,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
               </DaisyAlert>
             </motion.div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Analysis Results */}
@@ -519,7 +519,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     <DaisyAlertDescription>{analysisResult.note}
                   </DaisyAlert>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Extracted Content */}

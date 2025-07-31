@@ -466,7 +466,7 @@ export default function TeamDelegatePage() {
                         )}
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -512,7 +512,7 @@ export default function TeamDelegatePage() {
                   );
                 })}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -532,7 +532,7 @@ export default function TeamDelegatePage() {
             <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</SelectItem>
                 <DaisySelectItem value="pending">Pending</SelectItem>
@@ -546,7 +546,7 @@ export default function TeamDelegatePage() {
             <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</SelectItem>
                 <DaisySelectItem value="critical">Critical</SelectItem>
@@ -690,7 +690,7 @@ export default function TeamDelegatePage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -783,7 +783,7 @@ export default function TeamDelegatePage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -846,7 +846,7 @@ export default function TeamDelegatePage() {
                     <DaisySelect value={newTask.type} onValueChange={(value: any) => setNewTask(prev => ({ ...prev, type: value }))}>
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="risk_assessment">Risk Assessment</SelectItem>
                         <DaisySelectItem value="control_testing">Control Testing</SelectItem>
@@ -862,7 +862,7 @@ export default function TeamDelegatePage() {
                     <DaisySelect value={newTask.priority} onValueChange={(value: any) => setNewTask(prev => ({ ...prev, priority: value }))}>
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="critical">Critical</SelectItem>
                         <DaisySelectItem value="high">High</SelectItem>
@@ -882,7 +882,7 @@ export default function TeamDelegatePage() {
                     <DaisySelect value={newTask.assignee} onValueChange={(value) => setNewTask(prev => ({ ...prev, assignee: value }))}>
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select team member" />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {sampleTeamMembers.map((member) => (
                           <DaisySelectItem key={member.id} value={member.id}>
@@ -926,7 +926,7 @@ export default function TeamDelegatePage() {
                     <DaisySelect value={newTask.framework} onValueChange={(value) => setNewTask(prev => ({ ...prev, framework: value }))}>
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select framework" />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="">None</SelectItem>
                         <DaisySelectItem value="SOC 2">SOC 2</SelectItem>

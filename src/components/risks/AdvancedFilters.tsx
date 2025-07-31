@@ -510,7 +510,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 >
                   <DaisySelectTrigger className="w-20">
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {[1, 2, 3, 4, 5].map(num => (
                       <DaisySelectItem key={num} value={num.toString()}>{num}</SelectItem>
@@ -526,7 +526,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 >
                   <DaisySelectTrigger className="w-20">
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {[1, 2, 3, 4, 5].map(num => (
                       <DaisySelectItem key={num} value={num.toString()}>{num}</SelectItem>
@@ -548,7 +548,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </span>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       )}
     </DaisyCard>
   );

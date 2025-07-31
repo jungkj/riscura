@@ -206,7 +206,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
         )}
       </div>
     );
-  }
+  };
 
   return (
     <motion.div
@@ -331,7 +331,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               )}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );

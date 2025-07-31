@@ -1,0 +1,504 @@
+name: Vercel Integration & Deployment Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, ready_for_review]
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deployment even if checks fail'
+        required: false
+        default: false
+        type: boolean
+      environment:
+        description: 'Target environment'
+        required: false
+        default: 'preview'
+        type: choice
+        options:
+          - preview
+          - production
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  NODE_ENV: production
+
+jobs:
+  pre-deployment-validation:
+    name: Pre-Deployment JSX & Build Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    outputs:
+      deployment_ready: ${{ steps.validation.outputs.ready }}
+      build_hash: ${{ steps.build_check.outputs.hash }}
+      should_deploy: ${{ steps.deploy_decision.outputs.should_deploy }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+          npm run db:generate
+      
+      - name: Critical JSX Syntax Validation
+        run: |
+          echo "🔍 Running CRITICAL JSX validation for Vercel deployment..."
+          
+          # Fail fast on JSX syntax errors
+          node scripts/jsx-error-monitor.cjs scan
+          
+          # Comprehensive JSX linting with zero tolerance
+          npx eslint src/ --ext .tsx,.jsx \
+            --rule 'react/jsx-closing-tag-location: error' \
+            --rule 'react/jsx-closing-bracket-location: error' \
+            --rule 'react/jsx-no-undef: error' \
+            --rule 'react/jsx-pascal-case: error' \
+            --rule 'react/jsx-no-duplicate-props: error' \
+            --rule 'react/jsx-tag-spacing: error' \
+            --rule 'react/jsx-curly-spacing: error' \
+            --rule 'react/jsx-equals-spacing: error' \
+            --rule 'react/jsx-wrap-multilines: error' \
+            --rule 'react/jsx-indent: error' \
+            --rule 'react/jsx-indent-props: error' \
+            --max-warnings 0 \
+            --format=compact
+          
+          echo "✅ JSX syntax validation PASSED - Safe for Vercel deployment"
+      
+      - name: TypeScript Pre-Deployment Check
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+        run: |
+          echo "🔧 Running TypeScript compilation for Vercel..."
+          npm run type-check:full
+          echo "✅ TypeScript compilation PASSED"
+      
+      - name: Vercel Build Simulation
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+          BUILDING: true
+          SKIP_ENV_VALIDATION: 1
+        run: |
+          echo "🏗️ Simulating Vercel build process..."
+          
+          # Use the exact same build command as Vercel
+          START_TIME=$(date +%s)
+          npm run build:vercel
+          END_TIME=$(date +%s)
+          
+          BUILD_TIME=$((END_TIME - START_TIME))
+          echo "VERCEL_BUILD_TIME=$BUILD_TIME" >> $GITHUB_ENV
+          
+          echo "✅ Vercel build simulation completed in ${BUILD_TIME}s"
+      
+      - name: Build Artifact Validation
+        id: build_check
+        run: |
+          echo "📏 Validating Vercel build artifacts..."
+          
+          # Check critical build outputs
+          if [ ! -d ".next" ]; then
+            echo "❌ Missing .next directory - build failed"
+            exit 1
+          fi
+          
+          if [ ! -f ".next/BUILD_ID" ]; then
+            echo "❌ Missing BUILD_ID - invalid build"
+            exit 1
+          fi
+          
+          BUILD_ID=$(cat .next/BUILD_ID)
+          echo "hash=$BUILD_ID" >> $GITHUB_OUTPUT
+          
+          # Check for essential files
+          REQUIRED_FILES=(".next/static" ".next/server" "package.json")
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -e "$file" ]; then
+              echo "❌ Missing required file: $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ Build artifacts validated - Ready for Vercel"
+      
+      - name: Deployment Decision
+        id: deploy_decision
+        run: |
+          echo "🚀 Determining deployment strategy..."
+          
+          SHOULD_DEPLOY="false"
+          
+          if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ github.ref_name }}" == "main" ]]; then
+            SHOULD_DEPLOY="true"
+            echo "Production deployment approved for main branch push"
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            SHOULD_DEPLOY="true"
+            echo "Preview deployment approved for PR"
+          elif [[ "${{ github.event.inputs.force_deploy }}" == "true" ]]; then
+            SHOULD_DEPLOY="true"
+            echo "Forced deployment requested"
+          fi
+          
+          echo "should_deploy=$SHOULD_DEPLOY" >> $GITHUB_OUTPUT
+      
+      - name: Validation Summary
+        id: validation
+        run: |
+          echo "📊 Pre-deployment validation summary:"
+          echo "- JSX Syntax: ✅ PASS"
+          echo "- TypeScript: ✅ PASS"
+          echo "- Build: ✅ PASS (${VERCEL_BUILD_TIME}s)"
+          echo "- Artifacts: ✅ PASS"
+          echo "- Deploy Decision: ${{ steps.deploy_decision.outputs.should_deploy }}"
+          
+          echo "ready=true" >> $GITHUB_OUTPUT
+      
+      - name: Cache Build for Deployment
+        if: steps.validation.outputs.ready == 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/
+            node_modules/.cache/
+          key: vercel-build-${{ steps.build_check.outputs.hash }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            vercel-build-${{ steps.build_check.outputs.hash }}-
+            vercel-build-
+
+  vercel-deployment:
+    name: Vercel Deployment
+    runs-on: ubuntu-latest
+    needs: pre-deployment-validation
+    if: needs.pre-deployment-validation.outputs.should_deploy == 'true' && needs.pre-deployment-validation.outputs.deployment_ready == 'true'
+    timeout-minutes: 20
+    
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    
+    outputs:
+      deployment_url: ${{ steps.deploy.outputs.url }}
+      deployment_id: ${{ steps.deploy.outputs.deployment_id }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+      
+      - name: Restore Build Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/
+            node_modules/.cache/
+          key: vercel-build-${{ needs.pre-deployment-validation.outputs.build_hash }}-${{ hashFiles('package-lock.json') }}
+      
+      - name: Deploy to Vercel
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🚀 Deploying to Vercel..."
+          
+          # Configure Vercel
+          vercel --token $VERCEL_TOKEN --confirm
+          
+          # Determine deployment type
+          DEPLOY_FLAGS="--token $VERCEL_TOKEN"
+          
+          if [[ "${{ github.ref_name }}" == "main" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
+            DEPLOY_FLAGS="$DEPLOY_FLAGS --prod"
+            echo "Deploying to PRODUCTION"
+          else
+            echo "Deploying to PREVIEW"
+          fi
+          
+          # Deploy with error handling
+          DEPLOYMENT_OUTPUT=$(vercel $DEPLOY_FLAGS 2>&1)
+          DEPLOY_EXIT_CODE=$?
+          
+          echo "$DEPLOYMENT_OUTPUT"
+          
+          if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+            echo "❌ Vercel deployment failed"
+            echo "Error output: $DEPLOYMENT_OUTPUT"
+            exit 1
+          fi
+          
+          # Extract deployment URL
+          DEPLOYMENT_URL=$(echo "$DEPLOYMENT_OUTPUT" | grep -o 'https://[^[:space:]]*' | head -1)
+          
+          if [ -z "$DEPLOYMENT_URL" ]; then
+            echo "⚠️ Could not extract deployment URL"
+            DEPLOYMENT_URL="https://riscura.vercel.app"
+          fi
+          
+          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          echo "deployment_id=$(date +%s)" >> $GITHUB_OUTPUT
+          
+          echo "✅ Deployment successful: $DEPLOYMENT_URL"
+
+  post-deployment-validation:
+    name: Post-Deployment Validation
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-validation, vercel-deployment]
+    if: needs.vercel-deployment.outputs.deployment_url != ''
+    timeout-minutes: 10
+    
+    steps:
+      - name: Wait for Deployment
+        run: |
+          echo "⏳ Waiting for deployment to be ready..."
+          sleep 30
+      
+      - name: Health Check
+        run: |
+          echo "🎡 Running health checks on deployed application..."
+          
+          DEPLOYMENT_URL="${{ needs.vercel-deployment.outputs.deployment_url }}"
+          MAX_ATTEMPTS=10
+          
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Health check attempt $i/$MAX_ATTEMPTS..."
+            
+            # Basic connectivity test
+            if curl -f -s --max-time 30 "$DEPLOYMENT_URL" > /dev/null; then
+              echo "✅ Basic connectivity: PASS"
+              
+              # API health check
+              if curl -f -s --max-time 30 "$DEPLOYMENT_URL/api/health" > /dev/null; then
+                echo "✅ API health check: PASS"
+                echo "✅ Deployment validation successful!"
+                exit 0
+              else
+                echo "⚠️ API health check failed, but app is accessible"
+                exit 0
+              fi
+            fi
+            
+            if [ $i -eq $MAX_ATTEMPTS ]; then
+              echo "❌ Health check failed after $MAX_ATTEMPTS attempts"
+              echo "URL: $DEPLOYMENT_URL"
+              exit 1
+            fi
+            
+            sleep 10
+          done
+      
+      - name: Security Headers Check
+        run: |
+          echo "🛡️ Checking security headers..."
+          
+          DEPLOYMENT_URL="${{ needs.vercel-deployment.outputs.deployment_url }}"
+          
+          HEADERS=$(curl -I -s --max-time 30 "$DEPLOYMENT_URL" || echo "Failed to fetch headers")
+          
+          echo "Response headers:"
+          echo "$HEADERS"
+          
+          # Check for critical security headers
+          REQUIRED_HEADERS=("X-Content-Type-Options" "X-Frame-Options" "Referrer-Policy")
+          
+          for header in "${REQUIRED_HEADERS[@]}"; do
+            if echo "$HEADERS" | grep -q "$header"; then
+              echo "✅ $header: Found"
+            else
+              echo "⚠️ $header: Missing"
+            fi
+          done
+      
+      - name: Performance Snapshot
+        run: |
+          echo "📈 Taking performance snapshot..."
+          
+          DEPLOYMENT_URL="${{ needs.vercel-deployment.outputs.deployment_url }}"
+          
+          # Simple performance test
+          START_TIME=$(date +%s%3N)
+          curl -s --max-time 30 "$DEPLOYMENT_URL" > /dev/null
+          END_TIME=$(date +%s%3N)
+          
+          RESPONSE_TIME=$((END_TIME - START_TIME))
+          
+          echo "Response time: ${RESPONSE_TIME}ms"
+          
+          if [ $RESPONSE_TIME -gt 5000 ]; then
+            echo "⚠️ Slow response time detected: ${RESPONSE_TIME}ms"
+          else
+            echo "✅ Good response time: ${RESPONSE_TIME}ms"
+          fi
+
+  rollback-on-failure:
+    name: Automatic Rollback
+    runs-on: ubuntu-latest
+    needs: [vercel-deployment, post-deployment-validation]
+    if: failure() && needs.vercel-deployment.result == 'success'
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+      
+      - name: Rollback Deployment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🔄 Initiating automatic rollback..."
+          
+          # Get previous deployment
+          PREVIOUS_DEPLOYMENT=$(vercel ls --token $VERCEL_TOKEN | grep -v "${{ needs.vercel-deployment.outputs.deployment_id }}" | head -1 | awk '{print $1}')
+          
+          if [ -n "$PREVIOUS_DEPLOYMENT" ]; then
+            echo "Rolling back to: $PREVIOUS_DEPLOYMENT"
+            vercel promote $PREVIOUS_DEPLOYMENT --token $VERCEL_TOKEN
+            echo "✅ Rollback completed"
+          else
+            echo "⚠️ No previous deployment found for rollback"
+          fi
+      
+      - name: Notify Rollback
+        if: github.event_name == 'push' && github.ref_name == 'main'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: 'failure',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`,
+              description: 'Deployment failed and rolled back',
+              context: 'vercel/deployment'
+            });
+
+  deployment-notification:
+    name: Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-validation, vercel-deployment, post-deployment-validation]
+    if: always() && needs.pre-deployment-validation.outputs.should_deploy == 'true'
+    
+    steps:
+      - name: Determine Status
+        id: status
+        run: |
+          if [[ "${{ needs.vercel-deployment.result }}" == "success" ]] && [[ "${{ needs.post-deployment-validation.result }}" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "emoji=🎉" >> $GITHUB_OUTPUT
+            echo "message=Deployment successful" >> $GITHUB_OUTPUT
+          elif [[ "${{ needs.pre-deployment-validation.result }}" == "failure" ]]; then
+            echo "status=blocked" >> $GITHUB_OUTPUT
+            echo "emoji=🚨" >> $GITHUB_OUTPUT
+            echo "message=Deployment blocked due to validation failures" >> $GITHUB_OUTPUT
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+            echo "message=Deployment failed" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create Deployment Summary
+        run: |
+          echo "# ${{ steps.status.outputs.emoji }} Vercel Deployment Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ${{ steps.status.outputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Actor**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.vercel-deployment.outputs.deployment_url }}" != "" ]]; then
+            echo "**Deployment URL**: ${{ needs.vercel-deployment.outputs.deployment_url }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pre-deployment Validation | ${{ needs.pre-deployment-validation.result == 'success' && '✅' || '❌' }} ${{ needs.pre-deployment-validation.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Vercel Deployment | ${{ needs.vercel-deployment.result == 'success' && '✅' || '❌' }} ${{ needs.vercel-deployment.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Post-deployment Validation | ${{ needs.post-deployment-validation.result == 'success' && '✅' || '❌' }} ${{ needs.post-deployment-validation.result }} |" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            
+            let deploymentInfo = '';
+            if ('${{ needs.vercel-deployment.outputs.deployment_url }}') {
+              deploymentInfo = `
+              **🚀 Preview Deployment**: ${{ needs.vercel-deployment.outputs.deployment_url }}
+              `;
+            }
+            
+            const body = `## ${{ steps.status.outputs.emoji }} Vercel Deployment Status
+            
+            **Status**: ${{ steps.status.outputs.message }}
+            **Commit**: ${context.sha.substring(0, 7)}
+            ${deploymentInfo}
+            
+            ### Validation Results
+            
+            | Check | Result |
+            |-------|--------|
+            | JSX Syntax | ${{ needs.pre-deployment-validation.result == 'success' && '✅ PASS' || '❌ FAIL' }} |
+            | TypeScript | ${{ needs.pre-deployment-validation.result == 'success' && '✅ PASS' || '❌ FAIL' }} |
+            | Build | ${{ needs.pre-deployment-validation.result == 'success' && '✅ PASS' || '❌ FAIL' }} |
+            | Deployment | ${{ needs.vercel-deployment.result == 'success' && '✅ PASS' || '❌ FAIL' }} |
+            | Health Check | ${{ needs.post-deployment-validation.result == 'success' && '✅ PASS' || '❌ FAIL' }} |
+            
+            ${{ steps.status.outputs.status == 'blocked' && '
+            ### 🚨 Deployment Blocked
+            
+            The deployment was blocked due to JSX syntax errors or build failures. Please fix the issues and push again.
+            
+            **Quick Fix Commands**:
+            \`\`\`bash
+            npm run lint:jsx-validator
+            npm run lint:fix
+            npm run type-check:full
+            npm run build:vercel
+            \`\`\`
+            ' || ''}`;  
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body
+            });

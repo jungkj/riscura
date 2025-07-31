@@ -113,7 +113,7 @@ export default function CreateRiskPage() {
                   Try New Experience
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </DaisyButton>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
 
@@ -163,7 +163,7 @@ export default function CreateRiskPage() {
                   Use Classic Form
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </DaisyButton>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         </div>
@@ -187,7 +187,7 @@ export default function CreateRiskPage() {
               <DaisyButton variant="link" className="text-blue-600">
                 View Demo Video →
               </DaisyButton>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </motion.div>
 

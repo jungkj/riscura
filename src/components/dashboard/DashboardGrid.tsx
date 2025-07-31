@@ -109,8 +109,8 @@ export function DashboardGrid({
     const isExpanded = expandedWidget === widget.id;
     const isRefreshing = refreshingWidget === widget.id;
 
-    return (
-      <motion.div
+  return (
+    <motion.div
         key={widget.id}
         layout
         initial={{ opacity: 0, scale: 0.9 }}
@@ -186,7 +186,7 @@ export function DashboardGrid({
           
           <DaisyCardContent className="p-4">
             {renderWidgetContent(widget, isExpanded, data)}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
     );
@@ -326,15 +326,16 @@ function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: b
   ];
 
   if (!enabled) {
-    return (
-      <div className="flex items-center justify-center h-32 text-[#A8A8A8]">
+
+  return (
+    <div className="flex items-center justify-center h-32 text-[#A8A8A8]">
         <div className="text-center space-y-2">
           <Brain className="w-8 h-8 mx-auto opacity-50" />
           <p className="text-sm font-inter">AI Insights Disabled</p>
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-4">

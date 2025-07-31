@@ -224,8 +224,8 @@ export default function InteractiveRiskHeatmap({
       const cell = heatmapCells.find(c => c.x === data.x && c.y === data.y);
       if (!cell) return null;
 
-      return (
-        <div className="bg-white p-3 border rounded-lg shadow-lg max-w-xs">
+  return (
+    <div className="bg-white p-3 border rounded-lg shadow-lg max-w-xs">
           <div className="font-medium text-sm mb-2">{cell.label}</div>
           <div className="space-y-1 text-xs">
             <div>Risk Score: <span className="font-medium">{cell.value}</span></div>
@@ -467,7 +467,7 @@ export default function InteractiveRiskHeatmap({
             <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="Category" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Categories</SelectItem>
                 {categories.map(category => (
@@ -481,7 +481,7 @@ export default function InteractiveRiskHeatmap({
             <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</SelectItem>
                 {statuses.map(status => (
@@ -574,7 +574,7 @@ export default function InteractiveRiskHeatmap({
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

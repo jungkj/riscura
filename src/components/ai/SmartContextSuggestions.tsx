@@ -128,7 +128,7 @@ const SuggestionCard: React.FC<{
         </div>
       </motion.div>
     );
-  }
+  };
 
   return (
     <motion.div
@@ -216,7 +216,7 @@ const SuggestionCard: React.FC<{
               </DaisyButton>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );
@@ -277,7 +277,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
         )}
       </div>
     );
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>

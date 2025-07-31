@@ -311,7 +311,7 @@ const VantaInspiredRiskInterface = () => {
             <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Severity" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Severity</SelectItem>
                 <DaisySelectItem value="Critical">Critical</SelectItem>
@@ -324,7 +324,7 @@ const VantaInspiredRiskInterface = () => {
             <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</SelectItem>
                 <DaisySelectItem value="Active">Active</SelectItem>

@@ -310,14 +310,14 @@ export default function VantaInspiredLanding() {
               <DaisyCard key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-xl">{feature.title}</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <p className="text-purple-100 mb-4">{feature.description}</p>
                   <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10">
                     {feature.action}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>

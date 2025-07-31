@@ -364,7 +364,7 @@ export default function DocumentLibrary({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 
@@ -482,7 +482,7 @@ export default function DocumentLibrary({
           <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
             <DaisySelectTrigger className="w-48">
               <DaisySelectValue placeholder="Category" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {CATEGORY_OPTIONS.map(option => (
                 <DaisySelectItem key={option.value} value={option.value}>
@@ -495,7 +495,7 @@ export default function DocumentLibrary({
           <DaisySelect value={selectedFileType} onValueChange={setSelectedFileType}>
             <DaisySelectTrigger className="w-48">
               <DaisySelectValue placeholder="File Type" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {FILE_TYPE_OPTIONS.map(option => (
                 <DaisySelectItem key={option.value} value={option.value}>
@@ -510,7 +510,7 @@ export default function DocumentLibrary({
           <DaisySelect value={sortBy} onValueChange={setSortBy}>
             <DaisySelectTrigger className="w-48">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {SORT_OPTIONS.map(option => (
                 <DaisySelectItem key={option.value} value={option.value}>

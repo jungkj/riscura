@@ -138,7 +138,7 @@ export default function RiskAssessmentPage() {
               </div>
               <Target className="h-8 w-8 text-blue-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
@@ -150,7 +150,7 @@ export default function RiskAssessmentPage() {
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
@@ -162,7 +162,7 @@ export default function RiskAssessmentPage() {
               </div>
               <DaisyAlertTriangle className="h-8 w-8 text-yellow-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
@@ -174,7 +174,7 @@ export default function RiskAssessmentPage() {
               </div>
               <FileCheck className="h-8 w-8 text-emerald-600" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -185,7 +185,7 @@ export default function RiskAssessmentPage() {
             <FileCheck className="h-5 w-5 text-blue-600" />
             Assessment Overview
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent className="space-y-4">
           <Suspense fallback={<LoadingSpinner />}>
             {assessments.map((assessment) => (
@@ -250,7 +250,7 @@ export default function RiskAssessmentPage() {
                       </DaisyButton>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </Suspense>

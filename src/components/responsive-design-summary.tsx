@@ -40,7 +40,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <Layout className="h-5 w-5 text-[#199BEC]" />
             Key Responsive Features Implemented
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -103,7 +103,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Device-Specific Adaptations */}
@@ -115,8 +115,8 @@ export const ResponsiveDesignSummary: React.FC = () => {
               <Smartphone className="h-5 w-5 text-[#199BEC]" />
               Mobile (≤ 768px)
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Move className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -168,7 +168,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
                 <DaisyBadge variant="secondary" className="text-xs">Touch Actions</DaisyBadge>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Tablet */}
@@ -178,8 +178,8 @@ export const ResponsiveDesignSummary: React.FC = () => {
               <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
               Tablet (768px - 1024px)
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -231,7 +231,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
                 <DaisyBadge variant="secondary" className="text-xs">Touch Ready</DaisyBadge>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Desktop */}
@@ -241,8 +241,8 @@ export const ResponsiveDesignSummary: React.FC = () => {
               <Monitor className="h-5 w-5 text-[#199BEC]" />
               Desktop (≥ 1024px)
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
@@ -294,7 +294,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
                 <DaisyBadge variant="secondary" className="text-xs">Multi-column</DaisyBadge>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -302,7 +302,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle className="text-[#191919] font-inter">Component Responsive Adaptations</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -357,14 +357,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Technical Implementation */}
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle className="text-[#191919] font-inter">Technical Implementation Details</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -391,14 +391,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* User Experience Features */}
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle className="text-[#191919] font-inter">Enhanced User Experience Features</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-3">
@@ -440,7 +440,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </ul>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Implementation Status */}
@@ -450,7 +450,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
             <CheckCircle className="h-5 w-5" />
             Implementation Complete ✅
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <p className="text-green-700 font-inter">
             The RCSA platform now features a comprehensive responsive design system that seamlessly adapts to mobile, tablet, 
@@ -482,7 +482,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

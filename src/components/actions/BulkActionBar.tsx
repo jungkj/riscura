@@ -421,8 +421,8 @@ export function BulkActionBar<T = any>({
                   (action.maxSelection && selectedCount > action.maxSelection) ||
                   isExecuting;
 
-                return (
-                  <button
+  return (
+    <button
                     key={action.id}
                     onClick={() => executeBulkAction(action)}
                     disabled={isDisabled}

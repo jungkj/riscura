@@ -280,8 +280,8 @@ export const DataTablesDemo = () => {
           <DaisyCard className="border border-gray-200">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">Chart Features</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600" />
@@ -304,7 +304,7 @@ export const DataTablesDemo = () => {
                   <span className="text-sm text-gray-700 font-inter">Responsive design</span>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>
@@ -352,8 +352,8 @@ export const DataTablesDemo = () => {
           <DaisyCard className="border border-gray-200">
             <DaisyCardHeader>
               <DaisyCardTitle className="text-[#191919] font-inter">List Features</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-sm text-[#191919] font-inter mb-2">Design Elements</h4>
@@ -382,7 +382,7 @@ export const DataTablesDemo = () => {
                   </div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>
@@ -408,7 +408,7 @@ export const DataTablesDemo = () => {
                   <span className="text-xs text-gray-600 font-inter">Card Background #FAFAFA</span>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
           
           <DaisyCard className="border border-gray-200">
@@ -420,7 +420,7 @@ export const DataTablesDemo = () => {
                 <div>• Proper hierarchy</div>
                 <div>• Readable line heights</div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
           
           <DaisyCard className="border border-gray-200">
@@ -432,7 +432,7 @@ export const DataTablesDemo = () => {
                 <div>• Blue focus rings (#199BEC)</div>
                 <div>• Consistent spacing (8px grid)</div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       </section>

@@ -221,7 +221,7 @@ export function TableWidget({
             )}
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

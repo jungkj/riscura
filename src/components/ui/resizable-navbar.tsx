@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 
 import React, { useRef, useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 import { ModernButton } from "./modern-button";
 
 interface NavbarProps {
@@ -305,7 +306,7 @@ export const NavbarButton = ({
         {children}
       </ModernButton>
     );
-  }
+  };
 
   return (
     <ModernButton

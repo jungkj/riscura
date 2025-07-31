@@ -398,7 +398,7 @@ export const EnhancedDivider: React.FC<EnhancedDividerProps> = ({
 
   if (style === 'space') {
     return <EnhancedSpacer size="lg" className={className} />;
-  }
+  };
 
   return (
     <div className={cn(

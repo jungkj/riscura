@@ -93,7 +93,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         <Eye className="h-4 w-4" />
       </DaisyButton>
     );
-  }
+  };
 
   return (
     <DaisyTooltipProvider>
@@ -306,7 +306,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 </div>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </motion.div>
     

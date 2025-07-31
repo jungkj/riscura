@@ -187,7 +187,7 @@ export default function HelpPage() {
                   className="pl-10"
                 />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Main Content */}
@@ -257,7 +257,7 @@ export default function HelpPage() {
                           {article.helpful} found helpful
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
@@ -268,7 +268,7 @@ export default function HelpPage() {
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No articles found</h3>
                     <p className="text-gray-600">Try adjusting your search or category filter</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               )}
             </DaisyTabsContent>
@@ -293,7 +293,7 @@ export default function HelpPage() {
                           </DaisyBadge>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 ))}
               </div>
@@ -304,7 +304,7 @@ export default function HelpPage() {
                     <HelpCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No FAQs found</h3>
                     <p className="text-gray-600">Try a different search term</p>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               )}
             </DaisyTabsContent>
@@ -330,7 +330,7 @@ export default function HelpPage() {
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
                 <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
@@ -351,7 +351,7 @@ export default function HelpPage() {
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
                 <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer">
@@ -372,7 +372,7 @@ export default function HelpPage() {
                         <ExternalLink className="h-3 w-3 ml-1" />
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>
@@ -383,8 +383,8 @@ export default function HelpPage() {
                 <DaisyCard>
                   <DaisyCardHeader>
                     <DaisyCardTitle className="text-lg">Get in Touch</DaisyCardTitle>
-                  
-                  <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
                         <Mail className="h-5 w-5 text-blue-600" />
@@ -416,14 +416,14 @@ export default function HelpPage() {
                         <p className="text-sm text-gray-600">Available during business hours</p>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
 
                 <DaisyCard>
                   <DaisyCardHeader>
                     <DaisyCardTitle className="text-lg">Support Hours</DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <div className="space-y-3">
                       <div className="flex justify-between py-2 border-b">
                         <span className="text-gray-600">Monday - Friday</span>
@@ -447,7 +447,7 @@ export default function HelpPage() {
                         Enterprise customers have 24/7 priority support
                       </p>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </div>
             </DaisyTabsContent>

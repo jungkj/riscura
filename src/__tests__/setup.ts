@@ -5,6 +5,22 @@ import { TextEncoder, TextDecoder } from 'util';
 (global as any).TextDecoder = TextDecoder;
 (global as any).TextEncoder = TextEncoder;
 
+// Add Request and Response polyfills for Next.js server components
+if (typeof globalThis.Request === 'undefined') {
+  globalThis.Request = class Request {
+    constructor(public url: string, public init?: RequestInit) {}
+  } as any;
+}
+
+if (typeof globalThis.Response === 'undefined') {
+  globalThis.Response = class Response {
+    constructor(public body?: any, public init?: ResponseInit) {}
+    json() { return Promise.resolve(this.body); }
+    text() { return Promise.resolve(String(this.body)); }
+    clone() { return this; }
+  } as any;
+}
+
 // Mock Next.js router
 const mockPush = jest.fn();
 const mockReplace = jest.fn();

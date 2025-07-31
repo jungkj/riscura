@@ -423,7 +423,7 @@ const PerformanceDashboard: React.FC = () => {
             <Zap className="h-5 w-5" />
             Overall Performance Score
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-blue-600">
@@ -438,7 +438,7 @@ const PerformanceDashboard: React.FC = () => {
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Alerts */}
@@ -466,7 +466,7 @@ const PerformanceDashboard: React.FC = () => {
                 </DaisyAlert>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -485,45 +485,45 @@ const PerformanceDashboard: React.FC = () => {
             <DaisyCard>
               <DaisyCardHeader className="pb-2">
                 <DaisyCardTitle className="text-sm font-medium">Largest Contentful Paint</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="text-2xl font-bold">
                   {formatMetric(metrics.lcp, 'ms')}
                 </div>
                 <DaisyBadge variant={metrics.lcp <= 2500 ? 'default' : metrics.lcp <= 4000 ? 'secondary' : 'destructive'}>
                   {metrics.lcp <= 2500 ? 'Good' : metrics.lcp <= 4000 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* FID */}
             <DaisyCard>
               <DaisyCardHeader className="pb-2">
                 <DaisyCardTitle className="text-sm font-medium">First Input Delay</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="text-2xl font-bold">
                   {formatMetric(metrics.fid, 'ms')}
                 </div>
                 <DaisyBadge variant={metrics.fid <= 100 ? 'default' : metrics.fid <= 300 ? 'secondary' : 'destructive'}>
                   {metrics.fid <= 100 ? 'Good' : metrics.fid <= 300 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* CLS */}
             <DaisyCard>
               <DaisyCardHeader className="pb-2">
                 <DaisyCardTitle className="text-sm font-medium">Cumulative Layout Shift</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="text-2xl font-bold">
                   {formatMetric(metrics.cls, 'score')}
                 </div>
                 <DaisyBadge variant={metrics.cls <= 0.1 ? 'default' : metrics.cls <= 0.25 ? 'secondary' : 'destructive'}>
                   {metrics.cls <= 0.1 ? 'Good' : metrics.cls <= 0.25 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -537,7 +537,7 @@ const PerformanceDashboard: React.FC = () => {
               
               <DaisyCardContent>
                 <div className="text-2xl font-bold">{formatMetric(metrics.pageLoadTime, 'ms')}</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -548,7 +548,7 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardContent>
                 <div className="text-2xl font-bold">{formatMetric(metrics.memoryUsage, '%')}</div>
                 <DaisyProgress value={metrics.memoryUsage} className="mt-2" />
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -559,7 +559,7 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardContent>
                 <div className="text-2xl font-bold">{formatMetric(metrics.cpuUsage, '%')}</div>
                 <DaisyProgress value={metrics.cpuUsage} className="mt-2" />
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -572,7 +572,7 @@ const PerformanceDashboard: React.FC = () => {
                 <div className="text-sm text-gray-600">
                   {metrics.downlink}Mbps, {metrics.rtt}ms RTT
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -595,7 +595,7 @@ const PerformanceDashboard: React.FC = () => {
                   <Bar dataKey="duration" fill="#8884d8" />
                 </BarChart>
               </ResponsiveContainer>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -620,7 +620,7 @@ const PerformanceDashboard: React.FC = () => {
                   <Line type="monotone" dataKey="pageLoadTime" stroke="#ffc658" name="Page Load (ms)" />
                 </LineChart>
               </ResponsiveContainer>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

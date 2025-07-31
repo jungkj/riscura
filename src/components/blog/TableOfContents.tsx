@@ -83,7 +83,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   if (headings.length === 0) {
     return null;
-  }
+  };
 
   return (
     <nav className="bg-gray-50 rounded-lg p-4">

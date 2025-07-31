@@ -219,9 +219,9 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       else config = effectivenessConfig.low;
     } else {
       config = effectivenessConfig.low;
-    }
-    
-    return (
+    };
+
+  return (
       <div className="flex items-center space-x-2">
         <DaisyProgress value={config.value} className="w-16" />
         <DaisyBadge variant="outline" className={`${config.color} ${config.bgColor}`}>
@@ -251,9 +251,9 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
           <span className="text-xs">Active</span>
         </div>
       );
-    }
-    
-    return (
+    };
+
+  return (
       <div className="flex items-center space-x-1 text-gray-600">
         <Clock className="w-4 h-4" />
         <span className="text-xs">{control.status}</span>
@@ -275,10 +275,10 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -308,7 +308,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             <p className="text-xs text-muted-foreground">
               Across all types
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -323,7 +323,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             <p className="text-xs text-muted-foreground">
               Performing well
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -338,7 +338,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             <p className="text-xs text-muted-foreground">
               Need immediate attention
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -353,7 +353,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             <p className="text-xs text-muted-foreground">
               Out of 5.0 scale
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -397,7 +397,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Control Type" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Types</SelectItem>
                   <DaisySelectItem value="preventive">Preventive</SelectItem>
@@ -412,7 +412,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Effectiveness" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Effectiveness</SelectItem>
                   <DaisySelectItem value="high">High</SelectItem>
@@ -427,7 +427,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Status" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Statuses</SelectItem>
                   <DaisySelectItem value="active">Active</SelectItem>
@@ -467,7 +467,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -640,7 +640,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               </div>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Empty State */}
@@ -662,7 +662,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 </DaisyButton>
               )}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 

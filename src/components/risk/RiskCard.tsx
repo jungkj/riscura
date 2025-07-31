@@ -266,7 +266,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
             </DaisyDropdownMenu>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }

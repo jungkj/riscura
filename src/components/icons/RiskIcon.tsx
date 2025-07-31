@@ -1,6 +1,7 @@
 import { LucideProps } from 'lucide-react';
 
 export function RiskIcon(props: LucideProps) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

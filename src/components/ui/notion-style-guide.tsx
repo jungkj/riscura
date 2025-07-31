@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 
 export function NotionStyleGuide() {
+
   return (
     <div className="min-h-screen bg-white p-8 space-y-12 font-inter">
       {/* Header */}
@@ -70,7 +71,7 @@ export function NotionStyleGuide() {
                 <p className="text-xs text-gray-500">Main Background</p>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Typography */}
@@ -100,7 +101,7 @@ export function NotionStyleGuide() {
               <p className="text-sm text-gray-600 mb-2">Secondary Text</p>
               <p className="text-sm text-gray-500">text-sm text-gray-600</p>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Buttons */}
@@ -151,7 +152,7 @@ export function NotionStyleGuide() {
                 <DaisyButton variant="ghost" size="lg" className="w-full">Large Ghost</DaisyButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Form Components */}
@@ -198,7 +199,7 @@ export function NotionStyleGuide() {
                 />
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Data Display */}
@@ -243,7 +244,7 @@ export function NotionStyleGuide() {
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Navigation Components */}
@@ -323,7 +324,7 @@ export function NotionStyleGuide() {
                 </PaginationContent>
               </Pagination>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Table Component */}
@@ -379,7 +380,7 @@ export function NotionStyleGuide() {
                 </DaisyTableRow>
               </DaisyTableBody>
             </DaisyTable>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Card Layouts */}
@@ -403,7 +404,7 @@ export function NotionStyleGuide() {
                     <p className="text-3xl font-bold text-[#191919] mb-2">23</p>
                     <p className="text-xs text-gray-500">+2 this week</p>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               {/* Status Card */}
@@ -413,15 +414,15 @@ export function NotionStyleGuide() {
                     <DaisyAlertTriangle className="h-5 w-5 text-orange-600" />
                     High Priority
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <p className="text-sm text-gray-600 mb-4">
                     4 high-risk items require immediate attention.
                   </p>
                   <DaisyButton size="sm" className="w-full">
                     Review Now
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               {/* AI Insights Card */}
@@ -431,8 +432,8 @@ export function NotionStyleGuide() {
                     <Brain className="h-5 w-5 text-purple-600" />
                     AI Insights
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4">
                     <p className="text-sm text-purple-700">
                       ARIA detected potential compliance gaps in your SOX controls.
@@ -441,7 +442,7 @@ export function NotionStyleGuide() {
                   <DaisyButton variant="secondary" size="sm" className="w-full">
                     View Details
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyCardBody>
@@ -478,7 +479,7 @@ export function NotionStyleGuide() {
                 </ul>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

@@ -345,7 +345,7 @@ export default function ProboIntegrationPage() {
                               </DaisyBadge>
                               <ChevronRight className="h-4 w-4 text-[#A8A8A8] group-hover:text-[#199BEC] transition-colors" />
                             </div>
-                          </DaisyCardBody>
+                          </DaisyCardContent>
                         </DaisyCard>
                       </motion.div>
                     ))}
@@ -395,7 +395,7 @@ export default function ProboIntegrationPage() {
                                 ))}
                               </div>
                             </div>
-                          </DaisyCardBody>
+                          </DaisyCardContent>
                         </DaisyCard>
                       </motion.div>
                     ))}
@@ -443,7 +443,7 @@ export default function ProboIntegrationPage() {
                           </motion.div>
                         ))}
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </motion.div>
 

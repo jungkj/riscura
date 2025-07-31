@@ -234,7 +234,7 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
         Keyboard Shortcuts (?)
       </button>
     );
-  }
+  };
 
   return (
     <div

@@ -616,7 +616,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           <DaisySelect value={chartType} onValueChange={(value: any) => setChartType(value)}>
             <DaisySelectTrigger>
               <DaisySelectValue placeholder="Chart Type" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="progress">Progress Overview</SelectItem>
               <DaisySelectItem value="trend">Trend Analysis</SelectItem>
@@ -628,7 +628,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
             <DaisySelectTrigger>
               <DaisySelectValue placeholder="Time Range" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="30d">Last 30 Days</SelectItem>
               <DaisySelectItem value="90d">Last 90 Days</SelectItem>
@@ -690,7 +690,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                       </ResponsiveContainer>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               <DaisyCard>
@@ -704,7 +704,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <StatusIcons.CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               <DaisyCard>
@@ -716,7 +716,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <StatusIcons.AlertTriangle className="h-8 w-8 text-red-600" />
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
               
               <DaisyCard>
@@ -728,7 +728,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                     </div>
                     <DataIcons.BarChart3 className="h-8 w-8 text-blue-600" />
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
             
@@ -805,7 +805,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>
@@ -849,7 +849,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                         );
                       })}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>
@@ -899,7 +899,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                       <DaisyBadge variant="outline">Q3 2024</DaisyBadge>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </DaisyTabsContent>

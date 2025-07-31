@@ -320,7 +320,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {alertThresholds.map((threshold) => (
                         <DaisySelectItem key={threshold.value} value={threshold.value}>
@@ -631,7 +631,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="daily">Daily</DaisySelectItem>
                         <DaisySelectItem value="weekly">Weekly</DaisySelectItem>

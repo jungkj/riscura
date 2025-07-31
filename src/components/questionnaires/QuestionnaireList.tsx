@@ -260,7 +260,7 @@ export function QuestionnaireList({
               </DaisyTooltip>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );
@@ -424,14 +424,15 @@ export function QuestionnaireList({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );
 
   if (questionnaires.length === 0) {
-    return (
-      <motion.div
+
+  return (
+    <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center py-12"
@@ -449,7 +450,7 @@ export function QuestionnaireList({
         </DaisyButton>
       </motion.div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

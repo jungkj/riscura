@@ -234,7 +234,7 @@ export default function DocumentAnalysisPage() {
                           )}
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 )}
               </div>
@@ -343,7 +343,7 @@ export default function DocumentAnalysisPage() {
                                 </DaisyButton>
                               </div>
                             </div>
-                          </DaisyCardBody>
+                          </DaisyCardContent>
                         </DaisyCard>
                       ))}
                     </div>
@@ -393,7 +393,7 @@ export default function DocumentAnalysisPage() {
                       <DaisyButton className="w-full" variant="outline">
                         Generate Full Report
                       </DaisyButton>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </DaisyTabsContent>
               </DaisyTabs>

@@ -274,8 +274,8 @@ export default function DocumentSearch({
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-lg">Basic Search</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               <div className="space-y-2">
                 <DaisyLabel htmlFor="search-query">Search Query</DaisyLabel>
                 <DaisyInput
@@ -295,7 +295,7 @@ export default function DocumentSearch({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select category" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {CATEGORY_OPTIONS.map(option => (
                         <DaisySelectItem key={option.value} value={option.value}>
@@ -314,7 +314,7 @@ export default function DocumentSearch({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select file type" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {FILE_TYPE_OPTIONS.map(option => (
                         <DaisySelectItem key={option.value} value={option.value}>
@@ -325,15 +325,15 @@ export default function DocumentSearch({
                   </DaisySelect>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Advanced Filters */}
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-lg">Advanced Filters</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               {/* Tags */}
               <div className="space-y-2">
                 <DaisyLabel>Tags</DaisyLabel>
@@ -452,7 +452,7 @@ export default function DocumentSearch({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select entity type" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="">All Types</SelectItem>
                       <DaisySelectItem value="RISK">Risk</SelectItem>
@@ -472,7 +472,7 @@ export default function DocumentSearch({
                   />
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Search Actions */}
@@ -512,8 +512,8 @@ export default function DocumentSearch({
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle className="text-lg">Save Search</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
                   <DaisyLabel htmlFor="search-name">Search Name</DaisyLabel>
                   <DaisyInput
@@ -529,7 +529,7 @@ export default function DocumentSearch({
                     Cancel
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </DaisyTabsContent>
@@ -538,8 +538,8 @@ export default function DocumentSearch({
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-lg">Saved Searches</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               {savedSearches.length === 0 ? (
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -568,7 +568,7 @@ export default function DocumentSearch({
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
@@ -578,8 +578,8 @@ export default function DocumentSearch({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="text-lg">Refine Results</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {searchFacets.categories && searchFacets.categories.length > 0 && (
                 <div>
@@ -623,7 +623,7 @@ export default function DocumentSearch({
                 </div>
               )}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

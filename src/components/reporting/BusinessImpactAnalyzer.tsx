@@ -196,7 +196,7 @@ export function BusinessImpactAnalyzer() {
                   </div>
                   <p className="text-xs text-gray-500">{metric.period}</p>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}
@@ -217,8 +217,8 @@ export function BusinessImpactAnalyzer() {
                   <p className="text-sm text-gray-600 font-normal">Total return on risk management investments</p>
                 </div>
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </DaisyCardHeader>
+        <DaisyCardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-600">{formatCurrency(totalInvestment)}</div>
                 <div className="text-sm text-gray-600">Total Investment</div>
@@ -231,15 +231,15 @@ export function BusinessImpactAnalyzer() {
                 <div className="text-3xl font-bold text-purple-600">{Math.round(averageROI)}%</div>
                 <div className="text-sm text-gray-600">Average ROI</div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* ROI Breakdown */}
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>ROI Breakdown by Initiative</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
               {roiMetrics.map((metric) => (
                 <div key={metric.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center justify-between mb-3">
@@ -278,7 +278,7 @@ export function BusinessImpactAnalyzer() {
                   </div>
                 </div>
               ))}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}
@@ -288,8 +288,8 @@ export function BusinessImpactAnalyzer() {
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle>Financial Impact Dashboard</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900">Cost Efficiency Metrics</h3>
@@ -327,7 +327,7 @@ export function BusinessImpactAnalyzer() {
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

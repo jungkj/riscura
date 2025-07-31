@@ -455,8 +455,9 @@ export function withAutoSave<T = any>(
   config?: Partial<AutoSaveConfig>
 ) {
   return function AutoSaveWrapper(props: any) {
-    return (
-      <AutoSaveForm
+
+  return (
+    <AutoSaveForm
         initialData={props.initialData || {}}
         onSave={saveFunction}
         config={config}

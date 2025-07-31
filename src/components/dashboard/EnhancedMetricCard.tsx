@@ -295,7 +295,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
               </div>
             </>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
 
         {/* Hover effect overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />

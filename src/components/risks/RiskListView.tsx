@@ -206,10 +206,10 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -267,7 +267,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Category" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Categories</SelectItem>
                   <DaisySelectItem value="operational">Operational</SelectItem>
@@ -284,7 +284,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Status" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Statuses</SelectItem>
                   <DaisySelectItem value="identified">Identified</SelectItem>
@@ -300,7 +300,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               >
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Risk Level" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="">All Levels</SelectItem>
                   <DaisySelectItem value="low">Low</SelectItem>
@@ -341,7 +341,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -529,7 +529,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               </div>
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Empty State */}
@@ -550,7 +550,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 </DaisyButton>
               )}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

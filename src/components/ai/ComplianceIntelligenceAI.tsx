@@ -93,7 +93,7 @@ const FrameworkSelector: React.FC<{
                     <CheckCircle className="h-4 w-4 text-primary ml-auto" />
                   )}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}
@@ -136,7 +136,7 @@ const AssessmentOverview: React.FC<{
               {assessment.overallScore}%
             </div>
             <DaisyProgress value={assessment.overallScore} className="mt-2" />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -150,7 +150,7 @@ const AssessmentOverview: React.FC<{
             <p className="text-sm text-muted-foreground">
               {getMaturityLabel(assessment.maturityLevel)}
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -164,7 +164,7 @@ const AssessmentOverview: React.FC<{
             <p className="text-sm text-muted-foreground">
               of {assessment.gapsIdentified} total
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard>
@@ -176,7 +176,7 @@ const AssessmentOverview: React.FC<{
               {assessment.completionPercentage}%
             </div>
             <DaisyProgress value={assessment.completionPercentage} className="mt-2" />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -218,7 +218,7 @@ const AssessmentOverview: React.FC<{
               View Audit Plan
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Top Recommendations */}
@@ -257,7 +257,7 @@ const AssessmentOverview: React.FC<{
               View All Recommendations
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -363,7 +363,7 @@ const GapAnalysisView: React.FC<{
                 </div>
               ))}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -461,7 +461,7 @@ const RegulatoryChangesView: React.FC<{
                 Prep time: {change.ai_analysis.preparation_time} days
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -500,7 +500,7 @@ const RoadmapView: React.FC<{
               <p className="text-lg font-semibold">{roadmap.frameworks.length}</p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Phases */}
@@ -529,7 +529,7 @@ const RoadmapView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Key Initiatives */}
@@ -563,7 +563,7 @@ const RoadmapView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -752,7 +752,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -853,7 +853,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
                     </div>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </DaisyTabsContent>

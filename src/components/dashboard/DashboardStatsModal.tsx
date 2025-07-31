@@ -125,12 +125,12 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                   <Eye className="w-5 h-5 mr-2" />
                   Overview
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <p className="text-[#191919] font-semibold leading-relaxed">
                   {data.details.overview}
                 </p>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Breakdown Section */}
@@ -141,8 +141,8 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                     <TrendingUp className="w-5 h-5 mr-2" />
                     Breakdown
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-4">
                     {data.details.breakdown.map((item, index) => (
                       <div key={index} className="space-y-2">
@@ -167,7 +167,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
 
@@ -179,8 +179,8 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                     <Activity className="w-5 h-5 mr-2" />
                     Recent Activity
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-3">
                     {data.details.recentItems.map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg bg-white">
@@ -204,7 +204,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
 
@@ -216,8 +216,8 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                     <FileText className="w-5 h-5 mr-2" />
                     Key Insights
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-3">
                     {data.details.insights.map((insight, index) => (
                       <div 
@@ -237,7 +237,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
           </div>

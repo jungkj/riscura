@@ -421,7 +421,7 @@ export default function AnalyticsTrendsPage() {
           <DaisySelect value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Time Range" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="1month">Last Month</SelectItem>
               <DaisySelectItem value="3months">Last 3 Months</SelectItem>
@@ -433,7 +433,7 @@ export default function AnalyticsTrendsPage() {
           <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Category" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Categories</SelectItem>
               <DaisySelectItem value="risk">Risk</SelectItem>
@@ -489,8 +489,8 @@ export default function AnalyticsTrendsPage() {
                       )} />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <div className="space-y-3">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-2xl font-bold">
@@ -522,7 +522,7 @@ export default function AnalyticsTrendsPage() {
                         {metric.description}
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -585,7 +585,7 @@ export default function AnalyticsTrendsPage() {
                   <div className="text-sm text-yellow-700">near target goals</div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -694,7 +694,7 @@ export default function AnalyticsTrendsPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -769,7 +769,7 @@ export default function AnalyticsTrendsPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}

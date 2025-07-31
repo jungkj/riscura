@@ -160,7 +160,7 @@ const FormMessage = React.forwardRef<
 
   if (!body) {
     return null;
-  }
+  };
 
   return (
     <p

@@ -140,7 +140,7 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
             <DaisySkeletonButton />
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     )}
   </DaisyCard>
 );
@@ -279,7 +279,7 @@ export const LoadingDashboard: React.FC = () => (
               </div>
               <EnhancedSkeleton className="h-8 w-8 rounded" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>

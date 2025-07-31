@@ -95,9 +95,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       if (speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = loadVoices;
       }
-    }
+    };
 
-    return () => {
+  return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
@@ -289,10 +289,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             <StatusIcons.XCircle className="h-8 w-8 mx-auto mb-2" />
             <p>Voice interface is not supported in this browser</p>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <DaisyCard className={className}>
@@ -524,7 +524,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </div>
           <span>Voice AI Ready</span>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

@@ -76,7 +76,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -265,7 +265,7 @@ export const TokenUsageAnalytics: React.FC = () => {
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       <DaisyTabs value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as typeof selectedPeriod)}>
@@ -347,7 +347,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                 period="Resets monthly"
                 cost={tokenUsageMetrics.monthlyCost}
               />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Agent Usage Breakdown */}
@@ -378,7 +378,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Cost Projections */}
@@ -413,7 +413,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                   <div className="text-sm text-muted-foreground">Monthly</div>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Recent Conversations */}
@@ -441,7 +441,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

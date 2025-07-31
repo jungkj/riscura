@@ -414,15 +414,15 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow">
                   <DaisyCardHeader>
                     <DaisyCardTitle className="text-lg">{viz.title}</DaisyCardTitle>
-                  
-                  <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                     <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
                       <div className="text-center">
                         <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
                         <p className="text-sm text-gray-600">{viz.narrative}</p>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -464,7 +464,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                             </div>
                           </div>
                         </div>
-                      </DaisyCardBody>
+                      </DaisyCardContent>
                     </DaisyCard>
                   );
                 })}
@@ -618,7 +618,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <Wand2 className="w-5 h-5 mr-2" />
             AI Story Generation
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="flex items-center justify-between">
             <div>
@@ -656,7 +656,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <DaisyProgress value={40} className="h-2" />
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Story Summary */}
@@ -666,7 +666,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <BookOpen className="w-5 h-5 mr-2" />
             Story Summary
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -698,7 +698,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <h4 className="font-medium text-blue-900 mb-2">Executive Summary</h4>
             <p className="text-sm text-blue-800">{story.narrative.executiveSummary}</p>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

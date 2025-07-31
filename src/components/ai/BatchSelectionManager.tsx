@@ -349,7 +349,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                   <DaisySelect value={selectedAction} onValueChange={(value: AIAction) => setSelectedAction(value)}>
                     <DaisySelectTrigger className="w-40">
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="explain">Explain</SelectItem>
                       <DaisySelectItem value="improve">Improve</SelectItem>
@@ -474,7 +474,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                               <Trash2 className="h-3 w-3" />
                             </DaisyButton>
                           </div>
-                        </DaisyCardBody>
+                        </DaisyCardContent>
                       </DaisyCard>
                     ))}
                   </div>

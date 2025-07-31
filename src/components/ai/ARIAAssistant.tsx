@@ -693,7 +693,7 @@ How can I assist you today?`,
             </DaisyButton>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }

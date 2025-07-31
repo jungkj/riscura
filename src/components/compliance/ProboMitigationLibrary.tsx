@@ -169,12 +169,13 @@ export function ProboMitigationLibrary() {
   ];
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
+
+  return (
+    <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -230,7 +231,7 @@ export function ProboMitigationLibrary() {
                   <option value="ADVANCED">Advanced</option>
                 </select>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Selection Actions */}
@@ -302,7 +303,7 @@ export function ProboMitigationLibrary() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))}
             </div>
@@ -360,7 +361,7 @@ export function ProboMitigationLibrary() {
                   Import All Controls ({mitigations.length})
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -384,7 +385,7 @@ export function ProboMitigationLibrary() {
                   Browse Library
                 </DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

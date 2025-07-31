@@ -41,6 +41,7 @@ const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "st
 
 // Single Word Typewriter Component
 function SingleWordTypewriter() {
+
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">
@@ -274,7 +275,7 @@ function HeroProcessCard() {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -487,7 +488,7 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}

@@ -196,8 +196,9 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
   };
 
   if (!enabled) {
-    return (
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5] font-inter">
+
+  return (
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5] font-inter">
         <DaisyCardContent className="p-6">
           <div className="flex items-center justify-center space-x-4">
             <Brain className="w-8 h-8 text-[#A8A8A8]" />
@@ -210,10 +211,10 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <motion.div
@@ -580,7 +581,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
             </motion.div>
           )}
         </AnimatePresence>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </motion.div>
   );
 } 

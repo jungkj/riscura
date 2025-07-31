@@ -130,10 +130,10 @@ export default function RealTimeDashboard({
       HIGH: 'bg-orange-500 text-white',
       MEDIUM: 'bg-yellow-500 text-black',
       LOW: 'bg-green-500 text-white'
-    }
-    
-    return (
-      <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
+    };
+
+  return (
+    <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
         {level || 'Unassessed'}
       </DaisyBadge>
     )
@@ -146,9 +146,9 @@ export default function RealTimeDashboard({
       LARGELY_EFFECTIVE: 'bg-blue-500 text-white',
       PARTIALLY_EFFECTIVE: 'bg-yellow-500 text-black',
       NOT_EFFECTIVE: 'bg-red-500 text-white'
-    }
-    
-    return (
+    };
+
+  return (
       <DaisyBadge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}>
         {effectiveness?.replace(/_/g, ' ') || 'Not Assessed'}
       </DaisyBadge>
@@ -198,8 +198,8 @@ export default function RealTimeDashboard({
         </DaisyAlert>
       </div>
     )
-  }
-  
+  };
+
   return (
     <div className={cn("space-y-6", className)}>
       {/* Header */}
@@ -241,7 +241,7 @@ export default function RealTimeDashboard({
                 </DaisyBadge>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -260,7 +260,7 @@ export default function RealTimeDashboard({
                 />
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -273,7 +273,7 @@ export default function RealTimeDashboard({
             <p className="text-xs text-muted-foreground mt-2">
               Files and policies
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -286,7 +286,7 @@ export default function RealTimeDashboard({
             <p className="text-xs text-muted-foreground mt-2">
               Active users
             </p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
       
@@ -336,7 +336,7 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
         
@@ -378,7 +378,7 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
         
@@ -418,7 +418,7 @@ export default function RealTimeDashboard({
                   ))}
                 </div>
               )}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

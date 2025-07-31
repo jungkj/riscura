@@ -13,7 +13,7 @@ export default function TestDashboard() {
       .then(data => setSessionInfo(data))
       .catch(err => console.error('Failed to check session:', err));
   }, []);
-  
+
   return (
     <div>
       <div className="bg-yellow-100 p-4 mb-4">

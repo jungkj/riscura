@@ -104,7 +104,7 @@ export function RCSABreadcrumb({
 
   if (breadcrumbs.length <= 1) {
     return null; // Don't show breadcrumbs if we're at the top level
-  }
+  };
 
   return (
     <nav 

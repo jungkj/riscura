@@ -12,6 +12,7 @@ interface AuthorBioProps {
 }
 
 export default function AuthorBio({ author }: AuthorBioProps) {
+
   return (
     <div className="bg-gray-50 rounded-xl p-6 mb-12">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">About the Author</h3>

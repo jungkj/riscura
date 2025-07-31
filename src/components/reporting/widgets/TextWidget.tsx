@@ -59,7 +59,7 @@ export function TextWidget({
         <div className="text-sm text-gray-700 whitespace-pre-wrap">
           {content}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

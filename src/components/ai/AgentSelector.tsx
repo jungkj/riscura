@@ -267,7 +267,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                 </div>
               </DaisyTabsContent>
             </DaisyTabs>
-          </DaisyCardBody>
+          </DaisyCardContent>
         )}
       </DaisyCard>
     );

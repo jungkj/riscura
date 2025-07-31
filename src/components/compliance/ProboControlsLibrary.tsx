@@ -184,12 +184,13 @@ export function ProboControlsLibrary() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
+
+  return (
+    <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -240,7 +241,7 @@ export function ProboControlsLibrary() {
                   <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
                     <DaisySelectTrigger className="w-48">
                       <DaisySelectValue placeholder="All Categories" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Categories</SelectItem>
                       {categories.map(category => (
@@ -253,7 +254,7 @@ export function ProboControlsLibrary() {
                   <DaisySelect value={selectedImportance} onValueChange={setSelectedImportance}>
                     <DaisySelectTrigger className="w-40">
                       <DaisySelectValue placeholder="All Levels" />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Levels</SelectItem>
                       <DaisySelectItem value="MANDATORY">Mandatory</SelectItem>
@@ -263,7 +264,7 @@ export function ProboControlsLibrary() {
                   </DaisySelect>
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Controls List */}
@@ -348,7 +349,7 @@ export function ProboControlsLibrary() {
                   ))}
                 </div>
               </DaisyScrollArea>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -383,7 +384,7 @@ export function ProboControlsLibrary() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             ))}
           </div>
@@ -440,7 +441,7 @@ export function ProboControlsLibrary() {
                     Import {selectedMitigations.size} Controls
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           ) : (
             <DaisyCard className="bg-white border-[#D8C3A5]">
@@ -457,7 +458,7 @@ export function ProboControlsLibrary() {
                 >
                   Browse Controls
                 </DaisyButton>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           )}
         </DaisyTabsContent>

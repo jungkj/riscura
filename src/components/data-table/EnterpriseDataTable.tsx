@@ -180,7 +180,7 @@ export default function EnterpriseDataTable<T extends TableData>({
   
   const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedRows.has(row.id));
   const isIndeterminate = selectedRows.size > 0 && !isAllSelected;
-  
+
   return (
     <DaisyCard className={className}>
       <DaisyCardHeader className="pb-3">
@@ -401,9 +401,9 @@ export default function EnterpriseDataTable<T extends TableData>({
                     page = totalPages - 4 + i;
                   } else {
                     page = currentPage - 2 + i;
-                  }
-                  
-                  return (
+                  };
+
+  return (
                     <DaisyButton
                       key={page}
                       variant={currentPage === page ? 'primary' : 'outline'}
@@ -428,7 +428,7 @@ export default function EnterpriseDataTable<T extends TableData>({
             </div>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }
@@ -529,7 +529,7 @@ export function RiskDataTableExample() {
       variant: 'danger'
     }
   ];
-  
+
   return (
     <EnterpriseDataTable
       data={sampleData}

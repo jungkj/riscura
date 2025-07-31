@@ -598,8 +598,9 @@ export default function EnhancedRCSASpreadsheet() {
     const renderCellContent = () => {
       if (isEditing) {
         if (column.type === 'multiline') {
-          return (
-            <DaisyTextarea
+
+  return (
+    <DaisyTextarea
               value={editValue}
               onChange={(e) => setEditValue(e.target.value)}
               onBlur={handleSaveCell}
@@ -618,7 +619,7 @@ export default function EnhancedRCSASpreadsheet() {
             <DaisySelect value={editValue} onValueChange={setEditValue}>
               <DaisySelectTrigger className="h-full border-0 p-0 focus:ring-0">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {column.options.map(opt => (
                   <DaisySelectItem key={opt.value} value={opt.value}>
@@ -741,7 +742,7 @@ export default function EnhancedRCSASpreadsheet() {
           <DaisySelect value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="combined">Combined View</SelectItem>
               <DaisySelectItem value="risks">Risks Only</SelectItem>
@@ -779,7 +780,7 @@ export default function EnhancedRCSASpreadsheet() {
           <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="All Status" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Status</SelectItem>
               {viewMode !== 'controls' && (
@@ -805,7 +806,7 @@ export default function EnhancedRCSASpreadsheet() {
             <DaisySelect value={filterRiskLevel} onValueChange={setFilterRiskLevel}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="All Risk Levels" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Risk Levels</SelectItem>
                 <DaisySelectItem value="LOW">Low</SelectItem>

@@ -298,8 +298,8 @@ export default function FileUploadDropzone({
           <Upload className="w-5 h-5" />
           File Upload
         </DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-6">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-6">
         {/* Upload Area */}
         <div
           {...getRootProps()}
@@ -339,7 +339,7 @@ export default function FileUploadDropzone({
             <DaisySelect value={category} onValueChange={setCategory}>
               <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Select category" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {CATEGORY_OPTIONS.map(option => (
                   <DaisySelectItem key={option.value} value={option.value}>
@@ -503,7 +503,7 @@ export default function FileUploadDropzone({
             </DaisyButton>
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

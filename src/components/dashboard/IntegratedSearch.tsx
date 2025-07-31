@@ -11,6 +11,7 @@ interface IntegratedSearchProps {
 }
 
 export function IntegratedSearch({ value, onChange, placeholder = "Search..." }: IntegratedSearchProps) {
+
   return (
     <div className="relative">
       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#A8A8A8]" />

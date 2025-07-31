@@ -203,7 +203,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
           <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
             <DaisySelectTrigger className="w-32">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="popular">Popular</SelectItem>
               <DaisySelectItem value="recent">Recent</SelectItem>
@@ -220,8 +220,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle className="text-lg">Categories</DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-2">
               {templateCategories.map((category) => {
                 const Icon = category.icon;
                 const isSelected = selectedCategory === category.id;
@@ -245,7 +245,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   </button>
                 );
               })}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           {/* Featured Templates */}
@@ -255,8 +255,8 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                 <Star className="w-4 h-4 mr-2 text-yellow-500" />
                 Featured
               </DaisyCardTitle>
-            
-            <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
               {mockTemplates.filter(t => t.isFeatured).slice(0, 3).map((template) => (
                 <div
                   key={template.id}
@@ -280,7 +280,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   </div>
                 </div>
               ))}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
 
@@ -375,7 +375,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                           </DaisyButton>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </motion.div>
               );

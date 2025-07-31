@@ -8,6 +8,7 @@ interface RelatedPostsProps {
 }
 
 export default function RelatedPosts({ posts }: RelatedPostsProps) {
+
   return (
     <section className="mb-12">
       <h3 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h3>

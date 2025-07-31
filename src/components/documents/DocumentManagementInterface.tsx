@@ -326,7 +326,7 @@ export default function DocumentManagementInterface({
                 {formatDistanceToNow(new Date(document.uploadedAt), { addSuffix: true })}
               </p>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -396,7 +396,7 @@ export default function DocumentManagementInterface({
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       ))}
     </div>
@@ -439,7 +439,7 @@ export default function DocumentManagementInterface({
         <DaisySelect value={filterType} onValueChange={setFilterType}>
           <DaisySelectTrigger className="w-48">
             <DaisySelectValue placeholder="Filter by type" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="all">All Types</SelectItem>
             <DaisySelectItem value="application/pdf">PDF</SelectItem>
@@ -455,7 +455,7 @@ export default function DocumentManagementInterface({
         }}>
           <DaisySelectTrigger className="w-48">
             <DaisySelectValue placeholder="Sort by" />
-          </SelectTrigger>
+          </DaisySelectTrigger>
           <DaisySelectContent>
             <DaisySelectItem value="uploadedAt-desc">Newest First</SelectItem>
             <DaisySelectItem value="uploadedAt-asc">Oldest First</SelectItem>

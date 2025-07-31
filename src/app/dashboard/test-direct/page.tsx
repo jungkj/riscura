@@ -15,7 +15,7 @@ export default function TestDirectDashboard() {
       userEmail: user?.email,
     });
   }, [isAuthenticated, isLoading, isInitialized, user]);
-  
+
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Direct Dashboard Test (No ProtectedRoute)</h1>

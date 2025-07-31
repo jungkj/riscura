@@ -400,7 +400,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               </div>
             )}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </motion.div>
   );

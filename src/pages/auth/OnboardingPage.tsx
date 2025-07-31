@@ -142,7 +142,7 @@ export default function OnboardingPage() {
                         <FormControl>
                           <DaisySelectTrigger>
                             <DaisySelectValue placeholder="Select industry" />
-                          </SelectTrigger>
+                          </DaisySelectTrigger>
                         </FormControl>
                         <DaisySelectContent>
                           <DaisySelectItem value="financial">Financial Services</SelectItem>
@@ -171,7 +171,7 @@ export default function OnboardingPage() {
                         <FormControl>
                           <DaisySelectTrigger>
                             <DaisySelectValue placeholder="Select company size" />
-                          </SelectTrigger>
+                          </DaisySelectTrigger>
                         </FormControl>
                         <DaisySelectContent>
                           <DaisySelectItem value="1-50">1-50 employees</SelectItem>
@@ -277,7 +277,7 @@ export default function OnboardingPage() {
             )}
           </form>
         </Form>
-      </DaisyCardBody>
+      </DaisyCardContent>
       <DaisyCardFooter className="flex justify-center">
         <p className="text-xs text-muted-foreground">
           Step {step} of 2

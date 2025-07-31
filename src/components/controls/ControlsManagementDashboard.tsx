@@ -496,7 +496,7 @@ const ControlLibrary: React.FC = () => {
           <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Category" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Categories</SelectItem>
               {categories.map(category => (
@@ -508,7 +508,7 @@ const ControlLibrary: React.FC = () => {
           <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Framework" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Frameworks</SelectItem>
               {frameworks.map(framework => (
@@ -520,7 +520,7 @@ const ControlLibrary: React.FC = () => {
           <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Status" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Status</SelectItem>
               {statuses.map(status => (

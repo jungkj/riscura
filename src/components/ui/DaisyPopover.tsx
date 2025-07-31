@@ -46,7 +46,7 @@ export const DaisyPopoverTrigger = ({ children, asChild, open, onOpenChange }: P
     return React.cloneElement(children, {
       onClick: handleClick,
     } as any);
-  }
+  };
 
   return (
     <button onClick={handleClick} className="cursor-pointer">
@@ -82,9 +82,9 @@ export const DaisyPopoverContent = ({
 
     if (open) {
       document.addEventListener('mousedown', handleClickOutside);
-    }
+    };
 
-    return () => {
+  return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [open, onOpenChange]);

@@ -13,7 +13,7 @@ function LoginRedirectContent() {
     const redirectUrl = queryString ? `/auth/login?${queryString}` : '/auth/login';
     router.replace(redirectUrl);
   }, [router, searchParams]);
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <p>Redirecting to login...</p>
@@ -22,6 +22,7 @@ function LoginRedirectContent() {
 }
 
 export default function LoginRedirect() {
+
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">

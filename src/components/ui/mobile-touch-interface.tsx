@@ -436,9 +436,9 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
-    }
+    };
 
-    return () => {
+  return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };

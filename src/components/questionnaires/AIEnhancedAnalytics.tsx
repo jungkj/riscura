@@ -439,7 +439,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 AI analysis is disabled. Enable to access predictive insights and advanced analytics.
               </p>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -501,7 +501,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         
                         <DaisyProgress value={metric.confidence} className="h-1" />
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </motion.div>
               );
@@ -512,8 +512,8 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
           <DaisyCard>
             <DaisyCardHeader>
               <DaisyCardTitle>Predictive Trends</DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <ComposedChart data={[
                   { name: 'Week 1', actual: 87, predicted: 89, confidence: 0.9 },
@@ -531,7 +531,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   <Line type="monotone" dataKey="predicted" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="5 5" />
                 </ComposedChart>
               </ResponsiveContainer>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -590,7 +590,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         </ul>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -661,7 +661,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         </DaisyButton>
                       )}
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -676,21 +676,21 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 <ThumbsUp className="w-8 h-8 text-green-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-green-600">68%</div>
                 <div className="text-sm text-notion-text-secondary">Positive</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             <DaisyCard>
               <DaisyCardContent className="p-6 text-center">
                 <Minus className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-gray-600">22%</div>
                 <div className="text-sm text-notion-text-secondary">Neutral</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
             <DaisyCard>
               <DaisyCardContent className="p-6 text-center">
                 <ThumbsDown className="w-8 h-8 text-red-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-red-600">10%</div>
                 <div className="text-sm text-notion-text-secondary">Negative</div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
 
@@ -735,7 +735,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                           </div>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </motion.div>
               );
@@ -798,7 +798,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         <DaisyProgress value={pattern.frequency} className="w-16 h-2" />
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -893,7 +893,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                           </div>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </motion.div>
               );

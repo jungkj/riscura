@@ -221,25 +221,25 @@ const InteractiveDemo = () => {
                     <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-red-600">1</div>
                       <div className="text-sm text-red-700">High Risk</div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                   <DaisyCard className="bg-yellow-50 border-yellow-200">
                     <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-yellow-600">2</div>
                       <div className="text-sm text-yellow-700">Medium Risk</div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                   <DaisyCard className="bg-green-50 border-green-200">
                     <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-green-600">1</div>
                       <div className="text-sm text-green-700">Low Risk</div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                   <DaisyCard className="bg-blue-50 border-blue-200">
                     <DaisyCardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-blue-600">4</div>
                       <div className="text-sm text-blue-700">Total Risks</div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 </div>
 

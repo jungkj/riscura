@@ -23,6 +23,7 @@ export function FilterWidget({
   onDelete,
   onDuplicate,
 }: FilterWidgetProps) {
+
   return (
     <DaisyCard 
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
@@ -55,7 +56,7 @@ export function FilterWidget({
       
       <DaisyCardContent className="pt-0">
         <div className="text-sm text-gray-500">Filter control placeholder</div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

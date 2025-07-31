@@ -611,7 +611,7 @@ export default function QuickActionsPage() {
                       <stat.icon className="w-6 h-6" style={{ color: stat.color }} />
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </motion.div>
           ))}
@@ -660,7 +660,7 @@ export default function QuickActionsPage() {
                 </select>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Workflow Categories */}
@@ -807,7 +807,7 @@ export default function QuickActionsPage() {
                                 </div>
                                 <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-interactive-primary group-hover:translate-x-1 transition-all" />
                               </div>
-                            </DaisyCardBody>
+                            </DaisyCardContent>
                           </DaisyCard>
                         </motion.div>
                       ))}
@@ -880,7 +880,7 @@ export default function QuickActionsPage() {
                 </div>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </main>
 

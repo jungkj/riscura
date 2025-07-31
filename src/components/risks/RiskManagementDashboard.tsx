@@ -399,7 +399,7 @@ const RiskRegister: React.FC = () => {
           <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Category" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Categories</SelectItem>
               {categories.map(category => (
@@ -411,7 +411,7 @@ const RiskRegister: React.FC = () => {
           <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
             <DaisySelectTrigger className="w-40">
               <DaisySelectValue placeholder="Status" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="all">All Status</SelectItem>
               {statuses.map(status => (
@@ -713,7 +713,7 @@ export const RiskManagementDashboard: React.FC = () => {
                 providing AI-powered recommendations for risk mitigation strategies.
               
             </DaisyAlert>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Risk-Control Mappings */}
@@ -724,7 +724,7 @@ export const RiskManagementDashboard: React.FC = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
                 <p className="text-sm text-gray-600">Loading control mappings...</p>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ) : (
           <div className="grid gap-4">
@@ -798,7 +798,7 @@ export const RiskManagementDashboard: React.FC = () => {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}

@@ -284,8 +284,8 @@ export default function ReportLibrary({
       SCHEDULED: 'outline',
     } as const;
 
-    return (
-      <DaisyBadge variant={variants[status] || 'secondary'} className="flex items-center gap-1">
+  return (
+    <DaisyBadge variant={variants[status] || 'secondary'} className="flex items-center gap-1">
         {getStatusIcon(status)}
         {status}
       </DaisyBadge>
@@ -325,7 +325,7 @@ export default function ReportLibrary({
             <Filter className="h-5 w-5" />
             Filters
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
@@ -348,7 +348,7 @@ export default function ReportLibrary({
               <DaisySelect value={typeFilter} onValueChange={setTypeFilter}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Types</SelectItem>
                   <DaisySelectItem value="RISK_ASSESSMENT">Risk Assessment</SelectItem>
@@ -366,7 +366,7 @@ export default function ReportLibrary({
               <DaisySelect value={statusFilter} onValueChange={setStatusFilter}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Statuses</SelectItem>
                   <DaisySelectItem value="COMPLETED">Completed</SelectItem>
@@ -383,7 +383,7 @@ export default function ReportLibrary({
               <DaisySelect value={dateFilter} onValueChange={setDateFilter}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Time</SelectItem>
                   <DaisySelectItem value="today">Today</SelectItem>
@@ -393,7 +393,7 @@ export default function ReportLibrary({
               </DaisySelect>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Bulk Actions */}
@@ -606,7 +606,7 @@ export default function ReportLibrary({
               )}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Pagination */}

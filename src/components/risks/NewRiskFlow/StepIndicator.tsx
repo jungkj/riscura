@@ -17,7 +17,7 @@ interface StepIndicatorProps {
 
 export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
   const currentIndex = steps.findIndex(s => s.id === currentStep);
-  
+
   return (
     <div className="flex items-center justify-between" role="list" aria-label="Progress steps">
       {steps.map((step, index) => {

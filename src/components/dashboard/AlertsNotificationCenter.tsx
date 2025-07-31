@@ -28,8 +28,8 @@ export function AlertsNotificationCenter() {
         <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
           Alerts & Notifications
         </DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
         {alerts.map((alert, index) => (
           <motion.div
             key={alert.id}
@@ -49,7 +49,7 @@ export function AlertsNotificationCenter() {
             </div>
           </motion.div>
         ))}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

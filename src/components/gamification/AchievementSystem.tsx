@@ -338,7 +338,7 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
               ×
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );
@@ -494,7 +494,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
             <Trophy className="w-5 h-5" />
             <span>Your Progress</span>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
@@ -529,7 +529,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               </p>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Achievement filters */}
@@ -563,7 +563,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               <span>Show completed</span>
             </label>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Achievements grid */}
@@ -651,7 +651,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                           </div>
                         </div>
                       </div>
-                    </DaisyCardBody>
+                    </DaisyCardContent>
                   </DaisyCard>
                 );
               })}
@@ -664,7 +664,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       <DaisyCard>
         <DaisyCardHeader>
           <DaisyCardTitle>Quick Actions (Demo)</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="flex flex-wrap gap-2">
             <DaisyButton size="sm" onClick={() => trackAction('create_risk')}>
@@ -683,7 +683,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               Explore Dashboard
             </DaisyButton>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

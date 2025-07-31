@@ -97,12 +97,13 @@ export default function DaisyDashboardPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">

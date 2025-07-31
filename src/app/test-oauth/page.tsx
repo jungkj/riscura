@@ -29,11 +29,12 @@ function OAuthTestContent() {
   }, []);
 
   if (isLoading) {
-    return (
-      <DaisyCard className="max-w-2xl mx-auto">
+
+  return (
+    <DaisyCard className="max-w-2xl mx-auto">
         <DaisyCardContent className="p-8">
           <div className="text-center">Loading...</div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -51,8 +52,8 @@ function OAuthTestContent() {
     <DaisyCard className="max-w-2xl mx-auto">
       <DaisyCardHeader>
         <DaisyCardTitle>OAuth Test Page</DaisyCardTitle>
-      
-      <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
         <div>
           <strong>Status:</strong> {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
         </div>
@@ -98,19 +99,20 @@ function OAuthTestContent() {
             </li>
           </ul>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }
 
 export default function TestOAuthPage() {
+
   return (
     <div className="container mx-auto p-8">
       <Suspense fallback={
         <DaisyCard className="max-w-2xl mx-auto">
           <DaisyCardContent className="p-8">
             <div className="text-center">Loading...</div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       }>
         <OAuthTestContent />

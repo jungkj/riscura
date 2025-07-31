@@ -485,7 +485,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

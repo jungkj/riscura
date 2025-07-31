@@ -198,7 +198,7 @@ export default function TemplatesPage() {
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           );
         })}
@@ -211,7 +211,7 @@ export default function TemplatesPage() {
             <FileText className="h-5 w-5 text-blue-600" />
             How to Use These Templates
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -256,7 +256,7 @@ export default function TemplatesPage() {
               <strong>Pro Tip:</strong> Start with the sample data to understand the format, then gradually replace it with your own information. The templates include validation rules to help ensure data quality.
             </p>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

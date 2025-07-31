@@ -463,7 +463,7 @@ export const AdvancedReportingPlatform: React.FC = () => {
               <DaisySelect>
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Select frequency" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="daily">Daily</SelectItem>
                   <DaisySelectItem value="weekly">Weekly</SelectItem>
@@ -477,7 +477,7 @@ export const AdvancedReportingPlatform: React.FC = () => {
               <DaisySelect>
                 <DaisySelectTrigger>
                   <DaisySelectValue placeholder="Select delivery method" />
-                </SelectTrigger>
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="email">Email</SelectItem>
                   <DaisySelectItem value="slack">Slack</SelectItem>

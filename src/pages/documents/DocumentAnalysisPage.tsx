@@ -267,8 +267,8 @@ export default function DocumentAnalysisPage() {
                   <Clock className="h-5 w-5" />
                   Recent Analyses
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   {recentAnalyses.map((analysis) => (
                     <div key={analysis.id} className="flex items-center justify-between p-4 border rounded-lg">
@@ -312,8 +312,8 @@ export default function DocumentAnalysisPage() {
                   <BarChart3 className="h-5 w-5" />
                   Risk Category Trends
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   {riskTrends.map((trend) => (
                     <div key={trend.category} className="flex items-center justify-between p-4 border rounded-lg">
@@ -361,8 +361,8 @@ export default function DocumentAnalysisPage() {
                   <Brain className="h-5 w-5" />
                   AI-Generated Insights
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-6">
                   <div className="p-4 bg-[#D8C3A5]/20 dark:bg-[#D8C3A5]/10 rounded-lg border border-[#D8C3A5] dark:border-[#D8C3A5]">
                     <h4 className="font-medium text-[#191919] dark:text-[#191919] mb-2">

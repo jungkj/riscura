@@ -349,8 +349,9 @@ export default function MobileFormLayout({
     const renderInput = () => {
       switch (field.type) {
         case 'textarea':
-          return (
-            <DaisyTextarea
+
+  return (
+    <DaisyTextarea
               {...fieldProps}
               placeholder={field.placeholder}
               rows={field.rows || 3}
@@ -362,7 +363,7 @@ export default function MobileFormLayout({
             <DaisySelect value={value} onValueChange={(val) => handleFieldChange(field.id, val)}>
               <DaisySelectTrigger className={error ? 'border-red-500' : ''}>
                 <DaisySelectValue placeholder={field.placeholder} />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {field.options?.map(option => (
                   <DaisySelectItem key={option.value} value={option.value}>
@@ -625,7 +626,7 @@ export default function MobileFormLayout({
                 {(!section.collapsible || isExpanded) && (
                   <DaisyCardContent className="space-y-4">
                     {section.fields.map(field => renderField(field))}
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 )}
               </DaisyCard>
             );

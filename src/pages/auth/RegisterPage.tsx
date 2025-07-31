@@ -316,7 +316,7 @@ function RegisterForm() {
                 Sign in
               </Link>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Footer */}
@@ -329,6 +329,7 @@ function RegisterForm() {
 }
 
 export default function RegisterPage() {
+
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">

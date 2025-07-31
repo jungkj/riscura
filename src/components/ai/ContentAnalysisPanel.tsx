@@ -288,7 +288,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               )}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   };

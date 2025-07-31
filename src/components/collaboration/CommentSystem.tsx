@@ -309,7 +309,7 @@ const MentionInput: React.FC<{
                 </div>
               )}
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>
@@ -785,7 +785,7 @@ export const CommentSystem: React.FC<{
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-enterprise-6">
@@ -885,7 +885,7 @@ export const CommentSystem: React.FC<{
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Comments List */}

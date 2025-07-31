@@ -407,7 +407,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
             <Brain className="h-5 w-5 text-blue-600 animate-pulse" />
             Loading Custom Model Training Dashboard...
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
@@ -417,10 +417,10 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -464,7 +464,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 {metrics.totalJobs} total jobs
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -479,7 +479,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 {metrics.totalModels} trained models
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -494,7 +494,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 Active knowledge sources
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
 
           <DaisyCard>
@@ -509,7 +509,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
               <div className="text-xs text-gray-500 mt-1">
                 Running experiments
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </div>
       )}
@@ -534,8 +534,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   <TrendingUp className="h-5 w-5 text-blue-600" />
                   Training Job Status
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 {metrics && (
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -563,7 +563,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </ResponsiveContainer>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Model Performance Overview */}
@@ -573,8 +573,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   <TrendingUp className="h-5 w-5 text-green-600" />
                   Model Performance Trends
                 </DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={performance.slice(0, 7).map((p, i) => ({
@@ -604,7 +604,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
 
@@ -615,8 +615,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 <Brain className="h-5 w-5 text-purple-600" />
                 Recent Models
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 {modelOverviews.slice(0, 5).map((model) => (
                   <div key={model.id} className="flex items-center justify-between p-3 border rounded">
@@ -641,7 +641,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -653,8 +653,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 <Play className="h-5 w-5 text-blue-600" />
                 Training Jobs ({trainingJobs.length})
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-3">
                 {trainingJobs.map((job) => (
                   <div key={job.id} className="border rounded p-4">
@@ -747,7 +747,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -759,8 +759,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 <BookOpen className="h-5 w-5 text-purple-600" />
                 Knowledge Bases ({knowledgeBases.length})
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {knowledgeBases.map((kb) => (
                   <div key={kb.id} className="border rounded p-4">
@@ -799,7 +799,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -811,8 +811,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 <TestTube className="h-5 w-5 text-orange-600" />
                 A/B Test Experiments ({experiments.length})
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {experiments.map((experiment) => (
                   <div key={experiment.id} className="border rounded p-4">
@@ -866,7 +866,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -878,8 +878,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 <Rocket className="h-5 w-5 text-green-600" />
                 Model Deployments ({deployments.length})
               </DaisyCardTitle>
-            
-            <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
               <div className="space-y-4">
                 {deployments.map((deployment) => (
                   <div key={deployment.id} className="border rounded p-4">
@@ -923,7 +923,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -933,8 +933,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Performance Metrics</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={performance.slice(0, 7).map((p, i) => ({
@@ -969,14 +969,14 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Business Impact</DaisyCardTitle>
-              
-              <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                 <div className="space-y-4">
                   {performance.slice(0, 1).map((p) => (
                     <div key={p.modelId} className="space-y-3">
@@ -1026,7 +1026,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

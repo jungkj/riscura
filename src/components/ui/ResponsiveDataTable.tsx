@@ -350,7 +350,7 @@ const MobileCardLayout: React.FC<{
                   })}
                 </div>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </SwipeableCard>
         );
       })}
@@ -498,7 +498,7 @@ const TabletListLayout: React.FC<{
             );
           })}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -778,7 +778,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
   }
@@ -806,10 +806,10 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className={cn("space-y-enterprise-4", className)}>
@@ -878,7 +878,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Data Display */}
@@ -978,7 +978,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
                 </TouchButton>
               </div>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

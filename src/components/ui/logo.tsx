@@ -75,7 +75,7 @@ export const LogoPlaceholder: React.FC<LogoProps> = ({
         🐬
       </div>
     );
-  }
+  };
 
   return (
     <div 

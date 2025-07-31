@@ -26,8 +26,8 @@ export const ARIAChatSummary = () => {
               <MessageSquare className="h-5 w-5 text-[#199BEC]" />
               Chat Container Redesign
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-[#191919] font-inter">Clean Layout</h4>
               <ul className="text-sm text-gray-600 space-y-1">
@@ -48,7 +48,7 @@ export const ARIAChatSummary = () => {
                 <li>• Clean dropdown menu with hover states</li>
               </ul>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200">
@@ -57,8 +57,8 @@ export const ARIAChatSummary = () => {
               <Sparkles className="h-5 w-5 text-[#199BEC]" />
               Message Design
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-[#191919] font-inter">User Messages</h4>
               <ul className="text-sm text-gray-600 space-y-1">
@@ -78,7 +78,7 @@ export const ARIAChatSummary = () => {
                 <li>• Subtle border for definition</li>
               </ul>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200">
@@ -87,8 +87,8 @@ export const ARIAChatSummary = () => {
               <CheckCircle className="h-5 w-5 text-green-600" />
               Input Area Enhancement
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-[#191919] font-inter">Clean Input Field</h4>
               <ul className="text-sm text-gray-600 space-y-1">
@@ -108,7 +108,7 @@ export const ARIAChatSummary = () => {
                 <li>• Disabled states for loading</li>
               </ul>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200">
@@ -117,8 +117,8 @@ export const ARIAChatSummary = () => {
               <Bot className="h-5 w-5 text-[#199BEC]" />
               Feature Cards
             </DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-[#191919] font-inter">Risk Analysis Cards</h4>
               <ul className="text-sm text-gray-600 space-y-1">
@@ -138,7 +138,7 @@ export const ARIAChatSummary = () => {
                 <li>• Smooth transitions and animations</li>
               </ul>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -146,7 +146,7 @@ export const ARIAChatSummary = () => {
       <DaisyCard className="border border-gray-200">
         <DaisyCardHeader>
           <DaisyCardTitle className="text-[#191919] font-inter">Design System Integration</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
@@ -170,14 +170,14 @@ export const ARIAChatSummary = () => {
               <div className="text-xs text-gray-500 font-inter">#FFFFFF</div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Status Indicators */}
       <DaisyCard className="border border-gray-200">
         <DaisyCardHeader>
           <DaisyCardTitle className="text-[#191919] font-inter">Status Indicators & Animations</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -211,14 +211,14 @@ export const ARIAChatSummary = () => {
               </div>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Implementation Results */}
       <DaisyCard className="border border-green-200 bg-green-50">
         <DaisyCardHeader>
           <DaisyCardTitle className="text-green-800 font-inter">✅ Implementation Complete</DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -241,7 +241,7 @@ export const ARIAChatSummary = () => {
               </ul>
             </div>
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     </div>
   );

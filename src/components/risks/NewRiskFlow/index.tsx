@@ -137,6 +137,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
 }
 
 export function NewRiskFlow({ open, onOpenChange, onSuccess }: NewRiskFlowProps) {
+
   return (
     <DaisyDialog open={open} onOpenChange={onOpenChange}>
       <DaisyDialogContent className="max-w-4xl h-[90vh] p-0">

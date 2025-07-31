@@ -59,14 +59,14 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
 
   if (isLoading) {
     return <DaisySkeleton className="h-[280px] w-full" />;
-  }
+  };
 
   return (
     <DaisyCard>
       <DaisyCardHeader>
         <DaisyCardTitle>Compliance Status</DaisyCardTitle>
-      
-      <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -101,7 +101,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
             </div>
           ))}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

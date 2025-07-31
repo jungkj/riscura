@@ -251,9 +251,9 @@ export default function MobileNavigation({
     const isActive = pathname === item.href;
     const isExpanded = expandedItems.has(item.id);
     const hasChildren = item.children && item.children.length > 0;
-    
-    return (
-      <div key={item.id} className="w-full">
+
+  return (
+    <div key={item.id} className="w-full">
         <DaisyButton
           variant={isActive ? 'default' : 'ghost'}
           className={`w-full justify-start text-left h-auto p-3 ${

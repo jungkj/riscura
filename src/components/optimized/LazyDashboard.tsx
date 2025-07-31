@@ -409,7 +409,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div 
@@ -440,9 +440,9 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
                 <WidgetSkeleton size={widget.size} />
               </motion.div>
             );
-          }
+          };
 
-          return (
+  return (
             <motion.div
               key={widget.id}
               initial={{ opacity: 0, y: 20 }}

@@ -220,7 +220,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             <DaisySelect value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="level">By Level</SelectItem>
                 <DaisySelectItem value="category">By Category</SelectItem>
@@ -232,7 +232,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
               <DaisySelectTrigger className="w-24">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="donut">Donut</SelectItem>
                 <DaisySelectItem value="bar">Bar</SelectItem>
@@ -299,7 +299,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

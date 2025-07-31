@@ -509,7 +509,7 @@ const ActivityItem: React.FC<{
         )}
       </div>
     );
-  }
+  };
 
   return (
     <DaisyCard className={cn(
@@ -671,7 +671,7 @@ const ActivityItem: React.FC<{
             )}
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };

@@ -471,7 +471,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <DaisyAlertTriangle className="h-8 w-8 text-red-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -485,7 +485,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Activity className={`h-8 w-8 ${isMonitoring ? 'text-green-500' : 'text-gray-400'}`} />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -499,7 +499,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Cpu className="h-8 w-8 text-purple-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         <DaisyCard>
@@ -511,7 +511,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </div>
               <Target className="h-8 w-8 text-blue-500" />
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
 
@@ -578,7 +578,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Current Metrics */}
@@ -617,7 +617,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Detection Methods */}
@@ -649,7 +649,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     <DaisyBadge className="bg-green-100 text-green-800">Active</DaisyBadge>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -660,7 +660,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
             <DaisySelect value={selectedAlertType} onValueChange={setSelectedAlertType}>
               <DaisySelectTrigger className="w-48">
                 <DaisySelectValue placeholder="Filter by Type" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Types</SelectItem>
                 <DaisySelectItem value="statistical">Statistical</SelectItem>
@@ -673,7 +673,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
             <DaisySelect value={selectedSeverity} onValueChange={setSelectedSeverity}>
               <DaisySelectTrigger className="w-48">
                 <DaisySelectValue placeholder="Filter by Severity" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Severities</SelectItem>
                 <DaisySelectItem value="critical">Critical</SelectItem>
@@ -775,7 +775,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))
             ) : (
@@ -785,7 +785,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                   <p className="text-gray-500">
                     No anomaly alerts found. Start monitoring to detect anomalies.
                   </p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
           </div>
@@ -819,14 +819,14 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Monitoring Configuration</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Z-Score Threshold</label>
                   <input
@@ -870,14 +870,14 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     <option value="300">5 minutes</option>
                   </select>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>System Status</DaisyCardTitle>
-              
-              <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Detection Engine</span>
                   <DaisyBadge className={isMonitoring ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
@@ -898,7 +898,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     {new Date().toLocaleTimeString()}
                   </span>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -945,7 +945,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     <DaisyProgress value={85.2} className="h-2" />
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -985,7 +985,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                     </p>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

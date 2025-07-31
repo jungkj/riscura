@@ -413,8 +413,8 @@ export default function ReportScheduler({
       quarterly: 'bg-orange-100 text-orange-800',
     };
 
-    return (
-      <DaisyBadge className={colors[frequency as keyof typeof colors] || 'bg-gray-100 text-gray-800'}>
+  return (
+    <DaisyBadge className={colors[frequency as keyof typeof colors] || 'bg-gray-100 text-gray-800'}>
         {frequency}
       </DaisyBadge>
     );
@@ -452,7 +452,7 @@ export default function ReportScheduler({
           >
             <DaisySelectTrigger>
               <DaisySelectValue placeholder="Select report type" />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {reportTypes.map((type) => (
                 <DaisySelectItem key={type.value} value={type.value}>
@@ -483,7 +483,7 @@ export default function ReportScheduler({
           >
             <DaisySelectTrigger>
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="daily">Daily</SelectItem>
               <DaisySelectItem value="weekly">Weekly</SelectItem>
@@ -502,7 +502,7 @@ export default function ReportScheduler({
             >
               <DaisySelectTrigger>
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 {daysOfWeek.map((day) => (
                   <DaisySelectItem key={day.value} value={day.value.toString()}>
@@ -546,7 +546,7 @@ export default function ReportScheduler({
           >
             <DaisySelectTrigger>
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               {timezones.map((tz) => (
                 <DaisySelectItem key={tz.value} value={tz.value}>
@@ -754,7 +754,7 @@ export default function ReportScheduler({
               )}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Create Schedule Dialog */}

@@ -453,7 +453,7 @@ export default function TeamNotificationsPage() {
             <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="Category" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Categories</SelectItem>
                 <DaisySelectItem value="security">Security</SelectItem>
@@ -467,7 +467,7 @@ export default function TeamNotificationsPage() {
             <DaisySelect value={filterPriority} onValueChange={setFilterPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</SelectItem>
                 <DaisySelectItem value="critical">Critical</SelectItem>
@@ -620,7 +620,7 @@ export default function TeamNotificationsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -637,7 +637,7 @@ export default function TeamNotificationsPage() {
                       ? 'Try adjusting your filters to see more notifications.'
                       : 'You\'re all caught up! New notifications will appear here.'}
                   </p>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             )}
           </div>
@@ -690,7 +690,7 @@ export default function TeamNotificationsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -731,7 +731,7 @@ export default function TeamNotificationsPage() {
                         </span>
                       </div>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
@@ -813,7 +813,7 @@ export default function TeamNotificationsPage() {
                     }>
                       <DaisySelectTrigger className="w-48 mt-1">
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="immediate">Immediate</SelectItem>
                         <DaisySelectItem value="hourly">Hourly</SelectItem>
@@ -882,7 +882,7 @@ export default function TeamNotificationsPage() {
                 <DaisyButton variant="outline">Reset to Default</DaisyButton>
                 <DaisyButton onClick={handleSavePreferences}>Save Preferences</DaisyButton>
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </DaisyTabsContent>
       </MainContentArea>

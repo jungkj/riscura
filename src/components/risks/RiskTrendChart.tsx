@@ -252,7 +252,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <DaisySelect value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)}>
               <DaisySelectTrigger className="w-24">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="7d">7 days</SelectItem>
                 <DaisySelectItem value="30d">30 days</SelectItem>
@@ -264,7 +264,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="line">Line Chart</SelectItem>
                 <DaisySelectItem value="area">Area Chart</SelectItem>
@@ -339,7 +339,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <span>Low</span>
           </div>
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }; 

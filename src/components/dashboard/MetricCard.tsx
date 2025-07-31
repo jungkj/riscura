@@ -21,6 +21,7 @@ export default function MetricCard({
   icon,
   isLoading = false
 }: MetricCardProps) {
+
   return (
     <DaisyCard>
       <DaisyCardContent className="p-6">
@@ -53,7 +54,7 @@ export default function MetricCard({
             )
           )}
         </div>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 }

@@ -269,7 +269,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
               
             </DaisyAlert>
           )}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Results Section */}
@@ -313,7 +313,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                     </DaisyButton>
                   </div>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             {/* Results Accordion */}
@@ -492,7 +492,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                     </DaisyAccordionContent>
                   </DaisyAccordionItem>
                 </DaisyAccordion>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </motion.div>
         )}

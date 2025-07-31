@@ -679,7 +679,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-4', className)}>

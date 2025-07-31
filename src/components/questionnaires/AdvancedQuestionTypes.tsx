@@ -196,7 +196,7 @@ export function MatrixQuestionComponent({
                       >
                         <DaisySelectTrigger className="w-full">
                           <DaisySelectValue placeholder="Select..." />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           {displayColumns.map((col) => (
                             <DaisySelectItem key={col.id} value={col.id}>
@@ -817,7 +817,7 @@ export function LocationQuestionComponent({
           <DaisySelect value={config.mapType} disabled>
             <DaisySelectTrigger className="w-32">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="roadmap">Roadmap</SelectItem>
               <DaisySelectItem value="satellite">Satellite</SelectItem>
@@ -933,15 +933,15 @@ export function CustomHTMLQuestionComponent({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="text-sm">HTML Content</DaisyCardTitle>
-          
-          <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
             <DaisyTextarea
               value={config.htmlContent}
               readOnly
               rows={8}
               className="font-mono text-sm"
             />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
 
@@ -958,8 +958,8 @@ export function CustomHTMLQuestionComponent({
         <DaisyCard>
           <DaisyCardHeader>
             <DaisyCardTitle className="text-sm">Additional Input</DaisyCardTitle>
-          
-          <DaisyCardContent className="space-y-4">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-4">
             {config.inputFields.map((field) => (
               <div key={field.name}>
                 <DaisyLabel htmlFor={field.name}>
@@ -984,7 +984,7 @@ export function CustomHTMLQuestionComponent({
                 )}
               </div>
             ))}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>

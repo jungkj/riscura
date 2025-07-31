@@ -201,7 +201,7 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <DaisyAlertTriangle className="h-8 w-8 text-orange-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -215,7 +215,7 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <TrendingUp className="h-8 w-8 text-red-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -229,7 +229,7 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <Shield className="h-8 w-8 text-green-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
 
             <DaisyCard>
@@ -243,7 +243,7 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <Clock className="h-8 w-8 text-blue-400" />
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </div>
 
@@ -254,8 +254,8 @@ export default function GenerateRiskReportPage() {
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Report Configuration</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-6">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-6">
                   <div>
                     <DaisyLabel htmlFor="report-type">Report Type</DaisyLabel>
                     <DaisySelect
@@ -264,7 +264,7 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="report-type" className="mt-1">
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</SelectItem>
                         <DaisySelectItem value="executive">Executive Summary</SelectItem>
@@ -283,7 +283,7 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="time-range" className="mt-1">
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="last-month">Last Month</SelectItem>
                         <DaisySelectItem value="last-quarter">Last Quarter</SelectItem>
@@ -317,15 +317,15 @@ export default function GenerateRiskReportPage() {
                       </div>
                     </DaisyRadioGroup>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Sections to Include */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Report Sections</DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-3">
                     {Object.entries(reportConfig.sections).map(([key, value]) => (
                       <div key={key} className="flex items-center space-x-3">
@@ -340,7 +340,7 @@ export default function GenerateRiskReportPage() {
                       </div>
                     ))}
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
 
@@ -353,8 +353,8 @@ export default function GenerateRiskReportPage() {
                     <Eye className="h-5 w-5" />
                     Report Preview
                   </DaisyCardTitle>
-                
-                <DaisyCardContent>
+        </DaisyCardHeader>
+        <DaisyCardContent>
                   <div className="space-y-3 text-sm">
                     <div className="p-3 bg-gray-50 rounded">
                       <p className="font-medium">Selected Report:</p>
@@ -384,15 +384,15 @@ export default function GenerateRiskReportPage() {
                       <p className="text-gray-600">{reportConfig.format.toUpperCase()}</p>
                     </div>
                   </div>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Actions */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Generate Report</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-3">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-3">
                   <DaisyButton
                     className="w-full"
                     size="lg"
@@ -436,15 +436,15 @@ export default function GenerateRiskReportPage() {
                     <Printer className="h-4 w-4 mr-2" />
                     Print
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
 
               {/* Quick Actions */}
               <DaisyCard>
                 <DaisyCardHeader>
                   <DaisyCardTitle className="text-lg">Quick Actions</DaisyCardTitle>
-                
-                <DaisyCardContent className="space-y-2">
+        </DaisyCardHeader>
+        <DaisyCardContent className="space-y-2">
                   <DaisyButton
                     variant="outline"
                     size="sm"
@@ -472,7 +472,7 @@ export default function GenerateRiskReportPage() {
                     <Clock className="h-4 w-4 mr-2" />
                     View Report History
                   </DaisyButton>
-                </DaisyCardBody>
+                </DaisyCardContent>
               </DaisyCard>
             </div>
           </div>

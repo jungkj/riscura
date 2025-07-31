@@ -100,6 +100,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en" style={{ backgroundColor: '#FFFFFF' }} className={inter.variable} suppressHydrationWarning>
       <head>

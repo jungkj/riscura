@@ -223,7 +223,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         <span>View Details</span>
                       </DaisyButton>
                     </div>
-                  </DaisyCardBody>
+                  </DaisyCardContent>
                 </DaisyCard>
               ))
             )}

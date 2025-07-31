@@ -681,7 +681,7 @@ export const TouchActionMenu: React.FC<{
                   <span>{item.label}</span>
                 </TouchButton>
               ))}
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         </>
       )}

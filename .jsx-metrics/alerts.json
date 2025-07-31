@@ -1,0 +1,62 @@
+[
+  {
+    "type": "highErrorRate",
+    "severity": "warning",
+    "message": "High JSX error rate detected: 100.0%",
+    "details": {
+      "errorFiles": 509,
+      "totalFiles": 509,
+      "threshold": 0.1
+    },
+    "timestamp": "2025-07-31T03:22:29.166Z",
+    "commit": "2bba0720bfed1d2d11b43b00930ece1ad33cc34d",
+    "branch": "feature/daisyui-refactoring"
+  },
+  {
+    "type": "criticalErrors",
+    "severity": "error",
+    "message": "509 critical JSX errors found",
+    "details": {
+      "errors": [
+        {
+          "type": "fileReadError",
+          "file": "src/context/WorkflowContext.tsx",
+          "line": 0,
+          "content": "pattern.test is not a function",
+          "severity": "high"
+        },
+        {
+          "type": "fileReadError",
+          "file": "src/context/ThemeContext.tsx",
+          "line": 0,
+          "content": "pattern.test is not a function",
+          "severity": "high"
+        },
+        {
+          "type": "fileReadError",
+          "file": "src/context/ControlContext.tsx",
+          "line": 0,
+          "content": "pattern.test is not a function",
+          "severity": "high"
+        },
+        {
+          "type": "fileReadError",
+          "file": "src/context/RiskContext.tsx",
+          "line": 0,
+          "content": "pattern.test is not a function",
+          "severity": "high"
+        },
+        {
+          "type": "fileReadError",
+          "file": "src/context/AuthContext.tsx",
+          "line": 0,
+          "content": "pattern.test is not a function",
+          "severity": "high"
+        }
+      ]
+    },
+    "timestamp": "2025-07-31T03:22:29.166Z",
+    "commit": "2bba0720bfed1d2d11b43b00930ece1ad33cc34d",
+    "branch": "feature/daisyui-refactoring"
+  }
+]

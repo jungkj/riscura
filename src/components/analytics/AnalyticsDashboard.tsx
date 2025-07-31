@@ -478,7 +478,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
           <DaisySelect value={timeRange} onValueChange={setTimeRange}>
             <DaisySelectTrigger className="w-32">
               <DaisySelectValue />
-            </SelectTrigger>
+            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="1d">Last 24h</SelectItem>
               <DaisySelectItem value="7d">Last 7 days</SelectItem>

@@ -70,7 +70,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
         className={cn(heightClasses[lineHeight], 'w-full', className)}
       />
     );
-  }
+  };
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -139,7 +139,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
             <BaseSkeleton variant={variant} className="h-9 w-16" />
           </div>
         )}
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 };
@@ -255,7 +255,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
             <DaisyCardContent>
               <BaseSkeleton variant={variant} className="h-8 w-20 mb-2" />
               <BaseSkeleton variant={variant} className="h-3 w-32" />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>
@@ -271,7 +271,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
             
             <DaisyCardContent>
               <BaseSkeleton variant={variant} className="h-80 w-full" />
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         )}
 
@@ -293,7 +293,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
                   </div>
                 ))}
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         )}
       </div>
@@ -315,7 +315,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
               hasActions={true}
               showCheckboxes={true}
             />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       )}
     </div>
@@ -556,7 +556,7 @@ export const PageSkeletons = {
           
           <DaisyCardContent>
             <FormSkeleton fields={6} layout="two-column" />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>
@@ -585,7 +585,7 @@ export const PageSkeletons = {
         <DaisyCard>
           <DaisyCardContent>
             <DaisyTableSkeleton rows={10} columns={6} hasActions showCheckboxes />
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>
@@ -610,12 +610,12 @@ export const PageSkeletons = {
         {/* Main content */}
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-6">
-            <DaisyCardSkeleton hasHeader textLines={5} />
-            <DaisyCardSkeleton hasHeader textLines={3} />
+            <DaisyCardSkeleton hasHeader textLines={5} ></DaisyCard>
+            <DaisyCardSkeleton hasHeader textLines={3} ></DaisyCard>
           </div>
           <div className="space-y-6">
-            <DaisyCardSkeleton hasHeader textLines={4} />
-            <DaisyCardSkeleton hasHeader hasActions textLines={2} />
+            <DaisyCardSkeleton hasHeader textLines={4} ></DaisyCard>
+            <DaisyCardSkeleton hasHeader hasActions textLines={2} ></DaisyCard>
           </div>
         </div>
       </div>
@@ -637,7 +637,7 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
 }) => {
   if (!stagger) {
     return <>{children}</>;
-  }
+  };
 
   return (
     <div className="animate-in fade-in-0 duration-500">

@@ -307,7 +307,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 >
                   <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
                     <DaisySelectValue placeholder="Select category" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {controlCategories.map((category) => (
                       <DaisySelectItem key={category} value={category}>
@@ -354,7 +354,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {priorityLevels.map((priority) => (
                       <DaisySelectItem key={priority.value} value={priority.value}>
@@ -379,7 +379,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {controlTypes.map((type) => (
                       <DaisySelectItem key={type.value} value={type.value}>
@@ -401,7 +401,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {implementationTypes.map((type) => (
                       <DaisySelectItem key={type.value} value={type.value}>
@@ -438,7 +438,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </SelectTrigger>
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {testingFrequencies.map((freq) => (
                           <DaisySelectItem key={freq.value} value={freq.value}>
@@ -500,7 +500,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue />
-                    </SelectTrigger>
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       {automationLevels.map((level) => (
                         <DaisySelectItem key={level.value} value={level.value}>
@@ -513,7 +513,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </SelectContent>
                   </DaisySelect>
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -543,7 +543,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -557,7 +557,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select business unit" />
-                  </SelectTrigger>
+                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {businessUnits.map((unit) => (
                       <DaisySelectItem key={unit} value={unit}>
@@ -620,7 +620,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </div>
                   </div>
                 )}
-              </DaisyCardBody>
+              </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
         </DaisyTabs>

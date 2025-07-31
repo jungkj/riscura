@@ -14,7 +14,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   } catch (error) {
     console.error('Error using useTheme:', error);
     theme = 'system';
-  }
+  };
 
   return (
     <Sonner

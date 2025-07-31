@@ -326,9 +326,9 @@ export default function RealTimeMonitoringChart({
   // Custom tooltip
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload || !payload.length) return null;
-    
-    return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
+
+  return (
+    <div className="bg-white p-3 border rounded-lg shadow-lg">
         <div className="font-medium text-sm mb-2">{label}</div>
         <div className="space-y-1 text-xs">
           {payload.map((entry: any, index: number) => {
@@ -625,7 +625,7 @@ export default function RealTimeMonitoringChart({
                       >
                         <DaisySelectTrigger className="h-8">
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="above">Above</SelectItem>
                           <DaisySelectItem value="below">Below</SelectItem>
@@ -651,7 +651,7 @@ export default function RealTimeMonitoringChart({
                       >
                         <DaisySelectTrigger className="h-8">
                           <DaisySelectValue />
-                        </SelectTrigger>
+                        </DaisySelectTrigger>
                         <DaisySelectContent>
                           <DaisySelectItem value="low">Low</SelectItem>
                           <DaisySelectItem value="medium">Medium</SelectItem>
@@ -666,7 +666,7 @@ export default function RealTimeMonitoringChart({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

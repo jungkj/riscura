@@ -225,7 +225,7 @@ export function EnterpriseRiskDashboard() {
                   className="h-2"
                 />
               </div>
-            </DaisyCardBody>
+            </DaisyCardContent>
           </DaisyCard>
         ))}
       </div>
@@ -245,7 +245,7 @@ export function EnterpriseRiskDashboard() {
               {aiInsights.length} Insights
             </DaisyBadge>
           </DaisyCardTitle>
-        
+        </DaisyCardHeader>
         <DaisyCardContent className="space-y-4">
           {aiInsights.map((insight) => (
             <div 
@@ -292,7 +292,7 @@ export function EnterpriseRiskDashboard() {
               </div>
             </div>
           ))}
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
 
       {/* Quick Actions */}
@@ -304,7 +304,7 @@ export function EnterpriseRiskDashboard() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Real-time Monitoring</h3>
             <p className="text-xs text-gray-600">Live risk indicators</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer">
@@ -314,7 +314,7 @@ export function EnterpriseRiskDashboard() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Control Assessment</h3>
             <p className="text-xs text-gray-600">Automated testing</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer">
@@ -324,7 +324,7 @@ export function EnterpriseRiskDashboard() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Regulatory Intel</h3>
             <p className="text-xs text-gray-600">Compliance tracking</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer">
@@ -334,7 +334,7 @@ export function EnterpriseRiskDashboard() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Impact Analysis</h3>
             <p className="text-xs text-gray-600">Financial modeling</p>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

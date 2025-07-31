@@ -345,8 +345,9 @@ export default function ConversationHistory({
   };
 
   if (isLoading) {
-    return (
-      <DaisyCard className={className}>
+
+  return (
+    <DaisyCard className={className}>
         <DaisyCardHeader>
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
@@ -363,10 +364,10 @@ export default function ConversationHistory({
               </div>
             ))}
           </div>
-        </DaisyCardBody>
+        </DaisyCardContent>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <DaisyCard className={className}>
@@ -435,7 +436,7 @@ export default function ConversationHistory({
               <DaisySelectTrigger className="w-32">
                 <Filter className="w-4 h-4 mr-2" />
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Time</SelectItem>
                 <DaisySelectItem value="today">Today</SelectItem>
@@ -447,7 +448,7 @@ export default function ConversationHistory({
             <DaisySelect value={sortBy} onValueChange={setSortBy}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue />
-              </SelectTrigger>
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="updated">Last Updated</SelectItem>
                 <DaisySelectItem value="created">Date Created</SelectItem>
@@ -669,7 +670,7 @@ export default function ConversationHistory({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardBody>
+      </DaisyCardContent>
     </DaisyCard>
   );
 } 

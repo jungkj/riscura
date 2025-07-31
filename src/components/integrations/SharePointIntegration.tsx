@@ -48,7 +48,7 @@ export const SharePointIntegration: React.FC = () => {
         </div>
       </DaisyCard>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

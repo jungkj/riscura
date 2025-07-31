@@ -25,8 +25,8 @@ export function AuthDebugger() {
   
   if (process.env.NODE_ENV === 'production') {
     return null;
-  }
-  
+  };
+
   return (
     <div className="fixed bottom-4 right-4 p-4 bg-black bg-opacity-80 text-white text-xs rounded-lg max-w-sm">
       <div className="font-bold mb-2">Auth Debug</div>
