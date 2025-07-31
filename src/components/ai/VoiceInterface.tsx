@@ -283,8 +283,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
   if (!isSupported) {
     return (
-      <DaisyCard className={className}>
-        <DaisyCardContent className="p-4">
+      <DaisyCard className={className} >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="text-center text-gray-500">
             <StatusIcons.XCircle className="h-8 w-8 mx-auto mb-2" />
             <p>Voice interface is not supported in this browser</p>
@@ -295,38 +297,41 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   };
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="text-lg font-semibold flex items-center space-x-2">
-            <CommunicationIcons.Bell className="h-5 w-5" />
+          <DaisyCardTitle className="text-lg font-semibold flex items-center space-x-2" >
+  <CommunicationIcons.Bell className="h-5 w-5" />
+</DaisyCardTitle>
             <span>Voice Interface</span>
           </DaisyCardTitle>
           <div className="flex items-center space-x-2">
-            <DaisyBadge variant={isListening ? 'destructive' : 'secondary'}>
-              {isListening ? 'Listening' : 'Ready'}
+            <DaisyBadge variant={isListening ? 'destructive' : 'secondary'} >
+  {isListening ? 'Listening' : 'Ready'}
+</DaisyBadge>
             </DaisyBadge>
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
+              onClick={() => setIsExpanded(!isExpanded)} />
               <ActionIcons.Settings className="h-4 w-4" />
             </DaisyButton>
           </div>
         </div>
       
 
-      <DaisyCardContent className="space-y-4">
-        {/* Main controls */}
+      <DaisyCardContent className="space-y-4" >
+  {/* Main controls */}
+</DaisyCardContent>
         <div className="flex items-center space-x-4">
           <DaisyButton
             onClick={toggleListening}
             disabled={!isEnabled}
             variant={isListening ? 'destructive' : 'default'}
-            className="flex-1"
-          >
-            {isListening ? (
+            className="flex-1" >
+  {isListening ? (
+</DaisyButton>
               <>
                 <CommunicationIcons.MicrophoneOff className="h-4 w-4 mr-2" />
                 Stop Listening
@@ -343,9 +348,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             <DaisyButton
               onClick={stopSpeaking}
               variant="outline"
-              className="flex-1"
-            >
-              <StatusIcons.X className="h-4 w-4 mr-2" />
+              className="flex-1" >
+  <StatusIcons.X className="h-4 w-4 mr-2" />
+</DaisyButton>
               Stop Speaking
             </DaisyButton>
           )}
@@ -357,8 +362,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Transcript:</span>
               {confidence > 0 && (
-                <DaisyBadge variant="outline" className="text-xs">
-                  {Math.round(confidence * 100)}% confident
+                <DaisyBadge variant="outline" className="text-xs" >
+  {Math.round(confidence * 100)}% confident
+</DaisyBadge>
                 </DaisyBadge>
               )}
             </div>
@@ -501,11 +507,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                 variant="outline"
                 size="sm"
                 className="w-full"
-                disabled={isSpeaking}
-              >
+                disabled={isSpeaking} />
                 <CommunicationIcons.Volume className="h-4 w-4 mr-2" />
                 Test Voice
-              </DaisyButton>
+              </DaisySwitch>
             </div>
           </div>
         )}

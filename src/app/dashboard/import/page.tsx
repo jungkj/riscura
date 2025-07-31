@@ -127,8 +127,9 @@ export default function ImportPage() {
             {FEATURE_HIGHLIGHTS.map((feature, idx) => {
               const IconComponent = feature.icon;
               return (
-                <DaisyCard key={idx} className="hover:shadow-lg transition-shadow duration-200">
-                  <DaisyCardHeader>
+                <DaisyCard key={idx} className="hover:shadow-lg transition-shadow duration-200" >
+  <DaisyCardHeader />
+</DaisyCard>
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-100 rounded-lg">
                         <IconComponent className="h-6 w-6 text-blue-600" />
@@ -136,8 +137,9 @@ export default function ImportPage() {
                       <DaisyCardTitle className="text-lg">{feature.title}</DaisyCardTitle>
                     </div>
                   
-                  <DaisyCardContent>
-                    <p className="text-gray-600 mb-4">{feature.description}</p>
+                  <DaisyCardContent >
+  <p className="text-gray-600 mb-4">
+</DaisyCardContent>{feature.description}</p>
                     <div className="space-y-2">
                       {feature.features.map((feat, featIdx) => (
                         <div key={featIdx} className="flex items-center gap-2">
@@ -159,15 +161,18 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Download className="h-5 w-5 text-blue-600" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Download className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
                 Sample Templates
               </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+</DaisyCardContent>
                 {SAMPLE_TEMPLATES.map((template, idx) => {
                   const IconComponent = template.icon;
                   return (
@@ -181,8 +186,9 @@ export default function ImportPage() {
                           <h3 className="font-medium text-gray-900">{template.name}</h3>
                           <p className="text-sm text-gray-600 mt-1">{template.description}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <DaisyBadge variant="secondary" className="text-xs">
-                              {template.type}
+                            <DaisyBadge variant="secondary" className="text-xs" >
+  {template.type}
+</DaisyBadge>
                             </DaisyBadge>
                             <span className="text-xs text-gray-500">{template.size}</span>
                           </div>
@@ -190,8 +196,7 @@ export default function ImportPage() {
                             variant="outline"
                             size="sm"
                             className="mt-3"
-                            onClick={() => downloadSampleTemplate(template.name)}
-                          >
+                            onClick={() => downloadSampleTemplate(template.name)} />
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </DaisyButton>
@@ -211,19 +216,22 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center gap-2">
-                <Upload className="h-5 w-5 text-blue-600" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center gap-2" >
+  <Upload className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
                 Import Your Files
               </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-              <DragDropImport
+        <DaisyCardContent >
+  <DragDropImport
                 organizationId={mockUser.organizationId}
                 userId={mockUser.id}
                 onComplete={handleImportComplete}
               />
+</DaisyCardContent>
             </DaisyCardContent>
           </DaisyCard>
         </motion.div>
@@ -238,20 +246,24 @@ export default function ImportPage() {
             <h2 className="text-2xl font-bold text-gray-900">Import Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {importResults.map((result, idx) => (
-                <DaisyCard key={idx}>
-                  <DaisyCardHeader>
-                    <DaisyCardTitle className="flex items-center gap-2">
-                      {result.type === 'excel-rcsa' && <FileSpreadsheet className="h-5 w-5 text-green-600" />}
+                <DaisyCard key={idx} >
+  <DaisyCardHeader />
+</DaisyCard>
+                    <DaisyCardTitle className="flex items-center gap-2" >
+  {result.type === 'excel-rcsa' && 
+</DaisyCardTitle><FileSpreadsheet className="h-5 w-5 text-green-600" />}
                       {result.type === 'policy-document' && <FileText className="h-5 w-5 text-blue-600" />}
                       {result.type === 'bulk-upload' && <Upload className="h-5 w-5 text-purple-600" />}
                       <span className="truncate">{result.filename}</span>
                     </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                    <div className="space-y-2">
+        <DaisyCardContent >
+  <div className="space-y-2">
+</DaisyCardContent>
                       <div className="flex items-center gap-2">
-                        <DaisyBadge variant={result.status === 'completed' ? 'default' : 'destructive'}>
-                          {result.status}
+                        <DaisyBadge variant={result.status === 'completed' ? 'default' : 'destructive'} >
+  {result.status}
+</DaisyBadge>
                         </DaisyBadge>
                         <span className="text-sm text-gray-600 capitalize">
                           {result.type.replace('-', ' ')}
@@ -281,14 +293,17 @@ export default function ImportPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <DaisyAlert>
-            <Info className="h-4 w-4" />
-            <DaisyAlertDescription>
-              <strong>Pro Tip:</strong> For best results with Excel RCSA templates, ensure your spreadsheets 
+          <DaisyAlert >
+  <Info className="h-4 w-4" />
+</DaisyAlert>
+            <DaisyAlertDescription >
+  <strong>
+                </DaisyAlertDescription>
+</DaisyAlert>Pro Tip:</strong> For best results with Excel RCSA templates, ensure your spreadsheets 
               have clear column headers like "Risk Title", "Description", "Likelihood", "Impact", "Control Title", etc. 
               The AI will automatically detect and map these fields to the appropriate data structures.
-            
-          </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
         </motion.div>
 
         {/* Security Notice */}

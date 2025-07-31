@@ -117,8 +117,9 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
         "bg-gradient-to-br from-white to-slate-50/30",
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
-      )}>
-        <DaisyCardHeader className="pb-4">
+      )} >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.div
@@ -129,8 +130,9 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
               </motion.div>
               
               <div>
-                <DaisyCardTitle className="text-lg font-semibold text-slate-800">
-                  {title}
+                <DaisyCardTitle className="text-lg font-semibold text-slate-800" >
+  {title}
+</DaisyCardTitle>
                 </DaisyCardTitle>
                 {subtitle && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
@@ -139,14 +141,15 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
             </div>
 
             {showActions && (
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0">
-                    <MoreHorizontal className="h-4 w-4" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0" >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end">
-                  <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuItem>
+                <DaisyDropdownMenuContent align="end" />
+                  <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuContent>
                   <DaisyDropdownMenuItem>Export Data</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Configure</DaisyDropdownMenuItem>
                 </DaisyDropdownMenuContent>
@@ -155,8 +158,9 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
           </div>
         
 
-        <DaisyCardContent className="pt-0">
-          {isLoading ? (
+        <DaisyCardContent className="pt-0" >
+  {isLoading ? (
+</DaisyCardContent>
             <LoadingSkeleton />
           ) : (
             <div className="space-y-4">
@@ -236,8 +240,9 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
               >
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-500 font-medium">Total Items</span>
-                  <DaisyBadge variant="secondary" className="font-semibold">
-                    {totalValue}
+                  <DaisyBadge variant="secondary" className="font-semibold" >
+  {totalValue}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
               </motion.div>

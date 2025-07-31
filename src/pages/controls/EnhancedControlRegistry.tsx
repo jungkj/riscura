@@ -269,21 +269,21 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
             <DaisyButton
               onClick={() => setShowFiltersModal(true)}
               variant="outline"
-              className="notion-button-outline"
-            >
+              className="notion-button-outline" />
               <Filter className="w-4 h-4 mr-2" />
               Filters
             </DaisyButton>
 
             {selectedControls.length > 0 && (
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="outline" className="notion-button-outline">
-                    <MoreHorizontal className="w-4 h-4 mr-2" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="outline" className="notion-button-outline" >
+  <MoreHorizontal className="w-4 h-4 mr-2" />
+</DaisyDropdownMenu>
                     Bulk Actions ({selectedControls.length})
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end">
+                <DaisyDropdownMenuContent align="end" />
                   <DaisyDropdownMenuItem onClick={() => handleBulkOperation({
                     type: 'test',
                     controlIds: selectedControls,
@@ -293,7 +293,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   })}>
                     <TestTube className="w-4 h-4 mr-2" />
                     Schedule Tests
-                  </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuContent>
                   <DaisyDropdownMenuItem onClick={() => handleBulkOperation({
                     type: 'approve',
                     controlIds: selectedControls,
@@ -307,16 +307,19 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
               </DaisyDropdownMenu>
             )}
 
-            <DaisyButton className="notion-button-primary">
-              <Plus className="w-4 h-4 mr-2" />
+            <DaisyButton className="notion-button-primary" >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
               Add Control
             </DaisyButton>
           </div>
         </motion.div>
 
         {/* Search and Filters Bar */}
-        <DaisyCard className="notion-card">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="notion-card" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
@@ -331,12 +334,11 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
               </div>
               
               <div className="flex items-center gap-2">
-                <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                  <DaisySelectTrigger className="w-48">
-                    <DaisySelectValue />
-                  </DaisySelectTrigger>
-                  <DaisySelectContent>
-                    <DaisySelectItem value="effectivenessScore">Effectiveness Score</DaisySelectItem>
+                <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)} />
+                  <DaisySelectTrigger className="w-48" />
+                    <DaisySelectValue /></DaisyInput>
+                  <DaisySelectContent />
+                    <DaisySelectItem value="effectivenessScore">Effectiveness Score</DaisySelectContent>
                     <DaisySelectItem value="maturityLevel">Maturity Level</DaisySelectItem>
                     <DaisySelectItem value="framework">Framework</DaisySelectItem>
                     <DaisySelectItem value="title">Title</DaisySelectItem>
@@ -347,8 +349,7 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   variant="outline"
                   size="sm"
-                  className="notion-button-outline"
-                >
+                  className="notion-button-outline" />
                   {sortOrder === 'asc' ? '↑' : '↓'}
                 </DaisyButton>
               </div>
@@ -357,81 +358,88 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
         </DaisyCard>
 
         {/* Main Content Tabs */}
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <DaisyTabsList className="grid w-full grid-cols-6 bg-secondary">
-            <DaisyTabsTrigger value="overview" className="flex items-center gap-2">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
+          <DaisyTabsList className="grid w-full grid-cols-6 bg-secondary" />
+            <DaisyTabsTrigger value="overview" className="flex items-center gap-2" />
               <Shield className="w-4 h-4" />
               Overview
-            </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="controls" className="flex items-center gap-2">
+            </DaisyTabs>
+            <DaisyTabsTrigger value="controls" className="flex items-center gap-2" />
               <CheckCircle className="w-4 h-4" />
               Controls
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="testing" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="testing" className="flex items-center gap-2" />
               <TestTube className="w-4 h-4" />
               Testing
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="frameworks" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="frameworks" className="flex items-center gap-2" />
               <Network className="w-4 h-4" />
               Frameworks
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2" />
               <BarChart3 className="w-4 h-4" />
               Analytics
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="ai-insights" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="ai-insights" className="flex items-center gap-2" />
               <Brain className="w-4 h-4" />
               AI Insights
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Overview Tab */}
-          <DaisyTabsContent value="overview" className="space-y-6">
+          <DaisyTabsContent value="overview" className="space-y-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <DaisyCard className="notion-card">
-                <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <DaisyCard className="notion-card" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyTabsContent>
                   <DaisyCardTitle className="text-sm font-medium">Total Controls</DaisyCardTitle>
                   <Shield className="h-4 w-4 text-muted-foreground" />
                 </DaisyCardHeader>
-                <DaisyCardContent>
-                  <div className="text-2xl font-bold">{stats.total}</div>
+                <DaisyCardContent >
+  <div className="text-2xl font-bold">
+</DaisyCardContent>{stats.total}</div>
                   <p className="text-xs text-muted-foreground">
                     Active framework controls
                   </p>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard className="notion-card">
-                <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <DaisyCard className="notion-card" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
                   <DaisyCardTitle className="text-sm font-medium">Avg Effectiveness</DaisyCardTitle>
                   <Zap className="h-4 w-4 text-green-500" />
                 </DaisyCardHeader>
-                <DaisyCardContent>
-                  <div className="text-2xl font-bold text-green-600">{Math.round(stats.avgEffectiveness)}%</div>
-                  <DaisyProgress value={stats.avgEffectiveness} className="w-full mt-2" />
-                </DaisyCardContent>
+                <DaisyCardContent >
+  <div className="text-2xl font-bold text-green-600">
+</DaisyCardContent>{Math.round(stats.avgEffectiveness)}%</div>
+                  <DaisyProgress value={stats.avgEffectiveness} className="w-full mt-2" /></DaisyProgress>
               </DaisyCard>
 
-              <DaisyCard className="notion-card">
-                <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <DaisyCard className="notion-card" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
                   <DaisyCardTitle className="text-sm font-medium">Avg Maturity</DaisyCardTitle>
                   <BarChart3 className="h-4 w-4 text-blue-500" />
                 </DaisyCardHeader>
-                <DaisyCardContent>
-                  <div className="text-2xl font-bold text-blue-600">{stats.avgMaturity.toFixed(1)}</div>
+                <DaisyCardContent >
+  <div className="text-2xl font-bold text-blue-600">
+</DaisyCardContent>{stats.avgMaturity.toFixed(1)}</div>
                   <p className="text-xs text-muted-foreground">
                     Out of 5 levels
                   </p>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard className="notion-card">
-                <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <DaisyCard className="notion-card" >
+  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+</DaisyCard>
                   <DaisyCardTitle className="text-sm font-medium">Tests Due</DaisyCardTitle>
                   <Clock className="h-4 w-4 text-orange-500" />
                 </DaisyCardHeader>
-                <DaisyCardContent>
-                  <div className="text-2xl font-bold text-orange-600">
+                <DaisyCardContent >
+  <div className="text-2xl font-bold text-orange-600">
+</DaisyCardContent>
                     {stats.byTestingStatus.scheduled || 0}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -442,17 +450,20 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
             </div>
 
             {/* Framework Distribution */}
-            <DaisyCard className="notion-card">
-              <DaisyCardHeader>
+            <DaisyCard className="notion-card" >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle>Framework Distribution</DaisyCardTitle>
               </DaisyCardHeader>
-              <DaisyCardContent>
-                <div className="space-y-3">
+              <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                   {Object.entries(stats.byFramework).map(([framework, count]) => (
                     <div key={framework} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <DaisyBadge className={getFrameworkColor(framework)}>
-                          {framework}
+                        <DaisyBadge className={getFrameworkColor(framework)} >
+  {framework}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                       <div className="flex items-center gap-2">
@@ -472,9 +483,11 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
           </DaisyTabsContent>
 
           {/* Controls Tab */}
-          <DaisyTabsContent value="controls" className="space-y-6">
-            <DaisyCard className="notion-card">
-              <DaisyCardContent className="p-0">
+          <DaisyTabsContent value="controls" className="space-y-6" />
+            <DaisyCard className="notion-card" >
+  <DaisyCardContent className="p-0" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                 <div className="divide-y">
                   <AnimatePresence>
                     {filteredControls.map((control) => (
@@ -513,14 +526,17 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                                 </p>
                               </div>
                               <div className="flex items-center gap-2">
-                                <DaisyBadge className={getFrameworkColor(control.framework.category)}>
-                                  {control.framework.category}
+                                <DaisyBadge className={getFrameworkColor(control.framework.category)} >
+  {control.framework.category}
+</DaisyCheckbox>
                                 </DaisyBadge>
-                                <DaisyBadge className={getMaturityColor(control.maturityLevel)}>
-                                  Level {control.maturityLevel}
+                                <DaisyBadge className={getMaturityColor(control.maturityLevel)} >
+  Level {control.maturityLevel}
+</DaisyBadge>
                                 </DaisyBadge>
-                                <DaisyBadge className={getStatusColor(control.testingStatus)}>
-                                  {control.testingStatus.replace('_', ' ')}
+                                <DaisyBadge className={getStatusColor(control.testingStatus)} >
+  {control.testingStatus.replace('_', ' ')}
+</DaisyBadge>
                                 </DaisyBadge>
                               </div>
                             </div>
@@ -547,29 +563,30 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                                   <div className="text-xs text-muted-foreground">Effectiveness</div>
                                 </div>
                                 
-                                <DaisyDropdownMenu>
-                                  <DaisyDropdownMenuTrigger asChild>
-                                    <DaisyButton variant="ghost" size="sm">
-                                      <MoreHorizontal className="w-4 h-4" />
+                                <DaisyDropdownMenu />
+                                  <DaisyDropdownMenuTrigger asChild />
+                                    <DaisyButton variant="ghost" size="sm" >
+  <MoreHorizontal className="w-4 h-4" />
+</DaisyCalendar>
                                     </DaisyButton>
                                   </DaisyDropdownMenuTrigger>
-                                  <DaisyDropdownMenuContent align="end">
+                                  <DaisyDropdownMenuContent align="end" />
                                     <DaisyDropdownMenuItem onClick={() => {
                                       setSelectedControl(control);
                                       setShowControlDetail(true);
                                     }}>
                                       <Eye className="w-4 h-4 mr-2" />
                                       View Details
-                                    </DaisyDropdownMenuItem>
-                                    <DaisyDropdownMenuItem>
+                                    </DaisyDropdownMenuContent>
+                                    <DaisyDropdownMenuItem />
                                       <Edit className="w-4 h-4 mr-2" />
                                       Edit Control
                                     </DaisyDropdownMenuItem>
-                                    <DaisyDropdownMenuItem onClick={() => handleAIAnalysis(control)}>
+                                    <DaisyDropdownMenuItem onClick={() => handleAIAnalysis(control)} />
                                       <Brain className="w-4 h-4 mr-2" />
                                       AI Assessment
                                     </DaisyDropdownMenuItem>
-                                    <DaisyDropdownMenuItem>
+                                    <DaisyDropdownMenuItem />
                                       <TestTube className="w-4 h-4 mr-2" />
                                       Schedule Test
                                     </DaisyDropdownMenuItem>
@@ -588,13 +605,15 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
           </DaisyTabsContent>
 
           {/* Other tabs would be implemented here... */}
-          <DaisyTabsContent value="testing" className="space-y-6">
-            <DaisyCard className="notion-card">
-              <DaisyCardHeader>
+          <DaisyTabsContent value="testing" className="space-y-6" />
+            <DaisyCard className="notion-card" >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Control Testing Dashboard</DaisyCardTitle>
               </DaisyCardHeader>
-              <DaisyCardContent className="text-center py-8">
-                <TestTube className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <DaisyCardContent className="text-center py-8" >
+  <TestTube className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+</DaisyCardContent>
                 <h3 className="text-lg font-medium mb-2">Testing Workflows</h3>
                 <p className="text-muted-foreground">
                   Advanced testing workflows with automated scheduling will be available here.
@@ -605,13 +624,16 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
         </DaisyTabs>
 
         {/* Control Detail Modal */}
-        <DaisyDialog open={showControlDetail} onOpenChange={setShowControlDetail}>
-          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DaisyDialogHeader>
-              <DaisyDialogTitle className="flex items-center justify-between">
-                <span>{selectedControl?.title}</span>
-                <DaisyBadge className={selectedControl ? getFrameworkColor(selectedControl.framework.category) : ''}>
-                  {selectedControl?.framework.category}
+        <DaisyDialog open={showControlDetail} onOpenChange={setShowControlDetail} />
+          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+              <DaisyDialogTitle className="flex items-center justify-between" >
+  <span>
+</DaisyDialogTitle>{selectedControl?.title}</span>
+                <DaisyBadge className={selectedControl ? getFrameworkColor(selectedControl.framework.category) : ''} >
+  {selectedControl?.framework.category}
+</DaisyBadge>
                 </DaisyBadge>
               </DaisyDialogTitle>
             </DaisyDialogHeader>
@@ -620,20 +642,26 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
               <div className="space-y-6">
                 {/* Control Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="notion-card-minimal" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold">{selectedControl.effectivenessScore}%</div>
                       <div className="text-sm text-muted-foreground">Effectiveness</div>
                     </DaisyCardContent>
                   </DaisyCard>
-                  <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="notion-card-minimal" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold">{selectedControl.maturityLevel}</div>
                       <div className="text-sm text-muted-foreground">Maturity Level</div>
                     </DaisyCardContent>
                   </DaisyCard>
-                  <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="notion-card-minimal" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold">{selectedControl.mappedRisks.length}</div>
                       <div className="text-sm text-muted-foreground">Mapped Risks</div>
                     </DaisyCardContent>
@@ -643,8 +671,10 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                 {/* Framework Information */}
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Framework Details</h3>
-                  <DaisyCard className="notion-card-minimal">
-                    <DaisyCardContent className="p-4">
+                  <DaisyCard className="notion-card-minimal" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Framework:</span>
@@ -673,8 +703,10 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
                 {selectedControl.aiAssessment && (
                   <div>
                     <h3 className="text-lg font-semibold mb-2">AI Assessment</h3>
-                    <DaisyCard className="notion-card-minimal">
-                      <DaisyCardContent className="p-4">
+                    <DaisyCard className="notion-card-minimal" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <div className="text-sm text-muted-foreground">Overall Score</div>
@@ -697,8 +729,10 @@ export const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = (
         {/* Loading overlay */}
         {(isLoading || aiAnalyzing) && (
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-            <DaisyCard className="notion-card">
-              <DaisyCardContent className="p-6 text-center">
+            <DaisyCard className="notion-card" >
+  <DaisyCardContent className="p-6 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4" />
                 <p className="text-lg font-medium">
                   {aiAnalyzing ? 'Running AI Assessment...' : 'Processing...'}

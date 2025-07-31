@@ -62,12 +62,14 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
   };
 
   return (
-    <DaisyCard>
-      <DaisyCardHeader>
+    <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTooltipProps>
         <DaisyCardTitle>Compliance Status</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-        <div className="h-80">
+        <DaisyCardContent >
+  <div className="h-80">
+</DaisyCardContent>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -101,7 +103,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
             </div>
           ))}
         </div>
-      </DaisyCardContent>
+      </DaisyTooltip>
     </DaisyCard>
   );
 };

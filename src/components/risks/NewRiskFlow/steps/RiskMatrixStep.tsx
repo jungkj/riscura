@@ -220,12 +220,14 @@ export function RiskMatrixStep({ onNext, onBack }: RiskMatrixStepProps) {
         transition={{ delay: 0.4 }}
         className="flex justify-between pt-4"
       >
-        <DaisyButton onClick={onBack} variant="outline" size="lg">
-          <ChevronLeft className="w-4 h-4 mr-2" />
+        <DaisyButton onClick={onBack} variant="outline" size="lg" >
+  <ChevronLeft className="w-4 h-4 mr-2" />
+</DaisyButton>
           Back
         </DaisyButton>
-        <DaisyButton onClick={onNext} size="lg" className="min-w-[120px]">
-          Next
+        <DaisyButton onClick={onNext} size="lg" className="min-w-[120px]" >
+  Next
+</DaisyButton>
         </DaisyButton>
       </motion.div>
     </div>

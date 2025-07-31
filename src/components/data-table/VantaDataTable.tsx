@@ -106,8 +106,9 @@ const StatusBadgeCell: React.FC<{ value: string }> = ({ value }) => {
   const IconComponent = config.icon;
 
   return (
-    <DaisyBadge variant={config.variant} className="text-caption">
-      <IconComponent className="h-3 w-3 mr-enterprise-1" />
+    <DaisyBadge variant={config.variant} className="text-caption" >
+  <IconComponent className="h-3 w-3 mr-enterprise-1" />
+</DaisyBadge>
       {value.charAt(0).toUpperCase() + value.slice(1)}
     </DaisyBadge>
   );
@@ -191,34 +192,34 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
 
 const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => void }> = ({ row, onAction }) => {
   return (
-    <DaisyDropdownMenu>
-      <DaisyDropdownMenuTrigger asChild>
-        <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-          <MoreHorizontal className="h-3 w-3" />
+    <DaisyDropdownMenu />
+      <DaisyDropdownMenuTrigger asChild />
+        <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyCalendar>
         </DaisyButton>
       </DaisyDropdownMenuTrigger>
-      <DaisyDropdownMenuContent align="end" className="w-40">
-        <DaisyDropdownMenuItem onClick={() => onAction('view', row)}>
+      <DaisyDropdownMenuContent align="end" className="w-40" />
+        <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
           <Eye className="h-3 w-3 mr-enterprise-2" />
           View Details
-        </DaisyDropdownMenuItem>
-        <DaisyDropdownMenuItem onClick={() => onAction('edit', row)}>
+        </DaisyDropdownMenuContent>
+        <DaisyDropdownMenuItem onClick={() => onAction('edit', row)} />
           <Edit className="h-3 w-3 mr-enterprise-2" />
           Edit
         </DaisyDropdownMenuItem>
-        <DaisyDropdownMenuItem onClick={() => onAction('duplicate', row)}>
+        <DaisyDropdownMenuItem onClick={() => onAction('duplicate', row)} />
           <Copy className="h-3 w-3 mr-enterprise-2" />
           Duplicate
         </DaisyDropdownMenuItem>
         <DaisyDropdownMenuSeparator />
-        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)}>
+        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
           <Archive className="h-3 w-3 mr-enterprise-2" />
           Archive
-        </DaisyDropdownMenuItem>
+        </DaisyDropdownMenuSeparator>
         <DaisyDropdownMenuItem 
           onClick={() => onAction('delete', row)}
-          className="text-semantic-error focus:text-semantic-error"
-        >
+          className="text-semantic-error focus:text-semantic-error" />
           <Trash2 className="h-3 w-3 mr-enterprise-2" />
           Delete
         </DaisyDropdownMenuItem>
@@ -238,23 +239,25 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <DaisyPopover>
-      <DaisyPopoverTrigger asChild>
-        <DaisyButton variant="outline" size="sm" className="relative">
-          <Filter className="h-3 w-3 mr-enterprise-1" />
+    <DaisyPopover />
+      <DaisyPopoverTrigger asChild />
+        <DaisyButton variant="outline" size="sm" className="relative" >
+  <Filter className="h-3 w-3 mr-enterprise-1" />
+</DaisyPopover>
           Filters
           {hasActiveFilters && (
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-interactive-primary rounded-full" />
           )}
         </DaisyButton>
       </DaisyPopoverTrigger>
-      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start">
+      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start" />
         <div className="space-y-enterprise-4">
           <div className="flex items-center justify-between">
             <h4 className="text-body-sm font-semibold text-text-primary">Advanced Filters</h4>
             {hasActiveFilters && (
-              <DaisyButton variant="ghost" size="sm" onClick={onClearFilters}>
-                Clear All
+              <DaisyButton variant="ghost" size="sm" onClick={onClearFilters} >
+  Clear All
+</DaisyPopoverContent>
               </DaisyButton>
             )}
           </div>
@@ -277,17 +280,16 @@ const AdvancedFilters: React.FC<{
                     onFiltersChange(newFilters);
                   }}
                 >
-                  <DaisySelectTrigger className="h-8">
-                    <DaisySelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} />
-                  </DaisySelectTrigger>
-                  <DaisySelectContent>
-                    <DaisySelectItem value="">All</SelectItem>
+                  <DaisySelectTrigger className="h-8" />
+                    <DaisySelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} /></DaisySelect>
+                  <DaisySelectContent />
+                    <DaisySelectItem value="">All</DaisySelectContent>
                     {column.filterOptions.map((option) => (
-                      <DaisySelectItem key={option.value} value={option.value}>
+                      <DaisySelectItem key={option.value} value={option.value} />
                         {option.label}
-                      </SelectItem>
+                      </DaisySelectItem>
                     ))}
-                  </SelectContent>
+                  </DaisySelectContent>
                 </DaisySelect>
               ) : (
                 <DaisyInput
@@ -308,7 +310,7 @@ const AdvancedFilters: React.FC<{
             </div>
           ))}
         </div>
-      </DaisyPopoverContent>
+      </DaisyInput>
     </DaisyPopover>
   );
 };
@@ -479,8 +481,9 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
 
           {/* Active Filter Indicators */}
           {Object.entries(filters).map(([key, value]) => (
-            <DaisyBadge key={key} variant="secondary" className="text-caption">
-              {columns.find(col => col.key === key)?.title}: {String(value)}
+            <DaisyBadge key={key} variant="secondary" className="text-caption" >
+  {columns.find(col => col.key === key)?.title}: {String(value)}
+</DaisyProgressCell>
               <DaisyButton
                 variant="ghost"
                 size="sm"
@@ -501,53 +504,57 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
           {/* Bulk Actions */}
           {selectedRows.length > 0 && (
             <div className="flex items-center space-x-enterprise-2">
-              <DaisyBadge variant="outline" className="text-caption">
-                {selectedRows.length} selected
+              <DaisyBadge variant="outline" className="text-caption" >
+  {selectedRows.length} selected
+</DaisyBadge>
               </DaisyBadge>
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="outline" size="sm">
-                    Bulk Actions
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="outline" size="sm" >
+  Bulk Actions
+</DaisyDropdownMenu>
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))} />
                     <Download className="h-3 w-3 mr-enterprise-2" />
                     Export Selected
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find(row => row.id === id)!))}>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find(row => row.id === id)!))} />
                     <Archive className="h-3 w-3 mr-enterprise-2" />
                     Archive Selected
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
                   <DaisyDropdownMenuItem 
                     onClick={() => onBulkAction?.('delete', selectedRows.map(id => data.find(row => row.id === id)!))}
-                    className="text-semantic-error focus:text-semantic-error"
-                  >
+                    className="text-semantic-error focus:text-semantic-error" />
                     <Trash2 className="h-3 w-3 mr-enterprise-2" />
                     Delete Selected
-                  </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuSeparator>
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             </div>
           )}
 
           {/* Table Actions */}
-          <DaisyButton variant="outline" size="sm">
-            <RefreshCw className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" >
+  <RefreshCw className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Refresh
           </DaisyButton>
           
           {exportable && (
-            <DaisyButton variant="outline" size="sm">
-              <Download className="h-3 w-3 mr-enterprise-1" />
+            <DaisyButton variant="outline" size="sm" >
+  <Download className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
               Export
             </DaisyButton>
           )}
 
-          <DaisyButton variant="outline" size="sm">
-            <Settings className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" >
+  <Settings className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Columns
           </DaisyButton>
         </div>
@@ -654,10 +661,9 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
+                disabled={currentPage === 1} />
                 Previous
-              </DaisyButton>
+              </DaisyCheckbox>
               
               <div className="flex items-center space-x-enterprise-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -668,8 +674,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                       variant={currentPage === pageNum ? 'primary' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(pageNum)}
-                      className="w-8 h-8 p-0"
-                    >
+                      className="w-8 h-8 p-0" />
                       {pageNum}
                     </DaisyButton>
                   );
@@ -680,8 +685,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-              >
+                disabled={currentPage === totalPages} />
                 Next
               </DaisyButton>
             </div>

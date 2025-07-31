@@ -491,3 +491,370 @@ export const expectPerformance = (duration: number, maxMs: number) => {
 // ============================================================================
 
 export type MockPrismaClient = ReturnType<typeof createMockPrismaClient>;
+
+// ============================================================================
+// API ROUTE TESTING UTILITIES
+// ============================================================================
+
+/**
+ * Call an API route handler for testing purposes
+ */
+export const callApiRoute = async (
+  routePath: string, 
+  req: any, 
+  res: any
+): Promise<{ status: number; data: any; headers: any }> => {
+  try {
+    // Dynamic import of the route handler
+    const handler = await import(`@/app/api${routePath}/route`);
+    
+    // Determine which HTTP method to call
+    const method = req.method || 'GET';
+    const routeHandler = handler[method];
+    
+    if (!routeHandler) {
+      return {
+        status: 405,
+        data: { error: 'Method not allowed' },
+        headers: {}
+      };
+    }
+
+    // Call the route handler
+    const response = await routeHandler(req);
+    
+    // Extract response data
+    const data = response.json ? await response.json() : response;
+    const status = response.status || 200;
+    const headers = response.headers || {};
+
+    return { status, data, headers };
+  } catch (error) {
+    return {
+      status: 500,
+      data: { error: error.message },
+      headers: {}
+    };
+  }
+};
+
+/**
+ * Setup authenticated request with user context
+ */
+export const createAuthenticatedRequest = (
+  method: string,
+  url: string,
+  options: {
+    body?: any;
+    headers?: Record<string, string>;
+    user?: TestUser;
+  } = {}
+): any => {
+  const user = options.user || createTestUser();
+  
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer mock-jwt-token`,
+    ...options.headers
+  };
+
+  const request = {
+    method,
+    url,
+    headers,
+    body: options.body ? JSON.stringify(options.body) : undefined,
+    user // Attach user for middleware
+  };
+
+  return request;
+};
+
+/**
+ * Mock authentication middleware for testing
+ */
+export const mockAuthMiddleware = (user: TestUser = createTestUser()) => {
+  return jest.fn().mockImplementation((req: any) => {
+    req.user = user;
+    return Promise.resolve();
+  });
+};
+
+/**
+ * Mock rate limiting for testing
+ */
+export const mockRateLimiter = (shouldLimit = false) => {
+  return jest.fn().mockImplementation(() => {
+    if (shouldLimit) {
+      const error = new Error('Rate limit exceeded');
+      (error as any).status = 429;
+      throw error;
+    }
+    return Promise.resolve();
+  });
+};
+
+// ============================================================================
+// DATABASE TESTING UTILITIES
+// ============================================================================
+
+/**
+ * Create test database connection string
+ */
+export const getTestDatabaseUrl = (): string => {
+  return process.env.TEST_DATABASE_URL || 
+         process.env.DATABASE_URL || 
+         'postgresql://test:test@localhost:5432/test_db';
+};
+
+/**
+ * Setup test database with sample data
+ */
+export const setupTestDatabase = async (prisma: any) => {
+  // Create test organization
+  const testOrg = await prisma.organization.create({
+    data: createTestOrganization()
+  });
+
+  // Create test user
+  const testUser = await prisma.user.create({
+    data: {
+      ...createTestUser(),
+      organizationId: testOrg.id
+    }
+  });
+
+  // Create test risks
+  const testRisk = await prisma.risk.create({
+    data: {
+      ...createTestRisk(),
+      organizationId: testOrg.id,
+      createdBy: testUser.id
+    }
+  });
+
+  // Create test controls
+  const testControl = await prisma.control.create({
+    data: {
+      ...createTestControl(),
+      organizationId: testOrg.id,
+      createdBy: testUser.id
+    }
+  });
+
+  return {
+    organization: testOrg,
+    user: testUser,
+    risk: testRisk,
+    control: testControl
+  };
+};
+
+// ============================================================================
+// E2E TESTING UTILITIES
+// ============================================================================
+
+/**
+ * Wait for element with timeout
+ */
+export const waitForElement = async (page: any, selector: string, timeout = 10000) => {
+  try {
+    await page.waitForSelector(selector, { timeout });
+    return true;
+  } catch (error) {
+    console.warn(`Element ${selector} not found within ${timeout}ms`);
+    return false;
+  }
+};
+
+/**
+ * Fill form with error handling
+ */
+export const fillFormSafely = async (page: any, selector: string, value: string) => {
+  try {
+    await page.fill(selector, value);
+    return true;
+  } catch (error) {
+    console.warn(`Could not fill ${selector} with ${value}: ${error.message}`);
+    return false;
+  }
+};
+
+/**
+ * Click element with multiple selector attempts
+ */
+export const clickElementSafely = async (page: any, selectors: string[]) => {
+  for (const selector of selectors) {
+    try {
+      const element = page.locator(selector).first();
+      if (await element.isVisible({ timeout: 2000 })) {
+        await element.click();
+        return true;
+      }
+    } catch (error) {
+      // Continue to next selector
+    }
+  }
+  console.warn(`Could not click any of: ${selectors.join(', ')}`);
+  return false;
+};
+
+/**
+ * Login helper for E2E tests
+ */
+export const loginUser = async (
+  page: any, 
+  email: string = 'testuser@riscura.com', 
+  password: string = 'test123'
+) => {
+  await page.goto('/auth/login');
+  
+  // Try multiple selector patterns for email input
+  const emailSelectors = [
+    '[data-testid="email-input"]',
+    'input[type="email"]',
+    'input[name="email"]',
+    'input[placeholder*="email" i]'
+  ];
+  
+  const passwordSelectors = [
+    '[data-testid="password-input"]',
+    'input[type="password"]',
+    'input[name="password"]',
+    'input[placeholder*="password" i]'
+  ];
+  
+  const submitSelectors = [
+    '[data-testid="login-button"]',
+    'button[type="submit"]',
+    'button:has-text("Sign In")',
+    'button:has-text("Login")'
+  ];
+
+  // Fill form
+  let emailFilled = false;
+  for (const selector of emailSelectors) {
+    if (await fillFormSafely(page, selector, email)) {
+      emailFilled = true;
+      break;
+    }
+  }
+
+  let passwordFilled = false;
+  for (const selector of passwordSelectors) {
+    if (await fillFormSafely(page, selector, password)) {
+      passwordFilled = true;
+      break;
+    }
+  }
+
+  if (!emailFilled || !passwordFilled) {
+    throw new Error('Could not fill login form');
+  }
+
+  // Submit form
+  const submitted = await clickElementSafely(page, submitSelectors);
+  if (!submitted) {
+    throw new Error('Could not submit login form');
+  }
+
+  // Wait for redirect to dashboard
+  try {
+    await page.waitForURL('**/dashboard**', { timeout: 30000 });
+    return true;
+  } catch (error) {
+    console.warn('Login may have failed - no redirect to dashboard detected');
+    return false;
+  }
+};
+
+/**
+ * Logout helper for E2E tests
+ */
+export const logoutUser = async (page: any) => {
+  const userMenuSelectors = [
+    '[data-testid="user-menu"]',
+    '.user-menu',
+    '[aria-label*="user" i]',
+    '[aria-label*="profile" i]'
+  ];
+
+  const logoutSelectors = [
+    '[data-testid="logout-button"]',
+    'button:has-text("Logout")',
+    'button:has-text("Sign Out")',
+    'a:has-text("Logout")'
+  ];
+
+  // Click user menu
+  const menuClicked = await clickElementSafely(page, userMenuSelectors);
+  if (!menuClicked) {
+    throw new Error('Could not find user menu');
+  }
+
+  // Wait a bit for menu to open
+  await page.waitForTimeout(500);
+
+  // Click logout
+  const loggedOut = await clickElementSafely(page, logoutSelectors);
+  if (!loggedOut) {
+    throw new Error('Could not find logout button');
+  }
+
+  // Wait for redirect to login
+  try {
+    await page.waitForURL('**/auth/login**', { timeout: 10000 });
+    return true;
+  } catch (error) {
+    console.warn('Logout may have failed - no redirect to login detected');
+    return false;
+  }
+};
+
+// ============================================================================
+// DEPLOYMENT TESTING UTILITIES
+// ============================================================================
+
+/**
+ * Check if URL is accessible
+ */
+export const checkUrlAccessibility = async (url: string, timeout = 10000): Promise<boolean> => {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    const response = await fetch(url, {
+      signal: controller.signal,
+      method: 'HEAD'
+    });
+
+    clearTimeout(timeoutId);
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};
+
+/**
+ * Measure page load time
+ */
+export const measurePageLoadTime = async (page: any, url: string): Promise<number> => {
+  const startTime = Date.now();
+  await page.goto(url);
+  await page.waitForLoadState('networkidle');
+  return Date.now() - startTime;
+};
+
+/**
+ * Check for console errors
+ */
+export const checkConsoleErrors = async (page: any): Promise<string[]> => {
+  const errors: string[] = [];
+  
+  page.on('console', (msg: any) => {
+    if (msg.type() === 'error') {
+      errors.push(msg.text());
+    }
+  });
+
+  return errors;
+};

@@ -43,13 +43,15 @@ export function NotionStyleGuide() {
         </div>
 
         {/* Color Palette */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Color Palette</DaisyCardTitle>
             <DaisyCardDescription>Primary colors used throughout the application</p>
           
-          <DaisyCardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <DaisyCardContent >
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+</DaisyCardDescription>
               <div className="text-center">
                 <div className="w-full h-20 bg-[#191919] rounded-lg mb-2"></div>
                 <p className="text-sm font-medium">#191919</p>
@@ -75,13 +77,15 @@ export function NotionStyleGuide() {
         </DaisyCard>
 
         {/* Typography */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Typography</DaisyCardTitle>
             <DaisyCardDescription>Inter font family with consistent hierarchy</p>
           
-          <DaisyCardContent className="space-y-4">
-            <div>
+          <DaisyCardContent className="space-y-4" >
+  <div>
+</DaisyCardDescription>
               <h1 className="text-4xl font-bold text-[#191919] mb-2">Heading 1</h1>
               <p className="text-sm text-gray-500">text-4xl font-bold</p>
             </div>
@@ -105,17 +109,20 @@ export function NotionStyleGuide() {
         </DaisyCard>
 
         {/* Buttons */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Button Components</DaisyCardTitle>
             <DaisyCardDescription>Primary, secondary, tertiary, and ghost button styles</p>
           
-          <DaisyCardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+</DaisyCardDescription>
               <div className="space-y-3">
                 <h4 className="font-semibold text-[#191919]">Primary</h4>
-                <DaisyButton className="w-full">
-                  <Plus className="w-4 h-4 mr-2" />
+                <DaisyButton className="w-full" >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
                   Primary Action
                 </DaisyButton>
                 <DaisyButton size="sm" className="w-full">Small Primary</DaisyButton>
@@ -124,8 +131,9 @@ export function NotionStyleGuide() {
               
               <div className="space-y-3">
                 <h4 className="font-semibold text-[#191919]">Secondary</h4>
-                <DaisyButton variant="secondary" className="w-full">
-                  <Download className="w-4 h-4 mr-2" />
+                <DaisyButton variant="secondary" className="w-full" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
                   Secondary Action
                 </DaisyButton>
                 <DaisyButton variant="secondary" size="sm" className="w-full">Small Secondary</DaisyButton>
@@ -134,8 +142,9 @@ export function NotionStyleGuide() {
               
               <div className="space-y-3">
                 <h4 className="font-semibold text-[#191919]">Tertiary</h4>
-                <DaisyButton variant="tertiary" className="w-full">
-                  <Settings className="w-4 h-4 mr-2" />
+                <DaisyButton variant="tertiary" className="w-full" >
+  <Settings className="w-4 h-4 mr-2" />
+</DaisyButton>
                   Tertiary Action
                 </DaisyButton>
                 <DaisyButton variant="tertiary" size="sm" className="w-full">Small Tertiary</DaisyButton>
@@ -144,8 +153,9 @@ export function NotionStyleGuide() {
               
               <div className="space-y-3">
                 <h4 className="font-semibold text-[#191919]">Ghost</h4>
-                <DaisyButton variant="ghost" className="w-full">
-                  <User className="w-4 h-4 mr-2" />
+                <DaisyButton variant="ghost" className="w-full" >
+  <User className="w-4 h-4 mr-2" />
+</DaisyButton>
                   Ghost Action
                 </DaisyButton>
                 <DaisyButton variant="ghost" size="sm" className="w-full">Small Ghost</DaisyButton>
@@ -156,13 +166,15 @@ export function NotionStyleGuide() {
         </DaisyCard>
 
         {/* Form Components */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Form Components</DaisyCardTitle>
             <DaisyCardDescription>Clean input fields with blue focus states</p>
           
-          <DaisyCardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <DaisyCardContent className="space-y-6" >
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+</DaisyCardDescription>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-[#191919] mb-2">
@@ -199,17 +211,19 @@ export function NotionStyleGuide() {
                 />
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyInput>
         </DaisyCard>
 
         {/* Data Display */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Data Display Components</DaisyCardTitle>
             <DaisyCardDescription>Badges, progress indicators, and status elements</p>
           
-          <DaisyCardContent className="space-y-6">
-            {/* Badges */}
+          <DaisyCardContent className="space-y-6" >
+  {/* Badges */}
+</DaisyCardDescription>
             <div>
               <h4 className="font-semibold text-[#191919] mb-3">Status Badges</h4>
               <div className="flex flex-wrap gap-2">
@@ -244,17 +258,19 @@ export function NotionStyleGuide() {
                 </div>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyProgress>
         </DaisyCard>
 
         {/* Navigation Components */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Navigation Components</DaisyCardTitle>
             <DaisyCardDescription>Tabs, breadcrumbs, and pagination</p>
           
-          <DaisyCardContent className="space-y-8">
-            {/* Breadcrumbs */}
+          <DaisyCardContent className="space-y-8" >
+  {/* Breadcrumbs */}
+</DaisyCardDescription>
             <div>
               <h4 className="font-semibold text-[#191919] mb-3">Breadcrumb Navigation</h4>
               <Breadcrumb>
@@ -279,23 +295,23 @@ export function NotionStyleGuide() {
             {/* Tabs */}
             <div>
               <h4 className="font-semibold text-[#191919] mb-3">Tab Navigation</h4>
-              <DaisyTabs defaultValue="overview" className="w-full">
-                <DaisyTabsList>
-                  <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+              <DaisyTabs defaultValue="overview" className="w-full" />
+                <DaisyTabsList />
+                  <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
                   <DaisyTabsTrigger value="risks">Risks</DaisyTabsTrigger>
                   <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
                   <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
                 </DaisyTabsList>
-                <DaisyTabsContent value="overview" className="mt-4">
+                <DaisyTabsContent value="overview" className="mt-4" />
                   <p className="text-gray-600">Overview content goes here...</p>
                 </DaisyTabsContent>
-                <DaisyTabsContent value="risks" className="mt-4">
+                <DaisyTabsContent value="risks" className="mt-4" />
                   <p className="text-gray-600">Risk management content goes here...</p>
                 </DaisyTabsContent>
-                <DaisyTabsContent value="controls" className="mt-4">
+                <DaisyTabsContent value="controls" className="mt-4" />
                   <p className="text-gray-600">Controls content goes here...</p>
                 </DaisyTabsContent>
-                <DaisyTabsContent value="compliance" className="mt-4">
+                <DaisyTabsContent value="compliance" className="mt-4" />
                   <p className="text-gray-600">Compliance content goes here...</p>
                 </DaisyTabsContent>
               </DaisyTabs>
@@ -328,53 +344,55 @@ export function NotionStyleGuide() {
         </DaisyCard>
 
         {/* Table Component */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Data Table</DaisyCardTitle>
             <DaisyCardDescription>Clean table design for data display</p>
           
-          <DaisyCardContent>
-            <DaisyTable>
-              <DaisyTableHeader>
-                <DaisyTableRow>
-                  <DaisyTableHead>Risk ID</DaisyTableHead>
+          <DaisyCardContent >
+  <DaisyTable />
+</DaisyCardDescription>
+              <DaisyTableHeader />
+                <DaisyTableRow />
+                  <DaisyTableHead>Risk ID</DaisyTableHeader>
                   <DaisyTableHead>Description</DaisyTableHead>
                   <DaisyTableHead>Severity</DaisyTableHead>
                   <DaisyTableHead>Status</DaisyTableHead>
                   <DaisyTableHead>Owner</DaisyTableHead>
                 </DaisyTableRow>
               </DaisyTableHeader>
-              <DaisyTableBody>
-                <DaisyTableRow>
-                  <DaisyTableCell className="font-medium">RSK-001</DaisyTableCell>
+              <DaisyTableBody />
+                <DaisyTableRow />
+                  <DaisyTableCell className="font-medium">RSK-001</DaisyTableBody>
                   <DaisyTableCell>Data breach vulnerability</DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="error">High</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="error">High</DaisyTableCell>
                   </DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="warning">In Progress</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="warning">In Progress</DaisyTableCell>
                   </DaisyTableCell>
                   <DaisyTableCell>Sarah Chen</DaisyTableCell>
                 </DaisyTableRow>
-                <DaisyTableRow>
-                  <DaisyTableCell className="font-medium">RSK-002</DaisyTableCell>
+                <DaisyTableRow />
+                  <DaisyTableCell className="font-medium">RSK-002</DaisyTableRow>
                   <DaisyTableCell>Access control weakness</DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="warning">Medium</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="warning">Medium</DaisyTableCell>
                   </DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="success">Resolved</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="success">Resolved</DaisyTableCell>
                   </DaisyTableCell>
                   <DaisyTableCell>John Smith</DaisyTableCell>
                 </DaisyTableRow>
-                <DaisyTableRow>
-                  <DaisyTableCell className="font-medium">RSK-003</DaisyTableCell>
+                <DaisyTableRow />
+                  <DaisyTableCell className="font-medium">RSK-003</DaisyTableRow>
                   <DaisyTableCell>Compliance gap identified</DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="secondary">Low</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="secondary">Low</DaisyTableCell>
                   </DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="blue">Under Review</DaisyBadge>
+                  <DaisyTableCell />
+                    <DaisyBadge variant="blue">Under Review</DaisyTableCell>
                   </DaisyTableCell>
                   <DaisyTableCell>Alex Johnson</DaisyTableCell>
                 </DaisyTableRow>
@@ -384,16 +402,20 @@ export function NotionStyleGuide() {
         </DaisyCard>
 
         {/* Card Layouts */}
-        <DaisyCard className="mb-12">
-          <DaisyCardHeader>
+        <DaisyCard className="mb-12" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Card Layouts</DaisyCardTitle>
             <DaisyCardDescription>Various card designs for different content types</p>
           
-          <DaisyCardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+</DaisyCardDescription>
               {/* Metric Card */}
-              <DaisyCard>
-                <DaisyCardContent className="p-6">
+              <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                   <div className="flex items-center justify-between mb-4">
                     <div className="p-2 bg-white rounded-lg shadow-sm">
                       <Shield className="h-5 w-5 text-blue-600" />
@@ -408,54 +430,65 @@ export function NotionStyleGuide() {
               </DaisyCard>
               
               {/* Status Card */}
-              <DaisyCard>
-                <DaisyCardHeader className="pb-4">
-                  <DaisyCardTitle className="flex items-center gap-2">
-                    <DaisyAlertTriangle className="h-5 w-5 text-orange-600" />
+              <DaisyCard >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
+                  <DaisyCardTitle className="flex items-center gap-2" >
+  <DaisyAlertTriangle className="h-5 w-5 text-orange-600" >
+  </DaisyCardTitle>
+</DaisyAlert>
                     High Priority
                   </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+        <DaisyCardContent >
+  <p className="text-sm text-gray-600 mb-4">
+</DaisyCardContent>
                     4 high-risk items require immediate attention.
                   </p>
-                  <DaisyButton size="sm" className="w-full">
-                    Review Now
+                  <DaisyButton size="sm" className="w-full" >
+  Review Now
+</DaisyButton>
                   </DaisyButton>
                 </DaisyCardContent>
               </DaisyCard>
               
               {/* AI Insights Card */}
-              <DaisyCard>
-                <DaisyCardHeader className="pb-4">
-                  <DaisyCardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-purple-600" />
+              <DaisyCard >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
+                  <DaisyCardTitle className="flex items-center gap-2" >
+  <Brain className="h-5 w-5 text-purple-600" />
+</DaisyCardTitle>
                     AI Insights
                   </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4">
+        <DaisyCardContent >
+  <div className="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4">
+</DaisyCardContent>
                     <p className="text-sm text-purple-700">
                       ARIA detected potential compliance gaps in your SOX controls.
                     </p>
                   </div>
-                  <DaisyButton variant="secondary" size="sm" className="w-full">
-                    View Details
+                  <DaisyButton variant="secondary" size="sm" className="w-full" >
+  View Details
+</DaisyButton>
                   </DaisyButton>
                 </DaisyCardContent>
               </DaisyCard>
             </div>
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Usage Guidelines */}
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Usage Guidelines</DaisyCardTitle>
             <DaisyCardDescription>Best practices for implementing the design system</p>
           
-          <DaisyCardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <DaisyCardContent className="space-y-4" >
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+</DaisyCardDescription>
               <div>
                 <h4 className="font-semibold text-[#191919] mb-3">✅ Do</h4>
                 <ul className="space-y-2 text-sm text-gray-600">

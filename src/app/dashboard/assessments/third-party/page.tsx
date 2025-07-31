@@ -115,8 +115,9 @@ export default function ThirdPartyAssessmentPage() {
                 Manage and track security assessments for your third-party vendors and partners.
               </p>
             </div>
-            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
-              <Building className="w-4 h-4 mr-2" />
+            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white" >
+  <Building className="w-4 h-4 mr-2" />
+</DaisyCalendar>
               New Assessment
             </DaisyButton>
           </div>
@@ -129,8 +130,10 @@ export default function ThirdPartyAssessmentPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
         >
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center space-x-2">
                 <Building className="w-5 h-5 text-[#8B7355]" />
                 <div>
@@ -141,8 +144,10 @@ export default function ThirdPartyAssessmentPage() {
             </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <div>
@@ -153,11 +158,14 @@ export default function ThirdPartyAssessmentPage() {
             </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center space-x-2">
-                <DaisyAlertTriangle className="w-5 h-5 text-red-600" />
-                <div>
+                <DaisyAlertTriangle className="w-5 h-5 text-red-600" >
+  <div>
+</DaisyAlertTriangle>
                   <p className="text-sm text-[#6B5B47]">Critical Findings</p>
                   <p className="text-2xl font-semibold text-[#2C1810]">2</p>
                 </div>
@@ -165,8 +173,10 @@ export default function ThirdPartyAssessmentPage() {
             </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-green-600" />
                 <div>
@@ -194,8 +204,10 @@ export default function ThirdPartyAssessmentPage() {
           <div className="p-6 space-y-4">
             <Suspense fallback={<LoadingSpinner />}>
               {thirdPartyAssessments.map((assessment) => (
-                <DaisyCard key={assessment.id} className="bg-white/40 border-[#E5E1D8]">
-                  <DaisyCardContent className="p-6">
+                <DaisyCard key={assessment.id} className="bg-white/40 border-[#E5E1D8]" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
@@ -203,12 +215,14 @@ export default function ThirdPartyAssessmentPage() {
                           <h3 className="text-lg font-semibold text-[#2C1810]">
                             {assessment.vendorName}
                           </h3>
-                          <DaisyBadge className={getStatusColor(assessment.status)}>
-                            {getStatusIcon(assessment.status)}
+                          <DaisyBadge className={getStatusColor(assessment.status)} >
+  {getStatusIcon(assessment.status)}
+</DaisyBadge>
                             <span className="ml-1">{assessment.status}</span>
                           </DaisyBadge>
-                          <DaisyBadge className={getRiskColor(assessment.riskLevel)}>
-                            {assessment.riskLevel} Risk
+                          <DaisyBadge className={getRiskColor(assessment.riskLevel)} >
+  {assessment.riskLevel} Risk
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         
@@ -226,8 +240,9 @@ export default function ThirdPartyAssessmentPage() {
                             <span>Next Review: {assessment.nextReview}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <DaisyAlertTriangle className="w-4 h-4" />
-                            <span>{assessment.criticalFindings} critical / {assessment.totalFindings} total findings</span>
+                            <DaisyAlertTriangle className="w-4 h-4" >
+  <span>
+</DaisyCalendar>{assessment.criticalFindings} critical / {assessment.totalFindings} total findings</span>
                           </div>
                         </div>
                         
@@ -251,17 +266,17 @@ export default function ThirdPartyAssessmentPage() {
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
+  <FileText className="w-4 h-4 mr-2" />
+</DaisyProgress>
                           View Report
                         </DaisyButton>
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
-                        >
-                          Edit Assessment
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
+  Edit Assessment
+</DaisyButton>
                         </DaisyButton>
                       </div>
                     </div>

@@ -393,8 +393,9 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   return (
     <>
       <DaisyCard className={`${className} bg-white border border-gray-200`}>
-        <DaisyCardHeader className="pb-4">
-          <DaisyCardTitle className="flex items-center justify-between">
+        <DaisyCardHeader className="pb-4" >
+  <DaisyCardTitle className="flex items-center justify-between" />
+</DaisyCard>
             <div className="flex items-center">
               <Target className="w-5 h-5 mr-2 text-blue-600" />
               <div>
@@ -404,13 +405,15 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                 </p>
               </div>
             </div>
-            <DaisyBadge variant="secondary" className="bg-blue-50 text-blue-700 text-xs">
-              {totalRisks} Total Risks
+            <DaisyBadge variant="secondary" className="bg-blue-50 text-blue-700 text-xs" >
+  {totalRisks} Total Risks
+</DaisyBadge>
             </DaisyBadge>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="pb-4">
-          <div className="space-y-3">
+        <DaisyCardContent className="pb-4" >
+  <div className="space-y-3">
+</DaisyCardContent>
             {/* Compact Heat Map Grid */}
             <div className="bg-white rounded-lg p-3 border border-gray-200">
               <div className="flex items-center">
@@ -494,29 +497,33 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                 <div className="flex items-center space-x-1">
                   <div className="w-3 h-3 bg-green-400 rounded border border-green-500"></div>
                   <span className="text-xs font-medium text-gray-700">Low</span>
-                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-green-100 text-green-800">
-                    {heatMapData.filter(d => d.level === 'low').reduce((sum, d) => sum + d.count, 0)}
+                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-green-100 text-green-800" >
+  {heatMapData.filter(d => d.level === 'low').reduce((sum, d) => sum + d.count, 0)}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
                   <div className="w-3 h-3 bg-orange-400 rounded border border-orange-500"></div>
                   <span className="text-xs font-medium text-gray-700">Medium</span>
-                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-orange-100 text-orange-800">
-                    {heatMapData.filter(d => d.level === 'medium').reduce((sum, d) => sum + d.count, 0)}
+                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-orange-100 text-orange-800" >
+  {heatMapData.filter(d => d.level === 'medium').reduce((sum, d) => sum + d.count, 0)}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
                   <div className="w-3 h-3 bg-red-300 rounded border border-red-400"></div>
                   <span className="text-xs font-medium text-gray-700">High</span>
-                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-red-100 text-red-800">
-                    {heatMapData.filter(d => d.level === 'high').reduce((sum, d) => sum + d.count, 0)}
+                  <DaisyBadge variant="secondary" className="text-xs px-1 py-0 h-4 bg-red-100 text-red-800" >
+  {heatMapData.filter(d => d.level === 'high').reduce((sum, d) => sum + d.count, 0)}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
                   <div className="w-3 h-3 bg-red-500 rounded border border-red-600"></div>
                   <span className="text-xs font-medium text-gray-700">Critical</span>
-                  <DaisyBadge variant="error" className="text-xs px-1 py-0 h-4">
-                    {heatMapData.filter(d => d.level === 'critical').reduce((sum, d) => sum + d.count, 0)}
+                  <DaisyBadge variant="error" className="text-xs px-1 py-0 h-4" >
+  {heatMapData.filter(d => d.level === 'critical').reduce((sum, d) => sum + d.count, 0)}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
               </div>

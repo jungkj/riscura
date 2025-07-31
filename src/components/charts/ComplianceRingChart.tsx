@@ -218,25 +218,30 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
 
   return (
     <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <DaisyCardHeader>
-        <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-[#199BEC]" />
+      <DaisyCardHeader >
+  <div className="flex items-center justify-between">
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Shield className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
             Compliance Overview
           </DaisyCardTitle>
           <div className="flex items-center gap-2">
-            <DaisyButton variant="outline" size="sm">
-              <Eye className="h-4 w-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" >
+  <Eye className="h-4 w-4 mr-2" />
+</DaisyButton>
               View All
             </DaisyButton>
-            <DaisyButton variant="outline" size="sm">
-              <Settings className="h-4 w-4" />
+            <DaisyButton variant="outline" size="sm" >
+  <Settings className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
           </div>
         </div>
       
-      <DaisyCardContent>
-        <div className="space-y-6">
+      <DaisyCardContent >
+  <div className="space-y-6">
+</DaisyCardContent>
           {/* Overall Score Ring */}
           <div className="flex items-center justify-center">
             <div className="relative">
@@ -409,8 +414,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                       <DaisyButton
                         variant="ghost"
                         size="sm"
-                        onClick={() => setSelectedFramework(null)}
-                      >
+                        onClick={() => setSelectedFramework(null)} />
                         ×
                       </DaisyButton>
                     </div>
@@ -485,7 +489,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyProgress>
     </DaisyCard>
   );
 }; 

@@ -41,20 +41,21 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <DaisyCard className="w-full max-w-md">
-          <DaisyCardHeader className="text-center">
+        <DaisyCard className="w-full max-w-md" >
+  <DaisyCardHeader className="text-center" />
+</DaisyCard>
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
             <DaisyCardTitle>Check your email</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="text-center space-y-4">
-            <p className="text-muted-foreground">
+        <DaisyCardContent className="text-center space-y-4" >
+  <p className="text-muted-foreground">
+</DaisyCardContent>
               We've sent a password reset link to <strong>{email}</strong>
-            </p>
+            </DaisyCardDescription>
             <p className="text-sm text-muted-foreground">
               Didn't receive the email? Check your spam folder or try again.
-            </p>
+            </DaisyCardDescription>
             <div className="space-y-2">
               <DaisyButton 
                 variant="outline" 
@@ -67,29 +68,31 @@ export default function ForgotPasswordPage() {
                 Try different email
               </DaisyButton>
               <Link href="/auth/login">
-                <DaisyButton variant="ghost" className="w-full">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
+                <DaisyButton variant="ghost" className="w-full" >
+  <ArrowLeft className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Back to login
                 </DaisyButton>
               </Link>
             </div>
           </DaisyCardContent>
-        </DaisyCard>
       </div>
     );
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <DaisyCard className="w-full max-w-md">
-        <DaisyCardHeader>
+      <DaisyCard className="w-full max-w-md" >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle>Reset your password</DaisyCardTitle>
           <p className="text-muted-foreground">
             Enter your email address and we'll send you a link to reset your password.
-          </p>
+          </DaisyCardDescription>
         
-        <DaisyCardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <DaisyCardContent >
+  <form onSubmit={handleSubmit} className="space-y-4">
+</DaisyCardContent>
             <div className="space-y-2">
               <DaisyLabel htmlFor="email">Email address</DaisyLabel>
               <DaisyInput
@@ -106,20 +109,19 @@ export default function ForgotPasswordPage() {
             <DaisyButton 
               type="submit" 
               className="w-full" 
-              disabled={isLoading || !email}
-            >
-              {isLoading ? 'Sending...' : 'Send reset link'}
-            </DaisyButton>
+              disabled={isLoading || !email} >
+  {isLoading ? 'Sending...' : 'Send reset link'}
+</DaisyButton>
             
             <Link href="/auth/login">
-              <DaisyButton variant="ghost" className="w-full">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+              <DaisyButton variant="ghost" className="w-full" >
+  <ArrowLeft className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Back to login
               </DaisyButton>
             </Link>
           </form>
         </DaisyCardContent>
-      </DaisyCard>
     </div>
   );
 } 

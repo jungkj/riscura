@@ -324,7 +324,9 @@ const NetworkStatusIndicator: React.FC<{
       case 'checking':
         return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
       default:
-        return <DaisyAlertTriangle className="w-4 h-4 text-gray-500" />;
+        return <DaisyAlertTriangle className="w-4 h-4 text-gray-500" >
+  ;
+</DaisyAlertTriangle>
     }
   };
 
@@ -367,18 +369,22 @@ const NetworkStatusIndicator: React.FC<{
   };
 
   return (
-    <DaisyCard className="w-full max-w-sm">
-      <DaisyCardHeader className="pb-3">
-        <DaisyCardTitle className="flex items-center gap-2 text-sm">
-          {getStatusIcon()}
+    <DaisyCard className="w-full max-w-sm" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
+        <DaisyCardTitle className="flex items-center gap-2 text-sm" >
+  {getStatusIcon()}
+</DaisyCardTitle>
           Network Status
         </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3">
-        <div className="flex items-center justify-between">
+        <DaisyCardContent className="space-y-3" >
+  <div className="flex items-center justify-between">
+</DaisyCardContent>
           <span className="text-sm font-medium">Status:</span>
-          <DaisyBadge variant={status === 'online' ? 'default' : 'destructive'}>
-            {getStatusText()}
+          <DaisyBadge variant={status === 'online' ? 'default' : 'destructive'} >
+  {getStatusText()}
+</DaisyBadge>
           </DaisyBadge>
         </div>
         
@@ -430,9 +436,9 @@ const OfflineBanner: React.FC<{
           size="sm"
           onClick={onRetry}
           disabled={isRetrying}
-          className="bg-white text-red-600 hover:bg-gray-100"
-        >
-          {isRetrying ? (
+          className="bg-white text-red-600 hover:bg-gray-100" >
+  {isRetrying ? (
+</DaisyButton>
             <>
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
               Retrying...
@@ -506,16 +512,19 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       {/* Retry Progress Indicator */}
       {isRetrying && failedRequests.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40">
-          <DaisyCard className="w-80">
-            <DaisyCardHeader className="pb-3">
-              <DaisyCardTitle className="flex items-center gap-2 text-sm">
-                <RefreshCw className="w-4 h-4 animate-spin" />
+          <DaisyCard className="w-80" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center gap-2 text-sm" >
+  <RefreshCw className="w-4 h-4 animate-spin" />
+</DaisyCardTitle>
                 Retrying failed requests...
               </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-              <DaisyProgress 
-                value={(failedRequests.filter(r => r.retryCount > 0).length / failedRequests.length) * 100} 
+        <DaisyCardContent >
+  <DaisyProgress 
+                value={(failedRequests.filter(r =>
+</DaisyCardContent> r.retryCount > 0).length / failedRequests.length) * 100} 
                 className="h-2"
               />
               <p className="text-xs text-muted-foreground mt-2">

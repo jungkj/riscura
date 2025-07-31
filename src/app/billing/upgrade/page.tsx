@@ -111,12 +111,12 @@ export default function UpgradePage() {
         <h1 className="text-4xl font-bold mb-4">Choose Your Plan</h1>
         <p className="text-xl text-muted-foreground">
           Upgrade your risk management capabilities with advanced features
-        </p>
+        </DaisyCardDescription>
         {subscription && (
           <div className="mt-4">
-            <DaisyBadge variant="outline">
-              Current Plan: {subscription.plan}
-            </DaisyBadge>
+            <DaisyBadge variant="outline" >
+  Current Plan: {subscription.plan}
+</DaisyBadge>
           </div>
         )}
       </div>
@@ -130,12 +130,13 @@ export default function UpgradePage() {
           return (
             <DaisyCard key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}>
               {plan.popular && (
-                <DaisyBadge className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  Most Popular
-                </DaisyBadge>
+                <DaisyBadge className="absolute -top-2 left-1/2 transform -translate-x-1/2" >
+  Most Popular
+</DaisyCard>
               )}
-              <DaisyCardHeader className="text-center">
-                <div className="flex justify-center mb-2">
+              <DaisyCardHeader className="text-center" >
+  <div className="flex justify-center mb-2">
+</DaisyCardHeader>
                   <Icon className="h-8 w-8 text-primary" />
                 </div>
                 <DaisyCardTitle className="text-2xl">{plan.name}</DaisyCardTitle>
@@ -145,10 +146,11 @@ export default function UpgradePage() {
                     /{plan.period}
                   </span>
                 </div>
-                <DaisyCardDescription>{plan.description}</p>
+                <DaisyCardDescription>{plan.description}</DaisyCardDescription>
               
-              <DaisyCardContent>
-                <ul className="space-y-3 mb-6">
+              <DaisyCardContent >
+  <ul className="space-y-3 mb-6">
+</DaisyCardDescription>
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center">
                       <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -158,28 +160,25 @@ export default function UpgradePage() {
                 </ul>
                 
                 {isCurrentPlan ? (
-                  <DaisyButton className="w-full" disabled>
-                    Current Plan
-                  </DaisyButton>
+                  <DaisyButton className="w-full" disabled >
+  Current Plan
+</DaisyButton>
                                  ) : plan.name === 'Free' ? (
                    <DaisyButton 
                      variant="secondary" 
                      className="w-full"
-                     disabled
-                   >
-                     Free Forever
-                   </DaisyButton>
+                     disabled >
+  Free Forever
+</DaisyButton>
                  ) : (
                    <DaisyButton 
                      className="w-full" 
                      onClick={() => handleUpgrade(plan.name.toLowerCase())}
-                     variant={plan.popular ? 'primary' : 'secondary'}
-                   >
+                     variant={plan.popular ? 'primary' : 'secondary'} />
                      {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
                    </DaisyButton>
                  )}
               </DaisyCardContent>
-            </DaisyCard>
           );
         })}
       </div>
@@ -187,10 +186,10 @@ export default function UpgradePage() {
       <div className="text-center mt-12">
         <p className="text-muted-foreground">
           All plans include a 14-day free trial. Cancel anytime.
-        </p>
+        </DaisyCardDescription>
         <p className="text-sm text-muted-foreground mt-2">
           Need a custom solution? <a href="/contact" className="text-primary hover:underline">Contact us</a>
-        </p>
+        </DaisyCardDescription>
       </div>
     </div>
   );

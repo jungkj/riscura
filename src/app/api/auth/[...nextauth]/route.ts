@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { authOptions } from '@/lib/auth/auth-options-fixed';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Wrap the handler to add error logging and ensure JSON responses
@@ -37,27 +37,32 @@ async function authHandler(req: NextRequest, context: any) {
       return NextResponse.json(null);
     }
     
-    // Initialize NextAuth inside try block to catch initialization errors
+    // Initialize NextAuth with better error handling
     let handlers;
     try {
       handlers = NextAuth(authOptions);
+      console.log('[NextAuth] Handlers initialized successfully');
     } catch (initError) {
       console.error('[NextAuth] Failed to initialize:', initError);
       
-      // For session endpoint, return null instead of error
+      // For session endpoint, return null instead of error to allow fallback
       if (pathname.endsWith('/api/auth/session')) {
+        console.log('[NextAuth] Returning null session due to initialization error');
         return NextResponse.json(null);
       }
       
+      // For other endpoints, provide a fallback response
       return NextResponse.json(
         {
-          error: 'Authentication system initialization failed',
-          message: initError instanceof Error ? initError.message : 'Unknown initialization error',
+          error: 'Authentication temporarily unavailable',
+          message: 'Please try again or use demo credentials (admin@riscura.com / admin123)',
+          fallback: true,
           details: process.env.NODE_ENV === 'development' ? {
+            error: initError instanceof Error ? initError.message : 'Unknown initialization error',
             stack: initError instanceof Error ? initError.stack : undefined,
           } : undefined,
         },
-        { status: 500 }
+        { status: 503 } // Service Unavailable instead of Internal Server Error
       );
     }
     

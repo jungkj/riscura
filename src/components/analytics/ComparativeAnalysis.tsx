@@ -322,8 +322,9 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
               <td className="py-3 px-4">
                 <div>
                   <div className="font-medium text-gray-900">{metric.name}</div>
-                  <DaisyBadge variant="outline" className="text-xs mt-1 capitalize">
-                    {metric.category}
+                  <DaisyBadge variant="outline" className="text-xs mt-1 capitalize" >
+  {metric.category}
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
               </td>
@@ -363,12 +364,14 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
   const renderChartView = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {comparisonData.map((metric) => (
-        <DaisyCard key={metric.id}>
-          <DaisyCardHeader className="pb-2">
+        <DaisyCard key={metric.id} >
+  <DaisyCardHeader className="pb-2" />
+</DaisyProgress>
             <DaisyCardTitle className="text-sm">{metric.name}</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-            <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-bold">
@@ -404,7 +407,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                 </div>
               )}
             </div>
-          </DaisyCardContent>
+          </DaisyProgress>
         </DaisyCard>
       ))}
     </div>
@@ -456,15 +459,18 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       
       {/* Key insights */}
       <div className="space-y-4">
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="text-sm flex items-center">
-              <Brain className="w-4 h-4 mr-2" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="text-sm flex items-center" >
+  <Brain className="w-4 h-4 mr-2" />
+</DaisyCardTitle>
               Key Insights
             </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3">
-            <div className="p-3 bg-green-50 rounded-lg">
+        <DaisyCardContent className="space-y-3" >
+  <div className="p-3 bg-green-50 rounded-lg">
+</DaisyCardContent>
               <div className="flex items-start space-x-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
                 <div>
@@ -494,8 +500,9 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
             
             <div className="p-3 bg-orange-50 rounded-lg">
               <div className="flex items-start space-x-2">
-                <DaisyAlertTriangle className="w-4 h-4 text-orange-600 mt-0.5" />
-                <div>
+                <DaisyAlertTriangle className="w-4 h-4 text-orange-600 mt-0.5" >
+  <div>
+</DaisyAlertTriangle>
                   <div className="text-sm font-medium text-orange-900">
                     Cost Increase
                   </div>
@@ -508,15 +515,18 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="text-sm flex items-center">
-              <Target className="w-4 h-4 mr-2" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="text-sm flex items-center" >
+  <Target className="w-4 h-4 mr-2" />
+</DaisyCardTitle>
               Target Progress
             </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3">
-            {comparisonData.filter(m => m.target).map(metric => (
+        <DaisyCardContent className="space-y-3" >
+  {comparisonData.filter(m => m.target).map(metric => (
+</DaisyCardContent>
               <div key={metric.id}>
                 <div className="flex justify-between text-sm mb-1">
                   <span>{metric.name}</span>
@@ -525,7 +535,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                 <DaisyProgress value={(metric.current / metric.target!) * 100} className="h-2" />
               </div>
             ))}
-          </DaisyCardContent>
+          </DaisyProgress>
         </DaisyCard>
       </div>
     </div>
@@ -534,10 +544,12 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Configuration Panel */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center justify-between" >
+  <div className="flex items-center space-x-2">
+</DaisyCardTitle>
               <TrendingUp className="w-5 h-5" />
               <span>Comparative Analysis</span>
             </div>
@@ -551,15 +563,16 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                 <Settings className="w-4 h-4 mr-2" />
                 Save Config
               </DaisyButton>
-              <DaisyButton variant="outline" size="sm" onClick={() => onExport?.(comparisonData, 'excel')}>
+              <DaisyButton variant="outline" size="sm" onClick={() => onExport?.(comparisonData, 'excel')} />
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </DaisyButton>
             </div>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+</DaisyCardContent>
             {/* Metrics Selection */}
             <div>
               <label className="text-sm font-medium text-gray-700 mb-2 block">
@@ -688,22 +701,26 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       </DaisyCard>
 
       {/* Analysis Results */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center justify-between">
-            <span>Analysis Results</span>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center justify-between" >
+  <span>
+</DaisyCardTitle>Analysis Results</span>
             <div className="flex items-center space-x-2">
-              <DaisyBadge variant="secondary" className="text-xs">
-                {comparisonData.length} metrics
+              <DaisyBadge variant="secondary" className="text-xs" >
+  {comparisonData.length} metrics
+</DaisyBadge>
               </DaisyBadge>
-              <DaisyButton variant="ghost" size="sm" onClick={() => setIsLoading(true)}>
+              <DaisyButton variant="ghost" size="sm" onClick={() => setIsLoading(true)} />
                 <RefreshCw className="w-4 h-4" />
               </DaisyButton>
             </div>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          {isLoading ? (
+        <DaisyCardContent >
+  {isLoading ? (
+</DaisyCardContent>
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2 text-blue-600" />

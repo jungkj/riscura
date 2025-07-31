@@ -84,18 +84,20 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
   // Show auth required state
   if (authRequired || !isConnected) {
     return (
-      <DaisyCard className="p-6">
-        <div className="text-center space-y-4">
-          <DaisyAlertCircle className="h-12 w-12 text-yellow-500 mx-auto" />
-          <h3 className="text-lg font-semibold">Connect Google Drive</h3>
+      <DaisyCard className="p-6" >
+  <div className="text-center space-y-4">
+</DaisyCard>
+          <DaisyAlertCircle className="h-12 w-12 text-yellow-500 mx-auto" >
+  <h3 className="text-lg font-semibold">
+</DaisyAlertCircle>Connect Google Drive</h3>
           <p className="text-gray-600">
             Connect your Google Drive account to import Excel files
           </p>
           <DaisyButton
             onClick={connect}
-            className="mx-auto"
-          >
-            Connect Google Drive
+            className="mx-auto" >
+  Connect Google Drive
+</DaisyButton>
           </DaisyButton>
         </div>
       </DaisyCard>
@@ -104,8 +106,9 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
 
   if (isLoading && files.length === 0) {
     return (
-      <DaisyCard className="p-6">
-        <div className="flex items-center justify-center">
+      <DaisyCard className="p-6" >
+  <div className="flex items-center justify-center">
+</DaisyCard>
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading files...</span>
         </div>
@@ -131,29 +134,31 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
         <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
-          variant="outline"
-        >
-          Search
+          variant="outline" >
+  Search
+</DaisyButton>
         </DaisyButton>
         <DaisyButton
           onClick={refresh}
           variant="outline"
-          disabled={isLoading}
-        >
-          <RefreshCw className="h-4 w-4" />
+          disabled={isLoading} >
+  <RefreshCw className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <DaisyAlert variant="error">
-          {error}
+        <DaisyAlert variant="error" >
+  {error}
+</DaisyAlert>
         </DaisyAlert>
       )}
 
       {/* File List */}
-      <DaisyCard className="divide-y">
-        {files.length === 0 ? (
+      <DaisyCard className="divide-y" >
+  {files.length === 0 ? (
+</DaisyCard>
           <div className="p-8 text-center text-gray-500">
             {searchQuery ? (
               <p>No Excel files found matching your search.</p>

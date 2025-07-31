@@ -80,8 +80,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
-            Simple Pricing
+          <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm" >
+  Simple Pricing
+</DaisyBadge>
           </DaisyBadge>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
             Choose your plan
@@ -120,8 +121,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <DaisyBadge className="bg-[#199BEC] text-white px-4 py-1 font-semibold">
-                      Most Popular
+                    <DaisyBadge className="bg-[#199BEC] text-white px-4 py-1 font-semibold" >
+  Most Popular
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 )}
@@ -133,19 +135,21 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                     : 'border-gray-200 hover:border-gray-300'
                   }
                 `}>
-                  <DaisyCardHeader className="text-center pb-8">
-                    <div className={`
+                  <DaisyCardHeader className="text-center pb-8" >
+  <div className={`
                       w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4
                       ${plan.popular ? 'bg-[#199BEC]/10' : 'bg-gray-100'}
                     `}>
+</DaisyCard>
                       <Icon className={`
                         w-8 h-8 
                         ${plan.popular ? 'text-[#199BEC]' : 'text-gray-600'}
                       `} />
                     </div>
                     
-                    <DaisyCardTitle className="text-2xl font-bold text-gray-900 mb-2">
-                      {plan.name}
+                    <DaisyCardTitle className="text-2xl font-bold text-gray-900 mb-2" >
+  {plan.name}
+</DaisyCardTitle>
                     </DaisyCardTitle>
                     
                     <p className="text-gray-600 text-sm mb-4">
@@ -175,8 +179,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                     </div>
                   
                   
-                  <DaisyCardContent>
-                    <ul className="space-y-3 mb-8">
+                  <DaisyCardContent >
+  <ul className="space-y-3 mb-8">
+</DaisyCardContent>
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-start space-x-3">
                           <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -238,8 +243,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
           <DaisyButton 
             variant="secondary"
             onClick={() => router.push('/contact')}
-            className="px-8 py-3"
-          >
+            className="px-8 py-3" />
             Contact Sales
           </DaisyButton>
         </motion.div>

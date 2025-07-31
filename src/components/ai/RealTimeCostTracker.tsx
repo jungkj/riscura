@@ -88,15 +88,14 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         variant="outline"
         size="sm"
         className={getPositionClasses()}
-        onClick={() => setIsVisible(true)}
-      >
+        onClick={() => setIsVisible(true)} />
         <Eye className="h-4 w-4" />
       </DaisyButton>
     );
   };
 
   return (
-    <DaisyTooltipProvider>
+    <DaisyTooltipProvider />
       <motion.div
         className={getPositionClasses()}
         initial={{ opacity: 0, scale: 0.9 }}
@@ -108,8 +107,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         transition={{ duration: 0.2 }}
       >
         <DaisyCard className={`shadow-lg border-2 ${isNearLimit ? 'border-orange-200' : 'border-gray-200'} min-w-[280px]`}>
-          <DaisyCardContent className="p-3">
-            {/* Header */}
+          <DaisyCardContent className="p-3" >
+  {/* Header */}
+</DaisyTooltipProvider>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
                 <div className={`p-1 rounded-full ${getStatusColor()}`}>
@@ -117,42 +117,41 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 </div>
                 <span className="text-sm font-medium">Usage Tracker</span>
                 {hasActiveAlerts && (
-                  <DaisyBadge variant="error" className="text-xs">
-                    {usageAlerts.length}
+                  <DaisyBadge variant="error" className="text-xs" >
+  {usageAlerts.length}
+</DaisyBadge>
                   </DaisyBadge>
                 )}
               </div>
               <div className="flex items-center space-x-1">
-                <DaisyTooltip>
-                  <DaisyTooltipTrigger asChild>
+                <DaisyTooltip />
+                  <DaisyTooltipTrigger asChild />
                     <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
-                      onClick={() => setIsExpanded(!isExpanded)}
-                    >
+                      onClick={() => setIsExpanded(!isExpanded)} />
                       {isExpanded ? 
                         <Minimize2 className="h-3 w-3" /> : 
                         <Maximize2 className="h-3 w-3" />
                       }
-                    </DaisyButton>
+                    </DaisyTooltip>
                   </DaisyTooltipTrigger>
-                  <DaisyTooltipContent>
+                  <DaisyTooltipContent />
                     {isExpanded ? 'Minimize' : 'Expand'}
                   </DaisyTooltipContent>
                 </DaisyTooltip>
-                <DaisyTooltip>
-                  <DaisyTooltipTrigger asChild>
+                <DaisyTooltip />
+                  <DaisyTooltipTrigger asChild />
                     <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
-                      onClick={() => setIsVisible(false)}
-                    >
+                      onClick={() => setIsVisible(false)} />
                       <EyeOff className="h-3 w-3" />
-                    </DaisyButton>
+                    </DaisyTooltip>
                   </DaisyTooltipTrigger>
-                  <DaisyTooltipContent>
+                  <DaisyTooltipContent />
                     Hide tracker
                   </DaisyTooltipContent>
                 </DaisyTooltip>
@@ -257,8 +256,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                           key={alert.id}
                           className="flex items-center space-x-2 p-2 bg-orange-50 rounded text-xs"
                         >
-                          <DaisyAlertTriangle className="h-3 w-3 text-orange-500" />
-                          <span className="flex-1 text-orange-700">{alert.message}</span>
+                          <DaisyAlertTriangle className="h-3 w-3 text-orange-500" >
+  <span className="flex-1 text-orange-700">
+</DaisyProgress>{alert.message}</span>
                         </div>
                       ))}
                     </div>
@@ -268,8 +268,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   {!quotaCheck.allowed && (
                     <div className="p-2 bg-red-50 rounded text-xs">
                       <div className="flex items-center space-x-2 text-red-700">
-                        <DaisyAlertTriangle className="h-3 w-3" />
-                        <span>{quotaCheck.reason}</span>
+                        <DaisyAlertTriangle className="h-3 w-3" >
+  <span>
+</DaisyAlertTriangle>{quotaCheck.reason}</span>
                       </div>
                     </div>
                   )}
@@ -280,9 +281,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                       variant="outline"
                       size="sm"
                       className="w-full text-xs"
-                      onClick={onViewDetails}
-                    >
-                      View Detailed Analytics
+                      onClick={onViewDetails} >
+  View Detailed Analytics
+</DaisyButton>
                     </DaisyButton>
                   )}
                 </motion.div>

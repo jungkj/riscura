@@ -272,13 +272,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     const [open, setOpen] = useState(false);
 
     return (
-      <DaisyPopover open={open} onOpenChange={setOpen}>
-        <DaisyPopoverTrigger asChild>
+      <DaisyPopover open={open} onOpenChange={setOpen} />
+        <DaisyPopoverTrigger asChild />
           <DaisyButton
             className="w-full justify-between text-left font-normal"
-            size="sm"
-          >
-            {value.length > 0 ? (
+            size="sm" >
+  {value.length > 0 ? (
+</DaisyPopover>
               <span>{value.length} selected</span>
             ) : (
               <span className="text-slate-500">{placeholder}</span>
@@ -286,7 +286,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </DaisyButton>
         </DaisyPopoverTrigger>
-        <DaisyPopoverContent className="w-full p-0" align="start">
+        <DaisyPopoverContent className="w-full p-0" align="start" />
           <Command>
             <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
             <CommandList>
@@ -318,30 +318,34 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   };
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Filter className="h-5 w-5" />
+</DaisyCardTitle>
             Advanced Filters
             {activeFilterCount > 0 && (
-              <DaisyBadge className="ml-2">
-                {activeFilterCount}
+              <DaisyBadge className="ml-2" >
+  {activeFilterCount}
+</DaisyBadge>
               </DaisyBadge>
             )}
           </DaisyCardTitle>
           
           <div className="flex items-center gap-2">
-            <DaisyButton size="sm" onClick={handleUndo} disabled={!canUndo}>
-              <Undo className="h-4 w-4" />
+            <DaisyButton size="sm" onClick={handleUndo} disabled={!canUndo} >
+  <Undo className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
-            <DaisyButton size="sm" onClick={clearAllFilters}>
-              <RotateCcw className="h-4 w-4" />
+            <DaisyButton size="sm" onClick={clearAllFilters} >
+  <RotateCcw className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
             <DaisyButton 
               size="sm" 
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
+              onClick={() => setIsExpanded(!isExpanded)} />
               <Settings className="h-4 w-4" />
             </DaisyButton>
           </div>
@@ -351,8 +355,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         {activeFilterCount > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             {filters.search && (
-              <DaisyBadge className="gap-1">
-                Search: "{filters.search}"
+              <DaisyBadge className="gap-1" >
+  Search: "{filters.search}"
+</DaisyBadge>
                 <X 
                   className="h-3 w-3 cursor-pointer" 
                   onClick={() => updateFilters({ search: '' })}
@@ -360,8 +365,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </DaisyBadge>
             )}
             {filters.categories.map(category => (
-              <DaisyBadge key={category} className="gap-1">
-                {category}
+              <DaisyBadge key={category} className="gap-1" >
+  {category}
+</DaisyBadge>
                 <X 
                   className="h-3 w-3 cursor-pointer"
                   onClick={() => updateFilters({ 
@@ -371,8 +377,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </DaisyBadge>
             ))}
             {filters.levels.map(level => (
-              <DaisyBadge key={level} className="gap-1">
-                {level}
+              <DaisyBadge key={level} className="gap-1" >
+  {level}
+</DaisyBadge>
                 <X 
                   className="h-3 w-3 cursor-pointer"
                   onClick={() => updateFilters({ 
@@ -386,8 +393,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       
 
       {isExpanded && (
-        <DaisyCardContent className="space-y-6">
-          {/* Search */}
+        <DaisyCardContent className="space-y-6" >
+  {/* Search */}
+</DaisyCardContent>
           <div className="space-y-2">
             <DaisyLabel>Search</DaisyLabel>
             <div className="relative">
@@ -403,15 +411,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
           {/* Saved Presets */}
           <div className="space-y-2">
-            <DaisyLabel>Quick Presets</DaisyLabel>
+            <DaisyLabel>Quick Presets</DaisyInput>
             <div className="flex flex-wrap gap-2">
               {savedPresets.map(preset => (
                 <DaisyButton
                   key={preset.id}
                   size="sm"
                   onClick={() => applyPreset(preset)}
-                  className="gap-2"
-                >
+                  className="gap-2" />
                   <Bookmark className="h-3 w-3" />
                   {preset.name}
                 </DaisyButton>
@@ -419,9 +426,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <DaisyButton
                 size="sm"
                 onClick={saveCurrentAsPreset}
-                className="gap-2"
-              >
-                <Save className="h-3 w-3" />
+                className="gap-2" >
+  <Save className="h-3 w-3" />
+</DaisyButton>
                 Save Current
               </DaisyButton>
             </div>
@@ -500,7 +507,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             </div>
 
             <div className="space-y-2">
-              <DaisyLabel>Impact Range</DaisyLabel>
+              <DaisyLabel>Impact Range</DaisyInput>
               <div className="flex items-center gap-2">
                 <DaisySelect 
                   value={filters.impactRange[0].toString()} 
@@ -508,14 +515,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     impactRange: [parseInt(value), filters.impactRange[1]]
                   })}
                 >
-                  <DaisySelectTrigger className="w-20">
-                    <DaisySelectValue />
-                  </DaisySelectTrigger>
-                  <DaisySelectContent>
+                  <DaisySelectTrigger className="w-20" />
+                    <DaisySelectValue /></DaisySelect>
+                  <DaisySelectContent />
                     {[1, 2, 3, 4, 5].map(num => (
-                      <DaisySelectItem key={num} value={num.toString()}>{num}</SelectItem>
+                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectContent>
                     ))}
-                  </SelectContent>
+                  </DaisySelectContent>
                 </DaisySelect>
                 <span>to</span>
                 <DaisySelect 
@@ -524,14 +530,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     impactRange: [filters.impactRange[0], parseInt(value)]
                   })}
                 >
-                  <DaisySelectTrigger className="w-20">
-                    <DaisySelectValue />
-                  </DaisySelectTrigger>
-                  <DaisySelectContent>
+                  <DaisySelectTrigger className="w-20" />
+                    <DaisySelectValue /></DaisySelect>
+                  <DaisySelectContent />
                     {[1, 2, 3, 4, 5].map(num => (
-                      <DaisySelectItem key={num} value={num.toString()}>{num}</SelectItem>
+                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectContent>
                     ))}
-                  </SelectContent>
+                  </DaisySelectContent>
                 </DaisySelect>
               </div>
             </div>

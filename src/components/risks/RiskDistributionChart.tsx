@@ -208,42 +208,43 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
   const DistributionIcon = getDistributionIcon(selectedDistribution);
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader>
+    <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyCard>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="flex items-center gap-2">
-            <DistributionIcon className="h-5 w-5" />
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <DistributionIcon className="h-5 w-5" />
+</DaisyCardTitle>
             Risk Distribution
           </DaisyCardTitle>
           
           <div className="flex items-center gap-2">
-            <DaisySelect value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="level">By Level</SelectItem>
-                <DaisySelectItem value="category">By Category</SelectItem>
-                <DaisySelectItem value="owner">By Owner</SelectItem>
-                <DaisySelectItem value="status">By Status</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="level">By Level</DaisySelectContent>
+                <DaisySelectItem value="category">By Category</DaisySelectItem>
+                <DaisySelectItem value="owner">By Owner</DaisySelectItem>
+                <DaisySelectItem value="status">By Status</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)}>
-              <DaisySelectTrigger className="w-24">
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="donut">Donut</SelectItem>
-                <DaisySelectItem value="bar">Bar</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)} />
+              <DaisySelectTrigger className="w-24" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="donut">Donut</DaisySelectContent>
+                <DaisySelectItem value="bar">Bar</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
         </div>
       
       
-      <DaisyCardContent>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <DaisyCardContent >
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+</DaisyCardContent>
           {/* Chart */}
           <div className="flex items-center justify-center">
             {selectedChartType === 'donut' ? (
@@ -271,8 +272,9 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <DaisyBadge className="text-xs">
-                      {item.value}
+                    <DaisyBadge className="text-xs" >
+  {item.value}
+</DaisyBadge>
                     </DaisyBadge>
                     <span className="text-xs text-slate-500">
                       {item.percentage.toFixed(1)}%

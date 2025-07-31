@@ -193,9 +193,9 @@ const KPICard: React.FC<{
           {metric.trendPercentage && (
             <DaisyBadge 
               variant={metric.trend === 'up' ? 'default' : metric.trend === 'down' ? 'destructive' : 'secondary'}
-              className="text-caption"
-            >
-              {metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : ''}
+              className="text-caption" >
+  {metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : ''}
+</DaisyBadge>
               {Math.abs(metric.trendPercentage)}%
             </DaisyBadge>
           )}
@@ -263,8 +263,9 @@ const ChartContainer: React.FC<{
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
             {realTime && (
-              <DaisyBadge variant="outline" className="text-caption">
-                <div className="w-2 h-2 bg-semantic-success rounded-full mr-enterprise-1 animate-pulse" />
+              <DaisyBadge variant="outline" className="text-caption" >
+  <div className="w-2 h-2 bg-semantic-success rounded-full mr-enterprise-1 animate-pulse" />
+</DaisyBadge>
                 Real-time
               </DaisyBadge>
             )}
@@ -272,18 +273,21 @@ const ChartContainer: React.FC<{
           
           <div className="flex items-center space-x-enterprise-2">
             {onDrillDown && (
-              <DaisyButton variant="ghost" size="sm" onClick={onDrillDown}>
-                <Target className="h-4 w-4" />
+              <DaisyButton variant="ghost" size="sm" onClick={onDrillDown} >
+  <Target className="h-4 w-4" />
+</DaisyButton>
               </DaisyButton>
             )}
             {onExpand && (
-              <DaisyButton variant="ghost" size="sm" onClick={onExpand}>
-                <Maximize2 className="h-4 w-4" />
+              <DaisyButton variant="ghost" size="sm" onClick={onExpand} >
+  <Maximize2 className="h-4 w-4" />
+</DaisyButton>
               </DaisyButton>
             )}
             {onExport && (
-              <DaisyButton variant="ghost" size="sm" onClick={onExport}>
-                <Download className="h-4 w-4" />
+              <DaisyButton variant="ghost" size="sm" onClick={onExport} >
+  <Download className="h-4 w-4" />
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -447,8 +451,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       case 'progress-rings':
         return (
           <ChartContainer title={widget.title} {...commonProps}>
-            <DaisyProgressRingsPlaceholder data={widget.data} />
-          </ChartContainer>
+            <DaisyProgressRingsPlaceholder data={widget.data} /></DaisyProgressRingsPlaceholder>
         );
 
       default:
@@ -475,23 +478,23 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
 
         <div className="flex items-center space-x-enterprise-3">
           {/* Time Range Selector */}
-          <DaisySelect value={timeRange} onValueChange={setTimeRange}>
-            <DaisySelectTrigger className="w-32">
-              <DaisySelectValue />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="1d">Last 24h</SelectItem>
-              <DaisySelectItem value="7d">Last 7 days</SelectItem>
-              <DaisySelectItem value="30d">Last 30 days</SelectItem>
-              <DaisySelectItem value="90d">Last 90 days</SelectItem>
-              <DaisySelectItem value="1y">Last year</SelectItem>
-            </SelectContent>
+          <DaisySelect value={timeRange} onValueChange={setTimeRange} />
+            <DaisySelectTrigger className="w-32" />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="1d">Last 24h</DaisySelectContent>
+              <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
+              <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
+              <DaisySelectItem value="90d">Last 90 days</DaisySelectItem>
+              <DaisySelectItem value="1y">Last year</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
 
           {/* Actions */}
           <div className="flex items-center space-x-enterprise-2">
-            <DaisyButton variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-enterprise-1" />
+            <DaisyButton variant="outline" size="sm" >
+  <Filter className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
               Filter
             </DaisyButton>
 
@@ -499,14 +502,15 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
               variant="outline" 
               size="sm" 
               onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <RefreshCw className={cn("h-4 w-4 mr-enterprise-1", refreshing && "animate-spin")} />
+              disabled={refreshing} >
+  <RefreshCw className={cn("h-4 w-4 mr-enterprise-1", refreshing && "animate-spin")} />
+</DaisyButton>
               Refresh
             </DaisyButton>
 
-            <DaisyButton variant="outline" size="sm">
-              <Share className="h-4 w-4 mr-enterprise-1" />
+            <DaisyButton variant="outline" size="sm" >
+  <Share className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
               Share
             </DaisyButton>
           </div>
@@ -524,8 +528,9 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
             </span>
           </div>
           
-          <DaisyBadge variant="outline" className="text-caption">
-            Real-time enabled
+          <DaisyBadge variant="outline" className="text-caption" >
+  Real-time enabled
+</DaisyBadge>
           </DaisyBadge>
         </div>
       )}

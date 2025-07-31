@@ -174,8 +174,9 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
     const colorClass = getRiskLevelColor(level);
     
     return (
-      <DaisyBadge variant="outline" className={colorClass}>
-        {level.toUpperCase()}
+      <DaisyBadge variant="outline" className={colorClass} >
+  {level.toUpperCase()}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -198,11 +199,13 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 
   if (error) {
     return (
-      <DaisyCard>
-        <DaisyCardContent className="p-6">
+      <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyProgress>
+</DaisyCardContent>
           <div className="text-center text-red-600">
             <p>Error loading risks: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2">
+            <DaisyButton onClick={() => window.location.reload()} className="mt-2" />
               Retry
             </DaisyButton>
           </div>
@@ -221,15 +224,16 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
             {stats.total} risks • {stats.byLevel.critical || 0} critical • {stats.byLevel.high || 0} high
           </p>
         </div>
-        <DaisyButton onClick={onCreateRisk || (() => router.push('/risks/new'))}>
+        <DaisyButton onClick={onCreateRisk || (() => router.push('/risks/new'))} />
           <Plus className="mr-2 h-4 w-4" />
           Add Risk
         </DaisyButton>
       </div>
 
       {/* Search and Filters */}
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
             <div className="relative flex-1">
@@ -246,13 +250,13 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
             <DaisyButton
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}
-              className="shrink-0"
-            >
+              className="shrink-0" />
               <Filter className="mr-2 h-4 w-4" />
               Filters
               {Object.keys(filters).length > 0 && (
-                <DaisyBadge variant="secondary" className="ml-2">
-                  {Object.keys(filters).length}
+                <DaisyBadge variant="secondary" className="ml-2" >
+  {Object.keys(filters).length}
+</DaisyInput>
                 </DaisyBadge>
               )}
             </DaisyButton>
@@ -265,53 +269,51 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 value={filters.category || ''}
                 onValueChange={(value) => setFilters({ category: value as RiskCategory })}
               >
-                <DaisySelectTrigger>
-                  <DaisySelectValue placeholder="Category" />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="">All Categories</SelectItem>
-                  <DaisySelectItem value="operational">Operational</SelectItem>
-                  <DaisySelectItem value="financial">Financial</SelectItem>
-                  <DaisySelectItem value="strategic">Strategic</SelectItem>
-                  <DaisySelectItem value="compliance">Compliance</SelectItem>
-                  <DaisySelectItem value="technology">Technology</SelectItem>
-                </SelectContent>
+                <DaisySelectTrigger />
+                  <DaisySelectValue placeholder="Category" /></DaisySelect>
+                <DaisySelectContent />
+                  <DaisySelectItem value="">All Categories</DaisySelectContent>
+                  <DaisySelectItem value="operational">Operational</DaisySelectItem>
+                  <DaisySelectItem value="financial">Financial</DaisySelectItem>
+                  <DaisySelectItem value="strategic">Strategic</DaisySelectItem>
+                  <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
+                  <DaisySelectItem value="technology">Technology</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
 
               <DaisySelect
                 value={filters.status || ''}
                 onValueChange={(value) => setFilters({ status: value as Risk['status'] })}
               >
-                <DaisySelectTrigger>
-                  <DaisySelectValue placeholder="Status" />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="">All Statuses</SelectItem>
-                  <DaisySelectItem value="identified">Identified</SelectItem>
-                  <DaisySelectItem value="assessed">Assessed</SelectItem>
-                  <DaisySelectItem value="mitigated">Mitigated</SelectItem>
-                  <DaisySelectItem value="closed">Closed</SelectItem>
-                </SelectContent>
+                <DaisySelectTrigger />
+                  <DaisySelectValue placeholder="Status" /></DaisySelect>
+                <DaisySelectContent />
+                  <DaisySelectItem value="">All Statuses</DaisySelectContent>
+                  <DaisySelectItem value="identified">Identified</DaisySelectItem>
+                  <DaisySelectItem value="assessed">Assessed</DaisySelectItem>
+                  <DaisySelectItem value="mitigated">Mitigated</DaisySelectItem>
+                  <DaisySelectItem value="closed">Closed</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
 
               <DaisySelect
                 value={filters.riskLevel || ''}
                 onValueChange={(value) => setFilters({ riskLevel: value as 'low' | 'medium' | 'high' | 'critical' })}
               >
-                <DaisySelectTrigger>
-                  <DaisySelectValue placeholder="Risk Level" />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="">All Levels</SelectItem>
-                  <DaisySelectItem value="low">Low</SelectItem>
-                  <DaisySelectItem value="medium">Medium</SelectItem>
-                  <DaisySelectItem value="high">High</SelectItem>
-                  <DaisySelectItem value="critical">Critical</SelectItem>
-                </SelectContent>
+                <DaisySelectTrigger />
+                  <DaisySelectValue placeholder="Risk Level" /></DaisySelect>
+                <DaisySelectContent />
+                  <DaisySelectItem value="">All Levels</DaisySelectContent>
+                  <DaisySelectItem value="low">Low</DaisySelectItem>
+                  <DaisySelectItem value="medium">Medium</DaisySelectItem>
+                  <DaisySelectItem value="high">High</DaisySelectItem>
+                  <DaisySelectItem value="critical">Critical</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
 
-              <DaisyButton variant="outline" onClick={clearFilters}>
-                <X className="mr-2 h-4 w-4" />
+              <DaisyButton variant="outline" onClick={clearFilters} >
+  <X className="mr-2 h-4 w-4" />
+</DaisyButton>
                 Clear Filters
               </DaisyButton>
             </div>
@@ -321,23 +323,28 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 
       {/* Bulk Actions */}
       {selectedRisks.length > 0 && (
-        <DaisyCard>
-          <DaisyCardContent className="p-4">
+        <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
                 {selectedRisks.length} risk(s) selected
               </span>
               <div className="flex gap-2">
-                <DaisyButton variant="outline" size="sm" onClick={handleBulkExport}>
-                  <Download className="mr-2 h-4 w-4" />
+                <DaisyButton variant="outline" size="sm" onClick={handleBulkExport} >
+  <Download className="mr-2 h-4 w-4" />
+</DaisyButton>
                   Export
                 </DaisyButton>
-                <DaisyButton variant="danger" size="sm" onClick={handleBulkDelete}>
-                  <Trash2 className="mr-2 h-4 w-4" />
+                <DaisyButton variant="danger" size="sm" onClick={handleBulkDelete} >
+  <Trash2 className="mr-2 h-4 w-4" />
+</DaisyButton>
                   Delete
                 </DaisyButton>
-                <DaisyButton variant="outline" size="sm" onClick={clearSelection}>
-                  Clear Selection
+                <DaisyButton variant="outline" size="sm" onClick={clearSelection} >
+  Clear Selection
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -346,84 +353,82 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
       )}
 
       {/* Risk Table */}
-      <DaisyCard>
-        <DaisyCardContent className="p-0">
-          <DaisyTable>
-            <DaisyTableHeader>
-              <DaisyTableRow>
-                <DaisyTableHead className="w-12">
+      <DaisyCard >
+  <DaisyCardContent className="p-0" >
+  </DaisyCard>
+</DaisyCardContent>
+          <DaisyTable />
+            <DaisyTableHeader />
+              <DaisyTableRow />
+                <DaisyTableHead className="w-12" />
                   <DaisyCheckbox
                     checked={selectedRisks.length === filteredRisks.length && filteredRisks.length > 0}
                     onCheckedChange={handleSelectAll}
                   />
-                </DaisyTableHead>
-                <DaisyTableHead>
+                </DaisyTable>
+                <DaisyTableHead />
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('title')}
-                    className="h-auto p-0 font-semibold"
-                  >
+                    className="h-auto p-0 font-semibold" />
                     Title
                     {sortBy === 'title' && (
                       sortDirection === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />
                     )}
                     {sortBy !== 'title' && <ArrowUpDown className="ml-2 h-4 w-4" />}
-                  </DaisyButton>
+                  </DaisyTableHead>
                 </DaisyTableHead>
                 <DaisyTableHead>Category</DaisyTableHead>
-                <DaisyTableHead>
+                <DaisyTableHead />
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('status')}
-                    className="h-auto p-0 font-semibold"
-                  >
+                    className="h-auto p-0 font-semibold" />
                     Status
                     {sortBy === 'status' && (
                       sortDirection === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />
                     )}
                     {sortBy !== 'status' && <ArrowUpDown className="ml-2 h-4 w-4" />}
-                  </DaisyButton>
+                  </DaisyTableHead>
                 </DaisyTableHead>
-                <DaisyTableHead>
+                <DaisyTableHead />
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('riskScore')}
-                    className="h-auto p-0 font-semibold"
-                  >
+                    className="h-auto p-0 font-semibold" />
                     Risk Score
                     {sortBy === 'riskScore' && (
                       sortDirection === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />
                     )}
                     {sortBy !== 'riskScore' && <ArrowUpDown className="ml-2 h-4 w-4" />}
-                  </DaisyButton>
+                  </DaisyTableHead>
                 </DaisyTableHead>
                 <DaisyTableHead>Owner</DaisyTableHead>
-                <DaisyTableHead>
+                <DaisyTableHead />
                   <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('createdAt')}
-                    className="h-auto p-0 font-semibold"
-                  >
+                    className="h-auto p-0 font-semibold" />
                     Created
                     {sortBy === 'createdAt' && (
                       sortDirection === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />
                     )}
                     {sortBy !== 'createdAt' && <ArrowUpDown className="ml-2 h-4 w-4" />}
-                  </DaisyButton>
+                  </DaisyTableHead>
                 </DaisyTableHead>
                 <DaisyTableHead className="w-12"></DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody>
+            <DaisyTableBody />
               {paginatedRisks.map((risk) => (
-                <DaisyTableRow key={risk.id} className="hover:bg-muted/50">
-                  <DaisyTableCell>
+                <DaisyTableRow key={risk.id} className="hover:bg-muted/50" />
+                  <DaisyTableCell />
                     <DaisyCheckbox
                       checked={selectedRisks.includes(risk.id)}
                       onCheckedChange={() => handleSelectRisk(risk.id)}
                     />
-                  </DaisyTableCell>
-                  <DaisyTableCell>
+                  </DaisyTableBody>
+                  <DaisyTableCell />
                     <div>
                       <div className="font-medium">{risk.title}</div>
                       <div className="text-sm text-muted-foreground truncate max-w-xs">
@@ -431,19 +436,20 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                       </div>
                     </div>
                   </DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyBadge variant="outline">
-                      {risk.category}
+                  <DaisyTableCell />
+                    <DaisyBadge variant="outline" >
+  {risk.category}
+</DaisyTableCell>
                     </DaisyBadge>
                   </DaisyTableCell>
-                  <DaisyTableCell>
+                  <DaisyTableCell />
                     <DaisyBadge
-                      variant={risk.status === 'closed' ? 'default' : 'secondary'}
-                    >
-                      {risk.status}
+                      variant={risk.status === 'closed' ? 'default' : 'secondary'} >
+  {risk.status}
+</DaisyTableCell>
                     </DaisyBadge>
                   </DaisyTableCell>
-                  <DaisyTableCell>
+                  <DaisyTableCell />
                     <div className="flex items-center space-x-2">
                       <RiskScoreProgress score={risk.riskScore} />
                       <RiskLevelBadge score={risk.riskScore} />
@@ -451,15 +457,16 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   </DaisyTableCell>
                   <DaisyTableCell>{risk.owner}</DaisyTableCell>
                   <DaisyTableCell>{formatDate(risk.createdAt)}</DaisyTableCell>
-                  <DaisyTableCell>
-                    <DaisyDropdownMenu>
-                      <DaisyDropdownMenuTrigger asChild>
-                        <DaisyButton variant="ghost" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="h-4 w-4" />
+                  <DaisyTableCell />
+                    <DaisyDropdownMenu />
+                      <DaisyDropdownMenuTrigger asChild />
+                        <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyTableCell>
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
-                      <DaisyDropdownMenuContent align="end">
-                        <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuLabel>
+                      <DaisyDropdownMenuContent align="end" />
+                        <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuContent>
                         <DaisyDropdownMenuItem
                           onClick={() => onViewRisk ? onViewRisk(risk) : router.push(`/risks/${risk.id}`)}
                         >
@@ -475,11 +482,10 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                         <DaisyDropdownMenuSeparator />
                         <DaisyDropdownMenuItem
                           onClick={() => deleteRisk(risk.id)}
-                          className="text-red-600"
-                        >
+                          className="text-red-600" />
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
-                        </DaisyDropdownMenuItem>
+                        </DaisyDropdownMenuSeparator>
                       </DaisyDropdownMenuContent>
                     </DaisyDropdownMenu>
                   </DaisyTableCell>
@@ -501,8 +507,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
+                  disabled={currentPage === 1} />
                   Previous
                 </DaisyButton>
                 <div className="flex items-center space-x-1">
@@ -512,8 +517,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                       variant={currentPage === page ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
-                      className="w-8 h-8 p-0"
-                    >
+                      className="w-8 h-8 p-0" />
                       {page}
                     </DaisyButton>
                   ))}
@@ -522,8 +526,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
+                  disabled={currentPage === totalPages} />
                   Next
                 </DaisyButton>
               </div>
@@ -534,8 +537,10 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 
       {/* Empty State */}
       {filteredRisks.length === 0 && (
-        <DaisyCard>
-          <DaisyCardContent className="p-12 text-center">
+        <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="text-muted-foreground">
               <p className="text-lg font-medium">No risks found</p>
               <p className="text-sm">
@@ -544,7 +549,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                   : 'Get started by creating your first risk.'}
               </p>
               {Object.keys(filters).length === 0 && (
-                <DaisyButton onClick={onCreateRisk || (() => router.push('/risks/new'))} className="mt-4">
+                <DaisyButton onClick={onCreateRisk || (() => router.push('/risks/new'))} className="mt-4" />
                   <Plus className="mr-2 h-4 w-4" />
                   Add Risk
                 </DaisyButton>

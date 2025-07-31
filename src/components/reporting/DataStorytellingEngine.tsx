@@ -411,12 +411,14 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               if (!viz) return null;
 
               return (
-                <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow">
-                  <DaisyCardHeader>
+                <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow" >
+  <DaisyCardHeader />
+</DaisyCard>
                     <DaisyCardTitle className="text-lg">{viz.title}</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                    <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
+        <DaisyCardContent >
+  <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
+</DaisyCardContent>
                       <div className="text-center">
                         <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
                         <p className="text-sm text-gray-600">{viz.narrative}</p>
@@ -443,22 +445,26 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                   const Icon = getInsightIcon(insight.type);
                   return (
                     <DaisyCard key={insightId} className={`border-l-4 ${getImpactColor(insight.impact)}`}>
-                      <DaisyCardContent className="pt-4">
-                        <div className="flex items-start space-x-3">
+                      <DaisyCardContent className="pt-4" >
+  <div className="flex items-start space-x-3">
+</DaisyCard>
                           <Icon className="w-5 h-5 mt-1" />
                           <div>
                             <h4 className="font-medium text-gray-900">{insight.title}</h4>
                             <p className="text-sm text-gray-600 mt-1">{insight.description}</p>
                             <div className="flex items-center space-x-2 mt-2">
-                              <DaisyBadge variant="outline" className="text-xs">
-                                {insight.confidence}% confidence
+                              <DaisyBadge variant="outline" className="text-xs" >
+  {insight.confidence}% confidence
+</DaisyBadge>
                               </DaisyBadge>
-                              <DaisyBadge variant="outline" className="text-xs capitalize">
-                                {insight.impact} impact
+                              <DaisyBadge variant="outline" className="text-xs capitalize" >
+  {insight.impact} impact
+</DaisyBadge>
                               </DaisyBadge>
                               {insight.actionable && (
-                                <DaisyBadge variant="default" className="text-xs">
-                                  Actionable
+                                <DaisyBadge variant="default" className="text-xs" >
+  Actionable
+</DaisyBadge>
                                 </DaisyBadge>
                               )}
                             </div>
@@ -506,11 +512,13 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <p className="text-blue-100 mt-1">{story.subtitle}</p>
             </div>
             <div className="flex items-center space-x-2">
-              <DaisyBadge variant="secondary" className="text-xs">
-                {story.metadata.audience}
+              <DaisyBadge variant="secondary" className="text-xs" >
+  {story.metadata.audience}
+</DaisyBadge>
               </DaisyBadge>
-              <DaisyBadge variant="secondary" className="text-xs">
-                {Math.floor(story.metadata.duration / 60)}m {story.metadata.duration % 60}s
+              <DaisyBadge variant="secondary" className="text-xs" >
+  {Math.floor(story.metadata.duration / 60)}m {story.metadata.duration % 60}s
+</DaisyBadge>
               </DaisyBadge>
             </div>
           </div>
@@ -534,26 +542,26 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               variant="outline"
               size="sm"
               onClick={previousChapter}
-              disabled={currentChapter === 0}
-            >
-              <ChevronLeft className="w-4 h-4" />
+              disabled={currentChapter === 0} >
+  <ChevronLeft className="w-4 h-4" />
+</DaisyProgress>
             </DaisyButton>
             
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={togglePlayback}
-            >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              onClick={togglePlayback} >
+  {isPlaying ? 
+</DaisyButton><Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </DaisyButton>
             
             <DaisyButton
               variant="outline"
               size="sm"
               onClick={nextChapter}
-              disabled={currentChapter === story.chapters.length - 1}
-            >
-              <ChevronRight className="w-4 h-4" />
+              disabled={currentChapter === story.chapters.length - 1} >
+  <ChevronRight className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
 
             <select
@@ -572,33 +580,30 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <DaisyButton
               variant="ghost"
               size="sm"
-              onClick={() => setNarrationEnabled(!narrationEnabled)}
-            >
+              onClick={() => setNarrationEnabled(!narrationEnabled)} />
               {narrationEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </DaisyButton>
             
             <DaisyButton
               variant="ghost"
               size="sm"
-              onClick={() => setShowInsights(!showInsights)}
-            >
+              onClick={() => setShowInsights(!showInsights)} />
               <Brain className="w-4 h-4" />
             </DaisyButton>
             
             <DaisyButton
               variant="ghost"
               size="sm"
-              onClick={() => setIsFullscreen(!isFullscreen)}
-            >
+              onClick={() => setIsFullscreen(!isFullscreen)} />
               {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
             </DaisyButton>
 
-            <DaisyButton variant="outline" size="sm" onClick={() => onShareStory?.(story)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => onShareStory?.(story)} />
               <Share className="w-4 h-4 mr-2" />
               Share
             </DaisyButton>
             
-            <DaisyButton variant="outline" size="sm" onClick={() => onSaveStory?.(story)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => onSaveStory?.(story)} />
               <Download className="w-4 h-4 mr-2" />
               Export
             </DaisyButton>
@@ -612,15 +617,18 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
       </div>
 
       {/* Story Generation Panel */}
-      <DaisyCard className="max-w-6xl mx-auto m-6">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center">
-            <Wand2 className="w-5 h-5 mr-2" />
+      <DaisyCard className="max-w-6xl mx-auto m-6" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center" >
+  <Wand2 className="w-5 h-5 mr-2" />
+</DaisyCardTitle>
             AI Story Generation
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="flex items-center justify-between">
+        <DaisyCardContent >
+  <div className="flex items-center justify-between">
+</DaisyCardContent>
             <div>
               <p className="text-gray-600">
                 Generate new data stories automatically from your risk and compliance data
@@ -632,8 +640,9 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <span>• Multi-audience optimization</span>
               </div>
             </div>
-            <DaisyButton onClick={generateStory} disabled={isGenerating}>
-              {isGenerating ? (
+            <DaisyButton onClick={generateStory} disabled={isGenerating} >
+  {isGenerating ? (
+</DaisyButton>
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                   Generating...
@@ -656,19 +665,22 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <DaisyProgress value={40} className="h-2" />
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyProgress>
       </DaisyCard>
 
       {/* Story Summary */}
-      <DaisyCard className="max-w-6xl mx-auto m-6">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center">
-            <BookOpen className="w-5 h-5 mr-2" />
+      <DaisyCard className="max-w-6xl mx-auto m-6" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center" >
+  <BookOpen className="w-5 h-5 mr-2" />
+</DaisyCardTitle>
             Story Summary
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+</DaisyCardContent>
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Key Findings</h4>
               <ul className="space-y-1 text-sm text-gray-600">

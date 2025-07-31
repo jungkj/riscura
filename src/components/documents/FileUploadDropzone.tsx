@@ -286,21 +286,25 @@ export default function FileUploadDropzone({
     switch (status) {
       case 'uploading': return <Loader2 className="w-4 h-4 animate-spin" />;
       case 'success': return <CheckCircle className="w-4 h-4" />;
-      case 'error': return <DaisyAlertCircle className="w-4 h-4" />;
+      case 'error': return <DaisyAlertCircle className="w-4 h-4" >
+  ;
+</DaisyAlertCircle>
       default: return null;
     }
   };
 
   return (
     <DaisyCard className={`w-full ${className}`}>
-      <DaisyCardHeader>
-        <DaisyCardTitle className="flex items-center gap-2">
+      <DaisyCardHeader >
+  <DaisyCardTitle className="flex items-center gap-2" />
+</DaisyCard>
           <Upload className="w-5 h-5" />
           File Upload
         </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6">
-        {/* Upload Area */}
+        <DaisyCardContent className="space-y-6" >
+  {/* Upload Area */}
+</DaisyCardContent>
         <div
           {...getRootProps()}
           className={`
@@ -326,8 +330,7 @@ export default function FileUploadDropzone({
             type="button" 
             variant="outline" 
             className="mt-4"
-            onClick={() => fileInputRef.current?.click()}
-          >
+            onClick={() => fileInputRef.current?.click()} />
             Browse Files
           </DaisyButton>
         </div>
@@ -336,17 +339,16 @@ export default function FileUploadDropzone({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <DaisyLabel htmlFor="category">Category</DaisyLabel>
-            <DaisySelect value={category} onValueChange={setCategory}>
-              <DaisySelectTrigger>
-                <DaisySelectValue placeholder="Select category" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
+            <DaisySelect value={category} onValueChange={setCategory} />
+              <DaisySelectTrigger />
+                <DaisySelectValue placeholder="Select category" /></DaisySelect>
+              <DaisySelectContent />
                 {CATEGORY_OPTIONS.map(option => (
-                  <DaisySelectItem key={option.value} value={option.value}>
+                  <DaisySelectItem key={option.value} value={option.value} />
                     {option.label}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
 
@@ -362,7 +364,7 @@ export default function FileUploadDropzone({
         </div>
 
         <div className="space-y-2">
-          <DaisyLabel htmlFor="description">Description</DaisyLabel>
+          <DaisyLabel htmlFor="description">Description</DaisyInput>
           <DaisyTextarea
             id="description"
             value={description}
@@ -381,9 +383,9 @@ export default function FileUploadDropzone({
                 variant="outline" 
                 size="sm" 
                 onClick={clearFiles}
-                disabled={uploading}
-              >
-                Clear All
+                disabled={uploading} >
+  Clear All
+</DaisyTextarea>
               </DaisyButton>
             </div>
 
@@ -437,9 +439,9 @@ export default function FileUploadDropzone({
                     <div className="flex-shrink-0">
                       <DaisyBadge 
                         variant="secondary"
-                        className={getStatusColor(fileItem.status)}
-                      >
-                        <div className="flex items-center gap-1">
+                        className={getStatusColor(fileItem.status)} >
+  <div className="flex items-center gap-1">
+</DaisyProgress>
                           {getStatusIcon(fileItem.status)}
                           <span className="capitalize">{fileItem.status}</span>
                         </div>
@@ -453,8 +455,7 @@ export default function FileUploadDropzone({
                           size="sm"
                           variant="ghost"
                           onClick={() => retryUpload(fileItem.id)}
-                          disabled={uploading}
-                        >
+                          disabled={uploading} />
                           Retry
                         </DaisyButton>
                       )}
@@ -463,8 +464,7 @@ export default function FileUploadDropzone({
                         size="sm"
                         variant="ghost"
                         onClick={() => removeFile(fileItem.id)}
-                        disabled={uploading && fileItem.status === 'uploading'}
-                      >
+                        disabled={uploading && fileItem.status === 'uploading'} />
                         <X className="w-4 h-4" />
                       </DaisyButton>
                     </div>
@@ -481,14 +481,13 @@ export default function FileUploadDropzone({
             <DaisyButton 
               variant="outline" 
               onClick={clearFiles}
-              disabled={uploading}
-            >
-              Clear All
+              disabled={uploading} >
+  Clear All
+</DaisyButton>
             </DaisyButton>
             <DaisyButton 
               onClick={uploadFiles}
-              disabled={uploading || files.every(f => f.status === 'success')}
-            >
+              disabled={uploading || files.every(f => f.status === 'success')} />
               {uploading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

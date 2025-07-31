@@ -107,8 +107,7 @@ export default function AssessmentDetailPage() {
           <DaisyButton
             variant="outline"
             onClick={() => router.back()}
-            className="flex items-center gap-2"
-          >
+            className="flex items-center gap-2" />
             <ArrowLeft className="w-4 h-4" />
             Back
           </DaisyButton>
@@ -118,12 +117,14 @@ export default function AssessmentDetailPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" onClick={handleExport}>
-            <Download className="h-4 w-4 mr-2" />
+          <DaisyButton variant="outline" onClick={handleExport} >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
             Export Report
           </DaisyButton>
-          <DaisyButton onClick={handleEdit}>
-            <Edit className="w-4 h-4 mr-2" />
+          <DaisyButton onClick={handleEdit} >
+  <Edit className="w-4 h-4 mr-2" />
+</DaisyButton>
             Edit Assessment
           </DaisyButton>
         </div>
@@ -131,13 +132,16 @@ export default function AssessmentDetailPage() {
 
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <DaisyCard>
-          <DaisyCardContent className="p-4">
+        <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Status</p>
-                <DaisyBadge className={getStatusColor(assessment.status)}>
-                  {assessment.status}
+                <DaisyBadge className={getStatusColor(assessment.status)} >
+  {assessment.status}
+</DaisyBadge>
                 </DaisyBadge>
               </div>
               <FileCheck className="h-8 w-8 text-blue-600" />
@@ -145,8 +149,10 @@ export default function AssessmentDetailPage() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardContent className="p-4">
+        <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Progress</p>
@@ -157,20 +163,25 @@ export default function AssessmentDetailPage() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardContent className="p-4">
+        <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Risks Found</p>
                 <p className="text-2xl font-bold text-gray-900">{assessment.riskCount}</p>
               </div>
-              <DaisyAlertTriangle className="h-8 w-8 text-red-600" />
-            </div>
+              <DaisyAlertTriangle className="h-8 w-8 text-red-600" >
+  </div>
+</DaisyAlertTriangle>
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardContent className="p-4">
+        <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Due Date</p>
@@ -178,14 +189,16 @@ export default function AssessmentDetailPage() {
               </div>
               <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCalendar>
         </DaisyCard>
       </div>
 
       {/* Progress Bar */}
       {assessment.status === 'In Progress' && (
-        <DaisyCard>
-          <DaisyCardContent className="p-6">
+        <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Assessment Progress</h3>
@@ -193,16 +206,16 @@ export default function AssessmentDetailPage() {
               </div>
               <DaisyProgress value={assessment.progress} className="h-3" />
             </div>
-          </DaisyCardContent>
+          </DaisyProgress>
         </DaisyCard>
       )}
 
       {/* Main Content Tabs */}
-      <DaisyTabs defaultValue="overview" className="space-y-6">
-        <DaisyTabsList className="grid w-full grid-cols-5">
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyTabs defaultValue="overview" className="space-y-6" />
+        <DaisyTabsList className="grid w-full grid-cols-5" />
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="risks">Risks ({assessment.riskCount})</DaisyTabsTrigger>
-          <DaisyTabsTrigger value="ai-controls" className="flex items-center gap-2">
+          <DaisyTabsTrigger value="ai-controls" className="flex items-center gap-2" />
             <Brain className="h-4 w-4" />
             AI Controls
           </DaisyTabsTrigger>
@@ -210,14 +223,16 @@ export default function AssessmentDetailPage() {
           <DaisyTabsTrigger value="reports">Reports</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Assessment Details</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-                <div>
+        <DaisyCardContent className="space-y-4" >
+  <div>
+</DaisyCardContent>
                   <h4 className="font-medium text-gray-900">Description</h4>
                   <p className="text-sm text-gray-600">{assessment.description}</p>
                 </div>
@@ -228,8 +243,9 @@ export default function AssessmentDetailPage() {
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900">Priority</h4>
-                    <DaisyBadge className={getPriorityColor(assessment.priority)}>
-                      {assessment.priority}
+                    <DaisyBadge className={getPriorityColor(assessment.priority)} >
+  {assessment.priority}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 </div>
@@ -246,12 +262,14 @@ export default function AssessmentDetailPage() {
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle>Assessment Objectives</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <ul className="space-y-2">
+        <DaisyCardContent >
+  <ul className="space-y-2">
+</DaisyCardContent>
                   {assessment.objectives.map((objective, index) => (
                     <li key={index} className="flex items-start space-x-2">
                       <Target className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -264,21 +282,24 @@ export default function AssessmentDetailPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="risks" className="space-y-4">
-          <DaisyCard>
-            <DaisyCardHeader>
+        <DaisyTabsContent value="risks" className="space-y-4" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle>Identified Risks</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-              <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                 {assessment.risks.map((risk) => (
                   <div key={risk.id} className="border rounded-lg p-4 hover:bg-gray-50">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <h4 className="font-medium text-gray-900">{risk.title}</h4>
                         <div className="flex items-center space-x-4 mt-2">
-                          <DaisyBadge className={getSeverityColor(risk.severity)}>
-                            {risk.severity} Risk
+                          <DaisyBadge className={getSeverityColor(risk.severity)} >
+  {risk.severity} Risk
+</DaisyBadge>
                           </DaisyBadge>
                           <span className="text-sm text-gray-600">
                             Likelihood: {risk.likelihood}
@@ -290,8 +311,9 @@ export default function AssessmentDetailPage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <DaisyBadge variant="outline">{risk.status}</DaisyBadge>
-                        <DaisyButton variant="ghost" size="sm">
-                          <Eye className="h-4 w-4" />
+                        <DaisyButton variant="ghost" size="sm" >
+  <Eye className="h-4 w-4" />
+</DaisyButton>
                         </DaisyButton>
                       </div>
                     </div>
@@ -302,13 +324,15 @@ export default function AssessmentDetailPage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="activities" className="space-y-4">
-          <DaisyCard>
-            <DaisyCardHeader>
+        <DaisyTabsContent value="activities" className="space-y-4" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle>Assessment Activities</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-              <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                 {assessment.activities.map((activity) => (
                   <div key={activity.id} className="flex items-start space-x-3 pb-4 border-b last:border-b-0">
                     <div className="flex-shrink-0">
@@ -328,7 +352,7 @@ export default function AssessmentDetailPage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="ai-controls" className="space-y-6">
+        <DaisyTabsContent value="ai-controls" className="space-y-6" />
           <div className="space-y-6">
             {/* AI Control Generator for each risk */}
             {assessment.risks.map((risk) => (
@@ -366,19 +390,22 @@ export default function AssessmentDetailPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="reports" className="space-y-4">
-          <DaisyCard>
-            <DaisyCardHeader>
+        <DaisyTabsContent value="reports" className="space-y-4" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle>Assessment Reports</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="flex flex-col items-center justify-center p-12">
-              <FileText className="h-16 w-16 text-gray-400 mb-4" />
+        <DaisyCardContent className="flex flex-col items-center justify-center p-12" >
+  <FileText className="h-16 w-16 text-gray-400 mb-4" />
+</DaisyCardContent>
               <h3 className="text-lg font-medium mb-2">No Reports Generated</h3>
               <p className="text-sm text-gray-600 text-center mb-6 max-w-md">
                 Assessment reports will be available once the assessment is completed or reaches certain milestones.
               </p>
-              <DaisyButton variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+              <DaisyButton variant="outline" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Generate Interim Report
               </DaisyButton>
             </DaisyCardContent>

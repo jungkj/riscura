@@ -34,18 +34,22 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </div>
 
       {/* Key Features */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-            <Layout className="h-5 w-5 text-[#199BEC]" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
+  <Layout className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
             Key Responsive Features Implemented
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <DaisyCardContent >
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+</DaisyCardContent>
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Device Detection
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -54,8 +58,9 @@ export const ResponsiveDesignSummary: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Adaptive Navigation
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -64,8 +69,9 @@ export const ResponsiveDesignSummary: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Touch Optimization
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -74,8 +80,9 @@ export const ResponsiveDesignSummary: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Responsive Tables
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -84,8 +91,9 @@ export const ResponsiveDesignSummary: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Content Adaptation
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -94,8 +102,9 @@ export const ResponsiveDesignSummary: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <DaisyBadge variant="success" className="gap-1">
-                <CheckCircle className="h-3 w-3" />
+              <DaisyBadge variant="success" className="gap-1" >
+  <CheckCircle className="h-3 w-3" />
+</DaisyBadge>
                 Safe Area Support
               </DaisyBadge>
               <p className="text-sm text-gray-600 font-inter">
@@ -109,15 +118,18 @@ export const ResponsiveDesignSummary: React.FC = () => {
       {/* Device-Specific Adaptations */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Mobile */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-              <Smartphone className="h-5 w-5 text-[#199BEC]" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
+  <Smartphone className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
               Mobile (≤ 768px)
             </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            <div className="space-y-3">
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-3">
+</DaisyCardContent>
               <div className="flex items-start gap-3">
                 <Move className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
@@ -172,15 +184,18 @@ export const ResponsiveDesignSummary: React.FC = () => {
         </DaisyCard>
 
         {/* Tablet */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-              <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
+  <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
               Tablet (768px - 1024px)
             </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            <div className="space-y-3">
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-3">
+</DaisyCardContent>
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
@@ -235,15 +250,18 @@ export const ResponsiveDesignSummary: React.FC = () => {
         </DaisyCard>
 
         {/* Desktop */}
-        <DaisyCard>
-          <DaisyCardHeader>
-            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter">
-              <Monitor className="h-5 w-5 text-[#199BEC]" />
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+            <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
+  <Monitor className="h-5 w-5 text-[#199BEC]" />
+</DaisyCardTitle>
               Desktop (≥ 1024px)
             </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            <div className="space-y-3">
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-3">
+</DaisyCardContent>
               <div className="flex items-start gap-3">
                 <Layout className="h-4 w-4 text-[#199BEC] mt-0.5" />
                 <div>
@@ -299,12 +317,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </div>
 
       {/* Component Adaptations */}
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Component Responsive Adaptations</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid md:grid-cols-2 gap-6">
+        <DaisyCardContent >
+  <div className="grid md:grid-cols-2 gap-6">
+</DaisyCardContent>
             <div className="space-y-4">
               <h4 className="font-semibold text-[#191919] font-inter flex items-center gap-2">
                 <BarChart className="h-4 w-4 text-[#199BEC]" />
@@ -361,12 +381,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </DaisyCard>
 
       {/* Technical Implementation */}
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Technical Implementation Details</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid md:grid-cols-2 gap-6">
+        <DaisyCardContent >
+  <div className="grid md:grid-cols-2 gap-6">
+</DaisyCardContent>
             <div className="space-y-4">
               <h4 className="font-semibold text-[#191919] font-inter">Responsive Hooks</h4>
               <div className="space-y-2 text-sm text-gray-600 font-inter">
@@ -395,12 +417,14 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </DaisyCard>
 
       {/* User Experience Features */}
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Enhanced User Experience Features</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid md:grid-cols-3 gap-4">
+        <DaisyCardContent >
+  <div className="grid md:grid-cols-3 gap-4">
+</DaisyCardContent>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Keyboard className="h-4 w-4 text-[#199BEC]" />
@@ -444,15 +468,18 @@ export const ResponsiveDesignSummary: React.FC = () => {
       </DaisyCard>
 
       {/* Implementation Status */}
-      <DaisyCard className="border-green-200 bg-green-50">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="text-green-800 font-inter flex items-center gap-2">
-            <CheckCircle className="h-5 w-5" />
+      <DaisyCard className="border-green-200 bg-green-50" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="text-green-800 font-inter flex items-center gap-2" >
+  <CheckCircle className="h-5 w-5" />
+</DaisyCardTitle>
             Implementation Complete ✅
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <p className="text-green-700 font-inter">
+        <DaisyCardContent >
+  <p className="text-green-700 font-inter">
+</DaisyCardContent>
             The RCSA platform now features a comprehensive responsive design system that seamlessly adapts to mobile, tablet, 
             and desktop devices. All components maintain the clean Notion-like aesthetic while providing optimal user 
             experiences across all screen sizes and interaction methods.

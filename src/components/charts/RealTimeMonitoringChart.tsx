@@ -349,8 +349,9 @@ export default function RealTimeMonitoringChart({
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+      <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center justify-between">
+</DaisyAlertThreshold>
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Real-Time Monitoring</DaisyCardTitle>
@@ -364,9 +365,9 @@ export default function RealTimeMonitoringChart({
               )}
               <DaisyBadge 
                 variant={isConnected ? 'default' : 'secondary'}
-                className="text-xs"
-              >
-                {isConnected ? (isPaused ? 'Paused' : 'Live') : 'Disconnected'}
+                className="text-xs" >
+  {isConnected ? (isPaused ? 'Paused' : 'Live') : 'Disconnected'}
+</DaisyBadge>
               </DaisyBadge>
             </div>
             
@@ -377,10 +378,12 @@ export default function RealTimeMonitoringChart({
                   currentStatus.status === 'healthy' ? 'default' :
                   currentStatus.status === 'warning' ? 'secondary' : 'destructive'
                 }
-                className="text-xs"
-              >
-                {currentStatus.status === 'healthy' && <CheckCircle className="w-3 h-3 mr-1" />}
-                {currentStatus.status === 'warning' && <DaisyAlertTriangle className="w-3 h-3 mr-1" />}
+                className="text-xs" >
+  {currentStatus.status === 'healthy' && 
+</DaisyBadge><CheckCircle className="w-3 h-3 mr-1" />}
+                {currentStatus.status === 'warning' && <DaisyAlertTriangle className="w-3 h-3 mr-1" >
+  }
+</DaisyAlertTriangle>
                 {currentStatus.status === 'critical' && <Zap className="w-3 h-3 mr-1" />}
                 {currentStatus.status}
               </DaisyBadge>
@@ -394,9 +397,9 @@ export default function RealTimeMonitoringChart({
                 variant="primary"
                 size="sm"
                 onClick={startMonitoring}
-                className="p-2"
-              >
-                <Play className="w-4 h-4" />
+                className="p-2" >
+  <Play className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
             ) : (
               <>
@@ -404,18 +407,18 @@ export default function RealTimeMonitoringChart({
                   variant="ghost"
                   size="sm"
                   onClick={togglePause}
-                  className="p-2"
-                >
-                  {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                  className="p-2" >
+  {isPaused ? 
+</DaisyButton><Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
                 </DaisyButton>
                 
                 <DaisyButton
                   variant="ghost"
                   size="sm"
                   onClick={stopMonitoring}
-                  className="p-2"
-                >
-                  <WifiOff className="w-4 h-4" />
+                  className="p-2" >
+  <WifiOff className="w-4 h-4" />
+</DaisyButton>
                 </DaisyButton>
               </>
             )}
@@ -424,26 +427,25 @@ export default function RealTimeMonitoringChart({
               variant="ghost"
               size="sm"
               onClick={resetData}
-              className="p-2"
-            >
-              <RotateCcw className="w-4 h-4" />
+              className="p-2" >
+  <RotateCcw className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
             
             <DaisyButton
               variant="ghost"
               size="sm"
               onClick={handleExport}
-              className="p-2"
-            >
-              <Download className="w-4 h-4" />
+              className="p-2" >
+  <Download className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
             
             <DaisyButton
               variant="ghost"
               size="sm"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2"
-            >
+              className="p-2" />
               <Maximize2 className="w-4 h-4" />
             </DaisyButton>
           </div>
@@ -473,15 +475,16 @@ export default function RealTimeMonitoringChart({
         </div>
       
 
-      <DaisyCardContent>
-        <DaisyTabs value={selectedTab} onValueChange={setSelectedTab}>
-          <DaisyTabsList className="grid w-full grid-cols-3">
-            <DaisyTabsTrigger value="monitoring">Live Data</DaisyTabsTrigger>
+      <DaisyCardContent >
+  <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} />
+</DaisyCardContent>
+          <DaisyTabsList className="grid w-full grid-cols-3" />
+            <DaisyTabsTrigger value="monitoring">Live Data</DaisyTabsList>
             <DaisyTabsTrigger value="alerts">Alerts</DaisyTabsTrigger>
             <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
           </DaisyTabsList>
           
-          <DaisyTabsContent value="monitoring" className="space-y-4">
+          <DaisyTabsContent value="monitoring" className="space-y-4" />
             {/* Current Values */}
             {currentStatus && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
@@ -557,11 +560,12 @@ export default function RealTimeMonitoringChart({
             </ResponsiveContainer>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="alerts" className="space-y-4">
+          <DaisyTabsContent value="alerts" className="space-y-4" />
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-medium">Recent Alerts</h4>
-              <DaisyBadge variant="secondary" className="text-xs">
-                {alerts.length} total
+              <DaisyBadge variant="secondary" className="text-xs" >
+  {alerts.length} total
+</DaisyTabsContent>
               </DaisyBadge>
             </div>
             
@@ -578,9 +582,9 @@ export default function RealTimeMonitoringChart({
                       <div className="flex items-center space-x-2">
                         <DaisyBadge 
                           variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}
-                          className="text-xs"
-                        >
-                          {alert.severity}
+                          className="text-xs" >
+  {alert.severity}
+</DaisyBadge>
                         </DaisyBadge>
                         <span className="font-medium text-sm">
                           {metricConfigs[alert.metric as keyof typeof metricConfigs].label}
@@ -600,7 +604,7 @@ export default function RealTimeMonitoringChart({
             </div>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="settings" className="space-y-4">
+          <DaisyTabsContent value="settings" className="space-y-4" />
             <h4 className="font-medium mb-4">Alert Thresholds</h4>
             
             <div className="space-y-4">
@@ -618,18 +622,17 @@ export default function RealTimeMonitoringChart({
                   
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <DaisyLabel className="text-xs">Condition</DaisyLabel>
+                      <DaisyLabel className="text-xs">Condition</DaisyTabsContent>
                       <DaisySelect 
                         value={threshold.condition} 
                         onValueChange={(condition: 'above' | 'below') => updateThreshold(index, { condition })}
                       >
-                        <DaisySelectTrigger className="h-8">
-                          <DaisySelectValue />
-                        </DaisySelectTrigger>
-                        <DaisySelectContent>
-                          <DaisySelectItem value="above">Above</SelectItem>
-                          <DaisySelectItem value="below">Below</SelectItem>
-                        </SelectContent>
+                        <DaisySelectTrigger className="h-8" />
+                          <DaisySelectValue /></DaisySelect>
+                        <DaisySelectContent />
+                          <DaisySelectItem value="above">Above</DaisySelectContent>
+                          <DaisySelectItem value="below">Below</DaisySelectItem>
+                        </DaisySelectContent>
                       </DaisySelect>
                     </div>
                     
@@ -649,15 +652,14 @@ export default function RealTimeMonitoringChart({
                         value={threshold.severity} 
                         onValueChange={(severity: 'low' | 'medium' | 'high' | 'critical') => updateThreshold(index, { severity })}
                       >
-                        <DaisySelectTrigger className="h-8">
-                          <DaisySelectValue />
-                        </DaisySelectTrigger>
-                        <DaisySelectContent>
-                          <DaisySelectItem value="low">Low</SelectItem>
-                          <DaisySelectItem value="medium">Medium</SelectItem>
-                          <DaisySelectItem value="high">High</SelectItem>
-                          <DaisySelectItem value="critical">Critical</SelectItem>
-                        </SelectContent>
+                        <DaisySelectTrigger className="h-8" />
+                          <DaisySelectValue /></DaisySelect>
+                        <DaisySelectContent />
+                          <DaisySelectItem value="low">Low</DaisySelectContent>
+                          <DaisySelectItem value="medium">Medium</DaisySelectItem>
+                          <DaisySelectItem value="high">High</DaisySelectItem>
+                          <DaisySelectItem value="critical">Critical</DaisySelectItem>
+                        </DaisySelectContent>
                       </DaisySelect>
                     </div>
                   </div>

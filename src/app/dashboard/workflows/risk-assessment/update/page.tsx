@@ -105,8 +105,7 @@ export default function UpdateRiskAssessmentPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4"
-            >
+              className="mb-4" />
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -116,16 +115,19 @@ export default function UpdateRiskAssessmentPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Update Risk Assessment</h1>
                 <p className="text-gray-600 mt-1">Review and update existing risk assessments</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm">
-                <Clock className="h-4 w-4 mr-1" />
+              <DaisyBadge variant="outline" className="text-sm" >
+  <Clock className="h-4 w-4 mr-1" />
+</DaisyBadge>
                 10-15 min
               </DaisyBadge>
             </div>
           </div>
 
           {/* Search Bar */}
-          <DaisyCard className="mb-6">
-            <DaisyCardContent className="p-4">
+          <DaisyCard className="mb-6" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <DaisyInput
@@ -135,21 +137,26 @@ export default function UpdateRiskAssessmentPage() {
                   className="pl-10"
                 />
               </div>
-            </DaisyCardContent>
+            </DaisyInput>
           </DaisyCard>
 
           {/* Risk List */}
           {loading ? (
-            <DaisyCard>
-              <DaisyCardContent className="p-12 text-center">
+            <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                 <p className="text-gray-500">Loading risks...</p>
               </DaisyCardContent>
             </DaisyCard>
           ) : filteredRisks.length === 0 ? (
-            <DaisyCard>
-              <DaisyCardContent className="p-12 text-center">
-                <DaisyAlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <DaisyCard >
+  <DaisyCardContent className="p-12 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
+                <DaisyAlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" >
+  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+</DaisyAlertTriangle>
                   {searchQuery ? 'No risks found' : 'No risks to update'}
                 </h3>
                 <p className="text-gray-600 mb-4">
@@ -159,8 +166,7 @@ export default function UpdateRiskAssessmentPage() {
                 </p>
                 {!searchQuery && (
                   <DaisyButton
-                    onClick={() => router.push('/dashboard/workflows/risk-assessment/new')}
-                  >
+                    onClick={() => router.push('/dashboard/workflows/risk-assessment/new')} />
                     Create New Risk
                   </DaisyButton>
                 )}
@@ -172,20 +178,22 @@ export default function UpdateRiskAssessmentPage() {
                 <DaisyCard
                   key={risk.id}
                   className="hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => handleRiskSelect(risk.id)}
-                >
-                  <DaisyCardContent className="p-6">
-                    <div className="flex items-start justify-between">
+                  onClick={() => handleRiskSelect(risk.id)} />
+                  <DaisyCardContent className="p-6" >
+  <div className="flex items-start justify-between">
+</DaisyCard>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold text-gray-900">
                             {risk.title}
                           </h3>
-                          <DaisyBadge className={getRiskScoreColor(risk.riskScore)}>
-                            {risk.riskScore.toUpperCase()}
+                          <DaisyBadge className={getRiskScoreColor(risk.riskScore)} >
+  {risk.riskScore.toUpperCase()}
+</DaisyBadge>
                           </DaisyBadge>
-                          <DaisyBadge variant="outline">
-                            {risk.category}
+                          <DaisyBadge variant="outline" >
+  {risk.category}
+</DaisyBadge>
                           </DaisyBadge>
                           {getTrendIcon(risk.trend)}
                         </div>
@@ -200,15 +208,17 @@ export default function UpdateRiskAssessmentPage() {
                             <span>Last updated: {risk.lastUpdated}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <DaisyBadge variant={risk.status === 'active' ? 'default' : 'secondary'}>
-                              {risk.status}
+                            <DaisyBadge variant={risk.status === 'active' ? 'default' : 'secondary'} >
+  {risk.status}
+</DaisyCalendar>
                             </DaisyBadge>
                           </div>
                         </div>
                       </div>
                       
-                      <DaisyButton variant="outline" size="sm">
-                        <Edit2 className="h-4 w-4 mr-2" />
+                      <DaisyButton variant="outline" size="sm" >
+  <Edit2 className="h-4 w-4 mr-2" />
+</DaisyButton>
                         Update
                       </DaisyButton>
                     </div>
@@ -220,12 +230,14 @@ export default function UpdateRiskAssessmentPage() {
 
           {/* Quick Stats */}
           {!loading && risks.length > 0 && (
-            <DaisyCard className="mt-6">
-              <DaisyCardHeader>
+            <DaisyCard className="mt-6" >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle className="text-lg">Quick Overview</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+</DaisyCardContent>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{risks.length}</p>
                     <p className="text-sm text-gray-600">Total Risks</p>

@@ -30,8 +30,9 @@ export function TextWidget({
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between">
-        <DaisyCardTitle className="text-sm font-medium">{widget.title}</DaisyCardTitle>
+      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between" >
+  <DaisyCardTitle className="text-sm font-medium">
+</DaisyCard>{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
           <DaisyButton
             variant="ghost"
@@ -55,8 +56,9 @@ export function TextWidget({
           </DaisyButton>
         </div>
       
-      <DaisyCardContent className="pt-0">
-        <div className="text-sm text-gray-700 whitespace-pre-wrap">
+      <DaisyCardContent className="pt-0" >
+  <div className="text-sm text-gray-700 whitespace-pre-wrap">
+</DaisyCardContent>
           {content}
         </div>
       </DaisyCardContent>

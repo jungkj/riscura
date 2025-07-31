@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -422,19 +422,21 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
             variant="outline" 
             size="sm" 
             onClick={handleRefreshAI}
-            disabled={refreshing || !isAIEnabled}
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            disabled={refreshing || !isAIEnabled} >
+  <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+</DaisySwitch>
             Refresh AI
           </DaisyButton>
         </div>
       </div>
 
       {!isAIEnabled && (
-        <DaisyCard className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center space-x-2">
-              <DaisyAlertTriangle className="w-5 h-5 text-yellow-600" />
+              <AlertTriangle className="w-5 h-5 text-yellow-600" />
               <p className="text-sm text-yellow-800 dark:text-yellow-600">
                 AI analysis is disabled. Enable to access predictive insights and advanced analytics.
               </p>
@@ -444,9 +446,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       )}
 
       {/* AI Analytics Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <DaisyTabsList className="grid w-full grid-cols-6">
-          <DaisyTabsTrigger value="predictive">Predictive</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
+        <DaisyTabsList className="grid w-full grid-cols-6" />
+          <DaisyTabsTrigger value="predictive">Predictive</DaisyTabs>
           <DaisyTabsTrigger value="risk">Risk Scoring</DaisyTabsTrigger>
           <DaisyTabsTrigger value="anomalies">Anomalies</DaisyTabsTrigger>
           <DaisyTabsTrigger value="sentiment">Sentiment</DaisyTabsTrigger>
@@ -455,7 +457,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsList>
 
         {/* Predictive Analytics Tab */}
-        <DaisyTabsContent value="predictive" className="space-y-6">
+        <DaisyTabsContent value="predictive" className="space-y-6" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {mockPredictiveMetrics.map((metric, index) => {
               const TrendIcon = getTrendIcon(metric.trend);
@@ -466,14 +468,17 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <DaisyCard>
-                    <DaisyCardContent className="p-6">
+                  <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-medium text-notion-text-secondary">
                           {metric.metric}
                         </h3>
-                        <DaisyBadge className={getRiskColor(metric.impact)}>
-                          {metric.impact}
+                        <DaisyBadge className={getRiskColor(metric.impact)} >
+  {metric.impact}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                       
@@ -501,7 +506,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         
                         <DaisyProgress value={metric.confidence} className="h-1" />
                       </div>
-                    </DaisyCardContent>
+                    </DaisyProgress>
                   </DaisyCard>
                 </motion.div>
               );
@@ -509,12 +514,14 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
           </div>
 
           {/* Predictive Chart */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>Predictive Trends</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent>
-              <ResponsiveContainer width="100%" height={300}>
+            </DaisyCardHeader>
+            <DaisyCardContent >
+  <ResponsiveContainer width="100%" height={300}>
+</DaisyCardContent>
                 <ComposedChart data={[
                   { name: 'Week 1', actual: 87, predicted: 89, confidence: 0.9 },
                   { name: 'Week 2', actual: 89, predicted: 91, confidence: 0.92 },
@@ -524,7 +531,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <DaisyTooltip />
+                  <Tooltip />
                   <Legend />
                   <Bar dataKey="confidence" fill="#e0e7ff" opacity={0.3} />
                   <Line type="monotone" dataKey="actual" stroke="#3b82f6" strokeWidth={2} />
@@ -536,7 +543,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsContent>
 
         {/* Risk Scoring Tab */}
-        <DaisyTabsContent value="risk" className="space-y-6">
+        <DaisyTabsContent value="risk" className="space-y-6" />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {mockRiskScores.map((risk, index) => (
               <motion.div
@@ -545,17 +552,20 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <DaisyCard>
-                  <DaisyCardHeader className="pb-3">
+                <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyTabsContent>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="text-lg">{risk.category}</DaisyCardTitle>
-                      <DaisyBadge className={getRiskColor(risk.riskLevel)}>
-                        {risk.riskLevel}
+                      <DaisyBadge className={getRiskColor(risk.riskLevel)} >
+  {risk.riskLevel}
+</DaisyBadge>
                       </DaisyBadge>
                     </div>
-                  
-                  <DaisyCardContent>
-                    <div className="space-y-4">
+                  </DaisyCardHeader>
+                  <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                       <div className="text-center">
                         <div className="text-3xl font-bold text-notion-text-primary">
                           {risk.score}
@@ -590,7 +600,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         </ul>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyProgress>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -598,7 +608,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsContent>
 
         {/* Anomaly Detection Tab */}
-        <DaisyTabsContent value="anomalies" className="space-y-6">
+        <DaisyTabsContent value="anomalies" className="space-y-6" />
           <div className="space-y-4">
             {mockAnomalies.map((anomaly, index) => (
               <motion.div
@@ -607,13 +617,16 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <DaisyCard className={anomaly.severity === 'high' ? 'border-red-200 dark:border-red-800' : ''}>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard className={anomaly.severity === 'high' ? 'border-red-200 dark:border-red-800' : ''} >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge className={getRiskColor(anomaly.severity)}>
-                            {anomaly.severity}
+                          <DaisyBadge className={getRiskColor(anomaly.severity)} >
+  {anomaly.severity}
+</DaisyBadge>
                           </DaisyBadge>
                           <DaisyBadge variant="outline">{anomaly.type.replace('_', ' ')}</DaisyBadge>
                           <span className="text-xs text-notion-text-tertiary">
@@ -655,8 +668,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                       </div>
                       
                       {anomaly.requiresReview && (
-                        <DaisyButton variant="outline" size="sm">
-                          <Eye className="w-4 h-4 mr-2" />
+                        <DaisyButton variant="outline" size="sm" >
+  <Eye className="w-4 h-4 mr-2" />
+</DaisyProgress>
                           Review
                         </DaisyButton>
                       )}
@@ -669,24 +683,30 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsContent>
 
         {/* Sentiment Analysis Tab */}
-        <DaisyTabsContent value="sentiment" className="space-y-6">
+        <DaisyTabsContent value="sentiment" className="space-y-6" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <DaisyCard>
-              <DaisyCardContent className="p-6 text-center">
+            <DaisyCard >
+  <DaisyCardContent className="p-6 text-center" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                 <ThumbsUp className="w-8 h-8 text-green-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-green-600">68%</div>
                 <div className="text-sm text-notion-text-secondary">Positive</div>
               </DaisyCardContent>
             </DaisyCard>
-            <DaisyCard>
-              <DaisyCardContent className="p-6 text-center">
+            <DaisyCard >
+  <DaisyCardContent className="p-6 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                 <Minus className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-gray-600">22%</div>
                 <div className="text-sm text-notion-text-secondary">Neutral</div>
               </DaisyCardContent>
             </DaisyCard>
-            <DaisyCard>
-              <DaisyCardContent className="p-6 text-center">
+            <DaisyCard >
+  <DaisyCardContent className="p-6 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                 <ThumbsDown className="w-8 h-8 text-red-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-red-600">10%</div>
                 <div className="text-sm text-notion-text-secondary">Negative</div>
@@ -704,16 +724,19 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <DaisyCard>
-                    <DaisyCardContent className="p-4">
+                  <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="flex items-start space-x-3">
                         <SentimentIcon className={`w-5 h-5 mt-1 ${getSentimentColor(sentiment.sentiment)}`} />
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium text-notion-text-primary">{sentiment.source}</h4>
                             <div className="flex items-center space-x-2">
-                              <DaisyBadge variant="outline" className="text-xs">
-                                {sentiment.confidence}% confidence
+                              <DaisyBadge variant="outline" className="text-xs" >
+  {sentiment.confidence}% confidence
+</DaisyBadge>
                               </DaisyBadge>
                               <span className="text-xs text-notion-text-tertiary">
                                 {new Date(sentiment.timestamp).toLocaleString()}
@@ -728,8 +751,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                           <div className="flex items-center space-x-2">
                             <span className="text-xs text-notion-text-tertiary">Keywords:</span>
                             {sentiment.keywords.map((keyword, i) => (
-                              <DaisyBadge key={i} variant="secondary" className="text-xs">
-                                {keyword}
+                              <DaisyBadge key={i} variant="secondary" className="text-xs" >
+  {keyword}
+</DaisyBadge>
                               </DaisyBadge>
                             ))}
                           </div>
@@ -744,7 +768,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsContent>
 
         {/* Pattern Recognition Tab */}
-        <DaisyTabsContent value="patterns" className="space-y-6">
+        <DaisyTabsContent value="patterns" className="space-y-6" />
           <div className="space-y-4">
             {mockPatternInsights.map((pattern, index) => (
               <motion.div
@@ -753,20 +777,24 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <DaisyCard>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge className={getRiskColor(pattern.significance)}>
-                            {pattern.significance}
+                          <DaisyBadge className={getRiskColor(pattern.significance)} >
+  {pattern.significance}
+</DaisyBadge>
                           </DaisyBadge>
                           <span className="text-sm text-notion-text-tertiary">
                             {pattern.frequency}% frequency
                           </span>
                           {pattern.actionable && (
-                            <DaisyBadge variant="outline" className="text-xs">
-                              Actionable
+                            <DaisyBadge variant="outline" className="text-xs" >
+  Actionable
+</DaisyBadge>
                             </DaisyBadge>
                           )}
                         </div>
@@ -798,7 +826,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         <DaisyProgress value={pattern.frequency} className="w-16 h-2" />
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyProgress>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -806,7 +834,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         </DaisyTabsContent>
 
         {/* Automated Insights Tab */}
-        <DaisyTabsContent value="insights" className="space-y-6">
+        <DaisyTabsContent value="insights" className="space-y-6" />
           <div className="space-y-4">
             {mockAutomatedInsights.map((insight, index) => {
               const IconComponent = getInsightTypeIcon(insight.type);
@@ -817,8 +845,10 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <DaisyCard className={insight.priority === 'urgent' ? 'border-red-200 dark:border-red-800' : ''}>
-                    <DaisyCardContent className="p-6">
+                  <DaisyCard className={insight.priority === 'urgent' ? 'border-red-200 dark:border-red-800' : ''} >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                       <div className="flex items-start space-x-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                           insight.type === 'opportunity' ? 'bg-green-100 dark:bg-green-900/20' :
@@ -840,8 +870,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                               {insight.title}
                             </h3>
                             <div className="flex items-center space-x-2">
-                              <DaisyBadge className={getRiskColor(insight.priority)}>
-                                {insight.priority}
+                              <DaisyBadge className={getRiskColor(insight.priority)} >
+  {insight.priority}
+</DaisyBadge>
                               </DaisyBadge>
                               <span className="text-xs text-notion-text-tertiary">
                                 {insight.confidence}% confidence

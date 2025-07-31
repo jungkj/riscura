@@ -192,9 +192,9 @@ export function EnterpriseRiskDashboard() {
             size="sm" 
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center space-x-2"
-          >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+            className="flex items-center space-x-2" >
+  <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+</DaisyButton>
             <span>Refresh AI Analysis</span>
           </DaisyButton>
         </div>
@@ -203,8 +203,10 @@ export function EnterpriseRiskDashboard() {
       {/* Key Risk Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {riskMetrics.map((metric) => (
-          <DaisyCard key={metric.id} className="bg-white border-gray-200">
-            <DaisyCardContent className="p-6">
+          <DaisyCard key={metric.id} className="bg-white border-gray-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-gray-600">{metric.title}</h3>
                 {getTrendIcon(metric.trend)}
@@ -225,29 +227,33 @@ export function EnterpriseRiskDashboard() {
                   className="h-2"
                 />
               </div>
-            </DaisyCardContent>
+            </DaisyProgress>
           </DaisyCard>
         ))}
       </div>
 
       {/* AI-Powered Insights */}
-      <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-600 rounded-lg">
+      <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center space-x-3" >
+  <div className="p-2 bg-blue-600 rounded-lg">
+</DaisyCardTitle>
               <Brain className="w-5 h-5 text-white" />
             </div>
             <div>
               <span className="text-lg font-bold">AI Risk Intelligence</span>
               <p className="text-sm text-gray-600 font-normal">Machine learning insights and predictions</p>
             </div>
-            <DaisyBadge className="bg-blue-600 text-white">
-              {aiInsights.length} Insights
+            <DaisyBadge className="bg-blue-600 text-white" >
+  {aiInsights.length} Insights
+</DaisyBadge>
             </DaisyBadge>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-          {aiInsights.map((insight) => (
+        <DaisyCardContent className="space-y-4" >
+  {aiInsights.map((insight) => (
+</DaisyCardContent>
             <div 
               key={insight.id} 
               className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
@@ -285,8 +291,9 @@ export function EnterpriseRiskDashboard() {
                   <DaisyProgress value={insight.confidence} className="w-20 h-2" />
                 </div>
                 {insight.action && (
-                  <DaisyButton size="sm" variant="outline" className="text-xs">
-                    {insight.action}
+                  <DaisyButton size="sm" variant="outline" className="text-xs" >
+  {insight.action}
+</DaisyProgress>
                   </DaisyButton>
                 )}
               </div>
@@ -297,8 +304,10 @@ export function EnterpriseRiskDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <DaisyCard className="bg-white border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
-          <DaisyCardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-blue-300 transition-colors cursor-pointer" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="p-3 bg-blue-50 rounded-lg w-fit mx-auto mb-3">
               <Activity className="w-6 h-6 text-blue-600" />
             </div>
@@ -307,8 +316,10 @@ export function EnterpriseRiskDashboard() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer">
-          <DaisyCardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="p-3 bg-green-50 rounded-lg w-fit mx-auto mb-3">
               <Shield className="w-6 h-6 text-green-600" />
             </div>
@@ -317,8 +328,10 @@ export function EnterpriseRiskDashboard() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer">
-          <DaisyCardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="p-3 bg-purple-50 rounded-lg w-fit mx-auto mb-3">
               <Globe className="w-6 h-6 text-purple-600" />
             </div>
@@ -327,8 +340,10 @@ export function EnterpriseRiskDashboard() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer">
-          <DaisyCardContent className="p-4 text-center">
+        <DaisyCard className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="p-3 bg-orange-50 rounded-lg w-fit mx-auto mb-3">
               <BarChart3 className="w-6 h-6 text-orange-600" />
             </div>

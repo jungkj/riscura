@@ -184,26 +184,23 @@ export function MatrixQuestionComponent({
                         size="sm"
                         onClick={() => handleResponse(row.id, column.id, true)}
                         disabled={readonly}
-                        className="w-8 h-8 p-0"
-                      >
+                        className="w-8 h-8 p-0" />
                         {column.value}
                       </DaisyButton>
                     ) : (
                       <DaisySelect
                         value={responses[row.id] || ''}
                         onValueChange={(value) => handleResponse(row.id, value, true)}
-                        disabled={readonly}
-                      >
-                        <DaisySelectTrigger className="w-full">
-                          <DaisySelectValue placeholder="Select..." />
-                        </DaisySelectTrigger>
-                        <DaisySelectContent>
+                        disabled={readonly} />
+                        <DaisySelectTrigger className="w-full" />
+                          <DaisySelectValue placeholder="Select..." /></DaisySelect>
+                        <DaisySelectContent />
                           {displayColumns.map((col) => (
-                            <DaisySelectItem key={col.id} value={col.id}>
+                            <DaisySelectItem key={col.id} value={col.id} />
                               {col.text}
-                            </SelectItem>
+                            </DaisySelectContent>
                           ))}
-                        </SelectContent>
+                        </DaisySelectContent>
                       </DaisySelect>
                     )}
                   </td>
@@ -353,8 +350,7 @@ export function RankingQuestionComponent({
                         <DaisyButton
                           variant="ghost"
                           size="sm"
-                          onClick={() => removeFromRanking(itemId)}
-                        >
+                          onClick={() => removeFromRanking(itemId)} />
                           <Trash2 className="w-4 h-4" />
                         </DaisyButton>
                       </div>
@@ -368,12 +364,15 @@ export function RankingQuestionComponent({
       </div>
 
       {config.minRankings && rankedItems.length < config.minRankings && (
-        <DaisyAlert>
-          <DaisyAlertTriangle className="w-4 h-4" />
-          <DaisyAlertDescription>
-            Please rank at least {config.minRankings} items.
-          
-        </DaisyAlert>
+        <DaisyAlert >
+  <DaisyAlertTriangle className="w-4 h-4" />
+</DaisyAlert>
+          <DaisyAlertDescription >
+  Please rank at least {config.minRankings} items.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       )}
     </div>
   );
@@ -465,12 +464,15 @@ export function ImageQuestionComponent({
   return (
     <div className="space-y-4">
       {config.selectionType === 'hotspot' && (
-        <DaisyAlert>
-          <Info className="w-4 h-4" />
-          <DaisyAlertDescription>
-            Click on the image to mark important areas or points of interest.
-          
-        </DaisyAlert>
+        <DaisyAlert >
+  <Info className="w-4 h-4" />
+</DaisyAlert>
+          <DaisyAlertDescription >
+  Click on the image to mark important areas or points of interest.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -537,9 +539,10 @@ export function ImageQuestionComponent({
               className="hidden"
               id="image-upload"
             />
-            <DaisyLabel htmlFor="image-upload" className="cursor-pointer">
-              <DaisyButton variant="outline" size="sm" asChild>
-                <span>Choose File</span>
+            <DaisyLabel htmlFor="image-upload" className="cursor-pointer" />
+              <DaisyButton variant="outline" size="sm" asChild >
+  <span>
+</DaisyInput>Choose File</span>
               </DaisyButton>
             </DaisyLabel>
           </div>
@@ -669,8 +672,9 @@ export function SignatureQuestionComponent({
           </div>
           
           {config.clearable && (
-            <DaisyButton variant="outline" size="sm" onClick={clearSignature}>
-              <RotateCcw className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" onClick={clearSignature} >
+  <RotateCcw className="w-4 h-4 mr-2" />
+</DaisyButton>
               Clear
             </DaisyButton>
           )}
@@ -684,12 +688,15 @@ export function SignatureQuestionComponent({
       )}
 
       {config.required && !signature && (
-        <DaisyAlert>
-          <DaisyAlertTriangle className="w-4 h-4" />
-          <DaisyAlertDescription>
-            Signature is required to continue.
-          
-        </DaisyAlert>
+        <DaisyAlert >
+  <DaisyAlertTriangle className="w-4 h-4" />
+</DaisyAlert>
+          <DaisyAlertDescription >
+  Signature is required to continue.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       )}
     </div>
   );
@@ -777,11 +784,13 @@ export function LocationQuestionComponent({
             onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
             disabled={readonly}
           />
-          <DaisyButton onClick={searchLocation} disabled={isSearching || readonly}>
-            {isSearching ? 'Searching...' : 'Search'}
+          <DaisyButton onClick={searchLocation} disabled={isSearching || readonly} >
+  {isSearching ? 'Searching...' : 'Search'}
+</DaisyInput>
           </DaisyButton>
-          <DaisyButton variant="outline" onClick={getCurrentLocation} disabled={readonly}>
-            <MapPin className="w-4 h-4 mr-2" />
+          <DaisyButton variant="outline" onClick={getCurrentLocation} disabled={readonly} >
+  <MapPin className="w-4 h-4 mr-2" />
+</DaisyButton>
             Current
           </DaisyButton>
         </div>
@@ -814,16 +823,15 @@ export function LocationQuestionComponent({
 
         {/* Mock satellite view toggle */}
         <div className="p-2 border-t bg-gray-50 flex justify-between items-center">
-          <DaisySelect value={config.mapType} disabled>
-            <DaisySelectTrigger className="w-32">
-              <DaisySelectValue />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="roadmap">Roadmap</SelectItem>
-              <DaisySelectItem value="satellite">Satellite</SelectItem>
-              <DaisySelectItem value="terrain">Terrain</SelectItem>
-              <DaisySelectItem value="hybrid">Hybrid</SelectItem>
-            </SelectContent>
+          <DaisySelect value={config.mapType} disabled />
+            <DaisySelectTrigger className="w-32" />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="roadmap">Roadmap</DaisySelectContent>
+              <DaisySelectItem value="satellite">Satellite</DaisySelectItem>
+              <DaisySelectItem value="terrain">Terrain</DaisySelectItem>
+              <DaisySelectItem value="hybrid">Hybrid</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
           
           <div className="text-sm text-gray-600">
@@ -839,12 +847,15 @@ export function LocationQuestionComponent({
       )}
 
       {config.requireAccuracy && !selectedLocation && (
-        <DaisyAlert>
-          <DaisyAlertTriangle className="w-4 h-4" />
-          <DaisyAlertDescription>
-            Please select a location to continue.
-          
-        </DaisyAlert>
+        <DaisyAlert >
+  <DaisyAlertTriangle className="w-4 h-4" />
+</DaisyAlert>
+          <DaisyAlertDescription >
+  Please select a location to continue.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
       )}
     </div>
   );
@@ -916,32 +927,33 @@ export function CustomHTMLQuestionComponent({
           <DaisyButton
             variant="outline"
             size="sm"
-            onClick={() => setShowCode(!showCode)}
-          >
+            onClick={() => setShowCode(!showCode)} />
             <Code2 className="w-4 h-4 mr-2" />
             {showCode ? 'Hide Code' : 'Show Code'}
           </DaisyButton>
           {config.sandbox && (
-            <DaisyBadge variant="secondary" className="text-xs">
-              Sandboxed
+            <DaisyBadge variant="secondary" className="text-xs" >
+  Sandboxed
+</DaisyBadge>
             </DaisyBadge>
           )}
         </div>
       </div>
 
       {showCode && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle className="text-sm">HTML Content</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-            <DaisyTextarea
+        <DaisyCardContent >
+  <DaisyTextarea
               value={config.htmlContent}
               readOnly
               rows={8}
               className="font-mono text-sm"
             />
-          </DaisyCardContent>
+</DaisyCardContent></DaisyTextarea>
         </DaisyCard>
       )}
 
@@ -955,14 +967,16 @@ export function CustomHTMLQuestionComponent({
       </div>
 
       {config.allowUserInput && config.inputFields && config.inputFields.length > 0 && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle className="text-sm">Additional Input</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            {config.inputFields.map((field) => (
+        <DaisyCardContent className="space-y-4" >
+  {config.inputFields.map((field) => (
+</DaisyCardContent>
               <div key={field.name}>
-                <DaisyLabel htmlFor={field.name}>
+                <DaisyLabel htmlFor={field.name} />
                   {field.name}
                   {field.required && <span className="text-red-500 ml-1">*</span>}
                 </DaisyLabel>
@@ -984,7 +998,7 @@ export function CustomHTMLQuestionComponent({
                 )}
               </div>
             ))}
-          </DaisyCardContent>
+          </DaisyTextarea>
         </DaisyCard>
       )}
     </div>

@@ -113,8 +113,10 @@ export function AnalyticsCards({ analytics, className }: AnalyticsCardsProps) {
           whileHover={{ scale: 1.02 }}
           className="h-full"
         >
-          <DaisyCard className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200 h-full">
-            <DaisyCardContent className="p-5">
+          <DaisyCard className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200 h-full" >
+  <DaisyCardContent className="p-5" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="flex items-center justify-between h-full">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-notion-text-secondary mb-1 truncate">
@@ -150,8 +152,10 @@ export function AnalyticsCardsSkeleton({ className }: { className?: string }) {
       className
     )}>
       {Array.from({ length: 6 }).map((_, index) => (
-        <DaisyCard key={index} className="border-notion-border bg-white dark:bg-notion-bg-secondary">
-          <DaisyCardContent className="p-5">
+        <DaisyCard key={index} className="border-notion-border bg-white dark:bg-notion-bg-secondary" >
+  <DaisyCardContent className="p-5" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-24 animate-pulse" />

@@ -421,8 +421,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         }}
         onClick={() => setSelectedComponent(component.id)}
       >
-        <DaisyCardHeader className="pb-2">
-          <DaisyCardTitle className="flex items-center justify-between text-sm">
+        <DaisyCardHeader className="pb-2" >
+  <DaisyCardTitle className="flex items-center justify-between text-sm" />
+</DaisyCard>
             <div className="flex items-center space-x-2">
               <Icon className="w-4 h-4" />
               <span>{component.title}</span>
@@ -451,8 +452,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             </div>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="pt-0">
-          {renderComponentContent(component)}
+        <DaisyCardContent className="pt-0" >
+  {renderComponentContent(component)}
+</DaisyCardContent>
         </DaisyCardContent>
       </DaisyCard>
     );
@@ -492,8 +494,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               {component.data?.frameworks?.slice(0, 2).map((framework: any, index: number) => (
                 <div key={index} className="flex items-center justify-between text-sm">
                   <span>{framework.name}</span>
-                  <DaisyBadge variant={framework.status === 'compliant' ? 'default' : 'secondary'}>
-                    {framework.score}%
+                  <DaisyBadge variant={framework.status === 'compliant' ? 'default' : 'secondary'} >
+  {framework.score}%
+</DaisyBadge>
                   </DaisyBadge>
                 </div>
               ))}
@@ -520,8 +523,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               <div key={index} className="p-2 bg-purple-50 rounded">
                 <div className="font-medium text-sm">{rec.title}</div>
                 <div className="text-xs text-gray-600">{rec.description}</div>
-                <DaisyBadge variant="outline" className="text-xs mt-1">
-                  {rec.confidence}% confidence
+                <DaisyBadge variant="outline" className="text-xs mt-1" >
+  {rec.confidence}% confidence
+</DaisyBadge>
                 </DaisyBadge>
               </div>
             ))}
@@ -560,8 +564,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => loadTemplate(template.id)}
-                >
+                  onClick={() => loadTemplate(template.id)} />
                   <FileText className="w-4 h-4 mr-2" />
                   {template.name}
                 </DaisyButton>
@@ -616,8 +619,9 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 className="font-semibold text-lg border-none p-0 h-auto focus:ring-0"
                 placeholder="Report Title"
               />
-              <DaisyBadge variant="secondary" className="text-xs">
-                {components.length} components
+              <DaisyBadge variant="secondary" className="text-xs" >
+  {components.length} components
+</DaisyInput>
               </DaisyBadge>
             </div>
             
@@ -625,22 +629,21 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowComponentLibrary(!showComponentLibrary)}
-              >
+                onClick={() => setShowComponentLibrary(!showComponentLibrary)} />
                 <Layout className="w-4 h-4" />
               </DaisyButton>
               
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsPreviewMode(!isPreviewMode)}
-              >
+                onClick={() => setIsPreviewMode(!isPreviewMode)} />
                 <Eye className="w-4 h-4" />
                 {isPreviewMode ? 'Edit' : 'Preview'}
               </DaisyButton>
               
-              <DaisyButton variant="outline" size="sm" onClick={saveReport}>
-                <Save className="w-4 h-4 mr-2" />
+              <DaisyButton variant="outline" size="sm" onClick={saveReport} >
+  <Save className="w-4 h-4 mr-2" />
+</DaisyButton>
                 Save
               </DaisyButton>
               
@@ -649,8 +652,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                   variant="outline"
                   size="sm"
                   onClick={() => exportReport('pdf')}
-                  disabled={isGenerating}
-                >
+                  disabled={isGenerating} />
                   <Download className="w-4 h-4 mr-2" />
                   {isGenerating ? 'Generating...' : 'Export'}
                 </DaisyButton>
@@ -685,7 +687,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 <p className="text-sm mb-4">
                   Drag components from the sidebar or choose a template to get started
                 </p>
-                <DaisyButton onClick={() => loadTemplate('executive-summary')}>
+                <DaisyButton onClick={() => loadTemplate('executive-summary')} />
                   <Plus className="w-4 h-4 mr-2" />
                   Use Executive Summary Template
                 </DaisyButton>

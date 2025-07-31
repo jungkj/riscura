@@ -71,8 +71,9 @@ const InteractiveDemo = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <DaisyBadge className="bg-[#199BEC] text-white px-4 py-2 mb-4">
-            Interactive Demo
+          <DaisyBadge className="bg-[#199BEC] text-white px-4 py-2 mb-4" >
+  Interactive Demo
+</DaisyBadge>
           </DaisyBadge>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Try It Yourself
@@ -83,9 +84,10 @@ const InteractiveDemo = () => {
         </div>
 
         {/* Interactive Demo Area */}
-        <DaisyCard className="border-2 border-gray-200 shadow-xl overflow-hidden">
-          <DaisyCardContent className="p-0">
-            
+        <DaisyCard className="border-2 border-gray-200 shadow-xl overflow-hidden" >
+  <DaisyCardContent className="p-0" >
+  </DaisyCard>
+</DaisyCardContent>
             {/* Step 1: Upload Area */}
             {!uploadedFiles.length && !isAnalyzing && !showResults && (
               <div className="p-8">
@@ -217,26 +219,34 @@ const InteractiveDemo = () => {
 
                 {/* Results Summary */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                  <DaisyCard className="bg-red-50 border-red-200">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="bg-red-50 border-red-200" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold text-red-600">1</div>
                       <div className="text-sm text-red-700">High Risk</div>
                     </DaisyCardContent>
                   </DaisyCard>
-                  <DaisyCard className="bg-yellow-50 border-yellow-200">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="bg-yellow-50 border-yellow-200" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold text-yellow-600">2</div>
                       <div className="text-sm text-yellow-700">Medium Risk</div>
                     </DaisyCardContent>
                   </DaisyCard>
-                  <DaisyCard className="bg-green-50 border-green-200">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="bg-green-50 border-green-200" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold text-green-600">1</div>
                       <div className="text-sm text-green-700">Low Risk</div>
                     </DaisyCardContent>
                   </DaisyCard>
-                  <DaisyCard className="bg-blue-50 border-blue-200">
-                    <DaisyCardContent className="p-4 text-center">
+                  <DaisyCard className="bg-blue-50 border-blue-200" >
+  <DaisyCardContent className="p-4 text-center" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="text-2xl font-bold text-blue-600">4</div>
                       <div className="text-sm text-blue-700">Total Risks</div>
                     </DaisyCardContent>
@@ -265,9 +275,9 @@ const InteractiveDemo = () => {
                           variant={
                             result.risk === 'High' ? 'destructive' : 
                             result.risk === 'Medium' ? 'secondary' : 'default'
-                          }
-                        >
-                          {result.risk} Risk
+                          } >
+  {result.risk} Risk
+</DaisyBadge>
                         </DaisyBadge>
                         <div className="text-right">
                           <div className="font-semibold text-gray-900">Score: {result.score}</div>
@@ -279,21 +289,24 @@ const InteractiveDemo = () => {
 
                 {/* Action Buttons */}
                 <div className="flex justify-center space-x-4">
-                  <DaisyButton variant="outline" onClick={handleReset}>
-                    Try Again
+                  <DaisyButton variant="outline" onClick={handleReset} >
+  Try Again
+</DaisyButton>
                   </DaisyButton>
-                  <DaisyButton className="bg-blue-600 hover:bg-blue-700">
-                    <Download className="w-4 h-4 mr-2" />
+                  <DaisyButton className="bg-blue-600 hover:bg-blue-700" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
                     Export Report
                   </DaisyButton>
-                  <DaisyButton variant="outline">
-                    <Eye className="w-4 h-4 mr-2" />
+                  <DaisyButton variant="outline" >
+  <Eye className="w-4 h-4 mr-2" />
+</DaisyButton>
                     View Dashboard
                   </DaisyButton>
                 </div>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
 
         {/* Call to Action */}
@@ -307,8 +320,9 @@ const InteractiveDemo = () => {
             <p className="text-gray-600 mb-4">
               This is just a preview. The full platform offers much more!
             </p>
-            <DaisyButton size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <Sparkles className="w-5 h-5 mr-2" />
+            <DaisyButton size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" >
+  <Sparkles className="w-5 h-5 mr-2" />
+</DaisyButton>
               Get Full Access
             </DaisyButton>
           </motion.div>

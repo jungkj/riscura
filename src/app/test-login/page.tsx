@@ -44,14 +44,17 @@ export default function TestLoginPage() {
           Login Status Test Page
         </h1>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Authentication Status</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <DaisyBadge variant={isAuthenticated ? "default" : "destructive"}>
-                {isAuthenticated ? "Authenticated" : "Not Authenticated"}
+        <DaisyCardContent className="space-y-4" >
+  <div className="flex items-center space-x-4">
+</DaisyCardContent>
+              <DaisyBadge variant={isAuthenticated ? "default" : "destructive"} >
+  {isAuthenticated ? "Authenticated" : "Not Authenticated"}
+</DaisyBadge>
               </DaisyBadge>
               {isAuthenticated && <LoginStatus />}
             </div>
@@ -65,19 +68,22 @@ export default function TestLoginPage() {
             )}
 
             {isAuthenticated && (
-              <DaisyButton onClick={handleLogout} variant="outline">
-                Logout
+              <DaisyButton onClick={handleLogout} variant="outline" >
+  Logout
+</DaisyButton>
               </DaisyButton>
             )}
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Token Storage Debug Info</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-            <div className="space-y-2 font-mono text-sm">
+        <DaisyCardContent >
+  <div className="space-y-2 font-mono text-sm">
+</DaisyCardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p><strong>Has Token:</strong> {tokenInfo.hasToken ? 'Yes' : 'No'}</p>
@@ -94,12 +100,14 @@ export default function TestLoginPage() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Test Instructions</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-            <div className="space-y-2">
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-2">
+</DaisyCardContent>
               <h3 className="font-semibold">To test "Stay logged in" feature:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
                 <li>Go to the login page (/auth/login)</li>

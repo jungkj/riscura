@@ -80,8 +80,9 @@ export const SharePointFileBrowser: React.FC<Props> = ({
 
   if (isLoading && files.length === 0) {
     return (
-      <DaisyCard className="p-6">
-        <div className="flex items-center justify-center">
+      <DaisyCard className="p-6" >
+  <div className="flex items-center justify-center">
+</DaisyCard>
           <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           <span className="ml-2">Loading files...</span>
         </div>
@@ -107,16 +108,16 @@ export const SharePointFileBrowser: React.FC<Props> = ({
         <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
-          variant="outline"
-        >
-          Search
+          variant="outline" >
+  Search
+</DaisyButton>
         </DaisyButton>
         <DaisyButton
           onClick={refresh}
           variant="outline"
-          disabled={isLoading}
-        >
-          <RefreshCw className="h-4 w-4" />
+          disabled={isLoading} >
+  <RefreshCw className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
       </div>
 
@@ -141,14 +142,16 @@ export const SharePointFileBrowser: React.FC<Props> = ({
 
       {/* Error Alert */}
       {error && (
-        <DaisyAlert variant="error">
-          {error}
+        <DaisyAlert variant="error" >
+  {error}
+</DaisyAlert>
         </DaisyAlert>
       )}
 
       {/* File List */}
-      <DaisyCard className="divide-y">
-        {files.length === 0 ? (
+      <DaisyCard className="divide-y" >
+  {files.length === 0 ? (
+</DaisyCard>
           <div className="p-8 text-center text-gray-500">
             {isSearching ? (
               <p>No Excel files found matching your search.</p>

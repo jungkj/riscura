@@ -307,44 +307,51 @@ export default function ComplianceGapsPage() {
       >
         {/* AI Analysis Status */}
         {isAnalyzing && (
-          <DaisyAlert className="mb-6">
-            <Zap className="h-4 w-4 animate-pulse" />
-            <DaisyAlertDescription>
-              AI is analyzing your compliance posture against framework requirements...
-            
-          </DaisyAlert>
+          <DaisyAlert className="mb-6" >
+  <Zap className="h-4 w-4 animate-pulse" />
+</DaisyAlert>
+            <DaisyAlertDescription >
+  AI is analyzing your compliance posture against framework requirements...
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
         )}
 
         {/* Tabs */}
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <DaisyTabsList>
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6" />
+          <DaisyTabsList />
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
             <DaisyTabsTrigger value="gaps">Gap Details</DaisyTabsTrigger>
             <DaisyTabsTrigger value="remediation">Remediation Plans</DaisyTabsTrigger>
             <DaisyTabsTrigger value="frameworks">Framework Status</DaisyTabsTrigger>
           </DaisyTabsList>
         </DaisyTabs>
 
-        <DaisyTabsContent value="overview" className="space-y-6">
+        <DaisyTabsContent value="overview" className="space-y-6" />
           {/* Framework Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {sampleFrameworks.map((framework) => {
               const priorityConfig = getPriorityConfig(framework.priority);
               return (
-                <DaisyCard key={framework.id} className={cn("border-2", priorityConfig.border)}>
-                  <DaisyCardHeader className="pb-3">
+                <DaisyCard key={framework.id} className={cn("border-2", priorityConfig.border)} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyTabsContent>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="text-sm font-medium">{framework.name}</DaisyCardTitle>
-                      <DaisyBadge variant="outline" className={priorityConfig.color}>
-                        {framework.priority}
+                      <DaisyBadge variant="outline" className={priorityConfig.color} >
+  {framework.priority}
+</DaisyBadge>
                       </DaisyBadge>
                     </div>
-                    <DaisyCardDescription className="text-xs">
-                      {framework.description}
+                    <DaisyCardDescription className="text-xs" >
+  {framework.description}
+</DaisyCardDescription>
                     </p>
                   
-                  <DaisyCardContent>
-                    <div className="space-y-3">
+                  <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                       <div className="flex justify-between text-sm">
                         <span>Compliance</span>
                         <span className="font-medium">{framework.compliancePercentage}%</span>
@@ -361,25 +368,29 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyProgress>
                 </DaisyCard>
               );
             })}
           </div>
 
           {/* AI Insights */}
-          <DaisyCard>
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center space-x-2">
-                <Zap className="h-5 w-5 text-blue-600" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center space-x-2" >
+  <Zap className="h-5 w-5 text-blue-600" />
+</DaisyCardTitle>
                 <span>AI-Powered Insights</span>
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Intelligent recommendations based on your compliance posture
+              <DaisyCardDescription >
+  Intelligent recommendations based on your compliance posture
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+</DaisyCardContent>
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
                     <Target className="h-4 w-4 text-blue-600" />
@@ -412,46 +423,43 @@ export default function ComplianceGapsPage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="gaps" className="space-y-6">
+        <DaisyTabsContent value="gaps" className="space-y-6" />
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg">
-            <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue placeholder="Framework" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Frameworks</SelectItem>
-                <DaisySelectItem value="soc2">SOC 2</SelectItem>
-                <DaisySelectItem value="iso27001">ISO 27001</SelectItem>
-                <DaisySelectItem value="gdpr">GDPR</SelectItem>
-                <DaisySelectItem value="nist">NIST CSF</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
+              <DaisySelectTrigger className="w-40" />
+                <DaisySelectValue placeholder="Framework" /></DaisyTabsContent>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Frameworks</DaisySelectContent>
+                <DaisySelectItem value="soc2">SOC 2</DaisySelectItem>
+                <DaisySelectItem value="iso27001">ISO 27001</DaisySelectItem>
+                <DaisySelectItem value="gdpr">GDPR</DaisySelectItem>
+                <DaisySelectItem value="nist">NIST CSF</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Priority" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Priorities</SelectItem>
-                <DaisySelectItem value="critical">Critical</SelectItem>
-                <DaisySelectItem value="high">High</SelectItem>
-                <DaisySelectItem value="medium">Medium</SelectItem>
-                <DaisySelectItem value="low">Low</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Priority" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Priorities</DaisySelectContent>
+                <DaisySelectItem value="critical">Critical</DaisySelectItem>
+                <DaisySelectItem value="high">High</DaisySelectItem>
+                <DaisySelectItem value="medium">Medium</DaisySelectItem>
+                <DaisySelectItem value="low">Low</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Status" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Status</SelectItem>
-                <DaisySelectItem value="open">Open</SelectItem>
-                <DaisySelectItem value="in-progress">In Progress</SelectItem>
-                <DaisySelectItem value="resolved">Resolved</SelectItem>
-                <DaisySelectItem value="accepted">Accepted</SelectItem>
-              </SelectContent>
+            <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Status" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Status</DaisySelectContent>
+                <DaisySelectItem value="open">Open</DaisySelectItem>
+                <DaisySelectItem value="in-progress">In Progress</DaisySelectItem>
+                <DaisySelectItem value="resolved">Resolved</DaisySelectItem>
+                <DaisySelectItem value="accepted">Accepted</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
             <div className="text-sm text-gray-600 ml-auto">
@@ -467,28 +475,34 @@ export default function ComplianceGapsPage() {
               const StatusIcon = statusConfig.icon;
 
               return (
-                <DaisyCard key={gap.id} className={cn("border-l-4", priorityConfig.border)}>
-                  <DaisyCardHeader>
+                <DaisyCard key={gap.id} className={cn("border-l-4", priorityConfig.border)} >
+  <DaisyCardHeader />
+</DaisyCard>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {gap.id}
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {gap.id}
+</DaisyBadge>
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {gap.framework}
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {gap.framework}
+</DaisyBadge>
                           </DaisyBadge>
-                          <DaisyBadge variant={statusConfig.variant} className="text-xs">
-                            <StatusIcon className="h-3 w-3 mr-1" />
+                          <DaisyBadge variant={statusConfig.variant} className="text-xs" >
+  <StatusIcon className="h-3 w-3 mr-1" />
+</DaisyBadge>
                             {gap.status.replace('-', ' ').toUpperCase()}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                            {gap.priority.toUpperCase()}
+                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
+  {gap.priority.toUpperCase()}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         <DaisyCardTitle className="text-base">{gap.requirement}</DaisyCardTitle>
-                        <DaisyCardDescription className="mt-1">
-                          {gap.description}
+                        <DaisyCardDescription className="mt-1" >
+  {gap.description}
+</DaisyCardDescription>
                         </p>
                       </div>
                       <div className="text-right ml-4">
@@ -497,8 +511,9 @@ export default function ComplianceGapsPage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent>
-                    <div className="space-y-4">
+                  <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                       {/* Progress Info */}
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
@@ -557,16 +572,16 @@ export default function ComplianceGapsPage() {
                                     <span className="text-orange-600">
                                       {control.implementationEffort}h effort
                                     </span>
-                                    <DaisyBadge variant="outline" className="text-xs">
-                                      {control.importance}
+                                    <DaisyBadge variant="outline" className="text-xs" >
+  {control.importance}
+</DaisyBadge>
                                     </DaisyBadge>
                                   </div>
                                 </div>
                                 <DaisyButton
                                   size="sm"
                                   onClick={() => handleImplementControl(control.id)}
-                                  className="ml-2"
-                                >
+                                  className="ml-2" />
                                   Implement
                                 </DaisyButton>
                               </div>
@@ -580,17 +595,18 @@ export default function ComplianceGapsPage() {
                         <DaisyButton
                           variant="outline"
                           size="sm"
-                          onClick={() => handleCreateRemediationPlan(gap.id)}
-                        >
+                          onClick={() => handleCreateRemediationPlan(gap.id)} />
                           <Target className="h-4 w-4 mr-1" />
                           Create Plan
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm">
-                          <Users className="h-4 w-4 mr-1" />
+                        <DaisyButton variant="outline" size="sm" >
+  <Users className="h-4 w-4 mr-1" />
+</DaisyButton>
                           Assign
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm">
-                          <DaisyCalendar className="h-4 w-4 mr-1" />
+                        <DaisyButton variant="outline" size="sm" >
+  <DaisyCalendar className="h-4 w-4 mr-1" />
+</DaisyButton>
                           Schedule
                         </DaisyButton>
                       </div>
@@ -602,7 +618,7 @@ export default function ComplianceGapsPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="remediation">
+        <DaisyTabsContent value="remediation" />
           <div className="text-center py-12">
             <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -611,20 +627,22 @@ export default function ComplianceGapsPage() {
             <p className="text-gray-600 mb-4">
               Create and track remediation plans for compliance gaps
             </p>
-            <DaisyButton>
-              <Plus className="h-4 w-4 mr-2" />
+            <DaisyButton >
+  <Plus className="h-4 w-4 mr-2" />
+</DaisyTabsContent>
               Create Remediation Plan
             </DaisyButton>
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="frameworks">
+        <DaisyTabsContent value="frameworks" />
           <div className="grid gap-6">
             {sampleFrameworks.map((framework) => {
               const priorityConfig = getPriorityConfig(framework.priority);
               return (
-                <DaisyCard key={framework.id} className={cn("border-l-4", priorityConfig.border)}>
-                  <DaisyCardHeader>
+                <DaisyCard key={framework.id} className={cn("border-l-4", priorityConfig.border)} >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <DaisyCardTitle>{framework.name}</DaisyCardTitle>
@@ -636,8 +654,9 @@ export default function ComplianceGapsPage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent>
-                    <div className="space-y-4">
+                  <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardDescription>
                       <DaisyProgress value={framework.compliancePercentage} className="h-3" />
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
@@ -654,7 +673,7 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyProgress>
                 </DaisyCard>
               );
             })}

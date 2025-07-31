@@ -144,7 +144,9 @@ export function SOC2Assessment() {
       case 'PASSED':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'FAILED':
-        return <DaisyAlertCircle className="h-4 w-4 text-red-500" />;
+        return <DaisyAlertCircle className="h-4 w-4 text-red-500" >
+  ;
+</DaisyAlertCircle>
       case 'IN_PROGRESS':
       case 'UNDER_REVIEW':
         return <Clock className="h-4 w-4 text-yellow-500" />;
@@ -173,8 +175,9 @@ export function SOC2Assessment() {
     };
 
   return (
-    <DaisyBadge className={cn('text-xs', colors[status])}>
-        {status.replace('_', ' ')}
+    <DaisyBadge className={cn('text-xs', colors[status])} >
+  {status.replace('_', ' ')}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -215,29 +218,36 @@ export function SOC2Assessment() {
 
   if (!framework) {
     return (
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="text-[#191919] font-inter">
-            SOC 2 Compliance Assessment
+      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="text-[#191919] font-inter" >
+  SOC 2 Compliance Assessment
+</DaisyCardTitle>
           </DaisyCardTitle>
-          <DaisyCardDescription>
-            Import SOC 2 framework to begin compliance assessment
+          <DaisyCardDescription >
+  Import SOC 2 framework to begin compliance assessment
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <DaisyAlert>
+        <DaisyCardContent >
+  <DaisyAlert >
+  </DaisyCardContent>
+</DaisyAlert>
             <Shield className="h-4 w-4" />
-            <DaisyAlertDescription>
-              No SOC 2 framework found. Import the framework to begin your compliance assessment.
-            
-          </DaisyAlert>
+            <DaisyAlertDescription >
+  No SOC 2 framework found. Import the framework to begin your compliance assessment.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
           <div className="mt-4">
             <DaisyButton 
               onClick={importSOC2Framework}
               disabled={importing}
-              className="bg-[#199BEC] hover:bg-[#199BEC]/90"
-            >
-              {importing ? (
+              className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
+  {importing ? (
+</DaisyButton>
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Importing Framework...
@@ -259,8 +269,10 @@ export function SOC2Assessment() {
     <div className="space-y-6">
       {/* Progress Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Total Controls</p>
@@ -271,8 +283,10 @@ export function SOC2Assessment() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Assessed</p>
@@ -283,8 +297,10 @@ export function SOC2Assessment() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Passed</p>
@@ -295,47 +311,53 @@ export function SOC2Assessment() {
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Failed</p>
                 <p className="text-2xl font-bold text-red-600">{progress.failedControls}</p>
               </div>
-              <DaisyAlertCircle className="h-8 w-8 text-red-500" />
-            </div>
+              <DaisyAlertCircle className="h-8 w-8 text-red-500" >
+  </div>
+</DaisyAlertCircle>
           </DaisyCardContent>
         </DaisyCard>
       </div>
 
       {/* Progress Bar */}
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-        <DaisyCardContent className="p-6">
+      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-[#191919]">Assessment Progress</h3>
             <span className="text-sm text-[#A8A8A8]">{Math.round(progress.percentage)}% Complete</span>
           </div>
-          <DaisyProgress value={progress.percentage} className="h-3" />
-        </DaisyCardContent>
+          <DaisyProgress value={progress.percentage} className="h-3" /></DaisyProgress>
       </DaisyCard>
 
       {/* Main Content Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-        <DaisyTabsList className="grid w-full grid-cols-4">
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+        <DaisyTabsList className="grid w-full grid-cols-4" />
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="evidence">Evidence</DaisyTabsTrigger>
           <DaisyTabsTrigger value="reports">Reports</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="overview" className="space-y-4">
+        <DaisyTabsContent value="overview" className="space-y-4" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <DaisyCardHeader>
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle className="text-[#191919] font-inter">Framework Information</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <div className="space-y-2">
+        <DaisyCardContent >
+  <div className="space-y-2">
+</DaisyCardContent>
                   <div className="flex justify-between">
                     <span className="text-[#A8A8A8]">Framework:</span>
                     <span className="text-[#191919] font-medium">{framework.name}</span>
@@ -356,28 +378,33 @@ export function SOC2Assessment() {
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-              <DaisyCardHeader>
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle className="text-[#191919] font-inter">Assessment Status</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">Not Assessed</span>
-                    <DaisyBadge className="bg-gray-100 text-gray-700">
-                      {progress.totalControls - progress.assessedControls}
+                    <DaisyBadge className="bg-gray-100 text-gray-700" >
+  {progress.totalControls - progress.assessedControls}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">In Progress</span>
-                    <DaisyBadge className="bg-blue-100 text-blue-700">
-                      {framework.controls.filter(c => c.status === 'IN_PROGRESS').length}
+                    <DaisyBadge className="bg-blue-100 text-blue-700" >
+  {framework.controls.filter(c => c.status === 'IN_PROGRESS').length}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">Under Review</span>
-                    <DaisyBadge className="bg-purple-100 text-purple-700">
-                      {framework.controls.filter(c => c.status === 'UNDER_REVIEW').length}
+                    <DaisyBadge className="bg-purple-100 text-purple-700" >
+  {framework.controls.filter(c => c.status === 'UNDER_REVIEW').length}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 </div>
@@ -386,11 +413,11 @@ export function SOC2Assessment() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="controls" className="space-y-4">
+        <DaisyTabsContent value="controls" className="space-y-4" />
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <h3 className="text-lg font-semibold text-[#191919]">SOC 2 Controls</h3>
-              <DaisyBadge variant="outline">{filteredControls.length} controls</DaisyBadge>
+              <DaisyBadge variant="outline">{filteredControls.length} controls</DaisyTabsContent>
             </div>
             <div className="flex items-center space-x-2">
               <select
@@ -403,8 +430,9 @@ export function SOC2Assessment() {
                   <option key={category} value={category}>{category}</option>
                 ))}
               </select>
-              <DaisyButton size="sm" className="bg-[#199BEC] hover:bg-[#199BEC]/90">
-                <Plus className="h-4 w-4 mr-1" />
+              <DaisyButton size="sm" className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
+  <Plus className="h-4 w-4 mr-1" />
+</DaisyButton>
                 Add Control
               </DaisyButton>
             </div>
@@ -412,8 +440,10 @@ export function SOC2Assessment() {
 
           <div className="grid gap-4">
             {filteredControls.map(control => (
-              <DaisyCard key={control.id} className="bg-[#FAFAFA] border-[#D8C3A5]">
-                <DaisyCardContent className="p-4">
+              <DaisyCard key={control.id} className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
@@ -429,8 +459,9 @@ export function SOC2Assessment() {
                     </div>
                     <div className="flex flex-col items-end space-y-2">
                       {getStatusBadge(control.status)}
-                      <DaisyButton size="sm" variant="outline" className="text-xs">
-                        Assess
+                      <DaisyButton size="sm" variant="outline" className="text-xs" >
+  Assess
+</DaisyButton>
                       </DaisyButton>
                     </div>
                   </div>
@@ -440,20 +471,24 @@ export function SOC2Assessment() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="evidence" className="space-y-4">
-          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <DaisyCardHeader>
+        <DaisyTabsContent value="evidence" className="space-y-4" />
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter">Evidence Collection</DaisyCardTitle>
-              <DaisyCardDescription>
-                Upload and manage evidence for SOC 2 controls
+              <DaisyCardDescription >
+  Upload and manage evidence for SOC 2 controls
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="text-center py-8">
+            <DaisyCardContent >
+  <div className="text-center py-8">
+</DaisyCardContent>
                 <FileText className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#A8A8A8] mb-4">No evidence uploaded yet</p>
-                <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90">
-                  <Upload className="h-4 w-4 mr-2" />
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
+  <Upload className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Upload Evidence
                 </DaisyButton>
               </div>
@@ -461,26 +496,32 @@ export function SOC2Assessment() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="reports" className="space-y-4">
-          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-            <DaisyCardHeader>
+        <DaisyTabsContent value="reports" className="space-y-4" />
+          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter">Assessment Reports</DaisyCardTitle>
-              <DaisyCardDescription>
-                Generate and download SOC 2 assessment reports
+              <DaisyCardDescription >
+  Generate and download SOC 2 assessment reports
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent>
-              <div className="space-y-4">
-                <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90 w-full justify-start">
-                  <Download className="h-4 w-4 mr-2" />
+            <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90 w-full justify-start" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Download Assessment Summary
                 </DaisyButton>
-                <DaisyButton variant="outline" className="w-full justify-start">
-                  <Download className="h-4 w-4 mr-2" />
+                <DaisyButton variant="outline" className="w-full justify-start" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Export Control Matrix
                 </DaisyButton>
-                <DaisyButton variant="outline" className="w-full justify-start">
-                  <Download className="h-4 w-4 mr-2" />
+                <DaisyButton variant="outline" className="w-full justify-start" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Generate Gap Analysis Report
                 </DaisyButton>
               </div>

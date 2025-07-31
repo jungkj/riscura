@@ -633,16 +633,19 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           <p className="text-gray-600">Generate insights and create custom reports for your risk management program.</p>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" className="text-sm">
-            <Filter className="h-4 w-4 mr-2" />
+          <DaisyButton variant="outline" className="text-sm" >
+  <Filter className="h-4 w-4 mr-2" />
+</DaisyButton>
             Filters
           </DaisyButton>
-          <DaisyButton variant="outline" className="text-sm">
-            <Download className="h-4 w-4 mr-2" />
+          <DaisyButton variant="outline" className="text-sm" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
             Export
           </DaisyButton>
-          <DaisyButton>
-            <Plus className="h-4 w-4 mr-2" />
+          <DaisyButton >
+  <Plus className="h-4 w-4 mr-2" />
+</DaisyButton>
             New Report
           </DaisyButton>
         </div>
@@ -650,8 +653,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
 
       {/* Analytics Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-        <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Reports</p>
@@ -662,8 +667,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">Active Generations</p>
@@ -674,8 +681,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-purple-600">Scheduled Reports</p>
@@ -683,11 +692,13 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
               </div>
               <DaisyCalendar className="h-8 w-8 text-purple-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCalendar>
         </DaisyCard>
 
-        <DaisyCard className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Views</p>
@@ -698,8 +709,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-indigo-600">AI Insights</p>
@@ -710,8 +723,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </DaisyCardContent>
         </DaisyCard>
 
-        <DaisyCard className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
-          <DaisyCardContent className="p-6">
+        <DaisyCard className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-orange-600">Avg Gen Time</p>
@@ -724,16 +739,16 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
       </div>
 
       {/* Main Content Tabs */}
-      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <DaisyTabsList className="grid w-full grid-cols-5">
-          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>
+      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6" />
+        <DaisyTabsList className="grid w-full grid-cols-5" />
+          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
           <DaisyTabsTrigger value="library">Report Library</DaisyTabsTrigger>
           <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
           <DaisyTabsTrigger value="scheduled">Scheduled Reports</DaisyTabsTrigger>
           <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="dashboard" className="space-y-6">
+        <DaisyTabsContent value="dashboard" className="space-y-6" />
           <div className="text-center py-12">
             <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -745,7 +760,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="library" className="space-y-6">
+        <DaisyTabsContent value="library" className="space-y-6" />
           <div className="text-center py-12">
             <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -757,7 +772,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="builder" className="space-y-6">
+        <DaisyTabsContent value="builder" className="space-y-6" />
           <div className="text-center py-12">
             <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -769,7 +784,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="scheduled" className="space-y-6">
+        <DaisyTabsContent value="scheduled" className="space-y-6" />
           <div className="text-center py-12">
             <DaisyCalendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
@@ -781,7 +796,7 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="analytics" className="space-y-6">
+        <DaisyTabsContent value="analytics" className="space-y-6" />
           <div className="text-center py-12">
             <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">

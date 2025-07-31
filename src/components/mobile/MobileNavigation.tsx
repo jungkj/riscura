@@ -289,7 +289,7 @@ export default function MobileNavigation({
                   aria-label={`${item.badge} notifications`}
                 >
                   {item.badge}
-                </DaisyBadge>
+                </DaisyButton>
               )}
               {hasChildren && (
                 isExpanded 
@@ -320,8 +320,7 @@ export default function MobileNavigation({
           onClick={() => setIsOpen(true)}
           className="bg-white shadow-lg border-gray-200"
           aria-label="Open navigation menu"
-          accessKey="m"
-        >
+          accessKey="m" />
           <Menu className="w-5 h-5" />
         </DaisyButton>
       </div>
@@ -334,8 +333,7 @@ export default function MobileNavigation({
           onClick={() => setIsSearchOpen(true)}
           className="bg-white shadow-lg border-gray-200"
           aria-label="Open search"
-          accessKey="s"
-        >
+          accessKey="s" />
           <Search className="w-5 h-5" />
         </DaisyButton>
       </div>
@@ -353,9 +351,9 @@ export default function MobileNavigation({
             <DaisyBadge 
               variant="error" 
               className="absolute -top-2 -right-2 text-xs h-5 w-5 rounded-full p-0 flex items-center justify-center"
-              aria-hidden="true"
-            >
-              {notifications > 99 ? '99+' : notifications}
+              aria-hidden="true" >
+  {notifications > 99 ? '99+' : notifications}
+</DaisyButton>
             </DaisyBadge>
           )}
         </DaisyButton>
@@ -379,8 +377,7 @@ export default function MobileNavigation({
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsOpen(false)}
-                  aria-label="Close navigation"
-                >
+                  aria-label="Close navigation" />
                   <X className="w-5 h-5" />
                 </DaisyButton>
               </div>
@@ -430,7 +427,7 @@ export default function MobileNavigation({
             )}
             
             {/* Navigation Items */}
-            <DaisyScrollArea className="flex-1">
+            <DaisyScrollArea className="flex-1" />
               <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
                 {filteredItems.map(item => renderNavigationItem(item))}
               </nav>
@@ -441,8 +438,7 @@ export default function MobileNavigation({
               <DaisyButton
                 variant="ghost"
                 className="w-full justify-start"
-                onClick={() => router.push('/settings')}
-              >
+                onClick={() => router.push('/settings')} />
                 <Settings className="w-5 h-5 mr-3" />
                 Settings
               </DaisyButton>
@@ -450,8 +446,7 @@ export default function MobileNavigation({
               <DaisyButton
                 variant="ghost"
                 className="w-full justify-start"
-                onClick={() => router.push('/help')}
-              >
+                onClick={() => router.push('/help')} />
                 <HelpCircle className="w-5 h-5 mr-3" />
                 Help & Support
               </DaisyButton>
@@ -468,7 +463,7 @@ export default function MobileNavigation({
               >
                 <LogOut className="w-5 h-5 mr-3" />
                 Sign Out
-              </DaisyButton>
+              </DaisySeparator>
             </div>
           </div>
         </SheetContent>

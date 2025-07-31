@@ -129,9 +129,11 @@ npm run alerts:test        # Test alert system
   - `/performance/` - Optimization utilities
   - `/auth/` - Authentication utilities and middleware
   - `/billing/` - Billing and subscription management
+  - `/cache/` - Redis caching layer with multiple strategies
+  - `/db.ts` - Database client with connection pooling and retry logic
 - `/src/context/` - Global state management providers
 - `/src/services/` - Business logic service layer
-  - `/ai/` - AI service integrations
+  - `/ai/` - AI service integrations (AIService.ts)
 - `/src/hooks/` - Custom React hooks
 - `/src/types/` - TypeScript type definitions
 - `/scripts/` - Development and deployment scripts
@@ -141,28 +143,44 @@ npm run alerts:test        # Test alert system
 
 1. **API Development**: Always use `withApiMiddleware()` wrapper for new API endpoints
    ```typescript
-   // Current pattern (most endpoints use this):
+   // Legacy pattern (still widely used):
    export const POST = withApiMiddleware(async (req) => {
      const user = (req as any).user;
      // Your handler code
      return NextResponse.json({ data });
    });
    
-   // Recommended pattern (newer, supports validation & rate limiting):
-   export const POST = withApiMiddleware({
-     requireAuth: true,
-     bodySchema: MyBodySchema,
-     rateLimiters: ['standard'] // or 'auth', 'fileUpload', 'expensive', 'bulk', 'report'
-   })(async (context, validatedData) => {
-     const { user, organizationId } = context;
-     // Return data directly - middleware handles response formatting
-     return { data: result };
-   });
+   // Modern pattern (newer implementation in middleware.ts):
+   export const POST = withAPI(
+     async (req: NextRequest) => {
+       const user = (req as any).user;
+       const body = await req.json();
+       
+       // Your handler code
+       return createAPIResponse(data, {
+         message: 'Success',
+         statusCode: 200
+       });
+     },
+     {
+       requireAuth: true,
+       validateBody: MyBodySchema,
+       rateLimit: {
+         windowMs: 15 * 60 * 1000,
+         maxRequests: 100
+       },
+       subscription: {
+         requireActive: true,
+         requiredFeatures: ['feature-name'],
+         trackUsage: { type: 'api-call', quantity: 1 }
+       }
+     }
+   );
    ```
    
-   Available rate limiters:
+   Available rate limiters (via RateLimiterManager):
    - `standard`: 1000 requests per 15 minutes
-   - `auth`: 5 attempts per 15 minutes
+   - `auth`: 5 attempts per 15 minutes  
    - `fileUpload`: 50 uploads per hour
    - `expensive`: 10 operations per hour
    - `bulk`: 5 operations per 10 minutes
@@ -246,6 +264,55 @@ See `env.example` for:
 - Offline capability with service workers
 - Push notification support
 - App-like navigation with gesture support
+
+## Core Architectural Patterns
+
+### API Middleware System
+The codebase uses a comprehensive middleware system (`/src/lib/api/middleware.ts`) that provides:
+- **Authentication**: Via `withAuth()` or `requireAuth: true` option
+- **Rate Limiting**: Built-in rate limiter manager with predefined strategies
+- **Validation**: Request body and query parameter validation using Zod schemas
+- **Error Handling**: Standardized error responses with proper status codes
+- **Subscription Management**: Feature gating and usage tracking
+- **Response Formatting**: Consistent API response structure
+
+### Multi-Tenant Database Architecture
+All database operations must respect organization boundaries:
+```typescript
+// Always include organizationId in queries
+const data = await db.client.risk.findMany({
+  where: { 
+    organizationId: user.organizationId,
+    // other conditions
+  }
+});
+
+// Use helper functions
+const query = db.forOrganization(organizationId);
+```
+
+### AI Service Integration
+The AIService (`/src/services/AIService.ts`) provides:
+- **Multiple AI Providers**: OpenAI and Anthropic with lazy initialization
+- **Rate Limiting**: Built-in rate limiting and circuit breaker patterns
+- **Caching**: Response caching for cost optimization
+- **Usage Tracking**: Token usage and cost tracking
+- **Specialized Methods**: Risk analysis, control recommendations, compliance gaps
+
+### Caching Strategy
+Multi-layer caching with Redis (`/src/lib/cache/`):
+- **API Response Caching**: Via `api-cache.ts`
+- **Query Result Caching**: Via `query-cache.ts`
+- **Memory Caching**: In-memory LRU cache for hot data
+- **Cache Invalidation**: Pattern-based invalidation service
+
+### Database Connection Management
+The database client (`/src/lib/db.ts`) provides:
+- **Automatic Retry Logic**: Exponential backoff for transient failures
+- **Connection Pooling**: Configurable pool sizes for different environments
+- **Supabase Auto-conversion**: Automatic conversion from direct to pooled URLs in production
+- **Transaction Helpers**: `withTransaction()` for atomic operations
+- **Query Builders**: Pagination, search, and filter helpers
 
 ## Current Development Phase
 

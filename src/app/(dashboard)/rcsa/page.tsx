@@ -51,8 +51,7 @@ export default function RCSAPage() {
             {/* Import Button */}
             <DaisyButton
               onClick={() => setShowImportDialog(true)}
-              className="flex items-center gap-2"
-            >
+              className="flex items-center gap-2" />
               <Upload className="h-4 w-4" />
               Import RCSA
             </DaisyButton>
@@ -158,17 +157,17 @@ export default function RCSAPage() {
         {/* Removed non-functional floating action button - creation handled within spreadsheet components */}
         
         {/* Import Dialog */}
-        <DaisyDialog open={showImportDialog} onOpenChange={setShowImportDialog}>
-          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DaisyDialogHeader>
+        <DaisyDialog open={showImportDialog} onOpenChange={setShowImportDialog} />
+          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialogHeader>
               <DaisyDialogTitle>Import RCSA Data</DaisyDialogTitle>
-              <DaisyDialogDescription>
-                Upload your RCSA Excel file or paste data to automatically analyze and import risks and controls
-              </DaisyDialogDescription>
+              <DaisyDialogDescription >
+  Upload your RCSA Excel file or paste data to automatically analyze and import risks and controls
+</DaisyDialogDescription>
             </DaisyDialogHeader>
             <RCSAImportFlow onComplete={handleImportComplete} />
           </DaisyDialogContent>
-        </DaisyDialog>
       </div>
   );
 }

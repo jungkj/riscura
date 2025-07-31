@@ -64,12 +64,14 @@ export default function OAuthDebugPage() {
 
   return (
     <div className="container mx-auto p-8 max-w-4xl">
-      <DaisyCard className="mb-6">
-        <DaisyCardHeader>
+      <DaisyCard className="mb-6" >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle>OAuth Debug Information</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          {error && (
+        <DaisyCardContent >
+  {error && (
+</DaisyCardContent>
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-800">
               {error}
             </div>
@@ -82,15 +84,15 @@ export default function OAuthDebugPage() {
                 <DaisyButton 
                   onClick={testGoogleSignIn} 
                   disabled={loading}
-                  variant="default"
-                >
-                  {loading ? 'Testing...' : 'Test Google Sign-In'}
+                  variant="default" >
+  {loading ? 'Testing...' : 'Test Google Sign-In'}
+</DaisyButton>
                 </DaisyButton>
                 <DaisyButton 
                   onClick={fetchDebugInfo} 
-                  variant="outline"
-                >
-                  Refresh Debug Info
+                  variant="outline" >
+  Refresh Debug Info
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>

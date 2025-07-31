@@ -139,9 +139,9 @@ const ListItemComponent: React.FC<{
               className={cn(
                 "text-xs font-semibold border uppercase tracking-wider",
                 priorityStyle.badge
-              )}
-            >
-              {item.priority}
+              )} >
+  {item.priority}
+</DaisyBadge>
             </DaisyBadge>
             
             <div className="text-right">
@@ -221,8 +221,9 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
         "bg-gradient-to-br from-white to-slate-50/30",
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
-      )}>
-        <DaisyCardHeader className="pb-4">
+      )} >
+  <DaisyCardHeader className="pb-4" />
+</DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.div
@@ -233,8 +234,9 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
               </motion.div>
               
               <div>
-                <DaisyCardTitle className="text-lg font-semibold text-slate-800">
-                  {title}
+                <DaisyCardTitle className="text-lg font-semibold text-slate-800" >
+  {title}
+</DaisyCardTitle>
                 </DaisyCardTitle>
                 {subtitle && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
@@ -247,17 +249,18 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={onViewAll}
-                className="text-slate-600 hover:text-slate-800"
-              >
-                View All
+                className="text-slate-600 hover:text-slate-800" >
+  View All
+</DaisyButton>
                 <ChevronRight className="h-4 w-4 ml-1" />
               </DaisyButton>
             )}
           </div>
         
 
-        <DaisyCardContent className="pt-0">
-          {isLoading ? (
+        <DaisyCardContent className="pt-0" >
+  {isLoading ? (
+</DaisyCardContent>
             <LoadingSkeleton />
           ) : items.length === 0 ? (
             <EmptyState message={emptyMessage} />
@@ -285,9 +288,9 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={onViewAll}
-                    className="w-full text-slate-600 hover:text-slate-800 border-slate-200"
-                  >
-                    View {items.length - maxItems} more items
+                    className="w-full text-slate-600 hover:text-slate-800 border-slate-200" >
+  View {items.length - maxItems} more items
+</DaisyButton>
                     <ChevronRight className="h-4 w-4 ml-2" />
                   </DaisyButton>
                 </motion.div>

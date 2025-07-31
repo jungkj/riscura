@@ -138,9 +138,9 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
         <div key={index} className="flex items-center space-x-2">
           <DaisyBadge 
             variant={stat.variant || 'outline'} 
-            className="text-sm font-medium px-3 py-1"
-          >
-            {stat.value} {stat.label}
+            className="text-sm font-medium px-3 py-1" >
+  {stat.value} {stat.label}
+</DaisyBadge>
           </DaisyBadge>
           
           {stat.trend && stat.trendValue && (
@@ -185,9 +185,9 @@ const ActionButtons: React.FC<{
             <DaisyButton
               variant="outline"
               size="sm"
-              className="border-gray-300 hover:border-[#199BEC]"
-            >
-              <MoreHorizontal className="h-4 w-4" />
+              className="border-gray-300 hover:border-[#199BEC]" >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyButton>
             </DaisyButton>
           )}
         </div>
@@ -352,9 +352,9 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
-              disabled={action.disabled}
-            >
-              {action.icon && <action.icon className="h-4 w-4 mr-2" />}
+              disabled={action.disabled} >
+  {action.icon && 
+</DaisySeparator><action.icon className="h-4 w-4 mr-2" />}
               {action.label}
             </DaisyButton>
           )}
@@ -430,9 +430,9 @@ export const ContentCard: React.FC<ContentCardProps> = ({
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
-              disabled={action.disabled}
-            >
-              {action.icon && <action.icon className="h-4 w-4 mr-2" />}
+              disabled={action.disabled} >
+  {action.icon && 
+</DaisyButton><action.icon className="h-4 w-4 mr-2" />}
               {action.label}
             </DaisyButton>
           )}

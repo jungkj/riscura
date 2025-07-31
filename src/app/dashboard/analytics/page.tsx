@@ -45,8 +45,10 @@ const MetricCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <DaisyCard className="hover:shadow-md transition-shadow">
-        <DaisyCardContent className="p-6">
+      <DaisyCard className="hover:shadow-md transition-shadow" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -157,27 +159,27 @@ export default function AnalyticsPage() {
               <p className="text-gray-600">Comprehensive insights and metrics</p>
             </div>
             <div className="flex items-center space-x-3">
-              <DaisySelect value={timeRange} onValueChange={setTimeRange}>
-                <DaisySelectTrigger className="w-40">
-                  <DaisySelectValue />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="7d">Last 7 days</SelectItem>
-                  <DaisySelectItem value="30d">Last 30 days</SelectItem>
-                  <DaisySelectItem value="90d">Last 90 days</SelectItem>
-                </SelectContent>
+              <DaisySelect value={timeRange} onValueChange={setTimeRange} />
+                <DaisySelectTrigger className="w-40" />
+                  <DaisySelectValue /></DaisySelect>
+                <DaisySelectContent />
+                  <DaisySelectItem value="7d">Last 7 days</DaisySelectContent>
+                  <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
+                  <DaisySelectItem value="90d">Last 90 days</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
               <DaisyButton
                 variant="outline"
                 size="sm"
                 onClick={fetchAnalytics}
-                disabled={loading}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                disabled={loading} >
+  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+</DaisyButton>
                 Refresh
               </DaisyButton>
-              <DaisyButton size="sm">
-                <Download className="h-4 w-4 mr-2" />
+              <DaisyButton size="sm" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Export
               </DaisyButton>
             </div>
@@ -225,28 +227,31 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Main Analytics Content */}
-        <DaisyTabs defaultValue="overview" className="space-y-4">
-          <DaisyTabsList className="grid grid-cols-4 w-fit">
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+        <DaisyTabs defaultValue="overview" className="space-y-4" />
+          <DaisyTabsList className="grid grid-cols-4 w-fit" />
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
             <DaisyTabsTrigger value="risks">Risk Analysis</DaisyTabsTrigger>
             <DaisyTabsTrigger value="controls">Control Effectiveness</DaisyTabsTrigger>
             <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Overview Tab */}
-          <DaisyTabsContent value="overview" className="space-y-4">
+          <DaisyTabsContent value="overview" className="space-y-4" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Risk Trends Chart */}
-              <DaisyCard>
-                <DaisyCardHeader className="flex flex-row items-center justify-between">
+              <DaisyCard >
+  <DaisyCardHeader className="flex flex-row items-center justify-between" />
+</DaisyTabsContent>
                   <DaisyCardTitle className="text-lg">Risk Trends</DaisyCardTitle>
-                  <DaisyBadge variant="outline">
-                    <TrendingUp className="h-3 w-3 mr-1" />
+                  <DaisyBadge variant="outline" >
+  <TrendingUp className="h-3 w-3 mr-1" />
+</DaisyBadge>
                     Trending
                   </DaisyBadge>
                 
-                <DaisyCardContent>
-                  <div className="h-64">
+                <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={getRiskTrendData()}>
                         <defs>
@@ -269,20 +274,23 @@ export default function AnalyticsPage() {
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardContent>
+                </DaisyTooltip>
               </DaisyCard>
 
               {/* Risk Distribution */}
-              <DaisyCard>
-                <DaisyCardHeader className="flex flex-row items-center justify-between">
+              <DaisyCard >
+  <DaisyCardHeader className="flex flex-row items-center justify-between" />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Risk Distribution</DaisyCardTitle>
-                  <DaisyBadge variant="outline">
-                    <PieChartIcon className="h-3 w-3 mr-1" />
+                  <DaisyBadge variant="outline" >
+  <PieChartIcon className="h-3 w-3 mr-1" />
+</DaisyBadge>
                     Categories
                   </DaisyBadge>
                 
-                <DaisyCardContent>
-                  <div className="h-64">
+                <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -299,8 +307,7 @@ export default function AnalyticsPage() {
                             <Cell key={`cell-${index}`} fill={Object.values(COLORS)[index % Object.values(COLORS).length]} />
                           ))}
                         </Pie>
-                        <DaisyTooltip />
-                      </PieChart>
+                        <DaisyTooltip /></DaisyTooltip>
                     </ResponsiveContainer>
                   </div>
                 </DaisyCardContent>
@@ -308,12 +315,14 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Control Effectiveness */}
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle className="text-lg">Control Effectiveness Overview</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Average Effectiveness</span>
                     <span className="text-2xl font-bold text-green-600">
@@ -354,16 +363,19 @@ export default function AnalyticsPage() {
             </DaisyCard>
 
             {/* Recent Activity */}
-            <DaisyCard>
-              <DaisyCardHeader className="flex flex-row items-center justify-between">
+            <DaisyCard >
+  <DaisyCardHeader className="flex flex-row items-center justify-between" />
+</DaisyCard>
                 <DaisyCardTitle className="text-lg">Recent Activity</DaisyCardTitle>
-                <DaisyBadge variant="outline">
-                  <Activity className="h-3 w-3 mr-1" />
+                <DaisyBadge variant="outline" >
+  <Activity className="h-3 w-3 mr-1" />
+</DaisyBadge>
                   Live
                 </DaisyBadge>
               
-              <DaisyCardContent>
-                <div className="space-y-3">
+              <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                   {getActivityData().map((activity: any, index: number) => (
                     <motion.div
                       key={activity.id}
@@ -390,14 +402,16 @@ export default function AnalyticsPage() {
           </DaisyTabsContent>
 
           {/* Risk Analysis Tab */}
-          <DaisyTabsContent value="risks" className="space-y-4">
+          <DaisyTabsContent value="risks" className="space-y-4" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <DaisyCard className="lg:col-span-2">
-                <DaisyCardHeader>
+              <DaisyCard className="lg:col-span-2" >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle className="text-lg">Risk Level Distribution</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="h-64">
+        <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={[
                         { level: 'Critical', count: 4, color: COLORS.red },
@@ -422,15 +436,17 @@ export default function AnalyticsPage() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardContent>
+                </DaisyTooltip>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Risk Metrics</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-                  <div className="space-y-2">
+        <DaisyCardContent className="space-y-4" >
+  <div className="space-y-2">
+</DaisyCardContent>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Critical Risks</span>
                       <span className="text-sm font-bold text-red-600">4</span>
@@ -463,13 +479,15 @@ export default function AnalyticsPage() {
           </DaisyTabsContent>
 
           {/* Control Effectiveness Tab */}
-          <DaisyTabsContent value="controls" className="space-y-4">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="controls" className="space-y-4" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle className="text-lg">Control Performance Matrix</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <div className="h-80">
+        <DaisyCardContent >
+  <div className="h-80">
+</DaisyCardContent>
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={[
                       { type: 'Preventive', effectiveness: 85, count: 45 },
@@ -488,19 +506,21 @@ export default function AnalyticsPage() {
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
-              </DaisyCardContent>
+              </DaisyTooltip>
             </DaisyCard>
           </DaisyTabsContent>
 
           {/* Compliance Tab */}
-          <DaisyTabsContent value="compliance" className="space-y-4">
+          <DaisyTabsContent value="compliance" className="space-y-4" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle className="text-lg">Framework Compliance</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="h-64">
+        <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="90%" data={[
                         { name: 'SOC 2', value: 92, fill: COLORS.blue },
@@ -510,19 +530,20 @@ export default function AnalyticsPage() {
                       ]}>
                         <RadialBar dataKey="value" />
                         <Legend />
-                        <DaisyTooltip />
-                      </RadialBarChart>
+                        <DaisyTooltip /></DaisyTooltip>
                     </ResponsiveContainer>
                   </div>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Compliance Score Trend</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="h-64">
+        <DaisyCardContent >
+  <div className="h-64">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={[
                         { month: 'Jan', score: 82 },
@@ -540,7 +561,7 @@ export default function AnalyticsPage() {
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardContent>
+                </DaisyTooltip>
               </DaisyCard>
             </div>
           </DaisyTabsContent>

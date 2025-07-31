@@ -25,27 +25,32 @@ export function CollaborationPanel({
 
   return (
     <DaisyCard className={`h-full ${className}`}>
-      <DaisyCardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <DaisyCardTitle className="text-lg flex items-center">
-            <Users className="w-5 h-5 mr-2" />
+      <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center justify-between">
+</DaisyCard>
+          <DaisyCardTitle className="text-lg flex items-center" >
+  <Users className="w-5 h-5 mr-2" />
+</DaisyCardTitle>
             Collaboration
           </DaisyCardTitle>
           
           <div className="flex items-center space-x-2">
-            <DaisyButton variant="ghost" size="sm">
-              <Share2 className="w-4 h-4" />
+            <DaisyButton variant="ghost" size="sm" >
+  <Share2 className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
             
-            <DaisyButton variant="ghost" size="sm">
-              <UserPlus className="w-4 h-4" />
+            <DaisyButton variant="ghost" size="sm" >
+  <UserPlus className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
           </div>
         </div>
       </DaisyCardHeader>
       
-      <DaisyCardContent>
-        <div className="text-center py-8 text-gray-500">
+      <DaisyCardContent >
+  <div className="text-center py-8 text-gray-500">
+</DaisyCardContent>
           <p>Collaboration features temporarily simplified for build testing</p>
         </div>
       </DaisyCardContent>

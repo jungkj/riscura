@@ -264,8 +264,9 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
         }`}
         onClick={onClick}
       >
-        <DaisyCardContent className="p-6">
-          <div className="space-y-4">
+        <DaisyCardContent className="p-6" >
+  <div className="space-y-4">
+</DaisyCard>
             {/* Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
@@ -302,8 +303,9 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                 </DaisyBadge>
                 
                 {interactive && (
-                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <MoreHorizontal className="w-3 h-3" />
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="w-3 h-3" />
+</DaisyButton>
                   </DaisyButton>
                 )}
               </div>
@@ -389,8 +391,9 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
             {/* Footer Actions */}
             {interactive && (
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <DaisyButton variant="ghost" size="sm" className="text-xs">
-                  <Eye className="w-3 h-3 mr-1" />
+                <DaisyButton variant="ghost" size="sm" className="text-xs" >
+  <Eye className="w-3 h-3 mr-1" />
+</DaisyProgressRing>
                   View Details
                 </DaisyButton>
                 

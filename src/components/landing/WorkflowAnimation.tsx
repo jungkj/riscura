@@ -107,9 +107,9 @@ const WorkflowAnimation = () => {
         <span className="text-sm font-medium text-gray-900">{title}</span>
         <DaisyBadge 
           variant={risk === 'high' ? 'destructive' : risk === 'medium' ? 'secondary' : 'default'}
-          className="text-xs"
-        >
-          {risk} risk
+          className="text-xs" >
+  {risk} risk
+</DaisyBadge>
         </DaisyBadge>
       </div>
       <div className="flex items-center text-xs text-gray-600">
@@ -160,12 +160,13 @@ const WorkflowAnimation = () => {
                   transition-all duration-500 transform
                   ${isActive ? `${step.bgColor} ${step.borderColor} scale-105 shadow-lg` : 'bg-white border-gray-200 hover:shadow-md'}
                 `}>
-                  <DaisyCardContent className="p-6 text-center">
-                    <div className={`
+                  <DaisyCardContent className="p-6 text-center" >
+  <div className={`
                       w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center
                       ${isActive ? `bg-gradient-to-r ${step.color}` : 'bg-gray-100'}
                       transition-all duration-500
                     `}>
+</DaisyCard>
                       <Icon className={`w-8 h-8 ${isActive ? 'text-white' : 'text-gray-600'}`} />
                       {isActive && (
                         <motion.div

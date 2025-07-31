@@ -129,8 +129,9 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onView?.(risk)}
     >
-      <DaisyCardContent className="p-6">
-        <div className="flex items-start justify-between">
+      <DaisyCardContent className="p-6" >
+  <div className="flex items-start justify-between">
+</DaisyCard>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-3 mb-3">
               <span className="text-sm font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">
@@ -238,22 +239,21 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
           </div>
 
           <div className={`ml-4 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
                 <DaisyButton 
                   variant="ghost" 
                   size="sm"
                   className="h-8 w-8 p-0"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                  onClick={(e) => e.stopPropagation()} />
                   <MoreHorizontal className="w-4 h-4" />
-                </DaisyButton>
+                </DaisyProgress>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" className="w-48">
+              <DaisyDropdownMenuContent align="end" className="w-48" />
                 <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(risk); }}>
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
-                </DaisyDropdownMenuItem>
+                </DaisyDropdownMenuContent>
                 <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit?.(risk); }}>
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Risk

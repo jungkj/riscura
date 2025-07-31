@@ -345,8 +345,9 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
                 ) : (
                   <div className="bg-red-50 border border-red-200 rounded-md p-4">
                     <div className="flex items-start">
-                      <DaisyAlertCircle className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
-                      <div className="flex-1">
+                      <DaisyAlertCircle className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" >
+  <div className="flex-1">
+</DaisyAlertCircle>
                         <h4 className="text-sm font-medium text-red-800 mb-2">
                           Import Failed
                         </h4>

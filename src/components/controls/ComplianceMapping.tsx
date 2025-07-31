@@ -265,8 +265,9 @@ const FrameworkOverviewCard: React.FC<{
             <h3 className="text-body-base font-semibold text-text-primary">
               {framework.name}
             </h3>
-            <DaisyBadge variant={statusConfig.variant} className="text-caption">
-              <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+            <DaisyBadge variant={statusConfig.variant} className="text-caption" >
+  <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+</DaisyBadge>
               {framework.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </DaisyBadge>
           </div>
@@ -331,13 +332,15 @@ const RequirementDetail: React.FC<{
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{requirement.id}</span>
-            <DaisyBadge variant={statusConfig.variant} className="text-caption">
-              <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+            <DaisyBadge variant={statusConfig.variant} className="text-caption" >
+  <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+</DaisyProgress>
               {requirement.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </DaisyBadge>
             {requirement.mandatory && (
-              <DaisyBadge variant="outline" className="text-caption">
-                Mandatory
+              <DaisyBadge variant="outline" className="text-caption" >
+  Mandatory
+</DaisyBadge>
               </DaisyBadge>
             )}
           </div>
@@ -354,16 +357,18 @@ const RequirementDetail: React.FC<{
       <div className="mb-enterprise-2">
         <div className="flex items-center justify-between mb-enterprise-1">
           <span className="text-caption font-medium text-text-primary">Mapped Controls</span>
-          <DaisyButton variant="outline" size="sm" className="h-6 px-enterprise-2">
-            <MapPin className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" className="h-6 px-enterprise-2" >
+  <MapPin className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Map Control
           </DaisyButton>
         </div>
         {requirement.mappedControls.length > 0 ? (
           <div className="flex flex-wrap gap-enterprise-1">
             {requirement.mappedControls.map((controlId) => (
-              <DaisyBadge key={controlId} variant="outline" className="text-caption">
-                {controlId}
+              <DaisyBadge key={controlId} variant="outline" className="text-caption" >
+  {controlId}
+</DaisyBadge>
               </DaisyBadge>
             ))}
           </div>
@@ -379,8 +384,9 @@ const RequirementDetail: React.FC<{
           <div className="mt-enterprise-1 space-y-enterprise-1">
             {requirement.gaps.map((gap, index) => (
               <div key={index} className="flex items-start space-x-enterprise-2 text-caption text-semantic-error">
-                <DaisyAlertTriangle className="h-3 w-3 mt-0.5" />
-                <span>{gap}</span>
+                <DaisyAlertTriangle className="h-3 w-3 mt-0.5" >
+  <span>
+</DaisyAlertTriangle>{gap}</span>
               </div>
             ))}
           </div>
@@ -393,8 +399,9 @@ const RequirementDetail: React.FC<{
           <span className="text-caption font-medium text-text-primary">Evidence</span>
           <div className="mt-enterprise-1 flex flex-wrap gap-enterprise-1">
             {requirement.evidence.map((evidenceId) => (
-              <DaisyBadge key={evidenceId} variant="secondary" className="text-caption">
-                <FileText className="h-3 w-3 mr-enterprise-1" />
+              <DaisyBadge key={evidenceId} variant="secondary" className="text-caption" >
+  <FileText className="h-3 w-3 mr-enterprise-1" />
+</DaisyBadge>
                 {evidenceId}
               </DaisyBadge>
             ))}
@@ -552,8 +559,9 @@ export const ComplianceMapping: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <DaisyButton variant="outline">
-            <Download className="h-4 w-4 mr-enterprise-1" />
+          <DaisyButton variant="outline" >
+  <Download className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
             Export Report
           </DaisyButton>
         </div>
@@ -580,8 +588,7 @@ export const ComplianceMapping: React.FC = () => {
             <DaisyButton 
               variant="ghost" 
               size="sm" 
-              onClick={() => setSelectedFramework(null)}
-            >
+              onClick={() => setSelectedFramework(null)} />
               ← Back to Frameworks
             </DaisyButton>
             <span className="text-text-tertiary">/</span>
@@ -591,14 +598,14 @@ export const ComplianceMapping: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)}>
-            <DaisyTabsList>
-              <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+          <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)} />
+            <DaisyTabsList />
+              <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
               <DaisyTabsTrigger value="mapping">Control Mapping</DaisyTabsTrigger>
               <DaisyTabsTrigger value="gaps">Gap Analysis</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="overview" className="mt-enterprise-4">
+            <DaisyTabsContent value="overview" className="mt-enterprise-4" />
               <div className="space-y-enterprise-4">
                 {/* Framework Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
@@ -647,7 +654,7 @@ export const ComplianceMapping: React.FC = () => {
               </div>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="mapping" className="mt-enterprise-4">
+            <DaisyTabsContent value="mapping" className="mt-enterprise-4" />
               <div className="space-y-enterprise-4">
                 {selectedFramework.categories.map((category) => (
                   <CategoryDetail
@@ -659,7 +666,7 @@ export const ComplianceMapping: React.FC = () => {
               </div>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="gaps" className="mt-enterprise-4">
+            <DaisyTabsContent value="gaps" className="mt-enterprise-4" />
               <GapAnalysisView framework={selectedFramework} />
             </DaisyTabsContent>
           </DaisyTabs>

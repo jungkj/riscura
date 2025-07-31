@@ -616,17 +616,16 @@ export default function EnhancedRCSASpreadsheet() {
           );
         } else if (column.type === 'select' && column.options) {
           return (
-            <DaisySelect value={editValue} onValueChange={setEditValue}>
-              <DaisySelectTrigger className="h-full border-0 p-0 focus:ring-0">
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
+            <DaisySelect value={editValue} onValueChange={setEditValue} />
+              <DaisySelectTrigger className="h-full border-0 p-0 focus:ring-0" />
+                <DaisySelectValue /></DaisyTextarea>
+              <DaisySelectContent />
                 {column.options.map(opt => (
-                  <DaisySelectItem key={opt.value} value={opt.value}>
+                  <DaisySelectItem key={opt.value} value={opt.value} />
                     {opt.label}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
           );
         } else {
@@ -646,8 +645,9 @@ export default function EnhancedRCSASpreadsheet() {
       // Special rendering for certain columns
       if (column.id === 'type') {
         return (
-          <DaisyBadge variant="outline" className="text-xs">
-            {row.type === 'risk' ? (
+          <DaisyBadge variant="outline" className="text-xs" >
+  {row.type === 'risk' ? (
+</DaisyInput>
               <><Shield className="w-3 h-3 mr-1" /> Risk</>
             ) : (
               <><CheckCircle className="w-3 h-3 mr-1" /> Control</>
@@ -665,16 +665,18 @@ export default function EnhancedRCSASpreadsheet() {
           CRITICAL: 'bg-red-100 text-red-800'
         };
         return (
-          <DaisyBadge className={cn('text-xs', colors[level as keyof typeof colors])}>
-            {level}
+          <DaisyBadge className={cn('text-xs', colors[level as keyof typeof colors])} >
+  {level}
+</DaisyBadge>
           </DaisyBadge>
         );
       }
 
       if (column.id === 'status') {
         return (
-          <DaisyBadge variant="outline" className="text-xs">
-            {cellValue}
+          <DaisyBadge variant="outline" className="text-xs" >
+  {cellValue}
+</DaisyBadge>
           </DaisyBadge>
         );
       }
@@ -739,15 +741,14 @@ export default function EnhancedRCSASpreadsheet() {
           </h1>
           
           {/* View mode selector */}
-          <DaisySelect value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="combined">Combined View</SelectItem>
-              <DaisySelectItem value="risks">Risks Only</SelectItem>
-              <DaisySelectItem value="controls">Controls Only</SelectItem>
-            </SelectContent>
+          <DaisySelect value={viewMode} onValueChange={(v: any) => setViewMode(v)} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="combined">Combined View</DaisySelectContent>
+              <DaisySelectItem value="risks">Risks Only</DaisySelectItem>
+              <DaisySelectItem value="controls">Controls Only</DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
 
           {/* Status indicator */}
@@ -759,8 +760,9 @@ export default function EnhancedRCSASpreadsheet() {
           )}
           
           {rows.some(r => r.isDirty) && !isAutoSaving && (
-            <DaisyBadge variant="outline" className="text-xs">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2" />
+            <DaisyBadge variant="outline" className="text-xs" >
+  <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2" />
+</DaisyBadge>
               Unsaved changes
             </DaisyBadge>
           )}
@@ -777,43 +779,41 @@ export default function EnhancedRCSASpreadsheet() {
           />
 
           {/* Filters */}
-          <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="All Status" />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Status</SelectItem>
+          <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="All Status" /></DaisyInput>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Status</DaisySelectContent>
               {viewMode !== 'controls' && (
                 <>
-                  <DaisySelectItem value={RiskStatus.IDENTIFIED}>Identified</SelectItem>
-                  <DaisySelectItem value={RiskStatus.ASSESSED}>Assessed</SelectItem>
-                  <DaisySelectItem value={RiskStatus.MITIGATED}>Mitigated</SelectItem>
-                  <DaisySelectItem value={RiskStatus.ACCEPTED}>Accepted</SelectItem>
+                  <DaisySelectItem value={RiskStatus.IDENTIFIED}>Identified</DaisySelectItem>
+                  <DaisySelectItem value={RiskStatus.ASSESSED}>Assessed</DaisySelectItem>
+                  <DaisySelectItem value={RiskStatus.MITIGATED}>Mitigated</DaisySelectItem>
+                  <DaisySelectItem value={RiskStatus.ACCEPTED}>Accepted</DaisySelectItem>
                 </>
               )}
               {viewMode !== 'risks' && (
                 <>
-                  <DaisySelectItem value={ControlStatus.PLANNED}>Planned</SelectItem>
-                  <DaisySelectItem value={ControlStatus.IMPLEMENTED}>Implemented</SelectItem>
-                  <DaisySelectItem value={ControlStatus.TESTED}>Tested</SelectItem>
-                  <DaisySelectItem value={ControlStatus.EFFECTIVE}>Effective</SelectItem>
+                  <DaisySelectItem value={ControlStatus.PLANNED}>Planned</DaisySelectItem>
+                  <DaisySelectItem value={ControlStatus.IMPLEMENTED}>Implemented</DaisySelectItem>
+                  <DaisySelectItem value={ControlStatus.TESTED}>Tested</DaisySelectItem>
+                  <DaisySelectItem value={ControlStatus.EFFECTIVE}>Effective</DaisySelectItem>
                 </>
               )}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
 
           {viewMode !== 'controls' && (
-            <DaisySelect value={filterRiskLevel} onValueChange={setFilterRiskLevel}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue placeholder="All Risk Levels" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Risk Levels</SelectItem>
-                <DaisySelectItem value="LOW">Low</SelectItem>
-                <DaisySelectItem value="MEDIUM">Medium</SelectItem>
-                <DaisySelectItem value="HIGH">High</SelectItem>
-                <DaisySelectItem value="CRITICAL">Critical</SelectItem>
-              </SelectContent>
+            <DaisySelect value={filterRiskLevel} onValueChange={setFilterRiskLevel} />
+              <DaisySelectTrigger className="w-40" />
+                <DaisySelectValue placeholder="All Risk Levels" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Risk Levels</DaisySelectContent>
+                <DaisySelectItem value="LOW">Low</DaisySelectItem>
+                <DaisySelectItem value="MEDIUM">Medium</DaisySelectItem>
+                <DaisySelectItem value="HIGH">High</DaisySelectItem>
+                <DaisySelectItem value="CRITICAL">Critical</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
           )}
 
@@ -821,18 +821,18 @@ export default function EnhancedRCSASpreadsheet() {
           <DaisyButton
             variant="outline"
             size="sm"
-            onClick={handleAddRow}
-          >
-            <Plus className="w-4 h-4 mr-1" />
+            onClick={handleAddRow} >
+  <Plus className="w-4 h-4 mr-1" />
+</DaisyButton>
             Add {viewMode === 'controls' ? 'Control' : 'Risk'}
           </DaisyButton>
 
           <DaisyButton
             variant="outline"
             size="sm"
-            onClick={handleExport}
-          >
-            <Download className="w-4 h-4 mr-1" />
+            onClick={handleExport} >
+  <Download className="w-4 h-4 mr-1" />
+</DaisyButton>
             Export
           </DaisyButton>
         </div>

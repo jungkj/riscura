@@ -34,7 +34,7 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
+  <DaisyDialogPortal />
     <DaisyDialogOverlay />
     <DaisyDialogPrimitive.Content
       ref={ref}
@@ -136,7 +136,7 @@ const DialogLarge = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
+  <DaisyDialogPortal />
     <DaisyDialogOverlay />
     <DaisyDialogPrimitive.Content
       ref={ref}
@@ -180,7 +180,7 @@ const DialogFullscreen = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DaisyDialogPortal>
+  <DaisyDialogPortal />
     <DaisyDialogOverlay />
     <DaisyDialogPrimitive.Content
       ref={ref}

@@ -133,8 +133,9 @@ const ReportTemplatesGrid: React.FC = () => {
     };
 
     return (
-      <DaisyBadge variant={variants[status]} className="text-caption">
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+      <DaisyBadge variant={variants[status]} className="text-caption" >
+  {status.charAt(0).toUpperCase() + status.slice(1)}
+</DaisyBadge>
       </DaisyBadge>
     );
   };
@@ -150,23 +151,20 @@ const ReportTemplatesGrid: React.FC = () => {
         <DaisyButton
           variant={selectedCategory === 'all' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setSelectedCategory('all')}
-        >
+          onClick={() => setSelectedCategory('all')} />
           All Reports
         </DaisyButton>
         <DaisyButton
           variant={selectedCategory === 'regulatory' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setSelectedCategory('regulatory')}
-        >
+          onClick={() => setSelectedCategory('regulatory')} />
           <Shield className="h-3 w-3 mr-enterprise-1" />
           Regulatory
         </DaisyButton>
         <DaisyButton
           variant={selectedCategory === 'executive' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setSelectedCategory('executive')}
-        >
+          onClick={() => setSelectedCategory('executive')} />
           <BarChart3 className="h-3 w-3 mr-enterprise-1" />
           Executive
         </DaisyButton>
@@ -197,8 +195,9 @@ const ReportTemplatesGrid: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <MoreHorizontal className="h-3 w-3" />
+                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyButton>
                 </DaisyButton>
               </div>
 
@@ -218,8 +217,9 @@ const ReportTemplatesGrid: React.FC = () => {
               {/* Compliance Tags */}
               <div className="flex flex-wrap gap-enterprise-1 mb-enterprise-3">
                 {template.compliance.slice(0, 2).map((framework) => (
-                  <DaisyBadge key={framework} variant="outline" className="text-caption">
-                    {framework}
+                  <DaisyBadge key={framework} variant="outline" className="text-caption" >
+  {framework}
+</DaisyBadge>
                   </DaisyBadge>
                 ))}
               </div>
@@ -233,14 +233,17 @@ const ReportTemplatesGrid: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex items-center space-x-enterprise-1">
-                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Eye className="h-3 w-3" />
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <Eye className="h-3 w-3" />
+</DaisyButton>
                   </DaisyButton>
-                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Play className="h-3 w-3" />
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <Play className="h-3 w-3" />
+</DaisyButton>
                   </DaisyButton>
-                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Edit className="h-3 w-3" />
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <Edit className="h-3 w-3" />
+</DaisyButton>
                   </DaisyButton>
                 </div>
               </div>
@@ -312,8 +315,9 @@ const AutomatedInsightsPanel: React.FC = () => {
                   </div>
                 </div>
                 {insight.actionable && (
-                  <DaisyButton variant="ghost" size="sm" className="text-current">
-                    <Zap className="h-3 w-3 mr-enterprise-1" />
+                  <DaisyButton variant="ghost" size="sm" className="text-current" >
+  <Zap className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
                     Action
                   </DaisyButton>
                 )}
@@ -341,12 +345,14 @@ const ReportBuilderInterface: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <DaisyButton variant="outline" size="sm">
-            <Eye className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" size="sm" >
+  <Eye className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Preview
           </DaisyButton>
-          <DaisyButton size="sm">
-            <Download className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton size="sm" >
+  <Download className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Generate
           </DaisyButton>
         </div>
@@ -424,24 +430,24 @@ export const AdvancedReportingPlatform: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <DaisyTabsList>
-          <DaisyTabsTrigger value="templates">Report Templates</DaisyTabsTrigger>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
+        <DaisyTabsList />
+          <DaisyTabsTrigger value="templates">Report Templates</DaisyTabs>
           <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
           <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
           <DaisyTabsTrigger value="distribution">Distribution</DaisyTabsTrigger>
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="templates" className="space-y-enterprise-6">
+      <DaisyTabsContent value="templates" className="space-y-enterprise-6" />
         <ReportTemplatesGrid />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="builder" className="space-y-enterprise-6">
+      <DaisyTabsContent value="builder" className="space-y-enterprise-6" />
         <ReportBuilderInterface />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="insights" className="space-y-enterprise-6">
+      <DaisyTabsContent value="insights" className="space-y-enterprise-6" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-6">
           <AutomatedInsightsPanel />
           <ContentCard title="Predictive Analytics" className="shadow-notion-sm">
@@ -455,34 +461,32 @@ export const AdvancedReportingPlatform: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="distribution" className="space-y-enterprise-6">
+      <DaisyTabsContent value="distribution" className="space-y-enterprise-6" />
         <ContentCard title="Scheduling & Distribution" className="shadow-notion-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-enterprise-6">
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Schedule</h4>
-              <DaisySelect>
-                <DaisySelectTrigger>
-                  <DaisySelectValue placeholder="Select frequency" />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="daily">Daily</SelectItem>
-                  <DaisySelectItem value="weekly">Weekly</SelectItem>
-                  <DaisySelectItem value="monthly">Monthly</SelectItem>
-                  <DaisySelectItem value="quarterly">Quarterly</SelectItem>
-                </SelectContent>
+              <DaisySelect />
+                <DaisySelectTrigger />
+                  <DaisySelectValue placeholder="Select frequency" /></DaisyTabsContent>
+                <DaisySelectContent />
+                  <DaisySelectItem value="daily">Daily</DaisySelectContent>
+                  <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
+                  <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
+                  <DaisySelectItem value="quarterly">Quarterly</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
             </div>
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Distribution</h4>
-              <DaisySelect>
-                <DaisySelectTrigger>
-                  <DaisySelectValue placeholder="Select delivery method" />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="email">Email</SelectItem>
-                  <DaisySelectItem value="slack">Slack</SelectItem>
-                  <DaisySelectItem value="portal">Portal Only</SelectItem>
-                </SelectContent>
+              <DaisySelect />
+                <DaisySelectTrigger />
+                  <DaisySelectValue placeholder="Select delivery method" /></DaisySelect>
+                <DaisySelectContent />
+                  <DaisySelectItem value="email">Email</DaisySelectContent>
+                  <DaisySelectItem value="slack">Slack</DaisySelectItem>
+                  <DaisySelectItem value="portal">Portal Only</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
             </div>
           </div>

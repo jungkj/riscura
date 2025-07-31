@@ -274,8 +274,9 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     <div className={cn("text-center py-12 px-4", className)}>
       <div className="max-w-md mx-auto space-y-4">
         <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
-          <DaisyAlertTriangle className="w-8 h-8 text-red-600" />
-        </div>
+          <DaisyAlertTriangle className="w-8 h-8 text-red-600" >
+  </div>
+</DaisySkeletonProps>
         <div className="space-y-2">
           <h3 className="text-lg font-semibold text-gray-900 font-inter">
             {title}
@@ -285,8 +286,9 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           </p>
         </div>
         {onRetry && (
-          <DaisyButton onClick={onRetry} className="gap-2">
-            <RefreshCw className="w-4 h-4" />
+          <DaisyButton onClick={onRetry} className="gap-2" >
+  <RefreshCw className="w-4 h-4" />
+</DaisyButton>
             {retryText}
           </DaisyButton>
         )}
@@ -333,8 +335,9 @@ export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry 
           </p>
         </div>
         {onRetry && (
-          <DaisyButton onClick={onRetry} variant="secondary" className="gap-2">
-            <RefreshCw className="w-4 h-4" />
+          <DaisyButton onClick={onRetry} variant="secondary" className="gap-2" >
+  <RefreshCw className="w-4 h-4" />
+</DaisyButton>
             Try again
           </DaisyButton>
         )}
@@ -377,8 +380,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           </p>
         </div>
         {action && (
-          <DaisyButton onClick={action.onClick}>
-            {action.label}
+          <DaisyButton onClick={action.onClick} >
+  {action.label}
+</DaisyButton>
           </DaisyButton>
         )}
       </div>
@@ -456,8 +460,9 @@ export const SuccessState: React.FC<{
           </p>
         </div>
         {action && (
-          <DaisyButton onClick={action.onClick}>
-            {action.label}
+          <DaisyButton onClick={action.onClick} >
+  {action.label}
+</DaisyButton>
           </DaisyButton>
         )}
       </div>

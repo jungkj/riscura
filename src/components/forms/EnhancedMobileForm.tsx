@@ -1009,7 +1009,9 @@ export function EnhancedMobileForm({
           >
             {autoSaveStatus === 'saving' && <Save className="w-4 h-4 animate-spin" />}
             {autoSaveStatus === 'saved' && <Check className="w-4 h-4" />}
-            {autoSaveStatus === 'error' && <DaisyAlertCircle className="w-4 h-4" />}
+            {autoSaveStatus === 'error' && <DaisyAlertCircle className="w-4 h-4" >
+  }
+</DaisyTextareaField>
             <span>
               {autoSaveStatus === 'saving' && 'Saving...'}
               {autoSaveStatus === 'saved' && 'Saved automatically'}
@@ -1027,8 +1029,9 @@ export function EnhancedMobileForm({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <DaisyAlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-red-800">{error}</p>
+              <DaisyAlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" >
+  <p className="text-red-800">
+</DaisyAlertCircle>{error}</p>
             </motion.div>
           )}
 

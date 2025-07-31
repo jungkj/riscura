@@ -402,16 +402,18 @@ How can I assist you today?`,
   };
 
   return (
-    <DaisyCard className="h-[600px] flex flex-col">
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className="h-[600px] flex flex-col" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2">
               <Brain className="w-5 h-5 text-purple-600" />
               <DaisyCardTitle className="text-lg">ARIA Assistant</DaisyCardTitle>
             </div>
-            <DaisyBadge variant="secondary" className="text-xs">
-              <Zap className="w-3 h-3 mr-1" />
+            <DaisyBadge variant="secondary" className="text-xs" >
+  <Zap className="w-3 h-3 mr-1" />
+</DaisyBadge>
               AI Powered
             </DaisyBadge>
           </div>
@@ -424,9 +426,9 @@ How can I assist you today?`,
                   size="sm"
                   onClick={isSpeaking ? stopSpeaking : undefined}
                   disabled={!isSpeaking}
-                  className="p-2"
-                >
-                  {isSpeaking ? (
+                  className="p-2" >
+  {isSpeaking ? (
+</DaisyButton>
                     <VolumeX className="w-4 h-4 text-red-500" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
@@ -440,9 +442,9 @@ How can I assist you today?`,
               size="sm"
               onClick={exportConversation}
               disabled={messages.length === 0}
-              className="p-2"
-            >
-              <Download className="w-4 h-4" />
+              className="p-2" >
+  <Download className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
             
             <DaisyButton
@@ -450,17 +452,18 @@ How can I assist you today?`,
               size="sm"
               onClick={clearConversation}
               disabled={messages.length === 0}
-              className="p-2"
-            >
-              <RotateCcw className="w-4 h-4" />
+              className="p-2" >
+  <RotateCcw className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
           </div>
         </div>
       
 
-      <DaisyCardContent className="flex-1 flex flex-col p-0">
-        {/* Messages Area */}
-        <DaisyScrollArea className="flex-1 px-4">
+      <DaisyCardContent className="flex-1 flex flex-col p-0" >
+  {/* Messages Area */}
+</DaisyCardContent>
+        <DaisyScrollArea className="flex-1 px-4" />
           <div className="space-y-4 pb-4">
             {messages.map((message) => (
               <div
@@ -491,8 +494,9 @@ How can I assist you today?`,
                           {message.timestamp.toLocaleTimeString()}
                         </span>
                         {message.confidence && (
-                          <DaisyBadge variant="outline" className="text-xs">
-                            {Math.round(message.confidence * 100)}% confident
+                          <DaisyBadge variant="outline" className="text-xs" >
+  {Math.round(message.confidence * 100)}% confident
+</DaisyScrollArea>
                           </DaisyBadge>
                         )}
                       </div>
@@ -510,8 +514,7 @@ How can I assist you today?`,
                               variant="outline"
                               size="sm"
                               onClick={() => handleAction(action.action, action.parameters)}
-                              className="text-xs"
-                            >
+                              className="text-xs" />
                               {action.label}
                             </DaisyButton>
                           ))}
@@ -528,8 +531,7 @@ How can I assist you today?`,
                               variant="ghost"
                               size="sm"
                               onClick={() => handleFollowUpQuestion(question)}
-                              className="text-xs h-auto p-2 justify-start text-left whitespace-normal"
-                            >
+                              className="text-xs h-auto p-2 justify-start text-left whitespace-normal" />
                               {question}
                             </DaisyButton>
                           ))}
@@ -543,8 +545,7 @@ How can I assist you today?`,
                             variant="ghost"
                             size="sm"
                             onClick={() => copyMessage(message.content)}
-                            className="p-1 h-6 w-6"
-                          >
+                            className="p-1 h-6 w-6" />
                             <Copy className="w-3 h-3" />
                           </DaisyButton>
                           
@@ -554,8 +555,7 @@ How can I assist you today?`,
                               size="sm"
                               onClick={() => speakMessage(message.content)}
                               disabled={isSpeaking}
-                              className="p-1 h-6 w-6"
-                            >
+                              className="p-1 h-6 w-6" />
                               <Volume2 className="w-3 h-3" />
                             </DaisyButton>
                           )}
@@ -563,17 +563,17 @@ How can I assist you today?`,
                           <DaisyButton
                             variant="ghost"
                             size="sm"
-                            className="p-1 h-6 w-6"
-                          >
-                            <ThumbsUp className="w-3 h-3" />
+                            className="p-1 h-6 w-6" >
+  <ThumbsUp className="w-3 h-3" />
+</DaisyButton>
                           </DaisyButton>
                           
                           <DaisyButton
                             variant="ghost"
                             size="sm"
-                            className="p-1 h-6 w-6"
-                          >
-                            <ThumbsDown className="w-3 h-3" />
+                            className="p-1 h-6 w-6" >
+  <ThumbsDown className="w-3 h-3" />
+</DaisyButton>
                           </DaisyButton>
                         </div>
                       )}
@@ -633,16 +633,16 @@ How can I assist you today?`,
                   ) : (
                     <Mic className="w-4 h-4" />
                   )}
-                </DaisyButton>
+                </DaisySeparator>
               )}
             </div>
             
             <DaisyButton
               type="submit"
               disabled={!inputMessage.trim() || isLoading}
-              size="sm"
-            >
-              <Send className="w-4 h-4" />
+              size="sm" >
+  <Send className="w-4 h-4" />
+</DaisyButton>
             </DaisyButton>
           </form>
           
@@ -653,8 +653,7 @@ How can I assist you today?`,
               size="sm"
               onClick={() => sendMessage('Show me our risk dashboard')}
               disabled={isLoading}
-              className="text-xs"
-            >
+              className="text-xs" />
               <Shield className="w-3 h-3 mr-1" />
               Risk Dashboard
             </DaisyButton>
@@ -664,8 +663,7 @@ How can I assist you today?`,
               size="sm"
               onClick={() => sendMessage('Analyze compliance status')}
               disabled={isLoading}
-              className="text-xs"
-            >
+              className="text-xs" />
               <CheckCircle2 className="w-3 h-3 mr-1" />
               Compliance Status
             </DaisyButton>
@@ -675,8 +673,7 @@ How can I assist you today?`,
               size="sm"
               onClick={() => sendMessage('What are our trending risks?')}
               disabled={isLoading}
-              className="text-xs"
-            >
+              className="text-xs" />
               <BarChart3 className="w-3 h-3 mr-1" />
               Risk Trends
             </DaisyButton>
@@ -686,8 +683,7 @@ How can I assist you today?`,
               size="sm"
               onClick={() => sendMessage('Recommend controls for high-priority risks')}
               disabled={isLoading}
-              className="text-xs"
-            >
+              className="text-xs" />
               <Lightbulb className="w-3 h-3 mr-1" />
               Control Recommendations
             </DaisyButton>

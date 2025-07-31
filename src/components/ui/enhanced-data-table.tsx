@@ -100,8 +100,9 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
   const IconComponent = config.icon;
 
   return (
-    <DaisyBadge variant={config.variant} className="text-xs font-medium">
-      <IconComponent className="h-3 w-3 mr-1" />
+    <DaisyBadge variant={config.variant} className="text-xs font-medium" >
+  <IconComponent className="h-3 w-3 mr-1" />
+</DaisyBadge>
       {value.replace('_', ' ').charAt(0).toUpperCase() + value.replace('_', ' ').slice(1)}
     </DaisyBadge>
   );
@@ -213,41 +214,40 @@ const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => 
   const device = useDevice();
   
   return (
-    <DaisyDropdownMenu>
-      <DaisyDropdownMenuTrigger asChild>
+    <DaisyDropdownMenu />
+      <DaisyDropdownMenuTrigger asChild />
         <DaisyButton 
           variant="ghost" 
           size="sm" 
           className={cn(
             "p-0 hover:bg-gray-100",
             device.type === 'mobile' ? "h-10 w-10" : "h-8 w-8"
-          )}
-        >
-          <MoreHorizontal className="h-4 w-4" />
+          )} >
+  <MoreHorizontal className="h-4 w-4" />
+</DaisyCalendar>
         </DaisyButton>
       </DaisyDropdownMenuTrigger>
-      <DaisyDropdownMenuContent align="end" className="w-48">
-        <DaisyDropdownMenuItem onClick={() => onAction('view', row)}>
+      <DaisyDropdownMenuContent align="end" className="w-48" />
+        <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
           <Eye className="h-4 w-4 mr-2" />
           View Details
-        </DaisyDropdownMenuItem>
-        <DaisyDropdownMenuItem onClick={() => onAction('edit', row)}>
+        </DaisyDropdownMenuContent>
+        <DaisyDropdownMenuItem onClick={() => onAction('edit', row)} />
           <Edit className="h-4 w-4 mr-2" />
           Edit
         </DaisyDropdownMenuItem>
-        <DaisyDropdownMenuItem onClick={() => onAction('copy', row)}>
+        <DaisyDropdownMenuItem onClick={() => onAction('copy', row)} />
           <Copy className="h-4 w-4 mr-2" />
           Copy
         </DaisyDropdownMenuItem>
         <DaisyDropdownMenuSeparator />
-        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)}>
+        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
           <Archive className="h-4 w-4 mr-2" />
           Archive
-        </DaisyDropdownMenuItem>
+        </DaisyDropdownMenuSeparator>
         <DaisyDropdownMenuItem 
           onClick={() => onAction('delete', row)}
-          className="text-red-600 focus:text-red-600"
-        >
+          className="text-red-600 focus:text-red-600" />
           <Trash2 className="h-4 w-4 mr-2" />
           Delete
         </DaisyDropdownMenuItem>
@@ -358,19 +358,21 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <DaisyPopover>
-      <DaisyPopoverTrigger asChild>
-        <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} className="gap-2">
-          <Filter className="h-4 w-4" />
+    <DaisyPopover />
+      <DaisyPopoverTrigger asChild />
+        <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} className="gap-2" >
+  <Filter className="h-4 w-4" />
+</DaisyProgressCell>
           {device.type !== 'mobile' && 'Filters'}
           {hasActiveFilters && (
-            <DaisyBadge variant="default" className="text-xs px-1.5 py-0.5 h-4 min-w-4">
-              {Object.keys(filters).length}
+            <DaisyBadge variant="default" className="text-xs px-1.5 py-0.5 h-4 min-w-4" >
+  {Object.keys(filters).length}
+</DaisyBadge>
             </DaisyBadge>
           )}
         </DaisyButton>
       </DaisyPopoverTrigger>
-      <DaisyPopoverContent className="w-80 p-4">
+      <DaisyPopoverContent className="w-80 p-4" />
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold text-sm text-[#191919] font-inter">Advanced Filters</h4>
@@ -379,9 +381,9 @@ const AdvancedFilters: React.FC<{
                 variant="ghost"
                 size="sm"
                 onClick={onClearFilters}
-                className="text-xs"
-              >
-                Clear All
+                className="text-xs" >
+  Clear All
+</DaisyPopoverContent>
               </DaisyButton>
             )}
           </div>
@@ -405,17 +407,16 @@ const AdvancedFilters: React.FC<{
                       onFiltersChange(newFilters);
                     }}
                   >
-                    <DaisySelectTrigger className="h-8">
-                      <DaisySelectValue placeholder="Select..." />
-                    </DaisySelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="">All</SelectItem>
+                    <DaisySelectTrigger className="h-8" />
+                      <DaisySelectValue placeholder="Select..." /></DaisySelect>
+                    <DaisySelectContent />
+                      <DaisySelectItem value="">All</DaisySelectContent>
                       {column.filterOptions.map((option) => (
-                        <DaisySelectItem key={option.value} value={option.value}>
+                        <DaisySelectItem key={option.value} value={option.value} />
                           {option.label}
-                        </SelectItem>
+                        </DaisySelectItem>
                       ))}
-                    </SelectContent>
+                    </DaisySelectContent>
                   </DaisySelect>
                 ) : (
                   <DaisyInput
@@ -437,7 +438,7 @@ const AdvancedFilters: React.FC<{
             ))}
           </div>
         </div>
-      </DaisyPopoverContent>
+      </DaisyInput>
     </DaisyPopover>
   );
 };
@@ -623,8 +624,9 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
             {/* Active Filter Indicators */}
             {Object.entries(filters).map(([key, value]) => (
               value && (
-                <DaisyBadge key={key} variant="secondary" className="text-xs">
-                  {visibleColumns.find(col => col.key === key)?.title}: {String(value)}
+                <DaisyBadge key={key} variant="secondary" className="text-xs" >
+  {visibleColumns.find(col => col.key === key)?.title}: {String(value)}
+</DaisyProgressCell>
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -648,33 +650,34 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
           {/* Bulk Actions */}
           {selectedRows.length > 0 && (
             <div className="flex items-center gap-2">
-              <DaisyBadge variant="outline" className="text-xs">
-                {selectedRows.length} selected
+              <DaisyBadge variant="outline" className="text-xs" >
+  {selectedRows.length} selected
+</DaisyBadge>
               </DaisyBadge>
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
-                  <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'}>
-                    Actions
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
+                  <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} >
+  Actions
+</DaisyDropdownMenu>
                     <ChevronDown className="h-3 w-3 ml-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find((row: any) => row.id === id)!))}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find((row: any) => row.id === id)!))} />
                     <Download className="h-4 w-4 mr-2" />
                     Export Selected
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find((row: any) => row.id === id)!))}>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('archive', selectedRows.map(id => data.find((row: any) => row.id === id)!))} />
                     <Archive className="h-4 w-4 mr-2" />
                     Archive Selected
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
                   <DaisyDropdownMenuItem 
                     onClick={() => onBulkAction?.('delete', selectedRows.map(id => data.find((row: any) => row.id === id)!))}
-                    className="text-red-600 focus:text-red-600"
-                  >
+                    className="text-red-600 focus:text-red-600" />
                     <Trash2 className="h-4 w-4 mr-2" />
                     Delete Selected
-                  </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuSeparator>
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             </div>
@@ -683,20 +686,23 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
           {/* Table Actions */}
           {device.type !== 'mobile' && (
             <>
-              <DaisyButton variant="tertiary" size="sm">
-                <RefreshCw className="h-4 w-4 mr-2" />
+              <DaisyButton variant="tertiary" size="sm" >
+  <RefreshCw className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Refresh
               </DaisyButton>
               
               {exportable && (
-                <DaisyButton variant="tertiary" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
+                <DaisyButton variant="tertiary" size="sm" >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Export
                 </DaisyButton>
               )}
 
-              <DaisyButton variant="tertiary" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
+              <DaisyButton variant="tertiary" size="sm" >
+  <Settings className="h-4 w-4 mr-2" />
+</DaisyButton>
                 Columns
               </DaisyButton>
             </>
@@ -735,16 +741,16 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
         // Desktop Table View
         <div className="border border-gray-200 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
-            <DaisyTable>
-              <DaisyTableHeader>
-                <DaisyTableRow>
+            <DaisyTable />
+              <DaisyTableHeader />
+                <DaisyTableRow />
                   {selectable && (
-                    <DaisyTableHead className="w-12">
+                    <DaisyTableHead className="w-12" />
                       <DaisyCheckbox
                         checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
                         onCheckedChange={handleSelectAll}
                       />
-                    </DaisyTableHead>
+                    </DaisyTable>
                   )}
                   {visibleColumns.map((column) => (
                     <DaisyTableHead
@@ -768,40 +774,39 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                 </DaisyTableRow>
               </DaisyTableHeader>
 
-              <DaisyTableBody>
+              <DaisyTableBody />
                 {loading ? (
-                  <DaisyTableRow>
-                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
+                  <DaisyTableRow />
+                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" />
                       <div className="text-center">
                         <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#199BEC]" />
                         <p className="text-sm text-gray-500 mt-2 font-inter">Loading...</p>
                       </div>
-                    </DaisyTableCell>
+                    </DaisyTableBody>
                   </DaisyTableRow>
                 ) : paginatedData.length === 0 ? (
-                  <DaisyTableRow>
-                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12">
+                  <DaisyTableRow />
+                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" />
                       <div className="text-center">
                         <div className="p-4 rounded-full bg-gray-100 inline-block mb-3">
                           <Sparkles className="h-6 w-6 text-gray-400" />
                         </div>
                         <p className="text-sm text-gray-500 font-inter">{emptyMessage}</p>
                       </div>
-                    </DaisyTableCell>
+                    </DaisyTableRow>
                   </DaisyTableRow>
                 ) : (
                   paginatedData.map((row: any, index) => (
                     <DaisyTableRow
                       key={row.id || index}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
+                      className="hover:bg-gray-50 transition-colors" />
                       {selectable && (
-                        <DaisyTableCell>
+                        <DaisyTableCell />
                           <DaisyCheckbox
                             checked={selectedRows.includes(row.id)}
                             onCheckedChange={(checked) => handleSelectRow(row.id, !!checked)}
                           />
-                        </DaisyTableCell>
+                        </DaisyTableRow>
                       )}
                       {visibleColumns.map((column) => (
                         <DaisyTableCell
@@ -809,8 +814,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                           className={cn(
                             column.align === 'center' && "text-center",
                             column.align === 'right' && "text-right"
-                          )}
-                        >
+                          )} />
                           {renderCell(column, row[column.key], row)}
                         </DaisyTableCell>
                       ))}
@@ -838,8 +842,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
               variant="tertiary"
               size={device.type === 'mobile' ? 'default' : 'sm'}
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-            >
+              disabled={currentPage === 1} />
               <ChevronLeft className="h-4 w-4" />
               {device.type !== 'mobile' && 'Previous'}
             </DaisyButton>
@@ -854,8 +857,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                       variant={currentPage === pageNum ? 'default' : 'tertiary'}
                       size="sm"
                       onClick={() => setCurrentPage(pageNum)}
-                      className="w-8 h-8 p-0"
-                    >
+                      className="w-8 h-8 p-0" />
                       {pageNum}
                     </DaisyButton>
                   );
@@ -867,8 +869,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
               variant="tertiary"
               size={device.type === 'mobile' ? 'default' : 'sm'}
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-              disabled={currentPage === totalPages}
-            >
+              disabled={currentPage === totalPages} />
               {device.type !== 'mobile' && 'Next'}
               <ChevronRight className="h-4 w-4" />
             </DaisyButton>

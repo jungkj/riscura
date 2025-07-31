@@ -237,50 +237,50 @@ export function ComplianceGapAnalysis() {
 
   return (
     <div className="space-y-6">
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle>Compliance Gap Analysis</DaisyCardTitle>
-          <DaisyCardDescription>
-            Analyze compliance gaps and generate remediation recommendations
+          <DaisyCardDescription >
+  Analyze compliance gaps and generate remediation recommendations
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
-              <DaisySelectTrigger>
-                <DaisySelectValue placeholder="Select framework" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
+        <DaisyCardContent >
+  <div className="grid gap-4 md:grid-cols-3">
+</DaisyCardContent>
+            <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
+              <DaisySelectTrigger />
+                <DaisySelectValue placeholder="Select framework" /></DaisySelect>
+              <DaisySelectContent />
                 {frameworks.map((framework) => (
-                  <DaisySelectItem key={framework.id} value={framework.id}>
+                  <DaisySelectItem key={framework.id} value={framework.id} />
                     {framework.name} {framework.version && `(${framework.version})`}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
 
             <DaisySelect 
               value={selectedAssessment} 
               onValueChange={setSelectedAssessment}
-              disabled={!selectedFramework}
-            >
-              <DaisySelectTrigger>
-                <DaisySelectValue placeholder="Select assessment" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
+              disabled={!selectedFramework} />
+              <DaisySelectTrigger />
+                <DaisySelectValue placeholder="Select assessment" /></DaisySelect>
+              <DaisySelectContent />
                 {assessments.map((assessment) => (
-                  <DaisySelectItem key={assessment.id} value={assessment.id}>
+                  <DaisySelectItem key={assessment.id} value={assessment.id} />
                     {assessment.name} - {format(new Date(assessment.assessmentDate), 'MMM dd, yyyy')}
-                  </SelectItem>
+                  </DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
 
             <DaisyButton 
               onClick={performGapAnalysis}
-              disabled={!selectedAssessment || loading}
-            >
-              {loading ? (
+              disabled={!selectedAssessment || loading} >
+  {loading ? (
+</DaisyButton>
                 <>
                   <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                   Analyzing...
@@ -297,58 +297,66 @@ export function ComplianceGapAnalysis() {
       </DaisyCard>
 
       {analysis && (
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-          <DaisyTabsList className="grid w-full grid-cols-4">
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+          <DaisyTabsList className="grid w-full grid-cols-4" />
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
             <DaisyTabsTrigger value="gaps">Gaps</DaisyTabsTrigger>
             <DaisyTabsTrigger value="requirements">Requirements</DaisyTabsTrigger>
             <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value="overview" className="space-y-6">
+          <DaisyTabsContent value="overview" className="space-y-6" />
             <div className="grid gap-4 md:grid-cols-4">
-              <DaisyCard>
-                <DaisyCardHeader className="pb-3">
+              <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyTabsContent>
                   <DaisyCardTitle className="text-base">Overall Compliance</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="text-2xl font-bold">
+        <DaisyCardContent >
+  <div className="text-2xl font-bold">
+</DaisyCardContent>
                     {analysis.overallCompliance.toFixed(1)}%
                   </div>
-                  <DaisyProgress value={analysis.overallCompliance} className="mt-2" />
-                </DaisyCardContent>
+                  <DaisyProgress value={analysis.overallCompliance} className="mt-2" /></DaisyProgress>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader className="pb-3">
+              <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
                   <DaisyCardTitle className="text-base">Total Requirements</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="text-2xl font-bold">{analysis.requirementCount}</div>
+        <DaisyCardContent >
+  <div className="text-2xl font-bold">
+</DaisyCardContent>{analysis.requirementCount}</div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {analysis.notAssessedCount} not assessed
                   </p>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader className="pb-3">
+              <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
                   <DaisyCardTitle className="text-base">Compliance Gaps</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="text-2xl font-bold">{analysis.gaps.length}</div>
+        <DaisyCardContent >
+  <div className="text-2xl font-bold">
+</DaisyCardContent>{analysis.gaps.length}</div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {analysis.criticalGaps.length} critical
                   </p>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader className="pb-3">
+              <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
                   <DaisyCardTitle className="text-base">Assessment Status</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <DaisyBadge variant="secondary" className="text-xs">
+        <DaisyCardContent >
+  <DaisyBadge variant="secondary" className="text-xs" >
+  </DaisyCardContent>
+</DaisyBadge>
                     {analysis.assessment.status}
                   </DaisyBadge>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -359,12 +367,14 @@ export function ComplianceGapAnalysis() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-base">Compliance Status Distribution</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <ResponsiveContainer width="100%" height={300}>
+        <DaisyCardContent >
+  <ResponsiveContainer width="100%" height={300}>
+</DaisyCardContent>
                     <PieChart>
                       <Pie
                         data={getComplianceData()}
@@ -380,18 +390,19 @@ export function ComplianceGapAnalysis() {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <DaisyTooltip />
-                    </PieChart>
+                      <DaisyTooltip /></DaisyTooltip>
                   </ResponsiveContainer>
                 </DaisyCardContent>
               </DaisyCard>
 
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-base">Gaps by Severity</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <ResponsiveContainer width="100%" height={300}>
+        <DaisyCardContent >
+  <ResponsiveContainer width="100%" height={300}>
+</DaisyCardContent>
                     <BarChart data={getGapsBySeverity()}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="severity" />
@@ -400,16 +411,18 @@ export function ComplianceGapAnalysis() {
                       <Bar dataKey="count" fill="#8884d8" />
                     </BarChart>
                   </ResponsiveContainer>
-                </DaisyCardContent>
+                </DaisyTooltip>
               </DaisyCard>
             </div>
 
-            <DaisyCard>
-              <DaisyCardHeader>
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                 <DaisyCardTitle className="text-base">Gaps by Type</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <ResponsiveContainer width="100%" height={300}>
+        <DaisyCardContent >
+  <ResponsiveContainer width="100%" height={300}>
+</DaisyCardContent>
                   <BarChart data={getGapsByType()} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
@@ -418,43 +431,50 @@ export function ComplianceGapAnalysis() {
                     <Bar dataKey="count" fill="#10b981" />
                   </BarChart>
                 </ResponsiveContainer>
-              </DaisyCardContent>
+              </DaisyTooltip>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="gaps">
+          <DaisyTabsContent value="gaps" />
             <ComplianceGapList assessmentId={selectedAssessment} gaps={analysis.gaps} />
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="requirements">
+          <DaisyTabsContent value="requirements" />
             <ComplianceRequirementAssessment 
               assessmentId={selectedAssessment}
               frameworkId={analysis.framework.id}
             />
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="recommendations" className="space-y-4">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="recommendations" className="space-y-4" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Recommended Actions</DaisyCardTitle>
-                <DaisyCardDescription>
-                  Prioritized recommendations based on gap analysis
+                <DaisyCardDescription >
+  Prioritized recommendations based on gap analysis
+</DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-4">
-                {analysis.recommendations.map((recommendation, index) => (
-                  <DaisyAlert key={index}>
-                    <DaisyAlertTriangle className="h-4 w-4" />
-                    <DaisyAlertTitle>Recommendation {index + 1}</DaisyCardTitle>
+              <DaisyCardContent className="space-y-4" >
+  {analysis.recommendations.map((recommendation, index) => (
+</DaisyCardContent>
+                  <DaisyAlert key={index} >
+  <DaisyAlertTriangle className="h-4 w-4" />
+</DaisyAlert>
+                    <DaisyAlertTitle>Recommendation {index + 1}</DaisyAlertTitle>
                     <DaisyAlertDescription>{recommendation}
-                  </DaisyAlert>
+                </DaisyAlertDescription>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                 ))}
               </DaisyCardContent>
             </DaisyCard>
 
             <div className="flex justify-end">
-              <DaisyButton onClick={exportReport}>
-                <Download className="mr-2 h-4 w-4" />
+              <DaisyButton onClick={exportReport} >
+  <Download className="mr-2 h-4 w-4" />
+</DaisyButton>
                 Export Report
               </DaisyButton>
             </div>

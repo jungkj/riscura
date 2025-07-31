@@ -183,18 +183,22 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Upload Section */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Upload className="h-5 w-5" />
+</DaisyCardTitle>
             Policy Document Upload
           </DaisyCardTitle>
-          <DaisyCardDescription>
-            Upload policy documents (PDF, DOCX, DOC, TXT) for AI-powered risk and control analysis
+          <DaisyCardDescription >
+  Upload policy documents (PDF, DOCX, DOC, TXT) for AI-powered risk and control analysis
+</DaisyCardDescription>
           </p>
         
-        <DaisyCardContent>
-          {!loading && !hasResults && (
+        <DaisyCardContent >
+  {!loading && !hasResults && (
+</DaisyCardContent>
             <div
               {...getRootProps()}
               className={`
@@ -254,20 +258,26 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
           {/* Error Display */}
           {error && (
-            <DaisyAlert className="mt-4" variant="error">
-              <DaisyAlertCircle className="h-4 w-4" />
+            <DaisyAlert className="mt-4" variant="error" >
+  <DaisyAlertCircle className="h-4 w-4" />
+</DaisyAlert>
               <DaisyAlertDescription>{error}
-            </DaisyAlert>
+                </DaisyAlertDescription>
+                </DaisyAlertDescription>
+              </DaisyAlert>
           )}
 
           {/* Success Message */}
           {success && hasResults && (
-            <DaisyAlert className="mt-4" variant={success ? 'default' : 'destructive'}>
-              <CheckCircle2 className="h-4 w-4" />
-              <DaisyAlertDescription>
-                Analysis complete! Found {policyExtraction?.risks.length} risks and {policyExtraction?.controls.length} controls.
-              
-            </DaisyAlert>
+            <DaisyAlert className="mt-4" variant={success ? 'default' : 'destructive'} >
+  <CheckCircle2 className="h-4 w-4" />
+</DaisyAlert>
+              <DaisyAlertDescription >
+  Analysis complete! Found {policyExtraction?.risks.length} risks and {policyExtraction?.controls.length} controls.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
           )}
         </DaisyCardContent>
       </DaisyCard>
@@ -282,15 +292,19 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
             className="space-y-4"
           >
             {/* Action Bar */}
-            <DaisyCard>
-              <DaisyCardContent className="pt-6">
+            <DaisyCard >
+  <DaisyCardContent className="pt-6" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <DaisyBadge variant="outline" className="px-3 py-1">
-                      {policyExtraction?.risks.length} Risks
+                    <DaisyBadge variant="outline" className="px-3 py-1" >
+  {policyExtraction?.risks.length} Risks
+</DaisyBadge>
                     </DaisyBadge>
-                    <DaisyBadge variant="outline" className="px-3 py-1">
-                      {policyExtraction?.controls.length} Controls
+                    <DaisyBadge variant="outline" className="px-3 py-1" >
+  {policyExtraction?.controls.length} Controls
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                   <div className="flex items-center gap-2">
@@ -298,17 +312,17 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                       variant="outline"
                       size="sm"
                       onClick={approveAll}
-                      disabled={allItemsApproved}
-                    >
-                      <CheckSquare className="h-4 w-4 mr-2" />
+                      disabled={allItemsApproved} >
+  <CheckSquare className="h-4 w-4 mr-2" />
+</DaisyButton>
                       {allItemsApproved ? 'All Approved' : 'Approve All'}
                     </DaisyButton>
                     <DaisyButton
                       variant="outline"
                       size="sm"
-                      onClick={handleReset}
-                    >
-                      <X className="h-4 w-4 mr-2" />
+                      onClick={handleReset} >
+  <X className="h-4 w-4 mr-2" />
+</DaisyButton>
                       Reset
                     </DaisyButton>
                   </div>
@@ -317,15 +331,17 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
             </DaisyCard>
 
             {/* Results Accordion */}
-            <DaisyCard>
-              <DaisyCardContent className="pt-6">
-                <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']}>
+            <DaisyCard >
+  <DaisyCardContent className="pt-6" >
+  </DaisyCard>
+</DaisyCardContent>
+                <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']} />
                   {/* Risks Section */}
-                  <DaisyAccordionItem value="risks">
-                    <DaisyAccordionTrigger className="text-lg font-semibold">
+                  <DaisyAccordionItem value="risks" />
+                    <DaisyAccordionTrigger className="text-lg font-semibold" />
                       Identified Risks ({policyExtraction?.risks.length})
-                    </DaisyAccordionTrigger>
-                    <DaisyAccordionContent>
+                    </DaisyAccordion>
+                    <DaisyAccordionContent />
                       <div className="space-y-4">
                         {policyExtraction?.risks.map((risk) => {
                           const itemId = `risk-${risk.id}`;
@@ -343,12 +359,14 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                               <div className="flex items-start justify-between gap-4">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <DaisyBadge variant="error" className="text-xs">
-                                      Risk {risk.id}
+                                    <DaisyBadge variant="error" className="text-xs" >
+  Risk {risk.id}
+</DaisyAccordionContent>
                                     </DaisyBadge>
                                     {risk.confidence && (
-                                      <DaisyBadge variant="outline" className="text-xs">
-                                        {Math.round(risk.confidence * 100)}% confidence
+                                      <DaisyBadge variant="outline" className="text-xs" >
+  {Math.round(risk.confidence * 100)}% confidence
+</DaisyBadge>
                                       </DaisyBadge>
                                     )}
                                   </div>
@@ -363,11 +381,11 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                         className="min-h-[100px]"
                                       />
                                       <div className="flex gap-2">
-                                        <DaisyButton size="sm" onClick={() => saveEdit(itemId)}>
+                                        <DaisyButton size="sm" onClick={() => saveEdit(itemId)} />
                                           <Save className="h-3 w-3 mr-1" />
                                           Save
-                                        </DaisyButton>
-                                        <DaisyButton size="sm" variant="outline" onClick={() => cancelEdit(itemId)}>
+                                        </DaisyTextarea>
+                                        <DaisyButton size="sm" variant="outline" onClick={() => cancelEdit(itemId)} />
                                           <X className="h-3 w-3 mr-1" />
                                           Cancel
                                         </DaisyButton>
@@ -382,15 +400,13 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   <DaisyButton
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => isEditing ? cancelEdit(itemId) : startEditing(itemId, displayText)}
-                                  >
+                                    onClick={() => isEditing ? cancelEdit(itemId) : startEditing(itemId, displayText)} />
                                     <Edit2 className="h-3 w-3" />
                                   </DaisyButton>
                                   <DaisyButton
                                     size="sm"
                                     variant={isApproved ? "default" : "outline"}
-                                    onClick={() => toggleApproval(itemId)}
-                                  >
+                                    onClick={() => toggleApproval(itemId)} />
                                     {isApproved ? (
                                       <CheckSquare className="h-3 w-3" />
                                     ) : (
@@ -407,11 +423,11 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                   </DaisyAccordionItem>
 
                   {/* Controls Section */}
-                  <DaisyAccordionItem value="controls">
-                    <DaisyAccordionTrigger className="text-lg font-semibold">
+                  <DaisyAccordionItem value="controls" />
+                    <DaisyAccordionTrigger className="text-lg font-semibold" />
                       Identified Controls ({policyExtraction?.controls.length})
-                    </DaisyAccordionTrigger>
-                    <DaisyAccordionContent>
+                    </DaisyAccordionItem>
+                    <DaisyAccordionContent />
                       <div className="space-y-4">
                         {policyExtraction?.controls.map((control) => {
                           const itemId = `control-${control.id}`;
@@ -429,12 +445,14 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                               <div className="flex items-start justify-between gap-4">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <DaisyBadge variant="default" className="text-xs bg-blue-100 text-blue-800">
-                                      Control {control.id}
+                                    <DaisyBadge variant="default" className="text-xs bg-blue-100 text-blue-800" >
+  Control {control.id}
+</DaisyAccordionContent>
                                     </DaisyBadge>
                                     {control.confidence && (
-                                      <DaisyBadge variant="outline" className="text-xs">
-                                        {Math.round(control.confidence * 100)}% confidence
+                                      <DaisyBadge variant="outline" className="text-xs" >
+  {Math.round(control.confidence * 100)}% confidence
+</DaisyBadge>
                                       </DaisyBadge>
                                     )}
                                   </div>
@@ -449,11 +467,11 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                         className="min-h-[100px]"
                                       />
                                       <div className="flex gap-2">
-                                        <DaisyButton size="sm" onClick={() => saveEdit(itemId)}>
+                                        <DaisyButton size="sm" onClick={() => saveEdit(itemId)} />
                                           <Save className="h-3 w-3 mr-1" />
                                           Save
-                                        </DaisyButton>
-                                        <DaisyButton size="sm" variant="outline" onClick={() => cancelEdit(itemId)}>
+                                        </DaisyTextarea>
+                                        <DaisyButton size="sm" variant="outline" onClick={() => cancelEdit(itemId)} />
                                           <X className="h-3 w-3 mr-1" />
                                           Cancel
                                         </DaisyButton>
@@ -468,15 +486,13 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                   <DaisyButton
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => isEditing ? cancelEdit(itemId) : startEditing(itemId, displayText)}
-                                  >
+                                    onClick={() => isEditing ? cancelEdit(itemId) : startEditing(itemId, displayText)} />
                                     <Edit2 className="h-3 w-3" />
                                   </DaisyButton>
                                   <DaisyButton
                                     size="sm"
                                     variant={isApproved ? "default" : "outline"}
-                                    onClick={() => toggleApproval(itemId)}
-                                  >
+                                    onClick={() => toggleApproval(itemId)} />
                                     {isApproved ? (
                                       <CheckSquare className="h-3 w-3" />
                                     ) : (

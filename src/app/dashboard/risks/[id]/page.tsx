@@ -20,12 +20,14 @@ export default function RiskDetailPageRoute() {
           { label: riskId, current: true },
         ]}
       >
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Risk Information</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-            <p className="text-gray-500">Risk details for ID: {riskId} coming soon...</p>
+        <DaisyCardContent >
+  <p className="text-gray-500">
+</DaisyCardContent>Risk details for ID: {riskId} coming soon...</p>
           </DaisyCardContent>
         </DaisyCard>
       </MainContentArea>

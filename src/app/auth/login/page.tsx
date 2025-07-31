@@ -104,17 +104,18 @@ function LoginForm() {
             </h1>
             <p className="text-base-content/70">
               Sign in to your Riscura account
-            </p>
+            </DaisyCardDescription>
           </div>
         </div>
 
         {/* Login Card */}
-        <DaisyCard className="w-full">
-          <DaisyCardBody>
+        <DaisyCard className="w-full" >
+  <DaisyCardBody >
+  </DaisyCard>
             {(error || authError) && (
-              <DaisyAlert variant="error" className="mb-6">
-                {error || authError}
-              </DaisyAlert>
+              <DaisyAlert variant="error" className="mb-6" >
+  {error || authError}
+</DaisyAlert>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -188,10 +189,9 @@ function LoginForm() {
                 type="submit" 
                 loading={isLoading}
                 block
-                size="lg"
-              >
-                Sign in
-              </DaisyButton>
+                size="lg" >
+  Sign in
+</DaisyButton>
             </form>
 
             <div className="divider">OR</div>
@@ -200,9 +200,9 @@ function LoginForm() {
               variant="outline"
               block
               onClick={handleGoogleLogin}
-              disabled={isLoading}
-            >
-              <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              disabled={isLoading} >
+  <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+</DaisyButton>
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -238,10 +238,9 @@ function LoginForm() {
                   variant="secondary"
                   size="sm"
                   block
-                  onClick={handleDemoLogin}
-                >
-                  Use Demo Credentials (admin@riscura.com)
-                </DaisyButton>
+                  onClick={handleDemoLogin} >
+  Use Demo Credentials (admin@riscura.com)
+</DaisyButton>
               </>
             )}
 
@@ -254,10 +253,9 @@ function LoginForm() {
                 >
                   Sign up
                 </Link>
-              </p>
+              </DaisyCardDescription>
             </div>
           </DaisyCardBody>
-        </DaisyCard>
 
         {/* Footer */}
         <div className="text-center text-xs text-base-content/50">

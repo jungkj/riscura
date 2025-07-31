@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -718,16 +718,18 @@ export default function GuidedTour({
           maxHeight: '90vh'
         }}
       >
-        <DaisyCard className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm h-fit max-h-[90vh] flex flex-col">
-          <DaisyCardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 flex-shrink-0">
+        <DaisyCard className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm h-fit max-h-[90vh] flex flex-col" >
+  <DaisyCardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 flex-shrink-0" />
+</DaisyCard>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
                   <Compass className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <DaisyCardTitle className="text-xl font-bold text-gray-900 font-inter">
-                    {currentStepData.title}
+                  <DaisyCardTitle className="text-xl font-bold text-gray-900 font-inter" >
+  {currentStepData.title}
+</DaisyCardTitle>
                   </DaisyCardTitle>
                   <p className="text-sm text-blue-600 font-medium">
                     Step {currentStep + 1} of {steps.length}
@@ -740,9 +742,9 @@ export default function GuidedTour({
                   variant="ghost"
                   size="sm"
                   onClick={skipTour}
-                  className="w-8 h-8 p-0"
-                >
-                  <X className="w-4 h-4" />
+                  className="w-8 h-8 p-0" >
+  <X className="w-4 h-4" />
+</DaisyButton>
                 </DaisyButton>
               )}
             </div>
@@ -753,10 +755,11 @@ export default function GuidedTour({
                 <DaisyProgress value={progressPercentage} className="h-2" />
               </div>
             )}
-          
+          </DaisyProgress>
 
-          <DaisyCardContent className="pb-6 px-6 flex-1 overflow-y-auto">
-            {/* Step Content */}
+          <DaisyCardContent className="pb-6 px-6 flex-1 overflow-y-auto" >
+  {/* Step Content */}
+</DaisyCardContent>
             <div className="mb-6">
               <p className="text-gray-700 font-inter leading-relaxed mb-4 text-base">
                 {currentStepData.content}
@@ -805,9 +808,9 @@ export default function GuidedTour({
                   size="sm"
                   onClick={previousStep}
                   disabled={currentStep === 0}
-                  className="flex items-center gap-2 disabled:opacity-50"
-                >
-                  <ArrowLeft className="w-4 h-4" />
+                  className="flex items-center gap-2 disabled:opacity-50" >
+  <ArrowLeft className="w-4 h-4" />
+</DaisyButton>
                   Previous
                 </DaisyButton>
                 
@@ -815,9 +818,9 @@ export default function GuidedTour({
                   variant="ghost"
                   size="sm"
                   onClick={togglePlayPause}
-                  className="flex items-center gap-2"
-                >
-                  {isPlaying ? (
+                  className="flex items-center gap-2" >
+  {isPlaying ? (
+</DaisyButton>
                     <>
                       <Pause className="w-4 h-4" />
                       Pause
@@ -833,8 +836,9 @@ export default function GuidedTour({
 
               <div className="flex items-center gap-2">
                 {currentStepData.estimatedTime && (
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    {currentStepData.estimatedTime}
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  {currentStepData.estimatedTime}
+</DaisyBadge>
                   </DaisyBadge>
                 )}
                 
@@ -842,9 +846,9 @@ export default function GuidedTour({
                   variant="primary"
                   size="sm"
                   onClick={nextStep}
-                  className="flex items-center gap-2"
-                >
-                  {currentStep === steps.length - 1 ? (
+                  className="flex items-center gap-2" >
+  {currentStep === steps.length - 1 ? (
+</DaisyButton>
                     <>
                       <CheckCircle className="w-4 h-4" />
                       Complete
@@ -922,8 +926,10 @@ export default function GuidedTour({
 
       {/* Keyboard shortcuts help */}
       <div className="fixed bottom-4 right-4 z-50">
-        <DaisyCard className="bg-white border border-gray-200 shadow-lg">
-          <DaisyCardContent className="p-3">
+        <DaisyCard className="bg-white border border-gray-200 shadow-lg" >
+  <DaisyCardContent className="p-3" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="text-xs text-contrast-low space-y-1">
               <div className="flex items-center gap-2">
                 <kbd className="px-1 py-0.5 bg-gray-100 rounded text-xs">Space</kbd>
@@ -991,15 +997,18 @@ export function TourLauncher({
 
   return (
     <div className={className}>
-      <DaisyCard className="bg-white border-gray-200">
-        <DaisyCardHeader>
-          <DaisyCardTitle className="text-lg font-semibold text-contrast-medium font-inter flex items-center gap-2">
-            <Play className="w-5 h-5 text-blue-600" />
+      <DaisyCard className="bg-white border-gray-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="text-lg font-semibold text-contrast-medium font-inter flex items-center gap-2" >
+  <Play className="w-5 h-5 text-blue-600" />
+</DaisyCardTitle>
             Guided Tours
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="p-6">
-          <div className="space-y-4">
+        <DaisyCardContent className="p-6" >
+  <div className="space-y-4">
+</DaisyCardContent>
             {tours.map(tourId => {
               const tour = tourConfigs[tourId];
               if (!tour) return null;
@@ -1038,8 +1047,7 @@ export function TourLauncher({
                       variant="primary"
                       size="sm"
                       onClick={() => startTour(tourId)}
-                      className="flex items-center gap-2"
-                    >
+                      className="flex items-center gap-2" />
                       <Play className="w-4 h-4" />
                       Start Tour
                     </DaisyButton>

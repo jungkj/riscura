@@ -63,9 +63,9 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
           variant="ghost"
           shape="square" size="md"
           onClick={handleClose}
-          disabled={isSubmitting}
-        >
-          <X className="h-4 w-4" />
+          disabled={isSubmitting} >
+  <X className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
       </div>
 
@@ -139,9 +139,10 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
 export function NewRiskFlow({ open, onOpenChange, onSuccess }: NewRiskFlowProps) {
 
   return (
-    <DaisyDialog open={open} onOpenChange={onOpenChange}>
-      <DaisyDialogContent className="max-w-4xl h-[90vh] p-0">
-        <RiskFlowProvider>
+    <DaisyDialog open={open} onOpenChange={onOpenChange} />
+      <DaisyDialogContent className="max-w-4xl h-[90vh] p-0" >
+  <RiskFlowProvider>
+</DaisyDialog>
           <RiskFlowContent onOpenChange={onOpenChange} onSuccess={onSuccess} />
         </RiskFlowProvider>
       </DaisyDialogContent>

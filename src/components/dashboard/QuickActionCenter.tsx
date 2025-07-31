@@ -149,7 +149,9 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'review-alerts',
       title: 'Review Alerts',
       description: 'Check critical notifications',
-      icon: <DaisyAlertTriangle className="w-5 h-5" />,
+      icon: <DaisyAlertTriangle className="w-5 h-5" >
+  ,
+</DaisyCalendar>
       color: 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200 text-yellow-700',
       href: '/dashboard/alerts',
       badge: '3',
@@ -244,11 +246,13 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
   };
 
   return (
-    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
-      <DaisyCardHeader>
+    <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardHeader />
+</DaisyCard>
         <div className="flex items-center justify-between">
-          <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter">
-            Quick Actions
+          <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
+  Quick Actions
+</DaisyCardTitle>
           </DaisyCardTitle>
           <p className="text-sm text-[#A8A8A8] font-inter">
             {viewMode === 'executive' ? 'Executive shortcuts' : 'Analyst tools'}
@@ -256,8 +260,9 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
         </div>
       
 
-      <DaisyCardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <DaisyCardContent >
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+</DaisyCardContent>
           {getPrioritizedActions().map((action, index) => (
             <motion.div
               key={action.id}
@@ -278,9 +283,9 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
                     {action.badge && (
                       <DaisyBadge 
                         className="absolute -top-1 -right-1 text-xs px-1 py-0 h-3 min-w-3"
-                        variant={action.badge === 'AI' ? 'default' : action.badge === 'New' ? 'secondary' : 'destructive'}
-                      >
-                        {action.badge}
+                        variant={action.badge === 'AI' ? 'default' : action.badge === 'New' ? 'secondary' : 'destructive'} >
+  {action.badge}
+</DaisyButton>
                       </DaisyBadge>
                     )}
                   </div>

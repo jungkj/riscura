@@ -35,12 +35,14 @@ export default function FeatureShowcase() {
       stats: "62% faster risk evidence collection time",
       color: "text-[#199BEC]",
       mockUI: (
-        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
-          <div className="space-y-4">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6" >
+  <div className="space-y-4">
+</DaisyCard>
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-gray-900">Risk Assessment</h4>
-              <DaisyBadge className="bg-green-100 text-green-800">
-                <CheckCircle className="w-3 h-3 mr-1" />
+              <DaisyBadge className="bg-green-100 text-green-800" >
+  <CheckCircle className="w-3 h-3 mr-1" />
+</DaisyBadge>
                 Completed
               </DaisyBadge>
             </div>
@@ -68,8 +70,9 @@ export default function FeatureShowcase() {
       stats: "54% increased productivity gains",
       color: "text-[#199BEC]",
       mockUI: (
-        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
-          <div className="space-y-4">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6" >
+  <div className="space-y-4">
+</DaisyCard>
             <h4 className="font-semibold text-gray-900">Risk Scoring Matrix</h4>
             <div className="grid grid-cols-5 gap-1">
               {Array.from({ length: 25 }, (_, i) => {
@@ -99,12 +102,15 @@ export default function FeatureShowcase() {
       stats: "90% improvement in risk visibility",
       color: "text-[#199BEC]",
       mockUI: (
-        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
-          <div className="space-y-4">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6" >
+  <div className="space-y-4">
+</DaisyCard>
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-gray-900">Discovered Risks</h4>
-              <DaisyBadge className="bg-orange-100 text-orange-800">
-                <DaisyAlertTriangle className="w-3 h-3 mr-1" />
+              <DaisyBadge className="bg-orange-100 text-orange-800" >
+  <DaisyAlertTriangle className="w-3 h-3 mr-1" >
+  </DaisyBadge>
+</DaisyAlert>
                 5 New
               </DaisyBadge>
             </div>
@@ -137,8 +143,9 @@ export default function FeatureShowcase() {
       stats: "Complete risk program integration",
       color: "text-[#199BEC]",
       mockUI: (
-        <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
-          <div className="space-y-4">
+        <DaisyCard className="bg-white rounded-lg shadow-lg p-6" >
+  <div className="space-y-4">
+</DaisyCard>
             <h4 className="font-semibold text-gray-900">Risk Dashboard</h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
@@ -220,8 +227,9 @@ export default function FeatureShowcase() {
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="text-2xl font-bold text-[#199BEC]">{feature.stats}</div>
                   </div>
-                  <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-                    Request a demo
+                  <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  Request a demo
+</DaisyButton>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </DaisyButton>
                 </div>

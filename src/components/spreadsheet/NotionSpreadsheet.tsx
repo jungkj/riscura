@@ -300,14 +300,13 @@ export default function NotionSpreadsheet() {
                 setSelectedCell(null);
               }}
             >
-              <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none">
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
+              <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
                 {column.options?.map(option => (
-                  <DaisySelectItem key={option} value={option}>{option}</SelectItem>
+                  <DaisySelectItem key={option} value={option}>{option}</DaisySelectContent>
                 ))}
-              </SelectContent>
+              </DaisySelectContent>
             </DaisySelect>
           );
         case 'date':
@@ -352,7 +351,7 @@ export default function NotionSpreadsheet() {
         return (
           <DaisyBadge className={`text-xs ${getCategoryColor(String(cell.value))}`}>
             {String(cell.value)}
-          </DaisyBadge>
+          </DaisyInput>
         );
       }
       if (column.type === 'select' && column.id === 'status') {
@@ -455,13 +454,15 @@ export default function NotionSpreadsheet() {
             <FileSpreadsheet className="w-5 h-5 text-[#199BEC]" />
             <h1 className="text-xl font-semibold text-gray-900">Risk Register</h1>
           </div>
-          <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
-            <Sparkles className="w-3 h-3 mr-1" />
+          <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30" >
+  <Sparkles className="w-3 h-3 mr-1" />
+</DaisyBadge>
             AI Enhanced
           </DaisyBadge>
           {hasUnsavedChanges && (
-            <DaisyBadge variant="secondary" className="bg-amber-100 text-amber-800">
-              Unsaved Changes
+            <DaisyBadge variant="secondary" className="bg-amber-100 text-amber-800" >
+  Unsaved Changes
+</DaisyBadge>
             </DaisyBadge>
           )}
         </div>
@@ -477,13 +478,15 @@ export default function NotionSpreadsheet() {
             />
           </div>
           
-          <DaisyButton variant="secondary" size="sm" className="h-8">
-            <Filter className="w-4 h-4 mr-1" />
+          <DaisyButton variant="secondary" size="sm" className="h-8" >
+  <Filter className="w-4 h-4 mr-1" />
+</DaisyInput>
             Filter
           </DaisyButton>
           
-          <DaisyButton variant="secondary" size="sm" className="h-8">
-            <Download className="w-4 h-4 mr-1" />
+          <DaisyButton variant="secondary" size="sm" className="h-8" >
+  <Download className="w-4 h-4 mr-1" />
+</DaisyButton>
             Export
           </DaisyButton>
           
@@ -512,9 +515,9 @@ export default function NotionSpreadsheet() {
             <DaisyButton 
               size="sm" 
               className="h-8 bg-[#199BEC] hover:bg-[#199BEC]/90"
-              onClick={saveData}
-            >
-              <Save className="w-4 h-4 mr-1" />
+              onClick={saveData} >
+  <Save className="w-4 h-4 mr-1" />
+</DaisyButton>
               Save
             </DaisyButton>
           )}
@@ -544,8 +547,7 @@ export default function NotionSpreadsheet() {
                 variant="ghost"
                 size="sm"
                 className="h-6 w-6 p-0 hover:bg-[#199BEC]/10"
-                onClick={() => setIsAddColumnDialogOpen(true)}
-              >
+                onClick={() => setIsAddColumnDialogOpen(true)} />
                 <Plus className="w-4 h-4 text-[#199BEC]" />
               </DaisyButton>
             </div>
@@ -571,8 +573,7 @@ export default function NotionSpreadsheet() {
                   variant="ghost"
                   size="sm"
                   className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50"
-                  onClick={() => deleteRow(row.id)}
-                >
+                  onClick={() => deleteRow(row.id)} />
                   <Trash2 className="w-3 h-3" />
                 </DaisyButton>
               </div>
@@ -586,9 +587,9 @@ export default function NotionSpreadsheet() {
                 variant="ghost"
                 size="sm"
                 className="h-6 w-6 p-0 hover:bg-[#199BEC]/10"
-                onClick={addRow}
-              >
-                <Plus className="w-4 h-4 text-[#199BEC]" />
+                onClick={addRow} >
+  <Plus className="w-4 h-4 text-[#199BEC]" />
+</DaisyButton>
               </DaisyButton>
             </div>
             <div className="flex-1 h-10 bg-gray-50/30 flex items-center px-3">
@@ -599,12 +600,14 @@ export default function NotionSpreadsheet() {
       </div>
 
       {/* Add Column Dialog */}
-      <DaisyDialog open={isAddColumnDialogOpen} onOpenChange={setIsAddColumnDialogOpen}>
-        <DaisyDialogContent className="sm:max-w-md">
-          <DaisyDialogHeader>
+      <DaisyDialog open={isAddColumnDialogOpen} onOpenChange={setIsAddColumnDialogOpen} />
+        <DaisyDialogContent className="sm:max-w-md" >
+  <DaisyDialogHeader />
+</DaisyDialog>
             <DaisyDialogTitle>Add New Column</DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Create a new column for your spreadsheet.
+            <DaisyDialogDescription >
+  Create a new column for your spreadsheet.
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           <div className="space-y-4">
@@ -622,15 +625,14 @@ export default function NotionSpreadsheet() {
               <DaisySelect value={newColumn.type} onValueChange={(value: 'text' | 'number' | 'date' | 'select') => 
                 setNewColumn(prev => ({ ...prev, type: value }))
               }>
-                <DaisySelectTrigger className="mt-1">
-                  <DaisySelectValue />
-                </DaisySelectTrigger>
-                <DaisySelectContent>
-                  <DaisySelectItem value="text">Text</SelectItem>
-                  <DaisySelectItem value="number">Number</SelectItem>
-                  <DaisySelectItem value="date">Date</SelectItem>
-                  <DaisySelectItem value="select">Select</SelectItem>
-                </SelectContent>
+                <DaisySelectTrigger className="mt-1" />
+                  <DaisySelectValue /></DaisyInput>
+                <DaisySelectContent />
+                  <DaisySelectItem value="text">Text</DaisySelectContent>
+                  <DaisySelectItem value="number">Number</DaisySelectItem>
+                  <DaisySelectItem value="date">Date</DaisySelectItem>
+                  <DaisySelectItem value="select">Select</DaisySelectItem>
+                </DaisySelectContent>
               </DaisySelect>
             </div>
             {newColumn.type === 'select' && (
@@ -645,32 +647,36 @@ export default function NotionSpreadsheet() {
               </div>
             )}
           </div>
-          <DaisyDialogFooter>
-            <DaisyButton variant="secondary" onClick={() => setIsAddColumnDialogOpen(false)}>
+          <DaisyDialogFooter />
+            <DaisyButton variant="secondary" onClick={() => setIsAddColumnDialogOpen(false)} />
               Cancel
-            </DaisyButton>
-            <DaisyButton onClick={addColumn} disabled={!newColumn.name.trim()}>
-              Add Column
+            </DaisyInput>
+            <DaisyButton onClick={addColumn} disabled={!newColumn.name.trim()} >
+  Add Column
+</DaisyButton>
             </DaisyButton>
           </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
 
       {/* AI Insights Dialog */}
-      <DaisyDialog open={isAIInsightsOpen} onOpenChange={setIsAIInsightsOpen}>
-        <DaisyDialogContent className="sm:max-w-4xl max-h-[80vh] overflow-hidden">
-          <DaisyDialogHeader>
-            <DaisyDialogTitle className="flex items-center gap-2">
-              <Image 
+      <DaisyDialog open={isAIInsightsOpen} onOpenChange={setIsAIInsightsOpen} />
+        <DaisyDialogContent className="sm:max-w-4xl max-h-[80vh] overflow-hidden" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+            <DaisyDialogTitle className="flex items-center gap-2" >
+  <Image 
                 src="/images/logo/riscura.png" 
                 alt="Riscura" 
                 width={20} 
                 height={20}
               />
+</DaisyDialogTitle>
               AI Insights & Recommendations
             </DaisyDialogTitle>
-            <DaisyDialogDescription>
-              AI-powered analysis of your risk data with actionable recommendations.
+            <DaisyDialogDescription >
+  AI-powered analysis of your risk data with actionable recommendations.
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           
@@ -688,16 +694,18 @@ export default function NotionSpreadsheet() {
                   const IconComponent = getInsightIcon(insight.type);
                   return (
                     <DaisyCard key={insight.id} className={`border-l-4 ${getInsightSeverityColor(insight.severity)}`}>
-                      <DaisyCardContent className="p-4">
-                        <div className="flex items-start gap-3">
+                      <DaisyCardContent className="p-4" >
+  <div className="flex items-start gap-3">
+</DaisyCard>
                           <div className={`p-2 rounded-full ${getInsightSeverityColor(insight.severity)}`}>
                             <IconComponent className="w-4 h-4" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <h4 className="font-medium text-gray-900">{insight.title}</h4>
-                              <DaisyBadge variant="secondary" className={getInsightSeverityColor(insight.severity)}>
-                                {insight.severity}
+                              <DaisyBadge variant="secondary" className={getInsightSeverityColor(insight.severity)} >
+  {insight.severity}
+</DaisyBadge>
                               </DaisyBadge>
                               <span className="text-xs text-gray-500">
                                 {Math.round(insight.confidence * 100)}% confidence
@@ -718,12 +726,13 @@ export default function NotionSpreadsheet() {
             )}
           </div>
 
-          <DaisyDialogFooter>
-            <DaisyButton variant="secondary" onClick={() => setIsAIInsightsOpen(false)}>
+          <DaisyDialogFooter />
+            <DaisyButton variant="secondary" onClick={() => setIsAIInsightsOpen(false)} />
               Close
-            </DaisyButton>
-            <DaisyButton onClick={generateAIInsights} disabled={isGeneratingInsights}>
-              <Sparkles className="w-4 h-4 mr-2" />
+            </DaisyDialogFooter>
+            <DaisyButton onClick={generateAIInsights} disabled={isGeneratingInsights} >
+  <Sparkles className="w-4 h-4 mr-2" />
+</DaisyButton>
               Refresh Insights
             </DaisyButton>
           </DaisyDialogFooter>

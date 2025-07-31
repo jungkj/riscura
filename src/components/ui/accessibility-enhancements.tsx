@@ -359,9 +359,9 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
             size="sm"
             onClick={onClose}
             aria-label={ariaLabels['action.close']}
-            className="h-8 w-8 p-0"
-          >
-            <X className="h-4 w-4" />
+            className="h-8 w-8 p-0" >
+  <X className="h-4 w-4" />
+</DaisyButton>
           </DaisyButton>
         </div>
         {children}
@@ -483,9 +483,9 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
           size="sm"
           onClick={onClose}
           aria-label={ariaLabels['action.close']}
-          className="h-6 w-6 p-0 hover:bg-transparent"
-        >
-          <X className="h-4 w-4" />
+          className="h-6 w-6 p-0 hover:bg-transparent" >
+  <X className="h-4 w-4" />
+</DaisyButton>
         </DaisyButton>
       )}
     </div>

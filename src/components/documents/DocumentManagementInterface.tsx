@@ -250,8 +250,9 @@ export default function DocumentManagementInterface({
           }`}
           onClick={() => onDocumentSelect?.(document)}
         >
-          <DaisyCardHeader className="pb-2">
-            <div className="flex items-start justify-between">
+          <DaisyCardHeader className="pb-2" >
+  <div className="flex items-start justify-between">
+</DaisyCard>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   checked={selectedDocuments.includes(document.id)}
@@ -266,29 +267,29 @@ export default function DocumentManagementInterface({
                 />
                 {getFileIcon(document.type)}
               </div>
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                  <DaisyButton variant="ghost" size="sm">
-                    <MoreHorizontal className="w-4 h-4" />
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
+                  <DaisyButton variant="ghost" size="sm" >
+  <MoreHorizontal className="w-4 h-4" />
+</DaisyCheckbox>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem />
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem />
                     <Share2 className="w-4 h-4 mr-2" />
                     Share
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
                     onClick={() => handleDocumentDelete(document.id)}
-                    className="text-red-600"
-                  >
+                    className="text-red-600" />
                     <Trash2 className="w-4 h-4 mr-2" />
                     Delete
                   </DaisyDropdownMenuItem>
@@ -296,8 +297,9 @@ export default function DocumentManagementInterface({
               </DaisyDropdownMenu>
             </div>
           
-          <DaisyCardContent>
-            {document.aiAnalysis?.thumbnailUrl && (
+          <DaisyCardContent >
+  {document.aiAnalysis?.thumbnailUrl && (
+</DaisyCardContent>
               <div className="mb-3">
                 <img
                   src={document.aiAnalysis.thumbnailUrl}
@@ -313,10 +315,10 @@ export default function DocumentManagementInterface({
               </DaisyBadge>
               <p className="text-xs text-gray-500">{formatFileSize(document.size)}</p>
               <div className="flex items-center space-x-1">
-                <DaisyAvatar className="w-4 h-4">
-                  <DaisyAvatarFallback className="text-xs">
+                <DaisyAvatar className="w-4 h-4" />
+                  <DaisyAvatarFallback className="text-xs" />
                     {document.uploader.firstName[0]}{document.uploader.lastName[0]}
-                  </DaisyAvatarFallback>
+                  </DaisyAvatar>
                 </DaisyAvatar>
                 <p className="text-xs text-gray-500 truncate">
                   {document.uploader.firstName} {document.uploader.lastName}
@@ -342,8 +344,9 @@ export default function DocumentManagementInterface({
           }`}
           onClick={() => onDocumentSelect?.(document)}
         >
-          <DaisyCardContent className="p-4">
-            <div className="flex items-center space-x-4">
+          <DaisyCardContent className="p-4" >
+  <div className="flex items-center space-x-4">
+</DaisyCard>
               <DaisyCheckbox
                 checked={selectedDocuments.includes(document.id)}
                 onCheckedChange={(checked) => {
@@ -366,30 +369,30 @@ export default function DocumentManagementInterface({
               </div>
               <DaisyBadge className={`${getFileTypeColor(document.type)}`}>
                 {document.type.split('/')[1]?.toUpperCase() || 'FILE'}
-              </DaisyBadge>
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                  <DaisyButton variant="ghost" size="sm">
-                    <MoreHorizontal className="w-4 h-4" />
+              </DaisyCheckbox>
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
+                  <DaisyButton variant="ghost" size="sm" >
+  <MoreHorizontal className="w-4 h-4" />
+</DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)}>
+                <DaisyDropdownMenuContent />
+                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
-                  </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuContent>
+                  <DaisyDropdownMenuItem />
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem>
+                  <DaisyDropdownMenuItem />
                     <Share2 className="w-4 h-4 mr-2" />
                     Share
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
                     onClick={() => handleDocumentDelete(document.id)}
-                    className="text-red-600"
-                  >
+                    className="text-red-600" />
                     <Trash2 className="w-4 h-4 mr-2" />
                     Delete
                   </DaisyDropdownMenuItem>
@@ -413,12 +416,13 @@ export default function DocumentManagementInterface({
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <DaisyButton onClick={() => setShowUpload(true)}>
+          <DaisyButton onClick={() => setShowUpload(true)} />
             <Plus className="w-4 h-4 mr-2" />
             Upload Files
           </DaisyButton>
-          <DaisyButton variant="outline" onClick={loadDocuments}>
-            <RefreshCw className="w-4 h-4" />
+          <DaisyButton variant="outline" onClick={loadDocuments} >
+  <RefreshCw className="w-4 h-4" />
+</DaisyButton>
           </DaisyButton>
         </div>
       </div>
@@ -436,48 +440,44 @@ export default function DocumentManagementInterface({
             />
           </div>
         </div>
-        <DaisySelect value={filterType} onValueChange={setFilterType}>
-          <DaisySelectTrigger className="w-48">
-            <DaisySelectValue placeholder="Filter by type" />
-          </DaisySelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="all">All Types</SelectItem>
-            <DaisySelectItem value="application/pdf">PDF</SelectItem>
-            <DaisySelectItem value="image">Images</SelectItem>
-            <DaisySelectItem value="application/msword">Word Documents</SelectItem>
-            <DaisySelectItem value="application/vnd.ms-excel">Excel Files</SelectItem>
-          </SelectContent>
+        <DaisySelect value={filterType} onValueChange={setFilterType} />
+          <DaisySelectTrigger className="w-48" />
+            <DaisySelectValue placeholder="Filter by type" /></DaisyInput>
+          <DaisySelectContent />
+            <DaisySelectItem value="all">All Types</DaisySelectContent>
+            <DaisySelectItem value="application/pdf">PDF</DaisySelectItem>
+            <DaisySelectItem value="image">Images</DaisySelectItem>
+            <DaisySelectItem value="application/msword">Word Documents</DaisySelectItem>
+            <DaisySelectItem value="application/vnd.ms-excel">Excel Files</DaisySelectItem>
+          </DaisySelectContent>
         </DaisySelect>
         <DaisySelect value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
           const [field, order] = value.split('-');
           setSortBy(field);
           setSortOrder(order as 'asc' | 'desc');
         }}>
-          <DaisySelectTrigger className="w-48">
-            <DaisySelectValue placeholder="Sort by" />
-          </DaisySelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="uploadedAt-desc">Newest First</SelectItem>
-            <DaisySelectItem value="uploadedAt-asc">Oldest First</SelectItem>
-            <DaisySelectItem value="name-asc">Name A-Z</SelectItem>
-            <DaisySelectItem value="name-desc">Name Z-A</SelectItem>
-            <DaisySelectItem value="size-desc">Largest First</SelectItem>
-            <DaisySelectItem value="size-asc">Smallest First</SelectItem>
-          </SelectContent>
+          <DaisySelectTrigger className="w-48" />
+            <DaisySelectValue placeholder="Sort by" /></DaisySelect>
+          <DaisySelectContent />
+            <DaisySelectItem value="uploadedAt-desc">Newest First</DaisySelectContent>
+            <DaisySelectItem value="uploadedAt-asc">Oldest First</DaisySelectItem>
+            <DaisySelectItem value="name-asc">Name A-Z</DaisySelectItem>
+            <DaisySelectItem value="name-desc">Name Z-A</DaisySelectItem>
+            <DaisySelectItem value="size-desc">Largest First</DaisySelectItem>
+            <DaisySelectItem value="size-asc">Smallest First</DaisySelectItem>
+          </DaisySelectContent>
         </DaisySelect>
         <div className="flex items-center space-x-2">
           <DaisyButton
             variant={viewMode === 'grid' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('grid')}
-          >
+            onClick={() => setViewMode('grid')} />
             <Grid className="w-4 h-4" />
           </DaisyButton>
           <DaisyButton
             variant={viewMode === 'list' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('list')}
-          >
+            onClick={() => setViewMode('list')} />
             <List className="w-4 h-4" />
           </DaisyButton>
         </div>
@@ -494,9 +494,9 @@ export default function DocumentManagementInterface({
               variant="outline" 
               size="sm" 
               onClick={handleBulkDownload}
-              disabled={bulkOperating}
-            >
-              <Download className="w-4 h-4 mr-2" />
+              disabled={bulkOperating} >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
               Download All
             </DaisyButton>
             <DaisyButton 
@@ -504,16 +504,15 @@ export default function DocumentManagementInterface({
               size="sm" 
               onClick={handleBulkDelete}
               disabled={bulkOperating}
-              className="text-red-600 hover:text-red-700"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
+              className="text-red-600 hover:text-red-700" >
+  <Trash2 className="w-4 h-4 mr-2" />
+</DaisyButton>
               Delete All
             </DaisyButton>
             <DaisyButton 
               variant="outline" 
               size="sm" 
-              onClick={() => setSelectedDocuments([])}
-            >
+              onClick={() => setSelectedDocuments([])} />
               Clear Selection
             </DaisyButton>
           </div>
@@ -532,7 +531,7 @@ export default function DocumentManagementInterface({
           <p className="text-gray-500 mb-4">
             {searchQuery ? 'Try adjusting your search criteria' : 'Upload your first document to get started'}
           </p>
-          <DaisyButton onClick={() => setShowUpload(true)}>
+          <DaisyButton onClick={() => setShowUpload(true)} />
             <Upload className="w-4 h-4 mr-2" />
             Upload Files
           </DaisyButton>
@@ -553,8 +552,7 @@ export default function DocumentManagementInterface({
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                >
+                  disabled={currentPage === 1} />
                   Previous
                 </DaisyButton>
                 <span className="text-sm">
@@ -564,8 +562,7 @@ export default function DocumentManagementInterface({
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                >
+                  disabled={currentPage === totalPages} />
                   Next
                 </DaisyButton>
               </div>
@@ -592,7 +589,7 @@ export default function DocumentManagementInterface({
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold">Upload Documents</h3>
-                  <DaisyButton variant="outline" onClick={() => setShowUpload(false)}>
+                  <DaisyButton variant="outline" onClick={() => setShowUpload(false)} />
                     ✕
                   </DaisyButton>
                 </div>

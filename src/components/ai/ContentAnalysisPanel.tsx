@@ -162,29 +162,30 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
     };
 
     return (
-      <DaisyCard className="mb-4 transition-all duration-200">
-        <DaisyCardHeader className="pb-3">
+      <DaisyCard className="mb-4 transition-all duration-200" >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
           <div className="flex items-center justify-between">
-            <DaisyCardTitle className="text-sm flex items-center gap-2">
-              <span>{getActionLabel(result.action)}</span>
-              <DaisyBadge variant="outline" className={getStatusColor(result.status)}>
-                {result.status}
+            <DaisyCardTitle className="text-sm flex items-center gap-2" >
+  <span>
+</DaisyCardTitle>{getActionLabel(result.action)}</span>
+              <DaisyBadge variant="outline" className={getStatusColor(result.status)} >
+  {result.status}
+</DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
             <div className="flex items-center gap-1">
               <DaisyButton 
                 variant="ghost" 
                 size="sm"
-                onClick={() => copyToClipboard(result.result.content)}
-              >
+                onClick={() => copyToClipboard(result.result.content)} />
                 <Copy className="h-3 w-3" />
               </DaisyButton>
               {result.status === 'error' && onRetry && (
                 <DaisyButton 
                   variant="ghost" 
                   size="sm"
-                  onClick={() => onRetry(result.id)}
-                >
+                  onClick={() => onRetry(result.id)} />
                   <RotateCcw className="h-3 w-3" />
                 </DaisyButton>
               )}
@@ -194,8 +195,9 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
             Selected: "{result.selection.text.slice(0, 50)}..."
           </div>
         
-        <DaisyCardContent>
-          <div className="space-y-3">
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
             {/* Result Content */}
             <div className="text-sm">
               {result.result.type === 'replacement' ? (
@@ -252,8 +254,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
                       className={cn(
                         'h-7 px-2',
                         result.feedback === 'positive' && 'bg-green-100 text-green-700'
-                      )}
-                    >
+                      )} />
                       <ThumbsUp className="h-3 w-3" />
                     </DaisyButton>
                     <DaisyButton
@@ -263,8 +264,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
                       className={cn(
                         'h-7 px-2',
                         result.feedback === 'negative' && 'bg-red-100 text-red-700'
-                      )}
-                    >
+                      )} />
                       <ThumbsDown className="h-3 w-3" />
                     </DaisyButton>
                   </>
@@ -274,12 +274,12 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               {result.result.type === 'replacement' && (
                 <div className="flex items-center gap-2">
                   {onReject && (
-                    <DaisyButton variant="outline" size="sm" onClick={() => onReject(result.id)}>
+                    <DaisyButton variant="outline" size="sm" onClick={() => onReject(result.id)} />
                       Reject
                     </DaisyButton>
                   )}
                   {onApprove && (
-                    <DaisyButton size="sm" onClick={() => onApprove(result.id)}>
+                    <DaisyButton size="sm" onClick={() => onApprove(result.id)} />
                       <Check className="h-3 w-3 mr-1" />
                       Apply
                     </DaisyButton>
@@ -344,11 +344,13 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               </div>
               
               <div className="flex items-center gap-1">
-                <DaisyButton variant="ghost" size="sm" onClick={exportResults}>
-                  <Download className="h-4 w-4" />
+                <DaisyButton variant="ghost" size="sm" onClick={exportResults} >
+  <Download className="h-4 w-4" />
+</DaisyButton>
                 </DaisyButton>
-                <DaisyButton variant="ghost" size="sm" onClick={onClose}>
-                  <X className="h-4 w-4" />
+                <DaisyButton variant="ghost" size="sm" onClick={onClose} >
+  <X className="h-4 w-4" />
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -357,38 +359,39 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
             <div className="flex-1 overflow-hidden">
               {results.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center p-6">
-                  <DaisyAlertTriangle className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                  <h3 className="font-medium mb-2">No Analysis Results</h3>
+                  <DaisyAlertTriangle className="h-12 w-12 text-muted-foreground/50 mb-4" >
+  <h3 className="font-medium mb-2">
+</DaisyAlertTriangle>No Analysis Results</h3>
                   <p className="text-sm text-muted-foreground">
                     Select text and use AI actions to see analysis results here.
                   </p>
                 </div>
               ) : (
-                <DaisyTabs defaultValue="all" className="h-full flex flex-col">
-                  <DaisyTabsList className="grid grid-cols-3 m-4 mb-0">
-                    <DaisyTabsTrigger value="all">All ({results.length})</DaisyTabsTrigger>
-                    <DaisyTabsTrigger value="pending">
+                <DaisyTabs defaultValue="all" className="h-full flex flex-col" />
+                  <DaisyTabsList className="grid grid-cols-3 m-4 mb-0" />
+                    <DaisyTabsTrigger value="all">All ({results.length})</DaisyTabs>
+                    <DaisyTabsTrigger value="pending" />
                       Pending ({results.filter(r => r.status === 'pending').length})
                     </DaisyTabsTrigger>
-                    <DaisyTabsTrigger value="completed">
+                    <DaisyTabsTrigger value="completed" />
                       Completed ({results.filter(r => r.status === 'completed').length})
                     </DaisyTabsTrigger>
                   </DaisyTabsList>
 
-                  <DaisyScrollArea className="flex-1 px-4">
-                    <DaisyTabsContent value="all" className="mt-4">
+                  <DaisyScrollArea className="flex-1 px-4" />
+                    <DaisyTabsContent value="all" className="mt-4" />
                       {results.map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}
-                    </DaisyTabsContent>
+                    </DaisyScrollArea>
 
-                    <DaisyTabsContent value="pending" className="mt-4">
+                    <DaisyTabsContent value="pending" className="mt-4" />
                       {results.filter(r => r.status === 'pending').map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}
                     </DaisyTabsContent>
 
-                    <DaisyTabsContent value="completed" className="mt-4">
+                    <DaisyTabsContent value="completed" className="mt-4" />
                       {results.filter(r => r.status === 'completed').map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}

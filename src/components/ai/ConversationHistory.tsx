@@ -347,15 +347,17 @@ export default function ConversationHistory({
   if (isLoading) {
 
   return (
-    <DaisyCard className={className}>
-        <DaisyCardHeader>
+    <DaisyCard className={className} >
+  <DaisyCardHeader />
+</DaisyCard>
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Conversation History</DaisyCardTitle>
           </div>
         
-        <DaisyCardContent>
-          <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -370,14 +372,16 @@ export default function ConversationHistory({
   };
 
   return (
-    <DaisyCard className={className}>
-      <DaisyCardHeader className="pb-3">
+    <DaisyCard className={className} >
+  <DaisyCardHeader className="pb-3" />
+</DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Conversation History</DaisyCardTitle>
-            <DaisyBadge variant="secondary" className="text-xs">
-              {conversations.length} conversations
+            <DaisyBadge variant="secondary" className="text-xs" >
+  {conversations.length} conversations
+</DaisyBadge>
             </DaisyBadge>
           </div>
           
@@ -390,8 +394,7 @@ export default function ConversationHistory({
                   onClick={() => exportConversations(
                     conversations.filter(conv => selectedConversations.has(conv.id))
                   )}
-                  className="p-2"
-                >
+                  className="p-2" />
                   <Download className="w-4 h-4" />
                 </DaisyButton>
                 
@@ -399,9 +402,9 @@ export default function ConversationHistory({
                   variant="ghost"
                   size="sm"
                   onClick={deleteSelectedConversations}
-                  className="p-2 text-red-600"
-                >
-                  <Trash2 className="w-4 h-4" />
+                  className="p-2 text-red-600" >
+  <Trash2 className="w-4 h-4" />
+</DaisyButton>
                 </DaisyButton>
               </>
             )}
@@ -410,16 +413,16 @@ export default function ConversationHistory({
               variant="ghost"
               size="sm"
               onClick={() => exportConversations(filteredConversations)}
-              className="p-2"
-            >
+              className="p-2" />
               <Download className="w-4 h-4" />
             </DaisyButton>
           </div>
         </div>
       
 
-      <DaisyCardContent className="p-0">
-        {/* Search and Filters */}
+      <DaisyCardContent className="p-0" >
+  {/* Search and Filters */}
+</DaisyCardContent>
         <div className="p-4 border-b space-y-3">
           <div className="flex space-x-2">
             <div className="flex-1 relative">
@@ -432,42 +435,40 @@ export default function ConversationHistory({
               />
             </div>
             
-            <DaisySelect value={selectedFilter} onValueChange={setSelectedFilter}>
-              <DaisySelectTrigger className="w-32">
+            <DaisySelect value={selectedFilter} onValueChange={setSelectedFilter} />
+              <DaisySelectTrigger className="w-32" />
                 <Filter className="w-4 h-4 mr-2" />
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Time</SelectItem>
-                <DaisySelectItem value="today">Today</SelectItem>
-                <DaisySelectItem value="week">This Week</SelectItem>
-                <DaisySelectItem value="month">This Month</SelectItem>
-              </SelectContent>
+                <DaisySelectValue /></DaisyInput>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Time</DaisySelectContent>
+                <DaisySelectItem value="today">Today</DaisySelectItem>
+                <DaisySelectItem value="week">This Week</DaisySelectItem>
+                <DaisySelectItem value="month">This Month</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={sortBy} onValueChange={setSortBy}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="updated">Last Updated</SelectItem>
-                <DaisySelectItem value="created">Date Created</SelectItem>
-                <DaisySelectItem value="title">Title</SelectItem>
-                <DaisySelectItem value="messages">Message Count</SelectItem>
-              </SelectContent>
+            <DaisySelect value={sortBy} onValueChange={setSortBy} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="updated">Last Updated</DaisySelectContent>
+                <DaisySelectItem value="created">Date Created</DaisySelectItem>
+                <DaisySelectItem value="title">Title</DaisySelectItem>
+                <DaisySelectItem value="messages">Message Count</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
           </div>
         </div>
 
         {/* Tabs */}
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <DaisyTabsList className="grid w-full grid-cols-3 mx-4 mb-4">
-            <DaisyTabsTrigger value="recent">Recent</DaisyTabsTrigger>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
+          <DaisyTabsList className="grid w-full grid-cols-3 mx-4 mb-4" />
+            <DaisyTabsTrigger value="recent">Recent</DaisyTabs>
             <DaisyTabsTrigger value="starred">Starred</DaisyTabsTrigger>
             <DaisyTabsTrigger value="archived">Archived</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value={activeTab} className="mt-0">
+          <DaisyTabsContent value={activeTab} className="mt-0" />
             <div className="max-h-96 overflow-y-auto">
               {filteredConversations.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -546,13 +547,15 @@ export default function ConversationHistory({
                               {conversation.tags.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mt-2">
                                   {conversation.tags.slice(0, 3).map((tag) => (
-                                    <DaisyBadge key={tag} variant="outline" className="text-xs">
-                                      {tag}
+                                    <DaisyBadge key={tag} variant="outline" className="text-xs" >
+  {tag}
+</DaisyTabsContent>
                                     </DaisyBadge>
                                   ))}
                                   {conversation.tags.length > 3 && (
-                                    <DaisyBadge variant="outline" className="text-xs">
-                                      +{conversation.tags.length - 3}
+                                    <DaisyBadge variant="outline" className="text-xs" >
+  +{conversation.tags.length - 3}
+</DaisyBadge>
                                     </DaisyBadge>
                                   )}
                                 </div>
@@ -565,8 +568,7 @@ export default function ConversationHistory({
                               variant="ghost"
                               size="sm"
                               onClick={() => toggleStar(conversation.id)}
-                              className="p-1 h-6 w-6"
-                            >
+                              className="p-1 h-6 w-6" />
                               <Star 
                                 className={`w-3 h-3 ${
                                   conversation.isStarred ? 'text-yellow-500 fill-current' : ''
@@ -578,8 +580,7 @@ export default function ConversationHistory({
                               variant="ghost"
                               size="sm"
                               onClick={() => shareConversation(conversation)}
-                              className="p-1 h-6 w-6"
-                            >
+                              className="p-1 h-6 w-6" />
                               <Share2 className="w-3 h-3" />
                             </DaisyButton>
                             
@@ -587,8 +588,7 @@ export default function ConversationHistory({
                               variant="ghost"
                               size="sm"
                               onClick={() => toggleConversationExpansion(conversation.id)}
-                              className="p-1 h-6 w-6"
-                            >
+                              className="p-1 h-6 w-6" />
                               {expandedConversations.has(conversation.id) ? (
                                 <ChevronDown className="w-3 h-3" />
                               ) : (
@@ -645,8 +645,9 @@ export default function ConversationHistory({
                                       </span>
                                       
                                       {message.metadata?.confidence && (
-                                        <DaisyBadge variant="outline" className="text-xs">
-                                          {Math.round(message.metadata.confidence * 100)}% confidence
+                                        <DaisyBadge variant="outline" className="text-xs" >
+  {Math.round(message.metadata.confidence * 100)}% confidence
+</DaisyBadge>
                                         </DaisyBadge>
                                       )}
                                     </div>

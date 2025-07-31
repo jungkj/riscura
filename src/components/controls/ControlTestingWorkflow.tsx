@@ -264,8 +264,9 @@ const EvidenceUpload: React.FC<{
                       <span className="text-body-sm font-medium text-text-primary truncate">
                         {evidence.name}
                       </span>
-                      <DaisyBadge variant="outline" className="text-caption">
-                        {evidence.type}
+                      <DaisyBadge variant="outline" className="text-caption" >
+  {evidence.type}
+</DaisyBadge>
                       </DaisyBadge>
                     </div>
                     <div className="flex items-center space-x-enterprise-2 text-caption text-text-secondary">
@@ -280,14 +281,17 @@ const EvidenceUpload: React.FC<{
                     )}
                   </div>
                   <div className="flex items-center space-x-enterprise-1">
-                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Eye className="h-3 w-3" />
+                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <Eye className="h-3 w-3" />
+</DaisyButton>
                     </DaisyButton>
-                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Download className="h-3 w-3" />
+                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <Download className="h-3 w-3" />
+</DaisyButton>
                     </DaisyButton>
-                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0 text-semantic-error">
-                      <X className="h-3 w-3" />
+                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0 text-semantic-error" >
+  <X className="h-3 w-3" />
+</DaisyButton>
                     </DaisyButton>
                   </div>
                 </div>
@@ -370,37 +374,36 @@ const TestingForm: React.FC<{
           </label>
           <DaisySelect 
             value={formData.result} 
-            onValueChange={(value) => handleInputChange('result', value)}
-          >
-            <DaisySelectTrigger className="mt-enterprise-1">
-              <DaisySelectValue />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="passed">
+            onValueChange={(value) => handleInputChange('result', value)} />
+            <DaisySelectTrigger className="mt-enterprise-1" />
+              <DaisySelectValue /></DaisyTextarea>
+            <DaisySelectContent />
+              <DaisySelectItem value="passed" />
                 <div className="flex items-center space-x-enterprise-2">
                   <CheckCircle className="h-3 w-3 text-semantic-success" />
                   <span>Passed</span>
                 </div>
-              </SelectItem>
-              <DaisySelectItem value="failed">
+              </DaisySelectContent>
+              <DaisySelectItem value="failed" />
                 <div className="flex items-center space-x-enterprise-2">
                   <X className="h-3 w-3 text-semantic-error" />
                   <span>Failed</span>
                 </div>
-              </SelectItem>
-              <DaisySelectItem value="partial">
+              </DaisySelectItem>
+              <DaisySelectItem value="partial" />
                 <div className="flex items-center space-x-enterprise-2">
-                  <DaisyAlertTriangle className="h-3 w-3 text-semantic-warning" />
-                  <span>Partially Effective</span>
+                  <DaisyAlertTriangle className="h-3 w-3 text-semantic-warning" >
+  <span>
+</DaisySelectItem>Partially Effective</span>
                 </div>
-              </SelectItem>
-              <DaisySelectItem value="not-applicable">
+              </DaisySelectItem>
+              <DaisySelectItem value="not-applicable" />
                 <div className="flex items-center space-x-enterprise-2">
                   <Clock className="h-3 w-3 text-text-tertiary" />
                   <span>Not Applicable</span>
                 </div>
-              </SelectItem>
-            </SelectContent>
+              </DaisySelectItem>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
 
@@ -459,14 +462,16 @@ const TestingForm: React.FC<{
       {/* Actions */}
       <div className="flex items-center justify-between pt-enterprise-4 border-t border-border">
         <div className="flex items-center space-x-enterprise-2">
-          <DaisyButton variant="outline" onClick={handleSave}>
-            <Save className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton variant="outline" onClick={handleSave} >
+  <Save className="h-3 w-3 mr-enterprise-1" />
+</DaisyInput>
             Save Draft
           </DaisyButton>
         </div>
         <div className="flex items-center space-x-enterprise-2">
-          <DaisyButton onClick={handleSubmit}>
-            <Send className="h-3 w-3 mr-enterprise-1" />
+          <DaisyButton onClick={handleSubmit} >
+  <Send className="h-3 w-3 mr-enterprise-1" />
+</DaisyButton>
             Submit for Review
           </DaisyButton>
         </div>
@@ -491,11 +496,13 @@ const WorkflowCard: React.FC<{
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{workflow.id}</span>
-            <DaisyBadge variant={statusConfig.variant} className="text-caption">
-              {workflow.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            <DaisyBadge variant={statusConfig.variant} className="text-caption" >
+  {workflow.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+</DaisyBadge>
             </DaisyBadge>
-            <DaisyBadge variant="outline" className="text-caption">
-              {workflow.testingType}
+            <DaisyBadge variant="outline" className="text-caption" >
+  {workflow.testingType}
+</DaisyBadge>
             </DaisyBadge>
           </div>
           <h3 className="text-body-base font-semibold text-text-primary mb-enterprise-1">
@@ -574,18 +581,16 @@ const WorkflowCard: React.FC<{
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('view', workflow)}
-          >
+            onClick={() => onAction('view', workflow)} />
             <Eye className="h-3 w-3 mr-enterprise-1" />
             View
-          </DaisyButton>
+          </DaisyProgress>
           {workflow.status === 'in-progress' && (
             <DaisyButton 
               variant="ghost" 
               size="sm" 
               className="h-6 px-enterprise-2"
-              onClick={() => onAction('test', workflow)}
-            >
+              onClick={() => onAction('test', workflow)} />
               <Activity className="h-3 w-3 mr-enterprise-1" />
               Continue
             </DaisyButton>
@@ -639,26 +644,26 @@ export const ControlTestingWorkflow: React.FC = () => {
             Manage testing workflows and document results
           </p>
         </div>
-        <DaisyButton>
-          <Plus className="h-4 w-4 mr-enterprise-1" />
+        <DaisyButton >
+  <Plus className="h-4 w-4 mr-enterprise-1" />
+</DaisyButton>
           Schedule Test
         </DaisyButton>
       </div>
 
       {/* Filter */}
       <div className="flex items-center space-x-enterprise-3">
-        <DaisySelect value={filterStatus} onValueChange={setFilterStatus}>
-          <DaisySelectTrigger className="w-40">
-            <DaisySelectValue placeholder="Status" />
-          </DaisySelectTrigger>
-          <DaisySelectContent>
-            <DaisySelectItem value="all">All Status</SelectItem>
+        <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
+          <DaisySelectTrigger className="w-40" />
+            <DaisySelectValue placeholder="Status" /></DaisySelect>
+          <DaisySelectContent />
+            <DaisySelectItem value="all">All Status</DaisySelectContent>
             {statuses.map(status => (
-              <DaisySelectItem key={status} value={status}>
+              <DaisySelectItem key={status} value={status} />
                 {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </SelectItem>
+              </DaisySelectItem>
             ))}
-          </SelectContent>
+          </DaisySelectContent>
         </DaisySelect>
       </div>
 
@@ -675,22 +680,24 @@ export const ControlTestingWorkflow: React.FC = () => {
 
       {/* Testing Dialog */}
       {selectedWorkflow && (
-        <DaisyDialog open={testingDialogOpen} onOpenChange={setTestingDialogOpen}>
-          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DaisyDialogHeader>
-              <DaisyDialogTitle>
-                Testing: {selectedWorkflow.controlTitle}
+        <DaisyDialog open={testingDialogOpen} onOpenChange={setTestingDialogOpen} />
+          <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+              <DaisyDialogTitle >
+  Testing: {selectedWorkflow.controlTitle}
+</DaisyDialogTitle>
               </DaisyDialogTitle>
             </DaisyDialogHeader>
             
-            <DaisyTabs defaultValue="testing" className="mt-enterprise-4">
-              <DaisyTabsList>
-                <DaisyTabsTrigger value="testing">Testing Form</DaisyTabsTrigger>
+            <DaisyTabs defaultValue="testing" className="mt-enterprise-4" />
+              <DaisyTabsList />
+                <DaisyTabsTrigger value="testing">Testing Form</DaisyTabs>
                 <DaisyTabsTrigger value="evidence">Evidence</DaisyTabsTrigger>
                 <DaisyTabsTrigger value="history">History</DaisyTabsTrigger>
               </DaisyTabsList>
               
-              <DaisyTabsContent value="testing" className="mt-enterprise-4">
+              <DaisyTabsContent value="testing" className="mt-enterprise-4" />
                 <TestingForm
                   workflow={selectedWorkflow}
                   onSave={handleTestingSave}
@@ -698,14 +705,14 @@ export const ControlTestingWorkflow: React.FC = () => {
                 />
               </DaisyTabsContent>
               
-              <DaisyTabsContent value="evidence" className="mt-enterprise-4">
+              <DaisyTabsContent value="evidence" className="mt-enterprise-4" />
                 <EvidenceUpload
                   workflow={selectedWorkflow}
                   onEvidenceUpload={handleEvidenceUpload}
                 />
               </DaisyTabsContent>
               
-              <DaisyTabsContent value="history" className="mt-enterprise-4">
+              <DaisyTabsContent value="history" className="mt-enterprise-4" />
                 <div className="text-center py-enterprise-8">
                   <BarChart3 className="h-8 w-8 text-text-tertiary mx-auto mb-enterprise-2" />
                   <p className="text-body-sm text-text-secondary">

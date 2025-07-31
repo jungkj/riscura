@@ -474,10 +474,12 @@ export default function GlobalSearch({
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         className="w-full max-w-2xl mx-4"
       >
-        <DaisyCard className="bg-white border border-gray-200 shadow-2xl">
-          {/* Search Header */}
-          <DaisyCardHeader className="pb-4">
-            <div className="flex items-center gap-3">
+        <DaisyCard className="bg-white border border-gray-200 shadow-2xl" >
+  {/* Search Header */}
+</DaisyCard>
+          <DaisyCardHeader className="pb-4" >
+  <div className="flex items-center gap-3">
+</DaisyCardHeader>
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <DaisyInput
@@ -492,10 +494,9 @@ export default function GlobalSearch({
                     variant="ghost"
                     size="sm"
                     onClick={() => handleQueryChange('')}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0"
-                  >
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0" />
                     <X className="w-4 h-4" />
-                  </DaisyButton>
+                  </DaisyInput>
                 )}
               </div>
               
@@ -505,8 +506,7 @@ export default function GlobalSearch({
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowAdvanced(!showAdvanced)}
-                    className="flex items-center gap-2"
-                  >
+                    className="flex items-center gap-2" />
                     <Filter className="w-4 h-4" />
                     Filters
                   </DaisyButton>
@@ -516,9 +516,9 @@ export default function GlobalSearch({
                   variant="ghost"
                   size="sm"
                   onClick={onClose}
-                  className="w-8 h-8 p-0"
-                >
-                  <X className="w-4 h-4" />
+                  className="w-8 h-8 p-0" >
+  <X className="w-4 h-4" />
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -532,8 +532,9 @@ export default function GlobalSearch({
             )}
           
 
-          <DaisyCardContent className="p-0 max-h-96 overflow-y-auto" ref={resultsRef}>
-            {/* No query state - show suggestions and recent */}
+          <DaisyCardContent className="p-0 max-h-96 overflow-y-auto" ref={resultsRef} >
+  {/* No query state - show suggestions and recent */}
+</DaisyCardContent>
             {!query.trim() && (
               <div className="p-6 space-y-6">
                 {/* Recent Searches */}
@@ -653,8 +654,9 @@ export default function GlobalSearch({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h4 className="font-medium text-gray-900 truncate">{result.title}</h4>
-                            <DaisyBadge variant="secondary" className="text-xs">
-                              {result.type}
+                            <DaisyBadge variant="secondary" className="text-xs" >
+  {result.type}
+</DaisyBadge>
                             </DaisyBadge>
                           </div>
                           
@@ -680,8 +682,9 @@ export default function GlobalSearch({
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               {result.tags && result.tags.slice(0, 2).map(tag => (
-                                <DaisyBadge key={tag} variant="outline" className="text-xs">
-                                  {tag}
+                                <DaisyBadge key={tag} variant="outline" className="text-xs" >
+  {tag}
+</DaisyBadge>
                                 </DaisyBadge>
                               ))}
                               {result.tags && result.tags.length > 2 && (
@@ -719,15 +722,13 @@ export default function GlobalSearch({
                   <DaisyButton
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleQueryChange('')}
-                  >
+                    onClick={() => handleQueryChange('')} />
                     Clear Search
                   </DaisyButton>
                   <DaisyButton
                     variant="secondary"
                     size="sm"
-                    onClick={() => setShowAdvanced(true)}
-                  >
+                    onClick={() => setShowAdvanced(true)} />
                     Advanced Search
                   </DaisyButton>
                 </div>

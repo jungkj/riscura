@@ -166,15 +166,18 @@ export default function DocumentAnalysisPage() {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Document Upload Panel */}
-        <DaisyCard className="lg:col-span-1">
-          <DaisyCardHeader>
+        <DaisyCard className="lg:col-span-1" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Upload Document</DaisyCardTitle>
-            <DaisyCardDescription>
-              Supported formats: PDF, DOC, DOCX, TXT
+            <DaisyCardDescription >
+  Supported formats: PDF, DOC, DOCX, TXT
+</DaisyCardDescription>
             </p>
           
-          <DaisyCardContent>
-            {!analyzedDocument ? (
+          <DaisyCardContent >
+  {!analyzedDocument ? (
+</DaisyCardContent>
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 transition-colors rounded-lg p-6 text-center">
                   <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -189,9 +192,9 @@ export default function DocumentAnalysisPage() {
                     onChange={handleFileChange}
                     accept=".pdf,.doc,.docx,.txt"
                   />
-                  <DaisyButton variant="outline" onClick={() => document.getElementById('document-upload')?.click()}>
+                  <DaisyButton variant="outline" onClick={() => document.getElementById('document-upload')?.click()} />
                     Select File
-                  </DaisyButton>
+                  </DaisyInput>
                 </div>
                 
                 {file && (
@@ -206,17 +209,19 @@ export default function DocumentAnalysisPage() {
                         variant="secondary" 
                         size="sm" 
                         onClick={handleUpload}
-                        disabled={uploading || processing}
-                      >
-                        {uploading ? 'Uploading...' : 'Analyze'}
+                        disabled={uploading || processing} >
+  {uploading ? 'Uploading...' : 'Analyze'}
+</DaisyButton>
                       </DaisyButton>
                     </div>
                   </div>
                 )}
                 
                 {(uploading || processing) && (
-                  <DaisyCard className="border border-muted/50">
-                    <DaisyCardContent className="p-4">
+                  <DaisyCard className="border border-muted/50" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                       <div className="flex items-center space-x-4">
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
                         <div className="space-y-2 flex-1">
@@ -234,7 +239,7 @@ export default function DocumentAnalysisPage() {
                           )}
                         </div>
                       </div>
-                    </DaisyCardContent>
+                    </DaisyProgress>
                   </DaisyCard>
                 )}
               </div>
@@ -249,8 +254,9 @@ export default function DocumentAnalysisPage() {
                         {formatFileSize(analyzedDocument.size)} • Analyzed {new Date(analyzedDocument.uploadedAt).toLocaleTimeString()}
                       </p>
                     </div>
-                    <DaisyBadge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                      Analyzed
+                    <DaisyBadge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" >
+  Analyzed
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 </div>
@@ -262,8 +268,9 @@ export default function DocumentAnalysisPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <DaisyLabel>High Confidence</DaisyLabel>
-                    <DaisyBadge variant="outline">
-                      {riskInsights.filter(r => r.confidence >= 0.8).length}
+                    <DaisyBadge variant="outline" >
+  {riskInsights.filter(r => r.confidence >= 0.8).length}
+</DaisyBadge>
                     </DaisyBadge>
                   </div>
                 </div>
@@ -282,19 +289,22 @@ export default function DocumentAnalysisPage() {
                 </DaisyButton>
               </div>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
         
         {/* Analysis Results Panel */}
-        <DaisyCard className="lg:col-span-2">
-          <DaisyCardHeader>
+        <DaisyCard className="lg:col-span-2" >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Analysis Results</DaisyCardTitle>
-            <DaisyCardDescription>
-              AI-identified risks and suggested controls
+            <DaisyCardDescription >
+  AI-identified risks and suggested controls
+</DaisyCardDescription>
             </p>
           
-          <DaisyCardContent>
-            {!analyzedDocument ? (
+          <DaisyCardContent >
+  {!analyzedDocument ? (
+</DaisyCardContent>
               <div className="flex flex-col items-center justify-center h-72 text-center">
                 <Sparkles className="h-12 w-12 text-muted-foreground mb-4 opacity-30" />
                 <h3 className="text-lg font-semibold mb-2">No Document Analyzed</h3>
@@ -303,26 +313,31 @@ export default function DocumentAnalysisPage() {
                 </p>
               </div>
             ) : (
-              <DaisyTabs defaultValue="risks" className="w-full">
-                <DaisyTabsList className="grid w-full grid-cols-2">
-                  <DaisyTabsTrigger value="risks">Identified Risks</DaisyTabsTrigger>
+              <DaisyTabs defaultValue="risks" className="w-full" />
+                <DaisyTabsList className="grid w-full grid-cols-2" />
+                  <DaisyTabsTrigger value="risks">Identified Risks</DaisyTabs>
                   <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
                 </DaisyTabsList>
                 
-                <DaisyTabsContent value="risks" className="space-y-4 pt-4">
-                  <DaisyAlert>
-                    <DaisyAlertCircle className="h-4 w-4" />
-                    <DaisyAlertTitle>AI Analysis Complete</DaisyCardTitle>
-                    <DaisyAlertDescription>
-                      Found {riskInsights.length} potential risks in the document
-                    
-                  </DaisyAlert>
+                <DaisyTabsContent value="risks" className="space-y-4 pt-4" />
+                  <DaisyAlert >
+  <DaisyAlertCircle className="h-4 w-4" />
+</DaisyTabsContent>
+                    <DaisyAlertTitle>AI Analysis Complete</DaisyAlertTitle>
+                    <DaisyAlertDescription >
+  Found {riskInsights.length} potential risks in the document
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
                   
-                  <DaisyScrollArea className="h-[400px] pr-4">
+                  <DaisyScrollArea className="h-[400px] pr-4" />
                     <div className="space-y-3">
                       {riskInsights.map((risk) => (
-                        <DaisyCard key={risk.id} className="hover:shadow-sm transition-shadow">
-                          <DaisyCardContent className="p-4">
+                        <DaisyCard key={risk.id} className="hover:shadow-sm transition-shadow" >
+  <DaisyCardContent className="p-4" >
+  </DaisyScrollArea>
+</DaisyCardContent>
                             <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
                               <div className="space-y-1">
                                 <div className="flex items-center">
@@ -332,13 +347,13 @@ export default function DocumentAnalysisPage() {
                                 <p className="text-sm text-muted-foreground">{risk.description}</p>
                               </div>
                               <div className="flex flex-col gap-2 items-end shrink-0">
-                                <DaisyBadge variant={getConfidenceBadgeVariant(risk.confidence)}>
-                                  {Math.round(risk.confidence * 100)}% confidence
+                                <DaisyBadge variant={getConfidenceBadgeVariant(risk.confidence)} >
+  {Math.round(risk.confidence * 100)}% confidence
+</DaisyBadge>
                                 </DaisyBadge>
                                 <DaisyButton 
                                   size="sm" 
-                                  onClick={() => addRiskToRegister(risk)}
-                                >
+                                  onClick={() => addRiskToRegister(risk)} />
                                   Add to Register
                                 </DaisyButton>
                               </div>
@@ -350,9 +365,11 @@ export default function DocumentAnalysisPage() {
                   </DaisyScrollArea>
                 </DaisyTabsContent>
                 
-                <DaisyTabsContent value="insights" className="pt-4">
-                  <DaisyCard>
-                    <DaisyCardContent className="p-6">
+                <DaisyTabsContent value="insights" className="pt-4" />
+                  <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                       <h3 className="text-xl font-semibold mb-4">Document Summary</h3>
                       <p className="text-sm mb-6">
                         This document appears to be a policy document outlining operational procedures 
@@ -390,15 +407,16 @@ export default function DocumentAnalysisPage() {
                         </div>
                       </div>
                       
-                      <DaisyButton className="w-full" variant="outline">
-                        Generate Full Report
+                      <DaisyButton className="w-full" variant="outline" >
+  Generate Full Report
+</DaisyButton>
                       </DaisyButton>
                     </DaisyCardContent>
                   </DaisyCard>
                 </DaisyTabsContent>
               </DaisyTabs>
             )}
-          </DaisyCardBody>
+          </DaisyCardContent>
         </DaisyCard>
       </div>
     </div>

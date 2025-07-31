@@ -176,8 +176,9 @@ export default function MetricCards() {
             }`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <DaisyCardBody className="p-6">
-              <div className="flex items-center justify-between">
+            <DaisyCardBody className="p-6" >
+  <div className="flex items-center justify-between">
+</DaisyCard>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-600 mb-2">
                     {metric.title}

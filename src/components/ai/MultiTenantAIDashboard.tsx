@@ -237,8 +237,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
           </p>
         </div>
         {userRole === 'admin' && (
-          <DaisyButton onClick={createNewTenant} className="flex items-center gap-2">
-            <Plus className="w-4 h-4" />
+          <DaisyButton onClick={createNewTenant} className="flex items-center gap-2" >
+  <Plus className="w-4 h-4" />
+</DaisyButton>
             Create Tenant
           </DaisyButton>
         )}
@@ -247,14 +248,14 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
-            <DaisyAlertTriangle className="w-5 h-5 text-red-600" />
-            <p className="text-red-800">{error}</p>
+            <DaisyAlertTriangle className="w-5 h-5 text-red-600" >
+  <p className="text-red-800">
+</DaisyAlertTriangle>{error}</p>
             <DaisyButton 
               variant="ghost" 
               size="sm" 
               onClick={() => setError(null)}
-              className="ml-auto"
-            >
+              className="ml-auto" />
               ×
             </DaisyButton>
           </div>
@@ -262,15 +263,18 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       )}
 
       {/* Tenant Selector */}
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center gap-2">
-            <Building2 className="w-5 h-5" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center gap-2" >
+  <Building2 className="w-5 h-5" />
+</DaisyCardTitle>
             Tenant Selection
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+</DaisyCardContent>
             {tenants.map((tenant) => (
               <div
                 key={tenant.id}
@@ -287,8 +291,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                 </div>
                 <p className="text-sm text-gray-600 mb-1">{tenant.domain}</p>
                 <p className="text-xs text-gray-500">{tenant.subscription.tier}</p>
-                <DaisyBadge variant={tenant.status === 'active' ? 'default' : 'secondary'} className="mt-2">
-                  {tenant.status}
+                <DaisyBadge variant={tenant.status === 'active' ? 'default' : 'secondary'} className="mt-2" >
+  {tenant.status}
+</DaisyBadge>
                 </DaisyBadge>
               </div>
             ))}
@@ -297,45 +302,47 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       </DaisyCard>
 
       {selectedTenant && (
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-          <DaisyTabsList className="grid w-full grid-cols-7">
-            <DaisyTabsTrigger value="overview" className="flex items-center gap-2">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+          <DaisyTabsList className="grid w-full grid-cols-7" />
+            <DaisyTabsTrigger value="overview" className="flex items-center gap-2" />
               <BarChart3 className="w-4 h-4" />
               Overview
-            </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2">
+            </DaisyTabs>
+            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2" />
               <Activity className="w-4 h-4" />
               Analytics
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="billing" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="billing" className="flex items-center gap-2" />
               <CreditCard className="w-4 h-4" />
               Billing
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="isolation" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="isolation" className="flex items-center gap-2" />
               <Shield className="w-4 h-4" />
               Isolation
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="branding" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="branding" className="flex items-center gap-2" />
               <Palette className="w-4 h-4" />
               Branding
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="users" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="users" className="flex items-center gap-2" />
               <Users className="w-4 h-4" />
               Users
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="settings" className="flex items-center gap-2">
+            <DaisyTabsTrigger value="settings" className="flex items-center gap-2" />
               <Settings className="w-4 h-4" />
               Settings
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Overview Tab */}
-          <DaisyTabsContent value="overview">
+          <DaisyTabsContent value="overview" />
             <div className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <DaisyCard>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyTabsContent>
+</DaisyCardContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-600">AI Queries</p>
@@ -353,8 +360,10 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                   </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-600">Active Users</p>
@@ -372,8 +381,10 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                   </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-600">Monthly Cost</p>
@@ -391,8 +402,10 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                   </DaisyCardContent>
                 </DaisyCard>
 
-                <DaisyCard>
-                  <DaisyCardContent className="p-6">
+                <DaisyCard >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-600">Response Time</p>
@@ -412,12 +425,14 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
               </div>
 
               {/* Tenant Information */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle>Tenant Information</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+</DaisyCardContent>
                     <div className="space-y-4">
                       <div>
                         <DaisyLabel className="text-sm font-medium">Organization Name</DaisyLabel>
@@ -433,8 +448,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                       </div>
                       <div>
                         <DaisyLabel className="text-sm font-medium">Status</DaisyLabel>
-                        <DaisyBadge variant={selectedTenant.status === 'active' ? 'default' : 'secondary'}>
-                          {selectedTenant.status}
+                        <DaisyBadge variant={selectedTenant.status === 'active' ? 'default' : 'secondary'} >
+  {selectedTenant.status}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                     </div>
@@ -463,14 +479,16 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
           </DaisyTabsContent>
 
           {/* Analytics Tab */}
-          <DaisyTabsContent value="analytics">
+          <DaisyTabsContent value="analytics" />
             <div className="space-y-6">
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                   <DaisyCardTitle>Usage Analytics</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="h-80">
+        <DaisyCardContent >
+  <div className="h-80">
+</DaisyCardContent>
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={analytics?.usage.aiQueries.queriesPerDay || []}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -487,16 +505,18 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-                </DaisyCardContent>
+                </DaisyTooltip>
               </DaisyCard>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DaisyCard>
-                  <DaisyCardHeader>
+                <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                     <DaisyCardTitle>Model Usage</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                    <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">
                           {analytics?.usage.modelUsage.modelId || 'GPT-3.5 Turbo'}
@@ -513,15 +533,17 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                         Success Rate: {analytics?.usage.modelUsage.successRate || 95}%
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyProgress>
                 </DaisyCard>
 
-                <DaisyCard>
-                  <DaisyCardHeader>
+                <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                     <DaisyCardTitle>Performance Metrics</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                    <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
                       <div className="flex justify-between">
                         <span className="text-sm">Average Response Time</span>
                         <span className="text-sm font-medium">
@@ -546,57 +568,67 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
           </DaisyTabsContent>
 
           {/* Additional tabs would continue here... */}
-          <DaisyTabsContent value="billing">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="billing" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Billing Information</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <p>Billing dashboard implementation continues...</p>
+        <DaisyCardContent >
+  <p>
+</DaisyCardContent>Billing dashboard implementation continues...</p>
               </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="isolation">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="isolation" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Tenant Isolation</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <p>Isolation settings implementation continues...</p>
+        <DaisyCardContent >
+  <p>
+</DaisyCardContent>Isolation settings implementation continues...</p>
               </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="branding">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="branding" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Branding & Customization</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <p>Branding configuration implementation continues...</p>
+        <DaisyCardContent >
+  <p>
+</DaisyCardContent>Branding configuration implementation continues...</p>
               </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="users">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="users" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>User Management</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <p>User management implementation continues...</p>
+        <DaisyCardContent >
+  <p>
+</DaisyCardContent>User management implementation continues...</p>
               </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="settings">
-            <DaisyCard>
-              <DaisyCardHeader>
+          <DaisyTabsContent value="settings" />
+            <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
                 <DaisyCardTitle>Tenant Settings</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                <p>Settings configuration implementation continues...</p>
+        <DaisyCardContent >
+  <p>
+</DaisyCardContent>Settings configuration implementation continues...</p>
               </DaisyCardContent>
             </DaisyCard>
           </DaisyTabsContent>

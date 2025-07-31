@@ -165,8 +165,7 @@ export default function VantaInspiredLanding() {
               <button className="text-gray-700 hover:text-[#199BEC] font-medium">Login</button>
               <DaisyButton 
                 className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-6"
-                onClick={() => router.push('/register')}
-              >
+                onClick={() => router.push('/register')} />
                 Request a demo
               </DaisyButton>
             </div>
@@ -179,8 +178,9 @@ export default function VantaInspiredLanding() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#199BEC]/5 via-white to-purple-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
           <div className="text-center">
-            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm rounded-full">
-              <Sparkles className="w-4 h-4 mr-2" />
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm rounded-full" >
+  <Sparkles className="w-4 h-4 mr-2" />
+</DaisyBadge>
               Introducing Riscura AI: Powering the future of risk management
             </DaisyBadge>
             
@@ -200,17 +200,16 @@ export default function VantaInspiredLanding() {
               <DaisyButton 
                 size="lg" 
                 className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-8 py-4 text-lg"
-                onClick={() => router.push('/register')}
-              >
+                onClick={() => router.push('/register')} />
                 Request a demo
                 <ArrowRight className="w-5 h-5 ml-2" />
               </DaisyButton>
               <DaisyButton 
                 variant="outline" 
                 size="lg" 
-                className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg"
-              >
-                <Play className="w-5 h-5 mr-2" />
+                className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg" >
+  <Play className="w-5 h-5 mr-2" />
+</DaisyButton>
                 Watch demo
               </DaisyButton>
             </div>
@@ -270,8 +269,9 @@ export default function VantaInspiredLanding() {
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="text-2xl font-bold text-[#199BEC]">{feature.stats}</div>
                 </div>
-                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-                  Request a demo
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  Request a demo
+</DaisyButton>
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </DaisyButton>
               </div>
@@ -307,14 +307,17 @@ export default function VantaInspiredLanding() {
           
           <div className="grid lg:grid-cols-3 gap-8">
             {aiFeatures.map((feature, index) => (
-              <DaisyCard key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-                <DaisyCardHeader>
+              <DaisyCard key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white" >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-xl">{feature.title}</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <p className="text-purple-100 mb-4">{feature.description}</p>
-                  <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                    {feature.action}
+        <DaisyCardContent >
+  <p className="text-purple-100 mb-4">
+</DaisyCardContent>{feature.description}</p>
+                  <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10" >
+  {feature.action}
+</DaisyButton>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </DaisyButton>
                 </DaisyCardContent>
@@ -363,8 +366,7 @@ export default function VantaInspiredLanding() {
           <DaisyButton 
             size="lg" 
             className="bg-white text-[#199BEC] hover:bg-gray-100 px-8 py-4 text-lg font-semibold"
-            onClick={() => router.push('/register')}
-          >
+            onClick={() => router.push('/register')} />
             Request a demo
             <ArrowRight className="w-5 h-5 ml-2" />
           </DaisyButton>

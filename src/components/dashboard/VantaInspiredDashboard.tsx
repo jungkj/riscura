@@ -168,7 +168,9 @@ export default function VantaInspiredDashboard() {
       case 'Active':
         return <Clock className="w-4 h-4" />;
       case 'Not Started':
-        return <DaisyAlertCircle className="w-4 h-4" />;
+        return <DaisyAlertCircle className="w-4 h-4" >
+  ;
+</DaisyAlertCircle>
       default:
         return <Clock className="w-4 h-4" />;
     }
@@ -223,26 +225,31 @@ export default function VantaInspiredDashboard() {
             </div>
             
             {/* Action Buttons */}
-            <DaisyButton variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" >
+  <Filter className="w-4 h-4 mr-2" />
+</DaisyInput>
               Filter
             </DaisyButton>
-            <DaisyButton variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" size="sm" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyButton>
               Export
             </DaisyButton>
-            <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-              <Plus className="w-4 h-4 mr-2" />
+            <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
               New Assessment
             </DaisyButton>
             
             {/* Notifications */}
             <div className="relative">
-              <DaisyButton variant="ghost" size="sm">
-                <Bell className="w-4 h-4" />
+              <DaisyButton variant="ghost" size="sm" >
+  <Bell className="w-4 h-4" />
+</DaisyButton>
               </DaisyButton>
-              <DaisyBadge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
-                3
+              <DaisyBadge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0" >
+  3
+</DaisyBadge>
               </DaisyBadge>
             </div>
           </div>
@@ -251,41 +258,37 @@ export default function VantaInspiredDashboard() {
 
       {/* Main Content */}
       <div className="p-6">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
           {/* Tab Navigation */}
-          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg">
+          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg" />
             <DaisyTabsTrigger 
               value="overview" 
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <BarChart3 className="w-4 h-4 mr-2" />
               Overview
-            </DaisyTabsTrigger>
+            </DaisyTabs>
             <DaisyTabsTrigger 
               value="risks"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <DaisyCalendar className="w-4 h-4 mr-2" />
               Risk Analysis
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="compliance"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <Users className="w-4 h-4 mr-2" />
               Compliance
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="reports"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
-            >
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
               <Download className="w-4 h-4 mr-2" />
               Reports
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Tab Content */}
-          <DaisyTabsContent value="overview" className="space-y-6">
+          <DaisyTabsContent value="overview" className="space-y-6" />
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Key Metrics</h2>
               <MetricCards />
@@ -303,21 +306,21 @@ export default function VantaInspiredDashboard() {
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="risks" className="space-y-6">
+          <DaisyTabsContent value="risks" className="space-y-6" />
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Risk Analysis</h2>
               <RiskHeatMap />
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="compliance" className="space-y-6">
+          <DaisyTabsContent value="compliance" className="space-y-6" />
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Compliance Management</h2>
               <ComplianceProgress />
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="reports" className="space-y-6">
+          <DaisyTabsContent value="reports" className="space-y-6" />
             <div className="text-center py-12">
               <Download className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Reports & Analytics</h3>
@@ -325,11 +328,13 @@ export default function VantaInspiredDashboard() {
                 Generate comprehensive reports on risk assessments, compliance status, and organizational metrics.
               </p>
               <div className="flex justify-center space-x-4">
-                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-                  Generate Risk Report
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
+  Generate Risk Report
+</DaisyTabsContent>
                 </DaisyButton>
-                <DaisyButton variant="outline">
-                  Compliance Summary
+                <DaisyButton variant="outline" >
+  Compliance Summary
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -341,9 +346,9 @@ export default function VantaInspiredDashboard() {
       <div className="fixed bottom-6 right-6 space-y-3">
         <DaisyButton 
           className="w-12 h-12 rounded-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white shadow-lg"
-          title="Quick Risk Assessment"
-        >
-          <Plus className="w-5 h-5" />
+          title="Quick Risk Assessment" >
+  <Plus className="w-5 h-5" />
+</DaisyButton>
         </DaisyButton>
       </div>
     </div>

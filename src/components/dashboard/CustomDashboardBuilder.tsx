@@ -206,7 +206,9 @@ const widgetLibrary: WidgetConfig[] = [
     type: 'alerts',
     name: 'Alert List',
     description: 'Recent alerts and notifications',
-    icon: <DaisyAlertTriangle className="w-4 h-4" />,
+    icon: <DaisyAlertTriangle className="w-4 h-4" >
+  ,
+</DaisyAlertTriangle>
     category: 'Monitoring',
     defaultSize: { w: 4, h: 6 },
     minSize: { w: 3, h: 4 },
@@ -488,24 +490,23 @@ export default function CustomDashboardBuilder({
                 <DaisyButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowWidgetLibrary(false)}
-                >
+                  onClick={() => setShowWidgetLibrary(false)} />
                   <EyeOff className="h-4 w-4" />
                 </DaisyButton>
               </div>
               
-              <DaisyTabs defaultValue={categories[0]} className="w-full">
-                <DaisyTabsList className="grid w-full grid-cols-2">
+              <DaisyTabs defaultValue={categories[0]} className="w-full" />
+                <DaisyTabsList className="grid w-full grid-cols-2" />
                   {categories.slice(0, 2).map(category => (
-                    <DaisyTabsTrigger key={category} value={category} className="text-xs">
+                    <DaisyTabsTrigger key={category} value={category} className="text-xs" />
                       {category}
-                    </DaisyTabsTrigger>
+                    </DaisyTabs>
                   ))}
                 </DaisyTabsList>
                 
                 {categories.map(category => (
-                  <DaisyTabsContent key={category} value={category} className="mt-4">
-                    <DaisyScrollArea className="h-96">
+                  <DaisyTabsContent key={category} value={category} className="mt-4" />
+                    <DaisyScrollArea className="h-96" />
                       <div className="space-y-3">
                         {widgetLibrary
                           .filter(widget => widget.category === category)
@@ -513,7 +514,7 @@ export default function CustomDashboardBuilder({
                             <DraggableWidget key={widget.id} widget={widget} />
                           ))}
                       </div>
-                    </DaisyScrollArea>
+                    </DaisyTabsContent>
                   </DaisyTabsContent>
                 ))}
               </DaisyTabs>
@@ -536,8 +537,9 @@ export default function CustomDashboardBuilder({
                   />
                 </div>
                 
-                <DaisyBadge variant={isEditMode ? 'default' : 'secondary'}>
-                  {isEditMode ? 'Edit Mode' : 'View Mode'}
+                <DaisyBadge variant={isEditMode ? 'default' : 'secondary'} >
+  {isEditMode ? 'Edit Mode' : 'View Mode'}
+</DaisyInput>
                 </DaisyBadge>
               </div>
               
@@ -546,8 +548,7 @@ export default function CustomDashboardBuilder({
                   <DaisyButton
                     variant="outline"
                     size="sm"
-                    onClick={() => setShowWidgetLibrary(true)}
-                  >
+                    onClick={() => setShowWidgetLibrary(true)} />
                     <Plus className="h-4 w-4 mr-2" />
                     Widgets
                   </DaisyButton>
@@ -556,8 +557,7 @@ export default function CustomDashboardBuilder({
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsEditMode(!isEditMode)}
-                >
+                  onClick={() => setIsEditMode(!isEditMode)} />
                   {isEditMode ? <Eye className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
                   {isEditMode ? 'Preview' : 'Edit'}
                 </DaisyButton>
@@ -565,25 +565,24 @@ export default function CustomDashboardBuilder({
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={exportDashboard}
-                >
-                  <Download className="h-4 w-4 mr-2" />
+                  onClick={exportDashboard} >
+  <Download className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Export
                 </DaisyButton>
                 
                 <DaisyButton
                   size="sm"
-                  onClick={saveDashboard}
-                >
-                  <Save className="h-4 w-4 mr-2" />
+                  onClick={saveDashboard} >
+  <Save className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Save
                 </DaisyButton>
                 
                 <DaisyButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowSettings(true)}
-                >
+                  onClick={() => setShowSettings(true)} />
                   <Settings className="h-4 w-4" />
                 </DaisyButton>
               </div>
@@ -599,7 +598,7 @@ export default function CustomDashboardBuilder({
                   <h3 className="text-lg font-medium mb-2">Empty Dashboard</h3>
                   <p className="text-sm mb-4">Drag widgets from the library to get started</p>
                   {!showWidgetLibrary && (
-                    <DaisyButton onClick={() => setShowWidgetLibrary(true)}>
+                    <DaisyButton onClick={() => setShowWidgetLibrary(true)} />
                       <Plus className="h-4 w-4 mr-2" />
                       Open Widget Library
                     </DaisyButton>
@@ -628,9 +627,10 @@ export default function CustomDashboardBuilder({
         </div>
         
         {/* Settings Dialog */}
-        <DaisyDialog open={showSettings} onOpenChange={setShowSettings}>
-          <DaisyDialogContent className="max-w-md">
-            <DaisyDialogHeader>
+        <DaisyDialog open={showSettings} onOpenChange={setShowSettings} />
+          <DaisyDialogContent className="max-w-md" >
+  <DaisyDialogHeader />
+</DaisyDialog>
               <DaisyDialogTitle>Dashboard Settings</DaisyDialogTitle>
             </DaisyDialogHeader>
             
@@ -667,10 +667,10 @@ export default function CustomDashboardBuilder({
               </div>
               
               <div className="flex justify-end space-x-2">
-                <DaisyButton variant="outline" onClick={() => setShowSettings(false)}>
+                <DaisyButton variant="outline" onClick={() => setShowSettings(false)} />
                   Cancel
-                </DaisyButton>
-                <DaisyButton onClick={() => setShowSettings(false)}>
+                </DaisyInput>
+                <DaisyButton onClick={() => setShowSettings(false)} />
                   Save Changes
                 </DaisyButton>
               </div>

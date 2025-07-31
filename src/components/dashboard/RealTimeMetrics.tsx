@@ -65,7 +65,9 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       value: data.highPriorityRisks,
       previousValue: data.highPriorityRisks + 2,
       format: 'number',
-      icon: <DaisyAlertTriangle className="w-5 h-5" />,
+      icon: <DaisyAlertTriangle className="w-5 h-5" >
+  ,
+</DaisyAlertTriangle>
       color: 'text-[#191919]',
       target: 15,
       threshold: { warning: 20, critical: 30 },
@@ -203,8 +205,9 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
           <h2 className="text-lg font-semibold text-[#191919] font-inter">
             Real-Time Metrics
           </h2>
-          <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter">
-            {isAnimating ? 'Analyzing...' : 'Live'}
+          <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
+  {isAnimating ? 'Analyzing...' : 'Live'}
+</DaisyBadge>
           </DaisyBadge>
         </div>
         
@@ -228,23 +231,25 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: 0.1 }}
           >
-            <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-              <DaisyCardContent className="p-4">
+            <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     {metric.icon}
                     <span className="text-sm text-[#6B5B47]">{metric.label}</span>
                   </div>
-                  <DaisyTooltip>
-                    <DaisyTooltipTrigger>
+                  <DaisyTooltip />
+                    <DaisyTooltipTrigger />
                       <div className="flex items-center space-x-1">
                         {getTrendIcon(metric.value, metric.previousValue)}
                         <span className={`text-xs ${getStatusColor(metric.value, metric.threshold)}`}>
                           {getTrendPercentage(metric.value, metric.previousValue)}
                         </span>
                       </div>
-                    </DaisyTooltipTrigger>
-                    <DaisyTooltipContent>
+                    </DaisyTooltip>
+                    <DaisyTooltipContent />
                       <p>{metric.description}</p>
                     </DaisyTooltipContent>
                   </DaisyTooltip>
@@ -267,7 +272,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                     className="mt-2 h-1"
                   />
                 )}
-              </DaisyCardContent>
+              </DaisyProgress>
             </DaisyCard>
           </motion.div>
         ))}
@@ -279,8 +284,10 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
         animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 10 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <DaisyCard className="bg-[#F5F1E9] border-[#D8C3A5]">
-          <DaisyCardContent className="p-4">
+        <DaisyCard className="bg-[#F5F1E9] border-[#D8C3A5]" >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center space-y-1">
                 <div className="text-sm font-medium text-[#A8A8A8] font-inter">

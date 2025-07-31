@@ -2,32 +2,32 @@
 
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
-import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySelect, DaisySelectTrigger, DaisySelectValue, DaisySelectContent, DaisySelectItem } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog as DaisyDialog,
+  DialogContent as DaisyDialogContent,
+  DialogDescription as DaisyDialogDescription,
+  DialogHeader as DaisyDialogHeader,
+  DialogTitle as DaisyDialogTitle,
+  DialogTrigger as DaisyDialogTrigger,
 } from '@/components/ui/dialog';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
+  DropdownMenu as DaisyDropdownMenu,
+  DropdownMenuContent as DaisyDropdownMenuContent,
+  DropdownMenuItem as DaisyDropdownMenuItem,
+  DropdownMenuTrigger as DaisyDropdownMenuTrigger,
+  DropdownMenuSeparator as DaisyDropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
 import {
@@ -571,7 +571,7 @@ export function EnhancedQuestionnaireBuilder({
       case 'multiple_choice': return <List className="w-4 h-4" />;
       case 'scale': return <Gauge className="w-4 h-4" />;
       case 'boolean': return <ToggleLeft className="w-4 h-4" />;
-      case 'date': return <DaisyCalendar className="w-4 h-4" />;
+      case 'date': return <Calendar className="w-4 h-4" />;
       case 'file_upload': return <Upload className="w-4 h-4" />;
       case 'matrix': return <Grid3X3 className="w-4 h-4" />;
       case 'ranking': return <Move className="w-4 h-4" />;
@@ -631,8 +631,9 @@ export function EnhancedQuestionnaireBuilder({
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
             {isPreviewMode && (
-              <DaisyBadge variant="outline" className="bg-blue-50 text-blue-700">
-                Preview Mode
+              <DaisyBadge variant="outline" className="bg-blue-50 text-blue-700" >
+  Preview Mode
+</DaisyBadge>
               </DaisyBadge>
             )}
           </div>
@@ -649,37 +650,40 @@ export function EnhancedQuestionnaireBuilder({
               {isPreviewMode ? 'Exit Preview' : 'Preview'}
             </DaisyButton>
             
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
+                <DaisyButton variant="outline" >
+  <Download className="w-4 h-4 mr-2" />
+</DaisyDropdownMenu>
                   Export
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent>
-                <DaisyDropdownMenuItem onClick={() => exportQuestionnaire('json')}>
+              <DaisyDropdownMenuContent />
+                <DaisyDropdownMenuItem onClick={() => exportQuestionnaire('json')} />
                   <FileJson className="w-4 h-4 mr-2" />
                   Export as JSON
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => exportQuestionnaire('csv')}>
+                </DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => exportQuestionnaire('csv')} />
                   <FileSpreadsheet className="w-4 h-4 mr-2" />
                   Export as CSV
                 </DaisyDropdownMenuItem>
               </DaisyDropdownMenuContent>
             </DaisyDropdownMenu>
             
-            <DaisyButton variant="outline" onClick={() => setShowBulkImport(true)}>
+            <DaisyButton variant="outline" onClick={() => setShowBulkImport(true)} />
               <UploadIcon className="w-4 h-4 mr-2" />
               Import
             </DaisyButton>
             
-            <DaisyButton onClick={handleSave}>
-              <Save className="w-4 h-4 mr-2" />
+            <DaisyButton onClick={handleSave} >
+  <Save className="w-4 h-4 mr-2" />
+</DaisyButton>
               Save
             </DaisyButton>
             
-            <DaisyButton variant="outline" onClick={onCancel}>
-              <X className="w-4 h-4 mr-2" />
+            <DaisyButton variant="outline" onClick={onCancel} >
+  <X className="w-4 h-4 mr-2" />
+</DaisyButton>
               Cancel
             </DaisyButton>
           </div>
@@ -709,7 +713,7 @@ export function EnhancedQuestionnaireBuilder({
                     </div>
                     
                     <div>
-                      <DaisyLabel htmlFor="description">Description</DaisyLabel>
+                      <DaisyLabel htmlFor="description">Description</DaisyInput>
                       <DaisyTextarea
                         id="description"
                         value={description}
@@ -720,13 +724,12 @@ export function EnhancedQuestionnaireBuilder({
                     </div>
                     
                     <div>
-                      <DaisyLabel htmlFor="category">Category</DaisyLabel>
-                      <DaisySelect value={category} onValueChange={setCategory}>
-                        <DaisySelectTrigger>
-                          <DaisySelectValue />
-                        </DaisySelectTrigger>
-                        <DaisySelectContent>
-                          <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
+                      <DaisyLabel htmlFor="category">Category</DaisyTextarea>
+                      <DaisySelect value={category} onValueChange={setCategory} />
+                        <DaisySelectTrigger />
+                          <DaisySelectValue /></DaisySelect>
+                        <DaisySelectContent />
+                          <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectContent>
                           <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
                           <DaisySelectItem value="security">Security</DaisySelectItem>
                           <DaisySelectItem value="vendor_assessment">Vendor Assessment</DaisySelectItem>
@@ -745,8 +748,9 @@ export function EnhancedQuestionnaireBuilder({
                   </h3>
                   
                   <div className="space-y-2">
-                    <DaisyButton variant="outline" onClick={addSection} className="w-full justify-start">
-                      <Plus className="w-4 h-4 mr-2" />
+                    <DaisyButton variant="outline" onClick={addSection} className="w-full justify-start" >
+  <Plus className="w-4 h-4 mr-2" />
+</DaisyButton>
                       Add Section
                     </DaisyButton>
                     
@@ -754,8 +758,7 @@ export function EnhancedQuestionnaireBuilder({
                       <DaisyButton 
                         variant="outline" 
                         onClick={() => addQuestion(selectedSection)}
-                        className="w-full justify-start"
-                      >
+                        className="w-full justify-start" />
                         <Plus className="w-4 h-4 mr-2" />
                         Add Question
                       </DaisyButton>
@@ -785,15 +788,15 @@ export function EnhancedQuestionnaireBuilder({
           ) : (
             // Builder Mode
             <div className="p-6">
-              <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
-                <DaisyTabsList className="mb-6">
-                  <DaisyTabsTrigger value="builder">Builder</DaisyTabsTrigger>
+              <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+                <DaisyTabsList className="mb-6" />
+                  <DaisyTabsTrigger value="builder">Builder</DaisyTabs>
                   <DaisyTabsTrigger value="logic">Logic & Rules</DaisyTabsTrigger>
                   <DaisyTabsTrigger value="validation">Validation</DaisyTabsTrigger>
                   <DaisyTabsTrigger value="settings">Advanced Settings</DaisyTabsTrigger>
                 </DaisyTabsList>
 
-                <DaisyTabsContent value="builder">
+                <DaisyTabsContent value="builder" />
                   <BuilderContent
                     sections={sections}
                     selectedSection={selectedSection}
@@ -810,7 +813,7 @@ export function EnhancedQuestionnaireBuilder({
                   />
                 </DaisyTabsContent>
 
-                <DaisyTabsContent value="logic">
+                <DaisyTabsContent value="logic" />
                   <LogicContent
                     sections={sections}
                     selectedQuestion={selectedQuestion}
@@ -819,7 +822,7 @@ export function EnhancedQuestionnaireBuilder({
                   />
                 </DaisyTabsContent>
 
-                <DaisyTabsContent value="validation">
+                <DaisyTabsContent value="validation" />
                   <ValidationContent
                     sections={sections}
                     selectedQuestion={selectedQuestion}
@@ -827,7 +830,7 @@ export function EnhancedQuestionnaireBuilder({
                   />
                 </DaisyTabsContent>
 
-                <DaisyTabsContent value="settings">
+                <DaisyTabsContent value="settings" />
                   <AdvancedSettingsContent />
                 </DaisyTabsContent>
               </DaisyTabs>
@@ -837,12 +840,14 @@ export function EnhancedQuestionnaireBuilder({
       </div>
 
       {/* Bulk Import Dialog */}
-      <DaisyDialog open={showBulkImport} onOpenChange={setShowBulkImport}>
-        <DaisyDialogContent>
-          <DaisyDialogHeader>
+      <DaisyDialog open={showBulkImport} onOpenChange={setShowBulkImport} />
+        <DaisyDialogContent >
+  <DaisyDialogHeader />
+</DaisyDialog>
             <DaisyDialogTitle>Bulk Import Questions</DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Import questions from JSON or CSV files
+            <DaisyDialogDescription >
+  Import questions from JSON or CSV files
+</DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           
@@ -865,7 +870,7 @@ export function EnhancedQuestionnaireBuilder({
               <p><strong>CSV format:</strong> Section, Question, Type, Required, Description</p>
             </div>
           </div>
-        </DaisyDialogContent>
+        </DaisyInput>
       </DaisyDialog>
     </div>
   );
@@ -907,77 +912,77 @@ function BuilderContent({
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <DaisyDropdownMenu>
-                    <DaisyDropdownMenuTrigger asChild>
+                  <DaisyDropdownMenu />
+                    <DaisyDropdownMenuTrigger asChild />
                       <DaisyButton
                         size="sm"
                         variant="outline"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                        onClick={(e) => e.stopPropagation()} />
                         <Plus className="w-4 h-4 mr-1" />
                         Add Question
-                      </DaisyButton>
+                      </DaisyDropdownMenu>
                     </DaisyDropdownMenuTrigger>
-                    <DaisyDropdownMenuContent>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'text')}>
+                    <DaisyDropdownMenuContent />
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'text')} />
                         <Type className="w-4 h-4 mr-2" />
                         Text Input
-                      </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'textarea')}>
+                      </DaisyDropdownMenuContent>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'textarea')} />
                         <FileText className="w-4 h-4 mr-2" />
                         Long Text
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'single_choice')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'single_choice')} />
                         <CheckSquare className="w-4 h-4 mr-2" />
                         Single Choice
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'multiple_choice')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'multiple_choice')} />
                         <List className="w-4 h-4 mr-2" />
                         Multiple Choice
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'scale')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'scale')} />
                         <Gauge className="w-4 h-4 mr-2" />
                         Scale/Rating
                       </DaisyDropdownMenuItem>
                       <DaisyDropdownMenuSeparator />
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'matrix')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'matrix')} />
                         <Grid3X3 className="w-4 h-4 mr-2" />
                         Matrix/Grid
-                      </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'ranking')}>
+                      </DaisyDropdownMenuSeparator>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'ranking')} />
                         <Move className="w-4 h-4 mr-2" />
                         Ranking
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'image')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'image')} />
                         <Image className="w-4 h-4 mr-2" />
                         Image Selection
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'signature')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'signature')} />
                         <PenTool className="w-4 h-4 mr-2" />
                         Signature
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'location')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'location')} />
                         <MapPin className="w-4 h-4 mr-2" />
                         Location Picker
                       </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'custom_html')}>
+                      <DaisyDropdownMenuItem onClick={() => onAddQuestion(section.id, 'custom_html')} />
                         <Code2 className="w-4 h-4 mr-2" />
                         Custom HTML
                       </DaisyDropdownMenuItem>
                     </DaisyDropdownMenuContent>
                   </DaisyDropdownMenu>
                   
-                  <DaisyDropdownMenu>
-                    <DaisyDropdownMenuTrigger asChild>
-                      <DaisyButton size="sm" variant="outline">
-                        <MoreVertical className="w-4 h-4" />
+                  <DaisyDropdownMenu />
+                    <DaisyDropdownMenuTrigger asChild />
+                      <DaisyButton size="sm" variant="outline" >
+  <MoreVertical className="w-4 h-4" />
+</DaisyDropdownMenu>
                       </DaisyButton>
                     </DaisyDropdownMenuTrigger>
-                    <DaisyDropdownMenuContent>
-                      <DaisyDropdownMenuItem onClick={() => onDeleteSection(section.id)}>
+                    <DaisyDropdownMenuContent />
+                      <DaisyDropdownMenuItem onClick={() => onDeleteSection(section.id)} />
                         <Trash2 className="w-4 h-4 mr-2" />
                         Delete Section
-                      </DaisyDropdownMenuItem>
+                      </DaisyDropdownMenuContent>
                     </DaisyDropdownMenuContent>
                   </DaisyDropdownMenu>
                 </div>
@@ -1005,14 +1010,16 @@ function BuilderContent({
                                 <DaisyBadge variant="secondary" className="text-xs">Required</DaisyBadge>
                               )}
                               {question.conditionalRules.length > 0 && (
-                                <DaisyBadge variant="outline" className="text-xs">
-                                  <Filter className="w-3 h-3 mr-1" />
+                                <DaisyBadge variant="outline" className="text-xs" >
+  <Filter className="w-3 h-3 mr-1" />
+</DaisyBadge>
                                   Conditional
                                 </DaisyBadge>
                               )}
                               {question.branchingLogic && (
-                                <DaisyBadge variant="outline" className="text-xs">
-                                  <GitBranch className="w-3 h-3 mr-1" />
+                                <DaisyBadge variant="outline" className="text-xs" >
+  <GitBranch className="w-3 h-3 mr-1" />
+</DaisyBadge>
                                   Branching
                                 </DaisyBadge>
                               )}
@@ -1022,15 +1029,13 @@ function BuilderContent({
                               <DaisyButton
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => onDuplicateQuestion(question.id)}
-                              >
+                                onClick={() => onDuplicateQuestion(question.id)} />
                                 <Copy className="w-4 h-4" />
                               </DaisyButton>
                               <DaisyButton
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => onDeleteQuestion(question.id)}
-                              >
+                                onClick={() => onDeleteQuestion(question.id)} />
                                 <Trash2 className="w-4 h-4" />
                               </DaisyButton>
                             </div>
@@ -1053,20 +1058,27 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
 
   return (
     <div className="space-y-6">
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center">
-            <GitBranch className="w-5 h-5 mr-2" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center" >
+  <GitBranch className="w-5 h-5 mr-2" />
+</DaisyCardTitle>
             Conditional Logic & Branching
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          {selectedQuestion ? (
+        <DaisyCardContent >
+  {selectedQuestion ? (
+</DaisyCardContent>
             <div className="space-y-4">
-              <DaisyAlert>
-                <Info className="w-4 h-4" />
-                <DaisyAlertDescription>
-                  Configure when this question should be shown or hidden based on other responses.
+              <DaisyAlert >
+  <Info className="w-4 h-4" />
+</DaisyAlert>
+                <DaisyAlertDescription >
+  Configure when this question should be shown or hidden based on other responses.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
                 </DaisyAlertDescription>
               </DaisyAlert>
               
@@ -1090,21 +1102,28 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
 
   return (
     <div className="space-y-6">
-      <DaisyCard>
-        <DaisyCardHeader>
-          <DaisyCardTitle className="flex items-center">
-            <CheckCircle2 className="w-5 h-5 mr-2" />
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+          <DaisyCardTitle className="flex items-center" >
+  <CheckCircle2 className="w-5 h-5 mr-2" />
+</DaisyCardTitle>
             Question Validation
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          {selectedQuestion ? (
+        <DaisyCardContent >
+  {selectedQuestion ? (
+</DaisyCardContent>
             <div className="space-y-4">
-              <DaisyAlert>
-                <DaisyAlertTriangle className="w-4 h-4" />
-                <DaisyAlertDescription>
-                  Set validation rules to ensure responses meet your requirements.
-                
+              <DaisyAlert >
+  <AlertTriangle className="w-4 h-4" />
+</DaisyAlert>
+                <DaisyAlertDescription >
+  Set validation rules to ensure responses meet your requirements.
+                </DaisyAlertDescription>
+</DaisyAlert>
+                </DaisyAlertDescription>
+                </DaisyAlertDescription>
               </DaisyAlert>
               
               {/* Validation rules UI would go here */}
@@ -1127,12 +1146,14 @@ function AdvancedSettingsContent() {
 
   return (
     <div className="space-y-6">
-      <DaisyCard>
-        <DaisyCardHeader>
+      <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
           <DaisyCardTitle>Advanced Configuration</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-          <div className="space-y-4">
+        <DaisyCardContent >
+  <div className="space-y-4">
+</DaisyCardContent>
             <div>
               <h4 className="font-medium mb-2">AI Settings</h4>
               <DaisySwitch />
@@ -1155,7 +1176,7 @@ function AdvancedSettingsContent() {
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisySwitch>
       </DaisyCard>
     </div>
   );
@@ -1174,22 +1195,22 @@ function PreviewComponent({
   const visibleQuestions = currentSectionData ? getVisibleQuestions(currentSectionData.id) : [];
 
   if (!currentSectionData) {
-
-  return (
-    <div className="text-center py-8">
+    return (
+      <div className="text-center py-8">
         <h3 className="text-lg font-semibold">Preview Complete</h3>
         <p className="text-gray-600">You have completed the questionnaire preview.</p>
       </div>
     );
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">{currentSectionData.title}</h2>
-          <DaisyBadge variant="outline">
-            Section {currentSection + 1} of {sections.length}
+          <DaisyBadge variant="outline" >
+  Section {currentSection + 1} of {sections.length}
+</DaisyBadge>
           </DaisyBadge>
         </div>
         {currentSectionData.description && (
@@ -1199,8 +1220,10 @@ function PreviewComponent({
 
       <div className="space-y-6">
         {visibleQuestions.map((question: EnhancedQuestion) => (
-          <DaisyCard key={question.id}>
-            <DaisyCardContent className="p-6">
+          <DaisyCard key={question.id} >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
               <div className="space-y-4">
                 <div className="flex items-start space-x-2">
                   <span className="font-medium">{question.text}</span>
@@ -1229,14 +1252,12 @@ function PreviewComponent({
                     <div className="flex space-x-4">
                       <DaisyButton
                         variant="outline"
-                        onClick={() => onResponse(question.id, true)}
-                      >
+                        onClick={() => onResponse(question.id, true)} />
                         Yes
-                      </DaisyButton>
+                      </DaisyInput>
                       <DaisyButton
                         variant="outline"
-                        onClick={() => onResponse(question.id, false)}
-                      >
+                        onClick={() => onResponse(question.id, false)} />
                         No
                       </DaisyButton>
                     </div>
@@ -1253,15 +1274,15 @@ function PreviewComponent({
         <DaisyButton
           variant="outline"
           onClick={onPrevSection}
-          disabled={currentSection === 0}
-        >
-          Previous Section
+          disabled={currentSection === 0} >
+  Previous Section
+</DaisyButton>
         </DaisyButton>
         <DaisyButton
           onClick={onNextSection}
-          disabled={currentSection === sections.length - 1}
-        >
-          Next Section
+          disabled={currentSection === sections.length - 1} >
+  Next Section
+</DaisyButton>
         </DaisyButton>
       </div>
     </div>

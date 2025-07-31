@@ -23,21 +23,24 @@ export function DocumentUpload({
 
   return (
     <DaisyCard className={`w-full max-w-4xl mx-auto ${className}`}>
-      <DaisyCardHeader>
-        <DaisyCardTitle className="flex items-center gap-2">
+      <DaisyCardHeader >
+  <DaisyCardTitle className="flex items-center gap-2" />
+</DaisyCard>
           <Upload className="h-5 w-5" />
           Document Upload
         </DaisyCardTitle>
       </DaisyCardHeader>
-      <DaisyCardContent>
-        <div className="text-center py-12 text-gray-500">
+      <DaisyCardContent >
+  <div className="text-center py-12 text-gray-500">
+</DaisyCardContent>
           <Upload className="w-16 h-16 mx-auto mb-4 text-gray-300" />
           <p className="text-lg mb-2">Document upload temporarily simplified for build testing</p>
           <p className="text-sm">Drag and drop functionality will be restored after build fixes</p>
           
           <div className="mt-6">
-            <DaisyButton disabled={uploading}>
-              <Upload className="w-4 h-4 mr-2" />
+            <DaisyButton disabled={uploading} >
+  <Upload className="w-4 h-4 mr-2" />
+</DaisyButton>
               {uploading ? 'Uploading...' : 'Upload Documents'}
             </DaisyButton>
           </div>

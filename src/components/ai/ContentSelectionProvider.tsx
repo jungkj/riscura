@@ -267,8 +267,7 @@ export const EnhancedSelectableContent: React.FC<EnhancedSelectableContentProps>
       metadata={metadata}
       disabled={disabled}
       showQualityScore={showQualityScore}
-      highlightColor={highlightColor}
-    >
+      highlightColor={highlightColor} />
       {children}
     </SelectableContent>
   );

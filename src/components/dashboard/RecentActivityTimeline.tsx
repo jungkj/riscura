@@ -115,7 +115,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
   };
 
   return (
-    <DaisyScrollArea className="h-[350px] pr-3">
+    <DaisyScrollArea className="h-[350px] pr-3" />
       <div className="relative">
         {/* Vertical timeline line */}
         <div className="absolute left-4 top-0 bottom-0 w-[1px] bg-border ml-[0.625rem]" />
@@ -135,9 +135,9 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
               <p className="text-xs text-muted-foreground mb-2">{activity.description}</p>
               
               <div className="flex items-center">
-                <DaisyAvatar className="h-6 w-6 mr-2">
+                <DaisyAvatar className="h-6 w-6 mr-2" />
                   <DaisyAvatarImage src={activity.user.avatar} />
-                  <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisyAvatarFallback>
+                  <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisySkeleton>
                 </DaisyAvatar>
                 
                 <span className="text-xs">{activity.user.name}</span>

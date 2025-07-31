@@ -660,8 +660,10 @@ export const TouchActionMenu: React.FC<{
           />
           
           {/* Menu */}
-          <DaisyCard className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg">
-            <DaisyCardContent className="p-2">
+          <DaisyCard className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg" >
+  <DaisyCardContent className="p-2" >
+  </DaisyProgress>
+</DaisyCardContent>
               {items.map((item) => (
                 <TouchButton
                   key={item.id}

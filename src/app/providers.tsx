@@ -19,7 +19,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           enableSystem={false}
           storageKey="riscura-theme"
         >
-          <DaisyTooltipProvider>
+          <DaisyTooltipProvider />
             <AuthProvider>
               <AIProvider>
                 {children}

@@ -44,9 +44,13 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   const getSeverityIcon = () => {
     switch (error.severity) {
       case 'critical':
-        return <DaisyAlertTriangle className="h-5 w-5 text-red-500" />;
+        return <DaisyAlertTriangle className="h-5 w-5 text-red-500" >
+  ;
+</DaisyAlertTriangle>
       case 'high':
-        return <DaisyAlertTriangle className="h-5 w-5 text-orange-500" />;
+        return <DaisyAlertTriangle className="h-5 w-5 text-orange-500" >
+  ;
+</DaisyAlertTriangle>
       case 'medium':
         return <Info className="h-5 w-5 text-yellow-500" />;
       default:
@@ -66,31 +70,37 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
 
   if (compact) {
     return (
-      <DaisyAlert variant={getSeverityVariant()}>
-        <div className="flex items-center justify-between">
+      <DaisyAlert variant={getSeverityVariant()} >
+  <div className="flex items-center justify-between">
+</DaisyAlert>
           <div className="flex items-center space-x-2">
             {getSeverityIcon()}
             <div>
-              <DaisyAlertTitle className="text-sm">{error.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
-              <DaisyAlertDescription className="text-xs">
-                {error.userMessage || error.message}
+              <DaisyAlertTitle className="text-sm">{error.type.replace('_', ' ').toUpperCase()}</DaisyAlertTitle>
+              <DaisyAlertDescription className="text-xs" >
+  {error.userMessage || error.message}
+                </DaisyAlertDescription>
+</DaisyAlert>
               
             </div>
           </div>
           <div className="flex items-center space-x-2">
             {error.retryable && onRetry && (
-              <DaisyButton size="sm" variant="outline" onClick={onRetry}>
-                <RefreshCw className="h-3 w-3" />
+              <DaisyButton size="sm" variant="outline" onClick={onRetry} >
+  <RefreshCw className="h-3 w-3" />
+</DaisyButton>
               </DaisyButton>
             )}
             {onDismiss && (
-              <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
-                <X className="h-3 w-3" />
+              <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
+  <X className="h-3 w-3" />
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
         </div>
-      </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
     );
   };
 
@@ -100,11 +110,14 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      <DaisyAlert variant={getSeverityVariant()}>
-        {getSeverityIcon()}
-        <DaisyAlertTitle>{error.type.replace('_', ' ').toUpperCase()}</DaisyCardTitle>
-        <DaisyAlertDescription>
-          <div className="space-y-3">
+      <DaisyAlert variant={getSeverityVariant()} >
+  {getSeverityIcon()}
+</DaisyAlert>
+        <DaisyAlertTitle>{error.type.replace('_', ' ').toUpperCase()}</DaisyAlertTitle>
+        <DaisyAlertDescription >
+  <div className="space-y-3">
+                </DaisyAlertDescription>
+</DaisyAlert>
             <p>{error.userMessage || error.message}</p>
             
             {error.retryAfter && (
@@ -115,27 +128,30 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
             )}
             
             {error.code && (
-              <DaisyBadge variant="outline" className="text-xs">
-                Error Code: {error.code}
+              <DaisyBadge variant="outline" className="text-xs" >
+  Error Code: {error.code}
+</DaisyBadge>
               </DaisyBadge>
             )}
             
             <div className="flex space-x-2">
               {error.retryable && onRetry && (
-                <DaisyButton size="sm" variant="outline" onClick={onRetry}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                <DaisyButton size="sm" variant="outline" onClick={onRetry} >
+  <RefreshCw className="h-4 w-4 mr-2" />
+</DaisyButton>
                   Try Again
                 </DaisyButton>
               )}
               {onDismiss && (
-                <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
-                  Dismiss
+                <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
+  Dismiss
+</DaisyButton>
                 </DaisyButton>
               )}
             </div>
           </div>
-        
-      </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
     </motion.div>
   );
 };
@@ -223,8 +239,9 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
       </div>
       
       {status === ConnectionStatus.DISCONNECTED && onReconnect && !isReconnecting && (
-        <DaisyButton size="sm" variant="outline" onClick={onReconnect}>
-          <RefreshCw className="h-4 w-4 mr-2" />
+        <DaisyButton size="sm" variant="outline" onClick={onReconnect} >
+  <RefreshCw className="h-4 w-4 mr-2" />
+</DaisyButton>
           Reconnect
         </DaisyButton>
       )}
@@ -251,11 +268,14 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      <DaisyAlert>
-        <Shield className="h-4 w-4" />
-        <DaisyAlertTitle>Fallback Mode Active</DaisyCardTitle>
-        <DaisyAlertDescription>
-          <div className="space-y-2">
+      <DaisyAlert >
+  <Shield className="h-4 w-4" />
+</DaisyAlert>
+        <DaisyAlertTitle>Fallback Mode Active</DaisyAlertTitle>
+        <DaisyAlertDescription >
+  <div className="space-y-2">
+                </DaisyAlertDescription>
+</DaisyAlert>
             <p>
               AI services are temporarily unavailable. I'm operating in fallback mode 
               with limited functionality.
@@ -270,13 +290,14 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
               <span>Basic responses and manual processes are still available</span>
             </div>
             {onDismiss && (
-              <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
-                Understood
+              <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
+  Understood
+</DaisyButton>
               </DaisyButton>
             )}
           </div>
-        
-      </DaisyAlert>
+                </DaisyAlertDescription>
+              </DaisyAlert>
     </motion.div>
   );
 };
@@ -353,17 +374,21 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
   };
 
   return (
-    <DaisyCard>
-      <DaisyCardHeader className="pb-3">
-        <DaisyCardTitle className="text-sm flex items-center justify-between">
-          <span>Circuit Breaker Status</span>
-          <DaisyBadge variant="outline" className={getStateColor()}>
-            {state}
+    <DaisyCard >
+  <DaisyCardHeader className="pb-3" />
+</DaisyProgress>
+        <DaisyCardTitle className="text-sm flex items-center justify-between" >
+  <span>
+</DaisyCardTitle>Circuit Breaker Status</span>
+          <DaisyBadge variant="outline" className={getStateColor()} >
+  {state}
+</DaisyBadge>
           </DaisyBadge>
         </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3">
-        <div className="flex justify-between text-sm">
+        <DaisyCardContent className="space-y-3" >
+  <div className="flex justify-between text-sm">
+</DaisyCardContent>
           <span>Failure Count:</span>
           <span className="font-medium">{failures}</span>
         </div>
@@ -378,8 +403,9 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
         )}
         
         {state === 'OPEN' && onReset && (
-          <DaisyButton size="sm" variant="outline" onClick={onReset} className="w-full">
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <DaisyButton size="sm" variant="outline" onClick={onReset} className="w-full" >
+  <RefreshCw className="h-4 w-4 mr-2" />
+</DaisyButton>
             Reset Circuit Breaker
           </DaisyButton>
         )}

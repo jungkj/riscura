@@ -313,8 +313,9 @@ export default function LandingPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter">
-                Enterprise Platform
+              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 mb-6 text-sm font-inter" >
+  Enterprise Platform
+</DaisyBadge>
               </DaisyBadge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-8 font-inter leading-tight">
                 Built for modern<br />enterprise security
@@ -396,11 +397,13 @@ export default function LandingPage() {
                     ? 'hover:border-blue-300' 
                     : 'hover:border-[#D8C3A5]/60'
                 } transition-all duration-300 group rounded-2xl`}>
-                  <DaisyCardContent className="p-8">
-                    {feature.highlight && (
+                  <DaisyCardContent className="p-8" >
+  {feature.highlight && (
+</DaisyCard>
                       <div className="flex items-center gap-2 mb-4">
-                        <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200">
-                          <Brain className="h-3 w-3 mr-1" />
+                        <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200" >
+  <Brain className="h-3 w-3 mr-1" />
+</DaisyBadge>
                           Powered by Probo AI
                         </DaisyBadge>
                       </div>
@@ -448,8 +451,9 @@ export default function LandingPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2 mb-6 text-sm font-inter">
-                <Brain className="h-4 w-4 mr-2" />
+              <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200 px-4 py-2 mb-6 text-sm font-inter" >
+  <Brain className="h-4 w-4 mr-2" />
+</DaisyBadge>
                 Powered by Probo Open Source
               </DaisyBadge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-8 font-inter leading-tight">
@@ -469,8 +473,10 @@ export default function LandingPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <DaisyCard className="bg-white border-2 border-blue-200 shadow-xl rounded-2xl">
-                <DaisyCardContent className="p-8">
+              <DaisyCard className="bg-white border-2 border-blue-200 shadow-xl rounded-2xl" >
+  <DaisyCardContent className="p-8" >
+  </DaisyCard>
+</DaisyCardContent>
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                       <Brain className="h-6 w-6 text-blue-600" />
@@ -524,26 +530,31 @@ export default function LandingPage() {
               className="space-y-6"
             >
               <div className="grid grid-cols-2 gap-4">
-                <DaisyCard className="bg-white border border-blue-200 p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">20h</div>
+                <DaisyCard className="bg-white border border-blue-200 p-6 text-center" >
+  <div className="text-3xl font-bold text-blue-600 mb-2">
+</DaisyCard>20h</div>
                   <div className="text-sm text-[#A8A8A8] font-inter">SOC-2 Ready Time</div>
                 </DaisyCard>
-                <DaisyCard className="bg-white border border-blue-200 p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">95%</div>
+                <DaisyCard className="bg-white border border-blue-200 p-6 text-center" >
+  <div className="text-3xl font-bold text-blue-600 mb-2">
+</DaisyCard>95%</div>
                   <div className="text-sm text-[#A8A8A8] font-inter">AI Accuracy</div>
                 </DaisyCard>
-                <DaisyCard className="bg-white border border-blue-200 p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">5min</div>
+                <DaisyCard className="bg-white border border-blue-200 p-6 text-center" >
+  <div className="text-3xl font-bold text-blue-600 mb-2">
+</DaisyCard>5min</div>
                   <div className="text-sm text-[#A8A8A8] font-inter">Control Generation</div>
                 </DaisyCard>
-                <DaisyCard className="bg-white border border-blue-200 p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">100+</div>
+                <DaisyCard className="bg-white border border-blue-200 p-6 text-center" >
+  <div className="text-3xl font-bold text-blue-600 mb-2">
+</DaisyCard>100+</div>
                   <div className="text-sm text-[#A8A8A8] font-inter">Control Templates</div>
                 </DaisyCard>
               </div>
 
-              <DaisyCard className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-                <div className="flex items-center gap-3 mb-4">
+              <DaisyCard className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6" >
+  <div className="flex items-center gap-3 mb-4">
+</DaisyCard>
                   <Sparkles className="h-6 w-6" />
                   <h3 className="text-xl font-bold font-inter">Key Benefits</h3>
                 </div>
@@ -581,8 +592,9 @@ export default function LandingPage() {
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {['SOC 2', 'ISO 27001', 'GDPR', 'HIPAA', 'PCI-DSS'].map((framework) => (
-                <DaisyBadge key={framework} className="bg-white border border-blue-200 text-blue-700 px-4 py-2 text-sm font-inter">
-                  {framework}
+                <DaisyBadge key={framework} className="bg-white border border-blue-200 text-blue-700 px-4 py-2 text-sm font-inter" >
+  {framework}
+</DaisyBadge>
                 </DaisyBadge>
               ))}
             </div>
@@ -608,8 +620,9 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm font-inter rounded-full">
-              Get Started Today
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-8 text-sm font-inter rounded-full" >
+  Get Started Today
+</DaisyBadge>
             </DaisyBadge>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] mb-6 font-inter leading-tight">
               Ready to secure<br />your enterprise?
@@ -680,14 +693,17 @@ export default function LandingPage() {
                 Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
               </p>
               <div className="flex space-x-4">
-                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]">
-                  LinkedIn
+                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]" >
+  LinkedIn
+</DaisyButton>
                 </DaisyButton>
-                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]">
-                  Twitter
+                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]" >
+  Twitter
+</DaisyButton>
                 </DaisyButton>
-                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]">
-                  GitHub
+                <DaisyButton variant="outline" size="sm" className="border-[#D8C3A5]/60 text-[#A8A8A8] hover:text-[#191919] hover:bg-[#F5F1E9]" >
+  GitHub
+</DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -732,14 +748,17 @@ export default function LandingPage() {
                 © 2024 Riscura Inc. All rights reserved.
               </p>
               <div className="flex items-center space-x-6 mt-4 sm:mt-0">
-                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
-                  SOC 2 Type II
+                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
+  SOC 2 Type II
+</DaisyBadge>
                 </DaisyBadge>
-                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
-                  ISO 27001
+                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
+  ISO 27001
+</DaisyBadge>
                 </DaisyBadge>
-                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
-                  GDPR Ready
+                <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
+  GDPR Ready
+</DaisyBadge>
                 </DaisyBadge>
               </div>
             </div>

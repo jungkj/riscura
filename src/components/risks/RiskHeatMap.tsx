@@ -224,12 +224,14 @@ export const RiskHeatMap: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-2">
-          <DaisyButton variant="outline" size="sm" onClick={handleExport}>
-            <Download className="h-3 w-3 mr-1" />
+          <DaisyButton variant="outline" size="sm" onClick={handleExport} >
+  <Download className="h-3 w-3 mr-1" />
+</DaisyButton>
             Export
           </DaisyButton>
-          <DaisyButton variant="outline" size="sm" onClick={handleReset}>
-            <RotateCcw className="h-3 w-3 mr-1" />
+          <DaisyButton variant="outline" size="sm" onClick={handleReset} >
+  <RotateCcw className="h-3 w-3 mr-1" />
+</DaisyButton>
             Reset
           </DaisyButton>
         </div>
@@ -244,8 +246,7 @@ export const RiskHeatMap: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setZoomLevel([Math.max(50, zoomLevel[0] - 25)])}
-                disabled={zoomLevel[0] <= 50}
-              >
+                disabled={zoomLevel[0] <= 50} />
                 <ZoomOut className="h-3 w-3" />
               </DaisyButton>
               <span className="text-xs text-gray-600">
@@ -255,8 +256,7 @@ export const RiskHeatMap: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setZoomLevel([Math.min(200, zoomLevel[0] + 25)])}
-                disabled={zoomLevel[0] >= 200}
-              >
+                disabled={zoomLevel[0] >= 200} />
                 <ZoomIn className="h-3 w-3" />
               </DaisyButton>
             </div>
@@ -272,16 +272,16 @@ export const RiskHeatMap: React.FC = () => {
         </ContentCard>
 
         <ContentCard title="Group By" className="p-4">
-          <DaisySelect value={groupBy} onChange={(e) => setGroupBy(e.target.value as any)}>
+          <DaisySelect value={groupBy} onChange={(e) => setGroupBy(e.target.value as any)} />
             <option value="none">No Grouping</option>
             <option value="category">Category</option>
             <option value="framework">Framework</option>
             <option value="status">Status</option>
-          </DaisySelect>
+          </DaisySlider>
         </ContentCard>
 
         <ContentCard title="Category Filter" className="p-4">
-          <DaisySelect value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+          <DaisySelect value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} />
             <option value="all">All Categories</option>
             {categories.map(category => (
               <option key={category} value={category}>{category}</option>
@@ -290,7 +290,7 @@ export const RiskHeatMap: React.FC = () => {
         </ContentCard>
 
         <ContentCard title="Framework Filter" className="p-4">
-          <DaisySelect value={filterFramework} onChange={(e) => setFilterFramework(e.target.value)}>
+          <DaisySelect value={filterFramework} onChange={(e) => setFilterFramework(e.target.value)} />
             <option value="all">All Frameworks</option>
             {frameworks.map(framework => (
               <option key={framework} value={framework}>{framework}</option>
@@ -315,8 +315,7 @@ export const RiskHeatMap: React.FC = () => {
           <DaisyButton
             variant={showGrid ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setShowGrid(!showGrid)}
-          >
+            onClick={() => setShowGrid(!showGrid)} />
             <Grid3X3 className="h-3 w-3 mr-1" />
             Grid
           </DaisyButton>
@@ -371,8 +370,9 @@ export const RiskHeatMap: React.FC = () => {
             {groupBy !== 'none' && Object.keys(groupedRisks).length > 1 && (
               <div className="absolute top-2 right-2 space-y-1">
                 {Object.entries(groupedRisks).map(([groupName, risks]) => (
-                  <DaisyBadge key={groupName} variant="outline" className="text-xs">
-                    <Layers className="h-3 w-3 mr-1" />
+                  <DaisyBadge key={groupName} variant="outline" className="text-xs" >
+  <Layers className="h-3 w-3 mr-1" />
+</DaisyBadge>
                     {groupName} ({risks.length})
                   </DaisyBadge>
                 ))}
@@ -419,7 +419,7 @@ export const RiskHeatMap: React.FC = () => {
                 {selectedRisk.riskLevel.charAt(0).toUpperCase() + selectedRisk.riskLevel.slice(1)} Risk
               </span>
             </div>
-            <DaisyButton variant="outline" size="sm" onClick={() => setSelectedRisk(null)}>
+            <DaisyButton variant="outline" size="sm" onClick={() => setSelectedRisk(null)} />
               Close
             </DaisyButton>
           </div>

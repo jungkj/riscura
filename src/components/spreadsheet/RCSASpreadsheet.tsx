@@ -565,8 +565,9 @@ Provide recommendations for strengthening risk governance and operational resili
                 ) : (
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 )}
-                <DaisyBadge variant="outline" className="font-mono text-xs px-2 py-1">
-                  {risk.id}
+                <DaisyBadge variant="outline" className="font-mono text-xs px-2 py-1" >
+  {risk.id}
+</DaisyBadge>
                 </DaisyBadge>
               </div>
               
@@ -612,7 +613,7 @@ Provide recommendations for strengthening risk governance and operational resili
               }}
             >
               <Sparkles className="w-4 h-4" />
-            </DaisyButton>
+            </DaisyCalendar>
           </div>
         </div>
 
@@ -664,8 +665,7 @@ Provide recommendations for strengthening risk governance and operational resili
                         size="sm"
                         variant="outline"
                         className="text-[#199BEC] border-[#199BEC]/30 hover:bg-[#199BEC]/10 hover:border-[#199BEC]/50"
-                        onClick={() => handleAIInsight(risk.id, 'overview', risk)}
-                      >
+                        onClick={() => handleAIInsight(risk.id, 'overview', risk)} />
                         <Image 
                           src="/images/logo/riscura.png" 
                           alt="Riscura" 
@@ -680,8 +680,9 @@ Provide recommendations for strengthening risk governance and operational resili
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-3">
                         <h5 className="font-medium text-blue-800 flex items-center gap-2">
-                          <DaisyAlertTriangle className="w-4 h-4 text-amber-500" />
-                          Risk Driver
+                          <DaisyAlertTriangle className="w-4 h-4 text-amber-500" >
+  Risk Driver
+</DaisyAlertTriangle>
                         </h5>
                         <p className="text-sm text-gray-700 bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
                           {risk.riskInfo.driver}
@@ -721,8 +722,9 @@ Provide recommendations for strengthening risk governance and operational resili
                       </div>
                       <div className="text-center p-4 bg-white rounded-lg border border-blue-200 shadow-sm">
                         <div className="text-xs text-blue-600 mb-2 font-medium">Status</div>
-                        <DaisyBadge variant="outline" className="text-xs border-blue-300">
-                          {risk.riskInfo.readiness}
+                        <DaisyBadge variant="outline" className="text-xs border-blue-300" >
+  {risk.riskInfo.readiness}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                     </div>
@@ -740,8 +742,7 @@ Provide recommendations for strengthening risk governance and operational resili
                         size="sm"
                         variant="outline"
                         className="text-[#199BEC] border-[#199BEC]/30 hover:bg-[#199BEC]/10 hover:border-[#199BEC]/50"
-                        onClick={() => handleAIInsight(risk.id, 'assessment', risk)}
-                      >
+                        onClick={() => handleAIInsight(risk.id, 'assessment', risk)} />
                         <Image 
                           src="/images/logo/riscura.png" 
                           alt="Riscura" 
@@ -757,8 +758,9 @@ Provide recommendations for strengthening risk governance and operational resili
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <h5 className="font-medium text-orange-800">Likelihood</h5>
-                          <DaisyBadge className={getRiskRatingColor(risk.assessment.likelihood)}>
-                            {risk.assessment.likelihood}
+                          <DaisyBadge className={getRiskRatingColor(risk.assessment.likelihood)} >
+  {risk.assessment.likelihood}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         <p className="text-sm text-gray-700 bg-white p-4 rounded-lg border border-orange-200 shadow-sm">
@@ -769,8 +771,9 @@ Provide recommendations for strengthening risk governance and operational resili
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <h5 className="font-medium text-orange-800">Impact</h5>
-                          <DaisyBadge className={getRiskRatingColor(risk.assessment.impact)}>
-                            {risk.assessment.impact}
+                          <DaisyBadge className={getRiskRatingColor(risk.assessment.impact)} >
+  {risk.assessment.impact}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         <p className="text-sm text-gray-700 bg-white p-4 rounded-lg border border-orange-200 shadow-sm">
@@ -807,8 +810,7 @@ Provide recommendations for strengthening risk governance and operational resili
                         size="sm"
                         variant="outline"
                         className="text-[#199BEC] border-[#199BEC]/30 hover:bg-[#199BEC]/10 hover:border-[#199BEC]/50"
-                        onClick={() => handleAIInsight(risk.id, 'controls', risk)}
-                      >
+                        onClick={() => handleAIInsight(risk.id, 'controls', risk)} />
                         <Image 
                           src="/images/logo/riscura.png" 
                           alt="Riscura" 
@@ -823,8 +825,9 @@ Provide recommendations for strengthening risk governance and operational resili
                     {risk.controls.map((control, index) => (
                       <div key={control.id} className="bg-white border border-green-200 rounded-lg p-6 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
-                          <DaisyBadge variant="outline" className="font-mono text-xs border-green-300">
-                            {control.id}
+                          <DaisyBadge variant="outline" className="font-mono text-xs border-green-300" >
+  {control.id}
+</DaisyBadge>
                           </DaisyBadge>
                           <div className="flex items-center gap-2">
                             <DaisyBadge className={`${getRiskRatingColor(control.designEffectiveness)} text-xs`}>
@@ -899,8 +902,7 @@ Provide recommendations for strengthening risk governance and operational resili
                         size="sm"
                         variant="outline"
                         className="text-[#199BEC] border-[#199BEC]/30 hover:bg-[#199BEC]/10 hover:border-[#199BEC]/50"
-                        onClick={() => handleAIInsight(risk.id, 'details', risk)}
-                      >
+                        onClick={() => handleAIInsight(risk.id, 'details', risk)} />
                         <Image 
                           src="/images/logo/riscura.png" 
                           alt="Riscura" 
@@ -962,8 +964,9 @@ Provide recommendations for strengthening risk governance and operational resili
                       </div>
                       <div className="text-center p-4 bg-white rounded-lg border border-purple-200 shadow-sm">
                         <div className="text-xs text-purple-600 mb-2 font-medium">Applicability</div>
-                        <DaisyBadge variant="outline" className="text-xs border-purple-300">
-                          {risk.riskInfo.applicability}
+                        <DaisyBadge variant="outline" className="text-xs border-purple-300" >
+  {risk.riskInfo.applicability}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                     </div>
@@ -987,8 +990,9 @@ Provide recommendations for strengthening risk governance and operational resili
               <h1 className="text-2xl font-bold text-gray-900">
                 Risk Control Self-Assessment
               </h1>
-              <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30">
-                <Sparkles className="w-3 h-3 mr-1" />
+              <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30" >
+  <Sparkles className="w-3 h-3 mr-1" />
+</DaisyBadge>
                 {isDemoMode ? 'Demo Mode' : 'AI-Enhanced'}
               </DaisyBadge>
             </div>
@@ -1049,8 +1053,9 @@ Provide recommendations for strengthening risk governance and operational resili
       <div className="max-w-7xl mx-auto px-6 py-8">
         {filteredData.length === 0 ? (
           <div className="text-center py-16">
-            <DaisyAlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No risks found</h3>
+            <DaisyAlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" >
+  <h3 className="text-lg font-medium text-gray-900 mb-2">
+</DaisyInput>No risks found</h3>
             <p className="text-gray-500">Try adjusting your search or filter criteria.</p>
           </div>
         ) : (
@@ -1063,23 +1068,27 @@ Provide recommendations for strengthening risk governance and operational resili
       </div>
 
       {/* Enhanced AI Insight Modal */}
-      <DaisyDialog open={!!aiInsightCell} onOpenChange={() => setAiInsightCell(null)}>
-        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DaisyDialogHeader>
-            <DaisyDialogTitle className="flex items-center gap-2">
-              <Image 
+      <DaisyDialog open={!!aiInsightCell} onOpenChange={() => setAiInsightCell(null)} />
+        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
+  <DaisyDialogHeader />
+</DaisyDialog>
+            <DaisyDialogTitle className="flex items-center gap-2" >
+  <Image 
                 src="/images/logo/riscura.png" 
                 alt="Riscura" 
                 width={20} 
                 height={20}
               />
+</DaisyDialogTitle>
               AI Risk Analysis
-              <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30 text-xs">
-                {isDemoMode ? 'Demo Mode' : '1 Credit'}
+              <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30 text-xs" >
+  {isDemoMode ? 'Demo Mode' : '1 Credit'}
+</DaisyBadge>
               </DaisyBadge>
               {aiInsightCell && (
-                <DaisyBadge variant="outline" className="text-xs">
-                  {aiInsightCell.field.charAt(0).toUpperCase() + aiInsightCell.field.slice(1)} Analysis
+                <DaisyBadge variant="outline" className="text-xs" >
+  {aiInsightCell.field.charAt(0).toUpperCase() + aiInsightCell.field.slice(1)} Analysis
+</DaisyBadge>
                 </DaisyBadge>
               )}
             </DaisyDialogTitle>

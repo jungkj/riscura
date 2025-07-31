@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -169,16 +169,18 @@ export default function ComplianceProgress() {
             Track progress across compliance frameworks and standards
           </p>
         </div>
-        <DaisyButton variant="outline" size="sm">
-          <FileText className="w-4 h-4 mr-2" />
+        <DaisyButton variant="outline" size="sm" >
+  <FileText className="w-4 h-4 mr-2" />
+</DaisyButton>
           Generate Report
         </DaisyButton>
       </div>
 
       {/* Overall Progress */}
       <DaisyCard className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <DaisyCardBody className="p-6">
-          <div className="flex items-center justify-between">
+        <DaisyCardBody className="p-6" >
+  <div className="flex items-center justify-between">
+</DaisyCard>
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Overall Compliance</h4>
               <p className="text-sm text-gray-600 mb-4">
@@ -195,7 +197,7 @@ export default function ComplianceProgress() {
                 </div>
               </div>
             </div>
-            <DaisyProgressRing progress={overallProgress} size={120} strokeWidth={10} />
+            <ProgressRing progress={overallProgress} size={120} strokeWidth={10} />
           </div>
         </DaisyCardBody>
       </DaisyCard>
@@ -211,18 +213,21 @@ export default function ComplianceProgress() {
             style={{ transitionDelay: `${index * 100}ms` }}
             onClick={() => setSelectedFramework(framework.id)}
           >
-            <DaisyCardHeader className="pb-3">
-              <div className="flex items-center justify-between">
+            <DaisyCardHeader className="pb-3" >
+  <div className="flex items-center justify-between">
+</DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">{framework.shortName}</DaisyCardTitle>
-                <DaisyBadge className={getStatusColor(framework.status)}>
-                  {getStatusIcon(framework.status)}
+                <DaisyBadge className={getStatusColor(framework.status)} >
+  {getStatusIcon(framework.status)}
+</DaisyBadge>
                   <span className="ml-1 capitalize">{framework.status.replace('-', ' ')}</span>
                 </DaisyBadge>
               </div>
-            
-            <DaisyCardBody className="pt-0">
-              <div className="flex items-center justify-center mb-4">
-                <DaisyProgressRing 
+            </DaisyCardHeader>
+            <DaisyCardBody className="pt-0" >
+  <div className="flex items-center justify-center mb-4">
+</DaisyCardBody>
+                <ProgressRing 
                   progress={framework.progress} 
                   size={80} 
                   strokeWidth={6}
@@ -248,12 +253,14 @@ export default function ComplianceProgress() {
 
       {/* Detailed View */}
       {selectedFramework && (
-        <DaisyCard className="transition-all duration-500">
-          <DaisyCardHeader>
+        <DaisyCard className="transition-all duration-500" >
+  <DaisyCardHeader />
+</DaisyCard>
             <div className="flex items-center justify-between">
               <div>
-                <DaisyCardTitle className="text-lg">
-                  {frameworks.find(f => f.id === selectedFramework)?.name}
+                <DaisyCardTitle className="text-lg" >
+  {frameworks.find(f => f.id === selectedFramework)?.name}
+</DaisyCardTitle>
                 </DaisyCardTitle>
                 <p className="text-sm text-gray-600 mt-1">
                   Detailed compliance progress and upcoming tasks
@@ -262,14 +269,14 @@ export default function ComplianceProgress() {
               <DaisyButton 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setSelectedFramework(null)}
-              >
+                onClick={() => setSelectedFramework(null)} />
                 ×
               </DaisyButton>
             </div>
-          
-          <DaisyCardBody>
-            {(() => {
+          </DaisyCardHeader>
+          <DaisyCardContent >
+  {(() => {
+</DaisyCardContent>
               const framework = frameworks.find(f => f.id === selectedFramework);
               if (!framework) return null;
 
@@ -330,7 +337,7 @@ export default function ComplianceProgress() {
                     <h4 className="font-medium text-gray-900">Upcoming Tasks</h4>
                     <div className="space-y-3">
                       <div className="flex items-start space-x-3">
-                        <DaisyCalendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
+                        <Calendar className="w-4 h-4 text-[#199BEC] mt-0.5" />
                         <div>
                           <p className="text-sm font-medium">Quarterly review</p>
                           <p className="text-xs text-gray-600">Due in 2 weeks</p>
@@ -355,7 +362,7 @@ export default function ComplianceProgress() {
                 </div>
               );
             })()}
-          </DaisyCardBody>
+          </DaisyProgress>
         </DaisyCard>
       )}
     </div>

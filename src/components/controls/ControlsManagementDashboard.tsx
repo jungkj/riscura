@@ -295,8 +295,9 @@ const ControlCard: React.FC<{
         <div className="flex-1">
           <div className="flex items-center space-x-enterprise-2 mb-enterprise-1">
             <span className="text-caption font-medium text-text-tertiary">{control.id}</span>
-            <DaisyBadge variant={statusConfig.variant} className="text-caption">
-              <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+            <DaisyBadge variant={statusConfig.variant} className="text-caption" >
+  <StatusIcon className="h-3 w-3 mr-enterprise-1" />
+</DaisyBadge>
               {control.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </DaisyBadge>
           </div>
@@ -311,8 +312,7 @@ const ControlCard: React.FC<{
           variant="ghost" 
           size="sm" 
           className="h-6 w-6 p-0"
-          onClick={() => onAction('menu', control)}
-        >
+          onClick={() => onAction('menu', control)} />
           <MoreHorizontal className="h-3 w-3" />
         </DaisyButton>
       </div>
@@ -356,8 +356,9 @@ const ControlCard: React.FC<{
             </div>
             <span className="text-caption text-text-secondary">{control.owner.name}</span>
           </div>
-          <DaisyBadge variant="outline" className="text-caption">
-            {control.category}
+          <DaisyBadge variant="outline" className="text-caption" >
+  {control.category}
+</DaisyProgress>
           </DaisyBadge>
         </div>
 
@@ -384,13 +385,15 @@ const ControlCard: React.FC<{
         {/* Framework Compliance */}
         <div className="flex flex-wrap gap-enterprise-1">
           {control.framework.slice(0, 2).map((framework) => (
-            <DaisyBadge key={framework} variant="outline" className="text-caption">
-              {framework}
+            <DaisyBadge key={framework} variant="outline" className="text-caption" >
+  {framework}
+</DaisyCalendar>
             </DaisyBadge>
           ))}
           {control.framework.length > 2 && (
-            <DaisyBadge variant="outline" className="text-caption">
-              +{control.framework.length - 2}
+            <DaisyBadge variant="outline" className="text-caption" >
+  +{control.framework.length - 2}
+</DaisyBadge>
             </DaisyBadge>
           )}
         </div>
@@ -409,8 +412,7 @@ const ControlCard: React.FC<{
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('view', control)}
-          >
+            onClick={() => onAction('view', control)} />
             <Eye className="h-3 w-3 mr-enterprise-1" />
             View
           </DaisyButton>
@@ -418,8 +420,7 @@ const ControlCard: React.FC<{
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('test', control)}
-          >
+            onClick={() => onAction('test', control)} />
             <Activity className="h-3 w-3 mr-enterprise-1" />
             Test
           </DaisyButton>
@@ -493,42 +494,39 @@ const ControlLibrary: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="Category" />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Categories</SelectItem>
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="Category" /></DaisyInput>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Categories</DaisySelectContent>
               {categories.map(category => (
-                <DaisySelectItem key={category} value={category}>{category}</SelectItem>
+                <DaisySelectItem key={category} value={category}>{category}</DaisySelectItem>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="Framework" />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Frameworks</SelectItem>
+          <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="Framework" /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Frameworks</DaisySelectContent>
               {frameworks.map(framework => (
-                <DaisySelectItem key={framework} value={framework}>{framework}</SelectItem>
+                <DaisySelectItem key={framework} value={framework}>{framework}</DaisySelectItem>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
-            <DaisySelectTrigger className="w-40">
-              <DaisySelectValue placeholder="Status" />
-            </DaisySelectTrigger>
-            <DaisySelectContent>
-              <DaisySelectItem value="all">All Status</SelectItem>
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
+            <DaisySelectTrigger className="w-40" />
+              <DaisySelectValue placeholder="Status" /></DaisySelect>
+            <DaisySelectContent />
+              <DaisySelectItem value="all">All Status</DaisySelectContent>
               {statuses.map(status => (
-                <DaisySelectItem key={status} value={status}>
+                <DaisySelectItem key={status} value={status} />
                   {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </SelectItem>
+                </DaisySelectItem>
               ))}
-            </SelectContent>
+            </DaisySelectContent>
           </DaisySelect>
         </div>
       </div>
@@ -561,8 +559,9 @@ const ControlLibrary: React.FC = () => {
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <DaisyButton variant="outline">
-            Clear Filters
+          <DaisyButton variant="outline" >
+  Clear Filters
+</DaisyButton>
           </DaisyButton>
         </div>
       )}
@@ -685,10 +684,10 @@ export const ControlsManagementDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6">
-        <DaisyTabsList>
-          <DaisyTabsTrigger value="library">Control Library</DaisyTabsTrigger>
-          <DaisyTabsTrigger value="probo">
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
+        <DaisyTabsList />
+          <DaisyTabsTrigger value="library">Control Library</DaisyTabs>
+          <DaisyTabsTrigger value="probo" />
             <Shield className="h-4 w-4 mr-2" />
             Probo Controls
           </DaisyTabsTrigger>
@@ -698,11 +697,11 @@ export const ControlsManagementDashboard: React.FC = () => {
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="library">
+      <DaisyTabsContent value="library" />
         <ControlLibrary />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="probo" className="space-y-6">
+      <DaisyTabsContent value="probo" className="space-y-6" />
         <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -763,12 +762,13 @@ export const ControlsManagementDashboard: React.FC = () => {
                           control.importance === 'MANDATORY' ? 'destructive' :
                           control.importance === 'PREFERRED' ? 'secondary' : 'outline'
                         }
-                        className="text-xs"
-                      >
-                        {control.importance}
+                        className="text-xs" >
+  {control.importance}
+</DaisyTabsContent>
                       </DaisyBadge>
-                      <DaisyBadge variant="outline" className="text-xs">
-                        {control.category}
+                      <DaisyBadge variant="outline" className="text-xs" >
+  {control.category}
+</DaisyBadge>
                       </DaisyBadge>
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-1">{control.name}</h4>
@@ -791,11 +791,13 @@ export const ControlsManagementDashboard: React.FC = () => {
                     <span>{control.measureCount || 0} measures</span>
                   </div>
                   <div className="flex space-x-2">
-                    <DaisyButton variant="outline" size="sm">
-                      Implement
+                    <DaisyButton variant="outline" size="sm" >
+  Implement
+</DaisyButton>
                     </DaisyButton>
-                    <DaisyButton variant="ghost" size="sm">
-                      View Details
+                    <DaisyButton variant="ghost" size="sm" >
+  View Details
+</DaisyButton>
                     </DaisyButton>
                   </div>
                 </div>
@@ -805,15 +807,15 @@ export const ControlsManagementDashboard: React.FC = () => {
         )}
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="testing">
+      <DaisyTabsContent value="testing" />
         <ControlTestingWorkflow />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="compliance">
+      <DaisyTabsContent value="compliance" />
         <ComplianceMapping />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="analytics">
+      <DaisyTabsContent value="analytics" />
         <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">

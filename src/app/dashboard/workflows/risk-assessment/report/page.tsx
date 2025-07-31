@@ -170,8 +170,7 @@ export default function GenerateRiskReportPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4"
-            >
+              className="mb-4" />
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -181,8 +180,9 @@ export default function GenerateRiskReportPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Generate Risk Report</h1>
                 <p className="text-gray-600 mt-1">Create comprehensive risk assessment reports</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm">
-                <Clock className="h-4 w-4 mr-1" />
+              <DaisyBadge variant="outline" className="text-sm" >
+  <Clock className="h-4 w-4 mr-1" />
+</DaisyBadge>
                 10-15 min
               </DaisyBadge>
             </div>
@@ -190,8 +190,10 @@ export default function GenerateRiskReportPage() {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <DaisyCard>
-              <DaisyCardContent className="p-4">
+            <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total Risks</p>
@@ -199,13 +201,16 @@ export default function GenerateRiskReportPage() {
                       {loading ? '...' : stats.totalRisks}
                     </p>
                   </div>
-                  <DaisyAlertTriangle className="h-8 w-8 text-orange-400" />
-                </div>
+                  <DaisyAlertTriangle className="h-8 w-8 text-orange-400" >
+  </div>
+</DaisyAlertTriangle>
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard>
-              <DaisyCardContent className="p-4">
+            <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">High/Critical</p>
@@ -218,8 +223,10 @@ export default function GenerateRiskReportPage() {
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard>
-              <DaisyCardContent className="p-4">
+            <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Controls</p>
@@ -232,8 +239,10 @@ export default function GenerateRiskReportPage() {
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard>
-              <DaisyCardContent className="p-4">
+            <DaisyCard >
+  <DaisyCardContent className="p-4" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Open Actions</p>
@@ -251,27 +260,28 @@ export default function GenerateRiskReportPage() {
             {/* Report Configuration */}
             <div className="lg:col-span-2 space-y-6">
               {/* Report Type */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Report Configuration</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6">
-                  <div>
+        <DaisyCardContent className="space-y-6" >
+  <div>
+</DaisyCardContent>
                     <DaisyLabel htmlFor="report-type">Report Type</DaisyLabel>
                     <DaisySelect
                       value={reportConfig.reportType}
                       onValueChange={(value) => setReportConfig(prev => ({ ...prev, reportType: value }))}
                     >
-                      <DaisySelectTrigger id="report-type" className="mt-1">
-                        <DaisySelectValue />
-                      </DaisySelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</SelectItem>
-                        <DaisySelectItem value="executive">Executive Summary</SelectItem>
-                        <DaisySelectItem value="detailed">Detailed Risk Analysis</SelectItem>
-                        <DaisySelectItem value="controls">Controls Assessment</SelectItem>
-                        <DaisySelectItem value="compliance">Compliance Report</SelectItem>
-                      </SelectContent>
+                      <DaisySelectTrigger id="report-type" className="mt-1" />
+                        <DaisySelectValue /></DaisySelect>
+                      <DaisySelectContent />
+                        <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</DaisySelectContent>
+                        <DaisySelectItem value="executive">Executive Summary</DaisySelectItem>
+                        <DaisySelectItem value="detailed">Detailed Risk Analysis</DaisySelectItem>
+                        <DaisySelectItem value="controls">Controls Assessment</DaisySelectItem>
+                        <DaisySelectItem value="compliance">Compliance Report</DaisySelectItem>
+                      </DaisySelectContent>
                     </DaisySelect>
                   </div>
 
@@ -281,16 +291,15 @@ export default function GenerateRiskReportPage() {
                       value={reportConfig.timeRange}
                       onValueChange={(value) => setReportConfig(prev => ({ ...prev, timeRange: value }))}
                     >
-                      <DaisySelectTrigger id="time-range" className="mt-1">
-                        <DaisySelectValue />
-                      </DaisySelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="last-month">Last Month</SelectItem>
-                        <DaisySelectItem value="last-quarter">Last Quarter</SelectItem>
-                        <DaisySelectItem value="last-year">Last Year</SelectItem>
-                        <DaisySelectItem value="ytd">Year to Date</SelectItem>
-                        <DaisySelectItem value="all-time">All Time</SelectItem>
-                      </SelectContent>
+                      <DaisySelectTrigger id="time-range" className="mt-1" />
+                        <DaisySelectValue /></DaisySelect>
+                      <DaisySelectContent />
+                        <DaisySelectItem value="last-month">Last Month</DaisySelectContent>
+                        <DaisySelectItem value="last-quarter">Last Quarter</DaisySelectItem>
+                        <DaisySelectItem value="last-year">Last Year</DaisySelectItem>
+                        <DaisySelectItem value="ytd">Year to Date</DaisySelectItem>
+                        <DaisySelectItem value="all-time">All Time</DaisySelectItem>
+                      </DaisySelectContent>
                     </DaisySelect>
                   </div>
 
@@ -305,15 +314,15 @@ export default function GenerateRiskReportPage() {
                     >
                       <div className="flex items-center space-x-2">
                         <DaisyRadioGroupItem value="pdf" id="pdf" />
-                        <DaisyLabel htmlFor="pdf" className="cursor-pointer">PDF Document</DaisyLabel>
+                        <DaisyLabel htmlFor="pdf" className="cursor-pointer">PDF Document</DaisyRadioGroup>
                       </div>
                       <div className="flex items-center space-x-2">
                         <DaisyRadioGroupItem value="excel" id="excel" />
-                        <DaisyLabel htmlFor="excel" className="cursor-pointer">Excel Spreadsheet</DaisyLabel>
+                        <DaisyLabel htmlFor="excel" className="cursor-pointer">Excel Spreadsheet</DaisyRadioGroupItem>
                       </div>
                       <div className="flex items-center space-x-2">
                         <DaisyRadioGroupItem value="word" id="word" />
-                        <DaisyLabel htmlFor="word" className="cursor-pointer">Word Document</DaisyLabel>
+                        <DaisyLabel htmlFor="word" className="cursor-pointer">Word Document</DaisyRadioGroupItem>
                       </div>
                     </DaisyRadioGroup>
                   </div>
@@ -321,12 +330,14 @@ export default function GenerateRiskReportPage() {
               </DaisyCard>
 
               {/* Sections to Include */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Report Sections</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="space-y-3">
+        <DaisyCardContent >
+  <div className="space-y-3">
+</DaisyCardContent>
                     {Object.entries(reportConfig.sections).map(([key, value]) => (
                       <div key={key} className="flex items-center space-x-3">
                         <DaisyCheckbox
@@ -334,9 +345,9 @@ export default function GenerateRiskReportPage() {
                           checked={value}
                           onCheckedChange={() => handleSectionToggle(key as keyof typeof reportConfig.sections)}
                         />
-                        <DaisyLabel htmlFor={key} className="cursor-pointer">
+                        <DaisyLabel htmlFor={key} className="cursor-pointer" />
                           {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                        </DaisyLabel>
+                        </DaisyCheckbox>
                       </div>
                     ))}
                   </div>
@@ -347,15 +358,18 @@ export default function GenerateRiskReportPage() {
             {/* Report Preview & Actions */}
             <div className="space-y-6">
               {/* Preview */}
-              <DaisyCard>
-                <DaisyCardHeader>
-                  <DaisyCardTitle className="text-lg flex items-center gap-2">
-                    <Eye className="h-5 w-5" />
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
+                  <DaisyCardTitle className="text-lg flex items-center gap-2" >
+  <Eye className="h-5 w-5" />
+</DaisyCardTitle>
                     Report Preview
                   </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-                  <div className="space-y-3 text-sm">
+        <DaisyCardContent >
+  <div className="space-y-3 text-sm">
+</DaisyCardContent>
                     <div className="p-3 bg-gray-50 rounded">
                       <p className="font-medium">Selected Report:</p>
                       <p className="text-gray-600">
@@ -388,18 +402,20 @@ export default function GenerateRiskReportPage() {
               </DaisyCard>
 
               {/* Actions */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Generate Report</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3">
-                  <DaisyButton
+        <DaisyCardContent className="space-y-3" >
+  <DaisyButton
                     className="w-full"
                     size="lg"
                     onClick={handleGenerateReport}
-                    disabled={generating}
-                  >
-                    {generating ? (
+                    disabled={generating} >
+</DaisyCardContent>
+  {generating ? (
+</DaisyButton>
                       <>Generating...</>
                     ) : (
                       <>
@@ -421,9 +437,9 @@ export default function GenerateRiskReportPage() {
                     <DaisyButton
                       variant="outline"
                       className="flex-1"
-                      onClick={handleSendReport}
-                    >
-                      <Send className="h-4 w-4 mr-2" />
+                      onClick={handleSendReport} >
+  <Send className="h-4 w-4 mr-2" />
+</DaisyButton>
                       Send
                     </DaisyButton>
                   </div>
@@ -431,8 +447,7 @@ export default function GenerateRiskReportPage() {
                   <DaisyButton
                     variant="outline"
                     className="w-full"
-                    onClick={() => window.print()}
-                  >
+                    onClick={() => window.print()} />
                     <Printer className="h-4 w-4 mr-2" />
                     Print
                   </DaisyButton>
@@ -440,26 +455,26 @@ export default function GenerateRiskReportPage() {
               </DaisyCard>
 
               {/* Quick Actions */}
-              <DaisyCard>
-                <DaisyCardHeader>
+              <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
                   <DaisyCardTitle className="text-lg">Quick Actions</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2">
-                  <DaisyButton
+        <DaisyCardContent className="space-y-2" >
+  <DaisyButton
                     variant="outline"
                     size="sm"
                     className="w-full justify-start"
-                    onClick={() => router.push('/dashboard/reporting/schedule')}
-                  >
+                    onClick={() =>
+</DaisyCardContent> router.push('/dashboard/reporting/schedule')} />
                     <DaisyCalendar className="h-4 w-4 mr-2" />
                     Schedule Recurring Report
-                  </DaisyButton>
+                  </DaisyCalendar>
                   <DaisyButton
                     variant="outline"
                     size="sm"
                     className="w-full justify-start"
-                    onClick={() => router.push('/dashboard/reporting/templates')}
-                  >
+                    onClick={() => router.push('/dashboard/reporting/templates')} />
                     <FileText className="h-4 w-4 mr-2" />
                     Manage Templates
                   </DaisyButton>
@@ -467,8 +482,7 @@ export default function GenerateRiskReportPage() {
                     variant="outline"
                     size="sm"
                     className="w-full justify-start"
-                    onClick={() => router.push('/dashboard/reporting/history')}
-                  >
+                    onClick={() => router.push('/dashboard/reporting/history')} />
                     <Clock className="h-4 w-4 mr-2" />
                     View Report History
                   </DaisyButton>

@@ -413,31 +413,34 @@ export default function TeamNotificationsPage() {
         ]}
         maxWidth="2xl"
       >
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <DaisyTabsList>
-            <DaisyTabsTrigger value="all">
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6" />
+          <DaisyTabsList />
+            <DaisyTabsTrigger value="all" />
               All
-              <DaisyBadge variant="outline" className="ml-2">
-                {notifications.length}
+              <DaisyBadge variant="outline" className="ml-2" >
+  {notifications.length}
+</DaisyTabs>
               </DaisyBadge>
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="unread">
+            <DaisyTabsTrigger value="unread" />
               Unread
-              <DaisyBadge variant="error" className="ml-2">
-                {unreadCount}
+              <DaisyBadge variant="error" className="ml-2" >
+  {unreadCount}
+</DaisyTabsTrigger>
               </DaisyBadge>
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="starred">
+            <DaisyTabsTrigger value="starred" />
               Starred
-              <DaisyBadge variant="outline" className="ml-2">
-                {starredCount}
+              <DaisyBadge variant="outline" className="ml-2" >
+  {starredCount}
+</DaisyTabsTrigger>
               </DaisyBadge>
             </DaisyTabsTrigger>
             <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
           </DaisyTabsList>
         </DaisyTabs>
 
-        <DaisyTabsContent value="all" className="space-y-6">
+        <DaisyTabsContent value="all" className="space-y-6" />
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg">
             <div className="relative flex-1 min-w-64">
@@ -450,31 +453,29 @@ export default function TeamNotificationsPage() {
               />
             </div>
             
-            <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
-              <DaisySelectTrigger className="w-40">
-                <DaisySelectValue placeholder="Category" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Categories</SelectItem>
-                <DaisySelectItem value="security">Security</SelectItem>
-                <DaisySelectItem value="tasks">Tasks</SelectItem>
-                <DaisySelectItem value="compliance">Compliance</SelectItem>
-                <DaisySelectItem value="chat">Chat</SelectItem>
-                <DaisySelectItem value="audit">Audit</SelectItem>
-              </SelectContent>
+            <DaisySelect value={filterCategory} onValueChange={setFilterCategory} />
+              <DaisySelectTrigger className="w-40" />
+                <DaisySelectValue placeholder="Category" /></DaisyTabsContent>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Categories</DaisySelectContent>
+                <DaisySelectItem value="security">Security</DaisySelectItem>
+                <DaisySelectItem value="tasks">Tasks</DaisySelectItem>
+                <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
+                <DaisySelectItem value="chat">Chat</DaisySelectItem>
+                <DaisySelectItem value="audit">Audit</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={filterPriority} onValueChange={setFilterPriority}>
-              <DaisySelectTrigger className="w-32">
-                <DaisySelectValue placeholder="Priority" />
-              </DaisySelectTrigger>
-              <DaisySelectContent>
-                <DaisySelectItem value="all">All Priorities</SelectItem>
-                <DaisySelectItem value="critical">Critical</SelectItem>
-                <DaisySelectItem value="high">High</SelectItem>
-                <DaisySelectItem value="medium">Medium</SelectItem>
-                <DaisySelectItem value="low">Low</SelectItem>
-              </SelectContent>
+            <DaisySelect value={filterPriority} onValueChange={setFilterPriority} />
+              <DaisySelectTrigger className="w-32" />
+                <DaisySelectValue placeholder="Priority" /></DaisySelect>
+              <DaisySelectContent />
+                <DaisySelectItem value="all">All Priorities</DaisySelectContent>
+                <DaisySelectItem value="critical">Critical</DaisySelectItem>
+                <DaisySelectItem value="high">High</DaisySelectItem>
+                <DaisySelectItem value="medium">Medium</DaisySelectItem>
+                <DaisySelectItem value="low">Low</DaisySelectItem>
+              </DaisySelectContent>
             </DaisySelect>
 
             <div className="text-sm text-gray-600 ml-auto">
@@ -497,10 +498,10 @@ export default function TeamNotificationsPage() {
                     notification.isRead && priorityConfig.border,
                     notification.priority === 'critical' && "ring-2 ring-red-200"
                   )}
-                  onClick={() => handleNotificationAction(notification)}
-                >
-                  <DaisyCardContent className="p-4">
-                    <div className="flex items-start space-x-4">
+                  onClick={() => handleNotificationAction(notification)} />
+                  <DaisyCardContent className="p-4" >
+  <div className="flex items-start space-x-4">
+</DaisyCard>
                       {/* Icon */}
                       <div className={cn(
                         "flex-shrink-0 p-2 rounded-full",
@@ -520,11 +521,13 @@ export default function TeamNotificationsPage() {
                               )}>
                                 {notification.title}
                               </h3>
-                              <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                                {notification.priority}
+                              <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
+  {notification.priority}
+</DaisyBadge>
                               </DaisyBadge>
-                              <DaisyBadge variant="outline" className="text-xs">
-                                {notification.category}
+                              <DaisyBadge variant="outline" className="text-xs" >
+  {notification.category}
+</DaisyBadge>
                               </DaisyBadge>
                               {!notification.isRead && (
                                 <div className="h-2 w-2 bg-blue-500 rounded-full" />
@@ -536,11 +539,11 @@ export default function TeamNotificationsPage() {
                             <div className="flex items-center space-x-4 text-xs text-gray-500">
                               {notification.sender && (
                                 <div className="flex items-center space-x-1">
-                                  <DaisyAvatar className="h-4 w-4">
+                                  <DaisyAvatar className="h-4 w-4" />
                                     <DaisyAvatarImage src={notification.sender.avatar} />
-                                    <DaisyAvatarFallback className="text-xs">
+                                    <DaisyAvatarFallback className="text-xs" />
                                       {notification.sender.name.split(' ').map(n => n[0]).join('')}
-                                    </DaisyAvatarFallback>
+                                    </DaisyAvatar>
                                   </DaisyAvatar>
                                   <span>{notification.sender.name}</span>
                                 </div>
@@ -626,8 +629,10 @@ export default function TeamNotificationsPage() {
             })}
 
             {filteredNotifications.length === 0 && (
-              <DaisyCard>
-                <DaisyCardContent className="text-center py-12">
+              <DaisyCard >
+  <DaisyCardContent className="text-center py-12" >
+  </DaisyCard>
+</DaisyCardContent>
                   <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     No notifications found
@@ -643,7 +648,7 @@ export default function TeamNotificationsPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="unread" className="space-y-6">
+        <DaisyTabsContent value="unread" className="space-y-6" />
           <div className="space-y-3">
             {notifications.filter(n => !n.isRead).map((notification) => {
               const NotificationIcon = getNotificationIcon(notification.type);
@@ -656,18 +661,19 @@ export default function TeamNotificationsPage() {
                     "transition-all hover:shadow-md cursor-pointer border-l-4 bg-blue-50 border-blue-500",
                     notification.priority === 'critical' && "ring-2 ring-red-200"
                   )}
-                  onClick={() => handleNotificationAction(notification)}
-                >
-                  <DaisyCardContent className="p-4">
-                    <div className="flex items-start space-x-4">
+                  onClick={() => handleNotificationAction(notification)} />
+                  <DaisyCardContent className="p-4" >
+  <div className="flex items-start space-x-4">
+</DaisyTabsContent>
                       <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
                         <NotificationIcon className={cn("h-4 w-4", priorityConfig.color)} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-1">
                           <h3 className="font-semibold text-sm">{notification.title}</h3>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                            {notification.priority}
+                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
+  {notification.priority}
+</DaisyBadge>
                           </DaisyBadge>
                           <div className="h-2 w-2 bg-blue-500 rounded-full" />
                         </div>
@@ -697,7 +703,7 @@ export default function TeamNotificationsPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="starred" className="space-y-6">
+        <DaisyTabsContent value="starred" className="space-y-6" />
           <div className="space-y-3">
             {notifications.filter(n => n.isStarred).map((notification) => {
               const NotificationIcon = getNotificationIcon(notification.type);
@@ -710,10 +716,10 @@ export default function TeamNotificationsPage() {
                     "transition-all hover:shadow-md cursor-pointer border-l-4",
                     priorityConfig.border
                   )}
-                  onClick={() => handleNotificationAction(notification)}
-                >
-                  <DaisyCardContent className="p-4">
-                    <div className="flex items-start space-x-4">
+                  onClick={() => handleNotificationAction(notification)} />
+                  <DaisyCardContent className="p-4" >
+  <div className="flex items-start space-x-4">
+</DaisyTabsContent>
                       <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
                         <NotificationIcon className={cn("h-4 w-4", priorityConfig.color)} />
                       </div>
@@ -721,8 +727,9 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-center space-x-2 mb-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           <h3 className="font-medium text-sm">{notification.title}</h3>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                            {notification.priority}
+                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
+  {notification.priority}
+</DaisyBadge>
                           </DaisyBadge>
                         </div>
                         <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
@@ -738,16 +745,19 @@ export default function TeamNotificationsPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="settings" className="space-y-6">
-          <DaisyCard>
-            <DaisyCardHeader>
+        <DaisyTabsContent value="settings" className="space-y-6" />
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyTabsContent>
               <DaisyCardTitle>Notification Preferences</DaisyCardTitle>
-              <DaisyCardDescription>
-                Configure how and when you receive notifications
+              <DaisyCardDescription >
+  Configure how and when you receive notifications
+</DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-6">
-              {/* Notification Types */}
+            <DaisyCardContent className="space-y-6" >
+  {/* Notification Types */}
+</DaisyCardContent>
               <div>
                 <h3 className="font-medium mb-4">Notification Types</h3>
                 <div className="space-y-4">
@@ -774,7 +784,7 @@ export default function TeamNotificationsPage() {
                               handlePreferenceChange(item.key as keyof typeof preferences.email, 'email', checked)
                             }
                           />
-                          <DaisyLabel className="text-sm">Email</DaisyLabel>
+                          <DaisyLabel className="text-sm">Email</DaisySwitch>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
@@ -783,7 +793,7 @@ export default function TeamNotificationsPage() {
                               handlePreferenceChange(item.key as keyof typeof preferences.push, 'push', checked)
                             }
                           />
-                          <DaisyLabel className="text-sm">Push</DaisyLabel>
+                          <DaisyLabel className="text-sm">Push</DaisySwitch>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
@@ -792,7 +802,7 @@ export default function TeamNotificationsPage() {
                               handlePreferenceChange(item.key as keyof typeof preferences.inApp, 'inApp', checked)
                             }
                           />
-                          <DaisyLabel className="text-sm">In-App</DaisyLabel>
+                          <DaisyLabel className="text-sm">In-App</DaisySwitch>
                         </div>
                       </div>
                     </div>
@@ -807,19 +817,18 @@ export default function TeamNotificationsPage() {
                 <h3 className="font-medium mb-4">Notification Frequency</h3>
                 <div className="space-y-4">
                   <div>
-                    <DaisyLabel>Email Digest Frequency</DaisyLabel>
+                    <DaisyLabel>Email Digest Frequency</DaisySeparator>
                     <DaisySelect value={preferences.frequency} onValueChange={(value) => 
                       setPreferences(prev => ({ ...prev, frequency: value as any }))
                     }>
-                      <DaisySelectTrigger className="w-48 mt-1">
-                        <DaisySelectValue />
-                      </DaisySelectTrigger>
-                      <DaisySelectContent>
-                        <DaisySelectItem value="immediate">Immediate</SelectItem>
-                        <DaisySelectItem value="hourly">Hourly</SelectItem>
-                        <DaisySelectItem value="daily">Daily</SelectItem>
-                        <DaisySelectItem value="weekly">Weekly</SelectItem>
-                      </SelectContent>
+                      <DaisySelectTrigger className="w-48 mt-1" />
+                        <DaisySelectValue /></DaisySelect>
+                      <DaisySelectContent />
+                        <DaisySelectItem value="immediate">Immediate</DaisySelectContent>
+                        <DaisySelectItem value="hourly">Hourly</DaisySelectItem>
+                        <DaisySelectItem value="daily">Daily</DaisySelectItem>
+                        <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
+                      </DaisySelectContent>
                     </DaisySelect>
                   </div>
                 </div>
@@ -841,7 +850,7 @@ export default function TeamNotificationsPage() {
                         }))
                       }
                     />
-                    <DaisyLabel>Enable quiet hours</DaisyLabel>
+                    <DaisyLabel>Enable quiet hours</DaisySeparator>
                   </div>
                   {preferences.quietHours.enabled && (
                     <div className="grid grid-cols-2 gap-4 ml-6">
@@ -860,7 +869,7 @@ export default function TeamNotificationsPage() {
                         />
                       </div>
                       <div>
-                        <DaisyLabel>End Time</DaisyLabel>
+                        <DaisyLabel>End Time</DaisyInput>
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.end}
@@ -879,7 +888,7 @@ export default function TeamNotificationsPage() {
               </div>
 
               <div className="flex justify-end space-x-2 pt-4">
-                <DaisyButton variant="outline">Reset to Default</DaisyButton>
+                <DaisyButton variant="outline">Reset to Default</DaisyInput>
                 <DaisyButton onClick={handleSavePreferences}>Save Preferences</DaisyButton>
               </div>
             </DaisyCardContent>

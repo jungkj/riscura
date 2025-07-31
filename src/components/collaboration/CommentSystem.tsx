@@ -276,8 +276,10 @@ const MentionInput: React.FC<{
       />
 
       {showMentions && (
-        <DaisyCard className="absolute z-50 w-64 mt-1 shadow-lg">
-          <DaisyCardContent className="p-2">
+        <DaisyCard className="absolute z-50 w-64 mt-1 shadow-lg" >
+  <DaisyCardContent className="p-2" >
+  </DaisyTextarea>
+</DaisyCardContent>
             <div className="text-caption text-text-secondary mb-2 px-2">
               Mention someone
             </div>
@@ -288,11 +290,11 @@ const MentionInput: React.FC<{
                   className="flex items-center space-x-2 p-2 rounded hover:bg-surface-secondary cursor-pointer"
                   onClick={() => insertMention(user)}
                 >
-                  <DaisyAvatar className="h-6 w-6">
+                  <DaisyAvatar className="h-6 w-6" />
                     <DaisyAvatarImage src={user.avatar} />
-                    <DaisyAvatarFallback className="text-caption">
+                    <DaisyAvatarFallback className="text-caption" />
                       {user.name.split(' ').map(n => n[0]).join('')}
-                    </DaisyAvatarFallback>
+                    </DaisyAvatar>
                   </DaisyAvatar>
                   <div className="flex-1 min-w-0">
                     <div className="text-body-sm font-medium truncate">{user.name}</div>
@@ -389,17 +391,18 @@ const CommentComponent: React.FC<{
         {/* Header */}
         <div className="flex items-start justify-between mb-enterprise-3">
           <div className="flex items-center space-x-enterprise-3">
-            <DaisyAvatar className="h-8 w-8">
+            <DaisyAvatar className="h-8 w-8" />
               <DaisyAvatarImage src={comment.author.avatar} />
-              <DaisyAvatarFallback className="text-caption">
+              <DaisyAvatarFallback className="text-caption" />
                 {comment.author.name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatarFallback>
+              </DaisyAvatar>
             </DaisyAvatar>
             <div>
               <div className="flex items-center space-x-enterprise-2">
                 <span className="text-body-sm font-medium">{comment.author.name}</span>
-                <DaisyBadge variant="outline" className="text-caption">
-                  {comment.author.role}
+                <DaisyBadge variant="outline" className="text-caption" >
+  {comment.author.role}
+</DaisyBadge>
                 </DaisyBadge>
                 {comment.author.isOnline && (
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -426,29 +429,29 @@ const CommentComponent: React.FC<{
               <EyeOff className="h-3 w-3 text-text-tertiary" />
             )}
             
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <MoreHorizontal className="h-3 w-3" />
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
+                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyDropdownMenu>
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end">
-                <DaisyDropdownMenuItem onClick={() => onEdit(comment.id)}>
+              <DaisyDropdownMenuContent align="end" />
+                <DaisyDropdownMenuItem onClick={() => onEdit(comment.id)} />
                   <Edit className="h-3 w-3 mr-enterprise-2" />
                   Edit
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => onPin(comment.id)}>
+                </DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => onPin(comment.id)} />
                   <Pin className="h-3 w-3 mr-enterprise-2" />
                   {comment.isPinned ? 'Unpin' : 'Pin'}
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => onResolve(comment.id)}>
+                <DaisyDropdownMenuItem onClick={() => onResolve(comment.id)} />
                   <Check className="h-3 w-3 mr-enterprise-2" />
                   {comment.isResolved ? 'Unresolve' : 'Resolve'}
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuItem 
                   onClick={() => onDelete(comment.id)}
-                  className="text-semantic-error"
-                >
+                  className="text-semantic-error" />
                   <Trash2 className="h-3 w-3 mr-enterprise-2" />
                   Delete
                 </DaisyDropdownMenuItem>
@@ -478,8 +481,9 @@ const CommentComponent: React.FC<{
                     </div>
                   )}
                 </div>
-                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <ExternalLink className="h-3 w-3" />
+                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+  <ExternalLink className="h-3 w-3" />
+</DaisyButton>
                 </DaisyButton>
               </div>
             ))}
@@ -495,8 +499,7 @@ const CommentComponent: React.FC<{
                 variant="outline"
                 size="sm"
                 className="h-6 px-enterprise-2"
-                onClick={() => onReact(comment.id, reaction.emoji)}
-              >
+                onClick={() => onReact(comment.id, reaction.emoji)} />
                 <span className="mr-enterprise-1">{reaction.emoji}</span>
                 <span className="text-caption">{reaction.count}</span>
               </DaisyButton>
@@ -510,24 +513,23 @@ const CommentComponent: React.FC<{
             variant="ghost"
             size="sm"
             className="h-6 px-0 text-text-secondary hover:text-text-primary"
-            onClick={() => onReply(comment.id)}
-          >
+            onClick={() => onReply(comment.id)} />
             <Reply className="h-3 w-3 mr-enterprise-1" />
             Reply
           </DaisyButton>
 
-          <DaisyPopover open={showReactions} onOpenChange={setShowReactions}>
-            <DaisyPopoverTrigger asChild>
+          <DaisyPopover open={showReactions} onOpenChange={setShowReactions} />
+            <DaisyPopoverTrigger asChild />
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                className="h-6 px-0 text-text-secondary hover:text-text-primary"
-              >
-                <Heart className="h-3 w-3 mr-enterprise-1" />
+                className="h-6 px-0 text-text-secondary hover:text-text-primary" >
+  <Heart className="h-3 w-3 mr-enterprise-1" />
+</DaisyPopover>
                 React
               </DaisyButton>
             </DaisyPopoverTrigger>
-            <DaisyPopoverContent className="w-auto p-2">
+            <DaisyPopoverContent className="w-auto p-2" />
               <div className="flex space-x-1">
                 {commonReactions.map((emoji) => (
                   <DaisyButton
@@ -541,7 +543,7 @@ const CommentComponent: React.FC<{
                     }}
                   >
                     {emoji}
-                  </DaisyButton>
+                  </DaisyPopoverContent>
                 ))}
               </div>
             </DaisyPopoverContent>
@@ -552,8 +554,7 @@ const CommentComponent: React.FC<{
               variant="ghost"
               size="sm"
               className="h-6 px-0 text-text-secondary hover:text-text-primary"
-              onClick={() => setShowReplies(!showReplies)}
-            >
+              onClick={() => setShowReplies(!showReplies)} />
               {showReplies ? (
                 <ChevronDown className="h-3 w-3 mr-enterprise-1" />
               ) : (
@@ -727,7 +728,7 @@ export const CommentSystem: React.FC<{
     return (
       <div className="w-80 max-h-96 flex flex-col">
         <div className="flex-1 overflow-hidden">
-          <DaisyScrollArea className="h-full">
+          <DaisyScrollArea className="h-full" />
             <div className="p-enterprise-4 space-y-enterprise-4">
               {filteredComments.map((comment) => (
                 <CommentComponent
@@ -768,17 +769,16 @@ export const CommentSystem: React.FC<{
                 <DaisyButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => setReplyingTo(null)}
-                >
+                  onClick={() => setReplyingTo(null)} />
                   <X className="h-3 w-3" />
                 </DaisyButton>
               )}
               <DaisyButton
                 size="sm"
                 onClick={handleAddComment}
-                disabled={!newComment.trim()}
-              >
-                <Send className="h-3 w-3" />
+                disabled={!newComment.trim()} >
+  <Send className="h-3 w-3" />
+</DaisyButton>
               </DaisyButton>
             </div>
           </div>
@@ -801,22 +801,23 @@ export const CommentSystem: React.FC<{
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
-            <DaisyDropdownMenu>
-              <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="outline" size="sm">
-                  <Filter className="h-3 w-3 mr-enterprise-2" />
+            <DaisyDropdownMenu />
+              <DaisyDropdownMenuTrigger asChild />
+                <DaisyButton variant="outline" size="sm" >
+  <Filter className="h-3 w-3 mr-enterprise-2" />
+</DaisyDropdownMenu>
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent>
-                <DaisyDropdownMenuItem onClick={() => setFilterBy('all')}>
+              <DaisyDropdownMenuContent />
+                <DaisyDropdownMenuItem onClick={() => setFilterBy('all')} />
                   All Comments
-                </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => setFilterBy('mentions')}>
+                </DaisyDropdownMenuContent>
+                <DaisyDropdownMenuItem onClick={() => setFilterBy('mentions')} />
                   Mentions Only
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={() => setFilterBy('pinned')}>
+                <DaisyDropdownMenuItem onClick={() => setFilterBy('pinned')} />
                   Pinned Only
                 </DaisyDropdownMenuItem>
               </DaisyDropdownMenuContent>
@@ -825,8 +826,7 @@ export const CommentSystem: React.FC<{
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setShowResolved(!showResolved)}
-            >
+              onClick={() => setShowResolved(!showResolved)} />
               {showResolved ? (
                 <EyeOff className="h-3 w-3 mr-enterprise-2" />
               ) : (
@@ -839,14 +839,16 @@ export const CommentSystem: React.FC<{
       )}
 
       {/* New Comment */}
-      <DaisyCard>
-        <DaisyCardContent className="p-enterprise-4">
+      <DaisyCard >
+  <DaisyCardContent className="p-enterprise-4" >
+  </DaisyCard>
+</DaisyCardContent>
           <div className="flex items-start space-x-enterprise-3">
-            <DaisyAvatar className="h-8 w-8">
+            <DaisyAvatar className="h-8 w-8" />
               <DaisyAvatarImage src={sampleUsers[0].avatar} />
-              <DaisyAvatarFallback className="text-caption">
+              <DaisyAvatarFallback className="text-caption" />
                 {sampleUsers[0].name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatarFallback>
+              </DaisyAvatar>
             </DaisyAvatar>
             <div className="flex-1 space-y-enterprise-3">
               <MentionInput
@@ -859,8 +861,9 @@ export const CommentSystem: React.FC<{
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-enterprise-2">
                   {replyingTo && (
-                    <DaisyBadge variant="outline" className="text-caption">
-                      Replying to comment
+                    <DaisyBadge variant="outline" className="text-caption" >
+  Replying to comment
+</DaisyBadge>
                     </DaisyBadge>
                   )}
                 </div>
@@ -869,17 +872,16 @@ export const CommentSystem: React.FC<{
                     <DaisyButton
                       variant="outline"
                       size="sm"
-                      onClick={() => setReplyingTo(null)}
-                    >
+                      onClick={() => setReplyingTo(null)} />
                       Cancel
                     </DaisyButton>
                   )}
                   <DaisyButton
                     size="sm"
                     onClick={handleAddComment}
-                    disabled={!newComment.trim()}
-                  >
-                    {replyingTo ? 'Reply' : 'Comment'}
+                    disabled={!newComment.trim()} >
+  {replyingTo ? 'Reply' : 'Comment'}
+</DaisyButton>
                   </DaisyButton>
                 </div>
               </div>

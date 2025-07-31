@@ -103,13 +103,14 @@ export default function LoginPage() {
           className="w-full max-w-md relative z-10"
         >
           <HoverCard className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border-border/20">
-            <DaisyCardHeader className="space-y-1 text-center">
-              <motion.div
+            <DaisyCardHeader className="space-y-1 text-center" >
+  <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                 className="mx-auto mb-4 flex justify-center"
               >
+</DaisyCardHeader>
                 <Image
                   src="/images/logo/riscura.png"
                   alt="Riscura Logo"
@@ -119,16 +120,19 @@ export default function LoginPage() {
                   priority
                 />
               </motion.div>
-              <DaisyCardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                Welcome Back
+              <DaisyCardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent" >
+  Welcome Back
+</DaisyCardTitle>
               </DaisyCardTitle>
-              <DaisyCardDescription>
-                Enter your credentials to access your RCSA dashboard
+              <DaisyCardDescription >
+  Enter your credentials to access your RCSA dashboard
+</DaisyCardDescription>
               </p>
             
             
-            <DaisyCardContent>
-              <Form {...form}>
+            <DaisyCardContent >
+  <Form {...form}>
+</DaisyCardContent>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
@@ -178,14 +182,13 @@ export default function LoginPage() {
                               variant="ghost"
                               size="sm"
                               className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
+                              onClick={() => setShowPassword(!showPassword)} />
                               {showPassword ? (
                                 <EyeOff className="h-4 w-4 text-gray-400" />
                               ) : (
                                 <Eye className="h-4 w-4 text-gray-400" />
                               )}
-                            </DaisyButton>
+                            </DaisyInput>
                           </motion.div>
                         </FormControl>
                         <FormMessage />
@@ -203,8 +206,7 @@ export default function LoginPage() {
                             checked={field.value}
                             onCheckedChange={field.onChange}
                             className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
-                          />
-                        </FormControl>
+                          /></DaisyCheckbox>
                         <div className="space-y-1 leading-none">
                           <FormLabel className="text-sm text-slate-600 dark:text-slate-400 cursor-pointer">
                             Stay logged in
@@ -221,9 +223,9 @@ export default function LoginPage() {
                     <DaisyButton 
                       type="submit" 
                       className="w-full bg-gradient-to-r from-[#191919] to-[#191919] hover:from-[#2a2a2a] hover:to-[#2a2a2a] transition-all duration-200" 
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
+                      disabled={isLoading} >
+  {isLoading ? (
+</DaisyButton>
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Signing in...
@@ -246,8 +248,9 @@ export default function LoginPage() {
               </div>
             </DaisyCardContent>
             
-            <DaisyCardFooter className="flex justify-center">
-              <p className="text-sm text-muted-foreground">
+            <DaisyCardFooter className="flex justify-center" >
+  <p className="text-sm text-muted-foreground">
+</DaisyCardFooter>
                 Don't have an account?{' '}
                 <Link 
                   href="/register" 

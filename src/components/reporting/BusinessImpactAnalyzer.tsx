@@ -156,15 +156,13 @@ export function BusinessImpactAnalyzer() {
           <DaisyButton
             variant={selectedView === 'roi' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setSelectedView('roi')}
-          >
+            onClick={() => setSelectedView('roi')} />
             ROI Analysis
           </DaisyButton>
           <DaisyButton
             variant={selectedView === 'metrics' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setSelectedView('metrics')}
-          >
+            onClick={() => setSelectedView('metrics')} />
             Key Metrics
           </DaisyButton>
         </div>
@@ -175,8 +173,10 @@ export function BusinessImpactAnalyzer() {
         {businessMetrics.map((metric) => {
           const Icon = metric.icon;
           return (
-            <DaisyCard key={metric.id} className="bg-white border-gray-200">
-              <DaisyCardContent className="p-6">
+            <DaisyCard key={metric.id} className="bg-white border-gray-200" >
+  <DaisyCardContent className="p-6" >
+  </DaisyCard>
+</DaisyCardContent>
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Icon className="w-5 h-5 text-blue-600" />
@@ -206,10 +206,12 @@ export function BusinessImpactAnalyzer() {
       {selectedView === 'roi' && (
         <div className="space-y-6">
           {/* ROI Summary */}
-          <DaisyCard className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
-            <DaisyCardHeader>
-              <DaisyCardTitle className="flex items-center space-x-3">
-                <div className="p-2 bg-green-600 rounded-lg">
+          <DaisyCard className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200" >
+  <DaisyCardHeader />
+</DaisyCard>
+              <DaisyCardTitle className="flex items-center space-x-3" >
+  <div className="p-2 bg-green-600 rounded-lg">
+</DaisyCardTitle>
                   <Calculator className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -218,8 +220,9 @@ export function BusinessImpactAnalyzer() {
                 </div>
               </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
+        <DaisyCardContent className="grid grid-cols-1 md:grid-cols-3 gap-6" >
+  <div className="text-center">
+</DaisyCardContent>
                 <div className="text-3xl font-bold text-green-600">{formatCurrency(totalInvestment)}</div>
                 <div className="text-sm text-gray-600">Total Investment</div>
               </div>
@@ -235,19 +238,22 @@ export function BusinessImpactAnalyzer() {
           </DaisyCard>
 
           {/* ROI Breakdown */}
-          <DaisyCard>
-            <DaisyCardHeader>
+          <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
               <DaisyCardTitle>ROI Breakdown by Initiative</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4">
-              {roiMetrics.map((metric) => (
+        <DaisyCardContent className="space-y-4" >
+  {roiMetrics.map((metric) => (
+</DaisyCardContent>
                 <div key={metric.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-semibold text-gray-900">{metric.category}</h4>
-                        <DaisyBadge className={getStatusColor(metric.status)}>
-                          {metric.status}
+                        <DaisyBadge className={getStatusColor(metric.status)} >
+  {metric.status}
+</DaisyBadge>
                         </DaisyBadge>
                       </div>
                       <p className="text-sm text-gray-600">{metric.description}</p>
@@ -278,19 +284,21 @@ export function BusinessImpactAnalyzer() {
                   </div>
                 </div>
               ))}
-            </DaisyCardContent>
+            </DaisyProgress>
           </DaisyCard>
         </div>
       )}
 
       {/* Key Metrics View */}
       {selectedView === 'metrics' && (
-        <DaisyCard>
-          <DaisyCardHeader>
+        <DaisyCard >
+  <DaisyCardHeader />
+</DaisyCard>
             <DaisyCardTitle>Financial Impact Dashboard</DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DaisyCardContent >
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+</DaisyCardContent>
               <div className="space-y-4">
                 <h3 className="font-semibold text-gray-900">Cost Efficiency Metrics</h3>
                 <div className="space-y-3">

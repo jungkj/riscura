@@ -75,13 +75,15 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
       <span className="text-sm font-medium truncate flex-1">{attachment.title}</span>
       <div className="flex gap-1">
         {onView && (
-          <DaisyButton variant="ghost" size="sm" onClick={onView}>
-            <ExternalLink className="h-3 w-3" />
+          <DaisyButton variant="ghost" size="sm" onClick={onView} >
+  <ExternalLink className="h-3 w-3" />
+</DaisyButton>
           </DaisyButton>
         )}
         {onDownload && (
-          <DaisyButton variant="ghost" size="sm" onClick={onDownload}>
-            <Download className="h-3 w-3" />
+          <DaisyButton variant="ghost" size="sm" onClick={onDownload} >
+  <Download className="h-3 w-3" />
+</DaisyButton>
           </DaisyButton>
         )}
       </div>
@@ -104,8 +106,9 @@ const SuggestionCard: React.FC<{
   };
 
   return (
-    <DaisyCard className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800">
-      <div className="flex items-start gap-3">
+    <DaisyCard className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800" >
+  <div className="flex items-start gap-3">
+</DaisyCard>
         <span className="text-lg">{getSuggestionIcon(suggestion.type)}</span>
         <div className="flex-1">
           <h4 className="font-medium text-sm">{suggestion.title}</h4>
@@ -115,8 +118,7 @@ const SuggestionCard: React.FC<{
           size="sm" 
           variant="outline" 
           onClick={() => onApply(suggestion)}
-          className="ml-2"
-        >
+          className="ml-2" />
           Apply
         </DaisyButton>
       </div>
@@ -223,7 +225,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const messageMaxWidth = isAI ? '85%' : '75%';
 
   return (
-    <DaisyTooltipProvider>
+    <DaisyTooltipProvider />
       <motion.div
         ref={messageRef}
         initial={{ opacity: 0, y: 20 }}
@@ -258,8 +260,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 <Bot className="h-3 w-3" />
                 <span>ARIA</span>
                 {agentType !== 'general_assistant' && (
-                  <DaisyBadge variant="secondary" className="text-xs">
-                    {agentType.replace('_', ' ')}
+                  <DaisyBadge variant="secondary" className="text-xs" >
+  {agentType.replace('_', ' ')}
+</DaisyTooltipProvider>
                   </DaisyBadge>
                 )}
               </>
@@ -270,11 +273,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               </>
             )}
             <DaisySeparator orientation="vertical" className="h-3" />
-            <DaisyTooltip>
-              <DaisyTooltipTrigger>
+            <DaisyTooltip />
+              <DaisyTooltipTrigger />
                 <span>{formatDistanceToNow(message.timestamp, { addSuffix: true })}</span>
-              </DaisyTooltipTrigger>
-              <DaisyTooltipContent>
+              </DaisySeparator>
+              <DaisyTooltipContent />
                 {message.timestamp.toLocaleString()}
               </DaisyTooltipContent>
             </DaisyTooltip>
@@ -289,9 +292,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 ? "bg-card border-border" 
                 : "bg-primary text-primary-foreground ml-auto",
               message.isError && "border-destructive bg-destructive/10"
-            )}
-          >
-            {/* Message Content */}
+            )} >
+  {/* Message Content */}
+</DaisyCard>
             <div 
               className="prose prose-sm max-w-none dark:prose-invert"
               dangerouslySetInnerHTML={{ 
@@ -311,30 +314,30 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 
             {/* Message Actions */}
             <div className="absolute -bottom-2 right-2 flex gap-1">
-              <DaisyDropdownMenu>
-                <DaisyDropdownMenuTrigger asChild>
+              <DaisyDropdownMenu />
+                <DaisyDropdownMenuTrigger asChild />
                   <DaisyButton 
                     variant="secondary" 
                     size="sm" 
-                    className="h-6 w-6 p-0 bg-background border shadow-sm"
-                  >
-                    <MoreHorizontal className="h-3 w-3" />
+                    className="h-6 w-6 p-0 bg-background border shadow-sm" >
+  <MoreHorizontal className="h-3 w-3" />
+</DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end">
-                  <DaisyDropdownMenuItem onClick={handleCopy}>
+                <DaisyDropdownMenuContent align="end" />
+                  <DaisyDropdownMenuItem onClick={handleCopy} />
                     <Copy className="h-4 w-4 mr-2" />
                     Copy
-                  </DaisyDropdownMenuItem>
+                  </DaisyDropdownMenuContent>
                   
                   {isAI && onRegenerate && (
-                    <DaisyDropdownMenuItem onClick={onRegenerate}>
+                    <DaisyDropdownMenuItem onClick={onRegenerate} />
                       <RotateCcw className="h-4 w-4 mr-2" />
                       Regenerate
                     </DaisyDropdownMenuItem>
                   )}
                   
-                  <DaisyDropdownMenuItem onClick={handleSpeak}>
+                  <DaisyDropdownMenuItem onClick={handleSpeak} />
                     {isSpeaking ? (
                       <>
                         <VolumeX className="h-4 w-4 mr-2" />
@@ -351,11 +354,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   {isAI && onFeedback && (
                     <>
                       <DaisyDropdownMenuSeparator />
-                      <DaisyDropdownMenuItem onClick={() => handleFeedback('positive')}>
+                      <DaisyDropdownMenuItem onClick={() => handleFeedback('positive')} />
                         <ThumbsUp className="h-4 w-4 mr-2" />
                         Good response
-                      </DaisyDropdownMenuItem>
-                      <DaisyDropdownMenuItem onClick={() => handleFeedback('negative')}>
+                      </DaisyDropdownMenuSeparator>
+                      <DaisyDropdownMenuItem onClick={() => handleFeedback('negative')} />
                         <ThumbsDown className="h-4 w-4 mr-2" />
                         Poor response
                       </DaisyDropdownMenuItem>
