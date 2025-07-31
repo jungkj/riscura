@@ -60,14 +60,20 @@ import {
   BarChart,
   FileBarChart,
   Compass,
-  Grid3X3
+  Grid3X3,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipProvider, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
+import {
+  DaisyTooltip,
+  DaisyTooltipContent,
+  DaisyTooltipProvider,
+  DaisyTooltipTrigger,
+  DaisyTooltipWrapper,
+} from '@/components/ui/DaisyTooltip';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
 interface SidebarProps {
@@ -111,10 +117,10 @@ interface QuickAccessItem {
 export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const [expandedSections, setExpandedSections] = useState<string[]>([
-    'overview', 
-    'risk-operations', 
-    'compliance-hub', 
-    'insights-reports'
+    'overview',
+    'risk-operations',
+    'compliance-hub',
+    'insights-reports',
   ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
@@ -124,15 +130,15 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       title: 'Dashboard',
       href: '/dashboard',
       icon: LayoutDashboard,
-      type: 'favorite'
+      type: 'favorite',
     },
     {
       id: 'risk-register',
       title: 'Risk Register',
       href: '/dashboard/risks',
       icon: Shield,
-      type: 'favorite'
-    }
+      type: 'favorite',
+    },
   ]);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -166,8 +172,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/activity',
           icon: Clock,
           description: 'Latest updates and changes',
-        }
-      ]
+        },
+      ],
     },
     {
       id: 'risk-operations',
@@ -211,8 +217,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/risks/heatmap',
           icon: Activity,
           description: 'Visual risk analysis',
-        }
-      ]
+        },
+      ],
     },
     {
       id: 'compliance-hub',
@@ -248,8 +254,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/controls',
           icon: ShieldCheck,
           description: 'Control library and testing',
-        }
-      ]
+        },
+      ],
     },
     {
       id: 'insights-reports',
@@ -286,9 +292,9 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           href: '/dashboard/documents',
           icon: Folder,
           description: 'Document library and policies',
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
 
   // Keyboard shortcuts
@@ -322,10 +328,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   }, [showSearch]);
 
   const toggleSection = (sectionId: string) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionId) 
-        ? prev.filter(id => id !== sectionId)
-        : [...prev, sectionId]
+    setExpandedSections((prev) =>
+      prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId]
     );
   };
 
@@ -338,10 +342,10 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     if (href === '/dashboard') {
       return pathname === '/dashboard';
     }
-    
+
     // Exact match first
     if (pathname === href) return true;
-    
+
     // For nested routes, only match if the current path is a direct child
     // This prevents '/dashboard/risks' from matching '/dashboard/risks/assessment'
     if (pathname.startsWith(href + '/')) {
@@ -349,17 +353,22 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       const remainder = pathname.slice(href.length + 1);
       return !remainder.includes('/');
     }
-    
+
     return false;
   };
 
   const getBadgeVariant = (variant?: string) => {
     switch (variant) {
-      case 'critical': return 'destructive';
-      case 'warning': return 'secondary';
-      case 'success': return 'default';
-      case 'info': return 'secondary';
-      default: return 'secondary';
+      case 'critical':
+        return 'destructive';
+      case 'warning':
+        return 'secondary';
+      case 'success':
+        return 'default';
+      case 'info':
+        return 'secondary';
+      default:
+        return 'secondary';
     }
   };
 
@@ -369,13 +378,13 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       title: item.title,
       href: item.href,
       icon: item.icon,
-      type: 'favorite'
+      type: 'favorite',
     };
 
-    setFavorites(prev => {
-      const exists = prev.find(fav => fav.id === item.id);
+    setFavorites((prev) => {
+      const exists = prev.find((fav) => fav.id === item.id);
       if (exists) {
-        return prev.filter(fav => fav.id !== item.id);
+        return prev.filter((fav) => fav.id !== item.id);
       } else {
         return [...prev, quickAccessItem].slice(0, 5); // Limit to 5 favorites
       }
@@ -383,7 +392,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   };
 
   const isFavorite = (itemId: string) => {
-    return favorites.some(fav => fav.id === itemId);
+    return favorites.some((fav) => fav.id === itemId);
   };
 
   const formatTimeAgo = (timestamp: Date) => {
@@ -391,7 +400,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     const diff = now.getTime() - timestamp.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    
+
     if (minutes < 60) {
       return `${minutes}m ago`;
     } else if (hours < 24) {
@@ -402,14 +411,17 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   };
 
   // Filter items based on search
-  const filteredSections = searchQuery 
-    ? navigationSections.map(section => ({
-        ...section,
-        items: section.items.filter(item => 
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description?.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      })).filter(section => section.items.length > 0)
+  const filteredSections = searchQuery
+    ? navigationSections
+        .map((section) => ({
+          ...section,
+          items: section.items.filter(
+            (item) =>
+              item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+          ),
+        }))
+        .filter((section) => section.items.length > 0)
     : navigationSections;
 
   // Collapsed sidebar view
@@ -430,7 +442,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           </div>
           <DaisyButton
             variant="ghost"
-            shape="square" size="md"
+            shape="square"
+            size="md"
             onClick={onToggle}
             className="w-6 h-6 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
           >
@@ -449,15 +462,17 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                     shape="square"
                     size="md"
                     className={cn(
-                      "w-10 h-10 mx-auto text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-all duration-200",
-                      section.items.some(item => isItemActive(item.href)) && "bg-[#199BEC] text-white shadow-md"
+                      'w-10 h-10 mx-auto text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-all duration-200',
+                      section.items.some((item) => isItemActive(item.href)) &&
+                        'bg-[#199BEC] text-white shadow-md'
                     )}
                     onClick={() => onToggle?.()}
                   >
-                    {section.items[0] && (() => {
-                      const IconComponent = section.items[0].icon;
-                      return <IconComponent className="w-5 h-5" />;
-                    })()}
+                    {section.items[0] &&
+                      (() => {
+                        const IconComponent = section.items[0].icon;
+                        return <IconComponent className="w-5 h-5" />;
+                      })()}
                   </DaisyButton>
                 </DaisyTooltipTrigger>
                 <DaisyTooltipContent side="right" className="font-medium">
@@ -479,7 +494,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                 <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer">
                   <DaisyAvatarImage src={user?.avatar} />
                   <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
-                    {user?.firstName?.[0]}{user?.lastName?.[0]}
+                    {user?.firstName?.[0]}
+                    {user?.lastName?.[0]}
                   </DaisyAvatarFallback>
                 </DaisyAvatar>
               </DaisyTooltipTrigger>
@@ -494,7 +510,10 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   }
 
   return (
-    <div className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200" data-tour="sidebar">
+    <div
+      className="flex flex-col h-full w-64 bg-[#FAFAFA] border-r border-gray-200"
+      data-tour="sidebar"
+    >
       {/* Header */}
       <div className="flex items-center justify-between h-20 px-4 border-b border-gray-200">
         <div className="flex items-center gap-3 flex-1 min-w-0 py-2">
@@ -510,7 +529,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         </div>
         <DaisyButton
           variant="ghost"
-          shape="square" size="md"
+          shape="square"
+          size="md"
           onClick={onToggle}
           className="w-8 h-8 text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] transition-colors"
         >
@@ -554,15 +574,17 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             <div className="mb-3">
               <div className="flex items-center gap-2 mb-2">
                 <Star className="w-3 h-3 text-[#199BEC]" />
-                <span className="text-xs font-semibold text-[#191919] uppercase tracking-wide">Favorites</span>
+                <span className="text-xs font-semibold text-[#191919] uppercase tracking-wide">
+                  Favorites
+                </span>
               </div>
               <div className="space-y-1">
                 {favorites.slice(0, 3).map((item) => (
                   <Link key={item.id} href={item.href}>
                     <div
                       className={cn(
-                        "flex items-center gap-2 px-2 py-1.5 rounded-md text-xs font-medium transition-all duration-200 group",
-                        "text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC]"
+                        'flex items-center gap-2 px-2 py-1.5 rounded-md text-xs font-medium transition-all duration-200 group',
+                        'text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC]'
                       )}
                     >
                       <item.icon className="w-3 h-3 flex-shrink-0" />
@@ -573,8 +595,6 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               </div>
             </div>
           )}
-
-
         </div>
       )}
 
@@ -591,9 +611,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                       {section.title}
                     </h3>
                     {section.description && (
-                      <p className="text-xs text-gray-500 font-inter">
-                        {section.description}
-                      </p>
+                      <p className="text-xs text-gray-500 font-inter">{section.description}</p>
                     )}
                   </div>
                 </div>
@@ -621,32 +639,37 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                       <Link href={item.href}>
                         <div
                           className={cn(
-                            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group",
+                            'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group',
                             isItemActive(item.href)
-                              ? "bg-[#199BEC] text-white shadow-md shadow-[#199BEC]/25 scale-[1.02]"
-                              : "text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] hover:scale-[1.01]"
+                              ? 'bg-[#199BEC] text-white shadow-md shadow-[#199BEC]/25 scale-[1.02]'
+                              : 'text-[#191919] hover:bg-[#199BEC]/10 hover:text-[#199BEC] hover:scale-[1.01]'
                           )}
                           {...(item.id === 'ai-chat' && { 'data-tour': 'aria-assistant' })}
                         >
-                          <item.icon 
+                          <item.icon
                             className={cn(
-                              "w-4 h-4 flex-shrink-0 transition-colors",
-                              isItemActive(item.href) ? "text-white" : "text-gray-600 group-hover:text-[#199BEC]"
-                            )} 
+                              'w-4 h-4 flex-shrink-0 transition-colors',
+                              isItemActive(item.href)
+                                ? 'text-white'
+                                : 'text-gray-600 group-hover:text-[#199BEC]'
+                            )}
                           />
                           <span className="flex-1 truncate font-inter">{item.title}</span>
-                          
+
                           {/* Badges and Actions */}
                           <div className="flex items-center gap-1">
                             {item.isNew && (
-                              <DaisyBadge variant="secondary" className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0">
+                              <DaisyBadge
+                                variant="secondary"
+                                className="px-1.5 py-0.5 text-xs bg-[#199BEC] text-white border-0"
+                              >
                                 New
                               </DaisyBadge>
                             )}
                           </div>
                         </div>
                       </Link>
-                      
+
                       {/* Favorite Toggle */}
                       <DaisyButton
                         variant="ghost"
@@ -656,15 +679,17 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                           toggleFavorite(item);
                         }}
                         className={cn(
-                          "absolute right-1 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity",
-                          isFavorite(item.id) && "opacity-100"
+                          'absolute right-1 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity',
+                          isFavorite(item.id) && 'opacity-100'
                         )}
                       >
-                        <Star 
+                        <Star
                           className={cn(
-                            "w-3 h-3",
-                            isFavorite(item.id) ? "text-[#199BEC] fill-[#199BEC]" : "text-gray-400 hover:text-[#199BEC]"
-                          )} 
+                            'w-3 h-3',
+                            isFavorite(item.id)
+                              ? 'text-[#199BEC] fill-[#199BEC]'
+                              : 'text-gray-400 hover:text-[#199BEC]'
+                          )}
                         />
                       </DaisyButton>
                     </div>
@@ -682,7 +707,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           <DaisyAvatar className="w-8 h-8">
             <DaisyAvatarImage src={user?.avatar} />
             <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
+              {user?.firstName?.[0]}
+              {user?.lastName?.[0]}
             </DaisyAvatarFallback>
           </DaisyAvatar>
           <div className="flex-1 min-w-0">
@@ -691,7 +717,13 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             </p>
             <p className="text-xs text-gray-600 truncate">{user?.email}</p>
           </div>
-          <DaisyButton variant="ghost" shape="square" size="md" className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all" data-tour="help-menu">
+          <DaisyButton
+            variant="ghost"
+            shape="square"
+            size="md"
+            className="w-6 h-6 text-gray-500 hover:text-[#199BEC] opacity-0 group-hover:opacity-100 transition-all"
+            data-tour="help-menu"
+          >
             <Settings className="w-4 h-4" />
           </DaisyButton>
         </div>

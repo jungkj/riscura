@@ -55,16 +55,18 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className={cn(
-        'absolute right-6 top-6 rounded-lg p-2',
-        'text-[#A8A8A8] hover:text-[#191919]',
-        'bg-transparent hover:bg-[#F5F1E9]',
-        'border border-transparent hover:border-[#D8C3A5]/30',
-        'transition-all duration-200 ease-in-out',
-        'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
-        'disabled:pointer-events-none disabled:opacity-50',
-        'group'
-      )}>
+      <DialogPrimitive.Close
+        className={cn(
+          'absolute right-6 top-6 rounded-lg p-2',
+          'text-[#A8A8A8] hover:text-[#191919]',
+          'bg-transparent hover:bg-[#F5F1E9]',
+          'border border-transparent hover:border-[#D8C3A5]/30',
+          'transition-all duration-200 ease-in-out',
+          'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
+          'disabled:pointer-events-none disabled:opacity-50',
+          'group'
+        )}
+      >
         <X className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -73,10 +75,7 @@ const DialogContent = React.forwardRef<
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const DialogHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       'flex flex-col space-y-3 text-left mb-6 pb-4 border-b border-[#D8C3A5]/20',
@@ -87,10 +86,7 @@ const DialogHeader = ({
 );
 DialogHeader.displayName = 'DialogHeader';
 
-const DialogFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0',
@@ -123,10 +119,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn(
-      'text-sm leading-relaxed text-[#A8A8A8] font-inter',
-      className
-    )}
+    className={cn('text-sm leading-relaxed text-[#A8A8A8] font-inter', className)}
     {...props}
   />
 ));
@@ -157,16 +150,18 @@ const DialogLarge = React.forwardRef<
       )}
       {...props}
     >
-      <DialogPrimitive.Close className={cn(
-        'absolute right-6 top-6 rounded-lg p-2',
-        'text-[#A8A8A8] hover:text-[#191919]',
-        'bg-transparent hover:bg-[#F5F1E9]',
-        'border border-transparent hover:border-[#D8C3A5]/30',
-        'transition-all duration-200 ease-in-out',
-        'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
-        'disabled:pointer-events-none disabled:opacity-50',
-        'group z-10'
-      )}>
+      <DialogPrimitive.Close
+        className={cn(
+          'absolute right-6 top-6 rounded-lg p-2',
+          'text-[#A8A8A8] hover:text-[#191919]',
+          'bg-transparent hover:bg-[#F5F1E9]',
+          'border border-transparent hover:border-[#D8C3A5]/30',
+          'transition-all duration-200 ease-in-out',
+          'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
+          'disabled:pointer-events-none disabled:opacity-50',
+          'group z-10'
+        )}
+      >
         <X className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -196,17 +191,19 @@ const DialogFullscreen = React.forwardRef<
       )}
       {...props}
     >
-      <DialogPrimitive.Close className={cn(
-        'absolute right-6 top-6 rounded-lg p-3',
-        'text-[#A8A8A8] hover:text-[#191919]',
-        'bg-white hover:bg-[#F5F1E9]',
-        'border border-[#D8C3A5]/30 hover:border-[#D8C3A5]',
-        'shadow-md hover:shadow-lg',
-        'transition-all duration-200 ease-in-out',
-        'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
-        'disabled:pointer-events-none disabled:opacity-50',
-        'group z-10'
-      )}>
+      <DialogPrimitive.Close
+        className={cn(
+          'absolute right-6 top-6 rounded-lg p-3',
+          'text-[#A8A8A8] hover:text-[#191919]',
+          'bg-white hover:bg-[#F5F1E9]',
+          'border border-[#D8C3A5]/30 hover:border-[#D8C3A5]',
+          'shadow-md hover:shadow-lg',
+          'transition-all duration-200 ease-in-out',
+          'focus:outline-none focus:ring-2 focus:ring-[#D8C3A5]/30 focus:ring-offset-2 focus:ring-offset-[#FAFAFA]',
+          'disabled:pointer-events-none disabled:opacity-50',
+          'group z-10'
+        )}
+      >
         <X className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>

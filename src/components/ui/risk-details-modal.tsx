@@ -10,16 +10,23 @@ import {
 } from '@/components/ui/dialog';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent, DaisyCardDescription } from '@/components/ui/DaisyCard';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardTitle,
+  DaisyCardHeader,
+  DaisyCardContent,
+  DaisyCardDescription,
+} from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
-import { 
-  AlertTriangle, 
-  Calendar, 
-  User, 
-  FileText, 
+import {
+  AlertTriangle,
+  Calendar,
+  User,
+  FileText,
   ExternalLink,
   TrendingUp,
-  Shield
+  Shield,
 } from 'lucide-react';
 
 interface Risk {
@@ -70,9 +77,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   const getRiskLevelIcon = (level: string) => {
     switch (level) {
       case 'critical':
-        return <DaisyAlertTriangle className="w-4 h-4" >
-  ;
-</DaisyAlertTriangle>
+        return <DaisyAlertTriangle className="w-4 h-4">;</DaisyAlertTriangle>;
       case 'high':
         return <TrendingUp className="w-4 h-4" />;
       case 'medium':
@@ -134,27 +139,22 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         </DaisyCardDescription>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyBadge 
+                        <DaisyBadge
                           className={`${getRiskLevelColor(risk.riskLevel)} flex items-center space-x-1`}
                         >
                           {getRiskLevelIcon(risk.riskLevel)}
                           <span className="capitalize">{risk.riskLevel}</span>
                         </DaisyBadge>
-                        <DaisyBadge 
-                          variant="outline" 
-                          className={getStatusColor(risk.status)}
-                        >
+                        <DaisyBadge variant="outline" className={getStatusColor(risk.status)}>
                           {risk.status.charAt(0).toUpperCase() + risk.status.slice(1)}
                         </DaisyBadge>
                       </div>
                     </div>
                   </DaisyCardHeader>
-                  
+
                   <DaisyCardContent className="space-y-4">
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                      {risk.description}
-                    </p>
-                    
+                    <p className="text-sm text-gray-700 dark:text-gray-300">{risk.description}</p>
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div className="flex items-center space-x-2">
                         <TrendingUp className="w-4 h-4 text-gray-500" />
@@ -163,7 +163,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                           <p className="text-gray-600">{risk.riskScore}</p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <User className="w-4 h-4 text-gray-500" />
                         <div>
@@ -171,7 +171,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                           <p className="text-gray-600">{risk.owner}</p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <FileText className="w-4 h-4 text-gray-500" />
                         <div>
@@ -179,7 +179,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                           <p className="text-gray-600">{risk.category}</p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         <div>
@@ -196,21 +196,21 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         <p className="font-medium text-gray-700 dark:text-gray-300">Impact Level</p>
                         <div className="flex items-center space-x-2 mt-1">
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-red-500 h-2 rounded-full" 
+                            <div
+                              className="bg-red-500 h-2 rounded-full"
                               style={{ width: `${(risk.impact / 5) * 100}%` }}
                             ></div>
                           </div>
                           <span className="text-xs text-gray-600">{risk.impact}/5</span>
                         </div>
                       </div>
-                      
+
                       <div>
                         <p className="font-medium text-gray-700 dark:text-gray-300">Likelihood</p>
                         <div className="flex items-center space-x-2 mt-1">
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-orange-500 h-2 rounded-full" 
+                            <div
+                              className="bg-orange-500 h-2 rounded-full"
                               style={{ width: `${(risk.likelihood / 5) * 100}%` }}
                             ></div>
                           </div>
@@ -220,7 +220,11 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                     </div>
 
                     <div className="flex justify-end">
-                      <DaisyButton variant="outline" size="sm" className="flex items-center space-x-2">
+                      <DaisyButton
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center space-x-2"
+                      >
                         <ExternalLink className="w-4 h-4" />
                         <span>View Details</span>
                       </DaisyButton>
@@ -236,13 +240,9 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
           <DaisyButton variant="outline" onClick={onClose}>
             Close
           </DaisyButton>
-          {risks.length > 0 && (
-            <DaisyButton>
-              View All Risks
-            </DaisyButton>
-          )}
+          {risks.length > 0 && <DaisyButton>View All Risks</DaisyButton>}
         </div>
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}; 
+};

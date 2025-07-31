@@ -32,7 +32,7 @@ function RegisterForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -65,7 +65,7 @@ function RegisterForm() {
         password: formData.password,
         acceptTerms: true,
       };
-      
+
       await register(userData);
       // If registration is successful, redirect to onboarding
       router.push(redirectTo);
@@ -87,7 +87,7 @@ function RegisterForm() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/25 bg-[size:20px_20px] [mask-image:radial-gradient(white,transparent_85%)]" />
-      
+
       <div className="relative w-full max-w-md space-y-8">
         {/* Logo and Header */}
         <div className="text-center space-y-6">
@@ -101,7 +101,7 @@ function RegisterForm() {
               priority
             />
           </div>
-          
+
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
               Create your account
@@ -128,7 +128,10 @@ function RegisterForm() {
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <DaisyLabel htmlFor="firstName" className="text-slate-700 dark:text-slate-300 font-medium">
+                  <DaisyLabel
+                    htmlFor="firstName"
+                    className="text-slate-700 dark:text-slate-300 font-medium"
+                  >
                     First Name
                   </DaisyLabel>
                   <div className="relative">
@@ -147,7 +150,10 @@ function RegisterForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <DaisyLabel htmlFor="lastName" className="text-slate-700 dark:text-slate-300 font-medium">
+                  <DaisyLabel
+                    htmlFor="lastName"
+                    className="text-slate-700 dark:text-slate-300 font-medium"
+                  >
                     Last Name
                   </DaisyLabel>
                   <div className="relative">
@@ -168,7 +174,10 @@ function RegisterForm() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium">
+                <DaisyLabel
+                  htmlFor="email"
+                  className="text-slate-700 dark:text-slate-300 font-medium"
+                >
                   Email Address
                 </DaisyLabel>
                 <div className="relative">
@@ -188,7 +197,10 @@ function RegisterForm() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
+                <DaisyLabel
+                  htmlFor="password"
+                  className="text-slate-700 dark:text-slate-300 font-medium"
+                >
                   Password
                 </DaisyLabel>
                 <div className="relative">
@@ -221,7 +233,10 @@ function RegisterForm() {
 
               {/* Confirm Password Field */}
               <div className="space-y-2">
-                <DaisyLabel htmlFor="confirmPassword" className="text-slate-700 dark:text-slate-300 font-medium">
+                <DaisyLabel
+                  htmlFor="confirmPassword"
+                  className="text-slate-700 dark:text-slate-300 font-medium"
+                >
                   Confirm Password
                 </DaisyLabel>
                 <div className="relative">
@@ -252,9 +267,9 @@ function RegisterForm() {
                 </div>
               </div>
 
-              <DaisyButton 
-                type="submit" 
-                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200" 
+              <DaisyButton
+                type="submit"
+                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -329,13 +344,14 @@ function RegisterForm() {
 }
 
 export default function RegisterPage() {
-
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
       <RegisterForm />
     </Suspense>
   );

@@ -7,7 +7,12 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import {
   Shield,
   CheckCircle,
@@ -36,7 +41,7 @@ import {
   RefreshCw,
   AlertCircle,
   XCircle,
-  CheckCircle2
+  CheckCircle2,
 } from 'lucide-react';
 
 // import MetricCards from './MetricCards';
@@ -80,17 +85,17 @@ export default function VantaInspiredDashboard() {
       status: 'In Progress',
       owner: 'Sarah Chen',
       dueDate: '2024-01-15',
-      progress: 65
+      progress: 65,
     },
     {
-      id: 'R-002', 
+      id: 'R-002',
       title: 'Third-party vendor access controls',
       category: 'Vendor Management',
       severity: 'High',
       status: 'Active',
       owner: 'Mike Johnson',
       dueDate: '2024-01-20',
-      progress: 30
+      progress: 30,
     },
     {
       id: 'R-003',
@@ -100,8 +105,8 @@ export default function VantaInspiredDashboard() {
       status: 'Mitigated',
       owner: 'Lisa Wang',
       dueDate: '2024-01-10',
-      progress: 100
-    }
+      progress: 100,
+    },
   ];
 
   const complianceFrameworks: ComplianceFramework[] = [
@@ -112,7 +117,7 @@ export default function VantaInspiredDashboard() {
       status: 'In Progress',
       controls: 40,
       completedControls: 34,
-      lastAssessment: '2024-01-01'
+      lastAssessment: '2024-01-01',
     },
     {
       id: 'ISO27001',
@@ -121,7 +126,7 @@ export default function VantaInspiredDashboard() {
       status: 'Compliant',
       controls: 114,
       completedControls: 105,
-      lastAssessment: '2023-12-15'
+      lastAssessment: '2023-12-15',
     },
     {
       id: 'GDPR',
@@ -130,30 +135,43 @@ export default function VantaInspiredDashboard() {
       status: 'In Progress',
       controls: 25,
       completedControls: 19,
-      lastAssessment: '2024-01-05'
-    }
+      lastAssessment: '2024-01-05',
+    },
   ];
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'Critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'High': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'High':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Low':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Compliant': return 'bg-green-100 text-green-800';
-      case 'Non-Compliant': return 'bg-red-100 text-red-800';
-      case 'In Progress': return 'bg-blue-100 text-blue-800';
-      case 'Not Started': return 'bg-gray-100 text-gray-800';
-      case 'Active': return 'bg-orange-100 text-orange-800';
-      case 'Mitigated': return 'bg-green-100 text-green-800';
-      case 'Accepted': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Compliant':
+        return 'bg-green-100 text-green-800';
+      case 'Non-Compliant':
+        return 'bg-red-100 text-red-800';
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'Not Started':
+        return 'bg-gray-100 text-gray-800';
+      case 'Active':
+        return 'bg-orange-100 text-orange-800';
+      case 'Mitigated':
+        return 'bg-green-100 text-green-800';
+      case 'Accepted':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -172,7 +190,7 @@ export default function VantaInspiredDashboard() {
       default:
         return <Clock className="w-4 h-4" />;
     }
-  }
+  };
 
   useEffect(() => {
     // Simulate real-time updates
@@ -186,13 +204,13 @@ export default function VantaInspiredDashboard() {
   const formatLastUpdated = (date: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return 'Just now';
     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60);
     if (diffInHours < 24) return `${diffInHours}h ago`;
-    
+
     return date.toLocaleDateString();
   };
 
@@ -221,7 +239,7 @@ export default function VantaInspiredDashboard() {
                 className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]"
               />
             </div>
-            
+
             {/* Action Buttons */}
             <DaisyButton variant="outline" size="sm">
               <Filter className="w-4 h-4 mr-2" />
@@ -235,7 +253,7 @@ export default function VantaInspiredDashboard() {
               <Plus className="w-4 h-4 mr-2" />
               New Assessment
             </DaisyButton>
-            
+
             {/* Notifications */}
             <div className="relative">
               <DaisyButton variant="ghost" size="sm">
@@ -254,28 +272,28 @@ export default function VantaInspiredDashboard() {
         <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
           <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg">
-            <DaisyTabsTrigger 
-              value="overview" 
+            <DaisyTabsTrigger
+              value="overview"
               className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
             >
               <BarChart3 className="w-4 h-4 mr-2" />
               Overview
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger 
+            <DaisyTabsTrigger
               value="risks"
               className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
             >
               <Calendar className="w-4 h-4 mr-2" />
               Risk Analysis
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger 
+            <DaisyTabsTrigger
               value="compliance"
               className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
             >
               <Users className="w-4 h-4 mr-2" />
               Compliance
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger 
+            <DaisyTabsTrigger
               value="reports"
               className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm"
             >
@@ -289,19 +307,25 @@ export default function VantaInspiredDashboard() {
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Key Metrics</h2>
               {/* <MetricCards /> */}
-              <div className="text-center text-gray-500 py-8">MetricCards component temporarily disabled</div>
+              <div className="text-center text-gray-500 py-8">
+                MetricCards component temporarily disabled
+              </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Risk Overview</h2>
                 {/* <RiskHeatMap /> */}
-                <div className="text-center text-gray-500 py-8">RiskHeatMap component temporarily disabled</div>
+                <div className="text-center text-gray-500 py-8">
+                  RiskHeatMap component temporarily disabled
+                </div>
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Compliance Status</h2>
                 {/* <ComplianceProgress /> */}
-                <div className="text-center text-gray-500 py-8">ComplianceProgress component temporarily disabled</div>
+                <div className="text-center text-gray-500 py-8">
+                  ComplianceProgress component temporarily disabled
+                </div>
               </div>
             </div>
           </DaisyTabsContent>
@@ -310,7 +334,9 @@ export default function VantaInspiredDashboard() {
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Risk Analysis</h2>
               {/* <RiskHeatMap /> */}
-              <div className="text-center text-gray-500 py-8">RiskHeatMap component temporarily disabled</div>
+              <div className="text-center text-gray-500 py-8">
+                RiskHeatMap component temporarily disabled
+              </div>
             </div>
           </DaisyTabsContent>
 
@@ -318,7 +344,9 @@ export default function VantaInspiredDashboard() {
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Compliance Management</h2>
               {/* <ComplianceProgress /> */}
-              <div className="text-center text-gray-500 py-8">ComplianceProgress component temporarily disabled</div>
+              <div className="text-center text-gray-500 py-8">
+                ComplianceProgress component temporarily disabled
+              </div>
             </div>
           </DaisyTabsContent>
 
@@ -327,15 +355,14 @@ export default function VantaInspiredDashboard() {
               <Download className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Reports & Analytics</h3>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                Generate comprehensive reports on risk assessments, compliance status, and organizational metrics.
+                Generate comprehensive reports on risk assessments, compliance status, and
+                organizational metrics.
               </p>
               <div className="flex justify-center space-x-4">
                 <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
                   Generate Risk Report
                 </DaisyButton>
-                <DaisyButton variant="outline">
-                  Compliance Summary
-                </DaisyButton>
+                <DaisyButton variant="outline">Compliance Summary</DaisyButton>
               </div>
             </div>
           </DaisyTabsContent>
@@ -344,7 +371,7 @@ export default function VantaInspiredDashboard() {
 
       {/* Quick Actions Sidebar */}
       <div className="fixed bottom-6 right-6 space-y-3">
-        <DaisyButton 
+        <DaisyButton
           className="w-12 h-12 rounded-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white shadow-lg"
           title="Quick Risk Assessment"
         >
@@ -353,4 +380,4 @@ export default function VantaInspiredDashboard() {
       </div>
     </div>
   );
-} 
+}

@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from '@/hooks/use-toast';
@@ -19,7 +24,7 @@ import {
   RefreshCw,
   Zap,
   Shield,
-  Users
+  Users,
 } from 'lucide-react';
 
 // Types
@@ -69,46 +74,50 @@ export default function AIInsightsPage() {
           id: '1',
           type: 'risk_prediction',
           title: 'Emerging Cybersecurity Risk',
-          description: 'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',
+          description:
+            'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',
           confidence: 87,
           impact: 'high',
           category: 'Technology',
           actionable: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 30)
+          createdAt: new Date(Date.now() - 1000 * 60 * 30),
         },
         {
           id: '2',
           type: 'trend_analysis',
           title: 'Compliance Risk Trending Down',
-          description: 'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
+          description:
+            'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
           confidence: 92,
           impact: 'medium',
           category: 'Compliance',
           actionable: false,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2)
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
         },
         {
           id: '3',
           type: 'anomaly',
           title: 'Unusual Risk Pattern Detected',
-          description: 'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
+          description:
+            'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
           confidence: 78,
           impact: 'medium',
           category: 'Operational',
           actionable: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4)
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4),
         },
         {
           id: '4',
           type: 'recommendation',
           title: 'Risk Assessment Optimization',
-          description: 'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
+          description:
+            'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
           confidence: 85,
           impact: 'high',
           category: 'Process',
           actionable: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6)
-        }
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),
+        },
       ];
 
       const mockPredictive: PredictiveAnalysis = {
@@ -120,8 +129,8 @@ export default function AIInsightsPage() {
           'Increased remote work vulnerabilities',
           'New regulatory requirements',
           'Supply chain disruptions',
-          'Technology infrastructure aging'
-        ]
+          'Technology infrastructure aging',
+        ],
       };
 
       const mockRecommendations: RecommendationItem[] = [
@@ -133,7 +142,7 @@ export default function AIInsightsPage() {
           effort: 'high',
           impact: 'high',
           category: 'Security',
-          estimatedTime: '3-6 months'
+          estimatedTime: '3-6 months',
         },
         {
           id: '2',
@@ -143,7 +152,7 @@ export default function AIInsightsPage() {
           effort: 'medium',
           impact: 'high',
           category: 'Compliance',
-          estimatedTime: '1-2 months'
+          estimatedTime: '1-2 months',
         },
         {
           id: '3',
@@ -153,7 +162,7 @@ export default function AIInsightsPage() {
           effort: 'low',
           impact: 'medium',
           category: 'Training',
-          estimatedTime: '2-4 weeks'
+          estimatedTime: '2-4 weeks',
         },
         {
           id: '4',
@@ -163,8 +172,8 @@ export default function AIInsightsPage() {
           effort: 'low',
           impact: 'medium',
           category: 'Analytics',
-          estimatedTime: '1-2 weeks'
-        }
+          estimatedTime: '1-2 weeks',
+        },
       ];
 
       setInsights(mockInsights);
@@ -181,14 +190,16 @@ export default function AIInsightsPage() {
     setRefreshing(true);
     try {
       // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Update insights with new data
-      setInsights(prev => prev.map(insight => ({
-        ...insight,
-        confidence: Math.max(70, Math.min(95, insight.confidence + (Math.random() - 0.5) * 10))
-      })));
-      
+      setInsights((prev) =>
+        prev.map((insight) => ({
+          ...insight,
+          confidence: Math.max(70, Math.min(95, insight.confidence + (Math.random() - 0.5) * 10)),
+        }))
+      );
+
       toast({
         title: 'Insights Updated',
         description: 'AI insights have been refreshed with latest data',
@@ -197,7 +208,7 @@ export default function AIInsightsPage() {
       toast({
         title: 'Refresh Failed',
         description: 'Unable to refresh insights. Please try again.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setRefreshing(false);
@@ -244,7 +255,6 @@ export default function AIInsightsPage() {
   };
 
   if (isLoading) {
-
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
@@ -254,17 +264,17 @@ export default function AIInsightsPage() {
         </div>
       </div>
     );
-  };
+  }
 
   return (
-    <motion.div 
+    <motion.div
       className="space-y-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       {/* Header */}
-      <motion.div 
+      <motion.div
         className="flex items-center justify-between"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -307,7 +317,7 @@ export default function AIInsightsPage() {
                   <p className="text-sm text-muted-foreground">Risk Score</p>
                   <DaisyProgress value={predictiveAnalysis.riskScore} className="mt-2" />
                 </div>
-                
+
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     {predictiveAnalysis.trend === 'increasing' ? (
@@ -323,15 +333,13 @@ export default function AIInsightsPage() {
                   </div>
                   <p className="text-sm text-muted-foreground">Trend Direction</p>
                 </div>
-                
+
                 <div className="text-center">
-                  <div className="text-lg font-semibold mb-2">
-                    {predictiveAnalysis.timeframe}
-                  </div>
+                  <div className="text-lg font-semibold mb-2">{predictiveAnalysis.timeframe}</div>
                   <p className="text-sm text-muted-foreground">Forecast Period</p>
                 </div>
               </div>
-              
+
               <div className="mt-6">
                 <h4 className="font-medium mb-3">Key Risk Factors</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -343,7 +351,7 @@ export default function AIInsightsPage() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="mt-4 p-3 bg-muted rounded-lg">
                 <p className="text-sm font-medium">{predictiveAnalysis.prediction}</p>
               </div>
@@ -381,7 +389,9 @@ export default function AIInsightsPage() {
                         <h3 className="font-semibold">{insight.title}</h3>
                         <div className="flex items-center gap-2">
                           {getImpactBadge(insight.impact)}
-                          <DaisyBadge variant="outline">{insight.confidence}% confidence</DaisyBadge>
+                          <DaisyBadge variant="outline">
+                            {insight.confidence}% confidence
+                          </DaisyBadge>
                         </div>
                       </div>
                       <p className="text-muted-foreground mb-3">{insight.description}</p>
@@ -424,7 +434,7 @@ export default function AIInsightsPage() {
                       {rec.priority} Priority
                     </DaisyBadge>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
                       <span className="text-muted-foreground">Effort:</span>
@@ -443,11 +453,9 @@ export default function AIInsightsPage() {
                       <span className="ml-2">{rec.estimatedTime}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-end mt-4">
-                    <DaisyButton size="sm">
-                      Implement Recommendation
-                    </DaisyButton>
+                    <DaisyButton size="sm">Implement Recommendation</DaisyButton>
                   </div>
                 </DaisyCardContent>
               </DaisyCard>
@@ -535,4 +543,4 @@ export default function AIInsightsPage() {
       </DaisyTabs>
     </motion.div>
   );
-} 
+}
