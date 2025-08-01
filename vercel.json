@@ -19,29 +19,7 @@
   },
   "functions": {
     "src/app/api/**/*.ts": {
-      "maxDuration": 30,
-      "memory": 1024,
-      "runtime": "nodejs18.x"
-    },
-    "src/app/api/ai/**/*.ts": {
-      "maxDuration": 60,
-      "memory": 1024,
-      "runtime": "nodejs18.x"
-    },
-    "src/app/api/reports/**/*.ts": {
-      "maxDuration": 300,
-      "memory": 1024,
-      "runtime": "nodejs18.x"
-    },
-    "src/app/api/auth/**/*.ts": {
-      "maxDuration": 15,
-      "memory": 512,
-      "runtime": "nodejs18.x"
-    },
-    "src/app/api/health/**/*.ts": {
-      "maxDuration": 10,
-      "memory": 256,
-      "runtime": "nodejs18.x"
+      "maxDuration": 10
     }
   },
   "headers": [
@@ -124,15 +102,6 @@
           "value": "public, max-age=86400"
         }
       ]
-    },
-    {
-      "source": "/(.*\\.(ico|png|jpg|jpeg|gif|svg|webp|avif))$",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=2592000"
-        }
-      ]
     }
   ],
   "rewrites": [
@@ -161,19 +130,10 @@
     {
       "path": "/api/cron/cleanup",
       "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/health-check",
-      "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/cron/metrics-collection",
-      "schedule": "*/15 * * * *"
     }
   ],
   "trailingSlash": false,
   "cleanUrls": true,
-  "regions": ["iad1", "sfo1"],
   "github": {
     "silent": false,
     "autoAlias": true
