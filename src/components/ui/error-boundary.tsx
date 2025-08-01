@@ -42,30 +42,26 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
         transition={{ duration: 0.3 }}
         className="w-full max-w-md"
       >
-        <DaisyCard className="border-red-200 dark:border-red-800" >
-  <DaisyCardHeader className="text-center" />
-</DaisyCard>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="mx-auto mb-4 w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center"
-            >
-              <DaisyAlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" >
-  </motion.div>
-</DaisyAlertTriangle>
-            <DaisyCardTitle className="text-red-900 dark:text-red-100" >
-  Something went wrong
-</DaisyCardTitle>
-            </DaisyCardTitle>
-            <DaisyCardDescription className="text-red-700 dark:text-red-300" >
-  We encountered an unexpected error. Please try again or contact support if the problem persists.
-</DaisyCardDescription>
-            </p>
-          
-          <DaisyCardContent className="space-y-4" >
-  <details className="group">
-</DaisyCardContent>
+        <DaisyCard className="border-red-200 dark:border-red-800">
+          <DaisyCardBody>
+            <div className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="mx-auto mb-4 w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center"
+              >
+                <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+              </motion.div>
+              <DaisyCardTitle className="text-red-900 dark:text-red-100">
+                Something went wrong
+              </DaisyCardTitle>
+              <p className="text-red-700 dark:text-red-300 mt-2">
+                We encountered an unexpected error. Please try again or contact support if the problem persists.
+              </p>
+            </div>
+            <div className="space-y-4 mt-6">
+              <details className="group">
               <summary className="cursor-pointer text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                 <span className="inline-flex items-center gap-2">
                   <Bug className="w-4 h-4" />
@@ -90,34 +86,35 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
               </motion.div>
             </details>
             
-            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <DaisyButton
+                  onClick={resetErrorBoundary}
+                  className="flex-1"
+                  variant="default"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Try Again
+                </DaisyButton>
+                <DaisyButton
+                  onClick={handleGoHome}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Go Home
+                </DaisyButton>
+              </div>
+              
               <DaisyButton
-                onClick={resetErrorBoundary}
-                className="flex-1"
-                variant="default" >
-  <RefreshCw className="w-4 h-4 mr-2" />
-</DaisyButton>
-                Try Again
-              </DaisyButton>
-              <DaisyButton
-                onClick={handleGoHome}
-                variant="outline"
-                className="flex-1" >
-  <Home className="w-4 h-4 mr-2" />
-</DaisyButton>
-                Go Home
+                onClick={handleReportError}
+                variant="ghost"
+                size="sm"
+                className="w-full text-xs"
+              >
+                Report this error
               </DaisyButton>
             </div>
-            
-            <DaisyButton
-              onClick={handleReportError}
-              variant="ghost"
-              size="sm"
-              className="w-full text-xs" >
-  Report this error
-</DaisyButton>
-            </DaisyButton>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </motion.div>
     </div>

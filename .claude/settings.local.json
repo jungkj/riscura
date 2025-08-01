@@ -25,7 +25,17 @@
       "Bash(npx tsc:*)",
       "Bash(HUSKY=0 git push origin main)",
       "Bash(gh run list:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(git branch:*)",
+      "Bash(git for-each-ref:*)",
+      "Bash(for branch in cleanup/remove-duplicate-files feature/daisyui-refactoring feature/development-preparation feature/file-import-integrations feature/simplified-risk-creation-flow feature/stage-all-changes fix/build-errors-integration-imports fix/code-review-improvements feature/notion-rcsa-spreadsheet)",
+      "Bash(do)",
+      "Bash(done)",
+      "Bash(HUSKY=0 git push origin --delete cleanup/remove-duplicate-files feature/daisyui-refactoring feature/development-preparation feature/file-import-integrations feature/simplified-risk-creation-flow feature/stage-all-changes fix/build-errors-integration-imports fix/code-review-improvements feature/notion-rcsa-spreadsheet)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(npx next build:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

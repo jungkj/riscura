@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Workflow, WorkflowStep } from '@/types';
 import { formatDate } from '@/lib/utils';
@@ -218,11 +220,10 @@ export default function WorkflowPage() {
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
 
   return (
-    <DaisyBadge variant="outline" className={config.color} >
-  {config.label}
-</DaisyBadge>
-      </DaisyBadge>
-    );
+    <DaisyBadge variant="outline" className={config.color}>
+      {config.label}
+    </DaisyBadge>
+  );
   };
 
   const getPriorityBadge = (priority: Workflow['priority']) => {
@@ -235,9 +236,8 @@ export default function WorkflowPage() {
 
     const config = priorityConfig[priority] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
     return (
-      <DaisyBadge variant="outline" className={config.color} >
-  {config.label}
-</DaisyBadge>
+      <DaisyBadge variant="outline" className={config.color}>
+        {config.label}
       </DaisyBadge>
     );
   };
@@ -259,20 +259,21 @@ export default function WorkflowPage() {
 
   if (error) {
     return (
-      <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+      <Card className="bg-white border border-gray-100 shadow-sm">
+        <CardContent className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading workflows: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]" />
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-2 px-4 py-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] rounded"
+            >
               Retry
-            </DaisyButton>
+            </button>
           </div>
-        </DaisyCardContent>
-      </DaisyCard>
+        </CardContent>
+      </Card>
     );
-  };
+  }
 
   return (
     <div className="container mx-auto py-6 space-y-6">

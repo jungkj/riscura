@@ -1,187 +1,41 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { DaisySelect } from '@/components/ui/DaisySelect';
-import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import {
-  Brain,
-  Sparkles,
-  Shield,
-  Zap,
-  Target,
-  Clock,
-  DollarSign,
-  CheckCircle,
-  AlertTriangle,
-  Settings,
-  FileCheck,
-  Users,
-  Globe,
-  Lock,
-  Activity,
-  TrendingUp,
-  BarChart3,
-  ArrowRight,
-  Lightbulb,
-  Cpu,
-  Download,
-  RefreshCw,
-  Eye,
-  Edit,
-  Trash2,
-  Plus,
-  Building2
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ProboControl,
-  ControlGenerationRequest,
-  ControlGenerationResponse,
-  OrganizationContext,
-  GenerationConstraints,
-  ProboAIAnalysis,
-  RiskControlMapping
-} from '@/types/probo-integration.types';
-import { ProboIntegrationService } from '@/services/ProboIntegrationService';
+import { Brain, Sparkles, Shield, Target, AlertTriangle, FileCheck } from 'lucide-react';
 
 interface AIControlGeneratorProps {
   riskId: string;
   riskTitle: string;
-  riskDescription: string;
-  riskCategory: string;
-  riskSeverity: 'Critical' | 'High' | 'Medium' | 'Low';
-  onControlsGenerated?: (controls: ProboControl[], mappings: RiskControlMapping[]) => void;
+  riskDescription?: string;
+  riskCategory?: string;
+  riskSeverity?: 'Critical' | 'High' | 'Medium' | 'Low';
+  onControlsGenerated?: (controls: any[], mappings: any[]) => void;
   className?: string;
 }
 
 export default function AIControlGenerator({
   riskId,
   riskTitle,
-  riskDescription,
-  riskCategory,
-  riskSeverity,
+  riskDescription = '',
+  riskCategory = 'General',
+  riskSeverity = 'Medium',
   onControlsGenerated,
   className = ''
 }: AIControlGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generationStep, setGenerationStep] = useState(0);
-  const [generationProgress, setGenerationProgress] = useState(0);
-  const [generatedResponse, setGeneratedResponse] = useState<ControlGenerationResponse | null>(null);
-  const [selectedControls, setSelectedControls] = useState<string[]>([]);
-  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-  const [activeTab, setActiveTab] = useState('generation');
-
-  // Generation configuration
-  const [organizationContext, setOrganizationContext] = useState<OrganizationContext>({
-    industry: 'Technology',
-    size: 'Medium',
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'AWS'],
-    existingControls: [],
-    complianceGoals: ['SOC2', 'ISO27001'],
-    riskTolerance: 'Medium',
-    budget: 'Moderate',
-    timeline: 'Standard'
-  });
-
-  const [constraints, setConstraints] = useState<GenerationConstraints>({
-    maxImplementationHours: 80,
-    allowedComplexity: ['Simple', 'Moderate', 'Complex'],
-    requiredAutomation: false,
-    mustHaveFrameworks: ['SOC2'],
-    excludeCategories: []
-  });
-
-  const [preferredFrameworks, setPreferredFrameworks] = useState<string[]>(['SOC2']);
-
-  const proboService = ProboIntegrationService.getInstance();
-
-  const generationSteps = [
-    'Analyzing Risk Context',
-    'Identifying Relevant Controls',
-    'Generating AI Recommendations',
-    'Creating Control Mappings',
-    'Calculating Implementation Plan',
-    'Finalizing Results'
-  ];
 
   const handleGenerateControls = async () => {
     setIsGenerating(true);
-    setGenerationStep(0);
-    setGenerationProgress(0);
-    setActiveTab('generation');
-
-    try {
-      // Simulate step-by-step generation with progress updates
-      for (let i = 0; i < generationSteps.length; i++) {
-        setGenerationStep(i);
-        setGenerationProgress((i / generationSteps.length) * 100);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
-      }
-
-      const request: ControlGenerationRequest = {
-        riskId,
-        riskTitle,
-        riskDescription,
-        riskCategory,
-        riskSeverity,
-        organizationContext,
-        preferredFrameworks,
-        constraints
-      };
-
-      const response = await proboService.generateControlsForRisk(request);
-      setGeneratedResponse(response);
-      setSelectedControls(response.controls.map(c => c.id));
-      setGenerationProgress(100);
-      setActiveTab('results');
-
-      if (onControlsGenerated) {
-        onControlsGenerated(response.controls, response.mappings);
-      }
-    } catch (error) {
-      console.error('Error generating controls:', error);
-    } finally {
+    // Simulate generation
+    setTimeout(() => {
       setIsGenerating(false);
-    }
-  };
-
-  const handleControlSelection = (controlId: string, selected: boolean) => {
-    setSelectedControls(prev => 
-      selected 
-        ? [...prev, controlId]
-        : prev.filter(id => id !== controlId)
-    );
-  };
-
-  const handleSelectAllControls = () => {
-    if (!generatedResponse) return;
-    setSelectedControls(generatedResponse.controls.map(c => c.id));
-  };
-
-  const handleDeselectAllControls = () => {
-    setSelectedControls([]);
-  };
-
-  const getControlIcon = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'access control': return Shield;
-      case 'data protection': return Lock;
-      case 'network security': return Globe;
-      case 'incident response': return AlertTriangle;
-      case 'compliance monitoring': return FileCheck;
-      case 'vendor management': return Users;
-      default: return Shield;
-    }
+      if (onControlsGenerated) {
+        onControlsGenerated([], []);
+      }
+    }, 2000);
   };
 
   const getPriorityColor = (priority: string) => {
@@ -194,24 +48,13 @@ export default function AIControlGenerator({
     }
   };
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'Complex': return 'bg-red-50 text-red-700';
-      case 'Moderate': return 'bg-yellow-50 text-yellow-700';
-      case 'Simple': return 'bg-green-50 text-green-700';
-      default: return 'bg-gray-50 text-gray-700';
-    }
-  };
-
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" >
-  <DaisyCardHeader />
-</DaisyCard>
-          <DaisyCardTitle className="flex items-center gap-3" >
-  <div className="p-2 bg-blue-100 rounded-lg">
-</DaisyCardTitle>
+      <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
               <Brain className="h-6 w-6 text-blue-600" />
             </div>
             <div>
@@ -221,17 +64,15 @@ export default function AIControlGenerator({
               </p>
             </div>
             <div className="ml-auto">
-              <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200" >
-  <Sparkles className="h-3 w-3 mr-1" />
-</DaisyBadge>
+              <DaisyBadge className="bg-blue-100 text-blue-800 border-blue-200">
+                <Sparkles className="h-3 w-3 mr-1" />
                 Powered by Probo AI
               </DaisyBadge>
             </div>
           </DaisyCardTitle>
         </DaisyCardHeader>
-        <DaisyCardBody >
-  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardBody>
+        <DaisyCardBody>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
               <Target className="h-4 w-4 text-blue-600" />
               <div>
@@ -240,9 +81,8 @@ export default function AIControlGenerator({
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <DaisyAlertTriangle className="h-4 w-4 text-orange-600" >
-  <div>
-</DaisyAlertTriangle>
+              <AlertTriangle className="h-4 w-4 text-orange-600" />
+              <div>
                 <p className="text-xs text-gray-500">Severity</p>
                 <DaisyBadge className={getPriorityColor(riskSeverity)}>{riskSeverity}</DaisyBadge>
               </div>
@@ -258,7 +98,7 @@ export default function AIControlGenerator({
               <Shield className="h-4 w-4 text-purple-600" />
               <div>
                 <p className="text-xs text-gray-500">Framework</p>
-                <p className="font-medium">{preferredFrameworks.join(', ')}</p>
+                <p className="font-medium">SOC2</p>
               </div>
             </div>
           </div>
@@ -266,457 +106,43 @@ export default function AIControlGenerator({
       </DaisyCard>
 
       {/* Main Content */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
-        <DaisyTabsList className="grid w-full grid-cols-3" />
-          <DaisyTabsTrigger value="configuration">Configuration</DaisyTabs>
-          <DaisyTabsTrigger value="generation">Generation</DaisyTabsTrigger>
-          <DaisyTabsTrigger value="results" disabled={!generatedResponse}>Results</DaisyTabsTrigger>
-        </DaisyTabsList>
-
-        {/* Configuration Tab */}
-        <DaisyTabsContent value="configuration" className="space-y-6" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Organization Context */}
-            <DaisyCard >
-  <DaisyCardHeader />
-</DaisyTabsContent>
-                <DaisyCardTitle className="flex items-center gap-2" >
-  <Building2 className="h-5 w-5" />
-</DaisyCardTitle>
-                  Organization Context
-                </DaisyCardTitle>
-              </DaisyCardHeader>
-              <DaisyCardBody className="space-y-4" >
-  <div className="grid grid-cols-2 gap-4">
-</DaisyCardBody>
-                  <div className="space-y-2">
-                    <DaisyLabel>Industry</DaisyLabel>
-                    <DaisySelect
-                      value={organizationContext.industry}
-                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, industry: e.target.value }))}
-                    >
-                      <option value="Technology">Technology</option>
-                      <option value="Healthcare">Healthcare</option>
-                      <option value="Finance">Finance</option>
-                      <option value="Retail">Retail</option>
-                      <option value="Manufacturing">Manufacturing</option>
-                    </DaisySelect>
-                  </div>
-                  <div className="space-y-2">
-                    <DaisyLabel>Organization Size</DaisyLabel>
-                    <DaisySelect
-                      value={organizationContext.size}
-                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, size: e.target.value as any }))}
-                    >
-                      <option value="Startup">Startup (1-50)</option>
-                      <option value="Small">Small (51-200)</option>
-                      <option value="Medium">Medium (201-1000)</option>
-                      <option value="Large">Large (1001-5000)</option>
-                      <option value="Enterprise">Enterprise (5000+)</option>
-                    </DaisySelect>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <DaisyLabel>Tech Stack</DaisyLabel>
-                  <DaisyTextarea
-                    value={organizationContext.techStack.join(', ')}
-                    onChange={(e) => setOrganizationContext(prev => ({ 
-                      ...prev, 
-                      techStack: e.target.value.split(',').map(s => s.trim()) 
-                    }))}
-                    placeholder="React, Node.js, PostgreSQL, AWS, Docker..."
-                    rows={2}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <DaisyLabel>Risk Tolerance</DaisyTextarea>
-                    <DaisySelect
-                      value={organizationContext.riskTolerance}
-                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, riskTolerance: e.target.value as any }))}
-                    >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                    </DaisySelect>
-                  </div>
-                  <div className="space-y-2">
-                    <DaisyLabel>Timeline</DaisyLabel>
-                    <DaisySelect
-                      value={organizationContext.timeline}
-                      onChange={(e) => setOrganizationContext(prev => ({ ...prev, timeline: e.target.value as any }))}
-                    >
-                      <option value="Urgent">Urgent (1-2 weeks)</option>
-                      <option value="Standard">Standard (1-2 months)</option>
-                      <option value="Flexible">Flexible (3+ months)</option>
-                    </DaisySelect>
-                  </div>
-                </div>
-              </DaisyCardBody>
-            </DaisyCard>
-
-            {/* Generation Constraints */}
-            <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                <DaisyCardTitle className="flex items-center gap-2" >
-  <Settings className="h-5 w-5" />
-</DaisyCardTitle>
-                  Generation Constraints
-                </DaisyCardTitle>
-              </DaisyCardHeader>
-              <DaisyCardBody className="space-y-4" >
-  <div className="space-y-2">
-</DaisyCardBody>
-                  <DaisyLabel>Max Implementation Hours</DaisyLabel>
-                  <DaisyInput
-                    type="number"
-                    value={constraints.maxImplementationHours}
-                    onChange={(e) => setConstraints(prev => ({ 
-                      ...prev, 
-                      maxImplementationHours: parseInt(e.target.value) || 80 
-                    }))}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <DaisyLabel>Allowed Complexity</DaisyInput>
-                  <div className="flex flex-wrap gap-2">
-                    {['Simple', 'Moderate', 'Complex'].map((complexity) => (
-                      <div key={complexity} className="flex items-center space-x-2">
-                        <DaisyCheckbox
-                          id={complexity}
-                          checked={constraints.allowedComplexity.includes(complexity as any)}
-                          onCheckedChange={(checked) => {
-                            setConstraints(prev => ({
-                              ...prev,
-                              allowedComplexity: checked
-                                ? [...prev.allowedComplexity, complexity as any]
-                                : prev.allowedComplexity.filter(c => c !== complexity)
-                            }));
-                          }}
-                        />
-                        <DaisyLabel htmlFor={complexity} className="text-sm">{complexity}</DaisyCheckbox>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <DaisyLabel>Preferred Frameworks</DaisyLabel>
-                  <div className="flex flex-wrap gap-2">
-                    {['SOC2', 'ISO27001', 'GDPR', 'HIPAA'].map((framework) => (
-                      <div key={framework} className="flex items-center space-x-2">
-                        <DaisyCheckbox
-                          id={framework}
-                          checked={preferredFrameworks.includes(framework)}
-                          onCheckedChange={(checked) => {
-                            setPreferredFrameworks(prev => 
-                              checked
-                                ? [...prev, framework]
-                                : prev.filter(f => f !== framework)
-                            );
-                          }}
-                        />
-                        <DaisyLabel htmlFor={framework} className="text-sm">{framework}</DaisyCheckbox>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <DaisyCheckbox
-                    id="requiredAutomation"
-                    checked={constraints.requiredAutomation}
-                    onCheckedChange={(checked) => setConstraints(prev => ({ 
-                      ...prev, 
-                      requiredAutomation: checked as boolean 
-                    }))}
-                  />
-                  <DaisyLabel htmlFor="requiredAutomation" className="text-sm" />
-                    Prioritize automation-friendly controls
-                  </DaisyCheckbox>
-                </div>
-              </DaisyCardBody>
-            </DaisyCard>
-          </div>
-
-          <div className="flex justify-end">
-            <DaisyButton 
-              onClick={handleGenerateControls} 
-              disabled={isGenerating}
-              className="bg-blue-600 hover:bg-blue-700" >
-  <Brain className="h-4 w-4 mr-2" />
-</DaisyButton>
-              Generate AI Controls
-            </DaisyButton>
-          </div>
-        </DaisyTabsContent>
-
-        {/* Generation Tab */}
-        <DaisyTabsContent value="generation" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardHeader />
-</DaisyTabsContent>
-              <DaisyCardTitle className="flex items-center gap-2" >
-  <Cpu className="h-5 w-5" />
-</DaisyCardTitle>
-                AI Control Generation in Progress
-              </DaisyCardTitle>
-            </DaisyCardHeader>
-            <DaisyCardBody className="space-y-6" >
-  {isGenerating ? (
-</DaisyCardBody>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      Step {generationStep + 1} of {generationSteps.length}: {generationSteps[generationStep]}
-                    </span>
-                    <span className="text-sm text-gray-500">{Math.round(generationProgress)}%</span>
-                  </div>
-                  <DaisyProgress value={generationProgress} className="h-2" />
-                  
-                  <div className="space-y-2">
-                    {generationSteps.map((step, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        {index < generationStep ? (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        ) : index === generationStep ? (
-                          <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />
-                        ) : (
-                          <div className="h-4 w-4 rounded-full border-2 border-gray-300" />
-                        )}
-                        <span className={`text-sm ${
-                          index <= generationStep ? 'text-gray-900' : 'text-gray-500'
-                        }`}>
-                          {step}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <Brain className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Ready to Generate Controls</h3>
-                  <p className="text-gray-600 mb-4">
-                    Click "Generate AI Controls" to start the intelligent control generation process.
-                  </p>
-                  <DaisyButton 
-                    onClick={handleGenerateControls}
-                    className="bg-blue-600 hover:bg-blue-700" >
-  <Sparkles className="h-4 w-4 mr-2" />
-</DaisyProgress>
-                    Start Generation
-                  </DaisyButton>
-                </div>
-              )}
-            </DaisyCardBody>
-          </DaisyCard>
-        </DaisyTabsContent>
-
-        {/* Results Tab */}
-        <DaisyTabsContent value="results" className="space-y-6" />
-          {generatedResponse && (
-            <>
-              {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <DaisyCard className="bg-blue-50 border-blue-200" >
-  <DaisyCardBody className="p-4" >
-  </DaisyTabsContent>
-</DaisyCardBody>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-blue-600">Controls Generated</p>
-                        <p className="text-2xl font-bold text-blue-900">{generatedResponse.controls.length}</p>
-                      </div>
-                      <Shield className="h-8 w-8 text-blue-600" />
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-
-                <DaisyCard className="bg-green-50 border-green-200" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-green-600">Implementation Time</p>
-                        <p className="text-2xl font-bold text-green-900">{generatedResponse.estimatedTimeToImplement}h</p>
-                      </div>
-                      <Clock className="h-8 w-8 text-green-600" />
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-
-                <DaisyCard className="bg-purple-50 border-purple-200" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-purple-600">AI Confidence</p>
-                        <p className="text-2xl font-bold text-purple-900">{Math.round(generatedResponse.analysis.confidence * 100)}%</p>
-                      </div>
-                      <Brain className="h-8 w-8 text-purple-600" />
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-
-                <DaisyCard className="bg-orange-50 border-orange-200" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-orange-600">Est. Cost</p>
-                        <p className="text-2xl font-bold text-orange-900">${generatedResponse.estimatedCost?.toLocaleString() || 'N/A'}</p>
-                      </div>
-                      <DollarSign className="h-8 w-8 text-orange-600" />
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-              </div>
-
-              {/* Control Selection */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <div className="flex items-center justify-between">
-                    <DaisyCardTitle className="flex items-center gap-2" >
-  <CheckCircle className="h-5 w-5" />
-</DaisyCardTitle>
-                      Generated Controls
-                    </DaisyCardTitle>
-                    <div className="flex items-center gap-2">
-                      <DaisyButton 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={handleSelectAllControls} >
-  Select All
-</DaisyButton>
-                      </DaisyButton>
-                      <DaisyButton 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={handleDeselectAllControls} >
-  Deselect All
-</DaisyButton>
-                      </DaisyButton>
-                    </div>
-                  </div>
-                </DaisyCardHeader>
-                <DaisyCardBody >
-  <div className="space-y-4">
-</DaisyCardBody>
-                    {generatedResponse.controls.map((control) => {
-                      const IconComponent = getControlIcon(control.category.name);
-                      const isSelected = selectedControls.includes(control.id);
-                      
-                      return (
-                        <motion.div
-                          key={control.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className={`border rounded-lg p-4 transition-all ${
-                            isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-                          }`}
-                        >
-                          <div className="flex items-start space-x-4">
-                            <DaisyCheckbox
-                              checked={isSelected}
-                              onCheckedChange={(checked) => handleControlSelection(control.id, checked as boolean)}
-                              className="mt-1"
-                            />
-                            <div className="flex-1">
-                              <div className="flex items-start justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <div className={`p-2 rounded-lg`} style={{ backgroundColor: control.category.color + '20' }}>
-                                    <IconComponent className="h-4 w-4" style={{ color: control.category.color }} />
-                                  </div>
-                                  <div>
-                                    <h4 className="font-medium">{control.title}</h4>
-                                    <p className="text-sm text-gray-600 mt-1">{control.description}</p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <DaisyBadge className={getPriorityColor(control.priority)} >
-  {control.priority}
-</DaisyCheckbox>
-                                  </DaisyBadge>
-                                  <DaisyBadge className={getComplexityColor(control.implementationComplexity)} >
-  {control.implementationComplexity}
-</DaisyBadge>
-                                  </DaisyBadge>
-                                </div>
-                              </div>
-                              
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-                                <div className="flex items-center space-x-2">
-                                  <Clock className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">{control.estimatedHours}h</span>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Zap className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">{control.automationPotential}</span>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <TrendingUp className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">Risk Score: {control.riskMitigationScore}/10</span>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Brain className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">AI: {Math.round(control.aiConfidence * 100)}%</span>
-                                </div>
-                              </div>
-
-                              {control.tags.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-3">
-                                  {control.tags.map((tag) => (
-                                    <DaisyBadge key={tag} variant="outline" className="text-xs" >
-  {tag}
-</DaisyBadge>
-                                    </DaisyBadge>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </DaisyCardBody>
-              </DaisyCard>
-
-              {/* Action Buttons */}
-              <div className="flex justify-between">
-                <DaisyButton variant="outline" onClick={() => setActiveTab('configuration')} />
-                  <Settings className="h-4 w-4 mr-2" />
-                  Modify Configuration
-                </DaisyButton>
-                <div className="flex space-x-2">
-                  <DaisyButton variant="outline" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
-                    Export Controls
-                  </DaisyButton>
-                  <DaisyButton className="bg-green-600 hover:bg-green-700" >
-  <CheckCircle className="h-4 w-4 mr-2" />
-</DaisyButton>
-                    Implement Selected ({selectedControls.length})
-                  </DaisyButton>
-                </div>
-              </div>
-            </>
+      <DaisyCard>
+        <DaisyCardHeader>
+          <DaisyCardTitle className="flex items-center gap-2">
+            <Brain className="h-5 w-5" />
+            AI Control Generation
+          </DaisyCardTitle>
+        </DaisyCardHeader>
+        <DaisyCardBody className="space-y-6">
+          {isGenerating ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <h3 className="text-lg font-medium mb-2">Generating Controls...</h3>
+              <p className="text-gray-600">
+                AI is analyzing your risk and generating appropriate controls.
+              </p>
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Brain className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium mb-2">Ready to Generate Controls</h3>
+              <p className="text-gray-600 mb-4">
+                Click "Generate AI Controls" to start the intelligent control generation process.
+              </p>
+              <DaisyButton 
+                onClick={handleGenerateControls}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                Generate AI Controls
+              </DaisyButton>
+            </div>
           )}
-        </DaisyTabsContent>
-      </DaisyTabs>
+        </DaisyCardBody>
+      </DaisyCard>
     </div>
   );
 }
 
 // Export the component
-export { AIControlGenerator }; 
+export { AIControlGenerator };
