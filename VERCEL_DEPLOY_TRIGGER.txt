@@ -1,0 +1,7 @@
+JSX fixes deployed at Thu Aug 01 01:57:00 EDT 2025
+Commit: cbb698c
+Fixed files:
+- src/pages/workflows/WorkflowPage.tsx
+- src/app/auth/forgot-password/page.tsx
+- src/app/auth/login/page.tsx  
+- src/app/billing/upgrade/page.tsx
