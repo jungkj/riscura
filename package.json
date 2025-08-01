@@ -132,7 +132,7 @@
     "dev:test": "npm run db:push && npm run dev",
     "clean": "rm -rf .next node_modules/.cache",
     "clean:all": "rm -rf .next node_modules package-lock.json && npm install",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "jsx:monitor": "node scripts/jsx-error-monitor.cjs scan",
     "jsx:report": "node scripts/jsx-error-monitor.cjs report",
     "jsx:init": "node scripts/jsx-error-monitor.cjs init",
