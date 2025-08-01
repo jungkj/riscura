@@ -487,17 +487,14 @@ export default function WorkflowPage() {
 
         <DaisyTabsContent value="active-steps" className="space-y-4">
           <DaisyCard>
-  <DaisyCardHeader />
-</DaisyTabsContent>
+            <DaisyCardHeader>
               <DaisyCardTitle>Active Steps ({activeSteps.length})</DaisyCardTitle>
-              <DaisyCardDescription >
-  Steps requiring attention across all active workflows
-</DaisyCardDescription>
-              </p>
-            
-            <DaisyCardContent >
-  {activeSteps.length === 0 ? (
-</DaisyCardContent>
+              <DaisyCardDescription>
+                Steps requiring attention across all active workflows
+              </DaisyCardDescription>
+            </DaisyCardHeader>
+            <DaisyCardContent>
+              {activeSteps.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>No active steps</p>
@@ -510,10 +507,8 @@ export default function WorkflowPage() {
                     const isOverdue = new Date(step.dueDate) < new Date();
 
                     return (
-                      <DaisyCard key={step.id} className={isOverdue ? 'border-red-200' : ''} >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+                      <DaisyCard key={step.id} className={isOverdue ? 'border-red-200' : ''}>
+                        <DaisyCardContent className="p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-start space-x-3">
                               {getStepStatusIcon(step.status)}
@@ -524,9 +519,8 @@ export default function WorkflowPage() {
                                     {step.type}
                                   </DaisyBadge>
                                   {isOverdue && (
-                                    <DaisyBadge variant="error" className="text-xs" >
-  Overdue
-</DaisyBadge>
+                                    <DaisyBadge className="text-xs bg-red-100 text-red-800">
+                                      Overdue
                                     </DaisyBadge>
                                   )}
                                 </div>
@@ -539,7 +533,7 @@ export default function WorkflowPage() {
                                     <span>{step.assignee}</span>
                                   </div>
                                   <div className="flex items-center space-x-1">
-                                    <DaisyCalendar className="h-3 w-3" />
+                                    <Calendar className="h-3 w-3" />
                                     <span>Due: {formatDate(step.dueDate)}</span>
                                   </div>
                                 </div>
@@ -551,12 +545,12 @@ export default function WorkflowPage() {
                                   <DaisyButton
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'rejected')} />
+                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'rejected')}>
                                     Reject
-                                  </DaisyCalendar>
+                                  </DaisyButton>
                                   <DaisyButton
                                     size="sm"
-                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'completed')} />
+                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'completed')}>
                                     Complete
                                   </DaisyButton>
                                 </>
@@ -573,20 +567,17 @@ export default function WorkflowPage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="analytics" className="space-y-4" />
+        <DaisyTabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DaisyCard >
-  <DaisyCardHeader />
-</DaisyTabsContent>
+            <DaisyCard>
+              <DaisyCardHeader>
                 <DaisyCardTitle>Workflow Performance</DaisyCardTitle>
-                <DaisyCardDescription >
-  Average completion times and success rates
-</DaisyCardDescription>
-                </p>
-              
-              <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardContent>
+                <DaisyCardDescription>
+                  Average completion times and success rates
+                </DaisyCardDescription>
+              </DaisyCardHeader>
+              <DaisyCardContent>
+                <div className="space-y-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
                       {stats.avgCompletionTime} days
@@ -602,18 +593,15 @@ export default function WorkflowPage() {
               </DaisyCardContent>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
+            <DaisyCard>
+              <DaisyCardHeader>
                 <DaisyCardTitle>Step Analytics</DaisyCardTitle>
-                <DaisyCardDescription >
-  Step completion rates and average times
-</DaisyCardDescription>
-                </p>
-              
-              <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardContent>
+                <DaisyCardDescription>
+                  Step completion rates and average times
+                </DaisyCardDescription>
+              </DaisyCardHeader>
+              <DaisyCardContent>
+                <div className="space-y-4">
                   {workflows.slice(0, 3).map(workflow => (
                     <div key={workflow.id} className="border rounded-lg p-3">
                       <div className="font-medium text-sm mb-2">{workflow.name}</div>
@@ -642,12 +630,10 @@ export default function WorkflowPage() {
       {/* Workflow Details Dialog */}
       <DaisyDialog open={showWorkflowDialog} onOpenChange={setShowWorkflowDialog}>
         <DaisyDialogContent className="max-w-2xl">
-  <DaisyDialogHeader />
-</DaisyDialog>
+          <DaisyDialogHeader>
             <DaisyDialogTitle>{selectedWorkflow?.name}</DaisyDialogTitle>
-            <DaisyDialogDescription >
-  Workflow details and configuration
-</DaisyDialogDescription>
+            <DaisyDialogDescription>
+              Workflow details and configuration
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           {selectedWorkflow && (
@@ -659,12 +645,10 @@ export default function WorkflowPage() {
       {/* Workflow Steps Dialog */}
       <DaisyDialog open={showStepsDialog} onOpenChange={setShowStepsDialog}>
         <DaisyDialogContent className="max-w-4xl">
-  <DaisyDialogHeader />
-</DaisyDialog>
+          <DaisyDialogHeader>
             <DaisyDialogTitle>{selectedWorkflow?.name} - Steps</DaisyDialogTitle>
-            <DaisyDialogDescription >
-  Workflow step details and progress
-</DaisyDialogDescription>
+            <DaisyDialogDescription>
+              Workflow step details and progress
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           {selectedWorkflow && (
@@ -743,12 +727,10 @@ const WorkflowSteps: React.FC<WorkflowStepsProps> = ({ workflow }) => {
       pending: <Clock className="h-4 w-4 text-gray-500" />,
       in_progress: <Play className="h-4 w-4 text-blue-500" />,
       completed: <CheckCircle className="h-4 w-4 text-green-500" />,
-      rejected: <DaisyAlertTriangle className="h-4 w-4 text-red-500" >
-  ,
-</DaisyAlertTriangle>
+      rejected: <AlertTriangle className="h-4 w-4 text-red-500" />,
       skipped: <ArrowRight className="h-4 w-4 text-gray-400" />,
     };
-    return icons[status];
+    return icons[status] || <Clock className="h-4 w-4 text-gray-500" />;
   };
 
   return (
@@ -759,10 +741,8 @@ const WorkflowSteps: React.FC<WorkflowStepsProps> = ({ workflow }) => {
       
       <div className="space-y-3">
         {workflow.steps.map((step, index) => (
-          <DaisyCard key={step.id} >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard key={step.id}>
+            <DaisyCardContent className="p-4">
               <div className="flex items-start space-x-3">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm font-medium">
                   {index + 1}

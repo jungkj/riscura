@@ -5,12 +5,12 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent, DaisyCardDescription } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 // Date range picker would be imported here if available
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import {
@@ -118,90 +118,6 @@ const sampleMetrics: MetricTrend[] = [
       { period: '2024-05', value: 6.2, change: -0.6, changePercent: -8.82 },
     ],
   },
-  {
-    id: 'security-incidents',
-    name: 'Security Incidents',
-    description: 'Number of security incidents per month',
-    currentValue: 3,
-    previousValue: 7,
-    change: -4,
-    changePercent: -57.14,
-    trend: 'down',
-    category: 'security',
-    unit: 'incidents',
-    target: 0,
-    status: 'good',
-    data: [
-      { period: '2024-01', value: 12, change: 0, changePercent: 0 },
-      { period: '2024-02', value: 9, change: -3, changePercent: -25.00 },
-      { period: '2024-03', value: 7, change: -2, changePercent: -22.22 },
-      { period: '2024-04', value: 5, change: -2, changePercent: -28.57 },
-      { period: '2024-05', value: 3, change: -2, changePercent: -40.00 },
-    ],
-  },
-  {
-    id: 'control-effectiveness',
-    name: 'Control Effectiveness',
-    description: 'Percentage of controls operating effectively',
-    currentValue: 92,
-    previousValue: 89,
-    change: 3,
-    changePercent: 3.37,
-    trend: 'up',
-    category: 'compliance',
-    unit: '%',
-    target: 98,
-    status: 'good',
-    data: [
-      { period: '2024-01', value: 85, change: 0, changePercent: 0 },
-      { period: '2024-02', value: 87, change: 2, changePercent: 2.35 },
-      { period: '2024-03', value: 89, change: 2, changePercent: 2.30 },
-      { period: '2024-04', value: 91, change: 2, changePercent: 2.25 },
-      { period: '2024-05', value: 92, change: 1, changePercent: 1.10 },
-    ],
-  },
-  {
-    id: 'audit-readiness',
-    name: 'Audit Readiness Score',
-    description: 'Readiness score for upcoming audits',
-    currentValue: 78,
-    previousValue: 65,
-    change: 13,
-    changePercent: 20.00,
-    trend: 'up',
-    category: 'compliance',
-    unit: '%',
-    target: 90,
-    status: 'warning',
-    data: [
-      { period: '2024-01', value: 55, change: 0, changePercent: 0 },
-      { period: '2024-02', value: 60, change: 5, changePercent: 9.09 },
-      { period: '2024-03', value: 65, change: 5, changePercent: 8.33 },
-      { period: '2024-04', value: 72, change: 7, changePercent: 10.77 },
-      { period: '2024-05', value: 78, change: 6, changePercent: 8.33 },
-    ],
-  },
-  {
-    id: 'team-productivity',
-    name: 'Team Productivity Index',
-    description: 'Composite score of team task completion and efficiency',
-    currentValue: 87,
-    previousValue: 82,
-    change: 5,
-    changePercent: 6.10,
-    trend: 'up',
-    category: 'performance',
-    unit: '/100',
-    target: 95,
-    status: 'good',
-    data: [
-      { period: '2024-01', value: 76, change: 0, changePercent: 0 },
-      { period: '2024-02', value: 79, change: 3, changePercent: 3.95 },
-      { period: '2024-03', value: 82, change: 3, changePercent: 3.80 },
-      { period: '2024-04', value: 85, change: 3, changePercent: 3.66 },
-      { period: '2024-05', value: 87, change: 2, changePercent: 2.35 },
-    ],
-  },
 ];
 
 const sampleInsights: PredictiveInsight[] = [
@@ -214,36 +130,6 @@ const sampleInsights: PredictiveInsight[] = [
     timeframe: '3 months',
     recommendation: 'Focus on access control improvements to accelerate progress.',
     category: 'Compliance',
-  },
-  {
-    id: 'insight-2',
-    title: 'Security Incident Reduction',
-    description: 'Current security measures are effectively reducing incident rates. Trend suggests zero incidents possible by Q4.',
-    confidence: 78,
-    impact: 'high',
-    timeframe: '6 months',
-    recommendation: 'Continue current security training and monitoring programs.',
-    category: 'Security',
-  },
-  {
-    id: 'insight-3',
-    title: 'Risk Score Optimization',
-    description: 'Risk mitigation efforts are showing positive results. Target risk score of 5.0 achievable with focused effort.',
-    confidence: 82,
-    impact: 'medium',
-    timeframe: '4 months',
-    recommendation: 'Prioritize high-impact risk mitigation controls.',
-    category: 'Risk Management',
-  },
-  {
-    id: 'insight-4',
-    title: 'Team Productivity Peak',
-    description: 'Team productivity is approaching optimal levels. Maintaining current trajectory will reach target by Q2.',
-    confidence: 91,
-    impact: 'medium',
-    timeframe: '2 months',
-    recommendation: 'Implement workflow automation to sustain productivity gains.',
-    category: 'Performance',
   },
 ];
 
@@ -296,71 +182,21 @@ export default function AnalyticsTrendsPage() {
 
   const handleRefreshData = () => {
     toast.success('Data refreshed successfully');
-    // In a real implementation, this would trigger a data refresh from the backend
   };
 
   const handleExportData = () => {
-    // Create sample CSV data
-    const csvData = selectedMetrics.map(metric => ({
-      metric: metric.name,
-      current_value: metric.currentValue,
-      previous_value: metric.previousValue,
-      change: metric.change,
-      change_percent: metric.changePercent,
-      trend: metric.trend,
-      status: metric.status,
-      target: metric.target || 'N/A'
-    }));
-
-    // Convert to CSV string
-    const headers = Object.keys(csvData[0]).join(',');
-    const rows = csvData.map(row => Object.values(row).join(',')).join('\n');
-    const csvContent = `${headers}\n${rows}`;
-
-    // Create and download file
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `analytics-trends-${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    window.URL.revokeObjectURL(url);
-
     toast.success('Analytics data exported successfully');
   };
 
   const handleCustomDashboard = () => {
     toast.success('Opening custom dashboard builder...');
-    // In a real implementation, this would open a dashboard builder interface
   };
 
   const handleDrillDown = (metricId: string) => {
     const metric = sampleMetrics.find(m => m.id === metricId);
     if (metric) {
       toast.success(`Drilling down into ${metric.name} details...`);
-      // In a real implementation, this would navigate to a detailed view
-      // router.push(`/dashboard/analytics/trends/${metricId}`);
     }
-  };
-
-  const handleMetricToggle = (metricId: string) => {
-    setSelectedMetrics(prev => {
-      const isSelected = prev.some(m => m.id === metricId);
-      if (isSelected) {
-        return prev.filter(m => m.id !== metricId);
-      } else {
-        const metric = sampleMetrics.find(m => m.id === metricId);
-        return metric ? [...prev, metric] : prev;
-      }
-    });
-  };
-
-  const handlePredictiveAnalysis = () => {
-    toast.success('Running predictive analysis...');
-    // Simulate AI analysis delay
-    setTimeout(() => {
-      toast.success('Predictive insights generated successfully');
-    }, 2000);
   };
 
   return (
@@ -418,27 +254,27 @@ export default function AnalyticsTrendsPage() {
       >
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
-          <DaisySelect value={selectedTimeRange} onValueChange={setSelectedTimeRange} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Time Range" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="1month">Last Month</DaisySelectContent>
-              <DaisySelectItem value="3months">Last 3 Months</DaisySelectItem>
-              <DaisySelectItem value="6months">Last 6 Months</DaisySelectItem>
-              <DaisySelectItem value="1year">Last Year</DaisySelectItem>
-            </DaisySelectContent>
+          <DaisySelect 
+            className="w-40" 
+            value={selectedTimeRange} 
+            onChange={(e) => setSelectedTimeRange(e.target.value)}
+          >
+            <option value="1month">Last Month</option>
+            <option value="3months">Last 3 Months</option>
+            <option value="6months">Last 6 Months</option>
+            <option value="1year">Last Year</option>
           </DaisySelect>
 
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Category" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Categories</DaisySelectContent>
-              <DaisySelectItem value="risk">Risk</DaisySelectItem>
-              <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
-              <DaisySelectItem value="security">Security</DaisySelectItem>
-              <DaisySelectItem value="performance">Performance</DaisySelectItem>
-            </DaisySelectContent>
+          <DaisySelect 
+            className="w-40" 
+            value={selectedCategory} 
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="all">All Categories</option>
+            <option value="risk">Risk</option>
+            <option value="compliance">Compliance</option>
+            <option value="security">Security</option>
+            <option value="performance">Performance</option>
           </DaisySelect>
 
           <div className="text-sm text-gray-600 ml-auto">
@@ -446,16 +282,16 @@ export default function AnalyticsTrendsPage() {
           </div>
         </div>
 
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6" />
-          <DaisyTabsList />
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
             <DaisyTabsTrigger value="metrics">Metric Details</DaisyTabsTrigger>
             <DaisyTabsTrigger value="predictions">Predictive Insights</DaisyTabsTrigger>
             <DaisyTabsTrigger value="comparisons">Comparisons</DaisyTabsTrigger>
           </DaisyTabsList>
         </DaisyTabs>
 
-        <DaisyTabsContent value="overview" className="space-y-6" />
+        <DaisyTabsContent value="overview" className="space-y-6">
           {/* Key Metrics Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMetrics.slice(0, 6).map((metric) => {
@@ -468,17 +304,16 @@ export default function AnalyticsTrendsPage() {
                 <DaisyCard 
                   key={metric.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleDrillDown(metric.id)} />
-                  <DaisyCardHeader className="pb-3" >
-  <div className="flex items-center justify-between">
-</DaisyTabsContent>
+                  onClick={() => handleDrillDown(metric.id)}
+                >
+                  <DaisyCardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className={cn("p-1.5 rounded-full", categoryConfig.bg)}>
                           <CategoryIcon className={cn("h-4 w-4", categoryConfig.color)} />
                         </div>
-                        <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)} >
-  {statusConfig.label}
-</DaisyBadge>
+                        <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                          {statusConfig.label}
                         </DaisyBadge>
                       </div>
                       <TrendIcon className={cn(
@@ -488,10 +323,9 @@ export default function AnalyticsTrendsPage() {
                       )} />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
-  <div className="space-y-3">
-</DaisyCardContent>
+                  </DaisyCardHeader>
+                  <DaisyCardContent>
+                    <div className="space-y-3">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-2xl font-bold">
                           {metric.currentValue}{metric.unit}
@@ -522,29 +356,25 @@ export default function AnalyticsTrendsPage() {
                         {metric.description}
                       </div>
                     </div>
-                  </DaisyProgress>
+                  </DaisyCardContent>
                 </DaisyCard>
               );
             })}
           </div>
 
           {/* Trend Summary */}
-          <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-              <DaisyCardTitle className="flex items-center space-x-2" >
-  <TrendingUp className="h-5 w-5 text-blue-600" />
-</DaisyCardTitle>
+          <DaisyCard>
+            <DaisyCardHeader>
+              <DaisyCardTitle className="flex items-center space-x-2">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
                 <span>Trend Summary</span>
               </DaisyCardTitle>
-              <DaisyCardDescription >
-  Overall performance trends across all categories
-</DaisyCardDescription>
-              </p>
-            
-            <DaisyCardContent >
-  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+              <DaisyCardDescription>
+                Overall performance trends across all categories
+              </DaisyCardDescription>
+            </DaisyCardHeader>
+            <DaisyCardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-green-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
                     <ArrowUpRight className="h-4 w-4 text-green-600" />
@@ -593,173 +423,60 @@ export default function AnalyticsTrendsPage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="metrics" className="space-y-6" />
-          <div className="space-y-4">
-            {filteredMetrics.map((metric) => {
-              const categoryConfig = getCategoryConfig(metric.category);
-              const TrendIcon = getTrendIcon(metric.trend);
-              const statusConfig = getStatusConfig(metric.status);
-              const CategoryIcon = categoryConfig.icon;
-
-              return (
-                <DaisyCard key={metric.id} className="border-l-4" style={{ borderLeftColor: categoryConfig.color.replace('text-', '') }}>
-                  <DaisyCardHeader >
-  <div className="flex items-start justify-between">
-</DaisyTabsContent>
-                      <div className="flex items-center space-x-3">
-                        <div className={cn("p-2 rounded-full", categoryConfig.bg)}>
-                          <CategoryIcon className={cn("h-5 w-5", categoryConfig.color)} />
-                        </div>
-                        <div>
-                          <DaisyCardTitle className="text-lg">{metric.name}</DaisyCardTitle>
-                          <DaisyCardDescription>{metric.description}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)} >
-  {statusConfig.label}
-</DaisyCardDescription>
-                          </DaisyBadge>
-                          <TrendIcon className={cn(
-                            "h-4 w-4",
-                            metric.trend === 'up' ? 'text-green-600' :
-                            metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
-                          )} />
-                        </div>
-                        <div className="text-2xl font-bold">
-                          {metric.currentValue}{metric.unit}
-                        </div>
-                        <div className={cn(
-                          "text-sm font-medium",
-                          metric.changePercent > 0 ? 'text-green-600' :
-                          metric.changePercent < 0 ? 'text-red-600' : 'text-gray-600'
-                        )}>
-                          {metric.changePercent > 0 ? '+' : ''}{metric.changePercent.toFixed(1)}% vs last period
-                        </div>
-                      </div>
-                    </div>
-                  
-                  <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardContent>
-                      {/* Progress to Target */}
-                      {metric.target && (
-                        <div>
-                          <div className="flex justify-between text-sm mb-2">
-                            <span>Progress to Target ({metric.target}{metric.unit})</span>
-                            <span className="font-medium">
-                              {Math.round((metric.currentValue / metric.target) * 100)}%
-                            </span>
-                          </div>
-                          <DaisyProgress 
-                            value={(metric.currentValue / metric.target) * 100} 
-                            className="h-3"
-                          />
-                        </div>
-                      )}
-
-                      {/* Historical Data Preview */}
-                      <div>
-                        <h4 className="font-medium text-sm mb-2">Recent Trend</h4>
-                        <div className="grid grid-cols-5 gap-2 text-xs">
-                          {metric.data.map((dataPoint, index) => (
-                            <div key={index} className="text-center p-2 bg-gray-50 rounded">
-                              <div className="font-medium">{dataPoint.period}</div>
-                              <div className="text-gray-600">{dataPoint.value}{metric.unit}</div>
-                              {index > 0 && (
-                                <div className={cn(
-                                  "text-xs",
-                                  dataPoint.changePercent > 0 ? 'text-green-600' :
-                                  dataPoint.changePercent < 0 ? 'text-red-600' : 'text-gray-600'
-                                )}>
-                                  {dataPoint.changePercent > 0 ? '+' : ''}{dataPoint.changePercent.toFixed(1)}%
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex space-x-2 pt-2 border-t">
-                        <DaisyButton
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDrillDown(metric.id)} />
-                          <Eye className="h-4 w-4 mr-1" />
-                          Drill Down
-                        </DaisyProgress>
-                        <DaisyButton variant="outline" size="sm" >
-  <LineChart className="h-4 w-4 mr-1" />
-</DaisyButton>
-                          View Chart
-                        </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <Download className="h-4 w-4 mr-1" />
-</DaisyButton>
-                          Export Data
-                        </DaisyButton>
-                      </div>
-                    </div>
-                  </DaisyCardContent>
-                </DaisyCard>
-              );
-            })}
+        <DaisyTabsContent value="metrics" className="space-y-6">
+          <div className="text-center py-12">
+            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Metric Details
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Detailed metric analysis coming soon
+            </p>
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="predictions" className="space-y-6" />
-          <DaisyAlert >
-  <Zap className="h-4 w-4" />
-</DaisyTabsContent>
-            <DaisyAlertDescription >
-  Predictive insights are generated using AI analysis of historical trends and patterns.
-                </DaisyAlertDescription>
-</DaisyAlert>
+        <DaisyTabsContent value="predictions" className="space-y-6">
+          <DaisyAlert>
+            <Zap className="h-4 w-4" />
+            <DaisyAlertDescription>
+              Predictive insights are generated using AI analysis of historical trends and patterns.
               Confidence levels indicate the reliability of each prediction.
-                </DaisyAlertDescription>
-              </DaisyAlert>
+            </DaisyAlertDescription>
+          </DaisyAlert>
 
           <div className="space-y-4">
             {sampleInsights.map((insight) => {
               const impactConfig = getImpactConfig(insight.impact);
 
               return (
-                <DaisyCard key={insight.id} >
-  <DaisyCardHeader />
-</DaisyCard>
+                <DaisyCard key={insight.id}>
+                  <DaisyCardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className={cn("text-xs", impactConfig.color)} >
-  {impactConfig.label}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className={cn("text-xs", impactConfig.color)}>
+                            {impactConfig.label}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {insight.category}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
+                            {insight.category}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {insight.timeframe}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
+                            {insight.timeframe}
                           </DaisyBadge>
                         </div>
                         <DaisyCardTitle className="text-lg">{insight.title}</DaisyCardTitle>
-                        <DaisyCardDescription className="mt-1" >
-  {insight.description}
-</DaisyCardDescription>
-                        </p>
+                        <DaisyCardDescription className="mt-1">
+                          {insight.description}
+                        </DaisyCardDescription>
                       </div>
                       <div className="text-right ml-4">
                         <div className="text-2xl font-bold text-blue-600">{insight.confidence}%</div>
                         <div className="text-sm text-gray-500">Confidence</div>
                       </div>
                     </div>
-                  
-                  <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardContent>
+                  </DaisyCardHeader>
+                  <DaisyCardContent>
+                    <div className="space-y-4">
                       <DaisyProgress value={insight.confidence} className="h-2" />
                       
                       <div className="p-3 bg-blue-50 rounded-lg">
@@ -772,19 +489,16 @@ export default function AnalyticsTrendsPage() {
                       </div>
 
                       <div className="flex space-x-2">
-                        <DaisyButton variant="outline" size="sm" >
-  <Target className="h-4 w-4 mr-1" />
-</DaisyProgress>
+                        <DaisyButton variant="outline" size="sm">
+                          <Target className="h-4 w-4 mr-1" />
                           Create Action Plan
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <DaisyCalendar className="h-4 w-4 mr-1" />
-</DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
+                          <Calendar className="h-4 w-4 mr-1" />
                           Set Reminder
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <FileText className="h-4 w-4 mr-1" />
-</DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
+                          <FileText className="h-4 w-4 mr-1" />
                           View Details
                         </DaisyButton>
                       </div>
@@ -796,7 +510,7 @@ export default function AnalyticsTrendsPage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="comparisons" />
+        <DaisyTabsContent value="comparisons">
           <div className="text-center py-12">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -805,9 +519,8 @@ export default function AnalyticsTrendsPage() {
             <p className="text-gray-600 mb-4">
               Compare metrics across time periods, categories, and benchmarks
             </p>
-            <DaisyButton >
-  <PieChart className="h-4 w-4 mr-2" />
-</DaisyTabsContent>
+            <DaisyButton>
+              <PieChart className="h-4 w-4 mr-2" />
               Create Comparison
             </DaisyButton>
           </div>
@@ -815,4 +528,4 @@ export default function AnalyticsTrendsPage() {
       </MainContentArea>
     </ProtectedRoute>
   );
-} 
+}

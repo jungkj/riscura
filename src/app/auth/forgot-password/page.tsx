@@ -20,17 +20,17 @@ export default function ForgotPasswordPage() {
 
     try {
       // In demo mode, just show success message
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsSubmitted(true);
       toast({
-        title: "Reset link sent",
-        description: "Check your email for password reset instructions.",
+        title: 'Reset link sent',
+        description: 'Check your email for password reset instructions.',
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to send reset email. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to send reset email. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -55,8 +55,8 @@ export default function ForgotPasswordPage() {
               Didn't receive the email? Check your spam folder or try again.
             </p>
             <div className="space-y-2">
-              <DaisyButton 
-                variant="outline" 
+              <DaisyButton
+                variant="outline"
                 className="w-full"
                 onClick={() => {
                   setIsSubmitted(false);
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
             Enter your email address and we'll send you a link to reset your password.
           </p>
         </DaisyCardHeader>
-        
+
         <DaisyCardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -102,14 +102,11 @@ export default function ForgotPasswordPage() {
                 disabled={isLoading}
               />
             </div>
-            
-            <DaisyButton 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading || !email}>
+
+            <DaisyButton type="submit" className="w-full" disabled={isLoading || !email}>
               {isLoading ? 'Sending...' : 'Send reset link'}
             </DaisyButton>
-            
+
             <Link href="/auth/login">
               <DaisyButton variant="ghost" className="w-full">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -121,4 +118,4 @@ export default function ForgotPasswordPage() {
       </DaisyCard>
     </div>
   );
-} 
+}

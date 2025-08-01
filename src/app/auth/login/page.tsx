@@ -27,7 +27,7 @@ function LoginForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
@@ -38,7 +38,7 @@ function LoginForm() {
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       rememberMe: e.target.checked,
     }));
@@ -61,11 +61,11 @@ function LoginForm() {
     try {
       // Store the redirect URL in session storage
       sessionStorage.setItem('oauth_redirect', redirectTo);
-      
+
       // Use our working simple OAuth implementation with remember me preference and redirect
       const redirectParam = encodeURIComponent(redirectTo);
       window.location.href = `/api/google-oauth/login?remember=${formData.rememberMe}&redirect=${redirectParam}`;
-      
+
       // Note: This won't return since we're redirecting
       return;
     } catch (err) {
@@ -97,14 +97,10 @@ function LoginForm() {
               priority
             />
           </div>
-          
+
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-primary">
-              Welcome back
-            </h1>
-            <p className="text-base-content/70">
-              Sign in to your Riscura account
-            </p>
+            <h1 className="text-3xl font-bold text-primary">Welcome back</h1>
+            <p className="text-base-content/70">Sign in to your Riscura account</p>
           </div>
         </div>
 
@@ -156,11 +152,7 @@ function LoginForm() {
                     className="btn btn-ghost btn-xs"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </label>
               </div>
@@ -176,30 +168,19 @@ function LoginForm() {
                   />
                   <span className="label-text">Stay logged in</span>
                 </label>
-                <Link
-                  href="/auth/forgot-password"
-                  className="link link-primary text-sm"
-                >
+                <Link href="/auth/forgot-password" className="link link-primary text-sm">
                   Forgot password?
                 </Link>
               </div>
 
-              <DaisyButton 
-                type="submit" 
-                loading={isLoading}
-                block
-                size="lg" >
-  Sign in
-</DaisyButton>
+              <DaisyButton type="submit" loading={isLoading} block size="lg">
+                Sign in
+              </DaisyButton>
             </form>
 
             <div className="divider">OR</div>
 
-            <DaisyButton
-              variant="outline"
-              block
-              onClick={handleGoogleLogin}
-              disabled={isLoading}>
+            <DaisyButton variant="outline" block onClick={handleGoogleLogin} disabled={isLoading}>
               <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill="#4285F4"
@@ -232,23 +213,16 @@ function LoginForm() {
                     <div className="text-xs">Use demo credentials to explore the platform</div>
                   </div>
                 </div>
-                <DaisyButton
-                  variant="secondary"
-                  size="sm"
-                  block
-                  onClick={handleDemoLogin} >
-  Use Demo Credentials (admin@riscura.com)
-</DaisyButton>
+                <DaisyButton variant="secondary" size="sm" block onClick={handleDemoLogin}>
+                  Use Demo Credentials (admin@riscura.com)
+                </DaisyButton>
               </>
             )}
 
             <div className="text-center">
               <p className="text-base-content/70">
                 Don't have an account?{' '}
-                <Link
-                  href="/auth/register"
-                  className="link link-primary"
-                >
+                <Link href="/auth/register" className="link link-primary">
                   Sign up
                 </Link>
               </p>
@@ -266,13 +240,14 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
-
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+        </div>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

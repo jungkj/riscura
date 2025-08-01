@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -47,9 +47,8 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm" >
-  Enterprise Sales
-</DaisyBadge>
+            <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] px-4 py-2 mb-6 text-sm">
+              Enterprise Sales
             </DaisyBadge>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
               Let's discuss your needs
@@ -71,20 +70,16 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <DaisyCard className="shadow-xl" >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-2xl font-bold text-gray-900" >
-  Get in touch
-</DaisyCardTitle>
+              <DaisyCard className="shadow-xl">
+                <DaisyCardBody>
+                  <DaisyCardTitle className="text-2xl font-bold text-gray-900">
+                    Get in touch
                   </DaisyCardTitle>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 mb-6">
                     Fill out the form below and we'll get back to you within 24 hours.
                   </p>
-                
-                <DaisyCardContent >
-  <form onSubmit={handleSubmit} className="space-y-6">
-</DaisyCardContent>
+                  
+                  <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -149,13 +144,13 @@ export default function ContactPage() {
                     <DaisyButton 
                       type="submit" 
                       disabled={isSubmitting}
-                      className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white py-3" >
-  {isSubmitting ? 'Sending...' : 'Send Message'}
-</DaisyInput>
+                      className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white py-3 flex items-center justify-center"
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                       <Send className="w-4 h-4 ml-2" />
                     </DaisyButton>
                   </form>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
 
@@ -166,10 +161,8 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="space-y-8"
             >
-              <DaisyCard className="shadow-lg" >
-  <DaisyCardContent className="p-8" >
-  </DaisyCard>
-</DaisyCardContent>
+              <DaisyCard className="shadow-lg">
+                <DaisyCardBody className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">
                     Contact Information
                   </h3>
@@ -210,13 +203,11 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
-              <DaisyCard className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white" >
-  <DaisyCardContent className="p-8" >
-  </DaisyCard>
-</DaisyCardContent>
+              <DaisyCard className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white">
+                <DaisyCardBody className="p-8">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
                     Enterprise Features
                   </h3>
@@ -242,7 +233,7 @@ export default function ContactPage() {
                       White-label options available
                     </li>
                   </ul>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
           </div>

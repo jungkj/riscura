@@ -40,7 +40,11 @@
       "Bash(npm install:*)",
       "Bash(timeout 60 npm run build:*)",
       "Bash(timeout:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(mv:*)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build --no-lint)"
     ],
     "deny": []
   }
