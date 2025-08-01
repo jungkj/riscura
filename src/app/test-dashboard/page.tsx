@@ -3,13 +3,10 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-const DashboardPage = dynamic(
-  () => import('@/pages/dashboard/DashboardPage'),
-  { 
-    ssr: false,
-    loading: () => <div>Loading dashboard...</div>
-  }
-);
+const DashboardPage = dynamic(() => import('@/pages/dashboard/DashboardPage'), {
+  ssr: false,
+  loading: () => <div>Loading dashboard...</div>,
+});
 
 export default function TestDashboard() {
   const [sessionInfo, setSessionInfo] = useState<any>(null);

@@ -5,9 +5,9 @@ import dynamic from 'next/dynamic';
 
 const QuestionnairesPage = dynamic(
   () => import('@/pages/dashboard/questionnaires/QuestionnairesPage'),
-  { 
+  {
     ssr: false,
-    loading: () => <div>Loading questionnaires...</div>
+    loading: () => <div>Loading questionnaires...</div>,
   }
 );
 
