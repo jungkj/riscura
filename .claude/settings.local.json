@@ -44,7 +44,10 @@
       "Bash(npm audit:*)",
       "Bash(npm uninstall:*)",
       "Bash(mv:*)",
-      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build --no-lint)"
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build --no-lint)",
+      "Bash(HUSKY=0 git push origin main --no-verify)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(echo:*)"
     ],
     "deny": []
   }

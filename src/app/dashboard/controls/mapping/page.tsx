@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardContent } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { 
@@ -77,15 +77,9 @@ export default function ControlsMappingPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'Mapped': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'Partial': return <DaisyAlertTriangle className="w-4 h-4 text-yellow-600" >
-  ;
-</DaisyAlertTriangle>
-      case 'Unmapped': return <DaisyAlertTriangle className="w-4 h-4 text-red-600" >
-  ;
-</DaisyAlertTriangle>
-      default: return <DaisyAlertTriangle className="w-4 h-4 text-gray-600" >
-  ;
-</DaisyAlertTriangle>
+      case 'Partial': return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
+      case 'Unmapped': return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      default: return <AlertTriangle className="w-4 h-4 text-gray-600" />;
     }
   };
 
@@ -108,9 +102,8 @@ export default function ControlsMappingPage() {
                 Map your security controls to compliance frameworks and risk mitigation strategies.
               </p>
             </div>
-            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white" >
-  <Link className="w-4 h-4 mr-2" />
-</DaisyButton>
+            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
+              <Link className="w-4 h-4 mr-2" />
               Create Mapping
             </DaisyButton>
           </div>
@@ -124,10 +117,8 @@ export default function ControlsMappingPage() {
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
         >
           {frameworkStats.map((framework, index) => (
-            <DaisyCard key={index} className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+            <DaisyCard key={index} className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+              <DaisyCardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <Shield className="w-5 h-5 text-[#8B7355]" />
@@ -165,10 +156,8 @@ export default function ControlsMappingPage() {
           <div className="p-6 space-y-4">
             <Suspense fallback={<LoadingSpinner />}>
               {controlMappings.map((mapping) => (
-                <DaisyCard key={mapping.id} className="bg-white/40 border-[#E5E1D8]" >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+                <DaisyCard key={mapping.id} className="bg-white/40 border-[#E5E1D8]">
+                  <DaisyCardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
@@ -176,9 +165,8 @@ export default function ControlsMappingPage() {
                           <h3 className="text-lg font-semibold text-[#2C1810]">
                             {mapping.controlName}
                           </h3>
-                          <DaisyBadge className={getStatusColor(mapping.status)} >
-  {getStatusIcon(mapping.status)}
-</DaisyBadge>
+                          <DaisyBadge className={getStatusColor(mapping.status)}>
+                            {getStatusIcon(mapping.status)}
                             <span className="ml-1">{mapping.status}</span>
                           </DaisyBadge>
                         </div>
@@ -191,9 +179,8 @@ export default function ControlsMappingPage() {
                                 <DaisyBadge 
                                   key={index} 
                                   variant="outline" 
-                                  className="border-[#E5E1D8] text-[#6B5B47] text-xs" >
-  {framework}
-</DaisyBadge>
+                                  className="border-[#E5E1D8] text-[#6B5B47] text-xs">
+                                  {framework}
                                 </DaisyBadge>
                               ))}
                             </div>
@@ -226,17 +213,15 @@ export default function ControlsMappingPage() {
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
-  <Link className="w-4 h-4 mr-2" />
-</DaisyButton>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full">
+                          <Link className="w-4 h-4 mr-2" />
                           Edit Mapping
                         </DaisyButton>
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
-  View Details
-</DaisyButton>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full">
+                          View Details
                         </DaisyButton>
                       </div>
                     </div>
