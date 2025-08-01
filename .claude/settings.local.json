@@ -35,7 +35,12 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(npx next build:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(vercel:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 60 npm run build:*)",
+      "Bash(timeout:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

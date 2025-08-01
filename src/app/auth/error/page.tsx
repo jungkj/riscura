@@ -42,7 +42,7 @@ function AuthErrorContent() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/25 bg-[size:20px_20px] [mask-image:radial-gradient(white,transparent_85%)]" />
-      
+
       <div className="relative w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center">
@@ -74,24 +74,20 @@ function AuthErrorContent() {
             <div className="space-y-6">
               <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start space-x-2">
                 <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5" />
-                <p className="text-red-800 dark:text-red-200 text-sm">
-                  {getErrorMessage()}
-                </p>
+                <p className="text-red-800 dark:text-red-200 text-sm">{getErrorMessage()}</p>
               </div>
 
               <div className="space-y-3">
-                <DaisyButton 
-                  asChild 
+                <DaisyButton
+                  asChild
                   className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-500/25 transition-all duration-200"
                 >
-                  <Link href="/auth/login">
-                    Try Again
-                  </Link>
+                  <Link href="/auth/login">Try Again</Link>
                 </DaisyButton>
 
-                <DaisyButton 
-                  asChild 
-                  variant="outline" 
+                <DaisyButton
+                  asChild
+                  variant="outline"
                   className="w-full h-11 bg-white/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-800 transition-colors"
                 >
                   <Link href="/">
@@ -124,13 +120,14 @@ function AuthErrorContent() {
 }
 
 export default function AuthErrorPage() {
-
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
       <AuthErrorContent />
     </Suspense>
   );

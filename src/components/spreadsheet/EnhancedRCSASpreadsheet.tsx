@@ -1,7 +1,12 @@
 'use client';
 
 import React from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardHeader,
+  DaisyCardTitle,
+} from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 
 interface EnhancedRCSASpreadsheetProps {
@@ -10,10 +15,10 @@ interface EnhancedRCSASpreadsheetProps {
   className?: string;
 }
 
-export default function EnhancedRCSASpreadsheet({ 
-  data = [], 
+export default function EnhancedRCSASpreadsheet({
+  data = [],
   onDataChange,
-  className = '' 
+  className = '',
 }: EnhancedRCSASpreadsheetProps) {
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>

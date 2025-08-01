@@ -12,11 +12,7 @@ interface ErrorFallbackProps {
   className?: string;
 }
 
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-  error,
-  resetErrorBoundary,
-  className,
-}) => {
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary, className }) => {
   const handleReportError = () => {
     // In a real app, this would send error details to a logging service
     console.error('Error reported:', {
@@ -26,7 +22,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
       userAgent: navigator.userAgent,
       url: window.location.href,
     });
-    
+
     alert('Error reported successfully. Thank you for helping us improve!');
   };
 
@@ -57,54 +53,47 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                 Something went wrong
               </DaisyCardTitle>
               <p className="text-red-700 dark:text-red-300 mt-2">
-                We encountered an unexpected error. Please try again or contact support if the problem persists.
+                We encountered an unexpected error. Please try again or contact support if the
+                problem persists.
               </p>
             </div>
             <div className="space-y-4 mt-6">
               <details className="group">
-              <summary className="cursor-pointer text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-                <span className="inline-flex items-center gap-2">
-                  <Bug className="w-4 h-4" />
-                  Technical Details
-                  <motion.span
-                    className="inline-block"
-                    animate={{ rotate: 0 }}
-                    whileHover={{ rotate: 180 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    ▼
-                  </motion.span>
-                </span>
-              </summary>
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md text-xs font-mono text-gray-700 dark:text-gray-300 overflow-auto max-h-32"
-              >
-                {error.message}
-              </motion.div>
-            </details>
-            
-              <div className="flex flex-col sm:flex-row gap-2">
-                <DaisyButton
-                  onClick={resetErrorBoundary}
-                  className="flex-1"
-                  variant="default"
+                <summary className="cursor-pointer text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                  <span className="inline-flex items-center gap-2">
+                    <Bug className="w-4 h-4" />
+                    Technical Details
+                    <motion.span
+                      className="inline-block"
+                      animate={{ rotate: 0 }}
+                      whileHover={{ rotate: 180 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      ▼
+                    </motion.span>
+                  </span>
+                </summary>
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md text-xs font-mono text-gray-700 dark:text-gray-300 overflow-auto max-h-32"
                 >
+                  {error.message}
+                </motion.div>
+              </details>
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <DaisyButton onClick={resetErrorBoundary} className="flex-1" variant="default">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Try Again
                 </DaisyButton>
-                <DaisyButton
-                  onClick={handleGoHome}
-                  variant="outline"
-                  className="flex-1"
-                >
+                <DaisyButton onClick={handleGoHome} variant="outline" className="flex-1">
                   <Home className="w-4 h-4 mr-2" />
                   Go Home
                 </DaisyButton>
               </div>
-              
+
               <DaisyButton
                 onClick={handleReportError}
                 variant="ghost"
@@ -139,19 +128,17 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
     if (process.env.NODE_ENV === 'development') {
       console.error('Error Boundary caught an error:', error, errorInfo);
     }
-    
+
     // Call custom error handler if provided
     onError?.(error, errorInfo);
-    
+
     // In production, you would send this to your error reporting service
     // Example: Sentry, LogRocket, Bugsnag, etc.
   };
 
   return (
     <ReactErrorBoundary
-      FallbackComponent={(props) => (
-        <FallbackComponent {...props} className={className} />
-      )}
+      FallbackComponent={(props) => <FallbackComponent {...props} className={className} />}
       onError={handleError}
     >
       {children}
@@ -160,9 +147,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
 };
 
 // Specialized error boundaries for different sections
-export const DashboardErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const DashboardErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
@@ -175,9 +160,7 @@ export const DashboardErrorBoundary: React.FC<{ children: React.ReactNode }> = (
   );
 };
 
-export const FormErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const FormErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
@@ -190,9 +173,7 @@ export const FormErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
@@ -209,7 +190,7 @@ export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
 export const useErrorHandler = () => {
   const reportError = (error: Error, context?: string) => {
     console.error(`Error in ${context || 'unknown context'}:`, error);
-    
+
     // In production, send to error reporting service
     if (process.env.NODE_ENV === 'production') {
       // Example: Sentry.captureException(error, { tags: { context } });
@@ -217,4 +198,4 @@ export const useErrorHandler = () => {
   };
 
   return { reportError };
-}; 
+};

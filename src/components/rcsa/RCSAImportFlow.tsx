@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardHeader,
+  DaisyCardTitle,
+} from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload, CheckCircle, Loader2 } from 'lucide-react';
 
@@ -10,7 +15,9 @@ interface RCSAImportFlowProps {
 }
 
 export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
-  const [step, setStep] = useState<'upload' | 'analyzing' | 'review' | 'importing' | 'complete'>('upload');
+  const [step, setStep] = useState<'upload' | 'analyzing' | 'review' | 'importing' | 'complete'>(
+    'upload'
+  );
 
   const handleAnalysis = () => {
     setStep('analyzing');
@@ -68,9 +75,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
               Your RCSA data has been successfully imported and analyzed
             </p>
             <div className="flex space-x-3 mt-4">
-              <DaisyButton onClick={() => setStep('upload')}>
-                Import More Data
-              </DaisyButton>
+              <DaisyButton onClick={() => setStep('upload')}>Import More Data</DaisyButton>
               <DaisyButton variant="outline" onClick={onComplete}>
                 View Dashboard
               </DaisyButton>

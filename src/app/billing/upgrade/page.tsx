@@ -111,12 +111,12 @@ export default function UpgradePage() {
         <h1 className="text-4xl font-bold mb-4">Choose Your Plan</h1>
         <p className="text-xl text-muted-foreground">
           Upgrade your risk management capabilities with advanced features
-        </DaisyCardDescription>
+        </p>
         {subscription && (
           <div className="mt-4">
-            <DaisyBadge variant="outline" >
-  Current Plan: {subscription.plan}
-</DaisyBadge>
+            <DaisyBadge variant="outline">
+              Current Plan: {subscription.plan}
+            </DaisyBadge>
           </div>
         )}
       </div>

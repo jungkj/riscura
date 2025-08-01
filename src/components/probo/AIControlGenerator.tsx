@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardHeader,
+  DaisyCardTitle,
+} from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Brain, Sparkles, Shield, Target, AlertTriangle, FileCheck } from 'lucide-react';
@@ -23,7 +28,7 @@ export default function AIControlGenerator({
   riskCategory = 'General',
   riskSeverity = 'Medium',
   onControlsGenerated,
-  className = ''
+  className = '',
 }: AIControlGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -40,11 +45,16 @@ export default function AIControlGenerator({
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'Critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'High': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'High':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Low':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -129,7 +139,7 @@ export default function AIControlGenerator({
               <p className="text-gray-600 mb-4">
                 Click "Generate AI Controls" to start the intelligent control generation process.
               </p>
-              <DaisyButton 
+              <DaisyButton
                 onClick={handleGenerateControls}
                 className="bg-blue-600 hover:bg-blue-700"
               >

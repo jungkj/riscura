@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronDown, 
-  ChevronRight, 
-  Plus, 
+import {
+  ChevronDown,
+  ChevronRight,
+  Plus,
   Sparkles,
   CheckCircle,
   AlertCircle,
@@ -25,19 +25,19 @@ import {
   Link2,
   Eye,
   Edit3,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaApiClient } from '@/lib/api/rcsa-client';
-import { 
-  Risk, 
-  Control, 
+import {
+  Risk,
+  Control,
   TestScript,
   RiskLevel,
   ControlStatus,
   TestFrequency,
-  AutomationLevel
+  AutomationLevel,
 } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 import { AIControlGenerator } from '@/components/probo/AIControlGenerator';
@@ -52,7 +52,7 @@ const colors = {
   text: {
     primary: 'text-gray-900 dark:text-gray-100',
     secondary: 'text-gray-600 dark:text-gray-400',
-    muted: 'text-gray-500 dark:text-gray-500'
+    muted: 'text-gray-500 dark:text-gray-500',
   },
   hover: 'hover:bg-gray-100 dark:hover:bg-gray-800',
   active: 'bg-blue-50 dark:bg-blue-900/20',
@@ -60,8 +60,8 @@ const colors = {
     blue: 'text-blue-600 dark:text-blue-400',
     green: 'text-green-600 dark:text-green-400',
     amber: 'text-amber-600 dark:text-amber-400',
-    red: 'text-red-600 dark:text-red-400'
-  }
+    red: 'text-red-600 dark:text-red-400',
+  },
 };
 
 // Entity types
@@ -98,8 +98,10 @@ export function NotionRCSASpreadsheet() {
   const [showAIGenerator, setShowAIGenerator] = useState(false);
   const [currentEntity, setCurrentEntity] = useState<EntityRow | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
-  
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(
+    null
+  );
+
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -127,21 +129,21 @@ export function NotionRCSASpreadsheet() {
     const topLevelRows: EntityRow[] = [];
 
     // Add risks as top-level
-    risks.forEach(risk => {
+    risks.forEach((risk) => {
       const riskRow: EntityRow = {
         id: `risk-${risk.id}`,
         type: 'risk',
         data: risk,
         children: [],
         isExpanded: expandedRows.has(`risk-${risk.id}`),
-        level: 0
+        level: 0,
       };
       rowsMap.set(riskRow.id, riskRow);
       topLevelRows.push(riskRow);
     });
 
     // Add controls under their associated risks
-    controls.forEach(control => {
+    controls.forEach((control) => {
       const controlRow: EntityRow = {
         id: `control-${control.id}`,
         type: 'control',
@@ -149,7 +151,7 @@ export function NotionRCSASpreadsheet() {
         children: [],
         isExpanded: expandedRows.has(`control-${control.id}`),
         level: 1,
-        parentId: control.risks?.[0]?.riskId ? `risk-${control.risks[0].riskId}` : undefined
+        parentId: control.risks?.[0]?.riskId ? `risk-${control.risks[0].riskId}` : undefined,
       };
 
       if (controlRow.parentId && rowsMap.has(controlRow.parentId)) {
@@ -163,19 +165,19 @@ export function NotionRCSASpreadsheet() {
     });
 
     // Add test scripts under their associated controls
-    testScripts.forEach(testScript => {
-      testScript.controls?.forEach(controlTestScript => {
+    testScripts.forEach((testScript) => {
+      testScript.controls?.forEach((controlTestScript) => {
         const testScriptRow: EntityRow = {
           id: `testscript-${testScript.id}`,
           type: 'testScript',
           data: testScript,
           level: 2,
-          parentId: `control-${controlTestScript.controlId}`
+          parentId: `control-${controlTestScript.controlId}`,
         };
 
         if (rowsMap.has(testScriptRow.parentId!)) {
           const parent = rowsMap.get(testScriptRow.parentId!)!;
-          if (!parent.children!.some(child => child.id === testScriptRow.id)) {
+          if (!parent.children!.some((child) => child.id === testScriptRow.id)) {
             parent.children!.push(testScriptRow);
           }
         }
@@ -193,14 +195,14 @@ export function NotionRCSASpreadsheet() {
   // Flatten rows for virtual scrolling
   const flattenedRows = useMemo(() => {
     const flattened: EntityRow[] = [];
-    
+
     const addRow = (row: EntityRow) => {
       flattened.push(row);
       if (row.isExpanded && row.children) {
         row.children.forEach(addRow);
       }
     };
-    
+
     rows.forEach(addRow);
     return flattened;
   }, [rows]);
@@ -210,27 +212,27 @@ export function NotionRCSASpreadsheet() {
     count: flattenedRows.length,
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 52,
-    overscan: 10
+    overscan: 10,
   });
 
   // Filter rows based on search
   const filterRows = (rows: EntityRow[], query: string): EntityRow[] => {
     return rows.reduce((filtered, row) => {
-      const matchesQuery = 
+      const matchesQuery =
         (row.type === 'risk' && (row.data as Risk).title.toLowerCase().includes(query)) ||
         (row.type === 'control' && (row.data as Control).title.toLowerCase().includes(query)) ||
         (row.type === 'testScript' && (row.data as TestScript).title.toLowerCase().includes(query));
-      
+
       const filteredChildren = row.children ? filterRows(row.children, query) : [];
-      
+
       if (matchesQuery || filteredChildren.length > 0) {
         filtered.push({
           ...row,
           children: filteredChildren,
-          isExpanded: filteredChildren.length > 0 // Auto-expand if children match
+          isExpanded: filteredChildren.length > 0, // Auto-expand if children match
         });
       }
-      
+
       return filtered;
     }, [] as EntityRow[]);
   };
@@ -256,12 +258,12 @@ export function NotionRCSASpreadsheet() {
               <ChevronDown className="h-4 w-4" />
             </button>
           )}
-          
+
           <div className="flex items-center gap-2">
             {row.type === 'risk' && <Shield className="h-4 w-4 text-blue-500" />}
             {row.type === 'control' && <CheckCircle className="h-4 w-4 text-green-500" />}
             {row.type === 'testScript' && <FileText className="h-4 w-4 text-purple-500" />}
-            
+
             <span className={cn('font-medium', colors.text.primary)}>
               {row.type === 'risk' && (row.data as Risk).title}
               {row.type === 'control' && (row.data as Control).title}
@@ -270,7 +272,7 @@ export function NotionRCSASpreadsheet() {
           </div>
         </div>
       ),
-      sortable: true
+      sortable: true,
     },
     {
       id: 'status',
@@ -281,14 +283,17 @@ export function NotionRCSASpreadsheet() {
         if (row.type === 'risk') {
           const risk = row.data as Risk;
 
-  return (
-    <div className={cn(
-              'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
-              risk.riskLevel === 'CRITICAL' && 'bg-red-100 text-red-700 dark:bg-red-900/30',
-              risk.riskLevel === 'HIGH' && 'bg-orange-100 text-orange-700 dark:bg-orange-900/30',
-              risk.riskLevel === 'MEDIUM' && 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30',
-              risk.riskLevel === 'LOW' && 'bg-green-100 text-green-700 dark:bg-green-900/30'
-            )}>
+          return (
+            <div
+              className={cn(
+                'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
+                risk.riskLevel === 'CRITICAL' && 'bg-red-100 text-red-700 dark:bg-red-900/30',
+                risk.riskLevel === 'HIGH' && 'bg-orange-100 text-orange-700 dark:bg-orange-900/30',
+                risk.riskLevel === 'MEDIUM' &&
+                  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30',
+                risk.riskLevel === 'LOW' && 'bg-green-100 text-green-700 dark:bg-green-900/30'
+              )}
+            >
               {risk.riskLevel || 'Not Assessed'}
             </div>
           );
@@ -296,13 +301,17 @@ export function NotionRCSASpreadsheet() {
         if (row.type === 'control') {
           const control = row.data as Control;
           return (
-            <div className={cn(
-              'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
-              control.status === 'EFFECTIVE' && 'bg-green-100 text-green-700 dark:bg-green-900/30',
-              control.status === 'NEEDS_IMPROVEMENT' && 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30',
-              control.status === 'INEFFECTIVE' && 'bg-red-100 text-red-700 dark:bg-red-900/30',
-              control.status === 'PLANNED' && 'bg-blue-100 text-blue-700 dark:bg-blue-900/30'
-            )}>
+            <div
+              className={cn(
+                'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
+                control.status === 'EFFECTIVE' &&
+                  'bg-green-100 text-green-700 dark:bg-green-900/30',
+                control.status === 'NEEDS_IMPROVEMENT' &&
+                  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30',
+                control.status === 'INEFFECTIVE' && 'bg-red-100 text-red-700 dark:bg-red-900/30',
+                control.status === 'PLANNED' && 'bg-blue-100 text-blue-700 dark:bg-blue-900/30'
+              )}
+            >
               {control.status}
             </div>
           );
@@ -318,7 +327,7 @@ export function NotionRCSASpreadsheet() {
         }
         return null;
       },
-      filterable: true
+      filterable: true,
     },
     {
       id: 'automation',
@@ -350,7 +359,7 @@ export function NotionRCSASpreadsheet() {
           );
         }
         return null;
-      }
+      },
     },
     {
       id: 'aiGenerate',
@@ -386,7 +395,7 @@ export function NotionRCSASpreadsheet() {
             </button>
           )}
         </div>
-      )
+      ),
     },
     {
       id: 'actions',
@@ -426,13 +435,13 @@ export function NotionRCSASpreadsheet() {
             <MoreHorizontal className="h-4 w-4" />
           </button>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   // Event handlers
   const toggleExpand = (rowId: string) => {
-    setExpandedRows(prev => {
+    setExpandedRows((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(rowId)) {
         newSet.delete(rowId);
@@ -454,17 +463,17 @@ export function NotionRCSASpreadsheet() {
       toast.loading('Generating test script...');
       const response = await rcsaApiClient.generateTestScript({
         controlId: control.id,
-        controlDescription: control.description
+        controlDescription: control.description,
       });
-      
+
       if (response.success && response.data) {
         toast.success('Test script generated successfully');
         // Create the test script
         const createResponse = await rcsaApiClient.createTestScript({
           ...response.data.testScript,
-          controlIds: [control.id]
+          controlIds: [control.id],
         });
-        
+
         if (createResponse.success) {
           await fetchTestScripts();
           toast.success('Test script created and linked to control');
@@ -506,18 +515,16 @@ export function NotionRCSASpreadsheet() {
       {/* Header */}
       <div className={cn('flex items-center justify-between p-4 border-b', colors.border)}>
         <div className="flex items-center gap-4">
-          <h1 className={cn('text-2xl font-semibold', colors.text.primary)}>
-            RCSA Spreadsheet
-          </h1>
-          <div className={cn('text-sm', colors.text.secondary)}>
-            {flattenedRows.length} items
-          </div>
+          <h1 className={cn('text-2xl font-semibold', colors.text.primary)}>RCSA Spreadsheet</h1>
+          <div className={cn('text-sm', colors.text.secondary)}>{flattenedRows.length} items</div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {/* Search */}
           <div className="relative">
-            <Search className={cn('absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4', colors.text.muted)} />
+            <Search
+              className={cn('absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4', colors.text.muted)}
+            />
             <input
               type="text"
               placeholder="Search..."
@@ -531,7 +538,7 @@ export function NotionRCSASpreadsheet() {
               )}
             />
           </div>
-          
+
           {/* Actions */}
           <button className={cn('p-2 rounded-lg', colors.hover)}>
             <Filter className="h-4 w-4" />
@@ -549,13 +556,10 @@ export function NotionRCSASpreadsheet() {
       <div className="flex-1 overflow-hidden">
         {/* Column headers */}
         <div className={cn('flex border-b sticky top-0 z-10', colors.border, colors.surface)}>
-          {columns.map(column => (
+          {columns.map((column) => (
             <div
               key={column.id}
-              className={cn(
-                'px-4 py-3 font-medium text-sm',
-                colors.text.secondary
-              )}
+              className={cn('px-4 py-3 font-medium text-sm', colors.text.secondary)}
               style={{ width: column.width, minWidth: column.minWidth }}
             >
               {column.label}
@@ -564,18 +568,15 @@ export function NotionRCSASpreadsheet() {
         </div>
 
         {/* Virtual scrolling container */}
-        <div
-          ref={scrollContainerRef}
-          className="h-full overflow-auto"
-        >
+        <div ref={scrollContainerRef} className="h-full overflow-auto">
           <div
             style={{
               height: `${virtualizer.getTotalSize()}px`,
               width: '100%',
-              position: 'relative'
+              position: 'relative',
             }}
           >
-            {virtualizer.getVirtualItems().map(virtualItem => {
+            {virtualizer.getVirtualItems().map((virtualItem) => {
               const row = flattenedRows[virtualItem.index];
               return (
                 <div
@@ -586,17 +587,19 @@ export function NotionRCSASpreadsheet() {
                     left: 0,
                     width: '100%',
                     height: `${virtualItem.size}px`,
-                    transform: `translateY(${virtualItem.start}px)`
+                    transform: `translateY(${virtualItem.start}px)`,
                   }}
                 >
-                  <div className={cn(
-                    'flex items-center border-b',
-                    colors.border,
-                    selectedRows.has(row.id) && colors.active,
-                    'hover:bg-gray-50 dark:hover:bg-gray-800/50',
-                    'transition-colors duration-150'
-                  )}>
-                    {columns.map(column => (
+                  <div
+                    className={cn(
+                      'flex items-center border-b',
+                      colors.border,
+                      selectedRows.has(row.id) && colors.active,
+                      'hover:bg-gray-50 dark:hover:bg-gray-800/50',
+                      'transition-colors duration-150'
+                    )}
+                  >
+                    {columns.map((column) => (
                       <div
                         key={column.id}
                         className="px-4 py-3"
