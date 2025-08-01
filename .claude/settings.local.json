@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(git checkout:*)",
@@ -21,7 +22,10 @@
       "Bash(git config --global user.name \"Andy Jung\")",
       "Bash(git config --global --list)",
       "Bash(yarn type-check)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(HUSKY=0 git push origin main)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": []
   }
