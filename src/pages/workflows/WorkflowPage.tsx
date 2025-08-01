@@ -5,13 +5,7 @@ import { Workflow, WorkflowStep } from '@/types';
 import { formatDate } from '@/lib/utils';
 
 // UI Components
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -39,10 +33,35 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardContent, DaisyCardHeader, DaisyCardTitle, DaisyCardDescription } from '@/components/ui/DaisyCard';
-import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
-import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuLabel, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdownMenu';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import {
+  DaisyCard,
+  DaisyCardContent,
+  DaisyCardHeader,
+  DaisyCardTitle,
+  DaisyCardDescription,
+} from '@/components/ui/DaisyCard';
+import {
+  DaisyTable,
+  DaisyTableBody,
+  DaisyTableCell,
+  DaisyTableHead,
+  DaisyTableHeader,
+  DaisyTableRow,
+} from '@/components/ui/DaisyTable';
+import {
+  DaisyDropdownMenu,
+  DaisyDropdownMenuContent,
+  DaisyDropdownMenuItem,
+  DaisyDropdownMenuLabel,
+  DaisyDropdownMenuSeparator,
+  DaisyDropdownMenuTrigger,
+} from '@/components/ui/DaisyDropdownMenu';
 import { DaisyDialog, DaisyDialogContent } from '@/components/ui/DaisyDialog';
 import { DaisyAlertTriangle } from '@/components/ui/DaisyAlert';
 
@@ -205,7 +224,11 @@ export default function WorkflowPage() {
     }
   };
 
-  const handleCompleteStep = async (workflowId: string, stepId: string, result: 'completed' | 'rejected') => {
+  const handleCompleteStep = async (
+    workflowId: string,
+    stepId: string,
+    result: 'completed' | 'rejected'
+  ) => {
     try {
       console.log('Completing step:', stepId, 'with result:', result);
       alert(`Step ${result} successfully`);
@@ -224,11 +247,11 @@ export default function WorkflowPage() {
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
 
-  return (
-    <DaisyBadge variant="outline" className={config.color}>
-      {config.label}
-    </DaisyBadge>
-  );
+    return (
+      <DaisyBadge variant="outline" className={config.color}>
+        {config.label}
+      </DaisyBadge>
+    );
   };
 
   const getPriorityBadge = (priority: Workflow['priority']) => {
@@ -239,7 +262,10 @@ export default function WorkflowPage() {
       critical: { color: 'bg-red-100 text-red-800', label: 'Critical' },
     };
 
-    const config = priorityConfig[priority] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
+    const config = priorityConfig[priority] || {
+      color: 'bg-gray-100 text-gray-800',
+      label: 'Unknown',
+    };
     return (
       <DaisyBadge variant="outline" className={config.color}>
         {config.label}
@@ -249,12 +275,18 @@ export default function WorkflowPage() {
 
   const getStepStatusIcon = (status: WorkflowStep['status']) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'in_progress': return <Clock className="h-4 w-4 text-blue-500" />;
-      case 'rejected': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'pending': return <Clock className="h-4 w-4 text-muted-foreground" />;
-      case 'skipped': return <ArrowRight className="h-4 w-4 text-muted-foreground" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'in_progress':
+        return <Clock className="h-4 w-4 text-blue-500" />;
+      case 'rejected':
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'pending':
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
+      case 'skipped':
+        return <ArrowRight className="h-4 w-4 text-muted-foreground" />;
+      default:
+        return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -268,8 +300,8 @@ export default function WorkflowPage() {
         <DaisyCardContent className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading workflows: {error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="mt-2 px-4 py-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] rounded"
             >
               Retry
@@ -290,7 +322,10 @@ export default function WorkflowPage() {
             Design, manage, and monitor automated workflows
           </p>
         </div>
-        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
+        <DaisyButton
+          onClick={handleCreateNew}
+          className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Create Workflow
         </DaisyButton>
@@ -305,9 +340,7 @@ export default function WorkflowPage() {
           </DaisyCardHeader>
           <DaisyCardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">
-              Across all types
-            </p>
+            <p className="text-xs text-muted-foreground">Across all types</p>
           </DaisyCardContent>
         </DaisyCard>
 
@@ -318,9 +351,7 @@ export default function WorkflowPage() {
           </DaisyCardHeader>
           <DaisyCardContent>
             <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-            <p className="text-xs text-muted-foreground">
-              Currently running
-            </p>
+            <p className="text-xs text-muted-foreground">Currently running</p>
           </DaisyCardContent>
         </DaisyCard>
 
@@ -331,9 +362,7 @@ export default function WorkflowPage() {
           </DaisyCardHeader>
           <DaisyCardContent>
             <div className="text-2xl font-bold text-blue-600">{stats.completed}</div>
-            <p className="text-xs text-muted-foreground">
-              Successfully finished
-            </p>
+            <p className="text-xs text-muted-foreground">Successfully finished</p>
           </DaisyCardContent>
         </DaisyCard>
 
@@ -344,9 +373,7 @@ export default function WorkflowPage() {
           </DaisyCardHeader>
           <DaisyCardContent>
             <div className="text-2xl font-bold text-red-600">{stats.overdueSteps}</div>
-            <p className="text-xs text-muted-foreground">
-              Past due date
-            </p>
+            <p className="text-xs text-muted-foreground">Past due date</p>
           </DaisyCardContent>
         </DaisyCard>
       </div>
@@ -394,7 +421,9 @@ export default function WorkflowPage() {
                   </DaisyTableHeader>
                   <DaisyTableBody>
                     {workflows.map((workflow) => {
-                      const completedSteps = workflow.steps.filter(s => s.status === 'completed').length;
+                      const completedSteps = workflow.steps.filter(
+                        (s) => s.status === 'completed'
+                      ).length;
                       const totalSteps = workflow.steps.length;
                       const progress = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
@@ -413,12 +442,8 @@ export default function WorkflowPage() {
                               {workflow.type.replace('_', ' ')}
                             </DaisyBadge>
                           </DaisyTableCell>
-                          <DaisyTableCell>
-                            {getStatusBadge(workflow.status)}
-                          </DaisyTableCell>
-                          <DaisyTableCell>
-                            {getPriorityBadge(workflow.priority)}
-                          </DaisyTableCell>
+                          <DaisyTableCell>{getStatusBadge(workflow.status)}</DaisyTableCell>
+                          <DaisyTableCell>{getPriorityBadge(workflow.priority)}</DaisyTableCell>
                           <DaisyTableCell>
                             <div className="flex items-center space-x-2">
                               <DaisyProgress value={progress} className="w-16" />
@@ -434,9 +459,7 @@ export default function WorkflowPage() {
                             </div>
                           </DaisyTableCell>
                           <DaisyTableCell>
-                            <div className="text-sm">
-                              {formatDate(workflow.createdAt)}
-                            </div>
+                            <div className="text-sm">{formatDate(workflow.createdAt)}</div>
                           </DaisyTableCell>
                           <DaisyTableCell>
                             <DaisyDropdownMenu>
@@ -468,7 +491,8 @@ export default function WorkflowPage() {
                                 <DaisyDropdownMenuSeparator />
                                 <DaisyDropdownMenuItem
                                   onClick={() => handleDelete(workflow.id)}
-                                  className="text-red-600">
+                                  className="text-red-600"
+                                >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete
                                 </DaisyDropdownMenuItem>
@@ -503,7 +527,7 @@ export default function WorkflowPage() {
               ) : (
                 <div className="space-y-4">
                   {activeSteps.map((step) => {
-                    const workflow = workflows.find(w => w.steps.some(s => s.id === step.id));
+                    const workflow = workflows.find((w) => w.steps.some((s) => s.id === step.id));
                     const isOverdue = new Date(step.dueDate) < new Date();
 
                     return (
@@ -545,12 +569,18 @@ export default function WorkflowPage() {
                                   <DaisyButton
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'rejected')}>
+                                    onClick={() =>
+                                      handleCompleteStep(workflow?.id || '', step.id, 'rejected')
+                                    }
+                                  >
                                     Reject
                                   </DaisyButton>
                                   <DaisyButton
                                     size="sm"
-                                    onClick={() => handleCompleteStep(workflow?.id || '', step.id, 'completed')}>
+                                    onClick={() =>
+                                      handleCompleteStep(workflow?.id || '', step.id, 'completed')
+                                    }
+                                  >
                                     Complete
                                   </DaisyButton>
                                 </>
@@ -596,17 +626,15 @@ export default function WorkflowPage() {
             <DaisyCard>
               <DaisyCardHeader>
                 <DaisyCardTitle>Step Analytics</DaisyCardTitle>
-                <DaisyCardDescription>
-                  Step completion rates and average times
-                </DaisyCardDescription>
+                <DaisyCardDescription>Step completion rates and average times</DaisyCardDescription>
               </DaisyCardHeader>
               <DaisyCardContent>
                 <div className="space-y-4">
-                  {workflows.slice(0, 3).map(workflow => (
+                  {workflows.slice(0, 3).map((workflow) => (
                     <div key={workflow.id} className="border rounded-lg p-3">
                       <div className="font-medium text-sm mb-2">{workflow.name}</div>
                       <div className="space-y-2">
-                        {workflow.steps.slice(0, 2).map(step => (
+                        {workflow.steps.slice(0, 2).map((step) => (
                           <div key={step.id} className="flex items-center justify-between text-xs">
                             <span className="truncate">{step.name}</span>
                             <div className="flex items-center space-x-2">
@@ -632,13 +660,9 @@ export default function WorkflowPage() {
         <DaisyDialogContent className="max-w-2xl">
           <DaisyDialogHeader>
             <DaisyDialogTitle>{selectedWorkflow?.name}</DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Workflow details and configuration
-            </DaisyDialogDescription>
+            <DaisyDialogDescription>Workflow details and configuration</DaisyDialogDescription>
           </DaisyDialogHeader>
-          {selectedWorkflow && (
-            <WorkflowDetails workflow={selectedWorkflow} />
-          )}
+          {selectedWorkflow && <WorkflowDetails workflow={selectedWorkflow} />}
         </DaisyDialogContent>
       </DaisyDialog>
 
@@ -647,13 +671,9 @@ export default function WorkflowPage() {
         <DaisyDialogContent className="max-w-4xl">
           <DaisyDialogHeader>
             <DaisyDialogTitle>{selectedWorkflow?.name} - Steps</DaisyDialogTitle>
-            <DaisyDialogDescription>
-              Workflow step details and progress
-            </DaisyDialogDescription>
+            <DaisyDialogDescription>Workflow step details and progress</DaisyDialogDescription>
           </DaisyDialogHeader>
-          {selectedWorkflow && (
-            <WorkflowSteps workflow={selectedWorkflow} />
-          )}
+          {selectedWorkflow && <WorkflowSteps workflow={selectedWorkflow} />}
         </DaisyDialogContent>
       </DaisyDialog>
     </div>
@@ -693,7 +713,7 @@ const WorkflowDetails: React.FC<WorkflowDetailsProps> = ({ workflow }) => {
       <div>
         <label className="text-sm font-medium">Assigned To ({workflow.assignedTo.length})</label>
         <div className="flex flex-wrap gap-1 mt-1">
-          {workflow.assignedTo.map(assignee => (
+          {workflow.assignedTo.map((assignee) => (
             <DaisyBadge key={assignee} variant="outline" className="text-xs">
               {assignee}
             </DaisyBadge>
@@ -704,7 +724,7 @@ const WorkflowDetails: React.FC<WorkflowDetailsProps> = ({ workflow }) => {
         <div>
           <label className="text-sm font-medium">Tags</label>
           <div className="flex flex-wrap gap-1 mt-1">
-            {workflow.tags.map(tag => (
+            {workflow.tags.map((tag) => (
               <DaisyBadge key={tag} variant="secondary" className="text-xs">
                 {tag}
               </DaisyBadge>
@@ -736,9 +756,10 @@ const WorkflowSteps: React.FC<WorkflowStepsProps> = ({ workflow }) => {
   return (
     <div className="space-y-4">
       <div className="text-sm text-muted-foreground">
-        {workflow.steps.length} steps • {workflow.steps.filter(s => s.status === 'completed').length} completed
+        {workflow.steps.length} steps •{' '}
+        {workflow.steps.filter((s) => s.status === 'completed').length} completed
       </div>
-      
+
       <div className="space-y-3">
         {workflow.steps.map((step, index) => (
           <DaisyCard key={step.id}>
@@ -764,12 +785,14 @@ const WorkflowSteps: React.FC<WorkflowStepsProps> = ({ workflow }) => {
                     </div>
                     {step.completedAt && (
                       <div>
-                        <span className="text-muted-foreground">Completed:</span> {formatDate(step.completedAt)}
+                        <span className="text-muted-foreground">Completed:</span>{' '}
+                        {formatDate(step.completedAt)}
                       </div>
                     )}
                     {step.completedBy && (
                       <div>
-                        <span className="text-muted-foreground">Completed by:</span> {step.completedBy}
+                        <span className="text-muted-foreground">Completed by:</span>{' '}
+                        {step.completedBy}
                       </div>
                     )}
                   </div>

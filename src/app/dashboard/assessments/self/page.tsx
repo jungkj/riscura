@@ -8,15 +8,7 @@ import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
-  User, 
-  CheckCircle, 
-  Clock, 
-  FileText,
-  Calendar,
-  Target,
-  TrendingUp
-} from 'lucide-react';
+import { User, CheckCircle, Clock, FileText, Calendar, Target, TrendingUp } from 'lucide-react';
 
 export default function SelfAssessmentPage() {
   // Mock data for self-assessments
@@ -30,7 +22,7 @@ export default function SelfAssessmentPage() {
       completedDate: '2025-01-05',
       nextDue: '2025-04-05',
       questions: 25,
-      timeRequired: '15 minutes'
+      timeRequired: '15 minutes',
     },
     {
       id: 2,
@@ -41,7 +33,7 @@ export default function SelfAssessmentPage() {
       completedDate: null,
       nextDue: '2025-01-15',
       questions: 30,
-      timeRequired: '20 minutes'
+      timeRequired: '20 minutes',
     },
     {
       id: 3,
@@ -52,25 +44,33 @@ export default function SelfAssessmentPage() {
       completedDate: null,
       nextDue: '2025-01-20',
       questions: 20,
-      timeRequired: '12 minutes'
-    }
+      timeRequired: '12 minutes',
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'In Progress': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Not Started': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Completed':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Not Started':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'Completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'In Progress': return <Clock className="w-4 h-4 text-blue-600" />;
-      case 'Not Started': return <Clock className="w-4 h-4 text-gray-600" />;
-      default: return <Clock className="w-4 h-4 text-gray-600" />;
+      case 'Completed':
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'In Progress':
+        return <Clock className="w-4 h-4 text-blue-600" />;
+      case 'Not Started':
+        return <Clock className="w-4 h-4 text-gray-600" />;
+      default:
+        return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
 
@@ -96,7 +96,8 @@ export default function SelfAssessmentPage() {
                 Self-Assessments
               </EnhancedHeading>
               <p className="text-[#6B5B47] text-sm">
-                Complete self-assessments to evaluate your knowledge and compliance with organizational policies.
+                Complete self-assessments to evaluate your knowledge and compliance with
+                organizational policies.
               </p>
             </div>
             <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
@@ -174,7 +175,7 @@ export default function SelfAssessmentPage() {
               Available Assessments
             </EnhancedHeading>
           </div>
-          
+
           <div className="p-6 space-y-4">
             <Suspense fallback={<LoadingSpinner />}>
               {selfAssessments.map((assessment) => (
@@ -192,11 +193,9 @@ export default function SelfAssessmentPage() {
                             <span className="ml-1">{assessment.status}</span>
                           </DaisyBadge>
                         </div>
-                        
-                        <p className="text-[#6B5B47] text-sm mb-4">
-                          {assessment.description}
-                        </p>
-                        
+
+                        <p className="text-[#6B5B47] text-sm mb-4">{assessment.description}</p>
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
                             <FileText className="w-4 h-4" />
@@ -211,7 +210,7 @@ export default function SelfAssessmentPage() {
                             <span>Due: {assessment.nextDue}</span>
                           </div>
                         </div>
-                        
+
                         {assessment.status === 'Completed' && (
                           <div className="space-y-2">
                             <div className="flex items-center justify-between text-sm">
@@ -227,17 +226,20 @@ export default function SelfAssessmentPage() {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="ml-4">
-                        <DaisyButton 
+                        <DaisyButton
                           className={`${
-                            assessment.status === 'Completed' 
-                              ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' 
+                            assessment.status === 'Completed'
+                              ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                               : 'bg-[#8B7355] hover:bg-[#6B5B47] text-white'
                           }`}
                         >
-                          {assessment.status === 'Completed' ? 'Retake' : 
-                           assessment.status === 'In Progress' ? 'Continue' : 'Start'}
+                          {assessment.status === 'Completed'
+                            ? 'Retake'
+                            : assessment.status === 'In Progress'
+                              ? 'Continue'
+                              : 'Start'}
                         </DaisyButton>
                       </div>
                     </div>

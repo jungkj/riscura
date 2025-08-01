@@ -1,7 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Bot, MessageSquare, Shield, Brain, Target, Send, Sparkles, TrendingUp, CheckCircle } from 'lucide-react';
+import {
+  Bot,
+  MessageSquare,
+  Shield,
+  Brain,
+  Target,
+  Send,
+  Sparkles,
+  TrendingUp,
+  CheckCircle,
+} from 'lucide-react';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -20,9 +30,10 @@ function ARIAChat() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I\'m ARIA, your AI Risk Intelligence Assistant. I can help you analyze risks, review controls, and provide compliance guidance. What would you like to discuss today?',
-      timestamp: new Date()
-    }
+      content:
+        "Hello! I'm ARIA, your AI Risk Intelligence Assistant. I can help you analyze risks, review controls, and provide compliance guidance. What would you like to discuss today?",
+      timestamp: new Date(),
+    },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,10 +45,10 @@ function ARIAChat() {
       id: Date.now().toString(),
       role: 'user',
       content: input,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
@@ -46,10 +57,11 @@ function ARIAChat() {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'I understand you\'re asking about risk management. In demo mode, I can help you understand how ARIA would analyze this topic. For full AI capabilities, please contact our team for setup assistance.',
-        timestamp: new Date()
+        content:
+          "I understand you're asking about risk management. In demo mode, I can help you understand how ARIA would analyze this topic. For full AI capabilities, please contact our team for setup assistance.",
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, aiResponse]);
       setIsLoading(false);
     }, 1500);
   };
@@ -58,7 +70,7 @@ function ARIAChat() {
     'What are our highest risks?',
     'Review our security controls',
     'Generate compliance report',
-    'Help with risk assessment'
+    'Help with risk assessment',
   ];
 
   const featureCards = [
@@ -68,7 +80,7 @@ function ARIAChat() {
       icon: Brain,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200'
+      borderColor: 'border-blue-200',
     },
     {
       title: 'Control Review',
@@ -76,7 +88,7 @@ function ARIAChat() {
       icon: Shield,
       color: 'text-green-600',
       bgColor: 'bg-green-50',
-      borderColor: 'border-green-200'
+      borderColor: 'border-green-200',
     },
     {
       title: 'Compliance',
@@ -84,8 +96,8 @@ function ARIAChat() {
       icon: Target,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200'
-    }
+      borderColor: 'border-purple-200',
+    },
   ];
 
   return (
@@ -124,21 +136,31 @@ function ARIAChat() {
               AI-Powered Risk Management
             </h2>
             <p className="text-gray-600 font-inter max-w-2xl mx-auto">
-              ARIA combines advanced AI with deep risk management expertise to help you identify, assess, and mitigate risks across your organization.
+              ARIA combines advanced AI with deep risk management expertise to help you identify,
+              assess, and mitigate risks across your organization.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {featureCards.map((feature, index) => (
-              <DaisyCard key={index} className="border border-gray-200 bg-white hover:shadow-lg transition-all duration-200">
+              <DaisyCard
+                key={index}
+                className="border border-gray-200 bg-white hover:shadow-lg transition-all duration-200"
+              >
                 <DaisyCardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-lg ${feature.bgColor} ${feature.borderColor} border`}>
+                    <div
+                      className={`p-3 rounded-lg ${feature.bgColor} ${feature.borderColor} border`}
+                    >
                       <feature.icon className={`h-6 w-6 ${feature.color}`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-bold text-[#191919] font-inter text-lg mb-2">{feature.title}</h3>
-                      <p className="text-sm text-gray-600 font-inter leading-relaxed">{feature.description}</p>
+                      <h3 className="font-bold text-[#191919] font-inter text-lg mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 font-inter leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                 </DaisyCardContent>
@@ -194,9 +216,7 @@ function ARIAChat() {
                   key={message.id}
                   className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div
-                    className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}
-                  >
+                  <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
                     <div
                       className={`p-4 rounded-xl font-inter shadow-sm border ${
                         message.role === 'user'
@@ -207,22 +227,36 @@ function ARIAChat() {
                       <p className="text-sm leading-relaxed">{message.content}</p>
                     </div>
                     <div className="text-xs text-gray-500 font-inter mt-2 px-1 font-medium">
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {message.timestamp.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </div>
                   </div>
                 </div>
               ))}
-              
+
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div
+                          className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
+                          style={{ animationDelay: '0ms' }}
+                        />
+                        <div
+                          className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
+                          style={{ animationDelay: '150ms' }}
+                        />
+                        <div
+                          className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
+                          style={{ animationDelay: '300ms' }}
+                        />
                       </div>
-                      <span className="text-sm font-medium text-gray-600 font-inter">ARIA is thinking...</span>
+                      <span className="text-sm font-medium text-gray-600 font-inter">
+                        ARIA is thinking...
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -233,7 +267,9 @@ function ARIAChat() {
             {messages.length === 1 && (
               <div className="px-6 pb-4 border-t border-gray-100">
                 <div className="py-4">
-                  <p className="text-sm text-gray-600 font-inter font-medium mb-3">Quick questions to get started:</p>
+                  <p className="text-sm text-gray-600 font-inter font-medium mb-3">
+                    Quick questions to get started:
+                  </p>
                   <div className="grid grid-cols-2 gap-3">
                     {quickQuestions.map((question, index) => (
                       <DaisyButton
@@ -241,7 +277,8 @@ function ARIAChat() {
                         variant="ghost"
                         size="sm"
                         className="text-left justify-start text-sm h-auto py-3 px-4"
-                        onClick={() => setInput(question)}>
+                        onClick={() => setInput(question)}
+                      >
                         {question}
                       </DaisyButton>
                     ))}
@@ -261,10 +298,11 @@ function ARIAChat() {
                   disabled={isLoading}
                   className="flex-1 text-sm"
                 />
-                <DaisyButton 
-                  onClick={handleSend} 
+                <DaisyButton
+                  onClick={handleSend}
                   disabled={isLoading || !input.trim()}
-                  className="px-6 font-inter font-medium">
+                  className="px-6 font-inter font-medium"
+                >
                   <Send className="h-4 w-4" />
                 </DaisyButton>
               </div>
@@ -279,13 +317,16 @@ function ARIAChat() {
               Need Help Getting Started?
             </h3>
             <p className="text-gray-600 font-inter mb-6">
-              ARIA can help you with various risk management tasks. Here are some things you can try:
+              ARIA can help you with various risk management tasks. Here are some things you can
+              try:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
               <DaisyCard className="border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  <h4 className="font-semibold text-[#191919] font-inter text-sm">Risk Assessment</h4>
+                  <h4 className="font-semibold text-[#191919] font-inter text-sm">
+                    Risk Assessment
+                  </h4>
                 </div>
                 <p className="text-xs text-gray-600 font-inter">
                   "Analyze our cybersecurity risks" or "What are the top risks in our industry?"
@@ -294,7 +335,9 @@ function ARIAChat() {
               <DaisyCard className="border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <h4 className="font-semibold text-[#191919] font-inter text-sm">Control Review</h4>
+                  <h4 className="font-semibold text-[#191919] font-inter text-sm">
+                    Control Review
+                  </h4>
                 </div>
                 <p className="text-xs text-gray-600 font-inter">
                   "Review our access controls" or "Suggest improvements for our security policies"
@@ -318,10 +361,9 @@ function ARIAChat() {
 }
 
 export default function ARIAPage() {
-
   return (
     <ProtectedRoute>
       <ARIAChat />
     </ProtectedRoute>
   );
-} 
+}

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -14,26 +14,26 @@ export default function ContactPage() {
     name: '',
     email: '',
     company: '',
-    message: ''
+    message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    alert('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    alert("Thank you for your inquiry! We'll get back to you within 24 hours.");
     setFormData({ name: '', email: '', company: '', message: '' });
     setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -54,7 +54,8 @@ export default function ContactPage() {
               Let's discuss your needs
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Ready to secure your enterprise with Riscura? Our team is here to help you get started.
+              Ready to secure your enterprise with Riscura? Our team is here to help you get
+              started.
             </p>
           </motion.div>
         </div>
@@ -78,11 +79,14 @@ export default function ContactPage() {
                   <p className="text-gray-600 mb-6">
                     Fill out the form below and we'll get back to you within 24 hours.
                   </p>
-                  
+
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-gray-700 mb-2"
+                        >
                           Full Name *
                         </label>
                         <DaisyInput
@@ -96,7 +100,10 @@ export default function ContactPage() {
                         />
                       </div>
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700 mb-2"
+                        >
                           Email Address *
                         </label>
                         <DaisyInput
@@ -110,9 +117,12 @@ export default function ContactPage() {
                         />
                       </div>
                     </div>
-                    
+
                     <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="company"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         Company Name *
                       </label>
                       <DaisyInput
@@ -125,9 +135,12 @@ export default function ContactPage() {
                         placeholder="Acme Corporation"
                       />
                     </div>
-                    
+
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         Message *
                       </label>
                       <DaisyTextarea
@@ -140,9 +153,9 @@ export default function ContactPage() {
                         placeholder="Tell us about your risk management needs..."
                       />
                     </div>
-                    
-                    <DaisyButton 
-                      type="submit" 
+
+                    <DaisyButton
+                      type="submit"
                       disabled={isSubmitting}
                       className="w-full bg-[#199BEC] hover:bg-[#0f7dc7] text-white py-3 flex items-center justify-center"
                     >
@@ -163,10 +176,8 @@ export default function ContactPage() {
             >
               <DaisyCard className="shadow-lg">
                 <DaisyCardBody className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">
-                    Contact Information
-                  </h3>
-                  
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h3>
+
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-[#199BEC]/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -178,7 +189,7 @@ export default function ContactPage() {
                         <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-[#199BEC]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Phone className="w-6 h-6 text-[#199BEC]" />
@@ -189,7 +200,7 @@ export default function ContactPage() {
                         <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM EST</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-[#199BEC]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                         <MapPin className="w-6 h-6 text-[#199BEC]" />
@@ -197,7 +208,8 @@ export default function ContactPage() {
                       <div>
                         <h4 className="font-semibold text-gray-900">Office</h4>
                         <p className="text-gray-600">
-                          123 Enterprise Blvd<br />
+                          123 Enterprise Blvd
+                          <br />
                           San Francisco, CA 94105
                         </p>
                       </div>
@@ -208,9 +220,7 @@ export default function ContactPage() {
 
               <DaisyCard className="shadow-lg bg-gradient-to-br from-[#199BEC]/5 to-white">
                 <DaisyCardBody className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Enterprise Features
-                  </h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Enterprise Features</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
@@ -241,4 +251,4 @@ export default function ContactPage() {
       </section>
     </div>
   );
-} 
+}

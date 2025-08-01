@@ -139,8 +139,7 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
           <DaisyBadge 
             variant={stat.variant || 'outline'} 
             className="text-sm font-medium px-3 py-1" >
-  {stat.value} {stat.label}
-</DaisyBadge>
+            {stat.value} {stat.label}
           </DaisyBadge>
           
           {stat.trend && stat.trendValue && (

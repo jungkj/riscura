@@ -5,8 +5,20 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent, DaisyCardDescription } from '@/components/ui/DaisyCard';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardTitle,
+  DaisyCardHeader,
+  DaisyCardContent,
+  DaisyCardDescription,
+} from '@/components/ui/DaisyCard';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 // Date range picker would be imported here if available
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -92,7 +104,7 @@ const sampleMetrics: MetricTrend[] = [
     data: [
       { period: '2024-01', value: 72, change: 0, changePercent: 0 },
       { period: '2024-02', value: 75, change: 3, changePercent: 4.17 },
-      { period: '2024-03', value: 78, change: 3, changePercent: 4.00 },
+      { period: '2024-03', value: 78, change: 3, changePercent: 4.0 },
       { period: '2024-04', value: 82, change: 4, changePercent: 5.13 },
       { period: '2024-05', value: 85, change: 3, changePercent: 3.66 },
     ],
@@ -124,7 +136,8 @@ const sampleInsights: PredictiveInsight[] = [
   {
     id: 'insight-1',
     title: 'SOC 2 Compliance Target Achievement',
-    description: 'Based on current trends, you are likely to achieve 95% SOC 2 compliance by Q3 2024.',
+    description:
+      'Based on current trends, you are likely to achieve 95% SOC 2 compliance by Q3 2024.',
     confidence: 87,
     impact: 'high',
     timeframe: '3 months',
@@ -176,8 +189,8 @@ export default function AnalyticsTrendsPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMetrics, setSelectedMetrics] = useState<MetricTrend[]>([]);
 
-  const filteredMetrics = sampleMetrics.filter(metric => 
-    selectedCategory === 'all' || metric.category === selectedCategory
+  const filteredMetrics = sampleMetrics.filter(
+    (metric) => selectedCategory === 'all' || metric.category === selectedCategory
   );
 
   const handleRefreshData = () => {
@@ -193,7 +206,7 @@ export default function AnalyticsTrendsPage() {
   };
 
   const handleDrillDown = (metricId: string) => {
-    const metric = sampleMetrics.find(m => m.id === metricId);
+    const metric = sampleMetrics.find((m) => m.id === metricId);
     if (metric) {
       toast.success(`Drilling down into ${metric.name} details...`);
     }
@@ -236,12 +249,12 @@ export default function AnalyticsTrendsPage() {
           },
           {
             label: 'improving trends',
-            value: sampleMetrics.filter(m => m.trend === 'up').length,
+            value: sampleMetrics.filter((m) => m.trend === 'up').length,
             variant: 'default',
           },
           {
             label: 'critical alerts',
-            value: sampleMetrics.filter(m => m.status === 'critical').length,
+            value: sampleMetrics.filter((m) => m.status === 'critical').length,
             variant: 'destructive',
           },
           {
@@ -254,9 +267,9 @@ export default function AnalyticsTrendsPage() {
       >
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
-          <DaisySelect 
-            className="w-40" 
-            value={selectedTimeRange} 
+          <DaisySelect
+            className="w-40"
+            value={selectedTimeRange}
             onChange={(e) => setSelectedTimeRange(e.target.value)}
           >
             <option value="1month">Last Month</option>
@@ -265,9 +278,9 @@ export default function AnalyticsTrendsPage() {
             <option value="1year">Last Year</option>
           </DaisySelect>
 
-          <DaisySelect 
-            className="w-40" 
-            value={selectedCategory} 
+          <DaisySelect
+            className="w-40"
+            value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="all">All Categories</option>
@@ -301,7 +314,7 @@ export default function AnalyticsTrendsPage() {
               const CategoryIcon = categoryConfig.icon;
 
               return (
-                <DaisyCard 
+                <DaisyCard
                   key={metric.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleDrillDown(metric.id)}
@@ -309,18 +322,23 @@ export default function AnalyticsTrendsPage() {
                   <DaisyCardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className={cn("p-1.5 rounded-full", categoryConfig.bg)}>
-                          <CategoryIcon className={cn("h-4 w-4", categoryConfig.color)} />
+                        <div className={cn('p-1.5 rounded-full', categoryConfig.bg)}>
+                          <CategoryIcon className={cn('h-4 w-4', categoryConfig.color)} />
                         </div>
-                        <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                        <DaisyBadge variant="outline" className={cn('text-xs', statusConfig.color)}>
                           {statusConfig.label}
                         </DaisyBadge>
                       </div>
-                      <TrendIcon className={cn(
-                        "h-4 w-4",
-                        metric.trend === 'up' ? 'text-green-600' :
-                        metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
-                      )} />
+                      <TrendIcon
+                        className={cn(
+                          'h-4 w-4',
+                          metric.trend === 'up'
+                            ? 'text-green-600'
+                            : metric.trend === 'down'
+                              ? 'text-red-600'
+                              : 'text-gray-600'
+                        )}
+                      />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
                   </DaisyCardHeader>
@@ -328,33 +346,38 @@ export default function AnalyticsTrendsPage() {
                     <div className="space-y-3">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-2xl font-bold">
-                          {metric.currentValue}{metric.unit}
+                          {metric.currentValue}
+                          {metric.unit}
                         </span>
-                        <span className={cn(
-                          "text-sm font-medium",
-                          metric.changePercent > 0 ? 'text-green-600' :
-                          metric.changePercent < 0 ? 'text-red-600' : 'text-gray-600'
-                        )}>
-                          {metric.changePercent > 0 ? '+' : ''}{metric.changePercent.toFixed(1)}%
+                        <span
+                          className={cn(
+                            'text-sm font-medium',
+                            metric.changePercent > 0
+                              ? 'text-green-600'
+                              : metric.changePercent < 0
+                                ? 'text-red-600'
+                                : 'text-gray-600'
+                          )}
+                        >
+                          {metric.changePercent > 0 ? '+' : ''}
+                          {metric.changePercent.toFixed(1)}%
                         </span>
                       </div>
-                      
+
                       {metric.target && (
                         <div>
                           <div className="flex justify-between text-xs mb-1">
                             <span>Progress to Target</span>
                             <span>{Math.round((metric.currentValue / metric.target) * 100)}%</span>
                           </div>
-                          <DaisyProgress 
-                            value={(metric.currentValue / metric.target) * 100} 
+                          <DaisyProgress
+                            value={(metric.currentValue / metric.target) * 100}
                             className="h-2"
                           />
                         </div>
                       )}
 
-                      <div className="text-xs text-gray-500">
-                        {metric.description}
-                      </div>
+                      <div className="text-xs text-gray-500">{metric.description}</div>
                     </div>
                   </DaisyCardContent>
                 </DaisyCard>
@@ -381,18 +404,21 @@ export default function AnalyticsTrendsPage() {
                     <span className="font-medium text-green-900">Improving</span>
                   </div>
                   <div className="text-2xl font-bold text-green-900">
-                    {sampleMetrics.filter(m => m.trend === 'up').length}
+                    {sampleMetrics.filter((m) => m.trend === 'up').length}
                   </div>
                   <div className="text-sm text-green-700">metrics trending up</div>
                 </div>
-                
+
                 <div className="p-4 bg-red-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
                     <ArrowDownRight className="h-4 w-4 text-red-600" />
                     <span className="font-medium text-red-900">Declining</span>
                   </div>
                   <div className="text-2xl font-bold text-red-900">
-                    {sampleMetrics.filter(m => m.trend === 'down' && m.category !== 'risk').length}
+                    {
+                      sampleMetrics.filter((m) => m.trend === 'down' && m.category !== 'risk')
+                        .length
+                    }
                   </div>
                   <div className="text-sm text-red-700">metrics trending down</div>
                 </div>
@@ -403,7 +429,7 @@ export default function AnalyticsTrendsPage() {
                     <span className="font-medium text-gray-900">Stable</span>
                   </div>
                   <div className="text-2xl font-bold text-gray-900">
-                    {sampleMetrics.filter(m => m.trend === 'stable').length}
+                    {sampleMetrics.filter((m) => m.trend === 'stable').length}
                   </div>
                   <div className="text-sm text-gray-600">metrics stable</div>
                 </div>
@@ -414,7 +440,10 @@ export default function AnalyticsTrendsPage() {
                     <span className="font-medium text-yellow-900">On Target</span>
                   </div>
                   <div className="text-2xl font-bold text-yellow-900">
-                    {sampleMetrics.filter(m => m.target && m.currentValue >= m.target * 0.9).length}
+                    {
+                      sampleMetrics.filter((m) => m.target && m.currentValue >= m.target * 0.9)
+                        .length
+                    }
                   </div>
                   <div className="text-sm text-yellow-700">near target goals</div>
                 </div>
@@ -426,12 +455,8 @@ export default function AnalyticsTrendsPage() {
         <DaisyTabsContent value="metrics" className="space-y-6">
           <div className="text-center py-12">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Metric Details
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Detailed metric analysis coming soon
-            </p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Metric Details</h3>
+            <p className="text-gray-600 mb-4">Detailed metric analysis coming soon</p>
           </div>
         </DaisyTabsContent>
 
@@ -454,7 +479,10 @@ export default function AnalyticsTrendsPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className={cn("text-xs", impactConfig.color)}>
+                          <DaisyBadge
+                            variant="outline"
+                            className={cn('text-xs', impactConfig.color)}
+                          >
                             {impactConfig.label}
                           </DaisyBadge>
                           <DaisyBadge variant="outline" className="text-xs">
@@ -470,7 +498,9 @@ export default function AnalyticsTrendsPage() {
                         </DaisyCardDescription>
                       </div>
                       <div className="text-right ml-4">
-                        <div className="text-2xl font-bold text-blue-600">{insight.confidence}%</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          {insight.confidence}%
+                        </div>
                         <div className="text-sm text-gray-500">Confidence</div>
                       </div>
                     </div>
@@ -478,14 +508,12 @@ export default function AnalyticsTrendsPage() {
                   <DaisyCardContent>
                     <div className="space-y-4">
                       <DaisyProgress value={insight.confidence} className="h-2" />
-                      
+
                       <div className="p-3 bg-blue-50 rounded-lg">
                         <h4 className="font-medium text-sm text-blue-900 mb-1">
                           Recommended Action
                         </h4>
-                        <p className="text-sm text-blue-800">
-                          {insight.recommendation}
-                        </p>
+                        <p className="text-sm text-blue-800">{insight.recommendation}</p>
                       </div>
 
                       <div className="flex space-x-2">
@@ -513,9 +541,7 @@ export default function AnalyticsTrendsPage() {
         <DaisyTabsContent value="comparisons">
           <div className="text-center py-12">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Comparative Analysis
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Comparative Analysis</h3>
             <p className="text-gray-600 mb-4">
               Compare metrics across time periods, categories, and benchmarks
             </p>

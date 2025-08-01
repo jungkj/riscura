@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';

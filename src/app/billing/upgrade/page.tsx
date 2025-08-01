@@ -14,15 +14,10 @@ const plans = [
     price: '$0',
     period: 'forever',
     description: 'Perfect for getting started with basic risk management',
-    features: [
-      'Up to 10 risks',
-      'Basic reporting',
-      'Community support',
-      '3 team members'
-    ],
+    features: ['Up to 10 risks', 'Basic reporting', 'Community support', '3 team members'],
     limits: 'Limited features',
     popular: false,
-    icon: Shield
+    icon: Shield,
   },
   {
     name: 'Pro',
@@ -36,11 +31,11 @@ const plans = [
       'Priority support',
       'Up to 25 team members',
       'Integrations',
-      'Custom workflows'
+      'Custom workflows',
     ],
     limits: 'Everything you need',
     popular: true,
-    icon: Zap
+    icon: Zap,
   },
   {
     name: 'Enterprise',
@@ -54,12 +49,12 @@ const plans = [
       'API access',
       'Custom reporting',
       'Dedicated support',
-      'On-premise deployment'
+      'On-premise deployment',
     ],
     limits: 'Ultimate solution',
     popular: false,
-    icon: Crown
-  }
+    icon: Crown,
+  },
 ];
 
 export default function UpgradePage() {
@@ -80,7 +75,7 @@ export default function UpgradePage() {
         },
         body: JSON.stringify({
           priceId: planName === 'pro' ? 'price_pro_monthly' : 'price_enterprise_monthly',
-          mode: 'subscription'
+          mode: 'subscription',
         }),
       });
 
@@ -113,9 +108,7 @@ export default function UpgradePage() {
         </p>
         {subscription && (
           <div className="mt-4">
-            <DaisyBadge variant="outline">
-              Current Plan: {subscription.plan}
-            </DaisyBadge>
+            <DaisyBadge variant="outline">Current Plan: {subscription.plan}</DaisyBadge>
           </div>
         )}
       </div>
@@ -127,7 +120,10 @@ export default function UpgradePage() {
           const isUpgrade = subscription && subscription.plan === 'free' && plan.name !== 'Free';
 
           return (
-            <DaisyCard key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}>
+            <DaisyCard
+              key={plan.name}
+              className={`relative ${plan.popular ? 'ring-2 ring-primary' : ''}`}
+            >
               {plan.popular && (
                 <DaisyBadge className="absolute -top-2 left-1/2 transform -translate-x-1/2">
                   Most Popular
@@ -155,23 +151,21 @@ export default function UpgradePage() {
                     </li>
                   ))}
                 </ul>
-                
+
                 {isCurrentPlan ? (
                   <DaisyButton className="w-full" disabled>
                     Current Plan
                   </DaisyButton>
                 ) : plan.name === 'Free' ? (
-                  <DaisyButton 
-                    variant="secondary" 
-                    className="w-full"
-                    disabled>
+                  <DaisyButton variant="secondary" className="w-full" disabled>
                     Free Forever
                   </DaisyButton>
                 ) : (
-                  <DaisyButton 
-                    className="w-full" 
+                  <DaisyButton
+                    className="w-full"
                     onClick={() => handleUpgrade(plan.name.toLowerCase())}
-                    variant={plan.popular ? 'primary' : 'secondary'}>
+                    variant={plan.popular ? 'primary' : 'secondary'}
+                  >
                     {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
                   </DaisyButton>
                 )}
@@ -186,9 +180,12 @@ export default function UpgradePage() {
           All plans include a 14-day free trial. Cancel anytime.
         </p>
         <p className="text-sm text-muted-foreground mt-2">
-          Need a custom solution? <a href="/contact" className="text-primary hover:underline">Contact us</a>
+          Need a custom solution?{' '}
+          <a href="/contact" className="text-primary hover:underline">
+            Contact us
+          </a>
         </p>
       </div>
     </div>
   );
-} 
+}

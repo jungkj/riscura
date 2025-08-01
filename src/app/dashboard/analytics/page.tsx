@@ -5,31 +5,74 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisySelect, DaisySelectTrigger, DaisySelectValue, DaisySelectContent, DaisySelectItem } from '@/components/ui/DaisySelect';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import {
+  DaisySelect,
+  DaisySelectTrigger,
+  DaisySelectValue,
+  DaisySelectContent,
+  DaisySelectItem,
+} from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  RadialBarChart, RadialBar, ComposedChart
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  RadialBarChart,
+  RadialBar,
+  ComposedChart,
 } from 'recharts';
 import {
-  TrendingUp, TrendingDown, Activity, Shield, FileText, CheckCircle,
-  AlertTriangle, Clock, Users, Target, BarChart3, PieChart as PieChartIcon,
-  Download, RefreshCw, Calendar, Filter, ArrowUpRight, ArrowDownRight,
-  Zap, Eye, Briefcase
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Shield,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+  Clock,
+  Users,
+  Target,
+  BarChart3,
+  PieChart as PieChartIcon,
+  Download,
+  RefreshCw,
+  Calendar,
+  Filter,
+  ArrowUpRight,
+  ArrowDownRight,
+  Zap,
+  Eye,
+  Briefcase,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Enhanced metric card component
-const MetricCard = ({ 
-  title, 
-  value, 
-  change, 
-  trend, 
-  icon: Icon, 
+const MetricCard = ({
+  title,
+  value,
+  change,
+  trend,
+  icon: Icon,
   color = 'blue',
-  loading = false 
+  loading = false,
 }: any) => {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600',
@@ -62,9 +105,11 @@ const MetricCard = ({
                   ) : (
                     <ArrowDownRight className="h-4 w-4 text-red-600" />
                   )}
-                  <span className={`text-sm font-medium ${
-                    trend === 'up' ? 'text-green-600' : 'text-red-600'
-                  }`}>
+                  <span
+                    className={`text-sm font-medium ${
+                      trend === 'up' ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
                     {Math.abs(change)}%
                   </span>
                   <span className="text-sm text-gray-500">vs last period</span>
@@ -108,9 +153,9 @@ export default function AnalyticsPage() {
     try {
       const response = await fetch(`/api/analytics?type=dashboard&timeRange=${timeRange}`);
       const data = await response.json();
-      
+
       if (!response.ok) throw new Error(data.error);
-      
+
       setAnalyticsData(data.data);
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
@@ -145,12 +190,7 @@ export default function AnalyticsPage() {
                   <DaisySelectItem value="90d">Last 90 days</DaisySelectItem>
                 </DaisySelectContent>
               </DaisySelect>
-              <DaisyButton
-                variant="outline"
-                size="sm"
-                onClick={fetchAnalytics}
-                disabled={loading}
-              >
+              <DaisyButton variant="outline" size="sm" onClick={fetchAnalytics} disabled={loading}>
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
               </DaisyButton>
@@ -168,7 +208,7 @@ export default function AnalyticsPage() {
             title="Total Risks"
             value={analyticsData?.totals?.risks || 0}
             change={analyticsData?.changes?.risks}
-            trend={analyticsData?.changes?.risks > 0 ? "up" : "down"}
+            trend={analyticsData?.changes?.risks > 0 ? 'up' : 'down'}
             icon={AlertTriangle}
             color="red"
             loading={loading}
@@ -177,7 +217,7 @@ export default function AnalyticsPage() {
             title="Active Controls"
             value={analyticsData?.totals?.controls || 0}
             change={analyticsData?.changes?.controls}
-            trend={analyticsData?.changes?.controls > 0 ? "up" : "down"}
+            trend={analyticsData?.changes?.controls > 0 ? 'up' : 'down'}
             icon={Shield}
             color="green"
             loading={loading}
@@ -186,7 +226,7 @@ export default function AnalyticsPage() {
             title="Documents"
             value={analyticsData?.totals?.documents || 0}
             change={analyticsData?.changes?.documents}
-            trend={analyticsData?.changes?.documents > 0 ? "up" : "down"}
+            trend={analyticsData?.changes?.documents > 0 ? 'up' : 'down'}
             icon={FileText}
             color="blue"
             loading={loading}
@@ -195,7 +235,7 @@ export default function AnalyticsPage() {
             title="Questionnaires"
             value={analyticsData?.totals?.questionnaires || 0}
             change={analyticsData?.changes?.questionnaires}
-            trend={analyticsData?.changes?.questionnaires > 0 ? "up" : "down"}
+            trend={analyticsData?.changes?.questionnaires > 0 ? 'up' : 'down'}
             icon={CheckCircle}
             color="purple"
             loading={loading}
@@ -264,7 +304,9 @@ export default function AnalyticsPage() {
               <DaisyCardBody>
                 <DaisyCardTitle className="text-lg mb-4">Control Performance</DaisyCardTitle>
                 <div className="text-center py-8">
-                  <p className="text-gray-500">Control effectiveness metrics will be displayed here</p>
+                  <p className="text-gray-500">
+                    Control effectiveness metrics will be displayed here
+                  </p>
                 </div>
               </DaisyCardBody>
             </DaisyCard>
