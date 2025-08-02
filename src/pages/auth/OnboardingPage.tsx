@@ -101,7 +101,7 @@ export default function OnboardingPage() {
 
   return (
     <DaisyCard className="w-full" >
-  <DaisyCardHeader className="space-y-1" />
+  <DaisyCardBody className="space-y-1" />
 </DaisyCard>
         <DaisyCardTitle className="text-2xl font-bold" >
   {step === 1 ? 'Welcome to Riscura' : 'Complete Your Profile'}
@@ -114,9 +114,9 @@ export default function OnboardingPage() {
             : 'Tell us about your role and requirements'}
         </p>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <Form {...form}>
-</DaisyCardContent>
+</DaisyCardBody>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {step === 1 ? (
               <>
@@ -271,7 +271,7 @@ export default function OnboardingPage() {
             )}
           </form>
         </Form>
-      </DaisyCardContent>
+      </DaisyCardBody>
       <DaisyCardFooter className="flex justify-center" >
   <p className="text-xs text-muted-foreground">
 </DaisyCardFooter>

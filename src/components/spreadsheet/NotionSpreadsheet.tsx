@@ -694,7 +694,7 @@ export default function NotionSpreadsheet() {
                   const IconComponent = getInsightIcon(insight.type);
                   return (
                     <DaisyCard key={insight.id} className={`border-l-4 ${getInsightSeverityColor(insight.severity)}`}>
-                      <DaisyCardContent className="p-4" >
+                      <DaisyCardBody className="p-4" >
   <div className="flex items-start gap-3">
 </DaisyCard>
                           <div className={`p-2 rounded-full ${getInsightSeverityColor(insight.severity)}`}>
@@ -718,7 +718,7 @@ export default function NotionSpreadsheet() {
                             </div>
                           </div>
                         </div>
-                      </DaisyCardContent>
+                      </DaisyCardBody>
                     </DaisyCard>
                   );
                 })}

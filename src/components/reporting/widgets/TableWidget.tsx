@@ -116,7 +116,7 @@ export function TableWidget({
       className={`h-full ${isSelected ? 'ring-2 ring-blue-500' : ''} cursor-pointer`}
       onClick={onSelect}
     >
-      <DaisyCardHeader className="pb-2 flex flex-row items-center justify-between" >
+      <DaisyCardBody className="pb-2 flex flex-row items-center justify-between" >
   <DaisyCardTitle className="text-sm font-medium">
 </DaisyCard>{widget.title}</DaisyCardTitle>
         <div className="flex items-center space-x-1">
@@ -142,9 +142,9 @@ export function TableWidget({
           </DaisyButton>
         </div>
       
-      <DaisyCardContent className="pt-0" >
+      <DaisyCardBody className="pt-0" >
   {loading ? (
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center justify-center h-32">
             <div className="text-sm text-gray-500">Loading...</div>
           </div>
@@ -221,7 +221,7 @@ export function TableWidget({
             )}
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

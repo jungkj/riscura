@@ -129,7 +129,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onView?.(risk)}
     >
-      <DaisyCardContent className="p-6" >
+      <DaisyCardBody className="p-6" >
   <div className="flex items-start justify-between">
 </DaisyCard>
           <div className="flex-1 min-w-0">
@@ -266,7 +266,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
             </DaisyDropdownMenu>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

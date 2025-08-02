@@ -334,9 +334,9 @@ export default function ProboIntegrationPage() {
                         onClick={() => handleTabChange(action.tab)}
                       >
                         <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden group" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                             <div className={`h-12 w-12 bg-gradient-to-r ${action.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                               {action.icon}
                             </div>
@@ -349,7 +349,7 @@ export default function ProboIntegrationPage() {
                               </DaisyBadge>
                               <ChevronRight className="h-4 w-4 text-[#A8A8A8] group-hover:text-[#199BEC] transition-colors" />
                             </div>
-                          </DaisyCardContent>
+                          </DaisyCardBody>
                         </DaisyCard>
                       </motion.div>
                     ))}
@@ -367,7 +367,7 @@ export default function ProboIntegrationPage() {
                         className="group"
                       >
                         <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden" >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
                             <div className="flex items-start justify-between">
                               <div className="flex items-center space-x-4">
@@ -388,7 +388,7 @@ export default function ProboIntegrationPage() {
                             </div>
                             <DaisyProgress value={feature.progress} className="mt-3" />
                           
-                          <DaisyCardContent >
+                          <DaisyCardBody >
   <p className="text-[#A8A8A8] mb-4 leading-relaxed">
 </DaisyProgress>{feature.description}</p>
                             <div className="space-y-3">
@@ -402,7 +402,7 @@ export default function ProboIntegrationPage() {
                                 ))}
                               </div>
                             </div>
-                          </DaisyCardContent>
+                          </DaisyCardBody>
                         </DaisyCard>
                       </motion.div>
                     ))}
@@ -412,7 +412,7 @@ export default function ProboIntegrationPage() {
                 {/* Enhanced Success Metrics */}
                 <motion.div variants={itemVariants}>
                   <DaisyCard className="bg-gradient-to-br from-white via-white to-[#199BEC]/5 border-[#D8C3A5]/30 shadow-xl" >
-  <DaisyCardHeader className="text-center pb-8" />
+  <DaisyCardBody className="text-center pb-8" />
 </DaisyCard>
                       <DaisyCardTitle className="text-2xl text-[#191919] flex items-center justify-center gap-2" >
   <TrendingUp className="h-6 w-6 text-[#199BEC]" />
@@ -424,9 +424,9 @@ export default function ProboIntegrationPage() {
 </DaisyCardDescription>
                       </p>
                     
-                    <DaisyCardContent >
+                    <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-</DaisyCardContent>
+</DaisyCardBody>
                         {successMetrics.map((metric, index) => (
                           <motion.div
                             key={index}
@@ -455,7 +455,7 @@ export default function ProboIntegrationPage() {
                           </motion.div>
                         ))}
                       </div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </motion.div>
 

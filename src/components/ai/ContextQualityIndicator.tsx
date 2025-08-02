@@ -215,7 +215,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
       className={className}
     >
       <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -244,9 +244,9 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
           </div>
         
 
-        <DaisyCardContent className="space-y-4" >
+        <DaisyCardBody className="space-y-4" >
   {/* Quality Metrics */}
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="space-y-3">
             <QualityMetric
               label="Relevance"
@@ -335,7 +335,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               )}
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );

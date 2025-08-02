@@ -589,7 +589,7 @@ export default function MobileFormLayout({
             
             return (
               <DaisyCard key={section.id} className={`${isCurrentStep ? 'ring-2 ring-blue-500' : ''}`}>
-                <DaisyCardHeader 
+                <DaisyCardBody 
                   className={`${section.collapsible ? 'cursor-pointer' : ''} pb-3`}
                   onClick={() => section.collapsible && toggleSection(section.id)}
                 >
@@ -624,10 +624,10 @@ export default function MobileFormLayout({
                 
                 
                 {(!section.collapsible || isExpanded) && (
-                  <DaisyCardContent className="space-y-4" >
+                  <DaisyCardBody className="space-y-4" >
   {section.fields.map(field => renderField(field))}
-</DaisyCardContent>
-                  </DaisyCardContent>
+</DaisyCardBody>
+                  </DaisyCardBody>
                 )}
               </DaisyCard>
             );

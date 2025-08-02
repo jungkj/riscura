@@ -270,16 +270,16 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   if (error) {
     return (
       <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center text-red-600">
             <p>Error loading controls: {error}</p>
             <DaisyButton onClick={() => window.location.reload()} className="mt-2" />
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
@@ -303,43 +303,43 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Total Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{stats.total}</div>
+</DaisyCardBody>{stats.total}</div>
             <p className="text-xs text-muted-foreground">
               Across all types
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">High Effectiveness</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-green-600" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-green-600">
-</DaisyCardContent>
+</DaisyCardBody>
               {stats.byEffectiveness.high || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               Performing well
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Overdue Tests</DaisyCardTitle>
             <DaisyAlertTriangle className="h-4 w-4 text-red-600" >
-  <DaisyCardContent >
+  <DaisyCardBody >
 </DaisyAlertTriangle>
   <div className="text-2xl font-bold text-red-600">
 </DaisyCard>
@@ -348,30 +348,30 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
             <p className="text-xs text-muted-foreground">
               Need immediate attention
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Avg Effectiveness</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>
+</DaisyCardBody>
               {stats.averageEffectiveness.toFixed(1)}
             </div>
             <p className="text-xs text-muted-foreground">
               Out of 5.0 scale
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
       {/* Search and Filters */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
@@ -459,9 +459,9 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       {/* Bulk Actions */}
       {selectedControls.length > 0 && (
         <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
                 {selectedControls.length} control(s) selected
@@ -483,15 +483,15 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
       {/* Control Table */}
       <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTable />
             <DaisyTableHeader />
               <DaisyTableRow />
@@ -652,15 +652,15 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               </div>
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Empty State */}
       {filteredControls.length === 0 && (
         <DaisyCard >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-muted-foreground">
               <Shield className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium">No controls found</p>
@@ -676,7 +676,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 </DaisyButton>
               )}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 

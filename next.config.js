@@ -32,6 +32,8 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
+    // Disable SWC for JSX compilation issues
+    styledComponents: false,
   },
 
   // Image optimization
@@ -222,6 +224,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
     tsconfigPath: './tsconfig.json',
   },
+
 
   // Logging configuration
   logging: {

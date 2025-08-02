@@ -125,9 +125,9 @@ export default function UpdateRiskAssessmentPage() {
 
           {/* Search Bar */}
           <DaisyCard className="mb-6" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <DaisyInput
@@ -143,17 +143,17 @@ export default function UpdateRiskAssessmentPage() {
           {/* Risk List */}
           {loading ? (
             <DaisyCard >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <p className="text-gray-500">Loading risks...</p>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           ) : filteredRisks.length === 0 ? (
             <DaisyCard >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <DaisyAlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" >
   <h3 className="text-lg font-semibold text-gray-900 mb-2">
 </DaisyAlertTriangle>
@@ -170,7 +170,7 @@ export default function UpdateRiskAssessmentPage() {
                     Create New Risk
                   </DaisyButton>
                 )}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           ) : (
             <div className="grid gap-4">
@@ -179,7 +179,7 @@ export default function UpdateRiskAssessmentPage() {
                   key={risk.id}
                   className="hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => handleRiskSelect(risk.id)} />
-                  <DaisyCardContent className="p-6" >
+                  <DaisyCardBody className="p-6" >
   <div className="flex items-start justify-between">
 </DaisyCard>
                       <div className="flex-1">
@@ -222,7 +222,7 @@ export default function UpdateRiskAssessmentPage() {
                         Update
                       </DaisyButton>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               ))}
             </div>
@@ -231,13 +231,13 @@ export default function UpdateRiskAssessmentPage() {
           {/* Quick Stats */}
           {!loading && risks.length > 0 && (
             <DaisyCard className="mt-6" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-lg">Quick Overview</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{risks.length}</p>
                     <p className="text-sm text-gray-600">Total Risks</p>
@@ -266,7 +266,7 @@ export default function UpdateRiskAssessmentPage() {
                     <p className="text-sm text-gray-600">Need Review (&gt;30 days)</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </div>

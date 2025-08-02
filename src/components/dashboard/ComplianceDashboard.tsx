@@ -163,7 +163,7 @@ export default function ComplianceDashboard() {
 
       {/* Probo Integration Banner */}
       <DaisyCard className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -204,17 +204,17 @@ export default function ComplianceDashboard() {
 
       {/* Traffic Light System for Quick Status Overview */}
       <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="h-5 w-5 text-[#199BEC]" />
 </DaisyCardTitle>
             Framework Status Overview
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {frameworks.map((framework, index) => (
               <div key={index} className="p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-3 mb-3">
@@ -263,22 +263,22 @@ export default function ComplianceDashboard() {
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Detailed Framework Progress */}
       <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyCalendar className="h-5 w-5 text-[#199BEC]" />
 </DaisyCardTitle>
             Framework Progress Details
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
             {frameworks.map((framework, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -304,7 +304,7 @@ export default function ComplianceDashboard() {
               Generate Detailed Compliance Report
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
       );

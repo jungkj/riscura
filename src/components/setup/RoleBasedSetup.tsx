@@ -366,7 +366,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                   }`}
                   onClick={() => handleRoleSelect(role)}
                 >
-                  <DaisyCardContent className="p-6" >
+                  <DaisyCardBody className="p-6" >
   <div className="flex items-start space-x-4">
 </DaisyCard>
                       <div className={`p-3 rounded-lg ${role.color}`}>
@@ -390,7 +390,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -435,9 +435,9 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
     return (
       <div className="max-w-md mx-auto">
         <DaisyCard >
-  <DaisyCardContent className="p-8 text-center" >
+  <DaisyCardBody className="p-8 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600 animate-pulse" />
             </div>
@@ -454,7 +454,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div>
@@ -480,7 +480,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
           </div>
         
 
-        <DaisyCardContent className="p-6" >
+        <DaisyCardBody className="p-6" >
   {renderStepContent()}
 </DaisyProgress>
 
@@ -502,7 +502,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               <ChevronRight className="w-4 h-4 ml-2" />
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

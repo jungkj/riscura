@@ -241,7 +241,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTooltip>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -313,9 +313,9 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
         )}
       
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div style={{ width: '100%', height: 400 }}>
-</DaisyCardContent>
+</DaisyCardBody>
           <ResponsiveContainer>
             {renderChart()}
           </ResponsiveContainer>
@@ -340,7 +340,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <span>Low</span>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

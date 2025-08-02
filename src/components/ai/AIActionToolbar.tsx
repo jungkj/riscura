@@ -460,9 +460,9 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
   if (!isAIEnabled) {
     return (
       <DaisyCard className="border-dashed" >
-  <DaisyCardContent className="flex items-center justify-center py-6" >
+  <DaisyCardBody className="flex items-center justify-center py-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center">
             <Bot className="h-8 w-8 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-600">AI features are not enabled</p>
@@ -470,7 +470,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               Contact your administrator to enable AI capabilities
             </p>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
@@ -548,9 +548,9 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       {/* Running Actions Status */}
       {runningActions.size > 0 && (
         <DaisyCard >
-  <DaisyCardContent className="py-3" >
+  <DaisyCardBody className="py-3" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="space-y-2">
               {Array.from(runningActions.values()).map((result) => {
                 const action = aiActions.find(a => a.id === result.actionId);
@@ -593,7 +593,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
                 );
               })}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
@@ -650,9 +650,9 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
 
       {/* AI Tips */}
       <DaisyCard className="bg-blue-50 border-blue-200" >
-  <DaisyCardContent className="py-3" >
+  <DaisyCardBody className="py-3" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-start gap-3">
             <Lightbulb className="h-5 w-5 text-blue-500 mt-0.5" />
             <div>
@@ -663,7 +663,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
               </p>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

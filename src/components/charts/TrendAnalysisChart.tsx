@@ -485,7 +485,7 @@ export default function TrendAnalysisChart({
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3" >
+      <DaisyCardBody className="pb-3" >
   <div className="flex items-center justify-between">
 </DaisyTooltip>
           <div className="flex items-center space-x-2">
@@ -601,9 +601,9 @@ export default function TrendAnalysisChart({
         </div>
       
 
-      <DaisyCardContent >
+      <DaisyCardBody >
   <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} />
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTabsList className="grid w-full grid-cols-3" />
             <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
             <DaisyTabsTrigger value="detailed">Detailed View</DaisyTabsTrigger>
@@ -685,9 +685,9 @@ export default function TrendAnalysisChart({
           <DaisyTabsContent value="insights" className="space-y-4" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                   <h4 className="font-medium mb-3 flex items-center">
                     <Target className="w-4 h-4 mr-2" />
                     Forecast Summary
@@ -714,13 +714,13 @@ export default function TrendAnalysisChart({
                       </div>
                     </div>
                   )}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
               
               <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <h4 className="font-medium mb-3 flex items-center">
                     <DaisyAlertTriangle className="w-4 h-4 mr-2" >
   Key Insights
@@ -746,12 +746,12 @@ export default function TrendAnalysisChart({
                       📊 Data points: {filteredData.length} | Range: {timeRange}
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

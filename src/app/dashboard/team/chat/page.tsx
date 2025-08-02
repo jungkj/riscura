@@ -587,17 +587,17 @@ export default function TeamChatPage() {
 
             {/* Channels */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyInput>
                 <DaisyCardTitle className="text-sm font-medium flex items-center" >
   <Hash className="h-4 w-4 mr-2" />
 </DaisyCardTitle>
                   Channels
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyScrollArea className="h-64" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-1">
                     {channels
                       .filter(c => c.type !== ChannelType.DIRECT)
@@ -636,22 +636,22 @@ export default function TeamChatPage() {
                       ))}
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Direct Messages */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium flex items-center" >
   <MessageSquare className="h-4 w-4 mr-2" />
 </DaisyCardTitle>
                   Direct Messages
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyScrollArea className="h-48" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-1">
                     {channels
                       .filter((c: ChatChannel) => c.type === ChannelType.DIRECT)
@@ -689,7 +689,7 @@ export default function TeamChatPage() {
                       ))}
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
 
@@ -698,9 +698,9 @@ export default function TeamChatPage() {
             <DaisyCard className="flex-1 flex flex-col" >
   {/* Chat Header */}
 </DaisyCard>
-              <DaisyCardHeader className="border-b" >
+              <DaisyCardBody className="border-b" >
   <div className="flex items-center justify-between">
-</DaisyCardHeader>
+</DaisyCardBody>
                   <div className="flex items-center space-x-3">
                     {activeChannelData?.type === ChannelType.DIRECT ? (
                       <DaisyAvatar className="h-8 w-8" />
@@ -744,9 +744,9 @@ export default function TeamChatPage() {
               
 
               {/* Messages */}
-              <DaisyCardContent className="flex-1 overflow-hidden p-0" >
+              <DaisyCardBody className="flex-1 overflow-hidden p-0" >
   <DaisyScrollArea className="h-full p-4" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-4">
                     {channelMessages.map((message) => {
                       // const StatusIcon = getMessageStatusIcon(message.status);
@@ -838,7 +838,7 @@ export default function TeamChatPage() {
                     <div ref={messagesEndRef} />
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardContent>
+              </DaisyCardBody>
 
               {/* Message Input */}
               <div className="border-t p-4">
@@ -887,7 +887,7 @@ export default function TeamChatPage() {
           {/* Team Members Sidebar */}
           <div className="col-span-3 space-y-4">
             <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium flex items-center" >
   <Users className="h-4 w-4 mr-2" />
@@ -898,10 +898,10 @@ export default function TeamChatPage() {
 </DaisyBadge>
                   </DaisyBadge>
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyScrollArea className="h-80" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-2">
                     {onlineMembers.map((member: any) => {
                       return (
@@ -935,18 +935,18 @@ export default function TeamChatPage() {
                     })}
                   </div>
                 </DaisyScrollArea>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Quick Actions */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Quick Actions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                   <DaisyButton variant="outline" size="sm" className="w-full justify-start" >
   <Video className="h-4 w-4 mr-2" />
 </DaisyButton>
@@ -968,7 +968,7 @@ export default function TeamChatPage() {
                     Chat Settings
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </div>

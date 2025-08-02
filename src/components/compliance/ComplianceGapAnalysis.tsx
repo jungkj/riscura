@@ -238,7 +238,7 @@ export function ComplianceGapAnalysis() {
   return (
     <div className="space-y-6">
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Compliance Gap Analysis</DaisyCardTitle>
           <DaisyCardDescription >
@@ -246,9 +246,9 @@ export function ComplianceGapAnalysis() {
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="grid gap-4 md:grid-cols-3">
-</DaisyCardContent>
+</DaisyCardBody>
             <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
               <DaisySelectTrigger />
                 <DaisySelectValue placeholder="Select framework" /></DaisySelect>
@@ -293,7 +293,7 @@ export function ComplianceGapAnalysis() {
               )}
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {analysis && (
@@ -308,73 +308,73 @@ export function ComplianceGapAnalysis() {
           <DaisyTabsContent value="overview" className="space-y-6" />
             <div className="grid gap-4 md:grid-cols-4">
               <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyTabsContent>
                   <DaisyCardTitle className="text-base">Overall Compliance</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>
+</DaisyCardBody>
                     {analysis.overallCompliance.toFixed(1)}%
                   </div>
                   <DaisyProgress value={analysis.overallCompliance} className="mt-2" /></DaisyProgress>
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                   <DaisyCardTitle className="text-base">Total Requirements</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{analysis.requirementCount}</div>
+</DaisyCardBody>{analysis.requirementCount}</div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {analysis.notAssessedCount} not assessed
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                   <DaisyCardTitle className="text-base">Compliance Gaps</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{analysis.gaps.length}</div>
+</DaisyCardBody>{analysis.gaps.length}</div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {analysis.criticalGaps.length} critical
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                   <DaisyCardTitle className="text-base">Assessment Status</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyBadge variant="secondary" className="text-xs" >
-  </DaisyCardContent>
+  </DaisyCardBody>
 </DaisyBadge>
                     {analysis.assessment.status}
                   </DaisyBadge>
                   <p className="text-xs text-muted-foreground mt-1">
                     {format(new Date(analysis.assessment.assessmentDate), 'MMM dd, yyyy')}
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-base">Compliance Status Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <PieChart>
                       <Pie
                         data={getComplianceData()}
@@ -392,17 +392,17 @@ export function ComplianceGapAnalysis() {
                       </Pie>
                       <DaisyTooltip /></DaisyTooltip>
                   </ResponsiveContainer>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-base">Gaps by Severity</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <BarChart data={getGapsBySeverity()}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="severity" />
@@ -416,13 +416,13 @@ export function ComplianceGapAnalysis() {
             </div>
 
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-base">Gaps by Type</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                   <BarChart data={getGapsByType()} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
@@ -448,7 +448,7 @@ export function ComplianceGapAnalysis() {
 
           <DaisyTabsContent value="recommendations" className="space-y-4" />
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Recommended Actions</DaisyCardTitle>
                 <DaisyCardDescription >
@@ -456,9 +456,9 @@ export function ComplianceGapAnalysis() {
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-4" >
+              <DaisyCardBody className="space-y-4" >
   {analysis.recommendations.map((recommendation, index) => (
-</DaisyCardContent>
+</DaisyCardBody>
                   <DaisyAlert key={index} >
   <DaisyAlertTriangle className="h-4 w-4" />
 </DaisyAlert>
@@ -468,7 +468,7 @@ export function ComplianceGapAnalysis() {
                 </DaisyAlertDescription>
               </DaisyAlert>
                 ))}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <div className="flex justify-end">

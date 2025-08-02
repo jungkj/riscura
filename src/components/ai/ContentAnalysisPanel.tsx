@@ -163,7 +163,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
 
     return (
       <DaisyCard className="mb-4 transition-all duration-200" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <DaisyCardTitle className="text-sm flex items-center gap-2" >
@@ -195,9 +195,9 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
             Selected: "{result.selection.text.slice(0, 50)}..."
           </div>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
             {/* Result Content */}
             <div className="text-sm">
               {result.result.type === 'replacement' ? (
@@ -288,7 +288,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               )}
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };

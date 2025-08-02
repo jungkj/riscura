@@ -201,9 +201,9 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5] font-inter" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center justify-center space-x-4">
             <Brain className="w-8 h-8 text-[#A8A8A8]" />
             <div className="text-center">
@@ -215,7 +215,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
               </p>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
@@ -228,7 +228,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       className="font-inter"
     >
       <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5] shadow-lg" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -322,9 +322,9 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
         </AnimatePresence>
       </DaisyCard>
 
-      <DaisyCardContent className="pt-0" >
+      <DaisyCardBody className="pt-0" >
   {/* Summary Overview */}
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="text-center space-y-1">
             <div className={`text-2xl font-bold ${getHealthColor(briefingSummary.overallHealth)} font-inter`}>

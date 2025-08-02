@@ -228,9 +228,9 @@ export function ProboControlsLibrary() {
         <DaisyTabsContent value="browse" className="space-y-6" />
           {/* Search and Filters */}
           <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
@@ -268,12 +268,12 @@ export function ProboControlsLibrary() {
                   </DaisySelect>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Controls List */}
           <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <div className="flex items-center justify-between">
                 <DaisyCardTitle className="text-[#191919]" >
@@ -302,9 +302,9 @@ export function ProboControlsLibrary() {
                 </div>
               </div>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <DaisyScrollArea className="h-[600px]" />
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="space-y-4">
                   {filteredMitigations.map((mitigation) => (
                     <div
@@ -359,7 +359,7 @@ export function ProboControlsLibrary() {
                   ))}
                 </div>
               </DaisyScrollArea>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -367,16 +367,16 @@ export function ProboControlsLibrary() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(getCategoryStats()).map(([category, stats]) => (
               <DaisyCard key={category} className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyTabsContent>
                   <div className="flex items-center space-x-2">
                     {getCategoryIcon(category)}
                     <DaisyCardTitle className="text-sm font-medium text-[#191919]">{category}</DaisyCardTitle>
                   </div>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#A8A8A8]">Total Controls</span>
                       <DaisyBadge variant="outline">{stats.total}</DaisyBadge>
@@ -396,7 +396,7 @@ export function ProboControlsLibrary() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </div>
@@ -416,7 +416,7 @@ export function ProboControlsLibrary() {
 
           {selectedMitigations.size > 0 ? (
             <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-[#191919]" >
   Selected Controls ({selectedMitigations.size})
@@ -427,9 +427,9 @@ export function ProboControlsLibrary() {
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   {Array.from(selectedMitigations).map(id => {
                     const mitigation = mitigations.find(m => m.id === id);
                     if (!mitigation) return null;
@@ -461,13 +461,13 @@ export function ProboControlsLibrary() {
                     Import {selectedMitigations.size} Controls
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           ) : (
             <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <Shield className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-[#191919] mb-2">No Controls Selected</h3>
                 <p className="text-[#A8A8A8] mb-4">
@@ -479,7 +479,7 @@ export function ProboControlsLibrary() {
                   className="border-[#D8C3A5]" />
                   Browse Controls
                 </DaisyButton>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </DaisyTabsContent>

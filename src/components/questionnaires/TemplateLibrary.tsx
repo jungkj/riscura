@@ -217,13 +217,13 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
         {/* Sidebar - Categories */}
         <div className="lg:w-64 space-y-4">
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="text-lg">Categories</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   {templateCategories.map((category) => {
-</DaisyCardContent>
+</DaisyCardBody>
                 const Icon = category.icon;
                 const isSelected = selectedCategory === category.id;
                 return (
@@ -247,22 +247,22 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   </button>
                 );
               })}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Featured Templates */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="text-lg flex items-center" >
   <Star className="w-4 h-4 mr-2 text-yellow-500" />
 </DaisyCardTitle>
                 Featured
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3" >
   {mockTemplates.filter(t => t.isFeatured).slice(0, 3).map((template) => (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div
                   key={template.id}
                   className="p-3 border border-notion-border rounded-lg hover:bg-notion-bg-tertiary cursor-pointer transition-colors"
@@ -285,7 +285,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   </div>
                 </div>
               ))}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
 
@@ -313,7 +313,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   transition={{ delay: index * 0.05 }}
                 >
                   <DaisyCard className="h-full hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                       <div className="flex items-start justify-between mb-2">
                         <div className="w-10 h-10 bg-notion-bg-tertiary rounded-lg flex items-center justify-center">
@@ -337,9 +337,9 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                         {template.description}
                       </p>
                     
-                    <DaisyCardContent className="pt-0" >
+                    <DaisyCardBody className="pt-0" >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-notion-text-tertiary">{template.questions} questions</span>
                           <div className="flex items-center space-x-1">
@@ -382,7 +382,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                           </DaisyButton>
                         </div>
                       </div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </motion.div>
               );

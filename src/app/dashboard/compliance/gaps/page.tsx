@@ -307,378 +307,213 @@ export default function ComplianceGapsPage() {
       >
         {/* AI Analysis Status */}
         {isAnalyzing && (
-          <DaisyAlert className="mb-6" >
-  <Zap className="h-4 w-4 animate-pulse" />
-</DaisyAlert>
-            <DaisyAlertDescription >
-  AI is analyzing your compliance posture against framework requirements...
-                </DaisyAlertDescription>
-</DaisyAlert>
-                </DaisyAlertDescription>
-              </DaisyAlert>
+          <DaisyAlert className="mb-6">
+            <Zap className="h-4 w-4 animate-pulse" />
+            <div>AI is analyzing your compliance posture against framework requirements...</div>
+          </DaisyAlert>
         )}
 
         {/* Tabs */}
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6" />
-          <DaisyTabsList />
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
             <DaisyTabsTrigger value="gaps">Gap Details</DaisyTabsTrigger>
             <DaisyTabsTrigger value="remediation">Remediation Plans</DaisyTabsTrigger>
             <DaisyTabsTrigger value="frameworks">Framework Status</DaisyTabsTrigger>
           </DaisyTabsList>
-        </DaisyTabs>
 
-        <DaisyTabsContent value="overview" className="space-y-6" />
-          {/* Framework Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {sampleFrameworks.map((framework) => {
-              const priorityConfig = getPriorityConfig(framework.priority);
-              return (
-                <DaisyCard key={framework.id} className={cn("border-2", priorityConfig.border)} >
-  <DaisyCardHeader className="pb-3" />
-</DaisyTabsContent>
-                    <div className="flex items-center justify-between">
-                      <DaisyCardTitle className="text-sm font-medium">{framework.name}</DaisyCardTitle>
-                      <DaisyBadge variant="outline" className={priorityConfig.color} >
-  {framework.priority}
-</DaisyBadge>
-                      </DaisyBadge>
+          <DaisyTabsContent value="overview" className="space-y-6">
+            {/* Framework Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {sampleFrameworks.map((framework) => {
+                const priorityConfig = getPriorityConfig(framework.priority);
+                return (
+                  <DaisyCard key={framework.id} className={cn("border-2", priorityConfig.border)}>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium">{framework.name}</div>
+                        <DaisyBadge variant="outline" className={priorityConfig.color}>
+                          {framework.priority}
+                        </DaisyBadge>
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1">
+                        {framework.description}
+                      </div>
+                      <div className="space-y-3 mt-4">
+                        <div className="flex justify-between text-sm">
+                          <span>Compliance</span>
+                          <span className="font-medium">{framework.compliancePercentage}%</span>
+                        </div>
+                        <DaisyProgress value={framework.compliancePercentage} className="h-2" />
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
+                            <div className="text-gray-500">Implemented</div>
+                          </div>
+                          <div>
+                            <div className="font-medium text-red-600">{framework.gapCount}</div>
+                            <div className="text-gray-500">Gaps</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <DaisyCardDescription className="text-xs" >
-  {framework.description}
-</DaisyCardDescription>
+                  </DaisyCard>
+                );
+              })}
+            </div>
+
+            {/* AI Insights */}
+            <DaisyCard>
+              <div className="p-6">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Zap className="h-5 w-5 text-blue-600" />
+                  <span className="font-semibold">AI-Powered Insights</span>
+                </div>
+                <div className="text-sm text-gray-600 mb-4">
+                  Intelligent recommendations based on your compliance posture
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Target className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-blue-900">Priority Focus</span>
+                    </div>
+                    <p className="text-sm text-blue-800">
+                      Focus on SOC 2 CC6.1 controls - highest risk reduction potential
                     </p>
-                  
-                  <DaisyCardContent >
-  <div className="space-y-3">
-</DaisyCardContent>
-                      <div className="flex justify-between text-sm">
-                        <span>Compliance</span>
-                        <span className="font-medium">{framework.compliancePercentage}%</span>
-                      </div>
-                      <DaisyProgress value={framework.compliancePercentage} className="h-2" />
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
-                          <div className="text-gray-500">Implemented</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-red-600">{framework.gapCount}</div>
-                          <div className="text-gray-500">Gaps</div>
-                        </div>
-                      </div>
+                  </div>
+                  <div className="p-4 bg-green-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <span className="font-medium text-green-900">Quick Wins</span>
                     </div>
-                  </DaisyProgress>
-                </DaisyCard>
-              );
-            })}
-          </div>
-
-          {/* AI Insights */}
-          <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-              <DaisyCardTitle className="flex items-center space-x-2" >
-  <Zap className="h-5 w-5 text-blue-600" />
-</DaisyCardTitle>
-                <span>AI-Powered Insights</span>
-              </DaisyCardTitle>
-              <DaisyCardDescription >
-  Intelligent recommendations based on your compliance posture
-</DaisyCardDescription>
-              </p>
-            
-            <DaisyCardContent >
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Target className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium text-blue-900">Priority Focus</span>
+                    <p className="text-sm text-green-800">
+                      5 gaps can be closed with existing Probo controls
+                    </p>
                   </div>
-                  <p className="text-sm text-blue-800">
-                    Focus on SOC 2 CC6.1 controls - highest risk reduction potential
-                  </p>
-                </div>
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="font-medium text-green-900">Quick Wins</span>
+                  <div className="p-4 bg-orange-50 rounded-lg">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Clock className="h-4 w-4 text-orange-600" />
+                      <span className="font-medium text-orange-900">Timeline</span>
+                    </div>
+                    <p className="text-sm text-orange-800">
+                      Estimated 12 weeks to achieve 95% compliance
+                    </p>
                   </div>
-                  <p className="text-sm text-green-800">
-                    5 gaps can be closed with existing Probo controls
-                  </p>
-                </div>
-                <div className="p-4 bg-orange-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Clock className="h-4 w-4 text-orange-600" />
-                    <span className="font-medium text-orange-900">Timeline</span>
-                  </div>
-                  <p className="text-sm text-orange-800">
-                    Estimated 12 weeks to achieve 95% compliance
-                  </p>
                 </div>
               </div>
-            </DaisyCardContent>
-          </DaisyCard>
-        </DaisyTabsContent>
+            </DaisyCard>
+          </DaisyTabsContent>
 
-        <DaisyTabsContent value="gaps" className="space-y-6" />
-          {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg">
-            <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
-              <DaisySelectTrigger className="w-40" />
-                <DaisySelectValue placeholder="Framework" /></DaisyTabsContent>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Frameworks</DaisySelectContent>
-                <DaisySelectItem value="soc2">SOC 2</DaisySelectItem>
-                <DaisySelectItem value="iso27001">ISO 27001</DaisySelectItem>
-                <DaisySelectItem value="gdpr">GDPR</DaisySelectItem>
-                <DaisySelectItem value="nist">NIST CSF</DaisySelectItem>
-              </DaisySelectContent>
-            </DaisySelect>
-
-            <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Priority" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Priorities</DaisySelectContent>
-                <DaisySelectItem value="critical">Critical</DaisySelectItem>
-                <DaisySelectItem value="high">High</DaisySelectItem>
-                <DaisySelectItem value="medium">Medium</DaisySelectItem>
-                <DaisySelectItem value="low">Low</DaisySelectItem>
-              </DaisySelectContent>
-            </DaisySelect>
-
-            <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Status" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Status</DaisySelectContent>
-                <DaisySelectItem value="open">Open</DaisySelectItem>
-                <DaisySelectItem value="in-progress">In Progress</DaisySelectItem>
-                <DaisySelectItem value="resolved">Resolved</DaisySelectItem>
-                <DaisySelectItem value="accepted">Accepted</DaisySelectItem>
-              </DaisySelectContent>
-            </DaisySelect>
-
-            <div className="text-sm text-gray-600 ml-auto">
-              {filteredGaps.length} gap{filteredGaps.length !== 1 ? 's' : ''} found
+          <DaisyTabsContent value="gaps" className="space-y-6">
+            {/* Filters */}
+            <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-sm text-gray-600 ml-auto">
+                {filteredGaps.length} gap{filteredGaps.length !== 1 ? 's' : ''} found
+              </div>
             </div>
-          </div>
 
-          {/* Gap List */}
-          <div className="space-y-4">
-            {filteredGaps.map((gap) => {
-              const priorityConfig = getPriorityConfig(gap.priority);
-              const statusConfig = getStatusConfig(gap.status);
-              const StatusIcon = statusConfig.icon;
+            {/* Gap List */}
+            <div className="space-y-4">
+              {filteredGaps.map((gap) => {
+                const priorityConfig = getPriorityConfig(gap.priority);
+                const statusConfig = getStatusConfig(gap.status);
+                const StatusIcon = statusConfig.icon;
 
-              return (
-                <DaisyCard key={gap.id} className={cn("border-l-4", priorityConfig.border)} >
-  <DaisyCardHeader />
-</DaisyCard>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {gap.id}
-</DaisyBadge>
-                          </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {gap.framework}
-</DaisyBadge>
-                          </DaisyBadge>
-                          <DaisyBadge variant={statusConfig.variant} className="text-xs" >
-  <StatusIcon className="h-3 w-3 mr-1" />
-</DaisyBadge>
-                            {gap.status.replace('-', ' ').toUpperCase()}
-                          </DaisyBadge>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
-  {gap.priority.toUpperCase()}
-</DaisyBadge>
-                          </DaisyBadge>
-                        </div>
-                        <DaisyCardTitle className="text-base">{gap.requirement}</DaisyCardTitle>
-                        <DaisyCardDescription className="mt-1" >
-  {gap.description}
-</DaisyCardDescription>
-                        </p>
-                      </div>
-                      <div className="text-right ml-4">
-                        <div className="text-lg font-bold text-red-600">{gap.riskLevel}</div>
-                        <div className="text-xs text-gray-500">Risk Level</div>
-                      </div>
-                    </div>
-                  
-                  <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardContent>
-                      {/* Progress Info */}
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <div className="font-medium text-gray-900">{gap.assignee}</div>
-                          <div className="text-gray-500">Assignee</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">{gap.estimatedEffort}h</div>
-                          <div className="text-gray-500">Estimated Effort</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {gap.dueDate.toLocaleDateString()}
+                return (
+                  <DaisyCard key={gap.id} className={cn("border-l-4", priorityConfig.border)}>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <DaisyBadge variant="outline" className="text-xs">
+                              {gap.id}
+                            </DaisyBadge>
+                            <DaisyBadge variant="outline" className="text-xs">
+                              {gap.framework}
+                            </DaisyBadge>
+                            <DaisyBadge variant={statusConfig.variant} className="text-xs">
+                              <StatusIcon className="h-3 w-3 mr-1" />
+                              {gap.status.replace('-', ' ').toUpperCase()}
+                            </DaisyBadge>
+                            <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
+                              {gap.priority.toUpperCase()}
+                            </DaisyBadge>
                           </div>
-                          <div className="text-gray-500">Due Date</div>
+                          <div className="text-base font-semibold">{gap.requirement}</div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            {gap.description}
+                          </div>
                         </div>
-                      </div>
-
-                      {/* AI Recommendations */}
-                      <div>
-                        <h4 className="font-medium text-sm mb-2 flex items-center">
-                          <Zap className="h-4 w-4 mr-1 text-blue-600" />
-                          AI Recommendations
-                        </h4>
-                        <ul className="space-y-1">
-                          {gap.aiRecommendations.map((rec, index) => (
-                            <li key={index} className="text-sm text-gray-600 flex items-start">
-                              <ArrowRight className="h-3 w-3 mt-1 mr-2 flex-shrink-0" />
-                              {rec}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Probo Control Suggestions */}
-                      <div>
-                        <h4 className="font-medium text-sm mb-2 flex items-center">
-                          <Shield className="h-4 w-4 mr-1 text-[#199BEC]" />
-                          Probo Control Suggestions
-                        </h4>
-                        <div className="grid gap-2">
-                          {gap.proboControlSuggestions.map((control) => (
-                            <div key={control.id} className="p-3 bg-blue-50 rounded-lg">
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="font-medium text-sm text-blue-900">
-                                    {control.name}
-                                  </div>
-                                  <div className="text-xs text-blue-700 mt-1">
-                                    {control.description}
-                                  </div>
-                                  <div className="flex items-center space-x-4 mt-2 text-xs">
-                                    <span className="text-green-600">
-                                      {control.riskReduction}% risk reduction
-                                    </span>
-                                    <span className="text-orange-600">
-                                      {control.implementationEffort}h effort
-                                    </span>
-                                    <DaisyBadge variant="outline" className="text-xs" >
-  {control.importance}
-</DaisyBadge>
-                                    </DaisyBadge>
-                                  </div>
-                                </div>
-                                <DaisyButton
-                                  size="sm"
-                                  onClick={() => handleImplementControl(control.id)}
-                                  className="ml-2" />
-                                  Implement
-                                </DaisyButton>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex space-x-2 pt-2 border-t">
-                        <DaisyButton
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCreateRemediationPlan(gap.id)} />
-                          <Target className="h-4 w-4 mr-1" />
-                          Create Plan
-                        </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <Users className="h-4 w-4 mr-1" />
-</DaisyButton>
-                          Assign
-                        </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <DaisyCalendar className="h-4 w-4 mr-1" />
-</DaisyButton>
-                          Schedule
-                        </DaisyButton>
-                      </div>
-                    </div>
-                  </DaisyCardContent>
-                </DaisyCard>
-              );
-            })}
-          </div>
-        </DaisyTabsContent>
-
-        <DaisyTabsContent value="remediation" />
-          <div className="text-center py-12">
-            <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Remediation Planning
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Create and track remediation plans for compliance gaps
-            </p>
-            <DaisyButton >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyTabsContent>
-              Create Remediation Plan
-            </DaisyButton>
-          </div>
-        </DaisyTabsContent>
-
-        <DaisyTabsContent value="frameworks" />
-          <div className="grid gap-6">
-            {sampleFrameworks.map((framework) => {
-              const priorityConfig = getPriorityConfig(framework.priority);
-              return (
-                <DaisyCard key={framework.id} className={cn("border-l-4", priorityConfig.border)} >
-  <DaisyCardHeader />
-</DaisyTabsContent>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <DaisyCardTitle>{framework.name}</DaisyCardTitle>
-                        <DaisyCardDescription>{framework.description}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold">{framework.compliancePercentage}%</div>
-                        <div className="text-sm text-gray-500">Compliance</div>
-                      </div>
-                    </div>
-                  
-                  <DaisyCardContent >
-  <div className="space-y-4">
-</DaisyCardDescription>
-                      <DaisyProgress value={framework.compliancePercentage} className="h-3" />
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <div className="font-medium text-gray-900">{framework.totalRequirements}</div>
-                          <div className="text-gray-500">Total Requirements</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
-                          <div className="text-gray-500">Implemented</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-red-600">{framework.gapCount}</div>
-                          <div className="text-gray-500">Gaps</div>
+                        <div className="text-right ml-4">
+                          <div className="text-lg font-bold text-red-600">{gap.riskLevel}</div>
+                          <div className="text-xs text-gray-500">Risk Level</div>
                         </div>
                       </div>
                     </div>
-                  </DaisyProgress>
-                </DaisyCard>
-              );
-            })}
-          </div>
-        </DaisyTabsContent>
+                  </DaisyCard>
+                );
+              })}
+            </div>
+          </DaisyTabsContent>
+
+          <DaisyTabsContent value="remediation">
+            <div className="text-center py-12">
+              <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Remediation Planning
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Create and track remediation plans for compliance gaps
+              </p>
+              <DaisyButton>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Remediation Plan
+              </DaisyButton>
+            </div>
+          </DaisyTabsContent>
+
+          <DaisyTabsContent value="frameworks">
+            <div className="grid gap-6">
+              {sampleFrameworks.map((framework) => {
+                const priorityConfig = getPriorityConfig(framework.priority);
+                return (
+                  <DaisyCard key={framework.id} className={cn("border-l-4", priorityConfig.border)}>
+                    <div className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-semibold">{framework.name}</div>
+                          <div className="text-sm text-gray-600">{framework.description}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold">{framework.compliancePercentage}%</div>
+                          <div className="text-sm text-gray-500">Compliance</div>
+                        </div>
+                      </div>
+                      <div className="space-y-4 mt-4">
+                        <DaisyProgress value={framework.compliancePercentage} className="h-3" />
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <div className="font-medium text-gray-900">{framework.totalRequirements}</div>
+                            <div className="text-gray-500">Total Requirements</div>
+                          </div>
+                          <div>
+                            <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
+                            <div className="text-gray-500">Implemented</div>
+                          </div>
+                          <div>
+                            <div className="font-medium text-red-600">{framework.gapCount}</div>
+                            <div className="text-gray-500">Gaps</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DaisyCard>
+                );
+              })}
+            </div>
+          </DaisyTabsContent>
+        </DaisyTabs>
       </MainContentArea>
     </ProtectedRoute>
   );

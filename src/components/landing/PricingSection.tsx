@@ -135,7 +135,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                     : 'border-gray-200 hover:border-gray-300'
                   }
                 `}>
-                  <DaisyCardHeader className="text-center pb-8" >
+                  <DaisyCardBody className="text-center pb-8" >
   <div className={`
                       w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4
                       ${plan.popular ? 'bg-[#199BEC]/10' : 'bg-gray-100'}
@@ -179,9 +179,9 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                     </div>
                   
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <ul className="space-y-3 mb-8">
-</DaisyCardContent>
+</DaisyCardBody>
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-start space-x-3">
                           <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -222,7 +222,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
                         No credit card required for trial
                       </p>
                     )}
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               </motion.div>
             );

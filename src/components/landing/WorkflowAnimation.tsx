@@ -160,7 +160,7 @@ const WorkflowAnimation = () => {
                   transition-all duration-500 transform
                   ${isActive ? `${step.bgColor} ${step.borderColor} scale-105 shadow-lg` : 'bg-white border-gray-200 hover:shadow-md'}
                 `}>
-                  <DaisyCardContent className="p-6 text-center" >
+                  <DaisyCardBody className="p-6 text-center" >
   <div className={`
                       w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center
                       ${isActive ? `bg-gradient-to-r ${step.color}` : 'bg-gray-100'}
@@ -193,7 +193,7 @@ const WorkflowAnimation = () => {
                         <Sparkles className="w-5 h-5 text-yellow-500 mx-auto animate-pulse" />
                       </motion.div>
                     )}
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
 
                 {/* Arrow connector */}

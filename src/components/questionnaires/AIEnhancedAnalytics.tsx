@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -432,16 +432,16 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
 
       {!isAIEnabled && (
         <DaisyCard className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center space-x-2">
               <AlertTriangle className="w-5 h-5 text-yellow-600" />
               <p className="text-sm text-yellow-800 dark:text-yellow-600">
                 AI analysis is disabled. Enable to access predictive insights and advanced analytics.
               </p>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
@@ -469,9 +469,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   transition={{ delay: index * 0.1 }}
                 >
                   <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-medium text-notion-text-secondary">
                           {metric.metric}
@@ -515,13 +515,13 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
 
           {/* Predictive Chart */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Predictive Trends</DaisyCardTitle>
-            </DaisyCardHeader>
-            <DaisyCardContent >
+            </DaisyCardBody>
+            <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                 <ComposedChart data={[
                   { name: 'Week 1', actual: 87, predicted: 89, confidence: 0.9 },
                   { name: 'Week 2', actual: 89, predicted: 91, confidence: 0.92 },
@@ -538,7 +538,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   <Line type="monotone" dataKey="predicted" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="5 5" />
                 </ComposedChart>
               </ResponsiveContainer>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -553,7 +553,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 transition={{ delay: index * 0.1 }}
               >
                 <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyTabsContent>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="text-lg">{risk.category}</DaisyCardTitle>
@@ -562,10 +562,10 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
 </DaisyBadge>
                       </DaisyBadge>
                     </div>
-                  </DaisyCardHeader>
-                  <DaisyCardContent >
+                  </DaisyCardBody>
+                  <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-center">
                         <div className="text-3xl font-bold text-notion-text-primary">
                           {risk.score}
@@ -618,9 +618,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 transition={{ delay: index * 0.1 }}
               >
                 <DaisyCard className={anomaly.severity === 'high' ? 'border-red-200 dark:border-red-800' : ''} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
@@ -675,7 +675,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                         </DaisyButton>
                       )}
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -686,31 +686,31 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
         <DaisyTabsContent value="sentiment" className="space-y-6" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <DaisyCard >
-  <DaisyCardContent className="p-6 text-center" >
+  <DaisyCardBody className="p-6 text-center" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                 <ThumbsUp className="w-8 h-8 text-green-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-green-600">68%</div>
                 <div className="text-sm text-notion-text-secondary">Positive</div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
             <DaisyCard >
-  <DaisyCardContent className="p-6 text-center" >
+  <DaisyCardBody className="p-6 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <Minus className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-gray-600">22%</div>
                 <div className="text-sm text-notion-text-secondary">Neutral</div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
             <DaisyCard >
-  <DaisyCardContent className="p-6 text-center" >
+  <DaisyCardBody className="p-6 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <ThumbsDown className="w-8 h-8 text-red-500 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-red-600">10%</div>
                 <div className="text-sm text-notion-text-secondary">Negative</div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
 
@@ -725,9 +725,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   transition={{ delay: index * 0.1 }}
                 >
                   <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="flex items-start space-x-3">
                         <SentimentIcon className={`w-5 h-5 mt-1 ${getSentimentColor(sentiment.sentiment)}`} />
                         <div className="flex-1">
@@ -759,7 +759,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                           </div>
                         </div>
                       </div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </motion.div>
               );
@@ -778,9 +778,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                 transition={{ delay: index * 0.1 }}
               >
                 <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
@@ -846,9 +846,9 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                   transition={{ delay: index * 0.1 }}
                 >
                   <DaisyCard className={insight.priority === 'urgent' ? 'border-red-200 dark:border-red-800' : ''} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="flex items-start space-x-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                           insight.type === 'opportunity' ? 'bg-green-100 dark:bg-green-900/20' :
@@ -924,7 +924,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
                           </div>
                         </div>
                       </div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </motion.div>
               );

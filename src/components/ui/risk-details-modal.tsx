@@ -14,8 +14,8 @@ import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
-  DaisyCardHeader,
-  DaisyCardContent,
+  DaisyCardBody,
+  DaisyCardBody,
   DaisyCardDescription,
 } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -128,7 +128,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
             ) : (
               risks.map((risk) => (
                 <DaisyCard key={risk.id} className="border-l-4 border-l-blue-500">
-                  <DaisyCardHeader className="pb-3">
+                  <DaisyCardBody className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
                         <DaisyCardTitle className="text-lg font-semibold">
@@ -150,9 +150,9 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         </DaisyBadge>
                       </div>
                     </div>
-                  </DaisyCardHeader>
+                  </DaisyCardBody>
 
-                  <DaisyCardContent className="space-y-4">
+                  <DaisyCardBody className="space-y-4">
                     <p className="text-sm text-gray-700 dark:text-gray-300">{risk.description}</p>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -229,7 +229,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                         <span>View Details</span>
                       </DaisyButton>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               ))
             )}

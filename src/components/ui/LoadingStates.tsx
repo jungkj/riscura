@@ -127,16 +127,16 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
   <DaisyCard className={className} >
   {(title || description) && (
 </DaisyCard>
-      <DaisyCardHeader >
+      <DaisyCardBody >
   {title && 
-</DaisyCardHeader><EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
+</DaisyCardBody><EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
         {description && <EnhancedSkeleton className="h-4 w-3/4" />}
       
     )}
     {content && (
-      <DaisyCardContent className="space-y-3" >
+      <DaisyCardBody className="space-y-3" >
   <DaisySkeletonText lines={3} />
-</DaisyCardContent>
+</DaisyCardBody>
         {actions && (
           <div className="flex gap-2 pt-2">
             <DaisySkeletonButton />
@@ -274,9 +274,9 @@ export const LoadingDashboard: React.FC = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
         <DaisyCard key={i} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisySkeletonButton>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <EnhancedSkeleton className="h-4 w-24 mb-2" />
@@ -284,7 +284,7 @@ export const LoadingDashboard: React.FC = () => (
               </div>
               <EnhancedSkeleton className="h-8 w-8 rounded" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       ))}
     </div>

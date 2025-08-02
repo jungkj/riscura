@@ -194,17 +194,17 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           <div className="space-y-6">
             {/* Query Input */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="w-5 h-5" />
 </DaisyCardTitle>
                   AI Analysis Query
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="md:col-span-2">
                     <DaisyLabel htmlFor="query">Query or Description</DaisyLabel>
                     <DaisyTextarea
@@ -249,14 +249,14 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                     </DaisyButton>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Results */}
             <div className="space-y-4">
               {responses.map((response) => (
                 <DaisyCard key={response.requestId} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="flex items-center gap-2" >
@@ -274,9 +274,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                       </div>
                     </div>
                   
-                  <DaisyCardContent className="space-y-4" >
+                  <DaisyCardBody className="space-y-4" >
   <div className="prose max-w-none">
-</DaisyCardContent>
+</DaisyCardBody>
                       <p>{response.content}</p>
                     </div>
 
@@ -319,7 +319,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                         </DaisyBadge>
                       )}
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               ))}
             </div>
@@ -329,17 +329,17 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
         {/* Service Health Tab */}
         <DaisyTabsContent value="monitoring" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="w-5 h-5" />
 </DaisyCardTitle>
                 AI Services Health Status
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   {serviceHealth ? (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {Object.entries(serviceHealth.services).map(([service, isHealthy]) => (
@@ -382,60 +382,60 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                   <p className="text-gray-600 mt-2">Loading service health...</p>
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Other tabs with placeholder content */}
         <DaisyTabsContent value="compliance" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Compliance Monitoring</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p>
-</DaisyCardContent>Compliance monitoring dashboard implementation...</p>
-            </DaisyCardContent>
+</DaisyCardBody>Compliance monitoring dashboard implementation...</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="insights" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>AI Insights & Analytics</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p>
-</DaisyCardContent>AI insights and analytics dashboard implementation...</p>
-            </DaisyCardContent>
+</DaisyCardBody>AI insights and analytics dashboard implementation...</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="tenants" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Multi-Tenant Management</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p>
-</DaisyCardContent>Multi-tenant management dashboard implementation...</p>
-            </DaisyCardContent>
+</DaisyCardBody>Multi-tenant management dashboard implementation...</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="settings" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>AI Configuration Settings</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p>
-</DaisyCardContent>AI configuration settings implementation...</p>
-            </DaisyCardContent>
+</DaisyCardBody>AI configuration settings implementation...</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

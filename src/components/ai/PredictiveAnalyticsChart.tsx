@@ -322,23 +322,23 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
   if (loading) {
     return (
       <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
 </DaisyCardTitle>
             {title}
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="h-64 flex items-center justify-center">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-center">
               <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-500">Generating predictions...</p>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   }
@@ -351,7 +351,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
 
   return (
     <DaisyCard className={cardClass} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -399,9 +399,9 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
         )}
       
 
-      <DaisyCardContent className="space-y-4" >
+      <DaisyCardBody className="space-y-4" >
   <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center justify-between">
             <DaisyTabsList className="grid grid-cols-3 w-auto" />
               <DaisyTabsTrigger value="forecast" className="text-xs" />
@@ -623,7 +623,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
             </div>
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

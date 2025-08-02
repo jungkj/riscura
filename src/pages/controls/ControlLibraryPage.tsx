@@ -76,61 +76,61 @@ export default function ControlLibraryPage() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-gray-400" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
-</DaisyCardContent>{stats.total}</div>
+</DaisyCardBody>{stats.total}</div>
             <p className="text-xs text-gray-600">
               Across all categories
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">High Effectiveness</DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-green-600" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-green-600">
-</DaisyCardContent>
+</DaisyCardBody>
               {stats.byEffectiveness.high || 0}
             </div>
             <p className="text-xs text-gray-600">
               Performing optimally
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Risk Coverage</DaisyCardTitle>
             <Network className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-[#191919]">
-</DaisyCardContent>
+</DaisyCardBody>
               {coverage.length}
             </div>
             <p className="text-xs text-gray-600">
               Risks with controls
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Overdue Tests</DaisyCardTitle>
             <DaisyCalendar className="h-4 w-4 text-red-600" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-red-600">
 </DaisyCalendar>
               {stats.overdueTests}
@@ -138,7 +138,7 @@ export default function ControlLibraryPage() {
             <p className="text-xs text-gray-600">
               Need immediate attention
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
@@ -165,21 +165,21 @@ export default function ControlLibraryPage() {
 
         <DaisyTabsContent value="library" className="space-y-4" />
           <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardContent className="p-8 text-center" >
+  <DaisyCardBody className="p-8 text-center" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
               <Shield className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
               <h3 className="text-lg font-medium mb-2 text-gray-900">Control Library</h3>
               <p className="text-gray-600">
                 Control library interface will be available here.
               </p>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="mapping" className="space-y-4" />
           <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2 text-gray-900" >
   <Network className="h-5 w-5" />
@@ -190,22 +190,22 @@ export default function ControlLibraryPage() {
                 Visual mapping of controls to risks with effectiveness ratings
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="text-center py-8 text-gray-600">
-</DaisyCardContent>
+</DaisyCardBody>
                 <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Control-Risk mapping interface coming soon</p>
                 <p className="text-sm">
                   This will show visual relationships between controls and risks
                 </p>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="testing" className="space-y-4" />
           <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2 text-gray-900" >
   <DaisyCalendar className="h-5 w-5" />
@@ -216,44 +216,44 @@ export default function ControlLibraryPage() {
                 Manage control testing schedules and track effectiveness
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                       <DaisyCardTitle className="text-base text-gray-900">Overdue Tests</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-red-600">
-</DaisyCardContent>{stats.overdueTests}</div>
+</DaisyCardBody>{stats.overdueTests}</div>
                       <p className="text-xs text-gray-600">Require immediate attention</p>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                       <DaisyCardTitle className="text-base text-gray-900">Due This Week</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-yellow-600">
-</DaisyCardContent>3</div>
+</DaisyCardBody>3</div>
                       <p className="text-xs text-gray-600">Scheduled for testing</p>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                       <DaisyCardTitle className="text-base text-gray-900">Completed This Month</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-green-600">
-</DaisyCardContent>12</div>
+</DaisyCardBody>12</div>
                       <p className="text-xs text-gray-600">Tests completed</p>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </div>
                 
@@ -272,13 +272,13 @@ export default function ControlLibraryPage() {
         <DaisyTabsContent value="analytics" className="space-y-4" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="text-base text-gray-900">Control Effectiveness Trends</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="text-center py-8 text-gray-600">
                     <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Effectiveness trend chart coming soon</p>
@@ -308,17 +308,17 @@ export default function ControlLibraryPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
             
             <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-base text-gray-900">Control Coverage Analysis</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="text-center py-8 text-gray-600">
                     <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Coverage heat map coming soon</p>
@@ -342,18 +342,18 @@ export default function ControlLibraryPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
           
           <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="text-base text-gray-900">Control Type Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[#191919]">
                     {stats.byType.preventive || 0}
@@ -382,7 +382,7 @@ export default function ControlLibraryPage() {
                   </div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

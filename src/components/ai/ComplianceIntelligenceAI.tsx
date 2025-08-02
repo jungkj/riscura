@@ -78,7 +78,7 @@ const FrameworkSelector: React.FC<{
                 }
               }}
             >
-              <DaisyCardContent className="p-4" >
+              <DaisyCardBody className="p-4" >
   <div className="flex items-center gap-3">
 </DaisyCard>
                   <div className={`p-2 rounded-lg bg-secondary/10 ${info?.color || 'text-muted-foreground'}`}>
@@ -94,7 +94,7 @@ const FrameworkSelector: React.FC<{
                     <CheckCircle className="h-4 w-4 text-primary ml-auto" />
                   )}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           );
         })}
@@ -129,11 +129,11 @@ const AssessmentOverview: React.FC<{
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
             <DaisyCardDescription>Overall Score</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className={`text-2xl font-bold ${getScoreColor(assessment.overallScore)}`}>
 </DaisyCardDescription>
               {assessment.overallScore}%
@@ -142,11 +142,11 @@ const AssessmentOverview: React.FC<{
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
             <DaisyCardDescription>Maturity Level</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardDescription>
               {assessment.maturityLevel}/5
@@ -154,15 +154,15 @@ const AssessmentOverview: React.FC<{
             <p className="text-sm text-muted-foreground">
               {getMaturityLabel(assessment.maturityLevel)}
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
             <DaisyCardDescription>Critical Gaps</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-red-600">
 </DaisyCardDescription>
               {assessment.criticalGaps}
@@ -170,15 +170,15 @@ const AssessmentOverview: React.FC<{
             <p className="text-sm text-muted-foreground">
               of {assessment.gapsIdentified} total
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
             <DaisyCardDescription>Completion</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardDescription>
               {assessment.completionPercentage}%
@@ -189,7 +189,7 @@ const AssessmentOverview: React.FC<{
 
       {/* Audit Readiness */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Eye className="h-5 w-5" />
@@ -198,7 +198,7 @@ const AssessmentOverview: React.FC<{
           </DaisyCardTitle>
           <DaisyCardDescription>Current state of audit preparedness</p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 </DaisyCardDescription>
             <div className="space-y-2">
@@ -228,17 +228,17 @@ const AssessmentOverview: React.FC<{
               View Audit Plan
             </DaisyProgress>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Top Recommendations */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Priority Recommendations</DaisyCardTitle>
           <DaisyCardDescription>AI-generated compliance improvements</p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-3">
 </DaisyCardDescription>
             {assessment.recommendations.slice(0, 3).map((rec, index) => (
@@ -270,7 +270,7 @@ const AssessmentOverview: React.FC<{
               View All Recommendations
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );
@@ -315,7 +315,7 @@ const GapAnalysisView: React.FC<{
     <div className="space-y-6">
       {Object.entries(groupedGaps).map(([framework, frameworkGaps]) => (
         <DaisyCard key={framework} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5" />
@@ -327,9 +327,9 @@ const GapAnalysisView: React.FC<{
 </DaisyCardDescription>
             </p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
               {frameworkGaps.map(gap => (
                 <div
                   key={gap.id}
@@ -388,7 +388,7 @@ const GapAnalysisView: React.FC<{
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       ))}
     </div>
@@ -429,7 +429,7 @@ const RegulatoryChangesView: React.FC<{
           key={change.id} 
           className="cursor-pointer hover:shadow-md transition-shadow"
           onClick={() => onChangeSelected(change)} />
-          <DaisyCardHeader >
+          <DaisyCardBody >
   <div className="flex items-start justify-between">
 </DaisyCard>
               <div className="flex items-start gap-3">
@@ -453,9 +453,9 @@ const RegulatoryChangesView: React.FC<{
               </div>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
               <div>
                 <p className="text-muted-foreground">Framework</p>
                 <p className="font-medium">{change.framework.toUpperCase()}</p>
@@ -494,7 +494,7 @@ const RegulatoryChangesView: React.FC<{
                 Prep time: {change.ai_analysis.preparation_time} days
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       ))}
     </div>
@@ -508,7 +508,7 @@ const RoadmapView: React.FC<{
     <div className="space-y-6">
       {/* Roadmap Overview */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Compliance Roadmap Overview</DaisyCardTitle>
           <DaisyCardDescription >
@@ -516,9 +516,9 @@ const RoadmapView: React.FC<{
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             <div>
               <p className="text-sm text-muted-foreground">Budget</p>
               <p className="text-lg font-semibold">${roadmap.budget.toLocaleString()}</p>
@@ -536,17 +536,17 @@ const RoadmapView: React.FC<{
               <p className="text-lg font-semibold">{roadmap.frameworks.length}</p>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Phases */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Implementation Phases</DaisyCardTitle>
           <DaisyCardDescription>Structured approach to compliance maturity</p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-4">
 </DaisyCardDescription>
             {roadmap.phases.map((phase, index) => (
@@ -567,17 +567,17 @@ const RoadmapView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Key Initiatives */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Key Initiatives</DaisyCardTitle>
           <DaisyCardDescription>Priority compliance improvement projects</p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-3">
 </DaisyCardDescription>
             {roadmap.initiatives.slice(0, 5).map(initiative => (
@@ -605,7 +605,7 @@ const RoadmapView: React.FC<{
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );
@@ -734,7 +734,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
   return (
     <div className={`space-y-6 ${className}`}>
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-50 rounded-lg">
@@ -764,12 +764,12 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
         <DaisyTabsContent value="configuration" />
           <div className="space-y-6">
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Assessment Configuration</DaisyCardTitle>
                 <DaisyCardDescription>Configure compliance assessment parameters</p>
               
-              <DaisyCardContent className="space-y-6" >
+              <DaisyCardBody className="space-y-6" >
   <FrameworkSelector
                   frameworks={availableFrameworks}
                   selected={selectedFrameworks}
@@ -798,7 +798,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -842,7 +842,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
         <DaisyTabsContent value="changes" />
           <div className="space-y-6">
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Regulatory Changes Monitor</DaisyCardTitle>
                 <DaisyCardDescription >
@@ -865,7 +865,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
         <DaisyTabsContent value="audit" />
           {auditPlan && (
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Audit Preparation Plan</DaisyCardTitle>
                 <DaisyCardDescription >
@@ -873,9 +873,9 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <p className="text-sm text-muted-foreground">Audit Type</p>
@@ -908,7 +908,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
                     </div>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </DaisyTabsContent>

@@ -320,9 +320,9 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               transition={{ delay: 0.1 }}
             >
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-notion-text-secondary">Active Workflows</p>
@@ -336,7 +336,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                       <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
 
@@ -346,9 +346,9 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               transition={{ delay: 0.15 }}
             >
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-notion-text-secondary">Pending Approvals</p>
@@ -362,7 +362,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                       <UserCheck className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
 
@@ -372,9 +372,9 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               transition={{ delay: 0.2 }}
             >
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-notion-text-secondary">Avg Completion</p>
@@ -388,7 +388,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                       <Timer className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
 
@@ -398,9 +398,9 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               transition={{ delay: 0.25 }}
             >
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-notion-text-secondary">Templates</p>
@@ -414,20 +414,20 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                       <Workflow className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
           </div>
 
           {/* Recent Activity */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Recent Workflow Activity</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 {filteredInstances.slice(0, 5).map((instance, index) => (
                   <motion.div
                     key={instance.id}
@@ -460,7 +460,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                   </motion.div>
                 ))}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -468,9 +468,9 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
         <DaisyTabsContent value="active" className="space-y-6" />
           {/* Filters */}
           <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
@@ -506,7 +506,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                   </DaisySelectContent>
                 </DaisySelect>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Workflow Instances */}
@@ -553,13 +553,13 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
         {/* Settings Tab */}
         <DaisyTabsContent value="settings" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Notification Settings</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-notion-text-primary">Email Notifications</p>
@@ -586,13 +586,13 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Workflow Defaults</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div>
-</DaisyCardContent>
+</DaisyCardBody>
                 <label className="text-sm font-medium text-notion-text-primary">Default Approval Timeout</label>
                 <DaisySelect defaultValue="72" />
                   <DaisySelectTrigger className="mt-1" />
@@ -616,7 +616,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                   </DaisySelectContent>
                 </DaisySelect>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
@@ -658,9 +658,9 @@ function WorkflowInstanceCard({
 
   return (
     <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" onClick={onSelect} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="font-semibold text-notion-text-primary mb-1">
@@ -716,9 +716,9 @@ function WorkflowTemplateCard({ template, onSelect, getStatusColor }: WorkflowTe
 
   return (
     <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" onClick={onSelect} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="font-semibold text-notion-text-primary mb-1">
@@ -748,7 +748,7 @@ function WorkflowTemplateCard({ template, onSelect, getStatusColor }: WorkflowTe
             <span className="font-medium">{template.averageCompletionTime}h</span>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

@@ -152,7 +152,7 @@ export default function TemplatesPage() {
             <DaisyCard 
               key={template.id}
               className="border-gray-200 hover:shadow-lg transition-all duration-300" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <div className="flex items-start justify-between mb-3">
                   <div className={`p-3 bg-gray-50 rounded-lg ${template.color}`}>
@@ -166,7 +166,7 @@ export default function TemplatesPage() {
                 <DaisyCardTitle className="text-xl">{template.name}</DaisyCardTitle>
                 <DaisyCardDescription>{template.description}</p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-4">
 </DaisyCardDescription>
                   <div className="space-y-2">
@@ -198,7 +198,7 @@ export default function TemplatesPage() {
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           );
         })}
@@ -206,17 +206,17 @@ export default function TemplatesPage() {
 
       {/* Instructions Section */}
       <DaisyCard className="mt-8 border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <FileText className="h-5 w-5 text-blue-600" />
 </DaisyCardTitle>
             How to Use These Templates
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
@@ -259,7 +259,7 @@ export default function TemplatesPage() {
               <strong>Pro Tip:</strong> Start with the sample data to understand the format, then gradually replace it with your own information. The templates include validation rules to help ensure data quality.
             </p>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

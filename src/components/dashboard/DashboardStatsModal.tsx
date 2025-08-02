@@ -124,36 +124,36 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
           <div className="space-y-6">
             {/* Overview Section */}
             <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyScrollArea>
                 <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <Eye className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
                   Overview
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-[#191919] font-semibold leading-relaxed">
-</DaisyCardContent>
+</DaisyCardBody>
                   {data.details.overview}
                 </p>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Breakdown Section */}
             {data.details.breakdown && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <TrendingUp className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
                     Breakdown
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                     {data.details.breakdown.map((item, index) => (
                       <div key={index} className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -185,17 +185,17 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             {/* Recent Items */}
             {data.details.recentItems && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <Activity className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
                     Recent Activity
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                     {data.details.recentItems.map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg bg-white">
                         <div className="flex-1">
@@ -219,24 +219,24 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             )}
 
             {/* Insights */}
             {data.details.insights && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <FileText className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
                     Key Insights
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                     {data.details.insights.map((insight, index) => (
                       <div 
                         key={index} 
@@ -255,7 +255,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                       </div>
                     ))}
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             )}
           </div>

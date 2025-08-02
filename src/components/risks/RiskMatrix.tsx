@@ -196,7 +196,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div>
@@ -229,9 +229,9 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
           </DaisyDialog>
         </div>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Matrix Legend */}
           <MatrixLegend />
           
@@ -372,7 +372,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

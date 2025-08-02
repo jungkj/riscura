@@ -397,7 +397,7 @@ export default function LandingPage() {
                     ? 'hover:border-blue-300' 
                     : 'hover:border-[#D8C3A5]/60'
                 } transition-all duration-300 group rounded-2xl`}>
-                  <DaisyCardContent className="p-8" >
+                  <DaisyCardBody className="p-8" >
   {feature.highlight && (
 </DaisyCard>
                       <div className="flex items-center gap-2 mb-4">
@@ -433,7 +433,7 @@ export default function LandingPage() {
                         </li>
                       ))}
                     </ul>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -474,9 +474,9 @@ export default function LandingPage() {
               viewport={{ once: true }}
             >
               <DaisyCard className="bg-white border-2 border-blue-200 shadow-xl rounded-2xl" >
-  <DaisyCardContent className="p-8" >
+  <DaisyCardBody className="p-8" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                       <Brain className="h-6 w-6 text-blue-600" />
@@ -518,7 +518,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
 

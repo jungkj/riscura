@@ -222,7 +222,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
       )} >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -258,9 +258,9 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
           </div>
         
 
-        <DaisyCardContent className="pt-0" >
+        <DaisyCardBody className="pt-0" >
   {isLoading ? (
-</DaisyCardContent>
+</DaisyCardBody>
             <LoadingSkeleton />
           ) : items.length === 0 ? (
             <EmptyState message={emptyMessage} />
@@ -297,7 +297,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
               )}
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
 
         {/* Decorative gradient overlay */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-slate-100/40 to-transparent opacity-60 pointer-events-none" />

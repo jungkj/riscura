@@ -247,7 +247,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
@@ -260,9 +260,9 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
         </div>
       
 
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
           {getPrioritizedActions().map((action, index) => (
             <motion.div
               key={action.id}
@@ -346,7 +346,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
             <span>Pro tip: Use keyboard shortcuts for faster navigation</span>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

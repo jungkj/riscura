@@ -519,9 +519,9 @@ const ActivityItem: React.FC<{
       "transition-all duration-200 hover:shadow-notion-sm",
       !activity.isRead && "border-l-4 border-l-blue-500 bg-blue-50/30"
     )} >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-start space-x-enterprise-3">
           {/* Avatar & Icon */}
           <div className="relative">
@@ -675,7 +675,7 @@ const ActivityItem: React.FC<{
             )}
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };

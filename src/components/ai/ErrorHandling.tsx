@@ -375,7 +375,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
 
   return (
     <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyProgress>
         <DaisyCardTitle className="text-sm flex items-center justify-between" >
   <span>
@@ -385,10 +385,10 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
 </DaisyBadge>
           </DaisyBadge>
         </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3" >
   <div className="flex justify-between text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
           <span>Failure Count:</span>
           <span className="font-medium">{failures}</span>
         </div>
@@ -409,7 +409,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
             Reset Circuit Breaker
           </DaisyButton>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };

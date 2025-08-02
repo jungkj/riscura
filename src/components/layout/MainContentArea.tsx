@@ -184,9 +184,9 @@ const ActionButtons: React.FC<{
             <DaisyButton
               variant="outline"
               size="sm"
-              className="border-gray-300 hover:border-[#199BEC]" >
-  <MoreHorizontal className="h-4 w-4" />
-</DaisyButton>
+              className="border-gray-300 hover:border-[#199BEC]"
+            >
+              <MoreHorizontal className="h-4 w-4" />
             </DaisyButton>
           )}
         </div>
@@ -351,9 +351,9 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
-              disabled={action.disabled} >
-  {action.icon && 
-</DaisySeparator><action.icon className="h-4 w-4 mr-2" />}
+              disabled={action.disabled}
+            >
+              {action.icon && <action.icon className="h-4 w-4 mr-2" />}
               {action.label}
             </DaisyButton>
           )}
@@ -429,9 +429,9 @@ export const ContentCard: React.FC<ContentCardProps> = ({
               variant={action.variant || 'outline'}
               size="sm"
               onClick={action.onClick}
-              disabled={action.disabled} >
-  {action.icon && 
-</DaisyButton><action.icon className="h-4 w-4 mr-2" />}
+              disabled={action.disabled}
+            >
+              {action.icon && <action.icon className="h-4 w-4 mr-2" />}
               {action.label}
             </DaisyButton>
           )}

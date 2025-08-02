@@ -24,9 +24,9 @@ export default function MetricCard({
 
   return (
     <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-center justify-between space-y-0 pb-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
           {icon && <div className="text-muted-foreground">{icon}</div>}

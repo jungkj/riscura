@@ -134,16 +134,16 @@ function NewRiskForm() {
         >
           {/* Basic Information */}
           <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm" >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
               <DaisyCardTitle className="text-gray-900 text-lg font-semibold" >
   Basic Information
 </DaisyCardTitle>
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Risk Title *
@@ -219,16 +219,16 @@ function NewRiskForm() {
 
           {/* Risk Assessment */}
           <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm" >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
               <DaisyCardTitle className="text-gray-900 text-lg font-semibold" >
   Risk Assessment
 </DaisyCardTitle>
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Likelihood (1-5)
@@ -296,21 +296,21 @@ function NewRiskForm() {
                   </DaisySelectContent>
                 </DaisySelect>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Additional Information */}
           <DaisyCard className="border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm" >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
               <DaisyCardTitle className="text-gray-900 text-lg font-semibold" >
   Additional Information
 </DaisyCardTitle>
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                 <label className="text-sm font-medium text-gray-700">
                   Tags
                 </label>

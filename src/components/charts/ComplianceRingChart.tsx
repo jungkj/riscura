@@ -218,7 +218,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
 
   return (
     <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <DaisyCardHeader >
+      <DaisyCardBody >
   <div className="flex items-center justify-between">
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -239,9 +239,9 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
           </div>
         </div>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Overall Score Ring */}
           <div className="flex items-center justify-center">
             <div className="relative">

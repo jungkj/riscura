@@ -421,7 +421,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         }}
         onClick={() => setSelectedComponent(component.id)}
       >
-        <DaisyCardHeader className="pb-2" >
+        <DaisyCardBody className="pb-2" >
   <DaisyCardTitle className="flex items-center justify-between text-sm" />
 </DaisyCard>
             <div className="flex items-center space-x-2">
@@ -451,11 +451,11 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               </DaisyButton>
             </div>
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pt-0" >
+        </DaisyCardBody>
+        <DaisyCardBody className="pt-0" >
   {renderComponentContent(component)}
-</DaisyCardContent>
-        </DaisyCardContent>
+</DaisyCardBody>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };

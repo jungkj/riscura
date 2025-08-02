@@ -45,13 +45,13 @@ export default function TestLoginPage() {
         </h1>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Authentication Status</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="flex items-center space-x-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <DaisyBadge variant={isAuthenticated ? "default" : "destructive"} >
   {isAuthenticated ? "Authenticated" : "Not Authenticated"}
 </DaisyBadge>
@@ -73,17 +73,17 @@ export default function TestLoginPage() {
 </DaisyButton>
               </DaisyButton>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Token Storage Debug Info</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-2 font-mono text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p><strong>Has Token:</strong> {tokenInfo.hasToken ? 'Yes' : 'No'}</p>
@@ -97,17 +97,17 @@ export default function TestLoginPage() {
                 </div>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Test Instructions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
               <h3 className="font-semibold">To test "Stay logged in" feature:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
                 <li>Go to the login page (/auth/login)</li>
@@ -129,7 +129,7 @@ export default function TestLoginPage() {
                 <li>Close the browser tab and reopen - you should be logged out</li>
               </ol>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

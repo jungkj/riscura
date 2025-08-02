@@ -200,16 +200,16 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   if (error) {
     return (
       <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyProgress>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center text-red-600">
             <p>Error loading risks: {error}</p>
             <DaisyButton onClick={() => window.location.reload()} className="mt-2" />
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
@@ -232,7 +232,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 
       {/* Search and Filters */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
@@ -324,9 +324,9 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
       {/* Bulk Actions */}
       {selectedRisks.length > 0 && (
         <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
                 {selectedRisks.length} risk(s) selected
@@ -348,15 +348,15 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 </DaisyButton>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
       {/* Risk Table */}
       <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTable />
             <DaisyTableHeader />
               <DaisyTableRow />
@@ -532,15 +532,15 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               </div>
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Empty State */}
       {filteredRisks.length === 0 && (
         <DaisyCard >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-muted-foreground">
               <p className="text-lg font-medium">No risks found</p>
               <p className="text-sm">
@@ -555,7 +555,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 </DaisyButton>
               )}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
     </div>

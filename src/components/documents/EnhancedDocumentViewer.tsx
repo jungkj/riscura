@@ -374,9 +374,9 @@ export default function EnhancedDocumentViewer({
       {document?.aiAnalysis?.versions && document.aiAnalysis.versions.length > 0 ? (
         document.aiAnalysis.versions.map((version, index) => (
           <DaisyCard key={version.version} >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Version {version.version}</p>
@@ -391,7 +391,7 @@ export default function EnhancedDocumentViewer({
                   {formatFileSize(version.size)}
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         ))
       ) : (
@@ -421,9 +421,9 @@ export default function EnhancedDocumentViewer({
         {comments.length > 0 ? (
           comments.map((comment) => (
             <DaisyCard key={comment.id} >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisySeparator>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-start space-x-3">
                   <DaisyAvatar className="w-8 h-8" />
                     <DaisyAvatarFallback />
@@ -440,7 +440,7 @@ export default function EnhancedDocumentViewer({
                     <p className="text-sm mt-1">{comment.text}</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           ))
         ) : (

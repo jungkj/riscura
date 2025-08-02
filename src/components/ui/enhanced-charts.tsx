@@ -54,9 +54,9 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
     <DaisyCard className={cn("border border-gray-200", className)} >
   {(title || subtitle) && (
 </DaisyCard>
-        <DaisyCardHeader >
+        <DaisyCardBody >
   {title && (
-</DaisyCardHeader>
+</DaisyCardBody>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <BarChart3 className="h-5 w-5 text-[#199BEC]" />
 </DaisyCardTitle>
@@ -69,9 +69,9 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
         
       )}
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Chart */}
           <div className="space-y-3" style={{ height: `${height}px` }}>
             {data.map((item, index) => (
@@ -116,7 +116,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -184,9 +184,9 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
     <DaisyCard className={cn("border border-gray-200", className)} >
   {(title || subtitle) && (
 </DaisyCard>
-        <DaisyCardHeader >
+        <DaisyCardBody >
   {title && (
-</DaisyCardHeader>
+</DaisyCardBody>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <PieChart className="h-5 w-5 text-[#199BEC]" />
 </DaisyCardTitle>
@@ -199,9 +199,9 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
         
       )}
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="flex flex-col lg:flex-row gap-6 items-center">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Chart */}
           <div className="relative">
             <svg width={height} height={height} className="drop-shadow-sm">
@@ -270,7 +270,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -322,9 +322,9 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 
   return (
     <DaisyCard className={cn("border border-gray-200 hover:shadow-sm transition-all duration-200", className)} >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <p className="text-sm text-gray-600 font-inter font-medium mb-1">
@@ -351,7 +351,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };

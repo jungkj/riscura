@@ -302,7 +302,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
           <DaisyTabsContent value="assessment" className="space-y-6" />
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center space-x-2" >
   <Target className="h-5 w-5" />
@@ -314,9 +314,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-6" >
+              <DaisyCardBody className="space-y-6" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-4">
                     <DaisyLabel>Likelihood: {formData.likelihood}</DaisyLabel>
                     <DaisySlider
@@ -382,13 +382,13 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     </DaisySelectContent>
                   </DaisySelect>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>
 
           <DaisyTabsContent value="compliance" className="space-y-4" />
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center space-x-2" >
   <Shield className="h-5 w-5" />
@@ -400,9 +400,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   {complianceFrameworks.map((framework) => (
                     <div key={framework} className="flex items-center space-x-2">
                       <DaisyCheckbox
@@ -416,7 +416,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>
 

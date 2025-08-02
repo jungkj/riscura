@@ -157,9 +157,7 @@ export default function ImportDataPage() {
       case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
       case 'error': return <XCircle className="h-5 w-5 text-red-600" />;
       case 'processing': return <Clock className="h-5 w-5 text-blue-600 animate-spin" />;
-      default: return <DaisyAlertTriangle className="h-5 w-5 text-gray-400" >
-  ;
-</DaisyAlertTriangle>
+      default: return <AlertTriangle className="h-5 w-5 text-gray-400" />;
     }
   };
 
@@ -172,7 +170,8 @@ export default function ImportDataPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4" />
+              className="mb-4"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -182,9 +181,8 @@ export default function ImportDataPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Import Risk Data</h1>
                 <p className="text-gray-600 mt-1">Upload and import risk data from external sources</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm" >
-  <Clock className="h-4 w-4 mr-1" />
-</DaisyBadge>
+              <DaisyBadge variant="outline" className="text-sm">
+                <Clock className="h-4 w-4 mr-1" />
                 15-25 min
               </DaisyBadge>
             </div>
@@ -194,59 +192,45 @@ export default function ImportDataPage() {
             {/* Import Configuration */}
             <div className="lg:col-span-2 space-y-6">
               {/* Data Type Selection */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-lg">Import Configuration</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
-  <div>
-</DaisyCardContent>
-                    <label className="text-sm font-medium text-gray-700">Data Type</label>
-                    <DaisySelect value={dataType} onValueChange={setDataType} />
-                      <DaisySelectTrigger className="mt-1" />
-                        <DaisySelectValue /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="risks">Risks</DaisySelectContent>
-                        <DaisySelectItem value="controls">Controls</DaisySelectItem>
-                        <DaisySelectItem value="vendors">Vendors</DaisySelectItem>
-                        <DaisySelectItem value="assets">Assets</DaisySelectItem>
-                        <DaisySelectItem value="compliance">Compliance Data</DaisySelectItem>
-                      </DaisySelectContent>
-                    </DaisySelect>
-                  </div>
+              <DaisyCard>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Import Configuration</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Data Type</label>
+                      <div className="mt-1 p-2 border rounded">
+                        {dataType}
+                      </div>
+                    </div>
 
-                  <div className="p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
-                      <strong>Supported formats:</strong> CSV, Excel (.xls, .xlsx), JSON
-                    </p>
-                    <DaisyButton
-                      variant="link"
-                      size="sm"
-                      onClick={downloadTemplate}
-                      className="mt-2 p-0 h-auto text-blue-700" >
-  <Download className="h-4 w-4 mr-1" />
-</DaisyButton>
-                      Download {dataType} template
-                    </DaisyButton>
+                    <div className="p-4 bg-blue-50 rounded-lg">
+                      <p className="text-sm text-blue-800">
+                        <strong>Supported formats:</strong> CSV, Excel (.xls, .xlsx), JSON
+                      </p>
+                      <DaisyButton
+                        variant="link"
+                        size="sm"
+                        onClick={downloadTemplate}
+                        className="mt-2 p-0 h-auto text-blue-700"
+                      >
+                        <Download className="h-4 w-4 mr-1" />
+                        Download {dataType} template
+                      </DaisyButton>
+                    </div>
                   </div>
-                </DaisyCardContent>
+                </div>
               </DaisyCard>
 
               {/* File Upload */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-lg">Upload Files</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
-  <div
+              <DaisyCard>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Upload Files</h3>
+                  <div
                     {...getRootProps()}
                     className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
                       isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-</DaisyCardContent>
                     <input {...getInputProps()} />
                     <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     {isDragActive ? (
@@ -305,7 +289,8 @@ export default function ImportDataPage() {
                               <DaisyButton
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => removeFile(index)} />
+                                onClick={() => removeFile(index)}
+                              >
                                 <XCircle className="h-4 w-4" />
                               </DaisyButton>
                             )}
@@ -325,103 +310,96 @@ export default function ImportDataPage() {
                       <DaisyProgress value={importProgress} className="h-2" />
                     </div>
                   )}
-                </DaisyProgress>
+                </div>
               </DaisyCard>
             </div>
 
             {/* Import Actions & Help */}
             <div className="space-y-6">
               {/* Actions */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-lg">Import Actions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
-  <DaisyButton
-                    className="w-full"
-                    size="lg"
-                    onClick={handleImport}
-                    disabled={files.length === 0 || importing} >
-</DaisyCardContent>
-  {importing ? (
-</DaisyButton>
-                      <>Processing...</>
-                    ) : (
-                      <>
-                        <Upload className="h-5 w-5 mr-2" />
-                        Start Import
-                      </>
-                    )}
-                  </DaisyButton>
+              <DaisyCard>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Import Actions</h3>
+                  <div className="space-y-3">
+                    <DaisyButton
+                      className="w-full"
+                      size="lg"
+                      onClick={handleImport}
+                      disabled={files.length === 0 || importing}
+                    >
+                      {importing ? (
+                        <>Processing...</>
+                      ) : (
+                        <>
+                          <Upload className="h-5 w-5 mr-2" />
+                          Start Import
+                        </>
+                      )}
+                    </DaisyButton>
 
-                  <DaisyButton
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => toast({ title: 'Opening validation rules...' })}
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    View Validation Rules
-                  </DaisyButton>
+                    <DaisyButton
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => toast({ title: 'Opening validation rules...' })}
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Validation Rules
+                    </DaisyButton>
 
-                  <DaisyButton
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setFiles([])}
-                    disabled={importing} />
-                    Clear All Files
-                  </DaisyButton>
-                </DaisyCardContent>
+                    <DaisyButton
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setFiles([])}
+                      disabled={importing}
+                    >
+                      Clear All Files
+                    </DaisyButton>
+                  </div>
+                </div>
               </DaisyCard>
 
               {/* Import Guidelines */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-lg">Import Guidelines</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3 text-sm" >
-  <div>
-</DaisyCardContent>
-                    <h4 className="font-medium mb-1">File Requirements</h4>
-                    <ul className="space-y-1 text-gray-600">
-                      <li>• Maximum file size: 10MB</li>
-                      <li>• UTF-8 encoding required</li>
-                      <li>• Headers must match template</li>
-                    </ul>
-                  </div>
+              <DaisyCard>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Import Guidelines</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <h4 className="font-medium mb-1">File Requirements</h4>
+                      <ul className="space-y-1 text-gray-600">
+                        <li>• Maximum file size: 10MB</li>
+                        <li>• UTF-8 encoding required</li>
+                        <li>• Headers must match template</li>
+                      </ul>
+                    </div>
 
-                  <div>
-                    <h4 className="font-medium mb-1">Data Validation</h4>
-                    <ul className="space-y-1 text-gray-600">
-                      <li>• Required fields must be filled</li>
-                      <li>• Dates in ISO format (YYYY-MM-DD)</li>
-                      <li>• Valid email addresses</li>
-                      <li>• Unique identifiers preserved</li>
-                    </ul>
-                  </div>
+                    <div>
+                      <h4 className="font-medium mb-1">Data Validation</h4>
+                      <ul className="space-y-1 text-gray-600">
+                        <li>• Required fields must be filled</li>
+                        <li>• Dates in ISO format (YYYY-MM-DD)</li>
+                        <li>• Valid email addresses</li>
+                        <li>• Unique identifiers preserved</li>
+                      </ul>
+                    </div>
 
-                  <div>
-                    <h4 className="font-medium mb-1">Import Behavior</h4>
-                    <ul className="space-y-1 text-gray-600">
-                      <li>• Duplicates are skipped</li>
-                      <li>• Invalid rows are logged</li>
-                      <li>• Partial imports allowed</li>
-                    </ul>
+                    <div>
+                      <h4 className="font-medium mb-1">Import Behavior</h4>
+                      <ul className="space-y-1 text-gray-600">
+                        <li>• Duplicates are skipped</li>
+                        <li>• Invalid rows are logged</li>
+                        <li>• Partial imports allowed</li>
+                      </ul>
+                    </div>
                   </div>
-                </DaisyCardContent>
+                </div>
               </DaisyCard>
 
               {/* Recent Imports */}
-              <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
-                  <DaisyCardTitle className="text-lg">Recent Imports</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
-  <p className="text-sm text-gray-600">
-</DaisyCardContent>No recent imports</p>
-                </DaisyCardContent>
+              <DaisyCard>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Recent Imports</h3>
+                  <p className="text-sm text-gray-600">No recent imports</p>
+                </div>
               </DaisyCard>
             </div>
           </div>

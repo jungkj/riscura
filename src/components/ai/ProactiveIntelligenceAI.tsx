@@ -301,7 +301,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
       <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -346,25 +346,25 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyTabsContent>
                   <DaisyCardDescription className="text-gray-600 font-inter">Total Insights</p>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
 </DaisyCardDescription>{insightMetrics.totalInsights}</div>
                   <p className="text-sm text-gray-500">
                     {insightMetrics.criticalInsights} critical
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                   <DaisyCardDescription className="text-gray-600 font-inter">Actionable Insights</p>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
 </DaisyCardDescription>{insightMetrics.actionableInsights}</div>
                   <div className="relative h-2 bg-secondary/20 rounded-full overflow-hidden mt-2">
@@ -373,15 +373,15 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                       style={{ width: `${insightMetrics.totalInsights > 0 ? (insightMetrics.actionableInsights / insightMetrics.totalInsights) * 100 : 0}%` }}
                     />
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                   <DaisyCardDescription className="text-gray-600 font-inter">Avg Confidence</p>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
 </DaisyCardDescription>
                     {(insightMetrics.averageConfidence * 100).toFixed(0)}%
@@ -392,30 +392,30 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                       style={{ width: `${insightMetrics.averageConfidence * 100}%` }}
                     />
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                   <DaisyCardDescription className="text-gray-600 font-inter">Predictions</p>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
 </DaisyCardDescription>{predictions.length}</div>
                   <p className="text-sm text-gray-500">Active forecasts</p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
 
             {/* Quick Actions */}
             <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-lg font-bold text-gray-900 font-inter">AI Actions</DaisyCardTitle>
                 <DaisyCardDescription className="text-gray-600 font-inter">Generate insights and perform analysis</p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="flex gap-3">
 </DaisyCardDescription>
                   <DaisyButton 
@@ -446,22 +446,22 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     Smart Notifications
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* System Status */}
             <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2 text-lg font-bold text-gray-900 font-inter" >
   <Activity className="h-5 w-5 text-[#191919]" />
 </DaisyCardTitle>
                   System Status
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm p-2 bg-secondary/10 rounded-lg">
                       <span className="text-gray-600">Queue Size</span>
@@ -491,12 +491,12 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     )}
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Recent Insights Preview */}
             <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <div className="flex items-center justify-between">
                   <DaisyCardTitle className="text-lg font-bold text-gray-900 font-inter">Recent AI Insights</DaisyCardTitle>
@@ -505,9 +505,9 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   </DaisyButton>
                 </div>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   {insights.slice(0, 3).map(insight => (
                     <div key={insight.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg hover:bg-[#D8C3A5]/20 hover:border-[#191919] transition-all duration-200">
                       <div className="p-2 bg-secondary/10 rounded-lg">
@@ -536,14 +536,14 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="insights" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>AI-Generated Insights</DaisyCardTitle>
               <DaisyCardDescription >
@@ -551,9 +551,9 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 {insights.map(insight => (
                   <div key={insight.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between">
@@ -608,13 +608,13 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   </div>
                 )}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="predictions" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Predictive Analysis</DaisyCardTitle>
               <DaisyCardDescription >
@@ -622,9 +622,9 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 {predictions.map(prediction => (
                   <div key={prediction.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between">
@@ -669,13 +669,13 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   </div>
                 )}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="notifications" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Smart Notifications</DaisyCardTitle>
               <DaisyCardDescription >
@@ -683,9 +683,9 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                 {notifications.map(notification => (
                   <div 
                     key={notification.id} 
@@ -731,19 +731,19 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                   </div>
                 )}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="monitoring" />
           <div className="space-y-6">
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Background Processing</DaisyCardTitle>
                 <DaisyCardDescription>Monitor AI processing queue and performance</p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-4">
 </DaisyCardDescription>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -801,16 +801,16 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
               </DaisyAlert>
                   )}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle>Processing Configuration</DaisyCardTitle>
                 <DaisyCardDescription>Adjust AI processing settings</p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="space-y-4">
 </DaisyCardDescription>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -837,7 +837,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     Configure Settings
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

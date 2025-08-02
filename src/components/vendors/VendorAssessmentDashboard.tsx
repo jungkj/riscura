@@ -214,7 +214,7 @@ export function VendorAssessmentDashboard() {
 
         <DaisyTabsContent value="assess" className="space-y-4" />
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter flex items-center" >
   <Globe className="h-5 w-5 mr-2" />
@@ -226,9 +226,9 @@ export function VendorAssessmentDashboard() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex gap-4">
                   <div className="relative flex-1">
                     <Globe className="absolute left-3 top-1/2 h-4 w-4 transform -translate-y-1/2 text-[#A8A8A8]" />
@@ -288,7 +288,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -297,7 +297,7 @@ export function VendorAssessmentDashboard() {
             <div className="space-y-6">
               {/* Vendor Overview */}
               <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <div className="flex items-start justify-between">
                     <div>
@@ -317,9 +317,9 @@ export function VendorAssessmentDashboard() {
                     </DaisyBadge>
                   </div>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="space-y-3">
                       <div className="flex items-center text-sm">
                         <Globe className="h-4 w-4 mr-2 text-[#A8A8A8]" />
@@ -380,16 +380,16 @@ export function VendorAssessmentDashboard() {
                       </div>
                     </div>
                   )}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               {/* Risk Categories */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {riskCategories.map((category) => (
                   <DaisyCard key={category.name} className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-[#191919]">{category.name}</span>
                         {category.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
@@ -409,7 +409,7 @@ export function VendorAssessmentDashboard() {
 
               {/* Findings */}
               <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-inter flex items-center" >
   <DaisyAlertTriangle className="h-5 w-5 mr-2" >
@@ -421,10 +421,10 @@ export function VendorAssessmentDashboard() {
 </DaisyBadge>
                     </DaisyBadge>
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   {assessment.findings.length > 0 ? (
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="space-y-4">
                       {assessment.findings.map((finding) => (
                         <div key={finding.id} className="border border-[#D8C3A5] rounded-lg p-4">
@@ -461,7 +461,7 @@ export function VendorAssessmentDashboard() {
                       <p className="text-[#A8A8A8] text-sm">This vendor appears to have good security practices</p>
                     </div>
                   )}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               {/* Actions */}
@@ -479,20 +479,20 @@ export function VendorAssessmentDashboard() {
             </div>
           ) : (
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-8 text-center" >
+  <DaisyCardBody className="p-8 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <Search className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No assessment results</p>
                 <p className="text-[#A8A8A8] text-sm">Run a vendor assessment to see results here</p>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </DaisyTabsContent>
 
         <DaisyTabsContent value="history" className="space-y-4" />
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter">Assessment History</DaisyCardTitle>
               <DaisyCardDescription >
@@ -500,9 +500,9 @@ export function VendorAssessmentDashboard() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   {loading ? (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
                 </div>
@@ -539,16 +539,16 @@ export function VendorAssessmentDashboard() {
                   <p className="text-[#A8A8A8] text-sm">Start by assessing your first vendor</p>
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="dashboard" className="space-y-4" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">Total Vendors</p>
@@ -556,13 +556,13 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <Building className="h-8 w-8 text-[#199BEC]" />
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">High Risk</p>
@@ -573,13 +573,13 @@ export function VendorAssessmentDashboard() {
                   <DaisyAlertTriangle className="h-8 w-8 text-red-500" >
   </div>
 </DaisyAlertTriangle>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#A8A8A8]">Compliant</p>
@@ -589,7 +589,7 @@ export function VendorAssessmentDashboard() {
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>

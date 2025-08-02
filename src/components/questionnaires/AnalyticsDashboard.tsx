@@ -181,9 +181,9 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           transition={{ delay: 0.1 }}
         >
           <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Total Responses</p>
@@ -197,7 +197,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
 
@@ -207,9 +207,9 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           transition={{ delay: 0.15 }}
         >
           <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Avg Completion Rate</p>
@@ -223,7 +223,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
 
@@ -233,9 +233,9 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           transition={{ delay: 0.2 }}
         >
           <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Average Score</p>
@@ -249,7 +249,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Target className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
 
@@ -259,9 +259,9 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
           transition={{ delay: 0.25 }}
         >
           <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-notion-text-secondary">Active Users</p>
@@ -275,7 +275,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                   <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
       </div>
@@ -299,17 +299,17 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.3 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle className="flex items-center justify-between" >
   <span>
 </DaisyCardTitle>Response Trends</span>
                     <DaisyBadge variant="outline">Last 30 days</DaisyBadge>
                   </DaisyCardTitle>
-                </DaisyCardHeader>
-                <DaisyCardContent >
+                </DaisyCardBody>
+                <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <LineChart data={data.responsesTrend}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="date" className="text-xs" />
@@ -350,13 +350,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.35 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Daily Activity Pattern</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <AreaChart data={data.responsesTrend.slice(-7)}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="date" className="text-xs" />
@@ -397,13 +397,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.3 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Completion Rates by Questionnaire</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <BarChart data={data.completionRates}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="questionnaire" className="text-xs" />
@@ -423,13 +423,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.35 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Completion Breakdown</DaisyCardTitle>
-                </DaisyCardHeader>
-                <DaisyCardContent className="space-y-4" >
+                </DaisyCardBody>
+                <DaisyCardBody className="space-y-4" >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Completed</span>
@@ -491,13 +491,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.3 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Score Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <BarChart data={data.scoreDistribution}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="scoreRange" className="text-xs" />
@@ -517,13 +517,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.35 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Score Trends</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <LineChart data={data.responsesTrend.map((item, index) => ({
                       ...item,
                       avgScore: 70 + Math.sin(index * 0.2) * 10 + Math.random() * 5
@@ -556,13 +556,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.3 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Performance by Category</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                     <ComposedChart data={data.performanceMetrics}>
                       <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                       <XAxis dataKey="category" className="text-xs" />
@@ -585,13 +585,13 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
               transition={{ delay: 0.35 }}
             >
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Performance Summary</DaisyCardTitle>
-                </DaisyCardHeader>
-                <DaisyCardContent className="space-y-4" >
+                </DaisyCardBody>
+                <DaisyCardBody className="space-y-4" >
   {data.performanceMetrics.map((metric, index) => (
-</DaisyCardContent>
+</DaisyCardBody>
                     <div key={index} className="flex items-center justify-between p-3 bg-notion-bg-tertiary rounded-lg">
                       <div>
                         <p className="font-medium text-notion-text-primary">{metric.category}</p>
@@ -603,7 +603,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
                       </div>
                     </div>
                   ))}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
           </div>

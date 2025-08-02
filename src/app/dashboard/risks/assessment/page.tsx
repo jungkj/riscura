@@ -133,9 +133,9 @@ export default function RiskAssessmentPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Assessments</p>
@@ -143,13 +143,13 @@ export default function RiskAssessmentPage() {
               </div>
               <Target className="h-8 w-8 text-blue-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">In Progress</p>
@@ -157,13 +157,13 @@ export default function RiskAssessmentPage() {
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-yellow-600">Pending</p>
@@ -172,13 +172,13 @@ export default function RiskAssessmentPage() {
               <DaisyAlertTriangle className="h-8 w-8 text-yellow-600" >
   </div>
 </DaisyAlertTriangle>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-emerald-600">Completed</p>
@@ -186,28 +186,28 @@ export default function RiskAssessmentPage() {
               </div>
               <FileCheck className="h-8 w-8 text-emerald-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
       {/* Assessments List */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <FileCheck className="h-5 w-5 text-blue-600" />
 </DaisyCardTitle>
             Assessment Overview
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <Suspense fallback={<LoadingSpinner />
-</DaisyCardContent>}>
+</DaisyCardBody>}>
             {assessments.map((assessment) => (
               <DaisyCard key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-3">
@@ -268,11 +268,11 @@ export default function RiskAssessmentPage() {
                       </DaisyButton>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </Suspense>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

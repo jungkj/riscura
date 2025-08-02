@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useParams } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
@@ -20,15 +21,15 @@ export default function RiskDetailPageRoute() {
           { label: riskId, current: true },
         ]}
       >
-        <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Risk Information</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
-  <p className="text-gray-500">
-</DaisyCardContent>Risk details for ID: {riskId} coming soon...</p>
-          </DaisyCardContent>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <p className="text-gray-500">
+              Risk details for ID: {riskId} coming soon...
+            </p>
+          </DaisyCardBody>
         </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>

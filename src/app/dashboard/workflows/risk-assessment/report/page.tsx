@@ -191,9 +191,9 @@ export default function GenerateRiskReportPage() {
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total Risks</p>
@@ -204,13 +204,13 @@ export default function GenerateRiskReportPage() {
                   <DaisyAlertTriangle className="h-8 w-8 text-orange-400" >
   </div>
 </DaisyAlertTriangle>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">High/Critical</p>
@@ -220,13 +220,13 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <TrendingUp className="h-8 w-8 text-red-400" />
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Controls</p>
@@ -236,13 +236,13 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <Shield className="h-8 w-8 text-green-400" />
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Open Actions</p>
@@ -252,7 +252,7 @@ export default function GenerateRiskReportPage() {
                   </div>
                   <Clock className="h-8 w-8 text-blue-400" />
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
 
@@ -261,13 +261,13 @@ export default function GenerateRiskReportPage() {
             <div className="lg:col-span-2 space-y-6">
               {/* Report Type */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg">Report Configuration</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div>
-</DaisyCardContent>
+</DaisyCardBody>
                     <DaisyLabel htmlFor="report-type">Report Type</DaisyLabel>
                     <DaisySelect
                       value={reportConfig.reportType}
@@ -326,18 +326,18 @@ export default function GenerateRiskReportPage() {
                       </div>
                     </DaisyRadioGroup>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               {/* Sections to Include */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg">Report Sections</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                     {Object.entries(reportConfig.sections).map(([key, value]) => (
                       <div key={key} className="flex items-center space-x-3">
                         <DaisyCheckbox
@@ -351,7 +351,7 @@ export default function GenerateRiskReportPage() {
                       </div>
                     ))}
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
 
@@ -359,17 +359,17 @@ export default function GenerateRiskReportPage() {
             <div className="space-y-6">
               {/* Preview */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg flex items-center gap-2" >
   <Eye className="h-5 w-5" />
 </DaisyCardTitle>
                     Report Preview
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3 text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="p-3 bg-gray-50 rounded">
                       <p className="font-medium">Selected Report:</p>
                       <p className="text-gray-600">
@@ -398,22 +398,22 @@ export default function GenerateRiskReportPage() {
                       <p className="text-gray-600">{reportConfig.format.toUpperCase()}</p>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               {/* Actions */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg">Generate Report</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3" >
   <DaisyButton
                     className="w-full"
                     size="lg"
                     onClick={handleGenerateReport}
                     disabled={generating} >
-</DaisyCardContent>
+</DaisyCardBody>
   {generating ? (
 </DaisyButton>
                       <>Generating...</>
@@ -451,22 +451,22 @@ export default function GenerateRiskReportPage() {
                     <Printer className="h-4 w-4 mr-2" />
                     Print
                   </DaisyButton>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               {/* Quick Actions */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg">Quick Actions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   <DaisyButton
                     variant="outline"
                     size="sm"
                     className="w-full justify-start"
                     onClick={() =>
-</DaisyCardContent> router.push('/dashboard/reporting/schedule')} />
+</DaisyCardBody> router.push('/dashboard/reporting/schedule')} />
                     <DaisyCalendar className="h-4 w-4 mr-2" />
                     Schedule Recurring Report
                   </DaisyCalendar>
@@ -486,7 +486,7 @@ export default function GenerateRiskReportPage() {
                     <Clock className="h-4 w-4 mr-2" />
                     View Report History
                   </DaisyButton>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
           </div>

@@ -302,13 +302,13 @@ export default function AIInsightsPage() {
           transition={{ delay: 0.2 }}
         >
           <DaisyCard className="border-2 border-primary/20">
-            <DaisyCardHeader>
+            <DaisyCardBody>
               <DaisyCardTitle className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-primary" />
                 Predictive Risk Analysis
               </DaisyCardTitle>
-            </DaisyCardHeader>
-            <DaisyCardContent>
+            </DaisyCardBody>
+            <DaisyCardBody>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary mb-2">
@@ -355,7 +355,7 @@ export default function AIInsightsPage() {
               <div className="mt-4 p-3 bg-muted rounded-lg">
                 <p className="text-sm font-medium">{predictiveAnalysis.prediction}</p>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
       )}
@@ -381,7 +381,7 @@ export default function AIInsightsPage() {
           >
             {insights.map((insight) => (
               <DaisyCard key={insight.id} className="hover:shadow-md transition-shadow">
-                <DaisyCardContent className="p-6">
+                <DaisyCardBody className="p-6">
                   <div className="flex items-start gap-4">
                     {getInsightIcon(insight.type)}
                     <div className="flex-1">
@@ -410,7 +410,7 @@ export default function AIInsightsPage() {
                       </div>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </motion.div>
@@ -424,7 +424,7 @@ export default function AIInsightsPage() {
           >
             {recommendations.map((rec) => (
               <DaisyCard key={rec.id} className={`border-l-4 ${getPriorityColor(rec.priority)}`}>
-                <DaisyCardContent className="p-6">
+                <DaisyCardBody className="p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="font-semibold mb-1">{rec.title}</h3>
@@ -457,7 +457,7 @@ export default function AIInsightsPage() {
                   <div className="flex justify-end mt-4">
                     <DaisyButton size="sm">Implement Recommendation</DaisyButton>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </motion.div>
@@ -471,13 +471,13 @@ export default function AIInsightsPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5" />
                   Risk Correlation Matrix
                 </DaisyCardTitle>
-              </DaisyCardHeader>
-              <DaisyCardContent>
+              </DaisyCardBody>
+              <DaisyCardBody>
                 <p className="text-muted-foreground mb-4">
                   AI-identified correlations between different risk categories
                 </p>
@@ -504,17 +504,17 @@ export default function AIInsightsPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard>
-              <DaisyCardHeader>
+              <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
                   Department Risk Profiles
                 </DaisyCardTitle>
-              </DaisyCardHeader>
-              <DaisyCardContent>
+              </DaisyCardBody>
+              <DaisyCardBody>
                 <p className="text-muted-foreground mb-4">
                   Risk distribution and patterns across departments
                 </p>
@@ -536,7 +536,7 @@ export default function AIInsightsPage() {
                     <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>

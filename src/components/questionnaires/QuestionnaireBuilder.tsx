@@ -634,13 +634,13 @@ export function QuestionnaireBuilder({
             <DaisyTabsContent value="builder" className="space-y-6" />
               {/* Questionnaire Header */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Details</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div>
                       <DaisyLabel htmlFor="title">Title</DaisyLabel>
                       <DaisyInput
@@ -688,7 +688,7 @@ export function QuestionnaireBuilder({
 
               {/* Sections */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <div className="flex items-center justify-between">
                     <DaisyCardTitle>Sections & Questions</DaisyCardTitle>
@@ -699,9 +699,9 @@ export function QuestionnaireBuilder({
                     </DaisyButton>
                   </div>
                 
-                <DaisyCardContent >
+                <DaisyCardBody >
   {sections.length === 0 ? (
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="text-center py-8">
                       <Layers className="w-12 h-12 text-notion-text-tertiary mx-auto mb-4" />
                       <p className="text-notion-text-secondary mb-4">
@@ -843,19 +843,19 @@ export function QuestionnaireBuilder({
                       ))}
                     </div>
                   )}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </DaisyTabsContent>
 
             <DaisyTabsContent value="settings" />
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Settings</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
                     <DaisyAlert >
   <Info className="w-4 h-4" />
 </DaisyAlert>
@@ -871,19 +871,19 @@ export function QuestionnaireBuilder({
                       <p>Advanced settings panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </DaisyTabsContent>
 
             <DaisyTabsContent value="ai" />
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>AI Configuration</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
                     <DaisyAlert >
   <Brain className="w-4 h-4" />
 </DaisyAlert>
@@ -899,19 +899,19 @@ export function QuestionnaireBuilder({
                       <p>AI configuration panel coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </DaisyTabsContent>
 
             <DaisyTabsContent value="preview" />
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                   <DaisyCardTitle>Preview</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
                     <DaisyAlert >
   <Eye className="w-4 h-4" />
 </DaisyAlert>
@@ -927,7 +927,7 @@ export function QuestionnaireBuilder({
                       <p>Preview mode coming soon...</p>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </DaisyTabsContent>
           </DaisyTabs>

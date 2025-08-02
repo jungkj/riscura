@@ -264,7 +264,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
         }`}
         onClick={onClick}
       >
-        <DaisyCardContent className="p-6" >
+        <DaisyCardBody className="p-6" >
   <div className="space-y-4">
 </DaisyCard>
             {/* Header */}
@@ -403,7 +403,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               </div>
             )}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );

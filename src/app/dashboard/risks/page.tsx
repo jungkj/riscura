@@ -16,15 +16,13 @@ export default function RisksPage() {
           { label: 'Risks', current: true },
         ]}
       >
-        <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Risk Registry</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
-  <p className="text-gray-500">
-</DaisyCardContent>Risk management interface coming soon...</p>
-          </DaisyCardContent>
+            <p className="text-gray-500">
+              Risk management interface coming soon...
+            </p>
+          </DaisyCardBody>
         </DaisyCard>
       </MainContentArea>
     </ProtectedRoute>

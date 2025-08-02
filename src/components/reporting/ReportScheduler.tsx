@@ -635,9 +635,9 @@ export default function ReportScheduler({
 
       {/* Schedules Table */}
       <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTable />
             <DaisyTableHeader />
               <DaisyTableRow />
@@ -753,7 +753,7 @@ export default function ReportScheduler({
               )}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Create Schedule Dialog */}

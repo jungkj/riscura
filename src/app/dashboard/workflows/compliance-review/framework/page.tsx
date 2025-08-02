@@ -293,7 +293,7 @@ export default function FrameworkComplianceCheckPage() {
                     key={framework.id}
                     className="hover:shadow-md transition-shadow cursor-pointer"
                     onClick={() => setSelectedFramework(framework)} />
-                    <DaisyCardContent className="p-6" >
+                    <DaisyCardBody className="p-6" >
   <div className="flex items-start justify-between">
 </DaisyCard>
                         <div>
@@ -312,7 +312,7 @@ export default function FrameworkComplianceCheckPage() {
                         </div>
                         <Shield className="h-8 w-8 text-gray-400" />
                       </div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 ))}
               </div>
@@ -322,13 +322,13 @@ export default function FrameworkComplianceCheckPage() {
           {selectedFramework && !assessmentInProgress && currentRequirementIndex === 0 && (
             /* Pre-Assessment */
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle>Ready to Start Assessment</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="p-4 bg-blue-50 rounded-lg">
-</DaisyCardContent>
+</DaisyCardBody>
                   <h3 className="font-medium text-blue-900 mb-2">Selected Framework</h3>
                   <p className="text-blue-800">{selectedFramework.name} - {selectedFramework.description}</p>
                 </div>
@@ -355,7 +355,7 @@ export default function FrameworkComplianceCheckPage() {
                     Choose Different Framework
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
 
@@ -364,9 +364,9 @@ export default function FrameworkComplianceCheckPage() {
             <div className="space-y-6">
               {/* Progress Bar */}
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <p className="text-sm text-gray-600">Assessment Progress</p>
@@ -386,7 +386,7 @@ export default function FrameworkComplianceCheckPage() {
 
               {/* Current Requirement */}
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <div className="flex items-center justify-between">
                     <DaisyCardTitle className="text-lg" >
@@ -402,9 +402,9 @@ export default function FrameworkComplianceCheckPage() {
                     </DaisyBadge>
                   </div>
                 
-                <DaisyCardContent className="space-y-6" >
+                <DaisyCardBody className="space-y-6" >
   <div className="p-4 bg-gray-50 rounded-lg">
-</DaisyCardContent>
+</DaisyCardBody>
                     <p className="text-gray-700">
                       {getAllRequirements(selectedFramework)[currentRequirementIndex].description}
                     </p>
@@ -461,7 +461,7 @@ export default function FrameworkComplianceCheckPage() {
                       Reset
                     </DaisyButton>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
           )}
@@ -470,9 +470,9 @@ export default function FrameworkComplianceCheckPage() {
           {!assessmentInProgress && selectedFramework && currentRequirementIndex > 0 && 
            currentRequirementIndex < getAllRequirements(selectedFramework).length && (
             <DaisyCard >
-  <DaisyCardContent className="p-12 text-center" >
+  <DaisyCardBody className="p-12 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <Pause className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Assessment Paused</h3>
                 <p className="text-gray-600 mb-4">
@@ -488,7 +488,7 @@ export default function FrameworkComplianceCheckPage() {
 </DaisyButton>
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </div>

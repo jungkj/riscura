@@ -661,9 +661,9 @@ export const TouchActionMenu: React.FC<{
           
           {/* Menu */}
           <DaisyCard className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg" >
-  <DaisyCardContent className="p-2" >
+  <DaisyCardBody className="p-2" >
   </DaisyProgress>
-</DaisyCardContent>
+</DaisyCardBody>
               {items.map((item) => (
                 <TouchButton
                   key={item.id}
@@ -683,7 +683,7 @@ export const TouchActionMenu: React.FC<{
                   <span>{item.label}</span>
                 </TouchButton>
               ))}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </>
       )}

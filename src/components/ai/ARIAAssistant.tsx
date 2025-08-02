@@ -403,7 +403,7 @@ How can I assist you today?`,
 
   return (
     <DaisyCard className="h-[600px] flex flex-col" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -460,9 +460,9 @@ How can I assist you today?`,
         </div>
       
 
-      <DaisyCardContent className="flex-1 flex flex-col p-0" >
+      <DaisyCardBody className="flex-1 flex flex-col p-0" >
   {/* Messages Area */}
-</DaisyCardContent>
+</DaisyCardBody>
         <DaisyScrollArea className="flex-1 px-4" />
           <div className="space-y-4 pb-4">
             {messages.map((message) => (
@@ -689,7 +689,7 @@ How can I assist you today?`,
             </DaisyButton>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

@@ -186,17 +186,17 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
 
       {/* Quick Tours */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Lightbulb className="w-5 h-5 text-yellow-500" />
 </DaisyCardTitle>
             Guided Tours
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
             {helpResources.filter(r => r.type === 'tour').map((resource) => (
               <div
                 key={resource.id}
@@ -237,22 +237,22 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Other Resources */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <BookOpen className="w-5 h-5 text-green-600" />
 </DaisyCardTitle>
             Documentation & Guides
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
             {helpResources.filter(r => r.type !== 'tour').map((resource) => (
               <div
                 key={resource.id}
@@ -291,22 +291,22 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Quick Actions */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Settings className="w-5 h-5 text-purple-600" />
 </DaisyCardTitle>
             Quick Actions
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-2 gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
             <DaisyButton
               variant="outline"
               onClick={() => {
@@ -332,7 +332,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
               </div>
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

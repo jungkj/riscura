@@ -233,9 +233,9 @@ export function MitigationLibrary() {
         <DaisyTabsContent value="browse" className="space-y-4" />
           {/* Search and Filters */}
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 transform -translate-y-1/2 text-[#A8A8A8]" />
@@ -314,9 +314,9 @@ export function MitigationLibrary() {
             <div className="grid gap-4">
               {filteredMitigations.map(mitigation => (
                 <DaisyCard key={mitigation.id} className="bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-md transition-shadow" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                     <div className="flex items-start space-x-3">
                       <DaisyCheckbox
                         checked={selectedMitigations.includes(mitigation.id)}
@@ -361,7 +361,7 @@ export function MitigationLibrary() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               ))}
             </div>
@@ -379,7 +379,7 @@ export function MitigationLibrary() {
                   setActiveTab('browse');
                 }}
               >
-                <DaisyCardContent className="p-4" >
+                <DaisyCardBody className="p-4" >
   <div className="flex items-center justify-between mb-3">
 </DaisyTabsContent>
                     <div className={cn('p-2 rounded-lg bg-opacity-10', category.color)}>
@@ -389,19 +389,19 @@ export function MitigationLibrary() {
                   </div>
                   <h3 className="font-medium text-[#191919] mb-1">{category.name}</h3>
                   <p className="text-xs text-[#A8A8A8]">Security controls</p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </div>
 
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="text-[#191919] font-inter">Priority Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
                     <DaisyAlertCircle className="h-6 w-6 text-red-500" >
@@ -425,13 +425,13 @@ export function MitigationLibrary() {
                   <p className="text-sm text-[#A8A8A8]">Advanced</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="import" className="space-y-4" />
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter flex items-center" >
   <Upload className="h-5 w-5 mr-2" />
@@ -443,9 +443,9 @@ export function MitigationLibrary() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4" >
+            <DaisyCardBody className="space-y-4" >
   <DaisyAlert >
-  </DaisyCardContent>
+  </DaisyCardBody>
 </DaisyAlert>
                 <BookOpen className="h-4 w-4" />
                 <DaisyAlertDescription >
@@ -498,13 +498,13 @@ export function MitigationLibrary() {
                   <li>• Mapping to compliance requirements</li>
                 </ul>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="imported" className="space-y-4" />
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter">Imported Controls</DaisyCardTitle>
               <DaisyCardDescription >
@@ -512,9 +512,9 @@ export function MitigationLibrary() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="text-center py-8">
-</DaisyCardContent>
+</DaisyCardBody>
                 <FileText className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No controls imported yet</p>
                 <p className="text-[#A8A8A8] text-sm">Start by importing controls from the library</p>
@@ -524,7 +524,7 @@ export function MitigationLibrary() {
                   Browse Library
                 </DaisyButton>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

@@ -250,7 +250,7 @@ export default function DocumentManagementInterface({
           }`}
           onClick={() => onDocumentSelect?.(document)}
         >
-          <DaisyCardHeader className="pb-2" >
+          <DaisyCardBody className="pb-2" >
   <div className="flex items-start justify-between">
 </DaisyCard>
               <div className="flex items-center space-x-2">
@@ -297,9 +297,9 @@ export default function DocumentManagementInterface({
               </DaisyDropdownMenu>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   {document.aiAnalysis?.thumbnailUrl && (
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="mb-3">
                 <img
                   src={document.aiAnalysis.thumbnailUrl}
@@ -328,7 +328,7 @@ export default function DocumentManagementInterface({
                 {formatDistanceToNow(new Date(document.uploadedAt), { addSuffix: true })}
               </p>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       ))}
     </div>
@@ -344,7 +344,7 @@ export default function DocumentManagementInterface({
           }`}
           onClick={() => onDocumentSelect?.(document)}
         >
-          <DaisyCardContent className="p-4" >
+          <DaisyCardBody className="p-4" >
   <div className="flex items-center space-x-4">
 </DaisyCard>
               <DaisyCheckbox
@@ -399,7 +399,7 @@ export default function DocumentManagementInterface({
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       ))}
     </div>

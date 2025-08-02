@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
@@ -90,9 +90,8 @@ export default function ControlsTestingPage() {
                 Monitor and validate the effectiveness of your security controls through automated and manual testing.
               </p>
             </div>
-            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white" >
-  <Play className="w-4 h-4 mr-2" />
-</DaisyButton>
+            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
+              <Play className="w-4 h-4 mr-2" />
               Run Test Suite
             </DaisyButton>
           </div>
@@ -105,10 +104,8 @@ export default function ControlsTestingPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
         >
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <div className="p-4">
               <div className="flex items-center space-x-2">
                 <TestTube className="w-5 h-5 text-[#8B7355]" />
                 <div>
@@ -116,13 +113,11 @@ export default function ControlsTestingPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">3</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </div>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <div className="p-4">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <div>
@@ -130,13 +125,11 @@ export default function ControlsTestingPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </div>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <div className="p-4">
               <div className="flex items-center space-x-2">
                 <XCircle className="w-5 h-5 text-red-600" />
                 <div>
@@ -144,13 +137,11 @@ export default function ControlsTestingPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </div>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <div className="p-4">
               <div className="flex items-center space-x-2">
                 <Clock className="w-5 h-5 text-blue-600" />
                 <div>
@@ -158,7 +149,7 @@ export default function ControlsTestingPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </div>
           </DaisyCard>
         </motion.div>
 
@@ -178,10 +169,8 @@ export default function ControlsTestingPage() {
           <div className="p-6 space-y-4">
             <Suspense fallback={<LoadingSpinner />}>
               {controlTests.map((test) => (
-                <DaisyCard key={test.id} className="bg-white/40 border-[#E5E1D8]" >
-  <DaisyCardContent className="p-6" >
-  </DaisyCard>
-</DaisyCardContent>
+                <DaisyCard key={test.id} className="bg-white/40 border-[#E5E1D8]">
+                  <div className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
@@ -189,19 +178,17 @@ export default function ControlsTestingPage() {
                           <h3 className="text-lg font-semibold text-[#2C1810]">
                             {test.controlName}
                           </h3>
-                          <DaisyBadge className={getStatusColor(test.status)} >
-  {test.status}
-</DaisyBadge>
+                          <DaisyBadge className={getStatusColor(test.status)}>
+                            {test.status}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="border-[#E5E1D8] text-[#6B5B47]" >
-  {test.testType}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="border-[#E5E1D8] text-[#6B5B47]">
+                            {test.testType}
                           </DaisyBadge>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
-                            <DaisyCalendar className="w-4 h-4" />
+                            <Calendar className="w-4 h-4" />
                             <span>Last Run: {test.lastRun}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-[#6B5B47]">
@@ -227,21 +214,21 @@ export default function ControlsTestingPage() {
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
-  <Play className="w-4 h-4 mr-2" />
-</DaisyCalendar>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
+                        >
+                          <Play className="w-4 h-4 mr-2" />
                           Run Test
                         </DaisyButton>
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
-  View Details
-</DaisyButton>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
+                        >
+                          View Details
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </div>
                 </DaisyCard>
               ))}
             </Suspense>

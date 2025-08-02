@@ -459,9 +459,9 @@ export const ProductTour: React.FC<ProductTourProps> = ({
         }}
       >
         <DaisyCard className="bg-white shadow-xl border-0" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -567,7 +567,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </p>
               </div>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </>

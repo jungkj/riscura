@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -169,7 +169,7 @@ function DocumentAnalysisPage() {
         transition={{ delay: 0.2 }}
       >
         <DaisyCard>
-          <DaisyCardContent className="p-6">
+          <DaisyCardBody className="p-6">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-blue-600" />
               <div>
@@ -177,11 +177,11 @@ function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Total Documents</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard>
-          <DaisyCardContent className="p-6">
+          <DaisyCardBody className="p-6">
             <div className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-[#191919]" />
               <div>
@@ -189,11 +189,11 @@ function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Analyzed</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard>
-          <DaisyCardContent className="p-6">
+          <DaisyCardBody className="p-6">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-orange-600" />
               <div>
@@ -201,11 +201,11 @@ function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Risks Found</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         <DaisyCard>
-          <DaisyCardContent className="p-6">
+          <DaisyCardBody className="p-6">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
@@ -213,7 +213,7 @@ function DocumentAnalysisPage() {
                 <p className="text-sm text-muted-foreground">Avg Confidence</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </motion.div>
 
@@ -263,17 +263,17 @@ function DocumentAnalysisPage() {
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Clock className="h-5 w-5" />
 </DaisyCardTitle>
                   Recent Analyses
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   {recentAnalyses.map((analysis) => (
                     <div key={analysis.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
@@ -300,7 +300,7 @@ function DocumentAnalysisPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>
@@ -312,17 +312,17 @@ function DocumentAnalysisPage() {
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <BarChart3 className="h-5 w-5" />
 </DaisyCardTitle>
                   Risk Category Trends
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   {riskTrends.map((trend) => (
                     <div key={trend.category} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
@@ -364,17 +364,17 @@ function DocumentAnalysisPage() {
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5" />
 </DaisyCardTitle>
                   AI-Generated Insights
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="p-4 bg-[#D8C3A5]/20 dark:bg-[#D8C3A5]/10 rounded-lg border border-[#D8C3A5] dark:border-[#D8C3A5]">
                     <h4 className="font-medium text-[#191919] dark:text-[#191919] mb-2">
                       📊 Pattern Recognition
@@ -415,7 +415,7 @@ function DocumentAnalysisPage() {
                     </p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         </DaisyTabsContent>

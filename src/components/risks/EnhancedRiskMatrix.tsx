@@ -460,7 +460,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
       {/* Enhanced Matrix */}
       <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
           <div className="flex items-center justify-between">
             <DaisyCardTitle className="flex items-center gap-2" >
@@ -482,7 +482,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           </div>
         
         
-        <DaisyCardContent className="p-6" >
+        <DaisyCardBody className="p-6" >
   <div 
             ref={matrixRef}
             className="relative overflow-hidden rounded-lg border"
@@ -492,7 +492,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               transition: viewSettings.animationsEnabled ? 'transform 0.3s ease-out' : 'none',
             }}
           >
-</DaisyCardContent>
+</DaisyCardBody>
             {/* Impact labels (left side) */}
             <div className="absolute left-0 top-12 bottom-0 w-16 flex flex-col-reverse">
               {[1, 2, 3, 4, 5].map(impact => (
@@ -610,7 +610,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Cell Detail Dialog */}

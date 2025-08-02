@@ -320,17 +320,17 @@ export default function DragDropImport({
     <div className="space-y-6">
       {/* Import Mode Selection */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5 text-blue-600" />
 </DaisyCardTitle>
             Import Mode Selection
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {IMPORT_MODES.map((mode) => {
               const IconComponent = mode.icon;
               return (
@@ -377,19 +377,19 @@ export default function DragDropImport({
               );
             })}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Processing Options */}
       {selectedMode.aiEnabled && (
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="text-lg">Processing Options</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="aiAnalysis"
@@ -451,15 +451,15 @@ export default function DragDropImport({
                 </DaisyCheckbox>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
       {/* File Drop Zone */}
       <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div
             {...getRootProps()}
             className={`
@@ -500,13 +500,13 @@ export default function DragDropImport({
               </div>
             </motion.div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Selected Files */}
       {files.length > 0 && (
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center justify-between" >
   <span>
@@ -520,10 +520,10 @@ export default function DragDropImport({
 </DaisyButton>
               </DaisyButton>
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
               {files.map((fileObj) => {
                 const FileIcon = getFileIcon(fileObj.file.type);
                 return (
@@ -571,7 +571,7 @@ export default function DragDropImport({
                 );
               })}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
@@ -623,16 +623,16 @@ export default function DragDropImport({
           <div className="space-y-4">
             {processingResults.map((result, idx) => (
               <DaisyCard key={idx} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="text-lg" >
   {result.filename || `File ${idx + 1}`}
 </DaisyCardTitle>
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-2 gap-4 text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div>
                       <strong>Type:</strong> {result.type}
                     </div>
@@ -652,7 +652,7 @@ export default function DragDropImport({
                       </div>
                     )}
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             ))}
           </div>

@@ -349,7 +349,7 @@ export default function RealTimeMonitoringChart({
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3" >
+      <DaisyCardBody className="pb-3" >
   <div className="flex items-center justify-between">
 </DaisyAlertThreshold>
           <div className="flex items-center space-x-2">
@@ -475,9 +475,9 @@ export default function RealTimeMonitoringChart({
         </div>
       
 
-      <DaisyCardContent >
+      <DaisyCardBody >
   <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} />
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTabsList className="grid w-full grid-cols-3" />
             <DaisyTabsTrigger value="monitoring">Live Data</DaisyTabsList>
             <DaisyTabsTrigger value="alerts">Alerts</DaisyTabsTrigger>
@@ -668,7 +668,7 @@ export default function RealTimeMonitoringChart({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

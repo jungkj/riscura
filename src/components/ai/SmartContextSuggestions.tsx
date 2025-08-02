@@ -138,7 +138,7 @@ const SuggestionCard: React.FC<{
       transition={{ duration: 0.2 }}
     >
       <DaisyCard className="group hover:shadow-md transition-all" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
@@ -190,9 +190,9 @@ const SuggestionCard: React.FC<{
           </div>
         
 
-        <DaisyCardContent >
+        <DaisyCardBody >
   <DaisyCardDescription className="mb-4" />
-</DaisyCardContent>
+</DaisyCardBody>
             {suggestion.description}
           </p>
 
@@ -220,7 +220,7 @@ const SuggestionCard: React.FC<{
               </DaisyButton>
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );

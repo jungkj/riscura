@@ -312,16 +312,16 @@ export default function CollaborativeQuestionnairePage({
                />
              ) : (
               <DaisyCard className="h-full" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle >
   {currentMode === 'view' ? 'Preview Mode' : 'Edit Mode'}
 </DaisyCardTitle>
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
                     <div>
                       <h2 className="text-2xl font-bold mb-2">{questionnaire.title}</h2>
                       <p className="text-gray-600">{questionnaire.description}</p>
@@ -371,7 +371,7 @@ export default function CollaborativeQuestionnairePage({
                       </div>
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             )}
           </div>

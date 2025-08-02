@@ -9,9 +9,6 @@ import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
-  DaisyCardHeader,
-  DaisyCardContent,
-  DaisyCardDescription,
 } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
@@ -319,7 +316,7 @@ export default function AnalyticsTrendsPage() {
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleDrillDown(metric.id)}
                 >
-                  <DaisyCardHeader className="pb-3">
+                  <DaisyCardBody className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <div className={cn('p-1.5 rounded-full', categoryConfig.bg)}>
@@ -341,8 +338,8 @@ export default function AnalyticsTrendsPage() {
                       />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
-                  </DaisyCardHeader>
-                  <DaisyCardContent>
+                  </DaisyCardBody>
+                  <DaisyCardBody>
                     <div className="space-y-3">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-2xl font-bold">
@@ -379,7 +376,7 @@ export default function AnalyticsTrendsPage() {
 
                       <div className="text-xs text-gray-500">{metric.description}</div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -387,7 +384,7 @@ export default function AnalyticsTrendsPage() {
 
           {/* Trend Summary */}
           <DaisyCard>
-            <DaisyCardHeader>
+            <DaisyCardBody>
               <DaisyCardTitle className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
                 <span>Trend Summary</span>
@@ -395,8 +392,8 @@ export default function AnalyticsTrendsPage() {
               <DaisyCardDescription>
                 Overall performance trends across all categories
               </DaisyCardDescription>
-            </DaisyCardHeader>
-            <DaisyCardContent>
+            </DaisyCardBody>
+            <DaisyCardBody>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-green-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
@@ -448,7 +445,7 @@ export default function AnalyticsTrendsPage() {
                   <div className="text-sm text-yellow-700">near target goals</div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -475,7 +472,7 @@ export default function AnalyticsTrendsPage() {
 
               return (
                 <DaisyCard key={insight.id}>
-                  <DaisyCardHeader>
+                  <DaisyCardBody>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
@@ -504,8 +501,8 @@ export default function AnalyticsTrendsPage() {
                         <div className="text-sm text-gray-500">Confidence</div>
                       </div>
                     </div>
-                  </DaisyCardHeader>
-                  <DaisyCardContent>
+                  </DaisyCardBody>
+                  <DaisyCardBody>
                     <div className="space-y-4">
                       <DaisyProgress value={insight.confidence} className="h-2" />
 
@@ -531,7 +528,7 @@ export default function AnalyticsTrendsPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}

@@ -418,17 +418,17 @@ const PerformanceDashboard: React.FC = () => {
 
       {/* Performance Score */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5" />
 </DaisyCardTitle>
             Overall Performance Score
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="flex items-center gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-4xl font-bold text-blue-600">
               {performanceScore}
             </div>
@@ -447,7 +447,7 @@ const PerformanceDashboard: React.FC = () => {
       {/* Alerts */}
       {alerts.length > 0 && (
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between" />
+  <DaisyCardBody className="flex flex-row items-center justify-between" />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5 text-yellow-500" >
@@ -460,9 +460,9 @@ const PerformanceDashboard: React.FC = () => {
 </DaisyButton>
             </DaisyButton>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
               {alerts.slice(0, 3).map((alert) => (
                 <DaisyAlert key={alert.id} variant={alert.type === 'CRITICAL' ? 'destructive' : 'default'} >
   <DaisyAlertTriangle className="h-4 w-4" />
@@ -477,7 +477,7 @@ const PerformanceDashboard: React.FC = () => {
               </DaisyAlert>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
 
@@ -494,56 +494,56 @@ const PerformanceDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* LCP */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyTabsContent>
                 <DaisyCardTitle className="text-sm font-medium">Largest Contentful Paint</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>
+</DaisyCardBody>
                   {formatMetric(metrics.lcp, 'ms')}
                 </div>
                 <DaisyBadge variant={metrics.lcp <= 2500 ? 'default' : metrics.lcp <= 4000 ? 'secondary' : 'destructive'} >
   {metrics.lcp 
 </DaisyBadge><= 2500 ? 'Good' : metrics.lcp <= 4000 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* FID */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">First Input Delay</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>
+</DaisyCardBody>
                   {formatMetric(metrics.fid, 'ms')}
                 </div>
                 <DaisyBadge variant={metrics.fid <= 100 ? 'default' : metrics.fid <= 300 ? 'secondary' : 'destructive'} >
   {metrics.fid 
 </DaisyBadge><= 100 ? 'Good' : metrics.fid <= 300 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* CLS */}
             <DaisyCard >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Cumulative Layout Shift</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>
+</DaisyCardBody>
                   {formatMetric(metrics.cls, 'score')}
                 </div>
                 <DaisyBadge variant={metrics.cls <= 0.1 ? 'default' : metrics.cls <= 0.25 ? 'secondary' : 'destructive'} >
   {metrics.cls 
 </DaisyBadge><= 0.1 ? 'Good' : metrics.cls <= 0.25 ? 'Needs Improvement' : 'Poor'}
                 </DaisyBadge>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -551,61 +551,61 @@ const PerformanceDashboard: React.FC = () => {
         <DaisyTabsContent value="performance" className="space-y-4" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyTabsContent>
                 <DaisyCardTitle className="text-sm font-medium">Page Load Time</DaisyCardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{formatMetric(metrics.pageLoadTime, 'ms')}</div>
-              </DaisyCardContent>
+</DaisyCardBody>{formatMetric(metrics.pageLoadTime, 'ms')}</div>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Memory Usage</DaisyCardTitle>
                 <Database className="h-4 w-4 text-muted-foreground" />
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{formatMetric(metrics.memoryUsage, '%')}</div>
+</DaisyCardBody>{formatMetric(metrics.memoryUsage, '%')}</div>
                 <DaisyProgress value={metrics.memoryUsage} className="mt-2" /></DaisyProgress>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">CPU Usage</DaisyCardTitle>
                 <Server className="h-4 w-4 text-muted-foreground" />
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{formatMetric(metrics.cpuUsage, '%')}</div>
+</DaisyCardBody>{formatMetric(metrics.cpuUsage, '%')}</div>
                 <DaisyProgress value={metrics.cpuUsage} className="mt-2" /></DaisyProgress>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Connection</DaisyCardTitle>
                 <Wifi className="h-4 w-4 text-muted-foreground" />
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="text-lg font-bold">
-</DaisyCardContent>{metrics.connectionType}</div>
+</DaisyCardBody>{metrics.connectionType}</div>
                 <div className="text-sm text-gray-600">
                   {metrics.downlink}Mbps, {metrics.rtt}ms RTT
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="resources" className="space-y-4" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Resource Loading Performance</DaisyCardTitle>
               <DaisyCardDescription >
@@ -613,9 +613,9 @@ const PerformanceDashboard: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                 <BarChart data={resourceTimings.slice(0, 10)}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
@@ -630,7 +630,7 @@ const PerformanceDashboard: React.FC = () => {
 
         <DaisyTabsContent value="trends" className="space-y-4" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Performance Trends</DaisyCardTitle>
               <DaisyCardDescription >
@@ -638,9 +638,9 @@ const PerformanceDashboard: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <ResponsiveContainer width="100%" height={300}>
-</DaisyCardContent>
+</DaisyCardBody>
                 <LineChart data={historicalData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="timestamp" tickFormatter={(value) => new Date(value).toLocaleTimeString()} />

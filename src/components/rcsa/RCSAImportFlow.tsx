@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
   DaisyCard,
   DaisyCardBody,
-  DaisyCardHeader,
   DaisyCardTitle,
 } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -29,10 +28,10 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
   if (step === 'upload') {
     return (
       <DaisyCard>
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle>Import RCSA Data</DaisyCardTitle>
           <p>Upload an Excel file or paste your RCSA data to begin the analysis</p>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         <DaisyCardBody>
           <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
             <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />

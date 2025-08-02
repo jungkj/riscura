@@ -181,7 +181,7 @@ export default function ReportingPage() {
         <DaisyTabsContent value="builder" className="space-y-6" />
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <DaisyCard className="lg:col-span-3" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle>Report Preview</DaisyCardTitle>
                 <DaisyCardDescription >
@@ -189,9 +189,9 @@ export default function ReportingPage() {
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-6" >
+              <DaisyCardBody className="space-y-6" >
   {/* Risk by Category Chart */}
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="rounded-lg border p-4">
                   <h3 className="text-lg font-medium mb-4">Risk by Category</h3>
                   <div className="h-80">
@@ -366,13 +366,13 @@ export default function ReportingPage() {
             </DaisyCard>
             
             <DaisyCard className="lg:col-span-1" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle>Report Settings</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                   <DaisyLabel>Report Title</DaisyLabel>
                   <input
                     type="text"
@@ -465,7 +465,7 @@ export default function ReportingPage() {
                     )}
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
@@ -502,7 +502,7 @@ export default function ReportingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {savedReports.map((report) => (
               <DaisyCard key={report.id} >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
                   <div className="flex justify-between items-start">
                     <DaisyCardTitle>{report.name}</DaisyCardTitle>
@@ -514,7 +514,7 @@ export default function ReportingPage() {
                   </div>
                   <DaisyCardDescription>{report.description}</p>
                 
-                <DaisyCardContent className="pb-2" >
+                <DaisyCardBody className="pb-2" >
   <div className="flex items-center gap-1 text-sm text-muted-foreground">
 </DaisyCardDescription>
                     <DaisyCalendar className="h-4 w-4" />
@@ -558,9 +558,9 @@ export default function ReportingPage() {
           </div>
           
           <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <DaisyTable />
                 <DaisyTableHeader />
                   <DaisyTableRow />
@@ -693,7 +693,7 @@ export default function ReportingPage() {
                   </DaisyTableRow>
                 </DaisyTableBody>
               </DaisyTable>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

@@ -651,9 +651,9 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
       {/* Analytics Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
         <DaisyCard className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Reports</p>
@@ -661,13 +661,13 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
               </div>
               <FileText className="h-8 w-8 text-blue-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-green-50 to-green-100 border-green-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">Active Generations</p>
@@ -675,13 +675,13 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
               </div>
               <Activity className="h-8 w-8 text-green-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-purple-600">Scheduled Reports</p>
@@ -693,9 +693,9 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Views</p>
@@ -703,13 +703,13 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
               </div>
               <Eye className="h-8 w-8 text-gray-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-indigo-600">AI Insights</p>
@@ -717,13 +717,13 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
               </div>
               <Brain className="h-8 w-8 text-indigo-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-orange-600">Avg Gen Time</p>
@@ -731,7 +731,7 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
               </div>
               <Clock className="h-8 w-8 text-orange-600" />
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 

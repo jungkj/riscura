@@ -129,7 +129,7 @@ export default function UpgradePage() {
                   Most Popular
                 </DaisyBadge>
               )}
-              <DaisyCardHeader className="text-center">
+              <DaisyCardBody className="text-center">
                 <div className="flex justify-center mb-2">
                   <Icon className="h-8 w-8 text-primary" />
                 </div>
@@ -141,8 +141,8 @@ export default function UpgradePage() {
                   </span>
                 </div>
                 <DaisyCardDescription>{plan.description}</DaisyCardDescription>
-              </DaisyCardHeader>
-              <DaisyCardContent>
+              </DaisyCardBody>
+              <DaisyCardBody>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center">
@@ -169,7 +169,7 @@ export default function UpgradePage() {
                     {isUpgrade ? 'Upgrade' : 'Choose'} {plan.name}
                   </DaisyButton>
                 )}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           );
         })}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DaisyCard, DaisyCardHeader, DaisyCardContent, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Edit3 } from 'lucide-react';
 
 // Simplified version for testing
@@ -21,20 +21,20 @@ export function RealTimeEditor({
   return (
     <div className={`relative ${className}`}>
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <Edit3 className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
             Real-time Editor
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-center py-8 text-gray-500">
-</DaisyCardContent>
+</DaisyCardBody>
             <p>Real-time editor temporarily simplified for build testing</p>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

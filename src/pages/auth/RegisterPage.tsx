@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { DaisyCard, DaisyCardBody, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, User, CheckCircle } from 'lucide-react';
@@ -114,7 +114,7 @@ function RegisterForm() {
 
         {/* Register Card */}
         <DaisyCard className="backdrop-blur-sm bg-white/70 dark:bg-slate-800/70 border-slate-200/60 dark:border-slate-700/60 shadow-2xl shadow-slate-900/10">
-          <DaisyCardContent className="p-8 space-y-6">
+          <DaisyCardBody className="p-8 space-y-6">
             {(error || authError) && (
               <DaisyAlert variant="error" className="border-red-200 bg-red-50 dark:bg-red-950/50">
                 <AlertCircle className="h-4 w-4" />
@@ -331,7 +331,7 @@ function RegisterForm() {
                 Sign in
               </Link>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Footer */}

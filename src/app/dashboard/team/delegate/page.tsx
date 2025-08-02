@@ -407,7 +407,7 @@ export default function TeamDelegatePage() {
               
               return (
                 <DaisyCard key={member.id} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyTabsContent>
                     <div className="flex items-center space-x-3">
                       <DaisyAvatar className="h-10 w-10" />
@@ -430,9 +430,9 @@ export default function TeamDelegatePage() {
                       </DaisyBadge>
                     </div>
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Workload</span>
@@ -472,7 +472,7 @@ export default function TeamDelegatePage() {
                         )}
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -480,12 +480,12 @@ export default function TeamDelegatePage() {
 
           {/* Recent Activity */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Recent Delegation Activity</DaisyCardTitle>
               <DaisyCardDescription>Latest task assignments and updates</p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
 </DaisyCardDescription>
                 {sampleTasks.slice(0, 3).map((task) => {
@@ -522,7 +522,7 @@ export default function TeamDelegatePage() {
                   );
                 })}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
@@ -583,7 +583,7 @@ export default function TeamDelegatePage() {
                   "border-l-4",
                   isOverdue ? "border-red-500" : priorityConfig.bg.replace('bg-', 'border-')
                 )} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -624,9 +624,9 @@ export default function TeamDelegatePage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                       {/* Progress Bar */}
                       <DaisyProgress value={task.progress} className="h-2" />
                       
@@ -704,7 +704,7 @@ export default function TeamDelegatePage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -719,7 +719,7 @@ export default function TeamDelegatePage() {
               
               return (
                 <DaisyCard key={member.id} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-4">
@@ -752,9 +752,9 @@ export default function TeamDelegatePage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                       <DaisyProgress value={member.workload} className="h-3" />
                       
                       <div className="grid grid-cols-3 gap-4 text-sm">
@@ -804,7 +804,7 @@ export default function TeamDelegatePage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}

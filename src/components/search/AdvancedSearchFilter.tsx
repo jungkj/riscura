@@ -629,13 +629,13 @@ export function AdvancedSearchFilter({
             transition={{ duration: 0.2 }}
           >
             <DaisyCard >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                 <DaisyCardTitle className="text-lg">Advanced Search & Filters</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {/* Add New Filter */}
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <DaisySelect value={newFilter.field} onValueChange={(value) => setNewFilter({...newFilter, field: value})}>
                     <DaisySelectTrigger />
@@ -728,7 +728,7 @@ export function AdvancedSearchFilter({
                     </div>
                   </div>
                 )}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         )}

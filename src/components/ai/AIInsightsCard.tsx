@@ -312,16 +312,16 @@ export default function AIInsightsCard({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center space-x-2">
             <Brain className="w-5 h-5 text-purple-600" />
             <DaisyCardTitle className="text-lg">AI Insights</DaisyCardTitle>
           </div>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -330,14 +330,14 @@ export default function AIInsightsCard({
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -362,9 +362,9 @@ export default function AIInsightsCard({
         </div>
       
 
-      <DaisyCardContent className="p-0" >
+      <DaisyCardBody className="p-0" >
   <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTabsList className="grid w-full grid-cols-5 mx-4 mb-4" />
             <DaisyTabsTrigger value="all" className="text-xs">All</DaisyTabsList>
             <DaisyTabsTrigger value="high-priority" className="text-xs">Priority</DaisyTabsTrigger>
@@ -480,7 +480,7 @@ export default function AIInsightsCard({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardContent>
+      </DaisyCardBody>
 
       {/* Detailed Insight Modal/Panel */}
       {selectedInsight && (

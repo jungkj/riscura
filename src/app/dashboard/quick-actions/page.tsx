@@ -593,9 +593,9 @@ export default function QuickActionsPage() {
               transition={{ delay: index * 0.1 }}
             >
               <DaisyCard className="bg-white border-gray-200 hover:shadow-md transition-shadow" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-contrast-low">{stat.label}</p>
@@ -613,7 +613,7 @@ export default function QuickActionsPage() {
                       <stat.icon className="w-6 h-6" style={{ color: stat.color }} />
                     </div>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </motion.div>
           ))}
@@ -621,9 +621,9 @@ export default function QuickActionsPage() {
 
         {/* Search and Filters */}
         <DaisyCard className="bg-white border-gray-200 mb-8" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Search */}
               <div className="flex-1">
@@ -663,7 +663,7 @@ export default function QuickActionsPage() {
                 </select>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Workflow Categories */}
@@ -678,7 +678,7 @@ export default function QuickActionsPage() {
                 transition={{ delay: categoryIndex * 0.1 }}
               >
                 <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
@@ -712,9 +712,9 @@ export default function QuickActionsPage() {
                       </div>
                     </div>
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                       {category.actions.map((action, actionIndex) => (
                         <motion.div
                           key={action.id}
@@ -724,9 +724,9 @@ export default function QuickActionsPage() {
                           className="group"
                         >
                           <DaisyCard className="h-full bg-gray-50 border-gray-200 hover:shadow-md hover:border-interactive-primary/30 transition-all duration-200 cursor-pointer" >
-  <DaisyCardContent className="p-4 h-full flex flex-col" >
+  <DaisyCardBody className="p-4 h-full flex flex-col" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                               {/* Action Header */}
                               <div className="flex items-start justify-between mb-3">
                                 <div 
@@ -817,12 +817,12 @@ export default function QuickActionsPage() {
                                 </div>
                                 <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-interactive-primary group-hover:translate-x-1 transition-all" />
                               </div>
-                            </DaisyCardContent>
+                            </DaisyCardBody>
                           </DaisyCard>
                         </motion.div>
                       ))}
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               </motion.div>
             ))}
@@ -856,9 +856,9 @@ export default function QuickActionsPage() {
 
         {/* Help Section */}
         <DaisyCard className="bg-blue-50 border-blue-200 mt-8" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <HelpCircle className="w-6 h-6 text-blue-600" />
@@ -891,7 +891,7 @@ export default function QuickActionsPage() {
                 </div>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </main>
 

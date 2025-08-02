@@ -326,7 +326,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
     <div className={`space-y-6 ${className}`}>
       {/* Progress overview */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyProgressiveDisclosureProps>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Sparkles className="w-5 h-5" />
@@ -337,9 +337,9 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
             Unlock new features as you become more experienced with Riscura
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Overall Progress</span>
               <span className="text-sm text-gray-600">
@@ -371,9 +371,9 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
 
       {/* Feature filters */}
       <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(category => (
               <DaisyButton
@@ -396,7 +396,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               <span>Show locked features</span>
             </label>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Features grid */}
@@ -429,7 +429,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                           : 'opacity-75 hover:shadow-md'
                       }`}
                     >
-                      <DaisyCardContent className="p-4" >
+                      <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-3">
 </DaisyCard>
                           <div className={`p-2 rounded-lg ${
@@ -511,7 +511,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                             </div>
                           </div>
                         </div>
-                      </DaisyCardContent>
+                      </DaisyCardBody>
                     </DaisyCard>
                   );
                 })}
@@ -533,9 +533,9 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
         
         return (
           <DaisyCard className="border-2 border-dashed border-blue-200 bg-blue-50" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Lightbulb className="w-5 h-5 text-blue-600" />

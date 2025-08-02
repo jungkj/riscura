@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardHeader, DaisyCardContent, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Users, Share2, UserPlus } from 'lucide-react';
@@ -25,7 +25,7 @@ export function CollaborationPanel({
 
   return (
     <DaisyCard className={`h-full ${className}`}>
-      <DaisyCardHeader className="pb-3" >
+      <DaisyCardBody className="pb-3" >
   <div className="flex items-center justify-between">
 </DaisyCard>
           <DaisyCardTitle className="text-lg flex items-center" >
@@ -46,14 +46,14 @@ export function CollaborationPanel({
             </DaisyButton>
           </div>
         </div>
-      </DaisyCardHeader>
+      </DaisyCardBody>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="text-center py-8 text-gray-500">
-</DaisyCardContent>
+</DaisyCardBody>
           <p>Collaboration features temporarily simplified for build testing</p>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

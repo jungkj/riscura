@@ -97,7 +97,7 @@ export function QuestionnaireList({
       className="h-full"
     >
       <DaisyCard className="h-full border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-lg transition-all duration-200" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-3">
@@ -194,9 +194,9 @@ export function QuestionnaireList({
           </div>
         
 
-        <DaisyCardContent className="space-y-4" >
+        <DaisyCardBody className="space-y-4" >
   <p className="text-sm text-notion-text-secondary line-clamp-2">
-</DaisyCardContent>
+</DaisyCardBody>
             {questionnaire.description}
           </p>
 
@@ -265,7 +265,7 @@ export function QuestionnaireList({
               </DaisyTooltip>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );
@@ -279,9 +279,9 @@ export function QuestionnaireList({
       className="w-full"
     >
       <DaisyCard className="border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-md transition-all duration-200" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center justify-between">
             {/* Left Section - Main Info */}
             <div className="flex items-center space-x-4 flex-1 min-w-0">
@@ -434,7 +434,7 @@ export function QuestionnaireList({
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );

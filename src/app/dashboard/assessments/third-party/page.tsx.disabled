@@ -115,9 +115,8 @@ export default function ThirdPartyAssessmentPage() {
                 Manage and track security assessments for your third-party vendors and partners.
               </p>
             </div>
-            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white" >
-  <Building className="w-4 h-4 mr-2" />
-</DaisyCalendar>
+            <DaisyButton className="bg-[#8B7355] hover:bg-[#6B5B47] text-white">
+              <Building className="w-4 h-4 mr-2" />
               New Assessment
             </DaisyButton>
           </div>
@@ -130,10 +129,8 @@ export default function ThirdPartyAssessmentPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
         >
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <DaisyCardContent className="p-4">
               <div className="flex items-center space-x-2">
                 <Building className="w-5 h-5 text-[#8B7355]" />
                 <div>
@@ -142,12 +139,9 @@ export default function ThirdPartyAssessmentPage() {
                 </div>
               </div>
             </DaisyCardContent>
-          </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <DaisyCardContent className="p-4">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <div>
@@ -158,14 +152,11 @@ export default function ThirdPartyAssessmentPage() {
             </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <DaisyCardContent className="p-4">
               <div className="flex items-center space-x-2">
-                <DaisyAlertTriangle className="w-5 h-5 text-red-600" >
-  <div>
-</DaisyAlertTriangle>
+                <DaisyAlertTriangle className="w-5 h-5 text-red-600" />
+                <div>
                   <p className="text-sm text-[#6B5B47]">Critical Findings</p>
                   <p className="text-2xl font-semibold text-[#2C1810]">2</p>
                 </div>
@@ -173,10 +164,8 @@ export default function ThirdPartyAssessmentPage() {
             </DaisyCardContent>
           </DaisyCard>
 
-          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
-  </DaisyCard>
-</DaisyCardContent>
+          <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
+            <DaisyCardContent className="p-4">
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-green-600" />
                 <div>
@@ -274,9 +263,9 @@ export default function ThirdPartyAssessmentPage() {
                         <DaisyButton 
                           variant="outline" 
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full" >
-  Edit Assessment
-</DaisyButton>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
+                        >
+                          Edit Assessment
                         </DaisyButton>
                       </div>
                     </div>

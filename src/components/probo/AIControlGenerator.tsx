@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
   DaisyCard,
   DaisyCardBody,
-  DaisyCardHeader,
   DaisyCardTitle,
 } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -62,7 +61,7 @@ export default function AIControlGenerator({
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
       <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Brain className="h-6 w-6 text-blue-600" />
@@ -80,7 +79,7 @@ export default function AIControlGenerator({
               </DaisyBadge>
             </div>
           </DaisyCardTitle>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         <DaisyCardBody>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
@@ -117,12 +116,12 @@ export default function AIControlGenerator({
 
       {/* Main Content */}
       <DaisyCard>
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5" />
             AI Control Generation
           </DaisyCardTitle>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         <DaisyCardBody className="space-y-6">
           {isGenerating ? (
             <div className="text-center py-8">

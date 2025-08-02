@@ -540,17 +540,17 @@ const RiskAssessmentMatrix: React.FC = () => {
 
       {/* Risk Score Summary */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Calculator className="h-5 w-5" />
 </DaisyCardTitle>
             Risk Score Summary
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{assessment.likelihood.toFixed(1)}</div>
               <div className="text-sm text-gray-600">Likelihood</div>
@@ -577,7 +577,7 @@ const RiskAssessmentMatrix: React.FC = () => {
               <div className="text-sm text-gray-600 mt-1">Risk Level</div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Assessment Form */}
@@ -591,7 +591,7 @@ const RiskAssessmentMatrix: React.FC = () => {
 
         <DaisyTabsContent value="basic" className="space-y-4" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Basic Risk Information</DaisyCardTitle>
               <DaisyCardDescription >
@@ -599,9 +599,9 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4" >
+            <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="space-y-2">
                   <DaisyLabel htmlFor="title">Risk Title *</DaisyLabel>
                   <DaisyInput
@@ -692,7 +692,7 @@ const RiskAssessmentMatrix: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Likelihood Factors */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5" />
@@ -704,9 +704,9 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <DaisyScrollArea className="h-96" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-4">
                     {likelihoodFactors.map((factor) => (
                       <div key={factor.id} className="p-4 border rounded-lg space-y-3">
@@ -746,12 +746,12 @@ const RiskAssessmentMatrix: React.FC = () => {
                     ))}
                   </div>
                 </DaisyTextarea>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Impact Factors */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Target className="h-5 w-5" />
@@ -763,9 +763,9 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <DaisyScrollArea className="h-96" />
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-4">
                     {impactFactors.map((factor) => (
                       <div key={factor.id} className="p-4 border rounded-lg space-y-3">
@@ -805,14 +805,14 @@ const RiskAssessmentMatrix: React.FC = () => {
                     ))}
                   </div>
                 </DaisyTextarea>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="controls" className="space-y-4" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5" />
@@ -824,9 +824,9 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4" >
+            <DaisyCardBody className="space-y-4" >
   {assessment.mitigatingControls.map((control, index) => (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div key={index} className="flex items-center gap-2">
                   <DaisyInput
                     value={control}
@@ -848,13 +848,13 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyButton>
                 Add Control
               </DaisyButton>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="analysis" className="space-y-4" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Info className="h-5 w-5" />
@@ -866,11 +866,11 @@ const RiskAssessmentMatrix: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4" >
+            <DaisyCardBody className="space-y-4" >
   <DaisyButton 
                 onClick={getAIAnalysis} 
                 disabled={aiAnalyzing || !assessment.title || !assessment.description} >
-</DaisyCardContent>
+</DaisyCardBody>
   {aiAnalyzing ? 'Analyzing...' : 'Get AI Analysis'}
 </DaisyButton>
               </DaisyButton>
@@ -913,7 +913,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                   )}
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

@@ -323,17 +323,17 @@ export default function ReportLibrary({
 
       {/* Filters */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Filter className="h-5 w-5" />
 </DaisyCardTitle>
             Filters
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {/* Search */}
             <div className="space-y-2">
               <DaisyLabel>Search</DaisyLabel>
@@ -396,7 +396,7 @@ export default function ReportLibrary({
               </DaisySelect>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Bulk Actions */}
@@ -423,9 +423,9 @@ export default function ReportLibrary({
 
       {/* Reports Table */}
       <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTable />
             <DaisyTableHeader />
               <DaisyTableRow />
@@ -616,7 +616,7 @@ export default function ReportLibrary({
               )}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Pagination */}

@@ -13,21 +13,21 @@ export function InteractiveRiskLandscape({ risks, controls }: InteractiveRiskLan
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
         <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
   Interactive Risk Landscape
 </DaisyCardTitle>
         </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="h-96 flex items-center justify-center border-2 border-dashed border-[#D8C3A5] rounded-lg">
-</DaisyCardContent>
+</DaisyCardBody>
           <p className="text-[#A8A8A8] font-inter">
             3D Risk Visualization coming soon...
           </p>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

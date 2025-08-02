@@ -243,7 +243,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
 
   return (
     <DaisyCard className={`bg-[#FAFAFA] border-gray-200 ${className}`}>
-      <DaisyCardHeader >
+      <DaisyCardBody >
   <div className="flex items-center justify-between">
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -271,9 +271,9 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
           </div>
         </div>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Filters */}
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center gap-2">
@@ -566,7 +566,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

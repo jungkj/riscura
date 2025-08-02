@@ -96,7 +96,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       <div className="lg:col-span-2 space-y-6">
         {/* Risk Description */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5" >
@@ -104,10 +104,10 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 </DaisyAlert>
               Risk Description
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-foreground leading-relaxed">
-</DaisyCardContent>
+</DaisyCardBody>
               {risk.description}
             </p>
             
@@ -165,7 +165,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 
         {/* Related Controls */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <div className="flex items-center justify-between">
               <DaisyCardTitle className="flex items-center gap-2" >
@@ -181,9 +181,9 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               </DaisyButton>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   {relatedControls.length === 0 ? (
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="text-center py-8">
                 <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No controls mapped to this risk yet.</p>
@@ -244,17 +244,17 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       <div className="space-y-6">
         {/* Risk Score Card */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Target className="h-5 w-5" />
 </DaisyCardTitle>
               Risk Score
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-center">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className={`text-4xl font-bold rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4 ${getRiskLevelColor(riskLevel)}`}>
                 {riskScore}
               </div>
@@ -283,17 +283,17 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 
         {/* Control Effectiveness Summary */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5" />
 </DaisyCardTitle>
               Control Effectiveness
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-center mb-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="text-3xl font-bold text-foreground">
                 {Math.round(averageEffectiveness * 100)}%
               </div>
@@ -326,17 +326,17 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 
         {/* Timeline Card */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Clock className="h-5 w-5" />
 </DaisyCardTitle>
               Timeline
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Identified</span>
                 <span className="text-sm font-medium">
@@ -362,18 +362,18 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 </DaisyButton>
               Schedule Assessment
             </DaisyButton>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Quick Actions */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Quick Actions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   <DaisyButton className="w-full" variant="outline" >
-</DaisyCardContent>
+</DaisyCardBody>
   <Edit className="h-4 w-4 mr-2" />
 </DaisyButton>
               Edit Risk
@@ -393,7 +393,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 </DaisyButton>
               View Analytics
             </DaisyButton>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

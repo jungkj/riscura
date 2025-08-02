@@ -85,9 +85,9 @@ const InteractiveDemo = () => {
 
         {/* Interactive Demo Area */}
         <DaisyCard className="border-2 border-gray-200 shadow-xl overflow-hidden" >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             {/* Step 1: Upload Area */}
             {!uploadedFiles.length && !isAnalyzing && !showResults && (
               <div className="p-8">
@@ -220,36 +220,36 @@ const InteractiveDemo = () => {
                 {/* Results Summary */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                   <DaisyCard className="bg-red-50 border-red-200" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-red-600">1</div>
                       <div className="text-sm text-red-700">High Risk</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard className="bg-yellow-50 border-yellow-200" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-yellow-600">2</div>
                       <div className="text-sm text-yellow-700">Medium Risk</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard className="bg-green-50 border-green-200" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-green-600">1</div>
                       <div className="text-sm text-green-700">Low Risk</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard className="bg-blue-50 border-blue-200" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-blue-600">4</div>
                       <div className="text-sm text-blue-700">Total Risks</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </div>
 
@@ -306,7 +306,7 @@ const InteractiveDemo = () => {
                 </div>
               </div>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Call to Action */}

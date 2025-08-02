@@ -5,8 +5,6 @@ import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
-  DaisyCardHeader,
-  DaisyCardContent,
 } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Target } from 'lucide-react';
@@ -432,7 +430,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   return (
     <Fragment>
       <DaisyCard className={`${className} bg-white border border-gray-200`}>
-        <DaisyCardHeader className="pb-4">
+        <DaisyCardBody className="pb-4">
           <DaisyCardTitle className="flex items-center justify-between">
             <div className="flex items-center">
               <Target className="w-5 h-5 mr-2 text-blue-600" />
@@ -451,8 +449,8 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               {totalRisks} Total Risks
             </DaisyBadge>
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pb-4">
+        </DaisyCardBody>
+        <DaisyCardBody className="pb-4">
           <div className="space-y-3">
             {/* Compact Heat Map Grid */}
             <div className="bg-white rounded-lg p-3 border border-gray-200">
@@ -586,7 +584,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Risk Details Modal */}

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -1059,17 +1059,17 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
   return (
     <div className="space-y-6">
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <GitBranch className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
             Conditional Logic & Branching
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   {selectedQuestion ? (
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="space-y-4">
               <DaisyAlert >
   <Info className="w-4 h-4" />
@@ -1092,7 +1092,7 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
               Select a question to configure conditional logic
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );
@@ -1103,17 +1103,17 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
   return (
     <div className="space-y-6">
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <CheckCircle2 className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
             Question Validation
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   {selectedQuestion ? (
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="space-y-4">
               <DaisyAlert >
   <AlertTriangle className="w-4 h-4" />
@@ -1136,7 +1136,7 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
               Select a question to configure validation rules
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );
@@ -1147,13 +1147,13 @@ function AdvancedSettingsContent() {
   return (
     <div className="space-y-6">
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Advanced Configuration</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
             <div>
               <h4 className="font-medium mb-2">AI Settings</h4>
               <DaisySwitch />
@@ -1221,9 +1221,9 @@ function PreviewComponent({
       <div className="space-y-6">
         {visibleQuestions.map((question: EnhancedQuestion) => (
           <DaisyCard key={question.id} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-4">
                 <div className="flex items-start space-x-2">
                   <span className="font-medium">{question.text}</span>
@@ -1265,7 +1265,7 @@ function PreviewComponent({
                   {/* Add more question types as needed */}
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         ))}
       </div>

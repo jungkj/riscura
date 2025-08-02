@@ -370,17 +370,17 @@ const NetworkStatusIndicator: React.FC<{
 
   return (
     <DaisyCard className="w-full max-w-sm" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <DaisyCardTitle className="flex items-center gap-2 text-sm" >
   {getStatusIcon()}
 </DaisyCardTitle>
           Network Status
         </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3" >
   <div className="flex items-center justify-between">
-</DaisyCardContent>
+</DaisyCardBody>
           <span className="text-sm font-medium">Status:</span>
           <DaisyBadge variant={status === 'online' ? 'default' : 'destructive'} >
   {getStatusText()}
@@ -402,7 +402,7 @@ const NetworkStatusIndicator: React.FC<{
           <span>Last checked:</span>
           <span>{lastChecked.toLocaleTimeString()}</span>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -513,24 +513,24 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       {isRetrying && failedRequests.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40">
           <DaisyCard className="w-80" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2 text-sm" >
   <RefreshCw className="w-4 h-4 animate-spin" />
 </DaisyCardTitle>
                 Retrying failed requests...
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyProgress 
                 value={(failedRequests.filter(r =>
-</DaisyCardContent> r.retryCount > 0).length / failedRequests.length) * 100} 
+</DaisyCardBody> r.retryCount > 0).length / failedRequests.length) * 100} 
                 className="h-2"
               />
               <p className="text-xs text-muted-foreground mt-2">
                 {failedRequests.length} request{failedRequests.length > 1 ? 's' : ''} in queue
               </p>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
       )}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardHeader, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -719,7 +719,7 @@ export default function GuidedTour({
         }}
       >
         <DaisyCard className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl overflow-hidden backdrop-blur-sm h-fit max-h-[90vh] flex flex-col" >
-  <DaisyCardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 flex-shrink-0" />
+  <DaisyCardBody className="pb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 flex-shrink-0" />
 </DaisyCard>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -757,9 +757,9 @@ export default function GuidedTour({
             )}
           </DaisyProgress>
 
-          <DaisyCardContent className="pb-6 px-6 flex-1 overflow-y-auto" >
+          <DaisyCardBody className="pb-6 px-6 flex-1 overflow-y-auto" >
   {/* Step Content */}
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="mb-6">
               <p className="text-gray-700 font-inter leading-relaxed mb-4 text-base">
                 {currentStepData.content}
@@ -879,7 +879,7 @@ export default function GuidedTour({
                 />
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Arrow indicator */}
@@ -927,9 +927,9 @@ export default function GuidedTour({
       {/* Keyboard shortcuts help */}
       <div className="fixed bottom-4 right-4 z-50">
         <DaisyCard className="bg-white border border-gray-200 shadow-lg" >
-  <DaisyCardContent className="p-3" >
+  <DaisyCardBody className="p-3" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-xs text-contrast-low space-y-1">
               <div className="flex items-center gap-2">
                 <kbd className="px-1 py-0.5 bg-gray-100 rounded text-xs">Space</kbd>
@@ -944,7 +944,7 @@ export default function GuidedTour({
                 <span>Exit</span>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
@@ -998,17 +998,17 @@ export function TourLauncher({
   return (
     <div className={className}>
       <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="text-lg font-semibold text-contrast-medium font-inter flex items-center gap-2" >
   <Play className="w-5 h-5 text-blue-600" />
 </DaisyCardTitle>
             Guided Tours
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="p-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="p-6" >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {tours.map(tourId => {
               const tour = tourConfigs[tourId];
               if (!tour) return null;
@@ -1056,7 +1056,7 @@ export function TourLauncher({
               );
             })}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Render active tour */}

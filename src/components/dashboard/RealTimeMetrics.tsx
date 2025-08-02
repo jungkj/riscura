@@ -232,9 +232,9 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
             transition={{ duration: 0.3, delay: 0.1 }}
           >
             <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     {metric.icon}
@@ -285,9 +285,9 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
         transition={{ duration: 0.6, delay: 0.8 }}
       >
         <DaisyCard className="bg-[#F5F1E9] border-[#D8C3A5]" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center space-y-1">
                 <div className="text-sm font-medium text-[#A8A8A8] font-inter">
@@ -325,7 +325,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                 </div>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </motion.div>
     </div>

@@ -167,7 +167,7 @@ export default function DocumentAnalysisPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Document Upload Panel */}
         <DaisyCard className="lg:col-span-1" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Upload Document</DaisyCardTitle>
             <DaisyCardDescription >
@@ -175,9 +175,9 @@ export default function DocumentAnalysisPage() {
 </DaisyCardDescription>
             </p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   {!analyzedDocument ? (
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 transition-colors rounded-lg p-6 text-center">
                   <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -219,9 +219,9 @@ export default function DocumentAnalysisPage() {
                 
                 {(uploading || processing) && (
                   <DaisyCard className="border border-muted/50" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="flex items-center space-x-4">
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
                         <div className="space-y-2 flex-1">
@@ -289,12 +289,12 @@ export default function DocumentAnalysisPage() {
                 </DaisyButton>
               </div>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
         
         {/* Analysis Results Panel */}
         <DaisyCard className="lg:col-span-2" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Analysis Results</DaisyCardTitle>
             <DaisyCardDescription >
@@ -302,9 +302,9 @@ export default function DocumentAnalysisPage() {
 </DaisyCardDescription>
             </p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   {!analyzedDocument ? (
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex flex-col items-center justify-center h-72 text-center">
                 <Sparkles className="h-12 w-12 text-muted-foreground mb-4 opacity-30" />
                 <h3 className="text-lg font-semibold mb-2">No Document Analyzed</h3>
@@ -335,9 +335,9 @@ export default function DocumentAnalysisPage() {
                     <div className="space-y-3">
                       {riskInsights.map((risk) => (
                         <DaisyCard key={risk.id} className="hover:shadow-sm transition-shadow" >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyScrollArea>
-</DaisyCardContent>
+</DaisyCardBody>
                             <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
                               <div className="space-y-1">
                                 <div className="flex items-center">
@@ -358,7 +358,7 @@ export default function DocumentAnalysisPage() {
                                 </DaisyButton>
                               </div>
                             </div>
-                          </DaisyCardContent>
+                          </DaisyCardBody>
                         </DaisyCard>
                       ))}
                     </div>
@@ -367,9 +367,9 @@ export default function DocumentAnalysisPage() {
                 
                 <DaisyTabsContent value="insights" className="pt-4" />
                   <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyTabsContent>
-</DaisyCardContent>
+</DaisyCardBody>
                       <h3 className="text-xl font-semibold mb-4">Document Summary</h3>
                       <p className="text-sm mb-6">
                         This document appears to be a policy document outlining operational procedures 
@@ -411,12 +411,12 @@ export default function DocumentAnalysisPage() {
   Generate Full Report
 </DaisyButton>
                       </DaisyButton>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </DaisyTabsContent>
               </DaisyTabs>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

@@ -103,14 +103,14 @@ export default function LoginPage() {
           className="w-full max-w-md relative z-10"
         >
           <HoverCard className="backdrop-blur-sm bg-card/90 dark:bg-card/90 border-border/20">
-            <DaisyCardHeader className="space-y-1 text-center" >
+            <DaisyCardBody className="space-y-1 text-center" >
   <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                 className="mx-auto mb-4 flex justify-center"
               >
-</DaisyCardHeader>
+</DaisyCardBody>
                 <Image
                   src="/images/logo/riscura.png"
                   alt="Riscura Logo"
@@ -130,9 +130,9 @@ export default function LoginPage() {
               </p>
             
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <Form {...form}>
-</DaisyCardContent>
+</DaisyCardBody>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
@@ -246,7 +246,7 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
             
             <DaisyCardFooter className="flex justify-center" >
   <p className="text-sm text-muted-foreground">

@@ -209,7 +209,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -242,9 +242,9 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
         </div>
       
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
           {/* Chart */}
           <div className="flex items-center justify-center">
             {selectedChartType === 'donut' ? (
@@ -301,7 +301,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             </div>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

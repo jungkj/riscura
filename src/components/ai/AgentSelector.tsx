@@ -68,7 +68,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
           setExpandedAgent(isExpanded ? null : agentType);
         }}
       >
-        <DaisyCardHeader className="pb-3" >
+        <DaisyCardBody className="pb-3" >
   <div className="flex items-center space-x-3">
 </DaisyCard>
             <div className={`p-2 rounded-lg ${getAgentColor(agentType)} bg-opacity-10`}>
@@ -85,7 +85,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
         
 
         {isExpanded && (
-          <DaisyCardContent className="pt-0" >
+          <DaisyCardBody className="pt-0" >
   <DaisyTabs defaultValue="overview" className="w-full" />
 </DaisyCardDescription>
               <DaisyTabsList className="grid w-full grid-cols-4" />
@@ -275,7 +275,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                 </div>
               </DaisyTabsContent>
             </DaisyTabs>
-          </DaisyCardContent>
+          </DaisyCardBody>
         )}
       </DaisyCard>
     );

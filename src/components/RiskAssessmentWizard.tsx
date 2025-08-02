@@ -686,38 +686,38 @@ export default function RiskAssessmentWizard({
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <DaisyCard >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-blue-600">{analysisResults.totalFiles}</div>
                       <div className="text-sm text-gray-600">Files Processed</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-red-600">{analysisResults.totalRisks}</div>
                       <div className="text-sm text-gray-600">Risks Identified</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-green-600">{analysisResults.totalControls}</div>
                       <div className="text-sm text-gray-600">Controls Found</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                   <DaisyCard >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-2xl font-bold text-purple-600">
                         {Math.round((analysisResults.processedFiles / analysisResults.totalFiles) * 100)}%
                       </div>
                       <div className="text-sm text-gray-600">Success Rate</div>
-                    </DaisyCardContent>
+                    </DaisyCardBody>
                   </DaisyCard>
                 </div>
               </div>
@@ -740,28 +740,28 @@ export default function RiskAssessmentWizard({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Assessment Details</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   <div>
-</DaisyCardContent><strong>Name:</strong> {config.name}</div>
+</DaisyCardBody><strong>Name:</strong> {config.name}</div>
                   <div><strong>Type:</strong> {config.assessmentType}</div>
                   <div><strong>Department:</strong> {config.department}</div>
                   <div><strong>Due Date:</strong> {config.dueDate}</div>
                   <div><strong>Stakeholders:</strong> {config.stakeholders.length}</div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle>Analysis Results</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   {analysisResults ? (
-</DaisyCardContent>
+</DaisyCardBody>
                     <>
                       <div><strong>Files Processed:</strong> {analysisResults.totalFiles}</div>
                       <div><strong>Risks Identified:</strong> {analysisResults.totalRisks}</div>
@@ -771,7 +771,7 @@ export default function RiskAssessmentWizard({
                   ) : (
                     <div className="text-gray-500">No analysis results available</div>
                   )}
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
 
@@ -832,7 +832,7 @@ export default function RiskAssessmentWizard({
 
       {/* Step Content */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   {(() => {
@@ -842,10 +842,10 @@ export default function RiskAssessmentWizard({
             })()}
             {steps[currentStep].title}
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <AnimatePresence mode="wait">
-</DaisyCardContent>
+</DaisyCardBody>
             <motion.div
               key={currentStep}
               initial={{ opacity: 0, x: 20 }}
@@ -856,7 +856,7 @@ export default function RiskAssessmentWizard({
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Navigation */}

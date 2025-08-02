@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardHeader, DaisyCardTitle, DaisyCardContent } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -213,7 +213,7 @@ export default function ComplianceProgress() {
             style={{ transitionDelay: `${index * 100}ms` }}
             onClick={() => setSelectedFramework(framework.id)}
           >
-            <DaisyCardHeader className="pb-3" >
+            <DaisyCardBody className="pb-3" >
   <div className="flex items-center justify-between">
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">{framework.shortName}</DaisyCardTitle>
@@ -223,7 +223,7 @@ export default function ComplianceProgress() {
                   <span className="ml-1 capitalize">{framework.status.replace('-', ' ')}</span>
                 </DaisyBadge>
               </div>
-            </DaisyCardHeader>
+            </DaisyCardBody>
             <DaisyCardBody className="pt-0" >
   <div className="flex items-center justify-center mb-4">
 </DaisyCardBody>
@@ -254,7 +254,7 @@ export default function ComplianceProgress() {
       {/* Detailed View */}
       {selectedFramework && (
         <DaisyCard className="transition-all duration-500" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <div className="flex items-center justify-between">
               <div>
@@ -273,10 +273,10 @@ export default function ComplianceProgress() {
                 ×
               </DaisyButton>
             </div>
-          </DaisyCardHeader>
-          <DaisyCardContent >
+          </DaisyCardBody>
+          <DaisyCardBody >
   {(() => {
-</DaisyCardContent>
+</DaisyCardBody>
               const framework = frameworks.find(f => f.id === selectedFramework);
               if (!framework) return null;
 

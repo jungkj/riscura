@@ -319,7 +319,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -393,9 +393,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       
 
       {isExpanded && (
-        <DaisyCardContent className="space-y-6" >
+        <DaisyCardBody className="space-y-6" >
   {/* Search */}
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="space-y-2">
             <DaisyLabel>Search</DaisyLabel>
             <div className="relative">
@@ -553,7 +553,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </span>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       )}
     </DaisyCard>
   );

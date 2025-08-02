@@ -651,7 +651,7 @@ export const StyleGuide: React.FC = () => {
 
         <DaisyTabsContent value="colors" className="mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Palette className="h-5 w-5" />
@@ -663,16 +663,16 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <ColorPalette />
-</DaisyCardContent>
-            </DaisyCardContent>
+</DaisyCardBody>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="typography" className="mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Type className="h-5 w-5" />
@@ -684,16 +684,16 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <Typography />
-</DaisyCardContent>
-            </DaisyCardContent>
+</DaisyCardBody>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="spacing" className="mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Grid3X3 className="h-5 w-5" />
@@ -705,16 +705,16 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <SpacingGrid />
-</DaisyCardContent>
-            </DaisyCardContent>
+</DaisyCardBody>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="components" className="mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <MousePointer className="h-5 w-5" />
@@ -726,16 +726,16 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <ComponentVariations />
-</DaisyCardContent>
-            </DaisyCardContent>
+</DaisyCardBody>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="icons" className="mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Star className="h-5 w-5" />
@@ -747,16 +747,16 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <IconPatterns />
-</DaisyCardContent>
-            </DaisyCardContent>
+</DaisyCardBody>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
 
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Eye className="h-5 w-5" />
@@ -768,10 +768,10 @@ export const StyleGuide: React.FC = () => {
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <ResponsivePreview />
-</DaisyCardContent>
-        </DaisyCardContent>
+</DaisyCardBody>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

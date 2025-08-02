@@ -284,21 +284,21 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   if (!isSupported) {
     return (
       <DaisyCard className={className} >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center text-gray-500">
             <StatusIcons.XCircle className="h-8 w-8 mx-auto mb-2" />
             <p>Voice interface is not supported in this browser</p>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="text-lg font-semibold flex items-center space-x-2" >
@@ -321,9 +321,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         </div>
       
 
-      <DaisyCardContent className="space-y-4" >
+      <DaisyCardBody className="space-y-4" >
   {/* Main controls */}
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="flex items-center space-x-4">
           <DaisyButton
             onClick={toggleListening}
@@ -529,7 +529,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </div>
           <span>Voice AI Ready</span>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };

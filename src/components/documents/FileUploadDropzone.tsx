@@ -295,16 +295,16 @@ export default function FileUploadDropzone({
 
   return (
     <DaisyCard className={`w-full ${className}`}>
-      <DaisyCardHeader >
+      <DaisyCardBody >
   <DaisyCardTitle className="flex items-center gap-2" />
 </DaisyCard>
           <Upload className="w-5 h-5" />
           File Upload
         </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   {/* Upload Area */}
-</DaisyCardContent>
+</DaisyCardBody>
         <div
           {...getRootProps()}
           className={`
@@ -502,7 +502,7 @@ export default function FileUploadDropzone({
             </DaisyButton>
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

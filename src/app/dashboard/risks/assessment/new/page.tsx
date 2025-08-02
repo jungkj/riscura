@@ -169,13 +169,13 @@ export default function NewAssessmentPage() {
         {/* Main Form */}
         <div className="lg:col-span-2 space-y-6">
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Basic Information</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                 <DaisyLabel htmlFor="title">Assessment Title *</DaisyLabel>
                 <DaisyInput
                   id="title"
@@ -344,12 +344,12 @@ export default function NewAssessmentPage() {
                   </div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Objectives */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <div className="flex items-center justify-between">
                 <DaisyCardTitle>Assessment Objectives *</DaisyCardTitle>
@@ -360,9 +360,9 @@ export default function NewAssessmentPage() {
                 </DaisyButton>
               </div>
             
-            <DaisyCardContent className="space-y-3" >
+            <DaisyCardBody className="space-y-3" >
   {formData.objectives.map((objective, index) => (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div key={index} className="flex items-center space-x-2">
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
@@ -389,20 +389,20 @@ export default function NewAssessmentPage() {
 </DaisyAlertCircle>
                 </p>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Assessment Preview</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div>
-</DaisyCardContent>
+</DaisyCardBody>
                 <span className="text-sm font-medium text-gray-500">Title</span>
                 <p className="text-sm">{formData.title || 'Not specified'}</p>
               </div>
@@ -422,17 +422,17 @@ export default function NewAssessmentPage() {
                 <span className="text-sm font-medium text-gray-500">Due Date</span>
                 <p className="text-sm">{formData.dueDate || 'Not set'}</p>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Getting Started</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3 text-sm text-gray-600" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3 text-sm text-gray-600" >
   <div className="flex items-start space-x-2">
-</DaisyCardContent>
+</DaisyCardBody>
                 <FileCheck className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <p>Define clear objectives for your assessment</p>
               </div>

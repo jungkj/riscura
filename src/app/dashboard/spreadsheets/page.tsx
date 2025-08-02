@@ -169,7 +169,7 @@ export default function SpreadsheetsPage() {
 
   const SpreadsheetCard = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => (
     <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer group" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -210,9 +210,9 @@ export default function SpreadsheetsPage() {
           </DaisyDropdownMenu>
         </div>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center justify-between">
             <DaisyBadge className={getTemplateTypeBadgeColor(spreadsheet.templateType)} >
   {getTemplateTypeLabel(spreadsheet.templateType)}
@@ -228,7 +228,7 @@ export default function SpreadsheetsPage() {
             <span>{formatDate(spreadsheet.updatedAt)}</span>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 

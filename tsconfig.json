@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -59,6 +59,7 @@
     "scripts/**/*",
     "src/app/api/stripe/webhook/route.ts",
     "src/components/ai/VoiceInterface.tsx",
+    "src/app/dashboard/assessments/third-party/page.tsx",
     ".next",
     "out",
     "dist",

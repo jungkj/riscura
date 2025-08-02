@@ -271,7 +271,7 @@ export default function DocumentLibrary({
 
   const renderDocumentCard = (document: Document) => (
     <DaisyCard key={document.id} className="group hover:shadow-md transition-shadow" >
-  <DaisyCardHeader className="pb-2" />
+  <DaisyCardBody className="pb-2" />
 </DaisyCard>
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-2">
@@ -337,9 +337,9 @@ export default function DocumentLibrary({
         </div>
       
 
-      <DaisyCardContent className="pt-0" >
+      <DaisyCardBody className="pt-0" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
           {document.description && (
             <p className="text-xs text-gray-600 line-clamp-2">
               {document.description}
@@ -368,7 +368,7 @@ export default function DocumentLibrary({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 

@@ -35,13 +35,13 @@ export function StyleGuide() {
 
         {/* Color Palette */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Color Palette</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <div className="w-full h-20 bg-background border-2 border-border rounded-md"></div>
                 <p className="text-sm font-semibold text-foreground">Background</p>
@@ -63,18 +63,18 @@ export function StyleGuide() {
                 <p className="text-xs text-foreground">#D8C3A5</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Typography */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Typography - Bold Inter Font</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div>
-</DaisyCardContent>
+</DaisyCardBody>
               <h1 className="text-4xl font-bold text-foreground mb-2">Heading 1 - Bold</h1>
               <p className="text-sm text-foreground">font-bold, text-4xl</p>
             </div>
@@ -96,18 +96,18 @@ export function StyleGuide() {
               <p className="text-sm font-semibold text-foreground mb-2">Small text - Still bold</p>
               <p className="text-xs text-foreground">font-semibold, text-sm</p>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Buttons */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Buttons - Thick Borders & Bold Text</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <DaisyButton className="w-full">Primary</DaisyButton>
                 <p className="text-xs text-foreground">Default button</p>
@@ -142,18 +142,18 @@ export function StyleGuide() {
                 <p className="text-xs text-foreground">Large size</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Form Elements */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Form Elements - Thick Black Borders</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-6" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-6" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
               <label className="text-sm font-semibold text-foreground">Input Field</label>
               <DaisyInput placeholder="Enter text here..." />
               <p className="text-xs text-foreground">Thick black border, bold text</p>
@@ -172,49 +172,49 @@ export function StyleGuide() {
 
         {/* Cards */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Cards - Clean & Consistent</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="w-5 h-5" />
 </DaisyCardTitle>
                     Security
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-sm font-semibold text-foreground">
-</DaisyCardContent>
+</DaisyCardBody>
                     All security measures are active and monitoring.
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
               
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <CheckCircle className="w-5 h-5" />
 </DaisyCardTitle>
                     Compliance
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-sm font-semibold text-foreground">
-</DaisyCardContent>
+</DaisyCardBody>
                     System is fully compliant with regulations.
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
               
               <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="w-5 h-5" >
@@ -222,27 +222,27 @@ export function StyleGuide() {
 </DaisyAlert>
                     Alerts
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-sm font-semibold text-foreground">
-</DaisyCardContent>
+</DaisyCardBody>
                     No active alerts at this time.
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Badges & Status */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Badges & Status Indicators</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex flex-wrap gap-2">
                 <DaisyBadge variant="default">Default</DaisyBadge>
                 <DaisyBadge variant="secondary">Secondary</DaisyBadge>
@@ -264,13 +264,13 @@ export function StyleGuide() {
 
         {/* Icons */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Icons - Bold & Clear</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {[
                 Shield,
                 CheckCircle,
@@ -291,18 +291,18 @@ export function StyleGuide() {
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Layout Examples */}
         <DaisyCard className="mb-8" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Layout Examples</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-6">
-</DaisyCardContent>
+</DaisyCardBody>
               {/* Header Example */}
               <div className="border-2 border-border rounded-md p-4 bg-card">
                 <div className="flex items-center justify-between">
@@ -330,54 +330,54 @@ export function StyleGuide() {
               {/* Content Grid Example */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <DaisyCardTitle>Metric 1</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-foreground">
-</DaisyCardContent>1,234</div>
+</DaisyCardBody>1,234</div>
                     <p className="text-sm font-semibold text-foreground">Total items</p>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
                 
                 <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <DaisyCardTitle>Metric 2</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-foreground">
-</DaisyCardContent>98.5%</div>
+</DaisyCardBody>98.5%</div>
                     <p className="text-sm font-semibold text-foreground">Success rate</p>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
                 
                 <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <DaisyCardTitle>Metric 3</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-2xl font-bold text-foreground">
-</DaisyCardContent>24/7</div>
+</DaisyCardBody>24/7</div>
                     <p className="text-sm font-semibold text-foreground">Uptime</p>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Design Principles */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Design Principles</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-3">
                 <h4 className="text-lg font-bold text-foreground">Visual Hierarchy</h4>
                 <ul className="space-y-2 text-sm font-semibold text-foreground">
@@ -398,7 +398,7 @@ export function StyleGuide() {
                 </ul>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

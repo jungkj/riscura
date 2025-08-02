@@ -632,7 +632,7 @@ function DashboardPage() {
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('totalRisks')}>
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-blue-50 rounded-lg">  
                     <Shield className="h-5 w-5 text-blue-600" />
@@ -642,13 +642,13 @@ function DashboardPage() {
                     <p className="text-xs text-gray-600">Total Risks</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('highRisks')}>
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-red-50 rounded-lg">
                     <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -658,13 +658,13 @@ function DashboardPage() {
                     <p className="text-xs text-gray-600">High Priority</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('complianceScore')}>
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -674,13 +674,13 @@ function DashboardPage() {
                     <p className="text-xs text-gray-600">Compliance</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             <DaisyCard 
               className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
               onClick={() => handleStatsCardClick('activeControls')}>
-              <DaisyCardContent className="p-4">
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center">
                   <div className="p-2 bg-purple-50 rounded-lg">
                     <Settings className="h-5 w-5 text-purple-600" />
@@ -690,23 +690,23 @@ function DashboardPage() {
                     <p className="text-xs text-gray-600">Controls</p>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
 
           {/* Quick Actions - Simplified Card */}
           <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5 text-[#199BEC]" />
 </DaisyCardTitle>
                 <span className="text-[#191919] font-bold text-base">Quick Actions</span>
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pt-0" >
+        </DaisyCardBody>
+        <DaisyCardBody className="pt-0" >
   <div className="grid grid-cols-2 gap-3 h-full">
-</DaisyCardContent>
+</DaisyCardBody>
                 {quickActions.slice(0, 4).map((action) => (
                   <QuickActionCard
                     key={action.id}
@@ -719,13 +719,13 @@ function DashboardPage() {
                   />
                 ))}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Recently Imported Section */}
           {recentImports.length > 0 && (
             <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <FileSpreadsheet className="h-5 w-5 text-green-600" />
@@ -736,10 +736,10 @@ function DashboardPage() {
 </DaisyBadge>
                   </DaisyBadge>
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pt-0" >
+        </DaisyCardBody>
+        <DaisyCardBody className="pt-0" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                   {recentImports.map((importItem, index) => (
                     <div 
                       key={index}
@@ -773,7 +773,7 @@ function DashboardPage() {
                     </div>
                   ))}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </div>
@@ -805,7 +805,7 @@ function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 md:gap-8">
         {/* AI Insights */}
         <DaisyCard data-tour="ai-insights" className="bg-white border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center justify-between" >
   <div className="flex items-center gap-2">
@@ -823,10 +823,10 @@ function DashboardPage() {
 </DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex items-start justify-between">
@@ -853,7 +853,7 @@ function DashboardPage() {
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
@@ -861,7 +861,7 @@ function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Team Status */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Users className="h-5 w-5 text-blue-600" />
@@ -872,10 +872,10 @@ function DashboardPage() {
 </DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="text-center py-8">
-</DaisyCardContent>
+</DaisyCardBody>
               <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 text-sm">No team members yet</p>
               <p className="text-gray-400 text-xs mt-1">Invite your team to collaborate</p>
@@ -888,12 +888,12 @@ function DashboardPage() {
                 Invite Team
               </DaisyButton>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Quick Team Actions */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Briefcase className="h-5 w-5 text-purple-600" />
@@ -904,13 +904,13 @@ function DashboardPage() {
 </DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-3" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-3" >
   <DaisyButton 
               variant="ghost" 
               className="w-full justify-start h-auto p-3 hover:bg-gray-50"
               onClick={() =>
-</DaisyCardContent> router.push('/dashboard/team/delegate')} />
+</DaisyCardBody> router.push('/dashboard/team/delegate')} />
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-50 rounded-lg">
                   <UserPlus className="h-4 w-4 text-purple-600" />
@@ -949,12 +949,12 @@ function DashboardPage() {
                 </div>
               </div>
             </DaisyButton>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Small Team Insights */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -965,10 +965,10 @@ function DashboardPage() {
 </DaisyBadge>
               </DaisyBadge>
             </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Risk Resolution Rate</span>
                 <span className="text-sm font-bold text-green-600">85%</span>

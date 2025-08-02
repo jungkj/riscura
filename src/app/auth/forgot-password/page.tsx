@@ -41,13 +41,13 @@ export default function ForgotPasswordPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <DaisyCard className="w-full max-w-md">
-          <DaisyCardHeader className="text-center">
+          <DaisyCardBody className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
             <DaisyCardTitle>Check your email</DaisyCardTitle>
-          </DaisyCardHeader>
-          <DaisyCardContent className="text-center space-y-4">
+          </DaisyCardBody>
+          <DaisyCardBody className="text-center space-y-4">
             <p className="text-muted-foreground">
               We've sent a password reset link to <strong>{email}</strong>
             </p>
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                 </DaisyButton>
               </Link>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     );
@@ -81,14 +81,14 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <DaisyCard className="w-full max-w-md">
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle>Reset your password</DaisyCardTitle>
           <p className="text-muted-foreground">
             Enter your email address and we'll send you a link to reset your password.
           </p>
-        </DaisyCardHeader>
+        </DaisyCardBody>
 
-        <DaisyCardContent>
+        <DaisyCardBody>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <DaisyLabel htmlFor="email">Email address</DaisyLabel>
@@ -114,7 +114,7 @@ export default function ForgotPasswordPage() {
               </DaisyButton>
             </Link>
           </form>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

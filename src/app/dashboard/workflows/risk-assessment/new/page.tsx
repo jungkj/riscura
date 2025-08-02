@@ -205,9 +205,9 @@ export default function NewRiskAssessmentPage() {
 
           {/* Form Content */}
           <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               {/* Step 1: Basic Information */}
               {currentStep === 1 && (
                 <div className="space-y-6">
@@ -465,7 +465,7 @@ export default function NewRiskAssessmentPage() {
                   </DaisyButton>
                 )}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
       </div>

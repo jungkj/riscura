@@ -304,17 +304,17 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
   if (loading && insights.length === 0) {
     return (
       <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
 </DaisyCardTitle>
             AI Intelligence Loading...
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
             {[...Array(3)].map((_, index) => (
               <div key={index} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -322,14 +322,14 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
 
   return (
     <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -373,9 +373,9 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         )}
       
 
-      <DaisyCardContent className="space-y-4" >
+      <DaisyCardBody className="space-y-4" >
   <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTabsList className="grid w-full grid-cols-4" />
             <DaisyTabsTrigger value="insights" className="text-xs" />
               Insights ({insights.length})
@@ -698,7 +698,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             )}
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }; 

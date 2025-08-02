@@ -295,9 +295,9 @@ const ScenarioCard: React.FC<{
 </DaisyCard>
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-600"></div>
       
-      <DaisyCardHeader className="pb-enterprise-3" >
+      <DaisyCardBody className="pb-enterprise-3" >
   <div className="flex items-start justify-between">
-</DaisyCardHeader>
+</DaisyCardBody>
           <div className="flex items-start space-x-enterprise-3">
             <div className={cn("p-enterprise-2 rounded-lg", categoryConfig.bg)}>
               <CategoryIcon className={cn("h-4 w-4", categoryConfig.color)} />
@@ -323,9 +323,9 @@ const ScenarioCard: React.FC<{
         </div>
       
 
-      <DaisyCardContent className="space-y-enterprise-4" >
+      <DaisyCardBody className="space-y-enterprise-4" >
   {/* Risk Metrics */}
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="grid grid-cols-2 gap-enterprise-4">
           <div>
             <div className="flex items-center justify-between mb-enterprise-1">
@@ -391,7 +391,7 @@ const ScenarioCard: React.FC<{
             {scenario.lastUpdated.toLocaleDateString()}
           </span>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -565,40 +565,40 @@ const SimulationInterface: React.FC<{
                     {/* Results Summary */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-enterprise-4">
                       <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyTabsContent>
                           <DaisyCardTitle className="text-body-sm">Average Impact</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-heading-base font-bold text-semantic-warning">
-</DaisyCardContent>
+</DaisyCardBody>
                             {results.averageImpact.toFixed(1)}%
                           </div>
-                        </DaisyCardContent>
+                        </DaisyCardBody>
                       </DaisyCard>
                       <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
                           <DaisyCardTitle className="text-body-sm">Worst Case</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-heading-base font-bold text-semantic-error">
-</DaisyCardContent>
+</DaisyCardBody>
                             {results.worstCase.toFixed(1)}%
                           </div>
-                        </DaisyCardContent>
+                        </DaisyCardBody>
                       </DaisyCard>
                       <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
                           <DaisyCardTitle className="text-body-sm">Best Case</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-heading-base font-bold text-semantic-success">
-</DaisyCardContent>
+</DaisyCardBody>
                             {results.bestCase.toFixed(1)}%
                           </div>
-                        </DaisyCardContent>
+                        </DaisyCardBody>
                       </DaisyCard>
                     </div>
 
@@ -712,20 +712,20 @@ export const RiskScenarioModeling: React.FC = () => {
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
         <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
             <div className="flex items-center space-x-enterprise-2">
               <Activity className="h-4 w-4 text-purple-600" />
               <DaisyCardTitle className="text-body-sm">Active Scenarios</DaisyCardTitle>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-heading-base font-bold">
-</DaisyCardContent>{activeScenarios}</div>
-          </DaisyCardContent>
+</DaisyCardBody>{activeScenarios}</div>
+          </DaisyCardBody>
         </DaisyCard>
         <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
             <div className="flex items-center space-x-enterprise-2">
               <DaisyAlertTriangle className="h-4 w-4 text-semantic-error" >
@@ -733,36 +733,36 @@ export const RiskScenarioModeling: React.FC = () => {
 </DaisyAlertTriangle>High Risk</DaisyCardTitle>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-heading-base font-bold text-semantic-error">
-</DaisyCardContent>{highRiskScenarios}</div>
-          </DaisyCardContent>
+</DaisyCardBody>{highRiskScenarios}</div>
+          </DaisyCardBody>
         </DaisyCard>
         <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
             <div className="flex items-center space-x-enterprise-2">
               <Brain className="h-4 w-4 text-purple-600" />
               <DaisyCardTitle className="text-body-sm">AI Confidence</DaisyCardTitle>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-heading-base font-bold text-purple-600">
-</DaisyCardContent>{avgConfidence}%</div>
-          </DaisyCardContent>
+</DaisyCardBody>{avgConfidence}%</div>
+          </DaisyCardBody>
         </DaisyCard>
         <DaisyCard >
-  <DaisyCardHeader className="pb-enterprise-2" />
+  <DaisyCardBody className="pb-enterprise-2" />
 </DaisyCard>
             <div className="flex items-center space-x-enterprise-2">
               <Target className="h-4 w-4 text-text-primary" />
               <DaisyCardTitle className="text-body-sm">Total Scenarios</DaisyCardTitle>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-heading-base font-bold">
-</DaisyCardContent>{scenarios.length}</div>
-          </DaisyCardContent>
+</DaisyCardBody>{scenarios.length}</div>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 

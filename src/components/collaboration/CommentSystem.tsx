@@ -277,9 +277,9 @@ const MentionInput: React.FC<{
 
       {showMentions && (
         <DaisyCard className="absolute z-50 w-64 mt-1 shadow-lg" >
-  <DaisyCardContent className="p-2" >
+  <DaisyCardBody className="p-2" >
   </DaisyTextarea>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-caption text-text-secondary mb-2 px-2">
               Mention someone
             </div>
@@ -311,7 +311,7 @@ const MentionInput: React.FC<{
                 </div>
               )}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
     </div>
@@ -840,9 +840,9 @@ export const CommentSystem: React.FC<{
 
       {/* New Comment */}
       <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-start space-x-enterprise-3">
             <DaisyAvatar className="h-8 w-8" />
               <DaisyAvatarImage src={sampleUsers[0].avatar} />
@@ -887,7 +887,7 @@ export const CommentSystem: React.FC<{
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Comments List */}

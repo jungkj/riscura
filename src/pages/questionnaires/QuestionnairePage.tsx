@@ -424,16 +424,16 @@ export default function QuestionnairePage() {
   if (error) {
     return (
       <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
             <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]" />
               Retry
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   }
@@ -468,71 +468,71 @@ export default function QuestionnairePage() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-gray-900">
-</DaisyCardContent>{stats.total}</div>
+</DaisyCardBody>{stats.total}</div>
             <p className="text-xs text-gray-600">
               Across all statuses
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Active</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-green-600">
-</DaisyCardContent>{stats.active}</div>
+</DaisyCardBody>{stats.active}</div>
             <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
-</DaisyCardContent>
+</DaisyCardBody>
               {(stats.averageCompletion * 100).toFixed(1)}%
             </div>
             <p className="text-xs text-gray-600">
               Average across all questionnaires
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Responses</DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold text-[#191919]">
-</DaisyCardContent>{stats.totalResponses}</div>
+</DaisyCardBody>{stats.totalResponses}</div>
             <p className="text-xs text-gray-600">
               All-time responses collected
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
       {/* Questionnaires Table */}
       <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="text-gray-900 font-inter">Questionnaires</DaisyCardTitle>
           <DaisyCardDescription className="text-gray-600 font-inter" >
@@ -540,9 +540,9 @@ export default function QuestionnairePage() {
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <DaisyTable />
-</DaisyCardContent>
+</DaisyCardBody>
             <DaisyTableHeader />
               <DaisyTableRow />
                 <DaisyTableHead className="text-gray-700 font-medium">Title</DaisyTableHeader>
@@ -626,7 +626,7 @@ export default function QuestionnairePage() {
               ))}
             </DaisyTableBody>
           </DaisyTable>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Analytics Dialog */}

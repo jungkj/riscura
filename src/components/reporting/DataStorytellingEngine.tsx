@@ -412,19 +412,19 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
               return (
                 <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <DaisyCardTitle className="text-lg">{viz.title}</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
-</DaisyCardContent>
+</DaisyCardBody>
                       <div className="text-center">
                         <BarChart3 className="w-16 h-16 mx-auto mb-4 text-blue-600" />
                         <p className="text-sm text-gray-600">{viz.narrative}</p>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -445,7 +445,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                   const Icon = getInsightIcon(insight.type);
                   return (
                     <DaisyCard key={insightId} className={`border-l-4 ${getImpactColor(insight.impact)}`}>
-                      <DaisyCardContent className="pt-4" >
+                      <DaisyCardBody className="pt-4" >
   <div className="flex items-start space-x-3">
 </DaisyCard>
                           <Icon className="w-5 h-5 mt-1" />
@@ -470,7 +470,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                             </div>
                           </div>
                         </div>
-                      </DaisyCardContent>
+                      </DaisyCardBody>
                     </DaisyCard>
                   );
                 })}
@@ -618,17 +618,17 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
       {/* Story Generation Panel */}
       <DaisyCard className="max-w-6xl mx-auto m-6" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <Wand2 className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
             AI Story Generation
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="flex items-center justify-between">
-</DaisyCardContent>
+</DaisyCardBody>
             <div>
               <p className="text-gray-600">
                 Generate new data stories automatically from your risk and compliance data
@@ -670,17 +670,17 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
       {/* Story Summary */}
       <DaisyCard className="max-w-6xl mx-auto m-6" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <BookOpen className="w-5 h-5 mr-2" />
 </DaisyCardTitle>
             Story Summary
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Key Findings</h4>
               <ul className="space-y-1 text-sm text-gray-600">
@@ -710,7 +710,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <h4 className="font-medium text-blue-900 mb-2">Executive Summary</h4>
             <p className="text-sm text-blue-800">{story.narrative.executiveSummary}</p>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

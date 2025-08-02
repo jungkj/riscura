@@ -43,13 +43,13 @@ export const RiskByCategory: React.FC = () => {
 
   return (
     <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTooltipProps>
         <DaisyCardTitle>Risk by Category</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="h-80">
-</DaisyCardContent>
+</DaisyCardBody>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

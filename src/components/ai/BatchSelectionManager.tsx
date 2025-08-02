@@ -424,7 +424,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                           selectedItems.has(item.id) && 'ring-2 ring-primary ring-offset-2'
                         )}
                         onClick={() => toggleItemSelection(item.id)} />
-                        <DaisyCardContent className="p-4" >
+                        <DaisyCardBody className="p-4" >
   <div className="flex items-start gap-3">
 </DaisyProgress>
                             <div className="mt-1">
@@ -485,7 +485,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                               <Trash2 className="h-3 w-3" />
                             </DaisyButton>
                           </div>
-                        </DaisyCardContent>
+                        </DaisyCardBody>
                       </DaisyCard>
                     ))}
                   </div>

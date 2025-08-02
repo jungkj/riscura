@@ -477,9 +477,9 @@ export default function GlobalSearch({
         <DaisyCard className="bg-white border border-gray-200 shadow-2xl" >
   {/* Search Header */}
 </DaisyCard>
-          <DaisyCardHeader className="pb-4" >
+          <DaisyCardBody className="pb-4" >
   <div className="flex items-center gap-3">
-</DaisyCardHeader>
+</DaisyCardBody>
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <DaisyInput
@@ -532,9 +532,9 @@ export default function GlobalSearch({
             )}
           
 
-          <DaisyCardContent className="p-0 max-h-96 overflow-y-auto" ref={resultsRef} >
+          <DaisyCardBody className="p-0 max-h-96 overflow-y-auto" ref={resultsRef} >
   {/* No query state - show suggestions and recent */}
-</DaisyCardContent>
+</DaisyCardBody>
             {!query.trim() && (
               <div className="p-6 space-y-6">
                 {/* Recent Searches */}
@@ -742,7 +742,7 @@ export default function GlobalSearch({
                 <p className="text-gray-500">Searching...</p>
               </div>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
 
           {/* Footer with shortcuts */}
           <div className="border-t border-gray-200 p-3 bg-gray-50">

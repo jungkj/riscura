@@ -59,16 +59,16 @@ const UsageCard: React.FC<UsageCardProps> = ({
 
   return (
     <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
         <DaisyCardTitle className="text-sm font-medium">{title}</DaisyCardTitle>
         <div className={`rounded-full p-2 ${colorClasses[color]}`}>
           {icon}
         </div>
       
-      <DaisyCardContent >
+      <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{value}</div>
+</DaisyCardBody>{value}</div>
         <div className="flex items-center text-xs text-muted-foreground">
           <span>{subtitle}</span>
           {trend && trendValue && (
@@ -78,7 +78,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
             </div>
           )}
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -225,7 +225,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
       {/* Current Tier and Upgrade Options */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Settings className="h-5 w-5" />
@@ -237,9 +237,9 @@ export const TokenUsageAnalytics: React.FC = () => {
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {Object.entries(PRICING_TIERS).map(([tierKey, tier]) => (
               <div 
                 key={tierKey}
@@ -273,7 +273,7 @@ export const TokenUsageAnalytics: React.FC = () => {
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       <DaisyTabs value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as typeof selectedPeriod)} />
@@ -324,7 +324,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
           {/* Quota Status */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <Eye className="h-5 w-5" />
@@ -336,7 +336,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-4" >
+            <DaisyCardBody className="space-y-4" >
   <QuotaBar
                 label="Daily Quota"
                 used={tokenUsageMetrics.dailyTokens}
@@ -344,7 +344,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                 period="Resets daily"
                 cost={tokenUsageMetrics.dailyCost}
               />
-</DaisyCardContent>
+</DaisyCardBody>
               <QuotaBar
                 label="Weekly Quota"
                 used={tokenUsageMetrics.weeklyTokens}
@@ -359,12 +359,12 @@ export const TokenUsageAnalytics: React.FC = () => {
                 period="Resets monthly"
                 cost={tokenUsageMetrics.monthlyCost}
               />
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Agent Usage Breakdown */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <Users className="h-5 w-5" />
@@ -376,9 +376,9 @@ export const TokenUsageAnalytics: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 {agentUsageStats.map((agent) => (
                   <div key={agent.agentType} className="flex items-center space-x-4">
                     <div className="w-24 text-sm font-medium">{agent.name}</div>
@@ -399,7 +399,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
           {/* Cost Projections */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <DaisyCalendar className="h-5 w-5" />
@@ -411,9 +411,9 @@ export const TokenUsageAnalytics: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
                     ${realTimeUsageStats.costProjections.daily.toFixed(2)}
@@ -433,12 +433,12 @@ export const TokenUsageAnalytics: React.FC = () => {
                   <div className="text-sm text-muted-foreground">Monthly</div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Recent Conversations */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Recent High-Usage Conversations</DaisyCardTitle>
               <DaisyCardDescription >
@@ -446,9 +446,9 @@ export const TokenUsageAnalytics: React.FC = () => {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                 {conversationUsages.slice(0, 5).map((conversation) => (
                   <div key={conversation.id} className="flex justify-between items-center p-3 border rounded-lg">
                     <div>
@@ -464,7 +464,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

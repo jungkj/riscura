@@ -418,7 +418,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 
           <DaisyTabsContent value="testing" className="space-y-6" />
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center space-x-2" >
   <DaisyCalendar className="h-5 w-5" />
@@ -430,9 +430,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-6" >
+              <DaisyCardBody className="space-y-6" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="space-y-2">
                     <DaisyLabel>Testing Frequency</DaisyLabel>
                     <DaisySelect
@@ -513,13 +513,13 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </DaisySelectContent>
                   </DaisySelect>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>
 
           <DaisyTabsContent value="compliance" className="space-y-4" />
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center space-x-2" >
   <CheckCircle className="h-5 w-5" />
@@ -531,9 +531,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   {complianceFrameworks.map((framework) => (
                     <div key={framework} className="flex items-center space-x-2">
                       <DaisyCheckbox
@@ -547,7 +547,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </div>
                   ))}
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>
 
@@ -583,7 +583,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
             </div>
 
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyInput>
                 <DaisyCardTitle>Control Summary</DaisyCardTitle>
                 <DaisyCardDescription >
@@ -591,9 +591,9 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 </DaisyCardDescription>
                 </p>
               
-              <DaisyCardContent className="space-y-4" >
+              <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-2 gap-4 text-sm">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div>
                     <span className="font-medium">Priority:</span>
                     <DaisyBadge className={`ml-2 ${currentPriorityConfig.color} ${currentPriorityConfig.bg}`}>
@@ -627,7 +627,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                     </div>
                   </div>
                 )}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </DaisyTabsContent>
         </DaisyTabs>

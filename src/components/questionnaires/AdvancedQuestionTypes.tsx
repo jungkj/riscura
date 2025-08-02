@@ -942,18 +942,18 @@ export function CustomHTMLQuestionComponent({
 
       {showCode && (
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="text-sm">HTML Content</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <DaisyTextarea
               value={config.htmlContent}
               readOnly
               rows={8}
               className="font-mono text-sm"
             />
-</DaisyCardContent></DaisyTextarea>
+</DaisyCardBody></DaisyTextarea>
         </DaisyCard>
       )}
 
@@ -968,13 +968,13 @@ export function CustomHTMLQuestionComponent({
 
       {config.allowUserInput && config.inputFields && config.inputFields.length > 0 && (
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="text-sm">Additional Input</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {config.inputFields.map((field) => (
-</DaisyCardContent>
+</DaisyCardBody>
               <div key={field.name}>
                 <DaisyLabel htmlFor={field.name} />
                   {field.name}

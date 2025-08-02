@@ -499,7 +499,7 @@ export default function TeamNotificationsPage() {
                     notification.priority === 'critical' && "ring-2 ring-red-200"
                   )}
                   onClick={() => handleNotificationAction(notification)} />
-                  <DaisyCardContent className="p-4" >
+                  <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-4">
 </DaisyCard>
                       {/* Icon */}
@@ -623,16 +623,16 @@ export default function TeamNotificationsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
 
             {filteredNotifications.length === 0 && (
               <DaisyCard >
-  <DaisyCardContent className="text-center py-12" >
+  <DaisyCardBody className="text-center py-12" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     No notifications found
@@ -642,7 +642,7 @@ export default function TeamNotificationsPage() {
                       ? 'Try adjusting your filters to see more notifications.'
                       : 'You\'re all caught up! New notifications will appear here.'}
                   </p>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             )}
           </div>
@@ -662,7 +662,7 @@ export default function TeamNotificationsPage() {
                     notification.priority === 'critical' && "ring-2 ring-red-200"
                   )}
                   onClick={() => handleNotificationAction(notification)} />
-                  <DaisyCardContent className="p-4" >
+                  <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-4">
 </DaisyTabsContent>
                       <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
@@ -696,7 +696,7 @@ export default function TeamNotificationsPage() {
                         </div>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -717,7 +717,7 @@ export default function TeamNotificationsPage() {
                     priorityConfig.border
                   )}
                   onClick={() => handleNotificationAction(notification)} />
-                  <DaisyCardContent className="p-4" >
+                  <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-4">
 </DaisyTabsContent>
                       <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
@@ -738,7 +738,7 @@ export default function TeamNotificationsPage() {
                         </span>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}
@@ -747,7 +747,7 @@ export default function TeamNotificationsPage() {
 
         <DaisyTabsContent value="settings" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Notification Preferences</DaisyCardTitle>
               <DaisyCardDescription >
@@ -755,9 +755,9 @@ export default function TeamNotificationsPage() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent className="space-y-6" >
+            <DaisyCardBody className="space-y-6" >
   {/* Notification Types */}
-</DaisyCardContent>
+</DaisyCardBody>
               <div>
                 <h3 className="font-medium mb-4">Notification Types</h3>
                 <div className="space-y-4">
@@ -891,7 +891,7 @@ export default function TeamNotificationsPage() {
                 <DaisyButton variant="outline">Reset to Default</DaisyInput>
                 <DaisyButton onClick={handleSavePreferences}>Save Preferences</DaisyButton>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </MainContentArea>

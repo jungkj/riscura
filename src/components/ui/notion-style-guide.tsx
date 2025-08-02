@@ -44,12 +44,12 @@ export function NotionStyleGuide() {
 
         {/* Color Palette */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Color Palette</DaisyCardTitle>
             <DaisyCardDescription>Primary colors used throughout the application</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 </DaisyCardDescription>
               <div className="text-center">
@@ -73,17 +73,17 @@ export function NotionStyleGuide() {
                 <p className="text-xs text-gray-500">Main Background</p>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Typography */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Typography</DaisyCardTitle>
             <DaisyCardDescription>Inter font family with consistent hierarchy</p>
           
-          <DaisyCardContent className="space-y-4" >
+          <DaisyCardBody className="space-y-4" >
   <div>
 </DaisyCardDescription>
               <h1 className="text-4xl font-bold text-[#191919] mb-2">Heading 1</h1>
@@ -105,17 +105,17 @@ export function NotionStyleGuide() {
               <p className="text-sm text-gray-600 mb-2">Secondary Text</p>
               <p className="text-sm text-gray-500">text-sm text-gray-600</p>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Buttons */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Button Components</DaisyCardTitle>
             <DaisyCardDescription>Primary, secondary, tertiary, and ghost button styles</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 </DaisyCardDescription>
               <div className="space-y-3">
@@ -162,17 +162,17 @@ export function NotionStyleGuide() {
                 <DaisyButton variant="ghost" size="lg" className="w-full">Large Ghost</DaisyButton>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Form Components */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Form Components</DaisyCardTitle>
             <DaisyCardDescription>Clean input fields with blue focus states</p>
           
-          <DaisyCardContent className="space-y-6" >
+          <DaisyCardBody className="space-y-6" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 </DaisyCardDescription>
               <div className="space-y-4">
@@ -216,12 +216,12 @@ export function NotionStyleGuide() {
 
         {/* Data Display */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Data Display Components</DaisyCardTitle>
             <DaisyCardDescription>Badges, progress indicators, and status elements</p>
           
-          <DaisyCardContent className="space-y-6" >
+          <DaisyCardBody className="space-y-6" >
   {/* Badges */}
 </DaisyCardDescription>
             <div>
@@ -263,12 +263,12 @@ export function NotionStyleGuide() {
 
         {/* Navigation Components */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Navigation Components</DaisyCardTitle>
             <DaisyCardDescription>Tabs, breadcrumbs, and pagination</p>
           
-          <DaisyCardContent className="space-y-8" >
+          <DaisyCardBody className="space-y-8" >
   {/* Breadcrumbs */}
 </DaisyCardDescription>
             <div>
@@ -340,17 +340,17 @@ export function NotionStyleGuide() {
                 </PaginationContent>
               </Pagination>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Table Component */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Data Table</DaisyCardTitle>
             <DaisyCardDescription>Clean table design for data display</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <DaisyTable />
 </DaisyCardDescription>
               <DaisyTableHeader />
@@ -398,24 +398,24 @@ export function NotionStyleGuide() {
                 </DaisyTableRow>
               </DaisyTableBody>
             </DaisyTable>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Card Layouts */}
         <DaisyCard className="mb-12" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Card Layouts</DaisyCardTitle>
             <DaisyCardDescription>Various card designs for different content types</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 </DaisyCardDescription>
               {/* Metric Card */}
               <DaisyCard >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between mb-4">
                     <div className="p-2 bg-white rounded-lg shadow-sm">
                       <Shield className="h-5 w-5 text-blue-600" />
@@ -426,12 +426,12 @@ export function NotionStyleGuide() {
                     <p className="text-3xl font-bold text-[#191919] mb-2">23</p>
                     <p className="text-xs text-gray-500">+2 this week</p>
                   </div>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
               
               {/* Status Card */}
               <DaisyCard >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5 text-orange-600" >
@@ -439,32 +439,32 @@ export function NotionStyleGuide() {
 </DaisyAlert>
                     High Priority
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-sm text-gray-600 mb-4">
-</DaisyCardContent>
+</DaisyCardBody>
                     4 high-risk items require immediate attention.
                   </p>
                   <DaisyButton size="sm" className="w-full" >
   Review Now
 </DaisyButton>
                   </DaisyButton>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
               
               {/* AI Insights Card */}
               <DaisyCard >
-  <DaisyCardHeader className="pb-4" />
+  <DaisyCardBody className="pb-4" />
 </DaisyCard>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-purple-600" />
 </DaisyCardTitle>
                     AI Insights
                   </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4">
-</DaisyCardContent>
+</DaisyCardBody>
                     <p className="text-sm text-purple-700">
                       ARIA detected potential compliance gaps in your SOX controls.
                     </p>
@@ -473,20 +473,20 @@ export function NotionStyleGuide() {
   View Details
 </DaisyButton>
                   </DaisyButton>
-                </DaisyCardContent>
+                </DaisyCardBody>
               </DaisyCard>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Usage Guidelines */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Usage Guidelines</DaisyCardTitle>
             <DaisyCardDescription>Best practices for implementing the design system</p>
           
-          <DaisyCardContent className="space-y-4" >
+          <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 </DaisyCardDescription>
               <div>
@@ -512,7 +512,7 @@ export function NotionStyleGuide() {
                 </ul>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

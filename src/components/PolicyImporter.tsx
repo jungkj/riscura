@@ -329,17 +329,17 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
     <div className={`w-full max-w-4xl mx-auto space-y-6 ${className}`}>
       {/* File Upload Area */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <FileUp className="h-5 w-5 text-blue-600" />
 </DaisyCardTitle>
             Policy Document Upload
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <AnimatePresence>
-</DaisyCardContent>
+</DaisyCardBody>
             {files.length === 0 ? (
               <div
                 className={`
@@ -460,7 +460,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
               </DaisyAlert>
             </motion.div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Analysis Results */}
@@ -474,7 +474,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
           >
             {/* Summary Card */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <div className="flex items-center justify-between">
                   <DaisyCardTitle className="flex items-center gap-2" >
@@ -491,9 +491,9 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                   </DaisyButton>
                 </div>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="grid grid-cols-2 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="text-center p-4 bg-red-50 dark:bg-red-950/20 rounded-lg">
                     <div className="text-2xl font-bold text-red-600">
                       {analysisResult.extractedCount.risks}
@@ -531,7 +531,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                 </DaisyAlertDescription>
               </DaisyAlert>
                 )}
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Extracted Content */}

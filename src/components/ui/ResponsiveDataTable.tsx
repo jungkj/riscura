@@ -269,7 +269,7 @@ const MobileCardLayout: React.FC<{
             onSwipeLeft={() => console.log('Archive', item)}
             onSwipeRight={() => console.log('Favorite', item)}
           >
-            <DaisyCardContent className="p-enterprise-4" >
+            <DaisyCardBody className="p-enterprise-4" >
   <div className="space-y-enterprise-3">
 </DaisyProgress>
                 {/* Header with selection */}
@@ -386,9 +386,9 @@ const TabletListLayout: React.FC<{
 
   return (
     <DaisyCard >
-  <DaisyCardContent className="p-0" >
+  <DaisyCardBody className="p-0" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
         {/* Header */}
         <div className="grid gap-enterprise-3 p-enterprise-4 border-b border-border bg-surface-secondary">
           <div className="grid grid-cols-12 gap-enterprise-3 items-center text-caption font-medium text-text-secondary uppercase tracking-wide">
@@ -772,9 +772,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
   if (loading) {
     return (
       <DaisyCard className={className} >
-  <DaisyCardContent className="p-enterprise-6" >
+  <DaisyCardBody className="p-enterprise-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="space-y-enterprise-4">
             <div className="animate-pulse space-y-enterprise-3">
               <div className="h-4 bg-surface-secondary rounded w-1/4" />
@@ -785,7 +785,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               </div>
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   }
@@ -793,9 +793,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
   if (filteredData.length === 0) {
     return (
       <DaisyCard className={className} >
-  <DaisyCardContent className="p-enterprise-6" >
+  <DaisyCardBody className="p-enterprise-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           {emptyState || (
             <div className="text-center space-y-enterprise-4">
               <div className="w-16 h-16 mx-auto bg-surface-secondary rounded-full flex items-center justify-center">
@@ -815,7 +815,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
@@ -824,9 +824,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
     <div className={cn("space-y-enterprise-4", className)}>
       {/* Toolbar */}
       <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-enterprise-3 lg:space-y-0">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-enterprise-2 sm:space-y-0 sm:space-x-enterprise-3">
               {/* Search */}
@@ -890,7 +890,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
               )}
             </div>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Data Display */}
@@ -938,9 +938,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
       {/* Pagination */}
       {pagination && totalPages > 1 && (
         <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyTabletListLayout>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-enterprise-2 sm:space-y-0">
               <div className="text-body-sm text-text-secondary">
                 Showing {(currentPage - 1) * pageSize + 1} to{' '}
@@ -992,7 +992,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
                 </TouchButton>
               </div>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
     </div>

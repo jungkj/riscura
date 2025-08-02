@@ -184,7 +184,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Upload Section */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Upload className="h-5 w-5" />
@@ -196,9 +196,9 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 </DaisyCardDescription>
           </p>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   {!loading && !hasResults && (
-</DaisyCardContent>
+</DaisyCardBody>
             <div
               {...getRootProps()}
               className={`
@@ -279,7 +279,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                 </DaisyAlertDescription>
               </DaisyAlert>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Results Section */}
@@ -293,9 +293,9 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
           >
             {/* Action Bar */}
             <DaisyCard >
-  <DaisyCardContent className="pt-6" >
+  <DaisyCardBody className="pt-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <DaisyBadge variant="outline" className="px-3 py-1" >
@@ -327,14 +327,14 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                     </DaisyButton>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
 
             {/* Results Accordion */}
             <DaisyCard >
-  <DaisyCardContent className="pt-6" >
+  <DaisyCardBody className="pt-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
                 <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']} />
                   {/* Risks Section */}
                   <DaisyAccordionItem value="risks" />
@@ -508,7 +508,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                     </DaisyAccordionContent>
                   </DaisyAccordionItem>
                 </DaisyAccordion>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         )}

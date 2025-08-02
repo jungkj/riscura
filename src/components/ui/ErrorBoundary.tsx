@@ -318,7 +318,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <DaisyCard className="w-full max-w-2xl" >
-  <DaisyCardHeader className="text-center" />
+  <DaisyCardBody className="text-center" />
 </DaisyCard>
             <div className="flex justify-center mb-4">
               <div className="p-3 rounded-full bg-destructive/10">
@@ -341,9 +341,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             </p>
           
 
-          <DaisyCardContent className="space-y-6" >
+          <DaisyCardBody className="space-y-6" >
   {/* Error ID for support */}
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
                 Error ID: <code className="text-xs bg-muted px-2 py-1 rounded">{this.state.errorId}</code>
@@ -432,7 +432,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 If this problem persists, please contact support with the error ID above.
               </p>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     );

@@ -63,13 +63,13 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
 
   return (
     <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTooltipProps>
         <DaisyCardTitle>Compliance Status</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="h-80">
-</DaisyCardContent>
+</DaisyCardBody>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardHeader, DaisyCardContent, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload } from 'lucide-react';
 
@@ -23,16 +23,16 @@ export function DocumentUpload({
 
   return (
     <DaisyCard className={`w-full max-w-4xl mx-auto ${className}`}>
-      <DaisyCardHeader >
+      <DaisyCardBody >
   <DaisyCardTitle className="flex items-center gap-2" />
 </DaisyCard>
           <Upload className="h-5 w-5" />
           Document Upload
         </DaisyCardTitle>
-      </DaisyCardHeader>
-      <DaisyCardContent >
+      </DaisyCardBody>
+      <DaisyCardBody >
   <div className="text-center py-12 text-gray-500">
-</DaisyCardContent>
+</DaisyCardBody>
           <Upload className="w-16 h-16 mx-auto mb-4 text-gray-300" />
           <p className="text-lg mb-2">Document upload temporarily simplified for build testing</p>
           <p className="text-sm">Drag and drop functionality will be restored after build fixes</p>
@@ -45,7 +45,7 @@ export function DocumentUpload({
             </DaisyButton>
           </div>
         </div>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

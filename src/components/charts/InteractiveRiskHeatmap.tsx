@@ -400,7 +400,7 @@ export default function InteractiveRiskHeatmap({
 
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <DaisyCardHeader className="pb-3" >
+      <DaisyCardBody className="pb-3" >
   <div className="flex items-center justify-between">
 </DaisyCard>
           <div className="flex items-center space-x-2">
@@ -509,9 +509,9 @@ export default function InteractiveRiskHeatmap({
         </div>
       
 
-      <DaisyCardContent >
+      <DaisyCardBody >
   <DaisyTooltipProvider />
-</DaisyCardContent>
+</DaisyCardBody>
           {viewMode === 'heatmap' ? renderHeatmapGrid() : renderScatterPlot()}
         
         
@@ -571,7 +571,7 @@ export default function InteractiveRiskHeatmap({
             </div>
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

@@ -183,7 +183,7 @@ export default function EnterpriseDataTable<T extends TableData>({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div>
@@ -254,9 +254,9 @@ export default function EnterpriseDataTable<T extends TableData>({
         </div>
       
 
-      <DaisyCardContent className="p-0" >
+      <DaisyCardBody className="p-0" >
   <div className="border rounded-lg">
-</DaisyCardContent>
+</DaisyCardBody>
           <DaisyTable />
             <DaisyTableHeader />
               <DaisyTableRow />
@@ -426,7 +426,7 @@ export default function EnterpriseDataTable<T extends TableData>({
             </div>
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 }

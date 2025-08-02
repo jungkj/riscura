@@ -198,7 +198,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
         {/* Accent border */}
         <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
         
-        <DaisyCardContent className={cn("relative", spacingClasses.padding.lg)} >
+        <DaisyCardBody className={cn("relative", spacingClasses.padding.lg)} >
   {isLoading ? (
 </DaisyCard>
             <LoadingSkeleton />

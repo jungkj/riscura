@@ -75,9 +75,9 @@ export default function CreateRiskPage() {
                 NEW
               </div>
               
-              <DaisyCardHeader >
+              <DaisyCardBody >
   <DaisyCardTitle className="flex items-center gap-2" />
-</DaisyCardHeader>
+</DaisyCardBody>
                   <Rocket className="w-5 h-5 text-blue-600" />
                   Interactive Risk Flow
                 </DaisyCardTitle>
@@ -87,9 +87,9 @@ export default function CreateRiskPage() {
                 </p>
               
               
-              <DaisyCardContent className="space-y-4" >
+              <DaisyCardBody className="space-y-4" >
   <div className="grid grid-cols-2 gap-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   {features.map((feature, index) => (
                     <motion.div
                       key={feature.title}
@@ -116,7 +116,7 @@ export default function CreateRiskPage() {
                   Try New Experience
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </DaisyButton>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
 
@@ -127,7 +127,7 @@ export default function CreateRiskPage() {
             transition={{ delay: 0.2 }}
           >
             <DaisyCard className="h-full group hover:shadow-lg transition-shadow" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Layers className="w-5 h-5 text-gray-600" />
@@ -140,9 +140,9 @@ export default function CreateRiskPage() {
                 </p>
               
               
-              <DaisyCardContent className="space-y-4" >
+              <DaisyCardBody className="space-y-4" >
   <div className="space-y-3">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center gap-2 text-sm">
                     <ChevronRight className="w-4 h-4 text-muted-foreground" />
                     <span>Complete control over all risk attributes</span>
@@ -169,7 +169,7 @@ export default function CreateRiskPage() {
                   Use Classic Form
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </DaisyButton>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </motion.div>
         </div>
@@ -182,9 +182,9 @@ export default function CreateRiskPage() {
           className="mt-8 max-w-5xl mx-auto"
         >
           <DaisyCard >
-  <DaisyCardContent className="p-8 text-center" >
+  <DaisyCardBody className="p-8 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
@@ -196,7 +196,7 @@ export default function CreateRiskPage() {
   View Demo Video →
 </DaisyButton>
               </DaisyButton>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
 

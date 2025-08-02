@@ -316,17 +316,17 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         {/* Configuration Tab */}
         <DaisyTabsContent value="configuration" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <FileText className="h-5 w-5" />
 </DaisyCardTitle>
                 Report Configuration
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {/* Template Selection */}
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <DaisyLabel htmlFor="template">Report Template</DaisyLabel>
                 <DaisySelect onValueChange={handleTemplateSelect} />
@@ -393,24 +393,24 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Filters Tab */}
         <DaisyTabsContent value="filters" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Settings className="h-5 w-5" />
 </DaisyCardTitle>
                 Report Filters
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {/* Date Range */}
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <DaisyLabel>Date Range</DaisyLabel>
                 {/* <DatePickerWithRange
@@ -464,24 +464,24 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </DaisySelectContent>
                 </DaisySelect>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Delivery Tab */}
         <DaisyTabsContent value="delivery" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Mail className="h-5 w-5" />
 </DaisyCardTitle>
                 Delivery Options
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {/* Email Recipients */}
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <DaisyLabel>Email Recipients</DaisyLabel>
                 <div className="flex gap-2">
@@ -586,24 +586,24 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 )}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         {/* Preview Tab */}
         <DaisyTabsContent value="preview" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Eye className="h-5 w-5" />
 </DaisyCardTitle>
                 Report Preview
               </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <DaisyButton onClick={generatePreview} variant="outline" className="w-full" >
-</DaisyCardContent>
+</DaisyCardBody>
   Generate Preview
 </DaisyButton>
               </DaisyButton>
@@ -643,7 +643,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   </div>
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

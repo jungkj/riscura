@@ -4,7 +4,6 @@ import React from 'react';
 import {
   DaisyCard,
   DaisyCardBody,
-  DaisyCardHeader,
   DaisyCardTitle,
 } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -23,9 +22,9 @@ export default function EnhancedRCSASpreadsheet({
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
       <DaisyCard>
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle>Enhanced RCSA Spreadsheet</DaisyCardTitle>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         <DaisyCardBody>
           <p>RCSA Spreadsheet component temporarily simplified for emergency deployment.</p>
           <p>Data count: {data.length}</p>

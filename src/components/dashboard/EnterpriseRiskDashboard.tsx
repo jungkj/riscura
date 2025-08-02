@@ -204,9 +204,9 @@ export function EnterpriseRiskDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {riskMetrics.map((metric) => (
           <DaisyCard key={metric.id} className="bg-white border-gray-200" >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-gray-600">{metric.title}</h3>
                 {getTrendIcon(metric.trend)}
@@ -234,7 +234,7 @@ export function EnterpriseRiskDashboard() {
 
       {/* AI-Powered Insights */}
       <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-3" >
   <div className="p-2 bg-blue-600 rounded-lg">
@@ -250,10 +250,10 @@ export function EnterpriseRiskDashboard() {
 </DaisyBadge>
             </DaisyBadge>
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {aiInsights.map((insight) => (
-</DaisyCardContent>
+</DaisyCardBody>
             <div 
               key={insight.id} 
               className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
@@ -299,57 +299,57 @@ export function EnterpriseRiskDashboard() {
               </div>
             </div>
           ))}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <DaisyCard className="bg-white border-gray-200 hover:border-blue-300 transition-colors cursor-pointer" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="p-3 bg-blue-50 rounded-lg w-fit mx-auto mb-3">
               <Activity className="w-6 h-6 text-blue-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Real-time Monitoring</h3>
             <p className="text-xs text-gray-600">Live risk indicators</p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-green-300 transition-colors cursor-pointer" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="p-3 bg-green-50 rounded-lg w-fit mx-auto mb-3">
               <Shield className="w-6 h-6 text-green-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Control Assessment</h3>
             <p className="text-xs text-gray-600">Automated testing</p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-purple-300 transition-colors cursor-pointer" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="p-3 bg-purple-50 rounded-lg w-fit mx-auto mb-3">
               <Globe className="w-6 h-6 text-purple-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Regulatory Intel</h3>
             <p className="text-xs text-gray-600">Compliance tracking</p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border-gray-200 hover:border-orange-300 transition-colors cursor-pointer" >
-  <DaisyCardContent className="p-4 text-center" >
+  <DaisyCardBody className="p-4 text-center" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="p-3 bg-orange-50 rounded-lg w-fit mx-auto mb-3">
               <BarChart3 className="w-6 h-6 text-orange-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Impact Analysis</h3>
             <p className="text-xs text-gray-600">Financial modeling</p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

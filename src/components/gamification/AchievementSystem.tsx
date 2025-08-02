@@ -308,7 +308,7 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
   return (
     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
       <DaisyCard className={`border-2 ${tierColors[achievement.tier]} shadow-lg max-w-sm`}>
-        <DaisyCardContent className="p-4" >
+        <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-3">
 </DaisyCard>
             <div className="p-2 bg-white rounded-lg">
@@ -341,7 +341,7 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
 </DaisyButton>
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );
@@ -492,17 +492,17 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
       {/* Progress overview */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Trophy className="w-5 h-5" />
 </DaisyCardTitle>
             <span>Your Progress</span>
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-</DaisyCardContent>
+</DaisyCardBody>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-1">
                 Level {userProgress.level}
@@ -540,9 +540,9 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
       {/* Achievement filters */}
       <DaisyCard >
-  <DaisyCardContent className="p-4" >
+  <DaisyCardBody className="p-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(category => {
               const Icon = category.icon;
@@ -570,7 +570,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               <span>Show completed</span>
             </label>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Achievements grid */}
@@ -597,7 +597,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                         : 'hover:shadow-md'
                     }`}
                   >
-                    <DaisyCardContent className="p-4" >
+                    <DaisyCardBody className="p-4" >
   <div className="flex items-start space-x-3">
 </DaisyCard>
                         <div className={`p-2 rounded-lg ${
@@ -671,13 +671,13 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
       {/* Quick actions for testing */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle>Quick Actions (Demo)</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="flex flex-wrap gap-2">
-</DaisyCardContent>
+</DaisyCardBody>
             <DaisyButton size="sm" onClick={() => trackAction('create_risk')} />
               Create Risk
             </DaisyButton>
@@ -694,7 +694,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               Explore Dashboard
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

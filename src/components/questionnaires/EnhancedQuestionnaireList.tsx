@@ -436,7 +436,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       transition={{ duration: 0.2 }}
     >
       <DaisyCard className="h-full hover:shadow-md transition-shadow duration-200" >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-2">
@@ -509,11 +509,11 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
             {questionnaire.description}
           </p>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         
-        <DaisyCardContent className="space-y-4" >
+        <DaisyCardBody className="space-y-4" >
   {/* Status and Priority Badges */}
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="flex items-center space-x-2">
             <DaisyBadge className={getStatusColor(questionnaire.status)} >
   {questionnaire.status.replace('_', ' ')}
@@ -591,7 +591,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
 </DaisyCalendar>Due: {questionnaire.deadline.toLocaleDateString()}</span>
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </motion.div>
   );}

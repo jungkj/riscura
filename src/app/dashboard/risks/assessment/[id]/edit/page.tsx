@@ -128,15 +128,12 @@ export default function EditAssessmentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Form */}
         <div className="lg:col-span-2 space-y-6">
-          <DaisyCard >
-  <DaisyCardHeader />
-</DaisyCard>
+          <DaisyCard>
+            <DaisyCardBody>
               <DaisyCardTitle>Basic Information</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
-  <div className="space-y-2">
-</DaisyCardContent>
-                <DaisyLabel htmlFor="title">Assessment Title</DaisyLabel>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <DaisyLabel htmlFor="title">Assessment Title</DaisyLabel>
                 <DaisyInput
                   id="title"
                   value={formData.title}
@@ -146,7 +143,7 @@ export default function EditAssessmentPage() {
               </div>
 
               <div className="space-y-2">
-                <DaisyLabel htmlFor="description">Description</DaisyInput>
+                <DaisyLabel htmlFor="description">Description</DaisyLabel>
                 <DaisyTextarea
                   id="description"
                   value={formData.description}
@@ -217,12 +214,12 @@ export default function EditAssessmentPage() {
                   />
                 </div>
               </div>
-            </DaisyInput>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Objectives */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <div className="flex items-center justify-between">
                 <DaisyCardTitle>Assessment Objectives</DaisyCardTitle>
@@ -233,9 +230,9 @@ export default function EditAssessmentPage() {
                 </DaisyButton>
               </div>
             
-            <DaisyCardContent className="space-y-3" >
+            <DaisyCardBody className="space-y-3" >
   {formData.objectives.map((objective, index) => (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div key={index} className="flex items-center space-x-2">
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
@@ -251,24 +248,24 @@ export default function EditAssessmentPage() {
                       variant="ghost"
                       className="text-red-600 hover:text-red-700 hover:bg-red-50" />
                       <Trash2 className="h-4 w-4" />
-                    </DaisyInput>
+                    </DaisyButton>
                   )}
                 </div>
               ))}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Assessment Status</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="flex items-center justify-between">
-</DaisyCardContent>
+</DaisyCardBody>
                 <span className="text-sm font-medium">Current Status</span>
                 <DaisyBadge className={
                   formData.status === 'Completed' ? 'bg-green-100 text-green-800 border-green-200' :
@@ -303,13 +300,13 @@ export default function EditAssessmentPage() {
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Quick Actions</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   <DaisyButton variant="outline" className="w-full justify-start" >
-</DaisyCardContent>
+</DaisyCardBody>
   <Target className="h-4 w-4 mr-2" />
 </DaisyButton>
                 View Assessment Details
@@ -324,24 +321,24 @@ export default function EditAssessmentPage() {
 </DaisyButton>
                 Schedule Review
               </DaisyButton>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Assessment Progress</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="text-center space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="text-2xl font-bold text-gray-900">65%</div>
                 <p className="text-sm text-gray-600">Completion Progress</p>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%' }}></div>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
       </div>

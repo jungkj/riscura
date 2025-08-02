@@ -185,16 +185,16 @@ export function LiveDashboard() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <DaisyCard key={i} className="animate-pulse" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
                 <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                 <div className="h-4 w-4 bg-gray-200 rounded"></div>
               
-              <DaisyCardContent >
+              <DaisyCardBody >
   <div className="h-8 bg-gray-200 rounded w-1/3 mb-2">
-</DaisyCardContent></div>
+</DaisyCardBody></div>
                 <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           ))}
         </div>
@@ -202,18 +202,18 @@ export function LiveDashboard() {
         {/* Charts and Recent Activity */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <DaisyCard className="col-span-4 animate-pulse" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pl-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="pl-2" >
   <div className="h-80 bg-gray-200 rounded">
-</DaisyCardContent></div>
-            </DaisyCardContent>
+</DaisyCardBody></div>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard className="col-span-3 animate-pulse" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle>Recent Activity</DaisyCardTitle>
               <DaisyCardDescription >
@@ -221,10 +221,10 @@ export function LiveDashboard() {
 </DaisyCardDescription>
               </p>
             
-            <DaisyCardContent >
+            <DaisyCardBody >
   <div className="h-80 bg-gray-200 rounded">
-</DaisyCardContent></div>
-            </DaisyCardContent>
+</DaisyCardBody></div>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
       </div>
@@ -234,9 +234,9 @@ export function LiveDashboard() {
   if (error) {
     return (
       <DaisyCard className="col-span-full" >
-  <DaisyCardContent className="flex items-center justify-center py-8" >
+  <DaisyCardBody className="flex items-center justify-center py-8" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
           <div className="text-center">
             <DaisyAlertCircle className="h-8 w-8 text-red-500 mx-auto mb-2" >
   <p className="text-sm text-muted-foreground">
@@ -246,7 +246,7 @@ export function LiveDashboard() {
 </DaisyButton>
             </DaisyButton>
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   }
@@ -272,11 +272,11 @@ export function LiveDashboard() {
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Total Risks</DaisyCardTitle>
             <DaisyAlertTriangle className="h-4 w-4 text-muted-foreground" >
-  <DaisyCardContent >
+  <DaisyCardBody >
 </DaisyAlertTriangle>
   <div className="text-2xl font-bold">
 </DaisyCard>{data.summary.risks.total}</div>
@@ -290,18 +290,18 @@ export function LiveDashboard() {
 </DaisyBadge>
               </DaisyBadge>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{data.summary.controls.total}</div>
+</DaisyCardBody>{data.summary.controls.total}</div>
             <div className="flex gap-2 mt-2">
               <DaisyBadge variant={getControlStatusColor('operational')} className="text-xs" >
   {data.summary.controls.operational} Operational
@@ -311,33 +311,33 @@ export function LiveDashboard() {
             <div className="text-xs text-muted-foreground mt-1">
               Avg. Effectiveness: {Math.round(data.summary.controls.averageEffectiveness * 100)}%
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Documents</DaisyCardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{data.summary.documents}</div>
+</DaisyCardBody>{data.summary.documents}</div>
             <p className="text-xs text-muted-foreground">
               Policies, procedures & reports
             </p>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Compliance Score</DaisyCardTitle>
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="text-2xl font-bold">
-</DaisyCardContent>{data.summary.compliance.overall}%</div>
+</DaisyCardBody>{data.summary.compliance.overall}%</div>
             <DaisyProgress value={data.summary.compliance.overall} className="mt-2" /></DaisyProgress>
         </DaisyCard>
       </div>
@@ -345,13 +345,13 @@ export function LiveDashboard() {
       {/* Charts and Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <DaisyCard className="col-span-4" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Risk Distribution</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="pl-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="pl-2" >
   <ResponsiveContainer width="100%" height={350}>
-</DaisyCardContent>
+</DaisyCardBody>
               <BarChart data={data.summary.risks.breakdown}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="level" />
@@ -364,7 +364,7 @@ export function LiveDashboard() {
         </DaisyCard>
 
         <DaisyCard className="col-span-3" >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Recent Activity</DaisyCardTitle>
             <DaisyCardDescription >
@@ -372,9 +372,9 @@ export function LiveDashboard() {
 </DaisyCardDescription>
             </p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {data.recentActivity.slice(0, 5).map((activity) => (
                 <div key={activity.id} className="flex items-center space-x-4">
                   <Activity className="h-4 w-4 text-muted-foreground" />
@@ -390,20 +390,20 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
 
       {/* Recent Items */}
       <div className="grid gap-4 md:grid-cols-2">
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Recent Risks</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {data.recentRisks.map((risk) => (
                 <div key={risk.id} className="flex items-center justify-between">
                   <div className="flex-1">
@@ -417,17 +417,17 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Recent Controls</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {data.recentControls.map((control) => (
                 <div key={control.id} className="flex items-center justify-between">
                   <div className="flex-1">
@@ -448,7 +448,7 @@ export function LiveDashboard() {
                 </div>
               ))}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

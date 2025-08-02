@@ -39,26 +39,26 @@ export default function RiskHeatMapPage() {
 
       {/* Heat Map Content */}
       <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="h-5 w-5 text-blue-600" />
 </DaisyCardTitle>
             Interactive Risk Heat Map
           </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <Suspense 
             fallback={
               <div className="flex items-center justify-center p-12">
-</DaisyCardContent>
+</DaisyCardBody>
                 <LoadingSpinner />
               </div>
             }
           >
             <RiskHeatMap />
           </Suspense>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     </div>
   );

@@ -348,16 +348,16 @@ export default function ConversationHistory({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Conversation History</DaisyCardTitle>
           </div>
         
-        <DaisyCardContent >
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -366,14 +366,14 @@ export default function ConversationHistory({
               </div>
             ))}
           </div>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardHeader className="pb-3" />
+  <DaisyCardBody className="pb-3" />
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -420,9 +420,9 @@ export default function ConversationHistory({
         </div>
       
 
-      <DaisyCardContent className="p-0" >
+      <DaisyCardBody className="p-0" >
   {/* Search and Filters */}
-</DaisyCardContent>
+</DaisyCardBody>
         <div className="p-4 border-b space-y-3">
           <div className="flex space-x-2">
             <div className="flex-1 relative">
@@ -671,7 +671,7 @@ export default function ConversationHistory({
             </div>
           </DaisyTabsContent>
         </DaisyTabs>
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 } 

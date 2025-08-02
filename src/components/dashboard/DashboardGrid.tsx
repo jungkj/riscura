@@ -119,7 +119,7 @@ export function DashboardGrid({
         className={`${isExpanded ? 'col-span-full row-span-2' : ''}`}
       >
         <DaisyCard className="h-full bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-lg transition-shadow font-inter" >
-  <DaisyCardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
 </DaisyCard>
             <DaisyCardTitle className="text-base font-semibold text-[#191919] font-inter" >
   {widget.title}
@@ -183,10 +183,10 @@ export function DashboardGrid({
             </div>
           
           
-          <DaisyCardContent className="p-4" >
+          <DaisyCardBody className="p-4" >
   {renderWidgetContent(widget, isExpanded, data)}
-</DaisyCardContent>
-          </DaisyCardContent>
+</DaisyCardBody>
+          </DaisyCardBody>
         </DaisyCard>
       </motion.div>
     );

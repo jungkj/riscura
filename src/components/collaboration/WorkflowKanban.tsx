@@ -437,7 +437,7 @@ const TaskCard: React.FC<{
       draggable
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)} />
-      <DaisyCardContent className="p-enterprise-4" >
+      <DaisyCardBody className="p-enterprise-4" >
   {/* Header */}
 </DaisyCard>
         <div className="flex items-start justify-between mb-enterprise-3">
@@ -593,7 +593,7 @@ const TaskCard: React.FC<{
             </div>
           </div>
         )}
-      </DaisyCardContent>
+      </DaisyCardBody>
     </DaisyCard>
   );
 };
@@ -838,9 +838,9 @@ export const WorkflowKanban: React.FC<{
       {showMetrics && (
         <div className="grid grid-cols-4 gap-enterprise-4 p-enterprise-6 border-b border-border">
           <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Total Tasks</p>
@@ -848,13 +848,13 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <Layers className="h-5 w-5 text-blue-600" />
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Completed</p>
@@ -862,13 +862,13 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Overdue</p>
@@ -877,13 +877,13 @@ export const WorkflowKanban: React.FC<{
                 <DaisyAlertTriangle className="h-5 w-5 text-red-600" >
   </div>
 </DaisyAlertTriangle>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardContent className="p-enterprise-4" >
+  <DaisyCardBody className="p-enterprise-4" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-caption text-text-secondary">Avg Progress</p>
@@ -891,7 +891,7 @@ export const WorkflowKanban: React.FC<{
                 </div>
                 <TrendingUp className="h-5 w-5 text-blue-600" />
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </div>
       )}

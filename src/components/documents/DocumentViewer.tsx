@@ -233,7 +233,7 @@ export default function DocumentViewer({
   return (
     <>
       <DaisyCard className={`w-full ${className}`}>
-        <DaisyCardHeader className="pb-3" >
+        <DaisyCardBody className="pb-3" >
   <div className="flex items-start justify-between">
 </DaisyCard>
             <div className="flex items-start gap-3">
@@ -310,9 +310,9 @@ export default function DocumentViewer({
           </div>
         
 
-        <DaisyCardContent className="space-y-4" >
+        <DaisyCardBody className="space-y-4" >
   {/* Description */}
-</DaisyCardContent>
+</DaisyCardBody>
           {documentData.description && (
             <div>
               <p className="text-sm text-gray-700">{documentData.description}</p>
@@ -465,7 +465,7 @@ export default function DocumentViewer({
               </div>
             </DaisyTabsContent>
           </DaisyTabs>
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Preview Dialog */}

@@ -107,7 +107,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         transition={{ duration: 0.2 }}
       >
         <DaisyCard className={`shadow-lg border-2 ${isNearLimit ? 'border-orange-200' : 'border-gray-200'} min-w-[280px]`}>
-          <DaisyCardContent className="p-3" >
+          <DaisyCardBody className="p-3" >
   {/* Header */}
 </DaisyTooltipProvider>
             <div className="flex items-center justify-between mb-2">
@@ -307,7 +307,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 </div>
               </div>
             )}
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </motion.div>
     

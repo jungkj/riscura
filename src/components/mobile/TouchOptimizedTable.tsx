@@ -304,7 +304,7 @@ export default function TouchOptimizedTable({
           }
         }}
       >
-        <DaisyCardContent className="p-4" >
+        <DaisyCardBody className="p-4" >
   <div className="flex items-start justify-between">
 </DaisyCard>
             <div className="flex-1 min-w-0">
@@ -407,7 +407,7 @@ export default function TouchOptimizedTable({
               </DaisyButton>
             </div>
           )}
-        </DaisyCardContent>
+        </DaisyCardBody>
       </DaisyCard>
     );
   };

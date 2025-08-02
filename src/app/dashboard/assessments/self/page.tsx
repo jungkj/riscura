@@ -115,7 +115,7 @@ export default function SelfAssessmentPage() {
           className="grid grid-cols-1 md:grid-cols-4 gap-4"
         >
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+            <DaisyCardBody className="p-4">
               <div className="flex items-center space-x-2">
                 <Target className="w-5 h-5 text-[#8B7355]" />
                 <div>
@@ -123,11 +123,11 @@ export default function SelfAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">3</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+            <DaisyCardBody className="p-4">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <div>
@@ -135,11 +135,11 @@ export default function SelfAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+            <DaisyCardBody className="p-4">
               <div className="flex items-center space-x-2">
                 <Clock className="w-5 h-5 text-blue-600" />
                 <div>
@@ -147,11 +147,11 @@ export default function SelfAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">1</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           <DaisyCard className="bg-white/60 border-[#E5E1D8] backdrop-blur-sm">
-            <DaisyCardContent className="p-4">
+            <DaisyCardBody className="p-4">
               <div className="flex items-center space-x-2">
                 <TrendingUp className="w-5 h-5 text-green-600" />
                 <div>
@@ -159,7 +159,7 @@ export default function SelfAssessmentPage() {
                   <p className="text-2xl font-semibold text-[#2C1810]">85%</p>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </motion.div>
 
@@ -180,7 +180,7 @@ export default function SelfAssessmentPage() {
             <Suspense fallback={<LoadingSpinner />}>
               {selfAssessments.map((assessment) => (
                 <DaisyCard key={assessment.id} className="bg-white/40 border-[#E5E1D8]">
-                  <DaisyCardContent className="p-6">
+                  <DaisyCardBody className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
@@ -243,7 +243,7 @@ export default function SelfAssessmentPage() {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               ))}
             </Suspense>

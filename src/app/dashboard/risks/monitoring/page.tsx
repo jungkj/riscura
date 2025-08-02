@@ -166,9 +166,9 @@ export default function RiskMonitoringPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric) => (
           <DaisyCard key={metric.id} >
-  <DaisyCardContent className="p-6" >
+  <DaisyCardBody className="p-6" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{metric.title}</p>
@@ -201,7 +201,7 @@ export default function RiskMonitoringPage() {
                 </span>
                 <span className="text-sm text-gray-500 ml-1">from last week</span>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         ))}
       </div>
@@ -219,17 +219,17 @@ export default function RiskMonitoringPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Risk Status Chart */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5" />
 </DaisyCardTitle>
                   Risk Status Distribution
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Critical</span>
                     <span className="text-sm text-gray-600">4 risks</span>
@@ -259,17 +259,17 @@ export default function RiskMonitoringPage() {
 
             {/* Recent Activity */}
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Clock className="h-5 w-5" />
 </DaisyCardTitle>
                   Recent Activity
                 </DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div className="flex-1">
@@ -292,20 +292,20 @@ export default function RiskMonitoringPage() {
                     </div>
                   </div>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="alerts" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Active Alerts</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                 {alerts.map((alert) => (
                   <div key={alert.id} className="flex items-start gap-4 p-4 border rounded-lg">
                     <div className="flex-1">
@@ -340,33 +340,33 @@ export default function RiskMonitoringPage() {
                   </div>
                 ))}
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="trends" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Risk Trends</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-gray-600">
-</DaisyCardContent>Risk trend analysis and historical data visualization will be displayed here.</p>
-            </DaisyCardContent>
+</DaisyCardBody>Risk trend analysis and historical data visualization will be displayed here.</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="reports" className="space-y-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle>Monitoring Reports</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <p className="text-gray-600">
-</DaisyCardContent>Automated monitoring reports and scheduled exports will be available here.</p>
-            </DaisyCardContent>
+</DaisyCardBody>Automated monitoring reports and scheduled exports will be available here.</p>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>

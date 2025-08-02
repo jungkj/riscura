@@ -272,13 +272,13 @@ export default function DocumentSearch({
         <DaisyTabsContent value="search" className="space-y-6 mt-6" />
           {/* Basic Search */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Basic Search</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                 <DaisyLabel htmlFor="search-query">Search Query</DaisyLabel>
                 <DaisyInput
                   id="search-query"
@@ -325,18 +325,18 @@ export default function DocumentSearch({
                   </DaisySelect>
                 </div>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
 
           {/* Advanced Filters */}
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
               <DaisyCardTitle className="text-lg">Advanced Filters</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   {/* Tags */}
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="space-y-2">
                 <DaisyLabel>Tags</DaisyLabel>
                 <div className="flex gap-2">
@@ -515,13 +515,13 @@ export default function DocumentSearch({
           {/* Save Search Dialog */}
           {showSaveSearch && (
             <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                 <DaisyCardTitle className="text-lg">Save Search</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-4" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-4" >
   <div className="space-y-2">
-</DaisyCardContent>
+</DaisyCardBody>
                   <DaisyLabel htmlFor="search-name">Search Name</DaisyLabel>
                   <DaisyInput
                     id="search-name"
@@ -536,20 +536,20 @@ export default function DocumentSearch({
                     Cancel
                   </DaisyButton>
                 </div>
-              </DaisyCardContent>
+              </DaisyCardBody>
             </DaisyCard>
           )}
         </DaisyTabsContent>
 
         <DaisyTabsContent value="saved" className="space-y-4 mt-6" />
           <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Saved Searches</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   {savedSearches.length === 0 ? (
-</DaisyCardContent>
+</DaisyCardBody>
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No saved searches</h3>
@@ -578,7 +578,7 @@ export default function DocumentSearch({
                   ))}
                 </div>
               )}
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
       </DaisyTabs>
@@ -586,13 +586,13 @@ export default function DocumentSearch({
       {/* Search Facets */}
       {Object.keys(searchFacets).length > 0 && (
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle className="text-lg">Refine Results</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent >
+        </DaisyCardBody>
+        <DaisyCardBody >
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-</DaisyCardContent>
+</DaisyCardBody>
               {searchFacets.categories && searchFacets.categories.length > 0 && (
                 <div>
                   <h4 className="font-medium mb-2">Categories</h4>
@@ -635,7 +635,7 @@ export default function DocumentSearch({
                 </div>
               )}
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       )}
     </div>

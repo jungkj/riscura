@@ -685,7 +685,7 @@ export const RiskManagementDashboard: React.FC = () => {
       <DaisyTabsContent value="controls" className="space-y-6" />
         {/* Probo Integration Header */}
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyTabsContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -707,9 +707,9 @@ export const RiskManagementDashboard: React.FC = () => {
               </DaisyButton>
             </div>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <DaisyAlert >
-  </DaisyCardContent>
+  </DaisyCardBody>
 </DaisyAlert>
               <Zap className="h-4 w-4" />
               <DaisyAlertDescription >
@@ -719,20 +719,20 @@ export const RiskManagementDashboard: React.FC = () => {
                 providing AI-powered recommendations for risk mitigation strategies.
                 </DaisyAlertDescription>
               </DaisyAlert>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         {/* Risk-Control Mappings */}
         {isLoadingMappings ? (
           <DaisyCard >
-  <DaisyCardContent className="flex items-center justify-center py-8" >
+  <DaisyCardBody className="flex items-center justify-center py-8" >
   </DaisyCard>
-</DaisyCardContent>
+</DaisyCardBody>
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC] mx-auto mb-4"></div>
                 <p className="text-sm text-gray-600">Loading control mappings...</p>
               </div>
-            </DaisyCardContent>
+            </DaisyCardBody>
           </DaisyCard>
         ) : (
           <div className="grid gap-4">
@@ -743,7 +743,7 @@ export const RiskManagementDashboard: React.FC = () => {
               
               return (
                 <DaisyCard key={risk.id} >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -771,9 +771,9 @@ export const RiskManagementDashboard: React.FC = () => {
                       </div>
                     </div>
                   
-                  <DaisyCardContent >
+                  <DaisyCardBody >
   <div className="space-y-4">
-</DaisyCardContent>
+</DaisyCardBody>
                       {/* Coverage Progress */}
                       <div>
                         <div className="flex justify-between text-sm mb-2">
@@ -812,7 +812,7 @@ export const RiskManagementDashboard: React.FC = () => {
                         </DaisyButton>
                       </div>
                     </div>
-                  </DaisyCardContent>
+                  </DaisyCardBody>
                 </DaisyCard>
               );
             })}

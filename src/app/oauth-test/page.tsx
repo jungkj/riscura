@@ -67,40 +67,40 @@ export default function OAuthTestPage() {
         )}
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Environment Variables</DaisyCardTitle>
             <DaisyCardDescription>Current environment configuration</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
 </DaisyCardDescription>
               {JSON.stringify(envData, null, 2)}
             </pre>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Database Connection Test</DaisyCardTitle>
             <DaisyCardDescription>Results of database connection attempts</p>
           
-          <DaisyCardContent >
+          <DaisyCardBody >
   <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
 </DaisyCardDescription>
               {JSON.stringify(dbTestData, null, 2)}
             </pre>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>OAuth Test</DaisyCardTitle>
             <DaisyCardDescription>Test the Google OAuth flow</p>
           
-          <DaisyCardContent className="space-y-4" >
+          <DaisyCardBody className="space-y-4" >
   <DaisyButton onClick={testGoogleLogin} className="w-full" >
 </DaisyCardDescription>
   Test Google Login
@@ -115,17 +115,17 @@ export default function OAuthTestPage() {
                 <li>Check the browser console and Vercel logs for error details</li>
               </ol>
             </div>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardHeader />
+  <DaisyCardBody />
 </DaisyCard>
             <DaisyCardTitle>Quick Links</DaisyCardTitle>
-        </DaisyCardHeader>
-        <DaisyCardContent className="space-y-2" >
+        </DaisyCardBody>
+        <DaisyCardBody className="space-y-2" >
   <a href="/api/check-env" className="text-blue-600 hover:underline block">
-</DaisyCardContent>
+</DaisyCardBody>
               /api/check-env - Environment check endpoint
             </a>
             <a href="/api/test-db" className="text-blue-600 hover:underline block">
@@ -134,7 +134,7 @@ export default function OAuthTestPage() {
             <a href="/api/google-oauth/debug" className="text-blue-600 hover:underline block">
               /api/google-oauth/debug - OAuth configuration debug
             </a>
-          </DaisyCardContent>
+          </DaisyCardBody>
         </DaisyCard>
       </div>
     </div>

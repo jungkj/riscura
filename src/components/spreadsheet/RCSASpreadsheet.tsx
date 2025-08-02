@@ -4,7 +4,6 @@ import React from 'react';
 import {
   DaisyCard,
   DaisyCardBody,
-  DaisyCardHeader,
   DaisyCardTitle,
 } from '@/components/ui/DaisyCard';
 
@@ -19,9 +18,9 @@ export default function RCSASpreadsheet({ data = [], className = '' }: RCSASprea
       className={`bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md ${className}`}
     >
       <DaisyCard>
-        <DaisyCardHeader>
+        <DaisyCardBody>
           <DaisyCardTitle>RCSA Spreadsheet</DaisyCardTitle>
-        </DaisyCardHeader>
+        </DaisyCardBody>
         <DaisyCardBody>
           <p>RCSA Spreadsheet component temporarily simplified for emergency deployment.</p>
           <p>Data count: {data.length}</p>
