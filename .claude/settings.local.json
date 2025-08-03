@@ -47,7 +47,12 @@
       "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build --no-lint)",
       "Bash(HUSKY=0 git push origin main --no-verify)",
       "WebFetch(domain:vercel.com)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(/dev/null)",
+      "Bash(npm run verify:quick:*)",
+      "Bash(npm run clean:*)",
+      "Bash(npm run lint:*)",
+      "Bash(NEXT_TELEMETRY_DISABLED=1 npx next build)"
     ],
     "deny": []
   }

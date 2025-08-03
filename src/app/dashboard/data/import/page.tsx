@@ -10,9 +10,9 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
-import { 
-  ArrowLeft, 
-  Upload, 
+import {
+  ArrowLeft,
+  Upload,
   FileSpreadsheet,
   FileText,
   Database,
@@ -21,7 +21,7 @@ import {
   AlertTriangle,
   Download,
   Eye,
-  Clock
+  Clock,
 } from 'lucide-react';
 
 interface ImportFile {
@@ -41,11 +41,11 @@ export default function ImportDataPage() {
   const [importProgress, setImportProgress] = useState(0);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = acceptedFiles.map(file => ({
+    const newFiles = acceptedFiles.map((file) => ({
       file,
-      status: 'pending' as const
+      status: 'pending' as const,
     }));
-    setFiles(prev => [...prev, ...newFiles]);
+    setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -54,9 +54,9 @@ export default function ImportDataPage() {
       'text/csv': ['.csv'],
       'application/vnd.ms-excel': ['.xls'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/json': ['.json']
+      'application/json': ['.json'],
     },
-    multiple: true
+    multiple: true,
   });
 
   const handleImport = async () => {
@@ -74,11 +74,11 @@ export default function ImportDataPage() {
 
     for (let i = 0; i < files.length; i++) {
       const importFile = files[i];
-      
+
       // Update status to processing
-      setFiles(prev => prev.map((f, index) => 
-        index === i ? { ...f, status: 'processing' } : f
-      ));
+      setFiles((prev) =>
+        prev.map((f, index) => (index === i ? { ...f, status: 'processing' } : f))
+      );
 
       try {
         const formData = new FormData();
@@ -87,7 +87,7 @@ export default function ImportDataPage() {
 
         const response = await fetch('/api/data/import', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
 
         const result = await response.json();
@@ -95,31 +95,39 @@ export default function ImportDataPage() {
         if (!response.ok) throw new Error(result.error || 'Import failed');
 
         // Update with success
-        setFiles(prev => prev.map((f, index) => 
-          index === i ? { 
-            ...f, 
-            status: 'success',
-            recordsFound: result.recordsFound,
-            recordsImported: result.recordsImported,
-            message: `Successfully imported ${result.recordsImported} records`
-          } : f
-        ));
+        setFiles((prev) =>
+          prev.map((f, index) =>
+            index === i
+              ? {
+                  ...f,
+                  status: 'success',
+                  recordsFound: result.recordsFound,
+                  recordsImported: result.recordsImported,
+                  message: `Successfully imported ${result.recordsImported} records`,
+                }
+              : f
+          )
+        );
       } catch (error: any) {
         // Update with error
-        setFiles(prev => prev.map((f, index) => 
-          index === i ? { 
-            ...f, 
-            status: 'error',
-            message: error.message || 'Import failed'
-          } : f
-        ));
+        setFiles((prev) =>
+          prev.map((f, index) =>
+            index === i
+              ? {
+                  ...f,
+                  status: 'error',
+                  message: error.message || 'Import failed',
+                }
+              : f
+          )
+        );
       }
 
       setImportProgress(((i + 1) / files.length) * 100);
     }
 
     setImporting(false);
-    
+
     toast({
       title: 'Import Complete',
       description: 'Check the results below for details',
@@ -132,7 +140,7 @@ export default function ImportDataPage() {
       risks: 'risk-import-template.csv',
       controls: 'controls-import-template.csv',
       vendors: 'vendors-import-template.csv',
-      assets: 'assets-import-template.csv'
+      assets: 'assets-import-template.csv',
     };
 
     toast({
@@ -142,22 +150,27 @@ export default function ImportDataPage() {
   };
 
   const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const getFileIcon = (fileName: string) => {
     if (fileName.endsWith('.csv')) return <FileText className="h-5 w-5" />;
-    if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) return <FileSpreadsheet className="h-5 w-5" />;
+    if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx'))
+      return <FileSpreadsheet className="h-5 w-5" />;
     if (fileName.endsWith('.json')) return <Database className="h-5 w-5" />;
     return <FileText className="h-5 w-5" />;
   };
 
   const getStatusIcon = (status: ImportFile['status']) => {
     switch (status) {
-      case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'error': return <XCircle className="h-5 w-5 text-red-600" />;
-      case 'processing': return <Clock className="h-5 w-5 text-blue-600 animate-spin" />;
-      default: return <AlertTriangle className="h-5 w-5 text-gray-400" />;
+      case 'success':
+        return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'error':
+        return <XCircle className="h-5 w-5 text-red-600" />;
+      case 'processing':
+        return <Clock className="h-5 w-5 text-blue-600 animate-spin" />;
+      default:
+        return <AlertTriangle className="h-5 w-5 text-gray-400" />;
     }
   };
 
@@ -175,11 +188,13 @@ export default function ImportDataPage() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
-            
+
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Import Risk Data</h1>
-                <p className="text-gray-600 mt-1">Upload and import risk data from external sources</p>
+                <p className="text-gray-600 mt-1">
+                  Upload and import risk data from external sources
+                </p>
               </div>
               <DaisyBadge variant="outline" className="text-sm">
                 <Clock className="h-4 w-4 mr-1" />
@@ -198,9 +213,7 @@ export default function ImportDataPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-sm font-medium text-gray-700">Data Type</label>
-                      <div className="mt-1 p-2 border rounded">
-                        {dataType}
-                      </div>
+                      <div className="mt-1 p-2 border rounded">{dataType}</div>
                     </div>
 
                     <div className="p-4 bg-blue-50 rounded-lg">
@@ -228,7 +241,9 @@ export default function ImportDataPage() {
                   <div
                     {...getRootProps()}
                     className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                      isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+                      isDragActive
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
                     <input {...getInputProps()} />
@@ -264,7 +279,7 @@ export default function ImportDataPage() {
                               </p>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center gap-3">
                             {importFile.status !== 'pending' && (
                               <div className="text-right">
@@ -274,17 +289,21 @@ export default function ImportDataPage() {
                                   </p>
                                 )}
                                 {importFile.message && (
-                                  <p className={`text-xs ${
-                                    importFile.status === 'error' ? 'text-red-600' : 'text-green-600'
-                                  }`}>
+                                  <p
+                                    className={`text-xs ${
+                                      importFile.status === 'error'
+                                        ? 'text-red-600'
+                                        : 'text-green-600'
+                                    }`}
+                                  >
                                     {importFile.message}
                                   </p>
                                 )}
                               </div>
                             )}
-                            
+
                             {getStatusIcon(importFile.status)}
-                            
+
                             {importFile.status === 'pending' && (
                               <DaisyButton
                                 variant="ghost"

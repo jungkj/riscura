@@ -2,9 +2,9 @@
 
 import React, { Suspense } from 'react'
 import RealTimeDashboard from '@/components/dashboard/RealTimeDashboard'
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge'
-import { DaisyAlert } from '@/components/ui/DaisyAlert'
+import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert'
 import { Database, Zap, Activity, Globe } from 'lucide-react'
 
 // Mock organization and user IDs for demo
@@ -120,12 +120,11 @@ export default function RealTimeDashboardPage() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
-                <DaisyCard key={i} className="animate-pulse" >
-  <DaisyCardBody className="space-y-2" />
-</DaisyCard>
+                <DaisyCard key={i} className="animate-pulse">
+                  <DaisyCardBody className="space-y-2">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                     <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-                  
+                  </DaisyCardBody>
                 </DaisyCard>
               ))}
             </div>
@@ -169,17 +168,14 @@ export default function RealTimeDashboardPage() {
               </div>
             </div>
             
-            <DaisyAlert >
-  <Activity className="h-4 w-4" />
-</DaisyAlert>
-              <DaisyAlertDescription >
-  <strong>
-                </DaisyAlertDescription>
-</DaisyAlert>Pro Tip:</strong> Open this page in multiple browser tabs or windows 
+            <DaisyAlert>
+              <Activity className="h-4 w-4" />
+              <DaisyAlertDescription>
+                <strong>Pro Tip:</strong> Open this page in multiple browser tabs or windows 
                 to see real-time synchronization between different sessions. Changes made in 
                 one tab will instantly appear in all other tabs.
-                </DaisyAlertDescription>
-              </DaisyAlert>
+              </DaisyAlertDescription>
+            </DaisyAlert>
           </div>
         </DaisyCardBody>
       </DaisyCard>

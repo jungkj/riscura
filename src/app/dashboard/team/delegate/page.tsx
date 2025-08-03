@@ -9,7 +9,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';

@@ -5,16 +5,16 @@ import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { 
-  ChevronRight, 
-  Home, 
+import {
+  ChevronRight,
+  Home,
   MoreHorizontal,
   Plus,
   Download,
   Filter,
   Settings,
   Share,
-  BookmarkPlus
+  BookmarkPlus,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -45,24 +45,24 @@ export interface PageStats {
 
 export interface MainContentAreaProps {
   children: ReactNode;
-  
+
   // Header Configuration
   title: string;
   subtitle?: string;
   breadcrumbs?: BreadcrumbItem[];
-  
+
   // Actions
   primaryAction?: ActionButton;
   secondaryActions?: ActionButton[];
-  
+
   // Page Statistics
   stats?: PageStats[];
-  
+
   // Layout Options
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
   headerSeparator?: boolean;
   contentPadding?: boolean;
-  
+
   // Styling
   className?: string;
   headerClassName?: string;
@@ -73,20 +73,20 @@ export interface MainContentAreaProps {
 const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) => {
   return (
     <nav className="flex items-center space-x-2 text-sm" aria-label="Breadcrumb">
-      <Link 
-        href="/dashboard" 
+      <Link
+        href="/dashboard"
         className="text-gray-500 hover:text-gray-900 transition-colors"
         aria-label="Dashboard home"
       >
         <Home className="h-4 w-4" />
       </Link>
-      
+
       {items.map((item, index) => (
         <React.Fragment key={index}>
           <ChevronRight className="h-3 w-3 text-gray-400" />
-          
+
           {item.href && !item.current ? (
-            <Link 
+            <Link
               href={item.href}
               className="text-gray-500 hover:text-gray-900 transition-colors font-medium"
             >
@@ -98,10 +98,7 @@ const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) => {
           ) : (
             <div className="flex items-center space-x-1">
               {item.icon && <item.icon className="h-3 w-3 text-gray-900" />}
-              <span className={cn(
-                "font-medium",
-                item.current ? "text-gray-900" : "text-gray-500"
-              )}>
+              <span className={cn('font-medium', item.current ? 'text-gray-900' : 'text-gray-500')}>
                 {item.label}
               </span>
             </div>
@@ -116,19 +113,27 @@ const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) => {
 const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
   const getTrendIcon = (trend?: 'up' | 'down' | 'neutral') => {
     switch (trend) {
-      case 'up': return '↗';
-      case 'down': return '↘';
-      case 'neutral': return '→';
-      default: return null;
+      case 'up':
+        return '↗';
+      case 'down':
+        return '↘';
+      case 'neutral':
+        return '→';
+      default:
+        return null;
     }
   };
 
   const getTrendColor = (trend?: 'up' | 'down' | 'neutral') => {
     switch (trend) {
-      case 'up': return 'text-green-600';
-      case 'down': return 'text-red-600';
-      case 'neutral': return 'text-gray-500';
-      default: return 'text-gray-500';
+      case 'up':
+        return 'text-green-600';
+      case 'down':
+        return 'text-red-600';
+      case 'neutral':
+        return 'text-gray-500';
+      default:
+        return 'text-gray-500';
     }
   };
 
@@ -136,14 +141,12 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
     <div className="flex items-center space-x-6">
       {stats.map((stat, index) => (
         <div key={index} className="flex items-center space-x-2">
-          <DaisyBadge 
-            variant={stat.variant || 'outline'} 
-            className="text-sm font-medium px-3 py-1" >
+          <DaisyBadge variant={stat.variant || 'outline'} className="text-sm font-medium px-3 py-1">
             {stat.value} {stat.label}
           </DaisyBadge>
-          
+
           {stat.trend && stat.trendValue && (
-            <div className={cn("flex items-center space-x-1 text-xs", getTrendColor(stat.trend))}>
+            <div className={cn('flex items-center space-x-1 text-xs', getTrendColor(stat.trend))}>
               <span>{getTrendIcon(stat.trend)}</span>
               <span>{stat.trendValue}</span>
             </div>
@@ -155,9 +158,9 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
 };
 
 // ========== ACTION BUTTONS COMPONENT ==========
-const ActionButtons: React.FC<{ 
-  primary?: ActionButton; 
-  secondary?: ActionButton[] 
+const ActionButtons: React.FC<{
+  primary?: ActionButton;
+  secondary?: ActionButton[];
 }> = ({ primary, secondary = [] }) => {
   return (
     <div className="flex items-center space-x-3">
@@ -178,7 +181,7 @@ const ActionButtons: React.FC<{
               {action.label}
             </DaisyButton>
           ))}
-          
+
           {/* More Actions Dropdown */}
           {secondary.length > 2 && (
             <DaisyButton
@@ -191,7 +194,7 @@ const ActionButtons: React.FC<{
           )}
         </div>
       )}
-      
+
       {/* Primary Action */}
       {primary && (
         <DaisyButton
@@ -226,55 +229,47 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
   headerClassName,
   contentClassName,
 }) => {
-  
   const getMaxWidthClass = (width: string) => {
     switch (width) {
-      case 'sm': return 'max-w-3xl';
-      case 'md': return 'max-w-4xl';
-      case 'lg': return 'max-w-5xl';
-      case 'xl': return 'max-w-6xl';
-      case '2xl': return 'max-w-7xl';
-      case 'full': return 'max-w-full';
-      default: return 'max-w-6xl';
+      case 'sm':
+        return 'max-w-3xl';
+      case 'md':
+        return 'max-w-4xl';
+      case 'lg':
+        return 'max-w-5xl';
+      case 'xl':
+        return 'max-w-6xl';
+      case '2xl':
+        return 'max-w-7xl';
+      case 'full':
+        return 'max-w-full';
+      default:
+        return 'max-w-6xl';
     }
   };
 
   return (
-    <div className={cn("min-h-screen bg-gray-50", className)}>
-      <div className={cn("mx-auto", getMaxWidthClass(maxWidth))}>
+    <div className={cn('min-h-screen bg-gray-50', className)}>
+      <div className={cn('mx-auto', getMaxWidthClass(maxWidth))}>
         {/* Page Header */}
-        <header className={cn(
-          "bg-white border-b border-gray-200 px-6 py-6",
-          headerClassName
-        )}>
+        <header className={cn('bg-white border-b border-gray-200 px-6 py-6', headerClassName)}>
           <div className="space-y-4 md:space-y-6">
             {/* Breadcrumbs */}
-            {breadcrumbs.length > 0 && (
-              <Breadcrumbs items={breadcrumbs} />
-            )}
-            
+            {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+
             {/* Title Section */}
             <div className="flex items-start justify-between">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="text-lg text-gray-600 max-w-2xl">
-                    {subtitle}
-                  </p>
-                )}
+                <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
+                {subtitle && <p className="text-lg text-gray-600 max-w-2xl">{subtitle}</p>}
               </div>
-              
+
               {/* Actions */}
               {(primaryAction || secondaryActions.length > 0) && (
-                <ActionButtons 
-                  primary={primaryAction} 
-                  secondary={secondaryActions} 
-                />
+                <ActionButtons primary={primaryAction} secondary={secondaryActions} />
               )}
             </div>
-            
+
             {/* Stats */}
             {stats.length > 0 && (
               <div className="pt-4">
@@ -282,18 +277,12 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
               </div>
             )}
           </div>
-          
-          {headerSeparator && (
-            <DaisySeparator className="mt-6" />
-          )}
+
+          {headerSeparator && <DaisySeparator className="mt-6" />}
         </header>
-        
+
         {/* Content Area */}
-        <main className={cn(
-          "bg-white",
-          contentPadding ? "p-6" : "",
-          contentClassName
-        )}>
+        <main className={cn('bg-white', contentPadding ? 'p-6' : '', contentClassName)}>
           {children}
         </main>
       </div>
@@ -317,15 +306,18 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
   subtitle,
   action,
   className,
-  spacing = 'normal'
+  spacing = 'normal',
 }) => {
-  
   const getSpacingClass = (spacing: string) => {
     switch (spacing) {
-      case 'tight': return 'space-y-4';
-      case 'normal': return 'space-y-6 md:space-y-8';
-      case 'loose': return 'space-y-8 md:space-y-10';
-      default: return 'space-y-6 md:space-y-8';
+      case 'tight':
+        return 'space-y-4';
+      case 'normal':
+        return 'space-y-6 md:space-y-8';
+      case 'loose':
+        return 'space-y-8 md:space-y-10';
+      default:
+        return 'space-y-6 md:space-y-8';
     }
   };
 
@@ -334,18 +326,10 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       {(title || subtitle || action) && (
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            {title && (
-              <h2 className="text-xl font-semibold text-gray-900">
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p className="text-sm text-gray-600">
-                {subtitle}
-              </p>
-            )}
+            {title && <h2 className="text-xl font-semibold text-gray-900">{title}</h2>}
+            {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
           </div>
-          
+
           {action && (
             <DaisyButton
               variant={action.variant || 'outline'}
@@ -359,10 +343,8 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
           )}
         </div>
       )}
-      
-      <div>
-        {children}
-      </div>
+
+      <div>{children}</div>
     </section>
   );
 };
@@ -387,43 +369,42 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   footer,
   className,
   padding = 'md',
-  hover = false
+  hover = false,
 }) => {
-  
   const getPaddingClass = (padding: string) => {
     switch (padding) {
-      case 'sm': return 'p-4';
-      case 'md': return 'p-6';
-      case 'lg': return 'p-8';
-      default: return 'p-6';
+      case 'sm':
+        return 'p-4';
+      case 'md':
+        return 'p-6';
+      case 'lg':
+        return 'p-8';
+      default:
+        return 'p-6';
     }
   };
 
   return (
-    <div className={cn(
-      "bg-white border border-gray-200 rounded-lg shadow-sm",
-      hover && "hover:shadow-md transition-shadow duration-200",
-      className
-    )}>
+    <div
+      className={cn(
+        'bg-white border border-gray-200 rounded-lg shadow-sm',
+        hover && 'hover:shadow-md transition-shadow duration-200',
+        className
+      )}
+    >
       {(title || subtitle || action) && (
-        <div className={cn(
-          "flex items-start justify-between border-b border-gray-100",
-          getPaddingClass(padding),
-          "pb-4"
-        )}>
+        <div
+          className={cn(
+            'flex items-start justify-between border-b border-gray-100',
+            getPaddingClass(padding),
+            'pb-4'
+          )}
+        >
           <div className="space-y-1">
-            {title && (
-              <h3 className="text-lg font-semibold text-gray-900">
-                {title}
-              </h3>
-            )}
-            {subtitle && (
-              <p className="text-sm text-gray-600">
-                {subtitle}
-              </p>
-            )}
+            {title && <h3 className="text-lg font-semibold text-gray-900">{title}</h3>}
+            {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
           </div>
-          
+
           {action && (
             <DaisyButton
               variant={action.variant || 'outline'}
@@ -437,20 +418,13 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           )}
         </div>
       )}
-      
-      <div className={cn(
-        getPaddingClass(padding),
-        (title || subtitle || action) && "pt-4"
-      )}>
+
+      <div className={cn(getPaddingClass(padding), (title || subtitle || action) && 'pt-4')}>
         {children}
       </div>
-      
+
       {footer && (
-        <div className={cn(
-          "border-t border-gray-100",
-          getPaddingClass(padding),
-          "pt-4"
-        )}>
+        <div className={cn('border-t border-gray-100', getPaddingClass(padding), 'pt-4')}>
           {footer}
         </div>
       )}
@@ -458,4 +432,4 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   );
 };
 
-export default MainContentArea; 
+export default MainContentArea;

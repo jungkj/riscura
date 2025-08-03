@@ -6,7 +6,12 @@ import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySelect } from '@/components/ui/DaisySelect';
@@ -118,7 +123,8 @@ const sampleGaps: ComplianceGap[] = [
     id: 'GAP-001',
     framework: 'SOC 2',
     requirement: 'CC6.1 - Logical and Physical Access Controls',
-    description: 'The entity implements logical and physical access controls to restrict access to system resources and data.',
+    description:
+      'The entity implements logical and physical access controls to restrict access to system resources and data.',
     priority: 'critical',
     status: 'open',
     currentControls: ['CTL-001', 'CTL-005'],
@@ -159,7 +165,8 @@ const sampleGaps: ComplianceGap[] = [
     id: 'GAP-002',
     framework: 'GDPR',
     requirement: 'Article 32 - Security of Processing',
-    description: 'Implementation of appropriate technical and organizational measures to ensure security of processing.',
+    description:
+      'Implementation of appropriate technical and organizational measures to ensure security of processing.',
     priority: 'high',
     status: 'in-progress',
     currentControls: ['CTL-002', 'CTL-007'],
@@ -216,25 +223,26 @@ export default function ComplianceGapsPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   // Filter gaps based on selections
-  const filteredGaps = sampleGaps.filter(gap => {
-    const matchesFramework = selectedFramework === 'all' || gap.framework.toLowerCase().includes(selectedFramework);
+  const filteredGaps = sampleGaps.filter((gap) => {
+    const matchesFramework =
+      selectedFramework === 'all' || gap.framework.toLowerCase().includes(selectedFramework);
     const matchesPriority = selectedPriority === 'all' || gap.priority === selectedPriority;
     const matchesStatus = selectedStatus === 'all' || gap.status === selectedStatus;
     return matchesFramework && matchesPriority && matchesStatus;
   });
 
   const totalGaps = sampleGaps.length;
-  const criticalGaps = sampleGaps.filter(g => g.priority === 'critical').length;
-  const openGaps = sampleGaps.filter(g => g.status === 'open').length;
+  const criticalGaps = sampleGaps.filter((g) => g.priority === 'critical').length;
+  const openGaps = sampleGaps.filter((g) => g.status === 'open').length;
   const overallProgress = Math.round(
-    (sampleGaps.filter(g => g.status === 'resolved').length / totalGaps) * 100
+    (sampleGaps.filter((g) => g.status === 'resolved').length / totalGaps) * 100
   );
 
   const handleRunAnalysis = async () => {
     setIsAnalyzing(true);
     try {
       // Simulate AI analysis
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       toast.success('Gap analysis completed! Found 3 new gaps and 5 optimization opportunities.');
     } catch (error) {
       toast.error('Failed to run gap analysis');
@@ -328,7 +336,7 @@ export default function ComplianceGapsPage() {
               {sampleFrameworks.map((framework) => {
                 const priorityConfig = getPriorityConfig(framework.priority);
                 return (
-                  <DaisyCard key={framework.id} className={cn("border-2", priorityConfig.border)}>
+                  <DaisyCard key={framework.id} className={cn('border-2', priorityConfig.border)}>
                     <div className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="text-sm font-medium">{framework.name}</div>
@@ -336,9 +344,7 @@ export default function ComplianceGapsPage() {
                           {framework.priority}
                         </DaisyBadge>
                       </div>
-                      <div className="text-xs text-gray-600 mt-1">
-                        {framework.description}
-                      </div>
+                      <div className="text-xs text-gray-600 mt-1">{framework.description}</div>
                       <div className="space-y-3 mt-4">
                         <div className="flex justify-between text-sm">
                           <span>Compliance</span>
@@ -347,7 +353,9 @@ export default function ComplianceGapsPage() {
                         <DaisyProgress value={framework.compliancePercentage} className="h-2" />
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
-                            <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
+                            <div className="font-medium text-green-600">
+                              {framework.implementedRequirements}
+                            </div>
                             <div className="text-gray-500">Implemented</div>
                           </div>
                           <div>
@@ -421,7 +429,7 @@ export default function ComplianceGapsPage() {
                 const StatusIcon = statusConfig.icon;
 
                 return (
-                  <DaisyCard key={gap.id} className={cn("border-l-4", priorityConfig.border)}>
+                  <DaisyCard key={gap.id} className={cn('border-l-4', priorityConfig.border)}>
                     <div className="p-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -436,14 +444,15 @@ export default function ComplianceGapsPage() {
                               <StatusIcon className="h-3 w-3 mr-1" />
                               {gap.status.replace('-', ' ').toUpperCase()}
                             </DaisyBadge>
-                            <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
+                            <DaisyBadge
+                              variant="outline"
+                              className={cn('text-xs', priorityConfig.color)}
+                            >
                               {gap.priority.toUpperCase()}
                             </DaisyBadge>
                           </div>
                           <div className="text-base font-semibold">{gap.requirement}</div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            {gap.description}
-                          </div>
+                          <div className="text-sm text-gray-600 mt-1">{gap.description}</div>
                         </div>
                         <div className="text-right ml-4">
                           <div className="text-lg font-bold text-red-600">{gap.riskLevel}</div>
@@ -460,9 +469,7 @@ export default function ComplianceGapsPage() {
           <DaisyTabsContent value="remediation">
             <div className="text-center py-12">
               <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Remediation Planning
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Remediation Planning</h3>
               <p className="text-gray-600 mb-4">
                 Create and track remediation plans for compliance gaps
               </p>
@@ -478,7 +485,7 @@ export default function ComplianceGapsPage() {
               {sampleFrameworks.map((framework) => {
                 const priorityConfig = getPriorityConfig(framework.priority);
                 return (
-                  <DaisyCard key={framework.id} className={cn("border-l-4", priorityConfig.border)}>
+                  <DaisyCard key={framework.id} className={cn('border-l-4', priorityConfig.border)}>
                     <div className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -486,7 +493,9 @@ export default function ComplianceGapsPage() {
                           <div className="text-sm text-gray-600">{framework.description}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold">{framework.compliancePercentage}%</div>
+                          <div className="text-2xl font-bold">
+                            {framework.compliancePercentage}%
+                          </div>
                           <div className="text-sm text-gray-500">Compliance</div>
                         </div>
                       </div>
@@ -494,11 +503,15 @@ export default function ComplianceGapsPage() {
                         <DaisyProgress value={framework.compliancePercentage} className="h-3" />
                         <div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
-                            <div className="font-medium text-gray-900">{framework.totalRequirements}</div>
+                            <div className="font-medium text-gray-900">
+                              {framework.totalRequirements}
+                            </div>
                             <div className="text-gray-500">Total Requirements</div>
                           </div>
                           <div>
-                            <div className="font-medium text-green-600">{framework.implementedRequirements}</div>
+                            <div className="font-medium text-green-600">
+                              {framework.implementedRequirements}
+                            </div>
                             <div className="text-gray-500">Implemented</div>
                           </div>
                           <div>
@@ -517,4 +530,4 @@ export default function ComplianceGapsPage() {
       </MainContentArea>
     </ProtectedRoute>
   );
-} 
+}

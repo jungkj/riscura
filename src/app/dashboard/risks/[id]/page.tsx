@@ -26,9 +26,7 @@ export default function RiskDetailPageRoute() {
             <DaisyCardTitle>Risk Information</DaisyCardTitle>
           </DaisyCardBody>
           <DaisyCardBody>
-            <p className="text-gray-500">
-              Risk details for ID: {riskId} coming soon...
-            </p>
+            <p className="text-gray-500">Risk details for ID: {riskId} coming soon...</p>
           </DaisyCardBody>
         </DaisyCard>
       </MainContentArea>

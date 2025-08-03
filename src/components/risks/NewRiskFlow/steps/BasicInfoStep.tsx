@@ -95,9 +95,8 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         />
         {errors.title && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <DaisyAlertCircle className="w-3 h-3" >
-  {errors.title}
-</DaisyInput>
+            <AlertCircle className="w-3 h-3" />
+            {errors.title}
           </p>
         )}
       </motion.div>
@@ -115,9 +114,9 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             size="sm"
             onClick={generateAISuggestion}
             disabled={!riskData.title || aiSuggesting}
-            className="text-xs" >
-  <Sparkles className="w-3 h-3 mr-1" />
-</DaisyButton>
+            className="text-xs"
+          >
+            <Sparkles className="w-3 h-3 mr-1" />
             {aiSuggesting ? 'Generating...' : 'AI Suggest'}
           </DaisyButton>
         </div>
@@ -134,9 +133,8 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         />
         {errors.description && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <DaisyAlertCircle className="w-3 h-3" >
-  {errors.description}
-</DaisyTextarea>
+            <AlertCircle className="w-3 h-3" />
+            {errors.description}
           </p>
         )}
       </motion.div>
@@ -154,25 +152,25 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             if (errors.category) setErrors({ ...errors, category: '' });
           }}
         >
-          <DaisySelectTrigger className={cn("mt-1", errors.category && "border-red-500")} />
-            <DaisySelectValue placeholder="Select a category" /></DaisySelect>
-          <DaisySelectContent />
+          <DaisySelectTrigger className={cn("mt-1", errors.category && "border-red-500")}>
+            <DaisySelectValue placeholder="Select a category" />
+          </DaisySelectTrigger>
+          <DaisySelectContent>
             {categories.map((cat) => (
-              <DaisySelectItem key={cat.value} value={cat.value} />
+              <DaisySelectItem key={cat.value} value={cat.value}>
                 <div className="flex items-center gap-2">
                   <span className={cn("px-2 py-0.5 rounded-md text-xs font-medium", cat.color)}>
                     {cat.emoji} {cat.label}
                   </span>
                 </div>
-              </DaisySelectContent>
+              </DaisySelectItem>
             ))}
           </DaisySelectContent>
         </DaisySelect>
         {errors.category && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-            <DaisyAlertCircle className="w-3 h-3" >
-  {errors.category}
-</DaisyAlertCircle>
+            <AlertCircle className="w-3 h-3" />
+            {errors.category}
           </p>
         )}
       </motion.div>
@@ -183,9 +181,8 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         transition={{ delay: 0.4 }}
         className="flex justify-end pt-4"
       >
-        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]" >
-  Next
-</DaisyButton>
+        <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
+          Next
         </DaisyButton>
       </motion.div>
     </div>

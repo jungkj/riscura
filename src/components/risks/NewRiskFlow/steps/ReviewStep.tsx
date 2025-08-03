@@ -145,9 +145,8 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
                   <span>Likelihood: {validLikelihood}/5</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <DaisyAlertTriangle className="w-4 h-4 text-muted-foreground" >
-  <span>
-</DaisyAlertTriangle>Impact: {validImpact}/5</span>
+                  <AlertTriangle className="w-4 h-4 text-muted-foreground" />
+                  <span>Impact: {validImpact}/5</span>
                 </div>
               </div>
             </div>
@@ -176,14 +175,14 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
 
           <div className="flex items-center gap-4 pt-2 border-t text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <DaisyCalendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4" />
               <span>Identified: {riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
                 ? format(riskData.dateIdentified, 'MMM dd, yyyy') 
                 : 'Today'}</span>
             </div>
             {riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) && (
               <div className="flex items-center gap-1">
-                <DaisyCalendar className="w-4 h-4" />
+                <Calendar className="w-4 h-4" />
                 <span>Next Review: {format(riskData.nextReview, 'MMM dd, yyyy')}</span>
               </div>
             )}
@@ -197,18 +196,17 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
         transition={{ delay: 0.2 }}
         className="flex justify-between pt-4"
       >
-        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating} >
-  <ChevronLeft className="w-4 h-4 mr-2" />
-</DaisyCalendar>
+        <DaisyButton onClick={onBack} variant="outline" size="lg" disabled={isCreating}>
+          <ChevronLeft className="w-4 h-4 mr-2" />
           Back
         </DaisyButton>
         <DaisyButton 
           onClick={handleCreate} 
           size="lg" 
           className="min-w-[140px]"
-          disabled={isCreating} >
-  {isCreating ? (
-</DaisyButton>
+          disabled={isCreating}
+        >
+          {isCreating ? (
             <>Creating...</>
           ) : (
             <>

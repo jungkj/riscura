@@ -133,10 +133,9 @@ export default function RealTimeDashboard({
     };
 
   return (
-    <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')} >
-  {level || 'Unassessed'}
-</DaisyBadge>
-      </DaisyBadge>
+    <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
+      {level || 'Unassessed'}
+    </DaisyBadge>
     )
   }
   
@@ -150,9 +149,8 @@ export default function RealTimeDashboard({
     };
 
   return (
-      <DaisyBadge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')} >
-  {effectiveness?.replace(/_/g, ' ') || 'Not Assessed'}
-</DaisyBadge>
+      <DaisyBadge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}>
+        {effectiveness?.replace(/_/g, ' ') || 'Not Assessed'}
       </DaisyBadge>
     )
   }
@@ -169,12 +167,11 @@ export default function RealTimeDashboard({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <DaisyCard key={i} className="animate-pulse" >
-  <DaisyCardBody className="space-y-2" />
-</DaisyCard>
+            <DaisyCard key={i} className="animate-pulse">
+              <DaisyCardBody className="space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                 <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-              
+              </DaisyCardBody>
             </DaisyCard>
           ))}
         </div>
@@ -185,23 +182,20 @@ export default function RealTimeDashboard({
   if (error) {
     return (
       <div className={cn("space-y-6", className)}>
-        <DaisyAlert variant="error" >
-  <XCircle className="h-4 w-4" />
-</DaisyAlert>
-          <DaisyAlertDescription >
-  Error loading dashboard data: {error}
-                </DaisyAlertDescription>
-</DaisyAlert>
-            <DaisyButton 
-              variant="outline" 
-              size="sm" 
-              onClick={actions.refreshData}
-              className="ml-2" >
-  Retry
-</DaisyButton>
-            </DaisyButton>
-                </DaisyAlertDescription>
-              </DaisyAlert>
+        <DaisyAlert variant="error">
+          <XCircle className="h-4 w-4" />
+          <DaisyAlertDescription>
+            Error loading dashboard data: {error}
+          </DaisyAlertDescription>
+          <DaisyButton 
+            variant="outline" 
+            size="sm" 
+            onClick={actions.refreshData}
+            className="ml-2"
+          >
+            Retry
+          </DaisyButton>
+        </DaisyAlert>
       </div>
     )
   };
@@ -220,9 +214,9 @@ export default function RealTimeDashboard({
             variant="outline" 
             size="sm" 
             onClick={actions.refreshData}
-            disabled={isLoading} >
-  <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
-</DaisyButton>
+            disabled={isLoading}
+          >
+            <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
             Refresh
           </DaisyButton>
         </div>
@@ -230,39 +224,33 @@ export default function RealTimeDashboard({
       
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Total Risks</DaisyCardTitle>
-            <DaisyAlertTriangle className="h-4 w-4 text-muted-foreground" >
-  <DaisyCardBody >
-</DaisyAlertTriangle>
-  <div className="text-2xl font-bold">
-</DaisyCard>{risks.length}</div>
+            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold">{risks.length}</div>
             {metrics.risks && (
               <div className="flex gap-1 mt-2">
-                <DaisyBadge variant="error" className="text-xs" >
-  {metrics.risks.byLevel.critical} Critical
-</DaisyBadge>
+                <DaisyBadge variant="error" className="text-xs">
+                  {metrics.risks.byLevel.critical} Critical
                 </DaisyBadge>
-                <DaisyBadge variant="secondary" className="text-xs" >
-  {metrics.risks.byLevel.high} High
-</DaisyBadge>
+                <DaisyBadge variant="secondary" className="text-xs">
+                  {metrics.risks.byLevel.high} High
                 </DaisyBadge>
               </div>
             )}
           </DaisyCardBody>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Active Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
-          
-          <DaisyCardBody >
-  <div className="text-2xl font-bold">
-</DaisyCardBody>{controls.length}</div>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold">{controls.length}</div>
             {metrics.controls && (
               <div className="text-xs text-muted-foreground mt-2">
                 {metrics.controls.effectivenessRate.toFixed(1)}% Effective
@@ -272,33 +260,29 @@ export default function RealTimeDashboard({
                 />
               </div>
             )}
-          </DaisyProgress>
+          </DaisyCardBody>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Documents</DaisyCardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
-          
-          <DaisyCardBody >
-  <div className="text-2xl font-bold">
-</DaisyCardBody>{documents.length}</div>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold">{documents.length}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Files and policies
             </p>
           </DaisyCardBody>
         </DaisyCard>
         
-        <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Team Members</DaisyCardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
-          
-          <DaisyCardBody >
-  <div className="text-2xl font-bold">
-</DaisyCardBody>{users.length}</div>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-xs text-muted-foreground mt-2">
               Active users
             </p>
@@ -307,26 +291,23 @@ export default function RealTimeDashboard({
       </div>
       
       {/* Detailed Tabs */}
-      <DaisyTabs defaultValue="risks" className="space-y-4" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="risks">Recent Risks</DaisyTabs>
+      <DaisyTabs defaultValue="risks" className="space-y-4">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="risks">Recent Risks</DaisyTabsTrigger>
           <DaisyTabsTrigger value="controls">Recent Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="activities">Live Activity</DaisyTabsTrigger>
         </DaisyTabsList>
         
-        <DaisyTabsContent value="risks" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
-</DaisyTabsContent>
+        <DaisyTabsContent value="risks" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardBody>
               <DaisyCardTitle>Recent Risks</DaisyCardTitle>
-              <DaisyCardDescription >
-  Latest risks added to your organization (updates in real-time)
-</DaisyCardDescription>
+              <p className="text-muted-foreground">
+                Latest risks added to your organization (updates in real-time)
               </p>
-            
-            <DaisyCardBody >
-  {risks.length === 0 ? (
-</DaisyCardBody>
+            </DaisyCardBody>
+            <DaisyCardBody>
+              {risks.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No risks found. Create your first risk to see real-time updates.
                 </div>
@@ -359,19 +340,16 @@ export default function RealTimeDashboard({
           </DaisyCard>
         </DaisyTabsContent>
         
-        <DaisyTabsContent value="controls" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
-</DaisyTabsContent>
+        <DaisyTabsContent value="controls" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardBody>
               <DaisyCardTitle>Recent Controls</DaisyCardTitle>
-              <DaisyCardDescription >
-  Latest controls added to your organization (updates in real-time)
-</DaisyCardDescription>
+              <p className="text-muted-foreground">
+                Latest controls added to your organization (updates in real-time)
               </p>
-            
-            <DaisyCardBody >
-  {controls.length === 0 ? (
-</DaisyCardBody>
+            </DaisyCardBody>
+            <DaisyCardBody>
+              {controls.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No controls found. Create your first control to see real-time updates.
                 </div>
@@ -404,19 +382,16 @@ export default function RealTimeDashboard({
           </DaisyCard>
         </DaisyTabsContent>
         
-        <DaisyTabsContent value="activities" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
-</DaisyTabsContent>
+        <DaisyTabsContent value="activities" className="space-y-4">
+          <DaisyCard>
+            <DaisyCardBody>
               <DaisyCardTitle>Live Activity Feed</DaisyCardTitle>
-              <DaisyCardDescription >
-  Real-time updates from your organization (auto-refreshes)
-</DaisyCardDescription>
+              <p className="text-muted-foreground">
+                Real-time updates from your organization (auto-refreshes)
               </p>
-            
-            <DaisyCardBody >
-  {activities.length === 0 ? (
-</DaisyCardBody>
+            </DaisyCardBody>
+            <DaisyCardBody>
+              {activities.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No recent activity. Start using the platform to see live updates here.
                 </div>

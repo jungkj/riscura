@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -61,11 +61,11 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
         </div>
         <DaisyButton
           variant="ghost"
-          shape="square" size="md"
+          size="sm"
           onClick={handleClose}
-          disabled={isSubmitting} >
-  <X className="h-4 w-4" />
-</DaisyButton>
+          disabled={isSubmitting}
+        >
+          <X className="h-4 w-4" />
         </DaisyButton>
       </div>
 
@@ -137,12 +137,10 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
 }
 
 export function NewRiskFlow({ open, onOpenChange, onSuccess }: NewRiskFlowProps) {
-
   return (
-    <DaisyDialog open={open} onOpenChange={onOpenChange} />
-      <DaisyDialogContent className="max-w-4xl h-[90vh] p-0" >
-  <RiskFlowProvider>
-</DaisyDialog>
+    <DaisyDialog open={open} onOpenChange={onOpenChange}>
+      <DaisyDialogContent className="max-w-4xl h-[90vh] p-0">
+        <RiskFlowProvider>
           <RiskFlowContent onOpenChange={onOpenChange} onSuccess={onSuccess} />
         </RiskFlowProvider>
       </DaisyDialogContent>

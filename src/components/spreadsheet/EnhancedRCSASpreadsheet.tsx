@@ -1,11 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  DaisyCard,
-  DaisyCardBody,
-  DaisyCardTitle,
-} from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 
 interface EnhancedRCSASpreadsheetProps {

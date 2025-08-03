@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  DaisyCard,
-  DaisyCardBody,
-  DaisyCardTitle,
-} from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload, CheckCircle, Loader2 } from 'lucide-react';
 

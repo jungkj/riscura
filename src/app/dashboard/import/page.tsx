@@ -23,34 +23,51 @@ import {
   Download,
   ArrowRight,
   Shield,
-  Target
+  Target,
 } from 'lucide-react';
 
 // Mock user data - in real app this would come from auth context
 const mockUser = {
   id: 'user_demo_123',
-  organizationId: 'org_demo_456'
+  organizationId: 'org_demo_456',
 };
 
 const FEATURE_HIGHLIGHTS = [
   {
     icon: FileSpreadsheet,
     title: 'Excel RCSA Templates',
-    description: 'Automatically parse Excel files to extract risks, controls, and mappings with intelligent column detection.',
-    features: ['Auto-detect sheet types', 'Smart column mapping', 'Risk scoring calculation', 'AI-enhanced categorization']
+    description:
+      'Automatically parse Excel files to extract risks, controls, and mappings with intelligent column detection.',
+    features: [
+      'Auto-detect sheet types',
+      'Smart column mapping',
+      'Risk scoring calculation',
+      'AI-enhanced categorization',
+    ],
   },
   {
     icon: Brain,
     title: 'AI-Powered Document Analysis',
-    description: 'Extract risks and controls from policy documents using Claude Sonnet 4 for intelligent content analysis.',
-    features: ['PDF/DOCX/TXT support', 'Risk identification', 'Control extraction', 'Confidence scoring']
+    description:
+      'Extract risks and controls from policy documents using Claude Sonnet 4 for intelligent content analysis.',
+    features: [
+      'PDF/DOCX/TXT support',
+      'Risk identification',
+      'Control extraction',
+      'Confidence scoring',
+    ],
   },
   {
     icon: Upload,
     title: 'Bulk Document Upload',
     description: 'Upload multiple documents at once for efficient organization and categorization.',
-    features: ['Multi-file support', 'Automatic categorization', 'Metadata extraction', 'Version control']
-  }
+    features: [
+      'Multi-file support',
+      'Automatic categorization',
+      'Metadata extraction',
+      'Version control',
+    ],
+  },
 ];
 
 const SAMPLE_TEMPLATES = [
@@ -59,22 +76,22 @@ const SAMPLE_TEMPLATES = [
     description: 'Comprehensive risk assessment template for financial institutions',
     type: 'Excel',
     size: '2.3 MB',
-    icon: FileSpreadsheet
+    icon: FileSpreadsheet,
   },
   {
     name: 'Cybersecurity Policy Document',
     description: 'Sample cybersecurity policy with embedded risks and controls',
     type: 'PDF',
     size: '1.8 MB',
-    icon: FileText
+    icon: FileText,
   },
   {
     name: 'Operational Risk Framework',
     description: 'Enterprise operational risk management framework',
     type: 'Word',
     size: '3.1 MB',
-    icon: FileText
-  }
+    icon: FileText,
+  },
 ];
 
 export default function ImportPage() {
@@ -104,13 +121,11 @@ export default function ImportPage() {
             <div className="p-3 bg-blue-600 rounded-xl">
               <Zap className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">
-              Smart Import Center
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900">Smart Import Center</h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Transform your Excel RCSA templates and policy documents into structured risk and control data 
-            with AI-powered analysis and intelligent automation.
+            Transform your Excel RCSA templates and policy documents into structured risk and
+            control data with AI-powered analysis and intelligent automation.
           </p>
         </motion.div>
 
@@ -239,16 +254,24 @@ export default function ImportPage() {
                 <DaisyCard key={idx}>
                   <div className="p-6 border-b">
                     <div className="flex items-center gap-2">
-                      {result.type === 'excel-rcsa' && <FileSpreadsheet className="h-5 w-5 text-green-600" />}
-                      {result.type === 'policy-document' && <FileText className="h-5 w-5 text-blue-600" />}
-                      {result.type === 'bulk-upload' && <Upload className="h-5 w-5 text-purple-600" />}
+                      {result.type === 'excel-rcsa' && (
+                        <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                      )}
+                      {result.type === 'policy-document' && (
+                        <FileText className="h-5 w-5 text-blue-600" />
+                      )}
+                      {result.type === 'bulk-upload' && (
+                        <Upload className="h-5 w-5 text-purple-600" />
+                      )}
                       <span className="truncate">{result.filename}</span>
                     </div>
                   </div>
                   <div className="p-6">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <DaisyBadge variant={result.status === 'completed' ? 'default' : 'destructive'}>
+                        <DaisyBadge
+                          variant={result.status === 'completed' ? 'default' : 'destructive'}
+                        >
                           {result.status}
                         </DaisyBadge>
                         <span className="text-sm text-gray-600 capitalize">
@@ -282,9 +305,10 @@ export default function ImportPage() {
           <DaisyAlert>
             <Info className="h-4 w-4" />
             <div>
-              <strong>Pro Tip:</strong> For best results with Excel RCSA templates, ensure your spreadsheets 
-              have clear column headers like "Risk Title", "Description", "Likelihood", "Impact", "Control Title", etc. 
-              The AI will automatically detect and map these fields to the appropriate data structures.
+              <strong>Pro Tip:</strong> For best results with Excel RCSA templates, ensure your
+              spreadsheets have clear column headers like "Risk Title", "Description", "Likelihood",
+              "Impact", "Control Title", etc. The AI will automatically detect and map these fields
+              to the appropriate data structures.
             </div>
           </DaisyAlert>
         </motion.div>
@@ -299,11 +323,12 @@ export default function ImportPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg">
             <Shield className="h-4 w-4 text-green-600" />
             <span className="text-sm text-green-800">
-              All uploads are encrypted and processed securely within your organization's environment
+              All uploads are encrypted and processed securely within your organization's
+              environment
             </span>
           </div>
         </motion.div>
       </div>
     </div>
   );
-} 
+}

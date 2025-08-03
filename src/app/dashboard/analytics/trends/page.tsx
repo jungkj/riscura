@@ -5,11 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import {
-  DaisyCard,
-  DaisyCardBody,
-  DaisyCardTitle,
-} from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,

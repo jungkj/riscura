@@ -14,8 +14,6 @@ import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
-  DaisyCardBody,
-  DaisyCardBody,
   DaisyCardDescription,
 } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';

@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-import {
-  DaisyCard,
-  DaisyCardBody,
-  DaisyCardTitle,
-} from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Target } from 'lucide-react';
 import { RiskDetailsModal } from './risk-details-modal';

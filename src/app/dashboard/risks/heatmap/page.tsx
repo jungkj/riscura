@@ -19,39 +19,33 @@ export default function RiskHeatMapPage() {
           <p className="text-gray-600">Visualize and analyze your organization's risk landscape through our interactive heat map interface.</p>
         </div>
         <div className="flex items-center gap-3">
-          <DaisyButton variant="outline" className="text-sm" >
-  <Filter className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton variant="outline" className="text-sm">
+            <Filter className="h-4 w-4 mr-2" />
             Filters
           </DaisyButton>
-          <DaisyButton variant="outline" className="text-sm" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton variant="outline" className="text-sm">
+            <Download className="h-4 w-4 mr-2" />
             Export
           </DaisyButton>
-          <DaisyButton >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton>
+            <Plus className="h-4 w-4 mr-2" />
             Add Risk
           </DaisyButton>
         </div>
       </div>
 
       {/* Heat Map Content */}
-      <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
-          <DaisyCardTitle className="flex items-center gap-2" >
-  <Activity className="h-5 w-5 text-blue-600" />
-</DaisyCardTitle>
+      <DaisyCard>
+        <DaisyCardBody>
+          <DaisyCardTitle className="flex items-center gap-2">
+            <Activity className="h-5 w-5 text-blue-600" />
             Interactive Risk Heat Map
           </DaisyCardTitle>
         </DaisyCardBody>
-        <DaisyCardBody >
-  <Suspense 
+        <DaisyCardBody>
+          <Suspense 
             fallback={
               <div className="flex items-center justify-center p-12">
-</DaisyCardBody>
                 <LoadingSpinner />
               </div>
             }

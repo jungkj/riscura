@@ -69,27 +69,23 @@ export default function CreateRiskPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <DaisyCard className="relative overflow-hidden h-full group hover:shadow-lg transition-shadow" >
-  <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-bl-lg">
-</DaisyCard>
+            <DaisyCard className="relative overflow-hidden h-full group hover:shadow-lg transition-shadow">
+              <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-bl-lg">
                 NEW
               </div>
               
-              <DaisyCardBody >
-  <DaisyCardTitle className="flex items-center gap-2" />
-</DaisyCardBody>
+              <DaisyCardBody>
+                <DaisyCardTitle className="flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-blue-600" />
                   Interactive Risk Flow
                 </DaisyCardTitle>
-                <DaisyCardDescription >
-  Modern, visual approach to risk creation with drag-and-drop
-</DaisyCardDescription>
+                <p className="text-muted-foreground">
+                  Modern, visual approach to risk creation with drag-and-drop
                 </p>
               
               
-              <DaisyCardBody className="space-y-4" >
-  <div className="grid grid-cols-2 gap-3">
-</DaisyCardBody>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
                   {features.map((feature, index) => (
                     <motion.div
                       key={feature.title}
@@ -109,13 +105,14 @@ export default function CreateRiskPage() {
                   ))}
                 </div>
                 
-                <DaisyButton 
-                  onClick={() => setShowNewFlow(true)}
-                  className="w-full group"
-                  size="lg" />
-                  Try New Experience
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </DaisyButton>
+                  <DaisyButton 
+                    onClick={() => setShowNewFlow(true)}
+                    className="w-full group"
+                    size="lg">
+                    Try New Experience
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </DaisyButton>
+                </div>
               </DaisyCardBody>
             </DaisyCard>
           </motion.div>
@@ -126,23 +123,19 @@ export default function CreateRiskPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <DaisyCard className="h-full group hover:shadow-lg transition-shadow" >
-  <DaisyCardBody />
-</DaisyCard>
-                <DaisyCardTitle className="flex items-center gap-2" >
-  <Layers className="w-5 h-5 text-gray-600" />
-</DaisyCardTitle>
+            <DaisyCard className="h-full group hover:shadow-lg transition-shadow">
+              <DaisyCardBody>
+                <DaisyCardTitle className="flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-gray-600" />
                   Classic Form
                 </DaisyCardTitle>
-                <DaisyCardDescription >
-  Traditional tabbed form with comprehensive options
-</DaisyCardDescription>
+                <p className="text-muted-foreground">
+                  Traditional tabbed form with comprehensive options
                 </p>
               
               
-              <DaisyCardBody className="space-y-4" >
-  <div className="space-y-3">
-</DaisyCardBody>
+                <div className="space-y-4">
+                  <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm">
                     <ChevronRight className="w-4 h-4 text-muted-foreground" />
                     <span>Complete control over all risk attributes</span>
@@ -161,14 +154,15 @@ export default function CreateRiskPage() {
                   </div>
                 </div>
                 
-                <DaisyButton 
-                  onClick={() => setShowOldFlow(true)}
-                  className="w-full"
-                  variant="outline"
-                  size="lg" />
-                  Use Classic Form
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </DaisyButton>
+                  <DaisyButton 
+                    onClick={() => setShowOldFlow(true)}
+                    className="w-full"
+                    variant="outline"
+                    size="lg">
+                    Use Classic Form
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </DaisyButton>
+                </div>
               </DaisyCardBody>
             </DaisyCard>
           </motion.div>
@@ -181,10 +175,8 @@ export default function CreateRiskPage() {
           transition={{ delay: 0.3 }}
           className="mt-8 max-w-5xl mx-auto"
         >
-          <DaisyCard >
-  <DaisyCardBody className="p-8 text-center" >
-  </DaisyCard>
-</DaisyCardBody>
+          <DaisyCard>
+            <DaisyCardBody className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
@@ -192,9 +184,8 @@ export default function CreateRiskPage() {
               <p className="text-muted-foreground mb-4">
                 Watch how the interactive risk creation flow makes risk management more intuitive
               </p>
-              <DaisyButton variant="link" className="text-blue-600" >
-  View Demo Video →
-</DaisyButton>
+              <DaisyButton variant="link" className="text-blue-600">
+                View Demo Video →
               </DaisyButton>
             </DaisyCardBody>
           </DaisyCard>
