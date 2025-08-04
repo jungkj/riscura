@@ -9,7 +9,7 @@ const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(1, 'Password is required'),
   rememberMe: z.boolean().optional().default(false),
-})
+});
 
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -20,38 +20,38 @@ const simpleRateLimit = (key: string, limit: number, windowMs: number) => {
 
   if (!record || now > record.resetTime) {
     rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
-    return { allowed: true, remaining: limit - 1 }
+    return { allowed: true, remaining: limit - 1 };
   }
 
   if (record.count >= limit) {
-    return { allowed: false, remaining: 0 }
+    return { allowed: false, remaining: 0 };
   }
 
   record.count++;
-  return { allowed: true, remaining: limit - record.count }
-}
+  return { allowed: true, remaining: limit - record.count };
+};
 
 // Generate simple CSRF token
-const generateCSRFToken = (): string {
+const generateCSRFToken = (): string => {
   return Array.from(crypto.getRandomValues(new Uint8Array(32)))
     .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}
+    .join('');
+};
 
-export async function POST(_request: NextRequest): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // console.log('Login API route called')
 
     // Get client IP for rate limiting
     const clientIP =
-      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
     // Simple rate limiting
     const rateLimitResult = simpleRateLimit(
       `login:${clientIP}`,
       10, // 10 login attempts
       15 * 60 * 1000 // 15 minutes
-    )
+    );
 
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
@@ -63,7 +63,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Parse request body with error handling
-    let body
+    let body;
     try {
       body = await request.json();
       // console.log('Request body parsed successfully')
@@ -102,7 +102,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         organizationId: 'demo-org-id',
         isActive: true,
         emailVerified: new Date(),
-      }
+      };
 
       // Set token expiration based on rememberMe flag
       const accessTokenExpiry = rememberMe ? 7 * 24 * 3600 : 3600; // 7 days vs 1 hour
@@ -113,7 +113,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         refreshToken: `demo-refresh-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         expiresIn: accessTokenExpiry,
         refreshExpiresIn: refreshTokenExpiry,
-      }
+      };
 
       const csrfToken = generateCSRFToken();
 
@@ -147,7 +147,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         sameSite: 'strict',
         maxAge: tokens.refreshExpiresIn,
         path: '/',
-      })
+      });
 
       response.cookies.set('csrf-token', csrfToken, {
         httpOnly: false,
@@ -173,7 +173,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           maxAge: tokens.expiresIn,
           path: '/',
         }
-      )
+      );
 
       // Set remember me preference cookie
       if (rememberMe) {
@@ -183,7 +183,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           sameSite: 'strict',
           maxAge: tokens.refreshExpiresIn,
           path: '/',
-        })
+        });
       }
 
       return response;
@@ -191,7 +191,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 
     try {
       // Check database connection
-      const isConnected = await db.healthCheck()
+      const isConnected = await db.healthCheck();
 
       if (isConnected) {
         // Try database authentication first
@@ -207,7 +207,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
               },
             },
           },
-        })
+        });
 
         if (user && user.isActive && user.passwordHash) {
           const isValidPassword = await bcrypt.compare(password, user.passwordHash);
@@ -219,7 +219,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
             const { session, tokens } = await createSession(user, {
               ipAddress: clientIP,
               userAgent: request.headers.get('user-agent') || undefined,
-            })
+            });
 
             const csrfToken = generateCSRFToken();
 
@@ -257,7 +257,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
               sameSite: 'strict',
               maxAge: refreshTokenExpiry,
               path: '/',
-            })
+            });
 
             response.cookies.set('csrf-token', csrfToken, {
               httpOnly: false,
@@ -275,7 +275,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
                 sameSite: 'strict',
                 maxAge: refreshTokenExpiry,
                 path: '/',
-              })
+              });
             }
 
             return response;
@@ -296,7 +296,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     const errorMessage =
       process.env.NODE_ENV === 'development'
         ? `Login error: ${error instanceof Error ? error.message : 'Unknown error'}`
-        : 'An error occurred during login. Please try again.'
+        : 'An error occurred during login. Please try again.';
 
     return NextResponse.json(
       {
@@ -320,5 +320,5 @@ export async function GET(): Promise<NextResponse> {
     status: 'ok',
     message: 'Login API is working',
     timestamp: new Date().toISOString(),
-  })
+  });
 }

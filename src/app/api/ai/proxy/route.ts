@@ -19,7 +19,7 @@ const mockSecurityService = {
   async processSecureAIRequest(_request: any): Promise<any> {
     return {
       securityApproved: true,
-      sanitizedContent: request.content,
+      sanitizedContent: _request.content,
       auditLogId: 'mock-audit-id',
       warnings: [] as any[],
     };
@@ -40,7 +40,7 @@ const mockSecurityService = {
 
 export async function POST(_request: NextRequest) {
   try {
-    const { content, agentType, userId, sessionId } = await request.json();
+    const { content, agentType, userId, sessionId } = await _request.json();
 
     if (!content || !userId) {
       return NextResponse.json({ error: 'Content and userId are required' }, { status: 400 });
@@ -73,8 +73,8 @@ export async function POST(_request: NextRequest) {
         type: 'query',
         source: 'api',
         method: 'POST',
-        ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
+        ipAddress: _request.headers.get('x-forwarded-for') || 'unknown',
+        userAgent: _request.headers.get('user-agent') || 'unknown',
       },
     });
 
