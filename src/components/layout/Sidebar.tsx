@@ -544,8 +544,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             ref={searchInputRef}
             placeholder="Search features..."
             value={searchQuery}
-            onChange={(e) = />
-setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 pr-4 py-2 text-sm bg-white/50 border-gray-200/60 focus:ring-2 focus:ring-[#199BEC]/20 focus:border-[#199BEC]/50 rounded-xl" />
           {Boolean(searchQuery) && (
             <DaisyButton

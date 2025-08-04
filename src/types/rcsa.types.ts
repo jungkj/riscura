@@ -14,44 +14,30 @@
 //   TestFrequency as PrismaTestFrequency,
 //   TestStatus as PrismaTestStatus,
 // } from '@prisma/client';
-// Re-export Prisma enums for consistency
-// export const RiskCategory = PrismaRiskCategory;
-// export const RiskStatus = PrismaRiskStatus;
-// export const RiskLevel = PrismaRiskLevel;
-// export const ControlType = PrismaControlType;
-// export const ControlStatus = PrismaControlStatus;
-// export const ControlCategory = PrismaControlCategory;
-// export const AutomationLevel = PrismaAutomationLevel;
-// export const EffectivenessRating = PrismaEffectivenessRating;
-// export const Priority = PrismaPriority;
-// export const ControlEffort = PrismaControlEffort;
-// export const TestScriptType = PrismaTestScriptType;
-// export const TestFrequency = PrismaTestFrequency;
-// export const TestStatus = PrismaTestStatus;
-
-// export type RiskCategory = PrismaRiskCategory;
-// export type RiskStatus = PrismaRiskStatus;
-// export type RiskLevel = PrismaRiskLevel;
-// export type ControlType = PrismaControlType;
-// export type ControlStatus = PrismaControlStatus;
-// export type ControlCategory = PrismaControlCategory;
-// export type AutomationLevel = PrismaAutomationLevel;
-// export type EffectivenessRating = PrismaEffectivenessRating;
-// export type Priority = PrismaPriority;
-// export type ControlEffort = PrismaControlEffort;
-// export type TestScriptType = PrismaTestScriptType;
-// export type TestFrequency = PrismaTestFrequency;
-// export type TestStatus = PrismaTestStatus;
+// Basic type definitions for build compatibility
+export type RiskCategory = string;
+export type RiskStatus = string;
+export type RiskLevel = string;
+export type ControlType = string;
+export type ControlStatus = string;
+export type ControlCategory = string;
+export type AutomationLevel = string;
+export type EffectivenessRating = string;
+export type Priority = string;
+export type ControlEffort = string;
+export type TestScriptType = string;
+export type TestFrequency = string;
+export type TestStatus = string;
 // Standardized Risk interface
 export interface Risk {
   id: string;
   title: string;
   description: string;
   category: RiskCategory;
-  likelihood: number; // 1-5 scale;
-  impact: number; // 1-5 scale;
-  riskScore: number; // calculated: likelihood * impact;
-  riskLevel?: RiskLevel; // calculated based on riskScore;
+  likelihood: number; // 1-5 scale
+  impact: number; // 1-5 scale
+  riskScore: number; // calculated: likelihood * impact
+  riskLevel?: RiskLevel; // calculated based on riskScore
   owner?: string;
   status: RiskStatus;
   dateIdentified?: Date;
@@ -62,7 +48,6 @@ export interface Risk {
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-;
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -79,19 +64,17 @@ export interface Control {
   category: ControlCategory;
   frequency: string;
   automationLevel: AutomationLevel;
-  effectiveness: number; // 0-1 scale (STANDARDIZED);
+  effectiveness: number; // 0-1 scale (STANDARDIZED)
   effectivenessRating?: EffectivenessRating;
   owner?: string;
   operatorId?: string;
   reviewerId?: string;
   status: ControlStatus;
   priority?: Priority;
-;
   // Testing fields
   lastTestDate?: Date;
   nextTestDate?: Date;
   testResults?: string;
-;
   // Business context
   businessUnit?: string;
   department?: string;
