@@ -83,8 +83,7 @@ export default function AIInsightsPage() {
           id: '2',
           type: 'trend_analysis',
           title: 'Compliance Risk Trending Down',
-          // description: // Fixed expression expected error
-            'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
+          description: 'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
           confidence: 92,
           impact: 'medium',
           category: 'Compliance',

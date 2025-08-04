@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 // Helper function to get OpenAI client
-const getOpenAIClient = () {
-  const apiKey = process.env.OPENAI_API_KEY
+const getOpenAIClient = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
   }
@@ -12,7 +12,7 @@ const getOpenAIClient = () {
     apiKey,
     organization: process.env.OPENAI_ORG_ID,
   });
-}
+};
 
 // Mock security service for build time
 const mockSecurityService = {
@@ -22,7 +22,7 @@ const mockSecurityService = {
       sanitizedContent: request.content,
       auditLogId: 'mock-audit-id',
       warnings: [] as any[],
-    }
+    };
   },
   async processSecureAIResponse(
     auditLogId: string,
@@ -34,9 +34,9 @@ const mockSecurityService = {
       approved: true,
       filteredResponse: response,
       warnings: [] as any[],
-    }
+    };
   },
-}
+};
 
 export async function POST(_request: NextRequest) {
   try {
@@ -58,11 +58,11 @@ export async function POST(_request: NextRequest) {
           completionTokens: 0,
           totalTokens: 0,
         },
-      })
+      });
     }
 
     // Get OpenAI client
-    const openai = getOpenAIClient()
+    const openai = getOpenAIClient();
 
     // Security processing with mock service
     const securityResult = await mockSecurityService.processSecureAIRequest({
@@ -76,7 +76,7 @@ export async function POST(_request: NextRequest) {
         ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown',
       },
-    })
+    });
 
     if (!securityResult.securityApproved) {
       return NextResponse.json(
@@ -103,7 +103,7 @@ export async function POST(_request: NextRequest) {
       ],
       max_tokens: 2000,
       temperature: 0.7,
-    })
+    });
 
     const response = completion.choices[0]?.message?.content || '';
 
@@ -113,7 +113,7 @@ export async function POST(_request: NextRequest) {
       response,
       0.9, // confidence
       ['openai']
-    )
+    );
 
     return NextResponse.json({
       response: responseResult.filteredResponse,

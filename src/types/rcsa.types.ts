@@ -467,7 +467,6 @@ export interface ControlTestScript {
 
 // Type alias for backward compatibility - will be deprecated
 export type TestScriptControl = ControlTestScript;
-;
 export interface TestExecution {
   id: string;
   testScriptId: string;

@@ -8,10 +8,10 @@ export const GET = withApiMiddleware(
 
     if (!user || !user.organizationId) {
       // console.error('[Assessments API] Missing user or organizationId:', {
-        hasUser: !!user,
-        userId: user?.id,
-        organizationId: user?.organizationId,
-      })
+      //   hasUser: !!user,
+      //   userId: user?.id,
+      //   organizationId: user?.organizationId,
+      // });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -24,7 +24,7 @@ export const GET = withApiMiddleware(
       // Check if the organization exists
       const orgExists = await db.client.organization.findUnique({
         where: { id: user.organizationId },
-      })
+      });
 
       if (!orgExists) {
         // console.error('[Assessments API] Organization not found:', user.organizationId)
@@ -33,7 +33,7 @@ export const GET = withApiMiddleware(
           success: true,
           data: [],
           message: 'No assessments found. Create your first assessment to get started.',
-        })
+        });
       }
 
       const assessments = await db.client.questionnaire.findMany({
@@ -71,7 +71,7 @@ export const GET = withApiMiddleware(
         data: [],
         message: 'Unable to load assessments at this time',
         error: process.env.NODE_ENV === 'development' ? error.message : undefined,
-      })
+      });
     }
   },
   { requireAuth: true }

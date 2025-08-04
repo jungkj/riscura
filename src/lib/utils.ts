@@ -111,18 +111,18 @@ export const getFileExtension = (filename: string): string => {
   return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
 };
 // Array utilities
-export const groupBy = <T, K extends string | number | symbol>(;
-  array: T[],;
-  key: (item: T) => K;
+export const groupBy = <T, K extends string | number | symbol>(
+  array: T[],
+  key: (item: T) => K
 ): Record<K, T[]> => {
-  return array.reduce(;
+  return array.reduce(
     (groups, item) => {
       const group = key(item);
       groups[group] = groups[group] || [];
       groups[group].push(item);
       return groups;
-    },;
-    {} as Record<K, T[]>;
+    },
+    {} as Record<K, T[]>
   );
 };
 
