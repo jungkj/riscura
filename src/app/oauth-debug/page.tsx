@@ -32,17 +32,17 @@ export default function OAuthDebugPage() {
   const testGoogleSignIn = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       console.log('[OAuth Debug] Starting Google sign-in...');
-      
+
       const result = await signIn('google', {
         redirect: false,
         callbackUrl: '/dashboard',
       });
-      
+
       console.log('[OAuth Debug] Sign-in result:', result);
-      
+
       if (result?.error) {
         setError(`Sign-in error: ${result.error}`);
         console.error('[OAuth Debug] Sign-in error:', result.error);
@@ -74,23 +74,16 @@ export default function OAuthDebugPage() {
               {error}
             </div>
           )}
-          
+
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold mb-2">Actions:</h3>
               <div className="space-x-2">
-                <DaisyButton 
-                  onClick={testGoogleSignIn} 
-                  disabled={loading}
-                  variant="default" >
-  {loading ? 'Testing...' : 'Test Google Sign-In'}
-</DaisyButton>
+                <DaisyButton onClick={testGoogleSignIn} disabled={loading} variant="default">
+                  {loading ? 'Testing...' : 'Test Google Sign-In'}
                 </DaisyButton>
-                <DaisyButton 
-                  onClick={fetchDebugInfo} 
-                  variant="outline" >
-  Refresh Debug Info
-</DaisyButton>
+                <DaisyButton onClick={fetchDebugInfo} variant="outline">
+                  Refresh Debug Info
                 </DaisyButton>
               </div>
             </div>
@@ -119,7 +112,8 @@ export default function OAuthDebugPage() {
             <div>
               <h3 className="font-semibold mb-2">Console Logs:</h3>
               <p className="text-sm text-gray-600">
-                Open your browser's developer console (F12) to see detailed logs during the OAuth flow.
+                Open your browser's developer console (F12) to see detailed logs during the OAuth
+                flow.
               </p>
             </div>
           </div>

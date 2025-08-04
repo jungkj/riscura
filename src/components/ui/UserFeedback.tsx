@@ -240,8 +240,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
             size="sm"
             className="h-auto p-0 mt-2 text-xs"
             onClick={toast.action.onClick} >
-  {toast.action.label}
-</DaisyButton>
+            {toast.action.label}
           </DaisyButton>
         )}
       </div>
@@ -251,7 +250,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
           variant="ghost"
           size="sm"
           className="h-auto p-1 hover:bg-transparent"
-          onClick={() => removeToast(toast.id)} />
+          onClick={() => removeToast(toast.id)} >
           <X className="w-4 h-4" />
         </DaisyButton>
       )}

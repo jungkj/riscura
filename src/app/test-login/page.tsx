@@ -40,74 +40,84 @@ export default function TestLoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
       <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Login Status Test Page
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Login Status Test Page</h1>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Authentication Status</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody className="space-y-4" >
-  <div className="flex items-center space-x-4">
-</DaisyCardBody>
-              <DaisyBadge variant={isAuthenticated ? "default" : "destructive"} >
-  {isAuthenticated ? "Authenticated" : "Not Authenticated"}
-</DaisyBadge>
+          </DaisyCardBody>
+          <DaisyCardBody className="space-y-4">
+            <div className="flex items-center space-x-4">
+              <DaisyBadge variant={isAuthenticated ? 'default' : 'destructive'}>
+                {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
               </DaisyBadge>
               {isAuthenticated && <LoginStatus />}
             </div>
 
             {user && (
               <div className="space-y-2">
-                <p><strong>User:</strong> {user.firstName} {user.lastName}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Role:</strong> {user.role}</p>
+                <p>
+                  <strong>User:</strong> {user.firstName} {user.lastName}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
+                </p>
+                <p>
+                  <strong>Role:</strong> {user.role}
+                </p>
               </div>
             )}
 
             {isAuthenticated && (
-              <DaisyButton onClick={handleLogout} variant="outline" >
-  Logout
-</DaisyButton>
+              <DaisyButton onClick={handleLogout} variant="outline">
+                Logout
               </DaisyButton>
             )}
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Token Storage Debug Info</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody >
-  <div className="space-y-2 font-mono text-sm">
-</DaisyCardBody>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <div className="space-y-2 font-mono text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p><strong>Has Token:</strong> {tokenInfo.hasToken ? 'Yes' : 'No'}</p>
-                  <p><strong>Storage Type:</strong> {tokenInfo.storageType || 'None'}</p>
-                  <p><strong>Remember Me:</strong> {tokenInfo.hasRememberMe ? 'Yes' : 'No'}</p>
+                  <p>
+                    <strong>Has Token:</strong> {tokenInfo.hasToken ? 'Yes' : 'No'}
+                  </p>
+                  <p>
+                    <strong>Storage Type:</strong> {tokenInfo.storageType || 'None'}
+                  </p>
+                  <p>
+                    <strong>Remember Me:</strong> {tokenInfo.hasRememberMe ? 'Yes' : 'No'}
+                  </p>
                 </div>
                 <div>
-                  <p><strong>LocalStorage Token:</strong> {tokenInfo.localStorageToken ? 'Present' : 'None'}</p>
-                  <p><strong>SessionStorage Token:</strong> {tokenInfo.sessionStorageToken ? 'Present' : 'None'}</p>
-                  <p><strong>Remember Me Cookie:</strong> {tokenInfo.rememberMeCookie || 'None'}</p>
+                  <p>
+                    <strong>LocalStorage Token:</strong>{' '}
+                    {tokenInfo.localStorageToken ? 'Present' : 'None'}
+                  </p>
+                  <p>
+                    <strong>SessionStorage Token:</strong>{' '}
+                    {tokenInfo.sessionStorageToken ? 'Present' : 'None'}
+                  </p>
+                  <p>
+                    <strong>Remember Me Cookie:</strong> {tokenInfo.rememberMeCookie || 'None'}
+                  </p>
                 </div>
               </div>
             </div>
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Test Instructions</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody className="space-y-4" >
-  <div className="space-y-2">
-</DaisyCardBody>
+          </DaisyCardBody>
+          <DaisyCardBody className="space-y-4">
+            <div className="space-y-2">
               <h3 className="font-semibold">To test "Stay logged in" feature:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
                 <li>Go to the login page (/auth/login)</li>
@@ -117,7 +127,7 @@ export default function TestLoginPage() {
                 <li>Close the browser tab and reopen - you should still be logged in</li>
               </ol>
             </div>
-            
+
             <div className="space-y-2">
               <h3 className="font-semibold">To test session-only login:</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
@@ -134,4 +144,4 @@ export default function TestLoginPage() {
       </div>
     </div>
   );
-} 
+}

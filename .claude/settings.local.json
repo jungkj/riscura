@@ -64,7 +64,11 @@
       "Bash(npm view:*)",
       "Bash(npm run:*)",
       "Bash(npm test:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx swc:*)",
+      "Bash(gtimeout:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

@@ -29,12 +29,9 @@ function OAuthTestContent() {
   }, []);
 
   if (isLoading) {
-
-  return (
-    <DaisyCard className="max-w-2xl mx-auto" >
-  <DaisyCardBody className="p-8" >
-  </DaisyCard>
-</DaisyCardBody>
+    return (
+      <DaisyCard className="max-w-2xl mx-auto">
+        <DaisyCardBody className="p-8">
           <div className="text-center">Loading...</div>
         </DaisyCardBody>
       </DaisyCard>
@@ -51,17 +48,15 @@ function OAuthTestContent() {
   };
 
   return (
-    <DaisyCard className="max-w-2xl mx-auto" >
-  <DaisyCardBody />
-</DaisyCard>
+    <DaisyCard className="max-w-2xl mx-auto">
+      <DaisyCardBody>
         <DaisyCardTitle>OAuth Test Page</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody className="space-y-4" >
-  <div>
-</DaisyCardBody>
+      </DaisyCardBody>
+      <DaisyCardBody className="space-y-4">
+        <div>
           <strong>Status:</strong> {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
         </div>
-        
+
         {isAuthenticated && user ? (
           <>
             <div>
@@ -83,11 +78,13 @@ function OAuthTestContent() {
             <p>You are not signed in</p>
             <div className="space-x-4">
               <DaisyButton onClick={handleGoogleLogin}>Sign in with Google</DaisyButton>
-              <DaisyButton onClick={() => router.push('/auth/login')}>Sign in with Credentials</DaisyButton>
+              <DaisyButton onClick={() => router.push('/auth/login')}>
+                Sign in with Credentials
+              </DaisyButton>
             </div>
           </>
         )}
-        
+
         <div className="mt-8 p-4 bg-blue-50 rounded">
           <h3 className="font-bold mb-2">Google OAuth Configuration Checklist:</h3>
           <ul className="space-y-2 text-sm">
@@ -109,21 +106,19 @@ function OAuthTestContent() {
 }
 
 export default function TestOAuthPage() {
-
   return (
     <div className="container mx-auto p-8">
-      <Suspense fallback={
-        <DaisyCard className="max-w-2xl mx-auto" >
-  <DaisyCardBody className="p-8" >
-  </DaisyCard>
-</DaisyCardBody>
-            <div className="text-center">Loading...</div>
-          </DaisyCardBody>
-        </DaisyCard>
-      }>
+      <Suspense
+        fallback={
+          <DaisyCard className="max-w-2xl mx-auto">
+            <DaisyCardBody className="p-8">
+              <div className="text-center">Loading...</div>
+            </DaisyCardBody>
+          </DaisyCard>
+        }
+      >
         <OAuthTestContent />
       </Suspense>
     </div>
   );
 }
-

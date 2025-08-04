@@ -353,13 +353,11 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
 
   return (
     <DaisyCard className="fixed z-50 max-w-sm w-full top-4 right-4 shadow-2xl" >
-  <DaisyCardBody className="pb-3" />
-</DaisyTooltipProps>
+      <DaisyCardBody className="pb-3" >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <DaisyBadge variant="secondary" >
-  Step {currentStepIndex + 1} of {currentTour.steps.length}
-</DaisyBadge>
+              Step {currentStepIndex + 1} of {currentTour.steps.length}
             </DaisyBadge>
             <DaisyBadge variant="outline">{currentTour.category}</DaisyBadge>
           </div>
@@ -369,8 +367,7 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
               size="sm"
               onClick={pauseTour}
               className="h-8 w-8 p-0" >
-  <Pause className="w-4 h-4" />
-</DaisyButton>
+              <Pause className="w-4 h-4" />
             </DaisyButton>
             <DaisyButton
               variant="ghost"

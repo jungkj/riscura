@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -33,21 +33,18 @@ import {
   Home,
   Briefcase,
   DollarSign,
-  PlayCircle
+  PlayCircle,
 } from 'lucide-react';
 
 // New single-word typewriter effect
-const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "streamlined"];
+const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined'];
 
 // Single Word Typewriter Component
 function SingleWordTypewriter() {
-
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
-      <span className="text-gray-900">
-        Risk management made{' '}
-      </span>
-      <TextFlipContainer 
+      <span className="text-gray-900">Risk management made </span>
+      <TextFlipContainer
         words={cyclingWords}
         className="text-[#191919] font-bold min-w-[280px] sm:min-w-[320px] lg:min-w-[400px]"
         cursorClassName="bg-[#199BEC]"
@@ -68,7 +65,7 @@ function HeroProcessCard() {
       icon: Upload,
       color: 'text-[#199BEC]',
       bgColor: 'bg-[#e6f4fd]',
-      files: ['RCSA_Template.xlsx', 'Policy_Framework.pdf', 'Controls_Matrix.csv']
+      files: ['RCSA_Template.xlsx', 'Policy_Framework.pdf', 'Controls_Matrix.csv'],
     },
     {
       id: 'analyze',
@@ -77,7 +74,7 @@ function HeroProcessCard() {
       icon: Brain,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
-      processing: ['Extracting risks...', 'Calculating scores...', 'Mapping controls...']
+      processing: ['Extracting risks...', 'Calculating scores...', 'Mapping controls...'],
     },
     {
       id: 'results',
@@ -89,9 +86,9 @@ function HeroProcessCard() {
       results: [
         { name: 'Cyber Risk', level: 'high', score: 18 },
         { name: 'Compliance', level: 'medium', score: 12 },
-        { name: 'Operational', level: 'low', score: 6 }
-      ]
-    }
+        { name: 'Operational', level: 'low', score: 6 },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -135,15 +132,18 @@ function HeroProcessCard() {
                 {/* Step Indicator */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 rounded-lg ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}>
+                    <div
+                      className={`w-10 h-10 rounded-lg ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}
+                    >
                       <currentStepData.icon className={`w-5 h-5 ${currentStepData.color}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm">{currentStepData.title}</h3>
+                      <h3 className="font-semibold text-gray-900 text-sm">
+                        {currentStepData.title}
+                      </h3>
                       <p className="text-xs text-gray-600">{currentStepData.subtitle}</p>
                     </div>
                   </div>
-                  
                 </div>
 
                 {/* Step-Specific Content */}
@@ -181,7 +181,7 @@ function HeroProcessCard() {
                     <div className="bg-white/50 rounded-lg p-6 text-center">
                       <motion.div
                         animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                         className="mb-4"
                       >
                         <Brain className="w-10 h-10 text-purple-600 mx-auto" />
@@ -191,25 +191,25 @@ function HeroProcessCard() {
                           <motion.div
                             key={`${process}-${currentStep}`}
                             initial={{ opacity: 0.3 }}
-                            animate={{ 
+                            animate={{
                               opacity: [0.3, 1, 0.3],
                             }}
-                            transition={{ 
+                            transition={{
                               duration: 2.4,
                               delay: index * 0.8,
                               repeat: Infinity,
-                              ease: "easeInOut"
+                              ease: 'easeInOut',
                             }}
                             className="flex items-center justify-center space-x-2 text-sm"
                           >
-                            <motion.div 
+                            <motion.div
                               className="w-2 h-2 bg-purple-500 rounded-full"
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{
                                 duration: 1.2,
                                 delay: index * 0.8,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: 'easeInOut',
                               }}
                             />
                             <span className="text-gray-700">{process}</span>
@@ -224,8 +224,12 @@ function HeroProcessCard() {
                   <div className="space-y-4">
                     <div className="bg-white/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
-                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">Complete</DaisyBadge>
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Risk Assessment Results
+                        </h4>
+                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">
+                          Complete
+                        </DaisyBadge>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
@@ -237,18 +241,34 @@ function HeroProcessCard() {
                             className="bg-white border border-gray-200 rounded p-3 text-center"
                           >
                             <div className="flex items-center justify-center mb-2">
-                              <div className={`w-4 h-4 rounded-full shadow-sm ${
-                                result.level === 'high' ? 'bg-red-500' :
-                                result.level === 'medium' ? 'bg-orange-500' : 'bg-green-500'
-                              }`}></div>
+                              <div
+                                className={`w-4 h-4 rounded-full shadow-sm ${
+                                  result.level === 'high'
+                                    ? 'bg-red-500'
+                                    : result.level === 'medium'
+                                      ? 'bg-orange-500'
+                                      : 'bg-green-500'
+                                }`}
+                              ></div>
                             </div>
-                            <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
-                            <DaisyBadge 
-                              variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
-                              className="text-xs mb-1" >
-  {result.level}
-</DaisyBadge>
-                            <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
+                            <div className="text-xs text-gray-900 font-medium mb-2">
+                              {result.name}
+                            </div>
+                            <DaisyBadge
+                              variant={
+                                result.level === 'high'
+                                  ? 'destructive'
+                                  : result.level === 'medium'
+                                    ? 'secondary'
+                                    : 'default'
+                              }
+                              className="text-xs mb-1"
+                            >
+                              {result.level}
+                            </DaisyBadge>
+                            <div className="text-xs font-mono text-gray-600 mt-1">
+                              {result.score}
+                            </div>
                           </motion.div>
                         ))}
                       </div>
@@ -294,23 +314,23 @@ export default function HomePage() {
   // Navigation items for FloatingNav
   const navItems = [
     {
-      name: "Platform",
-      link: "#platform",
+      name: 'Platform',
+      link: '#platform',
       icon: <Shield className="h-4 w-4" />,
     },
     {
-      name: "Enterprise",
-      link: "#enterprise",
+      name: 'Enterprise',
+      link: '#enterprise',
       icon: <Briefcase className="h-4 w-4" />,
     },
     {
-      name: "Pricing",
-      link: "#pricing",
+      name: 'Pricing',
+      link: '#pricing',
       icon: <DollarSign className="h-4 w-4" />,
     },
     {
-      name: "Demo",
-      link: "#demo",
+      name: 'Demo',
+      link: '#demo',
       icon: <PlayCircle className="h-4 w-4" />,
     },
   ];
@@ -318,12 +338,11 @@ export default function HomePage() {
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
       {/* Floating Navigation */}
-      <FloatingNav 
-        navItems={navItems} 
+      <FloatingNav
+        navItems={navItems}
         onLogin={() => router.push('/auth/login')}
         onGetStarted={handleGetStarted}
       />
-      
 
       {/* Enhanced Hero Section */}
       <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
@@ -338,28 +357,32 @@ export default function HomePage() {
 
               {/* Strong Value Proposition */}
               <p className="text-xl sm:text-2xl text-[#A8A8A8] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-inter">
-                Identify, assess, and mitigate enterprise risks with AI-powered intelligence. 
-                <span className="text-[#191919] font-semibold"> Deploy in minutes, not months.</span>
+                Identify, assess, and mitigate enterprise risks with AI-powered intelligence.
+                <span className="text-[#191919] font-semibold">
+                  {' '}
+                  Deploy in minutes, not months.
+                </span>
               </p>
 
               {/* Primary CTA */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                <DaisyButton 
+                <DaisyButton
                   onClick={handleGetStarted}
-                  size="lg" 
-                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px] bg-[#199BEC] hover:bg-[#199BEC]/80" >
-  Start free trial
-</DaisyButton>
+                  size="lg"
+                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px] bg-[#199BEC] hover:bg-[#199BEC]/80"
+                >
+                  Start free trial
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </DaisyButton>
-                <DaisyButton 
+                <DaisyButton
                   onClick={handleRequestDemo}
                   variant="outline"
                   size="lg"
-                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]" >
-  Book a demo
-</DaisyButton>
-                </div>
+                  className="px-10 py-5 text-xl rounded-xl font-semibold font-inter min-w-[200px]"
+                >
+                  Book a demo
+                </DaisyButton>
+              </div>
 
               {/* Social Proof Stats */}
               <div className="grid grid-cols-3 gap-6 md:gap-8 max-w-md mx-auto lg:mx-0">
@@ -399,66 +422,104 @@ export default function HomePage() {
 
       {/* Enhanced Features Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 md:mb-20">
-              <motion.div
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 md:mb-20">
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="space-y-6 md:space-y-8"
             >
-              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter" >
-  Enterprise Platform
-</DaisyBadge>
+              <DaisyBadge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
+                Enterprise Platform
+              </DaisyBadge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
-                Built for modern<br />enterprise security
+                Built for modern
+                <br />
+                enterprise security
               </h2>
               <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
-                Comprehensive risk management platform designed for Fortune 500 companies 
-                with enterprise-grade security, compliance, and AI-powered automation.
+                Comprehensive risk management platform designed for Fortune 500 companies with
+                enterprise-grade security, compliance, and AI-powered automation.
               </p>
             </motion.div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
               {
                 icon: Shield,
-                title: "Advanced Risk Assessment",
-                description: "AI-powered threat detection with real-time monitoring and automated compliance tracking across all enterprise systems.",
-                features: ["Real-time monitoring", "Automated compliance", "Threat intelligence", "Risk scoring"],
+                title: 'Advanced Risk Assessment',
+                description:
+                  'AI-powered threat detection with real-time monitoring and automated compliance tracking across all enterprise systems.',
+                features: [
+                  'Real-time monitoring',
+                  'Automated compliance',
+                  'Threat intelligence',
+                  'Risk scoring',
+                ],
               },
               {
                 icon: Brain,
-                title: "AI-Driven Intelligence",
-                description: "Machine learning algorithms analyze patterns, predict risks, and provide actionable insights for proactive security management.",
-                features: ["Predictive analytics", "Pattern recognition", "Smart recommendations", "Behavioral analysis"],
+                title: 'AI-Driven Intelligence',
+                description:
+                  'Machine learning algorithms analyze patterns, predict risks, and provide actionable insights for proactive security management.',
+                features: [
+                  'Predictive analytics',
+                  'Pattern recognition',
+                  'Smart recommendations',
+                  'Behavioral analysis',
+                ],
               },
               {
                 icon: Target,
-                title: "Control Management",
-                description: "Design, implement, and monitor security controls with precision tracking of effectiveness and automated testing.",
-                features: ["Control design", "Effectiveness tracking", "Automated testing", "Compliance mapping"],
+                title: 'Control Management',
+                description:
+                  'Design, implement, and monitor security controls with precision tracking of effectiveness and automated testing.',
+                features: [
+                  'Control design',
+                  'Effectiveness tracking',
+                  'Automated testing',
+                  'Compliance mapping',
+                ],
               },
               {
                 icon: Zap,
-                title: "Rapid Deployment",
-                description: "Enterprise-ready platform that deploys in minutes with seamless integrations and zero-downtime migrations.",
-                features: ["5-minute setup", "API integrations", "SSO support", "Enterprise security"],
+                title: 'Rapid Deployment',
+                description:
+                  'Enterprise-ready platform that deploys in minutes with seamless integrations and zero-downtime migrations.',
+                features: [
+                  '5-minute setup',
+                  'API integrations',
+                  'SSO support',
+                  'Enterprise security',
+                ],
               },
               {
                 icon: Users,
-                title: "Team Collaboration",
-                description: "Built-in workflows for security teams with role-based access, audit trails, and real-time collaboration tools.",
-                features: ["Role-based access", "Audit trails", "Team workflows", "Real-time updates"],
+                title: 'Team Collaboration',
+                description:
+                  'Built-in workflows for security teams with role-based access, audit trails, and real-time collaboration tools.',
+                features: [
+                  'Role-based access',
+                  'Audit trails',
+                  'Team workflows',
+                  'Real-time updates',
+                ],
               },
               {
                 icon: Globe,
-                title: "Global Compliance",
-                description: "Support for international standards including SOC 2, ISO 27001, GDPR, and custom regulatory frameworks.",
-                features: ["Multi-framework", "Global standards", "Custom policies", "Audit readiness"],
-              }
+                title: 'Global Compliance',
+                description:
+                  'Support for international standards including SOC 2, ISO 27001, GDPR, and custom regulatory frameworks.',
+                features: [
+                  'Multi-framework',
+                  'Global standards',
+                  'Custom policies',
+                  'Audit readiness',
+                ],
+              },
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -467,9 +528,8 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <DaisyCard className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl" >
-  <DaisyCardBody className="p-8" >
-  </DaisyCard>
+                <DaisyCard className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
+                  <DaisyCardBody className="p-8">
                     <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="h-7 w-7 text-[#199BEC]" />
                     </div>
@@ -488,6 +548,7 @@ export default function HomePage() {
                       ))}
                     </ul>
                   </DaisyCardBody>
+                </DaisyCard>
               </motion.div>
             ))}
           </div>
@@ -496,41 +557,44 @@ export default function HomePage() {
 
       {/* Enhanced CTA Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F5F1E9] via-[#FAFAFA] to-[#F5F1E9] relative overflow-hidden">
-          <div className="max-w-5xl mx-auto text-center relative">
-            <motion.div
+        <div className="max-w-5xl mx-auto text-center relative">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="space-y-6 md:space-y-8"
           >
-            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full" >
-  Get Started Today
-</DaisyBadge>
+            <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
+              Get Started Today
+            </DaisyBadge>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
-              Ready to secure<br />your enterprise?
+              Ready to secure
+              <br />
+              your enterprise?
             </h2>
             <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
-              Join thousands of organizations that trust Riscura to protect their business 
-              and ensure compliance in an ever-changing risk landscape.
+              Join thousands of organizations that trust Riscura to protect their business and
+              ensure compliance in an ever-changing risk landscape.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <DaisyButton 
+              <DaisyButton
                 onClick={handleGetStarted}
-                size="lg" 
-                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80" >
-  Start free trial
-</DaisyButton>
+                size="lg"
+                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80"
+              >
+                Start free trial
                 <ChevronRight className="ml-2 h-5 w-5" />
               </DaisyButton>
-              <DaisyButton 
+              <DaisyButton
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
-                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl" >
-  Schedule demo
-</DaisyButton>
+                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
+              >
+                Schedule demo
+              </DaisyButton>
             </div>
 
             {/* Trust Elements */}
@@ -576,22 +640,30 @@ export default function HomePage() {
               <span className="text-2xl font-bold text-[#191919] font-inter">Riscura</span>
             </div>
             <p className="text-[#A8A8A8] text-lg font-inter mb-6 max-w-md mx-auto">
-              Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
+              Enterprise risk management platform powered by AI. Secure your business with
+              intelligent automation.
             </p>
             <div className="flex items-center justify-center space-x-6 mb-8">
-              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
-  SOC 2 Type II
-</DaisyBadge>
-              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
-  ISO 27001
-</DaisyBadge>
-              <DaisyBadge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]" >
-  GDPR Ready
-</DaisyBadge>
+              <DaisyBadge
+                variant="outline"
+                className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]"
+              >
+                SOC 2 Type II
+              </DaisyBadge>
+              <DaisyBadge
+                variant="outline"
+                className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]"
+              >
+                ISO 27001
+              </DaisyBadge>
+              <DaisyBadge
+                variant="outline"
+                className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]"
+              >
+                GDPR Ready
+              </DaisyBadge>
             </div>
-            <p className="text-[#A8A8A8] font-inter">
-              © 2024 Riscura Inc. All rights reserved.
-            </p>
+            <p className="text-[#A8A8A8] font-inter">© 2024 Riscura Inc. All rights reserved.</p>
           </div>
         </div>
       </footer>

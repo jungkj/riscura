@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 
 export default function OAuthTestPage() {
   const [envData, setEnvData] = useState<any>(null);
@@ -18,17 +18,16 @@ export default function OAuthTestPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch environment data
       const envResponse = await fetch('/api/check-env');
       const envJson = await envResponse.json();
       setEnvData(envJson);
-      
+
       // Fetch database test data
       const dbResponse = await fetch('/api/test-db');
       const dbJson = await dbResponse.json();
       setDbTestData(dbJson);
-      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
     } finally {
@@ -41,72 +40,61 @@ export default function OAuthTestPage() {
   };
 
   if (loading) {
-
-  return (
-    <div className="min-h-screen p-8 bg-gray-50">
+    return (
+      <div className="min-h-screen p-8 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">OAuth Debug Page</h1>
           <p>Loading...</p>
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-4xl mx-auto space-y-6">
         <h1 className="text-3xl font-bold">OAuth Debug Page</h1>
-        
+
         {error && (
-          <DaisyAlert variant="error" >
-  <DaisyAlertDescription>
-                </DaisyAlert>
-</DaisyAlert>{error}
-                </DaisyAlertDescription>
-              </DaisyAlert>
+          <DaisyAlert variant="error">
+            <DaisyAlertDescription>{error}</DaisyAlertDescription>
+          </DaisyAlert>
         )}
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Environment Variables</DaisyCardTitle>
-            <DaisyCardDescription>Current environment configuration</p>
-          
-          <DaisyCardBody >
-  <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
-</DaisyCardDescription>
+            <p className="text-gray-600">Current environment configuration</p>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
               {JSON.stringify(envData, null, 2)}
             </pre>
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Database Connection Test</DaisyCardTitle>
-            <DaisyCardDescription>Results of database connection attempts</p>
-          
-          <DaisyCardBody >
-  <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
-</DaisyCardDescription>
+            <p className="text-gray-600">Results of database connection attempts</p>
+          </DaisyCardBody>
+          <DaisyCardBody>
+            <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">
               {JSON.stringify(dbTestData, null, 2)}
             </pre>
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>OAuth Test</DaisyCardTitle>
-            <DaisyCardDescription>Test the Google OAuth flow</p>
-          
-          <DaisyCardBody className="space-y-4" >
-  <DaisyButton onClick={testGoogleLogin} className="w-full" >
-</DaisyCardDescription>
-  Test Google Login
-</DaisyButton>
+            <p className="text-gray-600">Test the Google OAuth flow</p>
+          </DaisyCardBody>
+          <DaisyCardBody className="space-y-4">
+            <DaisyButton onClick={testGoogleLogin} className="w-full">
+              Test Google Login
             </DaisyButton>
-            
+
             <div className="text-sm text-gray-600">
               <p>When you click the button above:</p>
               <ol className="list-decimal list-inside mt-2 space-y-1">
@@ -118,14 +106,12 @@ export default function OAuthTestPage() {
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+        <DaisyCard>
+          <DaisyCardBody>
             <DaisyCardTitle>Quick Links</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody className="space-y-2" >
-  <a href="/api/check-env" className="text-blue-600 hover:underline block">
-</DaisyCardBody>
+          </DaisyCardBody>
+          <DaisyCardBody className="space-y-2">
+            <a href="/api/check-env" className="text-blue-600 hover:underline block">
               /api/check-env - Environment check endpoint
             </a>
             <a href="/api/test-db" className="text-blue-600 hover:underline block">

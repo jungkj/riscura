@@ -261,8 +261,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           onClick={this.handleRetry}
           variant="primary"
           className="min-w-[120px]" >
-  <RefreshCw className="w-4 h-4 mr-2" />
-</DaisyButton>
+          <RefreshCw className="w-4 h-4 mr-2" />
           Try Again {retryCount > 0 && `(${retryCount}/${maxRetries})`}
         </DaisyButton>
       );
@@ -276,8 +275,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           onClick={this.handleReload}
           variant="outline"
           className="min-w-[120px]" >
-  <RefreshCw className="w-4 h-4 mr-2" />
-</DaisyButton>
+          <RefreshCw className="w-4 h-4 mr-2" />
           Reload Page
         </DaisyButton>
       );
@@ -291,8 +289,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           onClick={this.handleGoHome}
           variant="outline"
           className="min-w-[120px]" >
-  <Home className="w-4 h-4 mr-2" />
-</DaisyButton>
+          <Home className="w-4 h-4 mr-2" />
           Go to Dashboard
         </DaisyButton>
       );
@@ -322,16 +319,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 </DaisyCard>
             <div className="flex justify-center mb-4">
               <div className="p-3 rounded-full bg-destructive/10">
-                <DaisyAlertTriangle className="w-8 h-8 text-destructive" >
-  </div>
-</DaisyAlertTriangle>
+                <DaisyAlertTriangle className="w-8 h-8 text-destructive" />
+              </div>
             </div>
             
             <div className="flex items-center justify-center gap-2 mb-2">
               <DaisyCardTitle className="text-xl">Something went wrong</DaisyCardTitle>
               <DaisyBadge variant={this.getSeverityColor(severity) as any} >
-  {severity}
-</DaisyBadge>
+                {severity}
               </DaisyBadge>
             </div>
             

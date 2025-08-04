@@ -300,11 +300,12 @@ export default function NotionSpreadsheet() {
                 setSelectedCell(null);
               }}
             >
-              <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
+              <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none" >
+                <DaisySelectValue />
+              </DaisySelectTrigger>
+              <DaisySelectContent>
                 {column.options?.map(option => (
-                  <DaisySelectItem key={option} value={option}>{option}</DaisySelectContent>
+                  <DaisySelectItem key={option} value={option}>{option}</DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
@@ -351,7 +352,7 @@ export default function NotionSpreadsheet() {
         return (
           <DaisyBadge className={`text-xs ${getCategoryColor(String(cell.value))}`}>
             {String(cell.value)}
-          </DaisyInput>
+          </DaisyBadge>
         );
       }
       if (column.type === 'select' && column.id === 'status') {
@@ -455,14 +456,12 @@ export default function NotionSpreadsheet() {
             <h1 className="text-xl font-semibold text-gray-900">Risk Register</h1>
           </div>
           <DaisyBadge className="bg-[#199BEC]/10 text-[#199BEC] border-[#199BEC]/30" >
-  <Sparkles className="w-3 h-3 mr-1" />
-</DaisyBadge>
+            <Sparkles className="w-3 h-3 mr-1" />
             AI Enhanced
           </DaisyBadge>
           {hasUnsavedChanges && (
             <DaisyBadge variant="secondary" className="bg-amber-100 text-amber-800" >
-  Unsaved Changes
-</DaisyBadge>
+              Unsaved Changes
             </DaisyBadge>
           )}
         </div>
@@ -479,14 +478,12 @@ export default function NotionSpreadsheet() {
           </div>
           
           <DaisyButton variant="secondary" size="sm" className="h-8" >
-  <Filter className="w-4 h-4 mr-1" />
-</DaisyInput>
+            <Filter className="w-4 h-4 mr-1" />
             Filter
           </DaisyButton>
           
           <DaisyButton variant="secondary" size="sm" className="h-8" >
-  <Download className="w-4 h-4 mr-1" />
-</DaisyButton>
+            <Download className="w-4 h-4 mr-1" />
             Export
           </DaisyButton>
           
@@ -516,8 +513,7 @@ export default function NotionSpreadsheet() {
               size="sm" 
               className="h-8 bg-[#199BEC] hover:bg-[#199BEC]/90"
               onClick={saveData} >
-  <Save className="w-4 h-4 mr-1" />
-</DaisyButton>
+              <Save className="w-4 h-4 mr-1" />
               Save
             </DaisyButton>
           )}

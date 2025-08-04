@@ -38,8 +38,7 @@ const nextConfig = {
     reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
     // Enable SWC for styled-components if needed
     styledComponents: false,
-    // Enable SWC minification for better performance
-    swcMinify: true,
+    // Note: swcMinify is deprecated in Next.js 15+ (SWC minification is enabled by default)
   },
 
   // Image optimization
@@ -224,9 +223,9 @@ const nextConfig = {
   // Trailing slash
   trailingSlash: false,
 
-  // TypeScript configuration - optimized for Next.js 15.0.0
+  // TypeScript configuration - optimized for Next.js 15.4.5
   typescript: {
-    // Temporarily ignore build errors while fixing JSX issues
+    // Temporarily ignore build errors while fixing JSX syntax issues
     ignoreBuildErrors: true,
     tsconfigPath: './tsconfig.json',
   },
