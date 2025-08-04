@@ -44,7 +44,7 @@ export const GET = withApiMiddleware(
       // console.log('[Controls API] Fetching controls for organization:', user.organizationId)
 
       // Parse pagination parameters from query string
-      const { searchParams } = new URL(req.url)
+      const { searchParams } = new URL(req.url);
       const page = parseInt(searchParams.get('page') || '1');
       const limit = parseInt(searchParams.get('limit') || '50');
       const offset = (page - 1) * limit;
@@ -52,10 +52,10 @@ export const GET = withApiMiddleware(
       // Get total count for pagination
       const totalCount = await db.client.control.count({
         where: { organizationId: user.organizationId },
-      })
+      });
 
       // Single optimized query with relationships
-      let controls
+      let controls;
       try {
         controls = await db.client.control.findMany({
           where: { organizationId: user.organizationId },
@@ -88,21 +88,21 @@ export const GET = withApiMiddleware(
         });
       } catch (relationError) {
         // console.warn(
-          '[Controls API] Error fetching relationships, falling back to basic query:',
-          relationError
-        )
+        //   '[Controls API] Error fetching relationships, falling back to basic query:',
+        //   relationError
+        // )
         // Fallback to basic query without relationships
         controls = await db.client.control.findMany({
           where: { organizationId: user.organizationId },
           orderBy: { createdAt: 'desc' },
           skip: offset,
           take: limit,
-        })
+        });
       }
 
       // console.log(
-        `[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`
-      )
+      //   `[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`
+      // )
 
       return NextResponse.json({
         success: true,
@@ -117,11 +117,11 @@ export const GET = withApiMiddleware(
       });
     } catch (error) {
       // console.error('[Controls API] Critical error:', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        organizationId: user.organizationId,
-      })
+      //   error,
+      //   message: error instanceof Error ? error.message : 'Unknown error',
+      //   stack: error instanceof Error ? error.stack : undefined,
+      //   organizationId: user.organizationId,
+      // })
 
       return NextResponse.json(
         {
@@ -215,11 +215,11 @@ export const POST = withApiMiddleware(
       }
 
       // console.error('[Controls API] Create control error:', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId },
-      })
+      //   error,
+      //   message: error instanceof Error ? error.message : 'Unknown error',
+      //   stack: error instanceof Error ? error.stack : undefined,
+      //   user: { id: user.id, organizationId: user.organizationId },
+      // })
 
       return NextResponse.json(
         {

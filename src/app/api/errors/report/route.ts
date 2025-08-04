@@ -23,14 +23,14 @@ export async function POST(_request: NextRequest) {
 
     // For now, we'll just log to console and return success
     // console.error('Error Report:', {
-      errorId: errorReport.errorId,
-      level: errorReport.level,
-      message: errorReport.message,
-      url: errorReport.url,
-      timestamp: errorReport.timestamp,
-      userAgent: errorReport.userAgent,
-      retryCount: errorReport.retryCount,
-    })
+    //   errorId: errorReport.errorId,
+    //   level: errorReport.level,
+    //   message: errorReport.message,
+    //   url: errorReport.url,
+    //   timestamp: errorReport.timestamp,
+    //   userAgent: errorReport.userAgent,
+    //   retryCount: errorReport.retryCount,
+    // })
 
     // If it's a critical error, you might want to send additional alerts
     if (errorReport.level === 'critical') {

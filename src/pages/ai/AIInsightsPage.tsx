@@ -119,7 +119,7 @@ export default function AIInsightsPage() {
         trend: 'increasing',
         prediction: 'Overall risk exposure is projected to increase by 12% over the next 3 months',
         timeframe: '3 months',
-        factors: [;
+        factors: [
           'Increased remote work vulnerabilities',
           'New regulatory requirements',
           'Supply chain disruptions',
@@ -127,7 +127,7 @@ export default function AIInsightsPage() {
         ],
       }
 ;
-      const mockRecommendations: RecommendationItem[] = [;
+      const mockRecommendations: RecommendationItem[] = [
         {
           id: '1',
           title: 'Implement Zero-Trust Security Model',
@@ -185,15 +185,14 @@ export default function AIInsightsPage() {
     try {
       // Simulate AI processing
       await new Promise((resolve) => setTimeout(resolve, 2000));
-;
+
       // Update insights with new data
-      setInsights((prev) =>;
+      setInsights((prev) =>
         prev.map((insight) => ({
           ...insight,
           confidence: Math.max(70, Math.min(95, insight.confidence + (Math.random() - 0.5) * 10)),
-        }));
+        }))
       );
-;
       toast({
         title: 'Insights Updated',
         description: 'AI insights have been refreshed with latest data',
@@ -207,109 +206,108 @@ export default function AIInsightsPage() {
     } finally {
       setRefreshing(false);
     }
-  }
-;
+  };
+
   const getInsightIcon = (_type: AIInsight['type']) => {
     switch (type) {
-      case 'risk_prediction':;
-        return <TrendingUp className="h-5 w-5 text-red-500";
-      case 'trend_analysis':;
-        return <BarChart3 className="h-5 w-5 text-blue-500";
-      case 'recommendation':;
-        return <Lightbulb className="h-5 w-5 text-yellow-500";
-      case 'anomaly':;
-        return <AlertTriangle className="h-5 w-5 text-orange-500";
+      case 'risk_prediction':
+        return <TrendingUp className="h-5 w-5 text-red-500" />;
+      case 'trend_analysis':
+        return <BarChart3 className="h-5 w-5 text-blue-500" />;
+      case 'recommendation':
+        return <Lightbulb className="h-5 w-5 text-yellow-500" />;
+      case 'anomaly':
+        return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+      default:
+        return <AlertTriangle className="h-5 w-5 text-gray-500" />;
     }
-  }
-;
+  };
   const getImpactBadge = (impact: string) => {
     switch (impact) {
-      case 'high':;
+      case 'high':
         return <DaisyBadge variant="error">High Impact</DaisyBadge>;
-      case 'medium':;
+      case 'medium':
         return <DaisyBadge variant="secondary">Medium Impact</DaisyBadge>;
-      case 'low':;
+      case 'low':
         return <DaisyBadge variant="outline">Low Impact</DaisyBadge>;
-      // default: // Fixed expression expected error
+      default:
         return <DaisyBadge variant="outline">Unknown</DaisyBadge>;
     }
-  }
-;
+  };
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high':;
+      case 'high':
         return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium':;
+      case 'medium':
         return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low':;
+      case 'low':
         return 'text-green-600 bg-green-50 border-green-200';
-      // default: // Fixed expression expected error
+      default:
         return 'text-muted-foreground bg-secondary/20 border-border';
     }
-  }
-;
+  };
   if (isLoading) {
-    return (;
-      <div className="flex items-center justify-center min-h-[400px]">;
-        <div className="text-center">;
-          <Brain className="h-12 w-12 mx-auto mb-4 text-primary animate-pulse";
-          <p className="text-lg font-medium">AI is analyzing your data...</p>;
-          <p className="text-sm text-muted-foreground">Generating insights and recommendations</p>;
-        </div>;
-      </div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Brain className="h-12 w-12 mx-auto mb-4 text-primary animate-pulse" />
+          <p className="text-lg font-medium">AI is analyzing your data...</p>
+          <p className="text-sm text-muted-foreground">Generating insights and recommendations</p>
+        </div>
+      </div>
     );
   }
 
-  return (;
-    <motion.div;
-      className="space-y-6";
+  return (
+    <motion.div
+      className="space-y-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-    >;
+    >
       {/* Header */}
-      <motion.div;
-        className="flex items-center justify-between";
+      <motion.div
+        className="flex items-center justify-between"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
-      >;
-        <div>;
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">;
-            AI Insights;
-          </h1>;
-          <p className="text-muted-foreground">;
-            Intelligent analysis and recommendations powered by machine learning.;
-          </p>;
-        </div>;
-        <DaisyButton onClick={handleRefresh} variant="outline" disabled={refreshing}>;
-          <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin' : ''}`}
+      >
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            AI Insights
+          </h1>
+          <p className="text-muted-foreground">
+            Intelligent analysis and recommendations powered by machine learning.
+          </p>
+        </div>
+        <DaisyButton onClick={handleRefresh} variant="outline" disabled={refreshing}>
+          <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
           {refreshing ? 'Analyzing...' : 'Refresh Insights'}
-        </DaisyButton>;
-      </motion.div>;
+        </DaisyButton>
+      </motion.div>
       {/* Predictive Analysis Overview */}
-      {Boolean(predictiveAnalysis) && (;
-        <motion.div;
+      {Boolean(predictiveAnalysis) && (
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-        >;
-          <DaisyCard className="border-2 border-primary/20">;
-            <DaisyCardBody>;
-              <DaisyCardTitle className="flex items-center gap-2">;
-                <Zap className="h-5 w-5 text-primary";
-                Predictive Risk Analysis;
-              </DaisyCardTitle>;
-            </DaisyCardBody>;
-            <DaisyCardBody>;
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">;
-                <div className="text-center">;
-                  <div className="text-3xl font-bold text-primary mb-2">;
+        >
+          <DaisyCard className="border-2 border-primary/20">
+            <DaisyCardBody>
+              <DaisyCardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Predictive Risk Analysis
+              </DaisyCardTitle>
+            </DaisyCardBody>
+            <DaisyCardBody>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary mb-2">
                     {predictiveAnalysis.riskScore}
-                  </div>;
-                  <p className="text-sm text-muted-foreground">Risk Score</p>;
-                  <DaisyProgress value={predictiveAnalysis.riskScore} className="mt-2";
-                </div>;
+                  </div>
+                  <p className="text-sm text-muted-foreground">Risk Score</p>
+                  <DaisyProgress value={predictiveAnalysis.riskScore} className="mt-2" />
+                </div>
                 <div className="text-center">;
                   <div className="flex items-center justify-center gap-2 mb-2">;
                     {predictiveAnalysis.trend === 'increasing' ? (;

@@ -25,13 +25,13 @@ const registerSchema = z.object({
   acceptTerms: z
     .boolean()
     .refine((val) => val === true, 'You must accept the terms and conditions'),
-})
+});
 
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     // Rate limiting by IP
     const clientIP =
-      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
     const rateLimitResult = rateLimit(
       `register:${clientIP}`,
@@ -54,7 +54,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Parse request body
-    const body = await request.json()
+    const body = await request.json();
     const validationResult = registerSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -71,7 +71,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       validationResult.data;
 
     // Check password strength
-    const passwordStrength = checkPasswordStrength(password)
+    const passwordStrength = checkPasswordStrength(password);
     if (!passwordStrength.isValid) {
       return NextResponse.json(
         {
@@ -85,7 +85,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     // Check if email already exists
     const existingUser = await db.client.user.findUnique({
       where: { email: email.toLowerCase() },
-    })
+    });
 
     if (existingUser) {
       await logAuthEvent('REGISTER_EMAIL_EXISTS', clientIP, email);
@@ -105,7 +105,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       if (organizationId) {
         organization = await db.client.organization.findUnique({
           where: { id: organizationId },
-        })
+        });
 
         if (!organization || !organization.isActive) {
           return NextResponse.json({ error: 'Invalid or inactive organization' }, { status: 400 });
@@ -120,7 +120,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       // Joining existing organization (requires approval or open registration)
       organization = await db.client.organization.findUnique({
         where: { id: organizationId },
-      })
+      });
 
       if (!organization || !organization.isActive) {
         return NextResponse.json({ error: 'Invalid or inactive organization' }, { status: 400 });
@@ -138,7 +138,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
             currency: 'USD',
           },
         },
-      })
+      });
       userRole = UserRole.ADMIN; // First user becomes admin
     } else {
       return NextResponse.json({ error: 'Organization name or ID is required' }, { status: 400 });
@@ -146,11 +146,11 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 
     // Ensure organization is defined at this point
     if (!organization) {
-      throw new Error('Organization not found - this should not happen')
+      throw new Error('Organization not found - this should not happen');
     }
 
     // Hash password
-    const passwordHash = await hashPassword(password)
+    const passwordHash = await hashPassword(password);
 
     // Create user
     const user = await db.client.user.create({
@@ -165,7 +165,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         isActive: !env.SKIP_EMAIL_VERIFICATION, // Require email verification in production
         emailVerified: env.SKIP_EMAIL_VERIFICATION ? new Date() : null,
       },
-    })
+    });
 
     // Log registration
     await logAuthEvent('REGISTER_SUCCESS', clientIP, email, {
@@ -174,14 +174,14 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       organizationName: organization.name,
       role: user.role,
       userAgent: request.headers.get('user-agent'),
-    })
+    });
 
     // If email verification is disabled, create session immediately
     if (env.SKIP_EMAIL_VERIFICATION) {
       const sessionOptions = {
         ipAddress: clientIP,
         userAgent: request.headers.get('user-agent') || undefined,
-      }
+      };
 
       const { session, tokens } = await createSession(user, sessionOptions);
       const csrfToken = generateCSRFToken();
@@ -218,7 +218,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         sameSite: 'strict',
         maxAge: tokens.refreshExpiresIn,
         path: '/',
-      })
+      });
 
       response.cookies.set('csrf-token', csrfToken, {
         httpOnly: false,
@@ -231,7 +231,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       return response;
     } else {
       // Send email verification
-      await sendVerificationEmail(user.email, user.id)
+      await sendVerificationEmail(user.email, user.id);
 
       return NextResponse.json({
         message: 'Registration successful. Please check your email to verify your account.',
@@ -264,7 +264,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 /**
  * Get default permissions for user role
  */
-const getDefaultPermissions = (role: UserRole): string[] {
+const getDefaultPermissions = (role: UserRole): string[] => {
   switch (role) {
     case UserRole.ADMIN:
       return ['*']; // All permissions
@@ -300,7 +300,7 @@ const getDefaultPermissions = (role: UserRole): string[] {
     default:
       return ['risks:read', 'controls:read', 'documents:read', 'tasks:read', 'workflows:read'];
   }
-}
+};
 
 /**
  * Send email verification
@@ -308,7 +308,7 @@ const getDefaultPermissions = (role: UserRole): string[] {
 async function sendVerificationEmail(email: string, userId: string): Promise<void> {
   try {
     // Generate verification token
-    const verificationToken = generateVerificationToken(userId)
+    const verificationToken = generateVerificationToken(userId);
 
     // Store token in database with expiration
     await db.client.user.update({
@@ -317,16 +317,16 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
         emailVerificationToken: verificationToken,
         emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
       },
-    })
+    });
 
     // Get user details for personalization
     const user = await db.client.user.findUnique({
       where: { id: userId },
       select: { firstName: true, lastName: true },
-    })
+    });
 
     // Send verification email
-    const verificationUrl = `${env.APP_URL}/auth/verify?token=${verificationToken}`
+    const verificationUrl = `${env.APP_URL}/auth/verify?token=${verificationToken}`;
 
     await emailService.sendTemplate('verification', email, {
       firstName: user?.firstName || 'User',
@@ -343,7 +343,7 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
 /**
  * Generate verification token
  */
-const generateVerificationToken = (_userId: string): string {
+const generateVerificationToken = (_userId: string): string => {
   return jwt.sign(
     {
       userId,
@@ -356,13 +356,14 @@ const generateVerificationToken = (_userId: string): string {
       issuer: 'riscura',
       audience: 'riscura-users',
     }
-  )
-}
+  );
+};
 
 /**
  * Log authentication events
  */
-async function logAuthEvent(_type: string,
+async function logAuthEvent(
+  _type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}
@@ -385,14 +386,14 @@ async function logAuthEvent(_type: string,
 
     // For audit purposes, log the authentication event
     // console.log('Authentication Event:', {
-      type,
-      ipAddress,
-      email,
-      userId,
-      organizationId,
-      timestamp: new Date(),
-      ...metadata,
-    })
+    //   type,
+    //   ipAddress,
+    //   email,
+    //   userId,
+    //   organizationId,
+    //   timestamp: new Date(),
+    //   ...metadata,
+    // })
   } catch (error) {
     // console.error('Failed to log auth event:', error)
   }
@@ -404,5 +405,5 @@ export async function GET(): Promise<NextResponse> {
     status: 'ok',
     endpoint: 'register',
     timestamp: new Date().toISOString(),
-  })
+  });
 }

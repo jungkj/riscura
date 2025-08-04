@@ -9,7 +9,7 @@ import { createSecureAPIHandler, SECURITY_PROFILES } from '@/lib/security/middle
 export const POST = createSecureAPIHandler(async (_request: NextRequest): Promise<NextResponse> => {
   try {
     // Get refresh token from cookie or body
-    let refreshToken = request.cookies.get('refreshToken')?.value
+    let refreshToken = request.cookies.get('refreshToken')?.value;
 
     if (!refreshToken) {
       const body = await request.json();
@@ -31,7 +31,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
         token: 'demo-***',
         ip: request.headers.get('x-forwarded-for') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown',
-      })
+      });
 
       return NextResponse.json(
         { error: 'Demo authentication is not available in production' },
@@ -45,7 +45,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
       productionGuard.isDemoMode() &&
       refreshToken.startsWith('demo-refresh-')
     ) {
-      throwIfProduction('Demo token refresh')
+      throwIfProduction('Demo token refresh');
 
       const demoUserCookie = request.cookies.get('demo-user')?.value;
 
@@ -58,7 +58,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
 
         // Validate demo user structure
         if (!demoUser.id || !demoUser.email || !demoUser.role) {
-          throw new Error('Invalid demo user data')
+          throw new Error('Invalid demo user data');
         }
 
         // Return fresh demo tokens
@@ -78,7 +78,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
             expiresIn: 3600,
           },
           demoMode: true,
-        })
+        });
 
         // Update demo cookies
         response.cookies.set('refreshToken', `demo-refresh-${demoUser.id}`, {
@@ -87,7 +87,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
           sameSite: 'strict',
           maxAge: 86400, // 24 hours
           path: '/',
-        })
+        });
 
         // Log demo token refresh (development only)
         // console.log('🎭 Demo token refreshed for user:', demoUser.id)
@@ -105,10 +105,10 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
     // Regular JWT token refresh for non-demo users
     try {
       // Verify refresh token
-      const payload = verifyRefreshToken(refreshToken)
+      const payload = verifyRefreshToken(refreshToken);
 
       // Validate session
-      const sessionResult = await validateSession(payload.sessionId)
+      const sessionResult = await validateSession(payload.sessionId);
 
       if (!sessionResult.isValid || !sessionResult.session || !sessionResult.user) {
         productionGuard.logSecurityEvent('session_refresh_failed', {
@@ -128,10 +128,10 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
         refreshToken: 'new-refresh-token',
         expiresIn: 3600,
         refreshExpiresIn: 86400,
-      }
+      };
 
       // Generate new CSRF token
-      const csrfToken = generateCSRFToken()
+      const csrfToken = generateCSRFToken();
 
       // Log refresh event
       await logAuthEvent(
@@ -143,7 +143,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
           sessionId: session.id,
           userAgent: request.headers.get('user-agent'),
         }
-      )
+      );
 
       // Prepare response
       const response = NextResponse.json({
@@ -165,7 +165,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
           id: session.id,
           expiresAt: session.expiresAt,
         },
-      })
+      });
 
       // Update cookies with secure settings
       response.cookies.set('refreshToken', tokens.refreshToken, {
@@ -174,7 +174,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
         sameSite: 'strict',
         maxAge: tokens.refreshExpiresIn,
         path: '/',
-      })
+      });
 
       response.cookies.set('csrf-token', csrfToken, {
         httpOnly: false,
@@ -224,7 +224,8 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
 /**
  * Log authentication events
  */
-async function logAuthEvent(_type: string,
+async function logAuthEvent(
+  _type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}
@@ -249,14 +250,14 @@ async function logAuthEvent(_type: string,
 
     // For audit purposes, log the authentication event
     // console.log('Authentication Event:', {
-      type,
-      ipAddress,
-      email,
-      userId,
-      organizationId,
-      timestamp: new Date(),
-      metadata,
-    })
+    //   type,
+    //   ipAddress,
+    //   email,
+    //   userId,
+    //   organizationId,
+    //   timestamp: new Date(),
+    //   metadata,
+    // })
 
     // In production, this would typically go to a proper audit log system
     productionGuard.logSecurityEvent(type.toLowerCase(), {
@@ -265,7 +266,7 @@ async function logAuthEvent(_type: string,
       userId,
       organizationId,
       metadata,
-    })
+    });
   } catch (error) {
     // console.error('Failed to log auth event:', error)
   }
@@ -277,5 +278,5 @@ export async function GET(): Promise<NextResponse> {
     status: 'ok',
     timestamp: new Date().toISOString(),
     service: 'auth-refresh',
-  })
+  });
 }

@@ -23,15 +23,15 @@ export const GET = withApiMiddleware(
 
     try {
       // console.log(
-        '[Mappings API] Fetching control-risk mappings for organization:',
-        user.organizationId
-      )
+      //   '[Mappings API] Fetching control-risk mappings for organization:',
+      //   user.organizationId
+      // )
 
       // First check if there are any risks or controls at all
       const [risksCount, controlsCount] = await Promise.all([
         db.client.risk.count({ where: { organizationId: user.organizationId } }),
         db.client.control.count({ where: { organizationId: user.organizationId } }),
-      ])
+      ]);
 
       // console.log(`[Mappings API] Found ${risksCount} risks and ${controlsCount} controls`)
 
@@ -50,7 +50,7 @@ export const GET = withApiMiddleware(
             organizationId: user.organizationId,
           },
         },
-      })
+      });
 
       // console.log(`[Mappings API] Found ${mappings.length} mappings`)
 
@@ -88,7 +88,7 @@ export const GET = withApiMiddleware(
               },
             },
           },
-        })
+        });
 
         return NextResponse.json({
           success: true,
@@ -96,9 +96,9 @@ export const GET = withApiMiddleware(
         });
       } catch (relationError) {
         // console.warn(
-          '[Mappings API] Error fetching relationships, returning basic data:',
-          relationError
-        )
+        //   '[Mappings API] Error fetching relationships, returning basic data:',
+        //   relationError
+        // )
         return NextResponse.json({
           success: true,
           data: mappings,
@@ -106,11 +106,11 @@ export const GET = withApiMiddleware(
       }
     } catch (error) {
       // console.error('[Mappings API] Critical error:', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        organizationId: user.organizationId,
-      })
+      //   error,
+      //   message: error instanceof Error ? error.message : 'Unknown error',
+      //   stack: error instanceof Error ? error.stack : undefined,
+      //   organizationId: user.organizationId,
+      // })
 
       return NextResponse.json(
         {
@@ -194,7 +194,7 @@ export const POST = withApiMiddleware(
               controlId: validatedData.controlId,
             },
           },
-        })
+        });
 
         if (existingMapping) {
           // console.log('[Mappings API] Mapping already exists:', existingMapping.id)
@@ -219,7 +219,7 @@ export const POST = withApiMiddleware(
         riskId: validatedData.riskId,
         controlId: validatedData.controlId,
         effectiveness: validatedData.effectiveness || 0,
-      }
+      };
 
       const mapping = await db.client.controlRiskMapping.create({
         data: mappingData,
@@ -235,7 +235,7 @@ export const POST = withApiMiddleware(
             risk: true,
             control: true,
           },
-        })
+        });
 
         return NextResponse.json(
           {
@@ -264,11 +264,11 @@ export const POST = withApiMiddleware(
       }
 
       // console.error('[Mappings API] Create mapping error:', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId },
-      })
+      //   error,
+      //   message: error instanceof Error ? error.message : 'Unknown error',
+      //   stack: error instanceof Error ? error.stack : undefined,
+      //   user: { id: user.id, organizationId: user.organizationId },
+      // })
 
       return NextResponse.json(
         {
@@ -330,10 +330,10 @@ export const DELETE = withApiMiddleware(
 
       if (!mapping) {
         // console.warn('[Mappings API] Mapping not found:', {
-          riskId,
-          controlId,
-          organizationId: user.organizationId,
-        })
+        //   riskId,
+        //   controlId,
+        //   organizationId: user.organizationId,
+        // })
         return NextResponse.json(
           {
             success: false,
@@ -354,7 +354,7 @@ export const DELETE = withApiMiddleware(
             controlId,
           },
         },
-      })
+      });
 
       // console.log('[Mappings API] Mapping deleted successfully')
 
@@ -365,11 +365,11 @@ export const DELETE = withApiMiddleware(
       });
     } catch (error) {
       // console.error('[Mappings API] Delete mapping error:', {
-        error,
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        user: { id: user.id, organizationId: user.organizationId },
-      })
+      //   error,
+      //   message: error instanceof Error ? error.message : 'Unknown error',
+      //   stack: error instanceof Error ? error.stack : undefined,
+      //   user: { id: user.id, organizationId: user.organizationId },
+      // })
 
       return NextResponse.json(
         {
