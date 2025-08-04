@@ -84,9 +84,13 @@ export const hasAllPermissions = (
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + '...';
-}export const capitalizeFirst = (str: string): string => {
+};
+
+export const capitalizeFirst = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
+};
+
+export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency,
@@ -101,7 +105,9 @@ export const formatFileSize = (bytes: number): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 ;
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}export const getFileExtension = (filename: string): string => {
+};
+
+export const getFileExtension = (filename: string): string => {
   return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
 };
 // Array utilities
@@ -118,7 +124,9 @@ export const groupBy = <T, K extends string | number | symbol>(;
     },;
     {} as Record<K, T[]>;
   );
-}export const sortBy = <T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] => {
+};
+
+export const sortBy = <T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] => {
   return [...array].sort((a, b) => {
     const aVal = a[key];
     const bVal = b[key];
@@ -132,7 +140,9 @@ export const groupBy = <T, K extends string | number | symbol>(;
 export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}export const isValidUrl = (url: string): boolean => {
+};
+
+export const isValidUrl = (url: string): boolean => {
   try {
     new URL(url);
     return true;

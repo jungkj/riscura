@@ -64,115 +64,113 @@ export default function AIInsightsPage() {
   const [recommendations, setRecommendations] = useState<RecommendationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-;
   // Mock data generation
   useEffect(() => {
     const generateMockData = () => {
-      const mockInsights: AIInsight[] = [;
+      const mockInsights: AIInsight[] = [
         {
-          id: '1',;
-          type: 'risk_prediction',;
-          title: 'Emerging Cybersecurity Risk',;
-          // description: // Fixed expression expected error
-            'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',;
-          confidence: 87,;
-          impact: 'high',;
-          category: 'Technology',;
-          actionable: true,;
-          createdAt: new Date(Date.now() - 1000 * 60 * 30),;
-        },;
+          id: '1',
+          type: 'risk_prediction',
+          title: 'Emerging Cybersecurity Risk',
+          description: 'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',
+          confidence: 87,
+          impact: 'high',
+          category: 'Technology',
+          actionable: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 30),
+        },
         {
-          id: '2',;
-          type: 'trend_analysis',;
-          title: 'Compliance Risk Trending Down',;
+          id: '2',
+          type: 'trend_analysis',
+          title: 'Compliance Risk Trending Down',
           // description: // Fixed expression expected error
-            'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',;
-          confidence: 92,;
-          impact: 'medium',;
-          category: 'Compliance',;
-          actionable: false,;
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),;
-        },;
+            'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
+          confidence: 92,
+          impact: 'medium',
+          category: 'Compliance',
+          actionable: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+        },
         {
-          id: '3',;
-          type: 'anomaly',;
-          title: 'Unusual Risk Pattern Detected',;
+          id: '3',
+          type: 'anomaly',
+          title: 'Unusual Risk Pattern Detected',
           // description: // Fixed expression expected error
-            'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',;
-          confidence: 78,;
-          impact: 'medium',;
-          category: 'Operational',;
-          actionable: true,;
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4),;
-        },;
+            'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
+          confidence: 78,
+          impact: 'medium',
+          category: 'Operational',
+          actionable: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4),
+        },
         {
-          id: '4',;
-          type: 'recommendation',;
-          title: 'Risk Assessment Optimization',;
+          id: '4',
+          type: 'recommendation',
+          title: 'Risk Assessment Optimization',
           // description: // Fixed expression expected error
-            'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',;
-          confidence: 85,;
-          impact: 'high',;
-          category: 'Process',;
-          actionable: true,;
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),;
-        },;
+            'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
+          confidence: 85,
+          impact: 'high',
+          category: 'Process',
+          actionable: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),
+        },
       ];
 ;
       const mockPredictive: PredictiveAnalysis = {
-        riskScore: 73,;
-        trend: 'increasing',;
-        prediction: 'Overall risk exposure is projected to increase by 12% over the next 3 months',;
-        timeframe: '3 months',;
+        riskScore: 73,
+        trend: 'increasing',
+        prediction: 'Overall risk exposure is projected to increase by 12% over the next 3 months',
+        timeframe: '3 months',
         factors: [;
-          'Increased remote work vulnerabilities',;
-          'New regulatory requirements',;
-          'Supply chain disruptions',;
-          'Technology infrastructure aging',;
-        ],;
+          'Increased remote work vulnerabilities',
+          'New regulatory requirements',
+          'Supply chain disruptions',
+          'Technology infrastructure aging',
+        ],
       }
 ;
       const mockRecommendations: RecommendationItem[] = [;
         {
-          id: '1',;
-          title: 'Implement Zero-Trust Security Model',;
-          description: 'Deploy zero-trust architecture to reduce cybersecurity risks by 45%',;
-          priority: 'high',;
-          effort: 'high',;
-          impact: 'high',;
-          category: 'Security',;
-          estimatedTime: '3-6 months',;
-        },;
+          id: '1',
+          title: 'Implement Zero-Trust Security Model',
+          description: 'Deploy zero-trust architecture to reduce cybersecurity risks by 45%',
+          priority: 'high',
+          effort: 'high',
+          impact: 'high',
+          category: 'Security',
+          estimatedTime: '3-6 months',
+        },
         {
-          id: '2',;
-          title: 'Automate Compliance Monitoring',;
-          description: 'Set up automated compliance tracking to reduce manual oversight burden',;
-          priority: 'medium',;
-          effort: 'medium',;
-          impact: 'high',;
-          category: 'Compliance',;
-          estimatedTime: '1-2 months',;
-        },;
+          id: '2',
+          title: 'Automate Compliance Monitoring',
+          description: 'Set up automated compliance tracking to reduce manual oversight burden',
+          priority: 'medium',
+          effort: 'medium',
+          impact: 'high',
+          category: 'Compliance',
+          estimatedTime: '1-2 months',
+        },
         {
-          id: '3',;
-          title: 'Enhanced Staff Training Program',;
-          description: 'Develop targeted training for departments with higher risk concentrations',;
-          priority: 'medium',;
-          effort: 'low',;
-          impact: 'medium',;
-          category: 'Training',;
-          estimatedTime: '2-4 weeks',;
-        },;
+          id: '3',
+          title: 'Enhanced Staff Training Program',
+          description: 'Develop targeted training for departments with higher risk concentrations',
+          priority: 'medium',
+          effort: 'low',
+          impact: 'medium',
+          category: 'Training',
+          estimatedTime: '2-4 weeks',
+        },
         {
-          id: '4',;
-          title: 'Risk Dashboard Optimization',;
-          description: 'Improve risk visualization and reporting for better decision-making',;
-          priority: 'low',;
-          effort: 'low',;
-          impact: 'medium',;
-          category: 'Analytics',;
-          estimatedTime: '1-2 weeks',;
-        },;
+          id: '4',
+          title: 'Risk Dashboard Optimization',
+          description: 'Improve risk visualization and reporting for better decision-making',
+          priority: 'low',
+          effort: 'low',
+          impact: 'medium',
+          category: 'Analytics',
+          estimatedTime: '1-2 weeks',
+        },
       ];
 ;
       setInsights(mockInsights);
@@ -194,20 +192,20 @@ export default function AIInsightsPage() {
       // Update insights with new data
       setInsights((prev) =>;
         prev.map((insight) => ({
-          ...insight,;
-          confidence: Math.max(70, Math.min(95, insight.confidence + (Math.random() - 0.5) * 10)),;
+          ...insight,
+          confidence: Math.max(70, Math.min(95, insight.confidence + (Math.random() - 0.5) * 10)),
         }));
       );
 ;
       toast({
-        title: 'Insights Updated',;
-        description: 'AI insights have been refreshed with latest data',;
+        title: 'Insights Updated',
+        description: 'AI insights have been refreshed with latest data',
       });
     } catch {
       toast({
-        title: 'Refresh Failed',;
-        description: 'Unable to refresh insights. Please try again.',;
-        variant: 'destructive',;
+        title: 'Refresh Failed',
+        description: 'Unable to refresh insights. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setRefreshing(false);

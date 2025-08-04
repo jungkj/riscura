@@ -14,21 +14,21 @@ const aiGenerateSchema = z.object({
   maxTokens: z.number().min(1).max(4000).optional().default(2000),
   model: z.enum(['gpt-3.5-turbo', 'gpt-4', 'gpt-4-turbo']).optional().default('gpt-4'),
   context: z.record(z.any()).optional(),
-})
+});
 
 // Rate limiting configuration for AI endpoints
 const AI_RATE_LIMIT = {
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 10, // 10 requests per minute per user
-}
+};
 
 // POST /api/ai/generate - Generate AI content with server-side API key
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user
+    const user = (req as any).user;
 
     // Parse and validate request body
-    const body = await req.json()
+    const body = await req.json();
     const validationResult = aiGenerateSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -41,11 +41,11 @@ export const POST = withApiMiddleware(
     const data = validationResult.data;
 
     // Record start time for response time calculation
-    const startTime = Date.now()
+    const startTime = Date.now();
 
     try {
       // Check user's AI usage quota if applicable
-      const userQuota = await checkUserAIQuota(user.id, user.organizationId)
+      const userQuota = await checkUserAIQuota(user.id, user.organizationId);
       if (!userQuota.allowed) {
         return ApiResponseFormatter.error('QUOTA_EXCEEDED', 'AI generation quota exceeded', {
           status: 429,
@@ -58,7 +58,7 @@ export const POST = withApiMiddleware(
       }
 
       // Initialize AI service with server-side configuration
-      const aiService = new AIService()
+      const aiService = new AIService();
 
       // Generate content using the correct interface
       const response = await aiService.generateContent({
@@ -74,10 +74,10 @@ export const POST = withApiMiddleware(
         requirements: `Generate content based on the provided prompt with temperature ${data.temperature} and max tokens ${data.maxTokens}`,
         userId: user.id,
         organizationId: user.organizationId,
-      })
+      });
 
       // Calculate response time
-      const responseTime = Date.now() - startTime
+      const responseTime = Date.now() - startTime;
 
       // Track AI usage for billing and analytics
       await trackAIUsage({
@@ -93,7 +93,7 @@ export const POST = withApiMiddleware(
         }),
         responseTime,
         success: true,
-      })
+      });
 
       // Log activity
       await db.client.activity.create({
@@ -112,7 +112,7 @@ export const POST = withApiMiddleware(
             })
           ),
         },
-      })
+      });
 
       return ApiResponseFormatter.success({
         content: response.content,
@@ -124,7 +124,7 @@ export const POST = withApiMiddleware(
       // console.error('AI generation error:', error)
 
       // Calculate response time for failed request
-      const responseTime = Date.now() - startTime
+      const responseTime = Date.now() - startTime;
 
       // Track failed AI usage
       await trackAIUsage({
@@ -137,14 +137,14 @@ export const POST = withApiMiddleware(
         cost: 0,
         responseTime,
         success: false,
-      })
+      });
 
       // Handle specific AI service errors
       if (error instanceof Error) {
         if (error.message.includes('rate limit')) {
           return ApiResponseFormatter.error('RATE_LIMITED', 'AI service rate limit exceeded', {
             status: 429,
-          })
+          });
         }
         if (error.message.includes('invalid api key')) {
           return ApiResponseFormatter.error('SERVICE_ERROR', 'AI service configuration error', {
@@ -165,17 +165,18 @@ export const POST = withApiMiddleware(
 );
 
 // Helper function to check user's AI usage quota
-async function checkUserAIQuota(_userId: string,
+async function checkUserAIQuota(
+  _userId: string,
   organizationId: string
 ): Promise<{
-  allowed: boolean
+  allowed: boolean;
   limit: number;
   used: number;
   resetAt: Date;
 }> {
   // Implement quota checking logic based on your subscription model
   // This is a simplified example
-  const startOfMonth = new Date()
+  const startOfMonth = new Date();
   startOfMonth.setDate(1);
   startOfMonth.setHours(0, 0, 0, 0);
 
@@ -193,14 +194,14 @@ async function checkUserAIQuota(_userId: string,
   const organization = await db.client.organization.findUnique({
     where: { id: organizationId },
     select: { plan: true },
-  })
+  });
 
   const limits: Record<string, number> = {
     free: 100,
     starter: 1000,
     professional: 5000,
     enterprise: -1, // unlimited
-  }
+  };
 
   const limit = limits[organization?.plan || 'free'];
   const allowed = limit === -1 || usage < limit;
@@ -213,12 +214,12 @@ async function checkUserAIQuota(_userId: string,
     limit,
     used: usage,
     resetAt: nextMonth,
-  }
+  };
 }
 
 // Helper function to track AI usage
 async function trackAIUsage(_data: {
-  userId: string
+  userId: string;
   organizationId: string;
   model: string;
   promptTokens: number;
@@ -250,9 +251,10 @@ async function trackAIUsage(_data: {
 }
 
 // Helper function to calculate AI costs
-const calculateAICost = (_model: string,
+const calculateAICost = (
+  _model: string,
   usage?: { prompt_tokens?: number; completion_tokens?: number }
-): number {
+): number => {
   if (!usage) return 0;
 
   const modelPricing = getModelPricing(model);
@@ -260,4 +262,4 @@ const calculateAICost = (_model: string,
   const completionCost = ((usage.completion_tokens || 0) / 1000) * modelPricing.completion;
 
   return promptCost + completionCost;
-}
+};
