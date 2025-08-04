@@ -604,7 +604,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
       </AnimatePresence>
     </>
   );
-}
+};
 
 // ============================================================================
 // EXPORT

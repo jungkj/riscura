@@ -7,15 +7,15 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import { 
-  AlertTriangle, 
-  Shield, 
-  FileText, 
+import {
+  AlertTriangle,
+  Shield,
+  FileText,
   TrendingUp,
   Activity,
   Users,
   Calendar,
-  BarChart
+  BarChart,
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -33,77 +33,102 @@ export default function DaisyDashboardPage() {
     highRisks: 12,
     complianceScore: 94,
     activeControls: 124,
-    pendingActions: 8
+    pendingActions: 8,
   });
   const [loading, setLoading] = useState(false);
 
   const statsCards = [
-    { 
-      label: 'Total Risks', 
-      value: stats.totalRisks, 
-      icon: AlertTriangle, 
-      change: '+12%', 
+    {
+      label: 'Total Risks',
+      value: stats.totalRisks,
+      icon: AlertTriangle,
+      change: '+12%',
       color: 'warning',
-      onClick: () => router.push('/dashboard/risks')
+      onClick: () => router.push('/dashboard/risks'),
     },
-    { 
-      label: 'Active Controls', 
-      value: stats.activeControls, 
-      icon: Shield, 
-      change: '+5%', 
+    {
+      label: 'Active Controls',
+      value: stats.activeControls,
+      icon: Shield,
+      change: '+5%',
       color: 'success',
-      onClick: () => router.push('/dashboard/controls')
+      onClick: () => router.push('/dashboard/controls'),
     },
-    { 
-      label: 'Compliance Score', 
-      value: `${stats.complianceScore}%`, 
-      icon: TrendingUp, 
-      change: '+2%', 
+    {
+      label: 'Compliance Score',
+      value: `${stats.complianceScore}%`,
+      icon: TrendingUp,
+      change: '+2%',
       color: 'primary',
-      onClick: () => router.push('/dashboard/compliance')
+      onClick: () => router.push('/dashboard/compliance'),
     },
-    { 
-      label: 'Pending Actions', 
-      value: stats.pendingActions, 
-      icon: FileText, 
-      change: '-3', 
+    {
+      label: 'Pending Actions',
+      value: stats.pendingActions,
+      icon: FileText,
+      change: '-3',
       color: 'info',
-      onClick: () => router.push('/dashboard/actions')
+      onClick: () => router.push('/dashboard/actions'),
     },
   ];
 
   const recentRisks = [
-    { id: 'R001', title: 'Data Breach Risk', category: 'Cybersecurity', severity: 'high', status: 'open' },
-    { id: 'R002', title: 'Compliance Violation', category: 'Regulatory', severity: 'medium', status: 'mitigating' },
-    { id: 'R003', title: 'Third-party Vendor Risk', category: 'Operational', severity: 'low', status: 'monitoring' },
+    {
+      id: 'R001',
+      title: 'Data Breach Risk',
+      category: 'Cybersecurity',
+      severity: 'high',
+      status: 'open',
+    },
+    {
+      id: 'R002',
+      title: 'Compliance Violation',
+      category: 'Regulatory',
+      severity: 'medium',
+      status: 'mitigating',
+    },
+    {
+      id: 'R003',
+      title: 'Third-party Vendor Risk',
+      category: 'Operational',
+      severity: 'low',
+      status: 'monitoring',
+    },
   ];
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'success';
-      default: return 'ghost';
+      case 'high':
+        return 'error';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
+      default:
+        return 'ghost';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'error';
-      case 'mitigating': return 'warning';
-      case 'monitoring': return 'info';
-      default: return 'ghost';
+      case 'open':
+        return 'error';
+      case 'mitigating':
+        return 'warning';
+      case 'monitoring':
+        return 'info';
+      default:
+        return 'ghost';
     }
   };
 
   if (loading) {
-
-  return (
-    <div className="flex items-center justify-center min-h-screen">
+    return (
+      <div className="flex items-center justify-center min-h-screen">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
-  };
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -123,11 +148,12 @@ export default function DaisyDashboardPage() {
         {statsCards.map((stat) => {
           const Icon = stat.icon;
           return (
-            <DaisyCard 
-              key={stat.label} 
-              compact 
+            <DaisyCard
+              key={stat.label}
+              compact
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={stat.onClick}>
+              onClick={stat.onClick}
+            >
               <DaisyCardBody>
                 <div className="flex items-center justify-between">
                   <div>
@@ -172,10 +198,14 @@ export default function DaisyDashboardPage() {
                       <td>{risk.title}</td>
                       <td>{risk.category}</td>
                       <td>
-                        <DaisyBadge variant={getSeverityColor(risk.severity)} size="sm" >{risk.severity}</DaisyBadge>
+                        <DaisyBadge variant={getSeverityColor(risk.severity)} size="sm">
+                          {risk.severity}
+                        </DaisyBadge>
                       </td>
                       <td>
-                        <DaisyBadge variant={getStatusColor(risk.status)} size="sm" outline >{risk.status}</DaisyBadge>
+                        <DaisyBadge variant={getStatusColor(risk.status)} size="sm" outline>
+                          {risk.status}
+                        </DaisyBadge>
                       </td>
                     </tr>
                   ))}
@@ -183,7 +213,11 @@ export default function DaisyDashboardPage() {
               </table>
             </div>
             <div className="card-actions mt-4">
-              <DaisyButton variant="primary" size="sm" onClick={() => router.push('/dashboard/risks')}>
+              <DaisyButton
+                variant="primary"
+                size="sm"
+                onClick={() => router.push('/dashboard/risks')}
+              >
                 View All Risks
               </DaisyButton>
             </div>
@@ -245,7 +279,10 @@ export default function DaisyDashboardPage() {
               <Shield className="h-4 w-4 mr-2" />
               Add Control
             </DaisyButton>
-            <DaisyButton variant="outline" onClick={() => router.push('/dashboard/documents/upload')}>
+            <DaisyButton
+              variant="outline"
+              onClick={() => router.push('/dashboard/documents/upload')}
+            >
               <FileText className="h-4 w-4 mr-2" />
               Upload Document
             </DaisyButton>
@@ -258,9 +295,15 @@ export default function DaisyDashboardPage() {
         <DaisyAlert variant="info">
           <div>
             <h3 className="font-bold">No risks identified yet</h3>
-            <div className="text-xs">Start by creating your first risk assessment to get insights.</div>
+            <div className="text-xs">
+              Start by creating your first risk assessment to get insights.
+            </div>
           </div>
-          <DaisyButton size="sm" variant="primary" onClick={() => router.push('/dashboard/risks/new')}>
+          <DaisyButton
+            size="sm"
+            variant="primary"
+            onClick={() => router.push('/dashboard/risks/new')}
+          >
             Create First Risk
           </DaisyButton>
         </DaisyAlert>

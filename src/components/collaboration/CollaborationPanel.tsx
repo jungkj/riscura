@@ -19,7 +19,7 @@ export function CollaborationPanel({
   questionnaireId,
   currentUser,
   onUserActivity,
-  className
+  className,
 }: CollaborationPanelProps) {
   const [activeUsers] = useState([]);
 
@@ -31,19 +31,19 @@ export function CollaborationPanel({
             <Users className="w-5 h-5 mr-2" />
             Collaboration
           </DaisyCardTitle>
-          
+
           <div className="flex items-center space-x-2">
             <DaisyButton variant="ghost" size="sm">
               <Share2 className="w-4 h-4" />
             </DaisyButton>
-            
+
             <DaisyButton variant="ghost" size="sm">
               <UserPlus className="w-4 h-4" />
             </DaisyButton>
           </div>
         </div>
       </DaisyCardBody>
-      
+
       <DaisyCardBody>
         <div className="text-center py-8 text-gray-500">
           <p>Collaboration features temporarily simplified for build testing</p>

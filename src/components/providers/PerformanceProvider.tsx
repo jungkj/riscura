@@ -47,7 +47,7 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
       {children}
     </PerformanceContext.Provider>
   );
-}
+};
 
 export function usePerformance() {
   const context = useContext(PerformanceContext);

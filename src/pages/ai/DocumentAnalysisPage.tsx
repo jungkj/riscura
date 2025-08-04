@@ -7,7 +7,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -33,29 +38,29 @@ export default function DocumentAnalysisPage() {
     uploadedAt: string;
   } | null>(null);
   const [riskInsights, setRiskInsights] = useState<RiskInsight[]>([]);
-  
+
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
     }
   };
-  
+
   // Handle file upload
   const handleUpload = async () => {
     if (!file) return;
-    
+
     setUploading(true);
-    
+
     // Simulate file upload
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     setUploading(false);
     setProcessing(true);
-    
+
     // Simulate AI processing with progress updates
     const processingInterval = setInterval(() => {
-      setProcessingProgress(prev => {
+      setProcessingProgress((prev) => {
         const newProgress = prev + Math.random() * 10;
         if (newProgress >= 100) {
           clearInterval(processingInterval);
@@ -67,71 +72,76 @@ export default function DocumentAnalysisPage() {
       });
     }, 600);
   };
-  
+
   // Generate mock AI analysis results
   const generateMockResults = () => {
     // Mock document metadata
     setAnalyzedDocument({
-      name: file?.name || "Unknown document",
+      name: file?.name || 'Unknown document',
       size: file?.size || 0,
-      type: file?.type || "application/pdf",
-      uploadedAt: new Date().toISOString()
+      type: file?.type || 'application/pdf',
+      uploadedAt: new Date().toISOString(),
     });
-    
+
     // Mock risk insights
     setRiskInsights([
       {
-        id: "1",
-        title: "Inadequate Data Protection Controls",
-        description: "Document mentions customer data processing without specifying encryption methods or access controls, potentially violating GDPR and data protection regulations.",
+        id: '1',
+        title: 'Inadequate Data Protection Controls',
+        description:
+          'Document mentions customer data processing without specifying encryption methods or access controls, potentially violating GDPR and data protection regulations.',
         confidence: 0.92,
-        category: "Compliance"
+        category: 'Compliance',
       },
       {
-        id: "2",
-        title: "IT System Downtime Risk",
-        description: "Critical systems mentioned in the document lack redundancy plans or backup procedures, creating operational risk of extended downtime.",
+        id: '2',
+        title: 'IT System Downtime Risk',
+        description:
+          'Critical systems mentioned in the document lack redundancy plans or backup procedures, creating operational risk of extended downtime.',
         confidence: 0.85,
-        category: "Operational"
+        category: 'Operational',
       },
       {
-        id: "3",
-        title: "Third-Party Vendor Oversight Gap",
-        description: "Multiple vendor relationships described without clear monitoring or performance metrics, creating potential service delivery risks.",
+        id: '3',
+        title: 'Third-Party Vendor Oversight Gap',
+        description:
+          'Multiple vendor relationships described without clear monitoring or performance metrics, creating potential service delivery risks.',
         confidence: 0.78,
-        category: "Strategic"
+        category: 'Strategic',
       },
       {
-        id: "4", 
-        title: "Insufficient Fraud Detection Mechanisms",
-        description: "Payment processing section lacks fraud detection controls and monitoring tools, potentially exposing the organization to financial losses.",
+        id: '4',
+        title: 'Insufficient Fraud Detection Mechanisms',
+        description:
+          'Payment processing section lacks fraud detection controls and monitoring tools, potentially exposing the organization to financial losses.',
         confidence: 0.88,
-        category: "Financial"
+        category: 'Financial',
       },
       {
-        id: "5",
-        title: "Inadequate Disaster Recovery Planning",
-        description: "Business continuity measures mentioned are outdated and don't address remote work scenarios or modern cloud-based recovery options.",
+        id: '5',
+        title: 'Inadequate Disaster Recovery Planning',
+        description:
+          "Business continuity measures mentioned are outdated and don't address remote work scenarios or modern cloud-based recovery options.",
         confidence: 0.81,
-        category: "Technology"
-      }
+        category: 'Technology',
+      },
     ]);
-    
+
     setProcessing(false);
-    
+
     toast({
-      title: "Analysis Complete",
-      description: "AI has identified potential risks in your document.",
+      title: 'Analysis Complete',
+      description: 'AI has identified potential risks in your document.',
     });
   };
-  
+
   // Helper function to get badge color based on confidence
   const getConfidenceBadgeVariant = (confidence: number) => {
-    if (confidence >= 0.9) return "default";
-    if (confidence >= 0.7) return "secondary";
-    return "outline";
+    if (confidence >= 0.9) return 'default';
+    if (confidence >= 0.7) return 'secondary';
+    return 'outline';
   };
-  
+
   // Helper function to format file size
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -140,14 +150,14 @@ export default function DocumentAnalysisPage() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-  
+
   // Add risk to register
   const addRiskToRegister = (risk: RiskInsight) => {
     toast({
-      title: "Risk Added",
+      title: 'Risk Added',
       description: `"${risk.title}" has been added to your risk register.`,
     });
-    
+
     // In a real app, we would add the risk to the risk register
     // For now, just navigate to the risk list page
     setTimeout(() => {
@@ -163,7 +173,7 @@ export default function DocumentAnalysisPage() {
           Upload documents for AI-powered risk identification and analysis.
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Document Upload Panel */}
         <DaisyCard className="lg:col-span-1">
@@ -172,7 +182,7 @@ export default function DocumentAnalysisPage() {
             <p className="text-muted-foreground text-sm mb-4">
               Supported formats: PDF, DOC, DOCX, TXT
             </p>
-          
+
             {!analyzedDocument ? (
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 transition-colors rounded-lg p-6 text-center">
@@ -188,11 +198,14 @@ export default function DocumentAnalysisPage() {
                     onChange={handleFileChange}
                     accept=".pdf,.doc,.docx,.txt"
                   />
-                  <DaisyButton variant="outline" onClick={() => document.getElementById('document-upload')?.click()}>
+                  <DaisyButton
+                    variant="outline"
+                    onClick={() => document.getElementById('document-upload')?.click()}
+                  >
                     Select File
                   </DaisyButton>
                 </div>
-                
+
                 {file && (
                   <div className="border rounded-lg p-3">
                     <div className="flex items-center">
@@ -201,9 +214,9 @@ export default function DocumentAnalysisPage() {
                         <p className="text-sm font-medium truncate">{file.name}</p>
                         <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                       </div>
-                      <DaisyButton 
-                        variant="secondary" 
-                        size="sm" 
+                      <DaisyButton
+                        variant="secondary"
+                        size="sm"
                         onClick={handleUpload}
                         disabled={uploading || processing}
                       >
@@ -212,7 +225,7 @@ export default function DocumentAnalysisPage() {
                     </div>
                   </div>
                 )}
-                
+
                 {(uploading || processing) && (
                   <DaisyCard className="border border-muted/50">
                     <DaisyCardBody className="p-4">
@@ -222,8 +235,8 @@ export default function DocumentAnalysisPage() {
                           <p className="font-medium">
                             {uploading ? 'Uploading Document...' : 'Analyzing Document...'}
                           </p>
-                          <DaisyProgress 
-                            value={uploading ? undefined : processingProgress} 
+                          <DaisyProgress
+                            value={uploading ? undefined : processingProgress}
                             className="h-2"
                           />
                           {processing && (
@@ -245,13 +258,19 @@ export default function DocumentAnalysisPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{analyzedDocument.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {formatFileSize(analyzedDocument.size)} • Analyzed {new Date(analyzedDocument.uploadedAt).toLocaleTimeString()}
+                        {formatFileSize(analyzedDocument.size)} • Analyzed{' '}
+                        {new Date(analyzedDocument.uploadedAt).toLocaleTimeString()}
                       </p>
                     </div>
-                    <DaisyBadge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" >Analyzed</DaisyBadge>
+                    <DaisyBadge
+                      variant="default"
+                      className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    >
+                      Analyzed
+                    </DaisyBadge>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <DaisyLabel>Identified Risks</DaisyLabel>
@@ -259,11 +278,13 @@ export default function DocumentAnalysisPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <DaisyLabel>High Confidence</DaisyLabel>
-                    <DaisyBadge variant="outline" >{riskInsights.filter(r => r.confidence >= 0.8).length}</DaisyBadge>
+                    <DaisyBadge variant="outline">
+                      {riskInsights.filter((r) => r.confidence >= 0.8).length}
+                    </DaisyBadge>
                   </div>
                 </div>
-                
-                <DaisyButton 
+
+                <DaisyButton
                   className="w-full"
                   variant="outline"
                   onClick={() => {
@@ -279,7 +300,7 @@ export default function DocumentAnalysisPage() {
             )}
           </DaisyCardBody>
         </DaisyCard>
-        
+
         {/* Analysis Results Panel */}
         <DaisyCard className="lg:col-span-2">
           <DaisyCardBody>
@@ -287,7 +308,7 @@ export default function DocumentAnalysisPage() {
             <p className="text-muted-foreground text-sm mb-4">
               AI-identified risks and suggested controls
             </p>
-          
+
             {!analyzedDocument ? (
               <div className="flex flex-col items-center justify-center h-72 text-center">
                 <Sparkles className="h-12 w-12 text-muted-foreground mb-4 opacity-30" />
@@ -302,7 +323,7 @@ export default function DocumentAnalysisPage() {
                   <DaisyTabsTrigger value="risks">Identified Risks</DaisyTabsTrigger>
                   <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
                 </DaisyTabsList>
-                
+
                 <DaisyTabsContent value="risks" className="space-y-4 pt-4">
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
@@ -311,7 +332,7 @@ export default function DocumentAnalysisPage() {
                       Found {riskInsights.length} potential risks in the document
                     </AlertDescription>
                   </Alert>
-                  
+
                   <DaisyScrollArea className="h-[400px] pr-4">
                     <div className="space-y-3">
                       {riskInsights.map((risk) => (
@@ -321,16 +342,17 @@ export default function DocumentAnalysisPage() {
                               <div className="space-y-1">
                                 <div className="flex items-center">
                                   <h4 className="font-semibold">{risk.title}</h4>
-                                  <DaisyBadge className="ml-2" variant="outline">{risk.category}</DaisyBadge>
+                                  <DaisyBadge className="ml-2" variant="outline">
+                                    {risk.category}
+                                  </DaisyBadge>
                                 </div>
                                 <p className="text-sm text-muted-foreground">{risk.description}</p>
                               </div>
                               <div className="flex flex-col gap-2 items-end shrink-0">
-                                <DaisyBadge variant={getConfidenceBadgeVariant(risk.confidence)} >{Math.round(risk.confidence * 100)}% confidence</DaisyBadge>
-                                <DaisyButton 
-                                  size="sm" 
-                                  onClick={() => addRiskToRegister(risk)}
-                                >
+                                <DaisyBadge variant={getConfidenceBadgeVariant(risk.confidence)}>
+                                  {Math.round(risk.confidence * 100)}% confidence
+                                </DaisyBadge>
+                                <DaisyButton size="sm" onClick={() => addRiskToRegister(risk)}>
                                   Add to Register
                                 </DaisyButton>
                               </div>
@@ -341,36 +363,30 @@ export default function DocumentAnalysisPage() {
                     </div>
                   </DaisyScrollArea>
                 </DaisyTabsContent>
-                
+
                 <DaisyTabsContent value="insights" className="pt-4">
                   <DaisyCard>
                     <DaisyCardBody className="p-6">
                       <h3 className="text-xl font-semibold mb-4">Document Summary</h3>
                       <p className="text-sm mb-6">
-                        This document appears to be a policy document outlining operational procedures 
-                        across multiple departments. The AI has identified several key risk areas that 
-                        may require attention based on industry standards and regulatory requirements.
+                        This document appears to be a policy document outlining operational
+                        procedures across multiple departments. The AI has identified several key
+                        risk areas that may require attention based on industry standards and
+                        regulatory requirements.
                       </p>
-                      
+
                       <h4 className="font-semibold mb-2">Key Observations:</h4>
                       <ul className="list-disc pl-5 space-y-2 mb-6 text-sm">
                         <li>
-                          Data protection measures appear outdated relative to current regulatory standards
+                          Data protection measures appear outdated relative to current regulatory
+                          standards
                         </li>
-                        <li>
-                          IT infrastructure redundancy is not adequately addressed
-                        </li>
-                        <li>
-                          Third-party vendor management lacks clear oversight procedures
-                        </li>
-                        <li>
-                          Financial controls around payment processing may need enhancement
-                        </li>
-                        <li>
-                          Business continuity planning requires modernization
-                        </li>
+                        <li>IT infrastructure redundancy is not adequately addressed</li>
+                        <li>Third-party vendor management lacks clear oversight procedures</li>
+                        <li>Financial controls around payment processing may need enhancement</li>
+                        <li>Business continuity planning requires modernization</li>
                       </ul>
-                      
+
                       <div className="flex space-x-2 mb-6">
                         <div className="flex items-center space-x-1 text-sm">
                           <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -381,7 +397,7 @@ export default function DocumentAnalysisPage() {
                           <span>Weak in technology controls</span>
                         </div>
                       </div>
-                      
+
                       <DaisyButton className="w-full" variant="outline">
                         Generate Full Report
                       </DaisyButton>

@@ -243,4 +243,4 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
       </motion.div>
     </div>
   );
-}
+};

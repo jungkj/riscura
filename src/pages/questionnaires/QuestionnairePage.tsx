@@ -461,12 +461,11 @@ export default function QuestionnairePage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
-          
+          </DaisyCardBody>
           <DaisyCardBody>
             <div className="text-2xl font-bold text-gray-900">
               {stats.total}
@@ -483,9 +482,10 @@ export default function QuestionnairePage() {
             <CheckCircle className="h-4 w-4 text-green-600" />
           </DaisyCardBody>
           
-          <DaisyCardBody >
-  <div className="text-2xl font-bold text-green-600">
-</DaisyCardBody>{stats.active}</div>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.active}
+            </div>
             <p className="text-xs text-gray-600">
               Currently collecting responses
             </p>
@@ -498,9 +498,8 @@ export default function QuestionnairePage() {
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
           
-          <DaisyCardBody >
-  <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
-</DaisyCardBody>
+          <DaisyCardBody>
+            <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
               {(stats.averageCompletion * 100).toFixed(1)}%
             </div>
             <p className="text-xs text-gray-600">
@@ -509,9 +508,8 @@ export default function QuestionnairePage() {
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Responses</DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-[#191919]" />
           

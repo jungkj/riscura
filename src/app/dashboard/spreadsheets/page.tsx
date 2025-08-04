@@ -1,15 +1,50 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Grid, List, MoreHorizontal, Edit, Trash2, Eye, Share2 } from 'lucide-react';
+import {
+  Plus,
+  Search,
+  Filter,
+  Grid,
+  List,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  Eye,
+  Share2,
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogFooter, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
-import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
-import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyDialog,
+  DaisyDialogContent,
+  DaisyDialogDescription,
+  DaisyDialogFooter,
+  DaisyDialogHeader,
+  DaisyDialogTitle,
+  DaisyDialogTrigger,
+} from '@/components/ui/DaisyDialog';
+import {
+  DaisyDropdownMenu,
+  DaisyDropdownMenuContent,
+  DaisyDropdownMenuItem,
+  DaisyDropdownMenuTrigger,
+} from '@/components/ui/DaisyDropdown';
+import {
+  DaisySelect,
+  DaisySelectContent,
+  DaisySelectItem,
+  DaisySelectTrigger,
+  DaisySelectValue,
+} from '@/components/ui/DaisySelect';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
@@ -51,13 +86,41 @@ interface Spreadsheet {
 }
 
 const templateTypes = [
-  { value: 'RCSA_ASSESSMENT', label: 'RCSA Assessment', description: 'Complete risk and control self-assessment' },
-  { value: 'RISK_REGISTER', label: 'Risk Register', description: 'Track and monitor organizational risks' },
-  { value: 'CONTROL_MATRIX', label: 'Control Matrix', description: 'Map controls to risks and frameworks' },
-  { value: 'COMPLIANCE_TRACKER', label: 'Compliance Tracker', description: 'Monitor compliance requirements' },
-  { value: 'VENDOR_ASSESSMENT', label: 'Vendor Assessment', description: 'Evaluate third-party vendors' },
-  { value: 'AUDIT_FINDINGS', label: 'Audit Findings', description: 'Track audit findings and remediation' },
-  { value: 'CUSTOM', label: 'Custom Template', description: 'Create a custom spreadsheet structure' }
+  {
+    value: 'RCSA_ASSESSMENT',
+    label: 'RCSA Assessment',
+    description: 'Complete risk and control self-assessment',
+  },
+  {
+    value: 'RISK_REGISTER',
+    label: 'Risk Register',
+    description: 'Track and monitor organizational risks',
+  },
+  {
+    value: 'CONTROL_MATRIX',
+    label: 'Control Matrix',
+    description: 'Map controls to risks and frameworks',
+  },
+  {
+    value: 'COMPLIANCE_TRACKER',
+    label: 'Compliance Tracker',
+    description: 'Monitor compliance requirements',
+  },
+  {
+    value: 'VENDOR_ASSESSMENT',
+    label: 'Vendor Assessment',
+    description: 'Evaluate third-party vendors',
+  },
+  {
+    value: 'AUDIT_FINDINGS',
+    label: 'Audit Findings',
+    description: 'Track audit findings and remediation',
+  },
+  {
+    value: 'CUSTOM',
+    label: 'Custom Template',
+    description: 'Create a custom spreadsheet structure',
+  },
 ];
 
 export default function SpreadsheetsPage() {
@@ -72,7 +135,7 @@ export default function SpreadsheetsPage() {
   const [newSpreadsheet, setNewSpreadsheet] = useState({
     name: '',
     description: '',
-    templateType: 'RCSA_ASSESSMENT'
+    templateType: 'RCSA_ASSESSMENT',
   });
 
   // Fetch spreadsheets
@@ -81,7 +144,7 @@ export default function SpreadsheetsPage() {
       try {
         const response = await fetch('/api/spreadsheets');
         const data = await response.json();
-        
+
         if (data.success) {
           setSpreadsheets(data.data);
           setFilteredSpreadsheets(data.data);
@@ -102,15 +165,16 @@ export default function SpreadsheetsPage() {
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(s => 
-        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.description.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (s) =>
+          s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          s.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Apply type filter
     if (filterType !== 'all') {
-      filtered = filtered.filter(s => s.templateType === filterType);
+      filtered = filtered.filter((s) => s.templateType === filterType);
     }
 
     setFilteredSpreadsheets(filtered);
@@ -127,7 +191,7 @@ export default function SpreadsheetsPage() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setIsCreateDialogOpen(false);
         setNewSpreadsheet({ name: '', description: '', templateType: 'RCSA_ASSESSMENT' });
@@ -144,19 +208,19 @@ export default function SpreadsheetsPage() {
   };
 
   const getTemplateTypeLabel = (type: string) => {
-    const template = templateTypes.find(t => t.value === type);
+    const template = templateTypes.find((t) => t.value === type);
     return template?.label || type;
   };
 
   const getTemplateTypeBadgeColor = (type: string) => {
     const colors: { [key: string]: string } = {
-      'RCSA_ASSESSMENT': 'bg-blue-100 text-blue-800',
-      'RISK_REGISTER': 'bg-red-100 text-red-800',
-      'CONTROL_MATRIX': 'bg-green-100 text-green-800',
-      'COMPLIANCE_TRACKER': 'bg-purple-100 text-purple-800',
-      'VENDOR_ASSESSMENT': 'bg-orange-100 text-orange-800',
-      'AUDIT_FINDINGS': 'bg-yellow-100 text-yellow-800',
-      'CUSTOM': 'bg-gray-100 text-gray-800'
+      RCSA_ASSESSMENT: 'bg-blue-100 text-blue-800',
+      RISK_REGISTER: 'bg-red-100 text-red-800',
+      CONTROL_MATRIX: 'bg-green-100 text-green-800',
+      COMPLIANCE_TRACKER: 'bg-purple-100 text-purple-800',
+      VENDOR_ASSESSMENT: 'bg-orange-100 text-orange-800',
+      AUDIT_FINDINGS: 'bg-yellow-100 text-yellow-800',
+      CUSTOM: 'bg-gray-100 text-gray-800',
     };
     return colors[type] || 'bg-gray-100 text-gray-800';
   };
@@ -165,7 +229,7 @@ export default function SpreadsheetsPage() {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -178,18 +242,22 @@ export default function SpreadsheetsPage() {
               <DaisyCardTitle className="text-lg font-semibold group-hover:text-blue-600 transition-colors">
                 {spreadsheet.name}
               </DaisyCardTitle>
-              <p className="mt-1 line-clamp-2 text-gray-600">
-                {spreadsheet.description}
-              </p>
+              <p className="mt-1 line-clamp-2 text-gray-600">{spreadsheet.description}</p>
             </div>
             <DaisyDropdownMenu>
               <DaisyDropdownMenuTrigger asChild>
-                <DaisyButton variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <DaisyButton
+                  variant="ghost"
+                  size="sm"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                >
                   <MoreHorizontal className="h-4 w-4" />
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
               <DaisyDropdownMenuContent align="end">
-                <DaisyDropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
+                <DaisyDropdownMenuItem
+                  onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}
+                >
                   <Eye className="h-4 w-4 mr-2" />
                   View
                 </DaisyDropdownMenuItem>
@@ -208,7 +276,7 @@ export default function SpreadsheetsPage() {
               </DaisyDropdownMenuContent>
             </DaisyDropdownMenu>
           </div>
-        
+
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <DaisyBadge className={getTemplateTypeBadgeColor(spreadsheet.templateType)}>
@@ -218,9 +286,11 @@ export default function SpreadsheetsPage() {
                 {spreadsheet._count.sheets} sheet{spreadsheet._count.sheets !== 1 ? 's' : ''}
               </span>
             </div>
-          
+
             <div className="flex items-center justify-between text-sm text-gray-500">
-              <span>By {spreadsheet.creator.firstName} {spreadsheet.creator.lastName}</span>
+              <span>
+                By {spreadsheet.creator.firstName} {spreadsheet.creator.lastName}
+              </span>
               <span>{formatDate(spreadsheet.updatedAt)}</span>
             </div>
           </div>
@@ -251,12 +321,18 @@ export default function SpreadsheetsPage() {
         </div>
         <DaisyDropdownMenu>
           <DaisyDropdownMenuTrigger asChild>
-            <DaisyButton variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+            <DaisyButton
+              variant="ghost"
+              size="sm"
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
               <MoreHorizontal className="h-4 w-4" />
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
           <DaisyDropdownMenuContent align="end">
-            <DaisyDropdownMenuItem onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
+            <DaisyDropdownMenuItem
+              onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}
+            >
               <Eye className="h-4 w-4 mr-2" />
               View
             </DaisyDropdownMenuItem>
@@ -299,10 +375,7 @@ export default function SpreadsheetsPage() {
       <MainContentArea
         title="Spreadsheets"
         subtitle="Create and manage risk assessment spreadsheets and matrices"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Spreadsheets' }
-        ]}
+        breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Spreadsheets' }]}
       >
         <div className="space-y-6">
           {/* Header */}
@@ -319,7 +392,8 @@ export default function SpreadsheetsPage() {
                 <DaisyDialogHeader>
                   <DaisyDialogTitle>Create New Spreadsheet</DaisyDialogTitle>
                   <DaisyDialogDescription>
-                    Choose a template and customize your spreadsheet for risk management and compliance tracking.
+                    Choose a template and customize your spreadsheet for risk management and
+                    compliance tracking.
                   </DaisyDialogDescription>
                 </DaisyDialogHeader>
                 <div className="space-y-4 py-4">
@@ -329,7 +403,9 @@ export default function SpreadsheetsPage() {
                       id="name"
                       placeholder="Enter spreadsheet name"
                       value={newSpreadsheet.name}
-                      onChange={(e) => setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })}
+                      onChange={(e) =>
+                        setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -338,14 +414,18 @@ export default function SpreadsheetsPage() {
                       id="description"
                       placeholder="Enter a brief description"
                       value={newSpreadsheet.description}
-                      onChange={(e) => setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })}
+                      onChange={(e) =>
+                        setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel htmlFor="templateType">Template Type</DaisyLabel>
                     <DaisySelect
                       value={newSpreadsheet.templateType}
-                      onValueChange={(value) => setNewSpreadsheet({ ...newSpreadsheet, templateType: value })}
+                      onValueChange={(value) =>
+                        setNewSpreadsheet({ ...newSpreadsheet, templateType: value })
+                      }
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select a template type" />
@@ -354,11 +434,11 @@ export default function SpreadsheetsPage() {
                         {templateTypes.map((template) => (
                           <DaisySelectItem key={template.value} value={template.value}>
                             <div>
-                          <div className="font-medium">{template.label}</div>
-                          <div className="text-sm text-gray-500">{template.description}</div>
-                        </div>
+                              <div className="font-medium">{template.label}</div>
+                              <div className="text-sm text-gray-500">{template.description}</div>
+                            </div>
                           </DaisySelectItem>
-                    ))}
+                        ))}
                       </DaisySelectContent>
                     </DaisySelect>
                   </div>
@@ -398,7 +478,7 @@ export default function SpreadsheetsPage() {
                     <DaisySelectItem key={template.value} value={template.value}>
                       {template.label}
                     </DaisySelectItem>
-              ))}
+                  ))}
                 </DaisySelectContent>
               </DaisySelect>
               <div className="flex items-center border rounded-md">
@@ -430,35 +510,41 @@ export default function SpreadsheetsPage() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">No spreadsheets found</h3>
               <p className="text-gray-500 mb-4">
-                {searchTerm || filterType !== 'all' ? 'Try adjusting your search or filters' : 'Get started by creating your first spreadsheet'}
+                {searchTerm || filterType !== 'all'
+                  ? 'Try adjusting your search or filters'
+                  : 'Get started by creating your first spreadsheet'}
               </p>
               {!searchTerm && filterType === 'all' && (
-              <DaisyButton onClick={() => setIsCreateDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create New Spreadsheet
-              </DaisyButton>
-          )}
-            </div>
-      ) : (
-        <div className={
-          viewMode === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-            : 'space-y-2'
-        }
-        >
-          {filteredSpreadsheets.map((spreadsheet) => (
-            <div key={spreadsheet.id} onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}>
-              {viewMode === 'grid' ? (
-                <SpreadsheetCard spreadsheet={spreadsheet} />
-              ) : (
-                <SpreadsheetListItem spreadsheet={spreadsheet} />
+                <DaisyButton onClick={() => setIsCreateDialogOpen(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Spreadsheet
+                </DaisyButton>
               )}
             </div>
-          ))}
-        </div>
-      )}
+          ) : (
+            <div
+              className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+                  : 'space-y-2'
+              }
+            >
+              {filteredSpreadsheets.map((spreadsheet) => (
+                <div
+                  key={spreadsheet.id}
+                  onClick={() => router.push(`/dashboard/spreadsheets/${spreadsheet.id}`)}
+                >
+                  {viewMode === 'grid' ? (
+                    <SpreadsheetCard spreadsheet={spreadsheet} />
+                  ) : (
+                    <SpreadsheetListItem spreadsheet={spreadsheet} />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </MainContentArea>
     </ProtectedRoute>
   );
-} 
+}

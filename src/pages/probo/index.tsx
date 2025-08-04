@@ -330,10 +330,8 @@ export default function ProboIntegrationPage() {
                         className="cursor-pointer"
                         onClick={() => handleTabChange(action.tab)}
                       >
-                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden group" >
-  <DaisyCardBody className="p-6" >
-  </DaisyCard>
-</DaisyCardBody>
+                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                          <DaisyCardBody className="p-6">
                             <div className={`h-12 w-12 bg-gradient-to-r ${action.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                               {action.icon}
                             </div>
@@ -360,9 +358,8 @@ export default function ProboIntegrationPage() {
                         whileHover={{ scale: 1.02 }}
                         className="group"
                       >
-                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden" >
-  <DaisyCardBody className="pb-4" />
-</DaisyCard>
+                        <DaisyCard className="bg-white/80 backdrop-blur-sm border-[#D8C3A5]/30 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                          <DaisyCardBody className="pb-4">
                             <div className="flex items-start justify-between">
                               <div className="flex items-center space-x-4">
                                 <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -371,17 +368,19 @@ export default function ProboIntegrationPage() {
                                 <div className="flex-1">
                                   <DaisyCardTitle className="text-[#191919] text-xl mb-1">{feature.title}</DaisyCardTitle>
                                   <div className="flex items-center space-x-2">
-                                    <DaisyBadge variant="outline" className="text-xs" >{feature.stats}</DaisyBadge>
+                                    <DaisyBadge variant="outline" className="text-xs">{feature.stats}</DaisyBadge>
                                     <span className="text-xs text-[#A8A8A8]">{feature.progress}% complete</span>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <DaisyProgress value={feature.progress} className="mt-3" />
+                          </DaisyCardBody>
                           
-                          <DaisyCardBody >
-  <p className="text-[#A8A8A8] mb-4 leading-relaxed">
-</DaisyProgress>{feature.description}</p>
+                          <DaisyCardBody>
+                            <p className="text-[#A8A8A8] mb-4 leading-relaxed">
+                              {feature.description}
+                            </p>
                             <div className="space-y-3">
                               <p className="text-sm font-medium text-[#191919]">Key Capabilities:</p>
                               <div className="grid grid-cols-1 gap-2">
@@ -402,22 +401,19 @@ export default function ProboIntegrationPage() {
 
                 {/* Enhanced Success Metrics */}
                 <motion.div variants={itemVariants}>
-                  <DaisyCard className="bg-gradient-to-br from-white via-white to-[#199BEC]/5 border-[#D8C3A5]/30 shadow-xl" >
-  <DaisyCardBody className="text-center pb-8" />
-</DaisyCard>
-                      <DaisyCardTitle className="text-2xl text-[#191919] flex items-center justify-center gap-2" >
-  <TrendingUp className="h-6 w-6 text-[#199BEC]" />
-</DaisyCardTitle>
+                  <DaisyCard className="bg-gradient-to-br from-white via-white to-[#199BEC]/5 border-[#D8C3A5]/30 shadow-xl">
+                    <DaisyCardBody className="text-center pb-8">
+                      <DaisyCardTitle className="text-2xl text-[#191919] flex items-center justify-center gap-2">
+                        <TrendingUp className="h-6 w-6 text-[#199BEC]" />
                         Implementation Impact
                       </DaisyCardTitle>
-                      <DaisyCardDescription className="text-lg" >
-  Measurable improvements achieved through Probo integration
-</DaisyCardDescription>
-                      </p>
+                      <DaisyCardDescription className="text-lg">
+                        Measurable improvements achieved through Probo integration
+                      </DaisyCardDescription>
+                    </DaisyCardBody>
                     
-                    <DaisyCardBody >
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-</DaisyCardBody>
+                    <DaisyCardBody>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {successMetrics.map((metric, index) => (
                           <motion.div
                             key={index}
@@ -449,20 +445,17 @@ export default function ProboIntegrationPage() {
 
                 {/* Enhanced Status Alert */}
                 <motion.div variants={itemVariants}>
-                  <DaisyAlert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200" >
-  <div className="flex items-center">
-</DaisyAlert>
+                  <DaisyAlert className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+                    <div className="flex items-center">
                       <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse mr-3"></div>
                       <Zap className="h-5 w-5 text-green-600" />
                     </div>
-                                         <DaisyAlertDescription className="ml-6" >
-  <strong className="text-green-800">
-                </DaisyAlertDescription>
-</DaisyAlert>System Status:</strong> All Probo AI services are operational and optimized. 
+                    <DaisyAlertDescription className="ml-6">
+                      <strong className="text-green-800">System Status:</strong> All Probo AI services are operational and optimized. 
                        Real-time vendor assessment, SOC 2 workflows, and security controls library are fully integrated. 
                        {currentTime && <span className="text-green-700 font-medium"> Last sync: {currentTime}</span>}
-                </DaisyAlertDescription>
-              </DaisyAlert>
+                    </DaisyAlertDescription>
+                  </DaisyAlert>
                 </motion.div>
               </motion.div>
             </DaisyTabsContent>

@@ -231,7 +231,7 @@ export const MobileOptimized = ({
     },
     children
   );
-}
+};
 
 // ============================================================================
 // TOUCH OPTIMIZATION
@@ -300,7 +300,7 @@ export const TouchOptimizedButton = ({
     },
     children
   );
-}
+};
 
 // ============================================================================
 // GESTURE SUPPORT
@@ -452,7 +452,7 @@ export const LazyImage = ({
     loading: 'lazy',
     ...props,
   });
-}
+};
 
 function generateResponsiveSrc(src: string, width: number, quality: number): string {
   // If it's a Next.js optimized image, add responsive parameters
@@ -536,7 +536,7 @@ export const MobileFormField = ({
         ),
     ]
   );
-}
+};
 
 // ============================================================================
 // ACCESSIBILITY ENHANCEMENTS

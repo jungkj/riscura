@@ -240,4 +240,4 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
       </motion.div>
     </div>
   );
-}
+};

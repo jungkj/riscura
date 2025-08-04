@@ -781,6 +781,6 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return <RCSAContext.Provider value={contextValue}>{children}</RCSAContext.Provider>;
-}
+};
 
 export default RCSAProvider;

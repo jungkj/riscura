@@ -12,11 +12,7 @@ interface ShareDialogProps {
   questionnaire: any;
 }
 
-export function ShareDialog({
-  isOpen,
-  onOpenChange,
-  questionnaire
-}: ShareDialogProps) {
+export function ShareDialog({ isOpen, onOpenChange, questionnaire }: ShareDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
@@ -26,19 +22,17 @@ export function ShareDialog({
             Share Questionnaire
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="p-6">
           <div className="text-center py-8 text-gray-500">
             <p>Share dialog temporarily simplified for build testing</p>
           </div>
-          
+
           <div className="flex justify-end space-x-2 mt-6">
             <DaisyButton variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </DaisyButton>
-            <DaisyButton onClick={() => onOpenChange(false)}>
-              Share
-            </DaisyButton>
+            <DaisyButton onClick={() => onOpenChange(false)}>Share</DaisyButton>
           </div>
         </div>
       </DialogContent>

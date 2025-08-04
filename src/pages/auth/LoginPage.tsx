@@ -95,7 +95,7 @@ export default function LoginPage() {
     <FormErrorBoundary>
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <GlowingStarsBackground className="absolute inset-0" starCount={150} />
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -126,7 +126,7 @@ export default function LoginPage() {
                 Enter your credentials to access your RCSA dashboard
               </p>
             </DaisyCardBody>
-            
+
             <DaisyCardBody>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -141,9 +141,9 @@ export default function LoginPage() {
                             whileFocus={{ scale: 1.02 }}
                             transition={{ type: 'spring', stiffness: 300 }}
                           >
-                            <DaisyInput 
-                              placeholder="name@company.com" 
-                              {...field} 
+                            <DaisyInput
+                              placeholder="name@company.com"
+                              {...field}
                               autoComplete="email"
                               className="transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                             />
@@ -153,7 +153,7 @@ export default function LoginPage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="password"
@@ -166,10 +166,10 @@ export default function LoginPage() {
                             transition={{ type: 'spring', stiffness: 300 }}
                             className="relative"
                           >
-                            <DaisyInput 
+                            <DaisyInput
                               type={showPassword ? 'text' : 'password'}
-                              placeholder="••••••••" 
-                              {...field} 
+                              placeholder="••••••••"
+                              {...field}
                               autoComplete="current-password"
                               className="transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 pr-10"
                             />
@@ -192,7 +192,7 @@ export default function LoginPage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="rememberMe"
@@ -213,14 +213,11 @@ export default function LoginPage() {
                       </FormItem>
                     )}
                   />
-                  
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <DaisyButton 
-                      type="submit" 
-                      className="w-full bg-gradient-to-r from-[#191919] to-[#191919] hover:from-[#2a2a2a] hover:to-[#2a2a2a] transition-all duration-200" 
+
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <DaisyButton
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-[#191919] to-[#191919] hover:from-[#2a2a2a] hover:to-[#2a2a2a] transition-all duration-200"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -237,38 +234,36 @@ export default function LoginPage() {
               </Form>
 
               <div className="mt-4 text-center text-sm">
-                <Link 
-                  href="/forgot-password" 
+                <Link
+                  href="/forgot-password"
                   className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
                 >
                   Forgot password?
                 </Link>
               </div>
             </DaisyCardBody>
-            
+
             <DaisyCardFooter className="flex justify-center">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{' '}
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium"
                 >
                   Sign up
                 </Link>
               </p>
             </DaisyCardFooter>
-            
+
             {/* Enhanced Demo credentials */}
-            <motion.div 
+            <motion.div
               className="px-6 pb-4 space-y-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
               <div className="text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-3">
-                  Quick Demo Access:
-                </p>
+                <p className="text-sm font-medium text-muted-foreground mb-3">Quick Demo Access:</p>
               </div>
               <div className="grid grid-cols-1 gap-2">
                 {demoCredentials.map((cred, index) => (

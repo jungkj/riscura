@@ -6,9 +6,20 @@ import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
-import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
+import {
+  DaisySelect,
+  DaisySelectContent,
+  DaisySelectItem,
+  DaisySelectTrigger,
+  DaisySelectValue,
+} from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
@@ -48,7 +59,15 @@ import {
 // Types
 interface Notification {
   id: string;
-  type: 'task_assigned' | 'task_completed' | 'mention' | 'deadline' | 'security_alert' | 'system' | 'compliance' | 'audit';
+  type:
+    | 'task_assigned'
+    | 'task_completed'
+    | 'mention'
+    | 'deadline'
+    | 'security_alert'
+    | 'system'
+    | 'compliance'
+    | 'audit';
   title: string;
   message: string;
   timestamp: Date;
@@ -271,16 +290,16 @@ const getPriorityConfig = (priority: string) => {
 const formatTimeAgo = (date: Date) => {
   const now = new Date();
   const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-  
+
   if (diffInMinutes < 1) return 'Just now';
   if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-  
+
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) return `${diffInHours}h ago`;
-  
+
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) return `${diffInDays}d ago`;
-  
+
   return date.toLocaleDateString();
 };
 
@@ -293,48 +312,52 @@ export default function TeamNotificationsPage() {
   const [notifications, setNotifications] = useState(sampleNotifications);
 
   // Filter notifications
-  const filteredNotifications = notifications.filter(notification => {
-    const matchesSearch = notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || notification.category.toLowerCase() === filterCategory.toLowerCase();
+  const filteredNotifications = notifications.filter((notification) => {
+    const matchesSearch =
+      notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      filterCategory === 'all' ||
+      notification.category.toLowerCase() === filterCategory.toLowerCase();
     const matchesPriority = filterPriority === 'all' || notification.priority === filterPriority;
-    const matchesTab = activeTab === 'all' || 
-                      (activeTab === 'unread' && !notification.isRead) ||
-                      (activeTab === 'starred' && notification.isStarred);
-    
+    const matchesTab =
+      activeTab === 'all' ||
+      (activeTab === 'unread' && !notification.isRead) ||
+      (activeTab === 'starred' && notification.isStarred);
+
     return matchesSearch && matchesCategory && matchesPriority && matchesTab;
   });
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-  const starredCount = notifications.filter(n => n.isStarred).length;
-  const criticalCount = notifications.filter(n => n.priority === 'critical').length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const starredCount = notifications.filter((n) => n.isStarred).length;
+  const criticalCount = notifications.filter((n) => n.priority === 'critical').length;
 
   const handleMarkAsRead = (notificationId: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n))
     );
     toast.success('Notification marked as read');
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     toast.success('All notifications marked as read');
   };
 
   const handleToggleStar = (notificationId: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === notificationId ? { ...n, isStarred: !n.isStarred } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notificationId ? { ...n, isStarred: !n.isStarred } : n))
     );
     toast.success('Notification starred');
   };
 
   const handleDeleteNotification = (notificationId: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== notificationId));
+    setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification deleted');
   };
 
   const handleArchiveNotification = (notificationId: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== notificationId));
+    setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification archived');
   };
 
@@ -345,11 +368,15 @@ export default function TeamNotificationsPage() {
     }
   };
 
-  const handlePreferenceChange = (category: keyof NotificationPreferences['email'], type: keyof NotificationPreferences, value: boolean) => {
-    setPreferences(prev => ({
+  const handlePreferenceChange = (
+    category: keyof NotificationPreferences['email'],
+    type: keyof NotificationPreferences,
+    value: boolean
+  ) => {
+    setPreferences((prev) => ({
       ...prev,
       [type]: {
-        ...(prev[type] as Record<string, boolean> || {}),
+        ...((prev[type] as Record<string, boolean>) || {}),
         [category]: value,
       },
     }));
@@ -449,7 +476,7 @@ export default function TeamNotificationsPage() {
                 className="pl-10"
               />
             </div>
-            
+
             <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="Category" />
@@ -478,7 +505,8 @@ export default function TeamNotificationsPage() {
             </DaisySelect>
 
             <div className="text-sm text-gray-600 ml-auto">
-              {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? 's' : ''} found
+              {filteredNotifications.length} notification
+              {filteredNotifications.length !== 1 ? 's' : ''} found
             </div>
           </div>
 
@@ -492,21 +520,18 @@ export default function TeamNotificationsPage() {
                 <DaisyCard
                   key={notification.id}
                   className={cn(
-                    "transition-all hover:shadow-md cursor-pointer border-l-4",
-                    !notification.isRead && "bg-blue-50 border-blue-500",
+                    'transition-all hover:shadow-md cursor-pointer border-l-4',
+                    !notification.isRead && 'bg-blue-50 border-blue-500',
                     notification.isRead && priorityConfig.border,
-                    notification.priority === 'critical' && "ring-2 ring-red-200"
+                    notification.priority === 'critical' && 'ring-2 ring-red-200'
                   )}
                   onClick={() => handleNotificationAction(notification)}
                 >
                   <DaisyCardBody className="p-4">
                     <div className="flex items-start space-x-4">
                       {/* Icon */}
-                      <div className={cn(
-                        "flex-shrink-0 p-2 rounded-full",
-                        priorityConfig.bg
-                      )}>
-                        <NotificationIcon className={cn("h-4 w-4", priorityConfig.color)} />
+                      <div className={cn('flex-shrink-0 p-2 rounded-full', priorityConfig.bg)}>
+                        <NotificationIcon className={cn('h-4 w-4', priorityConfig.color)} />
                       </div>
 
                       {/* Content */}
@@ -514,13 +539,18 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">
-                              <h3 className={cn(
-                                "font-medium text-sm",
-                                !notification.isRead && "font-semibold"
-                              )}>
+                              <h3
+                                className={cn(
+                                  'font-medium text-sm',
+                                  !notification.isRead && 'font-semibold'
+                                )}
+                              >
                                 {notification.title}
                               </h3>
-                              <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
+                              <DaisyBadge
+                                variant="outline"
+                                className={cn('text-xs', priorityConfig.color)}
+                              >
                                 {notification.priority}
                               </DaisyBadge>
                               <DaisyBadge variant="outline" className="text-xs">
@@ -530,16 +560,17 @@ export default function TeamNotificationsPage() {
                                 <div className="h-2 w-2 bg-blue-500 rounded-full" />
                               )}
                             </div>
-                            <p className="text-sm text-gray-600 mb-2">
-                              {notification.message}
-                            </p>
+                            <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
                             <div className="flex items-center space-x-4 text-xs text-gray-500">
                               {notification.sender && (
                                 <div className="flex items-center space-x-1">
                                   <DaisyAvatar className="h-4 w-4">
                                     <DaisyAvatarImage src={notification.sender.avatar} />
                                     <DaisyAvatarFallback className="text-xs">
-                                      {notification.sender.name.split(' ').map(n => n[0]).join('')}
+                                      {notification.sender.name
+                                        .split(' ')
+                                        .map((n) => n[0])
+                                        .join('')}
                                     </DaisyAvatarFallback>
                                   </DaisyAvatar>
                                   <span>{notification.sender.name}</span>
@@ -579,10 +610,14 @@ export default function TeamNotificationsPage() {
                                 handleToggleStar(notification.id);
                               }}
                             >
-                              <Star className={cn(
-                                "h-4 w-4",
-                                notification.isStarred ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
-                              )} />
+                              <Star
+                                className={cn(
+                                  'h-4 w-4',
+                                  notification.isStarred
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-gray-400'
+                                )}
+                              />
                             </DaisyButton>
                             {!notification.isRead && (
                               <DaisyButton
@@ -635,7 +670,7 @@ export default function TeamNotificationsPage() {
                   <p className="text-gray-600">
                     {searchQuery || filterCategory !== 'all' || filterPriority !== 'all'
                       ? 'Try adjusting your filters to see more notifications.'
-                      : 'You\'re all caught up! New notifications will appear here.'}
+                      : "You're all caught up! New notifications will appear here."}
                   </p>
                 </DaisyCardBody>
               </DaisyCard>
@@ -645,96 +680,106 @@ export default function TeamNotificationsPage() {
 
         <DaisyTabsContent value="unread" className="space-y-6">
           <div className="space-y-3">
-            {notifications.filter(n => !n.isRead).map((notification) => {
-              const NotificationIcon = getNotificationIcon(notification.type);
-              const priorityConfig = getPriorityConfig(notification.priority);
+            {notifications
+              .filter((n) => !n.isRead)
+              .map((notification) => {
+                const NotificationIcon = getNotificationIcon(notification.type);
+                const priorityConfig = getPriorityConfig(notification.priority);
 
-              return (
-                <DaisyCard
-                  key={notification.id}
-                  className={cn(
-                    "transition-all hover:shadow-md cursor-pointer border-l-4 bg-blue-50 border-blue-500",
-                    notification.priority === 'critical' && "ring-2 ring-red-200"
-                  )}
-                  onClick={() => handleNotificationAction(notification)}
-                >
-                  <DaisyCardBody className="p-4">
-                    <div className="flex items-start space-x-4">
-                      <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
-                        <NotificationIcon className={cn("h-4 w-4", priorityConfig.color)} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <h3 className="font-semibold text-sm">{notification.title}</h3>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                            {notification.priority}
-                          </DaisyBadge>
-                          <div className="h-2 w-2 bg-blue-500 rounded-full" />
+                return (
+                  <DaisyCard
+                    key={notification.id}
+                    className={cn(
+                      'transition-all hover:shadow-md cursor-pointer border-l-4 bg-blue-50 border-blue-500',
+                      notification.priority === 'critical' && 'ring-2 ring-red-200'
+                    )}
+                    onClick={() => handleNotificationAction(notification)}
+                  >
+                    <DaisyCardBody className="p-4">
+                      <div className="flex items-start space-x-4">
+                        <div className={cn('flex-shrink-0 p-2 rounded-full', priorityConfig.bg)}>
+                          <NotificationIcon className={cn('h-4 w-4', priorityConfig.color)} />
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">
-                            {formatTimeAgo(notification.timestamp)}
-                          </span>
-                          <DaisyButton
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMarkAsRead(notification.id);
-                            }}
-                          >
-                                                          <CheckCircle2 className="h-3 w-3 mr-1" />
-                            Mark as Read
-                          </DaisyButton>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <h3 className="font-semibold text-sm">{notification.title}</h3>
+                            <DaisyBadge
+                              variant="outline"
+                              className={cn('text-xs', priorityConfig.color)}
+                            >
+                              {notification.priority}
+                            </DaisyBadge>
+                            <div className="h-2 w-2 bg-blue-500 rounded-full" />
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">
+                              {formatTimeAgo(notification.timestamp)}
+                            </span>
+                            <DaisyButton
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMarkAsRead(notification.id);
+                              }}
+                            >
+                              <CheckCircle2 className="h-3 w-3 mr-1" />
+                              Mark as Read
+                            </DaisyButton>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-              );
-            })}
+                    </DaisyCardBody>
+                  </DaisyCard>
+                );
+              })}
           </div>
         </DaisyTabsContent>
 
         <DaisyTabsContent value="starred" className="space-y-6">
           <div className="space-y-3">
-            {notifications.filter(n => n.isStarred).map((notification) => {
-              const NotificationIcon = getNotificationIcon(notification.type);
-              const priorityConfig = getPriorityConfig(notification.priority);
+            {notifications
+              .filter((n) => n.isStarred)
+              .map((notification) => {
+                const NotificationIcon = getNotificationIcon(notification.type);
+                const priorityConfig = getPriorityConfig(notification.priority);
 
-              return (
-                <DaisyCard
-                  key={notification.id}
-                  className={cn(
-                    "transition-all hover:shadow-md cursor-pointer border-l-4",
-                    priorityConfig.border
-                  )}
-                  onClick={() => handleNotificationAction(notification)}
-                >
-                  <DaisyCardBody className="p-4">
-                    <div className="flex items-start space-x-4">
-                      <div className={cn("flex-shrink-0 p-2 rounded-full", priorityConfig.bg)}>
-                        <NotificationIcon className={cn("h-4 w-4", priorityConfig.color)} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <h3 className="font-medium text-sm">{notification.title}</h3>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
-                            {notification.priority}
-                          </DaisyBadge>
+                return (
+                  <DaisyCard
+                    key={notification.id}
+                    className={cn(
+                      'transition-all hover:shadow-md cursor-pointer border-l-4',
+                      priorityConfig.border
+                    )}
+                    onClick={() => handleNotificationAction(notification)}
+                  >
+                    <DaisyCardBody className="p-4">
+                      <div className="flex items-start space-x-4">
+                        <div className={cn('flex-shrink-0 p-2 rounded-full', priorityConfig.bg)}>
+                          <NotificationIcon className={cn('h-4 w-4', priorityConfig.color)} />
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
-                        <span className="text-xs text-gray-500">
-                          {formatTimeAgo(notification.timestamp)}
-                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                            <h3 className="font-medium text-sm">{notification.title}</h3>
+                            <DaisyBadge
+                              variant="outline"
+                              className={cn('text-xs', priorityConfig.color)}
+                            >
+                              {notification.priority}
+                            </DaisyBadge>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                          <span className="text-xs text-gray-500">
+                            {formatTimeAgo(notification.timestamp)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </DaisyCardBody>
-                </DaisyCard>
-              );
-            })}
+                    </DaisyCardBody>
+                  </DaisyCard>
+                );
+              })}
           </div>
         </DaisyTabsContent>
 
@@ -746,19 +791,43 @@ export default function TeamNotificationsPage() {
                 Configure how and when you receive notifications
               </DaisyCardDescription>
             </DaisyCardBody>
-            
+
             <DaisyCardBody className="space-y-6">
               {/* Notification Types */}
               <div>
                 <h3 className="font-medium mb-4">Notification Types</h3>
                 <div className="space-y-4">
                   {[
-                    { key: 'taskAssignments', label: 'Task Assignments', description: 'When tasks are assigned to you' },
-                    { key: 'deadlineReminders', label: 'Deadline Reminders', description: 'Reminders for upcoming deadlines' },
-                    { key: 'securityAlerts', label: 'Security Alerts', description: 'Critical security notifications' },
-                    { key: 'mentions', label: 'Mentions', description: 'When you are mentioned in chat' },
-                    { key: 'systemUpdates', label: 'System Updates', description: 'System maintenance and updates' },
-                    { key: 'auditNotifications', label: 'Audit Notifications', description: 'Audit-related activities' },
+                    {
+                      key: 'taskAssignments',
+                      label: 'Task Assignments',
+                      description: 'When tasks are assigned to you',
+                    },
+                    {
+                      key: 'deadlineReminders',
+                      label: 'Deadline Reminders',
+                      description: 'Reminders for upcoming deadlines',
+                    },
+                    {
+                      key: 'securityAlerts',
+                      label: 'Security Alerts',
+                      description: 'Critical security notifications',
+                    },
+                    {
+                      key: 'mentions',
+                      label: 'Mentions',
+                      description: 'When you are mentioned in chat',
+                    },
+                    {
+                      key: 'systemUpdates',
+                      label: 'System Updates',
+                      description: 'System maintenance and updates',
+                    },
+                    {
+                      key: 'auditNotifications',
+                      label: 'Audit Notifications',
+                      description: 'Audit-related activities',
+                    },
                   ].map((item) => (
                     <div key={item.key} className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -771,8 +840,12 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.email[item.key as keyof typeof preferences.email]}
-                            onCheckedChange={(checked) => 
-                              handlePreferenceChange(item.key as keyof typeof preferences.email, 'email', checked)
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
+                                item.key as keyof typeof preferences.email,
+                                'email',
+                                checked
+                              )
                             }
                           />
                           <DaisyLabel className="text-sm">Email</DaisyLabel>
@@ -780,8 +853,12 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.push[item.key as keyof typeof preferences.push]}
-                            onCheckedChange={(checked) => 
-                              handlePreferenceChange(item.key as keyof typeof preferences.push, 'push', checked)
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
+                                item.key as keyof typeof preferences.push,
+                                'push',
+                                checked
+                              )
                             }
                           />
                           <DaisyLabel className="text-sm">Push</DaisyLabel>
@@ -789,8 +866,12 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.inApp[item.key as keyof typeof preferences.inApp]}
-                            onCheckedChange={(checked) => 
-                              handlePreferenceChange(item.key as keyof typeof preferences.inApp, 'inApp', checked)
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
+                                item.key as keyof typeof preferences.inApp,
+                                'inApp',
+                                checked
+                              )
                             }
                           />
                           <DaisyLabel className="text-sm">In-App</DaisyLabel>
@@ -809,9 +890,12 @@ export default function TeamNotificationsPage() {
                 <div className="space-y-4">
                   <div>
                     <DaisyLabel>Email Digest Frequency</DaisyLabel>
-                    <DaisySelect value={preferences.frequency} onValueChange={(value) => 
-                      setPreferences(prev => ({ ...prev, frequency: value as any }))
-                    }>
+                    <DaisySelect
+                      value={preferences.frequency}
+                      onValueChange={(value) =>
+                        setPreferences((prev) => ({ ...prev, frequency: value as any }))
+                      }
+                    >
                       <DaisySelectTrigger className="w-48 mt-1">
                         <DaisySelectValue />
                       </DaisySelectTrigger>
@@ -835,10 +919,10 @@ export default function TeamNotificationsPage() {
                   <div className="flex items-center space-x-2">
                     <DaisySwitch
                       checked={preferences.quietHours.enabled}
-                      onCheckedChange={(checked) => 
-                        setPreferences(prev => ({
+                      onCheckedChange={(checked) =>
+                        setPreferences((prev) => ({
                           ...prev,
-                          quietHours: { ...prev.quietHours, enabled: checked }
+                          quietHours: { ...prev.quietHours, enabled: checked },
                         }))
                       }
                     />
@@ -851,10 +935,10 @@ export default function TeamNotificationsPage() {
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.start}
-                          onChange={(e) => 
-                            setPreferences(prev => ({
+                          onChange={(e) =>
+                            setPreferences((prev) => ({
                               ...prev,
-                              quietHours: { ...prev.quietHours, start: e.target.value }
+                              quietHours: { ...prev.quietHours, start: e.target.value },
                             }))
                           }
                           className="mt-1"
@@ -865,10 +949,10 @@ export default function TeamNotificationsPage() {
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.end}
-                          onChange={(e) => 
-                            setPreferences(prev => ({
+                          onChange={(e) =>
+                            setPreferences((prev) => ({
                               ...prev,
-                              quietHours: { ...prev.quietHours, end: e.target.value }
+                              quietHours: { ...prev.quietHours, end: e.target.value },
                             }))
                           }
                           className="mt-1"
@@ -889,4 +973,4 @@ export default function TeamNotificationsPage() {
       </MainContentArea>
     </ProtectedRoute>
   );
-} 
+}

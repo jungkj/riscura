@@ -227,4 +227,4 @@ export const WorkflowProgress = ({ activeStep, onStepClick, className }: Workflo
       </div>
     </div>
   );
-}
+};

@@ -62,4 +62,4 @@ export const CollaborationIndicators = ({ users }: CollaborationIndicatorsProps)
       )}
     </div>
   );
-}
+};

@@ -608,7 +608,7 @@ const ProboPageContent = () => {
       </div>
     </ProtectedRoute>
   );
-}
+};
 
 export default function ProboPage() {
   return (

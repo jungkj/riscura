@@ -239,22 +239,23 @@ export const IntegrationPartners: React.FC = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translate(-50%, -5px);
+      <style jsx>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translate(-50%, -5px);
+            }
+            to {
+              opacity: 1;
+              transform: translate(-50%, 0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translate(-50%, 0);
-          }
-        }
 
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out forwards;
-        }
-      `}
+          .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out forwards;
+          }
+        `}
       </style>
     </section>
   );

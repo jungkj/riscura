@@ -19,7 +19,11 @@ interface RCSABreadcrumbProps {
   maxItems?: number;
 }
 
-export const RCSABreadcrumb = ({ className, showIcons = true, maxItems = 5 }: RCSABreadcrumbProps) => {
+export const RCSABreadcrumb = ({
+  className,
+  showIcons = true,
+  maxItems = 5,
+}: RCSABreadcrumbProps) => {
   const { currentRisk, currentControl, navigationContext } = useRCSA();
 
   const buildBreadcrumbs = (): BreadcrumbItem[] => {
@@ -150,7 +154,7 @@ export const RCSABreadcrumb = ({ className, showIcons = true, maxItems = 5 }: RC
       ))}
     </nav>
   );
-}
+};
 
 // Variant for mobile with simplified display
 export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
@@ -200,7 +204,7 @@ export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-}
+};
 
 // Context indicator component for showing relationship information
 export const RCSAContextIndicator = ({ className }: { className?: string }) => {
@@ -266,6 +270,6 @@ export const RCSAContextIndicator = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-}
+};
 
 export default RCSABreadcrumb;

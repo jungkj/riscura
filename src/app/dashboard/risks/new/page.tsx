@@ -338,7 +338,7 @@ const NewRiskForm = () => {
       </div>
     </div>
   );
-}
+};
 
 export default function NewRiskPage() {
   return (

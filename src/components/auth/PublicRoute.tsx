@@ -32,4 +32,4 @@ export const PublicRoute = () => {
 
   // If user is not authenticated, show landing page
   return <LandingPage />;
-}
+};

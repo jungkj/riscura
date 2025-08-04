@@ -9,9 +9,9 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  ArrowLeft, 
-  CheckCircle, 
+import {
+  ArrowLeft,
+  CheckCircle,
   XCircle,
   AlertTriangle,
   Shield,
@@ -20,7 +20,7 @@ import {
   Play,
   Pause,
   RotateCcw,
-  Clock
+  Clock,
 } from 'lucide-react';
 
 interface Framework {
@@ -62,21 +62,23 @@ const frameworks: Framework[] = [
             id: 'cc6.1',
             code: 'CC6.1',
             title: 'Logical and Physical Access Controls',
-            description: 'The entity implements logical access security software, infrastructure, and architectures over protected information assets.',
+            description:
+              'The entity implements logical access security software, infrastructure, and architectures over protected information assets.',
             status: 'not-assessed',
             evidence: [],
-            notes: ''
+            notes: '',
           },
           {
             id: 'cc6.2',
             code: 'CC6.2',
             title: 'User Authentication',
-            description: 'Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users.',
+            description:
+              'Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users.',
             status: 'not-assessed',
             evidence: [],
-            notes: ''
-          }
-        ]
+            notes: '',
+          },
+        ],
       },
       {
         id: 'availability',
@@ -89,11 +91,11 @@ const frameworks: Framework[] = [
             description: 'The entity maintains system availability commitments and requirements.',
             status: 'not-assessed',
             evidence: [],
-            notes: ''
-          }
-        ]
-      }
-    ]
+            notes: '',
+          },
+        ],
+      },
+    ],
   },
   {
     id: 'iso27001',
@@ -112,11 +114,11 @@ const frameworks: Framework[] = [
             description: 'Determine external and internal issues relevant to the ISMS.',
             status: 'not-assessed',
             evidence: [],
-            notes: ''
-          }
-        ]
-      }
-    ]
+            notes: '',
+          },
+        ],
+      },
+    ],
   },
   {
     id: 'gdpr',
@@ -135,12 +137,12 @@ const frameworks: Framework[] = [
             description: 'Personal data shall be processed lawfully, fairly and transparently.',
             status: 'not-assessed',
             evidence: [],
-            notes: ''
-          }
-        ]
-      }
-    ]
-  }
+            notes: '',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default function FrameworkComplianceCheckPage() {
@@ -156,7 +158,7 @@ export default function FrameworkComplianceCheckPage() {
     let interval: NodeJS.Timeout;
     if (assessmentInProgress) {
       interval = setInterval(() => {
-        setTimeElapsed(prev => prev + 1);
+        setTimeElapsed((prev) => prev + 1);
       }, 1000);
     }
 
@@ -164,7 +166,7 @@ export default function FrameworkComplianceCheckPage() {
   }, [assessmentInProgress]);
 
   const getAllRequirements = (framework: Framework) => {
-    return framework.categories.flatMap(cat => cat.requirements);
+    return framework.categories.flatMap((cat) => cat.requirements);
   };
 
   const startAssessment = () => {
@@ -199,13 +201,13 @@ export default function FrameworkComplianceCheckPage() {
     const requirements = getAllRequirements(selectedFramework);
     const currentReq = requirements[currentRequirementIndex];
 
-    setAssessmentResults(prev => ({
+    setAssessmentResults((prev) => ({
       ...prev,
-      [currentReq.id]: status
+      [currentReq.id]: status,
     }));
 
     if (currentRequirementIndex < requirements.length - 1) {
-      setCurrentRequirementIndex(prev => prev + 1);
+      setCurrentRequirementIndex((prev) => prev + 1);
     } else {
       // Assessment complete
       completeAssessment();
@@ -214,7 +216,7 @@ export default function FrameworkComplianceCheckPage() {
 
   const completeAssessment = async () => {
     setAssessmentInProgress(false);
-    
+
     try {
       const response = await fetch('/api/compliance/assessments', {
         method: 'POST',
@@ -222,8 +224,8 @@ export default function FrameworkComplianceCheckPage() {
         body: JSON.stringify({
           framework: selectedFramework?.id,
           results: assessmentResults,
-          completedAt: new Date().toISOString()
-        })
+          completedAt: new Date().toISOString(),
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to save assessment');
@@ -270,11 +272,13 @@ export default function FrameworkComplianceCheckPage() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
-            
+
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Framework Compliance Check</h1>
-                <p className="text-gray-600 mt-1">Assess compliance against regulatory frameworks</p>
+                <p className="text-gray-600 mt-1">
+                  Assess compliance against regulatory frameworks
+                </p>
               </div>
               <DaisyBadge variant="outline" className="text-sm">
                 <Clock className="h-4 w-4 mr-1" />
@@ -286,7 +290,9 @@ export default function FrameworkComplianceCheckPage() {
           {!assessmentInProgress && !selectedFramework && (
             /* Framework Selection */
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Select Compliance Framework</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Select Compliance Framework
+              </h2>
               <div className="grid gap-4">
                 {frameworks.map((framework) => (
                   <DaisyCard
@@ -326,7 +332,9 @@ export default function FrameworkComplianceCheckPage() {
               <DaisyCardBody className="space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <h3 className="font-medium text-blue-900 mb-2">Selected Framework</h3>
-                  <p className="text-blue-800">{selectedFramework.name} - {selectedFramework.description}</p>
+                  <p className="text-blue-800">
+                    {selectedFramework.name} - {selectedFramework.description}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -344,10 +352,7 @@ export default function FrameworkComplianceCheckPage() {
                     <Play className="h-5 w-5 mr-2" />
                     Start Assessment
                   </DaisyButton>
-                  <DaisyButton
-                    variant="outline"
-                    onClick={() => setSelectedFramework(null)}
-                  >
+                  <DaisyButton variant="outline" onClick={() => setSelectedFramework(null)}>
                     Choose Different Framework
                   </DaisyButton>
                 </div>
@@ -373,7 +378,8 @@ export default function FrameworkComplianceCheckPage() {
                   </div>
                   <DaisyProgress value={calculateProgress()} className="h-3" />
                   <p className="text-sm text-gray-600 mt-2">
-                    Requirement {currentRequirementIndex + 1} of {getAllRequirements(selectedFramework).length}
+                    Requirement {currentRequirementIndex + 1} of{' '}
+                    {getAllRequirements(selectedFramework).length}
                   </p>
                 </DaisyCardBody>
               </DaisyCard>
@@ -383,16 +389,21 @@ export default function FrameworkComplianceCheckPage() {
                 <DaisyCardBody>
                   <div className="flex items-center justify-between">
                     <DaisyCardTitle className="text-lg">
-                      {getAllRequirements(selectedFramework)[currentRequirementIndex].code} - {getAllRequirements(selectedFramework)[currentRequirementIndex].title}
+                      {getAllRequirements(selectedFramework)[currentRequirementIndex].code} -{' '}
+                      {getAllRequirements(selectedFramework)[currentRequirementIndex].title}
                     </DaisyCardTitle>
                     <DaisyBadge variant="outline">
-                      {selectedFramework.categories.find(cat => 
-                        cat.requirements.includes(getAllRequirements(selectedFramework)[currentRequirementIndex])
-                      )?.name}
+                      {
+                        selectedFramework.categories.find((cat) =>
+                          cat.requirements.includes(
+                            getAllRequirements(selectedFramework)[currentRequirementIndex]
+                          )
+                        )?.name
+                      }
                     </DaisyBadge>
                   </div>
                 </DaisyCardBody>
-                
+
                 <DaisyCardBody className="space-y-6">
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <p className="text-gray-700">
@@ -458,27 +469,30 @@ export default function FrameworkComplianceCheckPage() {
           )}
 
           {/* Paused State */}
-          {!assessmentInProgress && selectedFramework && currentRequirementIndex > 0 && 
-           currentRequirementIndex < getAllRequirements(selectedFramework).length && (
-            <DaisyCard>
-              <DaisyCardBody className="p-12 text-center">
-                <Pause className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Assessment Paused</h3>
-                <p className="text-gray-600 mb-4">
-                  You've completed {currentRequirementIndex} of {getAllRequirements(selectedFramework).length} requirements
-                </p>
-                <div className="flex gap-3 justify-center">
-                  <DaisyButton onClick={() => setAssessmentInProgress(true)}>
-                    <Play className="h-4 w-4 mr-2" />
-                    Resume Assessment
-                  </DaisyButton>
-                  <DaisyButton variant="outline" onClick={resetAssessment}>
-                    Start Over
-                  </DaisyButton>
-                </div>
-              </DaisyCardBody>
-            </DaisyCard>
-          )}
+          {!assessmentInProgress &&
+            selectedFramework &&
+            currentRequirementIndex > 0 &&
+            currentRequirementIndex < getAllRequirements(selectedFramework).length && (
+              <DaisyCard>
+                <DaisyCardBody className="p-12 text-center">
+                  <Pause className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Assessment Paused</h3>
+                  <p className="text-gray-600 mb-4">
+                    You've completed {currentRequirementIndex} of{' '}
+                    {getAllRequirements(selectedFramework).length} requirements
+                  </p>
+                  <div className="flex gap-3 justify-center">
+                    <DaisyButton onClick={() => setAssessmentInProgress(true)}>
+                      <Play className="h-4 w-4 mr-2" />
+                      Resume Assessment
+                    </DaisyButton>
+                    <DaisyButton variant="outline" onClick={resetAssessment}>
+                      Start Over
+                    </DaisyButton>
+                  </div>
+                </DaisyCardBody>
+              </DaisyCard>
+            )}
         </div>
       </div>
     </ProtectedRoute>

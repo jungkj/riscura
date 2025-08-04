@@ -33,10 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2 } from 'lucide-react';
 
 // Form schema
@@ -106,12 +103,12 @@ export default function OnboardingPage() {
           {step === 1 ? 'Welcome to Riscura' : 'Complete Your Profile'}
         </CardTitle>
         <CardDescription>
-          {step === 1 
-            ? 'Let\'s set up your organization'
+          {step === 1
+            ? "Let's set up your organization"
             : 'Tell us about your role and requirements'}
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -136,10 +133,7 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Industry</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select industry" />
@@ -165,10 +159,7 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Company Size</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select company size" />
@@ -186,11 +177,7 @@ export default function OnboardingPage() {
                     </FormItem>
                   )}
                 />
-                <DaisyButton 
-                  type="button" 
-                  onClick={nextStep} 
-                  className="w-full"
-                >
+                <DaisyButton type="button" onClick={nextStep} className="w-full">
                   Continue
                 </DaisyButton>
               </>
@@ -215,33 +202,25 @@ export default function OnboardingPage() {
                             <FormControl>
                               <RadioGroupItem value="risk_manager" />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Risk Manager
-                            </FormLabel>
+                            <FormLabel className="font-normal">Risk Manager</FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem value="admin" />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Administrator
-                            </FormLabel>
+                            <FormLabel className="font-normal">Administrator</FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem value="auditor" />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Auditor
-                            </FormLabel>
+                            <FormLabel className="font-normal">Auditor</FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem value="user" />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Regular User
-                            </FormLabel>
+                            <FormLabel className="font-normal">Regular User</FormLabel>
                           </FormItem>
                         </RadioGroup>
                       </FormControl>
@@ -249,21 +228,17 @@ export default function OnboardingPage() {
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="flex gap-3 pt-4">
-                  <DaisyButton 
-                    type="button" 
-                    variant="outline" 
+                  <DaisyButton
+                    type="button"
+                    variant="outline"
                     onClick={prevStep}
                     className="flex-1"
                   >
                     Back
                   </DaisyButton>
-                  <DaisyButton 
-                    type="submit" 
-                    className="flex-1"
-                    disabled={isLoading}
-                  >
+                  <DaisyButton type="submit" className="flex-1" disabled={isLoading}>
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -280,9 +255,7 @@ export default function OnboardingPage() {
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <p className="text-xs text-muted-foreground">
-          Step {step} of 2
-        </p>
+        <p className="text-xs text-muted-foreground">Step {step} of 2</p>
       </CardFooter>
     </Card>
   );

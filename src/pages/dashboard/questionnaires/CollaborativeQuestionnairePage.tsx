@@ -12,9 +12,25 @@ import { RealTimeEditor } from '@/components/collaboration/RealTimeEditor';
 import { ShareDialog } from '@/components/collaboration/ShareDialog';
 
 import {
-  Users, Share2, GitBranch, MessageCircle, Activity, Clock,
-  Save, Eye, Edit3, Settings, ArrowLeft, MoreVertical,
-  Bell, Star, BookOpen, Download, Upload, Lock, Unlock
+  Users,
+  Share2,
+  GitBranch,
+  MessageCircle,
+  Activity,
+  Clock,
+  Save,
+  Eye,
+  Edit3,
+  Settings,
+  ArrowLeft,
+  MoreVertical,
+  Bell,
+  Star,
+  BookOpen,
+  Download,
+  Upload,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 
 // Mock user data for CollaborationPanel
@@ -26,10 +42,10 @@ const mockCollaborationUser = {
   role: 'owner' as const,
   status: 'online' as const,
   lastSeen: new Date(),
-  permissions: ['view', 'edit', 'comment', 'admin', 'share', 'delete']
+  permissions: ['view', 'edit', 'comment', 'admin', 'share', 'delete'],
 };
 
-// Mock user data for RealTimeEditor  
+// Mock user data for RealTimeEditor
 const mockEditorUser = {
   id: 'current-user',
   name: 'John Doe',
@@ -37,7 +53,7 @@ const mockEditorUser = {
   avatar: '/avatars/john.jpg',
   color: '#3b82f6',
   isTyping: false,
-  lastActivity: new Date()
+  lastActivity: new Date(),
 };
 
 // Mock user data for ShareDialog
@@ -48,16 +64,52 @@ const mockShareUser = {
   avatar: '/avatars/john.jpg',
   role: 'owner' as const,
   permissions: [
-    { id: 'perm-1', type: 'view' as const, granted: true, grantedBy: 'system', grantedAt: new Date() },
-    { id: 'perm-2', type: 'edit' as const, granted: true, grantedBy: 'system', grantedAt: new Date() },
-    { id: 'perm-3', type: 'comment' as const, granted: true, grantedBy: 'system', grantedAt: new Date() },
-    { id: 'perm-4', type: 'admin' as const, granted: true, grantedBy: 'system', grantedAt: new Date() },
-    { id: 'perm-5', type: 'share' as const, granted: true, grantedBy: 'system', grantedAt: new Date() },
-    { id: 'perm-6', type: 'delete' as const, granted: true, grantedBy: 'system', grantedAt: new Date() }
+    {
+      id: 'perm-1',
+      type: 'view' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
+    {
+      id: 'perm-2',
+      type: 'edit' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
+    {
+      id: 'perm-3',
+      type: 'comment' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
+    {
+      id: 'perm-4',
+      type: 'admin' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
+    {
+      id: 'perm-5',
+      type: 'share' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
+    {
+      id: 'perm-6',
+      type: 'delete' as const,
+      granted: true,
+      grantedBy: 'system',
+      grantedAt: new Date(),
+    },
   ],
   addedBy: 'system',
   addedAt: new Date(),
-  status: 'active' as const
+  status: 'active' as const,
 };
 
 // Generic user for display
@@ -66,7 +118,7 @@ const mockCurrentUser = {
   name: 'John Doe',
   email: 'john.doe@company.com',
   avatar: '/avatars/john.jpg',
-  role: 'owner' as const
+  role: 'owner' as const,
 };
 
 interface CollaborativeQuestionnairePageProps {
@@ -76,7 +128,7 @@ interface CollaborativeQuestionnairePageProps {
 
 export default function CollaborativeQuestionnairePage({
   questionnaireId = 'questionnaire-1',
-  mode = 'collaborate'
+  mode = 'collaborate',
 }: CollaborativeQuestionnairePageProps) {
   // State management
   const [currentMode, setCurrentMode] = useState(mode);
@@ -92,7 +144,8 @@ export default function CollaborativeQuestionnairePage({
   const [questionnaire, setQuestionnaire] = useState({
     id: questionnaireId,
     title: 'Enterprise Security Risk Assessment',
-    description: 'Comprehensive cybersecurity risk assessment questionnaire for enterprise environments',
+    description:
+      'Comprehensive cybersecurity risk assessment questionnaire for enterprise environments',
     status: 'draft' as const,
     version: '1.2',
     createdAt: new Date(Date.now() - 86400000),
@@ -103,13 +156,14 @@ export default function CollaborativeQuestionnairePage({
     category: 'Security Assessment',
     isPublic: false,
     responseCount: 12,
-    completionRate: 85
+    completionRate: 85,
   });
 
   // Simulate auto-save
   useEffect(() => {
     const interval = setInterval(() => {
-      if (Math.random() > 0.7) { // 30% chance of auto-save trigger
+      if (Math.random() > 0.7) {
+        // 30% chance of auto-save trigger
         handleAutoSave();
       }
     }, 10000);
@@ -122,7 +176,7 @@ export default function CollaborativeQuestionnairePage({
     setTimeout(() => {
       setIsAutoSaving(false);
       setLastSaved(new Date());
-      
+
       toast({
         title: 'Auto-saved',
         description: 'Your changes have been automatically saved.',
@@ -133,15 +187,15 @@ export default function CollaborativeQuestionnairePage({
 
   const handleContentChange = (content: any) => {
     // Update questionnaire content
-    setQuestionnaire(prev => ({
+    setQuestionnaire((prev) => ({
       ...prev,
       updatedAt: new Date(),
-      lastEditedBy: mockCurrentUser
+      lastEditedBy: mockCurrentUser,
     }));
   };
 
   const handleUserActivity = (activity: any) => {
-    setActivities(prev => [activity, ...prev.slice(0, 49)]); // Keep last 50 activities
+    setActivities((prev) => [activity, ...prev.slice(0, 49)]); // Keep last 50 activities
   };
 
   const handleShare = () => {
@@ -152,16 +206,22 @@ export default function CollaborativeQuestionnairePage({
     setIsStarred(!isStarred);
     toast({
       title: isStarred ? 'Removed from favorites' : 'Added to favorites',
-      description: isStarred ? 'Questionnaire removed from your starred list.' : 'Questionnaire added to your starred list.',
+      description: isStarred
+        ? 'Questionnaire removed from your starred list.'
+        : 'Questionnaire added to your starred list.',
     });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800';
-      case 'draft': return 'bg-yellow-100 text-yellow-800';
-      case 'archived': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-blue-100 text-blue-800';
+      case 'published':
+        return 'bg-green-100 text-green-800';
+      case 'draft':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'archived':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-blue-100 text-blue-800';
     }
   };
 
@@ -177,9 +237,9 @@ export default function CollaborativeQuestionnairePage({
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Questionnaires
               </DaisyButton>
-              
+
               <DaisySeparator orientation="vertical" className="h-6" />
-              
+
               <div className="flex items-center space-x-3">
                 <div>
                   <h1 className="text-lg font-semibold text-gray-900">{questionnaire.title}</h1>
@@ -204,7 +264,7 @@ export default function CollaborativeQuestionnairePage({
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                     >
                       <Save className="w-4 h-4" />
                     </motion.div>
@@ -228,7 +288,9 @@ export default function CollaborativeQuestionnairePage({
               {/* Action buttons */}
               <div className="flex items-center space-x-2">
                 <DaisyButton variant="ghost" size="sm" onClick={handleStar}>
-                  <Star className={`w-4 h-4 ${isStarred ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                  <Star
+                    className={`w-4 h-4 ${isStarred ? 'fill-yellow-400 text-yellow-400' : ''}`}
+                  />
                 </DaisyButton>
 
                 <DaisyButton variant="ghost" size="sm">
@@ -256,7 +318,8 @@ export default function CollaborativeQuestionnairePage({
                   variant={currentMode === 'view' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('view')}
-                  className="h-8 px-3">
+                  className="h-8 px-3"
+                >
                   <Eye className="w-4 h-4 mr-1" />
                   View
                 </DaisyButton>
@@ -264,7 +327,8 @@ export default function CollaborativeQuestionnairePage({
                   variant={currentMode === 'edit' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('edit')}
-                  className="h-8 px-3">
+                  className="h-8 px-3"
+                >
                   <Edit3 className="w-4 h-4 mr-1" />
                   Edit
                 </DaisyButton>
@@ -272,7 +336,8 @@ export default function CollaborativeQuestionnairePage({
                   variant={currentMode === 'collaborate' ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => setCurrentMode('collaborate')}
-                  className="h-8 px-3">
+                  className="h-8 px-3"
+                >
                   <Users className="w-4 h-4 mr-1" />
                   Collaborate
                 </DaisyButton>
@@ -283,7 +348,8 @@ export default function CollaborativeQuestionnairePage({
                 variant="outline"
                 size="sm"
                 onClick={() => setCollaborationPanelOpen(!collaborationPanelOpen)}
-                className={collaborationPanelOpen ? 'bg-blue-50 border-blue-200' : ''}>
+                className={collaborationPanelOpen ? 'bg-blue-50 border-blue-200' : ''}
+              >
                 <MessageCircle className="w-4 h-4" />
               </DaisyButton>
             </div>
@@ -295,15 +361,17 @@ export default function CollaborativeQuestionnairePage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex gap-6">
           {/* Main editor area */}
-          <div className={`flex-1 transition-all duration-300 ${collaborationPanelOpen ? 'mr-80' : ''}`}>
-                         {currentMode === 'collaborate' ? (
-               <RealTimeEditor
-                 documentId={questionnaireId}
-                 currentUser={mockEditorUser}
-                 onContentChange={handleContentChange}
-                 className="h-full"
-               />
-             ) : (
+          <div
+            className={`flex-1 transition-all duration-300 ${collaborationPanelOpen ? 'mr-80' : ''}`}
+          >
+            {currentMode === 'collaborate' ? (
+              <RealTimeEditor
+                documentId={questionnaireId}
+                currentUser={mockEditorUser}
+                onContentChange={handleContentChange}
+                className="h-full"
+              />
+            ) : (
               <DaisyCard className="h-full">
                 <DaisyCardBody>
                   <DaisyCardTitle>
@@ -376,12 +444,12 @@ export default function CollaborativeQuestionnairePage({
                 transition={{ duration: 0.3 }}
                 className="fixed right-6 top-20 bottom-6 w-80 z-30"
               >
-                                 <CollaborationPanel
-                   questionnaireId={questionnaireId}
-                   currentUser={mockCollaborationUser}
-                   onUserActivity={handleUserActivity}
-                   className="h-full shadow-lg"
-                 />
+                <CollaborationPanel
+                  questionnaireId={questionnaireId}
+                  currentUser={mockCollaborationUser}
+                  onUserActivity={handleUserActivity}
+                  className="h-full shadow-lg"
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -389,21 +457,21 @@ export default function CollaborativeQuestionnairePage({
       </div>
 
       {/* Share Dialog */}
-             <ShareDialog
-         questionnaireId={questionnaireId}
-         questionnaireName={questionnaire.title}
-         currentUser={mockShareUser}
-         isOpen={showShareDialog}
-         onOpenChange={setShowShareDialog}
-         onShare={(settings) => {
-           console.log('Share settings:', settings);
-           setShowShareDialog(false);
-           toast({
-             title: 'Questionnaire Shared',
-             description: 'Sharing settings have been updated.',
-           });
-         }}
-       />
+      <ShareDialog
+        questionnaireId={questionnaireId}
+        questionnaireName={questionnaire.title}
+        currentUser={mockShareUser}
+        isOpen={showShareDialog}
+        onOpenChange={setShowShareDialog}
+        onShare={(settings) => {
+          console.log('Share settings:', settings);
+          setShowShareDialog(false);
+          toast({
+            title: 'Questionnaire Shared',
+            description: 'Sharing settings have been updated.',
+          });
+        }}
+      />
     </div>
   );
-} 
+}

@@ -57,7 +57,7 @@ const Calendar = ({ className, classNames, showOutsideDays = true, ...props }: C
       {...props}
     />
   );
-}
+};
 Calendar.displayName = 'Calendar';
 
 export { Calendar };

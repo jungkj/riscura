@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
-  Upload, 
-  Brain, 
-  Shield, 
-  FileText, 
-  CheckCircle, 
+import {
+  Upload,
+  Brain,
+  Shield,
+  FileText,
+  CheckCircle,
   ArrowRight,
   Sparkles,
   AlertTriangle,
-  BarChart3
+  BarChart3,
 } from 'lucide-react';
 
 const HeroProcessCard = () => {
@@ -27,7 +27,7 @@ const HeroProcessCard = () => {
       icon: Upload,
       color: 'text-[#199BEC]',
       bgColor: 'bg-[#e6f4fd]',
-      files: ['RCSA_Template.xlsx', 'Policy_Framework.pdf', 'Controls_Matrix.csv']
+      files: ['RCSA_Template.xlsx', 'Policy_Framework.pdf', 'Controls_Matrix.csv'],
     },
     {
       id: 'analyze',
@@ -36,7 +36,7 @@ const HeroProcessCard = () => {
       icon: Brain,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
-      processing: ['Extracting risks...', 'Calculating scores...', 'Mapping controls...']
+      processing: ['Extracting risks...', 'Calculating scores...', 'Mapping controls...'],
     },
     {
       id: 'results',
@@ -48,9 +48,9 @@ const HeroProcessCard = () => {
       results: [
         { name: 'Cyber Risk', level: 'high', score: 18 },
         { name: 'Compliance', level: 'medium', score: 12 },
-        { name: 'Operational', level: 'low', score: 6 }
-      ]
-    }
+        { name: 'Operational', level: 'low', score: 6 },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -94,15 +94,18 @@ const HeroProcessCard = () => {
                 {/* Step Indicator */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 rounded-lg ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}>
+                    <div
+                      className={`w-10 h-10 rounded-lg ${currentStepData.bgColor} border border-gray-200 flex items-center justify-center`}
+                    >
                       <currentStepData.icon className={`w-5 h-5 ${currentStepData.color}`} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm">{currentStepData.title}</h3>
+                      <h3 className="font-semibold text-gray-900 text-sm">
+                        {currentStepData.title}
+                      </h3>
                       <p className="text-xs text-gray-600">{currentStepData.subtitle}</p>
                     </div>
                   </div>
-                  
                 </div>
 
                 {/* Step-Specific Content */}
@@ -140,7 +143,7 @@ const HeroProcessCard = () => {
                     <div className="bg-white/50 rounded-lg p-6 text-center">
                       <motion.div
                         animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                         className="mb-4"
                       >
                         <Brain className="w-10 h-10 text-purple-600 mx-auto" />
@@ -150,25 +153,25 @@ const HeroProcessCard = () => {
                           <motion.div
                             key={`${process}-${currentStep}`}
                             initial={{ opacity: 0.3 }}
-                            animate={{ 
+                            animate={{
                               opacity: [0.3, 1, 0.3],
                             }}
-                            transition={{ 
+                            transition={{
                               duration: 2.4,
                               delay: index * 0.8,
                               repeat: Infinity,
-                              ease: "easeInOut"
+                              ease: 'easeInOut',
                             }}
                             className="flex items-center justify-center space-x-2 text-sm"
                           >
-                            <motion.div 
+                            <motion.div
                               className="w-2 h-2 bg-purple-500 rounded-full"
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{
                                 duration: 1.2,
                                 delay: index * 0.8,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: 'easeInOut',
                               }}
                             />
                             <span className="text-gray-700">{process}</span>
@@ -183,8 +186,12 @@ const HeroProcessCard = () => {
                   <div className="space-y-4">
                     <div className="bg-white/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-medium text-gray-900 text-sm">Risk Assessment Results</h4>
-                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">Complete</DaisyBadge>
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          Risk Assessment Results
+                        </h4>
+                        <DaisyBadge className="bg-green-100 text-green-800 text-xs">
+                          Complete
+                        </DaisyBadge>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         {currentStepData.results?.map((result, index) => (
@@ -196,19 +203,34 @@ const HeroProcessCard = () => {
                             className="bg-white border border-gray-200 rounded p-3 text-center"
                           >
                             <div className="flex items-center justify-center mb-2">
-                              <div className={`w-4 h-4 rounded-full shadow-sm ${
-                                result.level === 'high' ? 'bg-red-500' :
-                                result.level === 'medium' ? 'bg-orange-500' : 'bg-green-500'
-                              }`}></div>
+                              <div
+                                className={`w-4 h-4 rounded-full shadow-sm ${
+                                  result.level === 'high'
+                                    ? 'bg-red-500'
+                                    : result.level === 'medium'
+                                      ? 'bg-orange-500'
+                                      : 'bg-green-500'
+                                }`}
+                              ></div>
                             </div>
-                            <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
-                            <DaisyBadge 
-                              variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
+                            <div className="text-xs text-gray-900 font-medium mb-2">
+                              {result.name}
+                            </div>
+                            <DaisyBadge
+                              variant={
+                                result.level === 'high'
+                                  ? 'destructive'
+                                  : result.level === 'medium'
+                                    ? 'secondary'
+                                    : 'default'
+                              }
                               className="text-xs mb-1"
                             >
                               {result.level}
                             </DaisyBadge>
-                            <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
+                            <div className="text-xs font-mono text-gray-600 mt-1">
+                              {result.score}
+                            </div>
                           </motion.div>
                         ))}
                       </div>
@@ -240,4 +262,4 @@ const HeroProcessCard = () => {
   );
 };
 
-export default HeroProcessCard; 
+export default HeroProcessCard;

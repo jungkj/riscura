@@ -37,4 +37,4 @@ export const AuthDebugger = () => {
       <div>Role: {auth.user?.role || 'None'}</div>
     </div>
   );
-}
+};

@@ -201,4 +201,4 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
       </motion.div>
     </div>
   );
-}
+};

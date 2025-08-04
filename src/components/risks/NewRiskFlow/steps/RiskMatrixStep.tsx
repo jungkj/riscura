@@ -242,4 +242,4 @@ export const RiskMatrixStep = ({ onNext, onBack }: RiskMatrixStepProps) => {
       </motion.div>
     </div>
   );
-}
+};

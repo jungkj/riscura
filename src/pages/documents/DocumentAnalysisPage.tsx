@@ -9,6 +9,6 @@ const DocumentAnalysisPage = () => {
       <p className="text-gray-600">Document analysis feature is being updated.</p>
     </div>
   );
-}
+};
 
 export default DocumentAnalysisPage;

@@ -173,7 +173,7 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
       </div>
     </div>
   );
-}
+};
 
 // Performance optimized list item component
 export const MemoizedListItem = React.memo<{

@@ -820,7 +820,7 @@ const TeamChatPage: React.FC = () => {
               </DaisyCardBody>
 
               {/* Message Input */}
-              <div className="border-t p-4">
+              <DaisyCardBody className="border-t p-4">
                 {typingUsers.length > 0 && (
                   <div className="text-xs text-gray-500 mb-2">
                     Someone is typing...
@@ -859,7 +859,7 @@ const TeamChatPage: React.FC = () => {
                   onChange={handleFileSelected}
                   multiple
                 />
-              </div>
+              </DaisyCardBody>
             </DaisyCard>
           </div>
 

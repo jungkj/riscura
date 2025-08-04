@@ -19,16 +19,16 @@ const LoginRedirectContent = () => {
       <p>Redirecting to login...</p>
     </div>
   );
-}
+};
 
 export default function LoginRedirect() {
   return (
     <Suspense
-      fallback={(
+      fallback={
         <div className="min-h-screen flex items-center justify-center">
           <p>Loading...</p>
         </div>
-      )}
+      }
     >
       <LoginRedirectContent />
     </Suspense>

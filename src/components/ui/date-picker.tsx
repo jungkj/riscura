@@ -54,4 +54,4 @@ export const DatePicker = ({
       </PopoverContent>
     </Popover>
   );
-}
+};

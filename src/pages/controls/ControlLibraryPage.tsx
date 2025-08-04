@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { Control } from '@/types';
 
 // UI Components
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -66,7 +71,10 @@ export default function ControlLibraryPage() {
             Comprehensive control library with effectiveness tracking and risk mapping
           </p>
         </div>
-        <DaisyButton onClick={handleCreateControl} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
+        <DaisyButton
+          onClick={handleCreateControl}
+          className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Control
         </DaisyButton>
@@ -76,61 +84,55 @@ export default function ControlLibraryPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Controls</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Total Controls
+            </DaisyCardTitle>
             <Shield className="h-4 w-4 text-gray-400" />
           </DaisyCardBody>
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-gray-900">
-              {stats.total}
-            </div>
-            <p className="text-xs text-gray-600">
-              Across all categories
-            </p>
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <p className="text-xs text-gray-600">Across all categories</p>
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">High Effectiveness</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              High Effectiveness
+            </DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-green-600" />
           </DaisyCardBody>
           <DaisyCardBody>
             <div className="text-2xl font-bold text-green-600">
               {stats.byEffectiveness.high || 0}
             </div>
-            <p className="text-xs text-gray-600">
-              Performing optimally
-            </p>
+            <p className="text-xs text-gray-600">Performing optimally</p>
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Risk Coverage</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Risk Coverage
+            </DaisyCardTitle>
             <Network className="h-4 w-4 text-[#191919]" />
           </DaisyCardBody>
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-[#191919]">
-              {coverage.length}
-            </div>
-            <p className="text-xs text-gray-600">
-              Risks with controls
-            </p>
+            <div className="text-2xl font-bold text-[#191919]">{coverage.length}</div>
+            <p className="text-xs text-gray-600">Risks with controls</p>
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Overdue Tests</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Overdue Tests
+            </DaisyCardTitle>
             <Calendar className="h-4 w-4 text-red-600" />
           </DaisyCardBody>
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-red-600">
-              {stats.overdueTests}
-            </div>
-            <p className="text-xs text-gray-600">
-              Need immediate attention
-            </p>
+            <div className="text-2xl font-bold text-red-600">{stats.overdueTests}</div>
+            <p className="text-xs text-gray-600">Need immediate attention</p>
           </DaisyCardBody>
         </DaisyCard>
       </div>
@@ -138,19 +140,31 @@ export default function ControlLibraryPage() {
       {/* Main Content Tabs */}
       <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <DaisyTabsList className="grid w-full grid-cols-4 bg-white border border-gray-100 p-1 shadow-sm rounded-xl">
-          <DaisyTabsTrigger value="library" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
+          <DaisyTabsTrigger
+            value="library"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2"
+          >
             <Shield className="h-4 w-4" />
             Control Library
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="mapping" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
+          <DaisyTabsTrigger
+            value="mapping"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2"
+          >
             <Network className="h-4 w-4" />
             Risk Mapping
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="testing" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
+          <DaisyTabsTrigger
+            value="testing"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2"
+          >
             <Calendar className="h-4 w-4" />
             Testing Schedule
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="analytics" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2">
+          <DaisyTabsTrigger
+            value="analytics"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#191919] data-[state=active]:to-[#191919] data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-gray-900 transition-all duration-200 font-medium rounded-lg flex items-center gap-2"
+          >
             <BarChart3 className="h-4 w-4" />
             Analytics
           </DaisyTabsTrigger>
@@ -161,9 +175,7 @@ export default function ControlLibraryPage() {
             <DaisyCardBody className="p-8 text-center">
               <Shield className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
               <h3 className="text-lg font-medium mb-2 text-gray-900">Control Library</h3>
-              <p className="text-gray-600">
-                Control library interface will be available here.
-              </p>
+              <p className="text-gray-600">Control library interface will be available here.</p>
             </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
@@ -207,47 +219,45 @@ export default function ControlLibraryPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardBody className="pb-2">
-                      <DaisyCardTitle className="text-base text-gray-900">Overdue Tests</DaisyCardTitle>
+                      <DaisyCardTitle className="text-base text-gray-900">
+                        Overdue Tests
+                      </DaisyCardTitle>
                     </DaisyCardBody>
                     <DaisyCardBody>
-                      <div className="text-2xl font-bold text-red-600">
-                        {stats.overdueTests}
-                      </div>
+                      <div className="text-2xl font-bold text-red-600">{stats.overdueTests}</div>
                       <p className="text-xs text-gray-600">Require immediate attention</p>
                     </DaisyCardBody>
                   </DaisyCard>
-                  
+
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardBody className="pb-2">
-                      <DaisyCardTitle className="text-base text-gray-900">Due This Week</DaisyCardTitle>
+                      <DaisyCardTitle className="text-base text-gray-900">
+                        Due This Week
+                      </DaisyCardTitle>
                     </DaisyCardBody>
                     <DaisyCardBody>
-                      <div className="text-2xl font-bold text-yellow-600">
-                        3
-                      </div>
+                      <div className="text-2xl font-bold text-yellow-600">3</div>
                       <p className="text-xs text-gray-600">Scheduled for testing</p>
                     </DaisyCardBody>
                   </DaisyCard>
-                  
+
                   <DaisyCard className="bg-white border border-gray-100 shadow-sm">
                     <DaisyCardBody className="pb-2">
-                      <DaisyCardTitle className="text-base text-gray-900">Completed This Month</DaisyCardTitle>
+                      <DaisyCardTitle className="text-base text-gray-900">
+                        Completed This Month
+                      </DaisyCardTitle>
                     </DaisyCardBody>
                     <DaisyCardBody>
-                      <div className="text-2xl font-bold text-green-600">
-                        12
-                      </div>
+                      <div className="text-2xl font-bold text-green-600">12</div>
                       <p className="text-xs text-gray-600">Tests completed</p>
                     </DaisyCardBody>
                   </DaisyCard>
                 </div>
-                
+
                 <div className="text-center py-8 text-gray-600">
                   <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Detailed testing schedule interface coming soon</p>
-                  <p className="text-sm">
-                    This will include calendar view and testing workflows
-                  </p>
+                  <p className="text-sm">This will include calendar view and testing workflows</p>
                 </div>
               </div>
             </DaisyCardBody>
@@ -258,7 +268,9 @@ export default function ControlLibraryPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard className="bg-white border border-gray-100 shadow-sm">
               <DaisyCardBody>
-                <DaisyCardTitle className="text-base text-gray-900">Control Effectiveness Trends</DaisyCardTitle>
+                <DaisyCardTitle className="text-base text-gray-900">
+                  Control Effectiveness Trends
+                </DaisyCardTitle>
               </DaisyCardBody>
               <DaisyCardBody>
                 <div className="space-y-4">
@@ -269,7 +281,7 @@ export default function ControlLibraryPage() {
                       Will show effectiveness trends over time using Recharts
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
                       <div className="text-lg font-semibold text-green-600">
@@ -293,43 +305,57 @@ export default function ControlLibraryPage() {
                 </div>
               </DaisyCardBody>
             </DaisyCard>
-            
+
             <DaisyCard className="bg-white border border-gray-100 shadow-sm">
               <DaisyCardBody>
-                <DaisyCardTitle className="text-base text-gray-900">Control Coverage Analysis</DaisyCardTitle>
+                <DaisyCardTitle className="text-base text-gray-900">
+                  Control Coverage Analysis
+                </DaisyCardTitle>
               </DaisyCardBody>
               <DaisyCardBody>
                 <div className="space-y-4">
                   <div className="text-center py-8 text-gray-600">
                     <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>Coverage heat map coming soon</p>
-                    <p className="text-sm">
-                      Will show control coverage gaps and overlaps
-                    </p>
+                    <p className="text-sm">Will show control coverage gaps and overlaps</p>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Risks with Controls</span>
-                      <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">{coverage.length}</DaisyBadge>
+                      <DaisyBadge
+                        variant="outline"
+                        className="bg-secondary/20 text-muted-foreground border-0"
+                      >
+                        {coverage.length}
+                      </DaisyBadge>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Coverage Gaps</span>
-                      <DaisyBadge variant="error" className="bg-red-100 text-red-700 border-0">{stats.coverageGaps}</DaisyBadge>
+                      <DaisyBadge variant="error" className="bg-red-100 text-red-700 border-0">
+                        {stats.coverageGaps}
+                      </DaisyBadge>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Average Effectiveness</span>
-                      <DaisyBadge variant="secondary" className="bg-secondary/20 text-muted-foreground border-0">{stats.averageEffectiveness.toFixed(1)}</DaisyBadge>
+                      <DaisyBadge
+                        variant="secondary"
+                        className="bg-secondary/20 text-muted-foreground border-0"
+                      >
+                        {stats.averageEffectiveness.toFixed(1)}
+                      </DaisyBadge>
                     </div>
                   </div>
                 </div>
               </DaisyCardBody>
             </DaisyCard>
           </div>
-          
+
           <DaisyCard className="bg-white border border-gray-100 shadow-sm">
             <DaisyCardBody>
-              <DaisyCardTitle className="text-base text-gray-900">Control Type Distribution</DaisyCardTitle>
+              <DaisyCardTitle className="text-base text-gray-900">
+                Control Type Distribution
+              </DaisyCardTitle>
             </DaisyCardBody>
             <DaisyCardBody>
               <div className="grid grid-cols-3 gap-4">
@@ -339,7 +365,10 @@ export default function ControlLibraryPage() {
                   </div>
                   <div className="text-sm text-gray-600">Preventive</div>
                   <div className="text-xs text-gray-600">
-                    {stats.total > 0 ? Math.round(((stats.byType.preventive || 0) / stats.total) * 100) : 0}%
+                    {stats.total > 0
+                      ? Math.round(((stats.byType.preventive || 0) / stats.total) * 100)
+                      : 0}
+                    %
                   </div>
                 </div>
                 <div className="text-center">
@@ -348,7 +377,10 @@ export default function ControlLibraryPage() {
                   </div>
                   <div className="text-sm text-gray-600">Detective</div>
                   <div className="text-xs text-gray-600">
-                    {stats.total > 0 ? Math.round(((stats.byType.detective || 0) / stats.total) * 100) : 0}%
+                    {stats.total > 0
+                      ? Math.round(((stats.byType.detective || 0) / stats.total) * 100)
+                      : 0}
+                    %
                   </div>
                 </div>
                 <div className="text-center">
@@ -357,7 +389,10 @@ export default function ControlLibraryPage() {
                   </div>
                   <div className="text-sm text-gray-600">Corrective</div>
                   <div className="text-xs text-gray-600">
-                    {stats.total > 0 ? Math.round(((stats.byType.corrective || 0) / stats.total) * 100) : 0}%
+                    {stats.total > 0
+                      ? Math.round(((stats.byType.corrective || 0) / stats.total) * 100)
+                      : 0}
+                    %
                   </div>
                 </div>
               </div>
@@ -413,7 +448,9 @@ export default function ControlLibraryPage() {
               </div>
               {selectedControl.evidence.length > 0 && (
                 <div>
-                  <label className="text-sm font-medium text-gray-900">Evidence ({selectedControl.evidence.length})</label>
+                  <label className="text-sm font-medium text-gray-900">
+                    Evidence ({selectedControl.evidence.length})
+                  </label>
                   <div className="mt-2 space-y-2">
                     {selectedControl.evidence.slice(0, 3).map((evidence) => (
                       <div key={evidence.id} className="flex items-center space-x-2 text-sm">

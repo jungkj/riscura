@@ -191,7 +191,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </RiskFlowContext.Provider>
   );
-}
+};
 
 export function useRiskFlow() {
   const context = useContext(RiskFlowContext);

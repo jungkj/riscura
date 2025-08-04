@@ -9,6 +9,6 @@ const DashboardPage = () => {
       <p className="text-gray-600">Dashboard is being updated. Please check back soon.</p>
     </div>
   );
-}
+};
 
 export default DashboardPage;

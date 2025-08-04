@@ -190,10 +190,8 @@ export default function GenerateRiskReportPage() {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total Risks</p>

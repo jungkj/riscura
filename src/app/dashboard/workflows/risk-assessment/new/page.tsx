@@ -271,11 +271,12 @@ export default function NewRiskAssessmentPage() {
                     <DaisyLabel htmlFor="likelihood">Likelihood *</DaisyLabel>
                     <DaisySelect
                       value={formData.likelihood}
-                      onValueChange={(value) => handleInputChange('likelihood', value)} />
-                      <DaisySelectTrigger className="mt-1" />
-                        <DaisySelectValue placeholder="Select likelihood level" /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="low">Low - Unlikely to occur</DaisySelectContent>
+                      onValueChange={(value) => handleInputChange('likelihood', value)}>
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select likelihood level" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="low">Low - Unlikely to occur</DaisySelectItem>
                         <DaisySelectItem value="medium">Medium - Possible occurrence</DaisySelectItem>
                         <DaisySelectItem value="high">High - Likely to occur</DaisySelectItem>
                         <DaisySelectItem value="critical">Critical - Almost certain</DaisySelectItem>
@@ -287,11 +288,12 @@ export default function NewRiskAssessmentPage() {
                     <DaisyLabel htmlFor="impact">Impact *</DaisyLabel>
                     <DaisySelect
                       value={formData.impact}
-                      onValueChange={(value) => handleInputChange('impact', value)} />
-                      <DaisySelectTrigger className="mt-1" />
-                        <DaisySelectValue placeholder="Select impact level" /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="low">Low - Minimal impact</DaisySelectContent>
+                      onValueChange={(value) => handleInputChange('impact', value)}>
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select impact level" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="low">Low - Minimal impact</DaisySelectItem>
                         <DaisySelectItem value="medium">Medium - Moderate impact</DaisySelectItem>
                         <DaisySelectItem value="high">High - Significant impact</DaisySelectItem>
                         <DaisySelectItem value="critical">Critical - Severe impact</DaisySelectItem>

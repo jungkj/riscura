@@ -12,12 +12,7 @@ interface RealTimeEditorProps {
   className?: string;
 }
 
-export function RealTimeEditor({
-  content,
-  onChange,
-  currentUser,
-  className
-}: RealTimeEditorProps) {
+export function RealTimeEditor({ content, onChange, currentUser, className }: RealTimeEditorProps) {
   return (
     <div className={`relative ${className}`}>
       <DaisyCard>

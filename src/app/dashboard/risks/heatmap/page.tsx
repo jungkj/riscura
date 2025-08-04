@@ -46,11 +46,11 @@ export default function RiskHeatMapPage() {
         </DaisyCardBody>
         <DaisyCardBody>
           <Suspense
-            fallback={(
+            fallback={
               <div className="flex items-center justify-center p-12">
                 <LoadingSpinner />
               </div>
-            )}
+            }
           >
             <RiskHeatMap />
           </Suspense>

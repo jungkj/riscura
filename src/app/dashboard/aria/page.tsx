@@ -358,7 +358,7 @@ const ARIAChat = () => {
       </div>
     </div>
   );
-}
+};
 
 export default function ARIAPage() {
   return (

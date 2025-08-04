@@ -188,7 +188,7 @@ const RiskOverviewWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
       )}
     </div>
   );
-}
+};
 
 const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -214,7 +214,7 @@ const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: Wid
       )}
     </div>
   );
-}
+};
 
 const RecentActivitiesWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -244,7 +244,7 @@ const RecentActivitiesWidget = ({ config, onConfigChange, size, isEditing }: Wid
       </div>
     </div>
   );
-}
+};
 
 const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -266,7 +266,7 @@ const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetPro
       )}
     </div>
   );
-}
+};
 
 const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -292,7 +292,7 @@ const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
       )}
     </div>
   );
-}
+};
 
 const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -310,7 +310,7 @@ const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
       )}
     </div>
   );
-}
+};
 
 export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
   userId,

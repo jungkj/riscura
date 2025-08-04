@@ -156,7 +156,7 @@ export default function ReportingPage() {
             Generate custom reports and analyze risk data.
           </p>
         </div>
-        <DaisyButton onClick={() => handleGenerateReport()} disabled={isGenerating} />
+        <DaisyButton onClick={() => handleGenerateReport()} disabled={isGenerating}>
           {isGenerating ? (
             <>
               <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -337,20 +337,17 @@ export default function ReportingPage() {
                     </ResponsiveContainer>
                   </div>
                 </div>
-              </DaisyTooltip>
-              <DaisyCardFooter className="justify-end space-x-2" >
-  <DaisyButton variant="outline" >
-</DaisyCardFooter>
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+              </DaisyCardBody>
+              <DaisyCardFooter className="justify-end space-x-2">
+                <DaisyButton variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
                   Export PDF
                 </DaisyButton>
-                <DaisyButton variant="outline" >
-  <Send className="h-4 w-4 mr-2" />
-</DaisyButton>
+                <DaisyButton variant="outline">
+                  <Send className="h-4 w-4 mr-2" />
                   Share
                 </DaisyButton>
-                <DaisyButton onClick={() => handleGenerateReport()} disabled={isGenerating} />
+                <DaisyButton onClick={() => handleGenerateReport()} disabled={isGenerating}>
                   {isGenerating ? (
                     <>
                       <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

@@ -4,14 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
-  Shield, 
-  Target, 
-  Eye, 
-  BarChart3, 
+import {
+  Shield,
+  Target,
+  Eye,
+  BarChart3,
   ArrowRight,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
 } from 'lucide-react';
 
 interface Feature {
@@ -30,10 +30,11 @@ export default function FeatureShowcase() {
   const features: Feature[] = [
     {
       icon: Shield,
-      title: "Fast, accurate, automated risk assessments",
-      description: "Leverage automation to reduce the time it takes to gather all the evidence you need and use AI to accelerate the risk assessment process.",
-      stats: "62% faster risk evidence collection time",
-      color: "text-[#199BEC]",
+      title: 'Fast, accurate, automated risk assessments',
+      description:
+        'Leverage automation to reduce the time it takes to gather all the evidence you need and use AI to accelerate the risk assessment process.',
+      stats: '62% faster risk evidence collection time',
+      color: 'text-[#199BEC]',
       mockUI: (
         <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
@@ -59,14 +60,15 @@ export default function FeatureShowcase() {
             </div>
           </div>
         </DaisyCard>
-      )
+      ),
     },
     {
       icon: Target,
-      title: "Risk management, tailored to your program",
-      description: "Leverage out-of-the-box templates for evaluating risk, or customize inherent and residual risk scoring as your program matures.",
-      stats: "54% increased productivity gains",
-      color: "text-[#199BEC]",
+      title: 'Risk management, tailored to your program',
+      description:
+        'Leverage out-of-the-box templates for evaluating risk, or customize inherent and residual risk scoring as your program matures.',
+      stats: '54% increased productivity gains',
+      color: 'text-[#199BEC]',
       mockUI: (
         <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
@@ -74,12 +76,17 @@ export default function FeatureShowcase() {
             <div className="grid grid-cols-5 gap-1">
               {Array.from({ length: 25 }, (_, i) => {
                 const intensity = Math.random();
-                const bgColor = intensity > 0.7 ? 'bg-red-500' : 
-                               intensity > 0.5 ? 'bg-orange-400' :
-                               intensity > 0.3 ? 'bg-yellow-400' : 'bg-green-400';
+                const bgColor =
+                  intensity > 0.7
+                    ? 'bg-red-500'
+                    : intensity > 0.5
+                      ? 'bg-orange-400'
+                      : intensity > 0.3
+                        ? 'bg-yellow-400'
+                        : 'bg-green-400';
 
-  return (
-    <div
+                return (
+                  <div
                     key={i}
                     className={`w-6 h-6 rounded ${bgColor} flex items-center justify-center text-white text-xs`}
                   >
@@ -90,35 +97,40 @@ export default function FeatureShowcase() {
             </div>
           </div>
         </DaisyCard>
-      )
+      ),
     },
     {
       icon: Eye,
-      title: "Automatic risk discovery for shadow processes",
-      description: "Automatically identify risks and stay on top of potential blind spots, to make sure all processes meet your security and compliance standards.",
-      stats: "90% improvement in risk visibility",
-      color: "text-[#199BEC]",
+      title: 'Automatic risk discovery for shadow processes',
+      description:
+        'Automatically identify risks and stay on top of potential blind spots, to make sure all processes meet your security and compliance standards.',
+      stats: '90% improvement in risk visibility',
+      color: 'text-[#199BEC]',
       mockUI: (
         <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-gray-900">Discovered Risks</h4>
               <DaisyBadge className="bg-orange-100 text-orange-800">
-                <AlertTriangle className="w-3 h-3 mr-1" />
-                5 New
+                <AlertTriangle className="w-3 h-3 mr-1" />5 New
               </DaisyBadge>
             </div>
             <div className="space-y-3">
               {[
-                { name: "Shadow IT Application", severity: "High" },
-                { name: "Unencrypted Data Transfer", severity: "Critical" },
-                { name: "Access Control Gap", severity: "Medium" }
+                { name: 'Shadow IT Application', severity: 'High' },
+                { name: 'Unencrypted Data Transfer', severity: 'Critical' },
+                { name: 'Access Control Gap', severity: 'Medium' },
               ].map((risk, index) => (
                 <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <div className={`w-3 h-3 rounded-full ${
-                    risk.severity === 'Critical' ? 'bg-red-500' :
-                    risk.severity === 'High' ? 'bg-orange-500' : 'bg-yellow-500'
-                  }`}></div>
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      risk.severity === 'Critical'
+                        ? 'bg-red-500'
+                        : risk.severity === 'High'
+                          ? 'bg-orange-500'
+                          : 'bg-yellow-500'
+                    }`}
+                  ></div>
                   <div className="flex-1">
                     <div className="font-medium text-sm">{risk.name}</div>
                     <div className="text-xs text-gray-500">{risk.severity} Risk</div>
@@ -128,14 +140,15 @@ export default function FeatureShowcase() {
             </div>
           </div>
         </DaisyCard>
-      )
+      ),
     },
     {
       icon: BarChart3,
-      title: "Integrated risk across your entire program",
-      description: "No more juggling between fragmented views. With Riscura, risk becomes a clear, actionable part of your team's unified program.",
-      stats: "Complete risk program integration",
-      color: "text-[#199BEC]",
+      title: 'Integrated risk across your entire program',
+      description:
+        "No more juggling between fragmented views. With Riscura, risk becomes a clear, actionable part of your team's unified program.",
+      stats: 'Complete risk program integration',
+      color: 'text-[#199BEC]',
       mockUI: (
         <DaisyCard className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
@@ -160,8 +173,8 @@ export default function FeatureShowcase() {
             </div>
           </div>
         </DaisyCard>
-      )
-    }
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -169,7 +182,7 @@ export default function FeatureShowcase() {
       return new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setVisibleSections(prev => new Set([...prev, index]));
+            setVisibleSections((prev) => new Set([...prev, index]));
           }
         },
         { threshold: 0.3 }
@@ -183,7 +196,7 @@ export default function FeatureShowcase() {
     });
 
     return () => {
-      observers.forEach(observer => observer.disconnect());
+      observers.forEach((observer) => observer.disconnect());
     };
   }, []);
 
@@ -194,19 +207,25 @@ export default function FeatureShowcase() {
           const IconComponent = feature.icon;
           const isVisible = visibleSections.has(index);
           const isReversed = index % 2 === 1;
-          
+
           return (
-            <div 
+            <div
               key={index}
-              ref={el => { sectionRefs.current[index] = el; }}
+              ref={(el) => {
+                sectionRefs.current[index] = el;
+              }}
               className={`flex flex-col lg:flex-row items-center gap-12 mb-20 ${
                 isReversed ? 'lg:flex-row-reverse' : ''
               }`}
             >
               {/* Content Side */}
-              <div className={`flex-1 transition-all duration-1000 ${
-                isVisible ? 'opacity-100 translate-x-0' : `opacity-0 ${isReversed ? 'translate-x-10' : '-translate-x-10'}`
-              }`}>
+              <div
+                className={`flex-1 transition-all duration-1000 ${
+                  isVisible
+                    ? 'opacity-100 translate-x-0'
+                    : `opacity-0 ${isReversed ? 'translate-x-10' : '-translate-x-10'}`
+                }`}
+              >
                 <div className="mb-6">
                   <div className="w-16 h-16 bg-[#199BEC]/10 rounded-2xl flex items-center justify-center mb-6">
                     <IconComponent className={`w-8 h-8 ${feature.color}`} />
@@ -226,11 +245,15 @@ export default function FeatureShowcase() {
                   </DaisyButton>
                 </div>
               </div>
-              
+
               {/* Mock UI Side */}
-              <div className={`flex-1 transition-all duration-1000 ${
-                isVisible ? 'opacity-100 translate-x-0' : `opacity-0 ${isReversed ? '-translate-x-10' : 'translate-x-10'}`
-              }`}>
+              <div
+                className={`flex-1 transition-all duration-1000 ${
+                  isVisible
+                    ? 'opacity-100 translate-x-0'
+                    : `opacity-0 ${isReversed ? '-translate-x-10' : 'translate-x-10'}`
+                }`}
+              >
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-lg">
                   {feature.mockUI}
                 </div>

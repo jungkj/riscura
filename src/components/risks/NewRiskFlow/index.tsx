@@ -129,7 +129,7 @@ const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
       </div>
     </div>
   );
-}
+};
 
 export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps) => {
   return (
@@ -141,4 +141,4 @@ export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps)
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}
+};

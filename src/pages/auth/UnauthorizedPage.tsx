@@ -13,15 +13,14 @@ export default function UnauthorizedPage() {
             <AlertTriangle className="w-12 h-12 text-red-600" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-foreground mb-4">
-              Access Denied
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground mb-4">Access Denied</h1>
             <p className="text-muted-foreground mb-8">
-              You don't have permission to access this resource. Please contact your administrator if you believe this is an error.
+              You don't have permission to access this resource. Please contact your administrator
+              if you believe this is an error.
             </p>
           </div>
         </div>
-        
+
         <div className="space-y-4">
           <DaisyButton
             onClick={() => router.push('/dashboard')}
@@ -40,4 +39,4 @@ export default function UnauthorizedPage() {
       </div>
     </div>
   );
-} 
+}

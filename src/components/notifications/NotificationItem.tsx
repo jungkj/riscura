@@ -141,4 +141,4 @@ export const NotificationItem = ({ notification, onRead, onDismiss }: Notificati
       )}
     </div>
   );
-}
+};
