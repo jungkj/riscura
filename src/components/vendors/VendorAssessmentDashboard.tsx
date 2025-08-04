@@ -6,9 +6,14 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { 
+import {
   Search,
   Globe,
   Shield,
@@ -26,7 +31,7 @@ import {
   FileText,
   UserCheck,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -109,12 +114,12 @@ export function VendorAssessmentDashboard() {
       const response = await fetch('/api/probo/vendor-assessment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           websiteUrl: vendorUrl,
-          organizationId 
-        })
+          organizationId,
+        }),
       });
-      
+
       if (response.ok) {
         const result = await response.json();
         setAssessment(result);
@@ -146,50 +151,62 @@ export function VendorAssessmentDashboard() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'LOW': return 'bg-blue-100 text-blue-700';
-      case 'MEDIUM': return 'bg-yellow-100 text-yellow-700';
-      case 'HIGH': return 'bg-orange-100 text-orange-700';
-      case 'CRITICAL': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'LOW':
+        return 'bg-blue-100 text-blue-700';
+      case 'MEDIUM':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'HIGH':
+        return 'bg-orange-100 text-orange-700';
+      case 'CRITICAL':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   const getComplianceStatusColor = (status: string) => {
     switch (status) {
-      case 'COMPLIANT': return 'bg-green-100 text-green-700';
-      case 'MODERATE_RISK': return 'bg-yellow-100 text-yellow-700';
-      case 'HIGH_RISK': return 'bg-orange-100 text-orange-700';
-      case 'CRITICAL_RISK': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'COMPLIANT':
+        return 'bg-green-100 text-green-700';
+      case 'MODERATE_RISK':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'HIGH_RISK':
+        return 'bg-orange-100 text-orange-700';
+      case 'CRITICAL_RISK':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
-  const riskCategories: RiskCategory[] = assessment ? [
-    {
-      name: 'Security',
-      score: assessment.securityScore || (100 - assessment.riskScore),
-      trend: 'stable',
-      color: 'text-blue-600'
-    },
-    {
-      name: 'Privacy',
-      score: assessment.privacyScore || 75,
-      trend: 'up',
-      color: 'text-purple-600'
-    },
-    {
-      name: 'Compliance',
-      score: assessment.complianceScore || 65,
-      trend: 'down',
-      color: 'text-green-600'
-    },
-    {
-      name: 'Financial',
-      score: 70,
-      trend: 'stable',
-      color: 'text-yellow-600'
-    }
-  ] : [];
+  const riskCategories: RiskCategory[] = assessment
+    ? [
+        {
+          name: 'Security',
+          score: assessment.securityScore || 100 - assessment.riskScore,
+          trend: 'stable',
+          color: 'text-blue-600',
+        },
+        {
+          name: 'Privacy',
+          score: assessment.privacyScore || 75,
+          trend: 'up',
+          color: 'text-purple-600',
+        },
+        {
+          name: 'Compliance',
+          score: assessment.complianceScore || 65,
+          trend: 'down',
+          color: 'text-green-600',
+        },
+        {
+          name: 'Financial',
+          score: 70,
+          trend: 'stable',
+          color: 'text-yellow-600',
+        },
+      ]
+    : [];
 
   return (
     <div className="space-y-6">
@@ -198,9 +215,7 @@ export function VendorAssessmentDashboard() {
           <h1 className="text-2xl font-bold text-[#191919]">Vendor Risk Assessment</h1>
           <p className="text-[#A8A8A8]">AI-powered vendor security assessments</p>
         </div>
-        <DaisyBadge className="bg-[#199BEC] text-white">
-          Powered by Probo AI
-        </DaisyBadge>
+        <DaisyBadge className="bg-[#199BEC] text-white">Powered by Probo AI</DaisyBadge>
       </div>
 
       <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
@@ -222,7 +237,7 @@ export function VendorAssessmentDashboard() {
                 Enter a vendor's website URL to perform an AI-powered security assessment
               </DaisyCardDescription>
             </DaisyCardBody>
-            
+
             <DaisyCardBody>
               <div className="space-y-4">
                 <div className="flex gap-4">
@@ -236,10 +251,11 @@ export function VendorAssessmentDashboard() {
                       onKeyPress={(e) => e.key === 'Enter' && handleAssessVendor()}
                     />
                   </div>
-                  <DaisyButton 
+                  <DaisyButton
                     onClick={handleAssessVendor}
                     disabled={isAssessing || !vendorUrl.trim()}
-                    className="bg-[#199BEC] hover:bg-[#199BEC]/90 min-w-[120px]">
+                    className="bg-[#199BEC] hover:bg-[#199BEC]/90 min-w-[120px]"
+                  >
                     {isAssessing ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -257,8 +273,9 @@ export function VendorAssessmentDashboard() {
                 <DaisyAlert>
                   <Shield className="h-4 w-4" />
                   <DaisyAlertDescription>
-                    Our AI agent will analyze the vendor's website, security posture, compliance documentation, 
-                    and publicly available information to generate a comprehensive risk assessment.
+                    Our AI agent will analyze the vendor's website, security posture, compliance
+                    documentation, and publicly available information to generate a comprehensive
+                    risk assessment.
                   </DaisyAlertDescription>
                 </DaisyAlert>
 
@@ -304,7 +321,6 @@ export function VendorAssessmentDashboard() {
                       Risk Score: {assessment.riskScore}
                     </DaisyBadge>
                   </div>
-                
                 </DaisyCardBody>
                 <DaisyCardBody>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -312,7 +328,9 @@ export function VendorAssessmentDashboard() {
                       <div className="flex items-center text-sm">
                         <Globe className="h-4 w-4 mr-2 text-[#A8A8A8]" />
                         <span className="text-[#A8A8A8]">Category:</span>
-                        <span className="ml-2 text-[#191919]">{assessment.vendorInfo.category}</span>
+                        <span className="ml-2 text-[#191919]">
+                          {assessment.vendorInfo.category}
+                        </span>
                       </div>
                       {assessment.vendorInfo.email && (
                         <div className="flex items-center text-sm">
@@ -325,7 +343,9 @@ export function VendorAssessmentDashboard() {
                         <div className="flex items-center text-sm">
                           <MapPin className="h-4 w-4 mr-2 text-[#A8A8A8]" />
                           <span className="text-[#A8A8A8]">Address:</span>
-                          <span className="ml-2 text-[#191919] truncate">{assessment.vendorInfo.address}</span>
+                          <span className="ml-2 text-[#191919] truncate">
+                            {assessment.vendorInfo.address}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -340,7 +360,12 @@ export function VendorAssessmentDashboard() {
                       <div className="flex items-center text-sm">
                         <Shield className="h-4 w-4 mr-2 text-[#A8A8A8]" />
                         <span className="text-[#A8A8A8]">Compliance:</span>
-                        <DaisyBadge className={cn('ml-2 text-xs', getComplianceStatusColor(assessment.complianceStatus))}>
+                        <DaisyBadge
+                          className={cn(
+                            'ml-2 text-xs',
+                            getComplianceStatusColor(assessment.complianceStatus)
+                          )}
+                        >
                           {assessment.complianceStatus.replace('_', ' ')}
                         </DaisyBadge>
                       </div>
@@ -376,8 +401,12 @@ export function VendorAssessmentDashboard() {
                     <DaisyCardBody className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-[#191919]">{category.name}</span>
-                        {category.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
-                        {category.trend === 'down' && <TrendingDown className="h-4 w-4 text-red-500" />}
+                        {category.trend === 'up' && (
+                          <TrendingUp className="h-4 w-4 text-green-500" />
+                        )}
+                        {category.trend === 'down' && (
+                          <TrendingDown className="h-4 w-4 text-red-500" />
+                        )}
                         {category.trend === 'stable' && <div className="h-4 w-4" />}
                       </div>
                       <div className="flex items-center justify-between">
@@ -414,7 +443,9 @@ export function VendorAssessmentDashboard() {
                               <p className="text-sm text-[#A8A8A8] mt-1">{finding.description}</p>
                             </div>
                             <div className="flex flex-col items-end space-y-1">
-                              <DaisyBadge className={cn('text-xs', getSeverityColor(finding.severity))}>
+                              <DaisyBadge
+                                className={cn('text-xs', getSeverityColor(finding.severity))}
+                              >
                                 {finding.severity}
                               </DaisyBadge>
                               <DaisyBadge variant="outline" className="text-xs">
@@ -436,7 +467,9 @@ export function VendorAssessmentDashboard() {
                     <div className="text-center py-8">
                       <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
                       <p className="text-[#191919] font-medium">No security issues found</p>
-                      <p className="text-[#A8A8A8] text-sm">This vendor appears to have good security practices</p>
+                      <p className="text-[#A8A8A8] text-sm">
+                        This vendor appears to have good security practices
+                      </p>
                     </div>
                   )}
                 </DaisyCardBody>
@@ -458,7 +491,9 @@ export function VendorAssessmentDashboard() {
               <DaisyCardBody className="p-8 text-center">
                 <Search className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <p className="text-[#191919] font-medium">No assessment results</p>
-                <p className="text-[#A8A8A8] text-sm">Run a vendor assessment to see results here</p>
+                <p className="text-[#A8A8A8] text-sm">
+                  Run a vendor assessment to see results here
+                </p>
               </DaisyCardBody>
             </DaisyCard>
           )}
@@ -467,12 +502,12 @@ export function VendorAssessmentDashboard() {
         <DaisyTabsContent value="history" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardBody>
-              <DaisyCardTitle className="text-[#191919] font-inter">Assessment History</DaisyCardTitle>
-              <DaisyCardDescription>
-                View all previous vendor risk assessments
-              </DaisyCardDescription>
+              <DaisyCardTitle className="text-[#191919] font-inter">
+                Assessment History
+              </DaisyCardTitle>
+              <DaisyCardDescription>View all previous vendor risk assessments</DaisyCardDescription>
             </DaisyCardBody>
-            
+
             <DaisyCardBody>
               {loading ? (
                 <div className="flex items-center justify-center py-8">
@@ -484,11 +519,15 @@ export function VendorAssessmentDashboard() {
                     <div key={assessment.id} className="border border-[#D8C3A5] rounded-lg p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-[#191919]">{assessment.vendorInfo.name}</h4>
+                          <h4 className="font-medium text-[#191919]">
+                            {assessment.vendorInfo.name}
+                          </h4>
                           <p className="text-sm text-[#A8A8A8]">{assessment.vendorInfo.category}</p>
                         </div>
                         <div className="flex items-center space-x-4">
-                          <DaisyBadge className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}>
+                          <DaisyBadge
+                            className={cn('text-sm', getRiskBadgeColor(assessment.riskScore))}
+                          >
                             Risk: {assessment.riskScore}
                           </DaisyBadge>
                           <span className="text-sm text-[#A8A8A8]">
@@ -533,7 +572,7 @@ export function VendorAssessmentDashboard() {
                   <div>
                     <p className="text-sm text-[#A8A8A8]">High Risk</p>
                     <p className="text-2xl font-bold text-red-600">
-                      {assessments.filter(a => a.riskScore > 70).length}
+                      {assessments.filter((a) => a.riskScore > 70).length}
                     </p>
                   </div>
                   <AlertTriangle className="h-8 w-8 text-red-500" />
@@ -547,7 +586,7 @@ export function VendorAssessmentDashboard() {
                   <div>
                     <p className="text-sm text-[#A8A8A8]">Compliant</p>
                     <p className="text-2xl font-bold text-green-600">
-                      {assessments.filter(a => a.complianceStatus === 'COMPLIANT').length}
+                      {assessments.filter((a) => a.complianceStatus === 'COMPLIANT').length}
                     </p>
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
@@ -559,4 +598,4 @@ export function VendorAssessmentDashboard() {
       </DaisyTabs>
     </div>
   );
-} 
+}

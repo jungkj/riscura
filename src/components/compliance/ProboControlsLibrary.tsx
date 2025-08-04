@@ -5,19 +5,24 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Plus, 
-  Shield, 
-  CheckCircle, 
+import {
+  Search,
+  Filter,
+  Download,
+  Plus,
+  Shield,
+  CheckCircle,
   AlertTriangle,
   Info,
   Star,
@@ -29,7 +34,7 @@ import {
   Globe,
   Database,
   Eye,
-  Settings
+  Settings,
 } from 'lucide-react';
 import { ProboService, type ProboMitigation } from '@/services/ProboService';
 import { toast } from 'sonner';
@@ -101,7 +106,7 @@ export function ProboControlsLibrary() {
       setLoading(true);
       const [mitigationsData, categoriesData] = await Promise.all([
         proboService.getMitigations(),
-        proboService.getMitigationCategories()
+        proboService.getMitigationCategories(),
       ]);
       setMitigations(mitigationsData);
       setCategories(categoriesData);
@@ -118,19 +123,20 @@ export function ProboControlsLibrary() {
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(m => 
-        m.name.toLowerCase().includes(query) ||
-        m.description.toLowerCase().includes(query) ||
-        m.category.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (m) =>
+          m.name.toLowerCase().includes(query) ||
+          m.description.toLowerCase().includes(query) ||
+          m.category.toLowerCase().includes(query)
       );
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(m => m.category === selectedCategory);
+      filtered = filtered.filter((m) => m.category === selectedCategory);
     }
 
     if (selectedImportance !== 'all') {
-      filtered = filtered.filter(m => m.importance === selectedImportance);
+      filtered = filtered.filter((m) => m.importance === selectedImportance);
     }
 
     setFilteredMitigations(filtered);
@@ -150,7 +156,7 @@ export function ProboControlsLibrary() {
     if (selectedMitigations.size === filteredMitigations.length) {
       setSelectedMitigations(new Set());
     } else {
-      setSelectedMitigations(new Set(filteredMitigations.map(m => m.id)));
+      setSelectedMitigations(new Set(filteredMitigations.map((m) => m.id)));
     }
   };
 
@@ -170,9 +176,11 @@ export function ProboControlsLibrary() {
   };
 
   const getCategoryStats = () => {
-    const stats: { [key: string]: { total: number; mandatory: number; preferred: number; advanced: number } } = {};
-    
-    mitigations.forEach(m => {
+    const stats: {
+      [key: string]: { total: number; mandatory: number; preferred: number; advanced: number };
+    } = {};
+
+    mitigations.forEach((m) => {
       if (!stats[m.category]) {
         stats[m.category] = { total: 0, mandatory: 0, preferred: 0, advanced: 0 };
       }
@@ -184,20 +192,21 @@ export function ProboControlsLibrary() {
   };
 
   if (loading) {
-
-  return (
-    <div className="flex items-center justify-center h-64">
+    return (
+      <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[#191919] font-inter">Probo Security Controls Library</h2>
+          <h2 className="text-2xl font-bold text-[#191919] font-inter">
+            Probo Security Controls Library
+          </h2>
           <p className="text-[#A8A8A8] mt-1">
             Browse and import from {mitigations.length} security controls across multiple frameworks
           </p>
@@ -244,7 +253,7 @@ export function ProboControlsLibrary() {
                     </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Categories</DaisySelectItem>
-                      {categories.map(category => (
+                      {categories.map((category) => (
                         <DaisySelectItem key={category} value={category}>
                           {category}
                         </DaisySelectItem>
@@ -279,21 +288,24 @@ export function ProboControlsLibrary() {
                     variant="outline"
                     size="sm"
                     onClick={handleSelectAll}
-                    className="border-[#D8C3A5]">
-                    {selectedMitigations.size === filteredMitigations.length ? 'Deselect All' : 'Select All'}
+                    className="border-[#D8C3A5]"
+                  >
+                    {selectedMitigations.size === filteredMitigations.length
+                      ? 'Deselect All'
+                      : 'Select All'}
                   </DaisyButton>
                   {selectedMitigations.size > 0 && (
                     <DaisyButton
                       onClick={handleImportSelected}
                       className="bg-[#199BEC] hover:bg-[#199BEC]/90"
-                      size="sm">
+                      size="sm"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Import Selected ({selectedMitigations.size})
                     </DaisyButton>
                   )}
                 </div>
               </div>
-            
             </DaisyCardBody>
             <DaisyCardBody>
               <DaisyScrollArea className="h-[600px]">
@@ -326,7 +338,7 @@ export function ProboControlsLibrary() {
                               </DaisyBadge>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center space-x-2">
                             <DaisyBadge variant="outline" className="text-xs">
                               {mitigation.category}
@@ -338,7 +350,7 @@ export function ProboControlsLibrary() {
                               </DaisyBadge>
                             )}
                           </div>
-                          
+
                           <p className="text-sm text-[#A8A8A8] line-clamp-2">
                             {mitigation.description.replace(/##\s*/g, '').split('\n')[0]}
                           </p>
@@ -355,13 +367,17 @@ export function ProboControlsLibrary() {
         <DaisyTabsContent value="categories" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(getCategoryStats()).map(([category, stats]) => (
-              <DaisyCard key={category} className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow">
+              <DaisyCard
+                key={category}
+                className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow"
+              >
                 <DaisyCardBody className="pb-3">
                   <div className="flex items-center space-x-2">
                     {getCategoryIcon(category)}
-                    <DaisyCardTitle className="text-sm font-medium text-[#191919]">{category}</DaisyCardTitle>
+                    <DaisyCardTitle className="text-sm font-medium text-[#191919]">
+                      {category}
+                    </DaisyCardTitle>
                   </div>
-                
                 </DaisyCardBody>
                 <DaisyCardBody>
                   <div className="space-y-2">
@@ -394,8 +410,8 @@ export function ProboControlsLibrary() {
           <DaisyAlert>
             <CheckCircle className="h-4 w-4" />
             <DaisyAlertDescription>
-              Import selected security controls into your organization's control framework. 
-              This will add them to your compliance dashboard and enable tracking.
+              Import selected security controls into your organization's control framework. This
+              will add them to your compliance dashboard and enable tracking.
             </DaisyAlertDescription>
           </DaisyAlert>
 
@@ -409,15 +425,18 @@ export function ProboControlsLibrary() {
                   Review the controls you've selected for import
                 </DaisyCardDescription>
               </DaisyCardBody>
-              
+
               <DaisyCardBody>
                 <div className="space-y-3">
-                  {Array.from(selectedMitigations).map(id => {
-                    const mitigation = mitigations.find(m => m.id === id);
+                  {Array.from(selectedMitigations).map((id) => {
+                    const mitigation = mitigations.find((m) => m.id === id);
                     if (!mitigation) return null;
-                    
+
                     return (
-                      <div key={id} className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg">
+                      <div
+                        key={id}
+                        className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           {getCategoryIcon(mitigation.category)}
                           <div>
@@ -436,7 +455,8 @@ export function ProboControlsLibrary() {
                 <div className="flex justify-end">
                   <DaisyButton
                     onClick={handleImportSelected}
-                    className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+                    className="bg-[#199BEC] hover:bg-[#199BEC]/90"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
                     Import {selectedMitigations.size} Controls
                   </DaisyButton>
@@ -454,7 +474,8 @@ export function ProboControlsLibrary() {
                 <DaisyButton
                   onClick={() => setActiveTab('browse')}
                   variant="outline"
-                  className="border-[#D8C3A5]">
+                  className="border-[#D8C3A5]"
+                >
                   Browse Controls
                 </DaisyButton>
               </DaisyCardBody>
@@ -464,4 +485,4 @@ export function ProboControlsLibrary() {
       </DaisyTabs>
     </div>
   );
-} 
+}

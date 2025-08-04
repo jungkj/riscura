@@ -5,9 +5,14 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { 
+import {
   Shield,
   Building,
   CheckCircle,
@@ -24,7 +29,7 @@ import {
   Globe,
   Download,
   Plus,
-  ArrowRight
+  ArrowRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -68,9 +73,9 @@ export function ProboIntegrationDashboard() {
     soc2Progress: 0,
     controlsImplemented: 0,
     totalControls: 0,
-    complianceScore: 0
+    complianceScore: 0,
   });
-  
+
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [frameworks, setFrameworks] = useState<ComplianceFrameworkStatus[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,7 +89,7 @@ export function ProboIntegrationDashboard() {
     try {
       // In a real implementation, these would be separate API calls
       // For now, we'll set mock data that would come from our Probo integrations
-      
+
       setStats({
         totalVendors: 24,
         highRiskVendors: 3,
@@ -93,7 +98,7 @@ export function ProboIntegrationDashboard() {
         soc2Progress: 68,
         controlsImplemented: 142,
         totalControls: 200,
-        complianceScore: 85
+        complianceScore: 85,
       });
 
       setRecentActivities([
@@ -103,7 +108,7 @@ export function ProboIntegrationDashboard() {
           title: 'Slack Assessment Completed',
           description: 'AI-powered vendor risk assessment completed with score 35/100',
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          severity: 'LOW'
+          severity: 'LOW',
         },
         {
           id: '2',
@@ -111,7 +116,7 @@ export function ProboIntegrationDashboard() {
           title: 'Access Control Policy Updated',
           description: 'Multi-factor authentication requirements updated',
           timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-          status: 'completed'
+          status: 'completed',
         },
         {
           id: '3',
@@ -119,7 +124,7 @@ export function ProboIntegrationDashboard() {
           title: 'SOC 2 Control Testing',
           description: 'Quarterly control effectiveness testing initiated',
           timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-          status: 'in_progress'
+          status: 'in_progress',
         },
         {
           id: '4',
@@ -127,8 +132,8 @@ export function ProboIntegrationDashboard() {
           title: 'Zoom Security Review',
           description: 'High-risk findings identified requiring remediation',
           timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
-          severity: 'HIGH'
-        }
+          severity: 'HIGH',
+        },
       ]);
 
       setFrameworks([
@@ -139,7 +144,7 @@ export function ProboIntegrationDashboard() {
           controlsPassed: 57,
           controlsFailed: 3,
           lastAssessed: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          status: 'IN_PROGRESS'
+          status: 'IN_PROGRESS',
         },
         {
           name: 'ISO 27001',
@@ -148,7 +153,7 @@ export function ProboIntegrationDashboard() {
           controlsPassed: 51,
           controlsFailed: 5,
           lastAssessed: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-          status: 'IN_PROGRESS'
+          status: 'IN_PROGRESS',
         },
         {
           name: 'NIST CSF',
@@ -157,8 +162,8 @@ export function ProboIntegrationDashboard() {
           controlsPassed: 71,
           controlsFailed: 2,
           lastAssessed: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          status: 'IN_PROGRESS'
-        }
+          status: 'IN_PROGRESS',
+        },
       ]);
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -169,41 +174,54 @@ export function ProboIntegrationDashboard() {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'vendor_assessment': return <Building className="h-4 w-4" />;
-      case 'control_update': return <Shield className="h-4 w-4" />;
-      case 'compliance_review': return <CheckCircle className="h-4 w-4" />;
-      case 'finding_resolved': return <AlertTriangle className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+      case 'vendor_assessment':
+        return <Building className="h-4 w-4" />;
+      case 'control_update':
+        return <Shield className="h-4 w-4" />;
+      case 'compliance_review':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'finding_resolved':
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <FileText className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity?: string) => {
     switch (severity) {
-      case 'LOW': return 'text-green-600';
-      case 'MEDIUM': return 'text-yellow-600';
-      case 'HIGH': return 'text-orange-600';
-      case 'CRITICAL': return 'text-red-600';
-      default: return 'text-gray-600';
+      case 'LOW':
+        return 'text-green-600';
+      case 'MEDIUM':
+        return 'text-yellow-600';
+      case 'HIGH':
+        return 'text-orange-600';
+      case 'CRITICAL':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
   const getFrameworkStatusColor = (status: string) => {
     switch (status) {
-      case 'COMPLETED': return 'bg-green-100 text-green-700';
-      case 'IN_PROGRESS': return 'bg-blue-100 text-blue-700';
-      case 'NOT_STARTED': return 'bg-gray-100 text-gray-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'COMPLETED':
+        return 'bg-green-100 text-green-700';
+      case 'IN_PROGRESS':
+        return 'bg-blue-100 text-blue-700';
+      case 'NOT_STARTED':
+        return 'bg-gray-100 text-gray-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   if (loading) {
-
-  return (
-    <div className="flex items-center justify-center h-64">
+    return (
+      <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -270,8 +288,7 @@ export function ProboIntegrationDashboard() {
                 <p className="text-sm text-[#A8A8A8]">SOC 2 Progress</p>
                 <p className="text-2xl font-bold text-[#191919]">{stats.soc2Progress}%</p>
                 <div className="flex items-center text-xs text-blue-600 mt-1">
-                  <Clock className="h-3 w-3 mr-1" />
-                  3 months remaining
+                  <Clock className="h-3 w-3 mr-1" />3 months remaining
                 </div>
               </div>
               <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -305,13 +322,14 @@ export function ProboIntegrationDashboard() {
         <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
           <DaisyCardBody>
             <div className="flex items-center justify-between">
-              <DaisyCardTitle className="text-[#191919] font-inter">Compliance Frameworks</DaisyCardTitle>
+              <DaisyCardTitle className="text-[#191919] font-inter">
+                Compliance Frameworks
+              </DaisyCardTitle>
               <DaisyButton size="sm" variant="outline">
                 <Plus className="h-4 w-4 mr-1" />
                 Add Framework
               </DaisyButton>
             </div>
-          
           </DaisyCardBody>
           <DaisyCardBody className="space-y-4">
             {frameworks.map((framework, index) => (
@@ -324,7 +342,9 @@ export function ProboIntegrationDashboard() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <DaisyBadge className={cn('text-xs', getFrameworkStatusColor(framework.status))}>
+                    <DaisyBadge
+                      className={cn('text-xs', getFrameworkStatusColor(framework.status))}
+                    >
                       {framework.status.replace('_', ' ')}
                     </DaisyBadge>
                     <p className="text-lg font-bold text-[#191919] mt-1">{framework.progress}%</p>
@@ -366,7 +386,8 @@ export function ProboIntegrationDashboard() {
                     </div>
                     <p className="text-sm text-[#A8A8A8] mt-1">{activity.description}</p>
                     <p className="text-xs text-[#A8A8A8] mt-1">
-                      {activity.timestamp.toLocaleTimeString()} • {activity.timestamp.toLocaleDateString()}
+                      {activity.timestamp.toLocaleTimeString()} •{' '}
+                      {activity.timestamp.toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -383,11 +404,9 @@ export function ProboIntegrationDashboard() {
       <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
         <DaisyCardBody>
           <DaisyCardTitle className="text-[#191919] font-inter">Quick Actions</DaisyCardTitle>
-          <DaisyCardDescription>
-            Common tasks powered by Probo AI integration
-          </DaisyCardDescription>
+          <DaisyCardDescription>Common tasks powered by Probo AI integration</DaisyCardDescription>
         </DaisyCardBody>
-        
+
         <DaisyCardBody>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <DaisyButton className="h-20 flex-col bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200">
@@ -414,10 +433,11 @@ export function ProboIntegrationDashboard() {
       <DaisyAlert>
         <Zap className="h-4 w-4" />
         <DaisyAlertDescription>
-          <strong>Probo AI Integration Active:</strong> Real-time vendor assessments, automated control mapping, 
-          and 650+ security controls library available. All data synced as of {new Date().toLocaleTimeString()}.
+          <strong>Probo AI Integration Active:</strong> Real-time vendor assessments, automated
+          control mapping, and 650+ security controls library available. All data synced as of{' '}
+          {new Date().toLocaleTimeString()}.
         </DaisyAlertDescription>
       </DaisyAlert>
     </div>
   );
-} 
+}
