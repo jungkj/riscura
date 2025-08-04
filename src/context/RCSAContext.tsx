@@ -18,7 +18,7 @@ import { rcsaApiClient, rcsaHelpers } from '@/lib/api/rcsa-client';
   TestScript,
   CreateTestScriptRequest,
   UpdateTestScriptRequest,
-} from '@/types/rcsa.types'
+} from '@/types/rcsa.types';
 
 // ============================================================================
 // CONTEXT STATE & ACTIONS

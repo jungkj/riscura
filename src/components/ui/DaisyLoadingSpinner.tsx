@@ -13,7 +13,7 @@ const sizeClasses = {
   sm: 'loading-sm',
   md: 'loading-md',
   lg: 'loading-lg',
-}
+};
 
 export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
@@ -26,16 +26,16 @@ export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       {Boolean(text) && <span className="ml-2 text-sm text-base-content/70">{text}</span>}
     </div>
   );
-}
+};
 
 export const LoadingSpinner = DaisyLoadingSpinner;
 
 export const PageLoadingSpinner: React.FC<{ text?: string }> = ({ text = 'Loading...' }) => (
   <div className="flex items-center justify-center min-h-[400px]">
-    <DaisyLoadingSpinner size="lg" text={text} >
-    </div>
+    <DaisyLoadingSpinner size="lg" text={text} />
+  </div>
 );
 
 export const InlineLoadingSpinner: React.FC<{ text?: string }> = ({ text }) => (
-  <DaisyLoadingSpinner size="sm" text={text} className="py-2" >
-  );
+  <DaisyLoadingSpinner size="sm" text={text} className="py-2" />
+);
