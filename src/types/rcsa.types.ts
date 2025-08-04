@@ -1,49 +1,47 @@
 // Standardized RCSA types aligned with Prisma schema
 // import {
-  RiskCategory as PrismaRiskCategory,
-  RiskStatus as PrismaRiskStatus,;
-  RiskLevel as PrismaRiskLevel,;
-  ControlType as PrismaControlType,;
-  ControlStatus as PrismaControlStatus,;
-  ControlCategory as PrismaControlCategory,;
-  AutomationLevel as PrismaAutomationLevel,;
-  EffectivenessRating as PrismaEffectivenessRating,;
-  Priority as PrismaPriority,;
-  ControlEffort as PrismaControlEffort,;
-  TestScriptType as PrismaTestScriptType,;
-  TestFrequency as PrismaTestFrequency,;
-  TestStatus as PrismaTestStatus,;
-} from '@prisma/client';
-;
+//   RiskCategory as PrismaRiskCategory,
+//   RiskStatus as PrismaRiskStatus,
+//   RiskLevel as PrismaRiskLevel,
+//   ControlType as PrismaControlType,
+//   ControlStatus as PrismaControlStatus,
+//   ControlCategory as PrismaControlCategory,
+//   AutomationLevel as PrismaAutomationLevel,
+//   EffectivenessRating as PrismaEffectivenessRating,
+//   Priority as PrismaPriority,
+//   ControlEffort as PrismaControlEffort,
+//   TestScriptType as PrismaTestScriptType,
+//   TestFrequency as PrismaTestFrequency,
+//   TestStatus as PrismaTestStatus,
+// } from '@prisma/client';
 // Re-export Prisma enums for consistency
-export const RiskCategory = PrismaRiskCategory;
-export const RiskStatus = PrismaRiskStatus;
-export const RiskLevel = PrismaRiskLevel;
-export const ControlType = PrismaControlType;
-export const ControlStatus = PrismaControlStatus;
-export const ControlCategory = PrismaControlCategory;
-export const AutomationLevel = PrismaAutomationLevel;
-export const EffectivenessRating = PrismaEffectivenessRating;
-export const Priority = PrismaPriority;
-export const ControlEffort = PrismaControlEffort;
-export const TestScriptType = PrismaTestScriptType;
-export const TestFrequency = PrismaTestFrequency;
-export const TestStatus = PrismaTestStatus;
-;
-export type RiskCategory = PrismaRiskCategory;
-export type RiskStatus = PrismaRiskStatus;
-export type RiskLevel = PrismaRiskLevel;
-export type ControlType = PrismaControlType;
-export type ControlStatus = PrismaControlStatus;
-export type ControlCategory = PrismaControlCategory;
-export type AutomationLevel = PrismaAutomationLevel;
-export type EffectivenessRating = PrismaEffectivenessRating;
-export type Priority = PrismaPriority;
-export type ControlEffort = PrismaControlEffort;
-export type TestScriptType = PrismaTestScriptType;
-export type TestFrequency = PrismaTestFrequency;
-export type TestStatus = PrismaTestStatus;
-;
+// export const RiskCategory = PrismaRiskCategory;
+// export const RiskStatus = PrismaRiskStatus;
+// export const RiskLevel = PrismaRiskLevel;
+// export const ControlType = PrismaControlType;
+// export const ControlStatus = PrismaControlStatus;
+// export const ControlCategory = PrismaControlCategory;
+// export const AutomationLevel = PrismaAutomationLevel;
+// export const EffectivenessRating = PrismaEffectivenessRating;
+// export const Priority = PrismaPriority;
+// export const ControlEffort = PrismaControlEffort;
+// export const TestScriptType = PrismaTestScriptType;
+// export const TestFrequency = PrismaTestFrequency;
+// export const TestStatus = PrismaTestStatus;
+
+// export type RiskCategory = PrismaRiskCategory;
+// export type RiskStatus = PrismaRiskStatus;
+// export type RiskLevel = PrismaRiskLevel;
+// export type ControlType = PrismaControlType;
+// export type ControlStatus = PrismaControlStatus;
+// export type ControlCategory = PrismaControlCategory;
+// export type AutomationLevel = PrismaAutomationLevel;
+// export type EffectivenessRating = PrismaEffectivenessRating;
+// export type Priority = PrismaPriority;
+// export type ControlEffort = PrismaControlEffort;
+// export type TestScriptType = PrismaTestScriptType;
+// export type TestFrequency = PrismaTestFrequency;
+// export type TestStatus = PrismaTestStatus;
 // Standardized Risk interface
 export interface Risk {
   id: string;

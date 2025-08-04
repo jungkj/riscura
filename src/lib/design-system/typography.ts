@@ -146,9 +146,9 @@ export const getHeadingClasses = (level: keyof typeof typography.headings) => {
   const heading = typography.headings[level]
   if (!heading) {
     // console.error(
-      `Typography heading level "${level}" not found. Available levels:`,
-      Object.keys(typography.headings)
-    )
+    //   `Typography heading level "${level}" not found. Available levels:`,
+    //   Object.keys(typography.headings)
+    // );
     // Fallback to h2 styles
     const fallback = typography.headings.h2
     return `${fallback.size} ${fallback.weight} ${fallback.tracking} ${fallback.leading} ${fallback.color} ${fallback.spacing}`;

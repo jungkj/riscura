@@ -491,8 +491,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             <DaisyTooltip>
               <DaisyTooltipTrigger asChild>
                 <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer">
-                  <DaisyAvatarImage src={user?.avatar} >
-                    <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
+                  <DaisyAvatarImage src={user?.avatar} />
+                  <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
                     {user?.firstName?.[0]}
                     {user?.lastName?.[0]}
                   </DaisyAvatarFallback>
