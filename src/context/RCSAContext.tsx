@@ -148,40 +148,40 @@ const initialState: RCSAContextState = {
 const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextState {
   switch (action.type) {
     case 'SET_LOADING':
-      return { ...state, loading: action.payload }
+      return { ...state, loading: action.payload };
 
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false }
+      return { ...state, error: action.payload, loading: false };
 
     case 'CLEAR_ERROR':
-      return { ...state, error: null }
+      return { ...state, error: null };
 
     case 'SET_CURRENT_RISK':
-      return { ...state, currentRisk: action.payload }
+      return { ...state, currentRisk: action.payload };
 
     case 'SET_CURRENT_CONTROL':
-      return { ...state, currentControl: action.payload }
+      return { ...state, currentControl: action.payload };
 
     case 'SET_CURRENT_WORKFLOW':
-      return { ...state, currentWorkflow: action.payload }
+      return { ...state, currentWorkflow: action.payload };
 
     case 'SET_RISKS':
-      return { ...state, risks: action.payload }
+      return { ...state, risks: action.payload };
 
     case 'SET_CONTROLS':
-      return { ...state, controls: action.payload }
+      return { ...state, controls: action.payload };
 
     case 'SET_CONTROL_RISK_MAPPINGS':
-      return { ...state, controlRiskMappings: action.payload }
+      return { ...state, controlRiskMappings: action.payload };
 
     case 'SET_EVIDENCE':
-      return { ...state, evidence: action.payload }
+      return { ...state, evidence: action.payload };
 
     case 'SET_ANALYTICS':
-      return { ...state, analytics: action.payload }
+      return { ...state, analytics: action.payload };
 
     case 'ADD_RISK':
-      return { ...state, risks: [action.payload, ...state.risks] }
+      return { ...state, risks: [action.payload, ...state.risks] };
 
     case 'UPDATE_RISK':
       return {
@@ -189,14 +189,14 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
         risks: state.risks.map((risk) => (risk.id === action.payload.id ? action.payload : risk)),
         currentRisk:
           state.currentRisk?.id === action.payload.id ? action.payload : state.currentRisk,
-      }
+      };
 
     case 'REMOVE_RISK':
       return {
         ...state,
         risks: state.risks.filter((risk) => risk.id !== action.payload),
         currentRisk: state.currentRisk?.id === action.payload ? null : state.currentRisk,
-      }
+      };
 
     case 'ADD_CONTROL':
       return { ...state, controls: [action.payload, ...state.controls] }

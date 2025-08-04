@@ -22,7 +22,9 @@ export const formatDateTime = (date: string | Date) => {
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date(date));
-}export const formatRelativeTime = (date: string | Date) => {
+};
+
+export const formatRelativeTime = (date: string | Date) => {
   const now = new Date();
   const targetDate = new Date(date);
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
@@ -30,18 +32,21 @@ export const formatDateTime = (date: string | Date) => {
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
   if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-;
   return formatDate(date);
 };
 // Risk calculation utilities
 export const calculateRiskScore = (likelihood: number, impact: number): number => {
   return likelihood * impact;
-}export const getRiskLevel = (score: number): 'low' | 'medium' | 'high' | 'critical' => {
+};
+
+export const getRiskLevel = (score: number): 'low' | 'medium' | 'high' | 'critical' => {
   if (score <= 6) return 'low';
   if (score <= 12) return 'medium';
   if (score <= 20) return 'high';
   return 'critical';
-}export const getRiskLevelColor = (level: string): string => {
+};
+
+export const getRiskLevelColor = (level: string): string => {
   switch (level) {
     case 'low':;
       return 'text-green-600 bg-green-50 border-green-200';

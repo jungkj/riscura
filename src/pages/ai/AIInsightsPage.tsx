@@ -2,32 +2,30 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-  DaisyTabs,;
-  DaisyTabsContent,;
-  DaisyTabsList,;
-  DaisyTabsTrigger,;
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from '@/hooks/use-toast';
-;
 // Icons
 // import {
-  Brain,
-  TrendingUp,;
-  TrendingDown,;
-  AlertTriangle,;
-  Lightbulb,;
-  Target,;
-  BarChart3,;
-  RefreshCw,;
-  Zap,;
-  Shield,;
-  Users,;
-} from 'lucide-react';
-;
+//   Brain,
+//   TrendingUp,
+//   TrendingDown,
+//   AlertTriangle,
+//   Lightbulb,
+//   Target,
+//   BarChart3,
+//   RefreshCw,
+//   Zap,
+//   Shield,
+//   Users,
+// } from 'lucide-react';
 // Types
 interface AIInsight {
   id: string;

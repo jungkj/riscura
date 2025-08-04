@@ -24,7 +24,7 @@
   GenerateTestScriptRequest,
   GenerateTestScriptResponse,
   TestScriptControl,
-} from '@/types/rcsa.types'
+} from '@/types/rcsa.types';
 import { getSession } from 'next-auth/react';
 
 export class RCSAApiClient {
