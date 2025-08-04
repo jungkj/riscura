@@ -5,20 +5,25 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { 
-  CheckCircle, 
-  AlertCircle, 
-  Clock, 
-  FileText, 
-  Shield, 
-  Users, 
+import {
+  CheckCircle,
+  AlertCircle,
+  Clock,
+  FileText,
+  Shield,
+  Users,
   Database,
   Monitor,
   Download,
   Upload,
-  Plus
+  Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -63,7 +68,7 @@ export function SOC2Assessment() {
     assessedControls: 0,
     passedControls: 0,
     failedControls: 0,
-    percentage: 0
+    percentage: 0,
   });
   const [loading, setLoading] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -102,9 +107,9 @@ export function SOC2Assessment() {
       const response = await fetch('/api/probo/soc2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ organizationId })
+        body: JSON.stringify({ organizationId }),
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setFramework(data);
@@ -120,22 +125,16 @@ export function SOC2Assessment() {
     if (!framework) return;
 
     const totalControls = framework.controls.length;
-    const assessedControls = framework.controls.filter(c => 
-      c.status !== 'NOT_ASSESSED'
-    ).length;
-    const passedControls = framework.controls.filter(c => 
-      c.status === 'PASSED'
-    ).length;
-    const failedControls = framework.controls.filter(c => 
-      c.status === 'FAILED'
-    ).length;
+    const assessedControls = framework.controls.filter((c) => c.status !== 'NOT_ASSESSED').length;
+    const passedControls = framework.controls.filter((c) => c.status === 'PASSED').length;
+    const failedControls = framework.controls.filter((c) => c.status === 'FAILED').length;
 
     setProgress({
       totalControls,
       assessedControls,
       passedControls,
       failedControls,
-      percentage: totalControls > 0 ? (assessedControls / totalControls) * 100 : 0
+      percentage: totalControls > 0 ? (assessedControls / totalControls) * 100 : 0,
     });
   };
 
@@ -155,27 +154,25 @@ export function SOC2Assessment() {
 
   const getStatusBadge = (status: SOC2Control['status']) => {
     const variants = {
-      'NOT_ASSESSED': 'secondary',
-      'IN_PROGRESS': 'default',
-      'NEEDS_EVIDENCE': 'destructive',
-      'UNDER_REVIEW': 'secondary',
-      'PASSED': 'default',
-      'FAILED': 'destructive'
+      NOT_ASSESSED: 'secondary',
+      IN_PROGRESS: 'default',
+      NEEDS_EVIDENCE: 'destructive',
+      UNDER_REVIEW: 'secondary',
+      PASSED: 'default',
+      FAILED: 'destructive',
     } as const;
 
     const colors = {
-      'NOT_ASSESSED': 'bg-gray-100 text-gray-700',
-      'IN_PROGRESS': 'bg-blue-100 text-blue-700',
-      'NEEDS_EVIDENCE': 'bg-orange-100 text-orange-700',
-      'UNDER_REVIEW': 'bg-purple-100 text-purple-700',
-      'PASSED': 'bg-green-100 text-green-700',
-      'FAILED': 'bg-red-100 text-red-700'
+      NOT_ASSESSED: 'bg-gray-100 text-gray-700',
+      IN_PROGRESS: 'bg-blue-100 text-blue-700',
+      NEEDS_EVIDENCE: 'bg-orange-100 text-orange-700',
+      UNDER_REVIEW: 'bg-purple-100 text-purple-700',
+      PASSED: 'bg-green-100 text-green-700',
+      FAILED: 'bg-red-100 text-red-700',
     };
 
-  return (
-    <DaisyBadge className={cn('text-xs', colors[status])}>
-      {status.replace('_', ' ')}
-    </DaisyBadge>
+    return (
+      <DaisyBadge className={cn('text-xs', colors[status])}>{status.replace('_', ' ')}</DaisyBadge>
     );
   };
 
@@ -194,16 +191,18 @@ export function SOC2Assessment() {
     }
   };
 
-  const filteredControls = framework?.controls.filter(control => 
-    selectedCategory === 'all' || control.category === selectedCategory
-  ) || [];
+  const filteredControls =
+    framework?.controls.filter(
+      (control) => selectedCategory === 'all' || control.category === selectedCategory
+    ) || [];
 
-  const categories = framework?.controls.reduce((acc, control) => {
-    if (!acc.includes(control.category)) {
-      acc.push(control.category);
-    }
-    return acc;
-  }, [] as string[]) || [];
+  const categories =
+    framework?.controls.reduce((acc, control) => {
+      if (!acc.includes(control.category)) {
+        acc.push(control.category);
+      }
+      return acc;
+    }, [] as string[]) || [];
 
   if (loading) {
     return (
@@ -224,7 +223,7 @@ export function SOC2Assessment() {
             Import SOC 2 framework to begin compliance assessment
           </DaisyCardDescription>
         </DaisyCardBody>
-        
+
         <DaisyCardBody>
           <DaisyAlert>
             <Shield className="h-4 w-4" />
@@ -233,10 +232,11 @@ export function SOC2Assessment() {
             </DaisyAlertDescription>
           </DaisyAlert>
           <div className="mt-4">
-            <DaisyButton 
+            <DaisyButton
               onClick={importSOC2Framework}
               disabled={importing}
-              className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+              className="bg-[#199BEC] hover:bg-[#199BEC]/90"
+            >
               {importing ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -253,7 +253,7 @@ export function SOC2Assessment() {
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -313,7 +313,9 @@ export function SOC2Assessment() {
         <DaisyCardBody className="p-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-[#191919]">Assessment Progress</h3>
-            <span className="text-sm text-[#A8A8A8]">{Math.round(progress.percentage)}% Complete</span>
+            <span className="text-sm text-[#A8A8A8]">
+              {Math.round(progress.percentage)}% Complete
+            </span>
           </div>
           <DaisyProgress value={progress.percentage} className="h-3" />
         </DaisyCardBody>
@@ -332,7 +334,9 @@ export function SOC2Assessment() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
               <DaisyCardBody>
-                <DaisyCardTitle className="text-[#191919] font-inter">Framework Information</DaisyCardTitle>
+                <DaisyCardTitle className="text-[#191919] font-inter">
+                  Framework Information
+                </DaisyCardTitle>
               </DaisyCardBody>
               <DaisyCardBody>
                 <div className="space-y-2">
@@ -350,7 +354,9 @@ export function SOC2Assessment() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#A8A8A8]">Requirements:</span>
-                    <span className="text-[#191919] font-medium">{framework.requirements.length}</span>
+                    <span className="text-[#191919] font-medium">
+                      {framework.requirements.length}
+                    </span>
                   </div>
                 </div>
               </DaisyCardBody>
@@ -358,7 +364,9 @@ export function SOC2Assessment() {
 
             <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
               <DaisyCardBody>
-                <DaisyCardTitle className="text-[#191919] font-inter">Assessment Status</DaisyCardTitle>
+                <DaisyCardTitle className="text-[#191919] font-inter">
+                  Assessment Status
+                </DaisyCardTitle>
               </DaisyCardBody>
               <DaisyCardBody>
                 <div className="space-y-4">
@@ -371,13 +379,13 @@ export function SOC2Assessment() {
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">In Progress</span>
                     <DaisyBadge className="bg-blue-100 text-blue-700">
-                      {framework.controls.filter(c => c.status === 'IN_PROGRESS').length}
+                      {framework.controls.filter((c) => c.status === 'IN_PROGRESS').length}
                     </DaisyBadge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#A8A8A8]">Under Review</span>
                     <DaisyBadge className="bg-purple-100 text-purple-700">
-                      {framework.controls.filter(c => c.status === 'UNDER_REVIEW').length}
+                      {framework.controls.filter((c) => c.status === 'UNDER_REVIEW').length}
                     </DaisyBadge>
                   </div>
                 </div>
@@ -399,8 +407,10 @@ export function SOC2Assessment() {
                 className="px-3 py-1 border border-[#D8C3A5] rounded-md text-sm focus:outline-none focus:border-[#199BEC]"
               >
                 <option value="all">All Categories</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
                 ))}
               </select>
               <DaisyButton size="sm" className="bg-[#199BEC] hover:bg-[#199BEC]/90">
@@ -411,7 +421,7 @@ export function SOC2Assessment() {
           </div>
 
           <div className="grid gap-4">
-            {filteredControls.map(control => (
+            {filteredControls.map((control) => (
               <DaisyCard key={control.id} className="bg-[#FAFAFA] border-[#D8C3A5]">
                 <DaisyCardBody className="p-4">
                   <div className="flex items-start justify-between">
@@ -443,11 +453,12 @@ export function SOC2Assessment() {
         <DaisyTabsContent value="evidence" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardBody>
-              <DaisyCardTitle className="text-[#191919] font-inter">Evidence Collection</DaisyCardTitle>
+              <DaisyCardTitle className="text-[#191919] font-inter">
+                Evidence Collection
+              </DaisyCardTitle>
               <DaisyCardDescription>
                 Upload and manage evidence for SOC 2 controls
               </DaisyCardDescription>
-            
             </DaisyCardBody>
             <DaisyCardBody>
               <div className="text-center py-8">
@@ -465,7 +476,9 @@ export function SOC2Assessment() {
         <DaisyTabsContent value="reports" className="space-y-4">
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
             <DaisyCardBody>
-              <DaisyCardTitle className="text-[#191919] font-inter">Assessment Reports</DaisyCardTitle>
+              <DaisyCardTitle className="text-[#191919] font-inter">
+                Assessment Reports
+              </DaisyCardTitle>
               <DaisyCardDescription>
                 Generate and download SOC 2 assessment reports
               </DaisyCardDescription>
@@ -491,4 +504,4 @@ export function SOC2Assessment() {
       </DaisyTabs>
     </div>
   );
-} 
+}

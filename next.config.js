@@ -7,14 +7,16 @@ const nextConfig = {
   // Page extensions for MDX
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   
-  // Experimental features optimized for Next.js 15.3.4
+  // Experimental features optimized for Next.js 15.4.5
   experimental: {
-    // Disable problematic features causing build issues
+    // Enable optimizations for faster builds
     scrollRestoration: true,
     // Optimize bundling for Vercel deployment
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', '@tabler/icons-react'],
-    // Force Babel compilation to bypass SWC JSX parsing bugs in Next.js 15.3.4
-    forceSwcTransforms: false,
+    // Enable SWC transforms for better performance
+    forceSwcTransforms: true,
+    // Enable optimized CSS loading
+    optimizeCss: true,
   },
   
   // External packages for server components
@@ -30,12 +32,14 @@ const nextConfig = {
   //   },
   // },
 
-  // Compiler optimizations
+  // Compiler optimizations with SWC enabled
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
-    // Disable SWC for JSX compilation issues
+    // Enable SWC for styled-components if needed
     styledComponents: false,
+    // Enable SWC minification for better performance
+    swcMinify: true,
   },
 
   // Image optimization
@@ -227,8 +231,7 @@ const nextConfig = {
     tsconfigPath: './tsconfig.json',
   },
 
-  // Force Babel over SWC to resolve JSX parsing issues in Next.js 15.3.4
-  // This is automatically enabled by the presence of .babelrc
+  // SWC enabled for optimal performance - .babelrc removed
 
 
   // Logging configuration

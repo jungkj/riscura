@@ -382,10 +382,46 @@ class JSXErrorMonitor {
       });
     }
     
+    // Build failure prediction
+    if (errorRate > 0.05 && criticalErrors.length > 3) {
+      alerts.push({
+        type: 'buildFailureRisk',
+        severity: 'error',
+        message: 'High risk of build failure detected',
+        details: {
+          errorRate: errorRate,
+          criticalErrors: criticalErrors.length,
+          recommendation: 'Run comprehensive JSX validation before building'
+        }
+      });
+    }
+    
+    // Performance degradation warning
+    if (results.summary.totalFiles > 100 && errorRate > 0.2) {
+      alerts.push({
+        type: 'performanceDegradation',
+        severity: 'warning',
+        message: 'JSX errors may impact development performance',
+        details: {
+          fileCount: results.summary.totalFiles,
+          errorRate: errorRate,
+          recommendation: 'Consider running jsx:validate:fix to resolve issues'
+        }
+      });
+    }
+    
+    // Check for trending errors
+    await this.checkErrorTrends(alerts, results);
+    
     if (alerts.length > 0) {
       console.log('\n🚨 ALERTS:');
       alerts.forEach(alert => {
-        console.log(`${alert.severity.toUpperCase()}: ${alert.message}`);
+        const icon = alert.severity === 'error' ? '🔴' : '🟡';
+        console.log(`${icon} ${alert.severity.toUpperCase()}: ${alert.message}`);
+        
+        if (alert.details?.recommendation) {
+          console.log(`   💡 Recommendation: ${alert.details.recommendation}`);
+        }
       });
       
       // Save alerts
@@ -411,9 +447,66 @@ class JSXErrorMonitor {
       allAlerts = allAlerts.slice(-100);
       
       fs.writeFileSync(alertsFile, JSON.stringify(allAlerts, null, 2));
+      
+      // Send notifications if configured
+      await this.sendAlertNotifications(alerts);
     }
     
     return alerts;
+  }
+  
+  async checkErrorTrends(alerts, results) {
+    if (!fs.existsSync(this.trendsFile)) return;
+    
+    try {
+      const trends = JSON.parse(fs.readFileSync(this.trendsFile, 'utf8'));
+      
+      if (trends.daily && trends.daily.length >= 3) {
+        const recent = trends.daily.slice(-3);
+        const errorCounts = recent.map(day => day.totalErrors);
+        
+        // Check for increasing error trend
+        const isIncreasing = errorCounts.every((count, index) => 
+          index === 0 || count >= errorCounts[index - 1]
+        );
+        
+        if (isIncreasing && errorCounts[errorCounts.length - 1] > errorCounts[0] * 1.5) {
+          alerts.push({
+            type: 'increasingErrorTrend',
+            severity: 'warning',
+            message: 'JSX errors are trending upward over the last 3 days',
+            details: {
+              errorCounts: errorCounts,
+              trend: 'increasing',
+              recommendation: 'Review recent changes and run comprehensive validation'
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.warn('Could not analyze error trends:', error.message);
+    }
+  }
+  
+  async sendAlertNotifications(alerts) {
+    const criticalAlerts = alerts.filter(alert => alert.severity === 'error');
+    
+    if (criticalAlerts.length === 0) return;
+    
+    try {
+      // Try to send system notification
+      const message = `${criticalAlerts.length} critical JSX issues detected`;
+      
+      if (process.platform === 'darwin') {
+        const { execSync } = require('child_process');
+        execSync(`osascript -e 'display notification "${message}" with title "JSX Validation Alert"'`);
+      } else if (process.platform === 'linux') {
+        const { execSync } = require('child_process');
+        execSync(`notify-send "JSX Validation Alert" "${message}"`);
+      }
+    } catch (error) {
+      // Fail silently if notifications aren't available
+    }
   }
 
   generateReport() {

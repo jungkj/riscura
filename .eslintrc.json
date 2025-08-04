@@ -15,11 +15,11 @@
     "@typescript-eslint"
   ],
   "rules": {
-    // JSX Syntax Error Prevention
+    // JSX Syntax Error Prevention - Core Rules
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/jsx-closing-tag-location": "error",
-    "react/jsx-closing-bracket-location": "error",
+    "react/jsx-closing-bracket-location": ["error", "line-aligned"],
     "react/jsx-tag-spacing": ["error", {
       "closingSlash": "never",
       "beforeSelfClosing": "always",
@@ -47,6 +47,43 @@
     "react/self-closing-comp": ["error", {
       "component": true,
       "html": true
+    }],
+    
+    // Advanced JSX Validation Rules
+    "react/jsx-fragments": ["error", "syntax"],
+    "react/jsx-key": ["error", {
+      "checkFragmentShorthand": true,
+      "checkKeyMustBeforeSpread": true,
+      "warnOnDuplicates": true
+    }],
+    "react/jsx-max-props-per-line": ["error", {
+      "maximum": 1,
+      "when": "multiline"
+    }],
+    "react/jsx-no-comment-textnodes": "error",
+    "react/jsx-no-constructed-context-values": "error",
+    "react/jsx-no-leaked-render": "error",
+    "react/jsx-no-target-blank": ["error", {
+      "allowReferrer": false,
+      "enforceDynamicLinks": "always",
+      "warnOnSpreadAttributes": true
+    }],
+    "react/jsx-no-useless-fragment": ["error", {
+      "allowExpressions": true
+    }],
+    "react/jsx-props-no-spreading": ["warn", {
+      "html": "enforce",
+      "custom": "ignore",
+      "explicitSpread": "ignore",
+      "exceptions": []
+    }],
+    "react/jsx-sort-props": ["warn", {
+      "callbacksLast": true,
+      "shorthandFirst": false,
+      "shorthandLast": true,
+      "multiline": "last",
+      "ignoreCase": true,
+      "noSortAlphabetically": false
     }],
     
     // Component naming and structure

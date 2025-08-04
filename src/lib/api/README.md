@@ -1,17 +1,21 @@
 # API Standardization System
 
-This document describes the comprehensive API standardization system implemented for the RCSA platform.
+This document describes the comprehensive API standardization system implemented
+for the RCSA platform.
 
 ## Overview
 
 The API standardization system provides:
 
-- **Consistent Response Formats**: Standardized success/error response structures
+- **Consistent Response Formats**: Standardized success/error response
+  structures
 - **Input Validation**: Zod-based validation schemas for all inputs
 - **Error Handling**: Centralized error handling with proper HTTP status codes
 - **Rate Limiting**: Configurable rate limiting per endpoint type
-- **API Versioning**: Support for multiple API versions with deprecation warnings
-- **Authentication & Authorization**: Integrated auth and role-based access control
+- **API Versioning**: Support for multiple API versions with deprecation
+  warnings
+- **Authentication & Authorization**: Integrated auth and role-based access
+  control
 - **CORS Support**: Configurable CORS handling
 - **Request Logging**: Comprehensive request/response logging
 
@@ -22,6 +26,7 @@ The API standardization system provides:
 Provides standardized response formats for all API endpoints.
 
 #### Success Response Format
+
 ```typescript
 {
   success: true,
@@ -38,6 +43,7 @@ Provides standardized response formats for all API endpoints.
 ```
 
 #### Error Response Format
+
 ```typescript
 {
   success: false,
@@ -56,17 +62,21 @@ Provides standardized response formats for all API endpoints.
 #### Usage Examples
 
 ```typescript
-import { ApiResponseFormatter, successResponse, errorResponse } from '@/lib/api/response-formatter';
+import {
+  ApiResponseFormatter,
+  successResponse,
+  errorResponse,
+} from '@/lib/api/response-formatter';
 
 // Success response
 const response = ApiResponseFormatter.success(data, {
   requestId: 'req-123',
-  version: 'v1'
+  version: 'v1',
 });
 
 // Paginated response
 const paginatedResponse = ApiResponseFormatter.paginated(
-  items, 
+  items,
   { page: 1, limit: 10, total: 100 },
   { requestId: 'req-123' }
 );
@@ -91,8 +101,10 @@ Comprehensive Zod schemas for all API inputs.
 
 - **Authentication**: `LoginSchema`, `RegisterSchema`, `ChangePasswordSchema`
 - **Risks**: `RiskCreateSchema`, `RiskUpdateSchema`, `RiskFilterSchema`
-- **Controls**: `ControlCreateSchema`, `ControlUpdateSchema`, `ControlFilterSchema`
-- **Assessments**: `AssessmentCreateSchema`, `AssessmentUpdateSchema`, `AssessmentExecuteSchema`
+- **Controls**: `ControlCreateSchema`, `ControlUpdateSchema`,
+  `ControlFilterSchema`
+- **Assessments**: `AssessmentCreateSchema`, `AssessmentUpdateSchema`,
+  `AssessmentExecuteSchema`
 - **Documents**: `DocumentUploadSchema`, `DocumentAnalysisSchema`
 - **Reports**: `ReportGenerateSchema`
 - **Common**: `PaginationSchema`, `SearchSchema`, `IdSchema`
@@ -100,10 +112,10 @@ Comprehensive Zod schemas for all API inputs.
 #### Usage Examples
 
 ```typescript
-import { 
-  RiskCreateSchema, 
-  parseAndValidate, 
-  validateQueryParams 
+import {
+  RiskCreateSchema,
+  parseAndValidate,
+  validateQueryParams,
 } from '@/lib/api/validation-schemas';
 
 // Validate request body
@@ -124,7 +136,8 @@ if (!queryValidation.success) {
 
 ### 3. Error Handling (`error-handler.ts`)
 
-Centralized error handling with standardized error codes and proper HTTP status mapping.
+Centralized error handling with standardized error codes and proper HTTP status
+mapping.
 
 #### Error Codes
 
@@ -137,19 +150,19 @@ Centralized error handling with standardized error codes and proper HTTP status 
 #### Custom Error Classes
 
 ```typescript
-import { 
-  ApiError, 
-  ValidationError, 
+import {
+  ApiError,
+  ValidationError,
   BusinessLogicError,
   createAuthError,
-  createNotFoundError 
+  createNotFoundError,
 } from '@/lib/api/error-handler';
 
 // Create custom errors
 throw new ApiError('CUSTOM_ERROR', 'Custom error message', {
   severity: ErrorSeverity.HIGH,
   context: { userId: '123' },
-  statusCode: 422
+  statusCode: 422,
 });
 
 // Use error factories
@@ -171,7 +184,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return globalErrorHandler.handleError(error, request, {
       endpoint: 'POST /api/v1/risks',
-      action: 'create_risk'
+      action: 'create_risk',
     });
   }
 }
@@ -179,7 +192,8 @@ export async function POST(request: NextRequest) {
 
 ### 4. Rate Limiting (`rate-limiter.ts`)
 
-Flexible rate limiting system with different limits for different endpoint types.
+Flexible rate limiting system with different limits for different endpoint
+types.
 
 #### Pre-configured Rate Limiters
 
@@ -193,10 +207,10 @@ Flexible rate limiting system with different limits for different endpoint types
 #### Usage Examples
 
 ```typescript
-import { 
-  applyRateLimit, 
+import {
+  applyRateLimit,
   rateLimiterManager,
-  createStandardRateLimiter 
+  createStandardRateLimiter,
 } from '@/lib/api/rate-limiter';
 
 // Apply automatic rate limiting
@@ -209,11 +223,14 @@ if (!rateLimitResult.success) {
 const customLimiter = new RateLimiter({
   windowMs: 60 * 1000, // 1 minute
   max: 100, // 100 requests per minute
-  keyGenerator: (request) => `custom:${getUserId(request)}`
+  keyGenerator: (request) => `custom:${getUserId(request)}`,
 });
 
 // Apply multiple rate limiters
-const result = await rateLimiterManager.handleRequest(request, ['standard', 'auth']);
+const result = await rateLimiterManager.handleRequest(request, [
+  'standard',
+  'auth',
+]);
 ```
 
 ### 5. API Versioning (`versioning.ts`)
@@ -223,6 +240,7 @@ Support for API versioning with deprecation warnings and migration support.
 #### Version Extraction
 
 Versions can be specified via:
+
 - URL path: `/api/v1/risks`
 - Headers: `X-API-Version: v1`
 - Query parameters: `?version=v1`
@@ -231,10 +249,10 @@ Versions can be specified via:
 #### Usage Examples
 
 ```typescript
-import { 
+import {
   getApiVersionFromRequest,
   VersionedResponseFormatter,
-  isVersionDeprecated 
+  isVersionDeprecated,
 } from '@/lib/api/versioning';
 
 // Get version from request
@@ -251,7 +269,8 @@ if (isVersionDeprecated(version)) {
 
 ### 6. Middleware (`middleware.ts`)
 
-Comprehensive middleware that automatically handles all standardization concerns.
+Comprehensive middleware that automatically handles all standardization
+concerns.
 
 #### Configuration Options
 
@@ -261,20 +280,20 @@ interface ApiMiddlewareConfig {
   requireAuth?: boolean;
   allowedRoles?: string[];
   requireOrganization?: boolean;
-  
+
   // Rate limiting
   rateLimiters?: string[];
   skipRateLimit?: boolean;
-  
+
   // Validation
   bodySchema?: ZodSchema<any>;
   querySchema?: ZodSchema<any>;
   skipValidation?: boolean;
-  
+
   // Versioning
   supportedVersions?: ApiVersion[];
   skipVersioning?: boolean;
-  
+
   // CORS
   corsEnabled?: boolean;
   corsOptions?: CorsOptions;
@@ -284,10 +303,10 @@ interface ApiMiddlewareConfig {
 #### Usage Examples
 
 ```typescript
-import { 
+import {
   withApiMiddleware,
   authApiMiddleware,
-  riskManagerApiMiddleware 
+  riskManagerApiMiddleware,
 } from '@/lib/api/middleware';
 
 // Simple usage with middleware decorator
@@ -295,20 +314,22 @@ export const GET = withApiMiddleware({
   requireAuth: true,
   allowedRoles: ['ADMIN', 'RISK_MANAGER'],
   querySchema: RiskQuerySchema,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, validatedData) => {
   // Your handler logic here
   const { user, version, requestId } = context;
   const { page, limit, search } = validatedData.query;
-  
+
   // Return data (middleware handles response formatting)
   return { data: results, pagination: { page, limit, total } };
 });
 
 // Pre-configured middleware
-export const POST = riskManagerApiMiddleware.execute(async (context, validatedData) => {
-  // Handler logic
-});
+export const POST = riskManagerApiMiddleware.execute(
+  async (context, validatedData) => {
+    // Handler logic
+  }
+);
 ```
 
 ## Implementation Examples
@@ -324,17 +345,17 @@ import { ExampleSchema } from '@/lib/api/validation-schemas';
 export const GET = withApiMiddleware({
   requireAuth: true,
   querySchema: ExampleSchema,
-  rateLimiters: ['standard']
+  rateLimiters: ['standard'],
 })(async (context, validatedData) => {
   const { user } = context;
   const { page, limit } = validatedData.query;
-  
+
   // Your business logic
   const results = await fetchData(user.organizationId, page, limit);
-  
+
   return {
     data: results,
-    pagination: { page, limit, total: results.length }
+    pagination: { page, limit, total: results.length },
   };
 });
 ```
@@ -377,7 +398,6 @@ export async function GET(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     return globalErrorHandler.handleError(error, request);
   }
@@ -393,7 +413,7 @@ Always use the middleware system for new API endpoints to ensure consistency:
 ```typescript
 export const GET = withApiMiddleware({
   requireAuth: true,
-  querySchema: MyQuerySchema
+  querySchema: MyQuerySchema,
 })(async (context, validatedData) => {
   // Handler logic
 });
@@ -407,7 +427,7 @@ Create Zod schemas for all inputs:
 export const CreateResourceSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().max(1000).optional(),
-  tags: z.array(z.string()).max(10).optional()
+  tags: z.array(z.string()).max(10).optional(),
 });
 ```
 
@@ -417,16 +437,16 @@ Choose rate limiters based on endpoint type:
 
 ```typescript
 // Standard endpoints
-rateLimiters: ['standard']
+rateLimiters: ['standard'];
 
 // Authentication endpoints
-rateLimiters: ['auth']
+rateLimiters: ['auth'];
 
 // File uploads
-rateLimiters: ['standard', 'upload']
+rateLimiters: ['standard', 'upload'];
 
 // Expensive operations
-rateLimiters: ['standard', 'expensive']
+rateLimiters: ['standard', 'expensive'];
 ```
 
 ### 4. Handle Errors Properly
@@ -454,7 +474,7 @@ Structure your response data consistently:
 return {
   data: transformedData,
   pagination: { page, limit, total }, // For paginated responses
-  status: 201 // For creation endpoints
+  status: 201, // For creation endpoints
 };
 ```
 
@@ -472,6 +492,7 @@ All API responses include standard headers:
 ## Error Response Examples
 
 ### Validation Error
+
 ```json
 {
   "success": false,
@@ -494,6 +515,7 @@ All API responses include standard headers:
 ```
 
 ### Rate Limit Error
+
 ```json
 {
   "success": false,
@@ -507,6 +529,7 @@ All API responses include standard headers:
 ```
 
 ### Business Logic Error
+
 ```json
 {
   "success": false,
@@ -530,6 +553,7 @@ All API responses include standard headers:
 5. **Remove manual rate limiting** (middleware handles it)
 
 ### Before (Old Pattern)
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
@@ -555,18 +579,20 @@ export async function GET(request: NextRequest) {
 ```
 
 ### After (Standardized Pattern)
+
 ```typescript
 export const GET = withApiMiddleware({
   requireAuth: true,
-  querySchema: PaginationSchema
+  querySchema: PaginationSchema,
 })(async (context, validatedData) => {
   const { user } = context;
   const { page, limit } = validatedData.query;
-  
+
   const data = await fetchData();
-  
+
   return { data, pagination: { page, limit, total: data.length } };
 });
 ```
 
-This standardization system ensures all your APIs are consistent, secure, and maintainable while reducing boilerplate code significantly. 
+This standardization system ensures all your APIs are consistent, secure, and
+maintainable while reducing boilerplate code significantly.

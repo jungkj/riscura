@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { QuestionnaireBuilder } from '@/components/questionnaires/QuestionnaireBuilder';
-import { Questionnaire, QuestionnaireCategory, QuestionnaireType, QuestionnaireStatus } from '@/types/questionnaire.types';
+import {
+  Questionnaire,
+  QuestionnaireCategory,
+  QuestionnaireType,
+  QuestionnaireStatus,
+} from '@/types/questionnaire.types';
 import { formatDate } from '@/lib/utils';
 
 // UI Components
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -79,15 +78,15 @@ export default function QuestionnairePage() {
           types: ['response_submitted'],
           channels: ['email'],
           frequency: 'immediate',
-          recipients: []
+          recipients: [],
         },
         accessControl: {
           publicAccess: false,
           requiresAuthentication: true,
           allowedRoles: ['admin', 'auditor'],
           allowedUsers: [],
-          restrictions: []
-        }
+          restrictions: [],
+        },
       },
       sections: [],
       scoring: {
@@ -95,7 +94,7 @@ export default function QuestionnairePage() {
         maxScore: 100,
         categories: [],
         aggregation: 'sum',
-        normalization: false
+        normalization: false,
       },
       createdBy: 'admin',
       createdAt: new Date('2024-01-15'),
@@ -106,7 +105,7 @@ export default function QuestionnairePage() {
           completionRate: 0.85,
           averageScore: 78.5,
           averageTime: 45,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         completion: {
           started: 30,
@@ -114,7 +113,7 @@ export default function QuestionnairePage() {
           abandoned: 5,
           averageCompletionTime: 42,
           completionRateBySection: [],
-          dropOffPoints: []
+          dropOffPoints: [],
         },
         performance: {
           averageResponseTime: 2.5,
@@ -124,28 +123,28 @@ export default function QuestionnairePage() {
             usabilityScore: 4.0,
             clarityScore: 4.3,
             feedbackCount: 15,
-            commonComplaints: []
+            commonComplaints: [],
           },
           technicalMetrics: {
             loadTime: 1.2,
             errorRate: 0.02,
             crashRate: 0.001,
             deviceBreakdown: [],
-            browserBreakdown: []
-          }
+            browserBreakdown: [],
+          },
         },
         responses: {
           patterns: [],
           distributions: [],
           correlations: [],
-          outliers: []
+          outliers: [],
         },
         trends: {
           timeSeriesData: [],
           trendDirection: 'stable',
           seasonality: [],
-          forecasts: []
-        }
+          forecasts: [],
+        },
       },
       aiSettings: {
         enabled: true,
@@ -154,32 +153,32 @@ export default function QuestionnairePage() {
           contextSources: [],
           generationRules: [],
           reviewRequired: true,
-          maxQuestions: 50
+          maxQuestions: 50,
         },
         responseAnalysis: {
           enabled: true,
           patterns: [],
           riskScoring: true,
           anomalyDetection: true,
-          sentimentAnalysis: false
+          sentimentAnalysis: false,
         },
         riskAssessment: {
           enabled: true,
           scoringModel: {
             type: 'weighted',
             weights: {},
-            rules: []
+            rules: [],
           },
           riskCategories: [],
           thresholds: [],
-          autoPopulate: false
+          autoPopulate: false,
         },
         followUpSuggestions: {
           enabled: false,
           triggerConditions: [],
           suggestionRules: [],
-          maxSuggestions: 5
-        }
+          maxSuggestions: 5,
+        },
       },
       permissions: {
         read: ['admin', 'auditor', 'manager'],
@@ -188,8 +187,8 @@ export default function QuestionnairePage() {
         respond: ['all'],
         review: ['admin', 'auditor'],
         approve: ['admin'],
-        analytics: ['admin', 'auditor']
-      }
+        analytics: ['admin', 'auditor'],
+      },
     },
     {
       id: 'q2',
@@ -211,15 +210,15 @@ export default function QuestionnairePage() {
           types: ['response_submitted', 'review_required'],
           channels: ['email'],
           frequency: 'immediate',
-          recipients: []
+          recipients: [],
         },
         accessControl: {
           publicAccess: false,
           requiresAuthentication: true,
           allowedRoles: ['admin', 'manager'],
           allowedUsers: [],
-          restrictions: []
-        }
+          restrictions: [],
+        },
       },
       sections: [],
       scoring: {
@@ -227,7 +226,7 @@ export default function QuestionnairePage() {
         maxScore: 100,
         categories: [],
         aggregation: 'weighted_average',
-        normalization: true
+        normalization: true,
       },
       createdBy: 'admin',
       createdAt: new Date('2024-02-01'),
@@ -238,7 +237,7 @@ export default function QuestionnairePage() {
           completionRate: 0.72,
           averageScore: 82.3,
           averageTime: 35,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         completion: {
           started: 25,
@@ -246,7 +245,7 @@ export default function QuestionnairePage() {
           abandoned: 7,
           averageCompletionTime: 33,
           completionRateBySection: [],
-          dropOffPoints: []
+          dropOffPoints: [],
         },
         performance: {
           averageResponseTime: 1.8,
@@ -256,28 +255,28 @@ export default function QuestionnairePage() {
             usabilityScore: 4.2,
             clarityScore: 4.0,
             feedbackCount: 12,
-            commonComplaints: []
+            commonComplaints: [],
           },
           technicalMetrics: {
             loadTime: 0.9,
             errorRate: 0.01,
             crashRate: 0.0005,
             deviceBreakdown: [],
-            browserBreakdown: []
-          }
+            browserBreakdown: [],
+          },
         },
         responses: {
           patterns: [],
           distributions: [],
           correlations: [],
-          outliers: []
+          outliers: [],
         },
         trends: {
           timeSeriesData: [],
           trendDirection: 'improving',
           seasonality: [],
-          forecasts: []
-        }
+          forecasts: [],
+        },
       },
       aiSettings: {
         enabled: false,
@@ -286,32 +285,32 @@ export default function QuestionnairePage() {
           contextSources: [],
           generationRules: [],
           reviewRequired: true,
-          maxQuestions: 30
+          maxQuestions: 30,
         },
         responseAnalysis: {
           enabled: false,
           patterns: [],
           riskScoring: false,
           anomalyDetection: false,
-          sentimentAnalysis: false
+          sentimentAnalysis: false,
         },
         riskAssessment: {
           enabled: false,
           scoringModel: {
             type: 'weighted',
             weights: {},
-            rules: []
+            rules: [],
           },
           riskCategories: [],
           thresholds: [],
-          autoPopulate: false
+          autoPopulate: false,
         },
         followUpSuggestions: {
           enabled: false,
           triggerConditions: [],
           suggestionRules: [],
-          maxSuggestions: 3
-        }
+          maxSuggestions: 3,
+        },
       },
       permissions: {
         read: ['admin', 'manager'],
@@ -320,8 +319,8 @@ export default function QuestionnairePage() {
         respond: ['all'],
         review: ['admin', 'manager'],
         approve: ['admin'],
-        analytics: ['admin']
-      }
+        analytics: ['admin'],
+      },
     },
   ];
 
@@ -403,8 +402,10 @@ export default function QuestionnairePage() {
 
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
 
-  return (
-    <DaisyBadge variant="outline" className={config.color} >{config.label}</DaisyBadge>
+    return (
+      <DaisyBadge variant="outline" className={config.color}>
+        {config.label}
+      </DaisyBadge>
     );
   };
 
@@ -424,7 +425,10 @@ export default function QuestionnairePage() {
         <DaisyCardBody className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
+            <DaisyButton
+              onClick={() => window.location.reload()}
+              className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]"
+            >
               Retry
             </DaisyButton>
           </div>
@@ -436,12 +440,16 @@ export default function QuestionnairePage() {
   if (showBuilder) {
     return (
       <QuestionnaireBuilder
-        questionnaire={editingQuestionnaire ? questionnaires.find(q => q.id === editingQuestionnaire) || null : null}
+        questionnaire={
+          editingQuestionnaire
+            ? questionnaires.find((q) => q.id === editingQuestionnaire) || null
+            : null
+        }
         onSave={() => setShowBuilder(false)}
         onCancel={() => setShowBuilder(false)}
       />
     );
-  };
+  }
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -453,7 +461,10 @@ export default function QuestionnairePage() {
             Create and manage dynamic questionnaires with AI assistance
           </p>
         </div>
-        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
+        <DaisyButton
+          onClick={handleCreateNew}
+          className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Create Questionnaire
         </DaisyButton>
@@ -463,16 +474,14 @@ export default function QuestionnairePage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Total Questionnaires
+            </DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
           </DaisyCardBody>
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-gray-900">
-              {stats.total}
-            </div>
-            <p className="text-xs text-gray-600">
-              Across all statuses
-            </p>
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <p className="text-xs text-gray-600">Across all statuses</p>
           </DaisyCardBody>
         </DaisyCard>
 
@@ -481,46 +490,40 @@ export default function QuestionnairePage() {
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Active</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </DaisyCardBody>
-          
+
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-green-600">
-              {stats.active}
-            </div>
-            <p className="text-xs text-gray-600">
-              Currently collecting responses
-            </p>
+            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+            <p className="text-xs text-gray-600">Currently collecting responses</p>
           </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Completion Rate
+            </DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
           </DaisyCardBody>
-          
+
           <DaisyCardBody>
             <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>
               {(stats.averageCompletion * 100).toFixed(1)}%
             </div>
-            <p className="text-xs text-gray-600">
-              Average across all questionnaires
-            </p>
+            <p className="text-xs text-gray-600">Average across all questionnaires</p>
           </DaisyCardBody>
         </DaisyCard>
 
         <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Responses</DaisyCardTitle>
+            <DaisyCardTitle className="text-sm font-medium text-gray-600">
+              Total Responses
+            </DaisyCardTitle>
             <BarChart3 className="h-4 w-4 text-[#191919]" />
           </DaisyCardBody>
-          
+
           <DaisyCardBody>
-            <div className="text-2xl font-bold text-[#191919]">
-              {stats.totalResponses}
-            </div>
-            <p className="text-xs text-gray-600">
-              All-time responses collected
-            </p>
+            <div className="text-2xl font-bold text-[#191919]">{stats.totalResponses}</div>
+            <p className="text-xs text-gray-600">All-time responses collected</p>
           </DaisyCardBody>
         </DaisyCard>
       </div>
@@ -533,7 +536,7 @@ export default function QuestionnairePage() {
             Manage your questionnaires and track completion rates
           </DaisyCardDescription>
         </DaisyCardBody>
-        
+
         <DaisyCardBody>
           <Table>
             <TableHeader>
@@ -557,7 +560,10 @@ export default function QuestionnairePage() {
                   </TableCell>
                   <TableCell>{getStatusBadge(questionnaire.status)}</TableCell>
                   <TableCell>
-                    <DaisyBadge variant="outline" className="bg-secondary/20 text-muted-foreground border-0">
+                    <DaisyBadge
+                      variant="outline"
+                      className="bg-secondary/20 text-muted-foreground border-0"
+                    >
                       {questionnaire.category.replace('_', ' ')}
                     </DaisyBadge>
                   </TableCell>
@@ -566,47 +572,63 @@ export default function QuestionnairePage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <DaisyProgress value={questionnaire.analytics.overview.completionRate * 100} className="w-16 bg-secondary/20 border border-border h-2" />
-                      <span className="text-sm text-gray-600">{(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%</span>
+                      <DaisyProgress
+                        value={questionnaire.analytics.overview.completionRate * 100}
+                        className="w-16 bg-secondary/20 border border-border h-2"
+                      />
+                      <span className="text-sm text-gray-600">
+                        {(questionnaire.analytics.overview.completionRate * 100).toFixed(0)}%
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <DaisyButton variant="ghost" className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20">
+                        <DaisyButton
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-gray-600 hover:text-gray-900 hover:bg-[#D8C3A5]/20"
+                        >
                           <MoreHorizontal className="h-4 w-4" />
                         </DaisyButton>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-white border border-gray-100 shadow-lg">
+                      <DropdownMenuContent
+                        align="end"
+                        className="bg-white border border-gray-100 shadow-lg"
+                      >
                         <DropdownMenuLabel className="text-gray-900">Actions</DropdownMenuLabel>
                         <DropdownMenuItem
                           onClick={() => handleEdit(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDuplicate(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
                           <Copy className="mr-2 h-4 w-4" />
                           Duplicate
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDistribute(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
                           <Send className="mr-2 h-4 w-4" />
                           Distribute
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleViewAnalytics(questionnaire)}
-                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium">
+                          className="hover:bg-[#D8C3A5]/20 text-gray-700 font-inter font-medium"
+                        >
                           <BarChart3 className="mr-2 h-4 w-4" />
                           Analytics
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-gray-100" />
                         <DropdownMenuItem
                           onClick={() => handleDelete(questionnaire.id)}
-                          className="text-red-600 hover:bg-red-50 font-inter font-medium">
+                          className="text-red-600 hover:bg-red-50 font-inter font-medium"
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
@@ -661,4 +683,4 @@ export default function QuestionnairePage() {
       </Dialog>
     </div>
   );
-} 
+}

@@ -59,7 +59,12 @@
       "Bash(npx @babel/parser:*)",
       "Bash(cat:*)",
       "Bash(npm ls:*)",
-      "Bash(npm outdated:*)"
+      "Bash(npm outdated:*)",
+      "Bash(npm update:*)",
+      "Bash(npm view:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }
