@@ -72,7 +72,8 @@ export default function AIInsightsPage() {
           id: '1',
           type: 'risk_prediction',
           title: 'Emerging Cybersecurity Risk',
-          description: 'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',
+          description:
+            'AI models predict a 35% increase in cybersecurity risks over the next quarter based on current threat patterns and system vulnerabilities.',
           confidence: 87,
           impact: 'high',
           category: 'Technology',
@@ -83,7 +84,8 @@ export default function AIInsightsPage() {
           id: '2',
           type: 'trend_analysis',
           title: 'Compliance Risk Trending Down',
-          description: 'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
+          description:
+            'Regulatory compliance risks have decreased by 22% this month due to improved documentation and process standardization.',
           confidence: 92,
           impact: 'medium',
           category: 'Compliance',
@@ -94,7 +96,8 @@ export default function AIInsightsPage() {
           id: '3',
           type: 'anomaly',
           title: 'Unusual Risk Pattern Detected',
-          description: 'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
+          description:
+            'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
           confidence: 78,
           impact: 'medium',
           category: 'Operational',
@@ -105,7 +108,8 @@ export default function AIInsightsPage() {
           id: '4',
           type: 'recommendation',
           title: 'Risk Assessment Optimization',
-          description: 'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
+          description:
+            'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
           confidence: 85,
           impact: 'high',
           category: 'Process',
@@ -113,7 +117,7 @@ export default function AIInsightsPage() {
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),
         },
       ];
-;
+
       const mockPredictive: PredictiveAnalysis = {
         riskScore: 73,
         trend: 'increasing',
@@ -125,8 +129,7 @@ export default function AIInsightsPage() {
           'Supply chain disruptions',
           'Technology infrastructure aging',
         ],
-      }
-;
+      };
       const mockRecommendations: RecommendationItem[] = [
         {
           id: '1',
@@ -169,17 +172,16 @@ export default function AIInsightsPage() {
           estimatedTime: '1-2 weeks',
         },
       ];
-;
+
       setInsights(mockInsights);
       setPredictiveAnalysis(mockPredictive);
       setRecommendations(mockRecommendations);
       setIsLoading(false);
-    }
-;
+    };
+
     const timer = setTimeout(generateMockData, 1500);
     return () => clearTimeout(timer);
   }, []);
-;
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
@@ -308,219 +310,220 @@ export default function AIInsightsPage() {
                   <p className="text-sm text-muted-foreground">Risk Score</p>
                   <DaisyProgress value={predictiveAnalysis.riskScore} className="mt-2" />
                 </div>
-                <div className="text-center">;
-                  <div className="flex items-center justify-center gap-2 mb-2">;
-                    {predictiveAnalysis.trend === 'increasing' ? (;
-                      <TrendingUp className="h-6 w-6 text-red-500";
-                    ) : predictiveAnalysis.trend === 'decreasing' ? (;
-                      <TrendingDown className="h-6 w-6 text-green-500";
-                    ) : (;
-                      <div className="h-6 w-6 bg-muted rounded-full";
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    {predictiveAnalysis.trend === 'increasing' ? (
+                      <TrendingUp className="h-6 w-6 text-red-500" />
+                    ) : predictiveAnalysis.trend === 'decreasing' ? (
+                      <TrendingDown className="h-6 w-6 text-green-500" />
+                    ) : (
+                      <div className="h-6 w-6 bg-muted rounded-full" />
                     )}
-                    <span className="text-lg font-semibold capitalize">;
+                    <span className="text-lg font-semibold capitalize">
                       {predictiveAnalysis.trend}
-                    </span>;
-                  </div>;
-                  <p className="text-sm text-muted-foreground">Trend Direction</p>;
-                </div>;
-                <div className="text-center">;
-                  <div className="text-lg font-semibold mb-2">{predictiveAnalysis.timeframe}</div>;
-                  <p className="text-sm text-muted-foreground">Forecast Period</p>;
-                </div>;
-              </div>;
-              <div className="mt-6">;
-                <h4 className="font-medium mb-3">Key Risk Factors</h4>;
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">;
-                  {predictiveAnalysis.factors.map((factor, index) => (;
-                    <div key={index} className="flex items-center gap-2 text-sm">;
-                      <div className="h-2 w-2 bg-primary rounded-full";
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Trend Direction</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold mb-2">{predictiveAnalysis.timeframe}</div>
+                  <p className="text-sm text-muted-foreground">Forecast Period</p>
+                </div>
+              </div>
+              <div className="mt-6">
+                <h4 className="font-medium mb-3">Key Risk Factors</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {predictiveAnalysis.factors.map((factor, index) => (
+                    <div key={index} className="flex items-center gap-2 text-sm">
+                      <div className="h-2 w-2 bg-primary rounded-full" />
                       {factor}
-                    </div>;
+                    </div>
                   ))}
-                </div>;
-              </div>;
-              <div className="mt-4 p-3 bg-muted rounded-lg">;
-                <p className="text-sm font-medium">{predictiveAnalysis.prediction}</p>;
-              </div>;
-            </DaisyCardBody>;
-          </DaisyCard>;
-        </motion.div>;
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-muted rounded-lg">
+                <p className="text-sm font-medium">{predictiveAnalysis.prediction}</p>
+              </div>
+            </DaisyCardBody>
+          </DaisyCard>
+        </motion.div>
       )}
 
-      <DaisyTabs defaultValue="insights" className="space-y-6">;
-        <motion.div;
+      <DaisyTabs defaultValue="insights" className="space-y-6">
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-        >;
-          <DaisyTabsList className="grid w-full grid-cols-3">;
-            <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>;
-            <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>;
-            <DaisyTabsTrigger value="analytics">Advanced Analytics</DaisyTabsTrigger>;
-          </DaisyTabsList>;
-        </motion.div>;
-        <DaisyTabsContent value="insights" className="space-y-4">;
-          <motion.div;
+        >
+          <DaisyTabsList className="grid w-full grid-cols-3">
+            <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
+            <DaisyTabsTrigger value="analytics">Advanced Analytics</DaisyTabsTrigger>
+          </DaisyTabsList>
+        </motion.div>
+        <DaisyTabsContent value="insights" className="space-y-4">
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-          >;
-            {insights.map((insight) => (;
-              <DaisyCard key={insight.id} className="hover:shadow-md transition-shadow">;
-                <DaisyCardBody className="p-6">;
-                  <div className="flex items-start gap-4">;
+          >
+            {insights.map((insight) => (
+              <DaisyCard key={insight.id} className="hover:shadow-md transition-shadow">
+                <DaisyCardBody className="p-6">
+                  <div className="flex items-start gap-4">
                     {getInsightIcon(insight.type)}
-                    <div className="flex-1">;
-                      <div className="flex items-center justify-between mb-2">;
-                        <h3 className="font-semibold">{insight.title}</h3>;
-                        <div className="flex items-center gap-2">;
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold">{insight.title}</h3>
+                        <div className="flex items-center gap-2">
                           {getImpactBadge(insight.impact)}
-                          <DaisyBadge variant="outline">;
-                            {insight.confidence}% confidence;
-                          </DaisyBadge>;
-                        </div>;
-                      </div>;
-                      <p className="text-muted-foreground mb-3">{insight.description}</p>;
-                      <div className="flex items-center justify-between">;
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">;
-                          <span>{insight.category}</span>;
-                          <span>•</span>;
-                          <span>{insight.createdAt.toLocaleString()}</span>;
-                        </div>;
-                        {insight.actionable && (;
-                          <DaisyButton size="sm" variant="outline">;
-                            <Target className="h-4 w-4 mr-2";
-                            Take Action;
-                          </DaisyButton>;
+                          <DaisyBadge variant="outline">
+                            {insight.confidence}% confidence
+                          </DaisyBadge>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground mb-3">{insight.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span>{insight.category}</span>
+                          <span>•</span>
+                          <span>{insight.createdAt.toLocaleString()}</span>
+                        </div>
+                        {insight.actionable && (
+                          <DaisyButton size="sm" variant="outline">
+                            <Target className="h-4 w-4 mr-2" />
+                            Take Action
+                          </DaisyButton>
                         )}
-                      </div>;
-                    </div>;
-                  </div>;
-                </DaisyCardBody>;
-              </DaisyCard>;
+                      </div>
+                    </div>
+                  </div>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
-          </motion.div>;
-        </DaisyTabsContent>;
-        <DaisyTabsContent value="recommendations" className="space-y-4">;
-          <motion.div;
+          </motion.div>
+        </DaisyTabsContent>
+        <DaisyTabsContent value="recommendations" className="space-y-4">
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-          >;
-            {recommendations.map((rec) => (;
-              <DaisyCard key={rec.id} className={`border-l-4 ${getPriorityColor(rec.priority)}`}>;
-                <DaisyCardBody className="p-6">;
-                  <div className="flex items-start justify-between mb-3">;
-                    <div>;
-                      <h3 className="font-semibold mb-1">{rec.title}</h3>;
-                      <p className="text-muted-foreground">{rec.description}</p>;
-                    </div>;
-                    <DaisyBadge variant="outline" className="capitalize">;
-                      {rec.priority} Priority;
-                    </DaisyBadge>;
-                  </div>;
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">;
-                    <div>;
-                      <span className="text-muted-foreground">Effort:</span>;
-                      <span className="ml-2 capitalize">{rec.effort}</span>;
-                    </div>;
-                    <div>;
-                      <span className="text-muted-foreground">Impact:</span>;
-                      <span className="ml-2 capitalize">{rec.impact}</span>;
-                    </div>;
-                    <div>;
-                      <span className="text-muted-foreground">Category:</span>;
-                      <span className="ml-2">{rec.category}</span>;
-                    </div>;
-                    <div>;
-                      <span className="text-muted-foreground">Timeline:</span>;
-                      <span className="ml-2">{rec.estimatedTime}</span>;
-                    </div>;
-                  </div>;
-                  <div className="flex justify-end mt-4">;
-                    <DaisyButton size="sm">Implement Recommendation</DaisyButton>;
-                  </div>;
-                </DaisyCardBody>;
-              </DaisyCard>;
+          >
+            {recommendations.map((rec) => (
+              <DaisyCard key={rec.id} className={`border-l-4 ${getPriorityColor(rec.priority)}`}>
+                <DaisyCardBody className="p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="font-semibold mb-1">{rec.title}</h3>
+                      <p className="text-muted-foreground">{rec.description}</p>
+                    </div>
+                    <DaisyBadge variant="outline" className="capitalize">
+                      {rec.priority} Priority
+                    </DaisyBadge>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Effort:</span>
+                      <span className="ml-2 capitalize">{rec.effort}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Impact:</span>
+                      <span className="ml-2 capitalize">{rec.impact}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Category:</span>
+                      <span className="ml-2">{rec.category}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Timeline:</span>
+                      <span className="ml-2">{rec.estimatedTime}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <DaisyButton size="sm">Implement Recommendation</DaisyButton>
+                  </div>
+                </DaisyCardBody>
+              </DaisyCard>
             ))}
-          </motion.div>;
-        </DaisyTabsContent>;
-        <DaisyTabsContent value="analytics" className="space-y-6">;
-          <motion.div;
+          </motion.div>
+        </DaisyTabsContent>
+        <DaisyTabsContent value="analytics" className="space-y-6">
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6";
-            <DaisyCard>;
-              <DaisyCardBody>;
-                <DaisyCardTitle className="flex items-center gap-2">;
-                  <Shield className="h-5 w-5";
-                  Risk Correlation Matrix;
-                </DaisyCardTitle>;
-              </DaisyCardBody>;
-              <DaisyCardBody>;
-                <p className="text-muted-foreground mb-4">;
-                  AI-identified correlations between different risk categories;
-                </p>;
-                <div className="space-y-3">;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">Cyber ↔ Operational</span>;
-                    <div className="flex items-center gap-2">;
-                      <DaisyProgress value={78} className="w-20";
-                      <span className="text-sm">78%</span>;
-                    </div>;
-                  </div>;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">Financial ↔ Compliance</span>;
-                    <div className="flex items-center gap-2">;
-                      <DaisyProgress value={65} className="w-20";
-                      <span className="text-sm">65%</span>;
-                    </div>;
-                  </div>;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">Strategic ↔ Operational</span>;
-                    <div className="flex items-center gap-2">;
-                      <DaisyProgress value={52} className="w-20";
-                      <span className="text-sm">52%</span>;
-                    </div>;
-                  </div>;
-                </div>;
-              </DaisyCardBody>;
-            </DaisyCard>;
-            <DaisyCard>;
-              <DaisyCardBody>;
-                <DaisyCardTitle className="flex items-center gap-2">;
-                  <Users className="h-5 w-5";
-                  Department Risk Profiles;
-                </DaisyCardTitle>;
-              </DaisyCardBody>;
-              <DaisyCardBody>;
-                <p className="text-muted-foreground mb-4">;
-                  Risk distribution and patterns across departments;
-                </p>;
-                <div className="space-y-3">;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">IT Department</span>;
-                    <DaisyBadge variant="error">High Risk</DaisyBadge>;
-                  </div>;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">Finance</span>;
-                    <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>;
-                  </div>;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">HR</span>;
-                    <DaisyBadge variant="outline">Low Risk</DaisyBadge>;
-                  </div>;
-                  <div className="flex justify-between items-center">;
-                    <span className="text-sm">Operations</span>;
-                    <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>;
-                  </div>;
-                </div>;
-              </DaisyCardBody>;
-            </DaisyCard>;
-          </motion.div>;
-        </DaisyTabsContent>;
-      </DaisyTabs>;
-    </motion.div>;
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <DaisyCard>
+              <DaisyCardBody>
+                <DaisyCardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Risk Correlation Matrix
+                </DaisyCardTitle>
+              </DaisyCardBody>
+              <DaisyCardBody>
+                <p className="text-muted-foreground mb-4">
+                  AI-identified correlations between different risk categories
+                </p>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Cyber ↔ Operational</span>
+                    <div className="flex items-center gap-2">
+                      <DaisyProgress value={78} className="w-20" />
+                      <span className="text-sm">78%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Financial ↔ Compliance</span>
+                    <div className="flex items-center gap-2">
+                      <DaisyProgress value={65} className="w-20" />
+                      <span className="text-sm">65%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Strategic ↔ Operational</span>
+                    <div className="flex items-center gap-2">
+                      <DaisyProgress value={52} className="w-20" />
+                      <span className="text-sm">52%</span>
+                    </div>
+                  </div>
+                </div>
+              </DaisyCardBody>
+            </DaisyCard>
+            <DaisyCard>
+              <DaisyCardBody>
+                <DaisyCardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Department Risk Profiles
+                </DaisyCardTitle>
+              </DaisyCardBody>
+              <DaisyCardBody>
+                <p className="text-muted-foreground mb-4">
+                  Risk distribution and patterns across departments
+                </p>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">IT Department</span>
+                    <DaisyBadge variant="error">High Risk</DaisyBadge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Finance</span>
+                    <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">HR</span>
+                    <DaisyBadge variant="outline">Low Risk</DaisyBadge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Operations</span>
+                    <DaisyBadge variant="secondary">Medium Risk</DaisyBadge>
+                  </div>
+                </div>
+              </DaisyCardBody>
+            </DaisyCard>
+          </motion.div>
+        </DaisyTabsContent>
+      </DaisyTabs>
+    </motion.div>
   );
 }
