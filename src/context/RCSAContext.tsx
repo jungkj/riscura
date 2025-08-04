@@ -703,7 +703,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       // Check if user is authenticated before loading data
-      const _token = localStorage.getItem('auth-token');
+      const token = localStorage.getItem('auth-token');
       const sessionToken = sessionStorage.getItem('auth-token');
 
       if (!token && !sessionToken) {

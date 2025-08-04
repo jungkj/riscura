@@ -251,7 +251,7 @@ export const createMockRequest = (
 };
 
 export const createMockResponse = (
-  _data: any = {},
+  data: any = {},
   status = 200,
   headers: Record<string, string> = {}
 ): NextResponse => {
@@ -293,6 +293,7 @@ export const createMockPrismaClient = () => {
       findFirst: jest.fn(),
       findMany: jest.fn(),
       create: jest.fn(),
+      createMany: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
       count: jest.fn(),
@@ -360,6 +361,18 @@ export const createMockPrismaClient = () => {
     aIUsageLog: {
       count: jest.fn(),
       create: jest.fn(),
+    },
+    controlRiskMapping: {
+      findMany: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      count: jest.fn(),
+    },
+    activity: {
+      findMany: jest.fn(),
+      create: jest.fn(),
+      count: jest.fn(),
     },
     $disconnect: jest.fn(),
     $transaction: jest.fn(),

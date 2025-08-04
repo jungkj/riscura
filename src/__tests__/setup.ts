@@ -2,11 +2,12 @@ import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
 // Mock DOM APIs
-(global as any).TextDecoder = TextDecoder(global as any).TextEncoder = TextEncoder;
+(global as any).TextDecoder = TextDecoder;
+(global as any).TextEncoder = TextEncoder;
 
 // Add Request and Response polyfills for Next.js server components
 if (typeof globalThis.Request === 'undefined') {
-  globalThis.Request = class Request {
+  globalThis.Request = class {
     constructor(
       public url: string,
       public init?: RequestInit
@@ -135,7 +136,7 @@ afterAll(() => {
 
 // Global test utilities
 global.testUtils = {
-  mockApiResponse: (_data: any, status = 200) => ({
+  mockApiResponse: (data: any, status = 200) => ({
     json: () => Promise.resolve(data),
     status,
     ok: status < 400,
@@ -171,7 +172,7 @@ declare global {
   }
 
   var testUtils: {
-    mockApiResponse: (_data: any, status?: number) => any;
+    mockApiResponse: (data: any, status?: number) => any;
     createMockUser: (overrides?: any) => any;
     createMockOrganization: (overrides?: any) => any;
   };

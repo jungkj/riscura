@@ -101,9 +101,9 @@ export const GET = withApiMiddleware(
         });
       } catch (relationError) {
         // console.warn(
-          '[Risks API] Error fetching relationships, returning basic data:',
-          relationError
-        )
+        //   '[Risks API] Error fetching relationships, returning basic data:',
+        //   relationError
+        // )
         // If relationships fail, return basic risk data with pagination
         return NextResponse.json({
           success: true,

@@ -143,7 +143,7 @@ export class RCSAApiClient {
     return this.request<Risk>(`/risks/${id}`);
   }
 
-  async createRisk(_risk: CreateRiskRequest): Promise<ApiResponse<Risk>> {
+  async createRisk(risk: CreateRiskRequest): Promise<ApiResponse<Risk>> {
     return this.request<Risk>('/risks', {
       method: 'POST',
       body: JSON.stringify(risk),

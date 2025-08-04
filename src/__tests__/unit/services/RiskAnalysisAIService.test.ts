@@ -1,7 +1,7 @@
-// import { RiskAnalysisAIService } from '@/services/RiskAnalysisAIService'
-// import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client'
-// import { RiskFactory } from '../../factories/risk-factory'
-// import { Risk as AppRisk } from '@/types'
+import { RiskAnalysisAIService } from '@/services/RiskAnalysisAIService';
+import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client';
+import { RiskFactory } from '../../factories/risk-factory';
+import { Risk as AppRisk } from '@/types';
 
 describe('RiskAnalysisAIService', () => {
   let service: RiskAnalysisAIService;

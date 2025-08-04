@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { NextRequest } from 'next/server';
-// import {
+import {
   createMockRequest,
   createMockPrismaClient,
   createTestUser,
@@ -15,10 +15,10 @@ import { NextRequest } from 'next/server';
   measureExecutionTime,
   expectPerformance,
   type MockPrismaClient,
-} from '../../utils/test-helpers'
+} from '../../utils/test-helpers';
 
 // Mock the database
-const mockPrisma = createMockPrismaClient()
+const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
     client: mockPrisma,
@@ -30,7 +30,7 @@ const mockBillingManager = {
   getActiveSubscription: jest.fn(),
   getSubscriptionPlans: jest.fn(),
   trackUsage: jest.fn(),
-}
+};
 
 jest.mock('@/lib/billing/manager', () => ({
   billingManager: mockBillingManager,
@@ -49,7 +49,7 @@ describe('API Performance Tests', () => {
       id: 'sub-123',
       status: 'active',
       organizationId: testUser.organizationId,
-    })
+    });
 
     jest.clearAllMocks();
   });
@@ -67,7 +67,7 @@ describe('API Performance Tests', () => {
       // Mock large dataset
       const mockRisks = Array.from({ length: 100 }, (_, i) =>
         createTestRisk({ id: `risk-${i}`, title: `Risk ${i}` })
-      )
+      );
 
       mockPrisma.risk.findMany.mockResolvedValue(mockRisks);
       mockPrisma.risk.count.mockResolvedValue(100);
@@ -88,7 +88,7 @@ describe('API Performance Tests', () => {
       expect(data.data).toHaveLength(100);
 
       // API should respond within 500ms for 100 records
-      expectPerformance(duration, 500)
+      expectPerformance(duration, 500);
     });
 
     it('should create risk within performance threshold', async () => {
@@ -118,14 +118,14 @@ describe('API Performance Tests', () => {
       expect(data.data).toHaveProperty('id');
 
       // Risk creation should complete within 200ms
-      expectPerformance(duration, 200)
+      expectPerformance(duration, 200);
     });
 
     it('should handle bulk risk operations efficiently', async () => {
       // Mock creating 10 risks at once
       const bulkRisks = Array.from({ length: 10 }, (_, i) =>
         createTestRisk({ id: `bulk-risk-${i}`, title: `Bulk Risk ${i}` })
-      )
+      );
 
       mockPrisma.risk.createMany.mockResolvedValue({ count: 10 });
       mockPrisma.risk.findMany.mockResolvedValue(bulkRisks);
@@ -138,7 +138,7 @@ describe('API Performance Tests', () => {
           likelihood: risk.likelihood,
           impact: risk.impact,
         })),
-      }
+      };
 
       const request = createMockRequest('POST', 'http://localhost:3000/api/risks/bulk', {
         user: testUser,
@@ -155,14 +155,14 @@ describe('API Performance Tests', () => {
             }),
             { status: 201 }
           )
-        )
+        );
         return response;
       }, 'Bulk Risk Creation');
 
       expect(result.status).toBe(201);
 
       // Bulk operations should complete within 1 second
-      expectPerformance(duration, 1000)
+      expectPerformance(duration, 1000);
     });
   });
 
@@ -174,7 +174,7 @@ describe('API Performance Tests', () => {
     it('should load control matrix within performance threshold', async () => {
       const mockControls = Array.from({ length: 50 }, (_, i) =>
         createTestControl({ id: `control-${i}`, title: `Control ${i}` })
-      )
+      );
 
       mockPrisma.control.findMany.mockResolvedValue(mockControls);
       mockPrisma.control.count.mockResolvedValue(50);
@@ -195,7 +195,7 @@ describe('API Performance Tests', () => {
       expect(data.data).toHaveLength(50);
 
       // Control matrix should load within 400ms
-      expectPerformance(duration, 400)
+      expectPerformance(duration, 400);
     });
 
     it('should handle control-risk mapping efficiently', async () => {
@@ -222,7 +222,7 @@ describe('API Performance Tests', () => {
       expect(response.status).toBe(200);
 
       // Mapping queries should complete within 300ms
-      expectPerformance(duration, 300)
+      expectPerformance(duration, 300);
     });
   });
 
@@ -251,7 +251,7 @@ describe('API Performance Tests', () => {
           description: `Activity ${i}`,
           createdAt: new Date(),
         })),
-      }
+      };
 
       mockPrisma.risk.count.mockResolvedValue(100);
       mockPrisma.control.count.mockResolvedValue(150);
@@ -273,7 +273,7 @@ describe('API Performance Tests', () => {
       expect(data.data).toHaveProperty('riskMetrics');
 
       // Dashboard should load within 600ms (multiple aggregations)
-      expectPerformance(duration, 600)
+      expectPerformance(duration, 600);
     });
 
     it('should handle real-time analytics efficiently', async () => {
@@ -286,7 +286,7 @@ describe('API Performance Tests', () => {
           average: 0.85,
           trend: 'increasing',
         },
-      }
+      };
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/analytics/real-time', {
         user: testUser,
@@ -294,7 +294,7 @@ describe('API Performance Tests', () => {
 
       const { result, duration } = await measureExecutionTime(async () => {
         // Simulate analytics calculation
-        await new Promise((resolve) => setTimeout(resolve, 50))
+        await new Promise((resolve) => setTimeout(resolve, 50));
         return new Response(
           JSON.stringify({
             success: true,
@@ -307,7 +307,7 @@ describe('API Performance Tests', () => {
       expect(result.status).toBe(200);
 
       // Real-time analytics should complete within 300ms
-      expectPerformance(duration, 300)
+      expectPerformance(duration, 300);
     });
   });
 
@@ -329,10 +329,10 @@ describe('API Performance Tests', () => {
           name: `Security Document ${i}.pdf`,
           type: 'application/pdf',
         })),
-      }
+      };
 
       // Mock search queries
-      mockPrisma.risk.findMany.mockResolvedValue(mockSearchResults.risks)
+      mockPrisma.risk.findMany.mockResolvedValue(mockSearchResults.risks);
       mockPrisma.control.findMany.mockResolvedValue(mockSearchResults.controls);
       mockPrisma.document.findMany.mockResolvedValue(mockSearchResults.documents);
 
@@ -353,7 +353,7 @@ describe('API Performance Tests', () => {
             },
           }),
           { status: 200 }
-        )
+        );
       }, 'Full-text Search');
 
       const response = result;
@@ -363,7 +363,7 @@ describe('API Performance Tests', () => {
       expect(data.data.total).toBe(30);
 
       // Search should complete within 500ms
-      expectPerformance(duration, 500)
+      expectPerformance(duration, 500);
     });
 
     it('should handle complex filtering efficiently', async () => {
@@ -375,7 +375,7 @@ describe('API Performance Tests', () => {
           end: '2024-12-31',
         },
         tags: ['compliance', 'security'],
-      }
+      };
 
       const mockFilteredResults = Array.from({ length: 25 }, (_, i) =>
         createTestRisk({
@@ -411,7 +411,7 @@ describe('API Performance Tests', () => {
       expect(data.data).toHaveLength(25);
 
       // Complex filtering should complete within 400ms
-      expectPerformance(duration, 400)
+      expectPerformance(duration, 400);
     });
   });
 
@@ -427,7 +427,7 @@ describe('API Performance Tests', () => {
         status: 'active',
         planId: 'plan-pro',
         organizationId: testUser.organizationId,
-      })
+      });
 
       mockBillingManager.getSubscriptionPlans.mockResolvedValue([
         {
@@ -439,7 +439,7 @@ describe('API Performance Tests', () => {
       ]);
 
       // Mock current usage
-      mockPrisma.risk.count.mockResolvedValue(100)
+      mockPrisma.risk.count.mockResolvedValue(100);
       mockPrisma.user.count.mockResolvedValue(10);
 
       const request = createMockRequest('POST', 'http://localhost:3000/api/risks', {
@@ -451,13 +451,13 @@ describe('API Performance Tests', () => {
         // Simulate subscription enforcement middleware
         const subscription = await mockBillingManager.getActiveSubscription(
           testUser.organizationId
-        )
+        );
         const plans = await mockBillingManager.getSubscriptionPlans();
         const currentRiskCount = await mockPrisma.risk.count();
 
         // Check limits
         if (currentRiskCount >= 500) {
-          throw new Error('Limit exceeded')
+          throw new Error('Limit exceeded');
         }
 
         return new Response(
@@ -472,7 +472,7 @@ describe('API Performance Tests', () => {
       expect(result.status).toBe(200);
 
       // Subscription checks should complete within 100ms
-      expectPerformance(duration, 100)
+      expectPerformance(duration, 100);
     });
 
     it('should track usage efficiently', async () => {
@@ -496,7 +496,7 @@ describe('API Performance Tests', () => {
       expect(result.status).toBe(200);
 
       // Usage tracking should complete within 50ms
-      expectPerformance(duration, 50)
+      expectPerformance(duration, 50);
     });
   });
 
@@ -506,14 +506,14 @@ describe('API Performance Tests', () => {
 
   describe('Stress Tests', () => {
     it('should handle concurrent requests efficiently', async () => {
-      const concurrentRequests = 10
+      const concurrentRequests = 10;
       const requests = Array.from({ length: concurrentRequests }, (_, i) =>
         createMockRequest('GET', `http://localhost:3000/api/risks/${i}`, { user: testUser })
       );
 
       // Mock individual risk responses
       mockPrisma.risk.findUnique.mockImplementation((args) => {
-        const id = args.where.id
+        const id = args.where.id;
         return Promise.resolve(createTestRisk({ id, title: `Risk ${id}` }));
       });
 
@@ -521,7 +521,7 @@ describe('API Performance Tests', () => {
         const responses = await Promise.all(
           requests.map(async (request, i) => {
             // Simulate individual risk fetching
-            const risk = await mockPrisma.risk.findUnique({ where: { id: i.toString() } })
+            const risk = await mockPrisma.risk.findUnique({ where: { id: i.toString() } });
             return new Response(
               JSON.stringify({
                 success: true,
@@ -540,7 +540,7 @@ describe('API Performance Tests', () => {
       });
 
       // 10 concurrent requests should complete within 800ms
-      expectPerformance(duration, 800)
+      expectPerformance(duration, 800);
     });
 
     it('should handle large payload processing', async () => {
@@ -552,7 +552,7 @@ describe('API Performance Tests', () => {
           likelihood: (i % 5) + 1,
           impact: (i % 5) + 1,
         })),
-      }
+      };
 
       const request = createMockRequest('POST', 'http://localhost:3000/api/risks/bulk-import', {
         user: testUser,
@@ -561,7 +561,7 @@ describe('API Performance Tests', () => {
 
       const { result, duration } = await measureExecutionTime(async () => {
         // Simulate bulk processing
-        const processedCount = largeBulkData.risks.length
+        const processedCount = largeBulkData.risks.length;
 
         return new Response(
           JSON.stringify({
@@ -582,7 +582,7 @@ describe('API Performance Tests', () => {
       expect(data.data.processed).toBe(100);
 
       // Large payload processing should complete within 2 seconds
-      expectPerformance(duration, 2000)
+      expectPerformance(duration, 2000);
     });
   });
 });

@@ -16,7 +16,7 @@ import type {
 export class BillingManager {
   // Organization Subscription Queries
   async getOrganizationSubscription(
-    _organizationId: string
+    organizationId: string
   ): Promise<OrganizationSubscription | null> {
     const subscription = await db.client.organizationSubscription.findFirst({
       where: { organizationId },

@@ -1,4 +1,4 @@
-// import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client'
+import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client';
 
 export interface CreateRiskOptions {
   id?: string;
@@ -22,7 +22,7 @@ export interface CreateRiskOptions {
 export class RiskFactory {
   private static counter = 1;
 
-  static create(_options: CreateRiskOptions = {}): Risk {
+  static create(options: CreateRiskOptions = {}): Risk {
     const id = options.id || `risk-${this.counter++}`;
     const likelihood = options.likelihood || Math.floor(Math.random() * 5) + 1;
     const impact = options.impact || Math.floor(Math.random() * 5) + 1;

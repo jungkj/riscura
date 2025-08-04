@@ -14,7 +14,11 @@ const customJestConfig = {
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
     '<rootDir>/cypress/',
-    '<rootDir>/src/__tests__/e2e/'
+    '<rootDir>/src/__tests__/e2e/',
+    '<rootDir>/src/__tests__/integration/api-integration.test.ts',
+    '<rootDir>/src/__tests__/integration/user-workflows.test.ts',
+    '<rootDir>/src/__tests__/integration/file-operations.test.ts',
+    '<rootDir>/src/__tests__/integration/performance/'
   ],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',

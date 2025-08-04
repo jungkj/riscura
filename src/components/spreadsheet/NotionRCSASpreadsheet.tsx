@@ -123,6 +123,28 @@ export const NotionRCSASpreadsheet = () => {
     }
   };
 
+  // Filter rows based on search
+  const filterRows = (rows: EntityRow[], query: string): EntityRow[] => {
+    return rows.reduce((filtered, row) => {
+      const matchesQuery =
+        (row.type === 'risk' && (row.data as Risk).title.toLowerCase().includes(query)) ||
+        (row.type === 'control' && (row.data as Control).title.toLowerCase().includes(query)) ||
+        (row.type === 'testScript' && (row.data as TestScript).title.toLowerCase().includes(query));
+
+      const filteredChildren = row.children ? filterRows(row.children, query) : [];
+
+      if (matchesQuery || filteredChildren.length > 0) {
+        filtered.push({
+          ...row,
+          children: filteredChildren,
+          isExpanded: filteredChildren.length > 0, // Auto-expand if children match
+        });
+      }
+
+      return filtered;
+    }, [] as EntityRow[]);
+  };
+
   // Build hierarchical data structure
   const rows = useMemo(() => {
     const rowsMap = new Map<string, EntityRow>();
@@ -214,28 +236,6 @@ export const NotionRCSASpreadsheet = () => {
     estimateSize: () => 52,
     overscan: 10,
   });
-
-  // Filter rows based on search
-  const filterRows = (rows: EntityRow[], query: string): EntityRow[] => {
-    return rows.reduce((filtered, row) => {
-      const matchesQuery =
-        (row.type === 'risk' && (row.data as Risk).title.toLowerCase().includes(query)) ||
-        (row.type === 'control' && (row.data as Control).title.toLowerCase().includes(query)) ||
-        (row.type === 'testScript' && (row.data as TestScript).title.toLowerCase().includes(query));
-
-      const filteredChildren = row.children ? filterRows(row.children, query) : [];
-
-      if (matchesQuery || filteredChildren.length > 0) {
-        filtered.push({
-          ...row,
-          children: filteredChildren,
-          isExpanded: filteredChildren.length > 0, // Auto-expand if children match
-        });
-      }
-
-      return filtered;
-    }, [] as EntityRow[]);
-  };
 
   // Column definitions
   const columns: Column[] = [

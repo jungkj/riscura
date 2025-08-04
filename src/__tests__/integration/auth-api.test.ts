@@ -141,7 +141,7 @@ describe('Authentication Integration Tests', () => {
       } as Response);
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks();
+      const result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Authentication required');
@@ -163,7 +163,7 @@ describe('Authentication Integration Tests', () => {
       } as Response);
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks();
+      const result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Insufficient permissions');
@@ -180,7 +180,7 @@ describe('Authentication Integration Tests', () => {
       mockFetch.mockRejectedValue(new Error('Network error'));
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks();
+      const result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Network error');

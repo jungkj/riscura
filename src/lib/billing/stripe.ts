@@ -480,9 +480,9 @@ export class StripeService {
     });
 
     // console.log('Subscription canceled:', {
-      stripeSubscriptionId: subscription.id,
-      organizationId,
-    })
+    //   stripeSubscriptionId: subscription.id,
+    //   organizationId,
+    // })
 
     // Send notification
     await notificationManager.sendNotification({
@@ -524,10 +524,10 @@ export class StripeService {
     })
 
     // console.log('Payment succeeded:', {
-      stripeInvoiceId: invoice.id,
-      organizationId: organization.id,
-      amount: invoice.amount_paid,
-    })
+    //   stripeInvoiceId: invoice.id,
+    //   organizationId: organization.id,
+    //   amount: invoice.amount_paid,
+    // })
 
     // Send notification
     await notificationManager.sendNotification({
