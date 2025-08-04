@@ -496,6 +496,7 @@ export default function QuestionnairePage() {
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Completion Rate</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-[#191919]" />
+          </DaisyCardBody>
           
           <DaisyCardBody>
             <div className={`text-2xl font-bold ${getCompletionColor(stats.averageCompletion)}`}>

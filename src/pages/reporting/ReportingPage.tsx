@@ -366,7 +366,6 @@ export default function ReportingPage() {
               </DaisyCardBody>
               <DaisyCardBody className="space-y-4">
                 <div className="space-y-2">
-</DaisyCardBody>
                   <DaisyLabel>Report Title</DaisyLabel>
                   <input
                     type="text"
@@ -378,11 +377,12 @@ export default function ReportingPage() {
                 
                 <div className="space-y-2">
                   <DaisyLabel>Report Type</DaisyLabel>
-                  <DaisySelect defaultValue="executive" />
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select type" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="executive">Executive Summary</DaisySelectContent>
+                  <DaisySelect defaultValue="executive">
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select type" />
+                    </DaisySelectTrigger>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="executive">Executive Summary</DaisySelectItem>
                       <DaisySelectItem value="detailed">Detailed Analysis</DaisySelectItem>
                       <DaisySelectItem value="compliance">Compliance Report</DaisySelectItem>
                     </DaisySelectContent>
@@ -393,11 +393,12 @@ export default function ReportingPage() {
                   <DaisyLabel>Time Period</DaisyLabel>
                   <DaisySelect 
                     defaultValue={reportPeriod}
-                    onValueChange={setReportPeriod} />
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select period" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="monthly">Last Month</DaisySelectContent>
+                    onValueChange={setReportPeriod}>
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select period" />
+                    </DaisySelectTrigger>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="monthly">Last Month</DaisySelectItem>
                       <DaisySelectItem value="quarterly">Last Quarter</DaisySelectItem>
                       <DaisySelectItem value="yearly">Last Year</DaisySelectItem>
                       <DaisySelectItem value="custom">Custom Range</DaisySelectItem>
@@ -433,11 +434,12 @@ export default function ReportingPage() {
                 
                 <div className="space-y-2">
                   <DaisyLabel>Risk Categories</DaisyLabel>
-                  <DaisySelect defaultValue="all" />
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select categories" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="all">All Categories</DaisySelectContent>
+                  <DaisySelect defaultValue="all">
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select categories" />
+                    </DaisySelectTrigger>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="all">All Categories</DaisySelectItem>
                       <DaisySelectItem value="operational">Operational</DaisySelectItem>
                       <DaisySelectItem value="financial">Financial</DaisySelectItem>
                       <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
@@ -448,7 +450,7 @@ export default function ReportingPage() {
                 </div>
                 
                 <div className="pt-4">
-                  <DaisyButton className="w-full" onClick={() => handleGenerateReport()} disabled={isGenerating} />
+                  <DaisyButton className="w-full" onClick={() => handleGenerateReport()} disabled={isGenerating}>
                     {isGenerating ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -464,15 +466,14 @@ export default function ReportingPage() {
           </div>
         </DaisyTabsContent>
         
-        <DaisyTabsContent value="library" className="space-y-6" />
+        <DaisyTabsContent value="library" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Saved Reports</h2>
             <div className="flex gap-2">
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="outline" size="sm" >
-  <Filter className="h-4 w-4 mr-2" />
-</DaisyTabsContent>
+              <DaisyDropdownMenu>
+                <DaisyDropdownMenuTrigger asChild>
+                  <DaisyButton variant="outline" size="sm">
+                    <Filter className="h-4 w-4 mr-2" />
                     Filter
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>

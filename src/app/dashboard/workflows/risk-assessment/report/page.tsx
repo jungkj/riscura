@@ -199,16 +199,13 @@ export default function GenerateRiskReportPage() {
                       {loading ? '...' : stats.totalRisks}
                     </p>
                   </div>
-                  <DaisyAlertTriangle className="h-8 w-8 text-orange-400" >
-  </div>
-</DaisyAlertTriangle>
+                  <DaisyAlertTriangle className="h-8 w-8 text-orange-400" />
+                </div>
               </DaisyCardBody>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">High/Critical</p>
