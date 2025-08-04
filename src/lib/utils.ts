@@ -67,23 +67,21 @@ export const hasPermission = (userPermissions: string[], requiredPermission: str
   if (userPermissions.includes('*')) return true;
   return userPermissions.includes(requiredPermission);
 }
-;
-export const hasAnyPermission = (;
-  userPermissions: string[],;
-  requiredPermissions: string[];
+export const hasAnyPermission = (
+  userPermissions: string[],
+  requiredPermissions: string[]
 ): boolean => {
   if (userPermissions.includes('*')) return true;
   return requiredPermissions.some((permission) => userPermissions.includes(permission));
-}
-;
-export const hasAllPermissions = (;
-  userPermissions: string[],;
-  requiredPermissions: string[];
+};
+
+export const hasAllPermissions = (
+  userPermissions: string[],
+  requiredPermissions: string[]
 ): boolean => {
   if (userPermissions.includes('*')) return true;
   return requiredPermissions.every((permission) => userPermissions.includes(permission));
-}
-;
+};
 // String utilities
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;

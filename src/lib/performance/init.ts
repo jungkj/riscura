@@ -142,7 +142,7 @@ const initializeMemoryManagement = () => {
 /**
  * Initialize background task optimization
  */
-const initializeBackgroundTasks = () {
+const initializeBackgroundTasks = () => {
   // Set up Web Workers for background tasks if available
   if (typeof Worker !== 'undefined') {
     // console.log('Background task optimization initialized with Web Workers')
