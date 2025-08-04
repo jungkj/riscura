@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import {
+// import {
   Questionnaire,
   Question,
   Response,
@@ -19,47 +19,44 @@ interface QuestionnaireContextType extends QuestionnaireState {
   getQuestionnaire: (id: string) => Questionnaire | null;
 
   // Question Management
-  addQuestion: (questionnaireId: string, question: Omit<Question, 'id'>) => Promise<Question>;
-  updateQuestion: (
-    questionnaireId: string,
+  addQuestion: (_questionnaireId: string, question: Omit<Question, 'id'>) => Promise<Question>;
+  updateQuestion: (_questionnaireId: string,
     questionId: string,
     data: Partial<Question>
   ) => Promise<Question>;
-  deleteQuestion: (questionnaireId: string, questionId: string) => Promise<void>;
-  reorderQuestions: (questionnaireId: string, questionIds: string[]) => Promise<void>;
+  deleteQuestion: (_questionnaireId: string, questionId: string) => Promise<void>;
+  reorderQuestions: (_questionnaireId: string, questionIds: string[]) => Promise<void>;
 
   // AI Question Generation
   generateQuestionsForRisk: (riskCategory: RiskCategory, count?: number) => Promise<Question[]>;
   generateQuestionsForControl: (controlType: string, count?: number) => Promise<Question[]>;
 
   // Response Management
-  submitResponse: (
-    questionnaireId: string,
+  submitResponse: (_questionnaireId: string,
     responses: Omit<Response, 'id' | 'createdAt'>[]
   ) => Promise<void>;
   updateResponse: (responseId: string, data: Partial<Response>) => Promise<Response>;
-  getResponses: (questionnaireId: string, userId?: string) => Response[];
+  getResponses: (_questionnaireId: string, userId?: string) => Response[];
 
   // Analytics
-  getQuestionnaireAnalytics: (questionnaireId: string) => QuestionnaireAnalytics | null;
+  getQuestionnaireAnalytics: (_questionnaireId: string) => QuestionnaireAnalytics | null;
   getCompletionStats: () => { total: number; completed: number; pending: number; overdue: number };
-  getResponseTrends: (questionnaireId: string) => { date: string; responses: number }[];
+  getResponseTrends: (_questionnaireId: string) => { date: string; responses: number }[];
 
   // Distribution
-  distributeQuestionnaire: (questionnaireId: string, userIds: string[]) => Promise<void>;
-  sendReminders: (questionnaireId: string) => Promise<void>;
+  distributeQuestionnaire: (_questionnaireId: string, userIds: string[]) => Promise<void>;
+  sendReminders: (_questionnaireId: string) => Promise<void>;
 
   // Conditional Logic
   evaluateConditions: (question: Question, responses: Response[]) => boolean;
-  getNextQuestion: (
-    questionnaireId: string,
+  getNextQuestion: (_questionnaireId: string,
     currentQuestionId: string,
     responses: Response[]
   ) => Question | null;
 
   // Utility
-  duplicateQuestionnaire: (questionnaireId: string, newTitle: string) => Promise<Questionnaire>;
-  exportResponses: (questionnaireId: string, format: 'csv' | 'excel') => Promise<void>;
+  duplicateQuestionnaire: (_questionnaireId: string, newTitle: string) => Promise<Questionnaire>;
+  exportResponses: (_questionnaireId: string, format: 'csv' | 'excel') => Promise<void>;
 
   // Error handling
   clearError: () => void;
@@ -444,7 +441,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Question Management
-  const addQuestion = async (questionnaireId: string, question: Omit<Question, 'id'>) => {
+  const addQuestion = async (_questionnaireId: string, question: Omit<Question, 'id'>) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
@@ -462,8 +459,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return newQuestion;
   };
 
-  const updateQuestion = async (
-    questionnaireId: string,
+  const updateQuestion = async (_questionnaireId: string,
     questionId: string,
     data: Partial<Question>
   ) => {
@@ -483,7 +479,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return updatedQuestions.find((q) => q.id === questionId)!;
   };
 
-  const deleteQuestion = async (questionnaireId: string, questionId: string) => {
+  const deleteQuestion = async (_questionnaireId: string, questionId: string) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
@@ -496,7 +492,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
   };
 
-  const reorderQuestions = async (questionnaireId: string, questionIds: string[]) => {
+  const reorderQuestions = async (_questionnaireId: string, questionIds: string[]) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) throw new Error('Questionnaire not found');
 
@@ -555,7 +551,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return updatedResponse;
   };
 
-  const getResponses = (questionnaireId: string, userId?: string) => {
+  const getResponses = (_questionnaireId: string, userId?: string) => {
     const questionnaire = getQuestionnaire(questionnaireId);
     if (!questionnaire) return [];
 
@@ -571,7 +567,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Analytics
-  const getQuestionnaireAnalytics = (questionnaireId: string) => {
+  const getQuestionnaireAnalytics = (_questionnaireId: string) => {
     return state.analytics[questionnaireId] || null;
   };
 
@@ -586,18 +582,18 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return { total, completed, pending, overdue };
   };
 
-  const getResponseTrends = (questionnaireId: string) => {
+  const getResponseTrends = (_questionnaireId: string) => {
     const analytics = getQuestionnaireAnalytics(questionnaireId);
     return analytics?.trends || [];
   };
 
   // Distribution
-  const distributeQuestionnaire = async (questionnaireId: string, userIds: string[]) => {
+  const distributeQuestionnaire = async (_questionnaireId: string, userIds: string[]) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     // console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`);
   };
 
-  const sendReminders = async (questionnaireId: string) => {
+  const sendReminders = async (_questionnaireId: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     // console.log(`Sent reminders for questionnaire ${questionnaireId}`);
   };
@@ -614,8 +610,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return dependentResponse.answer === question.conditional.showWhen;
   };
 
-  const getNextQuestion = (
-    questionnaireId: string,
+  const getNextQuestion = (_questionnaireId: string,
     currentQuestionId: string,
     responses: Response[]
   ) => {
@@ -636,7 +631,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Utility
-  const duplicateQuestionnaire = async (questionnaireId: string, newTitle: string) => {
+  const duplicateQuestionnaire = async (_questionnaireId: string, newTitle: string) => {
     const original = getQuestionnaire(questionnaireId);
     if (!original) throw new Error('Questionnaire not found');
 
@@ -651,7 +646,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     return createQuestionnaire(duplicated);
   };
 
-  const exportResponses = async (questionnaireId: string, format: 'csv' | 'excel') => {
+  const exportResponses = async (_questionnaireId: string, format: 'csv' | 'excel') => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     // console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`);
   };

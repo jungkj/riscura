@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -12,7 +12,7 @@ import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
-import {
+// import {
   Brain, Lightbulb, Target, TrendingUp, Shield, AlertTriangle,
   CheckCircle, Star, Zap, Search, Plus, RefreshCw, Send,
   MessageSquare, FileText, BarChart3, Settings, HelpCircle,
@@ -281,7 +281,7 @@ export function AIAssistantPanel({
     }
   };
 
-  const getInsightTypeIcon = (type: string) => {
+  const getInsightTypeIcon = (_type: string) => {
     switch (type) {
       case 'pattern': return BarChart3;
       case 'anomaly': return AlertTriangle;
@@ -373,7 +373,7 @@ setSearchQuery(e.target.value)}
 {/* Question Suggestions */}
               <DaisyScrollArea className="h-[400px]" >
                   <div className="space-y-3">
-                  {isGenerating && (
+                  {Boolean(isGenerating) && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}

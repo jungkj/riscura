@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { 
+// import { 
   Search,
   Filter,
   Shield,
@@ -123,7 +123,7 @@ export function MitigationLibrary() {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const _result = await response.json();
         // console.log('Import successful:', result);
         setSelectedMitigations([]);
       }

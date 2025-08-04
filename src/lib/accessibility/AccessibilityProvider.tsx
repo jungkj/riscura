@@ -16,7 +16,7 @@ interface AccessibilitySettings {
 
 interface AccessibilityContextType {
   settings: AccessibilitySettings;
-  updateSettings: (settings: Partial<AccessibilitySettings>) => void;
+  updateSettings: (_settings: Partial<AccessibilitySettings>) => void;
   announceToScreenReader: (message: string, priority?: 'polite' | 'assertive') => void;
   focusElement: (selector: string) => void;
   trapFocus: (container: HTMLElement) => () => void;
@@ -106,7 +106,7 @@ export const useAnnouncements = () => {
   );
 
   const announceAction = useCallback(
-    (action: string, success: boolean = true) => {
+    (_action: string, success: boolean = true) => {
       const message = success ? `${action} completed successfully` : `${action} failed`;
       announceToScreenReader(message, success ? 'polite' : 'assertive');
     },
@@ -114,14 +114,14 @@ export const useAnnouncements = () => {
   );
 
   const announceDataUpdate = useCallback(
-    (count: number, type: string) => {
+    (_count: number, type: string) => {
       announceToScreenReader(`${count} ${type} loaded`, 'polite');
     },
     [announceToScreenReader]
   );
 
   const announceError = useCallback(
-    (_error: string) => {
+    (__error: string) => {
       announceToScreenReader(`Error: ${error}`, 'assertive');
     },
     [announceToScreenReader]

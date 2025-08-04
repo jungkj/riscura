@@ -18,7 +18,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', cla
   return (
     <div className={cn('flex items-center justify-center', className)}>
       <Loader2 className={cn('animate-spin', sizeClasses[size])} />
-      {text && <span className="ml-2 text-sm text-muted-foreground">{text}</span>}
+      {Boolean(text) && <span className="ml-2 text-sm text-muted-foreground">{text}</span>}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { Control, ControlState, ControlFilters, ControlRiskMapping, Document } from '@/types';
+// import { Control, ControlState, ControlFilters, ControlRiskMapping, Document } from '@/types';
 import { generateMockControls } from '@/lib/mockData';
 
 interface ControlContextType extends ControlState {
@@ -36,7 +36,7 @@ interface ControlContextType extends ControlState {
   ) => Promise<void>;
 
   // Filtering and Search
-  setFilters: (filters: Partial<ControlFilters>) => void;
+  setFilters: (_filters: Partial<ControlFilters>) => void;
   clearFilters: () => void;
   setSearch: (search: string) => void;
 
@@ -448,7 +448,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   // Filtering and Search
-  const setFilters = (filters: Partial<ControlFilters>) => {
+  const setFilters = (_filters: Partial<ControlFilters>) => {
     dispatch({ type: 'SET_FILTERS', payload: filters });
   };
 

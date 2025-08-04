@@ -22,7 +22,7 @@ interface DatabaseConfig {
 }
 
 // Get database configuration from environment
-function getDatabaseConfig(): DatabaseConfig {
+const getDatabaseConfig = (): DatabaseConfig {
   // Skip database configuration on client side
   if (typeof window !== 'undefined') {
     throw new Error('Database operations are not available on the client side');
@@ -162,7 +162,7 @@ function getDatabaseConfig(): DatabaseConfig {
 }
 
 // Database logging configuration
-function getLogConfig(): ('query' | 'info' | 'warn' | 'error')[] {
+const getLogConfig = (): ('query' | 'info' | 'warn' | 'error')[] {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const enableLogging = process.env.DB_QUERY_LOGGING === 'true';
 
@@ -174,7 +174,7 @@ function getLogConfig(): ('query' | 'info' | 'warn' | 'error')[] {
 }
 
 // Create Prisma client with proper configuration
-function createPrismaClient(): PrismaClient {
+const createPrismaClient = (): PrismaClient {
   const config = getDatabaseConfig();
 
   // console.log('🔗 Initializing database connection...');
@@ -243,7 +243,7 @@ async function withRetry<T>(
 // Global Prisma instance (singleton pattern)
 let prisma: PrismaClient | undefined;
 
-function getPrismaClient(): PrismaClient {
+const getPrismaClient = (): PrismaClient {
   // Prevent client-side initialization
   if (typeof window !== 'undefined') {
     throw new Error('Prisma client cannot be initialized on the client side');
@@ -263,7 +263,7 @@ function getPrismaClient(): PrismaClient {
 }
 
 // Safe prisma client getter
-function getSafePrismaClient(): PrismaClient {
+const getSafePrismaClient = (): PrismaClient {
   if (typeof window !== 'undefined') {
     throw new Error('Database operations are not available on the client side');
   }
@@ -574,7 +574,7 @@ export const db = {
   search: buildSearchQuery,
 
   // Raw query execution with retry
-  raw: async (query: TemplateStringsArray, ...values: any[]) => {
+  raw: async (_query: TemplateStringsArray, ...values: any[]) => {
     return withRetry(
       async () => {
         return await prisma.$queryRaw(query, ...values);
@@ -585,7 +585,7 @@ export const db = {
     );
   },
 
-  rawUnsafe: async (query: string, ...values: any[]) => {
+  rawUnsafe: async (_query: string, ...values: any[]) => {
     return withRetry(
       async () => {
         return await prisma.$queryRawUnsafe(query, ...values);

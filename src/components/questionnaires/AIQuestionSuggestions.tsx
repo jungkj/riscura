@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,7 +11,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
-import {
+// import {
   Brain, Sparkles, Target, Shield, CheckCircle, AlertTriangle,
   Plus, RefreshCw, ThumbsUp, ThumbsDown, Copy, Edit, Wand2,
   Lightbulb, TrendingUp, Eye, Clock, Users, Zap
@@ -473,7 +473,7 @@ setCustomPrompt(e.target.value)}
 
         <div className="space-y-3 max-h-96 overflow-y-auto">
           <AnimatePresence>
-            {isGenerating && suggestions.length === 0 && (
+            {Boolean(isGenerating) && suggestions.length === 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -504,7 +504,7 @@ setCustomPrompt(e.target.value)}
       </div>
 
       {/* AI Insights */}
-      {questionnaire && (
+      {Boolean(questionnaire) && (
         <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
           <div className="flex items-center space-x-2 mb-2">
             <TrendingUp className="w-4 h-4 text-blue-600" />

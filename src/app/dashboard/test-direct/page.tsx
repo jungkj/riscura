@@ -40,7 +40,7 @@ export default function TestDirectDashboard() {
           </pre>
         </div>
 
-        {user && (
+        {Boolean(user) && (
           <div className="p-4 bg-blue-100 rounded">
             <h2 className="font-semibold mb-2">User Data:</h2>
             <pre className="text-sm">{JSON.stringify(user, null, 2)}</pre>

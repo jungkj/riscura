@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 
 // Animation variants for skeletons
 type SkeletonVariant = 'pulse' | 'wave' | 'shimmer';
@@ -108,7 +108,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
 }) => {
   return (
     <DaisyCard className={cn(width, height, className)} >
-  {hasImage && (
+  {Boolean(hasImage) && (
 </DaisyCardSkeletonProps>
         <BaseSkeleton 
           variant={variant}
@@ -116,7 +116,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
       )}
       
       <DaisyCardBody className={cn(!hasImage && 'rounded-t-lg')} >
-  {hasHeader && (
+  {Boolean(hasHeader) && (
 </DaisyCardBody>
           <div className="space-y-2">
             <BaseSkeleton variant={variant} className="h-6 w-3/4" />
@@ -132,7 +132,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
           lineHeight="md" />
 </DaisyCardBody>
         
-        {hasActions && (
+        {Boolean(hasActions) && (
           <div className="flex gap-2 pt-4">
             <BaseSkeleton variant={variant} className="h-9 w-20" />
             <BaseSkeleton variant={variant} className="h-9 w-16" />
@@ -167,10 +167,10 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
     <div className={cn('w-full', className)}>
       <div className="rounded-md border">
         {/* Table Header */}
-        {hasHeader && (
+        {Boolean(hasHeader) && (
           <div className="border-b bg-muted/50">
             <div className="flex">
-              {showCheckboxes && (
+              {Boolean(showCheckboxes) && (
                 <div className="w-12 p-4">
                   <BaseSkeleton variant={variant} className="h-4 w-4" />
                 </div>
@@ -180,7 +180,7 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
                   <BaseSkeleton variant={variant} className="h-4 w-24" />
                 </div>
               ))}
-              {hasActions && (
+              {Boolean(hasActions) && (
                 <div className="w-24 p-4">
                   <BaseSkeleton variant={variant} className="h-4 w-16" />
                 </div>
@@ -193,7 +193,7 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
         <div className="divide-y">
           {Array.from({ length: rows }).map((_, rowIndex) => (
             <div key={rowIndex} className="flex">
-              {showCheckboxes && (
+              {Boolean(showCheckboxes) && (
                 <div className="w-12 p-4">
                   <BaseSkeleton variant={variant} className="h-4 w-4" />
                 </div>
@@ -208,7 +208,7 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
                     )} />
                 </div>
               ))}
-              {hasActions && (
+              {Boolean(hasActions) && (
                 <div className="w-24 p-4">
                   <div className="flex gap-1">
                     <BaseSkeleton variant={variant} className="h-6 w-6" />
@@ -263,7 +263,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       {/* Main Content Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         {/* Chart Section */}
-        {hasChart && (
+        {Boolean(hasChart) && (
           <DaisyCard className="col-span-4" >
   <DaisyCardBody >
 </DaisyCard>
@@ -278,7 +278,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
         )}
 
         {/* Activity Feed */}
-        {hasActivity && (
+        {Boolean(hasActivity) && (
           <DaisyCard className="col-span-3" >
   <DaisyCardBody >
 </DaisyCard>
@@ -303,7 +303,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       </div>
 
       {/* Table Section */}
-      {hasTable && (
+      {Boolean(hasTable) && (
         <DaisyCard >
   <DaisyCardBody >
 </DaisyCard>
@@ -347,21 +347,21 @@ export const ListSkeleton: React.FC<ListSkeletonProps> = ({
       {Array.from({ length: items }).map((_, index) => (
         <div key={index}>
           <div className="flex items-center space-x-4 p-4">
-            {hasAvatar && (
+            {Boolean(hasAvatar) && (
               <BaseSkeleton variant={variant} className="h-10 w-10 rounded-full" />
             )}
             <div className="flex-1 space-y-2">
               <BaseSkeleton variant={variant} className="h-4 w-1/2" />
               <BaseSkeleton variant={variant} className="h-3 w-3/4" />
             </div>
-            {hasActions && (
+            {Boolean(hasActions) && (
               <div className="flex space-x-2">
                 <BaseSkeleton variant={variant} className="h-8 w-8" />
                 <BaseSkeleton variant={variant} className="h-8 w-8" />
               </div>
             )}
           </div>
-          {showDividers && index < items - 1 && (
+          {Boolean(showDividers) && index < items - 1 && (
             <div className="border-b border-gray-200 dark:border-gray-700" />
           )}
         </div>
@@ -405,7 +405,7 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({
       </div>
 
       {/* Select Field */}
-      {hasSelect && (
+      {Boolean(hasSelect) && (
         <div className="space-y-2">
           <BaseSkeleton variant={variant} className="h-4 w-32" />
           <BaseSkeleton variant={variant} className="h-10 w-full" />
@@ -413,7 +413,7 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({
       )}
 
       {/* Textarea */}
-      {hasTextarea && (
+      {Boolean(hasTextarea) && (
         <div className="space-y-2">
           <BaseSkeleton variant={variant} className="h-4 w-28" />
           <BaseSkeleton variant={variant} className="h-24 w-full" />
@@ -421,7 +421,7 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({
       )}
 
       {/* Checkboxes */}
-      {hasCheckboxes && (
+      {Boolean(hasCheckboxes) && (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-3">
@@ -433,7 +433,7 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({
       )}
 
       {/* Form Buttons */}
-      {hasButtons && (
+      {Boolean(hasButtons) && (
         <div className="flex justify-end space-x-3 pt-4">
           <BaseSkeleton variant={variant} className="h-10 w-20" />
           <BaseSkeleton variant={variant} className="h-10 w-24" />
@@ -468,7 +468,7 @@ export const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
       </div>
 
       {/* Legend */}
-      {showLegend && (
+      {Boolean(showLegend) && (
         <div className="flex space-x-6">
           {Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-2">
@@ -482,7 +482,7 @@ export const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
       {/* Chart Area */}
       <div className={cn('relative', height)}>
         {/* Y-Axis */}
-        {showAxes && (
+        {Boolean(showAxes) && (
           <div className="absolute left-0 top-0 bottom-8 w-12 flex flex-col justify-between">
             {Array.from({ length: 6 }).map((_, index) => (
               <BaseSkeleton key={index} variant={variant} className="h-3 w-8" />
@@ -522,7 +522,7 @@ export const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
         </div>
 
         {/* X-Axis */}
-        {showAxes && (
+        {Boolean(showAxes) && (
           <div className="absolute bottom-0 left-12 right-4 h-8 flex justify-between items-end">
             {Array.from({ length: 6 }).map((_, index) => (
               <BaseSkeleton key={index} variant={variant} className="h-3 w-12" />

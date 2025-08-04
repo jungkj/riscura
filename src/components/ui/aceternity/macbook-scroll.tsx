@@ -96,10 +96,10 @@ export const MacbookScroll = ({
         </div>
         <Trackpad />
         <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
-        {showGradient && (
+        {Boolean(showGradient) && (
           <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
         )}
-        {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+        {Boolean(badge) && <div className="absolute bottom-4 left-4">{badge}</div>}
       </div>
     </div>
   );

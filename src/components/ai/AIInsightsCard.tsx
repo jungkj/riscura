@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { 
+// import { 
   Brain,
   TrendingUp,
   TrendingDown,
@@ -61,7 +61,7 @@ interface AIInsightsCardProps {
     selectedRisk?: string;
     selectedControl?: string;
   };
-  onActionTrigger?: (action: string, parameters?: any) => void;
+  onActionTrigger?: (_action: string, parameters?: any) => void;
   onInsightInteraction?: (insightId: string, interaction: 'view' | 'like' | 'dislike' | 'bookmark') => void;
   className?: string;
 }
@@ -255,7 +255,7 @@ export default function AIInsightsCard({
   };
 
   // Get type icon
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'risk_analysis': return <DaisyAlertTriangle className="w-4 h-4" >
   ;
@@ -286,7 +286,7 @@ export default function AIInsightsCard({
   };
 
   // Handle action trigger
-  const handleActionTrigger = (action: string, parameters?: any) => {
+  const handleActionTrigger = (_action: string, parameters?: any) => {
     onActionTrigger?.(action, parameters);
   };
 
@@ -481,7 +481,7 @@ export default function AIInsightsCard({
       </DaisyCardBody>
 
       {/* Detailed Insight Modal/Panel */}
-      {selectedInsight && (
+      {Boolean(selectedInsight) && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="p-6">

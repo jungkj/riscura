@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   ActionIcons,
   FileIcons,
   StatusIcons,
@@ -81,7 +81,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {/* Content */}
         <div className={classes.spacing}>
           <h3 className={`font-semibold text-gray-900 ${classes.title}`}>{title}</h3>
-          {description && (
+          {Boolean(description) && (
             <p className={`text-gray-600 max-w-md mx-auto ${classes.description}`}>{description}</p>
           )}
         </div>
@@ -89,7 +89,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {/* Actions */}
         {(action || secondaryAction) && (
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            {action && (
+            {Boolean(action) && (
               <button
                 onClick={action.onClick}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
@@ -101,7 +101,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
                 {action.label}
               </button>
             )}
-            {secondaryAction && (
+            {Boolean(secondaryAction) && (
               <button
                 onClick={secondaryAction.onClick}
                 className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
@@ -682,9 +682,9 @@ export const CustomEmptyState: React.FC<{
       <div className="mb-2">{illustration}</div>
       <div className="space-y-2">
         <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        {description && <p className="text-base text-gray-600 max-w-md mx-auto">{description}</p>}
+        {Boolean(description) && <p className="text-base text-gray-600 max-w-md mx-auto">{description}</p>}
       </div>
-      {actions && actions.length > 0 && (
+      {Boolean(actions) && actions.length > 0 && (
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {actions.map((action, index) => (
             <button

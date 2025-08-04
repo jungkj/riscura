@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -18,7 +18,7 @@ import {
   Edit,
   ExternalLink
 } from 'lucide-react';
-import { Risk, Control, RiskLevel } from '@/types/rcsa.types';
+// import { Risk, Control, RiskLevel } from '@/types/rcsa.types';
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaHelpers } from '@/lib/api/rcsa-client';
 
@@ -28,7 +28,7 @@ interface RiskOverviewTabProps {
 }
 
 // Helper function to get risk level color
-function getRiskLevelColor(level: RiskLevel): string {
+const getRiskLevelColor = (level: RiskLevel): string {
   switch (level) {
     case 'LOW':
       return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -44,7 +44,7 @@ function getRiskLevelColor(level: RiskLevel): string {
 }
 
 // Helper function to get status color
-function getStatusColor(status: Risk['status']): string {
+const getStatusColor = (status: Risk['status']): string {
   switch (status) {
     case 'IDENTIFIED':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';

@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { useToast } from '@/hooks/use-toast';
-import {
+// import {
   ArrowLeft,
   CheckCircle,
   XCircle,
@@ -165,7 +165,7 @@ export default function FrameworkComplianceCheckPage() {
     return () => clearInterval(interval);
   }, [assessmentInProgress]);
 
-  const getAllRequirements = (framework: Framework) => {
+  const getAllRequirements = (_framework: Framework) => {
     return framework.categories.flatMap((cat) => cat.requirements);
   };
 
@@ -323,7 +323,7 @@ export default function FrameworkComplianceCheckPage() {
             </div>
           )}
 
-          {selectedFramework && !assessmentInProgress && currentRequirementIndex === 0 && (
+          {Boolean(selectedFramework) && !assessmentInProgress && currentRequirementIndex === 0 && (
             /* Pre-Assessment */
             <DaisyCard>
               <DaisyCardBody>
@@ -360,7 +360,7 @@ export default function FrameworkComplianceCheckPage() {
             </DaisyCard>
           )}
 
-          {assessmentInProgress && selectedFramework && (
+          {Boolean(assessmentInProgress) && selectedFramework && (
             /* Assessment in Progress */
             <div className="space-y-6">
               {/* Progress Bar */}

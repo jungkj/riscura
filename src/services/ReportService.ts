@@ -213,7 +213,7 @@ export class ReportService {
   // Report generation
   async generateReport(
     reportId: string,
-    format: 'pdf' | 'excel' = 'pdf',
+    _format: 'pdf' | 'excel' = 'pdf',
     organizationId: string
   ): Promise<Report> {
     const report = await this.getReportById(reportId, organizationId);
@@ -233,14 +233,14 @@ export class ReportService {
     let fileName: string;
     let mimeType: string;
 
-    if (format === 'pdf') {
+    if (_format === 'pdf') {
       fileBuffer = await this.pdfGenerator.generate(report, reportData);
       fileName = `${report.title.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
       mimeType = 'application/pdf';
     } else {
       fileBuffer = await this.excelGenerator.generate(report, reportData);
       fileName = `${report.title.replace(/\s+/g, '_')}_${Date.now()}.xlsx`;
-      mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      mimeType = 'application/vnd.openxml_formats-officedocument.spreadsheetml.sheet';
     }
 
     // Upload to cloud storage
@@ -258,7 +258,7 @@ export class ReportService {
         data: reportData as any, // Cast to any for JSON field
         generatedAt: new Date(),
         fileUrl,
-        format,
+        _format,
         status: 'PUBLISHED',
       },
       include: {
@@ -478,7 +478,7 @@ export class ReportService {
   }
 
   // Get default date ranges for common report periods
-  getDateRangeForPeriod(period: string): { dateFrom: Date; dateTo: Date } {
+  getDateRangeForPeriod(_period: string): { dateFrom: Date; dateTo: Date } {
     const now = new Date();
 
     switch (period) {
@@ -533,4 +533,5 @@ export class ReportService {
   }
 }
 
-export default new ReportService();
+const ReportServiceInstance = new ReportService();
+export default ReportServiceInstance;

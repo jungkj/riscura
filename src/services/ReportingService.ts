@@ -2,11 +2,11 @@
   generatePDF,
   ReportData,
   ReportSection,
-  formatTableData,
-  formatChartData,
+  _formatTableData,
+  _formatChartData,
 } from '@/lib/pdf/pdf-generator-mock';
 import { exportToExcel, exportToCSV, ExcelWorkbookData } from '@/lib/pdf/excel-exporter';
-// import { format, addDays, addWeeks, addMonths } from 'date-fns';
+// import { _format, addDays, addWeeks, addMonths } from 'date-fns';
 import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/db';
 import { EmailService } from './EmailService';
@@ -46,8 +46,8 @@ export interface ReportSectionTemplate {
   dataSource: string;
   query?: string;
   filters?: Record<string, any>;
-  formatting?: {
-    columns?: Array<{ key: string; header: string; format?: string }>;
+  _formatting?: {
+    columns?: Array<{ key: string; header: string; _format?: string }>;
     chartType?: 'bar' | 'pie' | 'line';
     groupBy?: string;
     sortBy?: string;
@@ -66,7 +66,7 @@ export interface ReportParameter {
 
 export interface GenerateReportRequest {
   templateId: string;
-  format: 'pdf' | 'excel' | 'csv';
+  _format: 'pdf' | 'excel' | 'csv';
   parameters?: Record<string, any>;
   title?: string;
   subtitle?: string;
@@ -92,7 +92,7 @@ export interface ReportHistory {
   id: string;
   templateId: string;
   title: string;
-  format: string;
+  _format: string;
   generatedAt: Date;
   generatedBy: string;
   fileSize: number;
@@ -110,7 +110,7 @@ export interface ReportConfig {
   template: string;
   parameters: Record<string, any>;
   filters: ReportFilters;
-  format: ReportFormat[];
+  _format: ReportFormat[];
   organizationId: string;
   createdBy: string;
   isScheduled?: boolean;
@@ -122,7 +122,7 @@ export interface ScheduleConfig {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   dayOfWeek?: number; // 0-6 for weekly
   dayOfMonth?: number; // 1-31 for monthly
-  time: string; // HH:MM format
+  time: string; // HH:MM _format
   timezone: string;
   enabled: boolean;
 }
@@ -145,7 +145,7 @@ export interface GeneratedReport {
   id: string;
   name: string;
   type: ReportType;
-  format: ReportFormat;
+  _format: ReportFormat;
   filePath: string;
   fileSize: number;
   generatedAt: Date;
@@ -195,11 +195,11 @@ export class ReportingService {
       // Aggregate data based on report type
       const data = await this.aggregateReportData(config);
 
-      // Generate reports in requested formats
+      // Generate reports in requested _formats
       const reports: GeneratedReport[] = [];
 
-      for (const format of config.format) {
-        const report = await this.generateReportInFormat(config, data, format);
+      for (const _format of config._format) {
+        const report = await this.generateReportInFormat(config, data, _format);
         reports.push(report);
       }
 
@@ -481,7 +481,7 @@ export class ReportingService {
     });
 
     // Calculate compliance scores
-    const complianceScores = frameworks.map((framework: any) => {
+    const complianceScores = frameworks.map((_framework: any) => {
       const totalRequirements = framework.requirements?.length || 0;
       const metRequirements =
         framework.requirements?.filter(
@@ -621,11 +621,11 @@ export class ReportingService {
   }
 
   /**
-   * Generate report in specific format
+   * Generate report in specific _format
    */
   private async generateReportInFormat(_config: ReportConfig,
     data: any,
-    format: ReportFormat
+    _format: ReportFormat
   ): Promise<GeneratedReport> {
     const reportId = `${config.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fileName = `${config.name.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}`;
@@ -633,7 +633,7 @@ export class ReportingService {
     let filePath: string;
     let fileSize: number;
 
-    switch (format) {
+    switch (_format) {
       case ReportFormat.PDF:
         const pdfBuffer = await generatePDF(data);
         filePath = `/tmp/reports/${fileName}.pdf`;
@@ -690,14 +690,14 @@ export class ReportingService {
         break;
 
       default:
-        throw new Error(`Unsupported format: ${format}`);
+        throw new Error(`Unsupported _format: ${_format}`);
     }
 
     return {
       id: reportId,
       name: config.name,
       type: config.type,
-      format,
+      _format,
       filePath,
       fileSize,
       generatedAt: new Date(),
@@ -715,7 +715,7 @@ export class ReportingService {
     if (!config.recipients?.length) return;
 
     const attachments = reports.map((report) => ({
-      filename: `${report.name}.${report.format}`,
+      filename: `${report.name}.${report._format}`,
       path: report.filePath,
     }));
 
@@ -726,7 +726,7 @@ export class ReportingService {
         <h2>Your requested report is ready</h2>
         <p><strong>Report Name:</strong> ${config.name}</p>
         <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
-        <p><strong>Formats:</strong> ${reports.map((r) => r.format.toUpperCase()).join(', ')}</p>
+        <p><strong>Formats:</strong> ${reports.map((r) => r._format.toUpperCase()).join(', ')}</p>
         <p>Please find the attached report files.</p>
       `,
       attachments,
@@ -778,8 +778,8 @@ export class ReportingService {
       throw new Error('Missing required configuration fields');
     }
 
-    if (!config.format || config.format.length === 0) {
-      throw new Error('At least one output format must be specified');
+    if (!config._format || config._format.length === 0) {
+      throw new Error('At least one output _format must be specified');
     }
 
     // Validate date range
@@ -825,7 +825,7 @@ export class ReportingService {
           data: {
             reports: reports.map((r) => ({
               id: r.id,
-              format: r.format,
+              _format: r._format,
               filePath: r.filePath,
               fileSize: r.fileSize,
               generatedAt: r.generatedAt,

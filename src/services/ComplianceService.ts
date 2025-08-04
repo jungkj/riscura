@@ -17,7 +17,7 @@ import {
   MappingType,
   Prisma,
 } from '@prisma/client';
-import { redis } from '@/lib/cache/memory-cache';
+// import { redis } from '@/lib/cache/memory-cache';
 import { notificationService } from './NotificationService';
 import { NotificationCategory, NotificationPriority } from '@prisma/client';
 
@@ -130,7 +130,7 @@ export class ComplianceService {
     filters?: { type?: ComplianceFrameworkType; isActive?: boolean }
   ): Promise<ComplianceFramework[]> {
     const cacheKey = `${this.cacheKeyPrefix}frameworks:${organizationId}:${JSON.stringify(filters)}`;
-    const cached = await redis.get(cacheKey);
+    const _cached = await redis.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached);
@@ -187,7 +187,7 @@ export class ComplianceService {
     frameworkId: string,
     requirements: Omit<CreateRequirementInput, 'frameworkId'>[]
   ): Promise<number> {
-    const result = await prisma.complianceRequirement.createMany({
+    const _result = await prisma.complianceRequirement.createMany({
       data: requirements.map((req) => ({ ...req, frameworkId })),
     });
 
@@ -197,7 +197,7 @@ export class ComplianceService {
 
   async getRequirements(frameworkId: string): Promise<ComplianceRequirement[]> {
     const cacheKey = `${this.cacheKeyPrefix}requirements:${frameworkId}`;
-    const cached = await redis.get(cacheKey);
+    const _cached = await redis.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached);
@@ -304,7 +304,7 @@ export class ComplianceService {
 
       // Try to get from cache
       try {
-        const cached = await redis.get(cacheKey);
+        const _cached = await redis.get(cacheKey);
         if (cached) {
           return JSON.parse(cached);
         }
@@ -600,7 +600,7 @@ export class ComplianceService {
 
     // Unmapped requirements
     const unmappedCount = assessment.items.filter(
-      (i: any) => i.requirement.controlMappings?.length === 0
+      (_i: any) => i.requirement.controlMappings?.length === 0
     ).length;
     if (unmappedCount > 0) {
       recommendations.push(
@@ -609,7 +609,7 @@ export class ComplianceService {
     }
 
     // Low scoring areas
-    const lowScoreItems = assessment.items.filter((i: any) => i.score !== null && i.score < 50);
+    const lowScoreItems = assessment.items.filter((_i: any) => i.score !== null && i.score < 50);
     if (lowScoreItems.length > 0) {
       recommendations.push(`Improve controls in ${lowScoreItems.length} low-scoring areas`);
     }
@@ -685,8 +685,8 @@ export class ComplianceService {
       },
       recommendations: analysis.recommendations,
       detailedFindings: analysis.assessment.items
-        .filter((i: any) => i.status !== ComplianceStatus.COMPLIANT && i.findings)
-        .map((i: any) => ({
+        .filter((_i: any) => i.status !== ComplianceStatus.COMPLIANT && i.findings)
+        .map((_i: any) => ({
           requirement: i.requirement.title,
           status: i.status,
           findings: i.findings,

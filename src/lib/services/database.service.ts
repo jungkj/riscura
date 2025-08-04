@@ -1,5 +1,5 @@
 import { db, checkDatabaseConnection, isDatabaseSeeded } from '@/lib/db';
-import { createRiskRepository } from '@/lib/repositories';
+// import { createRiskRepository } from '@/lib/repositories';
 import type { RiskFilters } from '@/lib/repositories';
 import type { RiskLevel, RiskStatus } from '@prisma/client';
 
@@ -29,7 +29,7 @@ export class DatabaseService {
 
       let version: string | undefined;
       if (isConnected) {
-        const result = await db.raw`SELECT version();`;
+        const _result = await db.raw`SELECT version();`;
         version = result[0]?.version;
       }
 
@@ -173,8 +173,7 @@ export class DatabaseService {
   }
 
   // Bulk operations
-  async bulkCreateRisks(
-    risks: Array<{
+  async bulkCreateRisks(_risks: Array<{
       title: string;
       description: string;
       category: any;
@@ -236,8 +235,7 @@ export class DatabaseService {
   }
 
   // Activity logging helper
-  async logActivity(
-    type: string,
+  async logActivity(_type: string,
     entityType: string,
     entityId: string,
     description: string,

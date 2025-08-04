@@ -1,5 +1,5 @@
-import { AgentType } from '@/types/ai.types';
-import { Risk, Control } from '@/types';
+// import { AgentType } from '@/types/ai.types';
+// import { Risk, Control } from '@/types';
 
 // Agent Configuration Interface
 export interface AgentConfig {
@@ -1316,8 +1316,7 @@ export function injectRiskContext(template: string, context: RiskContext): strin
   return processedTemplate;
 }
 
-export function calculateConfidenceScore(
-  agentType: AgentType,
+export function calculateConfidenceScore(_agentType: AgentType,
   contextCompleteness: number,
   complexity: number
 ): number {
@@ -1335,8 +1334,7 @@ export function calculateConfidenceScore(
   return Math.min(Math.max(adjustedConfidence, agent.confidenceThresholds.minimum), 1.0);
 }
 
-export function formatAgentResponse(
-  agentType: AgentType,
+export function formatAgentResponse(_agentType: AgentType,
   content: string,
   confidence: number
 ): {

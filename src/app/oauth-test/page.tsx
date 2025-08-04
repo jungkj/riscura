@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 
 export default function OAuthTestPage() {
@@ -55,7 +55,7 @@ export default function OAuthTestPage() {
       <div className="max-w-4xl mx-auto space-y-6">
         <h1 className="text-3xl font-bold">OAuth Debug Page</h1>
 
-        {error && (
+        {Boolean(error) && (
           <DaisyAlert variant="error">
             <DaisyAlertDescription>{error}</DaisyAlertDescription>
           </DaisyAlert>

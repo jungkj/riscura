@@ -83,7 +83,7 @@ export class SupabaseStorageService {
    * Initialize storage buckets (run once during setup)
    */
   async initializeBuckets() {
-    const buckets = ['documents', 'attachments', 'reports', 'avatars'];
+    const _buckets = ['documents', 'attachments', 'reports', 'avatars'];
 
     for (const bucketName of buckets) {
       const { data: existingBucket } = await supabaseStorage.storage.getBucket(bucketName);
@@ -220,8 +220,8 @@ export class SupabaseStorageService {
     fileCount: number;
     byBucket: Record<string, { size: number; count: number }>;
   }> {
-    const buckets = ['documents', 'attachments', 'reports', 'avatars'];
-    const stats = {
+    const _buckets = ['documents', 'attachments', 'reports', 'avatars'];
+    const _stats = {
       totalSize: 0,
       fileCount: 0,
       byBucket: {} as Record<string, { size: number; count: number }>,
@@ -279,4 +279,4 @@ export class SupabaseStorageService {
 }
 
 // Export singleton instance
-export const storageService = SupabaseStorageService.getInstance();
+export const _storageService = SupabaseStorageService.getInstance();

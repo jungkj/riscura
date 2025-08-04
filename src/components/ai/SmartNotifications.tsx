@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import {
+// import {
   Bell,
   AlertTriangle,
   Info,
@@ -273,11 +273,11 @@ const sampleNotifications: SmartNotification[] = [
 // Notification Card Component
 const NotificationCard: React.FC<{
   notification: SmartNotification;
-  onAction: (action: string, notification: SmartNotification) => void;
+  onAction: (_action: string, notification: SmartNotification) => void;
   onMarkRead: (id: string) => void;
   onDismiss: (id: string) => void;
 }> = ({ notification, onAction, onMarkRead, onDismiss }) => {
-  const getTypeConfig = (type: string) => {
+  const getTypeConfig = (_type: string) => {
     const configs = {
       'prediction': { icon: Brain, color: 'text-purple-600', bg: 'bg-purple-50' },
       'alert': { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50' },
@@ -598,7 +598,7 @@ export const SmartNotifications: React.FC<{
   const [showSettings, setShowSettings] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
 
-  const handleAction = (action: string, notification: SmartNotification) => {
+  const handleAction = (_action: string, notification: SmartNotification) => {
     // console.log(`Action: ${action}`, notification);
     // Handle notification actions here
   };

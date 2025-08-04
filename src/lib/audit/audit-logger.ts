@@ -269,8 +269,7 @@ export class AuditLogger {
   /**
    * Log authentication events
    */
-  async logAuth(
-    action: Extract<
+  async logAuth(_action: Extract<
       AuditAction,
       'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
     >,
@@ -302,8 +301,7 @@ export class AuditLogger {
   /**
    * Log data modification events
    */
-  async logDataChange(
-    action: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'BULK_UPDATE' | 'BULK_DELETE'>,
+  async logDataChange(_action: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'BULK_UPDATE' | 'BULK_DELETE'>,
     entity: AuditEntity,
     entityId: string,
     userId: string,
@@ -331,8 +329,7 @@ export class AuditLogger {
   /**
    * Log access attempts (both successful and failed)
    */
-  async logAccess(
-    action: Extract<AuditAction, 'READ' | 'ACCESS_DENIED'>,
+  async logAccess(_action: Extract<AuditAction, 'READ' | 'ACCESS_DENIED'>,
     entity: AuditEntity,
     entityId: string | undefined,
     userId: string | undefined,
@@ -361,8 +358,7 @@ export class AuditLogger {
   /**
    * Log system events
    */
-  async logSystem(
-    action: Extract<
+  async logSystem(_action: Extract<
       AuditAction,
       'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE'
     >,
@@ -589,7 +585,7 @@ export class AuditLogger {
 
     const events = queryResult.events;
     const totalEvents = events.length;
-    const successCount = events.filter((e) => e.status === 'SUCCESS').length;
+    const _successCount = events.filter((e) => e.status === 'SUCCESS').length;
     const failureCount = events.filter((e) => e.status === 'FAILURE').length;
 
     // Calculate top actions
@@ -668,7 +664,7 @@ export class AuditLogger {
   // UTILITY METHODS
   // ============================================================================
 
-  private actionToMethod(action: AuditAction): string {
+  private actionToMethod(_action: AuditAction): string {
     const methodMap: Record<string, string> = {
       CREATE: 'POST',
       READ: 'GET',
@@ -680,8 +676,7 @@ export class AuditLogger {
     return methodMap[action] || 'UNKNOWN';
   }
 
-  private calculateSeverity(
-    action: AuditAction,
+  private calculateSeverity(_action: AuditAction,
     entity: AuditEntity,
     changes?: AuditChanges
   ): AuditSeverity {
@@ -708,7 +703,7 @@ export class AuditLogger {
     return 'MEDIUM';
   }
 
-  private getRetentionPeriod(action: AuditAction): number {
+  private getRetentionPeriod(_action: AuditAction): number {
     // Compliance-related events need longer retention
     if (['COMPLIANCE_CHECK', 'AUDIT_START', 'AUDIT_END', 'VIOLATION_DETECTED'].includes(action)) {
       return 2555; // 7 years
@@ -734,7 +729,7 @@ export class AuditLogger {
     return 365; // 1 year
   }
 
-  private shouldEncrypt(action: AuditAction, entity: AuditEntity): boolean {
+  private shouldEncrypt(_action: AuditAction, entity: AuditEntity): boolean {
     // Always encrypt sensitive entities
     const sensitiveEntities = ['USER', 'PAYMENT', 'DOCUMENT', 'API_KEY'];
     if (sensitiveEntities.includes(entity)) return true;
@@ -759,7 +754,7 @@ export class AuditLogger {
   private async updateAuditStatistics(events: AuditEvent[]): Promise<void> {
     for (const event of events) {
       const statsKey = `audit-stats:${event.organizationId}:${new Date().toISOString().split('T')[0]}`;
-      const stats = (await this.cache.get<Record<string, number>>(statsKey)) || {};
+      const _stats = (await this.cache.get<Record<string, number>>(statsKey)) || {};
 
       stats.totalEvents = (stats.totalEvents || 0) + 1;
       stats[`${event.action}_count`] = (stats[`${event.action}_count`] || 0) + 1;
@@ -773,7 +768,7 @@ export class AuditLogger {
   private calculateComplianceScore(events: AuditEvent[]): number {
     if (events.length === 0) return 100;
 
-    const successCount = events.filter((e) => e.status === 'SUCCESS').length;
+    const _successCount = events.filter((e) => e.status === 'SUCCESS').length;
     const failureCount = events.filter((e) => e.status === 'FAILURE').length;
     const warningCount = events.filter((e) => e.status === 'WARNING').length;
 
@@ -808,7 +803,7 @@ export class AuditLogger {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - 365); // Default 1 year retention
 
-    const result = await this.prisma.auditLog.deleteMany({
+    const _result = await this.prisma.auditLog.deleteMany({
       where: {
         timestamp: {
           lt: cutoffDate,

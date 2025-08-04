@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import {
+// import {
   Search,
   X,
   Clock,
@@ -393,7 +393,7 @@ export default function GlobalSearch({
   };
 
   // Handle query change
-  const handleQueryChange = (value: string) => {
+  const handleQueryChange = (_value: string) => {
     setQuery(value);
     setSelectedIndex(-1);
     
@@ -448,7 +448,7 @@ export default function GlobalSearch({
   };
 
   // Get result type icon and color
-  const getResultTypeInfo = (type: string) => {
+  const getResultTypeInfo = (_type: string) => {
     switch (type) {
       case 'risk': return { icon: Shield, color: '#ef4444' };
       case 'control': return { icon: CheckCircle, color: '#10b981' };
@@ -489,7 +489,7 @@ export default function GlobalSearch({
 handleQueryChange(e.target.value)}
                   placeholder={placeholder}
                   className="pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 bg-transparent" />
-                {query && (
+                {Boolean(query) && (
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -501,7 +501,7 @@ handleQueryChange(e.target.value)}
               </div>
               
               <div className="flex items-center gap-2">
-                {showFilters && (
+                {Boolean(showFilters) && (
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -527,7 +527,7 @@ handleQueryChange(e.target.value)}
             {results.length > 0 && (
               <div className="flex items-center justify-between text-sm text-gray-500">
                 <span>{results.length} results found</span>
-                {isLoading && <span>Searching...</span>}
+                {Boolean(isLoading) && <span>Searching...</span>}
               </div>
             )}
           
@@ -740,7 +740,7 @@ handleQueryChange(e.target.value)}
             )}
 
             {/* Loading */}
-            {isLoading && (
+            {Boolean(isLoading) && (
               <div className="p-8 text-center">
                 <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4" />
                 <p className="text-gray-500">Searching...</p>

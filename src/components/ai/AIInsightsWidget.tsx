@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -283,7 +283,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
     }
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     switch (trend) {
       case 'up': return <TrendingUp className="h-4 w-4 text-red-500" />;
       case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
@@ -291,7 +291,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
     }
   };
 
-  const preparePredictionChartData = (prediction: PredictiveAnalytics) => {
+  const preparePredictionChartData = (_prediction: PredictiveAnalytics) => {
     return prediction.chartData.map(point => ({
       date: point.timestamp.toLocaleDateString(),
       actual: point.actual,
@@ -367,7 +367,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
             </DaisyButton>
           </div>
         </div>
-        {lastUpdate && (
+        {Boolean(lastUpdate) && (
           <p className="text-xs text-gray-500">
             Last updated: {lastUpdate.toLocaleTimeString()}
           </p>
@@ -394,7 +394,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
 
           {/* Insights Tab */}
           <DaisyTabsContent value="insights" className="space-y-3 mt-4" >
-              {error && (
+              {Boolean(error) && (
               <div className="text-red-600 text-sm p-2 bg-red-50 rounded">
                 {error}
               </div>
@@ -654,7 +654,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         </DaisyTabs>
 
         {/* Interactive Assistance Modal/Panel */}
-        {assistance && (
+        {Boolean(assistance) && (
           <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-medium text-sm flex items-center gap-2">

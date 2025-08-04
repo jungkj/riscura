@@ -269,7 +269,7 @@ async function handleGet(req: NextRequest) {
       }, 1000);
     };
     
-    function addOrganizationIdInput() {
+    const addOrganizationIdInput = () {
       const topbar = document.querySelector('.swagger-ui .topbar');
       if (topbar && !document.getElementById('org-id-input')) {
         const orgInput = document.createElement('div');
@@ -294,7 +294,7 @@ async function handleGet(req: NextRequest) {
       }
     }
     
-    function setOrganizationId() {
+    const setOrganizationId = () {
       const input = document.getElementById('org-id-input');
       if (input) {
         const orgId = input.value.trim();

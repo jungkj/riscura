@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -349,7 +349,7 @@ const PerformanceDashboard: React.FC = () => {
   };
 
   // Format metric values
-  const formatMetric = (value: number, unit: string): string => {
+  const formatMetric = (_value: number, unit: string): string => {
     if (unit === 'ms') {
       return `${Math.round(value)}ms`;
     }

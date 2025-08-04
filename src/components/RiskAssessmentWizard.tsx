@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from '@/hooks/use-toast';
 
 // UI Components
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/dialog';
 
 // Icons
-import {
+// import {
   Upload,
   FileSpreadsheet,
   FileText,
@@ -198,7 +198,7 @@ export default function RiskAssessmentWizard({
     disabled: isProcessing
   });
 
-  const detectFileType = (file: File): AssessmentFile['type'] => {
+  const detectFileType = (_file: File): AssessmentFile['type'] => {
     const name = file.name.toLowerCase();
     const type = file.type;
 
@@ -228,7 +228,7 @@ export default function RiskAssessmentWizard({
     }
   };
 
-  const removeStakeholder = (index: number) => {
+  const removeStakeholder = (_index: number) => {
     setConfig(prev => ({
       ...prev,
       stakeholders: prev.stakeholders.filter((_, i) => i !== index)
@@ -244,7 +244,7 @@ export default function RiskAssessmentWizard({
     }));
   };
 
-  const toggleComplianceFramework = (framework: string) => {
+  const toggleComplianceFramework = (_framework: string) => {
     setConfig(prev => ({
       ...prev,
       complianceFrameworks: prev.complianceFrameworks.includes(framework)
@@ -289,7 +289,7 @@ export default function RiskAssessmentWizard({
             throw new Error(`Processing failed: ${response.statusText}`);
           }
 
-          const result = await response.json();
+          const _result = await response.json();
           
           setFiles(prev => prev.map(f => 
             f.id === fileObj.id 
@@ -386,7 +386,7 @@ export default function RiskAssessmentWizard({
     });
   };
 
-  const getFileIcon = (type: AssessmentFile['type']) => {
+  const getFileIcon = (_type: AssessmentFile['type']) => {
     switch (type) {
       case 'excel-rcsa': return FileSpreadsheet;
       case 'policy-document': return FileText;
@@ -455,7 +455,7 @@ setConfig(prev => ({ ...prev, description: e.target.value }))}
                   <DaisyLabel htmlFor="assessmentType">Assessment Type</DaisyTextarea>
                   <DaisySelect
                     value={config.assessmentType}
-                    onValueChange={(value: any) => setConfig(prev => ({ ...prev, assessmentType: value }))}
+                    onValueChange={(_value: any) => setConfig(prev => ({ ...prev, assessmentType: value }))}
                   >
                     <DaisySelectTrigger>
                         <DaisySelectValue />

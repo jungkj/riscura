@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -30,7 +30,7 @@ import {
   DropdownMenuSeparator as DaisyDropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
-import {
+// import {
   Plus, Trash2, GripVertical, Settings, Brain, Save, X, 
   FileText, Type, Hash, ToggleLeft, Calendar, Upload,
   List, Star, Gauge, CheckSquare, AlertCircle, Info,
@@ -132,7 +132,7 @@ interface PreviewResponse {
 
 interface EnhancedQuestionnaireBuilderProps {
   questionnaire?: any;
-  onSave: (questionnaire: any) => void;
+  onSave: (_questionnaire: any) => void;
   onCancel: () => void;
 }
 
@@ -234,7 +234,7 @@ export function EnhancedQuestionnaireBuilder({
   }, [sections, previewResponses, isPreviewMode]);
 
   // Drag and drop handlers
-  const handleDragStart = (type: 'section' | 'question', id: string, index: number) => {
+  const handleDragStart = (_type: 'section' | 'question', id: string, index: number) => {
     setDraggedItem({ type, id, sourceIndex: index });
   };
 
@@ -462,7 +462,7 @@ export function EnhancedQuestionnaireBuilder({
     });
   };
 
-  const importQuestionnaire = (file: File) => {
+  const importQuestionnaire = (_file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
@@ -562,7 +562,7 @@ export function EnhancedQuestionnaireBuilder({
   };
 
   // Question type icons
-  const getQuestionTypeIcon = (type: string) => {
+  const getQuestionTypeIcon = (_type: string) => {
     switch (type) {
       case 'text': return <Type className="w-4 h-4" />;
       case 'textarea': return <FileText className="w-4 h-4" />;
@@ -630,7 +630,7 @@ export function EnhancedQuestionnaireBuilder({
             <h1 className="text-2xl font-bold text-notion-text-primary">
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
-            {isPreviewMode && (
+            {Boolean(isPreviewMode) && (
               <DaisyBadge variant="outline" className="bg-blue-50 text-blue-700" >
   Preview Mode
 </DaisyBadge>
@@ -755,7 +755,7 @@ setDescription(e.target.value)}
                       Add Section
                     </DaisyButton>
                     
-                    {selectedSection && (
+                    {Boolean(selectedSection) && (
                       <DaisyButton 
                         variant="outline" 
                         onClick={() => addQuestion(selectedSection)}
@@ -876,7 +876,7 @@ setDescription(e.target.value)}
 // Sub-components (BuilderContent, LogicContent, etc.) would be defined here...
 // Due to length constraints, I'll include the key components inline
 
-function BuilderContent({ 
+const BuilderContent = ({ 
   sections, 
   selectedSection, 
   onSectionSelect, 
@@ -1051,7 +1051,7 @@ function BuilderContent({
   );
 }
 
-function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddBranchingLogic }: any) {
+const LogicContent = ({ sections, selectedQuestion, onAddConditionalRule, onAddBranchingLogic }: any) {
 
   return (
     <div className="space-y-6">
@@ -1095,7 +1095,7 @@ function LogicContent({ sections, selectedQuestion, onAddConditionalRule, onAddB
   );
 }
 
-function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: any) {
+const ValidationContent = ({ sections, selectedQuestion, onAddValidationRule }: any) {
 
   return (
     <div className="space-y-6">
@@ -1139,7 +1139,7 @@ function ValidationContent({ sections, selectedQuestion, onAddValidationRule }: 
   );
 }
 
-function AdvancedSettingsContent() {
+const AdvancedSettingsContent = () {
 
   return (
     <div className="space-y-6">
@@ -1178,7 +1178,7 @@ function AdvancedSettingsContent() {
   );
 }
 
-function PreviewComponent({ 
+const PreviewComponent = ({ 
   sections, 
   currentSection, 
   responses, 

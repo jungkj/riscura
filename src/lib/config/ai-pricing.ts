@@ -59,7 +59,7 @@ export type AIModel = keyof typeof AI_MODEL_PRICING;
  * - Validates that the model string is not empty
  * - All prices are in USD per 1K tokens
  */
-export function getModelPricing(model: string): { prompt: number; completion: number } {
+export function getModelPricing(_model: string): { prompt: number; completion: number } {
   // Input validation
   if (!model || typeof model !== 'string') {
     // console.warn(`Invalid model provided: ${model}. Using default pricing.`);

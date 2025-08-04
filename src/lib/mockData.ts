@@ -1,5 +1,5 @@
-import { User, Risk, Control, Document, Questionnaire, Workflow, RiskCategory } from '@/types';
-import { calculateRiskScore } from './utils';
+// import { User, Risk, Control, Document, Questionnaire, Workflow, RiskCategory } from '@/types';
+// import { calculateRiskScore } from './utils';
 import { toast } from 'sonner';
 
 // API base configuration
@@ -142,7 +142,7 @@ export const riskAPI = {
   },
 
   // Create new risk
-  async createRisk(risk: Partial<Risk>): Promise<Risk> {
+  async createRisk(_risk: Partial<Risk>): Promise<Risk> {
     return apiRequest<Risk>('/risks', {
       method: 'POST',
       body: JSON.stringify(risk),
@@ -270,7 +270,7 @@ export const documentAPI = {
   },
 
   // Upload document
-  async uploadDocument(file: File, metadata: Partial<Document>): Promise<Document> {
+  async uploadDocument(_file: File, metadata: Partial<Document>): Promise<Document> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('metadata', JSON.stringify(metadata));
@@ -387,7 +387,7 @@ export const questionnaireAPI = {
   },
 
   // Create new questionnaire
-  async createQuestionnaire(questionnaire: Partial<Questionnaire>): Promise<Questionnaire> {
+  async createQuestionnaire(_questionnaire: Partial<Questionnaire>): Promise<Questionnaire> {
     return apiRequest<Questionnaire>('/questionnaires', {
       method: 'POST',
       body: JSON.stringify(questionnaire),
@@ -395,7 +395,7 @@ export const questionnaireAPI = {
   },
 
   // Submit questionnaire response
-  async submitResponse(questionnaireId: string, responses: any[]): Promise<any> {
+  async submitResponse(_questionnaireId: string, responses: any[]): Promise<any> {
     return apiRequest('/questionnaires/responses', {
       method: 'POST',
       body: JSON.stringify({
@@ -443,7 +443,7 @@ export const reportAPI = {
   },
 
   // Generate report
-  async generateReport(type: string, parameters: any, format = 'PDF'): Promise<any> {
+  async generateReport(_type: string, parameters: any, format = 'PDF'): Promise<any> {
     return apiRequest('/reports/generate', {
       method: 'POST',
       body: JSON.stringify({
@@ -579,7 +579,7 @@ export const analyticsAPI = {
   },
 
   // Get risk trends
-  async getRiskTrends(period: string = '30d'): Promise<any> {
+  async getRiskTrends(_period: string = '30d'): Promise<any> {
     return apiRequest(`/analytics/risks/trends?period=${period}`);
   },
 
@@ -600,7 +600,7 @@ export function formatDateForAPI(date: Date | string): string {
 }
 
 // Handle API errors consistently
-export function handleAPIError(_error: unknown): string {
+export function handleAPIError(__error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
@@ -611,7 +611,7 @@ export function handleAPIError(_error: unknown): string {
 const cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
 
 export function getCachedData<T>(key: string): T | null {
-  const cached = cache.get(key);
+  const _cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < cached.ttl) {
     return cached.data;
   }

@@ -1,5 +1,5 @@
-import { Risk, RiskCategory } from '@/types';
-import { RiskCategory as PrismaRiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
+// import { Risk, RiskCategory } from '@/types';
+// import { RiskCategory as PrismaRiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
 import { BaseRepository, RepositoryResult, createPaginatedResult } from './base.repository';
 import { PaginationOptions } from '@/lib/db';
 

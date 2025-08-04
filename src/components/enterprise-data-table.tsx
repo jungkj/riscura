@@ -33,7 +33,7 @@ export interface ColumnDefinition<T = any> {
   type?: 'text' | 'status-badge' | 'user-avatar' | 'date' | 'actions';
   sortable?: boolean;
   searchable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (_value: any, row: T) => React.ReactNode;
   accessor?: (row: T) => any;
 }
 
@@ -104,7 +104,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   const [sorts, setSorts] = useState<Array<{ column: string; direction: 'asc' | 'desc' }>>([]);
 
   const filteredData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
     
     if (searchQuery) {
       result = result.filter(row => 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useGoogleDriveFiles } from '@/hooks/useGoogleDriveFiles';
 import { useGoogleDriveIntegration } from '@/hooks/useGoogleDriveIntegration';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
@@ -24,7 +24,7 @@ interface GoogleDriveFile {
 }
 
 interface Props {
-  onFileSelect: (file: GoogleDriveFile) => void;
+  onFileSelect: (_file: GoogleDriveFile) => void;
   selectedFileId?: string;
 }
 
@@ -149,7 +149,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
       </div>
 
       {/* Error Alert */}
-      {error && (
+      {Boolean(error) && (
         <DaisyAlert variant="error" >
   {error}
 </DaisyAlert>
@@ -209,7 +209,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
       </DaisyCard>
 
       {/* Loading indicator for pagination */}
-      {isLoading && files.length > 0 && (
+      {Boolean(isLoading) && files.length > 0 && (
         <div className="flex justify-center py-4">
           <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
         </div>

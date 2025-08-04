@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 
 // Services
-import { AIService } from '@/services/AIService';
+// import { AIService } from '@/services/AIService';
 
 interface ProcessingOptions {
   aiAnalysis: boolean;
@@ -87,7 +87,7 @@ async function processExcelRCSA(
 ): Promise<any> {
   const workbook = XLSX.read(buffer, { type: 'buffer' });
 
-  const result = {
+  const _result = {
     risks: [] as any[],
     controls: [] as any[],
     mappings: [] as any[],
@@ -169,7 +169,7 @@ async function processPolicyDocument(
     throw new Error('No text content could be extracted from the document');
   }
 
-  const result = {
+  const _result = {
     extractedRisks: [] as any[],
     extractedControls: [] as any[],
     aiConfidence: 0,
@@ -227,7 +227,7 @@ async function processBulkUpload(
 }
 
 // Helper functions
-function detectSheetType(headers: string[]): 'risk' | 'control' | 'mapping' | 'mixed' {
+const detectSheetType = (headers: string[]): 'risk' | 'control' | 'mapping' | 'mixed' {
   const riskKeywords = ['risk', 'threat', 'vulnerability', 'likelihood', 'impact', 'probability'];
   const controlKeywords = ['control', 'mitigation', 'safeguard', 'procedure', 'policy'];
   const mappingKeywords = ['mapping', 'relationship', 'link'];
@@ -331,7 +331,7 @@ async function processControlData(_data: any[],
   return controls;
 }
 
-function processMappingData(_data: any[], organizationId: string): any[] {
+const processMappingData = (_data: any[], organizationId: string): any[] {
   const mappings: any[] = [];
 
   for (const row of data) {
@@ -424,7 +424,7 @@ async function extractPDFText(buffer: Buffer): Promise<string> {
 async function extractWordText(buffer: Buffer): Promise<string> {
   try {
     const mammoth = await import('mammoth');
-    const result = await mammoth.extractRawText({ buffer });
+    const _result = await mammoth.extractRawText({ buffer });
     return result.value;
   } catch (error) {
     // console.error('Word extraction failed:', error);
@@ -433,7 +433,7 @@ async function extractWordText(buffer: Buffer): Promise<string> {
 }
 
 // Mapping helper functions
-function mapRiskCategory(category: string): string {
+const mapRiskCategory = (category: string): string {
   const cat = category.toLowerCase();
   if (cat.includes('operation') || cat.includes('process')) return 'operational';
   if (cat.includes('financial') || cat.includes('market')) return 'financial';
@@ -444,7 +444,7 @@ function mapRiskCategory(category: string): string {
   return 'operational';
 }
 
-function mapControlType(type: string): string {
+const mapControlType = (_type: string): string {
   const t = type.toLowerCase();
   if (t.includes('prevent')) return 'preventive';
   if (t.includes('detect') || t.includes('monitor')) return 'detective';
@@ -452,7 +452,7 @@ function mapControlType(type: string): string {
   return 'preventive';
 }
 
-function mapControlCategory(category: string): string {
+const mapControlCategory = (category: string): string {
   const cat = category.toLowerCase();
   if (cat.includes('technical') || cat.includes('system')) return 'technical';
   if (cat.includes('physical') || cat.includes('facility')) return 'physical';

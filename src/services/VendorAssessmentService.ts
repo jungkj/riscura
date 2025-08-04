@@ -1,5 +1,5 @@
-import { ProboService, VendorAssessment, VendorInfo, VendorFinding } from './ProboService';
-import { AIService } from './AIService';
+// import { ProboService, VendorAssessment, VendorInfo, VendorFinding } from './ProboService';
+// import { AIService } from './AIService';
 
 export interface VendorRiskProfile {
   id: string;

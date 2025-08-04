@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
+// import {
   Card,
   CardContent,
   CardDescription,
@@ -49,7 +49,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-import {
+// import {
   anomalyDetectionAIService,
   type AnomalyAlert,
   type AnomalyPattern,
@@ -59,7 +59,7 @@ import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
 
 interface DemoProps {
-  onAnomalyDetected?: (alert: AnomalyAlert) => void;
+  onAnomalyDetected?: (_alert: AnomalyAlert) => void;
 }
 
 interface RealTimeMetric {
@@ -420,7 +420,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
     }
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     switch (trend) {
       case 'up': return <TrendingUp className="h-4 w-4 text-red-500" />;
       case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;

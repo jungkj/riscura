@@ -26,7 +26,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { debounce, throttle } from 'lodash-es';
 import { cn } from '@/lib/utils';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -377,7 +377,7 @@ const ChartSkeleton: React.FC<{ height?: number }> = ({ height = 300 }) => (
 
 const ChartErrorBoundary: React.FC<{
   children: React.ReactNode;
-  onError: (_error: Error) => void;
+  onError: (__error: Error) => void;
 }> = ({ children, onError }) => {
   const [error, setError] = useState<Error | null>(null);
 
@@ -416,7 +416,7 @@ const LazyChart: React.FC<{
   config: ChartConfig;
   index: number;
   onLoad: () => void;
-  onError: (_error: Error) => void;
+  onError: (__error: Error) => void;
   inView: boolean;
   enableIntersectionObserver: boolean;
 }> = ({ config, index, onLoad, onError, inView, enableIntersectionObserver }) => {
@@ -694,11 +694,11 @@ export const useOptimizedCharts = (initialCharts: ChartConfig[]) => {
     setCharts((prev) => [...prev, chart]);
   }, []);
 
-  const removeChart = useCallback((index: number) => {
+  const removeChart = useCallback((_index: number) => {
     setCharts((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const updateChart = useCallback((index: number, updates: Partial<ChartConfig>) => {
+  const updateChart = useCallback((_index: number, updates: Partial<ChartConfig>) => {
     setCharts((prev) => prev.map((chart, i) => (i === index ? { ...chart, ...updates } : chart)));
   }, []);
 

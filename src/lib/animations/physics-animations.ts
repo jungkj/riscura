@@ -472,7 +472,7 @@ export class AnimationManager {
   /**
    * Create scroll-triggered animation
    */
-  createScrollAnimation(threshold: number = 0.1): Variants {
+  createScrollAnimation(_threshold: number = 0.1): Variants {
     if (this.reducedMotion) {
       return {
         offscreen: { opacity: 0 },

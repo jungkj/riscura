@@ -66,7 +66,7 @@ export async function GET() {
             },
           });
 
-          const result = await prisma.$queryRaw`SELECT 1 as test`;
+          const _result = await prisma.$queryRaw`SELECT 1 as test`;
           results.pooledTest = {
             success: true,
             result: result,

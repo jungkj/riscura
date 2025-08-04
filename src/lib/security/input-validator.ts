@@ -570,7 +570,7 @@ class InputValidator {
     return /<[^>]*>/g.test(input);
   }
 
-  private mergeResults(target: ValidationResult, source: ValidationResult): void {
+  private mergeResults(_target: ValidationResult, source: ValidationResult): void {
     target.sanitizedValue = source.sanitizedValue;
     target.errors.push(...source.errors);
     target.warnings.push(...source.warnings);
@@ -675,7 +675,7 @@ export function validateURL(url: string): ValidationResult {
 }
 
 export function sanitizeHTML(html: string, config?: Partial<SanitizationConfig>): string {
-  const result = inputValidator.validate(html, undefined, config);
+  const _result = inputValidator.validate(html, undefined, config);
   return result.sanitizedValue;
 }
 

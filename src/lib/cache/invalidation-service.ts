@@ -1,5 +1,5 @@
 // Cache Invalidation Service for Coordinated Cache Management
-import { redisClient } from './redis-client';
+// import { redisClient } from './redis-client';
 import { queryCache } from './query-cache';
 import { apiCache } from './api-cache';
 
@@ -72,8 +72,7 @@ class InvalidationService {
   }
 
   // Trigger invalidation based on database change
-  public async invalidateOnDatabaseChange(
-    table: string,
+  public async invalidateOnDatabaseChange(_table: string,
     operation: 'CREATE' | 'UPDATE' | 'DELETE',
     recordId?: string,
     data?: any

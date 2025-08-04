@@ -44,7 +44,7 @@ export async function GET() {
       log: ['error'],
     });
 
-    const result = await prisma.$queryRaw`SELECT current_database() as db, now() as time`;
+    const _result = await prisma.$queryRaw`SELECT current_database() as db, now() as time`;
     await prisma.$disconnect();
 
     return NextResponse.json({

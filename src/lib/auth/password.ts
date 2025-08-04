@@ -154,7 +154,7 @@ export function generateSecurePassword(length: number = 16): string {
 /**
  * Get a random character from a string
  */
-function getRandomChar(chars: string): string {
+const getRandomChar = (chars: string): string {
   return chars.charAt(Math.floor(Math.random() * chars.length));
 }
 

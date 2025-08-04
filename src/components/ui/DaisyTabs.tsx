@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultValue?: string;
   value?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (_value: string) => void;
 }
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {}

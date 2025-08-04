@@ -23,7 +23,7 @@ export interface AuthenticatedUser {
   lastLoginAt?: Date;
 }
 
-function extractTokenFromHeader(authHeader: string): string {
+const extractTokenFromHeader = (authHeader: string): string {
   if (authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7);
   }
@@ -141,7 +141,7 @@ export async function withAuth(
 /**
  * Enhanced authorization check with security logging
  */
-function checkAuthorization(
+const checkAuthorization = (
   user: {
     id: string;
     role: string;
@@ -205,7 +205,7 @@ function checkAuthorization(
  * Role-based access control decorator
  */
 export function requireRole(...roles: string[]) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
     descriptor.value = withAuth(method, { requiredRoles: roles });
@@ -216,7 +216,7 @@ export function requireRole(...roles: string[]) {
  * Permission-based access control decorator
  */
 export function requirePermission(...permissions: string[]) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
     descriptor.value = withAuth(method, { requiredPermissions: permissions });
@@ -297,7 +297,7 @@ export function validateCSRFToken(req: NextRequest): boolean {
     return true;
   }
 
-  const token = req.headers.get('x-csrf-token') || req.headers.get('csrf-token');
+  const _token = req.headers.get('x-csrf-token') || req.headers.get('csrf-token');
   const sessionToken = req.cookies.get('csrf-token')?.value;
 
   if (!token || !sessionToken || token !== sessionToken) {
@@ -316,7 +316,7 @@ export function generateCSRFToken(): string {
   return require('crypto').randomBytes(32).toString('hex');
 }
 
-function getDefaultRateLimitKey(req: NextRequest): string {
+const getDefaultRateLimitKey = (req: NextRequest): string {
   // Try to get IP from various headers
   const forwarded = req.headers.get('x-forwarded-for');
   const realIp = req.headers.get('x-real-ip');
@@ -434,7 +434,7 @@ export function composeMiddleware(
 ) {
   return async (req: NextRequest): Promise<NextResponse | null> => {
     for (const middleware of middlewares) {
-      const result = await middleware(req);
+      const _result = await middleware(req);
       if (result) {
         return result; // Middleware returned a response, stop processing
       }

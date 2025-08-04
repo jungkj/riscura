@@ -163,7 +163,7 @@ class BusinessAnalytics {
     success: boolean,
     errorMessage?: string
   ): void {
-    const duration = Date.now() - startTime;
+    const _duration = Date.now() - startTime;
     const userId = this.getCurrentUserId();
     const organizationId = this.getCurrentOrganizationId();
 
@@ -390,7 +390,7 @@ class BusinessAnalytics {
     const currentCount = this.kpis.documentsProcessed || 1;
 
     // Calculate new success rate
-    const successCount = Math.round((currentRate / 100) * (currentCount - 1));
+    const _successCount = Math.round((currentRate / 100) * (currentCount - 1));
     const newSuccessCount = successCount + (success ? 1 : 0);
     this.kpis.documentProcessingSuccessRate = (newSuccessCount / currentCount) * 100;
   }

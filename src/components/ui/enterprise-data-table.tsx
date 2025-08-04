@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   ChevronDown,
   ChevronUp,
   Filter,
@@ -65,7 +65,7 @@ export interface ColumnDefinition<T = any> {
   resizable?: boolean;
   pinnable?: boolean;
   hidden?: boolean;
-  render?: (value: any, row: T, column: ColumnDefinition<T>) => React.ReactNode;
+  render?: (_value: any, row: T, column: ColumnDefinition<T>) => React.ReactNode;
   filterOptions?: Array<{ label: string; value: any }>;
   colorMapping?: Record<string, string>;
   accessor?: (row: T) => any;
@@ -106,8 +106,8 @@ export interface DataTableProps<T = any> {
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
   onSort?: (sorts: SortState[]) => void;
-  onFilter?: (filters: FilterState[]) => void;
-  onSearch?: (query: string) => void;
+  onFilter?: (_filters: FilterState[]) => void;
+  onSearch?: (_query: string) => void;
   onRowSelect?: (selectedRows: T[]) => void;
   onRowClick?: (row: T) => void;
   onColumnReorder?: (columns: ColumnDefinition<T>[]) => void;
@@ -263,7 +263,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   );
   
   const filteredData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
     
     // Apply search
     if (searchQuery) {
@@ -349,7 +349,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     });
   }, [onFilter]);
   
-  const handleRowSelect = useCallback((rowIndex: number, selected: boolean) => {
+  const handleRowSelect = useCallback((_rowIndex: number, selected: boolean) => {
     setSelectedRows(prev => {
       const newSelection = new Set(prev);
       if (selected) {
@@ -776,7 +776,7 @@ handleRowSelect(rowIndex, checked as boolean)}
       </div>
       
       {/* Footer / Pagination */}
-      {totalCount && totalCount > pageSize && (
+      {Boolean(totalCount) && totalCount > pageSize && (
         <div className="flex items-center justify-between p-enterprise-4 border-t border-border bg-surface-secondary rounded-b-lg">
           <div className="flex items-center space-x-enterprise-4">
             <span className="text-body-sm text-text-secondary">

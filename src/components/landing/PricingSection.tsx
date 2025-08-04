@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Check, Zap, Star, Crown, ArrowRight } from 'lucide-react';
+// import { Check, Zap, Star, Crown, ArrowRight } from 'lucide-react';
 // import { SUBSCRIPTION_PLANS, formatPrice } from '@/lib/stripe';
 import { useRouter } from 'next/navigation';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
@@ -93,7 +93,7 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
         </motion.div>
 
         {/* Error Display */}
-        {error && (
+        {Boolean(error) && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

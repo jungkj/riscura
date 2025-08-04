@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { useRisks } from '@/context/RiskContext';
-import { Risk } from '@/types';
-import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 
 // UI Components
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -26,7 +26,7 @@ import {
 import { Info, Maximize2 } from 'lucide-react';
 
 interface RiskMatrixProps {
-  onRiskClick?: (risk: Risk) => void;
+  onRiskClick?: (_risk: Risk) => void;
   selectedRisks?: string[];
   className?: string;
 }

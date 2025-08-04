@@ -765,7 +765,7 @@ export class AuditService {
   }
 
   // Querying and Search
-  async searchEvents(query: AuditSearchQuery): Promise<AuditSearchResult> {
+  async searchEvents(_query: AuditSearchQuery): Promise<AuditSearchResult> {
     const where: any = {};
 
     if (query.userId) where.userId = query.userId;
@@ -802,7 +802,7 @@ export class AuditService {
   }
 
   // Metrics and Analytics
-  async getAuditMetrics(period: { start: Date; end: Date }): Promise<AuditMetrics> {
+  async getAuditMetrics(_period: { start: Date; end: Date }): Promise<AuditMetrics> {
     const where = {
       timestamp: {
         gte: period.start,
@@ -876,7 +876,7 @@ export class AuditService {
   }
 
   // Convert Sets to arrays and calculate risk scores
-  private calculateEntityRiskScore(pattern: any): number {
+  private calculateEntityRiskScore(_pattern: any): number {
     const accessCount = pattern.accessCount;
     const uniqueUsers = pattern.uniqueUsers.size;
     const actions = pattern.actions.size;
@@ -950,7 +950,7 @@ export class AuditService {
   }
 
   // Convert Sets to arrays and calculate user risk scores
-  private calculateUserRiskScore(pattern: any): number {
+  private calculateUserRiskScore(_pattern: any): number {
     const totalActions = pattern.totalActions;
     const uniqueEntities = pattern.uniqueEntities.size;
     const actions = Object.keys(pattern.actions).length;
@@ -982,7 +982,7 @@ export class AuditService {
   }
 
   // Detect user anomalies
-  private detectUserAnomalies(pattern: any, groupedData: SecurityAuditEvent[]): string[] {
+  private detectUserAnomalies(_pattern: any, groupedData: SecurityAuditEvent[]): string[] {
     const anomalies: string[] = [];
 
     // Implement anomaly detection logic based on user behavior patterns

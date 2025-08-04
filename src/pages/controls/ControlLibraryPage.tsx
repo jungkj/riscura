@@ -8,7 +8,7 @@ import {
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -30,7 +30,7 @@ export default function ControlLibraryPage() {
   const [selectedControl, setSelectedControl] = useState<Control | null>(null);
 
   // Mock stats for display
-  const stats = {
+  const _stats = {
     total: 15,
     byEffectiveness: { high: 8, medium: 5, low: 2 },
     byType: { preventive: 6, detective: 5, corrective: 4 },
@@ -410,7 +410,7 @@ export default function ControlLibraryPage() {
               Control details and effectiveness information
             </DialogDescription>
           </DialogHeader>
-          {selectedControl && (
+          {Boolean(selectedControl) && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>

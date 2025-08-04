@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { parseRiskScore } from '@/lib/utils/risk-score';
+// import { parseRiskScore } from '@/lib/utils/risk-score';
 
 export interface ValidationError {
   type: 'error' | 'warning';

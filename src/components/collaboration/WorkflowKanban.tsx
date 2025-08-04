@@ -7,13 +7,13 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import {
+// import {
   Plus,
   MoreHorizontal,
   Edit,
@@ -385,7 +385,7 @@ const sampleTasks: WorkflowTask[] = [
 // Task Card Component
 const TaskCard: React.FC<{
   task: WorkflowTask;
-  onEdit: (task: WorkflowTask) => void;
+  onEdit: (_task: WorkflowTask) => void;
   onDelete: (taskId: string) => void;
   onStatusChange: (taskId: string, newStatus: WorkflowTask['status']) => void;
 }> = ({ task, onEdit, onDelete, onStatusChange }) => {
@@ -401,7 +401,7 @@ const TaskCard: React.FC<{
     }
   };
 
-  const getTypeIcon = (type: WorkflowTask['type']) => {
+  const getTypeIcon = (_type: WorkflowTask['type']) => {
     switch (type) {
       case 'risk_assessment': return <Target className="h-4 w-4" />;
       case 'control_testing': return <Shield className="h-4 w-4" />;
@@ -602,7 +602,7 @@ const TaskCard: React.FC<{
 const KanbanColumn: React.FC<{
   column: KanbanColumn;
   tasks: WorkflowTask[];
-  onTaskEdit: (task: WorkflowTask) => void;
+  onTaskEdit: (_task: WorkflowTask) => void;
   onTaskDelete: (taskId: string) => void;
   onTaskStatusChange: (taskId: string, newStatus: WorkflowTask['status']) => void;
   onAddTask: (status: WorkflowTask['status']) => void;
@@ -637,7 +637,7 @@ const KanbanColumn: React.FC<{
 </DaisyBadge>
             {column.limit && `/${column.limit}`}
           </DaisyBadge>
-          {isOverLimit && (
+          {Boolean(isOverLimit) && (
             <DaisyBadge variant="error" className="text-caption" >
   Over Limit
 </DaisyBadge>
@@ -709,7 +709,7 @@ export const WorkflowKanban: React.FC<{
     search?: string;
   }>({});
 
-  const handleTaskEdit = (task: WorkflowTask) => {
+  const handleTaskEdit = (_task: WorkflowTask) => {
     setSelectedTask(task);
     setShowTaskDialog(true);
   };
@@ -834,7 +834,7 @@ setFilterBy(prev => ({ ...prev, search: e.target.value }))}
       </div>
 
       {/* Metrics */}
-      {showMetrics && (
+      {Boolean(showMetrics) && (
         <div className="grid grid-cols-4 gap-enterprise-4 p-enterprise-6 border-b border-border">
           <DaisyCard >
   <DaisyCardBody className="p-enterprise-4" >
@@ -922,7 +922,7 @@ setFilterBy(prev => ({ ...prev, search: e.target.value }))}
             </DaisyDialogTitle>
           </DaisyDialogHeader>
           
-          {selectedTask && (
+          {Boolean(selectedTask) && (
             <div className="space-y-enterprise-4">
               <div className="grid grid-cols-2 gap-enterprise-4">
                 <div>

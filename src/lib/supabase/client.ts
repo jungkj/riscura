@@ -10,7 +10,7 @@ const isBuildTime =
   process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build';
 
 // Lazy getter for Supabase URL
-function getSupabaseUrl(): string {
+const getSupabaseUrl = (): string {
   if (isBuildTime) {
     return 'https://dummy.supabase.co'; // Dummy URL for build time
   }
@@ -22,7 +22,7 @@ function getSupabaseUrl(): string {
 }
 
 // Lazy getter for Supabase Anon Key
-function getSupabaseAnonKey(): string {
+const getSupabaseAnonKey = (): string {
   if (isBuildTime) {
     return 'dummy-anon-key'; // Dummy key for build time
   }
@@ -34,7 +34,7 @@ function getSupabaseAnonKey(): string {
 }
 
 // Lazy getter for Supabase Service Role Key
-function getSupabaseServiceRoleKey(): string {
+const getSupabaseServiceRoleKey = (): string {
   if (isBuildTime) {
     return 'dummy-service-role-key'; // Dummy key for build time
   }

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   BarChart3,
   TrendingUp,
   TrendingDown,
@@ -245,7 +245,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
   }, [selectedMetrics]);
 
   // Format value based on metric format
-  const formatValue = (value: number, format: string, unit: string) => {
+  const formatValue = (_value: number, format: string, unit: string) => {
     switch (format) {
       case 'currency':
         return new Intl.NumberFormat('en-US', {
@@ -266,7 +266,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
   };
 
   // Get trend icon and color
-  const getTrendIndicator = (trend: string, change: number, significance: string) => {
+  const getTrendIndicator = (_trend: string, change: number, significance: string) => {
     const isPositive = change > 0;
     const isNegative = change < 0;
     
@@ -289,7 +289,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         {icon}
         <span className="text-sm font-medium">
           {Math.abs(change)}
-          {showPercentageChange && change !== 0 && (
+          {Boolean(showPercentageChange) && change !== 0 && (
             <span className="text-xs ml-1">
               ({((Math.abs(change) / (Math.abs(change) + Math.abs(change))) * 100).toFixed(1)}%)
             </span>
@@ -416,7 +416,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
   const renderHeatmapView = () => (
     <div className="space-y-4">
       <div className="grid grid-cols-6 gap-2 text-xs">
-        <div></div>
+        <div />
         {selectedPeriods.map(periodId => {
           const period = COMPARISON_PERIODS.find(p => p.id === periodId);
           return (

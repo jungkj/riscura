@@ -53,7 +53,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
 
   // Check cache first
   const getCachedData = useCallback((): T | null => {
-    const cached = cache.get(cacheKey);
+    const _cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < cached.staleTime) {
       return cached.data;
     }
@@ -62,7 +62,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
 
   // Cache data
   const setCachedData = useCallback(
-    (newData: T) => {
+    (_newData: T) => {
       cache.set(cacheKey, {
         data: newData,
         timestamp: Date.now(),
@@ -209,7 +209,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
 }
 
 // Enhanced specific hooks for different endpoints
-export function useDashboardData(timeRange: string = '30d') {
+export function useDashboardData(_timeRange: string = '30d') {
   return useApiData(`/api/dashboard?timeRange=${timeRange}`, {
     cacheKey: `dashboard-${timeRange}`,
     staleTime: 2 * 60 * 1000, // 2 minutes for dashboard
@@ -218,7 +218,7 @@ export function useDashboardData(timeRange: string = '30d') {
   });
 }
 
-export function useRisksData(filters: Record<string, any> = {}) {
+export function useRisksData(_filters: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -235,7 +235,7 @@ export function useRisksData(filters: Record<string, any> = {}) {
   });
 }
 
-export function useControlsData(filters: Record<string, any> = {}) {
+export function useControlsData(_filters: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -252,7 +252,7 @@ export function useControlsData(filters: Record<string, any> = {}) {
   });
 }
 
-export function useDocumentsData(filters: Record<string, any> = {}) {
+export function useDocumentsData(_filters: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -269,7 +269,7 @@ export function useDocumentsData(filters: Record<string, any> = {}) {
   });
 }
 
-export function useQuestionnairesData(filters: Record<string, any> = {}) {
+export function useQuestionnairesData(_filters: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -297,7 +297,7 @@ export function useItemData<T>(endpoint: string, id: string | null) {
 }
 
 // Hook for analytics data
-export function useAnalyticsData(type: string, filters: Record<string, any> = {}) {
+export function useAnalyticsData(_type: string, filters: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {

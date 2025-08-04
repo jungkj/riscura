@@ -19,10 +19,10 @@ import {
 } from 'lucide-react';
 
 import { ChatMessage as ChatMessageType, AISuggestion } from '@/hooks/useARIAChat';
-import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown';
@@ -59,7 +59,7 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
   onView, 
   onDownload 
 }) => {
-  const getAttachmentIcon = (type: string) => {
+  const getAttachmentIcon = (_type: string) => {
     switch (type) {
       case 'risk': return '⚠️';
       case 'control': return '🛡️';
@@ -74,13 +74,13 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
       <span className="text-sm">{getAttachmentIcon(attachment.type)}</span>
       <span className="text-sm font-medium truncate flex-1">{attachment.title}</span>
       <div className="flex gap-1">
-        {onView && (
+        {Boolean(onView) && (
           <DaisyButton variant="ghost" size="sm" onClick={onView} >
   <ExternalLink className="h-3 w-3" />
 </DaisyButton>
           </DaisyButton>
         )}
-        {onDownload && (
+        {Boolean(onDownload) && (
           <DaisyButton variant="ghost" size="sm" onClick={onDownload} >
   <Download className="h-3 w-3" />
 </DaisyButton>
@@ -95,7 +95,7 @@ const SuggestionCard: React.FC<{
   suggestion: AISuggestion;
   onApply: (suggestion: AISuggestion) => void;
 }> = ({ suggestion, onApply }) => {
-  const getSuggestionIcon = (type: string) => {
+  const getSuggestionIcon = (_type: string) => {
     switch (type) {
       case 'analysis': return '🔍';
       case 'recommendation': return '💡';
@@ -129,7 +129,7 @@ const SuggestionCard: React.FC<{
 };
 
 // Simple text formatter for basic markdown-like features
-const formatMessageContent = (content: string) => {
+const formatMessageContent = (_content: string) => {
   // Convert **bold** to <strong>
   const boldFormatted = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
@@ -199,7 +199,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
     }
   }, [message.content, isSpeaking]);
 
-  const handleFeedback = useCallback((type: 'positive' | 'negative') => {
+  const handleFeedback = useCallback((_type: 'positive' | 'negative') => {
     onFeedback?.(message.id, type);
     toast({
       title: "Feedback received",
@@ -207,7 +207,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
     });
   }, [message.id, onFeedback, toast]);
 
-  const getAgentAvatar = (agentType: AgentType) => {
+  const getAgentAvatar = (_agentType: AgentType) => {
     const avatars = {
       risk_analyzer: '🔍',
       control_advisor: '🛡️',
@@ -241,7 +241,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         style={{ alignItems: 'flex-start' }}
       >
         {/* Avatar */}
-        {isAI && (
+        {Boolean(isAI) && (
           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm">
             {getAgentAvatar(agentType)}
           </div>
@@ -303,7 +303,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 __html: formatMessageContent(message.content) 
               }} />
             {/* Token Usage (for AI messages) */}
-            {isAI && message.usage && (
+            {Boolean(isAI) && message.usage && (
               <div className="mt-3 pt-3 border-t border-border text-xs text-muted-foreground">
                 <div className="flex justify-between">
                   <span>Tokens: {message.usage.totalTokens}</span>
@@ -330,7 +330,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                     Copy
                   </DaisyDropdownMenuContent>
                   
-                  {isAI && onRegenerate && (
+                  {Boolean(isAI) && onRegenerate && (
                     <DaisyDropdownMenuItem onClick={onRegenerate} >
                         <RotateCcw className="h-4 w-4 mr-2" />
                       Regenerate
@@ -351,7 +351,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                     )}
                   </DaisyDropdownMenuItem>
 
-                  {isAI && onFeedback && (
+                  {Boolean(isAI) && onFeedback && (
                     <>
                       <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem onClick={() => handleFeedback('positive')} />
@@ -390,7 +390,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           )}
 
           {/* AI Suggestions */}
-          {isAI && message.suggestions && message.suggestions.length > 0 && onApplySuggestion && (
+          {Boolean(isAI) && message.suggestions && message.suggestions.length > 0 && onApplySuggestion && (
             <div className="flex flex-col gap-2 mt-3">
               <p className="text-xs font-medium text-muted-foreground">Suggested actions:</p>
               {message.suggestions.map((suggestion) => (

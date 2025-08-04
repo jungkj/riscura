@@ -115,7 +115,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
   if (variant === 'switch') {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
-        {showLabel && (
+        {Boolean(showLabel) && (
           <label
             htmlFor="high-contrast-toggle"
             className="text-sm font-medium text-contrast-medium cursor-pointer"
@@ -174,7 +174,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
         }}
       >
         <Contrast className={`${getIconSize()} mr-1`} aria-hidden="true" />
-        {showLabel && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast Off'}</span>}
+        {Boolean(showLabel) && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast Off'}</span>}
       </DaisyBadge>
     );
   }
@@ -195,7 +195,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       aria-pressed={isHighContrast}
     >
       <Contrast className={`${getIconSize()} ${showLabel ? 'mr-2' : ''}`} aria-hidden="true" />
-      {showLabel && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast'}</span>}
+      {Boolean(showLabel) && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast'}</span>}
       <span className="sr-only">
         High contrast mode is {isHighContrast ? 'enabled' : 'disabled'}
       </span>
@@ -273,7 +273,7 @@ export const AccessibilityPanel: React.FC<{
             Customize your viewing experience
           </p>
         </div>
-        {onClose && (
+        {Boolean(onClose) && (
           <DaisyButton
             variant="ghost"
             size="sm"

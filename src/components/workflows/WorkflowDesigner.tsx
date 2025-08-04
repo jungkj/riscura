@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   Play,
   Pause,
   Save,
@@ -253,7 +253,7 @@ const WorkflowStepNode: React.FC<{
 
 // ========== STEP PALETTE COMPONENT ==========
 const StepPalette: React.FC<{
-  onAddStep: (type: string) => void;
+  onAddStep: (_type: string) => void;
 }> = ({ onAddStep }) => {
   return (
     <div className="w-80 border-r border-border bg-surface-secondary p-enterprise-4">
@@ -321,7 +321,7 @@ const WorkflowCanvas: React.FC<{
   onSelectStep: (step: WorkflowStep | null) => void;
   onEditStep: (step: WorkflowStep) => void;
   onDeleteStep: (stepId: string) => void;
-  onAddStep: (type: string) => void;
+  onAddStep: (_type: string) => void;
   onUpdateWorkflow: (workflow: WorkflowDefinition) => void;
 }> = ({ 
   workflow, 
@@ -340,7 +340,7 @@ const WorkflowCanvas: React.FC<{
     }
   };
 
-  const handleAddStepToCanvas = useCallback((type: string) => {
+  const handleAddStepToCanvas = useCallback((_type: string) => {
     const newStep: WorkflowStep = {
       id: `step-${Date.now()}`,
       type: type as any,

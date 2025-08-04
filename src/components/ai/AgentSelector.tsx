@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types';
 import { AI_AGENTS, type AgentConfig } from '@/config/ai-agents';
-import {
+// import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
@@ -29,8 +29,8 @@ import {
 
 interface AgentSelectorProps {
   selectedAgent: AgentType;
-  onAgentSelect: (agentType: AgentType) => void;
-  onStartConversation?: (agentType: AgentType) => void;
+  onAgentSelect: (_agentType: AgentType) => void;
+  onStartConversation?: (_agentType: AgentType) => void;
 }
 
 const AgentSelector: React.FC<AgentSelectorProps> = ({
@@ -40,7 +40,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
 }) => {
   const [expandedAgent, setExpandedAgent] = useState<AgentType | null>(null);
 
-  const getAgentIcon = (agentType: AgentType) => {
+  const getAgentIcon = (_agentType: AgentType) => {
     const icons = {
       risk_analyzer: Brain,
       control_advisor: Shield,
@@ -50,7 +50,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
     return icons[agentType];
   };
 
-  const getAgentColor = (agentType: AgentType) => {
+  const getAgentColor = (_agentType: AgentType) => {
     const colors = {
       risk_analyzer: 'bg-blue-500',
       control_advisor: 'bg-green-500',
@@ -60,7 +60,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
     return colors[agentType];
   };
 
-  const renderAgentCard = (agentType: AgentType, config: AgentConfig) => {
+  const renderAgentCard = (_agentType: AgentType, config: AgentConfig) => {
     const Icon = getAgentIcon(agentType);
     const isSelected = selectedAgent === agentType;
     const isExpanded = expandedAgent === agentType;
@@ -85,11 +85,11 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
               <DaisyCardTitle className="text-lg">{config.name}</DaisyCardTitle>
               <DaisyCardDescription className="text-sm">{config.title}</DaisyCardDescription>
             </div>
-            {isSelected && <CheckCircle className="h-5 w-5 text-blue-500" />}
+            {Boolean(isSelected) && <CheckCircle className="h-5 w-5 text-blue-500" />}
           </div>
         </DaisyCardBody>
 
-        {isExpanded && (
+        {Boolean(isExpanded) && (
           <DaisyCardBody className="pt-0">
             <DaisyTabs defaultValue="overview" className="w-full">
               <DaisyTabsList className="grid w-full grid-cols-4">

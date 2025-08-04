@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { 
+// import { 
   Loader2, 
   AlertTriangle, 
   RefreshCw, 
@@ -128,7 +128,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <div className={cn('flex items-center justify-center gap-2', className)}>
       <Loader2 className={cn('animate-spin text-[#199BEC]', sizeClasses[size])} />
-      {text && (
+      {Boolean(text) && (
         <span className="text-sm text-gray-600 font-inter" aria-live="polite">
           {text}
         </span>
@@ -170,12 +170,12 @@ export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
     <div className={cn("space-y-2", className)}>
       {(label || showPercentage) && (
         <div className="flex justify-between items-center">
-          {label && (
+          {Boolean(label) && (
             <span className="text-sm font-medium text-gray-700 font-inter">
               {label}
             </span>
           )}
-          {showPercentage && (
+          {Boolean(showPercentage) && (
             <span className="text-sm text-gray-500 font-inter">
               {Math.round(percentage)}%
             </span>
@@ -282,7 +282,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             {message}
           </p>
         </div>
-        {onRetry && (
+        {Boolean(onRetry) && (
           <DaisyButton onClick={onRetry} className="gap-2" >
   <RefreshCw className="w-4 h-4" />
 </DaisyButton>
@@ -331,7 +331,7 @@ export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry 
             }
           </p>
         </div>
-        {onRetry && (
+        {Boolean(onRetry) && (
           <DaisyButton onClick={onRetry} variant="secondary" className="gap-2" >
   <RefreshCw className="w-4 h-4" />
 </DaisyButton>
@@ -376,7 +376,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             {message}
           </p>
         </div>
-        {action && (
+        {Boolean(action) && (
           <DaisyButton onClick={action.onClick}>
           {action.label}
 
@@ -455,7 +455,7 @@ export const SuccessState: React.FC<{
             {message}
           </p>
         </div>
-        {action && (
+        {Boolean(action) && (
           <DaisyButton onClick={action.onClick}>
           {action.label}
 
@@ -476,7 +476,7 @@ export const LoadingOverlay: React.FC<{
   return (
     <div className="relative">
       {children}
-      {isLoading && (
+      {Boolean(isLoading) && (
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center space-y-3">
             <LoadingSpinner size="lg" />

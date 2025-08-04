@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   StatusIcons,
   RiskManagementIcons,
   ActionIcons,
@@ -43,7 +43,7 @@ interface QuerySuggestion {
 
 interface NaturalLanguageQueryProps {
   onQueryResult?: (result: QueryResult) => void;
-  onQuerySave?: (query: string, result: QueryResult) => void;
+  onQuerySave?: (_query: string, result: QueryResult) => void;
   placeholder?: string;
   className?: string;
 }
@@ -141,7 +141,7 @@ const queryCategories = {
 };
 
 // Mock query processing function
-const processNaturalLanguageQuery = async (query: string): Promise<QueryResult> => {
+const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult> => {
   // Simulate AI processing time
   await new Promise((resolve) => setTimeout(resolve, 1500 + Math.random() * 1000));
 
@@ -320,7 +320,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
     setShowSuggestions(false);
 
     try {
-      const result = await processNaturalLanguageQuery(queryToProcess);
+      const _result = await processNaturalLanguageQuery(queryToProcess);
       setResults((prev) => [result, ...prev]);
       setRecentQueries((prev) =>
         [queryToProcess, ...prev.filter((q) => q !== queryToProcess)].slice(0, 5)
@@ -576,7 +576,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         </div>
 
         {/* Query Suggestions */}
-        {showSuggestions && (
+        {Boolean(showSuggestions) && (
           <div className="absolute top-full left-4 right-4 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
             {/* Categories */}
             <div className="p-3 border-b border-gray-100">
@@ -656,7 +656,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
 
       {/* Results */}
       <div className="p-4">
-        {isLoading && (
+        {Boolean(isLoading) && (
           <div className="text-center py-8">
             <InlineLoading />
             <p className="text-sm text-gray-500 mt-2">Processing your query...</p>

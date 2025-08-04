@@ -1,6 +1,6 @@
 // Enterprise API Key Management System
 import crypto from 'crypto';
-import { redisClient } from '../cache/redis-client';
+// import { redisClient } from '../cache/redis-client';
 
 export interface APIKey {
   id: string;
@@ -282,7 +282,7 @@ class APIKeyManager {
   }
 
   // Record API key usage
-  public async recordUsage(usage: APIKeyUsage): Promise<void> {
+  public async recordUsage(_usage: APIKeyUsage): Promise<void> {
     this.usageStore.push(usage);
 
     // Update API key usage statistics
@@ -442,7 +442,7 @@ class APIKeyManager {
   }
 
   // List API keys for user/organization
-  public async listAPIKeys(filters: {
+  public async listAPIKeys(_filters: {
     userId?: string;
     organizationId?: string;
     status?: APIKey['status'];
@@ -643,7 +643,7 @@ class APIKeyManager {
     await redisClient.client.expire('suspicious_api_activity', 86400); // 24 hours
   }
 
-  private async storeUsageInRedis(usage: APIKeyUsage): Promise<void> {
+  private async storeUsageInRedis(_usage: APIKeyUsage): Promise<void> {
     const key = `api_usage:${usage.keyId}:${Math.floor(usage.timestamp / 3600000)}`; // Hourly buckets
     await redisClient.client.hincrby(key, 'requests', 1);
     await redisClient.client.hincrby(key, 'bytes', usage.bytesTransferred);

@@ -24,7 +24,7 @@ export interface UploadOptions {
 }
 
 export interface StorageProvider {
-  upload(file: Buffer | Uint8Array, options: UploadOptions): Promise<StorageFile>;
+  upload(_file: Buffer | Uint8Array, options: UploadOptions): Promise<StorageFile>;
   download(fileId: string): Promise<Buffer>;
   delete(fileId: string): Promise<void>;
   getUrl(fileId: string, expiresIn?: number): Promise<string>;
@@ -41,7 +41,7 @@ export class LocalStorageProvider implements StorageProvider {
     this.basePath = basePath;
   }
 
-  async upload(file: Buffer | Uint8Array, options: UploadOptions): Promise<StorageFile> {
+  async upload(_file: Buffer | Uint8Array, options: UploadOptions): Promise<StorageFile> {
     const fileId = this.generateFileId();
     const filename = options.filename || fileId;
     const filePath = this.getFilePath(fileId, filename);
@@ -173,8 +173,7 @@ export function createStorageProvider(): StorageProvider {
 }
 
 // File validation utilities
-export function validateFile(
-  file: File,
+export function validateFile(_file: File,
   options: {
     maxSize?: number;
     allowedTypes?: string[];

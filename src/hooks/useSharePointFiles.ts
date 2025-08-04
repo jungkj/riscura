@@ -16,7 +16,7 @@ interface UseSharePointFilesReturn {
   error: string | null;
   currentPath: string;
   listFiles: (path?: string) => Promise<void>;
-  searchFiles: (query: string) => Promise<void>;
+  searchFiles: (_query: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -47,7 +47,7 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
 
         if (data.files) {
           setFiles(
-            data.files.map((file: any) => ({
+            data.files.map((_file: any) => ({
               ...file,
               modifiedDate: new Date(file.modifiedDate),
             }))
@@ -69,7 +69,7 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
 
   // Search for files
   const searchFiles = useCallback(
-    async (query: string) => {
+    async (_query: string) => {
       if (!integrationId || !query.trim()) return;
 
       try {
@@ -86,7 +86,7 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
 
         if (data.files) {
           setFiles(
-            data.files.map((file: any) => ({
+            data.files.map((_file: any) => ({
               ...file,
               modifiedDate: new Date(file.modifiedDate),
             }))

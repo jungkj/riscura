@@ -15,7 +15,7 @@ import {
   Signal
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { useToast } from '@/components/ui/UserFeedback';
@@ -44,8 +44,8 @@ interface FailedRequest {
   headers?: Record<string, string>;
   retryCount: number;
   timestamp: number;
-  resolve: (value: any) => void;
-  reject: (_error: any) => void;
+  resolve: (_value: any) => void;
+  reject: (__error: any) => void;
 }
 
 // Network error handler props
@@ -68,7 +68,7 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
 };
 
 // Network monitoring hook
-function useNetworkMonitor() {
+const useNetworkMonitor = () {
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus>('checking');
   const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality>('unknown');
   const [lastChecked, setLastChecked] = useState<Date>(new Date());
@@ -108,7 +108,7 @@ function useNetworkMonitor() {
       });
 
       clearTimeout(timeoutId);
-      const duration = performance.now() - startTime;
+      const _duration = performance.now() - startTime;
 
       if (duration < 500) return 'excellent';
       if (duration < 1000) return 'good';
@@ -179,7 +179,7 @@ function useNetworkMonitor() {
 }
 
 // Request interceptor with retry logic
-function useRequestInterceptor(retryConfig: RetryConfig) {
+const useRequestInterceptor = (retryConfig: RetryConfig) {
   const [failedRequests, setFailedRequests] = useState<FailedRequest[]>([]);
   const [isRetrying, setIsRetrying] = useState(false);
   const retryTimeoutRef = useRef<NodeJS.Timeout>();
@@ -241,7 +241,7 @@ function useRequestInterceptor(retryConfig: RetryConfig) {
         clearTimeout(timeoutId);
 
         if (response.ok) {
-          const result = await response.json();
+          const _result = await response.json();
           request.resolve(result);
         } else if (retryConfig.retryableStatuses.includes(response.status)) {
           if (request.retryCount < retryConfig.maxRetries) {
@@ -485,7 +485,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
   return (
     <div className={cn("relative", className)}>
       {/* Offline Banner */}
-      {showBanner && networkStatus === 'offline' && (
+      {Boolean(showBanner) && networkStatus === 'offline' && (
         <OfflineBanner
           onRetry={handleRetry}
           isRetrying={isRetrying}
@@ -493,7 +493,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       )}
 
       {/* Detailed Status Display */}
-      {showDetailedStatus && (
+      {Boolean(showDetailedStatus) && (
         <div className="fixed top-4 right-4 z-40">
           <NetworkStatusIndicator
             status={networkStatus}
@@ -509,7 +509,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       </div>
 
       {/* Retry Progress Indicator */}
-      {isRetrying && failedRequests.length > 0 && (
+      {Boolean(isRetrying) && failedRequests.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40">
           <DaisyCard className="w-80" >
   <DaisyCardBody className="pb-3" >

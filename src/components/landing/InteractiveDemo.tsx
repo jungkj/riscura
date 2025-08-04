@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { 
+// import { 
   Upload, 
   FileText, 
   Brain, 
@@ -161,7 +161,7 @@ const InteractiveDemo = () => {
                 </div>
 
                 {/* AI Analysis Animation */}
-                {isAnalyzing && (
+                {Boolean(isAnalyzing) && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -206,7 +206,7 @@ const InteractiveDemo = () => {
             )}
 
             {/* Step 3: Results */}
-            {showResults && (
+            {Boolean(showResults) && (
               <div className="p-8">
                 <div className="text-center mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -311,7 +311,7 @@ const InteractiveDemo = () => {
         </DaisyCard>
 
         {/* Call to Action */}
-        {showResults && (
+        {Boolean(showResults) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

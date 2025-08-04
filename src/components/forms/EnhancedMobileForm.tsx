@@ -7,7 +7,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
+// import {
   Save,
   X,
   Check,
@@ -69,7 +69,7 @@ export interface FormField {
     maxLength?: number;
     min?: number;
     max?: number;
-    custom?: (value: any) => string | null;
+    custom?: (_value: any) => string | null;
   };
   conditional?: {
     field: string;
@@ -136,10 +136,10 @@ interface FormTouched {
 // FIELD COMPONENTS
 // ============================================================================
 
-function TextInputField({ field, value, onChange, onBlur, error, touched }: {
+const TextInputField = ({ field, value, onChange, onBlur, error, touched }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
   error?: string;
   touched?: boolean;
@@ -214,10 +214,10 @@ function TextInputField({ field, value, onChange, onBlur, error, touched }: {
   );
 }
 
-function TextareaField({ field, value, onChange, onBlur, error, touched }: {
+const TextareaField = ({ field, value, onChange, onBlur, error, touched }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
   error?: string;
   touched?: boolean;
@@ -251,10 +251,10 @@ function TextareaField({ field, value, onChange, onBlur, error, touched }: {
   );
 }
 
-function SelectField({ field, value, onChange, onBlur, error, touched }: {
+const SelectField = ({ field, value, onChange, onBlur, error, touched }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
   error?: string;
   touched?: boolean;
@@ -319,10 +319,10 @@ function SelectField({ field, value, onChange, onBlur, error, touched }: {
   );
 }
 
-function CheckboxField({ field, value, onChange, onBlur }: {
+const CheckboxField = ({ field, value, onChange, onBlur }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
 }) {
 
@@ -348,10 +348,10 @@ function CheckboxField({ field, value, onChange, onBlur }: {
   );
 }
 
-function ToggleField({ field, value, onChange, onBlur }: {
+const ToggleField = ({ field, value, onChange, onBlur }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
 }) {
   const device = useDeviceInfo();
@@ -392,10 +392,10 @@ function ToggleField({ field, value, onChange, onBlur }: {
   );
 }
 
-function FileField({ field, value, onChange, onBlur, error, touched }: {
+const FileField = ({ field, value, onChange, onBlur, error, touched }: {
   field: FormField;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   onBlur: () => void;
   error?: string;
   touched?: boolean;
@@ -512,10 +512,10 @@ function FileField({ field, value, onChange, onBlur, error, touched }: {
       </div>
 
       {/* Selected Files */}
-      {value && (
+      {Boolean(value) && (
         <div className="space-y-2">
           {Array.isArray(value) ? (
-            value.map((file: File, index: number) => (
+            value.map((_file: File, index: number) => (
               <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -904,7 +904,7 @@ export function EnhancedMobileForm({
     const commonProps = {
       field,
       value: values[field.name],
-      onChange: (value: any) => handleFieldChange(field.name, value),
+      onChange: (_value: any) => handleFieldChange(field.name, value),
       onBlur: () => handleFieldBlur(field.name),
       error: fieldError,
       touched: fieldTouched,
@@ -970,7 +970,7 @@ export function EnhancedMobileForm({
     <MobileOptimized className={cn('max-w-2xl mx-auto', className)}>
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" {...swipeGestures}>
         {/* Progress Indicator */}
-        {enableProgressIndicator && visibleSections.length > 1 && (
+        {Boolean(enableProgressIndicator) && visibleSections.length > 1 && (
           <div className="bg-white border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-900">
@@ -991,7 +991,7 @@ export function EnhancedMobileForm({
         )}
 
         {/* Auto-save Status */}
-        {enableAutoSave && autoSaveStatus !== 'idle' && (
+        {Boolean(enableAutoSave) && autoSaveStatus !== 'idle' && (
           <motion.div
             className={cn(
               'flex items-center space-x-2 px-3 py-2 rounded-lg text-sm',
@@ -1018,7 +1018,7 @@ export function EnhancedMobileForm({
 
         {/* Error/Success Messages */}
         <AnimatePresence>
-          {error && (
+          {Boolean(error) && (
             <motion.div
               className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3"
               initial={{ opacity: 0, y: -10 }}
@@ -1031,7 +1031,7 @@ export function EnhancedMobileForm({
             </motion.div>
           )}
 
-          {success && (
+          {Boolean(success) && (
             <motion.div
               className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3"
               initial={{ opacity: 0, y: -10 }}
@@ -1090,7 +1090,7 @@ export function EnhancedMobileForm({
               </TouchOptimizedButton>
             )}
 
-            {onCancel && (
+            {Boolean(onCancel) && (
               <TouchOptimizedButton
                 type="button"
                 onClick={onCancel}
@@ -1134,7 +1134,7 @@ export function EnhancedMobileForm({
         </div>
 
         {/* Section Dots Navigation */}
-        {enableSectionNavigation && visibleSections.length > 1 && (
+        {Boolean(enableSectionNavigation) && visibleSections.length > 1 && (
           <div className="flex justify-center space-x-2">
             {visibleSections.map((_, index) => (
               <TouchOptimizedButton

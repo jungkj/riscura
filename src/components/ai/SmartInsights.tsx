@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   StatusIcons,
   RiskManagementIcons,
   DataIcons,
@@ -286,7 +286,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'risk':
         return RiskManagementIcons.Risk;

@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   FileText,
   Plus,
   Trash2,
@@ -491,7 +491,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               <div className="text-xs text-gray-500">Overall Compliance</div>
             </div>
             <div className="space-y-2">
-              {component.data?.frameworks?.slice(0, 2).map((framework: any, index: number) => (
+              {component.data?.frameworks?.slice(0, 2).map((_framework: any, index: number) => (
                 <div key={index} className="flex items-center justify-between text-sm">
                   <span>{framework.name}</span>
                   <DaisyBadge variant={framework.status === 'compliant' ? 'default' : 'secondary'} >
@@ -547,7 +547,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
   return (
     <div className={`h-screen flex bg-gray-50 ${className}`}>
       {/* Component Library Sidebar */}
-      {showComponentLibrary && (
+      {Boolean(showComponentLibrary) && (
         <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
           <div className="p-4 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-2">Component Library</h3>
@@ -665,7 +665,7 @@ setReportTitle(e.target.value)}
             </div>
           </div>
           
-          {lastSaved && (
+          {Boolean(lastSaved) && (
             <div className="text-xs text-gray-500 mt-2">
               Last saved: {lastSaved.toLocaleTimeString()}
             </div>
@@ -702,7 +702,7 @@ setReportTitle(e.target.value)}
       </div>
 
       {/* Component Settings Panel */}
-      {selectedComponent && (
+      {Boolean(selectedComponent) && (
         <div className="w-80 bg-white border-l border-gray-200 p-4">
           <h3 className="font-semibold text-gray-900 mb-4">Component Settings</h3>
           {/* Component configuration options would go here */}

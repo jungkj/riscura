@@ -300,7 +300,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
     setCellModal({ cell, column, rowId, rowIndex });
   }, []);
 
-  const handleAIInsight = async (rowIndex: number, columnKey: string) => {
+  const handleAIInsight = async (_rowIndex: number, columnKey: string) => {
     setAiInsightCell({ row: rowIndex, col: columnKey });
     
     // Simulate AI analysis
@@ -505,7 +505,7 @@ setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
                           </div>
                           
                           {/* Cell Actions */}
-                          {isHovered && (
+                          {Boolean(isHovered) && (
                             <div className="flex items-center space-x-1 opacity-0 group-hover/content:opacity-100 transition-opacity ml-2">
                               <DaisyButton
                                 variant="ghost"
@@ -565,14 +565,14 @@ setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
             <DaisyDialogTitle className="flex items-center space-x-2" >
   <div className="text-gray-500">
 </DaisyDialogTitle>
-                {cellModal && getDataTypeIcon(cellModal.column.dataType)}
+                {Boolean(cellModal) && getDataTypeIcon(cellModal.column.dataType)}
               </div>
               <span>{cellModal?.column.name}</span>
               <DaisyBadge variant="outline">Row {(cellModal?.rowIndex || 0) + 1}</DaisyBadge>
             </DaisyDialogTitle>
           </DaisyDialogHeader>
           
-          {cellModal && (
+          {Boolean(cellModal) && (
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">

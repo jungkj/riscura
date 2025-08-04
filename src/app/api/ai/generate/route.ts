@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 // import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
-import { AIService } from '@/services/AIService';
+// import { AIService } from '@/services/AIService';
 import { db } from '@/lib/db';
 import { getModelPricing } from '@/lib/config/ai-pricing';
 
@@ -250,8 +250,7 @@ async function trackAIUsage(_data: {
 }
 
 // Helper function to calculate AI costs
-function calculateAICost(
-  model: string,
+const calculateAICost = (_model: string,
   usage?: { prompt_tokens?: number; completion_tokens?: number }
 ): number {
   if (!usage) return 0;

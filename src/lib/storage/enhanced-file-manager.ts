@@ -58,8 +58,7 @@ export class EnhancedFileManager {
   /**
    * Upload a single file with comprehensive validation and processing
    */
-  async uploadFile(
-    file: File | Buffer,
+  async uploadFile(_file: File | Buffer,
     fileName: string,
     mimeType: string,
     userId: string,
@@ -220,7 +219,7 @@ export class EnhancedFileManager {
       const file = files[i];
 
       try {
-        const result = await this.uploadFile(
+        const _result = await this.uploadFile(
           file,
           file.name,
           file.type,
@@ -271,7 +270,7 @@ export class EnhancedFileManager {
     }
 
     // Upload new version
-    const result = await this.uploadFile(
+    const _result = await this.uploadFile(
       file,
       fileName,
       mimeType,
@@ -318,8 +317,7 @@ export class EnhancedFileManager {
   /**
    * Search documents with full-text search
    */
-  async searchDocuments(
-    query: string,
+  async searchDocuments(_query: string,
     organizationId: string,
     filters: {
       type?: string[];
@@ -560,8 +558,7 @@ export class EnhancedFileManager {
     return this.SUPPORTED_PREVIEW_TYPES.includes(mimeType);
   }
 
-  private async createAuditLog(
-    action: string,
+  private async createAuditLog(_action: string,
     entityId: string,
     userId: string,
     details: any

@@ -86,7 +86,7 @@ export function useDeviceInfo(): DeviceInfo {
   return deviceInfo;
 }
 
-function getDeviceInfo(): DeviceInfo {
+const getDeviceInfo = (): DeviceInfo {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const pixelRatio = window.devicePixelRatio || 1;
@@ -454,7 +454,7 @@ export const LazyImage = ({
   });
 };
 
-function generateResponsiveSrc(src: string, width: number, quality: number): string {
+const generateResponsiveSrc = (src: string, width: number, quality: number): string {
   // If it's a Next.js optimized image, add responsive parameters
   if (src.startsWith('/_next/image')) {
     return src;

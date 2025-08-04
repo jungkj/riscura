@@ -11,7 +11,7 @@ import {
   createForbiddenError,
   createNotFoundError,
 } from '@/lib/api/error-handler';
-import {
+// import {
   RiskCreateSchema,
   RiskQuerySchema,
   parseAndValidate,
@@ -51,7 +51,7 @@ export async function GET(_request: NextRequest) {
     if (!queryValidation.success) {
       const errors = (queryValidation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        errors.map((_error: any) => ({
+        errors.map((__error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code,
@@ -252,7 +252,7 @@ export async function POST(_request: NextRequest) {
     if (!validation.success) {
       const errors = (validation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        errors.map((_error: any) => ({
+        errors.map((__error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code,
@@ -409,7 +409,7 @@ export async function POST(_request: NextRequest) {
 /**
  * Helper function to calculate risk level from risk score
  */
-function calculateRiskLevel(riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+const calculateRiskLevel = (riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
   if (riskScore <= 8) return 'LOW';
   if (riskScore <= 15) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';

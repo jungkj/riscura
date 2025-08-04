@@ -5,13 +5,13 @@ import { motion } from 'framer-motion';
 
 // Components
 import DragDropImport from '@/components/DragDropImport';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 // Icons
-import {
+// import {
   FileSpreadsheet,
   FileText,
   Upload,
@@ -98,7 +98,7 @@ export default function ImportPage() {
   const [importResults, setImportResults] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
 
-  const handleImportComplete = (results: any[]) => {
+  const handleImportComplete = (_results: any[]) => {
     setImportResults(results);
     setShowResults(true);
   };
@@ -242,7 +242,7 @@ export default function ImportPage() {
         </motion.div>
 
         {/* Import Results */}
-        {showResults && importResults.length > 0 && (
+        {Boolean(showResults) && importResults.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

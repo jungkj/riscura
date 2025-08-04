@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Loader2, Link, Unlink, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 
@@ -26,7 +26,7 @@ export const SharePointIntegration: React.FC = () => {
       return;
     }
 
-    const result = await connect(siteUrl);
+    const _result = await connect(siteUrl);
     if (result.success) {
       setSiteUrl('');
       setShowConnectForm(false);
@@ -82,14 +82,14 @@ export const SharePointIntegration: React.FC = () => {
           </div>
         </div>
 
-        {error && (
+        {Boolean(error) && (
           <DaisyAlert variant="error" className="mb-4" >
   {error}
 </DaisyAlert>
           </DaisyAlert>
         )}
 
-        {showConnectForm && (
+        {Boolean(showConnectForm) && (
           <div className="border rounded-lg p-4 mb-4 bg-gray-50">
             <h4 className="font-medium mb-3">Connect SharePoint Site</h4>
             <div className="space-y-3">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {
+// import {
   Shield,
   FileText,
   AlertTriangle,
@@ -16,7 +16,7 @@ import {
   Brain
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -25,8 +25,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
-import { Risk, Control } from '@/types';
-import { 
+// import { Risk, Control } from '@/types';
+// import { 
   complianceAIService,
   ComplianceAssessment,
   ComplianceGap,
@@ -90,7 +90,7 @@ const FrameworkSelector: React.FC<{
                       {info?.description || 'Regulatory framework'}
                     </p>
                   </div>
-                  {isSelected && (
+                  {Boolean(isSelected) && (
                     <CheckCircle className="h-4 w-4 text-primary ml-auto" />
                   )}
                 </div>
@@ -290,7 +290,7 @@ const GapAnalysisView: React.FC<{
     }
   };
 
-  const getGapTypeIcon = (type: string) => {
+  const getGapTypeIcon = (_type: string) => {
     switch (type) {
       case 'missing': return <DaisyAlertTriangle className="h-4 w-4" >
   ;
@@ -409,7 +409,7 @@ const RegulatoryChangesView: React.FC<{
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'new': return <DaisyAlertTriangle className="h-4 w-4" >
   ;
@@ -802,7 +802,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
         </DaisyTabsContent>
 
         <DaisyTabsContent value="overview" >
-            {assessment && (
+            {Boolean(assessment) && (
             <div className="space-y-6">
               <AssessmentOverview
                 assessment={assessment}
@@ -854,11 +854,11 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
         </DaisyTabsContent>
 
         <DaisyTabsContent value="roadmap" >
-            {roadmap && <RoadmapView roadmap={roadmap} />}
+            {Boolean(roadmap) && <RoadmapView roadmap={roadmap} />}
         </DaisyTabsContent>
 
         <DaisyTabsContent value="audit" >
-            {auditPlan && (
+            {Boolean(auditPlan) && (
             <DaisyCard >
   <DaisyCardBody >
 </DaisyTabsContent>

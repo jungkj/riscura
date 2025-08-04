@@ -163,7 +163,7 @@ export class RequestValidator {
     data: unknown
   ): { success: true; data: T } | { success: false; errors: string[] } {
     try {
-      const result = schema.safeParse(data);
+      const _result = schema.safeParse(data);
 
       if (result.success) {
         return { success: true, data: result.data };
@@ -243,7 +243,7 @@ export class FileUploadValidator {
   /**
    * Validate file upload
    */
-  public static validateFile(file: {
+  public static validateFile(_file: {
     name: string;
     type: string;
     size: number;

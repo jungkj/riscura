@@ -1,4 +1,4 @@
-import { supabase, supabaseAdmin } from '@/lib/supabase/client';
+// import { supabase, supabaseAdmin } from '@/lib/supabase/client';
 import { Database } from '@/lib/supabase/types';
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
@@ -131,8 +131,7 @@ export class RealTimeDataService {
   /**
    * Subscribe to specific table changes
    */
-  subscribeToTable<T extends keyof Tables>(
-    table: T,
+  subscribeToTable<T extends keyof Tables>(_table: T,
     organizationId: string,
     callback: (payload: RealtimePostgresChangesPayload<DaisyTables[T]['Row']>) => void
   ): RealTimeSubscription {
@@ -212,7 +211,7 @@ export class RealTimeDataService {
   /**
    * Create a new risk
    */
-  async createRisk(risk: Tables['risks']['Insert']): Promise<Risk> {
+  async createRisk(_risk: Tables['risks']['Insert']): Promise<Risk> {
     const { data, error } = await supabase.from('risks').insert(risk).select().single();
 
     if (error) {

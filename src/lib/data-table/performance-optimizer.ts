@@ -96,7 +96,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Optimized filtering with caching and indexing
    */
-  filterData(filters: FilterState[]): T[] {
+  filterData(_filters: FilterState[]): T[] {
     const startTime = performance.now();
     const cacheKey = this.generateFilterCacheKey(filters);
 
@@ -233,7 +233,7 @@ export class DataTablePerformanceOptimizer<T = any> {
    */
   async *streamExport(_data: T[],
     config: ExportConfig,
-    columns: { field: string; header: string; formatter?: (value: any) => string }[]
+    columns: { field: string; header: string; formatter?: (_value: any) => string }[]
   ): AsyncGenerator<string, void, unknown> {
     const startTime = performance.now();
 
@@ -272,7 +272,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Advanced search with full-text indexing
    */
-  searchData(query: string, searchFields: string[]): T[] {
+  searchData(_query: string, searchFields: string[]): T[] {
     const normalizedQuery = query.toLowerCase().trim();
 
     if (!normalizedQuery) return this.data;
@@ -352,7 +352,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     });
   }
 
-  private evaluateFilter(value: any, filter: FilterState): boolean {
+  private evaluateFilter(_value: any, filter: FilterState): boolean {
     switch (filter.operator) {
       case 'equals':
         return value === filter.value;
@@ -387,7 +387,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     return a < b ? -1 : 1;
   }
 
-  private sortFiltersBySelectivity(filters: FilterState[]): FilterState[] {
+  private sortFiltersBySelectivity(_filters: FilterState[]): FilterState[] {
     // In a real implementation, we'd analyze field cardinality
     // For now, prioritize equality filters and indexed fields
     return filters.sort((a, b) => {
@@ -407,7 +407,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     return 20;
   }
 
-  private generateFilterCacheKey(filters: FilterState[]): string {
+  private generateFilterCacheKey(_filters: FilterState[]): string {
     return JSON.stringify(
       filters.map((f) => ({ field: f.field, operator: f.operator, value: f.value }))
     );
@@ -450,7 +450,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     throw lastError!;
   }
 
-  private escapeCsvValue(value: string): string {
+  private escapeCsvValue(_value: string): string {
     if (value.includes(',') || value.includes('"') || value.includes('\n')) {
       return `"${value.replace(/"/g, '""')}"`;
     }
@@ -458,7 +458,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   }
 
   private async *streamExcelExport(_data: T[],
-    columns: { field: string; header: string; formatter?: (value: any) => string }[],
+    columns: { field: string; header: string; formatter?: (_value: any) => string }[],
     config: ExportConfig
   ): AsyncGenerator<string, void, unknown> {
     // Placeholder for Excel streaming implementation
@@ -557,7 +557,7 @@ export const useDataTableOptimizer = <T>(_data: T[],
   }, [optimizer]);
 
   const filterData = useCallback(
-    (filters: FilterState[]) => optimizer.filterData(filters),
+    (_filters: FilterState[]) => optimizer.filterData(filters),
     [optimizer]
   );
 
@@ -584,13 +584,13 @@ export const useDataTableOptimizer = <T>(_data: T[],
   const streamExport = useCallback(
     (_data: T[],
       config: ExportConfig,
-      columns: { field: string; header: string; formatter?: (value: any) => string }[]
+      columns: { field: string; header: string; formatter?: (_value: any) => string }[]
     ) => optimizer.streamExport(data, config, columns),
     [optimizer]
   );
 
   const searchData = useCallback(
-    (query: string, searchFields: string[]) => optimizer.searchData(query, searchFields),
+    (_query: string, searchFields: string[]) => optimizer.searchData(query, searchFields),
     [optimizer]
   );
 

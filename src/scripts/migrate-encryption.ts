@@ -14,7 +14,7 @@ config();
 const prisma = new PrismaClient();
 
 // Old encryption method (for decryption only)
-function decryptOldMethod(encryptedKey: string, key: string): string | null {
+const decryptOldMethod = (encryptedKey: string, key: string): string | null {
   try {
     const decipher = crypto.createDecipher('aes-256-cbc', key);
     let decrypted = decipher.update(encryptedKey, 'hex', 'utf8');
@@ -80,7 +80,7 @@ async function migrateEncryption() {
 
     // console.log(`Found ${integrations.length} integrations to migrate\n`);
 
-    let successCount = 0;
+    let _successCount = 0;
     let failureCount = 0;
 
     for (const integration of integrations) {

@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { 
+// import { 
   ChevronRight, 
   ChevronLeft,
   CheckCircle,
@@ -456,7 +456,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
                 Let's set up your personalized risk management workspace
               </p>
             </div>
-            {onSkip && (
+            {Boolean(onSkip) && (
               <DaisyButton variant="ghost" onClick={onSkip}>
           Skip Setup
 

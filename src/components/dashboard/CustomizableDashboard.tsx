@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   ActionIcons,
   StatusIcons,
   DataIcons,
@@ -181,7 +181,7 @@ const RiskOverviewWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
           <div className="text-sm text-gray-600">Medium</div>
         </div>
       </div>
-      {isEditing && (
+      {Boolean(isEditing) && (
         <div className="mt-4 p-2 bg-blue-50 rounded text-xs text-blue-700">
           Configure risk categories and thresholds
         </div>
@@ -207,7 +207,7 @@ const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: Wid
           <span className="text-sm font-medium text-green-600">92%</span>
         </div>
       </div>
-      {isEditing && (
+      {Boolean(isEditing) && (
         <div className="mt-4 p-2 bg-blue-50 rounded text-xs text-blue-700">
           Select compliance frameworks to display
         </div>
@@ -259,7 +259,7 @@ const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetPro
           <div className="text-xs text-green-700">Consider implementing MFA for admin accounts</div>
         </div>
       </div>
-      {isEditing && (
+      {Boolean(isEditing) && (
         <div className="mt-4 p-2 bg-blue-50 rounded text-xs text-blue-700">
           Configure AI insight types and frequency
         </div>
@@ -285,7 +285,7 @@ const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
           Audit
         </button>
       </div>
-      {isEditing && (
+      {Boolean(isEditing) && (
         <div className="mt-4 p-2 bg-blue-50 rounded text-xs text-blue-700">
           Customize quick action buttons
         </div>
@@ -303,7 +303,7 @@ const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
           <div className="text-sm text-gray-600 mt-2">Chart Visualization</div>
         </div>
       </div>
-      {isEditing && (
+      {Boolean(isEditing) && (
         <div className="mt-4 p-2 bg-blue-50 rounded text-xs text-blue-700">
           Select metrics and chart type
         </div>
@@ -538,7 +538,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
             <h3 className="font-medium text-gray-900 text-sm">{widget.title}</h3>
           </div>
 
-          {isEditing && (
+          {Boolean(isEditing) && (
             <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
               {widget.configurable && (
                 <button
@@ -633,7 +633,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           </button>
 
           {/* Add Widget */}
-          {isEditing && (
+          {Boolean(isEditing) && (
             <button
               onClick={() => setShowWidgetLibrary(true)}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
@@ -644,7 +644,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           )}
 
           {/* Save Layout */}
-          {isEditing && onLayoutSave && (
+          {Boolean(isEditing) && onLayoutSave && (
             <button
               onClick={saveLayout}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 transition-colors"
@@ -672,7 +672,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
             title="No widgets added"
             description="Add widgets to customize your dashboard experience."
           />
-          {isEditing && (
+          {Boolean(isEditing) && (
             <button
               onClick={() => setShowWidgetLibrary(true)}
               className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
@@ -685,7 +685,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
       )}
 
       {/* Widget Library Modal */}
-      {showWidgetLibrary && (
+      {Boolean(showWidgetLibrary) && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">

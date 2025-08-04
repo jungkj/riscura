@@ -85,7 +85,7 @@ export async function getSubscriptionStatus(_organizationId: string): Promise<Su
   }
 }
 
-function createFreeStatus(): SubscriptionStatus {
+const createFreeStatus = (): SubscriptionStatus {
   return {
     isActive: false,
     status: 'FREE',

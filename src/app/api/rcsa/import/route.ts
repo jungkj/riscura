@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import {
+// import {
   RiskCategory,
   RiskStatus,
   ControlType,
@@ -12,8 +12,8 @@ import {
   ControlStatus,
   Priority,
 } from '@/types/rcsa.types';
-import { EntityType, RiskLevel } from '@prisma/client';
-import {
+// import { EntityType, RiskLevel } from '@prisma/client';
+// import {
   riskSchema as baseRiskSchema,
   controlSchema as baseControlSchema,
 } from '@/lib/validations';
@@ -46,7 +46,7 @@ const importBodySchema = z.object({
   sourceFileName: z.string().optional(),
 });
 
-function mapEffectivenessRating(rating?: string): EffectivenessRating | undefined {
+const mapEffectivenessRating = (rating?: string): EffectivenessRating | undefined {
   if (!rating) return undefined;
   const lower = rating.toLowerCase();
 
@@ -60,7 +60,7 @@ function mapEffectivenessRating(rating?: string): EffectivenessRating | undefine
   return undefined;
 }
 
-function calculateEffectivenessScore(operatingEffectiveness?: string): number {
+const calculateEffectivenessScore = (operatingEffectiveness?: string): number {
   const rating = mapEffectivenessRating(operatingEffectiveness);
   switch (rating) {
     case EffectivenessRating.EFFECTIVE:
@@ -83,7 +83,7 @@ export const POST = withApiMiddleware({
   const { user, organizationId } = context;
 
   try {
-    const result = await db.client.$transaction(async (prisma) => {
+    const _result = await db.client.$transaction(async (prisma) => {
       const riskIdMap = new Map<string, string>();
       const createdRisks = [];
       const createdControls = [];

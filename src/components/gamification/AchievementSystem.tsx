@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
+// import { 
   Trophy,
   Star,
   Target,
@@ -377,7 +377,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
   };
 
   // Track user action
-  const trackAction = useCallback((action: string, metadata?: any) => {
+  const trackAction = useCallback((_action: string, metadata?: any) => {
     const updatedAchievements = userProgress.achievements.map(achievement => {
       if (achievement.unlocked) return achievement;
 
@@ -484,7 +484,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Achievement notification */}
-      {showNotification && (
+      {Boolean(showNotification) && (
         <AchievementNotification
           achievement={showNotification}
           onClose={() => setShowNotification(null)} />
@@ -725,7 +725,7 @@ export const useAchievements = () => {
     }
   });
 
-  const trackAction = useCallback((action: string, metadata?: any) => {
+  const trackAction = useCallback((_action: string, metadata?: any) => {
     // This would integrate with the AchievementSystem component
     // console.log('Action tracked:', action, metadata);
   }, []);

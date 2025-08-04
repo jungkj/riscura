@@ -60,7 +60,7 @@ export default function NewsletterCTA() {
           </button>
         </form>
 
-        {message && (
+        {Boolean(message) && (
           <p className={`mt-4 text-sm ${status === 'error' ? 'text-red-200' : 'text-green-200'}`}>
             {message}
           </p>

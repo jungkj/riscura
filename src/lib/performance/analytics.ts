@@ -176,7 +176,7 @@ class PerformanceAnalytics {
   }
 
   private setupUserInteractionTracking(): void {
-    const trackInteraction = (type: UserInteractionMetric['type'], event: Event) => {
+    const trackInteraction = (_type: UserInteractionMetric['type'], event: Event) => {
       if (Math.random() > this.config.sampleRate) return;
 
       const target = event.target as HTMLElement;
@@ -407,7 +407,7 @@ class PerformanceAnalytics {
     const startTime = performance.now();
 
     return () => {
-      const duration = performance.now() - startTime;
+      const _duration = performance.now() - startTime;
       this.recordCustomMetric(name, duration);
     };
   }
@@ -606,7 +606,7 @@ export const trackCustomEvent = (name: string, value?: number): void => {
 export const timeFunction = <T extends (...args: any[]) => any>(name: string, fn: T): T => {
   return ((...args: any[]) => {
     const endTiming = performanceAnalytics.startTiming(name);
-    const result = fn(...args);
+    const _result = fn(...args);
 
     if (result instanceof Promise) {
       return result.finally(() => endTiming());

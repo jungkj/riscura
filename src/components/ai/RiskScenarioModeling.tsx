@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -13,7 +13,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import {
+// import {
   AlertTriangle,
   Brain,
   Target,
@@ -560,7 +560,7 @@ const SimulationInterface: React.FC<{
               </DaisyTabsContent>
 
               <DaisyTabsContent value="results" className="space-y-enterprise-6" >
-                  {results && (
+                  {Boolean(results) && (
                   <>
                     {/* Results Summary */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-enterprise-4">
@@ -621,7 +621,7 @@ const SimulationInterface: React.FC<{
               </DaisyTabsContent>
 
               <DaisyTabsContent value="timeline" className="space-y-enterprise-4" >
-                  {results && (
+                  {Boolean(results) && (
                   <div>
                     <h4 className="text-heading-sm font-semibold mb-enterprise-4">
                       Risk Evolution Timeline
@@ -667,7 +667,7 @@ const SimulationInterface: React.FC<{
         </DaisyButton>
               </DaisyButton>
             </div>
-            {results && (
+            {Boolean(results) && (
               <div className="flex items-center space-x-enterprise-2">
                 <DaisyButton variant="outline" size="sm" >
   <Download className="h-3 w-3 mr-enterprise-1" />
@@ -789,7 +789,7 @@ export const RiskScenarioModeling: React.FC = () => {
       </div>
 
       {/* Simulation Modal */}
-      {showSimulation && selectedScenario && (
+      {Boolean(showSimulation) && selectedScenario && (
         <SimulationInterface
           scenario={selectedScenario}
           onClose={() => {

@@ -7,7 +7,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
     const startTime = Date.now();
     const diagnostic = await checkAuthEnvironment();
-    const duration = Date.now() - startTime;
+    const _duration = Date.now() - startTime;
 
     // Additional runtime checks
     const runtimeChecks = {
@@ -87,7 +87,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
   }
 }
 
-function generateRecommendations(diagnostic: any): string[] {
+const generateRecommendations = (diagnostic: any): string[] {
   const recommendations: string[] = [];
 
   if (!diagnostic.nextAuth.valid) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -11,7 +11,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import {
+// import {
   Plus,
   Target,
   Move,
@@ -32,13 +32,13 @@ import {
   Minus,
   Info,
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 
 // Import our API services
-import { api, Risk } from '@/lib/mockData';
+// import { api, Risk } from '@/lib/mockData';
 import { aiService } from '@/lib/mockAI';
 
 // ============================================================================
@@ -373,7 +373,7 @@ const RiskAssessmentMatrix: React.FC = () => {
   };
 
   // Update mitigating control
-  const updateMitigatingControl = (index: number, value: string) => {
+  const updateMitigatingControl = (_index: number, value: string) => {
     setAssessment(prev => ({
       ...prev,
       mitigatingControls: prev.mitigatingControls.map((control, i) =>
@@ -383,7 +383,7 @@ const RiskAssessmentMatrix: React.FC = () => {
   };
 
   // Remove mitigating control
-  const removeMitigatingControl = (index: number) => {
+  const removeMitigatingControl = (_index: number) => {
     setAssessment(prev => ({
       ...prev,
       mitigatingControls: prev.mitigatingControls.filter((_, i) => i !== index),

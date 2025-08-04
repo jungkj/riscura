@@ -1,5 +1,5 @@
-import { RiskAnalysis, ControlRecommendation } from '@/types/ai.types';
-import { Risk, Control } from '@/types';
+// import { RiskAnalysis, ControlRecommendation } from '@/types/ai.types';
+// import { Risk, Control } from '@/types';
 
 export interface ParsedResponse<T = any> {
   success: boolean;

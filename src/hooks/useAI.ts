@@ -97,7 +97,7 @@ export function useAI(): UseAIReturn {
  * const { generate, loading } = useAI();
  *
  * const handleGenerate = async () => {
- *   const result = await generate({
+ *   const _result = await generate({
  *     prompt: 'Generate a risk assessment for data breach',
  *     systemPrompt: 'You are a risk management expert',
  *     temperature: 0.7,

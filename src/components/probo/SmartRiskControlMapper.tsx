@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -44,7 +44,7 @@ import {
   Unlink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types';
+// import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types';
 import { ProboIntegrationService } from '@/services/ProboIntegrationService';
 
 interface Risk {
@@ -133,7 +133,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Generate AI mapping suggestions
-  const generateAISuggestions = async (risk: Risk) => {
+  const generateAISuggestions = async (_risk: Risk) => {
     setIsAnalyzing(true);
     try {
       // Simulate AI analysis for control suggestions
@@ -147,7 +147,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Simulate AI analysis
-  const analyzeRiskForControlSuggestions = async (risk: Risk): Promise<any[]> => {
+  const analyzeRiskForControlSuggestions = async (_risk: Risk): Promise<any[]> => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -169,7 +169,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Calculate relevance score between risk and control
-  const calculateRelevanceScore = (risk: Risk, control: ProboControl): number => {
+  const calculateRelevanceScore = (_risk: Risk, control: ProboControl): number => {
     let score = 0;
 
     // Category matching
@@ -216,7 +216,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Generate reasoning text
-  const generateReasoningText = (risk: Risk, control: ProboControl): string => {
+  const generateReasoningText = (_risk: Risk, control: ProboControl): string => {
     const reasons = [];
 
     if (control.category.name.toLowerCase().includes(risk.category.toLowerCase())) {
@@ -239,8 +239,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Suggest mapping type
-  const suggestMappingType = (
-    risk: Risk,
+  const suggestMappingType = (_risk: Risk,
     control: ProboControl
   ): 'Preventive' | 'Detective' | 'Corrective' | 'Compensating' => {
     if (
@@ -262,7 +261,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Estimate effectiveness
-  const estimateEffectiveness = (risk: Risk, control: ProboControl): 'High' | 'Medium' | 'Low' => {
+  const estimateEffectiveness = (_risk: Risk, control: ProboControl): 'High' | 'Medium' | 'Low' => {
     const relevanceScore = calculateRelevanceScore(risk, control);
     if (relevanceScore >= 70) return 'High';
     if (relevanceScore >= 40) return 'Medium';
@@ -270,7 +269,7 @@ export default function SmartRiskControlMapper({
   };
 
   // Calculate implementation priority
-  const calculatePriority = (risk: Risk, control: ProboControl): number => {
+  const calculatePriority = (_risk: Risk, control: ProboControl): number => {
     let priority = 0;
 
     // Risk severity weight

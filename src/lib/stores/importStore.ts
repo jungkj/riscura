@@ -60,16 +60,16 @@ export interface ImportStore {
 
   // Upload state management
   setRcsaLoading: (loading: boolean) => void;
-  setRcsaError: (_error: string | null) => void;
+  setRcsaError: (__error: string | null) => void;
   setRcsaSuccess: (success: boolean) => void;
 
   setPolicyLoading: (loading: boolean) => void;
-  setPolicyError: (_error: string | null) => void;
+  setPolicyError: (__error: string | null) => void;
   setPolicySuccess: (success: boolean) => void;
 
   // Async thunks
-  uploadRcsaFile: (file: File) => Promise<void>;
-  uploadPolicyFile: (file: File) => Promise<void>;
+  uploadRcsaFile: (_file: File) => Promise<void>;
+  uploadPolicyFile: (_file: File) => Promise<void>;
 }
 
 // Initial state
@@ -160,7 +160,7 @@ export const useImportStore = create<ImportStore>()(
         })),
 
       // Async thunk for RCSA file upload
-      uploadRcsaFile: async (file: File) => {
+      uploadRcsaFile: async (_file: File) => {
         const { setRcsaLoading, setRcsaError, setRcsaSuccess, addRcsaEntries } = get();
 
         try {
@@ -180,7 +180,7 @@ export const useImportStore = create<ImportStore>()(
             throw new Error(errorData.error || 'Upload failed');
           }
 
-          const result = await response.json();
+          const _result = await response.json();
 
           if (result.success && result.data) {
             // Transform API response to match our store types
@@ -207,7 +207,7 @@ export const useImportStore = create<ImportStore>()(
       },
 
       // Async thunk for policy file upload
-      uploadPolicyFile: async (file: File) => {
+      uploadPolicyFile: async (_file: File) => {
         const { setPolicyLoading, setPolicyError, setPolicySuccess, setPolicyExtraction } = get();
 
         try {
@@ -227,7 +227,7 @@ export const useImportStore = create<ImportStore>()(
             throw new Error(errorData.error || 'Upload failed');
           }
 
-          const result = await response.json();
+          const _result = await response.json();
 
           if (result.success && result.data) {
             const extraction: PolicyExtraction = {

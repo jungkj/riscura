@@ -97,7 +97,7 @@ export class OrganizationFactory {
     });
   }
 
-  static createBatch(count: number, options: CreateOrganizationOptions = {}): Organization[] {
+  static createBatch(_count: number, options: CreateOrganizationOptions = {}): Organization[] {
     return Array.from({ length: count }, () => this.create(options));
   }
 

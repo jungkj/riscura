@@ -7,7 +7,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter, usePathname } from 'next/navigation';
 import { useRCSA } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';
-import { 
+// import { 
   Shield, 
   BarChart3, 
   FileText, 
@@ -226,7 +226,7 @@ export function RCSANavigationTabs({
   // Determine current tab from pathname if not explicitly provided
   const currentTab = activeTab || tabs.find(tab => pathname === tab.href)?.value || 'overview';
 
-  const handleTabChange = (value: string) => {
+  const handleTabChange = (_value: string) => {
     const tab = tabs.find(t => t.value === value);
     if (tab && !tab.disabled) {
       router.push(tab.href);
@@ -315,7 +315,7 @@ export function RCSANavigationTabs({
       </DaisyTabs>
       
       {/* Description tooltip for current tab */}
-      {showDescriptions && (
+      {Boolean(showDescriptions) && (
         <div className="mt-2 mb-4">
           {tabs.find(tab => tab.value === currentTab)?.description && (
             <p className="text-sm text-muted-foreground">
@@ -441,18 +441,18 @@ export function RCSATabContent({
       {(title || description || actions) && (
         <div className="flex items-start justify-between">
           <div>
-            {title && (
+            {Boolean(title) && (
               <h2 className="text-lg font-semibold text-foreground mb-1">
                 {title}
               </h2>
             )}
-            {description && (
+            {Boolean(description) && (
               <p className="text-sm text-muted-foreground">
                 {description}
               </p>
             )}
           </div>
-          {actions && (
+          {Boolean(actions) && (
             <div className="flex items-center gap-2">
               {actions}
             </div>

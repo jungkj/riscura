@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -69,7 +69,7 @@ interface RealTimeMonitoringChartProps {
   maxDataPoints?: number;
   showAlerts?: boolean;
   className?: string;
-  onAlert?: (alert: { metric: string; value: number; threshold: number; severity: string }) => void;
+  onAlert?: (_alert: { metric: string; value: number; threshold: number; severity: string }) => void;
   onExport?: (_data: any) => void;
 }
 
@@ -250,7 +250,7 @@ export default function RealTimeMonitoringChart({
   };
   
   // Update threshold
-  const updateThreshold = (index: number, updates: Partial<DaisyAlertThreshold>) => {
+  const updateThreshold = (_index: number, updates: Partial<DaisyAlertThreshold>) => {
     setThresholds(prev => prev.map((threshold, i) => 
       i === index ? { ...threshold, ...updates } : threshold
     ));
@@ -372,7 +372,7 @@ export default function RealTimeMonitoringChart({
             </div>
             
             {/* Current Status */}
-            {currentStatus && (
+            {Boolean(currentStatus) && (
               <DaisyBadge 
                 variant={
                   currentStatus.status === 'healthy' ? 'default' :
@@ -489,7 +489,7 @@ export default function RealTimeMonitoringChart({
           
           <DaisyTabsContent value="monitoring" className="space-y-4" >
               {/* Current Values */}
-            {currentStatus && (
+            {Boolean(currentStatus) && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-600">Risk Score</div>

@@ -532,8 +532,7 @@ export class TaskManager {
   }
 
   // Handle status change notifications
-  private async handleStatusChangeNotifications(
-    task: TaskWithRelations,
+  private async handleStatusChangeNotifications(_task: TaskWithRelations,
     oldStatus: string,
     newStatus: string,
     updatedBy: string
@@ -580,7 +579,7 @@ export class TaskManager {
   }
 
   // Handle task completion logic
-  private async handleTaskCompletion(task: TaskWithRelations, completedBy: string): Promise<void> {
+  private async handleTaskCompletion(_task: TaskWithRelations, completedBy: string): Promise<void> {
     // Check for dependent tasks
     const dependentTasks = await db.client.task.findMany({
       where: {
@@ -607,7 +606,7 @@ export class TaskManager {
   }
 
   // Check if task completion triggers workflow completion
-  private async checkWorkflowCompletion(task: TaskWithRelations): Promise<void> {
+  private async checkWorkflowCompletion(_task: TaskWithRelations): Promise<void> {
     // Get all tasks for the same entity
     const entityTasks = await db.client.task.findMany({
       where: {

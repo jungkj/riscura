@@ -14,10 +14,10 @@ import {
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import {
+// import {
   Shield,
   Building,
   Database,
@@ -526,7 +526,7 @@ export default function ProboIntegrationPage() {
                       <strong className="text-green-800">System Status:</strong> All Probo AI
                       services are operational and optimized. Real-time vendor assessment, SOC 2
                       workflows, and security controls library are fully integrated.
-                      {currentTime && (
+                      {Boolean(currentTime) && (
                         <span className="text-green-700 font-medium">
                           {' '}
                           Last sync: {currentTime}

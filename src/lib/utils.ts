@@ -216,7 +216,7 @@ export const storage = {
   },
 };
 
-export function formatPercentage(value: number): string {
+export function formatPercentage(_value: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'percent',
     minimumFractionDigits: 1,
@@ -256,12 +256,12 @@ export function animateValue(
   start: number,
   end: number,
   duration: number,
-  callback: (value: number) => void
+  callback: (_value: number) => void
 ): void {
   const startTime = performance.now();
   const change = end - start;
 
-  function animate(currentTime: number) {
+  const animate = (currentTime: number) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
 
@@ -316,7 +316,7 @@ export function validatePassword(password: string): {
   };
 }
 
-export function getErrorMessage(_error: unknown): string {
+export function getErrorMessage(__error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
@@ -339,7 +339,7 @@ export function retry<T>(
     const attempt = async () => {
       try {
         attempts++;
-        const result = await fn();
+        const _result = await fn();
         resolve(result);
       } catch (error) {
         if (attempts >= maxAttempts) {

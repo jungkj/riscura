@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
@@ -13,7 +13,7 @@ import { TextFlipContainer } from '@/components/ui/TextFlipContainer';
 import { FloatingNav } from '@/components/ui/FloatingNav';
 
 // Icons
-import {
+// import {
   Shield,
   Brain,
   Target,
@@ -40,7 +40,7 @@ import {
 const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined'];
 
 // Single Word Typewriter Component
-function SingleWordTypewriter() {
+const SingleWordTypewriter = () {
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">Risk management made </span>
@@ -54,7 +54,7 @@ function SingleWordTypewriter() {
 }
 
 // HeroProcessCard Component
-function HeroProcessCard() {
+const HeroProcessCard = () {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [

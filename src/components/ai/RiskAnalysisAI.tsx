@@ -14,7 +14,7 @@ import {
   Activity
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -24,8 +24,8 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
-import { Risk, Control } from '@/types';
-import { 
+// import { Risk, Control } from '@/types';
+// import { 
   riskAnalysisAIService, 
   RiskAssessmentReport, 
   RiskCorrelationAnalysis,
@@ -37,7 +37,7 @@ interface RiskAnalysisAIProps {
   risks: Risk[];
   controls?: Control[];
   onReportGenerated?: (report: RiskAssessmentReport) => void;
-  onRecommendationApplied?: (recommendation: RiskRecommendation) => void;
+  onRecommendationApplied?: (_recommendation: RiskRecommendation) => void;
   className?: string;
 }
 
@@ -312,7 +312,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
 
 const RecommendationsView: React.FC<{
   recommendations: RiskRecommendation[];
-  onApply: (recommendation: RiskRecommendation) => void;
+  onApply: (_recommendation: RiskRecommendation) => void;
 }> = ({ recommendations, onApply }) => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -324,7 +324,7 @@ const RecommendationsView: React.FC<{
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'mitigation': return <CheckCircle className="h-4 w-4" />;
       case 'transfer': return <TrendingUp className="h-4 w-4" />;
@@ -457,7 +457,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
     }
   };
 
-  const handleApplyRecommendation = (recommendation: RiskRecommendation) => {
+  const handleApplyRecommendation = (_recommendation: RiskRecommendation) => {
     onRecommendationApplied?.(recommendation);
   };
 
@@ -670,7 +670,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
         </DaisyTabsContent>
 
         <DaisyTabsContent value="report" >
-            {currentReport && (
+            {Boolean(currentReport) && (
             <div className="space-y-6">
               <DaisyCard >
   <DaisyCardBody >
@@ -708,7 +708,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
                       </div>
                     )}
 
-                    {correlationAnalysis && (
+                    {Boolean(correlationAnalysis) && (
                       <div>
                         <h4 className="font-semibold mb-4">Correlation Analysis</h4>
                         <CorrelationAnalysisView analysis={correlationAnalysis} />

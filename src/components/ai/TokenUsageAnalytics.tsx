@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+// import { 
   TrendingUp, 
   TrendingDown, 
   DollarSign, 
@@ -13,7 +13,7 @@ import {
   Calendar,
   Users
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -21,7 +21,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { useAI } from '@/context/AIContext';
 import { PRICING_TIERS } from '@/services/TokenManagementService';
-import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types';
 import { AI_AGENTS } from '@/config/ai-agents';
 
 interface UsageCardProps {
@@ -71,7 +71,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
 </DaisyCardBody>{value}</div>
         <div className="flex items-center text-xs text-muted-foreground">
           <span>{subtitle}</span>
-          {trend && trendValue && (
+          {Boolean(trend) && trendValue && (
             <div className="flex items-center ml-2">
               {trendIcons[trend]}
               <span className="ml-1">{trendValue}</span>

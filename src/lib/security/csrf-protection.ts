@@ -108,7 +108,7 @@ class CSRFProtection {
     hmac.update(payload);
     const signature = hmac.digest('hex');
 
-    const token = `${Buffer.from(payload).toString('base64')}.${signature}`;
+    const _token = `${Buffer.from(payload).toString('base64')}.${signature}`;
 
     // Store token for validation
     this.tokenStore.set(token, {
@@ -225,7 +225,7 @@ class CSRFProtection {
     }
 
     // Get CSRF token from various sources
-    const token = this.extractToken(request);
+    const _token = this.extractToken(request);
     if (!token) {
       validationResult.reason = 'Missing CSRF token';
       this.recordInvalidRequest(validationResult);
@@ -431,7 +431,7 @@ class CSRFProtection {
     cookie: string;
     expires: number;
   }> {
-    const token = this.generateToken(sessionId);
+    const _token = this.generateToken(sessionId);
     const cookie = this.createTokenCookie(token);
     const expires = Date.now() + this.config.cookieOptions.maxAge * 1000;
 
@@ -563,7 +563,7 @@ export function validateCSRFToken(
   cookieToken?: string,
   sessionId?: string
 ): boolean {
-  const result = csrfProtection.validateTokenFromAPI(token, cookieToken, sessionId);
+  const _result = csrfProtection.validateTokenFromAPI(token, cookieToken, sessionId);
   return result.isValid;
 }
 

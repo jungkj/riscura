@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { redis } from '@/lib/redis';
+// import { redis } from '@/lib/redis';
 import crypto from 'crypto';
 
 export interface GoogleDriveTokens {

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import { rcsaApiClient, rcsaHelpers } from '@/lib/api/rcsa-client';
-import {
+// import {
   Risk,
   Control,
   ControlRiskMapping,
@@ -56,7 +56,7 @@ interface RCSAContextActions {
   navigateToAssessment: (assessmentId: string, fromContext?: NavigationContext) => Promise<void>;
 
   // CRUD operations
-  createRisk: (risk: CreateRiskRequest) => Promise<Risk>;
+  createRisk: (_risk: CreateRiskRequest) => Promise<Risk>;
   updateRisk: (id: string, updates: UpdateRiskRequest) => Promise<Risk>;
   deleteRisk: (id: string) => Promise<void>;
 
@@ -145,7 +145,7 @@ const initialState: RCSAContextState = {
   analytics: null,
 };
 
-function rcsaReducer(state: RCSAContextState, action: RCSAAction): RCSAContextState {
+const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextState {
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
@@ -279,7 +279,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   // UTILITY FUNCTIONS
   // ============================================================================
 
-  const handleApiError = useCallback((_error: any, context: string) => {
+  const handleApiError = useCallback((__error: any, context: string) => {
     // console.error(`RCSA API Error [${context}]:`, error);
     const message = error?.message || error?.error?.message || `Failed to ${context}`;
     dispatch({ type: 'SET_ERROR', payload: message });
@@ -703,7 +703,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       // Check if user is authenticated before loading data
-      const token = localStorage.getItem('auth-token');
+      const _token = localStorage.getItem('auth-token');
       const sessionToken = sessionStorage.getItem('auth-token');
 
       if (!token && !sessionToken) {

@@ -21,7 +21,7 @@ import {
   Area,
   AreaChart
 } from 'recharts';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -29,7 +29,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import { 
+// import { 
   RiskManagementIcons, 
   DataIcons, 
   ActionIcons,
@@ -123,7 +123,7 @@ interface ComplianceProgressChartProps {
   enablePrediction?: boolean;
   height?: number;
   className?: string;
-  onFrameworkClick?: (framework: ComplianceFramework) => void;
+  onFrameworkClick?: (_framework: ComplianceFramework) => void;
   onRequirementClick?: (requirement: ComplianceRequirement) => void;
   onExport?: (_data: any) => void;
 }
@@ -472,7 +472,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
   };
 
   // Handle framework click
-  const handleFrameworkClick = useCallback((framework: ComplianceFramework) => {
+  const handleFrameworkClick = useCallback((_framework: ComplianceFramework) => {
     setSelectedFramework(framework.id);
     onFrameworkClick?.(framework);
   }, [onFrameworkClick]);
@@ -587,13 +587,13 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
 </DaisyCardTitle>
               <span>{title}</span>
             </DaisyCardTitle>
-            {description && (
+            {Boolean(description) && (
               <p className="text-sm text-gray-600 mt-1">{description}</p>
             )}
           </div>
           
           <div className="flex items-center space-x-2">
-            {enableExport && (
+            {Boolean(enableExport) && (
               <DaisyButton variant="outline" size="sm" onClick={handleExport} >
   <Download className="h-4 w-4 mr-2" />
 </DaisyButton>
@@ -613,7 +613,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
 
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <DaisySelect value={chartType} onValueChange={(value: any) => setChartType(value)} />
+          <DaisySelect value={chartType} onValueChange={(_value: any) => setChartType(value)} />
             <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Chart Type" />
 </DaisySelect>
@@ -625,7 +625,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
             </DaisySelectContent>
           </DaisySelect>
           
-          <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
+          <DaisySelect value={timeRange} onValueChange={(_value: any) => setTimeRange(value)} />
             <DaisySelectTrigger>
                 <DaisySelectValue placeholder="Time Range" />
 </DaisySelect>

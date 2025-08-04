@@ -2,10 +2,10 @@
 
 import React from 'react';
 import MainContentArea from '@/components/layout/MainContentArea';
-import { ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
-import { RiskRegisterTable } from '@/components/risk-register-table';
-import {
+// import { RiskRegisterTable } from '@/components/risk-register-table';
+// import {
   Shield,
   AlertTriangle,
   CheckCircle,

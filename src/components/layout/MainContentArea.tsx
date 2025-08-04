@@ -196,7 +196,7 @@ const ActionButtons: React.FC<{
       )}
 
       {/* Primary Action */}
-      {primary && (
+      {Boolean(primary) && (
         <DaisyButton
           variant={primary.variant || 'primary'}
           size="sm"
@@ -261,7 +261,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
             <div className="flex items-start justify-between">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
-                {subtitle && <p className="text-lg text-gray-600 max-w-2xl">{subtitle}</p>}
+                {Boolean(subtitle) && <p className="text-lg text-gray-600 max-w-2xl">{subtitle}</p>}
               </div>
 
               {/* Actions */}
@@ -278,7 +278,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
             )}
           </div>
 
-          {headerSeparator && <DaisySeparator className="mt-6" />}
+          {Boolean(headerSeparator) && <DaisySeparator className="mt-6" />}
         </header>
 
         {/* Content Area */}
@@ -326,11 +326,11 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       {(title || subtitle || action) && (
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            {title && <h2 className="text-xl font-semibold text-gray-900">{title}</h2>}
-            {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+            {Boolean(title) && <h2 className="text-xl font-semibold text-gray-900">{title}</h2>}
+            {Boolean(subtitle) && <p className="text-sm text-gray-600">{subtitle}</p>}
           </div>
 
-          {action && (
+          {Boolean(action) && (
             <DaisyButton
               variant={action.variant || 'outline'}
               size="sm"
@@ -401,11 +401,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           )}
         >
           <div className="space-y-1">
-            {title && <h3 className="text-lg font-semibold text-gray-900">{title}</h3>}
-            {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+            {Boolean(title) && <h3 className="text-lg font-semibold text-gray-900">{title}</h3>}
+            {Boolean(subtitle) && <p className="text-sm text-gray-600">{subtitle}</p>}
           </div>
 
-          {action && (
+          {Boolean(action) && (
             <DaisyButton
               variant={action.variant || 'outline'}
               size="sm"
@@ -423,7 +423,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         {children}
       </div>
 
-      {footer && (
+      {Boolean(footer) && (
         <div className={cn('border-t border-gray-100', getPaddingClass(padding), 'pt-4')}>
           {footer}
         </div>

@@ -144,7 +144,7 @@ export async function validateFile(
 /**
  * Detect file type based on magic numbers, extension, and MIME type
  */
-function detectFileType(buffer: Buffer, extension: string, mimeType: string): string {
+const detectFileType = (buffer: Buffer, extension: string, mimeType: string): string {
   // Check magic numbers first (most reliable)
   const magicType = detectByMagicNumbers(buffer);
   if (magicType) return magicType;
@@ -169,7 +169,7 @@ function detectFileType(buffer: Buffer, extension: string, mimeType: string): st
 /**
  * Detect file type by magic numbers
  */
-function detectByMagicNumbers(buffer: Buffer): string | null {
+const detectByMagicNumbers = (buffer: Buffer): string | null {
   if (buffer.length < 4) return null;
 
   // PDF
@@ -426,7 +426,7 @@ async function validateOfficeDocument(
 /**
  * Check if buffer starts with specific signature
  */
-function hasSignature(buffer: Buffer, signature: number[]): boolean {
+const hasSignature = (buffer: Buffer, signature: number[]): boolean {
   if (buffer.length < signature.length) return false;
 
   for (let i = 0; i < signature.length; i++) {

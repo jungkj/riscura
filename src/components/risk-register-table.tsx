@@ -269,7 +269,7 @@ const OwnerCell: React.FC<{ owner: RiskData['owner'] }> = ({ owner }) => {
 };
 
 const TrendCell: React.FC<{ value: string }> = ({ value }) => {
-  const getColor = (trend: string) => {
+  const getColor = (_trend: string) => {
     switch (trend) {
       case 'Increasing': return 'text-semantic-error';
       case 'Stable': return 'text-semantic-warning';

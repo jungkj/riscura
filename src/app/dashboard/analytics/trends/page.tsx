@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -18,7 +18,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import {
+// import {
   TrendingUp,
   TrendingDown,
   BarChart3,
@@ -149,7 +149,7 @@ const getCategoryConfig = (category: string) => {
   return configs[category as keyof typeof configs] || configs.performance;
 };
 
-const getTrendIcon = (trend: string) => {
+const getTrendIcon = (_trend: string) => {
   const icons = {
     up: ArrowUpRight,
     down: ArrowDownRight,

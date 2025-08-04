@@ -32,7 +32,7 @@ export async function GET() {
           log: ['error'],
         });
 
-        const result = await prisma.$queryRaw`SELECT 1 as test, now() as time`;
+        const _result = await prisma.$queryRaw`SELECT 1 as test, now() as time`;
         await prisma.$disconnect();
 
         testResult = {

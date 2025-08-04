@@ -1,4 +1,4 @@
-import { Document, Risk, Control, RiskCategory } from '@/types';
+// import { Document, Risk, Control, RiskCategory } from '@/types';
 import { generateId } from './utils';
 import { toast } from 'sonner';
 
@@ -502,7 +502,7 @@ export const batchAIAnalysis = async (documents: Document[]): Promise<AIAnalysis
 
   // Process documents sequentially to simulate realistic processing
   for (const document of documents) {
-    const result = await mockAIAnalysis(document);
+    const _result = await mockAIAnalysis(document);
     results.push(result);
   }
 
@@ -806,7 +806,7 @@ export const aiControlAnalysis = {
 
 export const aiComplianceAnalysis = {
   // Analyze compliance gaps
-  async analyzeComplianceGaps(framework: string, currentState: any): Promise<AIAnalysisResponse> {
+  async analyzeComplianceGaps(_framework: string, currentState: any): Promise<AIAnalysisResponse> {
     return aiRequest<AIAnalysisResponse>('/analysis/compliance', {
       method: 'POST',
       body: JSON.stringify({
@@ -825,8 +825,7 @@ export const aiComplianceAnalysis = {
   },
 
   // Map controls to compliance requirements
-  async mapControlsToRequirements(
-    framework: string,
+  async mapControlsToRequirements(_framework: string,
     controls: any[]
   ): Promise<{
     mappings: Array<{
@@ -1056,7 +1055,7 @@ export const aiAgentService = {
 
 export const aiUsageService = {
   // Get usage statistics
-  async getUsageStats(period: string = '30d'): Promise<{
+  async getUsageStats(_period: string = '30d'): Promise<{
     totalRequests: number;
     totalTokens: number;
     totalCost: number;
@@ -1102,7 +1101,7 @@ export function isAIEnabled(): boolean {
 }
 
 // Handle AI API errors gracefully
-export function handleAIError(_error: unknown,
+export function handleAIError(__error: unknown,
   fallbackMessage: string = 'AI service temporarily unavailable'
 ): string {
   if (!isAIEnabled()) {

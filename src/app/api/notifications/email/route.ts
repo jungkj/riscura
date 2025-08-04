@@ -214,7 +214,7 @@ async function checkRateLimit(_request: NextRequest): Promise<{
 /**
  * Validate email address
  */
-function isValidEmail(email: string): boolean {
+const isValidEmail = (email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
@@ -222,7 +222,7 @@ function isValidEmail(email: string): boolean {
 /**
  * Generate HTML version of email
  */
-function generateHTML(text: string, subject: string): string {
+const generateHTML = (text: string, subject: string): string {
   // Convert plain text to HTML with basic formatting
   const htmlContent = text
     .replace(/\n\n/g, '</p><p>')

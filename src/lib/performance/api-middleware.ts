@@ -26,7 +26,7 @@ export function withPerformance(
       const response = await handler(req);
 
       // Track performance
-      const duration = performance.now() - startTime;
+      const _duration = performance.now() - startTime;
       apiMonitor.trackRequest(endpoint, duration);
 
       // Add performance headers
@@ -53,7 +53,7 @@ export function withPerformance(
 
       return enhancedResponse;
     } catch (error) {
-      const duration = performance.now() - startTime;
+      const _duration = performance.now() - startTime;
       apiMonitor.trackRequest(`${endpoint} (ERROR)`, duration);
 
       // console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error);
@@ -90,7 +90,7 @@ export function optimizeResponse(_data: any,
   return optimizedData;
 }
 
-function selectFields(obj: any, fields: string[]): any {
+const selectFields = (obj: any, fields: string[]): any {
   const result: any = {};
   for (const field of fields) {
     if (field.includes('.')) {
@@ -160,7 +160,7 @@ export function shouldCompress(req: NextRequest): boolean {
   return acceptEncoding.includes('gzip') || acceptEncoding.includes('deflate');
 }
 
-export function generateETag(content: any): string {
+export function generateETag(_content: any): string {
   const str = typeof content === 'string' ? content : JSON.stringify(content);
   // Simple hash function for ETag
   let hash = 0;
@@ -224,7 +224,7 @@ export const rateLimiter = new RateLimiter();
 // ============================================================================
 
 export async function getPerformanceHealth() {
-  const stats = apiMonitor.getMetrics();
+  const _stats = apiMonitor.getMetrics();
 
   return {
     timestamp: new Date().toISOString(),

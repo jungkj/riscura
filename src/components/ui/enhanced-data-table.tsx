@@ -51,7 +51,7 @@ export interface EnhancedDataTableColumn<T = any> {
   filterable?: boolean;
   width?: string;
   align?: 'left' | 'center' | 'right';
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (_value: any, row: T) => React.ReactNode;
   filterOptions?: Array<{ label: string; value: string }>;
   mobileHidden?: boolean; // Hide column on mobile
 }
@@ -68,8 +68,8 @@ export interface EnhancedDataTableProps<T = any> {
   pagination?: boolean;
   pageSize?: number;
   loading?: boolean;
-  onRowAction?: (action: string, row: T) => void;
-  onBulkAction?: (action: string, rows: T[]) => void;
+  onRowAction?: (_action: string, row: T) => void;
+  onBulkAction?: (_action: string, rows: T[]) => void;
   className?: string;
   emptyMessage?: string;
   variant?: 'default' | 'minimal';
@@ -209,7 +209,7 @@ const NumberCell: React.FC<{ value: number; format?: 'currency' | 'percentage' |
   );
 };
 
-const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => void }> = ({ row, onAction }) => {
+const ActionsCell: React.FC<{ row: any; onAction: (_action: string, row: any) => void }> = ({ row, onAction }) => {
   const device = useDevice();
   
   return (
@@ -259,7 +259,7 @@ const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => 
 const MobileCardView: React.FC<{
   data: any[];
   columns: EnhancedDataTableColumn[];
-  onRowAction?: (action: string, row: any) => void;
+  onRowAction?: (_action: string, row: any) => void;
   selectedRows: string[];
   onSelectRow: (rowId: string, checked: boolean) => void;
   selectable: boolean;
@@ -298,7 +298,7 @@ const MobileCardView: React.FC<{
           {/* Header with selection and title */}
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3 flex-1">
-              {selectable && (
+              {Boolean(selectable) && (
                 <DaisyCheckbox
                   checked={selectedRows.includes(row.id)}
                   onCheckedChange={(checked) = />
@@ -349,7 +349,7 @@ onSelectRow(row.id, !!checked)}
 const AdvancedFilters: React.FC<{
   columns: EnhancedDataTableColumn[];
   filters: FilterState;
-  onFiltersChange: (filters: FilterState) => void;
+  onFiltersChange: (_filters: FilterState) => void;
   onClearFilters: () => void;
 }> = ({ columns, filters, onFiltersChange, onClearFilters }) => {
   const device = useDevice();
@@ -363,7 +363,7 @@ const AdvancedFilters: React.FC<{
   <Filter className="h-4 w-4" />
 </DaisyProgressCell>
           {device.type !== 'mobile' && 'Filters'}
-          {hasActiveFilters && (
+          {Boolean(hasActiveFilters) && (
             <DaisyBadge variant="default" className="text-xs px-1.5 py-0.5 h-4 min-w-4" >
   {Object.keys(filters).length}
 </DaisyBadge>
@@ -375,7 +375,7 @@ const AdvancedFilters: React.FC<{
           <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold text-sm text-[#191919] font-inter">Advanced Filters</h4>
-            {hasActiveFilters && (
+            {Boolean(hasActiveFilters) && (
               <DaisyButton
                 variant="ghost"
                 size="sm"
@@ -479,7 +479,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
 
     // Apply search
     if (searchQuery) {
@@ -580,12 +580,12 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       {/* Header */}
       {(title || subtitle) && (
         <div className={cn("space-y-1", device.type === 'mobile' ? 'px-4' : '')}>
-          {title && (
+          {Boolean(title) && (
             <h2 className={cn("font-bold text-[#191919] font-inter", device.type === 'mobile' ? 'text-xl' : 'text-2xl')}>
               {title}
             </h2>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
         </div>
@@ -598,7 +598,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       )}>
         <div className={cn("flex gap-3", device.type === 'mobile' ? 'flex-col' : 'items-center')}>
           {/* Search */}
-          {searchable && (
+          {Boolean(searchable) && (
             <div className="relative flex-1 min-w-0">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <DaisyInput
@@ -612,7 +612,7 @@ setSearchQuery(e.target.value)}
 
           {/* Filters and Active Filter Indicators */}
           <div className="flex flex-wrap items-center gap-2">
-            {filterable && (
+            {Boolean(filterable) && (
               <AdvancedFilters
                 columns={visibleColumns}
                 filters={filters}
@@ -691,7 +691,7 @@ setSearchQuery(e.target.value)}
                 Refresh
               </DaisyButton>
               
-              {exportable && (
+              {Boolean(exportable) && (
                 <DaisyButton variant="tertiary" size="sm" >
   <Download className="h-4 w-4 mr-2" />
 </DaisyButton>
@@ -742,7 +742,7 @@ setSearchQuery(e.target.value)}
             <DaisyTable >
                 <DaisyTableHeader >
                   <DaisyTableRow >
-                    {selectable && (
+                    {Boolean(selectable) && (
                     <DaisyTableHead className="w-12" >
                         <DaisyCheckbox
                         checked={selectedRows.length === paginatedData.length && paginatedData.length />
@@ -798,7 +798,7 @@ setSearchQuery(e.target.value)}
                     <DaisyTableRow
                       key={row.id || index}
                       className="hover:bg-gray-50 transition-colors" >
-                        {selectable && (
+                        {Boolean(selectable) && (
                         <DaisyTableCell >
                             <DaisyCheckbox
                             checked={selectedRows.includes(row.id)}
@@ -826,7 +826,7 @@ handleSelectRow(row.id, !!checked)} />
       )}
 
       {/* Pagination */}
-      {pagination && totalPages > 1 && (
+      {Boolean(pagination) && totalPages > 1 && (
         <div className={cn(
           "flex items-center justify-between py-4",
           device.type === 'mobile' ? 'px-4 flex-col gap-3' : ''

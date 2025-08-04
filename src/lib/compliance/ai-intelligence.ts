@@ -130,8 +130,7 @@ export interface ControlPrioritization {
 
 export class ComplianceAIIntelligence {
   // Process natural language compliance query
-  async processComplianceQuery(
-    query: string,
+  async processComplianceQuery(_query: string,
     context: ComplianceQuery['context'],
     userId: string
   ): Promise<ComplianceQueryResponse> {
@@ -157,7 +156,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Classify query intent using NLP analysis
-  private classifyQueryIntent(query: string): ComplianceQuery['intent'] {
+  private classifyQueryIntent(_query: string): ComplianceQuery['intent'] {
     const lowerQuery = query.toLowerCase();
 
     // Framework search patterns
@@ -215,8 +214,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Generate response based on intent
-  private async generateQueryResponse(
-    query: string,
+  private async generateQueryResponse(_query: string,
     intent: ComplianceQuery['intent'],
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
@@ -239,8 +237,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle framework search queries
-  private async handleFrameworkSearch(
-    query: string,
+  private async handleFrameworkSearch(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
@@ -287,8 +284,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle requirement lookup queries
-  private async handleRequirementLookup(
-    query: string,
+  private async handleRequirementLookup(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
@@ -339,8 +335,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle control mapping queries
-  private async handleControlMapping(
-    query: string,
+  private async handleControlMapping(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Extract requirement/control information from query
@@ -364,8 +359,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle gap analysis queries
-  private async handleGapAnalysis(
-    query: string,
+  private async handleGapAnalysis(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Perform gap analysis for specified frameworks
@@ -411,8 +405,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle interpretation queries
-  private async handleInterpretation(
-    query: string,
+  private async handleInterpretation(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Extract key concepts from query
@@ -432,8 +425,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle recommendation queries
-  private async handleRecommendation(
-    query: string,
+  private async handleRecommendation(_query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Generate recommendations based on query and context
@@ -454,7 +446,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Generate generic response for unclassified queries
-  private generateGenericResponse(query: string): ComplianceQueryResponse {
+  private generateGenericResponse(_query: string): ComplianceQueryResponse {
     return {
       type: 'answer',
       content: `I understand you're asking about "${query}". Could you please be more specific? I can help you with:\n\n• Finding compliance frameworks\n• Looking up specific requirements\n• Mapping controls to requirements\n• Performing gap analysis\n• Interpreting regulatory guidance\n• Providing implementation recommendations`,
@@ -468,7 +460,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Extract keywords from query
-  private extractKeywords(query: string): string[] {
+  private extractKeywords(_query: string): string[] {
     const stopWords = [
       'the',
       'a',
@@ -492,7 +484,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Extract compliance concepts
-  private extractComplianceConcepts(query: string): string[] {
+  private extractComplianceConcepts(_query: string): string[] {
     const complianceConcepts = [
       'control',
       'requirement',
@@ -549,8 +541,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Generate recommendations
-  private async generateRecommendations(
-    query: string,
+  private async generateRecommendations(_query: string,
     context: ComplianceQuery['context']
   ): Promise<any> {
     // Analyze current state and generate recommendations
@@ -578,7 +569,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Store query for learning
-  private async storeQuery(query: ComplianceQuery): Promise<void> {
+  private async storeQuery(_query: ComplianceQuery): Promise<void> {
     await db.client.complianceQuery.create({
       data: query,
     });

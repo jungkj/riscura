@@ -84,7 +84,7 @@ export async function generatePDF(
       printBackground: true,
     });
 
-    const stats = await fs.stat(filePath);
+    const _stats = await fs.stat(filePath);
 
     return {
       filePath,
@@ -135,7 +135,7 @@ async function generateHTMLContent(
 /**
  * Generate Risk Assessment Report HTML
  */
-function generateRiskAssessmentHTML(_data: any, baseStyles: string): string {
+const generateRiskAssessmentHTML = (_data: any, baseStyles: string): string {
   const { summary, risks, categoryDistribution, topRisks } = data;
 
   const periodText = data.filters?.dateRange
@@ -213,7 +213,7 @@ function generateRiskAssessmentHTML(_data: any, baseStyles: string): string {
             <tbody>
               ${topRisks
                 .map(
-                  (risk: any) => `
+                  (_risk: any) => `
                 <tr>
                   <td>${risk.title}</td>
                   <td><span class="category-badge">${risk.category}</span></td>
@@ -236,7 +236,7 @@ function generateRiskAssessmentHTML(_data: any, baseStyles: string): string {
           <div class="risk-list">
             ${risks
               .map(
-                (risk: any) => `
+                (_risk: any) => `
               <div class="risk-item">
                 <div class="risk-header">
                   <h3>${risk.title}</h3>
@@ -266,7 +266,7 @@ function generateRiskAssessmentHTML(_data: any, baseStyles: string): string {
 /**
  * Generate Compliance Status Report HTML
  */
-function generateComplianceStatusHTML(_data: any, baseStyles: string): string {
+const generateComplianceStatusHTML = (_data: any, baseStyles: string): string {
   const { frameworks, complianceScores, overallCompliance } = data;
 
   return `
@@ -339,7 +339,7 @@ function generateComplianceStatusHTML(_data: any, baseStyles: string): string {
           <h2>Framework Details</h2>
           ${frameworks
             .map(
-              (framework: any) => `
+              (_framework: any) => `
             <div class="framework-detail">
               <h3>${framework.name}</h3>
               <p>${framework.description || 'No description available'}</p>
@@ -361,7 +361,7 @@ function generateComplianceStatusHTML(_data: any, baseStyles: string): string {
 /**
  * Generate Control Effectiveness Report HTML
  */
-function generateControlEffectivenessHTML(_data: any, baseStyles: string): string {
+const generateControlEffectivenessHTML = (_data: any, baseStyles: string): string {
   const { controls, effectivenessStats, totalControls, averageEffectiveness } = data;
 
   return `
@@ -447,7 +447,7 @@ function generateControlEffectivenessHTML(_data: any, baseStyles: string): strin
 /**
  * Generate Executive Summary Report HTML
  */
-function generateExecutiveSummaryHTML(_data: any, baseStyles: string): string {
+const generateExecutiveSummaryHTML = (_data: any, baseStyles: string): string {
   const { executiveSummary } = data;
 
   return `
@@ -515,7 +515,7 @@ function generateExecutiveSummaryHTML(_data: any, baseStyles: string): string {
 /**
  * Generate Audit Trail Report HTML
  */
-function generateAuditTrailHTML(_data: any, baseStyles: string): string {
+const generateAuditTrailHTML = (_data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -547,7 +547,7 @@ function generateAuditTrailHTML(_data: any, baseStyles: string): string {
 /**
  * Generate generic report HTML
  */
-function generateGenericReportHTML(_data: any, baseStyles: string): string {
+const generateGenericReportHTML = (_data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -578,7 +578,7 @@ function generateGenericReportHTML(_data: any, baseStyles: string): string {
 /**
  * Get base CSS styles for reports
  */
-function getBaseStyles(): string {
+const getBaseStyles = (): string {
   return `
     * {
       margin: 0;
@@ -872,7 +872,7 @@ function getBaseStyles(): string {
 /**
  * Generate category chart HTML
  */
-function generateCategoryChart(distribution: Record<string, number>): string {
+const generateCategoryChart = (distribution: Record<string, number>): string {
   const total = Object.values(distribution).reduce((sum, count) => sum + count, 0);
 
   return `
@@ -932,7 +932,7 @@ function generateCategoryChart(distribution: Record<string, number>): string {
 /**
  * Get default header template
  */
-function getDefaultHeaderTemplate(_data: any): string {
+const getDefaultHeaderTemplate = (_data: any): string {
   return `
     <div style="font-size: 10px; padding: 10px; border-bottom: 1px solid #e0e0e0; width: 100%; display: flex; justify-content: space-between;">
       <span>Riscura Risk Management Platform</span>
@@ -944,7 +944,7 @@ function getDefaultHeaderTemplate(_data: any): string {
 /**
  * Get default footer template
  */
-function getDefaultFooterTemplate(): string {
+const getDefaultFooterTemplate = (): string {
   return `
     <div style="font-size: 10px; padding: 10px; border-top: 1px solid #e0e0e0; width: 100%; text-align: center;">
       <span>Generated on ${new Date().toLocaleDateString()} - Confidential</span>
@@ -955,21 +955,21 @@ function getDefaultFooterTemplate(): string {
 /**
  * Helper functions
  */
-function getRiskScoreClass(score: number): string {
+const getRiskScoreClass = (score: number): string {
   if (score >= 80) return 'critical';
   if (score >= 60) return 'high';
   if (score >= 40) return 'medium';
   return 'low';
 }
 
-function getComplianceStatus(score: number): string {
+const getComplianceStatus = (score: number): string {
   if (score >= 90) return 'excellent';
   if (score >= 75) return 'good';
   if (score >= 60) return 'fair';
   return 'poor';
 }
 
-function getComplianceStatusText(score: number): string {
+const getComplianceStatusText = (score: number): string {
   if (score >= 90) return 'Excellent';
   if (score >= 75) return 'Good';
   if (score >= 60) return 'Fair';

@@ -7,12 +7,12 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
-import {
+// import {
   MessageSquare,
   Reply,
   MoreHorizontal,
@@ -205,7 +205,7 @@ const sampleComments: Comment[] = [
 // Mention Input Component
 const MentionInput: React.FC<{
   value: string;
-  onChange: (value: string, mentions: Mention[]) => void;
+  onChange: (_value: string, mentions: Mention[]) => void;
   placeholder?: string;
   users: User[];
   autoFocus?: boolean;
@@ -273,7 +273,7 @@ const MentionInput: React.FC<{
         placeholder={placeholder}
         autoFocus={autoFocus}
         className="min-h-[80px] resize-none" />
-{showMentions && (
+{Boolean(showMentions) && (
         <DaisyCard className="absolute z-50 w-64 mt-1 shadow-lg" >
   <DaisyCardBody className="p-2" >
   </DaisyTextarea>
@@ -357,10 +357,10 @@ const CommentComponent: React.FC<{
     return date.toLocaleDateString();
   };
 
-  const renderMentions = (content: string, mentions: string[]) => {
+  const renderMentions = (_content: string, mentions: string[]) => {
     if (mentions.length === 0) return content;
 
-    let result = content;
+    let _result = content;
     mentions.forEach(userId => {
       const user = sampleUsers.find(u => u.id === userId);
       if (user) {
@@ -565,7 +565,7 @@ const CommentComponent: React.FC<{
       </div>
 
       {/* Replies */}
-      {showReplies && replies.length > 0 && (
+      {Boolean(showReplies) && replies.length > 0 && (
         <div className="space-y-enterprise-3">
           {replies.map((reply) => (
             <CommentComponent
@@ -757,10 +757,10 @@ export const CommentSystem: React.FC<{
             users={sampleUsers} />
           <div className="flex items-center justify-between mt-enterprise-2">
             <div className="text-caption text-text-secondary">
-              {replyingTo && 'Replying to comment'}
+              {Boolean(replyingTo) && 'Replying to comment'}
             </div>
             <div className="flex space-x-enterprise-1">
-              {replyingTo && (
+              {Boolean(replyingTo) && (
                 <DaisyButton
                   variant="ghost"
                   size="sm"
@@ -784,7 +784,7 @@ export const CommentSystem: React.FC<{
 
   return (
     <div className="space-y-enterprise-6">
-      {showHeader && (
+      {Boolean(showHeader) && (
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-heading-sm font-semibold">Comments & Discussion</h3>
@@ -854,7 +854,7 @@ export const CommentSystem: React.FC<{
                 autoFocus={!!replyingTo} />
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-enterprise-2">
-                  {replyingTo && (
+                  {Boolean(replyingTo) && (
                     <DaisyBadge variant="outline" className="text-caption" >
   Replying to comment
 </DaisyBadge>
@@ -862,7 +862,7 @@ export const CommentSystem: React.FC<{
                   )}
                 </div>
                 <div className="flex space-x-enterprise-2">
-                  {replyingTo && (
+                  {Boolean(replyingTo) && (
                     <DaisyButton
                       variant="outline"
                       size="sm"

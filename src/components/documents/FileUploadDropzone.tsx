@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+// import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -10,7 +10,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 // import { formatFileSize } from '@/lib/storage/file-validator';
 import toast from 'react-hot-toast';
 
@@ -25,8 +25,8 @@ interface FileUploadItem {
 }
 
 interface FileUploadDropzoneProps {
-  onUploadComplete?: (results: any[]) => void;
-  onUploadError?: (_error: string) => void;
+  onUploadComplete?: (_results: any[]) => void;
+  onUploadError?: (__error: string) => void;
   category?: string;
   linkedEntityType?: string;
   linkedEntityId?: string;
@@ -79,7 +79,7 @@ export default function FileUploadDropzone({
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle rejected files
     rejectedFiles.forEach(({ file, errors }) => {
-      errors.forEach((_error: any) => {
+      errors.forEach((__error: any) => {
         toast.error(`${file.name}: ${error.message}`);
       });
     });
@@ -197,7 +197,7 @@ export default function FileUploadDropzone({
             xhr.send(formData);
           });
 
-          const result = await uploadPromise;
+          const _result = await uploadPromise;
           
           setFiles(prev => prev.map(f => 
             f.id === fileItem.id 
@@ -261,7 +261,7 @@ export default function FileUploadDropzone({
     ));
   };
 
-  const getFileIcon = (file: File) => {
+  const getFileIcon = (_file: File) => {
     if (file.type.startsWith('image/')) return FILE_TYPE_ICONS.image;
     if (file.type === 'application/pdf') return FILE_TYPE_ICONS.pdf;
     if (file.type.includes('word')) return FILE_TYPE_ICONS.word;
@@ -467,7 +467,7 @@ setDescription(e.target.value)}
                         size="sm"
                         variant="ghost"
                         onClick={() => removeFile(fileItem.id)}
-                        disabled={uploading && fileItem.status === 'uploading'} />
+                        disabled={Boolean(uploading) && fileItem.status === 'uploading'} />
                         <X className="w-4 h-4" />
                       </DaisyButton>
                     </div>

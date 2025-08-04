@@ -63,7 +63,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
         const metrics = performanceMetrics.get(metric) || [];
         const recentMetrics = metrics.slice(-limit);
 
-        const stats = calculateStats(recentMetrics.map((m) => m.value));
+        const _stats = calculateStats(recentMetrics.map((m) => m.value));
 
         return NextResponse.json({
           metric,
@@ -101,7 +101,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
   return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }
 
-function calculateStats(values: number[]) {
+const calculateStats = (values: number[]) {
   if (values.length === 0) return null;
 
   const sorted = [...values].sort((a, b) => a - b);

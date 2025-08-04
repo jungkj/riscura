@@ -178,7 +178,7 @@ export async function GET(_request: NextRequest) {
 /**
  * Get API performance metrics
  */
-async function getApiMetrics(timeRange: string) {
+async function getApiMetrics(_timeRange: string) {
   try {
     // This would typically query your metrics database/service
     // For now, return mock data based on performance monitoring
@@ -257,7 +257,7 @@ async function getSystemMetrics() {
 /**
  * Get business trends
  */
-async function getBusinessTrends(timeRange: string) {
+async function getBusinessTrends(_timeRange: string) {
   try {
     // This would typically calculate trends from historical data
     // For now, return mock trend data
@@ -332,7 +332,7 @@ async function getSystemHealth() {
 /**
  * Get requests per minute
  */
-async function getRequestsPerMinute(timeRange: string): Promise<number> {
+async function getRequestsPerMinute(_timeRange: string): Promise<number> {
   try {
     // This would typically query your access logs or metrics service
     // For now, return a mock value
@@ -345,7 +345,7 @@ async function getRequestsPerMinute(timeRange: string): Promise<number> {
 /**
  * Get historical metrics for charting
  */
-async function getHistoricalMetrics(timeRange: string) {
+async function getHistoricalMetrics(_timeRange: string) {
   try {
     const now = Date.now();
     const intervals = getTimeIntervals(timeRange);
@@ -392,7 +392,7 @@ async function getHistoricalMetrics(timeRange: string) {
 /**
  * Generate time intervals for historical data
  */
-function getTimeIntervals(timeRange: string): number[] {
+const getTimeIntervals = (_timeRange: string): number[] {
   const now = Date.now();
   const intervals: number[] = [];
 

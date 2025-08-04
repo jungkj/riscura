@@ -436,7 +436,7 @@ class EmailService {
         priority: options.priority || 'normal',
       };
 
-      const result = await this.transporter.sendMail(mailOptions);
+      const _result = await this.transporter.sendMail(mailOptions);
 
       // console.log('Email sent successfully:', {
         messageId: result.messageId,
@@ -595,7 +595,7 @@ class EmailService {
       }
 
       // Send email
-      const result = await this.provider.sendEmail(options);
+      const _result = await this.provider.sendEmail(options);
 
       // Log email in database
       await this.logEmail(options, result);
@@ -617,7 +617,7 @@ class EmailService {
 
     for (const email of emails) {
       try {
-        const result = await this.sendEmail(email);
+        const _result = await this.sendEmail(email);
         results.push(result);
       } catch (error) {
         // console.error('Bulk email error:', error);

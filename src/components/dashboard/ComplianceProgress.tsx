@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   CheckCircle, 
   Clock, 
   AlertTriangle,
@@ -36,7 +36,7 @@ interface ProgressRingProps {
   color?: string;
 }
 
-function ProgressRing({ progress, size = 80, strokeWidth = 8, color = '#199BEC' }: ProgressRingProps) {
+const ProgressRing = ({ progress, size = 80, strokeWidth = 8, color = '#199BEC' }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDasharray = `${circumference} ${circumference}`;
@@ -249,7 +249,7 @@ export default function ComplianceProgress() {
       </div>
 
       {/* Detailed View */}
-      {selectedFramework && (
+      {Boolean(selectedFramework) && (
         <DaisyCard className="transition-all duration-500" >
   <DaisyCardBody >
 </DaisyCard>

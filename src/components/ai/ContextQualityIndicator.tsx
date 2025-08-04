@@ -11,7 +11,7 @@ import {
   Zap
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -192,7 +192,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
 </DaisyProgress>
         </DaisyBadge>
 
-        {onRefreshContext && (
+        {Boolean(onRefreshContext) && (
           <DaisyButton
             size="sm"
             variant="ghost"
@@ -228,7 +228,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               </div>
             </div>
 
-            {onRefreshContext && (
+            {Boolean(onRefreshContext) && (
               <DaisyButton
                 size="sm"
                 variant="outline"
@@ -270,7 +270,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
           </div>
 
           {/* Context Mode Selector */}
-          {onChangeMode && (
+          {Boolean(onChangeMode) && (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Info className="h-4 w-4 text-muted-foreground" />

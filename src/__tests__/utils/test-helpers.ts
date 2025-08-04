@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { User, Organization, Risk, Control, Document } from '@prisma/client';
+// import { User, Organization, Risk, Control, Document } from '@prisma/client';
 import { jest } from '@jest/globals';
 import type { SubscriptionPlan, OrganizationSubscription } from '@/lib/billing/types';
 
@@ -496,9 +496,9 @@ export const measureExecutionTime = async <T>(
   name: string
 ): Promise<{ result: T; duration: number }> => {
   const startTime = performance.now();
-  const result = await fn();
+  const _result = await fn();
   const endTime = performance.now();
-  const duration = endTime - startTime;
+  const _duration = endTime - startTime;
 
   // console.log(`${name} executed in ${duration.toFixed(2)}ms`);
 

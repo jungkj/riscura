@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,7 +11,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-import {
+// import {
   Shield,
   AlertTriangle,
   CheckCircle,
@@ -266,19 +266,19 @@ const VantaInspiredRiskInterface = () => {
     return { total, critical, open, overdue };
   };
 
-  const stats = getRiskStats();
+  const _stats = getRiskStats();
 
-  const handleRiskView = useCallback((risk: RiskData) => {
+  const handleRiskView = useCallback((_risk: RiskData) => {
     // console.log('View risk:', risk);
     setSelectedRisk(risk);
   }, []);
 
-  const handleRiskEdit = useCallback((risk: RiskData) => {
+  const handleRiskEdit = useCallback((_risk: RiskData) => {
     // console.log('Edit risk:', risk);
     setSelectedRisk(risk);
   }, []);
 
-  const handleRiskArchive = useCallback((risk: RiskData) => {
+  const handleRiskArchive = useCallback((_risk: RiskData) => {
     // console.log('Archive risk:', risk);
     // TODO: Archive risk
   }, []);
@@ -501,7 +501,7 @@ setSearchQuery(e.target.value)}
       </div>
 
       {/* Risk Detail Modal */}
-      {selectedRisk && (
+      {Boolean(selectedRisk) && (
         <DaisyDialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)} />
           <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
   <DaisyDialogHeader>

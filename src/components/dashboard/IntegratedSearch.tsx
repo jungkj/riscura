@@ -6,7 +6,7 @@ import { Search } from 'lucide-react';
 
 interface IntegratedSearchProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (_value: string) => void;
   placeholder?: string;
 }
 

@@ -514,8 +514,7 @@ export class MultiTenantAIService {
   /**
    * Apply tenant personality to content
    */
-  private async applyTenantPersonality(
-    content: string,
+  private async applyTenantPersonality(_content: string,
     personality: AIPersonality,
     customInstructions?: string[]
   ): Promise<string> {
@@ -923,7 +922,7 @@ export class MultiTenantAIService {
     return model;
   }
 
-  private generateStyleInstructions(personality: AIPersonality): string {
+  private generateStyleInstructions(_personality: AIPersonality): string {
     const instructions: string[] = [];
 
     // Add communication style instructions
@@ -1367,7 +1366,7 @@ export class MultiTenantAIService {
   private async initializeBillingCycle(_tenantId: string): Promise<void> {}
   private async validateTenantAccess(_tenantId: string): Promise<void> {}
   private async validateTenantConfiguration(_config: TenantConfiguration): Promise<void> {}
-  private async validateAIPersonality(personality: AIPersonality): Promise<void> {}
+  private async validateAIPersonality(_personality: AIPersonality): Promise<void> {}
   private async updateTenantIsolation(_tenantId: string): Promise<void> {}
   private async updateConversationHistory(_context: TenantConversationContext,
     request: string,

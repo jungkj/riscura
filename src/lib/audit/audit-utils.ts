@@ -20,7 +20,7 @@ export function extractIpAddress(_request: NextRequest): string {
 /**
  * Get compliance flags for different entities
  */
-export function getEntityComplianceFlags(entity: AuditEntity): string[] {
+export function getEntityComplianceFlags(_entity: AuditEntity): string[] {
   const complianceMap: Record<string, string[]> = {
     USER: ['SOX', 'GDPR', 'SOC2', 'HIPAA'],
     RISK: ['SOX', 'SOC2', 'ISO27001'],

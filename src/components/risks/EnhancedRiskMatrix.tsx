@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useRef } from 'react';
-import { useRisks } from '@/context/RiskContext';
-import { Risk } from '@/types';
-import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 // UI Components
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -51,7 +51,7 @@ import {
 } from 'lucide-react';
 
 interface EnhancedRiskMatrixProps {
-  onRiskClick?: (risk: Risk) => void;
+  onRiskClick?: (_risk: Risk) => void;
   selectedRisks?: string[];
   className?: string;
   viewMode?: 'matrix' | 'heatmap' | 'density';
@@ -431,7 +431,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             </div>
           </div>
 
-          {enableExport && (
+          {Boolean(enableExport) && (
             <DaisyDropdownMenu >
                 <DaisyDropdownMenuTrigger asChild >
                   <DaisyButton variant="outline" size="sm" disabled={isExporting} >
@@ -628,7 +628,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           
-          {selectedCell && (
+          {Boolean(selectedCell) && (
             <div className="space-y-4">
               <div className="grid gap-2">
                 {selectedCell.risks.map(risk => (

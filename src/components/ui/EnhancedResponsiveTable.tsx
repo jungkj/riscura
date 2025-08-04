@@ -48,7 +48,7 @@ export interface TableColumn<T = any> {
   sortable?: boolean;
   filterable?: boolean;
   hiddenOnMobile?: boolean;
-  renderCell?: (value: any, row: T, column: TableColumn<T>) => React.ReactNode;
+  renderCell?: (_value: any, row: T, column: TableColumn<T>) => React.ReactNode;
   renderMobileCard?: (row: T) => React.ReactNode;
   accessor?: (row: T) => any;
   className?: string;
@@ -193,7 +193,7 @@ function DefaultMobileCard<T>({
             </TouchOptimizedButton>
 
             <AnimatePresence>
-              {showActions && (
+              {Boolean(showActions) && (
                 <motion.div
                   className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[150px] z-10"
                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -239,7 +239,7 @@ function DefaultMobileCard<T>({
           </TouchOptimizedButton>
 
           <AnimatePresence>
-            {isExpanded && (
+            {Boolean(isExpanded) && (
               <motion.div
                 className="mt-3 pt-3 border-t border-gray-100 space-y-2"
                 initial={{ height: 0, opacity: 0 }}
@@ -314,7 +314,7 @@ export function EnhancedResponsiveTable<T = any>({
   // ============================================================================
 
   const processedData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
 
     // Apply search filter
     if (searchQuery) {
@@ -440,7 +440,7 @@ export function EnhancedResponsiveTable<T = any>({
   const renderTableHeader = () => (
     <thead className="bg-gray-50">
       <tr>
-        {selectable && (
+        {Boolean(selectable) && (
           <th className="w-12 px-4 py-3">
             <input
               type="checkbox"
@@ -467,7 +467,7 @@ export function EnhancedResponsiveTable<T = any>({
           >
             <div className="flex items-center space-x-1">
               <span>{column.label}</span>
-              {sortable && column.sortable !== false && (
+              {Boolean(sortable) && column.sortable !== false && (
                 <div className="flex flex-col">
                   {sortState.column === column.key ? (
                     sortState.direction === 'asc' ? (
@@ -502,7 +502,7 @@ export function EnhancedResponsiveTable<T = any>({
           isSelected && 'bg-blue-50 border-blue-200'
         )}
       >
-        {selectable && (
+        {Boolean(selectable) && (
           <td className="px-4 py-3">
             <input
               type="checkbox"
@@ -568,7 +568,7 @@ export function EnhancedResponsiveTable<T = any>({
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <p className="text-red-800">{error}</p>
-        {onRefresh && (
+        {Boolean(onRefresh) && (
           <TouchOptimizedButton onClick={onRefresh} variant="secondary" size="sm" className="mt-2">
             <RefreshCw className="w-4 h-4 mr-2" />
             Retry
@@ -584,7 +584,7 @@ export function EnhancedResponsiveTable<T = any>({
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div className="flex items-center space-x-2">
           {/* Search */}
-          {searchable && (
+          {Boolean(searchable) && (
             <div className="relative flex-1 md:w-64">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -598,7 +598,7 @@ export function EnhancedResponsiveTable<T = any>({
           )}
 
           {/* Filter Toggle */}
-          {filterable && (
+          {Boolean(filterable) && (
             <TouchOptimizedButton
               onClick={() => setShowFilters(!showFilters)}
               variant={showFilters ? 'primary' : 'secondary'}
@@ -632,7 +632,7 @@ export function EnhancedResponsiveTable<T = any>({
           </div>
 
           {/* Export */}
-          {onExport && (
+          {Boolean(onExport) && (
             <TouchOptimizedButton onClick={onExport} variant="secondary" size="md">
               <Download className="w-4 h-4 mr-2" />
               Export
@@ -640,7 +640,7 @@ export function EnhancedResponsiveTable<T = any>({
           )}
 
           {/* Refresh */}
-          {onRefresh && (
+          {Boolean(onRefresh) && (
             <TouchOptimizedButton onClick={onRefresh} variant="ghost" size="md">
               <RefreshCw className="w-4 h-4" />
             </TouchOptimizedButton>
@@ -650,7 +650,7 @@ export function EnhancedResponsiveTable<T = any>({
 
       {/* Filters Panel */}
       <AnimatePresence>
-        {showFilters && (
+        {Boolean(showFilters) && (
           <motion.div
             className="bg-gray-50 border border-gray-200 rounded-lg p-4"
             initial={{ height: 0, opacity: 0 }}
@@ -721,7 +721,7 @@ export function EnhancedResponsiveTable<T = any>({
       </div>
 
       {/* Pagination */}
-      {pagination && processedData.length > 0 && (
+      {Boolean(pagination) && processedData.length > 0 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700">
             Showing {(pagination.page - 1) * pagination.pageSize + 1} to{' '}

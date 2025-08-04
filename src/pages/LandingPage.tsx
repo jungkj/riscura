@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 
 import { TypewriterEffectSmooth } from '@/components/ui/aceternity/typewriter-effect';
@@ -26,7 +26,7 @@ import HeroProcessCard from '@/components/landing/HeroProcessCard';
 import { ModernButton } from '@/components/ui/modern-button';
 
 // Icons
-import {
+// import {
   Shield,
   Brain,
   Target,
@@ -50,7 +50,7 @@ import {
 const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined'];
 
 // Single Word Typewriter Component
-function SingleWordTypewriter() {
+const SingleWordTypewriter = () {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);

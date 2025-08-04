@@ -172,7 +172,7 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ background }}
       />
-      {children && <div className="relative z-10">{children}</div>}
+      {Boolean(children) && <div className="relative z-10">{children}</div>}
     </div>
   );
 };

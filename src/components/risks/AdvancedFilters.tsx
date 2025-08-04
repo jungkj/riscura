@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { useRisks } from '@/context/RiskContext';
-import { Risk } from '@/types';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -68,7 +68,7 @@ interface FilterPreset {
 
 interface AdvancedFiltersProps {
   className?: string;
-  onFiltersChange?: (filters: FilterState) => void;
+  onFiltersChange?: (_filters: FilterState) => void;
   compact?: boolean;
 }
 
@@ -266,7 +266,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   const MultiSelect: React.FC<{
     options: string[];
     value: string[];
-    onChange: (value: string[]) => void;
+    onChange: (_value: string[]) => void;
     placeholder: string;
   }> = ({ options, value, onChange, placeholder }) => {
     const [open, setOpen] = useState(false);
@@ -388,7 +388,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         )}
       
 
-      {isExpanded && (
+      {Boolean(isExpanded) && (
         <DaisyCardBody className="space-y-6" >
   {/* Search */}
 </DaisyCardBody>

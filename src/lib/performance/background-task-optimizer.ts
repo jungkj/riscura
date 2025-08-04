@@ -461,7 +461,7 @@ export class BackgroundTaskOptimizer {
               });
             };
 
-            const result = await taskProcessor(data, onProgress);
+            const _result = await taskProcessor(data, onProgress);
 
             self.postMessage({
               type: 'TASK_COMPLETE',
@@ -597,7 +597,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Execute individual task
    */
-  private async executeTask(task: Task): Promise<void> {
+  private async executeTask(_task: Task): Promise<void> {
     task.status = 'running';
     task.startedAt = new Date();
     task.attempts++;
@@ -631,7 +631,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Execute task in web worker
    */
-  private async executeTaskInWorker(task: Task): Promise<any> {
+  private async executeTaskInWorker(_task: Task): Promise<any> {
     // Find appropriate worker pool
     const poolName = this.findWorkerPool(task.type);
     const pool = this.workerPools.get(poolName);
@@ -696,7 +696,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Execute task in main thread
    */
-  private async executeTaskInMainThread(task: Task): Promise<any> {
+  private async executeTaskInMainThread(_task: Task): Promise<any> {
     const processor = this.processors.get(task.type);
 
     if (!processor) {
@@ -731,7 +731,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Handle task error
    */
-  private handleTaskError(task: Task, error: Error): void {
+  private handleTaskError(_task: Task, error: Error): void {
     task.error = error;
     this.runningTasks.delete(task.id);
 
@@ -869,7 +869,7 @@ export class BackgroundTaskOptimizer {
   /**
    * Persist task
    */
-  private persistTask(task: Task): void {
+  private persistTask(_task: Task): void {
     this.persistenceStore.set(task.id, { ...task });
   }
 

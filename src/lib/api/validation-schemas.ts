@@ -416,7 +416,7 @@ export function parseAndValidate<T>(
   context?: string
 ): { success: true; data: T } | { success: false; errors: z.ZodIssue[] } {
   try {
-    const result = schema.parse(data);
+    const _result = schema.parse(data);
     return { success: true, data: result };
   } catch (error) {
     if (error instanceof z.ZodError) {

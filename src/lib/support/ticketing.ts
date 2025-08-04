@@ -799,7 +799,7 @@ Contact support if issues persist.`,
     return this.tickets.get(ticketId);
   }
 
-  searchTickets(query: {
+  searchTickets(_query: {
     status?: TicketStatus[];
     priority?: TicketPriority[];
     category?: TicketCategory[];
@@ -868,7 +868,7 @@ Contact support if issues persist.`,
     };
   }
 
-  searchKnowledgeBase(query: string): KnowledgeBaseArticle[] {
+  searchKnowledgeBase(_query: string): KnowledgeBaseArticle[] {
     const searchTerms = query.toLowerCase().split(' ');
 
     return Array.from(this.knowledgeBase.values())

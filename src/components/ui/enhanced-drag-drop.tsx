@@ -77,7 +77,7 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
       aria-label={`Draggable item ${id}`}
     >
       {/* Drag Handle */}
-      {dragHandle && (
+      {Boolean(dragHandle) && (
         <div
           className="absolute top-2 left-2 cursor-grab active:cursor-grabbing p-1 rounded opacity-50 hover:opacity-100 transition-opacity"
           onPointerDown={(e) => dragControls.start(e)}
@@ -91,7 +91,7 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
       )}
 
       {/* Drag Shadow */}
-      {isDragging && (
+      {Boolean(isDragging) && (
         <motion.div
           className="absolute inset-0 bg-black rounded-lg opacity-20 blur-lg -z-10"
           initial={{ scale: 0.8 }}
@@ -220,7 +220,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
                   />
                 </motion.div>
                 <p className="text-sm text-slate-600 font-medium">
-                  {isOver && !disabled ? 'Release to drop' : 'Drag items here'}
+                  {Boolean(isOver) && !disabled ? 'Release to drop' : 'Drag items here'}
                 </p>
               </>
             )}
@@ -229,7 +229,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
       </div>
 
       {/* Drop Indicator */}
-      {isOver && !disabled && (
+      {Boolean(isOver) && !disabled && (
         <motion.div
           className="absolute inset-0 border-2 border-blue-500 rounded-lg pointer-events-none"
           initial={{ scale: 0.9, opacity: 0 }}

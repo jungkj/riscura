@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   ActionIcons,
   StatusIcons,
   DataIcons,
@@ -218,7 +218,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps />= ({
               Cancel
             </button>
           )}
-          {isComplete && (
+          {Boolean(isComplete) && (
             <button
               onClick={onClose}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
@@ -264,7 +264,7 @@ export function BulkActionBar<T = any>({
   const isPartiallySelected = selectedCount > 0 && selectedCount < totalItems;
 
   // Handle bulk action execution
-  const executeBulkAction = async (action: BulkAction) => {
+  const executeBulkAction = async (_action: BulkAction) => {
     if (isExecuting) return;
 
     // Check selection constraints
@@ -290,7 +290,7 @@ export function BulkActionBar<T = any>({
     await performBulkAction(action);
   };
 
-  const performBulkAction = async (action: BulkAction) => {
+  const performBulkAction = async (_action: BulkAction) => {
     setIsExecuting(true);
     setConfirmationModal({ isOpen: false, action: null });
 
@@ -310,7 +310,7 @@ export function BulkActionBar<T = any>({
     try {
       // For demonstration, we'll simulate progress updates
       // In a real implementation, you'd integrate with your actual bulk operation
-      const result = await onBulkAction(action.id, selectedItems);
+      const _result = await onBulkAction(action.id, selectedItems);
 
       // Update progress to completion
       setProgressModal((prev) => ({
@@ -344,7 +344,7 @@ export function BulkActionBar<T = any>({
     }
   };
 
-  const getActionButtonClasses = (action: BulkAction) => {
+  const getActionButtonClasses = (_action: BulkAction) => {
     const baseClasses =
       'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
@@ -378,7 +378,7 @@ export function BulkActionBar<T = any>({
         <div className="flex items-center justify-between">
           {/* Selection Info */}
           <div className="flex items-center space-x-4">
-            {showSelectAll && (
+            {Boolean(showSelectAll) && (
               <div className="flex items-center space-x-2">
                 <button
                   onClick={isAllSelected ? onClearSelection : onSelectAll}
@@ -399,7 +399,7 @@ export function BulkActionBar<T = any>({
               </div>
             )}
 
-            {showItemCount && (
+            {Boolean(showItemCount) && (
               <div className="flex items-center space-x-2">
                 <DataIcons.Database size="xs" color="secondary" />
                 <span className="text-sm font-medium text-gray-900">

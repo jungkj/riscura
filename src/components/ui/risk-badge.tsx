@@ -118,9 +118,9 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
         </div>
       )}
       
-      {showIcon && <Icon className={sizeStyles.icon} />}
+      {Boolean(showIcon) && <Icon className={sizeStyles.icon} />}
       <span>{config.label}</span>
-      {showScore && score !== undefined && (
+      {Boolean(showScore) && score !== undefined && (
         <span className="font-bold">
           ({score})
         </span>

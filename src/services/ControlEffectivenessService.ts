@@ -1,4 +1,4 @@
-import { Control, Risk } from '@/types';
+// import { Control, Risk } from '@/types';
 
 export interface ControlEffectivenessAssessment {
   controlId: string;

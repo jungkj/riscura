@@ -79,7 +79,7 @@ describe('BillingManager', () => {
           updatedAt: new Date(),
         });
 
-        const result = await billingManager.createSubscriptionPlan(planData);
+        const _result = await billingManager.createSubscriptionPlan(planData);
 
         expect(mockPrisma.subscriptionPlan.create).toHaveBeenCalledWith({
           data: expect.objectContaining({
@@ -124,7 +124,7 @@ describe('BillingManager', () => {
         const mockPlans = [testPlan, { ...testPlan, id: 'plan-456', name: 'Basic' }];
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue(mockPlans);
 
-        const result = await billingManager.getSubscriptionPlans();
+        const _result = await billingManager.getSubscriptionPlans();
 
         expect(mockPrisma.subscriptionPlan.findMany).toHaveBeenCalledWith({
           where: {},
@@ -141,7 +141,7 @@ describe('BillingManager', () => {
         const filters = { type: ['professional'], active: true, currency: 'USD' };
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue([testPlan]);
 
-        const result = await billingManager.getSubscriptionPlans(filters);
+        const _result = await billingManager.getSubscriptionPlans(filters);
 
         expect(mockPrisma.subscriptionPlan.findMany).toHaveBeenCalledWith({
           where: {
@@ -158,7 +158,7 @@ describe('BillingManager', () => {
       it('should return empty array when no plans found', async () => {
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue([]);
 
-        const result = await billingManager.getSubscriptionPlans();
+        const _result = await billingManager.getSubscriptionPlans();
 
         expect(result).toEqual([]);
       });
@@ -176,7 +176,7 @@ describe('BillingManager', () => {
         mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(testPlan);
         mockPrisma.organizationSubscription.create.mockResolvedValue(testSubscription);
 
-        const result = await billingManager.createSubscription(testOrg.id, testPlan.id, {
+        const _result = await billingManager.createSubscription(testOrg.id, testPlan.id, {
           trialDays: 14,
         });
 
@@ -224,7 +224,7 @@ describe('BillingManager', () => {
       it('should retrieve active subscription for organization', async () => {
         mockPrisma.organizationSubscription.findFirst.mockResolvedValue(testSubscription);
 
-        const result = await billingManager.getActiveSubscription(testOrg.id);
+        const _result = await billingManager.getActiveSubscription(testOrg.id);
 
         expect(mockPrisma.organizationSubscription.findFirst).toHaveBeenCalledWith({
           where: {
@@ -241,7 +241,7 @@ describe('BillingManager', () => {
       it('should return null when no active subscription found', async () => {
         mockPrisma.organizationSubscription.findFirst.mockResolvedValue(null);
 
-        const result = await billingManager.getActiveSubscription(testOrg.id);
+        const _result = await billingManager.getActiveSubscription(testOrg.id);
 
         expect(result).toBeNull();
       });
@@ -258,7 +258,7 @@ describe('BillingManager', () => {
           unitPrice: newPlan.price,
         });
 
-        const result = await billingManager.changeSubscriptionPlan(testSubscription.id, newPlan.id);
+        const _result = await billingManager.changeSubscriptionPlan(testSubscription.id, newPlan.id);
 
         expect(mockPrisma.organizationSubscription.update).toHaveBeenCalledWith({
           where: { id: testSubscription.id },
@@ -291,7 +291,7 @@ describe('BillingManager', () => {
           canceledAt: new Date(),
         });
 
-        const result = await billingManager.cancelSubscription(testSubscription.id, true);
+        const _result = await billingManager.cancelSubscription(testSubscription.id, true);
 
         expect(mockPrisma.organizationSubscription.update).toHaveBeenCalledWith({
           where: { id: testSubscription.id },
@@ -313,7 +313,7 @@ describe('BillingManager', () => {
           cancelAtPeriodEnd: true,
         });
 
-        const result = await billingManager.cancelSubscription(testSubscription.id, false);
+        const _result = await billingManager.cancelSubscription(testSubscription.id, false);
 
         expect(mockPrisma.organizationSubscription.update).toHaveBeenCalledWith({
           where: { id: testSubscription.id },
@@ -412,7 +412,7 @@ describe('BillingManager', () => {
           isActive: true,
         });
 
-        const result = await billingManager.addPaymentMethod(testOrg.id, 'pm_test123', true);
+        const _result = await billingManager.addPaymentMethod(testOrg.id, 'pm_test123', true);
 
         expect(mockStripeService.getPaymentMethod).toHaveBeenCalledWith('pm_test123');
         expect(mockPrisma.paymentMethod.updateMany).toHaveBeenCalledWith({
@@ -467,7 +467,7 @@ describe('BillingManager', () => {
         mockPrisma.invoice.findMany.mockResolvedValue(mockInvoices);
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue(mockPlans);
 
-        const result = await billingManager.getBillingAnalytics(testOrg.id);
+        const _result = await billingManager.getBillingAnalytics(testOrg.id);
 
         expect(result).toHaveProperty('period');
         expect(result).toHaveProperty('revenue');
@@ -487,7 +487,7 @@ describe('BillingManager', () => {
         mockPrisma.invoice.findMany.mockResolvedValue([]);
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue([]);
 
-        const result = await billingManager.getBillingAnalytics();
+        const _result = await billingManager.getBillingAnalytics();
 
         expect(result.revenue.total).toBe(0);
         expect(result.subscriptions.total).toBe(0);

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   DollarSign,
   TrendingUp,
   TrendingDown,
@@ -134,7 +134,7 @@ export function BusinessImpactAnalyzer() {
     return colorMap[status as keyof typeof colorMap] || 'bg-gray-100 text-gray-800';
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     if (trend === 'positive') return <TrendingUp className="w-4 h-4 text-green-500" />;
     if (trend === 'negative') return <TrendingDown className="w-4 h-4 text-red-500" />;
     return <Target className="w-4 h-4 text-gray-500" />;

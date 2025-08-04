@@ -326,7 +326,7 @@ export const responsiveSpacing = {
 } as const;
 
 // Helper function to convert spacing to Tailwind values
-function getSpacingValue(spacingKey: keyof typeof spacing): string {
+const getSpacingValue = (spacingKey: keyof typeof spacing): string {
   const spacingMap: Record<keyof typeof spacing, string> = {
     xs: '1',
     sm: '2',

@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import {
+// import {
   ArrowLeft,
   Save,
   X,
@@ -57,7 +57,7 @@ export default function NewAssessmentPage() {
     }
   };
 
-  const handleObjectiveChange = (index: number, value: string) => {
+  const handleObjectiveChange = (_index: number, value: string) => {
     const newObjectives = [...formData.objectives];
     newObjectives[index] = value;
     setFormData((prev) => ({
@@ -73,7 +73,7 @@ export default function NewAssessmentPage() {
     }));
   };
 
-  const removeObjective = (index: number) => {
+  const removeObjective = (_index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,

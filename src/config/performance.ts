@@ -140,7 +140,7 @@ export const performanceConfigSchema = z.object({
 export type PerformanceConfig = z.infer<typeof performanceConfigSchema>;
 
 // Load and validate performance configuration
-function loadPerformanceConfig(): PerformanceConfig {
+const loadPerformanceConfig = (): PerformanceConfig {
   const config = {
     database: {
       connectionPool: {

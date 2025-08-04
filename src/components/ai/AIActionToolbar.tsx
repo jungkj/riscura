@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from 'sonner';
-import {
+// import {
   Bot,
   Sparkles,
   Brain,
@@ -197,7 +197,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
             setSelectedAgent(agents[0].id);
           }
           
-          const stats = await aiService.usage.getUsageStats('30d');
+          const _stats = await aiService.usage.getUsageStats('30d');
           setUsageStats(stats);
         } catch (error) {
           // console.error('Failed to load AI agents:', error);
@@ -385,7 +385,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
   );
 
   // Execute AI action
-  const executeAction = async (action: AIAction) => {
+  const executeAction = async (_action: AIAction) => {
     if (!isAIEnabled) {
       toast.error('AI features are not enabled');
       return;
@@ -507,7 +507,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
           </DaisySelect>
 
           {/* Usage Stats */}
-          {usageStats && (
+          {Boolean(usageStats) && (
             <DaisyPopover >
                 <DaisyPopoverTrigger asChild >
                   <DaisyButton variant="outline" size="sm" >
@@ -634,7 +634,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
   {action.estimatedTime}
 </DaisyButton>
                       </DaisyBadge>
-                      {requiresDataAndMissing && (
+                      {Boolean(requiresDataAndMissing) && (
                         <DaisyBadge variant="secondary" className="text-xs" >
   No data
 </DaisyBadge>

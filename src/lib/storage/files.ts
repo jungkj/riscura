@@ -41,8 +41,7 @@ const DEFAULT_ALLOWED_TYPES = [
 /**
  * Upload a file to storage
  */
-export async function uploadFile(
-  file: File,
+export async function uploadFile(_file: File,
   path: string,
   metadata?: any
 ): Promise<UploadResult & { success: boolean; error?: string; checksum: string }> {
@@ -137,7 +136,7 @@ export async function getFileStats(path: string) {
 /**
  * Validate file before upload
  */
-export async function validateFile(file: File): Promise<FileValidationResult> {
+export async function validateFile(_file: File): Promise<FileValidationResult> {
   const errors: string[] = [];
   const maxSize = DEFAULT_MAX_SIZE;
   const allowedTypes = DEFAULT_ALLOWED_TYPES;
@@ -175,7 +174,7 @@ export async function validateFile(file: File): Promise<FileValidationResult> {
 /**
  * Validate file before upload (legacy with options)
  */
-export function validateFileWithOptions(file: File, options: UploadOptions): FileValidationResult {
+export function validateFileWithOptions(_file: File, options: UploadOptions): FileValidationResult {
   const errors: string[] = [];
   const maxSize = options.maxSize || DEFAULT_MAX_SIZE;
   const allowedTypes = options.allowedTypes || DEFAULT_ALLOWED_TYPES;
@@ -213,7 +212,7 @@ export function validateFileWithOptions(file: File, options: UploadOptions): Fil
 /**
  * Generate secure file path
  */
-function generateFilePath(_organizationId: string, filename: string): string {
+const generateFilePath = (_organizationId: string, filename: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -224,7 +223,7 @@ function generateFilePath(_organizationId: string, filename: string): string {
 /**
  * Generate directory path for organization
  */
-function getDirectoryPath(_organizationId: string): string {
+const getDirectoryPath = (_organizationId: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -235,14 +234,14 @@ function getDirectoryPath(_organizationId: string): string {
 /**
  * Get storage root directory
  */
-function getStorageRoot(): string {
+const getStorageRoot = (): string {
   return env.STORAGE_PATH || join(process.cwd(), 'storage', 'uploads');
 }
 
 /**
  * Generate public URL for file
  */
-function generateFileUrl(path: string): string {
+const generateFileUrl = (path: string): string {
   if (env.CDN_URL) {
     return `${env.CDN_URL}/${path}`;
   }
@@ -252,7 +251,7 @@ function generateFileUrl(path: string): string {
 /**
  * Get file extension from filename
  */
-function getFileExtension(filename: string): string {
+const getFileExtension = (filename: string): string {
   const lastDot = filename.lastIndexOf('.');
   return lastDot === -1 ? '' : filename.substring(lastDot);
 }

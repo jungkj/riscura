@@ -16,7 +16,7 @@ import { TextSelection } from '@/hooks/useTextSelection';
 import { AIAction } from './SelectableContent';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -77,7 +77,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
   }, [panelWidth, position]);
 
   // Copy content to clipboard
-  const copyToClipboard = useCallback(async (content: string) => {
+  const copyToClipboard = useCallback(async (_content: string) => {
     try {
       await navigator.clipboard.writeText(content);
       toast({
@@ -147,7 +147,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
       }
     };
 
-    const getActionLabel = (action: AIAction) => {
+    const getActionLabel = (_action: AIAction) => {
       const labels = {
         explain: 'Explanation',
         regenerate: 'Regenerated Content',
@@ -244,7 +244,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
             {/* Actions */}
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="flex items-center gap-2">
-                {onFeedback && (
+                {Boolean(onFeedback) && (
                   <>
                     <DaisyButton
                       variant="ghost"
@@ -272,14 +272,14 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               
               {result.result.type === 'replacement' && (
                 <div className="flex items-center gap-2">
-                  {onReject && (
+                  {Boolean(onReject) && (
                     <DaisyButton variant="outline" size="sm" onClick={() =>
           onReject(result.id)} />
                       Reject
                     
         </DaisyButton>
                   )}
-                  {onApprove && (
+                  {Boolean(onApprove) && (
                     <DaisyButton size="sm" onClick={() => onApprove(result.id)} />
                       <Check className="h-3 w-3 mr-1" />
                       Apply
@@ -296,7 +296,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {Boolean(isOpen) && (
         <>
           {/* Backdrop */}
           <motion.div

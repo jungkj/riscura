@@ -207,7 +207,7 @@ export class CoreWebVitalsOptimizer {
             const inp = entry.processingStart - entry.startTime;
             this.metrics.inp = Math.max(this.metrics.inp || 0, inp);
 
-            // Check INP threshold (target: <200ms)
+            // Check INP threshold (_target: <200ms)
             if (inp > 200) {
               this.reportIssue({
                 metric: 'inp' as keyof WebVitalsMetrics,
@@ -751,7 +751,7 @@ export class CoreWebVitalsOptimizer {
   /**
    * Report performance issue
    */
-  private reportIssue(issue: PerformanceIssue): void {
+  private reportIssue(_issue: PerformanceIssue): void {
     this.issues.push(issue);
 
     // Keep only recent issues
@@ -762,7 +762,7 @@ export class CoreWebVitalsOptimizer {
     // Log critical issues
     if (issue.severity === 'critical') {
       // console.error(
-        `Critical performance issue: ${issue.metric} = ${issue.value}ms (target: ${issue.target}ms)`
+        `Critical performance issue: ${issue.metric} = ${issue.value}ms (_target: ${issue.target}ms)`
       );
     }
   }

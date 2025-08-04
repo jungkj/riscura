@@ -166,7 +166,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
     }
 
     try {
-      const result = await Notification.requestPermission();
+      const _result = await Notification.requestPermission();
       setPermission(result);
       setLastError(null);
       return result;
@@ -413,7 +413,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
           throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
         }
 
-        const result = await response.json();
+        const _result = await response.json();
         // console.log('Successfully registered with server:', result);
       } catch (error) {
         const errorMessage =
@@ -463,7 +463,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       const registration = await getServiceWorkerRegistration();
 
       if (registration) {
-        const notifications = await registration.getNotifications();
+        const _notifications = await registration.getNotifications();
         notifications.forEach((notification) => notification.close());
       }
 
@@ -561,7 +561,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
 };
 
 // Utility functions
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
+const urlBase64ToUint8Array = (base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
@@ -574,7 +574,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return outputArray;
 }
 
-function arrayBufferToBase64(buffer: ArrayBuffer): string {
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binary = '';
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -607,7 +607,7 @@ export const NotificationTemplates = {
     data: { type: 'risk', severity },
   }),
 
-  complianceReminder: (framework: string, dueDate: string): NotificationConfig => ({
+  complianceReminder: (_framework: string, dueDate: string): NotificationConfig => ({
     title: 'Compliance Reminder',
     body: `${framework} assessment due ${dueDate}`,
     icon: '/images/icons/compliance.png',

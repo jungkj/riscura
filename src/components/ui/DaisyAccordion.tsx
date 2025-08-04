@@ -4,7 +4,7 @@ import { useState, createContext, useContext } from 'react';
 
 interface AccordionContextValue {
   openItems: string[];
-  toggleItem: (value: string) => void;
+  toggleItem: (_value: string) => void;
   type: 'single' | 'multiple';
 }
 
@@ -27,7 +27,7 @@ export const DaisyAccordion = ({
     Array.isArray(defaultValue) ? defaultValue : defaultValue ? [defaultValue] : []
   );
 
-  const toggleItem = (value: string) => {
+  const toggleItem = (_value: string) => {
     if (type === 'single') {
       setOpenItems((current) => (current.includes(value) ? [] : [value]));
     } else {

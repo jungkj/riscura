@@ -265,7 +265,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 }
 
 // File upload validation
-async function validateFileUpload(file: File): Promise<{ valid: boolean; reason?: string }> {
+async function validateFileUpload(_file: File): Promise<{ valid: boolean; reason?: string }> {
   // File size validation (10MB limit)
   const maxSize = 10 * 1024 * 1024; // 10MB
   if (file.size > maxSize) {

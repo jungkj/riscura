@@ -380,7 +380,7 @@ class AlertingSystem {
   /**
    * Send notifications for an alert
    */
-  private async sendNotifications(alert: Alert, rule: AlertRule): Promise<void> {
+  private async sendNotifications(_alert: Alert, rule: AlertRule): Promise<void> {
     for (const channel of rule.channels) {
       try {
         await this.sendNotification(alert, channel);
@@ -401,7 +401,7 @@ class AlertingSystem {
   /**
    * Send notification via specific channel
    */
-  private async sendNotification(alert: Alert, channel: NotificationChannel): Promise<void> {
+  private async sendNotification(_alert: Alert, channel: NotificationChannel): Promise<void> {
     const message = this.formatAlertMessage(alert);
 
     switch (channel) {
@@ -440,7 +440,7 @@ class AlertingSystem {
   /**
    * Format alert message
    */
-  private formatAlertMessage(alert: Alert): string {
+  private formatAlertMessage(_alert: Alert): string {
     const severity = alert.severity.toUpperCase();
     const timestamp = new Date(alert.timestamp).toISOString();
 
@@ -463,7 +463,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send Slack notification
    */
-  private async sendSlackNotification(alert: Alert, message: string): Promise<void> {
+  private async sendSlackNotification(_alert: Alert, message: string): Promise<void> {
     const webhookUrl = process.env.SLACK_WEBHOOK_URL;
     if (!webhookUrl) {
       throw new Error('Slack webhook URL not configured');
@@ -497,7 +497,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send email notification
    */
-  private async sendEmailNotification(alert: Alert, message: string): Promise<void> {
+  private async sendEmailNotification(_alert: Alert, message: string): Promise<void> {
     const recipients = process.env.ALERT_EMAIL_RECIPIENTS?.split(',') || [];
 
     const payload = {
@@ -521,7 +521,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send SMS notification
    */
-  private async sendSMSNotification(alert: Alert, message: string): Promise<void> {
+  private async sendSMSNotification(_alert: Alert, message: string): Promise<void> {
     const phoneNumbers = process.env.ALERT_PHONE_NUMBERS?.split(',') || [];
 
     const shortMessage = `${alert.severity.toUpperCase()}: ${alert.name} - Value: ${alert.value}, Threshold: ${alert.threshold}`;
@@ -545,7 +545,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send webhook notification
    */
-  private async sendWebhookNotification(alert: Alert, message: string): Promise<void> {
+  private async sendWebhookNotification(_alert: Alert, message: string): Promise<void> {
     const webhookUrl = process.env.ALERT_WEBHOOK_URL;
     if (!webhookUrl) {
       throw new Error('Alert webhook URL not configured');
@@ -571,7 +571,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send PagerDuty notification
    */
-  private async sendPagerDutyNotification(alert: Alert, message: string): Promise<void> {
+  private async sendPagerDutyNotification(_alert: Alert, message: string): Promise<void> {
     const routingKey = process.env.PAGERDUTY_ROUTING_KEY;
     if (!routingKey) {
       throw new Error('PagerDuty routing key not configured');
@@ -610,7 +610,7 @@ Alert ID: ${alert.id}`;
   /**
    * Send Discord notification
    */
-  private async sendDiscordNotification(alert: Alert, message: string): Promise<void> {
+  private async sendDiscordNotification(_alert: Alert, message: string): Promise<void> {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) {
       throw new Error('Discord webhook URL not configured');
@@ -646,7 +646,7 @@ Alert ID: ${alert.id}`;
   /**
    * Escalate an alert
    */
-  private async escalateAlert(alert: Alert, rule: AlertRule): Promise<void> {
+  private async escalateAlert(_alert: Alert, rule: AlertRule): Promise<void> {
     if (alert.resolved || alert.acknowledged || alert.escalated) {
       return; // Don't escalate if already handled
     }
@@ -815,7 +815,7 @@ Alert ID: ${alert.id}`;
     return recipients[channel] || 'Unknown';
   }
 
-  private formatEmailHTML(alert: Alert, message: string): string {
+  private formatEmailHTML(_alert: Alert, message: string): string {
     const color = this.getSeverityColor(alert.severity);
 
     return `

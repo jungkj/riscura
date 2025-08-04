@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { 
+// import { 
   Brain,
   Shield,
   AlertTriangle,
@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 import { aiIntegrationService } from '@/services/AIIntegrationService';
-import { multiTenantAIService } from '@/services/MultiTenantAIService';
+// import { multiTenantAIService } from '@/services/MultiTenantAIService';
 import { generateId } from '@/lib/utils';
 import type { 
   AIServiceRequest, 
@@ -116,7 +116,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
     }
   };
 
-  const handleAnalysisTypeChange = (value: string) => {
+  const handleAnalysisTypeChange = (_value: string) => {
     setSelectedAnalysisType(value as AnalysisType);
   };
 
@@ -129,7 +129,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
     }
   };
 
-  const getAnalysisTypeIcon = (type: string) => {
+  const getAnalysisTypeIcon = (_type: string) => {
     switch (type) {
       case 'risk_analysis': return <DaisyAlertTriangle className="w-4 h-4" >
   ;
@@ -152,7 +152,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
             Comprehensive AI-powered risk management and compliance analysis
           </p>
         </div>
-        {serviceHealth && (
+        {Boolean(serviceHealth) && (
           <DaisyBadge className={getStatusColor(serviceHealth.status)} >
   <Activity className="w-3 h-3 mr-1" />
 </DaisyBadge>

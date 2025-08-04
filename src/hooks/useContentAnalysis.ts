@@ -221,7 +221,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
 
           for (const action of actions) {
             try {
-              const result = await analyzeSelection(item.selection, action);
+              const _result = await analyzeSelection(item.selection, action);
               results.push(result);
             } catch (error) {
               // console.error(`Failed to process action ${action} for item ${item.id}:`, error);
@@ -279,7 +279,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   // Approve analysis result (apply changes)
   const approveResult = useCallback(
     (resultId: string) => {
-      const result = analysisResults.find((r) => r.id === resultId);
+      const _result = analysisResults.find((r) => r.id === resultId);
       if (!result) return;
 
       // This would integrate with the actual content editing system
@@ -311,7 +311,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   // Retry failed result
   const retryResult = useCallback(
     async (resultId: string) => {
-      const result = analysisResults.find((r) => r.id === resultId);
+      const _result = analysisResults.find((r) => r.id === resultId);
       if (!result) return;
 
       await analyzeSelection(result.selection, result.action);
@@ -325,7 +325,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   }, []);
 
   // Helper functions
-  const getResultType = (action: AIAction): ContentAnalysisResult['result']['type'] => {
+  const getResultType = (_action: AIAction): ContentAnalysisResult['result']['type'] => {
     switch (action) {
       case 'regenerate':
       case 'improve':

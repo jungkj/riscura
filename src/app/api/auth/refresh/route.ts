@@ -224,8 +224,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
 /**
  * Log authentication events
  */
-async function logAuthEvent(
-  type: string,
+async function logAuthEvent(_type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}

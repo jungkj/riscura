@@ -79,7 +79,7 @@ export class CSRFProtection {
     hmac.update(data);
     const signature = hmac.digest('hex');
 
-    const token = `${data}.${signature}`;
+    const _token = `${data}.${signature}`;
 
     // Store token for validation
     this.tokenStore.set(token, {
@@ -340,7 +340,7 @@ export class CSRFProtection {
     const response = NextResponse.json(body, responseInit);
 
     // Generate or rotate token
-    const token = rotateToken ? this.generateToken(sessionId) : this.generateToken(sessionId);
+    const _token = rotateToken ? this.generateToken(sessionId) : this.generateToken(sessionId);
 
     // Set token in cookie
     this.setTokenCookie(response, token);
@@ -479,7 +479,7 @@ export function getCSRFTokenForClient(): string | null {
  * Fetch wrapper with automatic CSRF token inclusion
  */
 export function fetchWithCSRF(url: string, options: RequestInit = {}): Promise<Response> {
-  const token = getCSRFTokenForClient();
+  const _token = getCSRFTokenForClient();
 
   if (
     token &&

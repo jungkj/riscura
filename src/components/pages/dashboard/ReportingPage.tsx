@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 
 // Icons
-import {
+// import {
   BarChart3, PieChart, TrendingUp, Download, Calendar, Filter, Search,
   Plus, Brain, Zap, FileText, Users, Clock, Target, AlertTriangle,
   Eye, Edit, Copy, Share, Archive, Trash2, Play, Settings, ChevronDown,
@@ -34,7 +34,7 @@ interface ReportingPageProps {
   view?: 'dashboard' | 'builder' | 'library' | 'scheduled' | 'analytics';
 }
 
-function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
+const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
   const router = useRouter();
   
   // State Management

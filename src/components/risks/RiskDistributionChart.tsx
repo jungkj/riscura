@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRisks } from '@/context/RiskContext';
-import { Risk } from '@/types';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   PieChart,
   Building,
   Users,
@@ -192,7 +192,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
     );
   };
 
-  const getDistributionIcon = (type: string) => {
+  const getDistributionIcon = (_type: string) => {
     switch (type) {
       case 'category': return Tag;
       case 'owner': return Users;

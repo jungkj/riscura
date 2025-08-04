@@ -1,11 +1,11 @@
 import { TimeWindow } from '@/types/proactive-monitoring.types';
-import { Risk } from '@/types';
+// import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
 
 // Import AI and analysis services
-import { AIService } from './AIService';
+// import { AIService } from './AIService';
 import { TrendAnalysisService } from './TrendAnalysisService';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
 
 // Define missing interfaces locally
 export interface ConfidenceInterval {
@@ -350,8 +350,7 @@ export class PredictiveRiskModelingService {
   /**
    * Generate comprehensive risk forecast using multiple models
    */
-  async generateRiskForecast(
-    risk: Risk,
+  async generateRiskForecast(_risk: Risk,
     historicalData: TimeSeriesPoint[],
     forecastHorizon: TimeWindow,
     config?: Partial<ModelConfiguration>
@@ -621,7 +620,7 @@ export class PredictiveRiskModelingService {
     return processedData;
   }
 
-  private async getRelevantExternalFactors(risk: Risk): Promise<ExternalFactor[]> {
+  private async getRelevantExternalFactors(_risk: Risk): Promise<ExternalFactor[]> {
     const relevantFactors: ExternalFactor[] = [];
 
     for (const [sourceId, source] of this.externalDataSources) {
@@ -658,8 +657,7 @@ export class PredictiveRiskModelingService {
     return models.reduce((best, current) => (current.accuracy > best.accuracy ? current : best));
   }
 
-  private async generateTimeSeriesPredictions(
-    model: PredictiveModel,
+  private async generateTimeSeriesPredictions(_model: PredictiveModel,
     data: TimeSeriesPoint[],
     horizon: TimeWindow,
     externalFactors: ExternalFactor[]
@@ -686,8 +684,7 @@ export class PredictiveRiskModelingService {
     return predictions;
   }
 
-  private async generateMonteCarloScenarios(
-    risk: Risk,
+  private async generateMonteCarloScenarios(_risk: Risk,
     data: TimeSeriesPoint[],
     externalFactors: ExternalFactor[],
     config: ModelConfiguration
@@ -715,8 +712,7 @@ export class PredictiveRiskModelingService {
     }));
   }
 
-  private async quantifyUncertainty(
-    model: PredictiveModel,
+  private async quantifyUncertainty(_model: PredictiveModel,
     predictions: ForecastPrediction[],
     scenarios: ForecastScenario[]
   ): Promise<UncertaintyQuantification> {
@@ -762,8 +758,7 @@ export class PredictiveRiskModelingService {
     };
   }
 
-  private async generateForecastRecommendations(
-    risk: Risk,
+  private async generateForecastRecommendations(_risk: Risk,
     predictions: ForecastPrediction[],
     scenarios: ForecastScenario[],
     uncertainty: UncertaintyQuantification
@@ -834,7 +829,7 @@ export class PredictiveRiskModelingService {
     return Math.max(0, Math.min(100, avgPredictionConfidence * (1 - uncertaintyPenalty) * 100));
   }
 
-  private calculateValidityPeriod(horizon: TimeWindow): Date {
+  private calculateValidityPeriod(_horizon: TimeWindow): Date {
     const now = new Date();
     const validityDays = horizon.duration * 0.5; // Valid for half the forecast horizon
     return new Date(now.getTime() + validityDays * 24 * 60 * 60 * 1000);
@@ -918,7 +913,7 @@ export class PredictiveRiskModelingService {
     return { coefficient, significance };
   }
 
-  private async runSimulationIterations(simulation: MonteCarloSimulation): Promise<number[][]> {
+  private async runSimulationIterations(_simulation: MonteCarloSimulation): Promise<number[][]> {
     const results: number[][] = [];
 
     for (let iteration = 0; iteration < simulation.iterations; iteration++) {
@@ -1067,8 +1062,7 @@ export class PredictiveRiskModelingService {
     return transformedValue;
   }
 
-  private async analyzeSimulationResults(
-    results: number[][],
+  private async analyzeSimulationResults(_results: number[][],
     simulation: MonteCarloSimulation
   ): Promise<SimulationResults> {
     const numVariables = simulation.variables.length;
@@ -1213,8 +1207,7 @@ export class PredictiveRiskModelingService {
     return maxDrawdown;
   }
 
-  private async performSensitivityAnalysis(
-    results: number[][],
+  private async performSensitivityAnalysis(_results: number[][],
     variables: SimulationVariable[]
   ): Promise<SensitivityAnalysis[]> {
     const sensitivity: SensitivityAnalysis[] = [];
@@ -1239,8 +1232,7 @@ export class PredictiveRiskModelingService {
     return sensitivity.sort((a, b) => b.importance - a.importance);
   }
 
-  private async generateScenariosFromSimulation(
-    results: number[][],
+  private async generateScenariosFromSimulation(_results: number[][],
     simulation: MonteCarloSimulation
   ): Promise<SimulationScenario[]> {
     const scenarios: SimulationScenario[] = [];
@@ -1309,8 +1301,7 @@ export class PredictiveRiskModelingService {
     return scenarios;
   }
 
-  private getScenarioVariables(
-    results: number[][],
+  private getScenarioVariables(_results: number[][],
     outcomes: number[],
     targetOutcome: number
   ): Record<string, number> {
@@ -1339,8 +1330,7 @@ export class PredictiveRiskModelingService {
 
   // Additional utility methods
 
-  private async generateSinglePrediction(
-    model: PredictiveModel,
+  private async generateSinglePrediction(_model: PredictiveModel,
     data: TimeSeriesPoint[],
     targetDate: Date,
     externalFactors: ExternalFactor[]
@@ -1381,7 +1371,7 @@ export class PredictiveRiskModelingService {
     return (lastValue - firstValue) / (timeSpan / (1000 * 60 * 60 * 24)); // Daily trend
   }
 
-  private calculateEndDate(startDate: Date, horizon: TimeWindow): Date {
+  private calculateEndDate(_startDate: Date, horizon: TimeWindow): Date {
     const endDate = new Date(startDate);
 
     switch (horizon.unit) {
@@ -1404,8 +1394,7 @@ export class PredictiveRiskModelingService {
     return endDate;
   }
 
-  private async createSimulationVariables(
-    risk: Risk,
+  private async createSimulationVariables(_risk: Risk,
     data: TimeSeriesPoint[],
     externalFactors: ExternalFactor[]
   ): Promise<SimulationVariable[]> {
@@ -1509,7 +1498,7 @@ export class PredictiveRiskModelingService {
     return 'stable';
   }
 
-  private async updateDataSource(source: ExternalDataSource): Promise<void> {
+  private async updateDataSource(_source: ExternalDataSource): Promise<void> {
     try {
       // Simulate API call to update external data
       source.lastUpdated = new Date();
@@ -1519,8 +1508,7 @@ export class PredictiveRiskModelingService {
     }
   }
 
-  private async testModelPerformance(
-    model: PredictiveModel,
+  private async testModelPerformance(_model: PredictiveModel,
     newData: TimeSeriesPoint[]
   ): Promise<{ accuracy: number }> {
     // Simplified performance testing
@@ -1615,12 +1603,12 @@ export class PredictiveRiskModelingService {
     return data;
   }
 
-  private async fetchExternalData(source: ExternalDataSource): Promise<ExternalFactor[]> {
+  private async fetchExternalData(_source: ExternalDataSource): Promise<ExternalFactor[]> {
     // Implementation would fetch data from external APIs
     return [];
   }
 
-  private isFactorRelevantToRisk(factor: ExternalFactor, risk: Risk): boolean {
+  private isFactorRelevantToRisk(_factor: ExternalFactor, risk: Risk): boolean {
     // Implementation would determine factor relevance
     return factor.impact > 0.5;
   }
@@ -1634,8 +1622,7 @@ export class PredictiveRiskModelingService {
     return { parameters: { type } };
   }
 
-  private async validateModel(
-    model: { parameters: Record<string, unknown> },
+  private async validateModel(_model: { parameters: Record<string, unknown> },
     validationData: TimeSeriesPoint[],
     features: number[][]
   ): Promise<ModelValidationMetrics> {

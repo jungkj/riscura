@@ -1,5 +1,5 @@
 // API Response Caching System for Performance Optimization
-import { redisClient, createCacheKey, hashKey } from './redis-client';
+// import { redisClient, createCacheKey, hashKey } from './redis-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '../monitoring/logger';
 import crypto from 'crypto';
@@ -291,7 +291,7 @@ class APICache {
       );
       const strategy = this.findMatchingStrategy(request.method, request.url);
 
-      const cached = await redisClient.get<CacheEntry>(cacheKey);
+      const _cached = await redisClient.get<CacheEntry>(cacheKey);
 
       if (!cached) {
         this.metrics.cacheMisses++;
@@ -418,7 +418,7 @@ class APICache {
   }
 
   // Invalidate cache by pattern
-  public async invalidateByPattern(pattern: string): Promise<number> {
+  public async invalidateByPattern(_pattern: string): Promise<number> {
     return await redisClient.invalidateByTags([pattern]);
   }
 

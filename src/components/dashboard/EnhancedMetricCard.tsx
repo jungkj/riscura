@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { cn } from '@/lib/utils';
@@ -207,7 +207,7 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                   <p className="text-sm font-medium text-slate-600 tracking-wide">
                     {title}
                   </p>
-                  {badge && (
+                  {Boolean(badge) && (
                     <DaisyBadge 
                       variant={badge.variant === 'danger' ? 'destructive' : badge.variant === 'success' ? 'default' : badge.variant === 'warning' ? 'secondary' : 'default'} 
                       className="text-xs font-medium" >
@@ -242,20 +242,20 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                     {value}
                   </motion.span>
                   
-                  {sparkline && (
+                  {Boolean(sparkline) && (
                     <div className="ml-auto">
                       <MiniSparkline data={sparkline} />
                     </div>
                   )}
                 </div>
 
-                {subtitle && (
+                {Boolean(subtitle) && (
                   <p className="text-sm text-slate-500 font-medium">
                     {subtitle}
                   </p>
                 )}
 
-                {trend && (
+                {Boolean(trend) && (
                   <motion.div 
                     className="flex items-center gap-1"
                     initial={{ opacity: 0, y: 10 }}

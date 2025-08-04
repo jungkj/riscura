@@ -30,7 +30,7 @@ export async function GET() {
         log: ['error'],
       });
 
-      const result = await prisma.$queryRaw`SELECT current_database() as db, version() as version`;
+      const _result = await prisma.$queryRaw`SELECT current_database() as db, version() as version`;
       await prisma.$disconnect();
 
       connectionTest = {

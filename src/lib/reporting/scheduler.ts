@@ -330,7 +330,7 @@ export class ReportScheduler {
         })
       );
 
-      const successCount = deliveryResults.filter((r) => r.status === 'fulfilled').length;
+      const _successCount = deliveryResults.filter((r) => r.status === 'fulfilled').length;
       const totalDeliveries = schedule.recipients.length * schedule.formats.length;
 
       // Log delivery

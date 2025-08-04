@@ -10,13 +10,13 @@ import {
 } from 'lucide-react';
 
 import { ARIAChat } from './ARIAChat';
-import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
+// import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
 import { useAI } from '@/context/AIContext';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 
 interface ARIAWidgetProps {
   initialContext?: RiskContext;
@@ -41,7 +41,7 @@ const ProactiveSuggestionCard: React.FC<{
   onDismiss: () => void;
   onAccept: () => void;
 }> = ({ suggestion, onDismiss, onAccept }) => {
-  const getIcon = (type: string) => {
+  const getIcon = (_type: string) => {
     switch (type) {
       case 'risk_alert': return <DaisyAlertCircle className="h-4 w-4 text-amber-500" >
   ;
@@ -280,7 +280,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
 
         {/* Main Chat Interface */}
         <AnimatePresence>
-          {isOpen && (
+          {Boolean(isOpen) && (
             <ARIAChat
               context="general"
               className="mb-4" />
@@ -343,7 +343,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
 
           {/* Notification Badges */}
           <AnimatePresence>
-            {hasUnreadMessages && !isOpen && (
+            {Boolean(hasUnreadMessages) && !isOpen && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}

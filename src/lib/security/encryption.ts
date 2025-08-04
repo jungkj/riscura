@@ -12,7 +12,7 @@ const TAG_LENGTH = 16;
 const KEY_LENGTH = 32; // 256 bits / 8 = 32 bytes
 
 // Get encryption key from environment or generate one
-function getEncryptionKey(): Buffer {
+const getEncryptionKey = (): Buffer {
   const key = process.env.ENCRYPTION_KEY;
   if (!key) {
     throw new Error('ENCRYPTION_KEY environment variable is required');
@@ -424,7 +424,7 @@ export class EncryptionService {
   }
 
   // Field-level Encryption
-  async encryptField(value: any, fieldName: string): Promise<string> {
+  async encryptField(_value: any, fieldName: string): Promise<string> {
     if (!this.config.fieldLevelEncryption.enabled) {
       return value;
     }
@@ -461,7 +461,7 @@ export class EncryptionService {
   }
 
   // Searchable Encryption (simplified implementation)
-  async createSearchableIndex(value: string, fieldName: string): Promise<string[]> {
+  async createSearchableIndex(_value: string, fieldName: string): Promise<string[]> {
     if (!this.config.fieldLevelEncryption.searchableEncryption) {
       return [];
     }
@@ -478,7 +478,7 @@ export class EncryptionService {
     return encryptedTokens;
   }
 
-  private generateSearchTokens(value: string): string[] {
+  private generateSearchTokens(_value: string): string[] {
     const tokens = new Set<string>();
     const cleanValue = value.toLowerCase().trim();
 
@@ -699,8 +699,7 @@ export class EncryptionService {
   }
 
   // Database encryption helpers
-  async encryptModel<T extends Record<string, any>>(
-    model: T,
+  async encryptModel<T extends Record<string, any>>(_model: T,
     encryptedFields: string[]
   ): Promise<T> {
     const encrypted = { ...model } as T & Record<string, any>;
@@ -714,8 +713,7 @@ export class EncryptionService {
     return encrypted;
   }
 
-  async decryptModel<T extends Record<string, any>>(
-    model: T,
+  async decryptModel<T extends Record<string, any>>(_model: T,
     encryptedFields: string[]
   ): Promise<T> {
     const decrypted = { ...model } as T & Record<string, any>;
@@ -780,7 +778,7 @@ export class EncryptionService {
   ): Promise<T> {
     const startTime = Date.now();
     return operation().finally(() => {
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
       this.operationsCount++;
       if (type === 'encrypt') {
         this.totalEncryptionTime += duration;
@@ -923,7 +921,7 @@ export class FieldEncryption {
   /**
    * Encrypt sensitive field for database storage
    */
-  public async encryptField(value: string, fieldName: string, recordId: string): Promise<string> {
+  public async encryptField(_value: string, fieldName: string, recordId: string): Promise<string> {
     const aad = `${fieldName}:${recordId}`;
     const encrypted = await this.encryptionService.encryptData(value, aad);
     return JSON.stringify(encrypted);

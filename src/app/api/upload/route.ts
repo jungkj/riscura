@@ -65,7 +65,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
   }
 
   try {
-    const stats = await storageService.getStorageStats(user.organizationId);
+    const _stats = await storageService.getStorageStats(user.organizationId);
 
     // Add usage percentage (1GB = 1073741824 bytes)
     const usagePercentage = (stats.totalSize / 1073741824) * 100;

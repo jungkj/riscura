@@ -30,7 +30,7 @@ export const DaisyModal = ({
   return (
     <dialog ref={modalRef} className="modal" onClose={onClose}>
       <div className={cn('modal-box', className)}>
-        {closeButton && (
+        {Boolean(closeButton) && (
           <form method="dialog" className="absolute right-2 top-2">
             <button className="btn btn-sm btn-circle btn-ghost">
               <X className="h-4 w-4" />

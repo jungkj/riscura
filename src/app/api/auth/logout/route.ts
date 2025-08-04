@@ -12,7 +12,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     // Try to get session from access token
     if (authHeader) {
       try {
-        const token = extractTokenFromHeader(authHeader);
+        const _token = extractTokenFromHeader(authHeader);
         const payload = verifyAccessToken(token);
         sessionId = payload.sessionId;
         userId = payload.userId;
@@ -105,8 +105,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 /**
  * Log authentication events
  */
-async function logAuthEvent(
-  type: string,
+async function logAuthEvent(_type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}

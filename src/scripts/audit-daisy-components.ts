@@ -55,7 +55,7 @@ const CONTAINER_COMPONENTS = [
 ];
 
 // Components that can be self-closed
-const SELF_CLOSING_COMPONENTS = [
+const _SELF_CLOSING_COMPONENTS = [
   'DaisyInput',
   'DaisyButton', // Can be self-closed if no children
   'DaisyCheckbox',
@@ -133,7 +133,7 @@ class DaisyUIAuditor {
     }
   }
 
-  private checkSelfClosingContainerComponents(file: string, line: string, lineNumber: number) {
+  private checkSelfClosingContainerComponents(_file: string, line: string, lineNumber: number) {
     CONTAINER_COMPONENTS.forEach((component) => {
       const selfClosingRegex = new RegExp(`<${component}[^>]*\\ />`, 'g');
       if (selfClosingRegex.test(line)) {
@@ -149,7 +149,7 @@ class DaisyUIAuditor {
     });
   }
 
-  private checkMissingRequiredProps(file: string, line: string, lineNumber: number) {
+  private checkMissingRequiredProps(_file: string, line: string, lineNumber: number) {
     Object.entries(REQUIRED_PROPS).forEach(([component, props]) => {
       if (line.includes(`<${component}`) && !line.includes(' />')) {
         props.forEach((prop) => {
@@ -168,7 +168,7 @@ class DaisyUIAuditor {
     });
   }
 
-  private checkClassNameUsage(file: string, line: string, lineNumber: number) {
+  private checkClassNameUsage(_file: string, line: string, lineNumber: number) {
     // Check for 'class' instead of 'className'
     if (line.includes(' class=') && !line.includes('className=')) {
       this.addIssue({
@@ -196,7 +196,7 @@ class DaisyUIAuditor {
     }
   }
 
-  private checkDaisySelectUsage(file: string, line: string, lineNumber: number) {
+  private checkDaisySelectUsage(_file: string, line: string, lineNumber: number) {
     if (line.includes('<DaisySelect') && !line.includes('onValueChange')) {
       this.addIssue({
         file,
@@ -224,7 +224,7 @@ class DaisyUIAuditor {
     }
   }
 
-  private checkDaisyCardNesting(file: string, lines: string[], currentIndex: number) {
+  private checkDaisyCardNesting(_file: string, lines: string[], currentIndex: number) {
     const line = lines[currentIndex];
 
     if (line.includes('<DaisyCard')) {
@@ -251,7 +251,7 @@ class DaisyUIAuditor {
     }
   }
 
-  private checkFragmentUsage(file: string, line: string, lineNumber: number) {
+  private checkFragmentUsage(_file: string, line: string, lineNumber: number) {
     // Check for improper fragment usage
     if (line.trim() === 'return <>' || line.trim() === 'return (<>') {
       this.addIssue({
@@ -265,7 +265,7 @@ class DaisyUIAuditor {
     }
   }
 
-  private addIssue(issue: ComponentIssue) {
+  private addIssue(_issue: ComponentIssue) {
     this.issues.push(issue);
   }
 
@@ -288,7 +288,7 @@ class DaisyUIAuditor {
 }
 
 // Report generation
-function generateReport(results: AuditResults) {
+const generateReport = (_results: AuditResults) {
   // console.log('\n📊 DAISY UI COMPONENT AUDIT REPORT');
   // console.log('=====================================');
 
@@ -318,7 +318,7 @@ function generateReport(results: AuditResults) {
   Object.entries(issuesByFile).forEach(([file, issues]) => {
     // console.log(`\n📄 ${file.replace(process.cwd(), '.')}`);
     issues.forEach((issue) => {
-      const icon = issue.severity === 'error' ? '❌' : issue.severity === 'warning' ? '⚠️' : 'ℹ️';
+      const _icon = issue.severity === 'error' ? '❌' : issue.severity === 'warning' ? '⚠️' : 'ℹ️';
       // console.log(`   ${icon} Line ${issue.line}: ${issue.issue}`);
       if (issue.suggestion) {
         // console.log(`      💡 ${issue.suggestion}`);

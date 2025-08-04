@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRisks } from '@/context/RiskContext';
-import { Risk, RiskCategory } from '@/types';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk, RiskCategory } from '@/types';
 // import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 
 // UI Components
@@ -33,7 +33,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
@@ -54,8 +54,8 @@ import {
 
 interface RiskListViewProps {
   onCreateRisk?: () => void;
-  onEditRisk?: (risk: Risk) => void;
-  onViewRisk?: (risk: Risk) => void;
+  onEditRisk?: (_risk: Risk) => void;
+  onViewRisk?: (_risk: Risk) => void;
 }
 
 export const RiskListView: React.FC<RiskListViewProps> = ({
@@ -96,7 +96,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   }, [searchInput, setFilters]);
 
   const filteredRisks = getFilteredRisks();
-  const stats = getRiskStats();
+  const _stats = getRiskStats();
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -265,7 +265,7 @@ setSearchInput(e.target.value)}
           </div>
 
           {/* Filter Controls */}
-          {showFilters && (
+          {Boolean(showFilters) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
               <DaisySelect
                 value={filters.category || ''}

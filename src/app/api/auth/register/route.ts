@@ -264,7 +264,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 /**
  * Get default permissions for user role
  */
-function getDefaultPermissions(role: UserRole): string[] {
+const getDefaultPermissions = (role: UserRole): string[] {
   switch (role) {
     case UserRole.ADMIN:
       return ['*']; // All permissions
@@ -343,7 +343,7 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
 /**
  * Generate verification token
  */
-function generateVerificationToken(_userId: string): string {
+const generateVerificationToken = (_userId: string): string {
   return jwt.sign(
     {
       userId,
@@ -362,8 +362,7 @@ function generateVerificationToken(_userId: string): string {
 /**
  * Log authentication events
  */
-async function logAuthEvent(
-  type: string,
+async function logAuthEvent(_type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}

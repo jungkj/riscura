@@ -33,7 +33,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import {
   Dialog,
@@ -44,7 +44,7 @@ import {
 } from '@/components/ui/dialog';
 
 // Icons
-import {
+// import {
   Search,
   Filter,
   Plus,
@@ -111,7 +111,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   }, [searchInput, setFilters]);
 
   const filteredControls = getFilteredControls();
-  const stats = getControlStats();
+  const _stats = getControlStats();
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -404,7 +404,7 @@ setSearchInput(e.target.value)}
           </div>
 
           {/* Filter Controls */}
-          {showFilters && (
+          {Boolean(showFilters) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
               <DaisySelect
                 value={filters.type || ''}
@@ -703,7 +703,7 @@ Schedule Test
 </DaisyDialogDescription>
             </DaisyDialogDescription>
           </DaisyDialogHeader>
-          {selectedControl && (
+          {Boolean(selectedControl) && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>

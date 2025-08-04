@@ -386,7 +386,7 @@ export class AISecurityService {
   /**
    * Detect and redact PII from content
    */
-  private async detectAndRedactPII(content: string): Promise<{
+  private async detectAndRedactPII(_content: string): Promise<{
     sanitizedContent: string;
     piiDetected: PIIEntity[];
   }> {
@@ -433,7 +433,7 @@ export class AISecurityService {
   /**
    * Analyze content for security risks
    */
-  private async analyzeContent(content: string): Promise<{
+  private async analyzeContent(_content: string): Promise<{
     flags: ContentFlag[];
     moderation: ModerationResult;
   }> {
@@ -487,8 +487,7 @@ export class AISecurityService {
   /**
    * Classify data sensitivity
    */
-  private async classifyData(
-    content: string,
+  private async classifyData(_content: string,
     piiEntities: PIIEntity[]
   ): Promise<DataClassification> {
     let level: DataClassification['level'] = 'public';
@@ -626,8 +625,7 @@ export class AISecurityService {
   /**
    * Generate comprehensive compliance report
    */
-  async generateComplianceReport(
-    standard: ComplianceStandard,
+  async generateComplianceReport(_standard: ComplianceStandard,
     period: { start: Date; end: Date }
   ): Promise<ComplianceReport> {
     const auditLogs = Array.from(this.auditLogs.values()).filter(
@@ -747,7 +745,7 @@ export class AISecurityService {
     ]);
   }
 
-  private calculatePIIConfidence(type: PIIType, value: string): number {
+  private calculatePIIConfidence(_type: PIIType, value: string): number {
     // Basic confidence calculation based on pattern specificity
     const confidenceMap: Record<PIIType, number> = {
       email: 0.95,
@@ -767,7 +765,7 @@ export class AISecurityService {
     return confidenceMap[type] || 0.6;
   }
 
-  private getRedactionMethod(type: PIIType): PIIEntity['redactionMethod'] {
+  private getRedactionMethod(_type: PIIType): PIIEntity['redactionMethod'] {
     const methodMap: Record<PIIType, PIIEntity['redactionMethod']> = {
       email: 'mask',
       phone: 'mask',
@@ -786,7 +784,7 @@ export class AISecurityService {
     return methodMap[type] || 'mask';
   }
 
-  private generateReplacement(type: PIIType, originalValue: string): string {
+  private generateReplacement(_type: PIIType, originalValue: string): string {
     switch (type) {
       case 'email':
         return '***@***.***';
@@ -805,7 +803,7 @@ export class AISecurityService {
     }
   }
 
-  private getContentFlagSeverity(type: ContentFlagType): ContentFlag['severity'] {
+  private getContentFlagSeverity(_type: ContentFlagType): ContentFlag['severity'] {
     const severityMap: Record<ContentFlagType, ContentFlag['severity']> = {
       inappropriate: 'high',
       harmful: 'critical',
@@ -821,7 +819,7 @@ export class AISecurityService {
     return severityMap[type] || 'medium';
   }
 
-  private getContentFlagAction(type: ContentFlagType): ContentFlag['action'] {
+  private getContentFlagAction(_type: ContentFlagType): ContentFlag['action'] {
     const actionMap: Record<ContentFlagType, ContentFlag['action']> = {
       inappropriate: 'warn',
       harmful: 'block',
@@ -864,7 +862,7 @@ export class AISecurityService {
     return periods[level] || 365;
   }
 
-  private countTokens(content: string): number {
+  private countTokens(_content: string): number {
     // Simple token counting (words + punctuation)
     return content.split(/\s+/).length + content.split(/[.,!?;:]/).length - 1;
   }
@@ -944,7 +942,7 @@ export class AISecurityService {
     };
   }
 
-  private calculateComplianceScore(logs: AIAuditLog[], standard: ComplianceStandard): number {
+  private calculateComplianceScore(_logs: AIAuditLog[], standard: ComplianceStandard): number {
     // Simplified compliance scoring
     const totalLogs = logs.length;
     if (totalLogs === 0) return 100;
@@ -956,7 +954,7 @@ export class AISecurityService {
     return Math.round((compliantLogs / totalLogs) * 100);
   }
 
-  private getDataClassificationBreakdown(logs: AIAuditLog[]): Record<string, number> {
+  private getDataClassificationBreakdown(_logs: AIAuditLog[]): Record<string, number> {
     const breakdown: Record<string, number> = {
       public: 0,
       internal: 0,
@@ -971,7 +969,7 @@ export class AISecurityService {
     return breakdown;
   }
 
-  private async generateGDPRFindings(logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
+  private async generateGDPRFindings(_logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
 
     const piiProcessingLogs = logs.filter((log) => log.requestData.piiDetected.length > 0);
@@ -991,8 +989,7 @@ export class AISecurityService {
     return findings;
   }
 
-  private async generateGDPRRecommendations(
-    logs: AIAuditLog[]
+  private async generateGDPRRecommendations(_logs: AIAuditLog[]
   ): Promise<ComplianceRecommendation[]> {
     return [
       {
@@ -1006,7 +1003,7 @@ export class AISecurityService {
     ];
   }
 
-  private async generateSOC2Findings(logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
+  private async generateSOC2Findings(_logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
     return [
       {
         id: generateId('finding'),
@@ -1020,8 +1017,7 @@ export class AISecurityService {
     ];
   }
 
-  private async generateSOC2Recommendations(
-    logs: AIAuditLog[]
+  private async generateSOC2Recommendations(_logs: AIAuditLog[]
   ): Promise<ComplianceRecommendation[]> {
     return [
       {
@@ -1035,7 +1031,7 @@ export class AISecurityService {
     ];
   }
 
-  private async generateISO27001Findings(logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
+  private async generateISO27001Findings(_logs: AIAuditLog[]): Promise<ComplianceFinding[]> {
     return [
       {
         id: generateId('finding'),
@@ -1049,8 +1045,7 @@ export class AISecurityService {
     ];
   }
 
-  private async generateISO27001Recommendations(
-    logs: AIAuditLog[]
+  private async generateISO27001Recommendations(_logs: AIAuditLog[]
   ): Promise<ComplianceRecommendation[]> {
     return [
       {

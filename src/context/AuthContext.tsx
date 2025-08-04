@@ -257,7 +257,7 @@ const authService = {
 
   // Logout user
   logout: async (logoutType: 'current' | 'all' = 'current'): Promise<void> => {
-    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     try {
       if (token && token !== 'oauth-session') {
@@ -319,7 +319,7 @@ const authService = {
 
   // Get current user profile
   getCurrentUser: async (): Promise<AuthUser | null> => {
-    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
       return null;
@@ -345,7 +345,7 @@ const authService = {
 
   // Update user profile
   updateProfile: async (_userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
-    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
       throw new Error('No access token found');
@@ -371,7 +371,7 @@ const authService = {
 
   // Change password
   changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
-    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
       throw new Error('No access token found');
@@ -436,7 +436,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // If no OAuth session, check for JWT token
-      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
       if (!token) {
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
@@ -483,7 +483,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const refreshInterval = setInterval(
       async () => {
         try {
-          const result = await authService.refreshToken();
+          const _result = await authService.refreshToken();
           if (result) {
             dispatch({ type: 'AUTH_SUCCESS', payload: result });
           } else {
@@ -561,7 +561,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refreshToken = async () => {
     try {
-      const result = await authService.refreshToken();
+      const _result = await authService.refreshToken();
       if (result) {
         dispatch({ type: 'AUTH_SUCCESS', payload: result });
       } else {

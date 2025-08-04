@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   ActionIcons,
   StatusIcons,
   NavigationIcons,
@@ -614,7 +614,7 @@ Could you provide more specific details about what you'd like to explore? For ex
           ))
         )}
 
-        {isLoading && (
+        {Boolean(isLoading) && (
           <div className="flex justify-start">
             <div className="bg-gray-100 rounded-lg px-4 py-2">
               <DotsLoading size="sm" />

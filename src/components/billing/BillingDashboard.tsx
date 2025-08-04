@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -9,7 +9,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
-import { 
+// import { 
   CreditCard, 
   Calendar, 
   TrendingUp, 
@@ -380,7 +380,7 @@ const BillingDashboard: React.FC = () => {
   // Handle plan upgrade
   const handlePlanUpgrade = async (planId: string) => {
     try {
-      const result = await billingService.updateSubscription(planId);
+      const _result = await billingService.updateSubscription(planId);
       if (result.success) {
         toast.success('Subscription updated successfully');
         loadBillingData();
@@ -399,7 +399,7 @@ const BillingDashboard: React.FC = () => {
     }
 
     try {
-      const result = await billingService.cancelSubscription();
+      const _result = await billingService.cancelSubscription();
       if (result.success) {
         toast.success('Subscription cancelled successfully');
         loadBillingData();

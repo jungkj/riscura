@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useGesture } from '@use-gesture/react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -48,7 +48,7 @@ interface FormField {
   label: string;
   placeholder?: string;
   required?: boolean;
-  validation?: (value: any) => string | null;
+  validation?: (_value: any) => string | null;
   options?: { value: string; label: string }[];
   description?: string;
   icon?: React.ReactNode;
@@ -385,7 +385,7 @@ handleFieldChange(field.id, checked)}
                 aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined} />
               <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >
                   {field.label}
-                {isRequired && <span className="text-red-500 ml-1">*</span>}
+                {Boolean(isRequired) && <span className="text-red-500 ml-1">*</span>}
               </DaisyCheckbox>
             </div>
           );
@@ -444,7 +444,7 @@ handleFieldChange(field.id, checked)}
                   )}
                 </div>
               </DaisyInput>
-              {value && (
+              {Boolean(value) && (
                 <div className="text-sm text-gray-600">
                   {field.multiple && Array.isArray(value) 
                     ? `${value.length} file(s) selected`
@@ -501,7 +501,7 @@ handleFieldChange(field.id, checked)}
         {field.type !== 'checkbox' && field.type !== 'switch' && (
           <DaisyLabel htmlFor={field.id} className="text-sm font-medium" >
               {field.label}
-            {isRequired && <span className="text-red-500 ml-1">*</span>}
+            {Boolean(isRequired) && <span className="text-red-500 ml-1">*</span>}
           </DaisyInput>
         )}
         
@@ -513,7 +513,7 @@ handleFieldChange(field.id, checked)}
           </p>
         )}
         
-        {error && (
+        {Boolean(error) && (
           <p id={`${field.id}-error`} className="text-xs text-red-600 flex items-center">
             <DaisyAlertTriangle className="w-3 h-3 mr-1" >
   {error}
@@ -536,11 +536,11 @@ handleFieldChange(field.id, checked)}
   return (
     <div className={`min-h-screen bg-gray-50 ${className}`}>
       {/* Header */}
-      {stickyHeader && (
+      {Boolean(stickyHeader) && (
         <div className="sticky top-0 z-40 bg-white border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              {onCancel && (
+              {Boolean(onCancel) && (
                 <DaisyButton
                   variant="ghost"
                   size="sm"
@@ -553,7 +553,7 @@ handleFieldChange(field.id, checked)}
               )}
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
-                {showProgress && (
+                {Boolean(showProgress) && (
                   <div className="text-xs text-gray-500">
                     {Math.round(progress)}% complete • {completedFields} of {totalFields} fields
                   </div>
@@ -561,14 +561,14 @@ handleFieldChange(field.id, checked)}
               </div>
             </div>
             
-            {autoSave && lastAutoSave && (
+            {Boolean(autoSave) && lastAutoSave && (
               <div className="text-xs text-gray-500">
                 Saved {lastAutoSave.toLocaleTimeString()}
               </div>
             )}
           </div>
           
-          {showProgress && (
+          {Boolean(showProgress) && (
             <DaisyProgress value={progress} className="mt-2 h-1" />)}
         </div>
       )}
@@ -576,7 +576,7 @@ handleFieldChange(field.id, checked)}
       {/* Form Content */}
       <form ref={formRef} onSubmit={handleSubmit} className="pb-20">
         <div ref={scrollRef} className="px-4 py-4 space-y-6" {...bind()}>
-          {description && (
+          {Boolean(description) && (
             <p className="text-sm text-gray-600">{description}</p>
           )}
           
@@ -634,10 +634,10 @@ handleFieldChange(field.id, checked)}
       </form>
       
       {/* Footer */}
-      {stickyFooter && (
+      {Boolean(stickyFooter) && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 z-40">
           <div className="flex space-x-3">
-            {onCancel && (
+            {Boolean(onCancel) && (
               <DaisyButton
                 type="button"
                 variant="outline"
@@ -671,7 +671,7 @@ handleFieldChange(field.id, checked)}
             </DaisyButton>
           </div>
           
-          {isDirty && (
+          {Boolean(isDirty) && (
             <p className="text-xs text-gray-500 text-center mt-2">
               You have unsaved changes
             </p>

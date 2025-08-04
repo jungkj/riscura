@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
-import { 
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { 
   Shield, 
   AlertTriangle, 
   CheckCircle, 
@@ -137,7 +137,7 @@ export default function MetricCards() {
     });
   }, []);
 
-  const getTrendIcon = (type: 'increase' | 'decrease' | 'neutral') => {
+  const getTrendIcon = (_type: 'increase' | 'decrease' | 'neutral') => {
     switch (type) {
       case 'increase':
         return <TrendingUp className="w-4 h-4" />;
@@ -148,7 +148,7 @@ export default function MetricCards() {
     }
   };
 
-  const getTrendColor = (type: 'increase' | 'decrease' | 'neutral', metricId: string) => {
+  const getTrendColor = (_type: 'increase' | 'decrease' | 'neutral', metricId: string) => {
     if (type === 'neutral') return 'text-gray-600';
     
     // For metrics where decrease is good (like risks, resolution time)

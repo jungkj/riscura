@@ -2,7 +2,7 @@ import { OpenAI } from 'openai';
 import { db } from '@/lib/db';
 
 // Helper function to get OpenAI client
-function getOpenAIClient() {
+const getOpenAIClient = () {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
@@ -235,7 +235,7 @@ export class DocumentTemplateService {
 
   // Interpolate template with variables
   private interpolateTemplate(template: string, variables: Record<string, any>): string {
-    let result = template;
+    let _result = template;
 
     for (const [key, value] of Object.entries(variables)) {
       const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
@@ -246,8 +246,7 @@ export class DocumentTemplateService {
   }
 
   // Enhance content with AI
-  private async enhanceWithAI(
-    content: string,
+  private async enhanceWithAI(_content: string,
     template: DocumentTemplate,
     variables: Record<string, any>
   ): Promise<string> {
@@ -281,7 +280,7 @@ export class DocumentTemplateService {
   }
 
   // Add boilerplate content
-  private addBoilerplate(content: string, template: DocumentTemplate): string {
+  private addBoilerplate(_content: string, template: DocumentTemplate): string {
     const boilerplate = `
 Document Type: ${template.type}
 Category: ${template.category}
@@ -315,8 +314,7 @@ This document was generated using the Riscura platform.
   }
 
   // Generate AI suggestions
-  private async generateSuggestions(
-    content: string,
+  private async generateSuggestions(_content: string,
     template: DocumentTemplate
   ): Promise<string[]> {
     try {

@@ -243,8 +243,8 @@ export class DatabasePerformanceOptimizer {
       const start = Date.now();
 
       try {
-        const result = await next(params);
-        const duration = Date.now() - start;
+        const _result = await next(params);
+        const _duration = Date.now() - start;
 
         // Log query metrics
         this.logQueryMetrics({
@@ -312,7 +312,7 @@ export class DatabasePerformanceOptimizer {
 
     try {
       // Try to get from cache
-      const cached = await this.redis.get(key);
+      const _cached = await this.redis.get(key);
       if (cached) {
         this.logQueryMetrics({
           duration: 1,
@@ -326,8 +326,8 @@ export class DatabasePerformanceOptimizer {
 
       // Execute query
       const start = Date.now();
-      const result = await queryFn();
-      const duration = Date.now() - start;
+      const _result = await queryFn();
+      const _duration = Date.now() - start;
 
       // Cache the result
       await this.redis.setex(key, ttl, JSON.stringify(result));
@@ -359,7 +359,7 @@ export class DatabasePerformanceOptimizer {
     const selectedReplica = this.selectReadReplica();
 
     try {
-      const result = await queryFn(selectedReplica);
+      const _result = await queryFn(selectedReplica);
       this.logQueryMetrics({
         duration: 0, // Will be measured by the middleware
         query: 'Read replica query',
@@ -395,7 +395,7 @@ export class DatabasePerformanceOptimizer {
     }
 
     try {
-      const result = await queryFn(shardClient);
+      const _result = await queryFn(shardClient);
       this.metrics.shardDistribution[shardId] = (this.metrics.shardDistribution[shardId] || 0) + 1;
       return result;
     } catch (error) {
@@ -602,7 +602,7 @@ export class DatabasePerformanceOptimizer {
         type: 'cache',
         priority: 'medium',
         description: 'Low cache hit rate',
-        impact: `Cache hit rate is ${this.metrics.cacheHitRate.toFixed(1)}% (target: >70%)`,
+        impact: `Cache hit rate is ${this.metrics.cacheHitRate.toFixed(1)}% (_target: >70%)`,
         implementation: 'Increase cache TTL for stable data, implement cache warming',
         estimatedImprovement: '40-50% response time improvement',
       });
@@ -638,7 +638,7 @@ export class DatabasePerformanceOptimizer {
   /**
    * Invalidate cache
    */
-  async invalidateCache(pattern: string): Promise<void> {
+  async invalidateCache(_pattern: string): Promise<void> {
     if (!this.redis) return;
 
     try {

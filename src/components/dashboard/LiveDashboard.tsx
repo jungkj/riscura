@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -18,7 +18,7 @@ import {
   LineChart,
   Line
 } from 'recharts';
-import {
+// import {
   AlertTriangle,
   Shield,
   FileText,
@@ -123,7 +123,7 @@ export function LiveDashboard() {
       setLoading(true);
       
       // Get the token from storage
-      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
       
       if (!token) {
         // If no token, silently skip fetching (user not authenticated yet)
@@ -150,7 +150,7 @@ export function LiveDashboard() {
         throw new Error('Failed to fetch dashboard data');
       }
 
-      const result = await response.json();
+      const _result = await response.json();
       setData(result.data);
       setError(null);
     } catch (err) {

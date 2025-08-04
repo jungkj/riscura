@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
-import {
+// import {
   TrendingUp, TrendingDown, Minus, BarChart3, AlertTriangle, 
   CheckCircle, Shield, Activity, Clock, Target, DollarSign,
   Users, Globe, Zap, Eye, Brain
@@ -152,7 +152,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
   }, [data, isAnimating]);
 
   // Helper functions
-  const formatValue = (value: number, format: string): string => {
+  const formatValue = (_value: number, format: string): string => {
     switch (format) {
       case 'percentage':
         return `${value.toFixed(1)}%`;
@@ -184,7 +184,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`;
   };
 
-  const getStatusColor = (value: number, threshold?: { warning: number; critical: number }) => {
+  const getStatusColor = (_value: number, threshold?: { warning: number; critical: number }) => {
     if (!threshold) return 'text-gray-600';
     
     if (value >= threshold.critical) return 'text-red-600';
@@ -192,7 +192,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     return 'text-green-600';
   };
 
-  const getProgressValue = (value: number, target?: number) => {
+  const getProgressValue = (_value: number, target?: number) => {
     if (!target) return 0;
     return Math.min((value / target) * 100, 100);
   };
@@ -331,11 +331,11 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
 }
 
 // Animated Number Component
-function AnimatedNumber({ value, format }: { value: number; format: string }) {
+const AnimatedNumber = ({ value, format }: { value: number; format: string }) {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    const duration = 1000;
+    const _duration = 1000;
     const startTime = Date.now();
     const startValue = displayValue;
     const difference = value - startValue;
@@ -359,7 +359,7 @@ function AnimatedNumber({ value, format }: { value: number; format: string }) {
     requestAnimationFrame(animate);
   }, [value]);
 
-  const formatValue = (val: number, fmt: string): string => {
+  const formatValue = (_val: number, fmt: string): string => {
     switch (fmt) {
       case 'percentage':
         return `${val.toFixed(1)}%`;

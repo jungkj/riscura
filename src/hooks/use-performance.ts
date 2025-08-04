@@ -35,7 +35,7 @@ export const usePerformanceMonitor = (componentName: string) => {
 };
 
 // Debounced value hook for performance optimization
-export const useDebounce = <T>(value: T, delay: number): T => {
+export const useDebounce = <T>(_value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export const useMemoizedCalculation = <T, R>(_data: T[],
 ): R => {
   return useMemo(() => {
     const start = performance.now();
-    const result = calculator(data);
+    const _result = calculator(data);
     const end = performance.now();
 
     if (process.env.NODE_ENV === 'development') {

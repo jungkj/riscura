@@ -4,7 +4,7 @@ import {
   PredictionData,
   SeasonalPattern,
 } from '@/types/proactive-monitoring.types';
-import {
+// import {
   TrendDirection,
   ConfidenceInterval,
   RiskTrendPrediction,
@@ -12,13 +12,13 @@ import {
   PredictionScenario,
   TrendPrediction,
 } from '@/types/risk-intelligence.types';
-import { Risk } from '@/types';
+// import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
 
 // Import AI services for real integration
-import { AIService } from './AIService';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
-import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
+// import { AIService } from './AIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
 
 interface RiskData {
   riskId: string;
@@ -479,8 +479,7 @@ export class TrendAnalysisService {
   /**
    * Compare trends across multiple entities or time periods
    */
-  async compareTrends(
-    entities: { id: string; type: string }[],
+  async compareTrends(_entities: { id: string; type: string }[],
     timeWindow: TimeWindow,
     comparisonType: 'cross_entity' | 'time_period' | 'benchmark'
   ): Promise<TrendComparisonResult> {
@@ -588,8 +587,7 @@ export class TrendAnalysisService {
     }));
   }
 
-  private async performTrendAnalysis(
-    timeSeries: TimeSeriesData[],
+  private async performTrendAnalysis(_timeSeries: TimeSeriesData[],
     config: TrendAnalysisConfig
   ): Promise<TrendAnalysis> {
     // Calculate basic trend metrics
@@ -616,8 +614,7 @@ export class TrendAnalysisService {
     };
   }
 
-  private async detectSeasonality(
-    timeSeries: TimeSeriesData[]
+  private async detectSeasonality(_timeSeries: TimeSeriesData[]
   ): Promise<SeasonalPattern | undefined> {
     if (timeSeries.length < 24) return undefined; // Need at least 2 years of monthly data
 
@@ -633,8 +630,7 @@ export class TrendAnalysisService {
     };
   }
 
-  private async generatePredictions(
-    timeSeries: TimeSeriesData[],
+  private async generatePredictions(_timeSeries: TimeSeriesData[],
     trend: TrendAnalysis,
     horizonMonths: number,
     seasonality?: SeasonalPattern
@@ -672,8 +668,7 @@ export class TrendAnalysisService {
     };
   }
 
-  private async detectAnomalies(
-    timeSeries: TimeSeriesData[],
+  private async detectAnomalies(_timeSeries: TimeSeriesData[],
     trend: TrendAnalysis
   ): Promise<Anomaly[]> {
     const anomalies: Anomaly[] = [];
@@ -769,8 +764,7 @@ export class TrendAnalysisService {
     };
   }
 
-  private async generateTrendRecommendations(
-    trend: TrendAnalysis,
+  private async generateTrendRecommendations(_trend: TrendAnalysis,
     prediction: PredictionData,
     anomalies: Anomaly[],
     factors: InfluencingFactor[],
@@ -869,7 +863,7 @@ export class TrendAnalysisService {
     return mostCommonId;
   }
 
-  private calculateCutoffDate(timeWindow: TimeWindow): Date {
+  private calculateCutoffDate(_timeWindow: TimeWindow): Date {
     const now = new Date();
     const cutoff = new Date(now);
 
@@ -906,13 +900,12 @@ export class TrendAnalysisService {
     });
   }
 
-  private async calculateLinearTrend(
-    timeSeries: TimeSeriesData[]
+  private async calculateLinearTrend(_timeSeries: TimeSeriesData[]
   ): Promise<{ slope: number; intercept: number; r2: number }> {
     return await this.statisticsService.linearRegression(timeSeries);
   }
 
-  private async calculateMomentum(timeSeries: TimeSeriesData[]): Promise<number> {
+  private async calculateMomentum(_timeSeries: TimeSeriesData[]): Promise<number> {
     if (timeSeries.length < 2) return 0;
 
     const recent = timeSeries.slice(-Math.min(5, timeSeries.length));
@@ -924,7 +917,7 @@ export class TrendAnalysisService {
     return (recentAvg - earlierAvg) / earlierAvg;
   }
 
-  private async calculateVolatility(timeSeries: TimeSeriesData[]): Promise<number> {
+  private async calculateVolatility(_timeSeries: TimeSeriesData[]): Promise<number> {
     return await this.statisticsService.calculateVolatility(timeSeries);
   }
 
@@ -933,7 +926,7 @@ export class TrendAnalysisService {
     return slope > 0 ? 'increasing' : 'decreasing';
   }
 
-  private calculateTrendDuration(timeSeries: TimeSeriesData[]): string {
+  private calculateTrendDuration(_timeSeries: TimeSeriesData[]): string {
     if (timeSeries.length < 2) return '0 days';
 
     const start = timeSeries[0].timestamp;
@@ -946,7 +939,7 @@ export class TrendAnalysisService {
     return `${Math.floor(durationDays / 365)} years`;
   }
 
-  private async calculateAcceleration(timeSeries: TimeSeriesData[]): Promise<number> {
+  private async calculateAcceleration(_timeSeries: TimeSeriesData[]): Promise<number> {
     if (timeSeries.length < 3) return 0;
 
     // Calculate second derivative to measure acceleration
@@ -1054,7 +1047,7 @@ export class TrendAnalysisService {
     return scenarios;
   }
 
-  private generateAssumptions(trend: TrendAnalysis, seasonality?: SeasonalPattern): string[] {
+  private generateAssumptions(_trend: TrendAnalysis, seasonality?: SeasonalPattern): string[] {
     const assumptions = [
       'Historical patterns continue',
       'No major external disruptions',
@@ -1073,19 +1066,18 @@ export class TrendAnalysisService {
   }
 
   // Simplified placeholder implementations for complex methods
-  private async detectStatisticalOutliers(timeSeries: TimeSeriesData[]): Promise<Anomaly[]> {
+  private async detectStatisticalOutliers(_timeSeries: TimeSeriesData[]): Promise<Anomaly[]> {
     return await this.statisticsService.detectOutliers(timeSeries);
   }
 
-  private async detectTrendDeviations(
-    timeSeries: TimeSeriesData[],
+  private async detectTrendDeviations(_timeSeries: TimeSeriesData[],
     trend: TrendAnalysis
   ): Promise<Anomaly[]> {
     // Mock implementation
     return [];
   }
 
-  private async detectSuddenChanges(timeSeries: TimeSeriesData[]): Promise<Anomaly[]> {
+  private async detectSuddenChanges(_timeSeries: TimeSeriesData[]): Promise<Anomaly[]> {
     // Mock implementation
     return [];
   }
@@ -1123,11 +1115,11 @@ export class TrendAnalysisService {
     return 0.88;
   }
 
-  private assessPredictionReliability(prediction: PredictionData, trend: TrendAnalysis): number {
+  private assessPredictionReliability(_prediction: PredictionData, trend: TrendAnalysis): number {
     return 0.82;
   }
 
-  private calculateExpectedDataPoints(timeWindow: TimeWindow): number {
+  private calculateExpectedDataPoints(_timeWindow: TimeWindow): number {
     // Calculate expected number of data points based on time window
     switch (timeWindow.unit) {
       case 'days':
@@ -1144,13 +1136,12 @@ export class TrendAnalysisService {
   }
 
   // Additional placeholder methods for remaining functionality
-  private isFactorRelevantToRisk(factor: IndustryFactor, risk: Risk): boolean {
+  private isFactorRelevantToRisk(_factor: IndustryFactor, risk: Risk): boolean {
     // Mock implementation
     return true;
   }
 
-  private async generateRiskScenarios(
-    risk: Risk,
+  private async generateRiskScenarios(_risk: Risk,
     trend: TrendAnalysis,
     factors: IndustryFactor[]
   ): Promise<PredictionScenario[]> {
@@ -1167,8 +1158,7 @@ export class TrendAnalysisService {
     return Math.min(100, quality.overall * 0.8 + factors.length * 2);
   }
 
-  private async generateTrendPredictions(
-    risk: Risk,
+  private async generateTrendPredictions(_risk: Risk,
     prediction: PredictionData
   ): Promise<TrendPrediction[]> {
     // Mock implementation
@@ -1301,8 +1291,7 @@ export class TrendAnalysisService {
     ];
   }
 
-  private applyDashboardFilters(
-    entities: Array<{ id: string; type: string }>,
+  private applyDashboardFilters(_entities: Array<{ id: string; type: string }>,
     filters?: TrendDashboardFilters
   ): Array<{ id: string; type: string }> {
     return entities; // No filtering applied in mock
@@ -1324,15 +1313,15 @@ export class TrendAnalysisService {
     };
   }
 
-  private async identifyKeyTrendInsights(summaries: TrendSummary[]): Promise<TrendInsight[]> {
+  private async identifyKeyTrendInsights(_summaries: TrendSummary[]): Promise<TrendInsight[]> {
     return [];
   }
 
-  private async generateTrendAlerts(summaries: TrendSummary[]): Promise<TrendAlert[]> {
+  private async generateTrendAlerts(_summaries: TrendSummary[]): Promise<TrendAlert[]> {
     return [];
   }
 
-  private calculateRefreshInterval(entities: Array<{ id: string; type: string }>): number {
+  private calculateRefreshInterval(_entities: Array<{ id: string; type: string }>): number {
     return 30000; // 30 seconds
   }
 }

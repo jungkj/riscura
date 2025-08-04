@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -39,7 +39,7 @@ interface ComplianceRingChartProps {
   size?: 'sm' | 'md' | 'lg';
   showDetails?: boolean;
   interactive?: boolean;
-  onFrameworkClick?: (framework: ComplianceFramework) => void;
+  onFrameworkClick?: (_framework: ComplianceFramework) => void;
   className?: string;
 }
 
@@ -391,7 +391,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
           </div>
 
           {/* Detailed View */}
-          {showDetails && selectedFramework && (
+          {Boolean(showDetails) && selectedFramework && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}

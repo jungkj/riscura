@@ -86,7 +86,7 @@ export const TouchCard: React.FC<TouchCardProps> = ({
     <div
       className={`
         bg-white border border-gray-200 rounded-lg shadow-sm transition-all duration-200
-        ${onClick && !disabled ? 'cursor-pointer hover:shadow-md active:shadow-sm' : ''}
+        ${Boolean(onClick) && !disabled ? 'cursor-pointer hover:shadow-md active:shadow-sm' : ''}
         ${isPressed ? 'scale-98 shadow-sm' : ''}
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         ${className}
@@ -98,7 +98,7 @@ export const TouchCard: React.FC<TouchCardProps> = ({
       onMouseUp={handleTouchEnd}
       onMouseLeave={handleTouchEnd}
       role={onClick ? 'button' : undefined}
-      tabIndex={onClick && !disabled ? 0 : undefined}
+      tabIndex={Boolean(onClick) && !disabled ? 0 : undefined}
       onKeyDown={(e) => {
         if ((e.key === 'Enter' || e.key === ' ') && onClick && !disabled) {
           e.preventDefault();
@@ -208,9 +208,9 @@ export const TouchInput: React.FC<TouchInputProps> = ({
 
   return (
     <div className="space-y-2">
-      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+      {Boolean(label) && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <input className={inputClasses} {...props} />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {Boolean(error) && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };
@@ -242,7 +242,7 @@ export const TouchSelect: React.FC<TouchSelectProps> = ({
 
   return (
     <div className="space-y-2">
-      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+      {Boolean(label) && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <select className={selectClasses} {...props}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -250,7 +250,7 @@ export const TouchSelect: React.FC<TouchSelectProps> = ({
           </option>
         ))}
       </select>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {Boolean(error) && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };
@@ -305,8 +305,8 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
 
       {(label || description) && (
         <div className="flex-1">
-          {label && <div className="text-sm font-medium text-gray-900">{label}</div>}
-          {description && <div className="text-sm text-gray-500">{description}</div>}
+          {Boolean(label) && <div className="text-sm font-medium text-gray-900">{label}</div>}
+          {Boolean(description) && <div className="text-sm text-gray-500">{description}</div>}
         </div>
       )}
     </div>
@@ -394,7 +394,7 @@ export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps />= ({
   return (
     <div ref={containerRef} className="h-full overflow-y-auto">
       {children}
-      {isLoading && (
+      {Boolean(isLoading) && (
         <div className="flex justify-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
         </div>

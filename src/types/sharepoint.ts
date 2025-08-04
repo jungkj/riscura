@@ -192,7 +192,7 @@ export interface UseSharePointFilesReturn {
   error: string | null;
   currentPath: string;
   listFiles: (path?: string) => Promise<void>;
-  searchFiles: (query: string) => Promise<void>;
+  searchFiles: (_query: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 

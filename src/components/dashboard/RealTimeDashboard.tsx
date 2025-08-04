@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import {
+// import {
   Activity,
   AlertTriangle,
   Shield,
@@ -111,7 +111,7 @@ export default function RealTimeDashboard({
           <span className="text-red-600">Offline</span>
         </>
       )}
-      {lastUpdated && (
+      {Boolean(lastUpdated) && (
         <span className="text-muted-foreground ml-2">
           Last updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
         </span>

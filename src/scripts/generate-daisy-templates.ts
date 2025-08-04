@@ -57,7 +57,7 @@ export const StandardCard: React.FC<StandardCardProps> = ({
           {title}
         </DaisyCardTitle>
         {children}
-        {actions && (
+        {Boolean(actions) && (
           <DaisyCardActions>
             {actions}
           </DaisyCardActions>
@@ -126,7 +126,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
       <DaisyDialogContent className={\`\${maxWidthClasses[maxWidth]} max-h-[90vh] overflow-y-auto\`}>
         <DaisyDialogHeader>
           <DaisyDialogTitle>{title}</DaisyDialogTitle>
-          {description && (
+          {Boolean(description) && (
             <DaisyDialogDescription>
               {description}
             </DaisyDialogDescription>
@@ -139,7 +139,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
         
         {(onConfirm || onCancel) && (
           <DaisyDialogFooter>
-            {onCancel && (
+            {Boolean(onCancel) && (
               <DaisyButton
                 variant="outline"
                 onClick={onCancel}
@@ -148,7 +148,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
               
         </DaisyButton>
             )}
-            {onConfirm && (
+            {Boolean(onConfirm) && (
               <DaisyButton
                 onClick={onConfirm}
                 disabled={isLoading}
@@ -195,7 +195,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
   type: 'input' | 'textarea' | 'select';
   placeholder?: string;
   required?: boolean;
-  validation?: (value: string) => string | null;
+  validation?: (_value: string) => string | null;
 }
 
 interface StandardFormProps {
@@ -477,7 +477,7 @@ export function StandardDataList<T extends DataItem>({
       <DaisyCardBody>
         <DaisyCardTitle className="flex items-center justify-between">
           {title}
-          {onRefresh && (
+          {Boolean(onRefresh) && (
             <DaisyButton
               variant="ghost"
               size="sm"
@@ -489,7 +489,7 @@ export function StandardDataList<T extends DataItem>({
           )}
         </DaisyCardTitle>
 
-        {error && (
+        {Boolean(error) && (
           <div className="text-red-600 text-sm mb-4">
             {error}
           </div>
@@ -636,7 +636,7 @@ ${templateList}
 Import the templates you need:
 
 \`\`\`tsx
-import { StandardCard, StandardDialog, StandardForm } from '@/components/templates';
+// import { StandardCard, StandardDialog, StandardForm } from '@/components/templates';
 \`\`\`
 
 ## Template Examples

@@ -16,7 +16,7 @@ interface UseGoogleDriveFilesReturn {
   error: string | null;
   authRequired: boolean;
   listFiles: (folderId?: string) => Promise<void>;
-  searchFiles: (query: string) => Promise<void>;
+  searchFiles: (_query: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -61,7 +61,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
 
   // Search for files
   const searchFiles = useCallback(
-    async (query: string) => {
+    async (_query: string) => {
       if (!query.trim()) {
         listFiles(lastFolderId);
         return;

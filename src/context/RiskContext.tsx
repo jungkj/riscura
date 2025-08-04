@@ -1,9 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types';
-import { generateMockRisks } from '@/lib/mockData';
-import { calculateRiskScore, getRiskLevel } from '@/lib/utils';
+// import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types';
+// import { generateMockRisks } from '@/lib/mockData';
+// import { calculateRiskScore, getRiskLevel } from '@/lib/utils';
 
 interface RiskContextType extends RiskState {
   // CRUD Operations
@@ -16,7 +16,7 @@ interface RiskContextType extends RiskState {
   getRisk: (id: string) => Risk | null;
 
   // Filtering and Search
-  setFilters: (filters: Partial<RiskFilters>) => void;
+  setFilters: (_filters: Partial<RiskFilters>) => void;
   clearFilters: () => void;
   setSearch: (search: string) => void;
 
@@ -285,7 +285,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Filtering and Search
-  const setFilters = (filters: Partial<RiskFilters>) => {
+  const setFilters = (_filters: Partial<RiskFilters>) => {
     dispatch({ type: 'SET_FILTERS', payload: filters });
   };
 
@@ -377,7 +377,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       'compliance',
       'technology',
     ];
-    const result = {} as Record<RiskCategory, Risk[]>;
+    const _result = {} as Record<RiskCategory, Risk[]>;
 
     categories.forEach((category) => {
       result[category] = state.risks.filter((risk) => risk.category === category);

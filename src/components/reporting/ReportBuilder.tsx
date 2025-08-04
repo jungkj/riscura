@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -12,7 +12,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import { 
+// import { 
   FileText, 
   Download, 
   Mail, 
@@ -375,7 +375,7 @@ handleFormatChange(format, checked as boolean)} />
               </div>
 
               {/* Template Parameters */}
-              {selectedTemplate && selectedTemplate.parameters.length > 0 && (
+              {Boolean(selectedTemplate) && selectedTemplate.parameters.length > 0 && (
                 <div className="space-y-2">
                   <DaisyLabel>Template Parameters</DaisyLabel>
                   <div className="space-y-3">
@@ -612,7 +612,7 @@ setConfig(prev => ({
 </DaisyButton>
               </DaisyButton>
 
-              {previewData && (
+              {Boolean(previewData) && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div className="text-center p-4 bg-muted rounded-lg">
@@ -673,7 +673,7 @@ setConfig(prev => ({
           )}
         </DaisyButton>
 
-        {onSchedule && (
+        {Boolean(onSchedule) && (
           <DaisyButton 
             onClick={handleSchedule} 
             variant="outline"

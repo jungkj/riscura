@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { RiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
+// import { RiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 
 export default function TestHeatmapPage() {
   return (

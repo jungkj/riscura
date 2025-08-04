@@ -52,7 +52,7 @@ export async function GET() {
         log: ['error'],
       });
 
-      const result = await testClient.$queryRaw`SELECT 1 as test`;
+      const _result = await testClient.$queryRaw`SELECT 1 as test`;
       await testClient.$disconnect();
       connectionTest = { success: true, result };
     } catch (error) {

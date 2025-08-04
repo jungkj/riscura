@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -13,7 +13,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
-import {
+// import {
   BarChart3,
   PieChart,
   LineChart,
@@ -447,7 +447,7 @@ export default function CustomDashboardBuilder({
         } ${!widget.visible ? 'opacity-50' : ''}`}
         onClick={() => setSelectedWidget(widget.id)}
       >
-        {isEditMode && (
+        {Boolean(isEditMode) && (
           <div className="absolute top-1 right-1 z-10 flex space-x-1">
             <DaisyButton
               variant="ghost"
@@ -482,7 +482,7 @@ export default function CustomDashboardBuilder({
     <DndProvider backend={HTML5Backend}>
       <div className={`flex h-screen bg-gray-100 ${className}`}>
         {/* Widget Library Sidebar */}
-        {showWidgetLibrary && (
+        {Boolean(showWidgetLibrary) && (
           <div className="w-80 bg-white border-r flex flex-col">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between mb-4">

@@ -1,6 +1,6 @@
 'use client';
 
-import {
+// import {
   EnhancedControl,
   ControlFramework,
   ControlAIAssessment,
@@ -41,7 +41,7 @@ export class EnhancedControlService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.assessment || this.getMockControlAssessment();
     } catch (error) {
       // console.error('AI control assessment failed:', error);
@@ -110,7 +110,7 @@ export class EnhancedControlService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.mapping || this.getMockRiskCoverage();
     } catch (error) {
       // console.error('Risk-control mapping analysis failed:', error);
@@ -119,8 +119,7 @@ export class EnhancedControlService {
   }
 
   // Generate Control Recommendations
-  async generateControlRecommendations(
-    risks: any[],
+  async generateControlRecommendations(_risks: any[],
     existingControls: EnhancedControl[]
   ): Promise<AIControlRecommendation[]> {
     try {
@@ -133,7 +132,7 @@ export class EnhancedControlService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.recommendations || this.getMockRecommendations();
     } catch (error) {
       // console.error('Control recommendations generation failed:', error);
@@ -197,7 +196,7 @@ export class EnhancedControlService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.automation || this.getMockAutomationAssessment();
     } catch (error) {
       // console.error('Automation analysis failed:', error);

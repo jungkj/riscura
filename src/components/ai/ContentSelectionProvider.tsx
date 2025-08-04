@@ -15,7 +15,7 @@ interface ContentSelectionContextValue {
   
   // Actions
   handleSelection: (selection: TextSelection) => void;
-  handleAIAction: (action: AIAction, selection: TextSelection) => void;
+  handleAIAction: (_action: AIAction, selection: TextSelection) => void;
   addToBatch: (selection: TextSelection, actions: AIAction[], priority?: 'low' | 'medium' | 'high' | 'urgent') => void;
   clearSelection: () => void;
   
@@ -113,7 +113,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
   }, []);
 
   // Handle AI action
-  const handleAIAction = useCallback(async (action: AIAction, selection: TextSelection) => {
+  const handleAIAction = useCallback(async (_action: AIAction, selection: TextSelection) => {
     if (!enableAnalysis) return;
     
     // Hide toolbar immediately
@@ -194,14 +194,14 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
       {children}
       
       {/* AI Action Toolbar */}
-      {isToolbarVisible && currentSelection && toolbarPosition && (
+      {Boolean(isToolbarVisible) && currentSelection && toolbarPosition && (
         <AIActionToolbar
           context={currentSelection}
           onActionComplete={(result) => console.log('Action completed:', result)} />
       )}
       
       {/* Analysis Results Panel */}
-      {enableAnalysis && (
+      {Boolean(enableAnalysis) && (
         <ContentAnalysisPanel
           isOpen={isAnalysisPanelOpen}
           onClose={hideAnalysisPanel}
@@ -213,7 +213,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
       )}
       
       {/* Batch Processing Manager */}
-      {enableBatching && (
+      {Boolean(enableBatching) && (
         <BatchSelectionManager
           isOpen={isBatchManagerOpen}
           onClose={hideBatchManager}

@@ -2,14 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 
-import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';
+// import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';
 
 // Mock template data
 const templateCategories = [
@@ -200,7 +200,7 @@ setSearchQuery(e.target.value)}
               className="pl-10 w-64" />
           </div>
 
-          <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)} />
+          <DaisySelect value={sortBy} onValueChange={(_value: any) => setSortBy(value)} />
             <DaisySelectTrigger className="w-32">
                 <DaisySelectValue />
 </DaisyInput>
@@ -407,7 +407,7 @@ setSearchQuery(e.target.value)}
       {/* Template Preview Dialog */}
       <DaisyDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} >
           <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
-  {selectedTemplate && (
+  {Boolean(selectedTemplate) && (
 </DaisyDialog>
             <TemplatePreview
               template={selectedTemplate}
@@ -429,7 +429,7 @@ interface TemplatePreviewProps {
   getCategoryIcon: (categoryId: string) => any;
 }
 
-function TemplatePreview({ 
+const TemplatePreview = ({ 
   template, 
   onClone, 
   getDifficultyColor,

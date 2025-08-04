@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+// import { 
   Upload, 
   Search, 
   Filter, 
@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -131,7 +131,7 @@ export default function DocumentManagementInterface({
     }
   };
 
-  const handleUploadComplete = (results: any[]) => {
+  const handleUploadComplete = (_results: any[]) => {
     toast.success(`Successfully uploaded ${results.length} file(s)`);
     setShowUpload(false);
     loadDocuments();
@@ -224,14 +224,14 @@ export default function DocumentManagementInterface({
     return `${size.toFixed(1)} ${units[unitIndex]}`;
   };
 
-  const getFileIcon = (type: string) => {
+  const getFileIcon = (_type: string) => {
     if (type.startsWith('image/')) return <Image className="w-5 h-5" />;
     if (type === 'application/pdf') return <FileText className="w-5 h-5" />;
     if (type.includes('archive') || type.includes('zip')) return <Archive className="w-5 h-5" />;
     return <FileText className="w-5 h-5" />;
   };
 
-  const getFileTypeColor = (type: string): string => {
+  const getFileTypeColor = (_type: string): string => {
     if (type.startsWith('image/')) return 'bg-green-100 text-green-800';
     if (type === 'application/pdf') return 'bg-red-100 text-red-800';
     if (type.includes('word')) return 'bg-blue-100 text-blue-800';
@@ -580,7 +580,7 @@ setSearchQuery(e.target.value)}
 
       {/* Upload Modal */}
       <AnimatePresence>
-        {showUpload && (
+        {Boolean(showUpload) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -616,7 +616,7 @@ setSearchQuery(e.target.value)}
 
       {/* Document Viewer Modal */}
       <AnimatePresence>
-        {selectedDocument && (
+        {Boolean(selectedDocument) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

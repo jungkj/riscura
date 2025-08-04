@@ -114,7 +114,7 @@ export const useResponsiveValue = <T>(values: Partial<Record<Breakpoint, T>>): T
 };
 
 // Media query hook
-export const useMediaQuery = (query: string): boolean => {
+export const useMediaQuery = (_query: string): boolean => {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {

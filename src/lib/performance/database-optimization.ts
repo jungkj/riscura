@@ -22,7 +22,7 @@ class DatabaseOptimizer {
     const { ttl = 300, tags = [] } = options; // Default 5 minutes
 
     // Check cache first
-    const cached = this.queryCache.get(queryKey);
+    const _cached = this.queryCache.get(queryKey);
     if (cached && Date.now() < cached.expires) {
       return cached.data;
     }
@@ -30,7 +30,7 @@ class DatabaseOptimizer {
     // Execute query
     const startTime = performance.now();
     const data = await queryFn();
-    const duration = performance.now() - startTime;
+    const _duration = performance.now() - startTime;
 
     // Log slow queries
     if (duration > 100) {
@@ -96,7 +96,7 @@ class DatabaseOptimizer {
   }
 
   // Batch operations
-  async batchCreate<T>(model: any, data: any[], batchSize = 100): Promise<T[]> {
+  async batchCreate<T>(_model: any, data: any[], batchSize = 100): Promise<T[]> {
     const results: T[] = [];
 
     for (let i = 0; i < data.length; i += batchSize) {

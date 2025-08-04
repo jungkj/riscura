@@ -224,8 +224,7 @@ export class ValidationService {
   };
 
   // Generic validation methods
-  public validateField<T>(
-    value: T,
+  public validateField<T>(_value: T,
     schema: z.ZodSchema<T>
   ): {
     isValid: boolean;
@@ -233,7 +232,7 @@ export class ValidationService {
     data?: T;
   } {
     try {
-      const result = schema.parse(value);
+      const _result = schema.parse(value);
       return { isValid: true, data: result };
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -251,7 +250,7 @@ export class ValidationService {
     data?: T;
   } {
     try {
-      const result = schema.parse(data);
+      const _result = schema.parse(data);
       return { isValid: true, data: result };
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -311,18 +310,18 @@ export class ValidationService {
       }
     },
 
-    validDateRange: (startDate: string, endDate: string): boolean => {
+    validDateRange: (_startDate: string, endDate: string): boolean => {
       const start = new Date(startDate);
       const end = new Date(endDate);
       return start < end;
     },
 
-    fileSize: (file: File, maxSizeMB: number): boolean => {
+    fileSize: (_file: File, maxSizeMB: number): boolean => {
       const maxBytes = maxSizeMB * 1024 * 1024;
       return file.size <= maxBytes;
     },
 
-    fileType: (file: File, allowedTypes: string[]): boolean => {
+    fileType: (_file: File, allowedTypes: string[]): boolean => {
       return allowedTypes.includes(file.type);
     },
 
@@ -350,7 +349,7 @@ export class ValidationService {
           try {
             const fieldSchema = (schema as any).shape[key];
             if (fieldSchema) {
-              const result = this.validateField(value, fieldSchema);
+              const _result = this.validateField(value, fieldSchema);
               if (!result.isValid && result.error) {
                 errors[key] = result.error;
                 isValid = false;
@@ -373,7 +372,7 @@ export class ValidationService {
           const fieldSchema = (schema as any).shape[fieldName];
           if (!fieldSchema) return null;
 
-          const result = validationService.validateField(value, fieldSchema);
+          const _result = validationService.validateField(value, fieldSchema);
           return result.error || null;
         } catch {
           return null;
@@ -385,7 +384,7 @@ export class ValidationService {
           const fieldSchema = (schema as any).shape[fieldName];
           if (!fieldSchema) return false;
 
-          const result = validationService.validateField(value, fieldSchema);
+          const _result = validationService.validateField(value, fieldSchema);
           return result.isValid;
         } catch {
           return false;

@@ -2,7 +2,7 @@
  * Parse risk score from various formats (string, number, text descriptions)
  * Returns a normalized score between 1-5
  */
-export function parseRiskScore(value: string | number | undefined | null): number {
+export function parseRiskScore(_value: string | number | undefined | null): number {
   if (value === undefined || value === null) return 0;
 
   // Handle number values - clamp between 1 and 5

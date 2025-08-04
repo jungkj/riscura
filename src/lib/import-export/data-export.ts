@@ -260,7 +260,7 @@ export class DataExportService {
    */
   async getExportJob(jobId: string, organizationId: string): Promise<ExportJob | null> {
     // Try cache first
-    const cached = await this.cache.get<ExportJob>(`export-job:${jobId}`);
+    const _cached = await this.cache.get<ExportJob>(`export-job:${jobId}`);
     if (cached && cached.organizationId === organizationId) {
       return cached;
     }
@@ -368,7 +368,7 @@ export class DataExportService {
       await this.updateExportJob(job);
 
       // Process the export based on type
-      const result = await this.processExportByType(job, controller.signal);
+      const _result = await this.processExportByType(job, controller.signal);
 
       // Update job with completion
       job.status = 'COMPLETED';
@@ -734,13 +734,13 @@ export class DataExportService {
   private objectToXML(obj: any, rootName: string): string {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<${rootName}>\n`;
 
-    const processValue = (value: any, key: string, indent: string): string => {
+    const processValue = (_value: any, key: string, indent: string): string => {
       if (value === null || value === undefined) {
         return `${indent}<${key} />\n`;
       }
 
       if (Array.isArray(value)) {
-        let result = `${indent}<${key}>\n`;
+        let _result = `${indent}<${key}>\n`;
         value.forEach((item, index) => {
           result += processValue(item, 'item', indent + '  ');
         });
@@ -749,7 +749,7 @@ export class DataExportService {
       }
 
       if (typeof value === 'object') {
-        let result = `${indent}<${key}>\n`;
+        let _result = `${indent}<${key}>\n`;
         Object.entries(value).forEach(([k, v]) => {
           result += processValue(v, k, indent + '  ');
         });
@@ -774,7 +774,7 @@ export class DataExportService {
   // DATA TRANSFORMATION
   // ============================================================================
 
-  private transformRisksForExport(risks: any[], parameters: ExportParameters): any[] {
+  private transformRisksForExport(_risks: any[], parameters: ExportParameters): any[] {
     return risks.map((risk) => {
       const transformed: any = {
         id: risk.id,

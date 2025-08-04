@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { ChevronUp, ChevronDown, Search, Filter } from 'lucide-react';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import {
   DropdownMenu,
@@ -28,7 +28,7 @@ export interface VirtualizedTableColumn<T = any> {
   resizable?: boolean;
   sortable?: boolean;
   filterable?: boolean;
-  render?: (value: any, record: T, index: number) => React.ReactNode;
+  render?: (_value: any, record: T, index: number) => React.ReactNode;
   align?: 'left' | 'center' | 'right';
   fixed?: 'left' | 'right';
   className?: string;
@@ -39,7 +39,7 @@ export interface VirtualizedTableProps<T = any> {
   data: T[];
   columns: VirtualizedTableColumn<T>[];
   height?: number;
-  rowHeight?: number | ((index: number) => number);
+  rowHeight?: number | ((_index: number) => number);
   headerHeight?: number;
   overscanCount?: number;
   loading?: boolean;
@@ -47,13 +47,13 @@ export interface VirtualizedTableProps<T = any> {
   onRowClick?: (record: T, index: number) => void;
   onRowDoubleClick?: (record: T, index: number) => void;
   onSort?: (key: string, direction: 'asc' | 'desc') => void;
-  onFilter?: (filters: Record<string, any>) => void;
+  onFilter?: (_filters: Record<string, any>) => void;
   onScroll?: (scrollTop: number, scrollLeft: number) => void;
   sortBy?: string;
   sortDirection?: 'asc' | 'desc';
   filters?: Record<string, any>;
   selectedRows?: Set<number>;
-  onRowSelect?: (index: number, selected: boolean) => void;
+  onRowSelect?: (_index: number, selected: boolean) => void;
   onSelectAll?: (selected: boolean) => void;
   showSelectColumn?: boolean;
   stickyHeader?: boolean;
@@ -68,7 +68,7 @@ export interface VirtualizedTableProps<T = any> {
   loadMore?: () => Promise<void>;
   searchable?: boolean;
   searchValue?: string;
-  onSearch?: (value: string) => void;
+  onSearch?: (_value: string) => void;
   rowClassName?: string | ((row: T, index: number) => string);
   emptyMessage?: string;
   loadingMessage?: string;
@@ -85,7 +85,7 @@ interface CellProps {
     onRowClick?: (record: any, index: number) => void;
     onRowDoubleClick?: (record: any, index: number) => void;
     selectedRows?: Set<number>;
-    onRowSelect?: (index: number, selected: boolean) => void;
+    onRowSelect?: (_index: number, selected: boolean) => void;
   };
 }
 
@@ -96,7 +96,7 @@ interface RowProps extends ListChildComponentProps {
     onRowClick?: (record: any, index: number) => void;
     onRowDoubleClick?: (record: any, index: number) => void;
     selectedRows?: Set<number>;
-    onRowSelect?: (index: number, selected: boolean) => void;
+    onRowSelect?: (_index: number, selected: boolean) => void;
   };
 }
 
@@ -166,7 +166,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
 
   // Memoized processed data
   const processedData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
 
     // Apply filters
     Object.entries(filterState).forEach(([key, value]) => {
@@ -368,7 +368,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
 
   // Variable row height calculator
   const getRowHeight = useCallback(
-    (index: number) => {
+    (_index: number) => {
       if (typeof rowHeight === 'function') {
         return rowHeight(index);
       }
@@ -387,7 +387,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
       )}
       style={{ height: headerHeight }}
     >
-      {showSelectColumn && (
+      {Boolean(showSelectColumn) && (
         <div
           style={{ width: 48 }}
           className="flex items-center justify-center px-3 border-r border-gray-300"
@@ -429,7 +429,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 onClick={(e) => e.stopPropagation()} />
             )}
 
-            {enableColumnResize && (
+            {Boolean(enableColumnResize) && (
               <div
                 className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500"
                 onMouseDown={(e) => handleMouseDown(e, column.key)} />
@@ -515,7 +515,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
                   onScroll={handleScroll}
                   overscanCount={overscanCount}
                   estimatedItemSize={estimatedRowHeight}
-                  itemKey={(index: number) => processedData[index].id || index}
+                  itemKey={(_index: number) => processedData[index].id || index}
                   width={autoWidth}
                 >
                   {ListRow}
@@ -532,7 +532,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 itemData={itemData}
                 onScroll={handleScroll}
                 overscanCount={overscanCount}
-                itemKey={(index: number) => processedData[index].id || index}
+                itemKey={(_index: number) => processedData[index].id || index}
                 width={autoWidth}
               >
                 {ListRow}
@@ -569,7 +569,7 @@ export const useVirtualizedTable = <T extends Record<string, any>>(
     setFilters(newFilters);
   }, []);
 
-  const handleRowSelect = useCallback((index: number, selected: boolean) => {
+  const handleRowSelect = useCallback((_index: number, selected: boolean) => {
     setSelectedRows((prev) => {
       const newSet = new Set(prev);
       if (selected) {

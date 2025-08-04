@@ -20,7 +20,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { MoreVertical, Copy, Trash2 } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
@@ -112,11 +112,11 @@ export function ChartWidget({
 
   return (
     <BarChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {Boolean(showGrid) && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
             <DaisyTooltip>
-              {showLegend && <Legend />}
+              {Boolean(showLegend) && <Legend />}
             <Bar dataKey="value" fill="#8884d8" />
             <Bar dataKey="risk" fill="#82ca9d" />
           </BarChart>
@@ -125,11 +125,11 @@ export function ChartWidget({
       case 'line':
         return (
           <LineChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {Boolean(showGrid) && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
             <DaisyTooltip>
-              {showLegend && <Legend />}
+              {Boolean(showLegend) && <Legend />}
             <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
             <Line type="monotone" dataKey="risk" stroke="#82ca9d" strokeWidth={2} />
           </LineChart>
@@ -138,11 +138,11 @@ export function ChartWidget({
       case 'area':
         return (
           <AreaChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {Boolean(showGrid) && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
             <DaisyTooltip>
-              {showLegend && <Legend />}
+              {Boolean(showLegend) && <Legend />}
             <Area type="monotone" dataKey="value" stackId="1" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="risk" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
           </AreaChart>
@@ -165,18 +165,18 @@ export function ChartWidget({
               ))}
             </Pie>
             <DaisyTooltip>
-              {showLegend && <Legend />}
+              {Boolean(showLegend) && <Legend />}
           </PieChart>
         );
 
       case 'scatter':
         return (
           <ScatterChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {Boolean(showGrid) && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="value" type="number" />
             <YAxis dataKey="risk" type="number" />
             <DaisyTooltip cursor={{ strokeDasharray: '3 3' }}>
-              {showLegend && <Legend />}
+              {Boolean(showLegend) && <Legend />}
             <Scatter name="Data Points" data={data} fill="#8884d8" />
           </ScatterChart>
         );

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   Brain, 
   TrendingUp, 
   Shield, 
@@ -141,13 +141,13 @@ export function EnterpriseRiskDashboard() {
     return 'text-red-600';
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+  const getTrendIcon = (_trend: 'up' | 'down' | 'stable') => {
     if (trend === 'up') return <ArrowUpRight className="w-4 h-4 text-green-500" />;
     if (trend === 'down') return <ArrowDownRight className="w-4 h-4 text-red-500" />;
     return <Clock className="w-4 h-4 text-gray-500" />;
   };
 
-  const getInsightIcon = (type: string) => {
+  const getInsightIcon = (_type: string) => {
     const iconMap = {
       prediction: TrendingUp,
       recommendation: Sparkles,
@@ -158,7 +158,7 @@ export function EnterpriseRiskDashboard() {
     return <Icon className="w-5 h-5" />;
   };
 
-  const getInsightBadgeColor = (type: string) => {
+  const getInsightBadgeColor = (_type: string) => {
     const colorMap = {
       prediction: 'bg-blue-100 text-blue-800',
       recommendation: 'bg-purple-100 text-purple-800',

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -18,7 +18,7 @@ import { QuestionnaireList } from '@/components/questionnaires/QuestionnaireList
 import { EnhancedQuestionnaireList } from '@/components/questionnaires/EnhancedQuestionnaireList';
 import CollaborativeQuestionnairePage from './CollaborativeQuestionnairePage';
 import { WorkflowProgress } from '@/components/questionnaires/WorkflowProgress';
-import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards';
+// import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards';
 import { AnalyticsDashboard } from '@/components/questionnaires/AnalyticsDashboard';
 import { TemplateLibrary } from '@/components/questionnaires/TemplateLibrary';
 import { WorkflowManagement } from '@/components/questionnaires/WorkflowManagement';
@@ -28,7 +28,7 @@ import { AIAssistantPanel } from '@/components/questionnaires/AIAssistantPanel';
 // import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel';
 
 // Icons
-import {
+// import {
   Plus, FileText, Brain, BarChart3, Users, 
   Filter, Search, Eye, Star, 
   Activity
@@ -46,7 +46,7 @@ interface QuestionnairesPageProps {
   view?: 'list' | 'enhanced-search' | 'builder' | 'analytics' | 'templates' | 'collaboration';
 }
 
-function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
+const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
   const router = useRouter();
   
   // State Management
@@ -543,7 +543,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
     setSelectedQuestionnaire(null);
   };
 
-  const handleEditQuestionnaire = (questionnaire: Questionnaire) => {
+  const handleEditQuestionnaire = (_questionnaire: Questionnaire) => {
     setSelectedQuestionnaire(questionnaire);
     setActiveView('builder');
   };
@@ -557,7 +557,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
     }
   };
 
-  const handleDuplicateQuestionnaire = async (questionnaire: Questionnaire) => {
+  const handleDuplicateQuestionnaire = async (_questionnaire: Questionnaire) => {
     try {
       const duplicate: Questionnaire = {
         ...questionnaire,
@@ -712,7 +712,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
 
         {/* Filters */}
         <AnimatePresence>
-          {showFilters && (
+          {Boolean(showFilters) && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -855,7 +855,7 @@ setSearchQuery(e.target.value)}
 
         {/* AI Panel */}
         <AnimatePresence>
-          {showAIPanel && (
+          {Boolean(showAIPanel) && (
             <motion.aside
               initial={{ x: 300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}

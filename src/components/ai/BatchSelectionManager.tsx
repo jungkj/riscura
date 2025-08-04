@@ -20,7 +20,7 @@ import { AIAction } from './SelectableContent';
 import { ContentAnalysisResult } from './ContentAnalysisPanel';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -244,7 +244,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
   }, [selections, selectedItems, processingQueue, toast]);
 
   // Calculate statistics
-  const stats = {
+  const _stats = {
     total: selections.length,
     selected: selectedItems.size,
     pending: selections.filter((item: BatchSelectionItem) => item.status === 'pending').length,
@@ -255,7 +255,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {Boolean(isOpen) && (
         <>
           {/* Backdrop */}
           <motion.div
@@ -355,7 +355,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  <DaisySelect value={selectedAction} onValueChange={(value: AIAction) => setSelectedAction(value)} />
+                  <DaisySelect value={selectedAction} onValueChange={(_value: AIAction) => setSelectedAction(value)} />
                     <DaisySelectTrigger className="w-40">
                         <DaisySelectValue />
 </DaisySelect>
@@ -396,7 +396,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                   )}
                 </div>
 
-                {processingQueue && processingQueue.status !== 'idle' && (
+                {Boolean(processingQueue) && processingQueue.status !== 'idle' && (
                   <div className="flex items-center gap-4">
                     <div className="text-sm text-muted-foreground">
                       {processingQueue.completedItems} / {processingQueue.totalItems}
@@ -463,7 +463,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                               
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-muted-foreground">Actions:</span>
-                                {item.actions.map((action: AIAction) => (
+                                {item.actions.map((_action: AIAction) => (
                                   <DaisyBadge key={action} className="text-xs" >
   {action}
 </DaisyBadge>

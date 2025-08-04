@@ -1,6 +1,6 @@
 import { ProboService } from './ProboService';
 import { VendorAssessmentService } from './VendorAssessmentService';
-import {
+// import {
   ProboControl,
   ProboControlCategory,
   ComplianceFramework,
@@ -249,7 +249,7 @@ export class EnhancedProboIntegrationService {
     return frameworkMap[category] || ['SOC2'];
   }
 
-  private findControlCategoryForMitigation(mitigation: any): ProboControlCategory {
+  private findControlCategoryForMitigation(_mitigation: any): ProboControlCategory {
     return {
       id: mitigation.category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and'),
       name: mitigation.category,
@@ -289,7 +289,7 @@ export class EnhancedProboIntegrationService {
     }
   }
 
-  private estimateImplementationHours(mitigation: any): number {
+  private estimateImplementationHours(_mitigation: any): number {
     // Estimate based on importance and complexity
     const baseHours: Record<string, number> = {
       MANDATORY: 8,
@@ -299,7 +299,7 @@ export class EnhancedProboIntegrationService {
     return baseHours[mitigation.importance] || 4;
   }
 
-  private assessComplexity(mitigation: any): 'Simple' | 'Moderate' | 'Complex' {
+  private assessComplexity(_mitigation: any): 'Simple' | 'Moderate' | 'Complex' {
     // Assess complexity based on description length and standards count
     const standardsCount = mitigation.standards.split(';').length;
     const descriptionLength = mitigation.description.length;
@@ -309,7 +309,7 @@ export class EnhancedProboIntegrationService {
     return 'Simple';
   }
 
-  private generateTags(mitigation: any): string[] {
+  private generateTags(_mitigation: any): string[] {
     const tags = [mitigation.importance.toLowerCase()];
 
     // Add framework tags
@@ -327,7 +327,7 @@ export class EnhancedProboIntegrationService {
     return [...new Set(tags)];
   }
 
-  private generateImplementationChecklist(mitigation: any): string[] {
+  private generateImplementationChecklist(_mitigation: any): string[] {
     // Generate basic checklist based on mitigation
     return [
       'Review current implementation status',
@@ -340,8 +340,7 @@ export class EnhancedProboIntegrationService {
     ];
   }
 
-  private determineTestingFrequency(
-    mitigation: any
+  private determineTestingFrequency(_mitigation: any
   ): 'Daily' | 'Weekly' | 'Monthly' | 'Quarterly' | 'Annually' {
     // Determine testing frequency based on importance
     switch (mitigation.importance) {
@@ -367,7 +366,7 @@ export class EnhancedProboIntegrationService {
     return standards.split(';').filter(Boolean);
   }
 
-  private getEvidenceRequirements(mitigation: any): string[] {
+  private getEvidenceRequirements(_mitigation: any): string[] {
     return [
       'Implementation documentation',
       'Configuration screenshots',
@@ -376,7 +375,7 @@ export class EnhancedProboIntegrationService {
     ];
   }
 
-  private assessAutomationPotential(mitigation: any): 'High' | 'Medium' | 'Low' {
+  private assessAutomationPotential(_mitigation: any): 'High' | 'Medium' | 'Low' {
     // Assess automation potential based on category
     const automationFriendlyCategories = [
       'Infrastructure & network security',
@@ -387,7 +386,7 @@ export class EnhancedProboIntegrationService {
     return automationFriendlyCategories.includes(mitigation.category) ? 'High' : 'Medium';
   }
 
-  private calculateRiskReduction(mitigation: any): number {
+  private calculateRiskReduction(_mitigation: any): number {
     // Calculate risk reduction percentage based on importance
     const reductionMap: Record<string, number> = {
       MANDATORY: 85,
@@ -397,7 +396,7 @@ export class EnhancedProboIntegrationService {
     return reductionMap[mitigation.importance] || 50;
   }
 
-  private assessBusinessImpact(mitigation: any): 'High' | 'Medium' | 'Low' {
+  private assessBusinessImpact(_mitigation: any): 'High' | 'Medium' | 'Low' {
     return mitigation.importance === 'MANDATORY'
       ? 'High'
       : mitigation.importance === 'PREFERRED'
@@ -493,7 +492,7 @@ export class EnhancedProboIntegrationService {
     };
   }
 
-  private isRelevantForRisk(mitigation: any, request: ControlGenerationRequest): boolean {
+  private isRelevantForRisk(_mitigation: any, request: ControlGenerationRequest): boolean {
     // Check if mitigation is relevant to the risk
     const categoryMatch = mitigation.category
       .toLowerCase()

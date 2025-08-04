@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -64,7 +64,7 @@ interface ARIAAssistantProps {
     selectedRisk?: string;
     selectedControl?: string;
   };
-  onActionTrigger?: (action: string, parameters?: any) => void;
+  onActionTrigger?: (_action: string, parameters?: any) => void;
 }
 
 export default function ARIAAssistant({ 
@@ -240,7 +240,7 @@ How can I assist you today?`,
       } else {
         throw new Error(data.message || 'Failed to get AI response');
       }
-    } catch (_error: any) {
+    } catch (__error: any) {
       if (error.name === 'AbortError') {
         return; // Request was cancelled
       }
@@ -312,7 +312,7 @@ How can I assist you today?`,
   };
 
   // Handle action triggers
-  const handleAction = (action: string, parameters?: any) => {
+  const handleAction = (_action: string, parameters?: any) => {
     if (onActionTrigger) {
       onActionTrigger(action, parameters);
     } else {
@@ -336,7 +336,7 @@ How can I assist you today?`,
   };
 
   // Copy message to clipboard
-  const copyMessage = async (content: string) => {
+  const copyMessage = async (_content: string) => {
     try {
       await navigator.clipboard.writeText(content);
       toast({
@@ -419,7 +419,7 @@ How can I assist you today?`,
           </div>
           
           <div className="flex items-center space-x-1">
-            {voiceEnabled && (
+            {Boolean(voiceEnabled) && (
               <>
                 <DaisyButton
                   variant="ghost"
@@ -554,7 +554,7 @@ How can I assist you today?`,
                             <Copy className="w-3 h-3" />
                           </DaisyButton>
                           
-                          {voiceEnabled && speechSynthesis && (
+                          {Boolean(voiceEnabled) && speechSynthesis && (
                             <DaisyButton
                               variant="ghost"
                               size="sm"
@@ -588,7 +588,7 @@ How can I assist you today?`,
               </div>
             ))}
             
-            {isLoading && (
+            {Boolean(isLoading) && (
               <div className="flex justify-start">
                 <div className="bg-gray-100 rounded-lg p-3 mr-4">
                   <div className="flex items-center space-x-2">
@@ -621,7 +621,7 @@ setInputMessage(e.target.value)}
                 disabled={isLoading}
                 className="pr-12" />
               
-              {voiceEnabled && (
+              {Boolean(voiceEnabled) && (
                 <DaisyButton
                   type="button"
                   variant="ghost"

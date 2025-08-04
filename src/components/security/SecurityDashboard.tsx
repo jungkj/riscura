@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { SecuritySettingsModal } from './SecuritySettingsModal';
 import ExportService from '@/services/ExportService';
-import {
+// import {
   Shield,
   AlertTriangle,
   CheckCircle,
@@ -363,7 +363,7 @@ const ThreatAlertsPanel: React.FC = () => {
 
 // ========== COMPLIANCE FRAMEWORKS ==========
 const ComplianceFrameworksPanel: React.FC = () => {
-  const getComplianceColor = (compliance: number) => {
+  const getComplianceColor = (_compliance: number) => {
     if (compliance >= 95) return 'text-semantic-success';
     if (compliance >= 85) return 'text-semantic-warning';
     return 'text-semantic-error';
@@ -565,7 +565,7 @@ export const SecurityDashboard: React.FC = () => {
     // For now, we'll just show a toast notification
   };
 
-  const handleSettingsUpdated = (settings: any) => {
+  const handleSettingsUpdated = (_settings: any) => {
     // Settings have been updated successfully
     // The SecuritySettingsModal will handle the toast notification
   };

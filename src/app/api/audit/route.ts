@@ -91,7 +91,7 @@ async function handleGet(req: NextRequest) {
 
     // Query audit logs
     const auditLogger = getAuditLogger(db.client);
-    const result = await auditLogger.query(queryOptions);
+    const _result = await auditLogger.query(queryOptions);
 
     return NextResponse.json({
       success: true,

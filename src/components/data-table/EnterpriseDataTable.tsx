@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -20,7 +20,7 @@ interface ColumnConfig<T> {
   key: keyof T;
   header: string;
   sortable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (_value: any, row: T) => React.ReactNode;
 }
 
 interface BulkAction {
@@ -74,7 +74,7 @@ export default function EnterpriseDataTable<T extends TableData>({
   const [currentPage, setCurrentPage] = useState(1);
   
   const filteredAndSortedData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
     
     if (searchTerm) {
       result = result.filter(row =>
@@ -128,7 +128,7 @@ export default function EnterpriseDataTable<T extends TableData>({
     }
   };
   
-  const handleBulkAction = (action: BulkAction) => {
+  const handleBulkAction = (_action: BulkAction) => {
     const selectedData = data.filter(row => selectedRows.has(row.id));
     action.action(selectedData);
     setSelectedRows(new Set());
@@ -188,13 +188,13 @@ export default function EnterpriseDataTable<T extends TableData>({
         <div className="flex items-center justify-between">
           <div>
             <DaisyCardTitle className="text-lg">{title}</DaisyCardTitle>
-            {description && (
+            {Boolean(description) && (
               <p className="text-sm text-gray-600 mt-1">{description}</p>
             )}
           </div>
           
           <div className="flex items-center space-x-2">
-            {enableExport && (
+            {Boolean(enableExport) && (
               <DaisyDropdownMenu >
                   <DaisyDropdownMenuTrigger asChild >
                     <DaisyButton variant="outline" size="sm" >
@@ -224,7 +224,7 @@ export default function EnterpriseDataTable<T extends TableData>({
         </div>
         
         <div className="flex flex-col space-y-4 mt-4">
-          {enableSearch && (
+          {Boolean(enableSearch) && (
             <div className="flex items-center space-x-2">
               <Search className="h-4 w-4 text-gray-500" />
               <DaisyInput
@@ -236,7 +236,7 @@ setSearchTerm(e.target.value)}
             </div>
           )}
           
-          {enableSelection && selectedRows.size > 0 && bulkActions.length > 0 && (
+          {Boolean(enableSelection) && selectedRows.size > 0 && bulkActions.length > 0 && (
             <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg">
               <DaisyBadge variant="secondary">{selectedRows.size} selected</DaisyInput>
               {bulkActions.map((action) => (
@@ -262,7 +262,7 @@ setSearchTerm(e.target.value)}
           <DaisyTable >
               <DaisyTableHeader >
                 <DaisyTableRow >
-                  {enableSelection && (
+                  {Boolean(enableSelection) && (
                   <DaisyTableHead className="w-12" >
                       <DaisyCheckbox
                       checked={isAllSelected}
@@ -308,7 +308,7 @@ setSearchTerm(e.target.value)}
                     key={row.id}
                     className={`hover:bg-gray-50 ${selectedRows.has(row.id) ? 'bg-blue-50' : ''}`}
                   >
-                    {enableSelection && (
+                    {Boolean(enableSelection) && (
                       <DaisyTableCell >
                           <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
@@ -345,13 +345,13 @@ handleRowSelection(row.id, checked as boolean)}
                             <Copy className="mr-2 h-4 w-4" />
                             Copy ID
                           </DaisyDropdownMenuItem>
-                          {onRowEdit && (
+                          {Boolean(onRowEdit) && (
                             <DaisyDropdownMenuItem onClick={() => onRowEdit(row)} />
                               <Edit className="mr-2 h-4 w-4" />
                               Edit
                             </DaisyDropdownMenuItem>
                           )}
-                          {onRowDelete && (
+                          {Boolean(onRowDelete) && (
                             <DaisyDropdownMenuItem 
                               onClick={() => onRowDelete(row)}
                               className="text-red-600" />
@@ -375,7 +375,7 @@ handleRowSelection(row.id, checked as boolean)}
           </DaisyTable>
         </div>
         
-        {enablePagination && totalPages > 1 && (
+        {Boolean(enablePagination) && totalPages > 1 && (
           <div className="flex items-center justify-between space-x-2 p-4">
             <div className="text-sm text-gray-700">
               Showing {(currentPage - 1) * pageSize + 1} to{' '}

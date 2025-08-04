@@ -62,7 +62,7 @@ export function useSubscription() {
     return subscription.features.includes(feature) || subscription.isActive;
   };
 
-  const hasReachedLimit = (type: 'users' | 'risks' | 'aiQueries') => {
+  const hasReachedLimit = (_type: 'users' | 'risks' | 'aiQueries') => {
     if (!subscription) return true;
     const limit = subscription.limits[type];
     return limit !== -1; // -1 means unlimited

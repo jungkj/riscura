@@ -1,4 +1,4 @@
-import { Risk, Control, RiskCategory } from '@/types';
+// import { Risk, Control, RiskCategory } from '@/types';
 
 // Enhanced risk analysis interfaces
 export interface RiskFramework {
@@ -462,8 +462,7 @@ export class RiskAnalysisAIService {
   /**
    * Comprehensive risk assessment using specified framework
    */
-  async assessRisk(
-    risk: Risk,
+  async assessRisk(_risk: Risk,
     framework: 'coso' | 'iso31000' | 'nist' = 'coso',
     options: {
       includeQuantitative?: boolean;
@@ -543,8 +542,7 @@ export class RiskAnalysisAIService {
   /**
    * Monte Carlo simulation for quantitative risk assessment
    */
-  async performMonteCarloSimulation(
-    risk: Risk,
+  async performMonteCarloSimulation(_risk: Risk,
     parameters: QuantitativeParameters,
     iterations: number = 10000
   ): Promise<QuantitativeResults> {
@@ -624,8 +622,7 @@ export class RiskAnalysisAIService {
   /**
    * Analyze risk correlations and dependencies
    */
-  async analyzeRiskCorrelations(
-    risks: Risk[],
+  async analyzeRiskCorrelations(_risks: Risk[],
     options: {
       includeHistorical?: boolean;
       timeWindow?: number; // months
@@ -670,8 +667,7 @@ export class RiskAnalysisAIService {
   /**
    * Generate comprehensive risk recommendations
    */
-  async generateRiskRecommendations(
-    risk: Risk,
+  async generateRiskRecommendations(_risk: Risk,
     assessment: RiskAssessmentReport,
     options: {
       priorityFocus?: 'cost' | 'time' | 'impact' | 'feasibility';
@@ -726,8 +722,7 @@ export class RiskAnalysisAIService {
   /**
    * Generate automated risk scoring using AI
    */
-  async generateAutomatedRiskScore(
-    risk: Risk,
+  async generateAutomatedRiskScore(_risk: Risk,
     framework: 'coso' | 'iso31000' | 'nist',
     context: {
       industry?: string;
@@ -971,8 +966,7 @@ export class RiskAnalysisAIService {
   }
 
   // Placeholder implementations for complex analysis methods
-  private async performQualitativeAnalysis(
-    risk: Risk,
+  private async performQualitativeAnalysis(_risk: Risk,
     framework: RiskFramework,
     controls?: Control[]
   ): Promise<QualitativeAnalysis> {
@@ -992,8 +986,7 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private async performQuantitativeAnalysis(
-    risk: Risk,
+  private async performQuantitativeAnalysis(_risk: Risk,
     framework: RiskFramework
   ): Promise<QuantitativeRiskAssessment> {
     const parameters: QuantitativeParameters = {
@@ -1030,8 +1023,7 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private async generateFindings(
-    risk: Risk,
+  private async generateFindings(_risk: Risk,
     framework: RiskFramework,
     qualitativeAnalysis: QualitativeAnalysis
   ): Promise<AssessmentFinding[]> {
@@ -1050,8 +1042,7 @@ export class RiskAnalysisAIService {
     ];
   }
 
-  private async generateRecommendations(
-    risk: Risk,
+  private async generateRecommendations(_risk: Risk,
     findings: AssessmentFinding[],
     framework: RiskFramework
   ): Promise<RiskRecommendation[]> {
@@ -1064,31 +1055,27 @@ export class RiskAnalysisAIService {
     return [];
   }
 
-  private async generateMonitoringPlan(
-    risk: Risk,
+  private async generateMonitoringPlan(_risk: Risk,
     recommendations: RiskRecommendation[]
   ): Promise<MonitoringRequirement[]> {
     // Create monitoring requirements
     return [];
   }
 
-  private async generateExecutiveSummary(
-    risk: Risk,
+  private async generateExecutiveSummary(_risk: Risk,
     report: RiskAssessmentReport
   ): Promise<string> {
     return `Executive Summary for ${risk.title}: Risk assessment completed using ${report.framework} framework. ${report.findings.length} findings identified with ${report.recommendations.length} recommendations for improvement.`;
   }
 
   // Additional helper methods would be implemented here...
-  private async analyzePairwiseCorrelations(
-    risks: Risk[],
+  private async analyzePairwiseCorrelations(_risks: Risk[],
     options: CorrelationAnalysisOptions
   ): Promise<RiskCorrelationPair[]> {
     return [];
   }
 
-  private async calculateNetworkMetrics(
-    risks: Risk[],
+  private async calculateNetworkMetrics(_risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<NetworkMetrics> {
     return {
@@ -1100,22 +1087,19 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private async identifyRiskClusters(
-    risks: Risk[],
+  private async identifyRiskClusters(_risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<RiskCluster[]> {
     return [];
   }
 
-  private async analyzeDependencies(
-    risks: Risk[],
+  private async analyzeDependencies(_risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<RiskDependency[]> {
     return [];
   }
 
-  private async calculateSystemicRisk(
-    risks: Risk[],
+  private async calculateSystemicRisk(_risks: Risk[],
     pairs: RiskCorrelationPair[],
     metrics: NetworkMetrics
   ): Promise<SystemicRiskIndicators> {
@@ -1128,13 +1112,12 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private calculateTargetRiskScore(risk: Risk, tolerance: 'low' | 'medium' | 'high'): number {
+  private calculateTargetRiskScore(_risk: Risk, tolerance: 'low' | 'medium' | 'high'): number {
     const toleranceMultipliers = { low: 0.5, medium: 0.7, high: 0.9 };
     return risk.riskScore * toleranceMultipliers[tolerance];
   }
 
-  private async generateMitigationRecommendations(
-    risk: Risk,
+  private async generateMitigationRecommendations(_risk: Risk,
     assessment: RiskAssessmentReport,
     scoreReduction: number,
     options: RecommendationOptions
@@ -1142,24 +1125,21 @@ export class RiskAnalysisAIService {
     return [];
   }
 
-  private async generateTransferRecommendations(
-    risk: Risk,
+  private async generateTransferRecommendations(_risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
     return [];
   }
 
-  private async generateAvoidanceRecommendations(
-    risk: Risk,
+  private async generateAvoidanceRecommendations(_risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
     return [];
   }
 
-  private async generateAcceptanceRecommendations(
-    risk: Risk,
+  private async generateAcceptanceRecommendations(_risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
@@ -1200,8 +1180,7 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private async analyzeControlEffectiveness(
-    risk: Risk,
+  private async analyzeControlEffectiveness(_risk: Risk,
     controls?: Control[]
   ): Promise<ControlEffectivenessResult> {
     return {
@@ -1210,8 +1189,7 @@ export class RiskAnalysisAIService {
     };
   }
 
-  private async calculateLikelihood(
-    risk: Risk,
+  private async calculateLikelihood(_risk: Risk,
     textAnalysis: TextAnalysisResult,
     industryFactors: IndustryFactorsResult,
     context: ContextData
@@ -1257,8 +1235,7 @@ export class RiskAnalysisAIService {
     return Math.min(5, Math.max(1, Math.round(weightedLikelihood)));
   }
 
-  private async calculateImpact(
-    risk: Risk,
+  private async calculateImpact(_risk: Risk,
     textAnalysis: TextAnalysisResult,
     industryFactors: IndustryFactorsResult,
     context: ContextData
@@ -1358,8 +1335,7 @@ export class RiskAnalysisAIService {
   /**
    * Calculate inherent vs residual risk scores
    */
-  async calculateInherentVsResidualRisk(
-    risk: Risk,
+  async calculateInherentVsResidualRisk(_risk: Risk,
     controls?: Control[]
   ): Promise<{
     inherentRisk: number;

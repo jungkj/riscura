@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   Eye,
   EyeOff,
   Upload,
@@ -56,7 +56,7 @@ export interface FormSectionConfig {
 const FloatingLabelInput: React.FC<{
   field: FormFieldConfig;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   error?: string;
   autoSaved?: boolean;
 }> = ({ field, value, onChange, error, autoSaved }) => {
@@ -137,7 +137,7 @@ const FloatingLabelInput: React.FC<{
         )}
 
         {/* Auto-save indicator */}
-        {autoSaved && (
+        {Boolean(autoSaved) && (
           <div className="absolute right-enterprise-3 top-enterprise-2">
             <Check className="h-3 w-3 text-semantic-success" />
           </div>
@@ -169,7 +169,7 @@ const FloatingLabelInput: React.FC<{
 const NotionSelect: React.FC<{
   field: FormFieldConfig;
   value: any;
-  onChange: (value: any) => void;
+  onChange: (_value: any) => void;
   error?: string;
 }> = ({ field, value, onChange, error }) => {
   return (
@@ -227,7 +227,7 @@ const NotionSelect: React.FC<{
 const NotionToggle: React.FC<{
   field: FormFieldConfig;
   value: boolean;
-  onChange: (value: boolean) => void;
+  onChange: (_value: boolean) => void;
   error?: string;
 }> = ({ field, value, onChange, error }) => {
   return (
@@ -265,7 +265,7 @@ const NotionToggle: React.FC<{
         </button>
       </div>
 
-      {error && (
+      {Boolean(error) && (
         <div className="flex items-start space-x-enterprise-2">
           <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" >
   <p className="text-caption text-semantic-error">
@@ -298,12 +298,12 @@ const NotionFileUpload: React.FC<{
     onChange([...value, ...files]);
   };
 
-  const removeFile = (index: number) => {
+  const removeFile = (_index: number) => {
     const newFiles = value.filter((_, i) => i !== index);
     onChange(newFiles);
   };
 
-  const getFileIcon = (file: File) => {
+  const getFileIcon = (_file: File) => {
     if (file.type.startsWith('image/')) return <Image className="h-4 w-4" />;
     if (file.type.includes('pdf')) return <FileText className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
@@ -376,7 +376,7 @@ const NotionFileUpload: React.FC<{
         </div>
       )}
 
-      {error && (
+      {Boolean(error) && (
         <div className="flex items-start space-x-enterprise-2">
           <DaisyAlertCircle className="h-3 w-3 text-semantic-error mt-0.5 flex-shrink-0" >
   <p className="text-caption text-semantic-error">
@@ -475,7 +475,7 @@ const FormSection: React.FC<{
       </div>
 
       {/* Section Content */}
-      {expanded && (
+      {Boolean(expanded) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-enterprise-4">
           {section.fields.map(renderField)}
         </div>
@@ -545,14 +545,14 @@ export const NotionForm: React.FC<{
       <div className="space-y-enterprise-2">
         <div className="flex items-center justify-between">
           <h2 className="text-heading-lg font-bold text-text-primary">{title}</h2>
-          {autoSave && lastSaved && (
+          {Boolean(autoSave) && lastSaved && (
             <div className="flex items-center space-x-enterprise-2 text-caption text-text-secondary">
               <Clock className="h-3 w-3" />
               <span>Last saved {lastSaved.toLocaleTimeString()}</span>
             </div>
           )}
         </div>
-        {description && (
+        {Boolean(description) && (
           <p className="text-body-base text-text-secondary">{description}</p>
         )}
       </div>
@@ -577,7 +577,7 @@ export const NotionForm: React.FC<{
       {/* Form Actions */}
       <div className="flex items-center justify-between pt-enterprise-6 border-t border-border">
         <div className="flex items-center space-x-enterprise-2">
-          {onCancel && (
+          {Boolean(onCancel) && (
             <DaisyButton type="button" variant="outline" onClick={onCancel} >
   Cancel
 </DaisySeparator>

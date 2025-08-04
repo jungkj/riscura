@@ -1,8 +1,8 @@
 import React from 'react';
 import { EnhancedDataTable, EnhancedDataTableColumn } from './enhanced-data-table';
 import { EnhancedList, EnhancedListItem } from './enhanced-list';
-import { SimpleBarChart, MetricCard } from './enhanced-charts';
-import { Card, CardContent, CardHeader, CardTitle } from './card';
+// import { SimpleBarChart, MetricCard } from './enhanced-charts';
+// import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { 
   TrendingUp, 
@@ -214,11 +214,11 @@ const tableColumns: EnhancedDataTableColumn[] = [
 ];
 
 export const DataTablesDemo = () => {
-  const handleRowAction = (action: string, row: any) => {
+  const handleRowAction = (_action: string, row: any) => {
     // console.log('Row action:', action, row);
   };
 
-  const handleBulkAction = (action: string, rows: any[]) => {
+  const handleBulkAction = (_action: string, rows: any[]) => {
     // console.log('Bulk action:', action, rows);
   };
 
@@ -226,7 +226,7 @@ export const DataTablesDemo = () => {
     // console.log('List item clicked:', item);
   };
 
-  const handleListItemAction = (action: string, item: EnhancedListItem) => {
+  const handleListItemAction = (_action: string, item: EnhancedListItem) => {
     // console.log('List item action:', action, item);
   };
 

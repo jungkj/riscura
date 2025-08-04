@@ -28,8 +28,7 @@ export interface BulkOperationResult {
 }
 
 // Generic bulk operation handler
-export function createBulkHandler(
-  entityType: 'risk' | 'control' | 'document' | 'questionnaire' | 'workflow' | 'report',
+export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' | 'questionnaire' | 'workflow' | 'report',
   requiredPermissions: string[]
 ) {
   return withAPI(
@@ -155,7 +154,7 @@ export function createBulkHandler(
 }
 
 // Helper functions
-function getEntityTypeEnum(entityType: string): string {
+const getEntityTypeEnum = (_entityType: string): string {
   const typeMap: Record<string, string> = {
     risk: 'RISK',
     control: 'CONTROL',
@@ -169,7 +168,7 @@ function getEntityTypeEnum(entityType: string): string {
   return typeMap[entityType] || 'TASK';
 }
 
-function getEntityTable(entityType: string): string {
+const getEntityTable = (_entityType: string): string {
   const tableMap: Record<string, string> = {
     risk: 'risk',
     control: 'control',
@@ -182,8 +181,7 @@ function getEntityTable(entityType: string): string {
   return tableMap[entityType] || entityType;
 }
 
-async function updateEntity(
-  table: string,
+async function updateEntity(_table: string,
   id: string,
   updateData: any,
   userId: string
@@ -198,7 +196,7 @@ async function updateEntity(
   });
 }
 
-async function deleteEntity(table: string, id: string, entityType: string): Promise<any> {
+async function deleteEntity(_table: string, id: string, entityType: string): Promise<any> {
   // Check for dependencies before deletion
   await checkDependencies(table, id, entityType);
 
@@ -207,7 +205,7 @@ async function deleteEntity(table: string, id: string, entityType: string): Prom
   });
 }
 
-async function archiveEntity(table: string, id: string, userId: string): Promise<any> {
+async function archiveEntity(_table: string, id: string, userId: string): Promise<any> {
   return await (db.client as any)[table].update({
     where: { id },
     data: {
@@ -218,14 +216,14 @@ async function archiveEntity(table: string, id: string, userId: string): Promise
   });
 }
 
-async function exportEntity(table: string, id: string): Promise<any> {
+async function exportEntity(_table: string, id: string): Promise<any> {
   return await (db.client as any)[table].findUnique({
     where: { id },
     include: getExportIncludes(table),
   });
 }
 
-async function checkDependencies(table: string, id: string, entityType: string): Promise<void> {
+async function checkDependencies(_table: string, id: string, entityType: string): Promise<void> {
   // Temporarily commented out due to schema issues - needs to be fixed later
   /*
   if (entityType === 'risk') {
@@ -253,7 +251,7 @@ async function checkDependencies(table: string, id: string, entityType: string):
   */
 }
 
-function getExportIncludes(table: string): any {
+const getExportIncludes = (_table: string): any {
   const includeMap: Record<string, any> = {
     risk: {
       owner: true,

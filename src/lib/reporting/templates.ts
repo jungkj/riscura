@@ -721,6 +721,6 @@ export function getTemplatesByCategory(category: string): ReportTemplate[] {
 }
 
 // Get templates by type
-export function getTemplatesByType(type: string): ReportTemplate[] {
+export function getTemplatesByType(_type: string): ReportTemplate[] {
   return reportTemplates.filter((template) => template.type === type);
 }

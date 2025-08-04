@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 
 interface AdvancedFiltersProps {
   filters: any;
-  onChange: (filters: any) => void;
+  onChange: (_filters: any) => void;
   onClose: () => void;
 }
 

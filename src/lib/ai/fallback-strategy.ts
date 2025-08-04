@@ -1,4 +1,4 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
 
 interface FallbackResponse {
@@ -30,7 +30,7 @@ export class AIFallbackStrategy {
   /**
    * Provide fallback response for risk analysis when AI is unavailable
    */
-  async getRiskAnalysisFallback(risk: Risk): Promise<FallbackResponse> {
+  async getRiskAnalysisFallback(_risk: Risk): Promise<FallbackResponse> {
     const template = this.riskTemplates.get(risk.category.toLowerCase());
 
     if (template) {
@@ -59,7 +59,7 @@ export class AIFallbackStrategy {
   /**
    * Provide fallback control recommendations
    */
-  async getControlRecommendationsFallback(risk: Risk): Promise<FallbackResponse> {
+  async getControlRecommendationsFallback(_risk: Risk): Promise<FallbackResponse> {
     const template = this.riskTemplates.get(risk.category.toLowerCase());
 
     if (template) {
@@ -88,7 +88,7 @@ export class AIFallbackStrategy {
   /**
    * Provide fallback for general AI assistance
    */
-  async getGeneralAssistanceFallback(query: string): Promise<FallbackResponse> {
+  async getGeneralAssistanceFallback(_query: string): Promise<FallbackResponse> {
     const queryType = this.categorizeQuery(query);
     const staticResponse = this.staticResponses.get(queryType);
 
@@ -116,7 +116,7 @@ export class AIFallbackStrategy {
   /**
    * Check if offline knowledge can answer the query
    */
-  async getOfflineKnowledgeResponse(query: string): Promise<FallbackResponse | null> {
+  async getOfflineKnowledgeResponse(_query: string): Promise<FallbackResponse | null> {
     const keywords = this.extractKeywords(query);
 
     for (const keyword of keywords) {
@@ -346,7 +346,7 @@ Use a 5x5 matrix for detailed analysis or 3x3 for simplified assessment.`,
     });
   }
 
-  private generateRiskAnalysisFromTemplate(risk: Risk, template: RiskTemplate): string {
+  private generateRiskAnalysisFromTemplate(_risk: Risk, template: RiskTemplate): string {
     return `
 **Risk Analysis: ${risk.title}**
 
@@ -371,7 +371,7 @@ Based on the risk score of ${risk.riskScore}, this risk should be ${this.getRisk
     `;
   }
 
-  private generateControlRecommendationsFromTemplate(risk: Risk, template: RiskTemplate): string {
+  private generateControlRecommendationsFromTemplate(_risk: Risk, template: RiskTemplate): string {
     return `
 **Control Recommendations for: ${risk.title}**
 
@@ -392,7 +392,7 @@ Given the risk score of ${risk.riskScore}, implement controls in this order:
     `;
   }
 
-  private generateBasicRiskAnalysis(risk: Risk): string {
+  private generateBasicRiskAnalysis(_risk: Risk): string {
     return `
 **Basic Risk Analysis: ${risk.title}**
 
@@ -415,7 +415,7 @@ For detailed analysis and specific recommendations, please use the AI-powered ri
     `;
   }
 
-  private generateBasicControlRecommendations(risk: Risk): string {
+  private generateBasicControlRecommendations(_risk: Risk): string {
     return `
 **Basic Control Recommendations: ${risk.title}**
 
@@ -446,7 +446,7 @@ For detailed analysis and specific recommendations, please use the AI-powered ri
     return 'Low Priority - Monitor and review regularly';
   }
 
-  private categorizeQuery(query: string): string {
+  private categorizeQuery(_query: string): string {
     const queryLower = query.toLowerCase();
 
     if (
@@ -468,7 +468,7 @@ For detailed analysis and specific recommendations, please use the AI-powered ri
     return 'general';
   }
 
-  private extractKeywords(query: string): string[] {
+  private extractKeywords(_query: string): string[] {
     const words = query.toLowerCase().split(/\s+/);
     const keywords = words.filter(
       (word) =>

@@ -7,8 +7,8 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import {
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import {
   Brain,
   TrendingUp,
   TrendingDown,
@@ -240,9 +240,9 @@ const sampleTrendData: AITrendData[] = [
 // AI Prediction Card Component
 const PredictionCard: React.FC<{
   prediction: AIPrediction;
-  onAction: (action: string, prediction: AIPrediction) => void;
+  onAction: (_action: string, prediction: AIPrediction) => void;
 }> = ({ prediction, onAction }) => {
-  const getTypeConfig = (type: string) => {
+  const getTypeConfig = (_type: string) => {
     const configs = {
       'risk': { icon: AlertTriangle, color: 'text-purple-600', bg: 'bg-purple-50' },
       'control': { icon: Shield, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -363,7 +363,7 @@ const PredictionCard: React.FC<{
 // AI Recommendation Panel Component
 const RecommendationPanel: React.FC<{
   recommendation: AIRecommendation;
-  onAction: (action: string, recommendation: AIRecommendation) => void;
+  onAction: (_action: string, recommendation: AIRecommendation) => void;
 }> = ({ recommendation, onAction }) => {
   const getPriorityConfig = (priority: string) => {
     const configs = {
@@ -553,11 +553,11 @@ export const AIPoweredDashboard: React.FC = () => {
     setIsLoading(false);
   };
 
-  const handlePredictionAction = (action: string, prediction: AIPrediction) => {
+  const handlePredictionAction = (_action: string, prediction: AIPrediction) => {
     // console.log(`Prediction action: ${action}`, prediction);
   };
 
-  const handleRecommendationAction = (action: string, recommendation: AIRecommendation) => {
+  const handleRecommendationAction = (_action: string, recommendation: AIRecommendation) => {
     // console.log(`Recommendation action: ${action}`, recommendation);
   };
 
@@ -619,7 +619,7 @@ export const AIPoweredDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Loading Overlay */}
-      {isLoading && (
+      {Boolean(isLoading) && (
         <div className="fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
           <div className="bg-white p-enterprise-6 rounded-lg shadow-lg flex items-center space-x-enterprise-3">
             <RefreshCw className="h-5 w-5 text-purple-600 animate-spin" />

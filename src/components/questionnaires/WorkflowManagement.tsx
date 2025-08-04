@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -13,7 +13,7 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 
-import {
+// import {
   Workflow, Users, Clock, Bell, CheckCircle, AlertCircle, Calendar,
   Play, Pause, RotateCcw, Settings, Plus, Edit, Trash2, Eye,
   ArrowRight, ArrowDown, User, UserCheck, UserX, Mail, Smartphone,
@@ -267,7 +267,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
     }
   };
 
-  const getStepIcon = (type: string) => {
+  const getStepIcon = (_type: string) => {
     switch (type) {
       case 'review': return Eye;
       case 'approval': return CheckCircle;
@@ -626,7 +626,7 @@ setSearchQuery(e.target.value)}
       {/* Workflow Instance Detail Dialog */}
       <DaisyDialog open={!!selectedInstance} onOpenChange={() => setSelectedInstance(null)} />
         <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
-  {selectedInstance && (
+  {Boolean(selectedInstance) && (
 </DaisyDialog>
             <WorkflowInstanceDetail
               instance={selectedInstance}
@@ -646,10 +646,10 @@ interface WorkflowInstanceCardProps {
   onSelect: () => void;
   getStatusColor: (status: string) => string;
   getPriorityColor: (priority: string) => string;
-  getStepIcon: (type: string) => any;
+  getStepIcon: (_type: string) => any;
 }
 
-function WorkflowInstanceCard({ 
+const WorkflowInstanceCard = ({ 
   instance, 
   onSelect, 
   getStatusColor, 
@@ -713,7 +713,7 @@ interface WorkflowTemplateCardProps {
   getStatusColor: (status: string) => string;
 }
 
-function WorkflowTemplateCard({ template, onSelect, getStatusColor }: WorkflowTemplateCardProps) {
+const WorkflowTemplateCard = ({ template, onSelect, getStatusColor }: WorkflowTemplateCardProps) {
 
   return (
     <DaisyCard className="hover:shadow-md transition-shadow cursor-pointer" onClick={onSelect} >
@@ -759,10 +759,10 @@ interface WorkflowInstanceDetailProps {
   instance: WorkflowInstance;
   getStatusColor: (status: string) => string;
   getPriorityColor: (priority: string) => string;
-  getStepIcon: (type: string) => any;
+  getStepIcon: (_type: string) => any;
 }
 
-function WorkflowInstanceDetail({ 
+const WorkflowInstanceDetail = ({ 
   instance, 
   getStatusColor, 
   getPriorityColor, 

@@ -1,4 +1,4 @@
-import { AIService } from './AIService';
+// import { AIService } from './AIService';
 import { ControlType } from '@/types/rcsa.types';
 
 // Import actual Probo data
@@ -388,7 +388,7 @@ export class ProboService {
    */
   async getMitigationControls(): Promise<MitigationControl[]> {
     try {
-      return mitigationsData.map((mitigation: any) => ({
+      return mitigationsData.map((_mitigation: any) => ({
         id: mitigation.id,
         name: mitigation.name,
         category: mitigation.category,
@@ -467,7 +467,7 @@ export class ProboService {
   }
 
   // Search mitigations
-  async searchMitigations(query: string): Promise<ProboMitigation[]> {
+  async searchMitigations(_query: string): Promise<ProboMitigation[]> {
     const mitigations = await this.getMitigations();
     const lowerQuery = query.toLowerCase();
     return mitigations.filter(

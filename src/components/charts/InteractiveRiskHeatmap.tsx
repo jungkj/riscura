@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -57,7 +57,7 @@ interface HeatmapCell {
 
 interface InteractiveRiskHeatmapProps {
   data: RiskData[];
-  onRiskSelect?: (risk: RiskData) => void;
+  onRiskSelect?: (_risk: RiskData) => void;
   onCellDrillDown?: (cell: HeatmapCell) => void;
   height?: number;
   showControls?: boolean;
@@ -166,7 +166,7 @@ export default function InteractiveRiskHeatmap({
   };
 
   // Handle risk selection
-  const handleRiskSelect = (risk: RiskData) => {
+  const handleRiskSelect = (_risk: RiskData) => {
     onRiskSelect?.(risk);
   };
 
@@ -388,7 +388,7 @@ export default function InteractiveRiskHeatmap({
                 className="cursor-pointer hover:opacity-80" />
             ))}
           </Scatter>
-          {showTooltip && <CustomTooltip />}
+          {Boolean(showTooltip) && <CustomTooltip />}
         </ScatterChart>
       </ResponsiveContainer>
     );
@@ -409,7 +409,7 @@ export default function InteractiveRiskHeatmap({
             </DaisyBadge>
           </div>
           
-          {showControls && (
+          {Boolean(showControls) && (
             <div className="flex items-center space-x-1">
               <DaisyButton
                 variant="ghost"
@@ -538,7 +538,7 @@ export default function InteractiveRiskHeatmap({
         </div>
         
         {/* Selected cell details */}
-        {selectedCell && selectedCell.count > 0 && (
+        {Boolean(selectedCell) && selectedCell.count > 0 && (
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center justify-between mb-3">
               <h4 className="font-medium">

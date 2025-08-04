@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   Calendar,
   Clock,
   Send,
@@ -772,10 +772,10 @@ setSearchQuery(e.target.value)}
       )}
 
       {/* Execution History */}
-      {showExecutionHistory && renderExecutionHistory()}
+      {Boolean(showExecutionHistory) && renderExecutionHistory()}
 
       {/* Create Report Form */}
-      {showCreateForm && (
+      {Boolean(showCreateForm) && (
         <DaisyCard >
   <DaisyCardBody >
 </DaisyCard>

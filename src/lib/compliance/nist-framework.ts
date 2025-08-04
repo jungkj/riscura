@@ -1,4 +1,4 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 
 export interface NISTFunction {
   id: string;
@@ -509,7 +509,7 @@ export class NISTFrameworkService {
     };
   }
 
-  private async createCurrentProfile(risks: Risk[], controls: Control[]): Promise<NISTProfile> {
+  private async createCurrentProfile(_risks: Risk[], controls: Control[]): Promise<NISTProfile> {
     const functionOutcomes: FunctionOutcome[] = [];
     const categoryOutcomes: CategoryOutcome[] = [];
     const subcategoryOutcomes: SubcategoryOutcome[] = [];

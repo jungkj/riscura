@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { 
+// import { 
   Calendar, 
   Download, 
   FileText, 
@@ -8,7 +8,7 @@ import {
   RefreshCw, 
   Send
 } from 'lucide-react';
-import { 
+// import { 
   Card, 
   CardContent, 
   CardDescription, 
@@ -210,6 +210,7 @@ export default function ReportingPage() {
                           ))}
                         </Pie>
                         <DaisyTooltip>
+</DaisyTooltip>
                           <Legend />
                       </RechartsPie>
                     </ResponsiveContainer>
@@ -234,6 +235,7 @@ export default function ReportingPage() {
                         <XAxis dataKey="month" />
                         <YAxis />
                         <DaisyTooltip>
+</DaisyTooltip>
                           <Legend />
                         <Bar dataKey="high" stackId="a" fill="#ef4444" name="High Risk" />
                         <Bar dataKey="medium" stackId="a" fill="#eab308" name="Medium Risk" />
@@ -265,6 +267,7 @@ export default function ReportingPage() {
                             ))}
                           </Pie>
                           <DaisyTooltip>
+</DaisyTooltip>
                             <Legend />
                         </RechartsPie>
                       </ResponsiveContainer>
@@ -325,6 +328,7 @@ export default function ReportingPage() {
                         <XAxis dataKey="month" />
                         <YAxis domain={[80, 100]} />
                         <DaisyTooltip>
+</DaisyTooltip>
                           <Legend />
                         <Line
                           type="monotone"

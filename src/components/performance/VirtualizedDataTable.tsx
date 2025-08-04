@@ -9,7 +9,7 @@ interface VirtualizedDataTableProps<T> {
     key: keyof T;
     title: string;
     width?: number;
-    render?: (value: any, item: T) => React.ReactNode;
+    render?: (_value: any, item: T) => React.ReactNode;
   }>;
   height?: number;
   itemHeight?: number;
@@ -120,7 +120,7 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
   return (
     <div className={`border border-gray-300 rounded-lg ${className}`}>
       {/* Search Input */}
-      {searchable && (
+      {Boolean(searchable) && (
         <div className="p-4 border-b border-gray-200">
           <input
             type="text"
@@ -145,7 +145,7 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
           >
             <div className="flex items-center justify-between">
               {column.title}
-              {sortable && sortConfig?.key === column.key && (
+              {Boolean(sortable) && sortConfig?.key === column.key && (
                 <span className="ml-2">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
               )}
             </div>
@@ -169,7 +169,7 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
       {/* Footer */}
       <div className="px-4 py-2 bg-gray-50 border-t border-gray-200 text-sm text-gray-600">
         Showing {processedData.length} of {data.length} items
-        {searchTerm && ` (filtered by "${searchTerm}")`}
+        {Boolean(searchTerm) && ` (filtered by "${searchTerm}")`}
       </div>
     </div>
   );

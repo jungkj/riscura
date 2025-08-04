@@ -100,7 +100,7 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
     >
       {/* Background Ripple Effect */}
       <AnimatePresence>
-        {isPressed && (
+        {Boolean(isPressed) && (
           <motion.div
             className="absolute inset-0 bg-white rounded-lg"
             initial={{ scale: 0, opacity: 0.3 }}
@@ -113,7 +113,7 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
 
       {/* Loading Spinner */}
       <AnimatePresence>
-        {loading && (
+        {Boolean(loading) && (
           <motion.div
             className="absolute inset-0 flex items-center justify-center"
             initial={{ opacity: 0 }}
@@ -214,9 +214,9 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
   return (
     <div className={cn('animate-pulse', className)}>
       <div className="flex items-start space-x-4">
-        {avatar && (
+        {Boolean(avatar) && (
           <div className="w-12 h-12 bg-slate-200 rounded-full relative overflow-hidden">
-            {animated && (
+            {Boolean(animated) && (
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
                 animate={{
@@ -249,7 +249,7 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
                 delay: i * 0.1,
               }}
             >
-              {animated && (
+              {Boolean(animated) && (
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
                   animate={{
@@ -318,7 +318,7 @@ export const EnhancedProgress: React.FC<EnhancedProgressProps> = ({
             ease: easings.smooth,
           }}
         >
-          {animated && (
+          {Boolean(animated) && (
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
               animate={{
@@ -334,7 +334,7 @@ export const EnhancedProgress: React.FC<EnhancedProgressProps> = ({
         </motion.div>
       </div>
 
-      {showPercentage && (
+      {Boolean(showPercentage) && (
         <motion.div
           className="absolute top-full mt-1 text-xs text-slate-600 font-medium"
           initial={{ opacity: 0 }}
@@ -393,7 +393,7 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {Boolean(isVisible) && (
         <motion.div
           className={cn(
             'flex items-center gap-3 p-4 rounded-lg border shadow-lg',
@@ -417,7 +417,7 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
 
           <div className="flex-1 text-sm font-medium">{message}</div>
 
-          {onClose && (
+          {Boolean(onClose) && (
             <motion.button
               className="flex-shrink-0 text-current hover:opacity-70 transition-opacity"
               onClick={() => {
@@ -478,7 +478,7 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
       {trigger}
 
       <AnimatePresence>
-        {isHovered && (
+        {Boolean(isHovered) && (
           <motion.div
             className={cn(
               'absolute z-50 bg-white border border-slate-200 rounded-lg shadow-lg p-3',

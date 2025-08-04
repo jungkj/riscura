@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -15,7 +15,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 
-import {
+// import {
   Plus, Trash2, GripVertical, Settings, Brain, Save, X, 
   FileText, Type, Hash, ToggleLeft, Calendar, Upload,
   List, Star, Gauge, CheckSquare, AlertCircle, Info,
@@ -36,7 +36,7 @@ import { generateId } from '@/lib/utils';
 
 interface QuestionnaireBuilderProps {
   questionnaire: Questionnaire | null;
-  onSave: (questionnaire: Questionnaire) => void;
+  onSave: (_questionnaire: Questionnaire) => void;
   onCancel: () => void;
 }
 
@@ -81,7 +81,7 @@ export function QuestionnaireBuilder({
     validation: []
   });
 
-  const getQuestionTypeIcon = (type: QuestionType) => {
+  const getQuestionTypeIcon = (_type: QuestionType) => {
     switch (type) {
       case 'text': return <Type className="w-4 h-4" />;
       case 'textarea': return <FileText className="w-4 h-4" />;
@@ -593,7 +593,7 @@ setQuestionForm(prev => ({
             <h1 className="text-xl font-semibold text-notion-text-primary">
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
-            {aiEnabled && (
+            {Boolean(aiEnabled) && (
               <DaisyBadge className="bg-secondary/20 text-foreground border-border">
                 <Brain className="w-3 h-3 mr-1" />
                 AI Enhanced
@@ -934,7 +934,7 @@ updateSection(section.id, { description: e.target.value })}
 
       {/* Question Editor Sidebar */}
       <AnimatePresence>
-        {showQuestionEditor && <QuestionEditor />}
+        {Boolean(showQuestionEditor) && <QuestionEditor />}
       </AnimatePresence>
     </div>
   );

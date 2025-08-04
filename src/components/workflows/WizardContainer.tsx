@@ -288,12 +288,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            {title && <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>}
-            {description && <p className="text-sm text-gray-600">{description}</p>}
+            {Boolean(title) && <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>}
+            {Boolean(description) && <p className="text-sm text-gray-600">{description}</p>}
           </div>
 
           {/* Auto-save status */}
-          {autoSave && onSave && (
+          {Boolean(autoSave) && onSave && (
             <div className="flex items-center space-x-2 text-sm">
               {autoSaveStatus.status === 'saving' && (
                 <>
@@ -315,7 +315,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <span className="text-red-600">Save failed</span>
                 </>
               )}
-              {hasUnsavedChanges && autoSaveStatus.status === 'idle' && (
+              {Boolean(hasUnsavedChanges) && autoSaveStatus.status === 'idle' && (
                 <>
                   <StatusIcons.Clock size="xs" color="secondary" />
                   <span className="text-gray-500">Unsaved changes</span>
@@ -327,7 +327,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       </div>
 
       {/* Progress Indicator */}
-      {showProgress && (
+      {Boolean(showProgress) && (
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-900">
@@ -442,7 +442,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            {onCancel && (
+            {Boolean(onCancel) && (
               <button
                 onClick={onCancel}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"

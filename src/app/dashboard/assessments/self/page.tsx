@@ -4,11 +4,11 @@ import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { User, CheckCircle, Clock, FileText, Calendar, Target, TrendingUp } from 'lucide-react';
+// import { User, CheckCircle, Clock, FileText, Calendar, Target, TrendingUp } from 'lucide-react';
 
 export default function SelfAssessmentPage() {
   // Mock data for self-assessments

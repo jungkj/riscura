@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, ChevronRight, AlertTriangle, Shield, Target } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
@@ -236,13 +236,13 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
   {title}
 </DaisyCardTitle>
                 </DaisyCardTitle>
-                {subtitle && (
+                {Boolean(subtitle) && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
                 )}
               </div>
             </div>
 
-            {showViewAll && hasMoreItems && (
+            {Boolean(showViewAll) && hasMoreItems && (
               <DaisyButton
                 variant="ghost"
                 size="sm"
@@ -275,7 +275,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                 ))}
               </AnimatePresence>
 
-              {hasMoreItems && showViewAll && (
+              {Boolean(hasMoreItems) && showViewAll && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

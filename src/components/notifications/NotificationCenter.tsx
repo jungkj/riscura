@@ -242,7 +242,7 @@ export function NotificationCenter() {
         </DaisyDropdownMenuContent>
       </DaisyDropdownMenu>
 
-      {showPreferences && (
+      {Boolean(showPreferences) && (
         <NotificationPreferences
           open={showPreferences}
           onClose={() => setShowPreferences(false)}

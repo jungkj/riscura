@@ -658,7 +658,7 @@ export class NotificationManager {
         ? new Date(Date.now() - 24 * 60 * 60 * 1000)
         : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const notifications = await db.client.notification.findMany({
+    const _notifications = await db.client.notification.findMany({
       where: {
         recipientId: userId,
         createdAt: { gte: since },
@@ -759,8 +759,7 @@ export class NotificationManager {
   }
 
   // Determine appropriate channels based on type and urgency
-  private determineChannels(
-    type: string,
+  private determineChannels(_type: string,
     urgency: string,
     preferences: NotificationPreferences
   ): ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] {
@@ -844,8 +843,7 @@ export class NotificationManager {
   }
 
   // Get notification template
-  private async getNotificationTemplate(
-    type: string,
+  private async getNotificationTemplate(_type: string,
     channel: string
   ): Promise<NotificationTemplate | null> {
     // TODO: Implement notificationTemplate model in Prisma schema
@@ -957,7 +955,7 @@ export class NotificationManager {
   }
 
   // Get display name for notification type
-  private getTypeDisplayName(type: string): string {
+  private getTypeDisplayName(_type: string): string {
     const displayNames: Record<string, string> = {
       TASK_ASSIGNED: 'Task Assignments',
       APPROVAL_REQUIRED: 'Approval Requests',
@@ -972,7 +970,7 @@ export class NotificationManager {
   }
 
   // Get Slack message color based on notification type
-  private getSlackColor(type: string): string {
+  private getSlackColor(_type: string): string {
     const colors: Record<string, string> = {
       TASK_ASSIGNED: '#36a64f',
       APPROVAL_REQUIRED: '#ff9900',

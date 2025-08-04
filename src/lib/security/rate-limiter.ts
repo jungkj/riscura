@@ -1,6 +1,6 @@
 // Advanced Rate Limiting System for API Protection
 import { NextRequest } from 'next/server';
-import { redisClient } from '../cache/redis-client';
+// import { redisClient } from '../cache/redis-client';
 
 export interface RateLimitConfig {
   windowMs: number;
@@ -266,7 +266,7 @@ class RateLimiter {
     }
 
     // Perform rate limiting based on algorithm
-    const result = await this.performRateLimit(key, rule.config);
+    const _result = await this.performRateLimit(key, rule.config);
 
     // Update metrics
     if (result.allowed) {

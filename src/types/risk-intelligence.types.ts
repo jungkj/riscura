@@ -1,4 +1,4 @@
-import { Risk } from './index';
+// import { Risk } from './index';
 
 // Core Intelligence Types
 export interface RiskQualityAnalysis {

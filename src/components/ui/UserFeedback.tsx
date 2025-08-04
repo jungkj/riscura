@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import {
+// import {
   CheckCircle,
   AlertCircle,
   XCircle,
@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Textarea } from './textarea';
 import { Input } from './input';
@@ -144,7 +144,7 @@ export const useToast = () => {
       messages: {
         loading: string;
         success: string | ((_data: T) => string);
-        error: string | ((_error: any) => string);
+        error: string | ((__error: any) => string);
       }
     ) => {
       const loadingId = addToast({
@@ -155,7 +155,7 @@ export const useToast = () => {
       });
 
       try {
-        const result = await promise;
+        const _result = await promise;
         removeToast(loadingId);
         addToast({
           type: 'success',
@@ -279,7 +279,7 @@ export const useConfirmation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState<ConfirmationOptions>({});
   const [resolver, setResolver] = useState<{
-    resolve: (value: boolean) => void;
+    resolve: (_value: boolean) => void;
   } | null>(null);
 
   const confirm = useCallback((opts: ConfirmationOptions = {}): Promise<boolean> => {
@@ -631,7 +631,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       </div>
 
       <div className="flex items-center gap-2">
-        {action && (
+        {Boolean(action) && (
           <DaisyButton
             variant="link"
             size="sm"
@@ -642,7 +642,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
         </DaisyButton>
         )}
 
-        {dismissible && (
+        {Boolean(dismissible) && (
           <DaisyButton
             variant="ghost"
             size="sm"

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
-import {
+// import {
   Upload,
   Zap,
   Play,
@@ -214,7 +214,7 @@ export default function EmptyStateWizard({
                 <p>Max size: 10MB</p>
               </div>
 
-              {uploadingFile && (
+              {Boolean(uploadingFile) && (
                 <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
                   <div className="text-center">
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />

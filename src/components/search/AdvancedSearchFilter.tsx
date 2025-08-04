@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -40,7 +40,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import {
+// import {
   Search, Filter, Tag, Star, BookmarkPlus, Download, Upload,
   X, Plus, Edit3, Trash2, Save, RefreshCw, SlidersHorizontal,
   Calendar, Clock, User, FolderOpen, Archive, CheckSquare,
@@ -520,7 +520,7 @@ export function AdvancedSearchFilter({
             onChange={(e) = />
 setSearchQuery(e.target.value)}
             className="pl-10" />
-          {searchQuery && (
+          {Boolean(searchQuery) && (
             <DaisyButton
               variant="ghost"
               size="sm"
@@ -621,7 +621,7 @@ setSearchQuery(e.target.value)}
 
       {/* Advanced Search Panel */}
       <AnimatePresence>
-        {showAdvancedSearch && (
+        {Boolean(showAdvancedSearch) && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}

@@ -61,7 +61,7 @@ class IndexedDBStorage {
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const result = request.result;
+        const _result = request.result;
         resolve(result ? result.value : null);
       };
     });
@@ -249,7 +249,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Sync operations
   const syncToServerFunc = useCallback(
-    async (value: T): Promise<boolean> => {
+    async (_value: T): Promise<boolean> => {
       if (!syncToServer || !syncEndpoint || !syncStatus.isOnline) {
         return false;
       }
@@ -346,7 +346,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Update data and sync
   const updateData = useCallback(
-    async (newData: T | ((prev: T) => T)) => {
+    async (_newData: T | ((prev: T) => T)) => {
       const updatedData =
         typeof newData === 'function' ? (newData as (prev: T) => T)(data) : newData;
 

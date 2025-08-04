@@ -14,7 +14,7 @@ const loginSchema = z.object({
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-function simpleRateLimit(key: string, limit: number, windowMs: number) {
+const simpleRateLimit = (key: string, limit: number, windowMs: number) {
   const now = Date.now();
   const record = rateLimitMap.get(key);
 
@@ -32,7 +32,7 @@ function simpleRateLimit(key: string, limit: number, windowMs: number) {
 }
 
 // Generate simple CSRF token
-function generateCSRFToken(): string {
+const generateCSRFToken = (): string {
   return Array.from(crypto.getRandomValues(new Uint8Array(32)))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');

@@ -42,7 +42,7 @@ export const POST = withApiMiddleware({
     }
 
     // Use transaction to prevent race condition
-    const result = await prisma.$transaction(async (tx) => {
+    const _result = await prisma.$transaction(async (tx) => {
       // Check for active imports within transaction
       const activeImport = await tx.importJob.findFirst({
         where: {

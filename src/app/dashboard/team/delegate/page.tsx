@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/DaisyDialog';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import {
+// import {
   Users,
   UserPlus,
   Calendar,
@@ -282,7 +282,7 @@ export default function TeamDelegatePage() {
     toast.success(`Task ${taskId} assigned to member ${memberId}`);
   };
 
-  const handleTaskAction = (action: string, taskId: string) => {
+  const handleTaskAction = (_action: string, taskId: string) => {
     switch (action) {
       case 'view':
         toast.success(`Viewing task ${taskId} details...`);
@@ -905,7 +905,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     <DaisyLabel htmlFor="type">Task Type</DaisyLabel>
                     <DaisySelect
                       value={newTask.type}
-                      onValueChange={(value: any) =>
+                      onValueChange={(_value: any) =>
                         setNewTask((prev) => ({ ...prev, type: value }))
                       }
                     >
@@ -929,7 +929,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
                     <DaisySelect
                       value={newTask.priority}
-                      onValueChange={(value: any) =>
+                      onValueChange={(_value: any) =>
                         setNewTask((prev) => ({ ...prev, priority: value }))
                       }
                     >

@@ -166,7 +166,7 @@ export class RateLimiter {
   }
 
   async handleRequest(_request: NextRequest): Promise<RateLimitResult> {
-    const result = await this.checkLimit(request);
+    const _result = await this.checkLimit(request);
 
     if (!result.success) {
       throw createRateLimitError(result.retryAfter!, result.limit, result.remaining);
@@ -287,7 +287,7 @@ export class RateLimiterManager {
     this.limiters.set('report', createReportGenerationRateLimiter());
   }
 
-  getLimiter(type: string): RateLimiter {
+  getLimiter(_type: string): RateLimiter {
     const limiter = this.limiters.get(type);
     if (!limiter) {
       throw new Error(`Rate limiter type '${type}' not found`);
@@ -295,7 +295,7 @@ export class RateLimiterManager {
     return limiter;
   }
 
-  addLimiter(type: string, limiter: RateLimiter): void {
+  addLimiter(_type: string, limiter: RateLimiter): void {
     this.limiters.set(type, limiter);
   }
 
@@ -376,8 +376,7 @@ export async function applyRateLimit(_request: NextRequest,
 
 // Rate limit decorator for API handlers
 export function withRateLimit(limiters?: string[]) {
-  return function <T extends any[], R>(
-    target: any,
+  return function <T extends any[], R>(_target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<(...args: T) => Promise<R>>
   ) {

@@ -1,6 +1,6 @@
 // Performance Metrics Collection API
 import { NextRequest, NextResponse } from 'next/server';
-import { redisClient } from '@/lib/cache/redis-client';
+// import { redisClient } from '@/lib/cache/redis-client';
 
 interface PerformanceMetric {
   name: string;
@@ -275,7 +275,7 @@ async function getAggregatedMetrics(
 }
 
 // Calculate metrics summary
-function calculateMetricsSummary(metrics: any[]) {
+const calculateMetricsSummary = (metrics: any[]) {
   if (metrics.length === 0) {
     return {
       totalSessions: 0,
@@ -324,7 +324,7 @@ function calculateMetricsSummary(metrics: any[]) {
 }
 
 // Calculate percentile
-function calculatePercentile(sortedValues: number[], percentile: number): number {
+const calculatePercentile = (sortedValues: number[], percentile: number): number {
   if (sortedValues.length === 0) return 0;
 
   const index = Math.ceil((percentile / 100) * sortedValues.length) - 1;

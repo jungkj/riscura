@@ -73,7 +73,7 @@ async function globalSetup(_config: FullConfig) {
       const response = await page.request.post(`${baseURL}/api/test/organizations`, {
         data: org,
       });
-      const result = await response.json();
+      const _result = await response.json();
       createdOrgs.push(result.data);
       // console.log(`  ✅ Created organization: ${org.name}`);
     }

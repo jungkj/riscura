@@ -167,7 +167,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 }
 
 // Helper function to get default columns based on template type
-function getDefaultColumns(templateType: string) {
+const getDefaultColumns = (templateType: string) {
   switch (templateType) {
     case 'RCSA_ASSESSMENT':
       return [

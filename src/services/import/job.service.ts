@@ -1,7 +1,7 @@
 import Bull from 'bull';
 import { ImportJob, ImportJobStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import { redis } from '@/lib/redis';
+// import { redis } from '@/lib/redis';
 import { getSharePointFileService } from '../sharepoint/file.service';
 import { getExcelValidatorService } from '../excel/validator.service';
 import { importRCSAData } from './rcsa-importer';

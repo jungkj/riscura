@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useRouter } from 'next/navigation';
 
-import {
+// import {
   Plus, FileText, Shield, BarChart3, AlertTriangle, CheckCircle,
   Settings, Upload, Download, Eye, Target, Users, Calendar, Clock,
   Zap, Search, Filter, RefreshCw, Activity
@@ -238,7 +238,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
     return [...prioritized, ...remaining].slice(0, 8); // Limit to 8 actions
   };
 
-  const handleActionClick = (action: QuickAction) => {
+  const handleActionClick = (_action: QuickAction) => {
     if (action.onClick) {
       action.onClick();
     } else if (action.href) {

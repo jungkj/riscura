@@ -1,5 +1,5 @@
-import { Risk, Control, Document } from '@/types';
-import { AgentType } from '@/types/ai.types';
+// import { Risk, Control, Document } from '@/types';
+// import { AgentType } from '@/types/ai.types';
 
 // Enhanced context interfaces
 export interface IntelligentContext {
@@ -460,8 +460,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async getCurrentContext(
-    currentPage: string,
+  private async getCurrentContext(_currentPage: string,
     selectedEntities: {
       risks?: Risk[];
       controls?: Control[];
@@ -487,8 +486,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async getRelatedContext(
-    selectedEntities: {
+  private async getRelatedContext(_selectedEntities: {
       risks?: Risk[];
       controls?: Control[];
       documents?: Document[];
@@ -509,8 +507,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async getAnalyticsContext(
-    selectedEntities: {
+  private async getAnalyticsContext(_selectedEntities: {
       risks?: Risk[];
       controls?: Control[];
       documents?: Document[];
@@ -736,13 +733,13 @@ export class ContextIntelligenceService {
     return comprehensiveContext + additionalParts.join('\n');
   }
 
-  private extractSection(currentPage: string): string {
+  private extractSection(_currentPage: string): string {
     // Extract section from page path
     const parts = currentPage.split('/');
     return parts[parts.length - 1] || 'unknown';
   }
 
-  private extractAction(currentPage: string): string {
+  private extractAction(_currentPage: string): string {
     // Extract action from page parameters or path
     return 'view'; // Default action
   }

@@ -201,7 +201,7 @@ export class ThemeManager {
 export const ThemeContext = createContext<{
   theme: ThemeConfig;
   settings: ThemeSettings;
-  updateSettings: (settings: Partial<ThemeSettings>) => void;
+  updateSettings: (_settings: Partial<ThemeSettings>) => void;
   manager: ThemeManager;
 }>({
   theme: lightTheme,

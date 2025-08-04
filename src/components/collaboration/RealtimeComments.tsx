@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { 
+// import { 
   MessageCircle,
   Send,
   Reply,
@@ -277,7 +277,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
   }, [newComment, replyingTo, currentUser, onCommentAdd]);
 
   // Extract mentions from comment content
-  const extractMentions = (content: string): string[] => {
+  const extractMentions = (_content: string): string[] => {
     const mentionRegex = /@(\w+(?:\.\w+)?)/g;
     const mentions = [];
     let match;
@@ -288,7 +288,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
   };
 
   // Extract hashtags from comment content
-  const extractTags = (content: string): string[] => {
+  const extractTags = (_content: string): string[] => {
     const tagRegex = /#(\w+)/g;
     const tags = [];
     let match;
@@ -491,7 +491,7 @@ setNewComment(e.target.value)}
                   Like
                 </DaisyButton>
 
-                {isAuthor && (
+                {Boolean(isAuthor) && (
                   <>
                     <DaisyButton
                       variant="ghost"
@@ -639,7 +639,7 @@ setSearchQuery(e.target.value)}
 
       {/* Comment input */}
       <div className="p-4 border-t border-gray-200">
-        {replyingTo && (
+        {Boolean(replyingTo) && (
           <div className="mb-2 p-2 bg-blue-50 rounded text-sm">
             <span className="text-blue-600">Replying to comment</span>
             <DaisyButton

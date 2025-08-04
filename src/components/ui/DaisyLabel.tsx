@@ -9,7 +9,7 @@ export const DaisyLabel = ({ className, children, required, ...props }: LabelPro
     <label className={cn('label', className)} {...props}>
       <span className="label-text">
         {children}
-        {required && <span className="text-error ml-1">*</span>}
+        {Boolean(required) && <span className="text-error ml-1">*</span>}
       </span>
     </label>
   );

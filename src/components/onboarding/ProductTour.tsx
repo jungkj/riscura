@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
+// import { 
   X, 
   ChevronLeft, 
   ChevronRight, 
@@ -297,7 +297,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
   // Auto-play functionality
   useEffect(() => {
     if (isPlaying && isActive && currentStepData) {
-      const duration = userContext?.preferences.speed === 'fast' ? 3000 : 
+      const _duration = userContext?.preferences.speed === 'fast' ? 3000 : 
                      userContext?.preferences.speed === 'slow' ? 7000 : 5000;
       
       autoPlayRef.current = setTimeout(() => {

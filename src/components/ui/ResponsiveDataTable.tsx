@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -11,13 +11,13 @@ import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { 
+// import { 
   SwipeableCard, 
   TouchButton, 
   TouchActionMenu,
   TouchChip 
 } from './TouchElements';
-import {
+// import {
   Search,
   Filter,
   SortAsc,
@@ -81,7 +81,7 @@ interface Column<T = any> {
   filterable?: boolean;
   width?: string;
   minWidth?: string;
-  cellRenderer?: (value: any, item: T, index: number) => React.ReactNode;
+  cellRenderer?: (_value: any, item: T, index: number) => React.ReactNode;
   headerRenderer?: () => React.ReactNode;
   className?: string;
   align?: 'left' | 'center' | 'right';
@@ -106,8 +106,8 @@ interface DataTableProps<T = any> {
   onRowClick?: (item: T, index: number) => void;
   onRowSelect?: (selectedItems: T[]) => void;
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
-  onFilter?: (filters: Record<string, any>) => void;
-  onSearch?: (query: string) => void;
+  onFilter?: (_filters: Record<string, any>) => void;
+  onSearch?: (_query: string) => void;
   onExport?: (format: 'csv' | 'excel' | 'pdf') => void;
   emptyState?: React.ReactNode;
   className?: string;
@@ -165,7 +165,7 @@ const getCellValue = <T,>(item: T, column: Column<T>) => {
   return item[column.accessor];
 };
 
-const formatCellValue = (value: any, type?: string) => {
+const formatCellValue = (_value: any, type?: string) => {
   if (value === null || value === undefined) return '-';
   
   switch (type) {
@@ -182,13 +182,13 @@ const formatCellValue = (value: any, type?: string) => {
 
 // Default Cell Renderers
 const defaultCellRenderers = {
-  badge: (value: any) => (
+  badge: (_value: any) => (
     <DaisyBadge variant={value?.variant || 'default'} className="capitalize" >
   {value?.label || value}
 </DaisyBadge>
     </DaisyBadge>
   ),
-  user: (value: any) => (
+  user: (_value: any) => (
     <div className="flex items-center space-x-2">
       <DaisyAvatar className="h-6 w-6" >
           <DaisyAvatarImage src={value?.avatar} >
@@ -199,7 +199,7 @@ const defaultCellRenderers = {
       <span className="truncate">{value?.name || value}</span>
     </div>
   ),
-  progress: (value: any) => (
+  progress: (_value: any) => (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
         <span>{value?.label || 'Progress'}</span>
@@ -208,7 +208,7 @@ const defaultCellRenderers = {
       <DaisyProgress value={value?.value || value} className="h-1" />
 </div>
   ),
-  actions: (value: any, item: any) => (
+  actions: (_value: any, item: any) => (
     <TouchActionMenu
       items={[
         {
@@ -274,7 +274,7 @@ const MobileCardLayout: React.FC<{
                 {/* Header with selection */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-enterprise-2">
-                    {selectable && (
+                    {Boolean(selectable) && (
                       <DaisyCheckbox
                         checked={isSelected}
                         onCheckedChange={(checked) = />
@@ -390,7 +390,7 @@ const TabletListLayout: React.FC<{
         {/* Header */}
         <div className="grid gap-enterprise-3 p-enterprise-4 border-b border-border bg-surface-secondary">
           <div className="grid grid-cols-12 gap-enterprise-3 items-center text-caption font-medium text-text-secondary uppercase tracking-wide">
-            {selectable && (
+            {Boolean(selectable) && (
               <div className="col-span-1">
                 <DaisyCheckbox />
 </div>
@@ -444,7 +444,7 @@ const TabletListLayout: React.FC<{
                 )}
                 onClick={() => onRowClick?.(item, index)}
               >
-                {selectable && (
+                {Boolean(selectable) && (
                   <div className="col-span-1">
                     <DaisyCheckbox
                       checked={isSelected}
@@ -546,7 +546,7 @@ const DesktopTableLayout: React.FC<{
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-surface-secondary">
-              {selectable && (
+              {Boolean(selectable) && (
                 <th className="w-12 px-enterprise-4 py-enterprise-3">
                   <DaisyCheckbox
                     checked={allSelected}
@@ -613,7 +613,7 @@ const DesktopTableLayout: React.FC<{
                   )}
                   onClick={() => onRowClick?.(item, index)}
                 >
-                  {selectable && (
+                  {Boolean(selectable) && (
                     <td className="px-enterprise-4 py-enterprise-3">
                       <DaisyCheckbox
                         checked={isSelected}
@@ -743,7 +743,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
   };
 
   // Handle search
-  const handleSearch = (query: string) => {
+  const handleSearch = (_query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
     onSearch?.(query);
@@ -826,7 +826,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
           <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-enterprise-3 lg:space-y-0">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-enterprise-2 sm:space-y-0 sm:space-x-enterprise-3">
               {/* Search */}
-              {searchable && (
+              {Boolean(searchable) && (
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-secondary" />
                   <DaisyInput
@@ -839,7 +839,7 @@ handleSearch(e.target.value)}
               )}
 
               {/* Filters */}
-              {filterable && (
+              {Boolean(filterable) && (
                 <TouchButton variant="outline" size="sm">
                   <Filter className="h-4 w-4 mr-enterprise-1" />
                   Filters
@@ -847,7 +847,7 @@ handleSearch(e.target.value)}
               )}
 
               {/* Selected count */}
-              {selectable && selectedItems.length > 0 && (
+              {Boolean(selectable) && selectedItems.length > 0 && (
                 <div className="flex items-center space-x-enterprise-2">
                   <DaisyBadge variant="secondary" >
   {selectedItems.length} selected
@@ -866,7 +866,7 @@ handleSearch(e.target.value)}
 
             <div className="flex items-center space-x-enterprise-2">
               {/* Export */}
-              {exportable && (
+              {Boolean(exportable) && (
                 <TouchButton variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-enterprise-1" />
                   Export
@@ -930,7 +930,7 @@ handleSearch(e.target.value)}
       )}
 
       {/* Pagination */}
-      {pagination && totalPages > 1 && (
+      {Boolean(pagination) && totalPages > 1 && (
         <DaisyCard >
   <DaisyCardBody className="p-enterprise-4" >
   </DaisyTabletListLayout>

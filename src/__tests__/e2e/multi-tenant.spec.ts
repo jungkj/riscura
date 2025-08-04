@@ -146,7 +146,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       const loginData = await loginResponse.json();
-      const token = loginData.token;
+      const _token = loginData.token;
 
       // Try to access org2 risk directly
       const riskResponse = await request.get(`${apiUrl}/risks/${org2Data.risks[0].id}`, {
@@ -306,7 +306,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       const loginData = await loginResponse.json();
-      const token = loginData.token;
+      const _token = loginData.token;
 
       // Get all risks (should only return org1 risks)
       const risksResponse = await request.get(`${apiUrl}/risks`, {
@@ -320,7 +320,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       expect(risksData.data).toHaveLength(2);
 
       // Verify all returned risks belong to org1
-      risksData.data.forEach((risk: any) => {
+      risksData.data.forEach((_risk: any) => {
         expect(risk.id).toContain('org1');
       });
     });
@@ -339,7 +339,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       const loginData = await loginResponse.json();
-      const token = loginData.token;
+      const _token = loginData.token;
 
       // Attempt SQL injection to access org2 data
       const maliciousQuery = `' OR organizationId='${org2Data.id}' --`;
@@ -357,7 +357,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
 
       // Should still only return org1 data
       expect(data.success).toBe(true);
-      data.data?.forEach((risk: any) => {
+      data.data?.forEach((_risk: any) => {
         expect(risk.id).toContain('org1');
         expect(risk.id).not.toContain('org2');
       });

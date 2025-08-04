@@ -53,7 +53,7 @@ export async function GET() {
 
     // Test 3: Try a simple query
     try {
-      const result = await prisma.$queryRaw`SELECT 1 as test`;
+      const _result = await prisma.$queryRaw`SELECT 1 as test`;
       results.tests.simpleQuery = {
         success: true,
         result: result,

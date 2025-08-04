@@ -109,7 +109,7 @@ export const variants = {
   // List Item Animations
   listItem: {
     initial: { opacity: 0, x: -20 },
-    animate: (i: number) => ({
+    animate: (_i: number) => ({
       opacity: 1,
       x: 0,
       transition: {

@@ -7,7 +7,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -43,7 +43,7 @@ interface SavedSearch {
 }
 
 interface DocumentSearchProps {
-  onSearch: (results: any[]) => void;
+  onSearch: (_results: any[]) => void;
   onSaveSearch?: (search: SavedSearch) => void;
   className?: string;
 }
@@ -518,7 +518,7 @@ setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))} />
           </div>
 
           {/* Save Search Dialog */}
-          {showSaveSearch && (
+          {Boolean(showSaveSearch) && (
             <DaisyCard >
   <DaisyCardBody >
 </DaisyCard>

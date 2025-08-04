@@ -280,7 +280,7 @@ export class AIAnalyticsEngine {
   }
 
   // Generate trend description
-  private generateTrendDescription(trend: TrendAnalysis): string {
+  private generateTrendDescription(_trend: TrendAnalysis): string {
     const direction =
       trend.direction === 'increasing'
         ? 'upward'
@@ -292,7 +292,7 @@ export class AIAnalyticsEngine {
   }
 
   // Get trend severity
-  private getTrendSeverity(trend: TrendAnalysis): 'low' | 'medium' | 'high' | 'critical' {
+  private getTrendSeverity(_trend: TrendAnalysis): 'low' | 'medium' | 'high' | 'critical' {
     if (trend.magnitude > 50 && trend.confidence > 0.8) return 'critical';
     if (trend.magnitude > 25 && trend.confidence > 0.7) return 'high';
     if (trend.magnitude > 10 && trend.confidence > 0.6) return 'medium';
@@ -300,7 +300,7 @@ export class AIAnalyticsEngine {
   }
 
   // Get trend recommendations
-  private getTrendRecommendations(trend: TrendAnalysis): string[] {
+  private getTrendRecommendations(_trend: TrendAnalysis): string[] {
     const recommendations: string[] = [];
 
     if (trend.direction === 'increasing' && trend.magnitude > 20) {
@@ -390,7 +390,7 @@ export class AIAnalyticsEngine {
   }
 
   // Get anomaly recommendations
-  private getAnomalyRecommendations(anomaly: AnomalyDetection): string[] {
+  private getAnomalyRecommendations(_anomaly: AnomalyDetection): string[] {
     const recommendations: string[] = [];
 
     if (anomaly.severity === 'high') {
@@ -443,7 +443,7 @@ export class AIAnalyticsEngine {
   }
 
   // Calculate correlations between risks
-  private calculateRiskCorrelations(risks: any[]): RiskCorrelation[] {
+  private calculateRiskCorrelations(_risks: any[]): RiskCorrelation[] {
     const correlations: RiskCorrelation[] = [];
 
     for (let i = 0; i < risks.length; i++) {

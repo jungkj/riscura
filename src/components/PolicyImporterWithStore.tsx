@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { 
+// import { 
   usePolicyUpload, 
   usePolicyExtraction, 
   useImportStore,
@@ -10,13 +10,13 @@ import {
   ExtractedControl 
 } from '@/lib/stores/importStore';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyAccordion, DaisyAccordionContent, DaisyAccordionItem, DaisyAccordionTrigger } from '@/components/ui/DaisyAccordion';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+// import { 
   Upload, 
   FileText, 
   AlertCircle, 
@@ -230,7 +230,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
           )}
 
           {/* File Preview */}
-          {filePreview && !hasResults && (
+          {Boolean(filePreview) && !hasResults && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -246,7 +246,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                     </p>
                   </div>
                 </div>
-                {loading && (
+                {Boolean(loading) && (
                   <div className="flex items-center gap-2 text-blue-600">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span className="text-sm">Processing...</span>
@@ -257,7 +257,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
           )}
 
           {/* Error Display */}
-          {error && (
+          {Boolean(error) && (
             <DaisyAlert className="mt-4" variant="error" >
   <DaisyAlertCircle className="h-4 w-4" />
 </DaisyAlert>
@@ -268,7 +268,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
           )}
 
           {/* Success Message */}
-          {success && hasResults && (
+          {Boolean(success) && hasResults && (
             <DaisyAlert className="mt-4" variant={success ? 'default' : 'destructive'} >
   <CheckCircle2 className="h-4 w-4" />
 </DaisyAlert>
@@ -284,7 +284,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
       {/* Results Section */}
       <AnimatePresence>
-        {hasResults && (
+        {Boolean(hasResults) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

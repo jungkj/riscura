@@ -232,7 +232,7 @@ export class ReportingEngine {
 
     switch (widget.dataSource.type) {
       case 'query':
-        const result = await this.executeQuery(widget.dataSource, {
+        const _result = await this.executeQuery(widget.dataSource, {
           ...globalFilters,
           ...this.parseWidgetFilters(widget.filters),
         });
@@ -309,7 +309,7 @@ export class ReportingEngine {
 
   // Apply aggregations to data
   private applyAggregations(_data: any[], aggregations: AggregationConfig[]): any[] {
-    let result = [...data];
+    let _result = [...data];
 
     for (const agg of aggregations) {
       switch (agg.type) {
@@ -403,7 +403,7 @@ export class ReportingEngine {
   }
 
   // Parse widget filters
-  private parseWidgetFilters(filters: WidgetFilter[]): Record<string, any> {
+  private parseWidgetFilters(_filters: WidgetFilter[]): Record<string, any> {
     return filters.reduce(
       (acc, filter) => {
         if (filter.value !== undefined && filter.value !== null) {

@@ -93,7 +93,7 @@ async function uploadToS3(
   });
 
   try {
-    const result = await s3Client.send(command);
+    const _result = await s3Client.send(command);
     const url = `https://${BUCKET_NAME}.s3.${process.env.AWS_REGION || 'us-east-1'}.amazonaws.com/${key}`;
 
     return {
@@ -172,7 +172,7 @@ async function getFromS3(key: string): Promise<{ buffer: Buffer; metadata: FileM
       Key: key,
     });
 
-    const result = await s3Client.send(command);
+    const _result = await s3Client.send(command);
     const buffer = Buffer.from(await result.Body!.transformToByteArray());
 
     const metadata: FileMetadata = {
@@ -335,7 +335,7 @@ export async function getFileMetadata(key: string): Promise<FileMetadata> {
         Key: key,
       });
 
-      const result = await s3Client.send(command);
+      const _result = await s3Client.send(command);
 
       return {
         originalName: result.Metadata?.originalName || key,

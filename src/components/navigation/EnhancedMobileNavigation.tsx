@@ -8,7 +8,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform } from 'framer-motion';
-import {
+// import {
   Menu,
   X,
   Search,
@@ -297,7 +297,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
   // ============================================================================
 
   const performSearch = useCallback(
-    async (query: string) => {
+    async (_query: string) => {
       if (!query.trim()) {
         setSearchResults([]);
         setIsSearching(false);
@@ -414,7 +414,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
                 )}
               </div>
             </div>
-            {hasChildren && (
+            {Boolean(hasChildren) && (
               <ChevronDown
                 className={cn(
                   'w-4 h-4 transition-transform duration-200 flex-shrink-0',
@@ -426,7 +426,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
           {/* Render children */}
           <AnimatePresence>
-            {hasChildren && isExpanded && (
+            {Boolean(hasChildren) && isExpanded && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
@@ -479,7 +479,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
       {/* Backdrop */}
       <AnimatePresence>
-        {isOpen && (
+        {Boolean(isOpen) && (
           <motion.div
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
             initial={{ opacity: 0 }}
@@ -493,7 +493,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
       {/* Navigation Panel */}
       <AnimatePresence>
-        {isOpen && (
+        {Boolean(isOpen) && (
           <motion.div
             ref={menuRef}
             className="fixed left-0 top-0 bottom-0 w-80 bg-white shadow-xl z-50 flex flex-col"
@@ -533,7 +533,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
                   className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                   aria-label="Search navigation items"
                 />
-                {isSearching && (
+                {Boolean(isSearching) && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                   </div>
@@ -573,7 +573,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
             {/* Footer */}
             <div className="p-4 border-t border-gray-200 bg-gray-50">
-              {user && (
+              {Boolean(user) && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">

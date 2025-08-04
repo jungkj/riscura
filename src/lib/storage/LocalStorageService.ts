@@ -64,8 +64,7 @@ export class LocalStorageService {
   }
 
   // Draft Management
-  public saveDraft(
-    type: 'questionnaire' | 'risk' | 'control' | 'document' | 'form',
+  public saveDraft(_type: 'questionnaire' | 'risk' | 'control' | 'document' | 'form',
     id: string,
     data: any
   ): boolean {
@@ -83,7 +82,7 @@ export class LocalStorageService {
     return this.setItem(this.storageKeys.DRAFTS, drafts);
   }
 
-  public getDraft(type: string, id: string): any | null {
+  public getDraft(_type: string, id: string): any | null {
     const drafts = this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
     const draftKey = `${type}_${id}`;
     return drafts[draftKey] || null;
@@ -93,7 +92,7 @@ export class LocalStorageService {
     return this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
   }
 
-  public deleteDraft(type: string, id: string): boolean {
+  public deleteDraft(_type: string, id: string): boolean {
     const drafts = this.getItem<Record<string, any>>(this.storageKeys.DRAFTS) || {};
     const draftKey = `${type}_${id}`;
 
@@ -179,7 +178,7 @@ export class LocalStorageService {
 
   public getCachedData<T>(key: string): T | null {
     const cache = this.getItem<Record<string, any>>(this.storageKeys.CACHED_DATA) || {};
-    const cached = cache[key];
+    const _cached = cache[key];
 
     if (!cached) return null;
 
@@ -201,7 +200,7 @@ export class LocalStorageService {
     const now = new Date().getTime();
 
     Object.keys(cache).forEach((key) => {
-      const cached = cache[key];
+      const _cached = cache[key];
       if (cached.timestamp) {
         const cachedTime = new Date(cached.timestamp).getTime();
         if (now - cachedTime > cached.ttl) {
@@ -238,7 +237,7 @@ export class LocalStorageService {
   }
 
   // Search History
-  public addSearchHistory(query: string, filters?: any): boolean {
+  public addSearchHistory(_query: string, filters?: any): boolean {
     const history = this.getItem<any[]>(this.storageKeys.SEARCH_HISTORY) || [];
     const searchEntry = {
       query,

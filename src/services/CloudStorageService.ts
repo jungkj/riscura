@@ -129,7 +129,7 @@ export class CloudStorageService {
         return null;
       }
 
-      const stats = await fs.stat(resolvedPath);
+      const _stats = await fs.stat(resolvedPath);
       const ext = path.extname(resolvedPath).toLowerCase();
 
       // Simple mime type mapping
@@ -198,4 +198,5 @@ export class CloudStorageService {
   }
 }
 
-export default new CloudStorageService();
+const CloudStorageServiceInstance = new CloudStorageService();
+export default CloudStorageServiceInstance;

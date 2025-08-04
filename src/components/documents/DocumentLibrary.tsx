@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
+// import { 
   Search, 
   Filter, 
   Download, 
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -172,12 +172,12 @@ export default function DocumentLibrary({
     fetchDocuments();
   }, [fetchDocuments]);
 
-  const handleSearch = (query: string) => {
+  const handleSearch = (_query: string) => {
     setSearchQuery(query);
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  const handleUploadComplete = (results: any[]) => {
+  const handleUploadComplete = (_results: any[]) => {
     toast.success(`Uploaded ${results.length} file(s) successfully`);
     setShowUpload(false);
     fetchDocuments();
@@ -314,7 +314,7 @@ toggleDocumentSelection(document.id)} />
                 <Download className="w-4 h-4 mr-2" />
                 Download
               </DaisyDropdownMenuItem>
-              {allowEdit && (
+              {Boolean(allowEdit) && (
                 <DaisyDropdownMenuItem onClick={() => handleDocumentEdit(document)} />
                   <Edit className="w-4 h-4 mr-2" />
                   Edit
@@ -324,7 +324,7 @@ toggleDocumentSelection(document.id)} />
                 <Share2 className="w-4 h-4 mr-2" />
                 Share
               </DaisyDropdownMenuItem>
-              {allowDelete && (
+              {Boolean(allowDelete) && (
                 <DaisyDropdownMenuItem 
                   onClick={() => handleDocumentDelete(document.id)}
                   className="text-red-600" />
@@ -421,7 +421,7 @@ toggleDocumentSelection(document.id)} />
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
           <DaisyDropdownMenuContent align="end" >
-              {allowEdit && (
+              {Boolean(allowEdit) && (
               <DaisyDropdownMenuItem onClick={() => handleDocumentEdit(document)} />
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
@@ -431,7 +431,7 @@ toggleDocumentSelection(document.id)} />
               <Share2 className="w-4 h-4 mr-2" />
               Share
             </DaisyDropdownMenuItem>
-            {allowDelete && (
+            {Boolean(allowDelete) && (
               <DaisyDropdownMenuItem 
                 onClick={() => handleDocumentDelete(document.id)}
                 className="text-red-600" />
@@ -453,12 +453,12 @@ toggleDocumentSelection(document.id)} />
           <h2 className="text-2xl font-bold">Document Library</h2>
           <p className="text-gray-600">
             {documents.length} document{documents.length !== 1 ? 's' : ''}
-            {linkedEntityType && ` linked to ${linkedEntityType}`}
+            {Boolean(linkedEntityType) && ` linked to ${linkedEntityType}`}
           </p>
         </div>
         
         <div className="flex items-center gap-2">
-          {allowUpload && (
+          {Boolean(allowUpload) && (
             <DaisyButton onClick={() => setShowUpload(true)} />
               <Upload className="w-4 h-4 mr-2" />
               Upload
@@ -556,7 +556,7 @@ handleSearch(e.target.value)}
 </DaisyButton>
               Download
             </DaisyButton>
-            {allowDelete && (
+            {Boolean(allowDelete) && (
               <DaisyButton size="sm" variant="outline" onClick={handleBulkDelete} >
   <Trash2 className="w-4 h-4 mr-1" />
 </DaisyButton>
@@ -590,7 +590,7 @@ handleSearch(e.target.value)}
               : 'Get started by uploading your first document'
             }
           </p>
-          {allowUpload && (
+          {Boolean(allowUpload) && (
             <DaisyButton onClick={() => setShowUpload(true)} />
               <Upload className="w-4 h-4 mr-2" />
               Upload Document
@@ -677,7 +677,7 @@ handleSearch(e.target.value)}
       </DaisyDialog>
 
       {/* Document Viewer Dialog */}
-      {viewingDocument && (
+      {Boolean(viewingDocument) && (
         <DaisyDialog open={!!viewingDocument} onOpenChange={(open) => !open && setViewingDocument(null)} />
           <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-auto" >
   <DocumentViewer

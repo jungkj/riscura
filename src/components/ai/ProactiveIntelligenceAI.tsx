@@ -14,7 +14,7 @@ import {
   Pause
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -23,7 +23,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 import { 
   ActionRecommendation,
   SmartNotification,
@@ -42,7 +42,7 @@ interface ProactiveIntelligenceAIProps {
   risks: Risk[];
   controls: Control[];
   onInsightGenerated?: (insight: IntelligentInsight) => void;
-  onRecommendationAccepted?: (recommendation: ActionRecommendation) => void;
+  onRecommendationAccepted?: (_recommendation: ActionRecommendation) => void;
   onNotificationRead?: (notificationId: string) => void;
   className?: string;
 }
@@ -794,7 +794,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
                     </DaisyButton>
                   </div>
 
-                  {isMonitoringActive && (
+                  {Boolean(isMonitoringActive) && (
                     <DaisyAlert >
   <Activity className="h-4 w-4" />
 </DaisyAlert>

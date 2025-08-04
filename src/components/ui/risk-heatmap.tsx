@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Target } from 'lucide-react';
-import { RiskDetailsModal } from './risk-details-modal';
+// import { RiskDetailsModal } from './risk-details-modal';
 
 interface HeatMapData {
   impact: string;
@@ -380,7 +380,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                               p-4 text-center font-bold text-lg rounded border border-white
                               ${cellData ? getCellColor(cellData.level) : 'bg-gray-100 text-gray-400'}
                               hover:opacity-80 hover:scale-105 transition-all duration-200 cursor-pointer
-                              ${cellData && cellData.count > 0 ? 'hover:shadow-lg' : ''}
+                              ${Boolean(cellData) && cellData.count > 0 ? 'hover:shadow-lg' : ''}
                             `}
                             title={`${impact} Impact, ${likelihood} Likelihood: ${cellData?.count || 0} risks - Click to view details`}
                             onClick={() => handleCellClick(impact, likelihood)}

@@ -3,14 +3,14 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
-import {
+// import {
   ArrowLeft,
   Upload,
   FileSpreadsheet,
@@ -90,7 +90,7 @@ export default function ImportDataPage() {
           body: formData,
         });
 
-        const result = await response.json();
+        const _result = await response.json();
 
         if (!response.ok) throw new Error(result.error || 'Import failed');
 
@@ -108,7 +108,7 @@ export default function ImportDataPage() {
               : f
           )
         );
-      } catch (_error: any) {
+      } catch (__error: any) {
         // Update with error
         setFiles((prev) =>
           prev.map((f, index) =>
@@ -149,7 +149,7 @@ export default function ImportDataPage() {
     });
   };
 
-  const removeFile = (index: number) => {
+  const removeFile = (_index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -320,7 +320,7 @@ export default function ImportDataPage() {
                   )}
 
                   {/* Import Progress */}
-                  {importing && (
+                  {Boolean(importing) && (
                     <div className="mt-4">
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-sm font-medium">Import Progress</p>

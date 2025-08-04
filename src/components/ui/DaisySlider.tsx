@@ -6,7 +6,7 @@ interface SliderProps extends React.InputHTMLAttributes<HTMLInputElement> {
   max?: number;
   step?: number;
   value?: number[];
-  onValueChange?: (value: number[]) => void;
+  onValueChange?: (_value: number[]) => void;
 }
 
 export const DaisySlider = forwardRef<HTMLInputElement, SliderProps>(

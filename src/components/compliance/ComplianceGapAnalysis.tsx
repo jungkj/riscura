@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -26,7 +26,7 @@ import {
   PolarRadiusAxis,
   Radar,
 } from 'recharts';
-import {
+// import {
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -299,7 +299,7 @@ export function ComplianceGapAnalysis() {
         </DaisyCardBody>
       </DaisyCard>
 
-      {analysis && (
+      {Boolean(analysis) && (
         <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
             <DaisyTabsList className="grid w-full grid-cols-4" >
               <DaisyTabsTrigger value="overview">Overview</DaisyTabs>

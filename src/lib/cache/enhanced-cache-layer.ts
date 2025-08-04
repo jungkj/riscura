@@ -3,7 +3,7 @@
  * Integrates all caching strategies and provides enterprise-grade performance optimization
  */
 
-import { redisClient } from './redis-client';
+// import { redisClient } from './redis-client';
 import {
   CacheManager,
   organizationCache,
@@ -274,7 +274,7 @@ export class EnhancedCacheLayer {
 
       await Promise.allSettled(warmupTasks);
 
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
       this.metrics.warmupTime = duration;
 
       logger.info(`✅ Cache warming completed in ${duration}ms`);
@@ -571,7 +571,7 @@ export class EnhancedCacheLayer {
   }
 
   private async getFromRedis<T>(key: string): Promise<T | null> {
-    const result = await redisClient.get(key);
+    const _result = await redisClient.get(key);
     if (!result) return null;
 
     try {
@@ -608,7 +608,7 @@ export class EnhancedCacheLayer {
     await Promise.all(tasks);
   }
 
-  private async invalidatePattern(pattern: string): Promise<number> {
+  private async invalidatePattern(_pattern: string): Promise<number> {
     return await redisClient.invalidatePattern(pattern);
   }
 

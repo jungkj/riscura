@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSharePointFiles } from '@/hooks/useSharePointFiles';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
@@ -26,7 +26,7 @@ interface FileInfo {
 
 interface Props {
   integrationId: string;
-  onFileSelect: (file: FileInfo) => void;
+  onFileSelect: (_file: FileInfo) => void;
   selectedFileId?: string;
 }
 
@@ -122,7 +122,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
       </div>
 
       {/* Current Path / Search Results */}
-      {isSearching && searchQuery && (
+      {Boolean(isSearching) && searchQuery && (
         <div className="flex items-center text-sm text-gray-600">
           <span>Search results for: "{searchQuery}"</span>
           <DaisyButton
@@ -143,7 +143,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
       )}
 
       {/* Error Alert */}
-      {error && (
+      {Boolean(error) && (
         <DaisyAlert variant="error" >
   {error}
 </DaisyAlert>
@@ -192,7 +192,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
       </DaisyCard>
 
       {/* Loading indicator for pagination */}
-      {isLoading && files.length > 0 && (
+      {Boolean(isLoading) && files.length > 0 && (
         <div className="flex justify-center py-4">
           <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
         </div>

@@ -35,7 +35,7 @@ interface PerformanceSettings {
 interface PerformanceContextType {
   metrics: PerformanceMetrics;
   settings: PerformanceSettings;
-  updateSettings: (settings: Partial<PerformanceSettings>) => void;
+  updateSettings: (_settings: Partial<PerformanceSettings>) => void;
   isOnline: boolean;
   networkSpeed: 'slow' | 'fast' | 'unknown';
   cacheData: (key: string, data: any, ttl?: number) => void;
@@ -106,7 +106,7 @@ export const useOfflineData = () => {
     async (key: string, fetcher: () => Promise<any>, ttl: number = 300000) => {
       // Try cache first if offline
       if (!isOnline) {
-        const cached = getCachedData(key);
+        const _cached = getCachedData(key);
         if (cached) return cached;
         throw new Error('No cached data available offline');
       }
@@ -117,7 +117,7 @@ export const useOfflineData = () => {
         return data;
       } catch (error) {
         // Fallback to cache on network error
-        const cached = getCachedData(key);
+        const _cached = getCachedData(key);
         if (cached) return cached;
         throw error;
       }

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
-import {
+// import {
   Edit, Eye, Copy, Share, Archive, Trash2, MoreVertical, 
   Play, Pause, Users, Clock, Target, BarChart3, Brain,
   Shield, CheckCircle, AlertTriangle, Calendar, FileText,
@@ -27,8 +27,8 @@ import type { Questionnaire } from '@/types/questionnaire.types';
 
 interface QuestionnaireListProps {
   questionnaires: Questionnaire[];
-  onEdit: (questionnaire: Questionnaire) => void;
-  onDuplicate: (questionnaire: Questionnaire) => void;
+  onEdit: (_questionnaire: Questionnaire) => void;
+  onDuplicate: (_questionnaire: Questionnaire) => void;
   onDelete: (id: string) => void;
   onPublish: (id: string) => void;
   viewMode?: 'grid' | 'list';

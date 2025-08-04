@@ -3,7 +3,7 @@ import { forwardRef, createContext, useContext } from 'react';
 
 interface RadioGroupContextValue {
   value?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (_value: string) => void;
   name?: string;
 }
 
@@ -11,7 +11,7 @@ const RadioGroupContext = createContext<RadioGroupContextValue>({});
 
 interface RadioGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (_value: string) => void;
   defaultValue?: string;
   name?: string;
 }

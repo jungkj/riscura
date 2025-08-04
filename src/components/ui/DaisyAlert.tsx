@@ -29,7 +29,7 @@ export const DaisyAlert = ({
 
   return (
     <div className={cn('alert', variantClasses[variant], className)} {...props}>
-      {icon && icons[variant]}
+      {Boolean(icon) && icons[variant]}
       <span>{children}</span>
     </div>
   );

@@ -3,11 +3,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import {
+// import {
   MoreHorizontal,
   ChevronDown,
   ChevronUp,
@@ -96,7 +96,7 @@ interface DraggableItemProps {
 
 interface TouchSliderProps {
   value: number;
-  onChange: (value: number) => void;
+  onChange: (_value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -321,7 +321,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
   return (
     <div className="relative overflow-hidden">
       {/* Left Action Background */}
-      {leftAction && (
+      {Boolean(leftAction) && (
         <div
           className={cn(
             "absolute inset-y-0 left-0 flex items-center justify-start pl-4 transition-opacity",
@@ -337,7 +337,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
       )}
 
       {/* Right Action Background */}
-      {rightAction && (
+      {Boolean(rightAction) && (
         <div
           className={cn(
             "absolute inset-y-0 right-0 flex items-center justify-end pr-4 transition-opacity",
@@ -478,7 +478,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
 
   return (
     <div className={cn("space-y-2", className)}>
-      {showValue && (
+      {Boolean(showValue) && (
         <div className="flex justify-between items-center">
           <span className="text-body-sm font-medium" aria-label={ariaLabel}>
             {ariaLabel}
@@ -650,7 +650,7 @@ export const TouchActionMenu: React.FC<{
         {trigger || <MoreHorizontal className="h-4 w-4" />}
       </TouchButton>
 
-      {isOpen && (
+      {Boolean(isOpen) && (
         <>
           {/* Backdrop */}
           <div
@@ -725,7 +725,7 @@ export const TouchChip: React.FC<{
       onClick={onClick}
     >
       <span className="truncate">{children}</span>
-      {onRemove && (
+      {Boolean(onRemove) && (
         <TouchButton
           variant="ghost"
           size="sm"

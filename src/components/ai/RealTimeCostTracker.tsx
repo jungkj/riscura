@@ -9,7 +9,7 @@ import {
   Maximize2,
   Minimize2
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -116,7 +116,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   <DollarSign className="h-3 w-3" />
                 </div>
                 <span className="text-sm font-medium">Usage Tracker</span>
-                {hasActiveAlerts && (
+                {Boolean(hasActiveAlerts) && (
                   <DaisyBadge variant="error" className="text-xs" >
   {usageAlerts.length}
 </DaisyBadge>
@@ -159,7 +159,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
             </div>
 
             <AnimatePresence>
-              {isExpanded && (
+              {Boolean(isExpanded) && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
@@ -221,7 +221,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   </div>
 
                   {/* Cost Projections */}
-                  {showProjections && (
+                  {Boolean(showProjections) && (
                     <div className="space-y-1">
                       <div className="text-xs text-muted-foreground">Projected Cost</div>
                       <div className="grid grid-cols-3 gap-1 text-xs">
@@ -248,7 +248,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   )}
 
                   {/* Alerts */}
-                  {hasActiveAlerts && (
+                  {Boolean(hasActiveAlerts) && (
                     <div className="space-y-1">
                       {usageAlerts.slice(0, 2).map((alert) => (
                         <div 
@@ -275,7 +275,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                   )}
 
                   {/* View Details Button */}
-                  {onViewDetails && (
+                  {Boolean(onViewDetails) && (
                     <DaisyButton
                       variant="outline"
                       size="sm"

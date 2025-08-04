@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { ConversationMessage, AgentType, AIError, MessageAttachment } from '@/types/ai.types';
-import { Risk, Control, Document } from '@/types';
+// import { ConversationMessage, AgentType, AIError, MessageAttachment } from '@/types/ai.types';
+// import { Risk, Control, Document } from '@/types';
 import { useAI } from '@/context/AIContext';
 import { useAuth } from '@/context/AuthContext';
 import { generateId } from '@/lib/utils';
@@ -96,9 +96,8 @@ export interface ConversationTemplate {
 }
 
 export interface ChatActions {
-  sendMessage: (content: string, attachments?: MessageAttachment[]) => Promise<void>;
-  sendMessageWithContext: (
-    content: string,
+  sendMessage: (_content: string, attachments?: MessageAttachment[]) => Promise<void>;
+  sendMessageWithContext: (_content: string,
     contextOverride?: Partial<RiskContext>
   ) => Promise<void>;
   regenerateMessage: (messageId: string) => Promise<void>;
@@ -107,18 +106,18 @@ export interface ChatActions {
   startVoiceInput: () => void;
   stopVoiceInput: () => void;
   uploadFiles: (files: File[]) => Promise<void>;
-  searchMessages: (query: string) => void;
+  searchMessages: (_query: string) => void;
   clearSearch: () => void;
   exportConversation: (format: 'json' | 'pdf' | 'markdown') => Promise<void>;
   setContext: (_context: Partial<RiskContext>) => void;
-  enrichContext: (selectedEntities: {
+  enrichContext: (_selectedEntities: {
     risks?: Risk[];
     controls?: Control[];
     documents?: Document[];
   }) => Promise<void>;
   useTemplate: (template: ConversationTemplate) => void;
   clearMessages: () => void;
-  switchAgent: (agentType: AgentType) => void;
+  switchAgent: (_agentType: AgentType) => void;
   clearError: () => void;
   setContextMode: (mode: 'minimal' | 'moderate' | 'comprehensive') => void;
   refreshContext: () => Promise<void>;
@@ -346,7 +345,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Enhanced send message with context injection
   const sendMessage = useCallback(
-    async (content: string, attachments?: MessageAttachment[]) => {
+    async (_content: string, attachments?: MessageAttachment[]) => {
       if (!content.trim() || state.isLoading) return;
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -432,7 +431,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Send message with context override
   const sendMessageWithContext = useCallback(
-    async (content: string, contextOverride?: Partial<RiskContext>) => {
+    async (_content: string, contextOverride?: Partial<RiskContext>) => {
       if (contextOverride) {
         setState((prev) => ({
           ...prev,
@@ -450,7 +449,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Enrich context with selected entities
   const enrichContext = useCallback(
-    async (selectedEntities: { risks?: Risk[]; controls?: Control[]; documents?: Document[] }) => {
+    async (_selectedEntities: { risks?: Risk[]; controls?: Control[]; documents?: Document[] }) => {
       if (!user) return;
 
       // Track context enrichment activity
@@ -594,7 +593,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Enhanced search with context awareness
   const searchMessages = useCallback(
-    (query: string) => {
+    (_query: string) => {
       setState((prev) => ({ ...prev, searchQuery: query }));
 
       if (!query.trim()) {
@@ -662,7 +661,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     clearMessages: () => {
       setState((prev) => ({ ...prev, messages: [] }));
     },
-    switchAgent: (agentType: AgentType) => {
+    switchAgent: (_agentType: AgentType) => {
       switchAgent(agentType);
       trackActivity({
         action: 'switch_agent',

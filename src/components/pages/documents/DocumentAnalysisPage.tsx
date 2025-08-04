@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -10,7 +10,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from '@/hooks/use-toast';
 
 // Icons
-import {
+// import {
   FileText,
   Brain,
   TrendingUp,
@@ -38,7 +38,7 @@ interface RiskTrend {
   percentage: number;
 }
 
-function DocumentAnalysisPage() {
+const DocumentAnalysisPage = () {
   const [analysisStats, setAnalysisStats] = useState<AnalysisStats>({
     totalDocuments: 0,
     analyzedDocuments: 0,
@@ -109,7 +109,7 @@ function DocumentAnalysisPage() {
     });
   };
 
-  const getTrendIcon = (trend: RiskTrend['trend']) => {
+  const getTrendIcon = (_trend: RiskTrend['trend']) => {
     switch (trend) {
       case 'up':
         return <TrendingUp className="h-4 w-4 text-red-500" />;

@@ -270,7 +270,7 @@ export class NotificationService {
     if (!this.registration) return;
 
     try {
-      const notifications = await this.registration.getNotifications(tag ? { tag } : undefined);
+      const _notifications = await this.registration.getNotifications(tag ? { tag } : undefined);
       notifications.forEach((notification) => notification.close());
     } catch (error) {
       // console.error('Failed to clear notifications:', error);
@@ -410,7 +410,7 @@ export function useNotificationTemplates() {
   );
 
   const createComplianceReminder = useCallback(
-    (framework: string, dueDate: string): NotificationOptions => ({
+    (_framework: string, dueDate: string): NotificationOptions => ({
       title: 'Compliance Reminder',
       body: `${framework} compliance review due on ${dueDate}`,
       icon: '/images/icons/compliance.png',
@@ -511,7 +511,7 @@ export const notificationUtils = {
   },
 
   // Vibrate device (if supported)
-  vibrate: (pattern: number[] = [200]): void => {
+  vibrate: (_pattern: number[] = [200]): void => {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern);
     }

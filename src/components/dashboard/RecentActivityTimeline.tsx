@@ -82,7 +82,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
   ]);
 
   // Get icon for activity type
-  const getActivityTypeClass = (type: Activity['type']) => {
+  const getActivityTypeClass = (_type: Activity['type']) => {
     switch (type) {
       case 'risk':
         return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';

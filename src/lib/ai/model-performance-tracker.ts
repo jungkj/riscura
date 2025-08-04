@@ -536,8 +536,7 @@ export class ModelPerformanceTracker {
     return recommendations;
   }
 
-  private getAlertsForPeriod(
-    period: 'daily' | 'weekly' | 'monthly'
+  private getAlertsForPeriod(_period: 'daily' | 'weekly' | 'monthly'
   ): Array<{ timestamp: Date; message: string; severity: string }> {
     const now = new Date();
     let cutoffDate: Date;

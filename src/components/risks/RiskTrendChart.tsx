@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { useRisks } from '@/context/RiskContext';
-import { Risk } from '@/types';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -274,7 +274,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
         </div>
         
         {/* Trend Metrics */}
-        {trendMetrics && (
+        {Boolean(trendMetrics) && (
           <div className="grid grid-cols-2 gap-4 mt-4">
             <div className="flex items-center gap-2">
               <div className="text-sm text-slate-600">Total Risks:</div>

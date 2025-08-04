@@ -5,12 +5,12 @@ import {
   PUT as PutSingle,
   DELETE as DeleteSingle,
 } from '@/app/api/risks/[id]/route';
-import { RiskFactory, testRisks } from '../../factories/risk-factory';
-import { UserFactory, testUsers } from '../../factories/user-factory';
+// import { RiskFactory, testRisks } from '../../factories/risk-factory';
+// import { UserFactory, testUsers } from '../../factories/user-factory';
 import { OrganizationFactory, testOrganizations } from '../../factories/organization-factory';
 import { db } from '@/lib/db';
-import { CreateRiskOptions } from '@/services/RiskService';
-import { RiskCategory } from '@prisma/client';
+// import { CreateRiskOptions } from '@/services/RiskService';
+// import { RiskCategory } from '@prisma/client';
 
 // Mock the database with unified mock object
 const mockRiskOperations = {
@@ -559,7 +559,7 @@ describe('/api/risks', () => {
 
       expect(response.status).toBe(200);
       expect(data.data).toHaveLength(3);
-      expect(data.data.every((risk: any) => risk.organizationId === mockUser.organizationId)).toBe(
+      expect(data.data.every((_risk: any) => risk.organizationId === mockUser.organizationId)).toBe(
         true
       );
 

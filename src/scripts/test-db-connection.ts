@@ -15,7 +15,7 @@ async function testDatabaseConnection() {
 
     // Test 2: Query database version
     // console.log('2️⃣ Checking database version...');
-    const result = await prisma.$queryRaw<Array<{ version: string }>>`SELECT version()`;
+    const _result = await prisma.$queryRaw<Array<{ version: string }>>`SELECT version()`;
     // console.log('✅ Database version:', result[0].version, '\n');
 
     // Test 3: Count records in main tables
@@ -53,7 +53,7 @@ async function testDatabaseConnection() {
 
     // Test 5: Check database size (Supabase free tier limit is 500MB)
     // console.log('5️⃣ Checking database size...');
-    const dbSize = await prisma.$queryRaw<Array<{ db_size: string }>>`
+    const _dbSize = await prisma.$queryRaw<Array<{ db_size: string }>>`
       SELECT pg_database_size(current_database())::bigint / 1024 / 1024 || ' MB' as db_size
     `;
     // console.log('💾 Current database size:', dbSize[0].db_size);
@@ -61,7 +61,7 @@ async function testDatabaseConnection() {
 
     // Test 6: Check connection pool
     // console.log('6️⃣ Connection pool status...');
-    const poolStatus = await prisma.$queryRaw<Array<{ connections: number }>>`
+    const _poolStatus = await prisma.$queryRaw<Array<{ connections: number }>>`
       SELECT count(*) as connections 
       FROM pg_stat_activity 
       WHERE datname = current_database()

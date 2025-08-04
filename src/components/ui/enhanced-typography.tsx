@@ -127,12 +127,12 @@ export const EnhancedSection: React.FC<SectionProps> = ({
     >
       {(title || subtitle) && (
         <header className="mb-6">
-          {title && (
+          {Boolean(title) && (
             <EnhancedHeading level="h2" className="mb-2">
               {title}
             </EnhancedHeading>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <EnhancedBodyText variant="large" className="text-slate-600">
               {subtitle}
             </EnhancedBodyText>
@@ -258,7 +258,7 @@ export const EnhancedPageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   return (
     <header className={cn('pb-8 border-b border-slate-200/60', className)}>
-      {breadcrumbs && (
+      {Boolean(breadcrumbs) && (
         <nav className="mb-4">
           <ol className="flex items-center space-x-2 text-sm">
             {breadcrumbs.map((crumb, index) => (
@@ -285,20 +285,20 @@ export const EnhancedPageHeader: React.FC<PageHeaderProps> = ({
             {title}
           </EnhancedHeading>
 
-          {subtitle && (
+          {Boolean(subtitle) && (
             <EnhancedBodyText variant="large" className="text-slate-600 max-w-3xl">
               {subtitle}
             </EnhancedBodyText>
           )}
 
-          {stats && (
+          {Boolean(stats) && (
             <div className="pt-2">
               <EnhancedStatsDisplay stats={stats} layout="horizontal" />
             </div>
           )}
         </div>
 
-        {actions && <div className="flex items-center gap-3 flex-shrink-0">{actions}</div>}
+        {Boolean(actions) && <div className="flex items-center gap-3 flex-shrink-0">{actions}</div>}
       </div>
     </header>
   );

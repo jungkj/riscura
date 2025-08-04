@@ -6,12 +6,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import {
+// import {
   Activity,
   Filter,
   Download,
@@ -365,7 +365,7 @@ const ActivityItem: React.FC<{
 }> = ({ activity, isCompact = false, showDetails = false, onMarkAsRead, onViewDetails }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const getActivityIcon = (type: ActivityType) => {
+  const getActivityIcon = (_type: ActivityType) => {
     switch (type) {
       case 'created': return <Plus className="h-4 w-4" />;
       case 'updated': return <Edit className="h-4 w-4" />;
@@ -396,7 +396,7 @@ const ActivityItem: React.FC<{
     }
   };
 
-  const getActivityColor = (type: ActivityType, severity: Activity['severity']) => {
+  const getActivityColor = (_type: ActivityType, severity: Activity['severity']) => {
     if (severity === 'critical') return 'text-red-600';
     if (severity === 'high') return 'text-orange-600';
     if (severity === 'medium') return 'text-blue-600';
@@ -806,7 +806,7 @@ export const ActivityFeed: React.FC<{
   return (
     <div className="space-y-enterprise-4">
       {/* Header */}
-      {showFilters && (
+      {Boolean(showFilters) && (
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-3">
             <div>
@@ -876,7 +876,7 @@ setFilters(prev => ({ ...prev, search: e.target.value }))}
             </DaisyButton>
 
             {/* Export */}
-            {showExport && (
+            {Boolean(showExport) && (
               <DaisyDropdownMenu >
                   <DaisyDropdownMenuTrigger asChild >
                     <DaisyButton variant="outline" size="sm" >
@@ -957,7 +957,7 @@ setFilters(prev => ({ ...prev, search: e.target.value }))}
             <DaisyDialogTitle>Activity Details</DaisyDialogTitle>
           </DaisyDialogHeader>
           
-          {selectedActivity && (
+          {Boolean(selectedActivity) && (
             <div className="space-y-enterprise-4">
               <ActivityItem
                 activity={selectedActivity}

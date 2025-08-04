@@ -1,5 +1,5 @@
-import { AIService } from './AIService';
-import { anomalyDetectionAIService } from './AnomalyDetectionAIService';
+// import { AIService } from './AIService';
+// import { anomalyDetectionAIService } from './AnomalyDetectionAIService';
 import { TrendAnalysisService } from './TrendAnalysisService';
 import { SmartNotificationService } from './SmartNotificationService';
 import { generateId } from '@/lib/utils';
@@ -466,8 +466,7 @@ export class DashboardIntelligenceService {
   }
 
   // Private helper methods
-  private async generateRiskInsights(
-    risks: Risk[],
+  private async generateRiskInsights(_risks: Risk[],
     config: DashboardConfig
   ): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
@@ -530,8 +529,7 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateAnomalyInsights(
-    risks: Risk[],
+  private async generateAnomalyInsights(_risks: Risk[],
     controls: Control[]
   ): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
@@ -579,8 +577,7 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateTrendInsights(
-    risks: Risk[],
+  private async generateTrendInsights(_risks: Risk[],
     controls: Control[],
     config: DashboardConfig
   ): Promise<DashboardInsight[]> {
@@ -744,7 +741,7 @@ export class DashboardIntelligenceService {
     };
   }
 
-  private prioritizeInsights(insights: DashboardInsight[]): DashboardInsight[] {
+  private prioritizeInsights(_insights: DashboardInsight[]): DashboardInsight[] {
     return insights.sort((a, b) => {
       // Sort by priority (lower number = higher priority)
       if (a.priority !== b.priority) {
@@ -778,7 +775,7 @@ export class DashboardIntelligenceService {
     );
   }
 
-  private parseRecommendations(content: string): SmartRecommendation[] {
+  private parseRecommendations(_content: string): SmartRecommendation[] {
     // Parse AI-generated recommendations from response content
     // This is a simplified parser - in production, use more robust parsing
     const recommendations: SmartRecommendation[] = [];
@@ -827,7 +824,7 @@ export class DashboardIntelligenceService {
     };
   }
 
-  private parseSuggestions(content: string): AssistanceSuggestion[] {
+  private parseSuggestions(_content: string): AssistanceSuggestion[] {
     // Parse AI suggestions from content
     const suggestions: AssistanceSuggestion[] = [];
 
@@ -847,7 +844,7 @@ export class DashboardIntelligenceService {
     return suggestions.slice(0, 5);
   }
 
-  private parseExplanations(content: string, question: string): AIExplanation[] {
+  private parseExplanations(_content: string, question: string): AIExplanation[] {
     return [
       {
         id: generateId('explanation'),
@@ -920,7 +917,7 @@ export class DashboardIntelligenceService {
   }
 
   // Utility methods
-  private calculateRiskTrend(risks: Risk[]): {
+  private calculateRiskTrend(_risks: Risk[]): {
     direction: 'increasing' | 'decreasing';
     change: number;
     significance: number;

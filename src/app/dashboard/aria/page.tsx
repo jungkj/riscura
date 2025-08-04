@@ -12,7 +12,7 @@ import {
   TrendingUp,
   CheckCircle,
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -236,7 +236,7 @@ const ARIAChat = () => {
                 </div>
               ))}
 
-              {isLoading && (
+              {Boolean(isLoading) && (
                 <div className="flex justify-start">
                   <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3">

@@ -74,7 +74,7 @@ export const COLUMN_MAPPINGS = {
   residualRiskRating: ['residual risk rating', 'residual risk'],
 };
 
-function findColumnIndex(headers: string[], mappings: string[]): number {
+const findColumnIndex = (headers: string[], mappings: string[]): number {
   const normalizedHeaders = headers.map((h) => h?.toString().toLowerCase().trim() || '');
 
   for (const mapping of mappings) {

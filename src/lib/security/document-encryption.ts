@@ -443,7 +443,7 @@ export class FieldEncryption {
   /**
    * Encrypt sensitive field for database storage
    */
-  public encryptField(value: string, fieldName: string, recordId: string): string {
+  public encryptField(_value: string, fieldName: string, recordId: string): string {
     const aad = `${fieldName}:${recordId}`;
     const encrypted = this.encryptionService.encryptData(value, aad);
     return JSON.stringify(encrypted);

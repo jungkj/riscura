@@ -294,7 +294,7 @@ export class SecurityMiddleware {
     // 2. Check for Bearer token
     const authorization = request.headers.get('authorization');
     if (authorization?.startsWith('Bearer ')) {
-      const token = authorization.slice(7);
+      const _token = authorization.slice(7);
       const tokenResult = documentEncryption.verifySecureToken(token);
       if (tokenResult.valid) {
         return {
@@ -477,8 +477,7 @@ export class SecurityMiddleware {
 export const securityMiddleware = SecurityMiddleware.getInstance();
 
 // Utility function to create rate limit key generators
-export function createRateLimitKeyGenerator(
-  type: 'ip' | 'user' | 'api-key' | 'custom',
+export function createRateLimitKeyGenerator(_type: 'ip' | 'user' | 'api-key' | 'custom',
   customGenerator?: (_request: NextRequest) => string
 ) {
   return (_request: NextRequest): string => {

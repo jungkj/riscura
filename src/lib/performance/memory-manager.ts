@@ -181,7 +181,7 @@ export class MemoryManager {
   /**
    * Count resources by type
    */
-  private countResourcesByType(type: string): number {
+  private countResourcesByType(_type: string): number {
     let count = 0;
     for (const handle of this.resourceHandles.values()) {
       if (handle.type === type) count++;
@@ -198,7 +198,7 @@ export class MemoryManager {
     // Override addEventListener to track event listeners
     const originalAddEventListener = EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener = function (type, listener, options) {
-      const result = originalAddEventListener.call(this, type, listener, options);
+      const _result = originalAddEventListener.call(this, type, listener, options);
 
       // Track this event listener
       const id = `listener-${Date.now()}-${Math.random()}`;
@@ -298,7 +298,7 @@ export class MemoryManager {
   /**
    * Check resource limits
    */
-  private checkResourceLimits(type: string): void {
+  private checkResourceLimits(_type: string): void {
     const count = this.countResourcesByType(type);
     const limits = this.config.resourceLimits;
 
@@ -331,7 +331,7 @@ export class MemoryManager {
   /**
    * Cleanup oldest resources of a specific type
    */
-  private cleanupOldestResources(type: string, count: number): void {
+  private cleanupOldestResources(_type: string, count: number): void {
     const resources = Array.from(this.resourceHandles.values())
       .filter((handle) => handle.type === type)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())

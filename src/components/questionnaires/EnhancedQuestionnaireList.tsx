@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -21,7 +21,7 @@ import {
 
 import { AdvancedSearchFilter } from '@/components/search/AdvancedSearchFilter';
 
-import {
+// import {
   FileText, Calendar, User, MoreVertical, Eye, Edit3, Copy,
   Trash2, Archive, Share2, Download, Upload, Star, Clock,
   Target, CheckCircle, AlertCircle, Users, Tag, Grid,
@@ -424,7 +424,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   };
 
   // Render questionnaire card
-  const renderQuestionnaireCard = (questionnaire: EnhancedQuestionnaire) => {
+  const renderQuestionnaireCard = (_questionnaire: EnhancedQuestionnaire) => {
 
   return (
     <motion.div
@@ -597,7 +597,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   );}
 
   // Render questionnaire list item
-  const renderQuestionnaireListItem = (questionnaire: EnhancedQuestionnaire) => (
+  const renderQuestionnaireListItem = (_questionnaire: EnhancedQuestionnaire) => (
     <motion.div
       key={questionnaire.id}
       layout

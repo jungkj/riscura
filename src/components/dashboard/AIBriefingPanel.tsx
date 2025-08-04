@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -10,7 +10,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
 
-import {
+// import {
   Brain, Sparkles, TrendingUp, AlertTriangle, CheckCircle, Clock,
   Target, Zap, Eye, ArrowRight, ChevronDown, ChevronUp, Play,
   Volume2, Pause, RotateCcw, BookOpen, Lightbulb, Flag, Star, Shield
@@ -160,7 +160,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
     setRefreshing(false);
   };
 
-  const getInsightIcon = (type: string) => {
+  const getInsightIcon = (_type: string) => {
     switch (type) {
       case 'critical':
         return <DaisyAlertTriangle className="w-4 h-4 text-red-600" >
@@ -297,7 +297,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
 
         {/* Audio Playing Indicator */}
         <AnimatePresence>
-          {isPlaying && (
+          {Boolean(isPlaying) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -554,7 +554,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
 
         {/* Expanded View */}
         <AnimatePresence>
-          {isExpanded && (
+          {Boolean(isExpanded) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}

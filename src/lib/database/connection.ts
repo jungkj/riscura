@@ -160,7 +160,7 @@ class DatabaseConnection {
           ? this.queryTimes.reduce((a, b) => a + b, 0) / this.queryTimes.length
           : 0;
 
-      const stats = dbStats[0] || {};
+      const _stats = dbStats[0] || {};
 
       const status: ConnectionPoolStatus = {
         isHealthy: true,
@@ -235,7 +235,7 @@ class DatabaseConnection {
     );
   }
 
-  private isConnectionError(_error: any): boolean {
+  private isConnectionError(__error: any): boolean {
     const connectionErrorMessages = [
       'connection terminated',
       'connection refused',

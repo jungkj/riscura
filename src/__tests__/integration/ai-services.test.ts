@@ -40,7 +40,7 @@ const server = setupServer(...aiServiceHandlers);
 
 // Test utilities
 class AIServiceTestUtils {
-  static createTestDocument(type: 'policy' | 'procedure' | 'guideline' = 'policy') {
+  static createTestDocument(_type: 'policy' | 'procedure' | 'guideline' = 'policy') {
     const documents = {
       policy: `
         PRIVACY POLICY
@@ -121,7 +121,7 @@ class AIServiceTestUtils {
     expect(analysis).toHaveProperty('compliance');
 
     if (analysis.risks && Array.isArray(analysis.risks)) {
-      analysis.risks.forEach((risk: any) => {
+      analysis.risks.forEach((_risk: any) => {
         expect(risk).toHaveProperty('title');
         expect(risk).toHaveProperty('description');
         expect(risk).toHaveProperty('category');
@@ -192,7 +192,7 @@ describe('AI Service Integration Tests', () => {
 
       expect(response.ok).toBe(true);
 
-      const result = await response.json();
+      const _result = await response.json();
       expect(result.success).toBe(true);
       expect(result.data).toHaveProperty('analysis');
 
@@ -216,7 +216,7 @@ describe('AI Service Integration Tests', () => {
 
         expect(response.ok).toBe(true);
 
-        const result = await response.json();
+        const _result = await response.json();
         expect(result.data.documentType).toBeTruthy();
       }
     });
@@ -233,7 +233,7 @@ describe('AI Service Integration Tests', () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       const compliance = result.data.analysis?.compliance;
 
       if (compliance) {
@@ -242,7 +242,7 @@ describe('AI Service Integration Tests', () => {
 
         if (compliance.frameworks) {
           expect(Array.isArray(compliance.frameworks)).toBe(true);
-          compliance.frameworks.forEach((framework: string) => {
+          compliance.frameworks.forEach((_framework: string) => {
             expect(typeof framework).toBe('string');
             expect(framework.length).toBeGreaterThan(0);
           });
@@ -297,13 +297,13 @@ describe('AI Service Integration Tests', () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       const risks = result.data.analysis?.risks;
 
       if (risks && risks.length > 0) {
         // Should identify high-impact risks
         const hasHighImpactRisk = risks.some(
-          (risk: any) =>
+          (_risk: any) =>
             risk.impact.financial >= 4 ||
             risk.impact.reputational >= 4 ||
             risk.impact.regulatory >= 4
@@ -325,7 +325,7 @@ describe('AI Service Integration Tests', () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const _result = await response.json();
 
       AIServiceTestUtils.validateControlAnalysis(result.data.analysis);
 
@@ -370,7 +370,7 @@ describe('AI Service Integration Tests', () => {
         body: formData,
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       const analysis = result.data.analysis;
 
       expect(analysis.complianceGaps).toBeGreaterThan(0);
@@ -422,7 +422,7 @@ describe('AI Service Integration Tests', () => {
       // Should handle timeout gracefully
       expect(response.status).toBe(408);
 
-      const result = await response.json();
+      const _result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('timeout');
     });
@@ -507,7 +507,7 @@ describe('AI Service Integration Tests', () => {
       });
 
       // Should handle malformed response gracefully
-      const result = await response.json();
+      const _result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('parsing');
     });
@@ -540,7 +540,7 @@ describe('AI Service Integration Tests', () => {
 
       expect(response.status).toBe(429);
 
-      const result = await response.json();
+      const _result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('rate limit');
     });

@@ -34,7 +34,7 @@ export interface RealTimeDataState {
 export interface RealTimeDataActions {
   // Data operations
   refreshData: () => Promise<void>;
-  createRisk: (risk: Tables['risks']['Insert']) => Promise<Risk>;
+  createRisk: (_risk: Tables['risks']['Insert']) => Promise<Risk>;
   updateRisk: (id: string, updates: Tables['risks']['Update']) => Promise<Risk>;
   deleteRisk: (id: string) => Promise<void>;
   createControl: (control: Tables['controls']['Insert']) => Promise<Control>;
@@ -90,7 +90,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
 
   // Error handler
   const handleError = useCallback(
-    (_error: any, context: string) => {
+    (__error: any, context: string) => {
       // console.error(`Real-time data error (${context}):`, error);
       updateState({
         error: error.message || 'An error occurred',
@@ -342,7 +342,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
   const actions: RealTimeDataActions = {
     refreshData: loadInitialData,
 
-    createRisk: useCallback(async (risk: Tables['risks']['Insert']) => {
+    createRisk: useCallback(async (_risk: Tables['risks']['Insert']) => {
       if (!serviceRef.current) throw new Error('Service not initialized');
       return serviceRef.current.createRisk(risk);
     }, []),

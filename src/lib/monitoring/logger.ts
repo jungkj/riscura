@@ -178,7 +178,7 @@ class Logger {
   }
 
   // Database logging
-  public database(query: string, duration: number, rows?: number): void {
+  public database(_query: string, duration: number, rows?: number): void {
     const entry = this.formatMessage('debug', `Database query`, {
       query: query.substring(0, 100) + (query.length > 100 ? '...' : ''),
       rows,

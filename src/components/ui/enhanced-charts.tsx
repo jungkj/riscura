@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity } from 'lucide-react';
 
@@ -55,7 +55,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
   {(title || subtitle) && (
 </DaisyCard>
         <DaisyCardBody >
-  {title && (
+  {Boolean(title) && (
 </DaisyCardBody>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <BarChart3 className="h-5 w-5 text-[#199BEC]" />
@@ -63,7 +63,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
               {title}
             </DaisyCardTitle>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
         
@@ -88,7 +88,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
                         backgroundColor: item.color || chartColors[index % chartColors.length],
                       }} />
                   </div>
-                  {showValues && (
+                  {Boolean(showValues) && (
                     <div className="w-16 text-sm text-gray-600 font-inter font-medium text-right">
                       {item.value.toLocaleString()}
                     </div>
@@ -99,7 +99,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
           </div>
 
           {/* Legend */}
-          {showLegend && (
+          {Boolean(showLegend) && (
             <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-100">
               {data.map((item, index) => (
                 <div key={item.label} className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
   {(title || subtitle) && (
 </DaisyCard>
         <DaisyCardBody >
-  {title && (
+  {Boolean(title) && (
 </DaisyCardBody>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <PieChart className="h-5 w-5 text-[#199BEC]" />
@@ -191,7 +191,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
               {title}
             </DaisyCardTitle>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
         
@@ -240,7 +240,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
           </div>
 
           {/* Legend */}
-          {showLegend && (
+          {Boolean(showLegend) && (
             <div className="flex-1 space-y-2">
               {slices.map((slice) => (
                 <div key={slice.label} className="flex items-center justify-between">
@@ -328,7 +328,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             <p className="text-2xl font-bold text-[#191919] font-inter mb-2">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
-            {change && (
+            {Boolean(change) && (
               <div className="flex items-center gap-1">
                 {getTrendIcon()}
                 <span className={cn("text-xs font-medium font-inter", getTrendColor())}>
@@ -337,7 +337,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
               </div>
             )}
           </div>
-          {Icon && (
+          {Boolean(Icon) && (
             <div 
               className="p-2 rounded-lg"
               style={{ backgroundColor: `${color}10`, color: color }}
@@ -421,12 +421,12 @@ export const ProgressRing: React.FC<DaisyProgressRingProps / />= ({
         
         {(label || subtitle) && (
           <div className="mt-3 text-center">
-            {label && (
+            {Boolean(label) && (
               <h4 className="font-semibold text-sm text-[#191919] font-inter">
                 {label}
               </h4>
             )}
-            {subtitle && (
+            {Boolean(subtitle) && (
               <p className="text-xs text-gray-600 font-inter mt-1">
                 {subtitle}
               </p>
@@ -491,7 +491,7 @@ export const SimpleTrendLine: React.FC<TrendLineProps> = ({
           strokeLinejoin="round" />
         
         {/* Data points */}
-        {showDots && points.map((point, index) => (
+        {Boolean(showDots) && points.map((point, index) => (
           <circle
             key={index}
             cx={point.x}

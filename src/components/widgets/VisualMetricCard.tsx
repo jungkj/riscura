@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { 
@@ -237,7 +237,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
     }
   };
 
-  const formatValue = (val: string | number) => {
+  const formatValue = (_val: string | number) => {
     if (typeof val === 'number') {
       if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M`;
       if (val >= 1000) return `${(val / 1000).toFixed(1)}K`;
@@ -265,7 +265,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
             {/* Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                {IconComponent && (
+                {Boolean(IconComponent) && (
                   <div 
                     className="p-2 rounded-lg"
                     style={{ backgroundColor: cardColor + '20' }}
@@ -277,7 +277,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                 )}
                 <div>
                   <h3 className="font-semibold text-[#191919] text-sm">{title}</h3>
-                  {subtitle && (
+                  {Boolean(subtitle) && (
                     <p className="text-xs text-gray-600 mt-1">{subtitle}</p>
                   )}
                 </div>
@@ -296,7 +296,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                   {statusInfo.label}
                 </DaisyBadge>
                 
-                {interactive && (
+                {Boolean(interactive) && (
                   <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
   <MoreHorizontal className="w-3 h-3" />
 </DaisyButton>
@@ -313,7 +313,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                   <span className="text-3xl font-bold text-[#191919]">
                     {formatValue(value)}
                   </span>
-                  {unit && (
+                  {Boolean(unit) && (
                     <span className="text-sm text-gray-600">{unit}</span>
                   )}
                 </div>
@@ -327,7 +327,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                         {trendPercentage > 0 ? '+' : ''}{trendPercentage.toFixed(1)}%
                       </span>
                     )}
-                    {previousValue && (
+                    {Boolean(previousValue) && (
                       <span className="text-xs text-gray-500">
                         vs {formatValue(previousValue)}
                       </span>
@@ -336,7 +336,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                 )}
 
                 {/* Target Progress */}
-                {target && showProgress && (
+                {Boolean(target) && showProgress && (
                   <div className="mt-3">
                     <div className="flex justify-between text-xs text-gray-600 mb-1">
                       <span>Progress to target</span>
@@ -359,7 +359,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               {/* Visual Elements */}
               <div className="flex items-center gap-4">
                 {/* Progress Ring */}
-                {target && !showProgress && (
+                {Boolean(target) && !showProgress && (
                   <DaisyProgressRing
                     value={Number(value)}
                     target={target}
@@ -367,7 +367,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                     size={60} / />)}
 
                 {/* Sparkline */}
-                {sparklineData && sparklineData.length > 1 && (
+                {Boolean(sparklineData) && sparklineData.length > 1 && (
                   <div className="w-24">
                     <Sparkline 
                       data={sparklineData} 
@@ -379,7 +379,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
             </div>
 
             {/* Footer Actions */}
-            {interactive && (
+            {Boolean(interactive) && (
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                 <DaisyButton variant="ghost" size="sm" className="text-xs" >
   <Eye className="w-3 h-3 mr-1" />

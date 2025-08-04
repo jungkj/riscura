@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, MoreHorizontal, TrendingUp, TrendingDown } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -133,13 +133,13 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
   {title}
 </DaisyCardTitle>
                 </DaisyCardTitle>
-                {subtitle && (
+                {Boolean(subtitle) && (
                   <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
                 )}
               </div>
             </div>
 
-            {showActions && (
+            {Boolean(showActions) && (
               <DaisyDropdownMenu >
                   <DaisyDropdownMenuTrigger asChild >
                     <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0" >
@@ -188,7 +188,7 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
                         <span className="text-sm font-medium text-slate-700 capitalize">
                           {item.label}
                         </span>
-                        {showTrends && item.trend && (
+                        {Boolean(showTrends) && item.trend && (
                           <div className="flex items-center gap-1">
                             {item.trend.isPositive ? (
                               <TrendingUp className="h-3 w-3 text-green-500" />

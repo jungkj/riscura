@@ -91,7 +91,7 @@ export class EmailService {
         attachments: options.attachments,
       };
 
-      const result = await this.transporter.sendMail(mailOptions);
+      const _result = await this.transporter.sendMail(mailOptions);
       // console.log('Email sent successfully:', result.messageId);
     } catch (error) {
       // console.error('Failed to send email:', error);

@@ -33,7 +33,7 @@ export class ExportService {
   }
 
   // Export to CSV
-  public async exportToCSV(exportData: ExportData): Promise<void> {
+  public async exportToCSV(_exportData: ExportData): Promise<void> {
     try {
       const { data, filename, headers } = exportData;
 
@@ -70,7 +70,7 @@ export class ExportService {
   }
 
   // Export to PDF
-  public async exportToPDF(exportData: ExportData, elementId?: string): Promise<void> {
+  public async exportToPDF(_exportData: ExportData, elementId?: string): Promise<void> {
     try {
       const { data, filename, title, subtitle } = exportData;
 
@@ -125,7 +125,7 @@ export class ExportService {
   }
 
   // Export to JSON
-  public async exportToJSON(exportData: ExportData): Promise<void> {
+  public async exportToJSON(_exportData: ExportData): Promise<void> {
     try {
       const { data, filename } = exportData;
 
@@ -154,8 +154,7 @@ export class ExportService {
   }
 
   // Export risks data
-  public async exportRisks(
-    risks: any[],
+  public async exportRisks(_risks: any[],
     options: ExportOptions = { format: 'csv' }
   ): Promise<void> {
     try {
@@ -309,7 +308,7 @@ export class ExportService {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 
-  private formatValueForCSV(value: any): string {
+  private formatValueForCSV(_value: any): string {
     if (value === null || value === undefined) return '';
     if (Array.isArray(value)) return value.join(', ');
     if (typeof value === 'object' && value instanceof Date) {
@@ -400,7 +399,7 @@ export class ExportService {
     }
   }
 
-  private downloadFile(content: string, filename: string, mimeType: string): void {
+  private downloadFile(_content: string, filename: string, mimeType: string): void {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

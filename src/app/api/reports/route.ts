@@ -35,7 +35,7 @@ export const GET = withApiMiddleware(
     if (dateFrom) filters.dateFrom = new Date(dateFrom);
     if (dateTo) filters.dateTo = new Date(dateTo);
 
-    const result = await ReportService.getReports(user.organizationId, filters, page, limit);
+    const _result = await ReportService.getReports(user.organizationId, filters, page, limit);
 
     return NextResponse.json({
       data: result.reports,

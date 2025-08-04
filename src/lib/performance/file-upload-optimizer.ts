@@ -186,7 +186,7 @@ export class FileUploadOptimizer {
         }
       }
       
-      function validateFile({ file, supportedFormats }) {
+      const validateFile = ({ file, supportedFormats }) {
         const isValidSize = file.size <= 100 * 1024 * 1024; // 100MB
         const isValidFormat = supportedFormats.some(format => 
           file.name.toLowerCase().endsWith(format.toLowerCase())
@@ -228,13 +228,12 @@ export class FileUploadOptimizer {
   /**
    * Upload file with chunking and progress tracking
    */
-  async uploadFile(
-    file: File,
+  async uploadFile(_file: File,
     uploadUrl: string,
     options: {
       onProgress?: (progress: UploadProgress) => void;
       onComplete?: (result: any) => void;
-      onError?: (_error: Error) => void;
+      onError?: (__error: Error) => void;
       metadata?: Record<string, any>;
     } = {}
   ): Promise<string> {
@@ -272,7 +271,7 @@ export class FileUploadOptimizer {
       await this.uploadChunks(session, uploadUrl, abortController.signal);
 
       // Complete upload
-      const result = await this.completeUpload(session, uploadUrl);
+      const _result = await this.completeUpload(session, uploadUrl);
 
       // Update progress
       this.updateProgress(sessionId, { status: 'completed' });
@@ -296,7 +295,7 @@ export class FileUploadOptimizer {
   /**
    * Validate file before upload
    */
-  private async validateFile(file: File): Promise<{
+  private async validateFile(_file: File): Promise<{
     isValid: boolean;
     errors: string[];
   }> {
@@ -334,7 +333,7 @@ export class FileUploadOptimizer {
   /**
    * Create upload session
    */
-  private createUploadSession(file: File, metadata: Record<string, any>): string {
+  private createUploadSession(_file: File, metadata: Record<string, any>): string {
     const sessionId = `upload-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const totalChunks = Math.ceil(file.size / this.config.chunkSize);
 
@@ -495,7 +494,7 @@ export class FileUploadOptimizer {
           throw new Error(`Upload failed: ${response.statusText}`);
         }
 
-        const result = await response.json();
+        const _result = await response.json();
         chunk.uploadId = result.uploadId || '';
         chunk.status = 'completed';
         session.uploadedChunks.add(chunk.index);
@@ -731,7 +730,7 @@ export class LargeDatasetProcessor {
         }
       });
       
-      function processBatch(data, id) {
+      const processBatch = (data, id) {
         try {
           // Process data batch
           const processed = data.map(item => {
@@ -757,7 +756,7 @@ export class LargeDatasetProcessor {
         }
       }
       
-      function aggregateData(data, id) {
+      const aggregateData = (data, id) {
         try {
           const aggregated = data.reduce((acc, item) => {
             // Example aggregation logic
@@ -780,7 +779,7 @@ export class LargeDatasetProcessor {
         }
       }
       
-      function filterData(data, id) {
+      const filterData = (data, id) {
         try {
           const { filters } = data;
           const filtered = data.items.filter(item => {
@@ -952,7 +951,7 @@ export class LargeDatasetProcessor {
   /**
    * Merge aggregated results
    */
-  private mergeAggregatedResults(results: any[]): any {
+  private mergeAggregatedResults(_results: any[]): any {
     return results.reduce((merged, result) => {
       Object.keys(result).forEach((key) => {
         if (typeof result[key] === 'number') {

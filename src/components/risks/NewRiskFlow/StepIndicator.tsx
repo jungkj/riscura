@@ -55,7 +55,7 @@ export const StepIndicator = ({ steps, currentStep }: StepIndicatorProps) => {
                   <span className="text-lg">{step.icon}</span>
                 )}
 
-                {isActive && (
+                {Boolean(isActive) && (
                   <motion.div
                     layoutId="activeRing"
                     className="absolute inset-0 rounded-full ring-4 ring-blue-500/30"

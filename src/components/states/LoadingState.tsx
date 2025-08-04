@@ -114,10 +114,10 @@ export const SkeletonCard: React.FC<{
   className?: string;
 }> = ({ showAvatar = false, showImage = false, className = '' }) => (
   <div className={`p-6 border border-gray-200 rounded-lg ${className}`}>
-    {showImage && <DaisySkeleton height={200} className="mb-4" />}
+    {Boolean(showImage) && <DaisySkeleton height={200} className="mb-4" />}
 
     <div className="space-y-4">
-      {showAvatar && (
+      {Boolean(showAvatar) && (
         <div className="flex items-center space-x-3">
           <DaisySkeleton width={40} height={40} rounded >
             <div className="space-y-2 flex-1">
@@ -187,7 +187,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 }) => (
   <div className={`relative ${className}`}>
     {children}
-    {isLoading && (
+    {Boolean(isLoading) && (
       <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
         <div className="text-center">
           <Spinner size="lg" />
@@ -233,7 +233,7 @@ export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
 
   return (
     <div className={className}>
-      {showLabel && (
+      {Boolean(showLabel) && (
         <div className="flex justify-between items-center mb-1">
           <span className="text-sm text-gray-700">{label}</span>
           <span className="text-sm text-gray-500">{Math.round(clampedProgress)}%</span>
@@ -328,7 +328,7 @@ export const PageLoading: React.FC<{
 }> = ({ message = 'Loading page...', showLogo = false, className = '' }) => (
   <div className={`min-h-screen flex items-center justify-center bg-gray-50 ${className}`}>
     <div className="text-center">
-      {showLogo && (
+      {Boolean(showLogo) && (
         <div className="mb-8">
           <div className="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900">Riscura</h1>
@@ -349,7 +349,7 @@ export const SectionLoading: React.FC<{
   <div className={`text-center py-12 ${className}`}>
     <Spinner size="lg" className="mx-auto mb-4" />
     <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-    {description && <p className="text-sm text-gray-600">{description}</p>}
+    {Boolean(description) && <p className="text-sm text-gray-600">{description}</p>}
   </div>
 );
 

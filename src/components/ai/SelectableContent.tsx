@@ -9,7 +9,7 @@ export interface SelectableContentProps {
   contentType: 'risk' | 'control' | 'test-script' | 'document' | 'text';
   contentId: string;
   onSelection?: (selection: TextSelection) => void;
-  onAIAction?: (action: AIAction, selection: TextSelection) => void;
+  onAIAction?: (_action: AIAction, selection: TextSelection) => void;
   aiActionsEnabled?: boolean;
   className?: string;
   sectionType?: string;
@@ -142,7 +142,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
 
   // Handle AI actions
   const handleAIAction = useCallback(
-    async (action: AIAction) => {
+    async (_action: AIAction) => {
       if (!currentSelection || !onAIAction) return;
 
       setIsProcessing(true);
@@ -174,7 +174,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   );
 
   // Get color based on action type
-  const getActionColor = (action: AIAction): string => {
+  const getActionColor = (_action: AIAction): string => {
     const colors = {
       explain: 'bg-blue-100 dark:bg-blue-900/30',
       regenerate: 'bg-purple-100 dark:bg-purple-900/30',
@@ -227,7 +227,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       data-content-id={contentId}
     >
       {/* Quality Score Indicator */}
-      {showQualityScore && qualityScore !== null && (
+      {Boolean(showQualityScore) && qualityScore !== null && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -285,7 +285,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
 
       {/* AI Action Toolbar */}
       <AnimatePresence>
-        {showToolbar && currentSelection && aiActionsEnabled && (
+        {Boolean(showToolbar) && currentSelection && aiActionsEnabled && (
           <AIActionToolbar
             context={{
               selection: currentSelection,
@@ -303,7 +303,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       </AnimatePresence>
 
       {/* Selection Loading Overlay */}
-      {isProcessing && (
+      {Boolean(isProcessing) && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

@@ -79,7 +79,7 @@ const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
 }) => {
   return (
     <div className={`bg-white border border-gray-200 rounded-lg shadow-sm p-4 xs:p-6 ${className}`}>
-      {showHeader && (
+      {Boolean(showHeader) && (
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <BaseSkeleton width={24} height={24} rounded="md" />
@@ -93,7 +93,7 @@ const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
         <TextSkeleton lines={contentLines} />
       </div>
 
-      {showFooter && (
+      {Boolean(showFooter) && (
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex items-center justify-between">
             <BaseSkeleton width="80px" height="0.875rem" />
@@ -121,7 +121,7 @@ const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
 }) => {
   return (
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>
-      {showHeader && (
+      {Boolean(showHeader) && (
         <div className="bg-gray-50 px-4 xs:px-6 py-3 border-b border-gray-200">
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {Array.from({ length: columns }).map((_, index) => (
@@ -167,7 +167,7 @@ const ListSkeleton: React.FC<ListSkeletonProps> = ({
       {Array.from({ length: items }).map((_, index) => (
         <div key={index} className="p-4 xs:p-6">
           <div className="flex items-start space-x-3 xs:space-x-4">
-            {showAvatar && (
+            {Boolean(showAvatar) && (
               <BaseSkeleton width={40} height={40} rounded="full" className="flex-shrink-0" />
             )}
 
@@ -179,7 +179,7 @@ const ListSkeleton: React.FC<ListSkeletonProps> = ({
               <TextSkeleton lines={2} lineHeight="0.875rem" lastLineWidth="85%" />
             </div>
 
-            {showActions && (
+            {Boolean(showActions) && (
               <div className="flex-shrink-0">
                 <BaseSkeleton width={24} height={24} rounded="sm" />
               </div>
@@ -272,7 +272,7 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
         {renderChartContent()}
       </div>
 
-      {showLegend && (
+      {Boolean(showLegend) && (
         <div className="flex flex-wrap gap-4 justify-center">
           {Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-2">
@@ -318,7 +318,7 @@ const FormSkeleton: React.FC<FormSkeletonProps> = ({
         ))}
       </div>
 
-      {showButtons && (
+      {Boolean(showButtons) && (
         <div className="flex flex-col xs:flex-row gap-3 xs:justify-end">
           <BaseSkeleton width="100px" height="2.5rem" rounded="md" />
           <BaseSkeleton width="120px" height="2.5rem" rounded="md" />

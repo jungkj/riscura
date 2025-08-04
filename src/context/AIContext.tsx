@@ -8,9 +8,9 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Risk } from '@/types';
-import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
-import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types';
+// import { Risk } from '@/types';
+// import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
+// import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types';
 import { AI_AGENTS } from '@/config/ai-agents';
 import { tokenManagementService, type UsageAlert } from '@/services/TokenManagementService';
 
@@ -106,19 +106,19 @@ interface EnhancedError {
 }
 
 interface AIContextType {
-  analyzeRisk: (risk: Risk) => Promise<unknown>;
-  recommendControls: (risk: Risk) => Promise<unknown>;
+  analyzeRisk: (_risk: Risk) => Promise<unknown>;
+  recommendControls: (_risk: Risk) => Promise<unknown>;
   generateContent: (_request: ContentGenerationRequest) => Promise<unknown>;
   explainContent: (_request: ExplanationRequest) => Promise<unknown>;
   isLoading: boolean;
   performanceMetrics: PerformanceMetrics;
   rateLimitStatus: RateLimitStatus;
   conversations: Conversation[];
-  sendMessage: (content: string, attachments?: MessageAttachment[]) => Promise<void>;
+  sendMessage: (_content: string, attachments?: MessageAttachment[]) => Promise<void>;
   selectedAgent: AgentType;
-  switchAgent: (agentType: AgentType) => void;
+  switchAgent: (_agentType: AgentType) => void;
   currentConversation: Conversation | null;
-  startConversation: (agentType: AgentType, context?: Record<string, unknown>) => void;
+  startConversation: (_agentType: AgentType, context?: Record<string, unknown>) => void;
   error: EnhancedError | null;
   toggleARIA: () => void;
   aiService: AIService | null;
@@ -130,7 +130,7 @@ interface AIContextType {
   realTimeUsageStats: RealTimeUsageStats;
   usageAlerts: UsageAlert[];
   acknowledgeAlert: (alertId: string) => void;
-  generateUsageReport: (period: 'daily' | 'weekly' | 'monthly', format?: 'json' | 'csv') => string;
+  generateUsageReport: (_period: 'daily' | 'weekly' | 'monthly', format?: 'json' | 'csv') => string;
   exportUsageData: (format: 'json' | 'csv') => void;
   upgradeTier: (tierName: string) => boolean;
   canMakeRequest: () => { allowed: boolean; reason?: string };
@@ -225,7 +225,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   const userId = 'current-user'; // Would come from auth context
 
   // Enhanced error handling utility
-  const enhanceError = useCallback((_error: unknown, context: string): EnhancedError => {
+  const enhanceError = useCallback((__error: unknown, context: string): EnhancedError => {
     if (error instanceof AIServiceError) {
       return {
         type: 'service_error',
@@ -442,7 +442,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return () => clearInterval(interval);
   }, [aiService]);
 
-  const handleError = useCallback((_error: unknown, requestFn?: () => Promise<unknown>) => {
+  const handleError = useCallback((__error: unknown, requestFn?: () => Promise<unknown>) => {
     // console.error('AI Service Error:', error);
 
     if (error instanceof RateLimitError) {
@@ -481,7 +481,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   }, []);
 
   const generateUsageReport = useCallback(
-    (period: 'daily' | 'weekly' | 'monthly', format: 'json' | 'csv' = 'json'): string => {
+    (_period: 'daily' | 'weekly' | 'monthly', format: 'json' | 'csv' = 'json'): string => {
       const report = tokenManagementService.generateUsageReport(userId, period);
       if (format === 'json') {
         return JSON.stringify(report, null, 2);
@@ -537,11 +537,11 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   );
 
   const canMakeRequest = useCallback((): { allowed: boolean; reason?: string } => {
-    const result = tokenManagementService.canMakeRequest(userId);
+    const _result = tokenManagementService.canMakeRequest(userId);
     return { allowed: result.allowed, reason: result.reason };
   }, [userId]);
 
-  const analyzeRisk = async (risk: Risk) => {
+  const analyzeRisk = async (_risk: Risk) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -587,7 +587,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const recommendControls = async (risk: Risk) => {
+  const recommendControls = async (_risk: Risk) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -629,7 +629,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await aiService.generateContent(request);
+        const _result = await aiService.generateContent(request);
         return {
           id: result.id,
           content: result.content,
@@ -676,7 +676,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const sendMessage = async (content: string, attachments?: MessageAttachment[]) => {
+  const sendMessage = async (_content: string, attachments?: MessageAttachment[]) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -740,7 +740,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const switchAgent = (agentType: string) => {
+  const switchAgent = (_agentType: string) => {
     setSelectedAgent(agentType as AgentType);
     setError(null);
 
@@ -755,7 +755,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     }
   };
 
-  const startConversation = (agentType: string, context?: Record<string, unknown>) => {
+  const startConversation = (_agentType: string, context?: Record<string, unknown>) => {
     const newConversation = {
       id: `conv-${Date.now()}`,
       title: `New ${agentType.replace('_', ' ')} conversation`,
@@ -779,7 +779,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     setError(null);
   };
 
-  const getWelcomeMessage = (agentType: AgentType): string => {
+  const getWelcomeMessage = (_agentType: AgentType): string => {
     const agent = AI_AGENTS[agentType];
     return agent?.welcomeMessage || AI_AGENTS.general_assistant.welcomeMessage;
   };

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
-import { ComplianceAIService } from '@/services/ComplianceAIService';
+// import { ComplianceAIService } from '@/services/ComplianceAIService';
 import { z } from 'zod';
 
 const gapAnalysisSchema = z.object({

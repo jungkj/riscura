@@ -6,7 +6,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isDemoMode = process.env.DEMO_MODE === 'true' && !isProduction;
 
 // Helper to check if a value looks like a development/test secret
-function isInsecureSecret(value: string): boolean {
+const isInsecureSecret = (_value: string): boolean {
   const insecurePatterns = [
     'dev-',
     'test-',
@@ -262,7 +262,7 @@ const envSchema = z.object({
 });
 
 // Parse and validate environment variables with enhanced error handling
-function validateEnv() {
+const validateEnv = () {
   // Skip validation if explicitly requested (useful for builds)
   if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
     // console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag');
@@ -317,7 +317,7 @@ function validateEnv() {
 }
 
 // Create minimal environment for build processes and development
-function createMinimalEnv() {
+const createMinimalEnv = () {
   return {
     NODE_ENV: process.env.NODE_ENV || 'development',
     APP_URL: process.env.APP_URL || 'http://localhost:3000',
@@ -444,7 +444,7 @@ function createMinimalEnv() {
 }
 
 // Additional production environment validations
-function validateProductionEnvironment(env: any) {
+const validateProductionEnvironment = (env: any) {
   const errors: string[] = [];
   const warnings: string[] = [];
 

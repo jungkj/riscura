@@ -107,19 +107,19 @@ class ComprehensiveTestRunner {
     let testResult: TestResult;
 
     try {
-      const output = execSync(suite.command, {
+      const _output = execSync(suite.command, {
         encoding: 'utf8',
         timeout: 120000, // 2 minutes timeout
       });
 
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
       testResult = this.parseTestOutput(suite.name, output, duration);
 
       // console.log(`✅ ${suite.name} completed successfully`);
       // console.log(`   Tests: ${testResult.passed} passed, ${testResult.failed} failed`);
       // console.log(`   Duration: ${duration}ms`);
-    } catch (_error: any) {
-      const duration = Date.now() - startTime;
+    } catch (__error: any) {
+      const _duration = Date.now() - startTime;
       // console.log(`❌ ${suite.name} failed`);
 
       if (error.stdout) {
@@ -155,7 +155,7 @@ class ComprehensiveTestRunner {
     const testMatch = output.match(testPattern);
     const coverageMatch = output.match(coveragePattern);
 
-    let passed = 0;
+    let _passed = 0;
     let failed = 0;
 
     if (testMatch) {
@@ -208,7 +208,7 @@ class ComprehensiveTestRunner {
       }
 
       writeFileSync(join(coverageDir, 'coverage-output.txt'), coverageOutput);
-    } catch (_error: any) {
+    } catch (__error: any) {
       // console.log('⚠️  Coverage report generation had issues');
       // console.log(`   Error: ${error.message.split('\n')[0]}`);
     }
@@ -325,11 +325,11 @@ class ComprehensiveTestRunner {
       lowCoverageSuites.forEach((suite) => {
         // console.log(`   • ${suite.suite}:`);
         if (suite.coverage!.lines < 80)
-          // console.log(`     - Lines: ${suite.coverage!.lines.toFixed(1)}% (target: 80%)`);
+          // console.log(`     - Lines: ${suite.coverage!.lines.toFixed(1)}% (_target: 80%)`);
         if (suite.coverage!.functions < 80)
-          // console.log(`     - Functions: ${suite.coverage!.functions.toFixed(1)}% (target: 80%)`);
+          // console.log(`     - Functions: ${suite.coverage!.functions.toFixed(1)}% (_target: 80%)`);
         if (suite.coverage!.branches < 70)
-          // console.log(`     - Branches: ${suite.coverage!.branches.toFixed(1)}% (target: 70%)`);
+          // console.log(`     - Branches: ${suite.coverage!.branches.toFixed(1)}% (_target: 70%)`);
       });
       // console.log('\n   Action: Add more test cases to improve coverage');
     }

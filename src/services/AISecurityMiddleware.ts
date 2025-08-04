@@ -69,7 +69,7 @@ export class AISecurityMiddleware {
     try {
       // 3. Execute the original AI function with sanitized content
       const modifiedArgs = this.sanitizeArguments(args, securityResult.sanitizedContent);
-      const result = await originalFunction(...modifiedArgs);
+      const _result = await originalFunction(...modifiedArgs);
 
       // 4. Process AI response through security pipeline
       const responseResult = await aiSecurityService.processSecureAIResponse(
@@ -338,7 +338,7 @@ export class AISecurityMiddleware {
   /**
    * Check for sensitive keywords
    */
-  private containsSensitiveKeywords(content: string): boolean {
+  private containsSensitiveKeywords(_content: string): boolean {
     const sensitiveKeywords = [
       'password',
       'secret',
@@ -428,7 +428,7 @@ export class AISecurityMiddleware {
   /**
    * Check if content contains personal data
    */
-  private containsPersonalData(content: string): boolean {
+  private containsPersonalData(_content: string): boolean {
     const personalDataPatterns = [
       /\b[A-Z][a-z]+ [A-Z][a-z]+\b/, // Names
       /\b\d{3}-\d{2}-\d{4}\b/, // SSN
@@ -441,7 +441,7 @@ export class AISecurityMiddleware {
   /**
    * Check if content contains classified information
    */
-  private containsClassifiedInfo(content: string): boolean {
+  private containsClassifiedInfo(_content: string): boolean {
     const classifiedKeywords = [
       'confidential',
       'secret',
@@ -534,7 +534,7 @@ export class AISecurityMiddleware {
     request: { content: string; action: AIAction },
     error: unknown
   ): Promise<void> {
-    const incident = {
+    const _incident = {
       id: generateId('incident'),
       timestamp: new Date(),
       type: 'ai_execution_failure' as const,

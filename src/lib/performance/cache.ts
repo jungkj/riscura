@@ -158,7 +158,7 @@ export class CacheService {
 
       if (this.isRedisAvailable && this.redis) {
         const serialized = JSON.stringify(value);
-        const result = await this.redis.setex(this.prefixKey(key), expiration, serialized);
+        const _result = await this.redis.setex(this.prefixKey(key), expiration, serialized);
         return result === 'OK';
       } else {
         // Use in-memory cache fallback
@@ -173,7 +173,7 @@ export class CacheService {
   async del(key: string): Promise<boolean> {
     try {
       if (this.isRedisAvailable && this.redis) {
-        const result = await this.redis.del(this.prefixKey(key));
+        const _result = await this.redis.del(this.prefixKey(key));
         return result > 0;
       } else {
         // Use in-memory cache fallback
@@ -188,7 +188,7 @@ export class CacheService {
   async exists(key: string): Promise<boolean> {
     try {
       if (this.isRedisAvailable && this.redis) {
-        const result = await this.redis.exists(this.prefixKey(key));
+        const _result = await this.redis.exists(this.prefixKey(key));
         return result > 0;
       } else {
         // Use in-memory cache fallback
@@ -233,7 +233,7 @@ export class CacheService {
 
   // Cache with fallback
   async getOrSet<T>(key: string, fallback: () => Promise<T>, ttl?: number): Promise<T> {
-    const cached = await this.get<T>(key);
+    const _cached = await this.get<T>(key);
 
     if (cached !== null) {
       return cached;
@@ -254,12 +254,12 @@ export class CacheService {
     return this.get<T>(`user:${userId}`);
   }
 
-  async cacheQuery(query: string, params: any[], result: any, ttl = 300): Promise<boolean> {
+  async cacheQuery(_query: string, params: any[], result: any, ttl = 300): Promise<boolean> {
     const key = `query:${this.hashQuery(query, params)}`;
     return this.set(key, result, ttl);
   }
 
-  async getCachedQuery<T>(query: string, params: any[]): Promise<T | null> {
+  async getCachedQuery<T>(_query: string, params: any[]): Promise<T | null> {
     const key = `query:${this.hashQuery(query, params)}`;
     return this.get<T>(key);
   }
@@ -294,7 +294,7 @@ export class CacheService {
 
   async extendSession(sessionId: string, ttl = 86400): Promise<boolean> {
     try {
-      const result = await this.redis?.expire(this.prefixKey(`session:${sessionId}`), ttl);
+      const _result = await this.redis?.expire(this.prefixKey(`session:${sessionId}`), ttl);
       return result === 1;
     } catch (error) {
       // console.error('Session extend error:', error);
@@ -339,7 +339,7 @@ export class CacheService {
   }
 
   // Cache invalidation patterns
-  async invalidatePattern(pattern: string): Promise<number> {
+  async invalidatePattern(_pattern: string): Promise<number> {
     try {
       const keys = await this.redis?.keys(this.prefixKey(pattern));
       if (keys.length === 0) return 0;
@@ -383,7 +383,7 @@ export class CacheService {
   async getCacheStats(): Promise<CacheStats> {
     try {
       const info = await this.redis?.info('memory');
-      const stats = await this.redis?.info('stats');
+      const _stats = await this.redis?.info('stats');
       const keyspace = await this.redis?.info('keyspace');
 
       return {
@@ -447,7 +447,7 @@ export class CacheService {
     return `${this.keyPrefix}${key}`;
   }
 
-  private hashQuery(query: string, params: any[]): string {
+  private hashQuery(_query: string, params: any[]): string {
     const crypto = require('crypto');
     const content = JSON.stringify({ query, params });
     return crypto.createHash('md5').update(content).digest('hex');
@@ -508,7 +508,7 @@ export interface CacheHealthCheck {
 
 // Decorator for automatic caching
 export function Cacheable(ttl = 300, keyGenerator?: (args: any[]) => string) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
@@ -516,12 +516,12 @@ export function Cacheable(ttl = 300, keyGenerator?: (args: any[]) => string) {
         ? keyGenerator(args)
         : `${propertyName}:${JSON.stringify(args)}`;
 
-      const cached = await cacheService.get(cacheKey);
+      const _cached = await cacheService.get(cacheKey);
       if (cached !== null) {
         return cached;
       }
 
-      const result = await method.apply(this, args);
+      const _result = await method.apply(this, args);
       await cacheService.set(cacheKey, result, ttl);
 
       return result;

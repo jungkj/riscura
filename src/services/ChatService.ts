@@ -1,5 +1,5 @@
 import { ChannelType, ChannelMemberRole, ChatMessageType } from '@prisma/client';
-import { redis } from '@/lib/cache/memory-cache';
+// import { redis } from '@/lib/cache/memory-cache';
 import { prisma } from '@/lib/prisma';
 
 export interface CreateChannelInput {
@@ -99,7 +99,7 @@ export class ChatService {
 
   async getChannel(channelId: string, userId: string) {
     // Check cache first
-    const cached = await redis.get(`channel:${channelId}`);
+    const _cached = await redis.get(`channel:${channelId}`);
     if (cached) {
       return JSON.parse(cached);
     }
@@ -660,7 +660,7 @@ export class ChatService {
 
   async getUnreadCount(channelId: string, userId: string): Promise<number> {
     // Check cache first
-    const cached = await redis.get(`unread:${channelId}:${userId}`);
+    const _cached = await redis.get(`unread:${channelId}:${userId}`);
     if (cached !== null) {
       return parseInt(cached);
     }
@@ -816,7 +816,7 @@ export class ChatService {
 
     // Use SCAN instead of KEYS for better performance
     do {
-      const result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      const _result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
       cursor = result[0];
       const keys = result[1];
 
@@ -833,4 +833,5 @@ export class ChatService {
   }
 }
 
-export default new ChatService();
+const ChatServiceInstance = new ChatService();
+export default ChatServiceInstance;

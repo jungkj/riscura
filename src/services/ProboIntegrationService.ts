@@ -1,6 +1,6 @@
 import { ProboService } from './ProboService';
 import { VendorAssessmentService } from './VendorAssessmentService';
-import {
+// import {
   ProboControl,
   ProboControlCategory,
   ComplianceFramework,
@@ -293,7 +293,7 @@ export class ProboIntegrationService {
   /**
    * Get framework-specific control recommendations
    */
-  async getFrameworkRecommendations(framework: string): Promise<{
+  async getFrameworkRecommendations(_framework: string): Promise<{
     totalAvailable: number;
     implemented: number;
     recommended: Array<{
@@ -1234,7 +1234,7 @@ export class ProboIntegrationService {
   }
 
   // Missing helper methods implementation
-  private findControlCategoryForMitigation(mitigation: any): ProboControlCategory {
+  private findControlCategoryForMitigation(_mitigation: any): ProboControlCategory {
     const _categories = this.getProboControlCategories();
     // Map mitigation category to ProboControlCategory based on mitigation.category
     const categoryMap: { [key: string]: string } = {
@@ -1272,20 +1272,20 @@ export class ProboIntegrationService {
     }
   }
 
-  private estimateImplementationHours(mitigation: any): number {
+  private estimateImplementationHours(_mitigation: any): number {
     // Simple estimation based on category and importance
     const baseHours =
       mitigation.importance === 'MANDATORY' ? 24 : mitigation.importance === 'PREFERRED' ? 16 : 8;
     return baseHours;
   }
 
-  private assessComplexity(mitigation: any): 'Simple' | 'Moderate' | 'Complex' {
+  private assessComplexity(_mitigation: any): 'Simple' | 'Moderate' | 'Complex' {
     if (mitigation.importance === 'MANDATORY') return 'Complex';
     if (mitigation.importance === 'PREFERRED') return 'Moderate';
     return 'Simple';
   }
 
-  private generateTags(mitigation: any): string[] {
+  private generateTags(_mitigation: any): string[] {
     const tags = [mitigation.category];
     if (mitigation.standards) {
       tags.push(...mitigation.standards.split(';').filter(Boolean));
@@ -1293,8 +1293,7 @@ export class ProboIntegrationService {
     return tags;
   }
 
-  private generateImplementationChecklist(
-    mitigation: any
+  private generateImplementationChecklist(_mitigation: any
   ): Array<{ id: string; task: string; completed: boolean }> {
     return [
       { id: '1', task: 'Review implementation requirements', completed: false },
@@ -1305,8 +1304,7 @@ export class ProboIntegrationService {
     ];
   }
 
-  private determineTestingFrequency(
-    mitigation: any
+  private determineTestingFrequency(_mitigation: any
   ): 'Daily' | 'Weekly' | 'Monthly' | 'Quarterly' | 'Annually' {
     if (mitigation.importance === 'MANDATORY') return 'Monthly';
     if (mitigation.importance === 'PREFERRED') return 'Quarterly';

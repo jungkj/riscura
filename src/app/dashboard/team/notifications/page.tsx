@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -28,7 +28,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import {
+// import {
   Bell,
   BellRing,
   Settings,
@@ -263,7 +263,7 @@ const defaultPreferences: NotificationPreferences = {
   },
 };
 
-const getNotificationIcon = (type: string) => {
+const getNotificationIcon = (_type: string) => {
   const icons = {
     task_assigned: Target,
     task_completed: CheckCircle,

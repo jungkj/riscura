@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useDevice } from '@/lib/responsive/hooks';
-import {
+// import {
   Search,
   MoreHorizontal,
   Calendar,
@@ -83,7 +83,7 @@ export interface EnhancedListProps {
   filterable?: boolean;
   sortable?: boolean;
   selectable?: boolean;
-  onItemAction?: (action: string, item: EnhancedListItem) => void;
+  onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
   className?: string;
   emptyMessage?: string;
@@ -187,7 +187,7 @@ const UserAvatar: React.FC<{
             {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
         </DaisyAvatar>
       </DaisyAvatar>
-      {showDetails && (
+      {Boolean(showDetails) && (
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-medium text-[#191919] font-inter truncate">
             {user.name}
@@ -278,7 +278,7 @@ const ProgressIndicator: React.FC<{
           {progress}%
         </span>
       </div>
-      {metadata && (metadata.completedTasks !== undefined && metadata.totalTasks !== undefined) && (
+      {Boolean(metadata) && (metadata.completedTasks !== undefined && metadata.totalTasks !== undefined) && (
         <div className="text-xs text-gray-500 font-inter">
           {metadata.completedTasks} of {metadata.totalTasks} tasks
         </div>
@@ -302,7 +302,7 @@ const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, 
         'text-gray-400'
       )} />
 <div className="flex flex-col">
-        {label && device.type !== 'mobile' && (
+        {Boolean(label) && device.type !== 'mobile' && (
           <span className="text-xs text-gray-500 font-inter">{label}</span>
         )}
         <span className={cn("text-xs font-inter",
@@ -347,7 +347,7 @@ const TagsDisplay: React.FC<{ tags: string[] }> = ({ tags }) => {
 // Actions Menu Component (responsive)
 const ActionsMenu: React.FC<{ 
   item: EnhancedListItem; 
-  onAction: (action: string, item: EnhancedListItem) => void;
+  onAction: (_action: string, item: EnhancedListItem) => void;
 }> = ({ item, onAction }) => {
   const device = useDevice();
   
@@ -397,7 +397,7 @@ const ActionsMenu: React.FC<{
 // Compact List Item Component (mobile-first)
 const CompactListItem: React.FC<{
   item: EnhancedListItem;
-  onItemAction?: (action: string, item: EnhancedListItem) => void;
+  onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
   const device = useDevice();
@@ -433,7 +433,7 @@ const CompactListItem: React.FC<{
         {item.dueDate && (
           <DateDisplay date={item.dueDate} />
         )}
-        {onItemAction && (
+        {Boolean(onItemAction) && (
           <ActionsMenu item={item} onAction={onItemAction} />
         )}
         <ChevronRight className="h-4 w-4 text-gray-400" />
@@ -445,7 +445,7 @@ const CompactListItem: React.FC<{
 // Default List Item Component
 const DefaultListItem: React.FC<{
   item: EnhancedListItem;
-  onItemAction?: (action: string, item: EnhancedListItem) => void;
+  onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
   const device = useDevice();
@@ -472,7 +472,7 @@ const DefaultListItem: React.FC<{
             )}
           </div>
         </div>
-        {onItemAction && (
+        {Boolean(onItemAction) && (
           <ActionsMenu item={item} onAction={onItemAction} />
         )}
       </div>
@@ -530,7 +530,7 @@ const DefaultListItem: React.FC<{
 // Detailed List Item Component
 const DetailedListItem: React.FC<{
   item: EnhancedListItem;
-  onItemAction?: (action: string, item: EnhancedListItem) => void;
+  onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
   const device = useDevice();
@@ -569,7 +569,7 @@ const DetailedListItem: React.FC<{
             </div>
           </div>
         </div>
-        {onItemAction && (
+        {Boolean(onItemAction) && (
           <ActionsMenu item={item} onAction={onItemAction} />
         )}
       </div>
@@ -683,7 +683,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
 
   // Filter and sort data
   const filteredAndSortedItems = useMemo(() => {
-    let result = [...items];
+    let _result = [...items];
 
     // Apply search
     if (searchQuery) {
@@ -810,14 +810,14 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
   return (
     <div className={cn("space-y-4 bg-white", device.type === 'mobile' ? 'space-y-3' : 'space-y-6', className)}>
       {/* Header */}
-      {showHeader && (title || subtitle) && (
+      {Boolean(showHeader) && (title || subtitle) && (
         <div className={cn("space-y-1", device.type === 'mobile' ? 'px-4' : '')}>
-          {title && (
+          {Boolean(title) && (
             <h2 className={cn("font-bold text-[#191919] font-inter", device.type === 'mobile' ? 'text-xl' : 'text-2xl')}>
               {title}
             </h2>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-sm text-gray-600 font-inter">{subtitle}</p>
           )}
         </div>
@@ -830,7 +830,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
       )}>
         <div className={cn("flex gap-3", device.type === 'mobile' ? 'flex-col' : 'items-center')}>
           {/* Search */}
-          {searchable && (
+          {Boolean(searchable) && (
             <div className="relative flex-1 min-w-0">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <DaisyInput
@@ -844,7 +844,7 @@ setSearchQuery(e.target.value)}
 
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2">
-            {filterable && (
+            {Boolean(filterable) && (
               <>
                 <DaisySelect value={statusFilter} onValueChange={setStatusFilter} >
                     <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
@@ -877,7 +877,7 @@ setSearchQuery(e.target.value)}
             )}
 
             {/* Active Filter Indicators */}
-            {hasActiveFilters && (
+            {Boolean(hasActiveFilters) && (
               <div className="flex items-center gap-2">
                 {statusFilter !== 'all' && (
                   <DaisyBadge variant="secondary" className="text-xs" >
@@ -911,7 +911,7 @@ setSearchQuery(e.target.value)}
         </div>
 
         {/* Sort Controls */}
-        {sortable && device.type !== 'mobile' && (
+        {Boolean(sortable) && device.type !== 'mobile' && (
           <div className="flex items-center gap-2">
             <DaisySelect value={sortBy} onValueChange={setSortBy} >
                 <DaisySelectTrigger className="w-32 gap-2">

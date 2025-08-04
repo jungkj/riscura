@@ -8,7 +8,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
@@ -36,7 +36,7 @@ import {
 interface SecuritySettingsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSettingsUpdated?: (settings: any) => void;
+  onSettingsUpdated?: (_settings: any) => void;
 }
 
 interface SecuritySettings {
@@ -190,7 +190,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
     setHasChanges(true);
   };
 
-  const handleFrameworkToggle = (framework: string) => {
+  const handleFrameworkToggle = (_framework: string) => {
     const currentFrameworks = settings.compliance.frameworks;
     const updatedFrameworks = currentFrameworks.includes(framework)
       ? currentFrameworks.filter(f => f !== framework)
@@ -727,7 +727,7 @@ updateSettings('integrations.enableThirdPartyScanning', checked)} />
           </DaisyTabsContent>
         </DaisyTabs>
 
-        {hasChanges && (
+        {Boolean(hasChanges) && (
           <DaisyAlert >
   <Info className="h-4 w-4" />
 </DaisyAlert>

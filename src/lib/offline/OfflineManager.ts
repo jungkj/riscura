@@ -168,7 +168,7 @@ export class OfflineManager {
   }
 
   // Get operations by type or resource
-  public getOperationsByType(type: QueuedOperation['type']): QueuedOperation[] {
+  public getOperationsByType(_type: QueuedOperation['type']): QueuedOperation[] {
     return this.getQueuedOperations().filter((op) => op.type === type);
   }
 
@@ -292,7 +292,7 @@ export class OfflineManager {
         return false;
       }
 
-      const result = await response.json();
+      const _result = await response.json();
 
       // Handle any response metadata
       if (operation.metadata?.updateLocalData && result.data) {
@@ -309,7 +309,7 @@ export class OfflineManager {
     }
   }
 
-  private getHttpMethod(type: QueuedOperation['type']): string {
+  private getHttpMethod(_type: QueuedOperation['type']): string {
     switch (type) {
       case 'create':
         return 'POST';

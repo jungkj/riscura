@@ -47,7 +47,7 @@ export interface DataTableColumn<T = any> {
   filterable?: boolean;
   width?: string;
   align?: 'left' | 'center' | 'right';
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (_value: any, row: T) => React.ReactNode;
   filterOptions?: Array<{ label: string; value: string }>;
 }
 
@@ -63,8 +63,8 @@ export interface DataTableProps<T = any> {
   pagination?: boolean;
   pageSize?: number;
   loading?: boolean;
-  onRowAction?: (action: string, row: T) => void;
-  onBulkAction?: (action: string, rows: T[]) => void;
+  onRowAction?: (_action: string, row: T) => void;
+  onBulkAction?: (_action: string, rows: T[]) => void;
   className?: string;
 }
 
@@ -189,7 +189,7 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
   );
 };
 
-const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => void }> = ({ row, onAction }) => {
+const ActionsCell: React.FC<{ row: any, onAction: (_action: string, row: any) => void }> = ({ row, onAction }) => {
   return (
     <DaisyDropdownMenu >
         <DaisyDropdownMenuTrigger asChild >
@@ -231,7 +231,7 @@ const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => 
 const AdvancedFilters: React.FC<{
   columns: DataTableColumn[];
   filters: FilterState;
-  onFiltersChange: (filters: FilterState) => void;
+  onFiltersChange: (_filters: FilterState) => void;
   onClearFilters: () => void;
 }> = ({ columns, filters, onFiltersChange, onClearFilters }) => {
   const filterableColumns = columns.filter(col => col.filterable);
@@ -244,7 +244,7 @@ const AdvancedFilters: React.FC<{
   <Filter className="h-3 w-3 mr-enterprise-1" />
 </DaisyPopover>
           Filters
-          {hasActiveFilters && (
+          {Boolean(hasActiveFilters) && (
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-interactive-primary rounded-full" />
           )}
         </DaisyButton>
@@ -253,7 +253,7 @@ const AdvancedFilters: React.FC<{
           <div className="space-y-enterprise-4">
           <div className="flex items-center justify-between">
             <h4 className="text-body-sm font-semibold text-text-primary">Advanced Filters</h4>
-            {hasActiveFilters && (
+            {Boolean(hasActiveFilters) && (
               <DaisyButton variant="ghost" size="sm" onClick={onClearFilters} >
   Clear All
 </DaisyPopoverContent>
@@ -340,7 +340,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
 
     // Apply search
     if (searchQuery) {
@@ -444,10 +444,10 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       {/* Header */}
       {(title || subtitle) && (
         <div className="space-y-enterprise-1">
-          {title && (
+          {Boolean(title) && (
             <h2 className="text-heading-base font-semibold text-text-primary">{title}</h2>
           )}
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-body-sm text-text-secondary">{subtitle}</p>
           )}
         </div>
@@ -457,7 +457,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       <div className="flex items-center justify-between space-x-enterprise-4">
         <div className="flex items-center space-x-enterprise-2">
           {/* Search */}
-          {searchable && (
+          {Boolean(searchable) && (
             <div className="relative">
               <Search className="absolute left-enterprise-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-text-tertiary" />
               <DaisyInput
@@ -470,7 +470,7 @@ setSearchQuery(e.target.value)}
           )}
 
           {/* Advanced Filters */}
-          {filterable && (
+          {Boolean(filterable) && (
             <AdvancedFilters
               columns={columns}
               filters={filters}
@@ -543,7 +543,7 @@ setSearchQuery(e.target.value)}
             Refresh
           </DaisyButton>
           
-          {exportable && (
+          {Boolean(exportable) && (
             <DaisyButton variant="outline" size="sm" >
   <Download className="h-3 w-3 mr-enterprise-1" />
 </DaisyButton>
@@ -566,7 +566,7 @@ setSearchQuery(e.target.value)}
             {/* Header */}
             <thead className="bg-surface-secondary/30 border-b border-border">
               <tr>
-                {selectable && (
+                {Boolean(selectable) && (
                   <th className="w-12 px-enterprise-3 py-enterprise-3">
                     <DaisyCheckbox
                       checked={selectedRows.length === paginatedData.length && paginatedData.length />
@@ -621,7 +621,7 @@ setSearchQuery(e.target.value)}
                     key={row.id || index}
                     className="border-b border-border hover:bg-surface-secondary/30 transition-colors"
                   >
-                    {selectable && (
+                    {Boolean(selectable) && (
                       <td className="px-enterprise-3 py-enterprise-3">
                         <DaisyCheckbox
                           checked={selectedRows.includes(row.id)}
@@ -649,7 +649,7 @@ handleSelectRow(row.id, !!checked)} />
         </div>
 
         {/* Pagination */}
-        {pagination && totalPages > 1 && (
+        {Boolean(pagination) && totalPages > 1 && (
           <div className="flex items-center justify-between px-enterprise-4 py-enterprise-3 border-t border-border bg-surface-secondary/30">
             <div className="text-caption text-text-secondary">
               Showing {startIndex + 1} to {Math.min(startIndex + pageSize, filteredData.length)} of {filteredData.length} results

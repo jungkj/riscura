@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -152,7 +152,7 @@ export default function DocumentAnalysisPage() {
   };
 
   // Add risk to register
-  const addRiskToRegister = (risk: RiskInsight) => {
+  const addRiskToRegister = (_risk: RiskInsight) => {
     toast({
       title: 'Risk Added',
       description: `"${risk.title}" has been added to your risk register.`,
@@ -206,7 +206,7 @@ export default function DocumentAnalysisPage() {
                   </DaisyButton>
                 </div>
 
-                {file && (
+                {Boolean(file) && (
                   <div className="border rounded-lg p-3">
                     <div className="flex items-center">
                       <FileText className="h-5 w-5 mr-2" />
@@ -239,7 +239,7 @@ export default function DocumentAnalysisPage() {
                             value={uploading ? undefined : processingProgress}
                             className="h-2"
                           />
-                          {processing && (
+                          {Boolean(processing) && (
                             <p className="text-xs text-muted-foreground">
                               Identifying risks and controls...
                             </p>

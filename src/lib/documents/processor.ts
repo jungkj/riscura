@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { storage } from '@/lib/storage';
 
 // Helper function to get OpenAI client
-function getOpenAIClient() {
+const getOpenAIClient = () {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
@@ -312,7 +312,7 @@ Return a JSON response with:
         max_tokens: 500,
       });
 
-      const result = JSON.parse(response.choices[0]?.message?.content || '{}');
+      const _result = JSON.parse(response.choices[0]?.message?.content || '{}');
 
       return {
         category: result.category || currentCategory || 'other',
@@ -393,7 +393,7 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
         max_tokens: 2000,
       });
 
-      const result = JSON.parse(response.choices[0]?.message?.content || '{}');
+      const _result = JSON.parse(response.choices[0]?.message?.content || '{}');
 
       return {
         text,

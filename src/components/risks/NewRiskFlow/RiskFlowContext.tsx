@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { RiskCategory, RiskStatus } from '@/types/rcsa.types';
+// import { RiskCategory, RiskStatus } from '@/types/rcsa.types';
 
 // Define TreatmentStrategy enum since it's not exported from rcsa.types
 export enum TreatmentStrategy {

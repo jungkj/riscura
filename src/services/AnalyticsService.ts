@@ -5,7 +5,7 @@
   eachDayOfInterval,
   startOfWeek,
   startOfMonth,
-  endOfMonth,
+  _endOfMonth,
 } from 'date-fns';
 import { prisma } from '@/lib/prisma';
 
@@ -294,7 +294,7 @@ export class AnalyticsService {
     );
   }
 
-  private calculateRiskDistribution(risks: any[]) {
+  private calculateRiskDistribution(_risks: any[]) {
     const distribution: Array<{ category: string; severity: string; count: number }> = [];
     const grouped = new Map<string, number>();
 
@@ -509,4 +509,5 @@ export class AnalyticsService {
   }
 }
 
-export default new AnalyticsService();
+const AnalyticsServiceInstance = new AnalyticsService();
+export default AnalyticsServiceInstance;

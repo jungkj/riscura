@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   BarChart3,
   LineChart,
   PieChart,
@@ -34,7 +34,7 @@ import {
   Share,
   Settings,
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -117,7 +117,7 @@ const KPICard: React.FC<{
   onClick?: () => void;
   realTime?: boolean;
 }> = ({ metric, onClick, realTime }) => {
-  const formatValue = (value: string | number, format?: string) => {
+  const formatValue = (_value: string | number, format?: string) => {
     if (typeof value === 'string') return value;
     
     switch (format) {
@@ -172,7 +172,7 @@ const KPICard: React.FC<{
             <p className="text-body-sm text-text-secondary font-medium">
               {metric.label}
             </p>
-            {realTime && (
+            {Boolean(realTime) && (
               <div className="flex items-center space-x-enterprise-1 mt-1">
                 <div className="w-2 h-2 bg-semantic-success rounded-full animate-pulse" />
                 <span className="text-caption text-text-tertiary">Live</span>
@@ -261,7 +261,7 @@ const ChartContainer: React.FC<{
         {/* Chart Actions */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-enterprise-2">
-            {realTime && (
+            {Boolean(realTime) && (
               <DaisyBadge variant="outline" className="text-caption" >
   <div className="w-2 h-2 bg-semantic-success rounded-full mr-enterprise-1 animate-pulse" />
 </DaisyBadge>
@@ -271,19 +271,19 @@ const ChartContainer: React.FC<{
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
-            {onDrillDown && (
+            {Boolean(onDrillDown) && (
               <DaisyButton variant="ghost" size="sm" onClick={onDrillDown} >
   <Target className="h-4 w-4" />
 </DaisyButton>
               </DaisyButton>
             )}
-            {onExpand && (
+            {Boolean(onExpand) && (
               <DaisyButton variant="ghost" size="sm" onClick={onExpand} >
   <Maximize2 className="h-4 w-4" />
 </DaisyButton>
               </DaisyButton>
             )}
-            {onExport && (
+            {Boolean(onExport) && (
               <DaisyButton variant="ghost" size="sm" onClick={onExport} >
   <Download className="h-4 w-4" />
 </DaisyButton>
@@ -470,7 +470,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-heading-xl font-bold text-text-primary">{title}</h1>
-          {subtitle && (
+          {Boolean(subtitle) && (
             <p className="text-body-base text-text-secondary mt-enterprise-1">{subtitle}</p>
           )}
         </div>
@@ -518,7 +518,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Real-time Status */}
-      {realTimeEnabled && (
+      {Boolean(realTimeEnabled) && (
         <div className="flex items-center justify-between bg-surface-secondary/50 rounded-lg px-enterprise-4 py-enterprise-3">
           <div className="flex items-center space-x-enterprise-2">
             <div className="w-2 h-2 bg-semantic-success rounded-full animate-pulse" />

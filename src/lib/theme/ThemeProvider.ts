@@ -334,7 +334,7 @@ export class ThemeService {
     return this.currentTheme.animations.duration[speed];
   }
 
-  public static getAnimationEasing(type: keyof ThemeAnimations['easing']): string {
+  public static getAnimationEasing(_type: keyof ThemeAnimations['easing']): string {
     return this.currentTheme.animations.easing[type];
   }
 
@@ -356,7 +356,7 @@ export class ThemeService {
   }
 
   private static hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const _result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
           r: parseInt(result[1], 16),

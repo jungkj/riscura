@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<
   {
     children: ReactNode;
     fallback?: ReactNode;
-    onError?: (_error: Error, errorInfo: ErrorInfo) => void;
+    onError?: (__error: Error, errorInfo: ErrorInfo) => void;
     resetOnPropsChange?: boolean;
     resetKeys?: Array<string | number | boolean>;
   },
@@ -58,11 +58,11 @@ export class ErrorBoundary extends Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(_error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(__error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(__error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
     this.props.onError?.(error, errorInfo);
 
@@ -241,7 +241,7 @@ export const LoadingOverlay: React.FC<{
 }> = ({ isLoading, children, loadingComponent, blur = true, className }) => (
   <div className={cn('relative', className)}>
     <div className={cn(isLoading && blur && 'blur-sm transition-all duration-300')}>{children}</div>
-    {isLoading && (
+    {Boolean(isLoading) && (
       <div className="absolute inset-0 flex items-center justify-center bg-surface-primary/80 backdrop-blur-sm">
         {loadingComponent || <LoadingSpinner size="lg" />}
       </div>
@@ -281,7 +281,7 @@ export const ProgressBar: React.FC<{
           style={{ width: `${percentage}%` }}
         />
       </div>
-      {showLabel && (
+      {Boolean(showLabel) && (
         <div className="mt-2 text-sm text-text-secondary text-right">{Math.round(percentage)}%</div>
       )}
     </div>
@@ -341,7 +341,7 @@ export const CircularProgress: React.FC<{
           className={cn('transition-all duration-500 ease-out', colorClasses[color])}
         />
       </svg>
-      {showLabel && (
+      {Boolean(showLabel) && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-2xl font-semibold text-text-primary">
             {Math.round(percentage)}%
@@ -558,7 +558,7 @@ export const useLoadingState = (initialState = false) => {
     setMessage(msg);
   }, []);
 
-  const updateProgress = useCallback((value: number, msg?: string) => {
+  const updateProgress = useCallback((_value: number, msg?: string) => {
     setProgress(Math.min(Math.max(value, 0), 100));
     if (msg) setMessage(msg);
   }, []);

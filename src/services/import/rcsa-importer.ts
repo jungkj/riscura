@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import { prisma } from '@/lib/prisma';
-import {
+// import {
   RiskStatus,
   RiskLikelihood,
   RiskImpact,
@@ -8,7 +8,7 @@ import {
   ControlStatus,
   ControlFrequency,
 } from '@prisma/client';
-import { parseRiskScore } from '@/lib/utils/risk-score';
+// import { parseRiskScore } from '@/lib/utils/risk-score';
 
 interface ImportOptions {
   organizationId: string;
@@ -141,7 +141,7 @@ export async function importRCSAData(
 /**
  * Find sheet by name (case-insensitive)
  */
-function findSheet(workbook: XLSX.WorkBook, names: string[]): string | undefined {
+const findSheet = (workbook: XLSX.WorkBook, names: string[]): string | undefined {
   for (const name of names) {
     const sheet = workbook.SheetNames.find((s) => s.toLowerCase() === name.toLowerCase());
     if (sheet) return sheet;
@@ -380,7 +380,7 @@ async function importAssessments(
 
 // Mapping functions
 
-function mapRiskCategory(category?: string): string {
+const mapRiskCategory = (category?: string): string {
   if (!category) return 'OPERATIONAL';
 
   const normalized = category.toUpperCase();
@@ -389,7 +389,7 @@ function mapRiskCategory(category?: string): string {
   return validCategories.includes(normalized) ? normalized : 'OPERATIONAL';
 }
 
-function mapLikelihood(value?: string | number): RiskLikelihood {
+const mapLikelihood = (value?: string | number): RiskLikelihood {
   if (!value) return RiskLikelihood.MEDIUM;
 
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
@@ -410,7 +410,7 @@ function mapLikelihood(value?: string | number): RiskLikelihood {
   }
 }
 
-function mapImpact(value?: string | number): RiskImpact {
+const mapImpact = (value?: string | number): RiskImpact {
   if (!value) return RiskImpact.MODERATE;
 
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
@@ -431,7 +431,7 @@ function mapImpact(value?: string | number): RiskImpact {
   }
 }
 
-function mapControlType(type?: string): ControlType {
+const mapControlType = (type?: string): ControlType {
   if (!type) return ControlType.DETECTIVE;
 
   const normalized = type.toUpperCase();
@@ -443,7 +443,7 @@ function mapControlType(type?: string): ControlType {
   return ControlType.DETECTIVE;
 }
 
-function mapControlFrequency(frequency?: string): ControlFrequency {
+const mapControlFrequency = (frequency?: string): ControlFrequency {
   if (!frequency) return ControlFrequency.MONTHLY;
 
   const normalized = frequency.toUpperCase();
@@ -460,14 +460,14 @@ function mapControlFrequency(frequency?: string): ControlFrequency {
   return ControlFrequency.MONTHLY;
 }
 
-function mapEffectiveness(value?: string | number): number {
+const mapEffectiveness = (value?: string | number): number {
   if (!value) return 3;
 
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
   return Math.max(1, Math.min(5, numValue));
 }
 
-function mapAssessmentStatus(status?: string): string {
+const mapAssessmentStatus = (status?: string): string {
   if (!status) return 'SATISFACTORY';
 
   const normalized = status.toUpperCase();

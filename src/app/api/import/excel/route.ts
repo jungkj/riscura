@@ -141,7 +141,7 @@ export const POST = withApiMiddleware({
 });
 
 // Helper function to parse risk scores from various formats
-function parseRiskScore(value: any): number {
+const parseRiskScore = (_value: any): number {
   if (typeof value === 'number') {
     return Math.min(Math.max(Math.round(value), 1), 5);
   }

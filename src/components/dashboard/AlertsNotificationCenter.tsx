@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Bell, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -13,7 +13,7 @@ export function AlertsNotificationCenter() {
     { id: 3, type: 'info', title: 'Compliance report ready', time: '2 hours ago' },
   ];
 
-  const getIcon = (type: string) => {
+  const getIcon = (_type: string) => {
     switch (type) {
       case 'critical': return <DaisyAlertTriangle className="w-4 h-4 text-red-600" >
   ;

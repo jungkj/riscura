@@ -1,8 +1,8 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
-import { AIService } from './AIService';
+// import { AIService } from './AIService';
 import { SmartNotificationService } from './SmartNotificationService';
-import { PredictiveRiskModelingService } from './PredictiveRiskModelingService';
+// import { PredictiveRiskModelingService } from './PredictiveRiskModelingService';
 
 // Core anomaly detection interfaces
 export interface AnomalyDetectionConfig {
@@ -190,8 +190,7 @@ export class AnomalyDetectionAIService {
   /**
    * Main anomaly detection method for risks
    */
-  async detectRiskAnomalies(
-    risks: Risk[],
+  async detectRiskAnomalies(_risks: Risk[],
     config?: Partial<AnomalyDetectionConfig>
   ): Promise<AnomalyAlert[]> {
     const effectiveConfig = { ...this.defaultConfig, ...config };
@@ -672,7 +671,7 @@ export class AnomalyDetectionAIService {
     };
   }
 
-  private async calculateIsolationScore(value: number, forest: any): Promise<number> {
+  private async calculateIsolationScore(_value: number, forest: any): Promise<number> {
     // Simplified isolation score calculation
     return Math.random() * 0.5 + 0.3; // Placeholder
   }
@@ -688,7 +687,7 @@ export class AnomalyDetectionAIService {
     ]);
   }
 
-  private async performClustering(features: number[][], algorithm: string): Promise<any> {
+  private async performClustering(_features: number[][], algorithm: string): Promise<any> {
     // Simplified clustering implementation
     // In production, integrate with proper ML clustering libraries
     const numClusters = Math.min(3, Math.floor(features.length / 10));
@@ -704,7 +703,7 @@ export class AnomalyDetectionAIService {
     };
   }
 
-  private async calculatePatternDeviation(features: number[], clusters: any): Promise<any> {
+  private async calculatePatternDeviation(_features: number[], clusters: any): Promise<any> {
     // Calculate deviation from normal patterns
     const minDistance = Math.min(
       ...clusters.centroids.map((centroid: number[]) =>
@@ -903,11 +902,11 @@ export class AnomalyDetectionAIService {
     return data;
   }
 
-  private async performSeasonalDecomposition(timeSeries: any[], period: number): Promise<any> {
+  private async performSeasonalDecomposition(_timeSeries: any[], period: number): Promise<any> {
     return { trend: [], seasonal: [], residual: [] };
   }
 
-  private async detectTrendChanges(trend: any[], sensitivity: number): Promise<any[]> {
+  private async detectTrendChanges(_trend: any[], sensitivity: number): Promise<any[]> {
     return [];
   }
 
@@ -919,7 +918,7 @@ export class AnomalyDetectionAIService {
     return [];
   }
 
-  private async detectChangePoints(timeSeries: any[], threshold: number): Promise<any[]> {
+  private async detectChangePoints(_timeSeries: any[], threshold: number): Promise<any[]> {
     return [];
   }
 

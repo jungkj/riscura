@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+// import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -29,7 +29,7 @@ export default function MetricCard({
 </DaisyCardBody>
         <div className="flex items-center justify-between space-y-0 pb-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          {icon && <div className="text-muted-foreground">{icon}</div>}
+          {Boolean(icon) && <div className="text-muted-foreground">{icon}</div>}
         </div>
         <div className="space-y-1">
           {isLoading ? (
@@ -37,11 +37,11 @@ export default function MetricCard({
             ) : (
             <div className="flex items-baseline">
               <span className="text-3xl font-bold tracking-tight">{value}</span>
-              {suffix && <span className="ml-1 text-xl">{suffix}</span>}
+              {Boolean(suffix) && <span className="ml-1 text-xl">{suffix}</span>}
             </div>
           )}
           
-          {trend && (
+          {Boolean(trend) && (
             isLoading ? (
               <DaisySkeleton className="h-5 w-[60px]" >
               ) : (

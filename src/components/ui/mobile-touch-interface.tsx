@@ -52,7 +52,7 @@ export interface PullToRefreshProps {
 
 export interface TouchSliderProps {
   value: number;
-  onChange: (value: number) => void;
+  onChange: (_value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -390,7 +390,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
       </div>
 
       {/* Value display */}
-      {showValue && <div className="mt-2 text-center text-sm text-gray-600">{value}</div>}
+      {Boolean(showValue) && <div className="mt-2 text-center text-sm text-gray-600">{value}</div>}
     </div>
   );
 };
@@ -417,7 +417,7 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
     }
   }, []);
 
-  const handleItemSelect = useCallback((action: () => void) => {
+  const handleItemSelect = useCallback((_action: () => void) => {
     action();
     setIsOpen(false);
   }, []);
@@ -446,7 +446,7 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
         {trigger}
       </TouchTarget>
 
-      {isOpen && (
+      {Boolean(isOpen) && (
         <motion.div
           ref={menuRef}
           className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-48"

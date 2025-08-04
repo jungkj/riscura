@@ -150,7 +150,7 @@ export function createAPIResponse<T>(_data: T,
   });
 }
 
-export function createErrorResponse(_error: APIError | Error,
+export function createErrorResponse(__error: APIError | Error,
   requestId?: string
 ): NextResponse<APIResponse> {
   const isAPIError = error instanceof APIError;
@@ -822,7 +822,7 @@ export function withFeatureGate(requiredFeatures: string[]) {
   };
 }
 
-export function withUsageTracking(type: string, quantity?: number, metadata?: Record<string, any>) {
+export function withUsageTracking(_type: string, quantity?: number, metadata?: Record<string, any>) {
   return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, {
       requireAuth: true,

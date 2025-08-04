@@ -407,7 +407,7 @@ export const AccessibleTooltip: React.FC<AccessibleTooltipProps> = ({
       >
         {children}
       </div>
-      {isVisible && (
+      {Boolean(isVisible) && (
         <div
           id={tooltipId.current}
           role="tooltip"
@@ -477,7 +477,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
     >
       <Icon className="h-5 w-5 flex-shrink-0" />
       <span className="flex-1 text-sm font-medium font-inter">{message}</span>
-      {onClose && (
+      {Boolean(onClose) && (
         <DaisyButton
           variant="ghost"
           size="sm"

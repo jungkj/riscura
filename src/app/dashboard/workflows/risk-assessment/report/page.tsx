@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -17,7 +17,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup';
 import { useToast } from '@/hooks/use-toast';
-import {
+// import {
   ArrowLeft,
   FileText,
   Download,
@@ -301,7 +301,7 @@ export default function GenerateRiskReportPage() {
                     <DaisyLabel>Report Format</DaisyLabel>
                     <DaisyRadioGroup
                       value={reportConfig.format}
-                      onValueChange={(value: 'pdf' | 'excel' | 'word') =>
+                      onValueChange={(_value: 'pdf' | 'excel' | 'word') =>
                         setReportConfig((prev) => ({ ...prev, format: value }))
                       }
                       className="mt-2"

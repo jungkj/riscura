@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -13,7 +13,7 @@ import {
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-import {
+// import {
   Search,
   Globe,
   Shield,
@@ -121,7 +121,7 @@ export function VendorAssessmentDashboard() {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const _result = await response.json();
         setAssessment(result);
         setActiveTab('results');
         await loadAssessments(); // Refresh the list

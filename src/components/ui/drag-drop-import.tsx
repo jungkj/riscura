@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 
 // UI Components
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/dialog';
 
 // Icons
-import {
+// import {
   Upload,
   File,
   FileText,
@@ -132,7 +132,7 @@ const IMPORT_MODES: ImportModeConfig[] = [
 interface DragDropImportProps {
   organizationId: string;
   userId: string;
-  onComplete?: (results: any[]) => void;
+  onComplete?: (_results: any[]) => void;
   maxFileSize?: number;
 }
 
@@ -241,7 +241,7 @@ export default function DragDropImport({
             throw new Error(`Processing failed: ${response.statusText}`);
           }
 
-          const result = await response.json();
+          const _result = await response.json();
           
           // Update file status
           setFiles(prev => prev.map(f => 
@@ -301,7 +301,7 @@ export default function DragDropImport({
     setShowResults(false);
   };
 
-  const getFileIcon = (type: string) => {
+  const getFileIcon = (_type: string) => {
     if (type.includes('spreadsheet') || type.includes('excel')) return FileSpreadsheet;
     if (type.includes('pdf') || type.includes('document') || type.includes('text')) return FileText;
     if (type.includes('image')) return FileImage;
@@ -571,7 +571,7 @@ setOptions(prev => ({ ...prev, previewMode: !!checked }))
       )}
 
       {/* Error Display */}
-      {processingError && (
+      {Boolean(processingError) && (
         <DaisyAlert variant="error" >
   <DaisyAlertCircle className="h-4 w-4" />
 </DaisyAlert>

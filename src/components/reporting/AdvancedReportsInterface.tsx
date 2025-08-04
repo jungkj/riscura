@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
+// import {
   Calendar,
   Filter,
   Download,
@@ -371,7 +371,7 @@ const FilterBar: React.FC<{
 
 // ========== CHART COMPONENT ==========
 const ChartPlaceholder: React.FC<{ chart: ChartConfig }> = ({ chart }) => {
-  const getChartIcon = (type: string) => {
+  const getChartIcon = (_type: string) => {
     switch (type) {
       case 'line': return LineChart;
       case 'bar': return BarChart3;
@@ -453,7 +453,7 @@ const DataTable: React.FC<{
     onSort(columnId, newDirection);
   };
 
-  const getStatusBadge = (value: string) => {
+  const getStatusBadge = (_value: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       'compliant': 'default',
       'non-compliant': 'destructive',

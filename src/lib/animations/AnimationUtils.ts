@@ -252,7 +252,7 @@ export class AnimationUtils {
     const omega = Math.sqrt(stiffness / mass);
     const zeta = damping / (2 * Math.sqrt(stiffness * mass));
 
-    let duration = 1000;
+    let _duration = 1000;
     if (zeta < 1) {
       duration = (4 / (omega * Math.sqrt(1 - zeta * zeta))) * 1000;
     } else {
@@ -422,7 +422,7 @@ export function useStaggeredAnimation(
   }, [animationName, trigger, staggerDelay, prefersReducedMotion]);
 
   const setRef = React.useCallback(
-    (index: number) => (element: HTMLElement | null) => {
+    (_index: number) => (element: HTMLElement | null) => {
       refs.current[index] = element;
     },
     []

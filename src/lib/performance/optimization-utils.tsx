@@ -87,7 +87,7 @@ export class PerformanceTimer {
       return 0;
     }
 
-    const duration = performance.now() - startTime;
+    const _duration = performance.now() - startTime;
     this.timers.delete(label);
 
     if (duration > 100) {
@@ -102,8 +102,8 @@ export class PerformanceTimer {
     fn: () => Promise<T>
   ): Promise<{ result: T; duration: number }> {
     this.start(label);
-    const result = await fn();
-    const duration = this.end(label);
+    const _result = await fn();
+    const _duration = this.end(label);
     return { result, duration };
   }
 }

@@ -7,7 +7,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
-import {
+// import {
   Bot,
   User,
   Send,
@@ -227,7 +227,7 @@ Based on current trends, I predict:
 // Message Component
 const ChatMessageComponent: React.FC<{
   message: ChatMessage;
-  onAction: (action: string) => void;
+  onAction: (_action: string) => void;
 }> = ({ message, onAction }) => {
   const isUser = message.type === 'user';
   const isThinking = message.thinking;
@@ -327,7 +327,7 @@ const ChatMessageComponent: React.FC<{
         )}
       </div>
 
-      {isUser && (
+      {Boolean(isUser) && (
         <div className="flex-shrink-0">
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
             <User className="h-4 w-4 text-blue-600" />
@@ -374,7 +374,7 @@ export const AIChatInterface: React.FC<{
     }
   }, [isOpen]);
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (_content: string) => {
     if (!content.trim()) return;
 
     // Add user message
@@ -436,7 +436,7 @@ export const AIChatInterface: React.FC<{
     handleSendMessage(suggestion);
   };
 
-  const handleAction = (action: string) => {
+  const handleAction = (_action: string) => {
     // console.log('Action triggered:', action);
     // Handle specific actions here
   };
@@ -521,7 +521,7 @@ setInputValue(e.target.value)}
                 placeholder="Ask me about risks, controls, compliance, or trends..."
                 className="pr-enterprise-10"
                 disabled={isTyping} />
-              {inputValue && (
+              {Boolean(inputValue) && (
                 <DaisyButton
                   size="sm"
                   className="absolute right-enterprise-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 bg-purple-600 hover:bg-purple-700"

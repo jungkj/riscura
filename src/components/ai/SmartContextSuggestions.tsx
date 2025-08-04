@@ -11,7 +11,7 @@ import {
   X
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -67,7 +67,7 @@ const SuggestionCard: React.FC<{
     return 'bg-gray-500';
   };
 
-  const getTypeLabel = (type: string) => {
+  const getTypeLabel = (_type: string) => {
     switch (type) {
       case 'data_insight': return 'Data Insight';
       case 'missing_context': return 'Missing Context';
@@ -116,7 +116,7 @@ const SuggestionCard: React.FC<{
             </DaisyButton>
           )}
 
-          {onDismiss && (
+          {Boolean(onDismiss) && (
             <DaisyButton
               size="sm"
               variant="ghost"
@@ -176,7 +176,7 @@ const SuggestionCard: React.FC<{
                 </div>
               </div>
 
-              {onDismiss && (
+              {Boolean(onDismiss) && (
                 <DaisyButton
                   size="sm"
                   variant="ghost"

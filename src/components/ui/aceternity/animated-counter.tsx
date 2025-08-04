@@ -129,7 +129,7 @@ export const CounterCard: React.FC<CounterCardProps> = ({
     >
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</h3>
-        {icon && <div className="text-gray-400 dark:text-gray-500">{icon}</div>}
+        {Boolean(icon) && <div className="text-gray-400 dark:text-gray-500">{icon}</div>}
       </div>
 
       <div className="flex items-end justify-between">
@@ -142,7 +142,7 @@ export const CounterCard: React.FC<CounterCardProps> = ({
           duration={1500}
         />
 
-        {trend && (
+        {Boolean(trend) && (
           <motion.div
             className={cn(
               'flex items-center text-sm font-medium',

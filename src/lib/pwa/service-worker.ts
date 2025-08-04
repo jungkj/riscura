@@ -289,7 +289,7 @@ export class ServiceWorkerManager {
     if (!this.registration) return false;
 
     try {
-      const result = await this.registration.unregister();
+      const _result = await this.registration.unregister();
       this.registration = null;
       return result;
     } catch (error) {

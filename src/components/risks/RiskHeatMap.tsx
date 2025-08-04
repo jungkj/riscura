@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
@@ -85,7 +85,7 @@ const getRiskColor = (level: string) => {
 const RiskBubble: React.FC<{
   risk: HeatMapRisk;
   scale: number;
-  onClick: (risk: HeatMapRisk) => void;
+  onClick: (_risk: HeatMapRisk) => void;
 }> = ({ risk, scale, onClick }) => {
   const baseSize = (risk.bubble?.size || 40) * scale;
   const opacity = risk.bubble?.opacity || 0.7;
@@ -368,7 +368,7 @@ export const RiskHeatMap: React.FC = () => {
             className="ml-20 relative bg-gradient-to-br from-green-50/50 via-yellow-50/50 to-red-50/50"
             style={{ height: '400px' }}
           >
-            {showGrid && <HeatMapGrid />}
+            {Boolean(showGrid) && <HeatMapGrid />}
 
             {Object.entries(groupedRisks).map(([groupName, risks]) => (
               <div key={groupName} className="absolute inset-0">
@@ -393,7 +393,7 @@ export const RiskHeatMap: React.FC = () => {
       </div>
 
       {/* Selected Risk Details */}
-      {selectedRisk && (
+      {Boolean(selectedRisk) && (
         <ContentCard
           title={`Risk Details - ${selectedRisk.id}`}
           className="border-l-4 border-l-blue-500"

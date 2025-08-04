@@ -537,8 +537,7 @@ export class ComplianceMappingEngine {
   }
 
   // Identify compliance gaps
-  private async identifyComplianceGaps(
-    framework: any,
+  private async identifyComplianceGaps(_framework: any,
     mappings: any[],
     organizationId: string
   ): Promise<ComplianceGap[]> {

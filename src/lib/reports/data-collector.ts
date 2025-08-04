@@ -502,7 +502,7 @@ export class ReportDataCollector {
     );
   }
 
-  private calculateAverageRiskScore(risks: any[]): number {
+  private calculateAverageRiskScore(_risks: any[]): number {
     if (risks.length === 0) return 0;
 
     const severityScores: Record<string, number> = {

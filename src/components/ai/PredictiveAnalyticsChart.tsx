@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -191,7 +191,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     prepareChartDataFromMock(mockPrediction);
   };
 
-  const prepareChartData = (prediction: PredictiveAnalytics) => {
+  const prepareChartData = (_prediction: PredictiveAnalytics) => {
     const chartPoints: ChartDataPoint[] = prediction.chartData.map(point => ({
       date: point.timestamp.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       timestamp: point.timestamp,
@@ -206,7 +206,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     setChartData(chartPoints);
   };
 
-  const prepareChartDataFromMock = (prediction: PredictiveAnalytics) => {
+  const prepareChartDataFromMock = (_prediction: PredictiveAnalytics) => {
     const chartPoints: ChartDataPoint[] = [];
     const now = new Date();
     const horizon = parseInt(selectedTimeframe);
@@ -358,10 +358,10 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
   <Brain className="h-5 w-5 text-indigo-600" />
 </DaisyCardTitle>
             {title}
-            {prediction && getTrendIcon(prediction.trend)}
+            {Boolean(prediction) && getTrendIcon(prediction.trend)}
           </DaisyCardTitle>
           
-          {interactive && (
+          {Boolean(interactive) && (
             <div className="flex items-center gap-2">
               <DaisyButton variant="ghost" size="sm" onClick={handleExport} >
   <Download className="h-4 w-4" />
@@ -377,7 +377,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           )}
         </div>
         
-        {prediction && (
+        {Boolean(prediction) && (
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-500">Current:</span>
@@ -415,7 +415,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
               </DaisyTabsTrigger>
             </DaisyTabsList>
             
-            {interactive && (
+            {Boolean(interactive) && (
               <div className="flex items-center gap-2">
                 <select
                   value={selectedTimeframe}
@@ -454,7 +454,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                   <Legend />
                   
                   {/* Confidence interval */}
-                  {showConfidenceInterval && (
+                  {Boolean(showConfidenceInterval) && (
                     <Area 
                       type="monotone" 
                       dataKey="upperBound" 
@@ -464,7 +464,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       name="Confidence Interval" />
                   )}
                   
-                  {showConfidenceInterval && (
+                  {Boolean(showConfidenceInterval) && (
                     <Area 
                       type="monotone" 
                       dataKey="lowerBound" 
@@ -495,7 +495,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                     connectNulls={false} />
                   
                   {/* Anomalies */}
-                  {showAnomalies && (
+                  {Boolean(showAnomalies) && (
                     <Scatter
                       dataKey="anomaly"
                       fill="#f59e0b"
@@ -504,7 +504,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                   )}
                   
                   {/* Reference line for current value */}
-                  {prediction && (
+                  {Boolean(prediction) && (
                     <ReferenceLine 
                       y={prediction.currentValue} 
                       stroke="#64748b" 
@@ -518,7 +518,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
 
           {/* Factors Tab */}
           <DaisyTabsContent value="factors" className="mt-4" >
-              {prediction && showFactors && (
+              {Boolean(prediction) && showFactors && (
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Prediction Factors</h4>
                 {prediction.factors.map((factor, index) => (
@@ -579,7 +579,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                 </ResponsiveContainer>
               </div>
               
-              {prediction && (
+              {Boolean(prediction) && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3 border rounded-lg">
                     <div className="text-xs text-gray-500 mb-1">Overall Confidence</div>
@@ -596,7 +596,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
         </DaisyTabs>
 
         {/* Recommendations */}
-        {prediction && prediction.recommendations.length > 0 && (
+        {Boolean(prediction) && prediction.recommendations.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
             <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
               <Zap className="h-4 w-4 text-yellow-500" />

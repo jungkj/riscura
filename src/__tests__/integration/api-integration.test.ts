@@ -122,7 +122,7 @@ test.describe('API Health and Connectivity', () => {
     expect(loginData.tokens || loginData.token).toBeTruthy();
 
     // Test token validation
-    const token = loginData.tokens?.accessToken || loginData.token;
+    const _token = loginData.tokens?.accessToken || loginData.token;
     const validateResponse = await helper.page.request.get(`${API_BASE_URL}/auth/validate`, {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -113,7 +113,7 @@ export const FloatingNav = ({
 
       {/* Floating Navbar (when scrolled) */}
       <AnimatePresence>
-        {isFloating && (
+        {Boolean(isFloating) && (
           <motion.div
             initial={{
               opacity: 0,

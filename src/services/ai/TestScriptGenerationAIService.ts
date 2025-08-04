@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { AIService } from '@/services/AIService';
+// import { AIService } from '@/services/AIService';
 import { ProboService } from '@/services/ProboService';
 import {
   GenerateTestScriptRequest,
@@ -12,7 +12,7 @@ import {
   ControlCategory,
   AutomationLevel,
 } from '@/types/rcsa.types';
-import {
+// import {
   ParsedTestScript,
   RawTestStep,
   ProboIntegrationResponse,
@@ -224,7 +224,7 @@ Always provide practical, implementable test scripts that auditors and control o
    * @param content - Raw AI response content
    * @returns ParsedTestScript - Normalized and validated test script
    */
-  private parseAIResponse(content: string): ParsedTestScript {
+  private parseAIResponse(_content: string): ParsedTestScript {
     try {
       // Try to parse as JSON first
       const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -288,7 +288,7 @@ Always provide practical, implementable test scripts that auditors and control o
     };
   }
 
-  private normalizeTestType(type: string): TestScriptType {
+  private normalizeTestType(_type: string): TestScriptType {
     const typeMap: Record<string, TestScriptType> = {
       MANUAL: TestScriptType.MANUAL,
       AUTOMATED: TestScriptType.AUTOMATED,
@@ -336,7 +336,7 @@ Always provide practical, implementable test scripts that auditors and control o
     }));
   }
 
-  private extractFromText(content: string): ParsedTestScript {
+  private extractFromText(_content: string): ParsedTestScript {
     // Basic text extraction logic
     const lines = content.split('\n');
     const title =
@@ -531,11 +531,11 @@ Always provide practical, implementable test scripts that auditors and control o
     }
   }
 
-  private validateString(value: any, defaultValue: string): string {
+  private validateString(_value: any, defaultValue: string): string {
     return typeof value === 'string' && value.trim() ? value : defaultValue;
   }
 
-  private validateNumber(value: any, defaultValue: number): number {
+  private validateNumber(_value: any, defaultValue: number): number {
     const num = Number(value);
     return !isNaN(num) && num > 0 ? num : defaultValue;
   }
@@ -548,14 +548,14 @@ Always provide practical, implementable test scripts that auditors and control o
     return [...new Set(validTags)]; // Remove duplicates
   }
 
-  private validateStringArray(value: any): string[] | undefined {
+  private validateStringArray(_value: any): string[] | undefined {
     if (!value) return undefined;
     if (!Array.isArray(value)) return undefined;
     const filtered = value.filter((item) => typeof item === 'string' && item.trim());
     return filtered.length > 0 ? filtered : undefined;
   }
 
-  private calculateCost(usage: { prompt_tokens?: number; completion_tokens?: number }): number {
+  private calculateCost(_usage: { prompt_tokens?: number; completion_tokens?: number }): number {
     // GPT-4 pricing (example rates - adjust to actual)
     const promptCostPer1k = 0.03;
     const completionCostPer1k = 0.06;

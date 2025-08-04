@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -97,7 +97,7 @@ export function MatrixQuestionComponent({
 }: {
   config: MatrixQuestion;
   value?: any;
-  onChange?: (value: any) => void;
+  onChange?: (_value: any) => void;
   readonly?: boolean;
 }) {
   const [responses, setResponses] = useState(value || {});
@@ -224,7 +224,7 @@ export function RankingQuestionComponent({
 }: {
   config: RankingQuestion;
   value?: string[];
-  onChange?: (value: string[]) => void;
+  onChange?: (_value: string[]) => void;
   readonly?: boolean;
 }) {
   const [rankedItems, setRankedItems] = useState<string[]>(value || []);
@@ -388,7 +388,7 @@ export function ImageQuestionComponent({
 }: {
   config: ImageQuestion;
   value?: any;
-  onChange?: (value: any) => void;
+  onChange?: (_value: any) => void;
   readonly?: boolean;
 }) {
   const [selectedImages, setSelectedImages] = useState<string[]>(
@@ -447,7 +447,7 @@ export function ImageQuestionComponent({
     }
   };
 
-  const handleImageUpload = (file: File) => {
+  const handleImageUpload = (_file: File) => {
     if (!config.allowUpload) return;
 
     const url = URL.createObjectURL(file);
@@ -567,7 +567,7 @@ export function SignatureQuestionComponent({
 }: {
   config: SignatureQuestion;
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (_value: string) => void;
   readonly?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -710,7 +710,7 @@ export function LocationQuestionComponent({
 }: {
   config: LocationQuestion;
   value?: { lat: number; lng: number; address?: string };
-  onChange?: (value: { lat: number; lng: number; address?: string }) => void;
+  onChange?: (_value: { lat: number; lng: number; address?: string }) => void;
   readonly?: boolean;
 }) {
   const [selectedLocation, setSelectedLocation] = useState(value);
@@ -801,7 +801,7 @@ setSearchQuery(e.target.value)}
           <div className="text-center">
             <Map className="w-12 h-12 text-gray-400 mx-auto mb-2" />
             <p className="text-gray-600">Interactive Map</p>
-            {selectedLocation && (
+            {Boolean(selectedLocation) && (
               <div className="absolute top-4 left-4 bg-white rounded p-2 shadow text-sm">
                 <div className="font-medium">Selected Location</div>
                 <div>Lat: {selectedLocation.lat.toFixed(6)}</div>
@@ -812,7 +812,7 @@ setSearchQuery(e.target.value)}
               </div>
             )}
             
-            {selectedLocation && (
+            {Boolean(selectedLocation) && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <MapPin className="w-8 h-8 text-red-500" />
               </div>
@@ -840,7 +840,7 @@ setSearchQuery(e.target.value)}
         </div>
       </div>
 
-      {selectedLocation && config.showAddress && (
+      {Boolean(selectedLocation) && config.showAddress && (
         <div className="text-sm text-gray-600">
           <strong>Address:</strong> {selectedLocation.address || 'Address not available'}
         </div>
@@ -870,7 +870,7 @@ export function CustomHTMLQuestionComponent({
 }: {
   config: CustomHTMLQuestion;
   value?: any;
-  onChange?: (value: any) => void;
+  onChange?: (_value: any) => void;
   readonly?: boolean;
 }) {
   const [inputValues, setInputValues] = useState(value || {});
@@ -940,7 +940,7 @@ export function CustomHTMLQuestionComponent({
         </div>
       </div>
 
-      {showCode && (
+      {Boolean(showCode) && (
         <DaisyCard >
   <DaisyCardBody >
 </DaisyCard>

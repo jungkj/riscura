@@ -24,7 +24,7 @@ import { prisma } from '@/lib/prisma';
 /**
  * Type guard to validate AuditAction values
  */
-function isValidAuditAction(value: string): value is AuditAction {
+const isValidAuditAction = (_value: string): value is AuditAction {
   const validActions: AuditAction[] = [
     // Authentication Actions
     'LOGIN',
@@ -104,7 +104,7 @@ function isValidAuditAction(value: string): value is AuditAction {
 /**
  * Type guard to validate AuditEntity values
  */
-function isValidAuditEntity(value: string): value is AuditEntity {
+const isValidAuditEntity = (_value: string): value is AuditEntity {
   const validEntities: AuditEntity[] = [
     'USER',
     'ORGANIZATION',
@@ -279,8 +279,7 @@ export function withAuditLogging<T extends any[]>(
 /**
  * Decorator for authentication endpoints
  */
-export function withAuthAudit(
-  action: Extract<
+export function withAuthAudit(_action: Extract<
     AuditAction,
     'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
   >
@@ -305,8 +304,7 @@ export function withAuthAudit(
 /**
  * Decorator for data modification endpoints
  */
-export function withDataAudit(
-  entity: AuditEntity,
+export function withDataAudit(_entity: AuditEntity,
   action?: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'READ'>,
   entityIdExtractor?: (req: NextRequest, context?: any) => string
 ) {
@@ -355,8 +353,7 @@ export function withPermissionAudit(requiredPermission: string, entity: AuditEnt
 /**
  * Decorator for system administration endpoints
  */
-export function withSystemAudit(
-  action: Extract<
+export function withSystemAudit(_action: Extract<
     AuditAction,
     'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE' | 'MAINTENANCE_START'
   >
@@ -382,8 +379,7 @@ export function withSystemAudit(
 /**
  * Decorator for compliance-related endpoints
  */
-export function withComplianceAudit(
-  action: Extract<
+export function withComplianceAudit(_action: Extract<
     AuditAction,
     'COMPLIANCE_CHECK' | 'AUDIT_START' | 'AUDIT_END' | 'POLICY_UPDATE' | 'VIOLATION_DETECTED'
   >,
@@ -432,8 +428,7 @@ export async function logBatchAuditEvents(
 /**
  * Helper for logging bulk operations
  */
-export async function logBulkOperation(
-  action: Extract<AuditAction, 'BULK_UPDATE' | 'BULK_DELETE'>,
+export async function logBulkOperation(_action: Extract<AuditAction, 'BULK_UPDATE' | 'BULK_DELETE'>,
   entity: AuditEntity,
   entityIds: string[],
   userId: string,

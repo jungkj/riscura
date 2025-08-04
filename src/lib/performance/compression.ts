@@ -318,7 +318,7 @@ export class CompressionService {
   async healthCheck(): Promise<CompressionHealthCheck> {
     try {
       const testData = { test: 'health check data'.repeat(100) };
-      const result = await this.compressAPIResponse(testData, 'gzip');
+      const _result = await this.compressAPIResponse(testData, 'gzip');
 
       return {
         healthy: result.compressed && result.compressionRatio > 0,
@@ -394,7 +394,7 @@ export function compressionMiddleware(_options: CompressionOptions = {}) {
         const encoding = await service.selectOptimalEncoding(data, acceptedEncodings);
 
         // Compress data
-        const result = await service.compressAPIResponse(data, encoding, options.threshold);
+        const _result = await service.compressAPIResponse(data, encoding, options.threshold);
 
         if (result.compressed) {
           res.set('Content-Encoding', encoding);
@@ -414,7 +414,7 @@ export function compressionMiddleware(_options: CompressionOptions = {}) {
 }
 
 // Utility functions
-function parseAcceptEncoding(acceptEncoding: string): CompressionEncoding[] {
+const parseAcceptEncoding = (acceptEncoding: string): CompressionEncoding[] {
   const encodings: CompressionEncoding[] = [];
 
   if (acceptEncoding.includes('br')) encodings.push('br');

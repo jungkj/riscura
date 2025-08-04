@@ -303,7 +303,7 @@ export class AccessControlService {
       }
 
       // Generate secure access token
-      const token = documentEncryption.generateSecureToken(
+      const _token = documentEncryption.generateSecureToken(
         documentId,
         userId,
         userPermissions,
@@ -533,7 +533,7 @@ export function hasAllPermissions(
   return requiredPermissions.every((perm) => accessControl.hasPermission(userPermissions, perm));
 }
 
-export function getSensitivityLevel(sensitivity: DocumentSensitivity): number {
+export function getSensitivityLevel(_sensitivity: DocumentSensitivity): number {
   const levels = {
     [DocumentSensitivity.PUBLIC]: 1,
     [DocumentSensitivity.INTERNAL]: 2,

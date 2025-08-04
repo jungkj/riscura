@@ -77,7 +77,7 @@ export class CollaborationServer {
   }): Promise<boolean> {
     try {
       const url = parse(info.req.url || '', true);
-      const token = url.query.token as string;
+      const _token = url.query.token as string;
 
       if (!token) {
         return false;

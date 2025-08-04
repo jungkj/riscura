@@ -432,7 +432,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
           <DaisySkeleton className="w-full h-full" >
           )}
         
-        {isLoading && loadProgress > 0 && (
+        {Boolean(isLoading) && loadProgress > 0 && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
             <div 
               className="h-full bg-blue-500 transition-all duration-300"
@@ -503,7 +503,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
         onClick={enableZoom ? () => setIsZoomed(!isZoomed) : undefined} />
 
       {/* Watermark */}
-      {watermark && (
+      {Boolean(watermark) && (
         <div 
           className={cn(
             'absolute pointer-events-none text-white text-sm font-medium',
@@ -524,7 +524,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       {(enableDownload || enableFullscreen) && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="flex gap-1">
-            {enableDownload && (
+            {Boolean(enableDownload) && (
               <DaisyButton
                 variant="secondary"
                 size="sm"
@@ -534,7 +534,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
 </DaisySkeleton>
               </DaisyButton>
             )}
-            {enableFullscreen && (
+            {Boolean(enableFullscreen) && (
               <DaisyButton
                 variant="secondary"
                 size="sm"
@@ -548,7 +548,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       )}
 
       {/* Fullscreen modal */}
-      {isFullscreen && (
+      {Boolean(isFullscreen) && (
         <div 
           className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
           onClick={() => setIsFullscreen(false)}

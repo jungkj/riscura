@@ -207,7 +207,7 @@ class LoadTestOrchestrator {
     allUserResponseTimes.forEach((times) => allResponseTimes.push(...times));
 
     // Calculate statistics
-    const stats = PerformanceTestUtils.calculateStatistics(allResponseTimes);
+    const _stats = PerformanceTestUtils.calculateStatistics(allResponseTimes);
     const actualDuration = Date.now() - startTime;
 
     // Find peak memory usage
@@ -280,7 +280,7 @@ test.describe('Performance and Load Testing', () => {
     try {
       await orchestrator.setupUsers(10);
 
-      const result = await orchestrator.runConcurrentUserTest(120000); // 2 minutes
+      const _result = await orchestrator.runConcurrentUserTest(120000); // 2 minutes
 
       // Assert performance criteria
       expect(result.averageResponseTime).toBeLessThan(2000); // < 2 seconds average
@@ -302,7 +302,7 @@ test.describe('Performance and Load Testing', () => {
     try {
       await orchestrator.setupUsers(50);
 
-      const result = await orchestrator.runConcurrentUserTest(300000); // 5 minutes
+      const _result = await orchestrator.runConcurrentUserTest(300000); // 5 minutes
 
       // More lenient thresholds for stress test
       expect(result.averageResponseTime).toBeLessThan(5000); // < 5 seconds average
@@ -365,7 +365,7 @@ test.describe('Performance and Load Testing', () => {
       const batchTime = performance.now() - batchStart;
       totalCreateTime += batchTime;
 
-      const successCount = results.filter(Boolean).length;
+      const _successCount = results.filter(Boolean).length;
       expect(successCount).toBe(Math.min(batchSize, riskCount - batch * batchSize));
 
       // console.log(`Batch ${batch + 1}/${batches}: ${successCount} risks created in ${batchTime}ms`);
@@ -480,7 +480,7 @@ test.describe('Performance and Load Testing', () => {
       const totalTime = performance.now() - requestStart;
 
       // All requests should succeed
-      const successCount = responses.filter((r) => r.status === 200).length;
+      const _successCount = responses.filter((r) => r.status === 200).length;
       expect(successCount).toBe(concurrentRequests);
 
       // Average response time should be reasonable

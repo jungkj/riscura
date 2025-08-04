@@ -3,7 +3,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
 
@@ -21,7 +21,7 @@ interface ErrorBoundaryState {
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
-  onError?: (_error: Error, errorInfo: ErrorInfo) => void;
+  onError?: (__error: Error, errorInfo: ErrorInfo) => void;
   showReportButton?: boolean;
   maxRetries?: number;
   level?: 'page' | 'component' | 'critical';
@@ -45,7 +45,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
+  static getDerivedStateFromError(__error: Error): Partial<ErrorBoundaryState> {
     const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
@@ -56,7 +56,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(__error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
 
     // Log error to console in development
@@ -87,7 +87,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.retryTimeouts.forEach((timeout) => clearTimeout(timeout));
   }
 
-  private trackError = (_error: Error, errorInfo: ErrorInfo) => {
+  private trackError = (__error: Error, errorInfo: ErrorInfo) => {
     try {
       // Send to analytics service
       if (typeof window !== 'undefined' && (window as any).gtag) {

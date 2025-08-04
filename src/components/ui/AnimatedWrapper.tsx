@@ -46,8 +46,7 @@ export interface AnimatedWrapperProps {
 }
 
 // Predefined animation variants
-const getAnimationVariants = (
-  type: AnimationType,
+const getAnimationVariants = (_type: AnimationType,
   distance: number = 30,
   duration: number = 0.6,
   easing: string | number[] = 'easeOut'

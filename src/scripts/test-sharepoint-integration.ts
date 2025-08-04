@@ -26,7 +26,7 @@ async function testSharePointIntegration() {
   // console.log('2️⃣ Testing authentication...');
   try {
     const authService = getSharePointAuthService();
-    const token = await authService.getAccessToken();
+    const _token = await authService.getAccessToken();
     // console.log('✅ Successfully acquired access token');
     // Do not log sensitive token information
   } catch (error) {
@@ -54,7 +54,7 @@ async function testSharePointIntegration() {
       // console.log('✅ Graph API access confirmed (user context)');
     } else {
       // Try app-only context
-      const sitesResponse = await graphClient.api('/sites').top(1).get();
+      const _sitesResponse = await graphClient.api('/sites').top(1).get();
       // console.log('✅ Graph API access confirmed (app-only context)');
     }
   } catch (error) {
@@ -67,7 +67,7 @@ async function testSharePointIntegration() {
     // console.log('\n4️⃣ Testing SharePoint site access...');
     try {
       const fileService = getSharePointFileService();
-      const siteInfo = await fileService.getSiteInfo(process.env.SHAREPOINT_SITE_ID);
+      const _siteInfo = await fileService.getSiteInfo(process.env.SHAREPOINT_SITE_ID);
       // console.log('✅ Successfully accessed SharePoint site');
       // console.log(`   Site: ${siteInfo.displayName}`);
       // console.log(`   URL: ${siteInfo.webUrl}`);

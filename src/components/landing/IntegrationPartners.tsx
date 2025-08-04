@@ -230,7 +230,7 @@ export const IntegrationPartners: React.FC = () => {
           <p className="text-sm text-gray-500">
             Connect your existing tools and workflows seamlessly
           </p>
-          {prefersReducedMotion && (
+          {Boolean(prefersReducedMotion) && (
             <p className="text-xs text-gray-400 mt-2">
               Animation paused for accessibility. Use Tab to navigate through partners.
             </p>

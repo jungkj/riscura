@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+// import { 
   FileText, 
   Download, 
   Share2, 
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -193,7 +193,7 @@ export default function EnhancedDocumentViewer({
     return `${size.toFixed(1)} ${units[unitIndex]}`;
   };
 
-  const getFileIcon = (type: string) => {
+  const getFileIcon = (_type: string) => {
     if (type.startsWith('image/')) return '🖼️';
     if (type === 'application/pdf') return '📄';
     if (type.includes('word')) return '📝';
@@ -202,7 +202,7 @@ export default function EnhancedDocumentViewer({
     return '📄';
   };
 
-  const canPreview = (type: string): boolean => {
+  const canPreview = (_type: string): boolean => {
     return [
       'application/pdf',
       'image/jpeg',
@@ -488,26 +488,26 @@ setComment(e.target.value)}
 </DaisyButton>
               Download
             </DaisyButton>
-            {onShare && (
+            {Boolean(onShare) && (
               <DaisyButton variant="outline" onClick={() => onShare(document)} />
                 <Share2 className="w-4 h-4 mr-2" />
                 Share
               </DaisyButton>
             )}
-            {onEdit && (
+            {Boolean(onEdit) && (
               <DaisyButton variant="outline" onClick={() => onEdit(document)} />
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit
               </DaisyButton>
             )}
-            {onDelete && (
+            {Boolean(onDelete) && (
               <DaisyButton variant="outline" onClick={handleDelete} >
   <Trash2 className="w-4 h-4 mr-2" />
 </DaisyButton>
                 Delete
               </DaisyButton>
             )}
-            {onClose && (
+            {Boolean(onClose) && (
               <DaisyButton variant="outline" onClick={onClose} >
   <X className="w-4 h-4" />
 </DaisyButton>
@@ -559,7 +559,7 @@ setComment(e.target.value)}
 
       {/* Fullscreen Image Modal */}
       <AnimatePresence>
-        {fullscreen && document?.type.startsWith('image/') && (
+        {Boolean(fullscreen) && document?.type.startsWith('image/') && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

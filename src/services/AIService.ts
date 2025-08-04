@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { prisma } from '@/lib/db';
-import {
+// import {
   AIResponse,
   TokenUsage,
   AIRequest,
@@ -13,9 +13,9 @@ import type {
   RiskAnalysis as ImportedRiskAnalysis,
   ControlRecommendation as ImportedControlRecommendation,
 } from '@/types/ai.types';
-import { Risk } from '@/types';
+// import { Risk } from '@/types';
 import { generateId } from '@/lib/utils';
-import {
+// import {
   RISCURA_MASTER_PROMPT,
   AGENT_MODIFIERS,
   buildContextualPrompt,
@@ -187,7 +187,7 @@ class CircuitBreaker {
     }
 
     try {
-      const result = await operation();
+      const _result = await operation();
       this.onSuccess();
       return result;
     } catch (error) {
@@ -499,7 +499,7 @@ export class AIService {
   /**
    * Recommend controls for a specific risk using AI
    */
-  async recommendControls(risk: any, organizationId: string): Promise<ControlRecommendation[]> {
+  async recommendControls(_risk: any, organizationId: string): Promise<ControlRecommendation[]> {
     try {
       // Get existing controls for context
       const existingControls = await this.getExistingControls(organizationId, risk.category);
@@ -537,8 +537,7 @@ export class AIService {
   /**
    * Identify compliance gaps using AI analysis
    */
-  async identifyComplianceGaps(
-    framework: string,
+  async identifyComplianceGaps(_framework: string,
     organizationId: string
   ): Promise<ComplianceGap[]> {
     try {
@@ -580,7 +579,7 @@ export class AIService {
   /**
    * Generate AI-powered risk report with insights
    */
-  async generateRiskReport(risks: any[], organizationId: string): Promise<string> {
+  async generateRiskReport(_risks: any[], organizationId: string): Promise<string> {
     try {
       const riskSummary = this.summarizeRisks(risks);
       const trends = await this.analyzeRiskTrends(risks, organizationId);
@@ -622,8 +621,7 @@ Format as a professional report with clear sections and actionable recommendatio
   /**
    * Process natural language queries about risk data
    */
-  async processNaturalLanguageQuery(
-    query: string,
+  async processNaturalLanguageQuery(_query: string,
     userId: string,
     organizationId: string
   ): Promise<ChatResponse> {
@@ -888,8 +886,7 @@ Provide a comprehensive analysis including:
 Format the response as structured JSON with clear sections for each analysis component.`;
   }
 
-  private buildControlRecommendationPrompt(
-    risk: any,
+  private buildControlRecommendationPrompt(_risk: any,
     existingControls: any[],
     industryContext: any
   ): string {
@@ -933,7 +930,7 @@ Analyze gaps and provide:
 Format as JSON array of gap analyses.`;
   }
 
-  private buildChatPrompt(query: string, history: any[], contextData: any, intent: any): string {
+  private buildChatPrompt(_query: string, history: any[], contextData: any, intent: any): string {
     return `User Query: ${query}
 
 Intent: ${JSON.stringify(intent)}
@@ -951,7 +948,7 @@ Provide a helpful, conversational response that:
 Be specific and data-driven while maintaining a conversational tone.`;
   }
 
-  private async analyzeQueryIntent(query: string): Promise<any> {
+  private async analyzeQueryIntent(_query: string): Promise<any> {
     const response = await this.openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -976,7 +973,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     }
   }
 
-  private async getRelevantData(intent: any, organizationId: string): Promise<any> {
+  private async getRelevantData(_intent: any, organizationId: string): Promise<any> {
     // Based on intent, fetch relevant data from database
     const data: any = {};
 
@@ -1155,7 +1152,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     });
   }
 
-  private summarizeRisks(risks: any[]) {
+  private summarizeRisks(_risks: any[]) {
     return {
       total: risks.length,
       byLevel: risks.reduce((acc, risk) => {
@@ -1167,7 +1164,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     };
   }
 
-  private getTopCategories(risks: any[]) {
+  private getTopCategories(_risks: any[]) {
     const _categories = risks.reduce((acc, risk) => {
       acc[risk.category] = (acc[risk.category] || 0) + 1;
       return acc;
@@ -1187,7 +1184,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     });
   }
 
-  private async getFrameworkRequirements(framework: string) {
+  private async getFrameworkRequirements(_framework: string) {
     // This would typically come from a frameworks database
     return [];
   }
@@ -1211,7 +1208,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     });
   }
 
-  private async analyzeRiskTrends(risks: any[], organizationId: string) {
+  private async analyzeRiskTrends(_risks: any[], organizationId: string) {
     // Simplified trend analysis
     return {
       significantChanges: [],
@@ -1233,7 +1230,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     };
   }
 
-  private async analyzeComplianceStatus(compliance: any[]) {
+  private async analyzeComplianceStatus(_compliance: any[]) {
     return {
       criticalGaps: [],
       overallScore: 85,
@@ -1303,7 +1300,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     });
   }
 
-  private updateUsageMetrics(usage: TokenUsage, responseTime: number, success: boolean): void {
+  private updateUsageMetrics(_usage: TokenUsage, responseTime: number, success: boolean): void {
     this.usageMetrics.totalRequests++;
     this.usageMetrics.totalTokens += usage.totalTokens;
     this.usageMetrics.totalCost += usage.estimatedCost;
@@ -1353,7 +1350,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
   }
 
   private getFromCache(key: string): AIResponse | null {
-    const cached = this.cache.get(key);
+    const _cached = this.cache.get(key);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
       return cached.response;
     }
@@ -1425,7 +1422,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
   /**
    * Calculate confidence level based on response content
    */
-  private calculateConfidence(content: string): number {
+  private calculateConfidence(_content: string): number {
     // Simple confidence calculation based on content characteristics
     let confidence = 0.7; // Base confidence
 

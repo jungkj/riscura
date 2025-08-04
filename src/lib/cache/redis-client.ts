@@ -203,7 +203,7 @@ class RedisClient {
         logger.warn('Redis not ready, skipping cache delete');
         return false;
       }
-      const result = await this.client.del(key);
+      const _result = await this.client.del(key);
       return result > 0;
     } catch (error) {
       logger.error(`Redis DEL error for key ${key}:`, error);
@@ -216,7 +216,7 @@ class RedisClient {
       if (!this.isReady()) {
         return false;
       }
-      const result = await this.client.exists(key);
+      const _result = await this.client.exists(key);
       return result === 1;
     } catch (error) {
       logger.error(`Redis EXISTS error for key ${key}:`, error);
@@ -229,7 +229,7 @@ class RedisClient {
       if (!this.isReady()) {
         return false;
       }
-      const result = await this.client.expire(key, seconds);
+      const _result = await this.client.expire(key, seconds);
       return result === 1;
     } catch (error) {
       logger.error(`Redis EXPIRE error for key ${key}:`, error);
@@ -341,7 +341,7 @@ class RedisClient {
   }
 
   // Cache invalidation patterns
-  public async invalidatePattern(pattern: string): Promise<number> {
+  public async invalidatePattern(_pattern: string): Promise<number> {
     try {
       if (!this.isReady()) return 0;
       const keys = await this.client.keys(pattern);
@@ -356,7 +356,7 @@ class RedisClient {
   // Health check
   public async ping(): Promise<boolean> {
     try {
-      const result = await this.client.ping();
+      const _result = await this.client.ping();
       return result === 'PONG';
     } catch (error) {
       logger.error('Redis ping error:', error);

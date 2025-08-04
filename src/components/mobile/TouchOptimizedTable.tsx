@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -44,7 +44,7 @@ interface TableColumn {
   filterable?: boolean;
   type?: 'text' | 'number' | 'date' | 'status' | 'priority';
   width?: string;
-  render?: (value: any, row: any) => React.ReactNode;
+  render?: (_value: any, row: any) => React.ReactNode;
 }
 
 interface TableRow {
@@ -65,7 +65,7 @@ interface TouchOptimizedTableProps {
   onRowClick?: (row: TableRow) => void;
   onRowSelect?: (selectedRows: TableRow[]) => void;
   onSort?: (column: string, direction: 'asc' | 'desc') => void;
-  onFilter?: (filters: Record<string, any>) => void;
+  onFilter?: (_filters: Record<string, any>) => void;
   onRefresh?: () => void;
   onExport?: () => void;
   className?: string;
@@ -127,7 +127,7 @@ export default function TouchOptimizedTable({
   
   // Filter and sort data
   const processedData = useMemo(() => {
-    let result = [...data];
+    let _result = [...data];
     
     // Apply search filter
     if (searchQuery) {
@@ -310,7 +310,7 @@ export default function TouchOptimizedTable({
             <div className="flex-1 min-w-0">
               {/* Primary column (first column) */}
               <div className="flex items-center space-x-3 mb-2">
-                {selectable && (
+                {Boolean(selectable) && (
                   <DaisyCheckbox
                     checked={isSelected}
                     onCheckedChange={(checked) = />
@@ -343,7 +343,7 @@ handleRowSelect(row.id, checked as boolean)}
               ))}
               
               {/* Expanded view - show all columns */}
-              {isExpanded && (
+              {Boolean(isExpanded) && (
                 <div className="mt-3 space-y-2 pt-3 border-t border-gray-100">
                   {columns.slice(2).map(column => (
                     <div key={column.key} className="flex justify-between items-center">
@@ -420,7 +420,7 @@ handleRowSelect(row.id, checked as boolean)}
       <div className="flex flex-col space-y-4 mb-4">
         {/* Search and actions row */}
         <div className="flex items-center space-x-2">
-          {searchable && (
+          {Boolean(searchable) && (
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <DaisyInput
@@ -434,7 +434,7 @@ setSearchQuery(e.target.value)}
             </div>
           )}
           
-          {filterable && (
+          {Boolean(filterable) && (
             <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
               <SheetTrigger asChild>
                 <DaisyButton variant="outline" size="sm" className="whitespace-nowrap" >
@@ -484,7 +484,7 @@ handleFilterChange(column.key, e.target.value)} />
             </Sheet>
           )}
           
-          {onRefresh && (
+          {Boolean(onRefresh) && (
             <DaisyButton
               variant="outline"
               size="sm"
@@ -496,7 +496,7 @@ handleFilterChange(column.key, e.target.value)} />
             </DaisyButton>
           )}
           
-          {onExport && (
+          {Boolean(onExport) && (
             <DaisyButton variant="outline" size="sm" onClick={onExport} >
   <Download className="w-4 h-4" />
 </DaisyButton>
@@ -505,7 +505,7 @@ handleFilterChange(column.key, e.target.value)} />
         </div>
         
         {/* Selection info */}
-        {selectable && selectedRows.size > 0 && (
+        {Boolean(selectable) && selectedRows.size > 0 && (
           <div className="flex items-center justify-between bg-blue-50 p-3 rounded-lg">
             <span className="text-sm text-blue-700">
               {selectedRows.size} item{selectedRows.size !== 1 ? 's' : ''} selected
@@ -525,7 +525,7 @@ handleFilterChange(column.key, e.target.value)} />
         {/* Active filters */}
         {(searchQuery || Object.values(filters).some(Boolean)) && (
           <div className="flex flex-wrap gap-2">
-            {searchQuery && (
+            {Boolean(searchQuery) && (
               <DaisyBadge variant="secondary" className="flex items-center gap-1" >
   Search: {searchQuery}
 </DaisyBadge>
@@ -550,7 +550,7 @@ handleFilterChange(column.key, e.target.value)} />
       </div>
       
       {/* Pull to refresh indicator */}
-      {isRefreshing && (
+      {Boolean(isRefreshing) && (
         <div className="flex justify-center py-4">
           <div className="flex items-center space-x-2 text-blue-600">
             <RefreshCw className="w-4 h-4 animate-spin" />
@@ -591,7 +591,7 @@ handleFilterChange(column.key, e.target.value)} />
         ) : (
           <>
             {/* Select all (mobile) */}
-            {selectable && (
+            {Boolean(selectable) && (
               <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3">
                 <DaisyCheckbox
                   checked={selectedRows.size === paginatedData.length && paginatedData.length />
@@ -613,7 +613,7 @@ handleFilterChange(column.key, e.target.value)} />
       </div>
       
       {/* Pagination */}
-      {pagination && totalPages > 1 && (
+      {Boolean(pagination) && totalPages > 1 && (
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
           <div className="text-sm text-gray-500">
             Showing {((currentPage - 1) * pageSize) + 1} to{' '}

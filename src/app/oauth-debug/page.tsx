@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function OAuthDebugPage() {
   const [debugInfo, setDebugInfo] = useState<any>(null);
@@ -36,7 +36,7 @@ export default function OAuthDebugPage() {
     try {
       // console.log('[OAuth Debug] Starting Google sign-in...');
 
-      const result = await signIn('google', {
+      const _result = await signIn('google', {
         redirect: false,
         callbackUrl: '/dashboard',
       });
@@ -69,7 +69,7 @@ export default function OAuthDebugPage() {
           <DaisyCardTitle>OAuth Debug Information</DaisyCardTitle>
         </DaisyCardBody>
         <DaisyCardBody>
-          {error && (
+          {Boolean(error) && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-800">
               {error}
             </div>
@@ -88,7 +88,7 @@ export default function OAuthDebugPage() {
               </div>
             </div>
 
-            {debugInfo && (
+            {Boolean(debugInfo) && (
               <div>
                 <h3 className="font-semibold mb-2">Environment Configuration:</h3>
                 <pre className="bg-gray-100 p-4 rounded overflow-auto text-sm">

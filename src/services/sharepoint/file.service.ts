@@ -208,7 +208,7 @@ export class SharePointFileService {
     let nextPageToken: string | undefined;
 
     do {
-      const result = await this.listExcelFiles(siteId, driveId, path, 100, nextPageToken);
+      const _result = await this.listExcelFiles(siteId, driveId, path, 100, nextPageToken);
       allFiles.push(...result.files);
       nextPageToken = result.nextPageToken;
 
@@ -299,7 +299,7 @@ export class SharePointFileService {
         }
 
         return Buffer.from(buffer);
-      } catch (_error: any) {
+      } catch (__error: any) {
         if (error.name === 'AbortError') {
           throw new Error('File download timed out after 30 seconds');
         }

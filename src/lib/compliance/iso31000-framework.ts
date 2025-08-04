@@ -1,4 +1,4 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 
 export interface ISO31000Process {
   id: string;
@@ -392,8 +392,7 @@ export class ISO31000FrameworkService {
     };
   }
 
-  private async assessPrincipleCompliance(
-    risks: Risk[],
+  private async assessPrincipleCompliance(_risks: Risk[],
     controls: Control[]
   ): Promise<PrincipleCompliance[]> {
     return this.principles.map((principle) => {

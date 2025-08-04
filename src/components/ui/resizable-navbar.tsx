@@ -175,7 +175,7 @@ export const MobileNavHeader = ({ children, className }: MobileNavHeaderProps) =
 export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNavMenuProps) => {
   return (
     <AnimatePresence>
-      {isOpen && (
+      {Boolean(isOpen) && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

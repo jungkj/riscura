@@ -225,7 +225,7 @@ export class AutoSaveService {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const result = await response.json();
+      const _result = await response.json();
 
       // Handle version conflicts
       if (result.conflict) {
@@ -241,7 +241,7 @@ export class AutoSaveService {
     }
   }
 
-  private getEndpointForType(type: AutoSaveData['type']): string {
+  private getEndpointForType(_type: AutoSaveData['type']): string {
     const baseUrl = '/api';
     switch (type) {
       case 'questionnaire':
@@ -325,17 +325,17 @@ export class AutoSaveService {
   }
 
   // Load draft from local storage
-  public loadDraft(type: string, id: string): any | null {
+  public loadDraft(_type: string, id: string): any | null {
     return localStorageService.getDraft(type, id);
   }
 
   // Check if draft exists
-  public hasDraft(type: string, id: string): boolean {
+  public hasDraft(_type: string, id: string): boolean {
     return localStorageService.getDraft(type, id) !== null;
   }
 
   // Delete draft
-  public deleteDraft(type: string, id: string): boolean {
+  public deleteDraft(_type: string, id: string): boolean {
     this.clearSaveData(id);
     return localStorageService.deleteDraft(type, id);
   }

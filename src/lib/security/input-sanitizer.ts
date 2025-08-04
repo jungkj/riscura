@@ -24,7 +24,7 @@ export interface ValidationOptions {
   maxLength?: number;
   pattern?: RegExp;
   allowEmpty?: boolean;
-  customValidator?: (value: string) => boolean;
+  customValidator?: (_value: string) => boolean;
 }
 
 export interface FileValidationOptions {
@@ -360,7 +360,7 @@ export class InputSanitizer {
   /**
    * Sanitize file upload
    */
-  validateFile(file: File, options: FileValidationOptions): { isValid: boolean; errors: string[] } {
+  validateFile(_file: File, options: FileValidationOptions): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     try {
@@ -532,7 +532,7 @@ export class InputSanitizer {
   /**
    * Validate and sanitize search query
    */
-  sanitizeSearchQuery(query: string): string {
+  sanitizeSearchQuery(_query: string): string {
     if (!query || typeof query !== 'string') {
       return '';
     }
@@ -630,8 +630,7 @@ export function sanitizeUrl(url: string, allowedSchemes?: string[]): string {
   return inputSanitizer.sanitizeUrl(url, allowedSchemes);
 }
 
-export function validateFile(
-  file: File,
+export function validateFile(_file: File,
   options: FileValidationOptions
 ): { isValid: boolean; errors: string[] } {
   return inputSanitizer.validateFile(file, options);
@@ -644,7 +643,7 @@ export function sanitizeObject(
   return inputSanitizer.sanitizeObject(obj, SANITIZATION_CONFIGS[configName]);
 }
 
-export function sanitizeSearchQuery(query: string): string {
+export function sanitizeSearchQuery(_query: string): string {
   return inputSanitizer.sanitizeSearchQuery(query);
 }
 

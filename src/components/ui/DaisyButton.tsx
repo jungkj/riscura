@@ -75,7 +75,7 @@ export const DaisyButton = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {Boolean(loading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {children}
       </button>
     );

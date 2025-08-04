@@ -125,8 +125,7 @@ class OfflineHandler {
   }
 
   // Action queue management
-  public queueAction(
-    type: string,
+  public queueAction(_type: string,
     data: any,
     options: {
       priority?: 'low' | 'medium' | 'high' | 'critical';
@@ -164,7 +163,7 @@ class OfflineHandler {
     return action.id;
   }
 
-  private insertActionByPriority(action: OfflineAction): void {
+  private insertActionByPriority(_action: OfflineAction): void {
     const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
     const actionPriority = priorityOrder[action.priority];
 
@@ -283,7 +282,7 @@ class OfflineHandler {
     return result;
   }
 
-  private async syncAction(action: OfflineAction): Promise<boolean> {
+  private async syncAction(_action: OfflineAction): Promise<boolean> {
     try {
       // Simulate API call - replace with actual API integration
       const response = await this.makeAPICall(action);
@@ -303,7 +302,7 @@ class OfflineHandler {
     }
   }
 
-  private async makeAPICall(action: OfflineAction): Promise<any> {
+  private async makeAPICall(_action: OfflineAction): Promise<any> {
     // This would be replaced with actual API calls
     // For now, simulate different responses
     return new Promise((resolve) => {
@@ -320,18 +319,17 @@ class OfflineHandler {
     });
   }
 
-  private handleSyncConflict(action: OfflineAction, serverData: any): void {
+  private handleSyncConflict(_action: OfflineAction, serverData: any): void {
     this.emit('syncConflict', {
       action,
       serverData,
-      resolve: (resolution: 'local' | 'server' | 'merge', mergedData?: any) => {
+      resolve: (_resolution: 'local' | 'server' | 'merge', mergedData?: any) => {
         this.resolveSyncConflict(action, resolution, mergedData);
       },
     });
   }
 
-  private resolveSyncConflict(
-    action: OfflineAction,
+  private resolveSyncConflict(_action: OfflineAction,
     resolution: 'local' | 'server' | 'merge',
     mergedData?: any
   ): void {
@@ -441,7 +439,7 @@ class OfflineHandler {
       const actionsData = localStorage.getItem('riscura_offline_actions');
       if (actionsData) {
         const actions = JSON.parse(actionsData);
-        this.actionQueue = actions.map((action: any) => ({
+        this.actionQueue = actions.map((_action: any) => ({
           ...action,
           timestamp: new Date(action.timestamp),
         }));

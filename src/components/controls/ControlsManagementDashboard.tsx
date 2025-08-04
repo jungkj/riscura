@@ -15,7 +15,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import ControlTestingWorkflow from './ControlTestingWorkflow';
 import ComplianceMapping from './ComplianceMapping';
-import {
+// import {
   Plus,
   Shield,
   Calendar,
@@ -278,7 +278,7 @@ const getStatusConfig = (status: string) => {
 // Control Card Component
 const ControlCard: React.FC<{ 
   control: Control; 
-  onAction: (action: string, control: Control) => void;
+  onAction: (_action: string, control: Control) => void;
 }> = ({ control, onAction }) => {
   const effectivenessConfig = getEffectivenessConfig(control.effectiveness);
   const statusConfig = getStatusConfig(control.status);
@@ -451,7 +451,7 @@ const ControlLibrary: React.FC = () => {
     return matchesSearch && matchesCategory && matchesFramework && matchesStatus;
   });
 
-  const handleControlAction = (action: string, control: Control) => {
+  const handleControlAction = (_action: string, control: Control) => {
     switch (action) {
       case 'view':
         toast.success(`Viewing details for ${control.title}`);
@@ -616,7 +616,7 @@ export const ControlsManagementDashboard: React.FC = () => {
       try {
         const response = await fetch('/api/controls/probo?organizationId=org-1');
         if (response.ok) {
-          const result = await response.json();
+          const _result = await response.json();
           setProboControls(result.data || []);
         }
       } catch (error) {

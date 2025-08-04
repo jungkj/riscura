@@ -1,4 +1,4 @@
-import {
+// import {
   Risk,
   Control,
   ControlRiskMapping,
@@ -143,7 +143,7 @@ export class RCSAApiClient {
     return this.request<Risk>(`/risks/${id}`);
   }
 
-  async createRisk(risk: CreateRiskRequest): Promise<ApiResponse<Risk>> {
+  async createRisk(_risk: CreateRiskRequest): Promise<ApiResponse<Risk>> {
     return this.request<Risk>('/risks', {
       method: 'POST',
       body: JSON.stringify(risk),
@@ -421,8 +421,7 @@ export class RCSAApiClient {
     return this.request('/analytics/risk-coverage');
   }
 
-  async getEffectivenessTrends(
-    period: 'daily' | 'weekly' | 'monthly' = 'weekly'
+  async getEffectivenessTrends(_period: 'daily' | 'weekly' | 'monthly' = 'weekly'
   ): Promise<ApiResponse<{ date: string; effectiveness: number }[]>> {
     return this.request(`/analytics/effectiveness-trends?period=${period}`);
   }
@@ -431,7 +430,7 @@ export class RCSAApiClient {
   // BULK OPERATIONS
   // ============================================================================
 
-  async bulkCreateRisks(risks: CreateRiskRequest[]): Promise<ApiResponse<Risk[]>> {
+  async bulkCreateRisks(_risks: CreateRiskRequest[]): Promise<ApiResponse<Risk[]>> {
     return this.request<Risk[]>('/risks/bulk-create', {
       method: 'POST',
       body: JSON.stringify({ risks }),
@@ -649,7 +648,7 @@ export const rcsaHelpers = {
   /**
    * Generate control ID
    */
-  generateControlId: (type: string, sequence: number): string => {
+  generateControlId: (_type: string, sequence: number): string => {
     const typePrefix = type.substring(0, 3).toUpperCase();
     return `${typePrefix}-${sequence.toString().padStart(4, '0')}`;
   },

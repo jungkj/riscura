@@ -9,16 +9,16 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
-import { CreateRiskModal } from './CreateRiskModal';
-import { NewRiskFlow } from './NewRiskFlow';
+// import { CreateRiskModal } from './CreateRiskModal';
+// import { NewRiskFlow } from './NewRiskFlow';
 import ExportService from '@/services/ExportService';
-import {
+// import {
   Plus,
   LayoutGrid,
   List,
@@ -176,7 +176,7 @@ const getStatusConfig = (status: string) => {
 };
 
 // Risk Card Component
-const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) => void }> = ({ 
+const RiskCard: React.FC<{ risk: Risk; onAction: (_action: string, risk: Risk) => void }> = ({ 
   risk, 
   onAction 
 }) => {
@@ -351,7 +351,7 @@ const RiskRegister: React.FC = () => {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const handleRiskAction = (action: string, risk: Risk) => {
+  const handleRiskAction = (_action: string, risk: Risk) => {
     switch (action) {
       case 'view':
         // Navigate to risk detail view
@@ -538,7 +538,7 @@ export const RiskManagementDashboard: React.FC = () => {
       });
       
       if (response.ok) {
-        const result = await response.json();
+        const _result = await response.json();
         toast.success('Probo controls imported successfully!');
         // Controls imported successfully, result contains import details
       }

@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Input } from './input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
@@ -100,7 +100,7 @@ export const Tooltip: React.FC<DaisyTooltipProps> = ({
       onBlur={hideTooltip}
     >
       {children}
-      {isVisible && (
+      {Boolean(isVisible) && (
         <div
           ref={tooltipRef}
           className={cn(
@@ -307,7 +307,7 @@ const TourOverlay: React.FC = () => {
       {/* Backdrop */}
       <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       {/* Highlight */}
-      {highlightElement && (
+      {Boolean(highlightElement) && (
         <div
           className="fixed z-50 pointer-events-none"
           style={{
@@ -636,7 +636,7 @@ setSearchTerm(e.target.value)}
         </div>
         
         {/* Article Modal */}
-        {selectedArticle && (
+        {Boolean(selectedArticle) && (
           <DaisyDialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
             <DaisyDialogContent className="max-w-2xl max-h-[80vh]">
               <DaisyDialogHeader>

@@ -297,7 +297,7 @@ export class OpenAIError extends Error {
   }
 }
 
-export function handleOpenAIError(_error: any): OpenAIError {
+export function handleOpenAIError(__error: any): OpenAIError {
   if (error.status) {
     switch (error.status) {
       case 401:
@@ -375,7 +375,7 @@ export class OpenAIClient {
       const response = await this.client.chat.completions.create(params);
       this.updateRateLimit();
       return response;
-    } catch (_error: any) {
+    } catch (__error: any) {
       if (error.status === 429) {
         this.rateLimitReset = new Date(Date.now() + 60000); // 1 minute cooldown
         throw new Error('Rate limit exceeded. Please try again later.');
@@ -399,7 +399,7 @@ export class OpenAIClient {
       const response = await this.client.embeddings.create(params);
       this.updateRateLimit();
       return response;
-    } catch (_error: any) {
+    } catch (__error: any) {
       if (error.status === 429) {
         this.rateLimitReset = new Date(Date.now() + 60000);
         throw new Error('Rate limit exceeded. Please try again later.');
@@ -473,7 +473,7 @@ export class OpenAIClient {
     return this.parseRecommendations(content);
   }
 
-  private parseRecommendations(content: string): string[] {
+  private parseRecommendations(_content: string): string[] {
     const lines = content.split('\n');
     const recommendations: string[] = [];
 

@@ -82,7 +82,7 @@ export class ScreenReaderUtils {
   }
 
   // Announce action completion
-  static announceAction(action: string, success = true): void {
+  static announceAction(_action: string, success = true): void {
     const message = success ? `${action} completed successfully` : `${action} failed`;
     this.announce(message, success ? 'polite' : 'assertive');
   }
@@ -147,7 +147,7 @@ export function useScreenReader() {
     ScreenReaderUtils.announceLoading(isLoading, context);
   }, []);
 
-  const announceAction = useCallback((action: string, success = true) => {
+  const announceAction = useCallback((_action: string, success = true) => {
     ScreenReaderUtils.announceAction(action, success);
   }, []);
 

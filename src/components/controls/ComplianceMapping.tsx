@@ -2,14 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import {
+// import {
   Target,
   Shield,
   CheckCircle,
@@ -245,7 +245,7 @@ const getComplianceStatusConfig = (status: string) => {
 // Framework Overview Card
 const FrameworkOverviewCard: React.FC<{
   framework: ComplianceFramework;
-  onSelect: (framework: ComplianceFramework) => void;
+  onSelect: (_framework: ComplianceFramework) => void;
 }> = ({ framework, onSelect }) => {
   const statusConfig = getComplianceStatusConfig(framework.status);
   const StatusIcon = statusConfig.icon;
@@ -597,7 +597,7 @@ export const ComplianceMapping: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)} />
+          <DaisyTabs value={activeView} onValueChange={(_value: any) => setActiveView(value)} />
             <DaisyTabsList >
                 <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
               <DaisyTabsTrigger value="mapping">Control Mapping</DaisyTabsTrigger>

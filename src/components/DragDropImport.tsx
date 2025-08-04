@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function DragDropImport({ organizationId, userId }: any) {
   return (

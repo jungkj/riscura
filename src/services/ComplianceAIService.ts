@@ -1,4 +1,4 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 
 // Core compliance interfaces
 export interface RegulatoryFramework {
@@ -959,8 +959,7 @@ export class ComplianceAIService {
   /**
    * Identify compliance gaps
    */
-  async identifyComplianceGaps(
-    framework: string,
+  async identifyComplianceGaps(_framework: string,
     existingControls: Control[],
     risks: Risk[]
   ): Promise<ComplianceGap[]> {
@@ -1105,8 +1104,7 @@ export class ComplianceAIService {
   /**
    * Prepare for audit
    */
-  async prepareAudit(
-    framework: string,
+  async prepareAudit(_framework: string,
     auditType: 'internal' | 'external' | 'regulatory' | 'certification',
     scope: string[],
     auditDate: Date,
@@ -1244,8 +1242,7 @@ export class ComplianceAIService {
 
   // Private helper methods implementation would continue...
 
-  private async assessFrameworkCompliance(
-    framework: RegulatoryFramework,
+  private async assessFrameworkCompliance(_framework: RegulatoryFramework,
     existingControls: Control[],
     risks: Risk[],
     scope: AssessmentScope
@@ -1344,8 +1341,7 @@ export class ComplianceAIService {
     };
   }
 
-  private async assessReadinessForAudit(
-    framework: string,
+  private async assessReadinessForAudit(_framework: string,
     scope: string[]
   ): Promise<ReadinessAssessment> {
     // Implementation for detailed audit readiness assessment
@@ -1520,8 +1516,7 @@ export class ComplianceAIService {
     return change;
   }
 
-  private async generatePreparationTasks(
-    framework: string,
+  private async generatePreparationTasks(_framework: string,
     auditType: string,
     scope: string[],
     auditDate: Date
@@ -1539,8 +1534,7 @@ export class ComplianceAIService {
     return [];
   }
 
-  private async identifyDocumentationRequirements(
-    framework: string,
+  private async identifyDocumentationRequirements(_framework: string,
     scope: string[],
     existingControls: Control[]
   ): Promise<DocumentationPlan> {
@@ -1564,7 +1558,7 @@ export class ComplianceAIService {
     };
   }
 
-  private async planAuditInterviews(framework: string, scope: string[]): Promise<InterviewPlan> {
+  private async planAuditInterviews(_framework: string, scope: string[]): Promise<InterviewPlan> {
     // Implementation for audit interview planning
     // console.log('Planning interviews for', framework, 'covering', scope.length, 'areas');
     return {
@@ -1585,8 +1579,7 @@ export class ComplianceAIService {
     };
   }
 
-  private async planAuditTesting(
-    framework: string,
+  private async planAuditTesting(_framework: string,
     existingControls: Control[]
   ): Promise<TestingPlan> {
     // Implementation for audit testing planning
@@ -1606,7 +1599,7 @@ export class ComplianceAIService {
     };
   }
 
-  private async identifyAuditRiskAreas(framework: string, scope: string[]): Promise<RiskArea[]> {
+  private async identifyAuditRiskAreas(_framework: string, scope: string[]): Promise<RiskArea[]> {
     // Implementation for audit risk area identification
     // console.log('Identifying risk areas for', framework, 'covering', scope.length, 'areas');
     return [];

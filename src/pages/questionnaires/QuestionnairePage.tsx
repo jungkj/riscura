@@ -9,7 +9,7 @@ import {
 // import { formatDate } from '@/lib/utils';
 
 // UI Components
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -39,7 +39,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
-import {
+// import {
   Plus,
   MoreHorizontal,
   Edit,
@@ -341,19 +341,19 @@ export default function QuestionnairePage() {
   const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<Questionnaire | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
 
-  const stats = mockStats;
+  const _stats = mockStats;
 
   const handleCreateNew = () => {
     setEditingQuestionnaire(null);
     setShowBuilder(true);
   };
 
-  const handleEdit = (questionnaire: Questionnaire) => {
+  const handleEdit = (_questionnaire: Questionnaire) => {
     setEditingQuestionnaire(questionnaire.id);
     setShowBuilder(true);
   };
 
-  const handleDuplicate = async (questionnaire: Questionnaire) => {
+  const handleDuplicate = async (_questionnaire: Questionnaire) => {
     try {
       // console.log('Duplicating questionnaire:', questionnaire.id);
       // Mock implementation
@@ -362,7 +362,7 @@ export default function QuestionnairePage() {
     }
   };
 
-  const handleDelete = async (questionnaireId: string) => {
+  const handleDelete = async (_questionnaireId: string) => {
     if (confirm('Are you sure you want to delete this questionnaire?')) {
       try {
         // console.log('Deleting questionnaire:', questionnaireId);
@@ -373,7 +373,7 @@ export default function QuestionnairePage() {
     }
   };
 
-  const handleDistribute = async (questionnaire: Questionnaire) => {
+  const handleDistribute = async (_questionnaire: Questionnaire) => {
     try {
       // In a real app, this would open a user selection dialog
       const mockUserIds = ['user1', 'user2', 'user3'];
@@ -384,7 +384,7 @@ export default function QuestionnairePage() {
     }
   };
 
-  const handleViewAnalytics = (questionnaire: Questionnaire) => {
+  const handleViewAnalytics = (_questionnaire: Questionnaire) => {
     setSelectedQuestionnaire(questionnaire);
     setShowAnalytics(true);
   };
@@ -651,7 +651,7 @@ export default function QuestionnairePage() {
               {selectedQuestionnaire?.title} - Response analytics and insights
             </DialogDescription>
           </DialogHeader>
-          {selectedQuestionnaire && (
+          {Boolean(selectedQuestionnaire) && (
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>

@@ -1,4 +1,4 @@
-import {
+// import {
   MonitoringTask,
   MonitoringResult,
   ProactiveInsight,
@@ -14,14 +14,14 @@ import {
   PersonalizedContent,
   ContextualData,
 } from '@/types/proactive-monitoring.types';
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
 
 // Import AI services for real integration
-import { AIService } from './AIService';
-import { ComplianceAIService } from './ComplianceAIService';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
-import { ControlRecommendationAIService } from './ControlRecommendationAIService';
+// import { AIService } from './AIService';
+// import { ComplianceAIService } from './ComplianceAIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { ControlRecommendationAIService } from './ControlRecommendationAIService';
 
 // Enhanced AI processing interfaces
 export interface AIProcessingTask {
@@ -184,7 +184,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Queue a task for AI processing
    */
-  async queueAITask(task: Omit<AIProcessingTask, 'id' | 'status' | 'retryCount'>): Promise<string> {
+  async queueAITask(_task: Omit<AIProcessingTask, 'id' | 'status' | 'retryCount'>): Promise<string> {
     const aiTask: AIProcessingTask = {
       ...task,
       id: generateId('ai-task'),
@@ -204,8 +204,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Generate intelligent insights from data
    */
-  async generateIntelligentInsights(
-    entityId: string,
+  async generateIntelligentInsights(_entityId: string,
     entityType: 'risk' | 'control' | 'process' | 'compliance',
     context: Record<string, unknown> = {}
   ): Promise<IntelligentInsight[]> {
@@ -230,7 +229,7 @@ export class ProactiveAIIntegrationService {
     // Wait for processing (in real implementation, this would be async)
     await this.waitForTaskCompletion(taskId);
 
-    const result = this.processingResults.get(taskId);
+    const _result = this.processingResults.get(taskId);
     if (!result) {
       throw new Error('Failed to generate insights');
     }
@@ -241,8 +240,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Perform predictive risk modeling
    */
-  async performPredictiveRiskModeling(
-    risks: Risk[],
+  async performPredictiveRiskModeling(_risks: Risk[],
     controls: Control[],
     historicalData: unknown[] = []
   ): Promise<PredictiveResult[]> {
@@ -269,7 +267,7 @@ export class ProactiveAIIntegrationService {
       });
 
       await this.waitForTaskCompletion(taskId);
-      const result = this.processingResults.get(taskId);
+      const _result = this.processingResults.get(taskId);
       if (result) {
         predictions.push(...result.predictions);
       }
@@ -304,15 +302,14 @@ export class ProactiveAIIntegrationService {
     });
 
     await this.waitForTaskCompletion(taskId);
-    const result = this.processingResults.get(taskId);
+    const _result = this.processingResults.get(taskId);
     return result?.notifications || [];
   }
 
   /**
    * Analyze trends with AI-powered insights
    */
-  async analyzeAITrends(
-    entityId: string,
+  async analyzeAITrends(_entityId: string,
     entityType: string,
     timeSeriesData: unknown[],
     context: Record<string, unknown> = {}
@@ -341,7 +338,7 @@ export class ProactiveAIIntegrationService {
     });
 
     await this.waitForTaskCompletion(taskId);
-    const result = this.processingResults.get(taskId);
+    const _result = this.processingResults.get(taskId);
 
     return {
       trends: [] as unknown[], // Would be populated by AI analysis
@@ -353,8 +350,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Get real-time AI recommendations
    */
-  async getRealtimeRecommendations(
-    entityId: string,
+  async getRealtimeRecommendations(_entityId: string,
     entityType: 'risk' | 'control' | 'process' | 'compliance',
     urgency: 'immediate' | 'high' | 'medium' | 'low' = 'medium'
   ): Promise<ActionRecommendation[]> {
@@ -379,7 +375,7 @@ export class ProactiveAIIntegrationService {
     });
 
     await this.waitForTaskCompletion(taskId);
-    const result = this.processingResults.get(taskId);
+    const _result = this.processingResults.get(taskId);
     return result?.recommendations || [];
   }
 
@@ -417,12 +413,12 @@ export class ProactiveAIIntegrationService {
   /**
    * Process individual AI task
    */
-  private async processAITask(task: AIProcessingTask): Promise<void> {
+  private async processAITask(_task: AIProcessingTask): Promise<void> {
     this.activeProcessingTasks.set(task.id, { ...task, status: 'processing' });
     const startTime = Date.now();
 
     try {
-      const result = await this.executeAITask(task);
+      const _result = await this.executeAITask(task);
 
       const processingResult: AIProcessingResult = {
         taskId: task.id,
@@ -467,7 +463,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute specific AI task based on type
    */
-  private async executeAITask(task: AIProcessingTask): Promise<{
+  private async executeAITask(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -501,7 +497,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute risk analysis with AI
    */
-  private async executeRiskAnalysis(task: AIProcessingTask): Promise<{
+  private async executeRiskAnalysis(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -515,7 +511,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute trend analysis with AI
    */
-  private async executeTrendAnalysis(task: AIProcessingTask): Promise<{
+  private async executeTrendAnalysis(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -529,7 +525,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute compliance check with AI
    */
-  private async executeComplianceCheck(task: AIProcessingTask): Promise<{
+  private async executeComplianceCheck(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -543,7 +539,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute insight generation with AI
    */
-  private async executeInsightGeneration(task: AIProcessingTask): Promise<{
+  private async executeInsightGeneration(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -557,7 +553,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute prediction with AI
    */
-  private async executePrediction(task: AIProcessingTask): Promise<{
+  private async executePrediction(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -590,7 +586,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Execute notification generation with AI
    */
-  private async executeNotificationGeneration(task: AIProcessingTask): Promise<{
+  private async executeNotificationGeneration(_task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -623,7 +619,7 @@ export class ProactiveAIIntegrationService {
     throw new Error(`Task ${taskId} timed out`);
   }
 
-  private convertToIntelligentInsights(insights: ProactiveInsight[]): IntelligentInsight[] {
+  private convertToIntelligentInsights(_insights: ProactiveInsight[]): IntelligentInsight[] {
     return insights.map((insight) => ({
       id: insight.id,
       category: insight.category as any,
@@ -675,7 +671,7 @@ export class ProactiveAIIntegrationService {
     };
   }
 
-  private generateRiskPredictions(risk: Risk, analysis: unknown): PredictiveResult[] {
+  private generateRiskPredictions(_risk: Risk, analysis: unknown): PredictiveResult[] {
     return [
       {
         id: generateId('prediction'),
@@ -724,7 +720,7 @@ export class ProactiveAIIntegrationService {
 
   getProcessingResults(taskId?: string): AIProcessingResult[] {
     if (taskId) {
-      const result = this.processingResults.get(taskId);
+      const _result = this.processingResults.get(taskId);
       return result ? [result] : [];
     }
     return Array.from(this.processingResults.values());

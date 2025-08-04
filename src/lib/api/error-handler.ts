@@ -226,12 +226,12 @@ export class RateLimitError extends ApiError {
 
 // Error logger interface
 export interface ErrorLogger {
-  log(_error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>;
+  log(__error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>;
 }
 
 // Console error logger implementation
 export class ConsoleErrorLogger implements ErrorLogger {
-  async log(_error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void> {
+  async log(__error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void> {
     const logEntry = {
       timestamp: new Date().toISOString(),
       error: {
@@ -272,7 +272,7 @@ export class ApiErrorHandler {
   /**
    * Handle and format any error for API response
    */
-  async handleError(_error: unknown, request?: NextRequest, context?: Record<string, any>) {
+  async handleError(__error: unknown, request?: NextRequest, context?: Record<string, any>) {
     const responseOptions = request ? ApiResponseFormatter.createResponseOptions(request) : {};
 
     // Handle ApiError instances
@@ -304,7 +304,7 @@ export class ApiErrorHandler {
   /**
    * Handle Zod validation errors
    */
-  private handleZodError(_error: ZodError): ValidationError {
+  private handleZodError(__error: ZodError): ValidationError {
     const validationErrors = error.issues.map((issue) => ({
       field: issue.path.join('.'),
       message: issue.message,
@@ -317,7 +317,7 @@ export class ApiErrorHandler {
   /**
    * Handle Prisma database errors
    */
-  private handlePrismaError(_error: any): ApiError {
+  private handlePrismaError(__error: any): ApiError {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       switch (error.code) {
         case 'P2002':
@@ -402,7 +402,7 @@ export class ApiErrorHandler {
   /**
    * Handle generic JavaScript errors
    */
-  private handleGenericError(_error: unknown): ApiError {
+  private handleGenericError(__error: unknown): ApiError {
     if (error instanceof Error) {
       // Check for specific error types
       if (error.message.includes('timeout')) {
@@ -449,7 +449,7 @@ export class ApiErrorHandler {
   /**
    * Format ApiError for response
    */
-  private formatApiError(_error: ApiError, responseOptions: ResponseOptions) {
+  private formatApiError(__error: ApiError, responseOptions: ResponseOptions) {
     if (error instanceof ValidationError) {
       return ApiResponseFormatter.validationError(error.validationErrors, responseOptions);
     }
@@ -475,7 +475,7 @@ export class ApiErrorHandler {
   /**
    * Check if error is a Prisma error
    */
-  private isPrismaError(_error: unknown): boolean {
+  private isPrismaError(__error: unknown): boolean {
     return (
       error instanceof Prisma.PrismaClientKnownRequestError ||
       error instanceof Prisma.PrismaClientUnknownRequestError ||

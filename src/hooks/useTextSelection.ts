@@ -196,7 +196,7 @@ export function useTextSelection(
 
   // Get selection by index from history
   const getHistorySelection = useCallback(
-    (index: number): TextSelection | null => {
+    (_index: number): TextSelection | null => {
       return selectionHistory[index] || null;
     },
     [selectionHistory]

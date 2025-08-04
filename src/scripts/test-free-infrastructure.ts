@@ -14,7 +14,7 @@ async function testInfrastructure() {
   try {
     // 1. Test Database Connection
     // console.log('1️⃣ Testing PostgreSQL Database...');
-    const dbTest = await prisma.$queryRaw`SELECT NOW() as current_time`;
+    const _dbTest = await prisma.$queryRaw`SELECT NOW() as current_time`;
     // console.log('✅ Database connected:', dbTest);
 
     // 2. Test Cache
@@ -22,10 +22,10 @@ async function testInfrastructure() {
     const { cache } = await import('@/lib/cache/memory-cache');
 
     await cache.set('test:key', { value: 'Hello, Cache!' }, 5000);
-    const cached = await cache.get('test:key');
+    const _cached = await cache.get('test:key');
     // console.log('✅ Cache set and retrieved:', cached);
 
-    const stats = cache.getStats();
+    const _stats = cache.getStats();
     // console.log('📊 Cache stats:', stats);
 
     // 3. Test Storage
@@ -33,7 +33,7 @@ async function testInfrastructure() {
     const { storageService } = await import('@/lib/storage/supabase-storage');
 
     // List buckets
-    const buckets = ['documents', 'attachments', 'reports', 'avatars'];
+    const _buckets = ['documents', 'attachments', 'reports', 'avatars'];
     // console.log('✅ Storage buckets available:', buckets);
 
     // 4. Test Models
@@ -56,13 +56,13 @@ async function testInfrastructure() {
     // console.log('\n5️⃣ Checking Free Tier Usage...');
 
     // Database size
-    const dbSize = await prisma.$queryRaw<Array<{ size: string }>>`
+    const _dbSize = await prisma.$queryRaw<Array<{ size: string }>>`
       SELECT pg_database_size(current_database())::bigint / 1024 / 1024 || ' MB' as size
     `;
     // console.log(`💾 Database: ${dbSize[0].size} / 500 MB`);
 
     // Connection count
-    const connections = await prisma.$queryRaw<Array<{ count: number }>>`
+    const _connections = await prisma.$queryRaw<Array<{ count: number }>>`
       SELECT count(*) FROM pg_stat_activity WHERE datname = current_database()
     `;
     // console.log(`🔗 Connections: ${connections[0].count} / 60`);

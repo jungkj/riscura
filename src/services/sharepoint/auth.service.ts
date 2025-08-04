@@ -1,8 +1,8 @@
 import { ClientSecretCredential, DefaultAzureCredential } from '@azure/identity';
 import { Client, AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 import 'isomorphic-fetch'; // Required for microsoft-graph-client
-import { redis } from '@/lib/redis';
-import { SecretClient } from '@azure/keyvault-secrets';
+// import { redis } from '@/lib/redis';
+// import { SecretClient } from '@azure/keyvault-secrets';
 import { CertificateClient } from '@azure/keyvault-certificates';
 
 export class SharePointAuthService {
@@ -46,7 +46,7 @@ export class SharePointAuthService {
     // Create custom auth provider that uses Azure credentials
     const authProvider: AuthenticationProvider = {
       getAccessToken: async () => {
-        const token = await this.getAccessToken();
+        const _token = await this.getAccessToken();
         return token;
       },
     };
@@ -132,7 +132,7 @@ export class SharePointAuthService {
     }
 
     try {
-      const token = await redis.get(this.tokenCacheKey);
+      const _token = await redis.get(this.tokenCacheKey);
       if (!token) {
         return null;
       }

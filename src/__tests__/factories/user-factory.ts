@@ -66,7 +66,7 @@ export class UserFactory {
     });
   }
 
-  static createBatch(count: number, options: CreateUserOptions = {}): User[] {
+  static createBatch(_count: number, options: CreateUserOptions = {}): User[] {
     return Array.from({ length: count }, (_, index) =>
       this.create({
         ...options,

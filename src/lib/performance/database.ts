@@ -6,8 +6,7 @@ export class DatabaseOptimizer {
   private performanceMetrics = new Map<string, QueryMetrics>();
 
   // Query optimization with caching
-  async optimizedQuery<T>(
-    query: string,
+  async optimizedQuery<T>(_query: string,
     params: any[] = [],
     options: QueryOptions = {}
   ): Promise<T> {
@@ -17,7 +16,7 @@ export class DatabaseOptimizer {
     try {
       // Check cache first
       if (options.useCache !== false) {
-        const cached = await cacheService.getCachedQuery<T>(query, params);
+        const _cached = await cacheService.getCachedQuery<T>(query, params);
         if (cached !== null) {
           this.recordMetrics(query, Date.now() - startTime, true);
           return cached;
@@ -25,7 +24,7 @@ export class DatabaseOptimizer {
       }
 
       // Execute query
-      const result = await this.executeQuery<T>(query, params);
+      const _result = await this.executeQuery<T>(query, params);
 
       // Cache result if enabled
       if (options.useCache !== false && options.cacheTTL) {
@@ -138,9 +137,9 @@ export class DatabaseOptimizer {
   }
 
   // Query plan analysis
-  async analyzeQueryPlan(query: string, params: any[] = []): Promise<QueryPlan> {
+  async analyzeQueryPlan(_query: string, params: any[] = []): Promise<QueryPlan> {
     const explainQuery = `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`;
-    const result = await this.executeQuery<any[]>(explainQuery, params);
+    const _result = await this.executeQuery<any[]>(explainQuery, params);
 
     return {
       plan: result[0],
@@ -193,7 +192,7 @@ export class DatabaseOptimizer {
         pg_size_pretty(pg_total_relation_size('public.controls')) as controls_table_size;
     `;
 
-    const result = await this.executeQuery<any[]>(sizeQuery, []);
+    const _result = await this.executeQuery<any[]>(sizeQuery, []);
     return result[0];
   }
 
@@ -208,7 +207,7 @@ export class DatabaseOptimizer {
       WHERE datname = current_database();
     `;
 
-    const result = await this.executeQuery<ConnectionStats[]>(query, []);
+    const _result = await this.executeQuery<ConnectionStats[]>(query, []);
     return result[0];
   }
 
@@ -284,18 +283,18 @@ export class DatabaseOptimizer {
   }
 
   // Private helper methods
-  private async executeQuery<T>(query: string, params: any[]): Promise<T> {
+  private async executeQuery<T>(_query: string, params: any[]): Promise<T> {
     // Use Prisma's raw query execution
     return (await db.client.$queryRaw<T>`${query}`) as T;
   }
 
-  private generateCacheKey(query: string, params: any[]): string {
+  private generateCacheKey(_query: string, params: any[]): string {
     const crypto = require('crypto');
     const content = JSON.stringify({ query, params });
     return crypto.createHash('md5').update(content).digest('hex');
   }
 
-  private recordMetrics(query: string, duration: number, fromCache: boolean, error?: any): void {
+  private recordMetrics(_query: string, duration: number, fromCache: boolean, error?: any): void {
     const queryHash = this.generateCacheKey(query, []);
     const existing = this.performanceMetrics.get(queryHash) || {
       query: query.substring(0, 100),
@@ -400,7 +399,7 @@ export class DatabaseOptimizer {
       LIMIT 1;
     `;
 
-    const result = await this.executeQuery<any[]>(query, []);
+    const _result = await this.executeQuery<any[]>(query, []);
     const lastVacuum = result[0]?.last_vacuum || result[0]?.last_autovacuum;
 
     return lastVacuum ? new Date(lastVacuum) : new Date(0);

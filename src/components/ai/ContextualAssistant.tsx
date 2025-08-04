@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
-import {
+// import {
   StatusIcons,
   RiskManagementIcons,
   ActionIcons,
@@ -284,7 +284,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'tip':
         return StatusIcons.Info;
@@ -301,7 +301,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
     }
   };
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (_type: string) => {
     switch (type) {
       case 'tip':
         return 'text-blue-700 bg-blue-100 border-blue-200';

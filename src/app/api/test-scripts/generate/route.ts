@@ -8,7 +8,7 @@ import {
   TestScriptType,
   TestFrequency,
 } from '@/types/rcsa.types';
-import { TestScriptGenerationAIService } from '@/services/ai/TestScriptGenerationAIService';
+// import { TestScriptGenerationAIService } from '@/services/ai/TestScriptGenerationAIService';
 
 // Validation schema
 const generateTestScriptSchema = z.object({

@@ -125,12 +125,11 @@ export class ResponsiveUtils {
     return classes.join(' ');
   }
 
-  public static clamp(value: number, min: number, max: number): number {
+  public static clamp(_value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
   }
 
-  public static scaleValue(
-    value: number,
+  public static scaleValue(_value: number,
     fromBreakpoint: Breakpoint,
     toBreakpoint: Breakpoint,
     scaleFactor: number = 0.8

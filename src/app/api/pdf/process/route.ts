@@ -43,7 +43,7 @@ export async function POST(_request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Process PDF with lazy loading
-    const result = await processPdfFile(buffer);
+    const _result = await processPdfFile(buffer);
 
     return NextResponse.json(result);
   } catch (error) {

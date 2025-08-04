@@ -133,7 +133,7 @@ export class EnhancedProboService {
     return crypto.pbkdf2Sync(keySource, salt, 100000, 32, 'sha256');
   }
 
-  private validateMetricValue<T>(value: any, schema: z.ZodSchema<T>): T {
+  private validateMetricValue<T>(_value: any, schema: z.ZodSchema<T>): T {
     try {
       return schema.parse(value);
     } catch (error) {

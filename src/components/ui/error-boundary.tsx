@@ -3,7 +3,7 @@ import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { cn } from '@/lib/utils';
 
 interface ErrorFallbackProps {
@@ -113,7 +113,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
 interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ComponentType<ErrorFallbackProps>;
-  onError?: (_error: Error, errorInfo: React.ErrorInfo) => void;
+  onError?: (__error: Error, errorInfo: React.ErrorInfo) => void;
   className?: string;
 }
 
@@ -123,7 +123,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   onError,
   className,
 }) => {
-  const handleError = (_error: Error, errorInfo: React.ErrorInfo) => {
+  const handleError = (__error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
       // console.error('Error Boundary caught an error:', error, errorInfo);
@@ -188,7 +188,7 @@ export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ chi
 
 // Hook for manual error reporting
 export const useErrorHandler = () => {
-  const reportError = (_error: Error, context?: string) => {
+  const reportError = (__error: Error, context?: string) => {
     // console.error(`Error in ${context || 'unknown context'}:`, error);
 
     // In production, send to error reporting service

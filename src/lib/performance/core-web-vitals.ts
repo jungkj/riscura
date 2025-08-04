@@ -329,7 +329,7 @@ export class CoreWebVitalsMonitor {
         type: 'image',
         priority: 'high',
         description: 'Optimize Largest Contentful Paint',
-        impact: `LCP is ${this.metrics.lcp}ms (target: <${PERFORMANCE_THRESHOLDS.lcp.good}ms)`,
+        impact: `LCP is ${this.metrics.lcp}ms (_target: <${PERFORMANCE_THRESHOLDS.lcp.good}ms)`,
         implementation:
           'Optimize hero images, use WebP format, implement lazy loading, preload critical resources',
       });
@@ -341,7 +341,7 @@ export class CoreWebVitalsMonitor {
         type: 'javascript',
         priority: 'high',
         description: 'Reduce First Input Delay',
-        impact: `FID is ${this.metrics.fid}ms (target: <${PERFORMANCE_THRESHOLDS.fid.good}ms)`,
+        impact: `FID is ${this.metrics.fid}ms (_target: <${PERFORMANCE_THRESHOLDS.fid.good}ms)`,
         implementation:
           'Split JavaScript bundles, use code splitting, defer non-critical scripts, optimize event handlers',
       });
@@ -353,7 +353,7 @@ export class CoreWebVitalsMonitor {
         type: 'layout',
         priority: 'high',
         description: 'Reduce Cumulative Layout Shift',
-        impact: `CLS score is ${this.metrics.cls} (target: <${PERFORMANCE_THRESHOLDS.cls.good})`,
+        impact: `CLS score is ${this.metrics.cls} (_target: <${PERFORMANCE_THRESHOLDS.cls.good})`,
         implementation:
           'Add size attributes to images, reserve space for ads, avoid inserting content above existing content',
       });

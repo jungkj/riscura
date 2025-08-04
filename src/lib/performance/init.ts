@@ -108,7 +108,7 @@ async function initializeWebVitals() {
 /**
  * Initialize basic memory management
  */
-function initializeMemoryManagement() {
+const initializeMemoryManagement = () {
   if (typeof window === 'undefined') return;
 
   // Basic memory monitoring
@@ -142,7 +142,7 @@ function initializeMemoryManagement() {
 /**
  * Initialize background task optimization
  */
-function initializeBackgroundTasks() {
+const initializeBackgroundTasks = () {
   // Set up Web Workers for background tasks if available
   if (typeof Worker !== 'undefined') {
     // console.log('Background task optimization initialized with Web Workers');
@@ -154,7 +154,7 @@ function initializeBackgroundTasks() {
 /**
  * Initialize WebSocket optimization
  */
-function initializeWebSocketOptimization() {
+const initializeWebSocketOptimization = () {
   // Basic WebSocket connection tracking
   const originalWebSocket = window.WebSocket;
   let activeConnections = 0;
@@ -185,7 +185,7 @@ function initializeWebSocketOptimization() {
 /**
  * Initialize file upload optimization
  */
-function initializeFileUploadOptimization() {
+const initializeFileUploadOptimization = () {
   // Basic file upload optimization setup
   // console.log('File upload optimization initialized');
 }
@@ -193,7 +193,7 @@ function initializeFileUploadOptimization() {
 /**
  * Start performance monitoring
  */
-function startPerformanceMonitoring() {
+const startPerformanceMonitoring = () {
   if (typeof window === 'undefined') return;
 
   // Performance monitoring disabled to prevent console errors

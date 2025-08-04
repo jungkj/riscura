@@ -73,7 +73,7 @@ export const useOptimizedMemo = <T>(
 ): T => {
   return useMemo(() => {
     performanceMonitor.startMeasure(`memo-${debugName || 'anonymous'}`);
-    const result = factory();
+    const _result = factory();
     performanceMonitor.endMeasure(`memo-${debugName || 'anonymous'}`);
 
     // Track memory usage in development
@@ -286,7 +286,7 @@ export const useDevicePixelRatio = () => {
     };
 
     // Listen for changes in device pixel ratio
-    const mediaQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    const mediaQuery = window.matchMedia(`(_resolution: ${window.devicePixelRatio}dppx)`);
     mediaQuery.addEventListener('change', handleChange);
 
     return () => {

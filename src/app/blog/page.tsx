@@ -26,7 +26,7 @@ export default function BlogPage() {
       </header>
 
       {/* Featured Post */}
-      {featuredPost && (
+      {Boolean(featuredPost) && (
         <section className="mb-16">
           <h2 className="text-2xl font-semibold mb-6 text-gray-900">Featured Article</h2>
           <Link href={`/blog/${featuredPost.slug}`} className="group">

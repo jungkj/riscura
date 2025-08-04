@@ -244,7 +244,7 @@ export class CacheManager {
   }
 
   async getOrSet<T>(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T> {
-    const cached = await this.get<T>(key);
+    const _cached = await this.get<T>(key);
     if (cached !== null) {
       return cached;
     }
@@ -281,7 +281,7 @@ export class CacheManager {
   }
 
   async exists(key: string): Promise<boolean> {
-    const cached = await this.get(key);
+    const _cached = await this.get(key);
     return cached !== null;
   }
 
@@ -399,7 +399,7 @@ export class CacheWarmer {
     });
 
     await Promise.all(promises);
-    const duration = performance.now() - startTime;
+    const _duration = performance.now() - startTime;
     // console.log(`✅ Cache warming completed in ${duration.toFixed(2)}ms`);
   }
 }

@@ -218,7 +218,7 @@ export class ComplianceFrameworkManager {
   }
 
   // Upsert framework
-  private async upsertFramework(framework: ComplianceFramework): Promise<void> {
+  private async upsertFramework(_framework: ComplianceFramework): Promise<void> {
     await db.client.complianceFramework.upsert({
       where: { id: framework.id },
       update: framework,
@@ -862,8 +862,7 @@ export class ComplianceFrameworkManager {
   }
 
   // Search frameworks and requirements
-  async searchFrameworks(
-    query: string,
+  async searchFrameworks(_query: string,
     filters?: {
       frameworks?: string[];
       categories?: string[];

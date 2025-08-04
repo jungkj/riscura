@@ -163,9 +163,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : (
           <>
-            {leftIcon && <span className="mr-2">{leftIcon}</span>}
+            {Boolean(leftIcon) && <span className="mr-2">{leftIcon}</span>}
             {children}
-            {rightIcon && <span className="ml-2">{rightIcon}</span>}
+            {Boolean(rightIcon) && <span className="ml-2">{rightIcon}</span>}
           </>
         )}
       </Comp>

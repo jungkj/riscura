@@ -19,7 +19,7 @@ export const GET = withApiMiddleware(
       const limit = parseInt(searchParams.get('limit') || '10', 10);
       const unreadOnly = searchParams.get('unreadOnly') === 'true';
 
-      const result = await notificationService.getUserNotifications(
+      const _result = await notificationService.getUserNotifications(
         user.id,
         { read: unreadOnly ? false : undefined }, // NotificationFilters
         page,

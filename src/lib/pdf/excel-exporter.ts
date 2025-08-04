@@ -187,14 +187,14 @@ export class ExcelExporter {
     return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
   }
 
-  private formatValue(value: any): any {
+  private formatValue(_value: any): any {
     if (value === null || value === undefined) return '';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (value instanceof Date) return format(value, 'PP');
     return value;
   }
 
-  private formatCellValue(value: any): any {
+  private formatCellValue(_value: any): any {
     if (value === null || value === undefined) return '';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (typeof value === 'number') return value;
@@ -302,7 +302,7 @@ const formatLabel = (key: string): string => {
   return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
 };
 
-const formatValue = (value: any): string => {
+const formatValue = (_value: any): string => {
   if (value === null || value === undefined) return '';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if (typeof value === 'number') return value.toLocaleString();
@@ -310,7 +310,7 @@ const formatValue = (value: any): string => {
   return String(value);
 };
 
-const formatCellValue = (value: any): string => {
+const formatCellValue = (_value: any): string => {
   if (value === null || value === undefined) return '';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if (typeof value === 'number') return value.toString();
@@ -319,7 +319,7 @@ const formatCellValue = (value: any): string => {
 };
 
 // Predefined export templates
-export const createRiskAssessmentExport = (risks: any[]): ExcelWorkbookData => ({
+export const createRiskAssessmentExport = (_risks: any[]): ExcelWorkbookData => ({
   title: 'Risk Assessment Export',
   sheets: [
     {
@@ -524,7 +524,7 @@ export async function exportDataToExcel(_data: any,
     // Write file
     XLSX.writeFile(workbook, filePath);
 
-    const stats = await fs.stat(filePath);
+    const _stats = await fs.stat(filePath);
 
     return {
       filePath,
@@ -540,7 +540,7 @@ export async function exportDataToExcel(_data: any,
 /**
  * Create worksheet from various data formats
  */
-function createWorksheetFromData(_data: any): XLSX.WorkSheet {
+const createWorksheetFromData = (_data: any): XLSX.WorkSheet {
   if (Array.isArray(data)) {
     return XLSX.utils.json_to_sheet(data);
   } else if (data.headers && data.rows) {
@@ -568,7 +568,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
 
   // Risks sheet
   if (data.risks && Array.isArray(data.risks)) {
-    const risksData = data.risks.map((risk: any) => ({
+    const risksData = data.risks.map((_risk: any) => ({
       ID: risk.id,
       Title: risk.title,
       Description: risk.description,
@@ -610,7 +610,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
 
   // Compliance frameworks sheet
   if (data.frameworks && Array.isArray(data.frameworks)) {
-    const frameworksData = data.frameworks.map((framework: any) => ({
+    const frameworksData = data.frameworks.map((_framework: any) => ({
       ID: framework.id,
       Name: framework.name,
       Description: framework.description,
@@ -688,7 +688,7 @@ export async function exportMultipleSheetsToExcel(
 
     XLSX.writeFile(workbook, filePath);
 
-    const stats = await fs.stat(filePath);
+    const _stats = await fs.stat(filePath);
 
     return {
       filePath,
@@ -732,7 +732,7 @@ export async function exportToExcelWithFormatting(_data: any[],
     XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
     XLSX.writeFile(workbook, filePath);
 
-    const stats = await fs.stat(filePath);
+    const _stats = await fs.stat(filePath);
 
     return {
       filePath,

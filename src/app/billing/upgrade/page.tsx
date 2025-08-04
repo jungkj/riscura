@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSubscription } from '@/hooks/use-subscription';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Crown, Zap, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -106,7 +106,7 @@ export default function UpgradePage() {
         <p className="text-xl text-muted-foreground">
           Upgrade your risk management capabilities with advanced features
         </p>
-        {subscription && (
+        {Boolean(subscription) && (
           <div className="mt-4">
             <DaisyBadge variant="outline">Current Plan: {subscription.plan}</DaisyBadge>
           </div>

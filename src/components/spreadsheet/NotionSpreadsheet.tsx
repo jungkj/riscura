@@ -4,7 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import {
   DaisyDialog,
   DaisyDialogContent,
@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import {
+// import {
   Plus,
   Type,
   Hash,
@@ -493,7 +493,7 @@ updateCellValue(row.id, column.id, e.target.value)}
     return colors[severity as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
-  const getInsightIcon = (type: string) => {
+  const getInsightIcon = (_type: string) => {
     switch (type) {
       case 'risk':
         return AlertCircle;
@@ -521,7 +521,7 @@ updateCellValue(row.id, column.id, e.target.value)}
             <Sparkles className="w-3 h-3 mr-1" />
             AI Enhanced
           </DaisyBadge>
-          {hasUnsavedChanges && (
+          {Boolean(hasUnsavedChanges) && (
             <DaisyBadge variant="secondary" className="bg-amber-100 text-amber-800">
               Unsaved Changes
             </DaisyBadge>
@@ -569,7 +569,7 @@ setSearchTerm(e.target.value)}
             AI Insights
           </DaisyButton>
 
-          {hasUnsavedChanges && (
+          {Boolean(hasUnsavedChanges) && (
             <DaisyButton
               size="sm"
               className="h-8 bg-[#199BEC] hover:bg-[#199BEC]/90"
@@ -685,7 +685,7 @@ setNewColumn((prev) => ({ ...prev, name: e.target.value }))}
               <label className="text-sm font-medium">Column Type</label>
               <DaisySelect
                 value={newColumn.type}
-                onValueChange={(value: 'text' | 'number' | 'date' | 'select') =>
+                onValueChange={(_value: 'text' | 'number' | 'date' | 'select') =>
                   setNewColumn((prev) => ({ ...prev, type: value }))
                 }
               >

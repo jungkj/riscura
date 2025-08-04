@@ -323,7 +323,7 @@ export class SecurityManager {
   }
 
   // Security Monitoring
-  async getSecurityMetrics(period: { start: Date; end: Date }): Promise<SecurityMetrics> {
+  async getSecurityMetrics(_period: { start: Date; end: Date }): Promise<SecurityMetrics> {
     const [auditMetrics, threatMetrics, complianceMetrics, incidentMetrics] = await Promise.all([
       this.auditService.getAuditMetrics(period),
       this.threatDetectionEngine.getMetrics(period),
@@ -710,7 +710,7 @@ class ThreatDetectionEngine {
     // Failed login pattern detection
   }
 
-  async getMetrics(period: { start: Date; end: Date }): Promise<any> {
+  async getMetrics(_period: { start: Date; end: Date }): Promise<any> {
     return {
       detectedThreats: 0,
       blockedThreats: 0,
@@ -773,7 +773,7 @@ class ComplianceManager {
     };
   }
 
-  async getMetrics(period: { start: Date; end: Date }): Promise<any> {
+  async getMetrics(_period: { start: Date; end: Date }): Promise<any> {
     return {
       overallScore: 85,
       frameworks: 2,
@@ -811,7 +811,7 @@ class IncidentResponseManager {
     // Trigger response
   }
 
-  async getMetrics(period: { start: Date; end: Date }): Promise<any> {
+  async getMetrics(_period: { start: Date; end: Date }): Promise<any> {
     return {
       totalIncidents: 5,
       openIncidents: 2,

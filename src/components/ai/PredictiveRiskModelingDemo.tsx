@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
+// import {
   Card,
   CardContent,
   CardDescription,
@@ -49,7 +49,7 @@ import {
   LineChart as LineChartIcon
 } from 'lucide-react';
 
-import { 
+// import { 
   predictiveRiskModelingService,
   type RiskForecast,
   type MonteCarloSimulation

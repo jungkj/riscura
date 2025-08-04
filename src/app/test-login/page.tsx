@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
 import { LoginStatus } from '@/components/auth/LoginStatus';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 
@@ -51,10 +51,10 @@ export default function TestLoginPage() {
               <DaisyBadge variant={isAuthenticated ? 'default' : 'destructive'}>
                 {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
               </DaisyBadge>
-              {isAuthenticated && <LoginStatus />}
+              {Boolean(isAuthenticated) && <LoginStatus />}
             </div>
 
-            {user && (
+            {Boolean(user) && (
               <div className="space-y-2">
                 <p>
                   <strong>User:</strong> {user.firstName} {user.lastName}
@@ -68,7 +68,7 @@ export default function TestLoginPage() {
               </div>
             )}
 
-            {isAuthenticated && (
+            {Boolean(isAuthenticated) && (
               <DaisyButton onClick={handleLogout} variant="outline">
                 Logout
               </DaisyButton>

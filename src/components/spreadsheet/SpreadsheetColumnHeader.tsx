@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import { 
+// import { 
   ChevronDown, 
   Type, 
   Hash, 
@@ -135,7 +135,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
           </DaisyDropdownMenuTrigger>
           <DaisyDropdownMenuContent align="start" className="w-48" >
               {/* Sorting */}
-            {onSort && (
+            {Boolean(onSort) && (
               <>
                 <DaisyDropdownMenuItem onClick={() => onSort('asc')} />
                   <ArrowUp className="h-4 w-4 mr-2" />
@@ -167,7 +167,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             </DaisyDropdownMenuSeparator>
             
             {/* Hide/Show */}
-            {onHide && (
+            {Boolean(onHide) && (
               <DaisyDropdownMenuItem onClick={onHide} >
                   <EyeOff className="h-4 w-4 mr-2" />
                 Hide column
@@ -175,7 +175,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             )}
             
             {/* Delete */}
-            {onDelete && (
+            {Boolean(onDelete) && (
               <>
                 <DaisyDropdownMenuSeparator / />
 <DaisyDropdownMenuItem onClick={onDelete} className="text-red-600" >
@@ -194,7 +194,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
         onMouseDown={handleMouseDown}
         title="Drag to resize column" />
       {/* Resize indicator */}
-      {isResizing && (
+      {Boolean(isResizing) && (
         <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-blue-500" />
       )}
     </div>

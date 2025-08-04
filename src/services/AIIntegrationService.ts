@@ -1,5 +1,5 @@
 import { generateId } from '@/lib/utils';
-import { multiTenantAIService } from './MultiTenantAIService';
+// import { multiTenantAIService } from './MultiTenantAIService';
 
 // Service result types
 interface ServiceResult {

@@ -1,4 +1,4 @@
-import {
+// import {
   LayoutDashboard,
   Shield,
   CheckCircle,
@@ -280,7 +280,7 @@ export const getAllNavItems = (): NavItem[] => {
   return navigationSections.flatMap((section) => section.items);
 };
 
-export const searchNavItems = (query: string): NavItem[] => {
+export const searchNavItems = (_query: string): NavItem[] => {
   const lowercaseQuery = query.toLowerCase();
   return getAllNavItems().filter(
     (item) =>

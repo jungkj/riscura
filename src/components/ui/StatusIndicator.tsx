@@ -226,14 +226,14 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
         role="status"
         id={id}
       >
-        {showIcon && (
+        {Boolean(showIcon) && (
           <>
             <IconComponent className={`${sizeStyles.iconSize} flex-shrink-0`} aria-hidden="true" />
             <span className="sr-only">{config.semanticLabel}:</span>
           </>
         )}
         <span>{label}</span>
-        {description && <span className="sr-only">. {description}</span>}
+        {Boolean(description) && <span className="sr-only">. {description}</span>}
       </DaisyBadge>
     );
   }
@@ -251,14 +251,14 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
       role="status"
       id={id}
     >
-      {showIcon && (
+      {Boolean(showIcon) && (
         <>
           <IconComponent className={`${sizeStyles.iconSize} flex-shrink-0`} aria-hidden="true" />
           <span className="sr-only">{config.semanticLabel}:</span>
         </>
       )}
       <span>{label}</span>
-      {description && <span className="sr-only">. {description}</span>}
+      {Boolean(description) && <span className="sr-only">. {description}</span>}
     </div>
   );
 };

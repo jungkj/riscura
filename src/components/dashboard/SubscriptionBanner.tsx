@@ -15,7 +15,7 @@ export function SubscriptionBanner() {
 
   return (
     <div className="mb-6">
-      {isTrialing && trialDaysLeft !== null && (
+      {Boolean(isTrialing) && trialDaysLeft !== null && (
         <DaisyAlert className="border-blue-200 bg-blue-50" >
   <Clock className="h-4 w-4 text-blue-600" />
 </DaisyAlert>
@@ -37,7 +37,7 @@ export function SubscriptionBanner() {
               </DaisyAlert>
       )}
 
-      {isFree && !isTrialing && (
+      {Boolean(isFree) && !isTrialing && (
         <DaisyAlert className="border-amber-200 bg-amber-50" >
   <DaisyAlertTriangle className="h-4 w-4 text-amber-600" />
 </DaisyAlert>

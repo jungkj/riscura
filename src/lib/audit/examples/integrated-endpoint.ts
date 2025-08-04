@@ -463,7 +463,7 @@ async function handleLogin(req: NextRequest) {
     }
 
     // Generate session/token
-    const token = generateAuthToken(user);
+    const _token = generateAuthToken(user);
 
     // Log successful login
     await logAuthEvent(context.prisma, 'LOGIN', user.id, user.organizationId, req, {
@@ -505,12 +505,12 @@ export const POST_LOGIN = withAPI(withAuthAudit('LOGIN')(handleLogin), {
 // UTILITY FUNCTIONS (would be in separate files in real implementation)
 // ============================================================================
 
-function verifyPassword(password: string, hash: string): boolean {
+const verifyPassword = (password: string, hash: string): boolean {
   // Implementation would use bcrypt or similar
   return true; // Simplified for example
 }
 
-function generateAuthToken(user: any): string {
+const generateAuthToken = (user: any): string {
   // Implementation would use JWT or similar
   return 'example-token'; // Simplified for example
 }

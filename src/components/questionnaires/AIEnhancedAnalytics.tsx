@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -18,7 +18,7 @@ import {
   ComposedChart, PieChart, Pie, Cell
 } from 'recharts';
 
-import {
+// import {
   Brain, TrendingUp, TrendingDown, AlertTriangle, Target, Eye,
   Zap, Activity, Shield, Search, Bell, CheckCircle, XCircle,
   BarChart3, LineChart as LineIcon, PieChart as PieIcon,
@@ -340,7 +340,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
     setRefreshing(false);
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     switch (trend) {
       case 'up': return ArrowUp;
       case 'down': return ArrowDown;
@@ -348,7 +348,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
     }
   };
 
-  const getTrendColor = (trend: string) => {
+  const getTrendColor = (_trend: string) => {
     switch (trend) {
       case 'up': return 'text-green-500';
       case 'down': return 'text-red-500';
@@ -366,7 +366,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
     }
   };
 
-  const getInsightTypeIcon = (type: string) => {
+  const getInsightTypeIcon = (_type: string) => {
     switch (type) {
       case 'opportunity': return Lightbulb;
       case 'risk': return AlertTriangle;

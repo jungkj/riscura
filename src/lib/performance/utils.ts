@@ -71,7 +71,7 @@ export const memoryUtils = {
   },
 
   // Monitor memory leaks
-  detectMemoryLeaks: (threshold: number = 80): boolean => {
+  detectMemoryLeaks: (_threshold: number = 80): boolean => {
     const usage = memoryUtils.getMemoryUsage();
     return usage ? usage.percentage > threshold : false;
   },
@@ -359,8 +359,7 @@ export const scoringUtils = {
   },
 
   // Score individual metric
-  scoreMetric: (
-    value: number,
+  scoreMetric: (_value: number,
     goodThreshold: number,
     poorThreshold: number,
     lowerIsBetter: boolean = false

@@ -557,7 +557,7 @@ export class ReportGenerationService {
     return this.generateChartPlaceholder(chart);
   }
 
-  private generateTable(table: TableConfig, results: AssessmentResults, format: string): string {
+  private generateTable(_table: TableConfig, results: AssessmentResults, format: string): string {
     if (format === 'html') {
       return this.generateHTMLTable(table);
     }
@@ -583,7 +583,7 @@ a comprehensive evaluation of the organization's control environment.
     `.trim();
   }
 
-  private generateManagementAssertion(results: AssessmentResults): string {
+  private generateManagementAssertion(_results: AssessmentResults): string {
     return `
 Management acknowledges the findings and recommendations contained in this assessment report. 
 We are committed to addressing the identified deficiencies and implementing the recommended 
@@ -702,7 +702,7 @@ ${
     `.trim();
   }
 
-  private generateKeyFindings(results: AssessmentResults): string {
+  private generateKeyFindings(_results: AssessmentResults): string {
     const findings = [];
 
     // Risk findings
@@ -738,7 +738,7 @@ ${
       : '• No significant findings identified';
   }
 
-  private generateDetailedFindings(results: AssessmentResults): string {
+  private generateDetailedFindings(_results: AssessmentResults): string {
     return `
 Detailed Assessment Findings:
 
@@ -871,7 +871,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     let content = `Implementation Action Plan:\n\n`;
 
     content += `IMMEDIATE ACTIONS (Critical Priority - ${criticalActions.length}):\n`;
-    criticalActions.slice(0, 5).forEach((action: any, index: number) => {
+    criticalActions.slice(0, 5).forEach((_action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
       content += `   Owner: ${action.owner}\n`;
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
@@ -879,7 +879,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     });
 
     content += `SHORT-TERM ACTIONS (High Priority - ${highActions.length}):\n`;
-    highActions.slice(0, 5).forEach((action: any, index: number) => {
+    highActions.slice(0, 5).forEach((_action: any, index: number) => {
       content += `${index + 1}. ${action.title}\n`;
       content += `   Owner: ${action.owner}\n`;
       content += `   Due Date: ${new Date(action.dueDate).toLocaleDateString()}\n`;
@@ -914,7 +914,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     return content.trim();
   }
 
-  private generateRemediationPlanContent(results: AssessmentResults): string {
+  private generateRemediationPlanContent(_results: AssessmentResults): string {
     const materialWeaknesses = results.complianceAssessment.materialWeaknesses || [];
     const criticalRecommendations = results.recommendations.filter(
       (r) => r.priority === 'critical'
@@ -947,7 +947,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   }
 
   // Formatting helper methods
-  private formatContent(content: string, format: string): string {
+  private formatContent(_content: string, format: string): string {
     switch (format) {
       case 'html':
         return `<div class="content">${content.replace(/\n/g, '<br>')}</div>\n`;
@@ -1034,7 +1034,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     return `\n[CHART: ${chart.title} - ${chart.type.toUpperCase()} - ${chart.data.length} data points]\n\n`;
   }
 
-  private generateHTMLTable(table: TableConfig): string {
+  private generateHTMLTable(_table: TableConfig): string {
     let html = `<h3>${table.title}</h3>\n<table>\n<thead>\n<tr>\n`;
 
     table.headers.forEach((header) => {
@@ -1056,7 +1056,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     return html;
   }
 
-  private generateTablePlaceholder(table: TableConfig): string {
+  private generateTablePlaceholder(_table: TableConfig): string {
     let text = `\n${table.title}\n${'-'.repeat(table.title.length)}\n`;
 
     // Add headers
@@ -1095,7 +1095,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     return `${framework} ${template.name} - ${date}`;
   }
 
-  private estimatePageCount(content: string): number {
+  private estimatePageCount(_content: string): number {
     // Rough estimation: 500 words per page
     const wordCount = content.split(/\s+/).length;
     return Math.ceil(wordCount / 500);
@@ -1109,12 +1109,12 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     return template.sections.reduce((count, section) => count + (section.tables?.length || 0), 0);
   }
 
-  private estimateFileSize(content: string): number {
+  private estimateFileSize(_content: string): number {
     // Rough estimation in bytes
     return content.length * 2; // Account for formatting and metadata
   }
 
-  private generateExecutiveSummaryContent(results: AssessmentResults): string {
+  private generateExecutiveSummaryContent(_results: AssessmentResults): string {
     const riskSummary = results.riskAssessment
       ? `Total Risks: ${results.riskAssessment.totalRisks || 0}, Critical: ${results.riskAssessment.risksByLevel?.CRITICAL || 0}`
       : 'Risk assessment data not available';

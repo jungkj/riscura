@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -9,7 +9,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Area, AreaChart 
 } from 'recharts';
-import {
+// import {
   Building2,
   Users,
   Settings,
@@ -26,7 +26,7 @@ import {
   Activity
 } from 'lucide-react';
 
-import { multiTenantAIService } from '@/services/MultiTenantAIService';
+// import { multiTenantAIService } from '@/services/MultiTenantAIService';
 import type { 
   Tenant, 
   TenantAnalytics, 
@@ -245,7 +245,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
         )}
       </div>
 
-      {error && (
+      {Boolean(error) && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
             <DaisyAlertTriangle className="w-5 h-5 text-red-600" >
@@ -303,7 +303,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
         </DaisyCardBody>
       </DaisyCard>
 
-      {selectedTenant && (
+      {Boolean(selectedTenant) && (
         <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
             <DaisyTabsList className="grid w-full grid-cols-7" >
               <DaisyTabsTrigger value="overview" className="flex items-center gap-2" >

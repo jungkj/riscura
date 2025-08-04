@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
-import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
+// import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
 
 const CreateRiskSchema = z.object({
   title: z.string().min(1),
@@ -258,7 +258,7 @@ export const POST = withApiMiddleware(
   }
 );
 
-function calculateRiskLevel(score: number): RiskLevel {
+const calculateRiskLevel = (score: number): RiskLevel {
   if (score <= 6) return RiskLevel.LOW; // 1-6 (24% of range)
   if (score <= 12) return RiskLevel.MEDIUM; // 7-12 (24% of range)
   if (score <= 20) return RiskLevel.HIGH; // 13-20 (32% of range)

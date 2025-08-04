@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -11,7 +11,7 @@ import { CollaborationPanel } from '@/components/collaboration/CollaborationPane
 import { RealTimeEditor } from '@/components/collaboration/RealTimeEditor';
 import { ShareDialog } from '@/components/collaboration/ShareDialog';
 
-import {
+// import {
   Users,
   Share2,
   GitBranch,
@@ -185,7 +185,7 @@ export default function CollaborativeQuestionnairePage({
     }, 1500);
   };
 
-  const handleContentChange = (content: any) => {
+  const handleContentChange = (_content: any) => {
     // Update questionnaire content
     setQuestionnaire((prev) => ({
       ...prev,
@@ -433,7 +433,7 @@ export default function CollaborativeQuestionnairePage({
 
           {/* Collaboration panel */}
           <AnimatePresence>
-            {collaborationPanelOpen && (
+            {Boolean(collaborationPanelOpen) && (
               <motion.div
                 initial={{ x: 320, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}

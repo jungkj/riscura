@@ -8,8 +8,8 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import { useRiskFlow } from '../RiskFlowContext';
-import { RiskCategory } from '@/types/rcsa.types';
+// import { useRiskFlow } from '../RiskFlowContext';
+// import { RiskCategory } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 
 const categories: { value: RiskCategory; label: string; color: string; emoji: string }[] = [

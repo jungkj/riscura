@@ -54,16 +54,16 @@ const tests = [
   },
 ];
 
-let passed = 0;
+let _passed = 0;
 let failed = 0;
-let skipped = 0;
+let _skipped = 0;
 
 async function runTest(test: (typeof tests)[0]) {
   // console.log(`\n🧪 ${test.name}`);
   // console.log('─'.repeat(50));
 
   try {
-    const output = execSync(test.command, {
+    const _output = execSync(test.command, {
       encoding: 'utf8',
       timeout: test.timeout || 60000,
       stdio: test.name === 'Dependencies Check' ? 'pipe' : 'inherit',
@@ -76,7 +76,7 @@ async function runTest(test: (typeof tests)[0]) {
     // console.log(`✅ ${test.name} passed`);
     passed++;
     return true;
-  } catch (_error: any) {
+  } catch (__error: any) {
     // console.error(`❌ ${test.name} failed`);
 
     if (test.critical) {
@@ -95,13 +95,13 @@ async function runAllTests() {
   const startTime = Date.now();
 
   for (const test of tests) {
-    const result = await runTest(test);
+    const _result = await runTest(test);
     if (!result && test.critical) {
       break;
     }
   }
 
-  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  const _duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
   // console.log('\n\n📊 Test Summary');
   // console.log('=====================================');

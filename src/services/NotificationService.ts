@@ -10,7 +10,7 @@ import {
   PushSubscription,
   Prisma,
 } from '@prisma/client';
-import { redis } from '@/lib/cache/memory-cache';
+// import { redis } from '@/lib/cache/memory-cache';
 import webpush from 'web-push';
 import { sendEmail } from '@/lib/email';
 // import { add, isAfter, isBefore, parseISO, format } from 'date-fns';
@@ -110,7 +110,7 @@ export class NotificationService {
 
   // Create bulk notifications
   async createBulkNotifications(input: BulkNotificationInput): Promise<Notification[]> {
-    const notifications = await prisma.notification.createMany({
+    const _notifications = await prisma.notification.createMany({
       data: input.userIds.map((userId) => ({
         userId,
         organizationId: input.organizationId,
@@ -146,7 +146,7 @@ export class NotificationService {
     limit = 20
   ): Promise<{ notifications: Notification[]; total: number }> {
     const cacheKey = `${this.cacheKeyPrefix}user:${userId}:${JSON.stringify(filters)}:${page}:${limit}`;
-    const cached = await redis.get(cacheKey);
+    const _cached = await redis.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached as string);
@@ -179,7 +179,7 @@ export class NotificationService {
       prisma.notification.count({ where }),
     ]);
 
-    const result = { notifications, total };
+    const _result = { notifications, total };
     await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(result));
 
     return result;
@@ -204,7 +204,7 @@ export class NotificationService {
 
   // Mark multiple notifications as read
   async markMultipleAsRead(notificationIds: string[], userId: string): Promise<number> {
-    const result = await prisma.notification.updateMany({
+    const _result = await prisma.notification.updateMany({
       where: {
         id: { in: notificationIds },
         userId,
@@ -240,7 +240,7 @@ export class NotificationService {
   // Get unread count
   async getUnreadCount(_userId: string): Promise<number> {
     const cacheKey = `${this.cacheKeyPrefix}unread:${userId}`;
-    const cached = await redis.get(cacheKey);
+    const _cached = await redis.get(cacheKey);
 
     if (cached !== null) {
       return parseInt(cached as string);
@@ -419,7 +419,7 @@ export class NotificationService {
           where: { id: sub.id },
           data: { lastUsedAt: new Date() },
         });
-      } catch (_error: any) {
+      } catch (__error: any) {
         // Handle expired subscriptions
         if (error.statusCode === 410) {
           await prisma.pushSubscription.delete({
@@ -462,7 +462,7 @@ export class NotificationService {
 
   // Send digest email
   private async sendDigest(digest: any): Promise<void> {
-    const notifications = await prisma.notification.findMany({
+    const _notifications = await prisma.notification.findMany({
       where: {
         userId: digest.userId,
         organizationId: digest.organizationId,

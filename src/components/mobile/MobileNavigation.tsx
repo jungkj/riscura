@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { useGesture } from '@use-gesture/react';
-import {
+// import {
   Menu,
   X,
   Home,
@@ -291,7 +291,7 @@ export default function MobileNavigation({
                   {item.badge}
                 </DaisyButton>
               )}
-              {hasChildren && (
+              {Boolean(hasChildren) && (
                 isExpanded 
                   ? <ChevronDown className="w-4 h-4" />
                   : <ChevronRight className="w-4 h-4" />
@@ -301,7 +301,7 @@ export default function MobileNavigation({
         </DaisyButton>
         
         {/* Render children */}
-        {hasChildren && isExpanded && (
+        {Boolean(hasChildren) && isExpanded && (
           <div className="mt-1 space-y-1" role="group" aria-label={`${item.label} submenu`}>
             {item.children!.map(child => renderNavigationItem(child, level + 1))}
           </div>
@@ -397,7 +397,7 @@ export default function MobileNavigation({
             </div>
             
             {/* Search */}
-            {isSearchOpen && (
+            {Boolean(isSearchOpen) && (
               <div className="p-4 border-b">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />

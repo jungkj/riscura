@@ -1,5 +1,5 @@
-import { Risk, Control } from '@/types';
-import { AgentType } from '@/types/ai.types';
+// import { Risk, Control } from '@/types';
+// import { AgentType } from '@/types/ai.types';
 
 // Base prompt templates for different agent types
 export const AGENT_PROMPTS = {
@@ -97,7 +97,7 @@ RESPONSE STRUCTURE:
 
 // Specialized prompt templates for specific tasks
 export const TASK_PROMPTS = {
-  riskAnalysis: (risk: Risk, context?: any) => `
+  riskAnalysis: (_risk: Risk, context?: any) => `
 RISK ANALYSIS REQUEST
 
 Risk Details:
@@ -135,7 +135,7 @@ ANALYSIS REQUIREMENTS:
 
 Please provide a comprehensive risk analysis with actionable insights and recommendations.`,
 
-  controlRecommendation: (risk: Risk, context?: any) => `
+  controlRecommendation: (_risk: Risk, context?: any) => `
 CONTROL RECOMMENDATION REQUEST
 
 Risk Context:
@@ -169,7 +169,7 @@ CONTROL REQUIREMENTS:
 
 Please recommend a comprehensive control strategy that effectively mitigates this risk.`,
 
-  complianceGapAnalysis: (framework: string, controls: Control[], context?: any) => `
+  complianceGapAnalysis: (_framework: string, controls: Control[], context?: any) => `
 COMPLIANCE GAP ANALYSIS REQUEST
 
 Framework: ${framework}
@@ -203,7 +203,7 @@ ANALYSIS REQUIREMENTS:
 
 Please provide a detailed gap analysis with prioritized remediation plan.`,
 
-  naturalLanguageQuery: (query: string, context?: any) => `
+  naturalLanguageQuery: (_query: string, context?: any) => `
 NATURAL LANGUAGE QUERY PROCESSING
 
 User Query: "${query}"
@@ -264,7 +264,7 @@ ANALYSIS REQUIREMENTS:
 
 Please provide predictive analysis with actionable recommendations for risk management strategy.`,
 
-  reportGeneration: (risks: Risk[], reportType: string, context?: any) => `
+  reportGeneration: (_risks: Risk[], reportType: string, context?: any) => `
 RISK REPORT GENERATION REQUEST
 
 Report Type: ${reportType}
@@ -409,7 +409,7 @@ export const PromptUtils = {
   /**
    * Generate agent-specific prompt
    */
-  getAgentPrompt(agentType: AgentType): string {
+  getAgentPrompt(_agentType: AgentType): string {
     return AGENT_PROMPTS[agentType] || AGENT_PROMPTS.general_assistant;
   },
 
@@ -461,8 +461,7 @@ Consider this risk appetite when making recommendations and assessments.`;
   /**
    * Generate comprehensive system prompt
    */
-  generateSystemPrompt(
-    agentType: AgentType,
+  generateSystemPrompt(_agentType: AgentType,
     taskType: keyof typeof TASK_PROMPTS,
     context?: any,
     responseFormat?: keyof typeof RESPONSE_FORMATS
@@ -820,8 +819,7 @@ export function buildRiskAnalysisPrompt(
     .replace('{organizationContext}', JSON.stringify(orgContext, null, 2));
 }
 
-export function buildControlRecommendationPrompt(
-  risk: any,
+export function buildControlRecommendationPrompt(_risk: any,
   existingControls: any[],
   industryContext: any
 ): string {
@@ -840,8 +838,7 @@ export function buildComplianceGapPrompt(
     .replace('{frameworkRequirements}', JSON.stringify(requirements, null, 2));
 }
 
-export function buildChatPrompt(
-  query: string,
+export function buildChatPrompt(_query: string,
   history: any[],
   contextData: any,
   intent: any

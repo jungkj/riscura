@@ -1,4 +1,4 @@
-import {
+// import {
   SmartNotification,
   NotificationChannel,
   IntelligentPriority,
@@ -12,14 +12,14 @@ import {
   ActionItem,
   UserContext,
 } from '@/types/proactive-monitoring.types';
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 import { generateId } from '@/lib/utils';
 
 // Import AI services for real integration
-import { AIService } from './AIService';
-import { ComplianceAIService } from './ComplianceAIService';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
-import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
+// import { AIService } from './AIService';
+// import { ComplianceAIService } from './ComplianceAIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { ProactiveAIIntegrationService } from './ProactiveAIIntegrationService';
 
 // Add missing ComplianceRequirement interface
 interface ComplianceRequirement {
@@ -187,7 +187,7 @@ export class SmartNotificationService {
   /**
    * Generate intelligent risk alerts with AI insights
    */
-  async generateRiskAlerts(risks: Risk[]): Promise<SmartNotification[]> {
+  async generateRiskAlerts(_risks: Risk[]): Promise<SmartNotification[]> {
     try {
       const notifications: SmartNotification[] = [];
 
@@ -752,8 +752,7 @@ export class SmartNotificationService {
     );
   }
 
-  private async generateRiskActionItems(
-    risk: Risk,
+  private async generateRiskActionItems(_risk: Risk,
     analysis: unknown,
     userContext: UserContext
   ): Promise<ActionItem[]> {
@@ -1115,7 +1114,7 @@ export class SmartNotificationService {
   }
 
   // Service integration helper methods
-  private async getUsersForRisk(risk: Risk): Promise<string[]> {
+  private async getUsersForRisk(_risk: Risk): Promise<string[]> {
     return await this.userService.getUsersForEntity('risk', risk.id);
   }
 
@@ -1130,7 +1129,7 @@ export class SmartNotificationService {
   }
 
   private async getUserPreferences(_userId: string): Promise<UserPreferences> {
-    const cached = await this.cacheService.get(`user_preferences:${userId}`);
+    const _cached = await this.cacheService.get(`user_preferences:${userId}`);
     if (cached) return cached as UserPreferences;
 
     return await this.userService.getUserPreferences(userId);
@@ -1178,8 +1177,7 @@ export class SmartNotificationService {
 
 // Service interfaces
 interface AIInsightService {
-  analyzeRiskForAlert(
-    risk: Risk
+  analyzeRiskForAlert(_risk: Risk
   ): Promise<{ requiresAlert: boolean; id: string; severity: string }>;
   analyzeControlForReminder(
     control: Control
@@ -1192,8 +1190,7 @@ interface AIInsightService {
     improvementType: string;
     potentialTimeSavings: number;
   }>;
-  generateRiskInsight(
-    risk: Risk,
+  generateRiskInsight(_risk: Risk,
     context: UserContext,
     analysis: unknown
   ): Promise<{ insight: string }>;
@@ -1243,7 +1240,7 @@ interface AIInsightService {
 
 interface UserContextService {
   getUserContext(_userId: string): Promise<UserContext>;
-  getUsersForEntity(entityType: string, entityId: string): Promise<string[]>;
+  getUsersForEntity(_entityType: string, entityId: string): Promise<string[]>;
   getUserPreferences(_userId: string): Promise<UserPreferences>;
   getWorkingHours(_userId: string): Promise<unknown>;
   getCurrentActivity(_userId: string): Promise<string>;

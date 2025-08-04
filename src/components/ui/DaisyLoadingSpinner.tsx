@@ -22,7 +22,7 @@ export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <div className={cn('flex items-center justify-center', className)}>
       <span className={cn('loading loading-spinner', sizeClasses[size])} />
-      {text && <span className="ml-2 text-sm text-base-content/70">{text}</span>}
+      {Boolean(text) && <span className="ml-2 text-sm text-base-content/70">{text}</span>}
     </div>
   );
 };

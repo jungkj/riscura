@@ -4,10 +4,10 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { Network, Shield, Link, Target, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
+// import { Network, Shield, Link, Target, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function ControlsMappingPage() {
   // Mock data for control mappings

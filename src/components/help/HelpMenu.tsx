@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import GuidedTour, { TourLauncher } from '@/components/help/GuidedTour';
-import {
+// import {
   HelpCircle,
   Play,
   BookOpen,
@@ -150,7 +150,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'tour': return Play;
       case 'guide': return BookOpen;
@@ -164,7 +164,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Guided Tour Component */}
-      {showTour && (
+      {Boolean(showTour) && (
         <GuidedTour
           tourId={selectedTourId}
           autoStart={true}

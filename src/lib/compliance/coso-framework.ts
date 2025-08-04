@@ -1,4 +1,4 @@
-import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types';
 
 export interface COSOComponent {
   id: string;

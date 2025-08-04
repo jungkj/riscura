@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+// import { 
   Upload, 
   FileText, 
   CheckCircle, 
@@ -158,7 +158,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
               {...getRootProps()}
               className={`
                 relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
-                ${isDragActive && !isDragReject ? 'border-blue-400 bg-blue-50' : ''}
+                ${Boolean(isDragActive) && !isDragReject ? 'border-blue-400 bg-blue-50' : ''}
                 ${isDragReject ? 'border-red-400 bg-red-50' : ''}
                 ${!isDragActive && !isDragReject ? 'border-gray-300 hover:border-gray-400 hover:bg-gray-50' : ''}
                 ${isUploading ? 'pointer-events-none opacity-50' : ''}
@@ -260,7 +260,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
             )}
 
             {/* Upload Button */}
-            {filePreview && (
+            {Boolean(filePreview) && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -289,7 +289,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
 
           {/* Loading Animation */}
           <AnimatePresence>
-            {isUploading && (
+            {Boolean(isUploading) && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -313,7 +313,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
 
           {/* Import Results */}
           <AnimatePresence>
-            {importResult && (
+            {Boolean(importResult) && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

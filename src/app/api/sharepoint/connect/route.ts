@@ -24,7 +24,7 @@ export const POST = withApiMiddleware({
     const fileService = getSharePointFileService();
 
     // Get site information from URL
-    const siteInfo = await fileService.getSiteByUrl(siteUrl);
+    const _siteInfo = await fileService.getSiteByUrl(siteUrl);
 
     // Validate access to the site
     const hasAccess = await authService.validateSiteAccess(siteInfo.id);

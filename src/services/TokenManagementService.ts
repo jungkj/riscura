@@ -1,4 +1,4 @@
-import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types';
 
 // Interfaces for token management
 export interface TokenUsage {
@@ -964,7 +964,7 @@ export class TokenManagementService {
       // Load usage alerts
       const alertsData = localStorage.getItem(this.USAGE_ALERTS_KEY);
       if (alertsData) {
-        this.usageAlerts = JSON.parse(alertsData).map((alert: UsageAlert) => ({
+        this.usageAlerts = JSON.parse(alertsData).map((_alert: UsageAlert) => ({
           ...alert,
           timestamp: new Date(alert.timestamp),
         }));

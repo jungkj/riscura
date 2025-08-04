@@ -2,7 +2,7 @@
 
 /** @jsxImportSource react */
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,7 +11,7 @@ import { toast } from '@/hooks/use-toast';
 import GuidedTour from '@/components/help/GuidedTour';
 import { DashboardStatsModal } from '@/components/dashboard/DashboardStatsModal';
 
-import {
+// import {
   Shield,
   CheckCircle,
   AlertTriangle,
@@ -47,7 +47,7 @@ import {
 import Image from 'next/image';
 
 // Import the interactive risk heat map component
-import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
+// import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
 import EmptyStateWizard from '@/components/dashboard/EmptyStateWizard';
 
@@ -89,7 +89,7 @@ interface Insight {
   action?: string;
 }
 
-function DashboardPage() {
+const DashboardPage = () {
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats>({
     totalRisks: 0,
@@ -137,7 +137,7 @@ function DashboardPage() {
             if (risksRes.ok) {
               const risksData = await risksRes.json();
               if (risksData.success && risksData.data) {
-                risksData.data.forEach((risk: any) => {
+                risksData.data.forEach((_risk: any) => {
                   const riskScore = (risk.likelihood || 0) * (risk.impact || 0);
                   if (riskScore >= 20) {
                     criticalCount++;
@@ -383,7 +383,7 @@ function DashboardPage() {
     localStorage.setItem('hasSeenDashboardTour', 'true');
   };
 
-  const getStatsModalData = (type: string) => {
+  const getStatsModalData = (_type: string) => {
     switch (type) {
       case 'totalRisks':
         return {
@@ -551,7 +551,7 @@ function DashboardPage() {
     }
   };
 
-  const handleStatsCardClick = (type: string) => {
+  const handleStatsCardClick = (_type: string) => {
     const modalData = getStatsModalData(type);
     setSelectedStatsModal(modalData);
   };
@@ -567,7 +567,7 @@ function DashboardPage() {
   return (
     <div className="p-6 space-y-6 md:space-y-8" data-tour="dashboard-main">
       {/* Guided Tour Component */}
-      {showTour && (
+      {Boolean(showTour) && (
         <GuidedTour
           tourId="platform-overview"
           autoStart={true}
@@ -1008,7 +1008,7 @@ function DashboardPage() {
   );
 }
 
-function QuickActionCard({ 
+const QuickActionCard = ({ 
   title, 
   description, 
   icon: Icon, 
@@ -1033,7 +1033,7 @@ function QuickActionCard({
         <div className={`p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors flex-shrink-0`}>
           <Icon className={`w-4 h-4 ${color} group-hover:text-blue-600 transition-colors`} />
         </div>
-        {badge && (
+        {Boolean(badge) && (
           <DaisyBadge 
             variant="secondary" 
             className={`text-xs font-semibold ml-auto ${
@@ -1060,7 +1060,7 @@ function QuickActionCard({
   );
 }
 
-function ActivityItem({ 
+const ActivityItem = ({ 
   action, 
   user, 
   time, 

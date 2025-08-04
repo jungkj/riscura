@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -52,9 +52,9 @@ export interface RiskData {
 
 interface RiskCardProps {
   risk: RiskData;
-  onView?: (risk: RiskData) => void;
-  onEdit?: (risk: RiskData) => void;
-  onArchive?: (risk: RiskData) => void;
+  onView?: (_risk: RiskData) => void;
+  onEdit?: (_risk: RiskData) => void;
+  onArchive?: (_risk: RiskData) => void;
   className?: string;
 }
 
@@ -90,7 +90,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
     return 'text-green-600 bg-green-50';
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     switch (trend) {
       case 'up': return <TrendingUp className="w-4 h-4 text-red-500" />;
       case 'down': return <TrendingDown className="w-4 h-4 text-green-500" />;

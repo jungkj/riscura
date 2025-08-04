@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
+// import {
   ChevronDown,
   ChevronRight,
   Plus,
@@ -30,7 +30,7 @@ import {
 import { toast } from 'sonner';
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaApiClient } from '@/lib/api/rcsa-client';
-import {
+// import {
   Risk,
   Control,
   TestScript,
@@ -618,7 +618,7 @@ export const NotionRCSASpreadsheet = () => {
 
       {/* AI Generator Modal */}
       <AnimatePresence>
-        {showAIGenerator && currentEntity && (
+        {Boolean(showAIGenerator) && currentEntity && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

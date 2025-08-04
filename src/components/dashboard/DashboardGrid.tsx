@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -20,7 +20,7 @@ import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
          ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
 // Icons
-import {
+// import {
   BarChart3, TrendingUp, AlertTriangle, CheckCircle, Shield, Eye,
   MoreHorizontal, Maximize, Minimize, RefreshCw, Download, Settings,
   Brain, Zap, Target, Activity, PieChart as PieChartIcon, LineChart as LineChartIcon,
@@ -54,7 +54,7 @@ interface DashboardGridProps {
 }
 
 // Mock chart data
-const generateChartData = (type: string) => {
+const generateChartData = (_type: string) => {
   switch (type) {
     case 'risk-trend':
       return Array.from({ length: 12 }, (_, i) => ({
@@ -254,7 +254,7 @@ export function DashboardGrid({
 }
 
 // Widget Components
-function MetricsWidget({ data, expanded }: { data: any; expanded: boolean }) {
+const MetricsWidget = ({ data, expanded }: { data: any; expanded: boolean }) {
   const metrics = [
     { label: 'Total Risks', value: data.totalRisks, trend: '+2.3%', positive: false, icon: <BarChart3 className="w-4 h-4" /> },
     { label: 'High Priority', value: data.highPriorityRisks, trend: '-5.1%', positive: true, icon: <DaisyAlertTriangle className="w-4 h-4" >
@@ -296,7 +296,7 @@ function MetricsWidget({ data, expanded }: { data: any; expanded: boolean }) {
   );
 }
 
-function RiskHeatmapWidget({ risks, expanded }: { risks: Risk[]; expanded: boolean }) {
+const RiskHeatmapWidget = ({ risks, expanded }: { risks: Risk[]; expanded: boolean }) {
   const chartData = generateChartData('risk-trend');
 
   return (
@@ -324,7 +324,7 @@ function RiskHeatmapWidget({ risks, expanded }: { risks: Risk[]; expanded: boole
   );
 }
 
-function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: boolean }) {
+const AIInsightsWidget = ({ enabled, expanded }: { enabled: boolean; expanded: boolean }) {
   const insights = [
     { id: 1, title: 'Emerging Cybersecurity Threat', severity: 'high', confidence: 92 },
     { id: 2, title: 'Compliance Gap Detected', severity: 'medium', confidence: 87 },
@@ -390,7 +390,7 @@ function AIInsightsWidget({ enabled, expanded }: { enabled: boolean; expanded: b
   );
 }
 
-function ComplianceWidget({ expanded }: { expanded: boolean }) {
+const ComplianceWidget = ({ expanded }: { expanded: boolean }) {
   const complianceData = generateChartData('compliance-score');
 
   return (
@@ -417,7 +417,7 @@ function ComplianceWidget({ expanded }: { expanded: boolean }) {
   );
 }
 
-function RecentActivityWidget({ expanded }: { expanded: boolean }) {
+const RecentActivityWidget = ({ expanded }: { expanded: boolean }) {
   const activities = [
     { id: 1, type: 'risk', title: 'New cybersecurity risk identified', time: '2 mins ago', user: 'Sarah Chen' },
     { id: 2, type: 'control', title: 'Control testing completed', time: '15 mins ago', user: 'Mike Johnson' },
@@ -465,7 +465,7 @@ function RecentActivityWidget({ expanded }: { expanded: boolean }) {
   );
 }
 
-function PredictiveWidget({ expanded }: { expanded: boolean }) {
+const PredictiveWidget = ({ expanded }: { expanded: boolean }) {
   const predictions = [
     { metric: 'Risk Exposure', current: 75, predicted: 68, confidence: 89, trend: 'decreasing' },
     { metric: 'Compliance Score', current: 94, predicted: 96, confidence: 92, trend: 'increasing' },

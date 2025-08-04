@@ -1,4 +1,4 @@
-import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client';
+// import { Risk, RiskCategory, RiskStatus, RiskLevel } from '@prisma/client';
 
 export interface CreateRiskOptions {
   id?: string;
@@ -84,7 +84,7 @@ export class RiskFactory {
     return Array.from({ length: count }, () => this.create({ category }));
   }
 
-  static createBatch(count: number, options: CreateRiskOptions = {}): Risk[] {
+  static createBatch(_count: number, options: CreateRiskOptions = {}): Risk[] {
     return Array.from({ length: count }, () => this.create(options));
   }
 

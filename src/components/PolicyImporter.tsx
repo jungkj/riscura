@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+// import { 
   FileText, 
   Upload, 
   CheckCircle, 
@@ -18,7 +18,7 @@ import {
   FilePlus2
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -90,7 +90,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   // File type icons
-  const getFileIcon = (type: string) => {
+  const getFileIcon = (_type: string) => {
     if (type.includes('pdf')) return '📄';
     if (type.includes('word') || type.includes('document')) return '📝';
     if (type.includes('text')) return '📃';
@@ -430,7 +430,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                   </div>
                 ))}
 
-                {uploading && (
+                {Boolean(uploading) && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -446,7 +446,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
             )}
           </AnimatePresence>
 
-          {error && (
+          {Boolean(error) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -466,7 +466,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
 
       {/* Analysis Results */}
       <AnimatePresence>
-        {analysisResult && (
+        {Boolean(analysisResult) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

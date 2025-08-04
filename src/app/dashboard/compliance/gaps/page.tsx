@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -17,7 +17,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import {
+// import {
   AlertTriangle,
   Shield,
   CheckCircle,
@@ -314,7 +314,7 @@ export default function ComplianceGapsPage() {
         maxWidth="2xl"
       >
         {/* AI Analysis Status */}
-        {isAnalyzing && (
+        {Boolean(isAnalyzing) && (
           <DaisyAlert className="mb-6">
             <Zap className="h-4 w-4 animate-pulse" />
             <div>AI is analyzing your compliance posture against framework requirements...</div>

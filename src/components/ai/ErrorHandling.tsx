@@ -11,7 +11,7 @@ import {
   Info,
   X
 } from 'lucide-react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -91,7 +91,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
 </DaisyButton>
               </DaisyButton>
             )}
-            {onDismiss && (
+            {Boolean(onDismiss) && (
               <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
   <X className="h-3 w-3" />
 </DaisyButton>
@@ -142,7 +142,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
                   Try Again
                 </DaisyButton>
               )}
-              {onDismiss && (
+              {Boolean(onDismiss) && (
                 <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
           Dismiss
 
@@ -231,7 +231,7 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
           <div className={`font-medium ${getStatusColor()}`}>
             {getStatusText()}
           </div>
-          {lastSuccessfulConnection && status !== ConnectionStatus.CONNECTED && (
+          {Boolean(lastSuccessfulConnection) && status !== ConnectionStatus.CONNECTED && (
             <div className="text-xs text-muted-foreground">
               Last connected: {lastSuccessfulConnection.toLocaleTimeString()}
             </div>
@@ -281,7 +281,7 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
               AI services are temporarily unavailable. I'm operating in fallback mode 
               with limited functionality.
             </p>
-            {fallbackReason && (
+            {Boolean(fallbackReason) && (
               <p className="text-sm text-muted-foreground">
                 Reason: {fallbackReason}
               </p>
@@ -290,7 +290,7 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
               <Zap className="h-4 w-4 text-blue-500" />
               <span>Basic responses and manual processes are still available</span>
             </div>
-            {onDismiss && (
+            {Boolean(onDismiss) && (
               <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
           Understood
 
@@ -395,7 +395,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
           <span className="font-medium">{failures}</span>
         </div>
         
-        {nextAttempt && nextAttempt > Date.now() && (
+        {Boolean(nextAttempt) && nextAttempt > Date.now() && (
           <div className="text-sm">
             <span>Next attempt: </span>
             <span className="font-medium">

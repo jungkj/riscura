@@ -71,7 +71,7 @@ interface MetricData {
 }
 
 // Sample Data
-const generateSampleRisks = (count: number): Risk[] => {
+const generateSampleRisks = (_count: number): Risk[] => {
   const _categories = ['Operational', 'Financial', 'Compliance', 'Strategic', 'Technology'];
   const departments = ['IT', 'Finance', 'Operations', 'Legal', 'Marketing'];
   const owners = ['John Smith', 'Sarah Johnson', 'Mike Chen', 'Lisa Brown', 'David Wilson'];
@@ -158,7 +158,7 @@ const AccessibilityPanel: React.FC = () => {
         </svg>
       </button>
 
-      {isOpen && (
+      {Boolean(isOpen) && (
         <FocusTrap
           active={isOpen}
           className="absolute right-0 top-full mt-2 w-80 bg-surface-primary border border-surface-tertiary rounded-lg shadow-lg p-4 z-50"
@@ -239,7 +239,7 @@ const PerformancePanel: React.FC = () => {
   const { metrics, settings, updateSettings } = usePerformance();
   const [isOpen, setIsOpen] = useState(false);
 
-  const formatMetric = (value: number, unit: string) => {
+  const formatMetric = (_value: number, unit: string) => {
     return `${value.toFixed(2)} ${unit}`;
   };
 
@@ -260,7 +260,7 @@ const PerformancePanel: React.FC = () => {
         </svg>
       </button>
 
-      {isOpen && (
+      {Boolean(isOpen) && (
         <div className="absolute right-0 top-full mt-2 w-96 bg-surface-primary border border-surface-tertiary rounded-lg shadow-lg p-4 z-50">
           <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
 
@@ -332,7 +332,7 @@ const PerformancePanel: React.FC = () => {
 
 // Metric Card Component
 const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, index }) => {
-  const formatValue = (value: number, format: string) => {
+  const formatValue = (_value: number, format: string) => {
     switch (format) {
       case 'percentage':
         return `${value}%`;
@@ -478,7 +478,7 @@ const VirtualScrollContainer: React.FC<{
   items: Risk[];
   itemHeight: number;
   height: number;
-  renderItem: (risk: Risk, index: number) => JSX.Element;
+  renderItem: (_risk: Risk, index: number) => JSX.Element;
   className?: string;
 }> = ({ items, renderItem }) => (
   <div>
@@ -687,7 +687,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                 items={filteredRisks}
                 itemHeight={140}
                 height={600}
-                renderItem={(risk: Risk, index: number) => (
+                renderItem={(_risk: Risk, index: number) => (
                   <div className="px-6 py-2">
                     <RiskItem risk={risk} index={index} />
                   </div>

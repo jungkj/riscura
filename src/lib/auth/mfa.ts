@@ -196,7 +196,7 @@ export class MFAService {
       : enabledMethods;
 
     for (const method of methodsToTry) {
-      const result = await this.verifyMethodCode(method, code);
+      const _result = await this.verifyMethodCode(method, code);
       if (result) {
         // Update last used
         await this.updateMethodLastUsed(method.id);

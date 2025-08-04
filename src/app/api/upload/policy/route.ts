@@ -18,7 +18,7 @@ interface UploadedFile {
 }
 
 // Rate limiting function
-function checkRateLimit(clientIP: string): boolean {
+const checkRateLimit = (clientIP: string): boolean {
   const now = Date.now();
   const userLimit = rateLimitStore.get(clientIP);
 
@@ -53,7 +53,7 @@ async function extractTextFromPDF(buffer: Buffer): Promise<string> {
 async function extractTextFromDocx(buffer: Buffer): Promise<string> {
   try {
     const mammoth = await import('mammoth');
-    const result = await mammoth.extractRawText({ buffer });
+    const _result = await mammoth.extractRawText({ buffer });
     return result.value;
   } catch (error) {
     throw new Error(`DOCX extraction failed: ${error}`);
@@ -117,7 +117,7 @@ ${text}`,
     // Add confidence scores and validate structure
     const extractedContent: ExtractedContent = {
       risks:
-        parsed.risks?.map((risk: any, index: number) => ({
+        parsed.risks?.map((_risk: any, index: number) => ({
           id: risk.id || `R${index + 1}`,
           text: risk.text || '',
           confidence: 0.9, // Default confidence score

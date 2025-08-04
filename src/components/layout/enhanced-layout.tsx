@@ -318,9 +318,9 @@ export const EnhancedSectionHeader: React.FC<EnhancedSectionHeaderProps> = ({
       <EnhancedFlex justify="between" align="end" gap="md">
         <div className="space-y-1">
           <h2 className={sizeClasses[size].title}>{title}</h2>
-          {subtitle && <p className={sizeClasses[size].subtitle}>{subtitle}</p>}
+          {Boolean(subtitle) && <p className={sizeClasses[size].subtitle}>{subtitle}</p>}
         </div>
-        {action && <div className="flex-shrink-0">{action}</div>}
+        {Boolean(action) && <div className="flex-shrink-0">{action}</div>}
       </EnhancedFlex>
     </motion.div>
   );

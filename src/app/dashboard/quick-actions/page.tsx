@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -22,7 +22,7 @@ import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import GuidedTour from '@/components/help/GuidedTour';
 
-import {
+// import {
   Shield,
   CheckCircle,
   AlertTriangle,
@@ -472,7 +472,7 @@ export default function QuickActionsPage() {
     .filter((category) => category.actions.length > 0);
 
   // Handle action click
-  const handleActionClick = (action: WorkflowAction) => {
+  const handleActionClick = (_action: WorkflowAction) => {
     if (action.id === 'guided-tour') {
       setShowTour(true);
       return;
@@ -926,7 +926,7 @@ setSearchQuery(e.target.value)}
         </DaisyCard>
       </main>
 
-      {showTour && <GuidedTour onComplete={handleTourComplete} onSkip={handleTourSkip} />}
+      {Boolean(showTour) && <GuidedTour onComplete={handleTourComplete} onSkip={handleTourSkip} />}
     </div>
   );
 }

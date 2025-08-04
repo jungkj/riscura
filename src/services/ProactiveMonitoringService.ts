@@ -1,4 +1,4 @@
-import {
+// import {
   MonitoringTask,
   MonitoringResult,
   ScheduledAnalysis,
@@ -14,15 +14,15 @@ import {
   ActionRecommendation,
   PerformanceMetrics,
 } from '@/types/proactive-monitoring.types';
-import { Risk, Control } from '@/types';
-import { OrganizationContext, RiskCategory } from '@/types/risk-intelligence.types';
+// import { Risk, Control } from '@/types';
+// import { OrganizationContext, RiskCategory } from '@/types/risk-intelligence.types';
 import { generateId } from '@/lib/utils';
 
 // Import AI services for real integration
-import { AIService } from './AIService';
-import { ComplianceAIService } from './ComplianceAIService';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
-import { ControlRecommendationAIService } from './ControlRecommendationAIService';
+// import { AIService } from './AIService';
+// import { ComplianceAIService } from './ComplianceAIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { ControlRecommendationAIService } from './ControlRecommendationAIService';
 import { TrendAnalysisService } from './TrendAnalysisService';
 import { SmartNotificationService } from './SmartNotificationService';
 
@@ -289,7 +289,7 @@ class InMemoryScheduleManager implements ScheduleManager {
 
 // Stub services for development
 interface AIAnalysisService {
-  analyzeRisk(risk: Risk): Promise<unknown>;
+  analyzeRisk(_risk: Risk): Promise<unknown>;
   analyzeTrend(_data: unknown[]): Promise<TrendAnalysisResult>;
   detectAnomalies(_data: unknown[]): Promise<unknown[]>;
   generateInsights(_context: unknown): Promise<ProactiveInsight[]>;
@@ -298,8 +298,8 @@ interface AIAnalysisService {
 interface DataRetrievalService {
   getRiskData(riskId: string): Promise<Risk | null>;
   getControlData(controlId: string): Promise<Control | null>;
-  getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]>;
-  getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics>;
+  getHistoricalData(_entityId: string, timeRange: unknown): Promise<unknown[]>;
+  getPerformanceMetrics(_entityId: string): Promise<PerformanceMetrics>;
 }
 
 interface CacheService {
@@ -725,7 +725,7 @@ export class ProactiveMonitoringService {
 
   private async getUserContext(_userId: string): Promise<UserContext> {
     // Get user context from cache or data service
-    const cached = await this.cacheService.get(`user_context:${userId}`);
+    const _cached = await this.cacheService.get(`user_context:${userId}`);
     if (cached) return cached as UserContext;
 
     const userContext = await this.dataService.getUserContext(userId);
@@ -735,7 +735,7 @@ export class ProactiveMonitoringService {
   }
 
   private async getOrganizationContext(_organizationId: string): Promise<OrganizationContext> {
-    const cached = await this.cacheService.get(`org_context:${organizationId}`);
+    const _cached = await this.cacheService.get(`org_context:${organizationId}`);
     if (cached) return cached as OrganizationContext;
 
     const orgContext = await this.dataService.getOrganizationContext(organizationId);
@@ -1364,7 +1364,7 @@ export class ProactiveMonitoringService {
     return insights;
   }
 
-  private prioritizeInsights(insights: ProactiveInsight[]): ProactiveInsight[] {
+  private prioritizeInsights(_insights: ProactiveInsight[]): ProactiveInsight[] {
     return insights.sort((a, b) => {
       // Priority weight (critical=4, high=3, medium=2, low=1, info=0)
       const priorityWeight = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
@@ -1537,15 +1537,14 @@ export class ProactiveMonitoringService {
     return [];
   }
 
-  private async generateRecommendations(
-    insights: ProactiveInsight[],
+  private async generateRecommendations(_insights: ProactiveInsight[],
     findings: MonitoringFinding[]
   ): Promise<ActionRecommendation[]> {
     // Mock recommendations generation
     return [];
   }
 
-  private async analyzeRiskTrend(risk: Risk): Promise<TrendAnalysisResult> {
+  private async analyzeRiskTrend(_risk: Risk): Promise<TrendAnalysisResult> {
     // Mock risk trend analysis
     return {
       direction: Math.random() > 0.5 ? 'increasing' : 'decreasing',
@@ -1573,8 +1572,7 @@ export class ProactiveMonitoringService {
     ];
   }
 
-  private determineResultStatus(
-    findings: MonitoringFinding[]
+  private determineResultStatus(_findings: MonitoringFinding[]
   ): 'success' | 'warning' | 'error' | 'anomaly' {
     const hasError = findings.some((f) => f.severity === 'critical');
     const hasWarning = findings.some((f) => f.severity === 'high' || f.severity === 'medium');
@@ -1586,7 +1584,7 @@ export class ProactiveMonitoringService {
     return 'success';
   }
 
-  private calculateOverallConfidence(insights: ProactiveInsight[]): number {
+  private calculateOverallConfidence(_insights: ProactiveInsight[]): number {
     if (insights.length === 0) return 50;
 
     const avgInsightConfidence =
@@ -1641,7 +1639,7 @@ interface MonitoringStatus {
 
 // Service interfaces
 interface AIAnalysisService {
-  analyzeRisk(risk: Risk): Promise<unknown>;
+  analyzeRisk(_risk: Risk): Promise<unknown>;
   analyzeTrend(_data: unknown[]): Promise<TrendAnalysisResult>;
   detectAnomalies(_data: unknown[]): Promise<unknown[]>;
   generateInsights(_context: unknown): Promise<ProactiveInsight[]>;
@@ -1653,8 +1651,7 @@ interface AIAnalysisService {
     result: unknown,
     findings: MonitoringFinding[]
   ): Promise<ProactiveInsight[]>;
-  generateRecommendations(
-    insights: ProactiveInsight[],
+  generateRecommendations(_insights: ProactiveInsight[],
     findings: MonitoringFinding[]
   ): Promise<ActionRecommendation[]>;
 }
@@ -1664,11 +1661,11 @@ interface DataRetrievalService {
   getOrganizationContext(_organizationId: string): Promise<OrganizationContext>;
   getOrganizationControls(_organizationId: string): Promise<Control[]>;
   getRisk(riskId: string): Promise<Risk | null>;
-  getEntityData(entityId: string, entityType: string): Promise<unknown>;
+  getEntityData(_entityId: string, entityType: string): Promise<unknown>;
   getRiskData(riskId: string): Promise<Risk | null>;
   getControlData(controlId: string): Promise<Control | null>;
-  getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]>;
-  getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics>;
+  getHistoricalData(_entityId: string, timeRange: unknown): Promise<unknown[]>;
+  getPerformanceMetrics(_entityId: string): Promise<PerformanceMetrics>;
 }
 
 interface CacheService {
@@ -1818,12 +1815,12 @@ class InMemoryDataService implements DataRetrievalService {
     return this.controls.get(controlId) || null;
   }
 
-  async getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]> {
+  async getHistoricalData(_entityId: string, timeRange: unknown): Promise<unknown[]> {
     // console.log('Getting historical data for', entityId, timeRange);
     return [];
   }
 
-  async getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics> {
+  async getPerformanceMetrics(_entityId: string): Promise<PerformanceMetrics> {
     // console.log('Getting performance metrics for', entityId);
     // Return a structure that matches the complex PerformanceMetrics interface
     return {
@@ -1890,7 +1887,7 @@ class InMemoryDataService implements DataRetrievalService {
     return this.getRiskData(riskId);
   }
 
-  async getEntityData(entityId: string, entityType: string): Promise<unknown> {
+  async getEntityData(_entityId: string, entityType: string): Promise<unknown> {
     // console.log('Getting entity data for', entityId, entityType);
     return null;
   }
@@ -1967,7 +1964,7 @@ class InMemoryPerformanceService implements PerformanceService {
 
     return () => {
       const endTime = Date.now();
-      const duration = endTime - startTime;
+      const _duration = endTime - startTime;
       this.recordMetric(`${operation}_duration`, duration);
       this.timers.delete(operation);
     };

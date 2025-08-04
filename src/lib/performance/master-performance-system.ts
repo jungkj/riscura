@@ -615,8 +615,7 @@ export class MasterPerformanceSystem {
   /**
    * Record optimization action
    */
-  private recordOptimization(
-    type: OptimizationAction['type'],
+  private recordOptimization(_type: OptimizationAction['type'],
     category: string,
     description: string,
     impact: OptimizationAction['impact']
@@ -649,7 +648,7 @@ export class MasterPerformanceSystem {
   /**
    * Report alert to external endpoint
    */
-  private async reportAlert(alert: PerformanceAlert): Promise<void> {
+  private async reportAlert(_alert: PerformanceAlert): Promise<void> {
     if (!this.config.reportingEndpoint) return;
 
     try {

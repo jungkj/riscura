@@ -21,7 +21,7 @@ import {
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -32,12 +32,12 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
+// import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
 
 interface CreateRiskModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onRiskCreated: (risk: any) => void;
+  onRiskCreated: (_risk: any) => void;
 }
 
 interface RiskFormData {
@@ -206,7 +206,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
     }
   };
 
-  const handleFrameworkToggle = (framework: string) => {
+  const handleFrameworkToggle = (_framework: string) => {
     setFormData((prev) => ({
       ...prev,
       framework: prev.framework.includes(framework)

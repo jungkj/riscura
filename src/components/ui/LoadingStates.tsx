@@ -5,7 +5,7 @@ import React from 'react';
 import { Loader2, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from './progress';
-import { Card, CardContent, CardHeader } from './card';
+// import { Card, CardContent, CardHeader } from './card';
 import { Badge } from './badge';
 // Using unique component names to avoid conflicts with skeleton.tsx and loading-spinner.tsx
 
@@ -125,16 +125,15 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
   {(title || description) && (
 </DaisyCard>
       <DaisyCardBody >
-  {title && 
-</DaisyCardBody><EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
-        {description && <EnhancedSkeleton className="h-4 w-3/4" />}
+  {Boolean(title) && </DaisyCardBody><EnhancedSkeleton className="h-6 w-1/2 mb-2" />}
+        {Boolean(description) && <EnhancedSkeleton className="h-4 w-3/4" />}
       
     )}
-    {content && (
+    {Boolean(content) && (
       <DaisyCardBody className="space-y-3" >
   <DaisySkeletonText lines={3} />
 </DaisyCardBody>
-        {actions && (
+        {Boolean(actions) && (
           <div className="flex gap-2 pt-2">
             <DaisySkeletonButton >
               <DaisySkeletonButton >
@@ -160,7 +159,7 @@ export const LoadingTable: React.FC<LoadingTableProps> = ({
   className
 }) => (
   <div className={cn('w-full', className)}>
-    {showHeader && (
+    {Boolean(showHeader) && (
       <div className="flex gap-4 p-4 border-b">
         {Array.from({ length: columns }).map((_, i) => (
           <EnhancedSkeleton key={i} className="h-5 flex-1" />
@@ -316,13 +315,13 @@ export const LoadingList: React.FC<LoadingListProps> = ({
     {Array.from({ length: items }).map((_, i) => (
       <div key={i} className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          {showAvatar && <DaisySkeletonAvatar />}
+          {Boolean(showAvatar) && <DaisySkeletonAvatar />}
           <div>
             <EnhancedSkeleton className="h-4 w-32 mb-2" />
             <EnhancedSkeleton className="h-3 w-48" />
           </div>
         </div>
-        {showActions && (
+        {Boolean(showActions) && (
           <div className="flex gap-2">
             <DaisySkeletonButton variant="default" >
             </div>
@@ -363,7 +362,7 @@ export const LoadingProgress: React.FC<LoadingProgressProps> = ({
   className
 }) => (
   <div className={cn('space-y-2', className)}>
-    {label && (
+    {Boolean(label) && (
       <div className="flex justify-between text-sm">
         <span>{label}</span>
         {!indeterminate && progress !== undefined && (
@@ -447,7 +446,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 }) => (
   <div className="relative">
     {children}
-    {isLoading && (
+    {Boolean(isLoading) && (
       <div className={cn(
         'absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center',
         blur ? 'backdrop-blur-sm' : ''
@@ -510,7 +509,7 @@ export const InfiniteScrollLoading: React.FC<{
     return (
       <div className="text-center py-8">
         <p className="text-destructive mb-2">Failed to load more items</p>
-        {onRetry && (
+        {Boolean(onRetry) && (
           <button
             onClick={onRetry}
             className="text-primary hover:underline text-sm"

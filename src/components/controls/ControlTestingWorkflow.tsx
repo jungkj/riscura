@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -13,7 +13,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import {
+// import {
   Upload,
   File,
   Image,
@@ -143,7 +143,7 @@ const sampleWorkflows: TestingWorkflow[] = [
 ];
 
 // Evidence Type Configuration
-const getEvidenceTypeConfig = (type: string) => {
+const getEvidenceTypeConfig = (_type: string) => {
   const configs = {
     'document': { icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50' },
     'screenshot': { icon: Image, color: 'text-green-600', bg: 'bg-green-50' },
@@ -483,7 +483,7 @@ handleInputChange('recommendations', e.target.value)}
 // Workflow Card Component
 const WorkflowCard: React.FC<{
   workflow: TestingWorkflow;
-  onAction: (action: string, workflow: TestingWorkflow) => void;
+  onAction: (_action: string, workflow: TestingWorkflow) => void;
 }> = ({ workflow, onAction }) => {
   const statusConfig = getWorkflowStatusConfig(workflow.status);
   const isOverdue = workflow.dueDate < new Date() && workflow.status !== 'completed';
@@ -566,7 +566,7 @@ const WorkflowCard: React.FC<{
           {daysUntilDue > 0 && !isOverdue && (
             <span>{daysUntilDue} days remaining</span>
           )}
-          {isOverdue && (
+          {Boolean(isOverdue) && (
             <span className="text-semantic-error font-medium">
               {Math.abs(daysUntilDue)} days overdue
             </span>
@@ -612,7 +612,7 @@ export const ControlTestingWorkflow: React.FC = () => {
     filterStatus === 'all' || workflow.status === filterStatus
   );
 
-  const handleWorkflowAction = (action: string, workflow: TestingWorkflow) => {
+  const handleWorkflowAction = (_action: string, workflow: TestingWorkflow) => {
     if (action === 'test' || action === 'view') {
       setSelectedWorkflow(workflow);
       setTestingDialogOpen(true);
@@ -679,7 +679,7 @@ export const ControlTestingWorkflow: React.FC = () => {
       </div>
 
       {/* Testing Dialog */}
-      {selectedWorkflow && (
+      {Boolean(selectedWorkflow) && (
         <DaisyDialog open={testingDialogOpen} onOpenChange={setTestingDialogOpen} >
             <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
   <DaisyDialogHeader>

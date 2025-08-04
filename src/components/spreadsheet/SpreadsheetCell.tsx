@@ -6,7 +6,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { cn } from '@/lib/utils';
-import { Calendar, Star, User, Calculator } from 'lucide-react';
+// import { Calendar, Star, User, Calculator } from 'lucide-react';
 import { Cell, Column } from './SpreadsheetGrid';
 
 interface SpreadsheetCellProps {
@@ -17,8 +17,8 @@ interface SpreadsheetCellProps {
   isSelected: boolean;
   isReadOnly: boolean;
   onClick: (rowId: string, columnId: string, currentValue: string) => void;
-  onSave: (value: string) => void;
-  onValueChange: (value: string) => void;
+  onSave: (_value: string) => void;
+  onValueChange: (_value: string) => void;
 }
 
 export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
@@ -55,7 +55,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
     }
   }, [isEditing]);
 
-  const handleInputChange = (value: string) => {
+  const handleInputChange = (_value: string) => {
     setLocalValue(value);
     onValueChange(value);
   };
@@ -71,7 +71,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
     }
   };
 
-  const formatDisplayValue = (value: any, dataType: string): React.ReactNode => {
+  const formatDisplayValue = (_value: any, dataType: string): React.ReactNode => {
     if (!value && value !== 0) return null;
 
     switch (dataType) {

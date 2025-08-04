@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-import {
+// import {
   FileText,
   BarChart3,
   TrendingUp,
@@ -259,7 +259,7 @@ const ReportTemplatesGrid: React.FC = () => {
 
 // Automated Insights Panel Component
 const AutomatedInsightsPanel: React.FC = () => {
-  const getInsightIcon = (type: string) => {
+  const getInsightIcon = (_type: string) => {
     switch (type) {
       case 'trend': return TrendingUp;
       case 'anomaly': return AlertCircle;

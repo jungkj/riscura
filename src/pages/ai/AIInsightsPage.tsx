@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
   DaisyTabs,
@@ -13,7 +13,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from '@/hooks/use-toast';
 
 // Icons
-import {
+// import {
   Brain,
   TrendingUp,
   TrendingDown,
@@ -215,7 +215,7 @@ export default function AIInsightsPage() {
     }
   };
 
-  const getInsightIcon = (type: AIInsight['type']) => {
+  const getInsightIcon = (_type: AIInsight['type']) => {
     switch (type) {
       case 'risk_prediction':
         return <TrendingUp className="h-5 w-5 text-red-500" />;
@@ -295,7 +295,7 @@ export default function AIInsightsPage() {
       </motion.div>
 
       {/* Predictive Analysis Overview */}
-      {predictiveAnalysis && (
+      {Boolean(predictiveAnalysis) && (
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

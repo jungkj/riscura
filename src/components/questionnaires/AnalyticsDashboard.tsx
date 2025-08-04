@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -23,7 +23,7 @@ import {
   ComposedChart
 } from 'recharts';
 
-import {
+// import {
   TrendingUp, TrendingDown, BarChart3,
   Download, RefreshCw, Users, Target,
   CheckCircle, ArrowUp, ArrowDown, Minus
@@ -133,7 +133,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
         </div>
         
         <div className="flex items-center space-x-3">
-          <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
+          <DaisySelect value={timeRange} onValueChange={(_value: any) => setTimeRange(value)} />
             <DaisySelectTrigger className="w-32">
                 <DaisySelectValue />
 </DaisySelect>

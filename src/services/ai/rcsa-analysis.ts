@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import { RCSARowData, COLUMN_MAPPINGS } from '@/lib/rcsa/parser';
-import {
+// import {
   RiskCategory,
   RiskStatus,
   ControlType,
@@ -104,7 +104,7 @@ Focus on:
 
 Provide actionable recommendations with specific priorities.`;
 
-function mapLikelihoodRating(rating?: string): number {
+const mapLikelihoodRating = (rating?: string): number {
   if (!rating) return 3;
   const lower = rating.toLowerCase();
   if (lower.includes('unlikely') || lower.includes('rare')) return 1;
@@ -114,7 +114,7 @@ function mapLikelihoodRating(rating?: string): number {
   return 3;
 }
 
-function mapImpactRating(rating?: string): number {
+const mapImpactRating = (rating?: string): number {
   if (!rating) return 3;
   const lower = rating.toLowerCase();
   if (lower.includes('low') || lower.includes('negligible')) return 1;
@@ -124,7 +124,7 @@ function mapImpactRating(rating?: string): number {
   return 3;
 }
 
-function mapRiskCategory(category?: string): RiskCategory {
+const mapRiskCategory = (category?: string): RiskCategory {
   if (!category) return RiskCategory.OPERATIONAL;
   const lower = category.toLowerCase();
 
@@ -141,7 +141,7 @@ function mapRiskCategory(category?: string): RiskCategory {
   return RiskCategory.OPERATIONAL;
 }
 
-function mapControlType(description?: string, frequency?: string): ControlType {
+const mapControlType = (description?: string, frequency?: string): ControlType {
   if (!description && !frequency) return ControlType.DETECTIVE;
 
   const text = `${description || ''} ${frequency || ''}`.toLowerCase();
@@ -159,7 +159,7 @@ function mapControlType(description?: string, frequency?: string): ControlType {
   return ControlType.DETECTIVE;
 }
 
-function mapAutomationLevel(automation?: string): AutomationLevel {
+const mapAutomationLevel = (automation?: string): AutomationLevel {
   if (!automation) return AutomationLevel.MANUAL;
   const lower = automation.toLowerCase();
 
@@ -369,7 +369,7 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
   }
 }
 
-function performBasicAnalysis(rows: RCSARowData[]): RCSAGapAnalysis {
+const performBasicAnalysis = (rows: RCSARowData[]): RCSAGapAnalysis {
   const mappedRisks: MappedRisk[] = [];
   const mappedControls: MappedControl[] = [];
   const riskGaps: RiskGap[] = [];

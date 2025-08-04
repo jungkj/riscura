@@ -180,7 +180,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
       const { controlIds } = validationResult.data;
 
       // Delete associations
-      const result = await db.client.controlTestScript.deleteMany({
+      const _result = await db.client.controlTestScript.deleteMany({
         where: {
           testScriptId: id,
           controlId: { in: controlIds },

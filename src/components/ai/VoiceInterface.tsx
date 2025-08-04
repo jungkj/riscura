@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
@@ -130,7 +130,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       let maxConfidence = 0;
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const result = event.results[i];
+        const _result = event.results[i];
         const transcript = result[0].transcript;
         const confidence = result[0].confidence || 0;
 
@@ -345,7 +345,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             )}
           </DaisyButton>
 
-          {isSpeaking && (
+          {Boolean(isSpeaking) && (
             <DaisyButton
               onClick={stopSpeaking}
               variant="outline"
@@ -358,7 +358,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         </div>
 
         {/* Current transcript */}
-        {currentTranscript && (
+        {Boolean(currentTranscript) && (
           <div className="p-3 bg-gray-50 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Transcript:</span>
@@ -390,7 +390,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         </div>
 
         {/* Expanded settings */}
-        {isExpanded && (
+        {Boolean(isExpanded) && (
           <div className="space-y-4 pt-4 border-t">
             {/* Recognition settings */}
             <div className="space-y-3">

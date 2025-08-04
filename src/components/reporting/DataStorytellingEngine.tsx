@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
+// import { 
   BookOpen,
   Brain,
   TrendingUp,
@@ -317,7 +317,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
     if (!isPlaying) return;
 
     const currentChapterData = story.chapters[currentChapter];
-    const duration = (currentChapterData.duration * 1000) / playbackSpeed;
+    const _duration = (currentChapterData.duration * 1000) / playbackSpeed;
 
     const timer = setTimeout(() => {
       if (currentChapter < story.chapters.length - 1) {
@@ -366,7 +366,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
   };
 
   // Get insight icon
-  const getInsightIcon = (type: string) => {
+  const getInsightIcon = (_type: string) => {
     switch (type) {
       case 'trend': return TrendingUp;
       case 'anomaly': return AlertTriangle;
@@ -431,7 +431,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
           </div>
 
           {/* Chapter insights */}
-          {showInsights && (
+          {Boolean(showInsights) && (
             <div className="space-y-4">
               <h3 className="text-xl font-semibold text-gray-900 flex items-center">
                 <Brain className="w-5 h-5 mr-2" />
@@ -480,7 +480,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
         </div>
 
         {/* Annotations */}
-        {showAnnotations && chapter.annotations.map(annotation => (
+        {Boolean(showAnnotations) && chapter.annotations.map(annotation => (
           <div
             key={annotation.id}
             className={`absolute pointer-events-none ${
@@ -658,7 +658,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             </DaisyButton>
           </div>
           
-          {isGenerating && (
+          {Boolean(isGenerating) && (
             <div className="mt-4">
               <div className="flex justify-between text-sm text-gray-600 mb-2">
                 <span>Analyzing data patterns...</span>

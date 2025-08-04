@@ -15,7 +15,7 @@ import { useControls } from '@/context/ControlContext';
 import { EnhancedControlService } from '@/services/EnhancedControlService';
 
 // UI Components
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -27,7 +27,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 
 // Icons
-import {
+// import {
   Plus, Search, Filter, Shield, Brain, BarChart3, TestTube, 
   CheckCircle, AlertTriangle, Clock, Users, Eye, Edit, 
   MoreHorizontal, Zap, Network, Calendar, RefreshCw
@@ -164,7 +164,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   const handleBulkOperation = async (operation: ControlBulkOperation) => {
     setIsLoading(true);
     try {
-      const result = await enhancedControlService.performBulkOperation(operation);
+      const _result = await enhancedControlService.performBulkOperation(operation);
       if (result.success) {
         // console.log('Bulk operation completed successfully');
         setSelectedControls([]);
@@ -195,7 +195,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
     return 'bg-red-100 text-red-800 border-red-200';
   };
 
-  const getFrameworkColor = (framework: string) => {
+  const getFrameworkColor = (_framework: string) => {
     switch (framework) {
       case 'SOC2': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'ISO27001': return 'bg-secondary/20 text-foreground border-border';
@@ -205,7 +205,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   };
 
   // Control statistics
-  const stats = useMemo(() => {
+  const _stats = useMemo(() => {
     const total = filteredControls.length;
     const byFramework = filteredControls.reduce((acc, control) => {
       acc[control.framework.category] = (acc[control.framework.category] || 0) + 1;
@@ -331,7 +331,7 @@ setSearchQuery(e.target.value)}
               </div>
               
               <div className="flex items-center gap-2">
-                <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                <DaisySelect value={sortBy} onValueChange={(_value: any) => setSortBy(value)}>
                   <DaisySelectTrigger className="w-48">
                     <DaisySelectValue />
                   <DaisySelectContent>
@@ -621,7 +621,7 @@ setSearchQuery(e.target.value)}
               </DaisyDialogTitle>
             </DaisyDialogHeader>
             
-            {selectedControl && (
+            {Boolean(selectedControl) && (
               <div className="space-y-6">
                 {/* Control Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

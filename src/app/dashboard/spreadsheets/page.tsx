@@ -16,7 +16,7 @@ import {
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyDialog,
   DaisyDialogContent,
@@ -207,12 +207,12 @@ export default function SpreadsheetsPage() {
     }
   };
 
-  const getTemplateTypeLabel = (type: string) => {
+  const getTemplateTypeLabel = (_type: string) => {
     const template = templateTypes.find((t) => t.value === type);
     return template?.label || type;
   };
 
-  const getTemplateTypeBadgeColor = (type: string) => {
+  const getTemplateTypeBadgeColor = (_type: string) => {
     const colors: { [key: string]: string } = {
       RCSA_ASSESSMENT: 'bg-blue-100 text-blue-800',
       RISK_REGISTER: 'bg-red-100 text-red-800',

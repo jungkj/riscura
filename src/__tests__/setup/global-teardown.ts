@@ -44,7 +44,7 @@ async function globalTeardown(_config: FullConfig) {
 
         // console.log('  ✅ Performance metrics saved to test-results/performance-metrics.json');
       }
-    } catch (_error: any) {
+    } catch (__error: any) {
       // console.warn('⚠️  Could not collect performance metrics:', error.message);
     }
 
@@ -73,7 +73,7 @@ async function globalTeardown(_config: FullConfig) {
 
         // console.log('  ✅ Test coverage data saved to test-results/test-coverage.json');
       }
-    } catch (_error: any) {
+    } catch (__error: any) {
       // console.warn('⚠️  Could not collect coverage data:', error.message);
     }
 
@@ -105,7 +105,7 @@ async function globalTeardown(_config: FullConfig) {
         // console.log('🔍 Critical Workflow Status:');
         criticalWorkflows.forEach((workflow) => {
           const status = summary.workflows?.[workflow] || 'unknown';
-          const icon = status === 'passed' ? '✅' : status === 'failed' ? '❌' : '⚠️';
+          const _icon = status === 'passed' ? '✅' : status === 'failed' ? '❌' : '⚠️';
           // console.log(`  ${icon} ${workflow}: ${status}`);
         });
 
@@ -120,7 +120,7 @@ async function globalTeardown(_config: FullConfig) {
 
         // console.log('  ✅ Test summary saved to test-results/test-summary.json');
       }
-    } catch (_error: any) {
+    } catch (__error: any) {
       // console.warn('⚠️  Could not generate test summary:', error.message);
     }
 
@@ -144,7 +144,7 @@ async function globalTeardown(_config: FullConfig) {
         } else {
           // console.warn('  ⚠️  Test data cleanup failed');
         }
-      } catch (_error: any) {
+      } catch (__error: any) {
         // console.warn('⚠️  Could not clean up test data:', error.message);
       }
     } else {
@@ -174,7 +174,7 @@ async function globalTeardown(_config: FullConfig) {
           // console.warn(`⚠️  Critical issues detected: ${criticalIssues.join(', ')}`);
         }
       }
-    } catch (_error: any) {
+    } catch (__error: any) {
       // console.warn('⚠️  Could not validate environment health:', error.message);
     }
 
@@ -206,7 +206,7 @@ async function globalTeardown(_config: FullConfig) {
     }
 
     // console.log('✅ Global test teardown completed successfully');
-  } catch (_error: unknown) {
+  } catch (__error: unknown) {
     // console.error('❌ Global test teardown failed:', error);
     // Don't throw error to avoid failing the test suite
   } finally {

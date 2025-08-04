@@ -686,7 +686,7 @@ export const apiRegistry = new APIRegistry();
  * Decorator to automatically register API endpoints
  */
 export function ApiEndpoint(info: Partial<APIEndpointInfo>) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (req: NextRequest, context?: any) {

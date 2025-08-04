@@ -98,7 +98,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   );
 }
 
-function getCategoryDescription(category: string): string {
+const getCategoryDescription = (category: string): string {
   const descriptions: Record<string, string> = {
     'Risk Management Basics':
       'Fundamental concepts and strategies for effective risk management in small to medium businesses.',

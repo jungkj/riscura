@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
+// import { 
   Download, 
   Eye, 
   FileText, 
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -258,7 +258,7 @@ export default function DocumentViewer({
             </div>
             
             <div className="flex items-center gap-1">
-              {canPreview && (
+              {Boolean(canPreview) && (
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 
@@ -276,7 +276,7 @@ export default function DocumentViewer({
   <Download className="w-4 h-4" />
 </DaisyButton>
               </DaisyButton>
-              {onShare && (
+              {Boolean(onShare) && (
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 
@@ -285,7 +285,7 @@ export default function DocumentViewer({
 </DaisyButton>
                 </DaisyButton>
               )}
-              {onEdit && (
+              {Boolean(onEdit) && (
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 
@@ -294,7 +294,7 @@ export default function DocumentViewer({
 </DaisyButton>
                 </DaisyButton>
               )}
-              {onDelete && (
+              {Boolean(onDelete) && (
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -380,7 +380,7 @@ export default function TrendAnalysisChart({
               fill={config.color}
               fillOpacity={0.3}
               strokeWidth={2} />
-            {showMovingAverage && (
+            {Boolean(showMovingAverage) && (
               <Area
                 type="monotone"
                 dataKey="movingAverage"
@@ -389,7 +389,7 @@ export default function TrendAnalysisChart({
                 strokeWidth={1}
                 strokeDasharray="5 5" />
             )}
-            {showForecast && (
+            {Boolean(showForecast) && (
               <Area
                 type="monotone"
                 dataKey={selectedMetric}
@@ -425,7 +425,7 @@ export default function TrendAnalysisChart({
             <YAxis tickFormatter={config.format} />
             <DaisyTooltip content={<CustomTooltip />} />
             <Bar dataKey={selectedMetric} fill={config.color} fillOpacity={0.6} />
-            {showMovingAverage && (
+            {Boolean(showMovingAverage) && (
               <Line
                 type="monotone"
                 dataKey="movingAverage"
@@ -452,7 +452,7 @@ export default function TrendAnalysisChart({
               strokeWidth={2}
               dot={{ fill: config.color, strokeWidth: 2, r: 4 }}
               activeDot={{ r: 6 }} />
-            {showMovingAverage && (
+            {Boolean(showMovingAverage) && (
               <Line
                 type="monotone"
                 dataKey="movingAverage"
@@ -461,7 +461,7 @@ export default function TrendAnalysisChart({
                 strokeDasharray="5 5"
                 dot={false} />
             )}
-            {showTrendLine && trendStats && (
+            {Boolean(showTrendLine) && trendStats && (
               <ReferenceLine 
                 stroke="#ef4444" 
                 strokeDasharray="2 2" 
@@ -480,7 +480,7 @@ export default function TrendAnalysisChart({
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-blue-600" />
             <DaisyCardTitle className="text-lg">Trend Analysis</DaisyCardTitle>
-            {trendStats && (
+            {Boolean(trendStats) && (
               <DaisyBadge 
                 variant={trendStats.trend === 'increasing' ? 'destructive' : 
                         trendStats.trend === 'decreasing' ? 'default' : 'secondary'}
@@ -517,7 +517,7 @@ export default function TrendAnalysisChart({
         <div className="flex flex-wrap items-center gap-4 mt-3">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
-            <DaisySelect value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)} />
+            <DaisySelect value={selectedMetric} onValueChange={(_value: any) => setSelectedMetric(value)} />
               <DaisySelectTrigger className="w-48">
                   <DaisySelectValue />
 </DaisySelect>
@@ -530,7 +530,7 @@ export default function TrendAnalysisChart({
               </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
+            <DaisySelect value={timeRange} onValueChange={(_value: any) => setTimeRange(value)} />
               <DaisySelectTrigger className="w-24">
                   <DaisySelectValue />
 </DaisySelect>
@@ -601,7 +601,7 @@ export default function TrendAnalysisChart({
           
           <DaisyTabsContent value="overview" className="space-y-4" >
               {/* Key Metrics */}
-            {trendStats && (
+            {Boolean(trendStats) && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-600">Current</div>
@@ -654,7 +654,7 @@ export default function TrendAnalysisChart({
                   stroke={metricConfigs[selectedMetric].color}
                   strokeWidth={2}
                   dot={{ fill: metricConfigs[selectedMetric].color, strokeWidth: 2, r: 3 }} />
-                {showMovingAverage && (
+                {Boolean(showMovingAverage) && (
                   <Line
                     type="monotone"
                     dataKey="movingAverage"

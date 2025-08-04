@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Copy, Trash2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
@@ -112,7 +112,7 @@ export function KPIWidget({
     }
   };
 
-  const formatValue = (value: number, format: string) => {
+  const formatValue = (_value: number, format: string) => {
     switch (format) {
       case 'percentage':
         return `${value}%`;
@@ -136,7 +136,7 @@ export function KPIWidget({
     }
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (_trend: string) => {
     switch (trend) {
       case 'up':
         return <TrendingUp className="w-4 h-4 text-green-600" />;

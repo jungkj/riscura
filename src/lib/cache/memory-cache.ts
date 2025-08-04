@@ -45,7 +45,7 @@ export class MemoryCache {
    */
   async get<T>(key: string): Promise<T | null> {
     // Try memory cache first
-    const cached = this.cache.get(key);
+    const _cached = this.cache.get(key);
     if (cached !== undefined) {
       return cached;
     }
@@ -158,7 +158,7 @@ export class MemoryCache {
   /**
    * Get all keys matching a pattern
    */
-  async keys(pattern: string): Promise<string[]> {
+  async keys(_pattern: string): Promise<string[]> {
     const regex = new RegExp(pattern.replace(/\*/g, '.*'));
     const memoryKeys = Array.from(this.cache.keys()).filter((key) => regex.test(key));
 
@@ -237,6 +237,6 @@ export const _redis = {
   setex: (key: string, seconds: number, value: any) => cache.setex(key, seconds, value),
   del: (key: string) => cache.del(key),
   exists: (key: string) => cache.exists(key),
-  keys: (pattern: string) => cache.keys(pattern),
+  keys: (_pattern: string) => cache.keys(pattern),
   flushall: () => cache.clear(),
 };

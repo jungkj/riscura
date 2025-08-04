@@ -339,7 +339,7 @@ export async function createDefaultSubscriptionForOrganization(_organizationId: 
 }
 
 // Helper function to get plan by type
-export async function getPlanByType(type: string): Promise<SubscriptionPlan | null> {
+export async function getPlanByType(_type: string): Promise<SubscriptionPlan | null> {
   const plan = await db.client.subscriptionPlan.findFirst({
     where: { type, isActive: true },
   });

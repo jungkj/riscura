@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
+// import { 
   Upload, 
   Brain, 
   BarChart3, 
@@ -167,7 +167,7 @@ const WorkflowAnimation = () => {
                     `}>
 </DaisyCard>
                       <Icon className={`w-8 h-8 ${isActive ? 'text-white' : 'text-gray-600'}`} />
-                      {isActive && (
+                      {Boolean(isActive) && (
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -182,7 +182,7 @@ const WorkflowAnimation = () => {
                       {step.description}
                     </p>
                     
-                    {isActive && (
+                    {Boolean(isActive) && (
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

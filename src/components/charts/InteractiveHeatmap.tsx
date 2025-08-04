@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
@@ -42,7 +42,7 @@ interface InteractiveHeatmapProps {
   showLegend?: boolean;
   interactive?: boolean;
   onCellClick?: (cell: HeatmapCell) => void;
-  onRiskClick?: (risk: RiskItem) => void;
+  onRiskClick?: (_risk: RiskItem) => void;
   className?: string;
 }
 
@@ -344,7 +344,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
               <div className="grid grid-cols-5 gap-1 w-fit mx-auto">
                 {/* Y-axis labels (Impact - reversed order for visual consistency) */}
                 <div className="col-span-5 grid grid-cols-5 gap-1 mb-2">
-                  <div></div> {/* Empty corner */}
+                  <div /> {/* Empty corner */}
                   {[1, 2, 3, 4, 5].map(likelihood => (
                     <div key={likelihood} className="text-center text-sm font-medium text-gray-600 py-2">
                       {likelihood}
@@ -445,7 +445,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
           </div>
 
           {/* Selected Cell Details */}
-          {selectedCell && selectedCell.value > 0 && (
+          {Boolean(selectedCell) && selectedCell.value > 0 && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -527,7 +527,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
           )}
 
           {/* Legend */}
-          {showLegend && (
+          {Boolean(showLegend) && (
             <div className="grid grid-cols-2 gap-6">
               {/* Risk Levels */}
               <div>

@@ -1,6 +1,6 @@
 'use client';
 
-import {
+// import {
   EnhancedRisk,
   AISuggestions,
   BulkOperation,
@@ -13,8 +13,8 @@ import {
   WorkflowTransition,
   TrendDataPoint,
 } from '@/types/enhanced-risk.types';
-import { Risk } from '@/types';
-import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { Risk } from '@/types';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
 
 export class EnhancedRiskService {
   private aiService: RiskAnalysisAIService;
@@ -41,7 +41,7 @@ export class EnhancedRiskService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
 
       return {
         suggestedCategory: result.suggestedCategory,
@@ -78,7 +78,7 @@ export class EnhancedRiskService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.category || 'operational';
     } catch (error) {
       // console.error('Risk categorization failed:', error);
@@ -87,7 +87,7 @@ export class EnhancedRiskService {
   }
 
   // Generate mitigation strategies using AI
-  async generateMitigationStrategies(risk: EnhancedRisk): Promise<MitigationStrategy[]> {
+  async generateMitigationStrategies(_risk: EnhancedRisk): Promise<MitigationStrategy[]> {
     try {
       const response = await fetch('/api/ai/generate', {
         method: 'POST',
@@ -105,7 +105,7 @@ export class EnhancedRiskService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
 
       return (
         result.strategies?.map((strategy: any, index: number) => ({
@@ -209,7 +209,7 @@ export class EnhancedRiskService {
   }
 
   // Advanced filtering
-  filterRisks(risks: EnhancedRisk[], filters: AdvancedRiskFilters): EnhancedRisk[] {
+  filterRisks(_risks: EnhancedRisk[], filters: AdvancedRiskFilters): EnhancedRisk[] {
     return risks.filter((risk) => {
       // Category filter
       if (filters.category && filters.category.length > 0) {
@@ -282,7 +282,7 @@ export class EnhancedRiskService {
     });
   }
 
-  private getDateFieldValue(risk: EnhancedRisk, field: string): Date | null {
+  private getDateFieldValue(_risk: EnhancedRisk, field: string): Date | null {
     switch (field) {
       case 'createdAt':
         return new Date(risk.createdAt);
@@ -298,7 +298,7 @@ export class EnhancedRiskService {
   }
 
   // Analytics and insights
-  async generateRiskAnalytics(risks: EnhancedRisk[]): Promise<RiskAnalytics> {
+  async generateRiskAnalytics(_risks: EnhancedRisk[]): Promise<RiskAnalytics> {
     const totalRisks = risks.length;
 
     const risksByCategory = risks.reduce(
@@ -346,7 +346,7 @@ export class EnhancedRiskService {
     };
   }
 
-  private calculateTrendData(risks: EnhancedRisk[]): TrendDataPoint[] {
+  private calculateTrendData(_risks: EnhancedRisk[]): TrendDataPoint[] {
     // Mock trend data calculation
     const now = new Date();
     const trendData: TrendDataPoint[] = [];
@@ -374,14 +374,14 @@ export class EnhancedRiskService {
     return trendData;
   }
 
-  private calculateRiskVelocity(risks: EnhancedRisk[]): number {
+  private calculateRiskVelocity(_risks: EnhancedRisk[]): number {
     const now = new Date();
     const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const newRisksLastMonth = risks.filter((risk) => new Date(risk.createdAt) >= lastMonth);
     return newRisksLastMonth.length;
   }
 
-  private calculateMitigationEffectiveness(risks: EnhancedRisk[]): number {
+  private calculateMitigationEffectiveness(_risks: EnhancedRisk[]): number {
     const mitigatedRisks = risks.filter((risk) => risk.status === 'mitigated');
     const totalMitigations = risks.reduce((sum, risk) => sum + risk.mitigationStrategies.length, 0);
 
@@ -389,7 +389,7 @@ export class EnhancedRiskService {
     return (mitigatedRisks.length / totalMitigations) * 100;
   }
 
-  private calculateComplianceScore(risks: EnhancedRisk[]): number {
+  private calculateComplianceScore(_risks: EnhancedRisk[]): number {
     const complianceRisks = risks.filter(
       (risk) => risk.category === 'COMPLIANCE' || risk.regulatoryFrameworks.length > 0
     );
@@ -403,7 +403,7 @@ export class EnhancedRiskService {
   }
 
   // Risk correlation analysis
-  async analyzeRiskCorrelations(risks: EnhancedRisk[]): Promise<any[]> {
+  async analyzeRiskCorrelations(_risks: EnhancedRisk[]): Promise<any[]> {
     try {
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
@@ -414,7 +414,7 @@ export class EnhancedRiskService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.correlations || [];
     } catch (error) {
       // console.error('Risk correlation analysis failed:', error);
@@ -423,7 +423,7 @@ export class EnhancedRiskService {
   }
 
   // Predictive risk modeling
-  async generatePredictiveInsights(risks: EnhancedRisk[]): Promise<RiskIntelligence> {
+  async generatePredictiveInsights(_risks: EnhancedRisk[]): Promise<RiskIntelligence> {
     try {
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
@@ -434,7 +434,7 @@ export class EnhancedRiskService {
         }),
       });
 
-      const result = await response.json();
+      const _result = await response.json();
       return result.intelligence || this.getMockRiskIntelligence();
     } catch (error) {
       // console.error('Predictive analysis failed:', error);
@@ -487,7 +487,7 @@ export class EnhancedRiskService {
   }
 
   // Convert regular Risk to EnhancedRisk
-  enhanceRisk(risk: Risk): EnhancedRisk {
+  enhanceRisk(_risk: Risk): EnhancedRisk {
     return {
       ...risk,
       workflowState: risk.status as any,

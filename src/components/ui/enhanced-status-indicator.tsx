@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
+// import {
   statusColors,
   getStatusColor,
   getRiskLevelColor,
@@ -119,7 +119,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
         ${className}
       `}
     >
-      {showIcon && getStatusIcon()}
+      {Boolean(showIcon) && getStatusIcon()}
       <span className="uppercase font-semibold tracking-wide">{status}</span>
     </Component>
   );
@@ -211,7 +211,7 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
       </div>
 
       {/* Confidence Indicator */}
-      {showConfidence && (
+      {Boolean(showConfidence) && (
         <div className="flex items-center gap-2">
           <span className={`${sizeClasses[size]} text-slate-600`}>Confidence:</span>
           <div
@@ -288,7 +288,7 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps / />= ({
           animate={animated ? { strokeDashoffset } : {}}
           transition={animated ? { duration: 1, ease: 'easeInOut' } : {}} />
       </svg>
-      {showPercentage && (
+      {Boolean(showPercentage) && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-sm font-semibold text-slate-700">{Math.round(progress)}%</span>
         </div>
@@ -431,7 +431,7 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
       <span className={`${iconSizes[size]} flex items-center justify-center font-bold`}>
         {trendConfig.icon}
       </span>
-      {showValue && value !== undefined && (
+      {Boolean(showValue) && value !== undefined && (
         <span className="font-medium">
           {value > 0 && trend === 'up' && '+'}
           {value}%

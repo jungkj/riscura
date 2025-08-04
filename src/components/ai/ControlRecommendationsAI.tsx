@@ -12,7 +12,7 @@ import {
   Calendar
 } from 'lucide-react';
 
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -22,8 +22,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 
-import { Risk, Control } from '@/types';
-import { 
+// import { Risk, Control } from '@/types';
+// import { 
   controlRecommendationAIService,
   ControlRecommendation,
   ControlGapAnalysis,
@@ -34,7 +34,7 @@ import {
 interface ControlRecommendationsAIProps {
   risks: Risk[];
   existingControls: Control[];
-  onRecommendationAccepted?: (recommendation: ControlRecommendation) => void;
+  onRecommendationAccepted?: (_recommendation: ControlRecommendation) => void;
   onImplementationPlanGenerated?: (plan: ImplementationPlan) => void;
   className?: string;
 }
@@ -109,7 +109,7 @@ const RecommendationCard: React.FC<{
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'preventive': return <Shield className="h-4 w-4" />;
       case 'detective': return <DaisyAlertTriangle className="h-4 w-4" >
@@ -209,7 +209,7 @@ const RecommendationCard: React.FC<{
 
 const GapAnalysisView: React.FC<{ 
   analysis: ControlGapAnalysis;
-  onRecommendationAccepted: (recommendation: ControlRecommendation) => void;
+  onRecommendationAccepted: (_recommendation: ControlRecommendation) => void;
 }> = ({ analysis, onRecommendationAccepted }) => {
   return (
     <div className="space-y-6">
@@ -737,7 +737,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
     }
   };
 
-  const handleAcceptRecommendation = (recommendation: ControlRecommendation) => {
+  const handleAcceptRecommendation = (_recommendation: ControlRecommendation) => {
     onRecommendationAccepted?.(recommendation);
   };
 
@@ -802,7 +802,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <DaisyLabel htmlFor="org-size">Organization Size</DaisyLabel>
-                      <DaisySelect value={organizationSize} onValueChange={(value: 'small' | 'medium' | 'large' | 'enterprise') => setOrganizationSize(value)} />
+                      <DaisySelect value={organizationSize} onValueChange={(_value: 'small' | 'medium' | 'large' | 'enterprise') => setOrganizationSize(value)} />
                         <DaisySelectTrigger id="org-size">
                             <DaisySelectValue />
 </DaisySelect>
@@ -817,7 +817,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
 
                     <div className="space-y-2">
                       <DaisyLabel htmlFor="risk-tolerance">Risk Tolerance</DaisyLabel>
-                      <DaisySelect value={riskTolerance} onValueChange={(value: 'low' | 'medium' | 'high') => setRiskTolerance(value)} />
+                      <DaisySelect value={riskTolerance} onValueChange={(_value: 'low' | 'medium' | 'high') => setRiskTolerance(value)} />
                         <DaisySelectTrigger id="risk-tolerance">
                             <DaisySelectValue />
 </DaisySelect>
@@ -877,7 +877,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
 {/* Priority Focus */}
                 <div className="space-y-2">
                   <DaisyLabel htmlFor="priority-focus">Priority Focus</DaisySlider>
-                  <DaisySelect value={priorityFocus} onValueChange={(value: 'cost' | 'time' | 'effectiveness' | 'compliance') => setPriorityFocus(value)} />
+                  <DaisySelect value={priorityFocus} onValueChange={(_value: 'cost' | 'time' | 'effectiveness' | 'compliance') => setPriorityFocus(value)} />
                     <DaisySelectTrigger id="priority-focus">
                         <DaisySelectValue />
 </DaisySelect>
@@ -984,7 +984,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
         </DaisyTabsContent>
 
         <DaisyTabsContent value="cost-benefit" >
-            {selectedRecommendation && (
+            {Boolean(selectedRecommendation) && (
             <CostBenefitView
               analysis={selectedRecommendation.costBenefitAnalysis}
               recommendation={selectedRecommendation} />
@@ -992,7 +992,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
         </DaisyTabsContent>
 
         <DaisyTabsContent value="implementation" >
-            {implementationPlan && (
+            {Boolean(implementationPlan) && (
             <ImplementationPlanView plan={implementationPlan} />
           )}
         </DaisyTabsContent>

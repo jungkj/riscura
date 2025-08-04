@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-function OAuthTestContent() {
+const OAuthTestContent = () {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [googleConfig, setGoogleConfig] = useState({ configured: false });
@@ -57,7 +57,7 @@ function OAuthTestContent() {
           <strong>Status:</strong> {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
         </div>
 
-        {isAuthenticated && user ? (
+        {Boolean(isAuthenticated) && user ? (
           <>
             <div>
               <strong>Signed in as:</strong> {user.email}

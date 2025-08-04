@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -458,7 +458,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       </div>
 
       {/* Training Metrics Overview */}
-      {metrics && (
+      {Boolean(metrics) && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -554,7 +554,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                 </DaisyCardTitle>
         </DaisyCardBody>
         <DaisyCardBody >
-  {metrics && (
+  {Boolean(metrics) && (
 </DaisyCardBody>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
