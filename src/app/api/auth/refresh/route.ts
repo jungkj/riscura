@@ -4,9 +4,19 @@ import { validateSession, getSessionByToken } from '@/lib/auth/session';
 import { generateCSRFToken } from '@/lib/auth/middleware';
 import { env } from '@/config/env';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
-import { createSecureAPIHandler, SECURITY_PROFILES } from '@/lib/security/middleware-integration';
+import { withApiMiddleware } from '@/lib/api/middleware';
 
-export const POST = createSecureAPIHandler(async (_request: NextRequest): Promise<NextResponse> => {
+export const POST = withApiMiddleware({
+  requireAuth: false, // This is a refresh endpoint, so no auth required initially
+  rateLimiters: ['auth'], // Apply auth-specific rate limiting
+  security: {
+    enableCORS: false,
+    enableCSRF: true, // Enable CSRF protection for auth endpoints
+    enableRateLimit: true,
+  },
+})(async (context) => {
+  const { req: request } = context;
+
   try {
     // Get refresh token from cookie or body
     let refreshToken = request.cookies.get('refreshToken')?.value;
@@ -219,7 +229,7 @@ export const POST = createSecureAPIHandler(async (_request: NextRequest): Promis
 
     return NextResponse.json({ error: 'Failed to refresh token' }, { status: 500 });
   }
-}, SECURITY_PROFILES.auth);
+});
 
 /**
  * Log authentication events

@@ -209,7 +209,7 @@ export default function AIInsightsPage() {
   };
 
   const getInsightIcon = (_type: AIInsight['type']) => {
-    switch (type) {
+    switch (_type) {
       case 'risk_prediction':
         return <TrendingUp className="h-5 w-5 text-red-500" />;
       case 'trend_analysis':

@@ -1,4 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import crypto from 'crypto';
+
+/**
+ * Create a signed session token to prevent tampering
+ * Uses HMAC-SHA256 with a secret key
+ */
+function createSignedSessionToken(sessionData: any): string {
+  const secret = process.env.NEXTAUTH_SECRET || process.env.SESSION_SECRET || 'fallback-secret-key';
+  const payload = JSON.stringify(sessionData);
+
+  // Create HMAC signature
+  const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+
+  // Combine payload and signature
+  const signedToken = Buffer.from(
+    JSON.stringify({
+      payload: payload,
+      signature: signature,
+    })
+  ).toString('base64');
+
+  return signedToken;
+}
+
+/**
+ * Verify a signed session token
+ */
+function verifySignedSessionToken(token: string): any | null {
+  try {
+    const secret =
+      process.env.NEXTAUTH_SECRET || process.env.SESSION_SECRET || 'fallback-secret-key';
+    const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
+
+    // Verify signature
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(decoded.payload)
+      .digest('hex');
+
+    if (decoded.signature !== expectedSignature) {
+      return null; // Invalid signature
+    }
+
+    return JSON.parse(decoded.payload);
+  } catch {
+    return null; // Invalid token format
+  }
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -66,10 +115,26 @@ export async function GET(req: NextRequest) {
 
     const tokens = await tokenResponse.json();
 
-    // Get user info
-    const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${tokens.access_token}` },
-    });
+    // Get user info with timeout protection
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+
+    let userResponse;
+    try {
+      userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+        headers: { Authorization: `Bearer ${tokens.access_token}` },
+        signal: controller.signal, // Add abort signal for timeout
+      });
+      clearTimeout(timeoutId); // Clear timeout on successful response
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
+      const errorMsg =
+        fetchError instanceof Error && fetchError.name === 'AbortError'
+          ? 'Request%20timeout%20getting%20user%20info'
+          : 'Network%20error%20getting%20user%20info';
+      return NextResponse.redirect(`${baseUrl}/auth/login?error=${errorMsg}`);
+    }
 
     if (!userResponse.ok) {
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
@@ -78,33 +143,7 @@ export async function GET(req: NextRequest) {
 
     const googleUser = await userResponse.json();
 
-    // Import database client
-    let db;
-    try {
-      const dbModule = await import('@/lib/db');
-      db = dbModule.db;
-    } catch (dbError) {
-      // console.error('[Google OAuth] Database import error:', dbError)
-      // console.error('[Google OAuth] Environment check:', {
-      //   hasDbUrl: !!process.env.DATABASE_URL,
-      //   hasDbUrlLower: !!process.env.database_url,
-      //   hasAnyDb: !!(process.env.DATABASE_URL || process.env.database_url),
-      //   nodeEnv: process.env.NODE_ENV,
-      //   nextAuthUrl: process.env.NEXTAUTH_URL,
-      //   appUrl: process.env.APP_URL,
-      //   errorType: dbError instanceof Error ? dbError.name : 'Unknown',
-      //   errorMsg: dbError instanceof Error ? dbError.message : String(dbError),
-      // })
-      const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
-      // More specific error message for missing DATABASE_URL
-      const hasDb = process.env.DATABASE_URL || process.env.database_url;
-      const errorMsg = !hasDb
-        ? 'Database%20not%20configured.%20Please%20contact%20support.'
-        : `Database%20import%20failed%3A%20${encodeURIComponent((dbError instanceof Error ? dbError.message : 'Unknown error').substring(0, 50))}`;
-      return NextResponse.redirect(`${baseUrl}/auth/login?error=${errorMsg}`);
-    }
-
-    // Find or create user in database
+    // Find or create user in database (using static import for better performance)
     let dbUser;
     try {
       dbUser = await db.client.user.findUnique({
@@ -160,22 +199,23 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Create a simple session token with appropriate expiration
+    // Create a secure signed session token to prevent tampering
     const sessionDuration = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000; // 30 days if remember me, 1 day otherwise
-    const sessionToken = Buffer.from(
-      JSON.stringify({
-        user: {
-          id: dbUser.id,
-          email: dbUser.email,
-          name: `${dbUser.firstName} ${dbUser.lastName}`.trim() || dbUser.email,
-          picture: dbUser.avatar || googleUser.picture,
-          organizationId: dbUser.organizationId,
-          role: dbUser.role.toLowerCase(), // Ensure role is lowercase for consistency
-        },
-        expires: new Date(Date.now() + sessionDuration).toISOString(),
-        rememberMe: rememberMe,
-      })
-    ).toString('base64');
+    const sessionData = {
+      user: {
+        id: dbUser.id,
+        email: dbUser.email,
+        name: `${dbUser.firstName} ${dbUser.lastName}`.trim() || dbUser.email,
+        picture: dbUser.avatar || googleUser.picture,
+        organizationId: dbUser.organizationId,
+        role: dbUser.role.toLowerCase(), // Ensure role is lowercase for consistency
+      },
+      expires: new Date(Date.now() + sessionDuration).toISOString(),
+      rememberMe: rememberMe,
+      iat: Math.floor(Date.now() / 1000), // Issued at timestamp
+    };
+
+    const sessionToken = createSignedSessionToken(sessionData);
 
     // Redirect to the intended destination with session
     const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
@@ -217,10 +257,11 @@ export async function GET(req: NextRequest) {
     //   redirectUrl,
     // })
 
-    response.cookies.set('session-token', sessionToken, cookieOptions);
-
-    // Clear OAuth state cookie
+    // Clear OAuth state cookie first to avoid conflicts
     response.cookies.delete('oauth_state');
+
+    // Set secure session cookie
+    response.cookies.set('session-token', sessionToken, cookieOptions);
 
     return response;
   } catch (error) {

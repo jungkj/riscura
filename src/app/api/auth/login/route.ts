@@ -38,7 +38,7 @@ const generateCSRFToken = (): string => {
     .join('');
 };
 
-export async function POST(_request: NextRequest): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // console.log('Login API route called')
 
