@@ -120,8 +120,7 @@ const COLORS = [
 ];
 
 // Optimized data processing utilities
-const processChartData = (
-  data: ChartDataPoint[],
+const processChartData = (_data: ChartDataPoint[],
   maxPoints: number = 1000,
   aggregationMethod: 'sum' | 'avg' | 'max' | 'min' = 'avg'
 ): ChartDataPoint[] => {
@@ -378,7 +377,7 @@ const ChartSkeleton: React.FC<{ height?: number }> = ({ height = 300 }) => (
 
 const ChartErrorBoundary: React.FC<{
   children: React.ReactNode;
-  onError: (error: Error) => void;
+  onError: (_error: Error) => void;
 }> = ({ children, onError }) => {
   const [error, setError] = useState<Error | null>(null);
 
@@ -417,7 +416,7 @@ const LazyChart: React.FC<{
   config: ChartConfig;
   index: number;
   onLoad: () => void;
-  onError: (error: Error) => void;
+  onError: (_error: Error) => void;
   inView: boolean;
   enableIntersectionObserver: boolean;
 }> = ({ config, index, onLoad, onError, inView, enableIntersectionObserver }) => {

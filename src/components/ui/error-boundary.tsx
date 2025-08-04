@@ -15,7 +15,7 @@ interface ErrorFallbackProps {
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary, className }) => {
   const handleReportError = () => {
     // In a real app, this would send error details to a logging service
-    console.error('Error reported:', {
+    // console.error('Error reported:', {
       message: error.message,
       stack: error.stack,
       timestamp: new Date().toISOString(),
@@ -113,7 +113,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
 interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ComponentType<ErrorFallbackProps>;
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
+  onError?: (_error: Error, errorInfo: React.ErrorInfo) => void;
   className?: string;
 }
 
@@ -123,10 +123,10 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   onError,
   className,
 }) => {
-  const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
+  const handleError = (_error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.error('Error Boundary caught an error:', error, errorInfo);
+      // console.error('Error Boundary caught an error:', error, errorInfo);
     }
 
     // Call custom error handler if provided
@@ -151,7 +151,7 @@ export const DashboardErrorBoundary: React.FC<{ children: React.ReactNode }> = (
   return (
     <ErrorBoundary
       onError={(error) => {
-        console.error('Dashboard Error:', error);
+        // console.error('Dashboard Error:', error);
         // Track dashboard-specific errors
       }}
     >
@@ -164,7 +164,7 @@ export const FormErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ chi
   return (
     <ErrorBoundary
       onError={(error) => {
-        console.error('Form Error:', error);
+        // console.error('Form Error:', error);
         // Track form-specific errors
       }}
     >
@@ -177,7 +177,7 @@ export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ chi
   return (
     <ErrorBoundary
       onError={(error) => {
-        console.error('Data Loading Error:', error);
+        // console.error('Data Loading Error:', error);
         // Track data loading errors
       }}
     >
@@ -188,8 +188,8 @@ export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ chi
 
 // Hook for manual error reporting
 export const useErrorHandler = () => {
-  const reportError = (error: Error, context?: string) => {
-    console.error(`Error in ${context || 'unknown context'}:`, error);
+  const reportError = (_error: Error, context?: string) => {
+    // console.error(`Error in ${context || 'unknown context'}:`, error);
 
     // In production, send to error reporting service
     if (process.env.NODE_ENV === 'production') {

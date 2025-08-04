@@ -11,7 +11,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { formatFileSize } from '@/lib/storage/file-validator';
+// import { formatFileSize } from '@/lib/storage/file-validator';
 import toast from 'react-hot-toast';
 
 interface FileUploadItem {
@@ -26,7 +26,7 @@ interface FileUploadItem {
 
 interface FileUploadDropzoneProps {
   onUploadComplete?: (results: any[]) => void;
-  onUploadError?: (error: string) => void;
+  onUploadError?: (_error: string) => void;
   category?: string;
   linkedEntityType?: string;
   linkedEntityId?: string;
@@ -79,7 +79,7 @@ export default function FileUploadDropzone({
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle rejected files
     rejectedFiles.forEach(({ file, errors }) => {
-      errors.forEach((error: any) => {
+      errors.forEach((_error: any) => {
         toast.error(`${file.name}: ${error.message}`);
       });
     });
@@ -208,7 +208,7 @@ export default function FileUploadDropzone({
           results.push(result);
 
         } catch (error) {
-          console.error('Upload error:', error);
+          // console.error('Upload error:', error);
           const errorMessage = error instanceof Error ? error.message : 'Upload failed';
           
           setFiles(prev => prev.map(f => 
@@ -234,7 +234,7 @@ export default function FileUploadDropzone({
       }
 
     } catch (error) {
-      console.error('Upload process error:', error);
+      // console.error('Upload process error:', error);
       const errorMessage = 'Upload process failed';
       toast.error(errorMessage);
       onUploadError?.(errorMessage);

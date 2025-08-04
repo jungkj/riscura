@@ -340,7 +340,7 @@ export function AdvancedSearchFilter({
 
   const handleBulkAddTags = (itemIds: string[]) => {
     // In a real app, this would update the items with new tags
-    console.log('Adding tags to items:', itemIds);
+    // console.log('Adding tags to items:', itemIds);
     toast({
       title: 'Tags Added',
       description: `Added tags to ${itemIds.length} items.`,
@@ -349,7 +349,7 @@ export function AdvancedSearchFilter({
 
   const handleBulkArchive = (itemIds: string[]) => {
     // In a real app, this would archive the items
-    console.log('Archiving items:', itemIds);
+    // console.log('Archiving items:', itemIds);
     toast({
       title: 'Items Archived',
       description: `Archived ${itemIds.length} items.`,
@@ -358,7 +358,7 @@ export function AdvancedSearchFilter({
 
   const handleBulkDelete = (itemIds: string[]) => {
     // In a real app, this would delete the items
-    console.log('Deleting items:', itemIds);
+    // console.log('Deleting items:', itemIds);
     toast({
       title: 'Items Deleted',
       description: `Deleted ${itemIds.length} items.`,

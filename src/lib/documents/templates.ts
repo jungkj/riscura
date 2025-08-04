@@ -61,7 +61,7 @@ export interface GeneratedDocument {
 
 export class DocumentTemplateService {
   // Get available templates for organization
-  async getTemplates(organizationId: string, category?: string): Promise<DocumentTemplate[]> {
+  async getTemplates(_organizationId: string, category?: string): Promise<DocumentTemplate[]> {
     const where: any = {
       OR: [
         { organizationId: organizationId },
@@ -85,7 +85,7 @@ export class DocumentTemplateService {
 
       return templates;
     } catch (error) {
-      console.error('Error fetching templates:', error);
+      // console.error('Error fetching templates:', error);
       return [];
     }
   }
@@ -124,13 +124,13 @@ export class DocumentTemplateService {
 
       return created;
     } catch (error) {
-      console.error('Error creating template:', error);
+      // console.error('Error creating template:', error);
       throw new Error('Failed to create template');
     }
   }
 
   // Generate document from template
-  async generateDocument(options: GenerationOptions): Promise<GeneratedDocument> {
+  async generateDocument(_options: GenerationOptions): Promise<GeneratedDocument> {
     try {
       const template = await db.client.documentTemplate.findUnique({
         where: { id: options.templateId },
@@ -201,7 +201,7 @@ export class DocumentTemplateService {
             : undefined,
       };
     } catch (error) {
-      console.error('Error generating document:', error);
+      // console.error('Error generating document:', error);
       throw new Error('Failed to generate document');
     }
   }
@@ -275,7 +275,7 @@ export class DocumentTemplateService {
 
       return response.choices[0]?.message?.content || content;
     } catch (error) {
-      console.error('Error enhancing with AI:', error);
+      // console.error('Error enhancing with AI:', error);
       return content;
     }
   }
@@ -351,7 +351,7 @@ This document was generated using the Riscura platform.
 
       return suggestions || ['No suggestions available'];
     } catch (error) {
-      console.error('Error generating suggestions:', error);
+      // console.error('Error generating suggestions:', error);
       return ['Unable to generate suggestions'];
     }
   }

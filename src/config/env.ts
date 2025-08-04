@@ -265,7 +265,7 @@ const envSchema = z.object({
 function validateEnv() {
   // Skip validation if explicitly requested (useful for builds)
   if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
-    console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag');
+    // console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag');
     return createMinimalEnv();
   }
 
@@ -276,7 +276,7 @@ function validateEnv() {
     process.env.CI === 'true';
 
   if (isBuildTime) {
-    console.log('🔧 Build time detected - using minimal environment validation');
+    // console.log('🔧 Build time detected - using minimal environment validation');
     return createMinimalEnv();
   }
 
@@ -296,19 +296,19 @@ function validateEnv() {
         return `❌ ${path}: ${err.message}`;
       });
 
-      console.error('Environment validation failed:');
-      console.error('Missing required variables:', missingVars);
-      console.error('Please check your .env.local file and ensure all required variables are set.');
-      console.error('See env.example for reference values.');
+      // console.error('Environment validation failed:');
+      // console.error('Missing required variables:', missingVars);
+      // console.error('Please check your .env.local file and ensure all required variables are set.');
+      // console.error('See env.example for reference values.');
 
       if (isProduction && !isBuildTime) {
-        console.error('\n🛡️ Production security requires all secrets to be properly configured.');
-        console.error('Run `npm run check:env` to validate your environment configuration.');
+        // console.error('\n🛡️ Production security requires all secrets to be properly configured.');
+        // console.error('Run `npm run check:env` to validate your environment configuration.');
         throw new Error('Environment validation failed');
       } else {
         // In development mode or build time, use minimal environment with defaults
-        console.warn('⚠️ Using default environment values for missing variables.');
-        console.warn('💡 For full functionality, create a .env.local file with proper values.');
+        // console.warn('⚠️ Using default environment values for missing variables.');
+        // console.warn('💡 For full functionality, create a .env.local file with proper values.');
         return createMinimalEnv();
       }
     }
@@ -479,13 +479,13 @@ function validateProductionEnvironment(env: any) {
 
   // Log warnings
   if (warnings.length > 0) {
-    console.warn('⚠️ Production warnings:');
+    // console.warn('⚠️ Production warnings:');
     warnings.forEach((warning) => console.warn(`  • ${warning}`));
   }
 
   // Throw on errors
   if (errors.length > 0) {
-    console.error('❌ Production validation errors:');
+    // console.error('❌ Production validation errors:');
     errors.forEach((error) => console.error(`  • ${error}`));
     throw new Error('Production environment validation failed');
   }

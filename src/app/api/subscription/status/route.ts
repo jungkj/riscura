@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
       limits: getPlanLimits(plan),
     });
   } catch (error) {
-    console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error);
     return NextResponse.json({ error: 'Failed to get subscription status' }, { status: 500 });
   }
 }

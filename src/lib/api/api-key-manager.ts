@@ -103,7 +103,7 @@ class APIKeyManager {
   }
 
   // Generate new API key
-  public async generateAPIKey(config: {
+  public async generateAPIKey(_config: {
     name: string;
     description: string;
     userId: string;
@@ -275,7 +275,7 @@ class APIKeyManager {
 
       return result;
     } catch (error) {
-      console.error('API key validation error:', error);
+      // console.error('API key validation error:', error);
       result.reason = 'Validation error';
       return result;
     }
@@ -587,7 +587,7 @@ class APIKeyManager {
 
       return { allowed, remaining };
     } catch (error) {
-      console.error('Rate limit check error:', error);
+      // console.error('Rate limit check error:', error);
       // Fail open
       return {
         allowed: true,
@@ -636,7 +636,7 @@ class APIKeyManager {
       timestamp: Date.now(),
     };
 
-    console.warn('Suspicious API key activity:', event);
+    // console.warn('Suspicious API key activity:', event);
 
     // Store in Redis for analysis
     await redisClient.client.lpush('suspicious_api_activity', JSON.stringify(event));
@@ -667,9 +667,9 @@ class APIKeyManager {
       if (apiKey.rotationSchedule?.enabled && apiKey.rotationSchedule.nextRotation <= now) {
         try {
           await this.rotateAPIKey(apiKey.id, true);
-          console.log(`Auto-rotated API key: ${apiKey.id}`);
+          // console.log(`Auto-rotated API key: ${apiKey.id}`);
         } catch (error) {
-          console.error(`Failed to auto-rotate API key ${apiKey.id}:`, error);
+          // console.error(`Failed to auto-rotate API key ${apiKey.id}:`, error);
         }
       }
     }
@@ -677,7 +677,7 @@ class APIKeyManager {
 
   private async notifyKeyRotation(apiKey: APIKey): Promise<void> {
     // Implementation would send notification to user
-    console.log(`API key rotated for user ${apiKey.userId}: ${apiKey.name}`);
+    // console.log(`API key rotated for user ${apiKey.userId}: ${apiKey.name}`);
   }
 
   private async saveKeyToStorage(apiKey: APIKey): Promise<void> {
@@ -692,7 +692,7 @@ class APIKeyManager {
 
   private async loadKeysFromStorage(): Promise<void> {
     // Implementation would load keys from persistent storage
-    console.log('Loading API keys from storage...');
+    // console.log('Loading API keys from storage...');
   }
 }
 

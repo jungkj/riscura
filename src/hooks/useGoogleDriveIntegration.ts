@@ -44,7 +44,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
         setError(data.error);
       }
     } catch (err) {
-      console.error('Error connecting to Google Drive:', err);
+      // console.error('Error connecting to Google Drive:', err);
       setError('Failed to connect to Google Drive');
     } finally {
       setIsConnecting(false);
@@ -69,7 +69,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
 
       return false;
     } catch (err) {
-      console.error('Error disconnecting from Google Drive:', err);
+      // console.error('Error disconnecting from Google Drive:', err);
       setError('Failed to disconnect from Google Drive');
       return false;
     }

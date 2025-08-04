@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { checkAuthEnvironment } from '@/lib/auth/env-check';
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('[Auth Diagnostic] Running comprehensive authentication diagnostic...');
+    // console.log('[Auth Diagnostic] Running comprehensive authentication diagnostic...');
 
     const startTime = Date.now();
     const diagnostic = await checkAuthEnvironment();
@@ -55,9 +55,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       recommendations: generateRecommendations(diagnostic),
     };
 
-    console.log('[Auth Diagnostic] Completed in', duration, 'ms');
-    console.log('[Auth Diagnostic] Status:', response.status);
-    console.log('[Auth Diagnostic] Critical issues:', response.summary.criticalIssues);
+    // console.log('[Auth Diagnostic] Completed in', duration, 'ms');
+    // console.log('[Auth Diagnostic] Status:', response.status);
+    // console.log('[Auth Diagnostic] Critical issues:', response.summary.criticalIssues);
 
     return NextResponse.json(response, {
       status: diagnostic.isValid ? 200 : 207, // 207 Multi-Status for partial success
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('[Auth Diagnostic] Fatal error:', error);
+    // console.error('[Auth Diagnostic] Fatal error:', error);
 
     return NextResponse.json(
       {

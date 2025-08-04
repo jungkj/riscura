@@ -272,11 +272,11 @@ export class ProductionGuard {
       process.env.CI === 'true';
 
     if (isBuildTime) {
-      console.log('🔧 Build time detected - skipping production security initialization');
+      // console.log('🔧 Build time detected - skipping production security initialization');
       return;
     }
 
-    console.log('🛡️ Initializing production security...');
+    // console.log('🛡️ Initializing production security...');
 
     // Block development features
     this.blockDevelopmentFeatures();
@@ -286,7 +286,7 @@ export class ProductionGuard {
     const validation = this.validateProduction();
 
     if (!validation.isReady) {
-      console.error('❌ Production validation failed:');
+      // console.error('❌ Production validation failed:');
       validation.errors.forEach((error) => console.error(`  - ${error}`));
 
       if (process.env.STRICT_PRODUCTION_MODE !== 'false') {
@@ -297,11 +297,11 @@ export class ProductionGuard {
     }
 
     if (validation.warnings.length > 0) {
-      console.warn('⚠️ Production warnings:');
+      // console.warn('⚠️ Production warnings:');
       validation.warnings.forEach((warning) => console.warn(`  - ${warning}`));
     }
 
-    console.log('✅ Production security initialized');
+    // console.log('✅ Production security initialized');
   }
 
   /**
@@ -329,10 +329,10 @@ export class ProductionGuard {
 
     if (this.isProduction()) {
       // In production, use structured logging
-      console.log(JSON.stringify(logEntry));
+      // console.log(JSON.stringify(logEntry));
     } else {
       // In development, use readable format
-      console.log(`🔒 Security Event: ${event}`, details);
+      // console.log(`🔒 Security Event: ${event}`, details);
     }
   }
 
@@ -383,7 +383,7 @@ if (process.env.NODE_ENV === 'production') {
     try {
       productionGuard.initializeProduction();
     } catch (error) {
-      console.error('Failed to initialize production security:', error);
+      // console.error('Failed to initialize production security:', error);
       if (process.env.STRICT_PRODUCTION_MODE !== 'false') {
         process.exit(1);
       }
@@ -400,7 +400,7 @@ export function throwIfProduction(message: string): void {
 
 export function warnIfProduction(message: string): void {
   if (productionGuard.isProduction()) {
-    console.warn(`⚠️ Development feature detected in production: ${message}`);
+    // console.warn(`⚠️ Development feature detected in production: ${message}`);
   }
 }
 

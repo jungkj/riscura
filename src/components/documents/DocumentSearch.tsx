@@ -13,7 +13,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
-import { format, subDays, subMonths, subYears } from 'date-fns';
+// import { format, subDays, subMonths, subYears } from 'date-fns';
 import toast from 'react-hot-toast';
 
 interface SearchFilters {
@@ -114,7 +114,7 @@ export default function DocumentSearch({
         setSavedSearches(data.searches || []);
       }
     } catch (error) {
-      console.error('Error loading saved searches:', error);
+      // console.error('Error loading saved searches:', error);
     }
   };
 
@@ -161,7 +161,7 @@ export default function DocumentSearch({
       
       toast.success(`Found ${data.documents.length} document(s)`);
     } catch (error) {
-      console.error('Search error:', error);
+      // console.error('Search error:', error);
       toast.error('Search failed');
     } finally {
       setSearching(false);
@@ -202,7 +202,7 @@ export default function DocumentSearch({
       
       toast.success('Search saved successfully');
     } catch (error) {
-      console.error('Save search error:', error);
+      // console.error('Save search error:', error);
       toast.error('Failed to save search');
     }
   };
@@ -217,7 +217,7 @@ export default function DocumentSearch({
       
       toast.success(`Loaded search: ${search.name}`);
     } catch (error) {
-      console.error('Load search error:', error);
+      // console.error('Load search error:', error);
       toast.error('Failed to load saved search');
     }
   };

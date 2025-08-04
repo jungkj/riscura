@@ -46,9 +46,9 @@ class RedisClient {
 
       await this.client.connect();
       this.isConnected = true;
-      console.log('✅ Redis connected successfully');
+      // console.log('✅ Redis connected successfully');
     } catch (error) {
-      console.warn('⚠️ Redis connection failed, falling back to memory cache:', error);
+      // console.warn('⚠️ Redis connection failed, falling back to memory cache:', error);
       this.client = null;
       this.isConnected = false;
     }
@@ -134,7 +134,7 @@ const memoryCache = new MemoryCache();
 export class CacheManager {
   private config: CacheConfig;
 
-  constructor(config: Partial<CacheConfig> = {}) {
+  constructor(_config: Partial<CacheConfig> = {}) {
     this.config = { ...DEFAULT_CACHE_CONFIG, ...config };
   }
 
@@ -142,12 +142,12 @@ export class CacheManager {
     return `${this.config.prefix}:${key}`;
   }
 
-  private serialize(data: any): string {
+  private serialize(_data: any): string {
     if (!this.config.serialize) return data;
     return JSON.stringify(data);
   }
 
-  private deserialize(data: string): any {
+  private deserialize(_data: string): any {
     if (!this.config.serialize) return data;
     try {
       return JSON.parse(data);
@@ -171,7 +171,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis set error:', error);
+      // console.warn('Redis set error:', error);
     }
 
     // Fallback to memory cache
@@ -193,7 +193,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis get error:', error);
+      // console.warn('Redis get error:', error);
     }
 
     // Fallback to memory cache
@@ -212,7 +212,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis delete error:', error);
+      // console.warn('Redis delete error:', error);
     }
 
     // Also clear from memory cache
@@ -236,7 +236,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis clear error:', error);
+      // console.warn('Redis clear error:', error);
     }
 
     // Clear memory cache
@@ -267,7 +267,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis mget error:', error);
+      // console.warn('Redis mget error:', error);
     }
 
     // Fallback to memory cache
@@ -296,7 +296,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis TTL error:', error);
+      // console.warn('Redis TTL error:', error);
     }
 
     return -1; // Unknown for memory cache
@@ -313,7 +313,7 @@ export class CacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis increment error:', error);
+      // console.warn('Redis increment error:', error);
     }
 
     // Fallback for memory cache
@@ -386,7 +386,7 @@ export class CacheWarmer {
   async warmCache(
     entries: Array<{ key: string; fetcher: () => Promise<any>; ttl?: number }>
   ): Promise<void> {
-    console.log(`🔥 Warming cache with ${entries.length} entries...`);
+    // console.log(`🔥 Warming cache with ${entries.length} entries...`);
 
     const startTime = performance.now();
     const promises = entries.map(async (entry) => {
@@ -394,13 +394,13 @@ export class CacheWarmer {
         const value = await entry.fetcher();
         await this.cacheManager.set(entry.key, value, entry.ttl);
       } catch (error) {
-        console.warn(`Failed to warm cache for key: ${entry.key}`, error);
+        // console.warn(`Failed to warm cache for key: ${entry.key}`, error);
       }
     });
 
     await Promise.all(promises);
     const duration = performance.now() - startTime;
-    console.log(`✅ Cache warming completed in ${duration.toFixed(2)}ms`);
+    // console.log(`✅ Cache warming completed in ${duration.toFixed(2)}ms`);
   }
 }
 
@@ -412,7 +412,7 @@ export async function initializeCache(): Promise<void> {
   try {
     await redisClient.connect();
   } catch (error) {
-    console.warn('Cache initialization warning:', error);
+    // console.warn('Cache initialization warning:', error);
   }
 }
 

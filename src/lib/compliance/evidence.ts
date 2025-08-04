@@ -317,8 +317,7 @@ export class ComplianceEvidenceManager {
   }
 
   // Create evidence request
-  async createEvidenceRequest(
-    request: Omit<EvidenceRequest, 'id' | 'createdAt'>
+  async createEvidenceRequest(_request: Omit<EvidenceRequest, 'id' | 'createdAt'>
   ): Promise<EvidenceRequest> {
     const newRequest = await db.client.evidenceRequest.create({
       data: {
@@ -679,7 +678,7 @@ export class ComplianceEvidenceManager {
   // Schedule evidence collection
   private async scheduleEvidenceCollection(collectionId: string): Promise<void> {
     // This would integrate with a job scheduler like node-cron
-    console.log(`Scheduling evidence collection: ${collectionId}`);
+    // console.log(`Scheduling evidence collection: ${collectionId}`);
 
     // In a real implementation, this would:
     // 1. Set up cron jobs based on collection frequency
@@ -713,7 +712,7 @@ export class ComplianceEvidenceManager {
   }
 
   // Check evidence expiration
-  async checkEvidenceExpiration(organizationId: string): Promise<void> {
+  async checkEvidenceExpiration(_organizationId: string): Promise<void> {
     const expiringEvidence = await db.client.assessmentEvidence.findMany({
       where: {
         organizationId,
@@ -758,8 +757,7 @@ export class ComplianceEvidenceManager {
   }
 
   // Get evidence statistics
-  async getEvidenceStatistics(
-    organizationId: string,
+  async getEvidenceStatistics(_organizationId: string,
     frameworkId?: string
   ): Promise<{
     total: number;

@@ -25,7 +25,7 @@ async function processPdfFile(buffer: Buffer) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error('PDF processing error:', error);
+    // console.error('PDF processing error:', error);
     return NextResponse.json(
       {
         error: 'PDF processing failed',

@@ -124,7 +124,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
   // Download sample template
   const handleDownloadTemplate = () => {
     // This would typically download a sample RCSA template
-    console.log('Download RCSA template');
+    // console.log('Download RCSA template');
   };
 
   return (

@@ -132,8 +132,8 @@ ${text}`,
 
     return extractedContent;
   } catch (parseError) {
-    console.error('Failed to parse AI response:', parseError);
-    console.error('AI Response:', responseText);
+    // console.error('Failed to parse AI response:', parseError);
+    // console.error('AI Response:', responseText);
 
     // Return empty structure if parsing fails
     return {
@@ -144,7 +144,7 @@ ${text}`,
 }
 
 // File upload handler using busboy
-async function parseUploadedFile(request: NextRequest): Promise<UploadedFile> {
+async function parseUploadedFile(_request: NextRequest): Promise<UploadedFile> {
   return new Promise(async (resolve, reject) => {
     try {
       const formData = await request.formData();
@@ -186,7 +186,7 @@ async function parseUploadedFile(request: NextRequest): Promise<UploadedFile> {
   });
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Rate limiting
     const clientIP =
@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
 
     // Parse uploaded file
     const uploadedFile = await parseUploadedFile(request);
-    console.log(`Processing file: ${uploadedFile.filename} (${uploadedFile.mimetype})`);
+    // console.log(`Processing file: ${uploadedFile.filename} (${uploadedFile.mimetype})`);
 
     // Extract text based on file type
     let extractedText: string;
@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`Extracted ${extractedText.length} characters from document`);
+    // console.log(`Extracted ${extractedText.length} characters from document`);
 
     // Check for API key and perform AI analysis
     if (process.env.ANTHROPIC_API_KEY) {
@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
           uploadedFile.filename
         );
 
-        console.log(
+        // console.log(
           `AI extracted ${extractedContent.risks.length} risks and ${extractedContent.controls.length} controls`
         );
 
@@ -291,7 +291,7 @@ export async function POST(request: NextRequest) {
 
             await prisma.$disconnect();
 
-            console.log(
+            // console.log(
               `Successfully saved ${savedRisks} risks and ${savedControls} controls to database`
             );
 
@@ -308,10 +308,10 @@ export async function POST(request: NextRequest) {
             throw dbError;
           }
         } catch (error) {
-          console.error('Database error:', error);
+          // console.error('Database error:', error);
 
           // Fallback to returning extracted data without database save
-          console.log('Database not available, returning extracted data without persistence');
+          // console.log('Database not available, returning extracted data without persistence');
 
           return NextResponse.json({
             success: true,
@@ -324,7 +324,7 @@ export async function POST(request: NextRequest) {
           });
         }
       } catch (aiError) {
-        console.error('AI analysis failed:', aiError);
+        // console.error('AI analysis failed:', aiError);
         // Fall back to mock data if AI fails
       }
     }
@@ -367,7 +367,7 @@ export async function POST(request: NextRequest) {
       ],
     };
 
-    console.log(
+    // console.log(
       `Mock extracted ${mockExtractedContent.risks.length} risks and ${mockExtractedContent.controls.length} controls`
     );
 
@@ -388,7 +388,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Policy upload error:', error);
+    // console.error('Policy upload error:', error);
 
     return NextResponse.json(
       {

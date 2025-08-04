@@ -296,7 +296,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
             selectedData={currentSelection ? [currentSelection] : []}
             onActionComplete={async (result) => {
               // Handle action completion
-              console.log('AI Action completed:', result);
+              // console.log('AI Action completed:', result);
             }}
           />
         )}

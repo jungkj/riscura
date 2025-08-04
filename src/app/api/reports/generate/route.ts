@@ -9,7 +9,7 @@ import {
 } from '@/services/ReportingService';
 import { db } from '@/lib/db';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       })),
     });
   } catch (error) {
-    console.error('Report generation error:', error);
+    // console.error('Report generation error:', error);
 
     // Handle specific error types
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
       formats: Object.values(ReportFormat),
     });
   } catch (error) {
-    console.error('Error fetching report templates:', error);
+    // console.error('Error fetching report templates:', error);
     return NextResponse.json({ error: 'Failed to fetch report templates' }, { status: 500 });
   }
 }

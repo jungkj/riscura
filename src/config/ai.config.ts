@@ -190,7 +190,7 @@ export const getAIConfig = (): AIConfig => {
 };
 
 // Validation utilities
-export const validateAIConfig = (config: AIConfig): { isValid: boolean; errors: string[] } => {
+export const validateAIConfig = (_config: AIConfig): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
   if (!config.openaiApiKey && process.env.NODE_ENV === 'production') {

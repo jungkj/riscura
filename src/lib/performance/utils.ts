@@ -253,7 +253,7 @@ export const virtualizationUtils = {
   },
 
   // Implement data sampling for large datasets
-  sampleData: <T>(data: T[], maxItems: number, strategy: 'uniform' | 'random' = 'uniform'): T[] => {
+  sampleData: <T>(_data: T[], maxItems: number, strategy: 'uniform' | 'random' = 'uniform'): T[] => {
     if (data.length <= maxItems) return data;
 
     if (strategy === 'random') {

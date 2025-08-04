@@ -130,7 +130,7 @@ export async function importRCSAData(
 
     return result;
   } catch (error) {
-    console.error('RCSA import error:', error);
+    // console.error('RCSA import error:', error);
     result.errors.push(
       `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`
     );

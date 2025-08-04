@@ -89,7 +89,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
       const total = critical + high + medium + low;
       
       // Calculate average score
-      const avgScore = (critical * 20 + high * 15 + medium * 8 + low * 3) / Math.max(total, 1);
+      const _avgScore = (critical * 20 + high * 15 + medium * 8 + low * 3) / Math.max(total, 1);
       
       // Simulate new and resolved risks
       const newRisks = Math.floor(Math.random() * 5);

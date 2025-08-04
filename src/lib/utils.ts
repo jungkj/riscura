@@ -316,7 +316,7 @@ export function validatePassword(password: string): {
   };
 }
 
-export function getErrorMessage(error: unknown): string {
+export function getErrorMessage(_error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }

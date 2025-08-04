@@ -149,7 +149,7 @@ export default function InteractiveRiskHeatmap({
   }, [filteredData]);
 
   // Get unique categories and statuses for filters
-  const categories = useMemo(() => {
+  const _categories = useMemo(() => {
     const uniqueCategories = [...new Set(data.map(risk => risk.category))];
     return uniqueCategories.sort();
   }, [data]);

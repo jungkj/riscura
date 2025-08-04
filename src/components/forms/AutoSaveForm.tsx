@@ -33,14 +33,14 @@ interface ConflictResolution {
 
 interface AutoSaveFormProps<T = any> {
   initialData: T;
-  onSave: (data: T) => Promise<{
+  onSave: (_data: T) => Promise<{
     success: boolean;
     data?: T;
     error?: string;
     conflict?: boolean;
     serverVersion?: T;
   }>;
-  onDataChange?: (data: T) => void;
+  onDataChange?: (_data: T) => void;
   config?: Partial<AutoSaveConfig>;
   children: (props: {
     data: T;
@@ -475,7 +475,7 @@ export function AutoSaveForm<T = any>({
 // Higher-order component for easier integration
 export function withAutoSave<T = any>(
   WrappedComponent: React.ComponentType<any>,
-  saveFunction: (data: T) => Promise<{
+  saveFunction: (_data: T) => Promise<{
     success: boolean;
     data?: T;
     error?: string;

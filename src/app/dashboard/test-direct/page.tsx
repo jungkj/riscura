@@ -7,7 +7,7 @@ export default function TestDirectDashboard() {
   const { user, isAuthenticated, isLoading, isInitialized } = useAuth();
 
   useEffect(() => {
-    console.log('[TestDirect] Auth state:', {
+    // console.log('[TestDirect] Auth state:', {
       isAuthenticated,
       isLoading,
       isInitialized,

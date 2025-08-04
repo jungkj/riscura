@@ -131,7 +131,7 @@ export const Lid = ({
         if (entry.isIntersecting) {
           video.play().catch(() => {
             // Handle autoplay restrictions
-            console.log('Video autoplay was prevented');
+            // console.log('Video autoplay was prevented');
           });
         } else {
           video.pause();
@@ -203,7 +203,7 @@ export const Lid = ({
                 // Ensure video is ready to play when in view
                 if (isInView && videoRef.current) {
                   videoRef.current.play().catch(() => {
-                    console.log('Video autoplay was prevented');
+                    // console.log('Video autoplay was prevented');
                   });
                 }
               }}

@@ -95,7 +95,7 @@ export const POST = withApiMiddleware({
       message: 'SharePoint connected successfully',
     };
   } catch (error) {
-    console.error('SharePoint connection error:', error);
+    // console.error('SharePoint connection error:', error);
 
     if (error instanceof Error && error.message.includes('404')) {
       return {

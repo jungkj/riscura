@@ -92,7 +92,7 @@ export async function generatePDF(
       fileName: options.fileName,
     };
   } catch (error) {
-    console.error('PDF generation failed:', error);
+    // console.error('PDF generation failed:', error);
     throw new Error(`PDF generation failed: ${error.message}`);
   } finally {
     if (browser) {
@@ -135,7 +135,7 @@ async function generateHTMLContent(
 /**
  * Generate Risk Assessment Report HTML
  */
-function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
+function generateRiskAssessmentHTML(_data: any, baseStyles: string): string {
   const { summary, risks, categoryDistribution, topRisks } = data;
 
   const periodText = data.filters?.dateRange
@@ -266,7 +266,7 @@ function generateRiskAssessmentHTML(data: any, baseStyles: string): string {
 /**
  * Generate Compliance Status Report HTML
  */
-function generateComplianceStatusHTML(data: any, baseStyles: string): string {
+function generateComplianceStatusHTML(_data: any, baseStyles: string): string {
   const { frameworks, complianceScores, overallCompliance } = data;
 
   return `
@@ -361,7 +361,7 @@ function generateComplianceStatusHTML(data: any, baseStyles: string): string {
 /**
  * Generate Control Effectiveness Report HTML
  */
-function generateControlEffectivenessHTML(data: any, baseStyles: string): string {
+function generateControlEffectivenessHTML(_data: any, baseStyles: string): string {
   const { controls, effectivenessStats, totalControls, averageEffectiveness } = data;
 
   return `
@@ -447,7 +447,7 @@ function generateControlEffectivenessHTML(data: any, baseStyles: string): string
 /**
  * Generate Executive Summary Report HTML
  */
-function generateExecutiveSummaryHTML(data: any, baseStyles: string): string {
+function generateExecutiveSummaryHTML(_data: any, baseStyles: string): string {
   const { executiveSummary } = data;
 
   return `
@@ -515,7 +515,7 @@ function generateExecutiveSummaryHTML(data: any, baseStyles: string): string {
 /**
  * Generate Audit Trail Report HTML
  */
-function generateAuditTrailHTML(data: any, baseStyles: string): string {
+function generateAuditTrailHTML(_data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -547,7 +547,7 @@ function generateAuditTrailHTML(data: any, baseStyles: string): string {
 /**
  * Generate generic report HTML
  */
-function generateGenericReportHTML(data: any, baseStyles: string): string {
+function generateGenericReportHTML(_data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -932,7 +932,7 @@ function generateCategoryChart(distribution: Record<string, number>): string {
 /**
  * Get default header template
  */
-function getDefaultHeaderTemplate(data: any): string {
+function getDefaultHeaderTemplate(_data: any): string {
   return `
     <div style="font-size: 10px; padding: 10px; border-bottom: 1px solid #e0e0e0; width: 100%; display: flex; justify-content: space-between;">
       <span>Riscura Risk Management Platform</span>

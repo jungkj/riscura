@@ -170,7 +170,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
     }
   }, [initialPrompt, messages.length]);
 
-  const getWelcomeMessage = (context: ARIAContext): string => {
+  const getWelcomeMessage = (_context: ARIAContext): string => {
     const contextMessages = {
       'risk-assessment':
         "Hi! I'm ARIA, your AI risk assessment assistant. I can help you analyze risks, assess impact and likelihood, and recommend mitigation strategies. What would you like to explore?",
@@ -394,9 +394,9 @@ Could you provide more specific details about what you'd like to explore? For ex
     ? smartFeatures.suggestedPrompts.filter((p) => p.category === selectedCategory)
     : smartFeatures.suggestedPrompts;
 
-  const categories = [...new Set(smartFeatures.suggestedPrompts.map((p) => p.category))];
+  const _categories = [...new Set(smartFeatures.suggestedPrompts.map((p) => p.category))];
 
-  const getContextualGreeting = (context: ARIAContext): string => {
+  const getContextualGreeting = (_context: ARIAContext): string => {
     const contextMessages: { [key in ARIAContext]: string } = {
       'risk-assessment':
         'Welcome! I can help you with risk identification, assessment, and mitigation strategies.',
@@ -412,7 +412,7 @@ Could you provide more specific details about what you'd like to explore? For ex
     return contextMessages[context] || contextMessages.general;
   };
 
-  const getContextKey = (context: ARIAContext): keyof typeof smartFeatures.contextualAssistance => {
+  const getContextKey = (_context: ARIAContext): keyof typeof smartFeatures.contextualAssistance => {
     const contextMap: Record<ARIAContext, keyof typeof smartFeatures.contextualAssistance> = {
       'risk-assessment': 'riskAssessment',
       compliance: 'complianceReview',

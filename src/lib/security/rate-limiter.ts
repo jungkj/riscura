@@ -334,7 +334,7 @@ class RateLimiter {
         resetTime,
       };
     } catch (error) {
-      console.error('Fixed window rate limit error:', error);
+      // console.error('Fixed window rate limit error:', error);
       // Fail open for Redis errors
       return {
         allowed: true,
@@ -393,7 +393,7 @@ class RateLimiter {
         resetTime,
       };
     } catch (error) {
-      console.error('Sliding window rate limit error:', error);
+      // console.error('Sliding window rate limit error:', error);
       return {
         allowed: true,
         remaining: config.maxRequests,
@@ -449,7 +449,7 @@ class RateLimiter {
         resetTime: now + ((config.maxRequests - newBucketData.tokens) / refillRate) * 1000,
       };
     } catch (error) {
-      console.error('Token bucket rate limit error:', error);
+      // console.error('Token bucket rate limit error:', error);
       return {
         allowed: true,
         remaining: config.maxRequests,
@@ -505,7 +505,7 @@ class RateLimiter {
         resetTime: now + (newBucketData.volume / leakRate) * 1000,
       };
     } catch (error) {
-      console.error('Leaky bucket rate limit error:', error);
+      // console.error('Leaky bucket rate limit error:', error);
       return {
         allowed: true,
         remaining: config.maxRequests,
@@ -635,7 +635,7 @@ class RateLimiter {
 
     // Log high severity threats
     if (threat.severity === 'high' || threat.severity === 'critical') {
-      console.warn('High severity threat detected:', threat);
+      // console.warn('High severity threat detected:', threat);
     }
   }
 

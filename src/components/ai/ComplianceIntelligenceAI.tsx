@@ -681,7 +681,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onAssessmentCompleted?.(assessmentResult);
       setActiveTab('overview');
     } catch (error) {
-      console.error('Failed to perform assessment:', error);
+      // console.error('Failed to perform assessment:', error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -705,7 +705,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onRoadmapGenerated?.(roadmapResult);
       setActiveTab('roadmap');
     } catch (error) {
-      console.error('Failed to generate roadmap:', error);
+      // console.error('Failed to generate roadmap:', error);
     }
   };
 
@@ -727,7 +727,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onAuditPlanCreated?.(auditPrep);
       setActiveTab('audit');
     } catch (error) {
-      console.error('Failed to prepare audit:', error);
+      // console.error('Failed to prepare audit:', error);
     }
   };
 

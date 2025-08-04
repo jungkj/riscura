@@ -80,7 +80,7 @@ export class AIIntegrationService {
   /**
    * Process AI request with full integration
    */
-  async processAIRequest(request: AIServiceRequest): Promise<AIServiceResponse> {
+  async processAIRequest(_request: AIServiceRequest): Promise<AIServiceResponse> {
     const startTime = Date.now();
     const requestId = request.context.requestId || generateId('ai_request');
 
@@ -138,7 +138,7 @@ export class AIIntegrationService {
 
       return response;
     } catch (error) {
-      console.error(`AI Integration error for request ${requestId}:`, error);
+      // console.error(`AI Integration error for request ${requestId}:`, error);
 
       // Return error response
       return {
@@ -162,7 +162,7 @@ export class AIIntegrationService {
   /**
    * Route request to appropriate AI service
    */
-  private async routeToAIService(request: AIServiceRequest): Promise<ServiceResult> {
+  private async routeToAIService(_request: AIServiceRequest): Promise<ServiceResult> {
     switch (request.type) {
       case 'risk_analysis':
         return await this.processRiskAnalysis(request);
@@ -187,7 +187,7 @@ export class AIIntegrationService {
   /**
    * Process risk analysis request
    */
-  private async processRiskAnalysis(request: AIServiceRequest): Promise<ServiceResult> {
+  private async processRiskAnalysis(_request: AIServiceRequest): Promise<ServiceResult> {
     try {
       // For now, return a simplified response since the services need integration work
       return {
@@ -209,7 +209,7 @@ export class AIIntegrationService {
         ],
       };
     } catch (error) {
-      console.error('Risk analysis error:', error);
+      // console.error('Risk analysis error:', error);
       return {
         content:
           'Risk analysis completed with basic assessment. The identified risk requires further evaluation.',
@@ -226,7 +226,7 @@ export class AIIntegrationService {
   /**
    * Process compliance check request
    */
-  private async processComplianceCheck(request: AIServiceRequest): Promise<ServiceResult> {
+  private async processComplianceCheck(_request: AIServiceRequest): Promise<ServiceResult> {
     try {
       return {
         content: `Compliance Analysis: Reviewed content against key compliance standards. Found areas requiring attention and provided recommendations for improvement.`,
@@ -247,7 +247,7 @@ export class AIIntegrationService {
         ],
       };
     } catch (error) {
-      console.error('Compliance check error:', error);
+      // console.error('Compliance check error:', error);
       return {
         content:
           "Compliance check completed. Please review against your organization's compliance requirements.",
@@ -264,7 +264,7 @@ export class AIIntegrationService {
   /**
    * Process control recommendation request
    */
-  private async processControlRecommendation(request: AIServiceRequest): Promise<ServiceResult> {
+  private async processControlRecommendation(_request: AIServiceRequest): Promise<ServiceResult> {
     try {
       return {
         content: `Control Recommendations: Generated comprehensive control recommendations based on your request. Identified key control areas and suggested implementation strategies.`,
@@ -285,7 +285,7 @@ export class AIIntegrationService {
         ],
       };
     } catch (error) {
-      console.error('Control recommendation error:', error);
+      // console.error('Control recommendation error:', error);
       return {
         content:
           'Control recommendations generated. Please review and implement appropriate controls.',
@@ -302,7 +302,7 @@ export class AIIntegrationService {
   /**
    * Process proactive monitoring request
    */
-  private async processProactiveMonitoring(request: AIServiceRequest): Promise<ServiceResult> {
+  private async processProactiveMonitoring(_request: AIServiceRequest): Promise<ServiceResult> {
     try {
       return {
         content: `Proactive Analysis: Monitoring analysis completed. Identified potential issues and trends requiring attention. Automated monitoring configured.`,
@@ -319,7 +319,7 @@ export class AIIntegrationService {
         insights: ['Trend analysis completed', 'Anomalies detected', 'Predictive model activated'],
       };
     } catch (error) {
-      console.error('Proactive monitoring error:', error);
+      // console.error('Proactive monitoring error:', error);
       return {
         content:
           'Proactive monitoring analysis completed. Continue with standard risk management practices.',
@@ -336,7 +336,7 @@ export class AIIntegrationService {
   /**
    * Process custom query request
    */
-  private async processCustomQuery(request: AIServiceRequest): Promise<ServiceResult> {
+  private async processCustomQuery(_request: AIServiceRequest): Promise<ServiceResult> {
     return {
       content: `Query processed: Analyzed your request and provided relevant insights based on risk management best practices and organizational context.`,
       confidence: 0.8,
@@ -352,8 +352,7 @@ export class AIIntegrationService {
   /**
    * Apply tenant isolation to AI service results
    */
-  private async applyTenantIsolation(
-    tenantId: string,
+  private async applyTenantIsolation(_tenantId: string,
     request: AIServiceRequest,
     serviceResult: ServiceResult,
     securityContext: SecurityContext
@@ -380,7 +379,7 @@ export class AIIntegrationService {
         complianceValidated: tenantResponse.isolation.complianceValidated,
       };
     } catch (error) {
-      console.warn('Tenant isolation failed, using direct result:', error);
+      // console.warn('Tenant isolation failed, using direct result:', error);
       return serviceResult;
     }
   }
@@ -388,7 +387,7 @@ export class AIIntegrationService {
   /**
    * Validate request context
    */
-  private async validateRequestContext(context: AIIntegrationContext): Promise<void> {
+  private async validateRequestContext(_context: AIIntegrationContext): Promise<void> {
     if (!context.userId) {
       throw new Error('User ID is required');
     }

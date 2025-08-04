@@ -27,7 +27,7 @@ export class ServiceWorkerManager {
   private isOnline = navigator.onLine;
   private syncQueue: any[] = [];
 
-  constructor(config: ServiceWorkerConfig = {}) {
+  constructor(_config: ServiceWorkerConfig = {}) {
     this.config = {
       swPath: '/sw.js',
       cacheStrategies: [],
@@ -43,7 +43,7 @@ export class ServiceWorkerManager {
 
   private async init(): Promise<void> {
     if (!('serviceWorker' in navigator)) {
-      console.warn('Service Worker not supported');
+      // console.warn('Service Worker not supported');
       return;
     }
 
@@ -52,7 +52,7 @@ export class ServiceWorkerManager {
       this.setupEventListeners();
       this.startUpdateCheck();
     } catch (error) {
-      console.error('Service Worker initialization failed:', error);
+      // console.error('Service Worker initialization failed:', error);
     }
   }
 
@@ -74,7 +74,7 @@ export class ServiceWorkerManager {
         }
       });
 
-      console.log('Service Worker registered successfully');
+      // console.log('Service Worker registered successfully');
     } catch (error) {
       throw new Error(`Service Worker registration failed: ${error}`);
     }
@@ -109,7 +109,7 @@ export class ServiceWorkerManager {
 
     switch (type) {
       case 'CACHE_UPDATED':
-        console.log('Cache updated:', payload);
+        // console.log('Cache updated:', payload);
         break;
       case 'OFFLINE_FALLBACK':
         this.handleOfflineFallback(payload);
@@ -121,7 +121,7 @@ export class ServiceWorkerManager {
         this.handlePushReceived(payload);
         break;
       default:
-        console.log('Unknown service worker message:', type, payload);
+        // console.log('Unknown service worker message:', type, payload);
     }
   }
 
@@ -160,7 +160,7 @@ export class ServiceWorkerManager {
       await this.registration.update();
       return this.updateAvailable;
     } catch (error) {
-      console.error('Update check failed:', error);
+      // console.error('Update check failed:', error);
       return false;
     }
   }
@@ -210,7 +210,7 @@ export class ServiceWorkerManager {
   }
 
   // Background sync
-  public async addToSyncQueue(data: any, tag = 'default'): Promise<void> {
+  public async addToSyncQueue(_data: any, tag = 'default'): Promise<void> {
     if (!this.config.enableBackgroundSync) return;
 
     this.syncQueue.push({ data, tag, timestamp: Date.now() });
@@ -223,7 +223,7 @@ export class ServiceWorkerManager {
         try {
           await (this.registration as any).sync.register(tag);
         } catch (error) {
-          console.error('Background sync registration failed:', error);
+          // console.error('Background sync registration failed:', error);
         }
       }
     }
@@ -240,7 +240,7 @@ export class ServiceWorkerManager {
       try {
         await this.processSync(item);
       } catch (error) {
-        console.error('Sync failed:', error);
+        // console.error('Sync failed:', error);
         // Re-add to queue for retry
         this.syncQueue.push(item);
       }
@@ -293,14 +293,14 @@ export class ServiceWorkerManager {
       this.registration = null;
       return result;
     } catch (error) {
-      console.error('Service worker unregistration failed:', error);
+      // console.error('Service worker unregistration failed:', error);
       return false;
     }
   }
 }
 
 // Hook for service worker management
-export function useServiceWorker(config: ServiceWorkerConfig = {}) {
+export function useServiceWorker(_config: ServiceWorkerConfig = {}) {
   const [swManager] = useState(() => new ServiceWorkerManager(config));
   const [isRegistered, setIsRegistered] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -360,7 +360,7 @@ export function useServiceWorker(config: ServiceWorkerConfig = {}) {
   }, [swManager]);
 
   const addToSyncQueue = useCallback(
-    async (data: any, tag?: string) => {
+    async (_data: any, tag?: string) => {
       await swManager.addToSyncQueue(data, tag);
       setSyncQueueLength(swManager.getSyncQueueLength());
     },
@@ -474,7 +474,7 @@ export const serviceWorkerUtils = {
   },
 
   // Check if request should be cached
-  shouldCache: (request: Request, strategies: CacheStrategy[]): CacheStrategy | null => {
+  shouldCache: (_request: Request, strategies: CacheStrategy[]): CacheStrategy | null => {
     for (const strategy of strategies) {
       if (strategy.pattern.test(request.url)) {
         return strategy;

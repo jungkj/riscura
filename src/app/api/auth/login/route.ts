@@ -38,9 +38,9 @@ function generateCSRFToken(): string {
     .join('');
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('Login API route called');
+    // console.log('Login API route called');
 
     // Get client IP for rate limiting
     const clientIP =
@@ -66,16 +66,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     let body;
     try {
       body = await request.json();
-      console.log('Request body parsed successfully');
+      // console.log('Request body parsed successfully');
     } catch (parseError) {
-      console.error('Failed to parse request body:', parseError);
+      // console.error('Failed to parse request body:', parseError);
       return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
     }
 
     const validationResult = loginSchema.safeParse(body);
 
     if (!validationResult.success) {
-      console.log('Validation failed:', validationResult.error);
+      // console.log('Validation failed:', validationResult.error);
       return NextResponse.json(
         {
           error: 'Invalid request data',
@@ -86,11 +86,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const { email, password, rememberMe } = validationResult.data;
-    console.log('Login attempt for email:', email, 'rememberMe:', rememberMe);
+    // console.log('Login attempt for email:', email, 'rememberMe:', rememberMe);
 
     // Handle demo credentials first to avoid database calls
     if (email === 'admin@riscura.com' && password === 'admin123') {
-      console.log('Demo login detected - bypassing database');
+      // console.log('Demo login detected - bypassing database');
 
       const demoUser = {
         id: 'demo-admin-id',
@@ -213,7 +213,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           const isValidPassword = await bcrypt.compare(password, user.passwordHash);
 
           if (isValidPassword) {
-            console.log('Database login successful for:', email);
+            // console.log('Database login successful for:', email);
 
             // Create session
             const { session, tokens } = await createSession(user, {
@@ -283,14 +283,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
       }
     } catch (dbError) {
-      console.error('Database authentication error:', dbError);
+      // console.error('Database authentication error:', dbError);
     }
 
     // Invalid credentials
-    console.log('Invalid credentials for email:', email);
+    // console.log('Invalid credentials for email:', email);
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   } catch (error) {
-    console.error('Login API error:', error);
+    // console.error('Login API error:', error);
 
     // Provide more specific error information in development
     const errorMessage =

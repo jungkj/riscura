@@ -906,8 +906,7 @@ export class RiskAnalysisAIService {
     return sorted[lower] * (1 - weight) + sorted[upper] * weight;
   }
 
-  private createHistogram(
-    data: number[],
+  private createHistogram(_data: number[],
     bins: number
   ): Array<{ value: number; frequency: number; cumulative: number }> {
     const min = Math.min(...data);
@@ -936,13 +935,13 @@ export class RiskAnalysisAIService {
     return histogram;
   }
 
-  private calculateSkewness(data: number[], mean: number, stddev: number): number {
+  private calculateSkewness(_data: number[], mean: number, stddev: number): number {
     const n = data.length;
     const sum = data.reduce((acc, val) => acc + Math.pow((val - mean) / stddev, 3), 0);
     return (n / ((n - 1) * (n - 2))) * sum;
   }
 
-  private calculateKurtosis(data: number[], mean: number, stddev: number): number {
+  private calculateKurtosis(_data: number[], mean: number, stddev: number): number {
     const n = data.length;
     const sum = data.reduce((acc, val) => acc + Math.pow((val - mean) / stddev, 4), 0);
     return (

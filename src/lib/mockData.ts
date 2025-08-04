@@ -28,7 +28,7 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
     const data = await response.json();
     return data.data || data;
   } catch (error) {
-    console.error(`API request failed for ${endpoint}:`, error);
+    // console.error(`API request failed for ${endpoint}:`, error);
     toast.error(
       `Failed to ${options.method || 'fetch'} data: ${error instanceof Error ? error.message : 'Unknown error'}`
     );
@@ -600,7 +600,7 @@ export function formatDateForAPI(date: Date | string): string {
 }
 
 // Handle API errors consistently
-export function handleAPIError(error: unknown): string {
+export function handleAPIError(_error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }

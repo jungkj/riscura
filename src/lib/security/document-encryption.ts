@@ -85,8 +85,7 @@ export class DocumentEncryptionService {
   /**
    * Fallback encryption using CBC mode
    */
-  private encryptDataBasic(
-    data: Buffer,
+  private encryptDataBasic(_data: Buffer,
     iv: Buffer,
     salt: Buffer,
     key: Buffer,

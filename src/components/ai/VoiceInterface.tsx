@@ -161,7 +161,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
+      // console.error('Speech recognition error:', event.error);
       setIsListening(false);
       
       // Handle specific errors
@@ -215,7 +215,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     try {
       recognitionRef.current.start();
     } catch (error) {
-      console.error('Failed to start speech recognition:', error);
+      // console.error('Failed to start speech recognition:', error);
     }
   }, [isSupported, isEnabled]);
 
@@ -260,7 +260,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = (event) => {
-      console.error('Speech synthesis error:', event.error);
+      // console.error('Speech synthesis error:', event.error);
       setIsSpeaking(false);
     };
 

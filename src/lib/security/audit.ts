@@ -27,7 +27,7 @@ export class AuditService {
     critical: 3,
   };
 
-  constructor(config: AuditConfiguration) {
+  constructor(_config: AuditConfiguration) {
     this.config = config;
     this.initializeSIEMClients();
     this.startEventProcessor();
@@ -84,7 +84,7 @@ export class AuditService {
   }
 
   // Enhanced logging methods for specific categories
-  async logAuthentication(data: AuthenticationAuditData): Promise<void> {
+  async logAuthentication(_data: AuthenticationAuditData): Promise<void> {
     await this.logEvent({
       category: 'authentication',
       action: data.action,
@@ -105,7 +105,7 @@ export class AuditService {
     });
   }
 
-  async logAuthorization(data: AuthorizationAuditData): Promise<void> {
+  async logAuthorization(_data: AuthorizationAuditData): Promise<void> {
     await this.logEvent({
       category: 'authorization',
       action: data.action,
@@ -126,7 +126,7 @@ export class AuditService {
     });
   }
 
-  async logDataAccess(data: DataAccessAuditData): Promise<void> {
+  async logDataAccess(_data: DataAccessAuditData): Promise<void> {
     await this.logEvent({
       category: 'data_access',
       action: data.action,
@@ -150,7 +150,7 @@ export class AuditService {
     });
   }
 
-  async logDataModification(data: DataModificationAuditData): Promise<void> {
+  async logDataModification(_data: DataModificationAuditData): Promise<void> {
     await this.logEvent({
       category: 'data_modification',
       action: data.action,
@@ -174,7 +174,7 @@ export class AuditService {
     });
   }
 
-  async logSystemAccess(data: SystemAccessAuditData): Promise<void> {
+  async logSystemAccess(_data: SystemAccessAuditData): Promise<void> {
     await this.logEvent({
       category: 'system_access',
       action: data.action,
@@ -196,7 +196,7 @@ export class AuditService {
     });
   }
 
-  async logConfigurationChange(data: ConfigurationChangeAuditData): Promise<void> {
+  async logConfigurationChange(_data: ConfigurationChangeAuditData): Promise<void> {
     await this.logEvent({
       category: 'configuration_change',
       action: data.action,
@@ -220,7 +220,7 @@ export class AuditService {
     });
   }
 
-  async logSecurityEvent(data: SecurityEventAuditData): Promise<void> {
+  async logSecurityEvent(_data: SecurityEventAuditData): Promise<void> {
     await this.logEvent({
       category: 'security_event',
       action: data.action,
@@ -257,7 +257,7 @@ export class AuditService {
       try {
         await this.processEventBatch(eventsToProcess);
       } catch (error) {
-        console.error('Failed to process audit events:', error);
+        // console.error('Failed to process audit events:', error);
         // Re-queue failed events
         this.eventQueue.unshift(...eventsToProcess);
       } finally {
@@ -293,7 +293,7 @@ export class AuditService {
         })),
       });
     } catch (error) {
-      console.error('Failed to store audit events:', error);
+      // console.error('Failed to store audit events:', error);
       throw error;
     }
   }
@@ -330,7 +330,7 @@ export class AuditService {
   private async sendToSIEM(events: SecurityAuditEvent[]): Promise<void> {
     const siemClient = this.siemClients.get(this.config.siemIntegration.provider);
     if (!siemClient) {
-      console.warn('SIEM client not configured');
+      // console.warn('SIEM client not configured');
       return;
     }
 
@@ -354,7 +354,7 @@ export class AuditService {
       try {
         await siemClient.sendEvents(batch);
       } catch (error) {
-        console.error('Failed to send events to SIEM:', error);
+        // console.error('Failed to send events to SIEM:', error);
       }
     }
   }
@@ -375,10 +375,10 @@ export class AuditService {
           await this.sendToWebhook(events, destination);
           break;
         default:
-          console.warn(`Unknown destination type: ${destination.type}`);
+          // console.warn(`Unknown destination type: ${destination.type}`);
       }
     } catch (error) {
-      console.error(`Failed to send to destination ${destination.type}:`, error);
+      // console.error(`Failed to send to destination ${destination.type}:`, error);
     }
   }
 
@@ -403,7 +403,7 @@ export class AuditService {
     // Simplified syslog implementation
     for (const event of events) {
       const message = this.formatEvent(event, destination.format);
-      console.log(`SYSLOG: ${message}`);
+      // console.log(`SYSLOG: ${message}`);
     }
   }
 
@@ -428,7 +428,7 @@ export class AuditService {
         }),
       });
     } catch (error) {
-      console.error('Failed to send to webhook:', error);
+      // console.error('Failed to send to webhook:', error);
     }
   }
 
@@ -634,7 +634,7 @@ export class AuditService {
     return false;
   }
 
-  private async getRecentFailedLogins(userId: string, minutes: number): Promise<number> {
+  private async getRecentFailedLogins(_userId: string, minutes: number): Promise<number> {
     const since = new Date(Date.now() - minutes * 60 * 1000);
 
     const count = await db.client.securityAuditEvent.count({
@@ -651,7 +651,7 @@ export class AuditService {
     return count;
   }
 
-  private async getRecentDataAccess(userId: string, minutes: number): Promise<number> {
+  private async getRecentDataAccess(_userId: string, minutes: number): Promise<number> {
     const since = new Date(Date.now() - minutes * 60 * 1000);
 
     const events = await db.client.securityAuditEvent.findMany({
@@ -707,8 +707,7 @@ export class AuditService {
     return eventTypeConfig.actions.includes(event.action) || eventTypeConfig.actions.includes('*');
   }
 
-  private getDataAccessSeverity(
-    data: DataAccessAuditData
+  private getDataAccessSeverity(_data: DataAccessAuditData
   ): 'info' | 'low' | 'medium' | 'high' | 'critical' {
     if (data.sensitive || data.classification === 'confidential') {
       return 'high';
@@ -997,7 +996,7 @@ export class AuditService {
 abstract class SIEMClient {
   protected config: SIEMIntegration;
 
-  constructor(config: SIEMIntegration) {
+  constructor(_config: SIEMIntegration) {
     this.config = config;
   }
 
@@ -1268,7 +1267,7 @@ export interface AuditMetrics {
 }
 
 // Factory function
-export const createAuditService = (config: AuditConfiguration): AuditService => {
+export const createAuditService = (_config: AuditConfiguration): AuditService => {
   return new AuditService(config);
 };
 

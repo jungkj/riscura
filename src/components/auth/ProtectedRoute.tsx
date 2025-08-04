@@ -28,12 +28,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   useEffect(() => {
     // Wait for auth to initialize before making any decisions
     if (!isInitialized || isLoading) {
-      console.log('[ProtectedRoute] Waiting for auth:', { isInitialized, isLoading });
+      // console.log('[ProtectedRoute] Waiting for auth:', { isInitialized, isLoading });
       return;
     }
 
     if (!isAuthenticated || !user) {
-      console.log('[ProtectedRoute] Not authenticated, redirecting:', {
+      // console.log('[ProtectedRoute] Not authenticated, redirecting:', {
         isAuthenticated,
         hasUser: !!user,
         pathname,

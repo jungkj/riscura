@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth/auth-config';
 import { ReportingService, ReportType, ReportFormat } from '@/services/ReportingService';
 import { db } from '@/lib/db';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       scheduledReport,
     });
   } catch (error) {
-    console.error('Error creating scheduled report:', error);
+    // console.error('Error creating scheduled report:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to create scheduled report' },
       { status: 500 }
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -134,12 +134,12 @@ export async function GET(request: NextRequest) {
       scheduledReports,
     });
   } catch (error) {
-    console.error('Error fetching scheduled reports:', error);
+    // console.error('Error fetching scheduled reports:', error);
     return NextResponse.json({ error: 'Failed to fetch scheduled reports' }, { status: 500 });
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -222,7 +222,7 @@ export async function PUT(request: NextRequest) {
       scheduledReport: updatedReport,
     });
   } catch (error) {
-    console.error('Error updating scheduled report:', error);
+    // console.error('Error updating scheduled report:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to update scheduled report' },
       { status: 500 }
@@ -230,7 +230,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -267,7 +267,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Scheduled report deleted successfully',
     });
   } catch (error) {
-    console.error('Error deleting scheduled report:', error);
+    // console.error('Error deleting scheduled report:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to delete scheduled report' },
       { status: 500 }

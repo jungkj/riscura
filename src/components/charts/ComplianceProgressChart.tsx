@@ -35,7 +35,7 @@ import {
   ActionIcons,
   StatusIcons 
 } from '@/components/icons/IconLibrary';
-import { format, subDays, subMonths } from 'date-fns';
+// import { format, subDays, subMonths } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import {
   Shield,
@@ -125,7 +125,7 @@ interface ComplianceProgressChartProps {
   className?: string;
   onFrameworkClick?: (framework: ComplianceFramework) => void;
   onRequirementClick?: (requirement: ComplianceRequirement) => void;
-  onExport?: (data: any) => void;
+  onExport?: (_data: any) => void;
 }
 
 // Sample compliance frameworks data

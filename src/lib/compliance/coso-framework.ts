@@ -479,8 +479,7 @@ export class COSOFrameworkService {
   /**
    * Perform comprehensive COSO assessment
    */
-  async performCOSOAssessment(
-    organizationId: string,
+  async performCOSOAssessment(_organizationId: string,
     risks: Risk[],
     controls: Control[],
     assessor: string,

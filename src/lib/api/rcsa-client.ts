@@ -58,7 +58,7 @@ export class RCSAApiClient {
 
       return headers;
     } catch (error) {
-      console.warn('Failed to get session for API request:', error);
+      // console.warn('Failed to get session for API request:', error);
       return this.headers;
     }
   }
@@ -82,12 +82,12 @@ export class RCSAApiClient {
 
         // Handle authentication errors specifically
         if (response.status === 401) {
-          console.error('Authentication required for API request:', endpoint);
+          // console.error('Authentication required for API request:', endpoint);
           throw new Error(errorData.message || 'Authentication required. Please sign in again.');
         }
 
         if (response.status === 403) {
-          console.error('Insufficient permissions for API request:', endpoint);
+          // console.error('Insufficient permissions for API request:', endpoint);
           throw new Error(errorData.message || 'Insufficient permissions for this operation.');
         }
 
@@ -100,7 +100,7 @@ export class RCSAApiClient {
         data,
       };
     } catch (error) {
-      console.error(`API Error [${endpoint}]:`, error);
+      // console.error(`API Error [${endpoint}]:`, error);
       return {
         success: false,
         error: {
@@ -506,7 +506,7 @@ export class RCSAApiClient {
     return this.request<TestScript>(`/test-scripts/${id}`);
   }
 
-  async createTestScript(data: CreateTestScriptRequest): Promise<ApiResponse<TestScript>> {
+  async createTestScript(_data: CreateTestScriptRequest): Promise<ApiResponse<TestScript>> {
     return this.request<TestScript>('/test-scripts', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -567,8 +567,7 @@ export class RCSAApiClient {
   }
 
   // AI generation
-  async generateTestScript(
-    data: GenerateTestScriptRequest
+  async generateTestScript(_data: GenerateTestScriptRequest
   ): Promise<ApiResponse<GenerateTestScriptResponse>> {
     return this.request<GenerateTestScriptResponse>('/test-scripts/generate', {
       method: 'POST',

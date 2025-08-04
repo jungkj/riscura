@@ -52,15 +52,14 @@ export class TestScriptGenerationAIService {
    * @param userId - User ID for tracking and permissions
    * @returns Promise<GenerateTestScriptResponse> with generated test script and metadata
    */
-  async generateTestScript(
-    request: GenerateTestScriptRequest,
+  async generateTestScript(_request: GenerateTestScriptRequest,
     organizationId: string,
     userId: string
   ): Promise<GenerateTestScriptResponse> {
     try {
       // Fetch control details if not provided
       let control: Control | null = null;
-      let controlDescription = request.controlDescription;
+      let _controlDescription = request.controlDescription;
 
       if (request.controlId) {
         control = await db.control.findFirst({
@@ -88,7 +87,7 @@ export class TestScriptGenerationAIService {
       const context = this.prepareContext(control, request);
 
       // Generate test script using AI
-      const prompt = this.buildPrompt(context);
+      const _prompt = this.buildPrompt(context);
       const systemPrompt = this.getSystemPrompt();
 
       const aiResponse = await this.aiService.generateContent({
@@ -137,7 +136,7 @@ export class TestScriptGenerationAIService {
         suggestions: parsedScript.suggestions || [],
       };
     } catch (error) {
-      console.error('Test script generation error:', error);
+      // console.error('Test script generation error:', error);
       throw error;
     }
   }
@@ -159,7 +158,7 @@ export class TestScriptGenerationAIService {
     };
   }
 
-  private buildPrompt(context: TestScriptGenerationContext): string {
+  private buildPrompt(_context: TestScriptGenerationContext): string {
     return `Generate a comprehensive test script for the following control:
 
 Control Title: ${context.controlTitle}
@@ -237,7 +236,7 @@ Always provide practical, implementable test scripts that auditors and control o
       // Fallback: extract information from text
       return this.extractFromText(content);
     } catch (error) {
-      console.error('Failed to parse AI response:', error);
+      // console.error('Failed to parse AI response:', error);
       return this.getDefaultTestScript();
     }
   }
@@ -430,7 +429,7 @@ Always provide practical, implementable test scripts that auditors and control o
     try {
       // Validate inputs
       if (!control || !control.type) {
-        console.warn('Invalid control data for Probo enhancement');
+        // console.warn('Invalid control data for Probo enhancement');
         return null;
       }
 
@@ -462,7 +461,7 @@ Always provide practical, implementable test scripts that auditors and control o
         ],
       };
     } catch (error) {
-      console.error('Failed to enhance with Probo data:', error);
+      // console.error('Failed to enhance with Probo data:', error);
 
       // Return minimal enhancement data on error
       return {
@@ -502,8 +501,7 @@ Always provide practical, implementable test scripts that auditors and control o
    * @param usage - Token usage statistics from AI service
    * @param context - Context of the AI usage
    */
-  private async trackTokenUsage(
-    userId: string,
+  private async trackTokenUsage(_userId: string,
     organizationId: string,
     usage: {
       prompt_tokens?: number;
@@ -528,7 +526,7 @@ Always provide practical, implementable test scripts that auditors and control o
         },
       });
     } catch (error) {
-      console.error('Failed to track AI token usage:', error);
+      // console.error('Failed to track AI token usage:', error);
       // Don't throw - token tracking failure shouldn't break the main flow
     }
   }

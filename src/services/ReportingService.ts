@@ -1,4 +1,4 @@
-import {
+// import {
   generatePDF,
   ReportData,
   ReportSection,
@@ -6,7 +6,7 @@ import {
   formatChartData,
 } from '@/lib/pdf/pdf-generator-mock';
 import { exportToExcel, exportToCSV, ExcelWorkbookData } from '@/lib/pdf/excel-exporter';
-import { format, addDays, addWeeks, addMonths } from 'date-fns';
+// import { format, addDays, addWeeks, addMonths } from 'date-fns';
 import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/db';
 import { EmailService } from './EmailService';
@@ -187,7 +187,7 @@ export class ReportingService {
   /**
    * Generate a report on demand
    */
-  async generateReport(config: ReportConfig): Promise<GeneratedReport[]> {
+  async generateReport(_config: ReportConfig): Promise<GeneratedReport[]> {
     try {
       // Validate configuration
       await this.validateReportConfig(config);
@@ -213,7 +213,7 @@ export class ReportingService {
 
       return reports;
     } catch (error) {
-      console.error('Error generating report:', error);
+      // console.error('Error generating report:', error);
       throw new Error(
         `Failed to generate report: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
@@ -223,7 +223,7 @@ export class ReportingService {
   /**
    * Schedule a report for regular generation
    */
-  async scheduleReport(config: ReportConfig): Promise<string> {
+  async scheduleReport(_config: ReportConfig): Promise<string> {
     if (!config.schedule) {
       throw new Error('Schedule configuration is required');
     }
@@ -238,9 +238,9 @@ export class ReportingService {
       async () => {
         try {
           await this.generateReport(savedConfig);
-          console.log(`Scheduled report generated: ${savedConfig.name}`);
+          // console.log(`Scheduled report generated: ${savedConfig.name}`);
         } catch (error) {
-          console.error(`Failed to generate scheduled report: ${savedConfig.name}`, error);
+          // console.error(`Failed to generate scheduled report: ${savedConfig.name}`, error);
         }
       },
       {
@@ -262,7 +262,7 @@ export class ReportingService {
   /**
    * Get available report templates
    */
-  async getReportTemplates(organizationId: string): Promise<any[]> {
+  async getReportTemplates(_organizationId: string): Promise<any[]> {
     // Mock implementation - in real app, this would query a templates table
     return [
       {
@@ -299,8 +299,7 @@ export class ReportingService {
   /**
    * Get report generation history
    */
-  async getReportHistory(
-    organizationId: string,
+  async getReportHistory(_organizationId: string,
     filters: {
       type?: ReportType;
       dateFrom?: Date;
@@ -351,7 +350,7 @@ export class ReportingService {
   /**
    * Aggregate data for report generation
    */
-  private async aggregateReportData(config: ReportConfig): Promise<any> {
+  private async aggregateReportData(_config: ReportConfig): Promise<any> {
     const { type, filters, organizationId } = config;
 
     switch (type) {
@@ -375,7 +374,7 @@ export class ReportingService {
     }
   }
 
-  private async aggregateRiskData(organizationId: string, filters: ReportFilters): Promise<any> {
+  private async aggregateRiskData(_organizationId: string, filters: ReportFilters): Promise<any> {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -444,8 +443,7 @@ export class ReportingService {
     };
   }
 
-  private async aggregateComplianceData(
-    organizationId: string,
+  private async aggregateComplianceData(_organizationId: string,
     filters: ReportFilters
   ): Promise<any> {
     if (!prisma) {
@@ -520,7 +518,7 @@ export class ReportingService {
     };
   }
 
-  private async aggregateControlData(organizationId: string, filters: ReportFilters): Promise<any> {
+  private async aggregateControlData(_organizationId: string, filters: ReportFilters): Promise<any> {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -581,8 +579,7 @@ export class ReportingService {
     };
   }
 
-  private async aggregateExecutiveData(
-    organizationId: string,
+  private async aggregateExecutiveData(_organizationId: string,
     filters: ReportFilters
   ): Promise<any> {
     // Aggregate high-level metrics for executive summary
@@ -608,7 +605,7 @@ export class ReportingService {
     };
   }
 
-  private async aggregateAuditData(organizationId: string, filters: ReportFilters): Promise<any> {
+  private async aggregateAuditData(_organizationId: string, filters: ReportFilters): Promise<any> {
     // Since there's no audit log model in the schema, we'll create a mock implementation
     // In a real implementation, this would query the audit log table
     return {
@@ -626,8 +623,7 @@ export class ReportingService {
   /**
    * Generate report in specific format
    */
-  private async generateReportInFormat(
-    config: ReportConfig,
+  private async generateReportInFormat(_config: ReportConfig,
     data: any,
     format: ReportFormat
   ): Promise<GeneratedReport> {
@@ -715,7 +711,7 @@ export class ReportingService {
   /**
    * Email reports to recipients
    */
-  private async emailReports(config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
+  private async emailReports(_config: ReportConfig, reports: GeneratedReport[]): Promise<void> {
     if (!config.recipients?.length) return;
 
     const attachments = reports.map((report) => ({
@@ -768,16 +764,16 @@ export class ReportingService {
     try {
       // In a real implementation, this would load scheduled reports from database
       // For now, we'll skip this since there's no scheduled reports table in the schema
-      console.log('Scheduled reports initialized');
+      // console.log('Scheduled reports initialized');
     } catch (error) {
-      console.error('Failed to initialize scheduled reports:', error);
+      // console.error('Failed to initialize scheduled reports:', error);
     }
   }
 
   /**
    * Validate report configuration
    */
-  private async validateReportConfig(config: ReportConfig): Promise<void> {
+  private async validateReportConfig(_config: ReportConfig): Promise<void> {
     if (!config.name || !config.type || !config.organizationId || !config.createdBy) {
       throw new Error('Missing required configuration fields');
     }
@@ -798,7 +794,7 @@ export class ReportingService {
   /**
    * Save scheduled report configuration
    */
-  private async saveScheduledReport(config: ReportConfig): Promise<ReportConfig> {
+  private async saveScheduledReport(_config: ReportConfig): Promise<ReportConfig> {
     // In a real implementation, this would save to a scheduled_reports table
     // For now, we'll just return the config with a generated ID
     return {
@@ -810,8 +806,7 @@ export class ReportingService {
   /**
    * Save report metadata to database
    */
-  private async saveReportMetadata(
-    config: ReportConfig,
+  private async saveReportMetadata(_config: ReportConfig,
     reports: GeneratedReport[]
   ): Promise<void> {
     if (!prisma) {
@@ -839,7 +834,7 @@ export class ReportingService {
         },
       });
     } catch (error) {
-      console.error('Error saving report metadata:', error);
+      // console.error('Error saving report metadata:', error);
       throw new Error(
         `Failed to save report metadata: ${error instanceof Error ? error.message : 'Unknown error'}`
       );

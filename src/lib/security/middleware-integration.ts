@@ -84,8 +84,7 @@ export class SecurityMiddleware {
   /**
    * Apply comprehensive security middleware
    */
-  async applySecurityMiddleware(
-    request: NextRequest,
+  async applySecurityMiddleware(_request: NextRequest,
     options: SecurityMiddlewareOptions = {}
   ): Promise<{ response?: NextResponse; proceed: boolean; context?: any }> {
     const config = { ...DEFAULT_SECURITY_OPTIONS, ...options };
@@ -289,7 +288,7 @@ export class SecurityMiddleware {
   /**
    * Production security validation
    */
-  private validateProductionSecurity(request: NextRequest): { isValid: boolean; details?: any } {
+  private validateProductionSecurity(_request: NextRequest): { isValid: boolean; details?: any } {
     const issues: string[] = [];
 
     // Check for development tokens
@@ -319,8 +318,7 @@ export class SecurityMiddleware {
   /**
    * Rate limiting implementation
    */
-  private checkRateLimit(
-    request: NextRequest,
+  private checkRateLimit(_request: NextRequest,
     config: SecurityMiddlewareOptions
   ): { allowed: boolean; remaining: number; resetTime: number; limit: number } {
     const rateLimitOptions =
@@ -374,8 +372,7 @@ export class SecurityMiddleware {
   /**
    * CORS handling
    */
-  private handleCORS(
-    request: NextRequest,
+  private handleCORS(_request: NextRequest,
     config: SecurityMiddlewareOptions
   ): { response?: NextResponse; headers?: Record<string, string> } {
     const origin = request.headers.get('origin');
@@ -433,8 +430,7 @@ export class SecurityMiddleware {
   /**
    * Sanitize request input
    */
-  private async sanitizeRequestInput(
-    request: NextRequest,
+  private async sanitizeRequestInput(_request: NextRequest,
     config: SecurityMiddlewareOptions
   ): Promise<any> {
     try {
@@ -524,7 +520,7 @@ export class SecurityMiddleware {
   /**
    * Get client IP address
    */
-  private getClientIP(request: NextRequest): string {
+  private getClientIP(_request: NextRequest): string {
     return (
       request.headers.get('cf-connecting-ip') ||
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
@@ -546,7 +542,7 @@ export class SecurityMiddleware {
   private logSecurityEvent(event: string, context: any, level: string = 'info'): void {
     if (productionGuard.isProduction()) {
       // In production, use structured logging
-      console.log(
+      // console.log(
         JSON.stringify({
           timestamp: new Date().toISOString(),
           level,
@@ -559,7 +555,7 @@ export class SecurityMiddleware {
       );
     } else if (level !== 'debug') {
       // In development, use readable format for non-debug events
-      console.log(`🛡️ Security Event [${level.toUpperCase()}]: ${event}`, context);
+      // console.log(`🛡️ Security Event [${level.toUpperCase()}]: ${event}`, context);
     }
   }
 }
@@ -568,8 +564,7 @@ export class SecurityMiddleware {
 export const securityMiddleware = SecurityMiddleware.getInstance();
 
 // Utility function for applying comprehensive security
-export async function withComprehensiveSecurity(
-  request: NextRequest,
+export async function withComprehensiveSecurity(_request: NextRequest,
   options: SecurityMiddlewareOptions = {}
 ) {
   return securityMiddleware.applySecurityMiddleware(request, options);

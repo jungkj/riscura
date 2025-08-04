@@ -49,12 +49,12 @@ test.describe('Enhanced Authentication Flows', () => {
 
         // In a real test, this would go through Google's OAuth flow
         // For testing purposes, we verify the button click and mock the flow
-        console.log('Google OAuth button interaction tested');
+        // console.log('Google OAuth button interaction tested');
 
         // Verify OAuth flow initiation (URL change or popup)
         await page.waitForTimeout(1000);
       } else {
-        console.log('Google OAuth not implemented or button not found');
+        // console.log('Google OAuth not implemented or button not found');
       }
     });
 
@@ -83,7 +83,7 @@ test.describe('Enhanced Authentication Flows', () => {
         const errorMessage = page.locator('[data-testid="oauth-error"], .error, .alert-error');
         if (await errorMessage.isVisible()) {
           await expect(errorMessage).toContainText(/error|denied|failed/i);
-          console.log('OAuth error handling verified');
+          // console.log('OAuth error handling verified');
         }
       }
     });
@@ -129,7 +129,7 @@ test.describe('Enhanced Authentication Flows', () => {
                   '[data-testid="mfa-setup"], .mfa-setup, text=QR code, text=authenticator'
                 )
               ).toBeVisible({ timeout: 10000 });
-              console.log('MFA setup flow verified');
+              // console.log('MFA setup flow verified');
             }
             break;
           }
@@ -139,7 +139,7 @@ test.describe('Enhanced Authentication Flows', () => {
       }
 
       if (!settingsFound) {
-        console.log('MFA settings not found or not implemented');
+        // console.log('MFA settings not found or not implemented');
       }
     });
 
@@ -169,9 +169,9 @@ test.describe('Enhanced Authentication Flows', () => {
           '[data-testid="verify-mfa"], button:has-text("Verify"), button[type="submit"]'
         );
 
-        console.log('MFA verification flow tested');
+        // console.log('MFA verification flow tested');
       } else {
-        console.log('MFA not configured for test user or not implemented');
+        // console.log('MFA not configured for test user or not implemented');
       }
     });
   });
@@ -209,7 +209,7 @@ test.describe('Enhanced Authentication Flows', () => {
       await expect(page1.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
       await expect(page2.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
 
-      console.log('Concurrent session handling tested');
+      // console.log('Concurrent session handling tested');
 
       await context1.close();
       await context2.close();
@@ -238,13 +238,13 @@ test.describe('Enhanced Authentication Flows', () => {
       // Should redirect to login or show session expired message
       const currentUrl = page.url();
       if (currentUrl.includes('/auth/login')) {
-        console.log('Session timeout redirect to login verified');
+        // console.log('Session timeout redirect to login verified');
       } else {
         const sessionMessage = page.locator(
           'text=session expired, text=please login, .expired-session'
         );
         if (await sessionMessage.isVisible()) {
-          console.log('Session expired message displayed');
+          // console.log('Session expired message displayed');
         }
       }
     });
@@ -280,15 +280,15 @@ test.describe('Enhanced Authentication Flows', () => {
           // Check if still logged in (this depends on implementation)
           const userMenu = newPage.locator('[data-testid="user-menu"], .user-menu');
           if (await userMenu.isVisible({ timeout: 5000 })) {
-            console.log('Remember me functionality working');
+            // console.log('Remember me functionality working');
           } else {
-            console.log('Remember me not implemented or session not persisted');
+            // console.log('Remember me not implemented or session not persisted');
           }
 
           await newContext?.close();
         }
       } else {
-        console.log('Remember me functionality not found');
+        // console.log('Remember me functionality not found');
       }
     });
   });
@@ -309,7 +309,7 @@ test.describe('Enhanced Authentication Flows', () => {
 
         if (await strengthIndicator.isVisible()) {
           await expect(strengthIndicator).toContainText(/weak|poor/i);
-          console.log('Weak password detection verified');
+          // console.log('Weak password detection verified');
         }
 
         // Test strong password
@@ -318,7 +318,7 @@ test.describe('Enhanced Authentication Flows', () => {
 
         if (await strengthIndicator.isVisible()) {
           // Should show strong or good rating
-          console.log('Password strength validation tested');
+          // console.log('Password strength validation tested');
         }
       }
     });
@@ -348,9 +348,9 @@ test.describe('Enhanced Authentication Flows', () => {
           page.locator('[data-testid="reset-sent"], .success, text=email sent')
         ).toBeVisible({ timeout: 10000 });
 
-        console.log('Password reset flow verified');
+        // console.log('Password reset flow verified');
       } else {
-        console.log('Password reset functionality not found');
+        // console.log('Password reset functionality not found');
       }
     });
   });
@@ -381,9 +381,9 @@ test.describe('Enhanced Authentication Flows', () => {
       );
 
       if (await lockoutMessage.isVisible()) {
-        console.log('Account lockout protection verified');
+        // console.log('Account lockout protection verified');
       } else {
-        console.log('Account lockout protection not implemented or threshold not reached');
+        // console.log('Account lockout protection not implemented or threshold not reached');
       }
     });
 
@@ -403,9 +403,9 @@ test.describe('Enhanced Authentication Flows', () => {
 
         securityHeaders.forEach((header) => {
           if (headers[header]) {
-            console.log(`Security header ${header} present: ${headers[header]}`);
+            // console.log(`Security header ${header} present: ${headers[header]}`);
           } else {
-            console.log(`Security header ${header} missing`);
+            // console.log(`Security header ${header} missing`);
           }
         });
       }
@@ -430,7 +430,7 @@ test.describe('Enhanced Authentication Flows', () => {
         // Verify successful login across browsers
         await expect(page.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
 
-        console.log(`Authentication successful in ${browserName}`);
+        // console.log(`Authentication successful in ${browserName}`);
       });
     });
   });
@@ -448,18 +448,18 @@ test.describe('Enhanced Authentication Flows', () => {
       if (loginResponse.ok()) {
         const loginData = await loginResponse.json();
         expect(loginData).toHaveProperty('success');
-        console.log('Login API endpoint verified');
+        // console.log('Login API endpoint verified');
       } else {
-        console.log(`Login API returned status: ${loginResponse.status()}`);
+        // console.log(`Login API returned status: ${loginResponse.status()}`);
       }
 
       // Test session API
       const sessionResponse = await request.get('/api/auth/session');
-      console.log(`Session API status: ${sessionResponse.status()}`);
+      // console.log(`Session API status: ${sessionResponse.status()}`);
 
       // Test logout API
       const logoutResponse = await request.post('/api/auth/logout');
-      console.log(`Logout API status: ${logoutResponse.status()}`);
+      // console.log(`Logout API status: ${logoutResponse.status()}`);
     });
   });
 });

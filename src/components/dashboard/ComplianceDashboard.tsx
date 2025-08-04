@@ -187,7 +187,7 @@ export default function ComplianceDashboard() {
       <div className="mb-8">
         <ComplianceRingChart 
           onFrameworkClick={(framework) => {
-            console.log('Framework clicked:', framework);
+            // console.log('Framework clicked:', framework);
             // Navigate to appropriate Probo tab based on framework
             if (framework.name.toLowerCase().includes('soc')) {
               router.push('/probo?tab=soc2-assessment');

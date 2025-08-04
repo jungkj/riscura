@@ -481,7 +481,7 @@ export class ModelPerformanceTracker {
     if (metrics.length === 0) return {};
 
     const latest = metrics[metrics.length - 1];
-    const average = {
+    const _average = {
       responseTime: metrics.reduce((sum, m) => sum + m.responseTime, 0) / metrics.length,
       errorRate: metrics.reduce((sum, m) => sum + m.errorRate, 0) / metrics.length,
       userSatisfaction: metrics.reduce((sum, m) => sum + m.userSatisfaction, 0) / metrics.length,

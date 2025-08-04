@@ -121,7 +121,7 @@ export const useAnnouncements = () => {
   );
 
   const announceError = useCallback(
-    (error: string) => {
+    (_error: string) => {
       announceToScreenReader(`Error: ${error}`, 'assertive');
     },
     [announceToScreenReader]
@@ -262,7 +262,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
         const parsed = JSON.parse(savedSettings);
         setSettings((prev) => ({ ...prev, ...parsed }));
       } catch (error) {
-        console.warn('Failed to parse saved accessibility settings:', error);
+        // console.warn('Failed to parse saved accessibility settings:', error);
       }
     }
 

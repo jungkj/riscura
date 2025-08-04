@@ -89,7 +89,7 @@ export class MemoryManager {
   private weakRefs: any[] = [];
   private finalizationRegistry: any;
 
-  constructor(config: Partial<MemoryConfig> = {}) {
+  constructor(_config: Partial<MemoryConfig> = {}) {
     this.config = { ...DEFAULT_MEMORY_CONFIG, ...config };
 
     // Initialize finalization registry for cleanup if available
@@ -289,7 +289,7 @@ export class MemoryManager {
       try {
         handle.cleanup();
       } catch (error) {
-        console.error(`Error cleaning up resource ${id}:`, error);
+        // console.error(`Error cleaning up resource ${id}:`, error);
       }
       this.resourceHandles.delete(id);
     }
@@ -401,9 +401,9 @@ export class MemoryManager {
 
     // Log critical leaks
     if (leak.severity === 'critical') {
-      console.error('Critical resource leak detected:', leak);
+      // console.error('Critical resource leak detected:', leak);
     } else if (this.config.enableMemoryProfiling) {
-      console.warn('Resource leak detected:', leak);
+      // console.warn('Resource leak detected:', leak);
     }
   }
 
@@ -424,7 +424,7 @@ export class MemoryManager {
         (window as any).gc();
         this.metrics.gcCount++;
       } catch (error) {
-        console.warn('Unable to trigger garbage collection:', error);
+        // console.warn('Unable to trigger garbage collection:', error);
       }
     }
 
@@ -470,7 +470,7 @@ export class MemoryManager {
    */
   private performPeriodicCleanup(): void {
     // Clean up old resources
-    const oneHourAgo = new Date(Date.now() - 3600000);
+    const _oneHourAgo = new Date(Date.now() - 3600000);
 
     for (const [id, handle] of this.resourceHandles.entries()) {
       if (handle.createdAt < oneHourAgo) {
@@ -538,7 +538,7 @@ export class MemoryManager {
       try {
         handle.cleanup();
       } catch (error) {
-        console.error(`Error cleaning up resource ${id}:`, error);
+        // console.error(`Error cleaning up resource ${id}:`, error);
       }
     }
     this.resourceHandles.clear();

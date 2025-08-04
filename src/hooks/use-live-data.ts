@@ -105,7 +105,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
           !endpoint.includes('/api/auth/session')
         ) {
           if (!isAuthenticated || !token) {
-            console.log(`User not authenticated, skipping fetch for ${endpoint}`);
+            // console.log(`User not authenticated, skipping fetch for ${endpoint}`);
             if (isMountedRef.current) {
               setError('Please log in to access this data');
               setLoading(false);
@@ -146,7 +146,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
         }
 
         if (isMountedRef.current) {
-          console.error(`Error fetching ${endpoint}:`, err);
+          // console.error(`Error fetching ${endpoint}:`, err);
           setError(err instanceof Error ? err.message : 'Failed to fetch data');
 
           // Fallback to cached data if available

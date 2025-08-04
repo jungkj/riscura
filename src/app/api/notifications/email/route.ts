@@ -58,7 +58,7 @@ const createTransporter = () => {
   }
 };
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const payload: EmailPayload = await request.json();
 
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
         });
       } catch (emailError) {
         results.failed++;
-        console.error(`Failed to send email to ${email}:`, emailError);
+        // console.error(`Failed to send email to ${email}:`, emailError);
 
         // Log failed delivery
         Sentry.captureException(emailError, {
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error('Email notification error:', error);
+    // console.error('Email notification error:', error);
 
     Sentry.captureException(error, {
       tags: {
@@ -194,7 +194,7 @@ export async function POST(request: NextRequest) {
 /**
  * Rate limiting for email notifications
  */
-async function checkRateLimit(request: NextRequest): Promise<{
+async function checkRateLimit(_request: NextRequest): Promise<{
   allowed: boolean;
   retryAfter?: number;
 }> {
@@ -324,6 +324,6 @@ async function trackEmailMetrics(metrics: {
     }
   } catch (error) {
     // Don't throw - email sending is more important than metrics
-    console.error('Failed to track email metrics:', error);
+    // console.error('Failed to track email metrics:', error);
   }
 }

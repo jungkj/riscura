@@ -138,7 +138,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           generateFallbackPrediction();
         }
       } catch (error) {
-        console.error('Error generating prediction:', error);
+        // console.error('Error generating prediction:', error);
         generateFallbackPrediction();
       } finally {
         setLoading(false);

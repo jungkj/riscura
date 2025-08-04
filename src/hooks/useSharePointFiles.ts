@@ -57,7 +57,7 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
           setFiles([]);
         }
       } catch (err) {
-        console.error('Error listing files:', err);
+        // console.error('Error listing files:', err);
         setError('Failed to load files from SharePoint');
         setFiles([]);
       } finally {
@@ -96,7 +96,7 @@ export const useSharePointFiles = (integrationId: string): UseSharePointFilesRet
           setFiles([]);
         }
       } catch (err) {
-        console.error('Error searching files:', err);
+        // console.error('Error searching files:', err);
         setError('Failed to search files in SharePoint');
         setFiles([]);
       } finally {

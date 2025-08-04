@@ -9,14 +9,14 @@ export function getProductionDatabaseUrl(): string | undefined {
     process.env.NODE_ENV === 'production' &&
     rawUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')
   ) {
-    console.log('🚨 Applying production database URL override');
+    // console.log('🚨 Applying production database URL override');
 
     // Extract password from the direct URL
     const passwordMatch = rawUrl.match(/postgres:([^@]+)@/);
     if (passwordMatch) {
       const password = passwordMatch[1];
       const pooledUrl = `postgresql://postgres.zggstcxinvxsfksssdyr:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`;
-      console.log('✅ Converted to pooled URL for production');
+      // console.log('✅ Converted to pooled URL for production');
       return pooledUrl;
     }
   }

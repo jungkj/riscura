@@ -6,7 +6,7 @@ import { db } from '@/lib/db';
 
 // Validate OpenAI API key at startup
 if (!process.env.OPENAI_API_KEY) {
-  console.error('[Test Scripts Analysis] OpenAI API key is not configured');
+  // console.error('[Test Scripts Analysis] OpenAI API key is not configured');
 }
 
 const openai = process.env.OPENAI_API_KEY
@@ -104,7 +104,7 @@ Determine if this test script provides adequate evidence for control effectivene
 
     // Track token usage
     if (completion.usage) {
-      console.log('[Test Script Analysis] Token usage:', {
+      // console.log('[Test Script Analysis] Token usage:', {
         prompt_tokens: completion.usage.prompt_tokens,
         completion_tokens: completion.usage.completion_tokens,
         total_tokens: completion.usage.total_tokens,
@@ -173,7 +173,7 @@ Determine if this test script provides adequate evidence for control effectivene
       },
     };
   } catch (error) {
-    console.error('Test script analysis error:', error);
+    // console.error('Test script analysis error:', error);
 
     // Check if it's a database error
     if (error instanceof Error && error.message.includes('database')) {

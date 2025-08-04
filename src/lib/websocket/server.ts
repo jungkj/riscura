@@ -122,7 +122,7 @@ export class CollaborationServer {
 
       return true;
     } catch (error) {
-      console.error('WebSocket verification failed:', error);
+      // console.error('WebSocket verification failed:', error);
       return false;
     }
   }
@@ -136,7 +136,7 @@ export class CollaborationServer {
         return;
       }
 
-      console.log(`User ${user.email} connected to collaboration server`);
+      // console.log(`User ${user.email} connected to collaboration server`);
 
       // Store user-socket mapping
       this.socketUsers.set(ws, user);
@@ -157,7 +157,7 @@ export class CollaborationServer {
       });
 
       // Handle incoming messages
-      ws.on('message', (data: Buffer) => {
+      ws.on('message', (_data: Buffer) => {
         try {
           const message = JSON.parse(data.toString()) as WebSocketMessage;
           message.userId = user.id;
@@ -165,7 +165,7 @@ export class CollaborationServer {
 
           this.handleMessage(ws, message);
         } catch (error) {
-          console.error('Invalid WebSocket message:', error);
+          // console.error('Invalid WebSocket message:', error);
           this.sendToSocket(ws, {
             type: 'error',
             payload: { message: 'Invalid message format' },
@@ -181,7 +181,7 @@ export class CollaborationServer {
       });
 
       ws.on('error', (error) => {
-        console.error('WebSocket error:', error);
+        // console.error('WebSocket error:', error);
         this.handleDisconnection(ws, user);
       });
     });
@@ -242,7 +242,7 @@ export class CollaborationServer {
         break;
 
       default:
-        console.warn('Unknown message type:', message.type);
+        // console.warn('Unknown message type:', message.type);
     }
   }
 
@@ -299,7 +299,7 @@ export class CollaborationServer {
       userId: user.id,
     });
 
-    console.log(`User ${user.email} joined room ${roomId}`);
+    // console.log(`User ${user.email} joined room ${roomId}`);
   }
 
   private handleLeaveRoom(user: CollaborationUser, payload: { roomId: string }): void {
@@ -328,7 +328,7 @@ export class CollaborationServer {
       this.rooms.delete(roomId);
     }
 
-    console.log(`User ${user.email} left room ${roomId}`);
+    // console.log(`User ${user.email} left room ${roomId}`);
   }
 
   private handlePresenceUpdate(
@@ -507,7 +507,7 @@ export class CollaborationServer {
         },
       });
     } catch (error) {
-      console.error('Failed to create comment:', error);
+      // console.error('Failed to create comment:', error);
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to create comment' },
@@ -551,7 +551,7 @@ export class CollaborationServer {
         userId: user.id,
       });
     } catch (error) {
-      console.error('Failed to update comment:', error);
+      // console.error('Failed to update comment:', error);
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to update comment' },
@@ -584,7 +584,7 @@ export class CollaborationServer {
         userId: user.id,
       });
     } catch (error) {
-      console.error('Failed to delete comment:', error);
+      // console.error('Failed to delete comment:', error);
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to delete comment' },
@@ -659,7 +659,7 @@ export class CollaborationServer {
         });
       }
     } catch (error) {
-      console.error('Failed to update task:', error);
+      // console.error('Failed to update task:', error);
     }
   }
 
@@ -694,7 +694,7 @@ export class CollaborationServer {
   }
 
   private handleDisconnection(ws: WebSocket, user: CollaborationUser): void {
-    console.log(`User ${user.email} disconnected from collaboration server`);
+    // console.log(`User ${user.email} disconnected from collaboration server`);
 
     // Remove from socket mappings
     this.socketUsers.delete(ws);
@@ -731,7 +731,7 @@ export class CollaborationServer {
     }
   }
 
-  private updateUserPresence(userId: string, updates: Partial<CollaborationUser>): void {
+  private updateUserPresence(_userId: string, updates: Partial<CollaborationUser>): void {
     // Update in-memory presence
     for (const room of this.rooms.values()) {
       const participant = room.participants.get(userId);
@@ -750,11 +750,11 @@ export class CollaborationServer {
         },
       })
       .catch((error) => {
-        console.error('Failed to update user presence:', error);
+        // console.error('Failed to update user presence:', error);
       });
   }
 
-  public sendToUser(userId: string, message: WebSocketMessage): void {
+  public sendToUser(_userId: string, message: WebSocketMessage): void {
     const sockets = this.userSockets.get(userId);
     if (sockets) {
       for (const socket of sockets) {
@@ -812,7 +812,7 @@ export class CollaborationServer {
         userId: notification.senderId,
       });
     } catch (error) {
-      console.error('Failed to create notification:', error);
+      // console.error('Failed to create notification:', error);
     }
   }
 
@@ -854,7 +854,7 @@ export class CollaborationServer {
     return users;
   }
 
-  public getUserPresence(userId: string): PresenceInfo | undefined {
+  public getUserPresence(_userId: string): PresenceInfo | undefined {
     for (const room of this.rooms.values()) {
       const participant = room.participants.get(userId);
       if (participant) {

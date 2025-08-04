@@ -64,7 +64,7 @@ export const RiskAssessmentForm: React.FC = () => {
   };
 
   const handleSubmit = (values: Record<string, any>) => {
-    console.log('Risk Assessment submitted:', values);
+    // console.log('Risk Assessment submitted:', values);
   };
 
   return (
@@ -257,7 +257,7 @@ export const ControlTestingForm: React.FC = () => {
   };
 
   const handleSubmit = (values: Record<string, any>) => {
-    console.log('Control Test submitted:', values);
+    // console.log('Control Test submitted:', values);
   };
 
   return (
@@ -435,7 +435,7 @@ export const UserManagementForm: React.FC = () => {
   };
 
   const handleSubmit = (values: Record<string, any>) => {
-    console.log('User created:', values);
+    // console.log('User created:', values);
   };
 
   return (
@@ -602,7 +602,7 @@ export const SettingsForm: React.FC = () => {
   };
 
   const handleSubmit = (values: Record<string, any>) => {
-    console.log('Settings saved:', values);
+    // console.log('Settings saved:', values);
   };
 
   return (

@@ -13,7 +13,7 @@ interface RouteParams {
 // GET /api/compliance/frameworks/[id] - Get single framework with requirements
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {

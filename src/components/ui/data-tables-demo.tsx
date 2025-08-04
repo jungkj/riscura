@@ -215,19 +215,19 @@ const tableColumns: EnhancedDataTableColumn[] = [
 
 export const DataTablesDemo = () => {
   const handleRowAction = (action: string, row: any) => {
-    console.log('Row action:', action, row);
+    // console.log('Row action:', action, row);
   };
 
   const handleBulkAction = (action: string, rows: any[]) => {
-    console.log('Bulk action:', action, rows);
+    // console.log('Bulk action:', action, rows);
   };
 
   const handleListItemClick = (item: EnhancedListItem) => {
-    console.log('List item clicked:', item);
+    // console.log('List item clicked:', item);
   };
 
   const handleListItemAction = (action: string, item: EnhancedListItem) => {
-    console.log('List item action:', action, item);
+    // console.log('List item action:', action, item);
   };
 
   return (

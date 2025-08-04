@@ -15,7 +15,7 @@ export const performanceMonitor = {
       const measure = performance.getEntriesByName(name, 'measure')[0];
 
       if (process.env.NODE_ENV === 'development' && measure) {
-        console.log(`⚡ Performance: ${name} took ${measure.duration.toFixed(2)}ms`);
+        // console.log(`⚡ Performance: ${name} took ${measure.duration.toFixed(2)}ms`);
       }
 
       return measure?.duration || 0;
@@ -82,11 +82,11 @@ export const useOptimizedMemo = <T>(
         const size = JSON.stringify(result).length;
         if (size > 10000) {
           // Warn about large memoized values
-          console.warn(`📊 Large memoized value detected: ${debugName} (${size} bytes)`);
+          // console.warn(`📊 Large memoized value detected: ${debugName} (${size} bytes)`);
         }
       } catch (error) {
         // Handle circular references or non-serializable values
-        console.warn(`📊 Could not measure size for memoized value: ${debugName}`);
+        // console.warn(`📊 Could not measure size for memoized value: ${debugName}`);
       }
     }
 
@@ -95,7 +95,7 @@ export const useOptimizedMemo = <T>(
 };
 
 // Intersection Observer hook for lazy loading
-export const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
+export const useIntersectionObserver = (_options: IntersectionObserverInit = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
@@ -201,7 +201,7 @@ export const usePerformanceMetrics = (componentName: string) => {
       metrics.avgRenderTime = metrics.totalRenderTime / metrics.renderCount;
 
       if (process.env.NODE_ENV === 'development' && metrics.renderCount % 10 === 0) {
-        console.log(`📊 ${componentName} Performance:`, {
+        // console.log(`📊 ${componentName} Performance:`, {
           renders: metrics.renderCount,
           lastRender: `${renderTime.toFixed(2)}ms`,
           avgRender: `${metrics.avgRenderTime.toFixed(2)}ms`,

@@ -96,9 +96,9 @@ export class SupabaseStorageService {
         });
 
         if (error) {
-          console.error(`Failed to create bucket ${bucketName}:`, error);
+          // console.error(`Failed to create bucket ${bucketName}:`, error);
         } else {
-          console.log(`Created bucket: ${bucketName}`);
+          // console.log(`Created bucket: ${bucketName}`);
         }
       }
     }
@@ -107,7 +107,7 @@ export class SupabaseStorageService {
   /**
    * Upload a file to Supabase Storage
    */
-  async uploadFile(options: UploadFileOptions): Promise<StorageFile> {
+  async uploadFile(_options: UploadFileOptions): Promise<StorageFile> {
     const { bucket, file, fileName, organizationId, userId, metadata } = options;
 
     // Generate unique file path
@@ -215,7 +215,7 @@ export class SupabaseStorageService {
   /**
    * Get storage usage statistics
    */
-  async getStorageStats(organizationId: string): Promise<{
+  async getStorageStats(_organizationId: string): Promise<{
     totalSize: number;
     fileCount: number;
     byBucket: Record<string, { size: number; count: number }>;

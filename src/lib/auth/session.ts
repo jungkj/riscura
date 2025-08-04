@@ -97,7 +97,7 @@ export async function createSession(
       },
     };
   } catch (error) {
-    console.error('Session creation error:', error);
+    // console.error('Session creation error:', error);
     throw new Error('Failed to create session');
   }
 }
@@ -190,7 +190,7 @@ export async function validateSession(sessionToken: string): Promise<{
       session,
     };
   } catch (error) {
-    console.error('Session validation error:', error);
+    // console.error('Session validation error:', error);
     return { isValid: false };
   }
 }
@@ -204,7 +204,7 @@ export async function invalidateSession(sessionToken: string): Promise<void> {
       where: { token: sessionToken },
     });
   } catch (error) {
-    console.error('Session invalidation error:', error);
+    // console.error('Session invalidation error:', error);
     // Don't throw error if session doesn't exist
   }
 }
@@ -212,13 +212,13 @@ export async function invalidateSession(sessionToken: string): Promise<void> {
 /**
  * Invalidate all sessions for user
  */
-export async function invalidateAllSessions(userId: string): Promise<void> {
+export async function invalidateAllSessions(_userId: string): Promise<void> {
   try {
     await db.client.session.deleteMany({
       where: { userId },
     });
   } catch (error) {
-    console.error('All sessions invalidation error:', error);
+    // console.error('All sessions invalidation error:', error);
     throw new Error('Failed to invalidate sessions');
   }
 }
@@ -226,7 +226,7 @@ export async function invalidateAllSessions(userId: string): Promise<void> {
 /**
  * Clean up old sessions for user
  */
-export async function cleanupOldSessions(userId: string, keepCount: number = 10): Promise<void> {
+export async function cleanupOldSessions(_userId: string, keepCount: number = 10): Promise<void> {
   try {
     // Get all sessions for user ordered by creation date
     const sessions = await db.client.session.findMany({
@@ -247,7 +247,7 @@ export async function cleanupOldSessions(userId: string, keepCount: number = 10)
       });
     }
   } catch (error) {
-    console.error('Session cleanup error:', error);
+    // console.error('Session cleanup error:', error);
     // Don't throw error, this is a maintenance operation
   }
 }
@@ -263,14 +263,14 @@ export async function cleanupExpiredSessions(): Promise<void> {
       },
     });
   } catch (error) {
-    console.error('Expired sessions cleanup error:', error);
+    // console.error('Expired sessions cleanup error:', error);
   }
 }
 
 /**
  * Get active sessions for user
  */
-export async function getActiveSessions(userId: string): Promise<any[]> {
+export async function getActiveSessions(_userId: string): Promise<any[]> {
   try {
     return await db.client.session.findMany({
       where: {
@@ -287,7 +287,7 @@ export async function getActiveSessions(userId: string): Promise<any[]> {
       },
     });
   } catch (error) {
-    console.error('Get active sessions error:', error);
+    // console.error('Get active sessions error:', error);
     return [];
   }
 }
@@ -309,7 +309,7 @@ export async function updateSessionActivity(
       },
     });
   } catch (error) {
-    console.error('Session activity update error:', error);
+    // console.error('Session activity update error:', error);
     // Don't throw error, this is optional
   }
 }
@@ -391,7 +391,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
       where: { id: sessionId },
     });
   } catch (error) {
-    console.error('Session deletion error:', error);
+    // console.error('Session deletion error:', error);
     throw new Error('Failed to delete session');
   }
 }

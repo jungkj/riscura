@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/questionnaires - List questionnaires (stub implementation)
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     return NextResponse.json(
       {
@@ -16,13 +16,13 @@ export async function GET(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error('Get questionnaires error:', error);
+    // console.error('Get questionnaires error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // POST /api/questionnaires - Create new questionnaire (stub implementation)
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     return NextResponse.json(
       {
@@ -31,13 +31,13 @@ export async function POST(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error('Create questionnaire error:', error);
+    // console.error('Create questionnaire error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // PUT /api/questionnaires - Update questionnaire (stub implementation)
-export async function PUT(request: NextRequest) {
+export async function PUT(_request: NextRequest) {
   try {
     return NextResponse.json(
       {
@@ -46,13 +46,13 @@ export async function PUT(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error('Update questionnaire error:', error);
+    // console.error('Update questionnaire error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // DELETE /api/questionnaires - Delete questionnaire (stub implementation)
-export async function DELETE(request: NextRequest) {
+export async function DELETE(_request: NextRequest) {
   try {
     return NextResponse.json(
       {
@@ -61,7 +61,7 @@ export async function DELETE(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error('Delete questionnaire error:', error);
+    // console.error('Delete questionnaire error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

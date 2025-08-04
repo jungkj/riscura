@@ -258,7 +258,7 @@ export default function DragDropImport({
           results.push(result.data);
 
         } catch (error) {
-          console.error(`Error processing ${fileObj.file.name}:`, error);
+          // console.error(`Error processing ${fileObj.file.name}:`, error);
           
           // Update file status with error
           setFiles(prev => prev.map(f => 
@@ -287,7 +287,7 @@ export default function DragDropImport({
       });
 
     } catch (error) {
-      console.error('Import processing error:', error);
+      // console.error('Import processing error:', error);
       setProcessingError(error instanceof Error ? error.message : 'Processing failed');
     } finally {
       setIsProcessing(false);

@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth.config';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
@@ -16,12 +16,12 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(framework);
   } catch (error) {
-    console.error('SOC 2 framework API error:', error);
+    // console.error('SOC 2 framework API error:', error);
     return NextResponse.json({ error: 'Failed to fetch SOC 2 framework' }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(completeFramework);
   } catch (error) {
-    console.error('SOC 2 import error:', error);
+    // console.error('SOC 2 import error:', error);
     return NextResponse.json({ error: 'Failed to import SOC 2 framework' }, { status: 500 });
   }
 }

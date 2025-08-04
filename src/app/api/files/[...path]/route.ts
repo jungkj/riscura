@@ -3,8 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import CloudStorageService from '@/services/CloudStorageService';
 
-export async function GET(
-  request: NextRequest,
+export async function GET(_request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
@@ -46,7 +45,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('Error serving file:', error);
+    // console.error('Error serving file:', error);
     return NextResponse.json({ error: 'Failed to serve file' }, { status: 500 });
   }
 }

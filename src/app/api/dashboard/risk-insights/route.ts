@@ -37,7 +37,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('Probo insights API error:', error);
+      // console.error('Probo insights API error:', error);
       return NextResponse.json(
         {
           success: false,
@@ -120,7 +120,7 @@ export const POST = withApiMiddleware(
           return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
       }
     } catch (error) {
-      console.error('Probo insights POST API error:', error);
+      // console.error('Probo insights POST API error:', error);
 
       if (error instanceof z.ZodError) {
         return NextResponse.json(

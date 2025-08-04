@@ -250,8 +250,7 @@ export const createMockRequest = (
   return request;
 };
 
-export const createMockResponse = (
-  data: any = {},
+export const createMockResponse = (_data: any = {},
   status = 200,
   headers: Record<string, string> = {}
 ): NextResponse => {
@@ -438,7 +437,7 @@ export const createMockStripeInvoice = (overrides: any = {}) => ({
 // ASSERTION HELPERS
 // ============================================================================
 
-export const expectValidApiResponse = (response: any) => {
+export const expectValidApiResponse = (_response: any) => {
   expect(response).toHaveProperty('success');
   expect(response).toHaveProperty('data');
   if (response.success === false) {
@@ -450,7 +449,7 @@ export const expectValidApiResponse = (response: any) => {
   expect(response.meta).toHaveProperty('timestamp');
 };
 
-export const expectValidPaginationResponse = (response: any) => {
+export const expectValidPaginationResponse = (_response: any) => {
   expectValidApiResponse(response);
   expect(response).toHaveProperty('pagination');
   expect(response.pagination).toHaveProperty('page');
@@ -459,8 +458,7 @@ export const expectValidPaginationResponse = (response: any) => {
   expect(response.pagination).toHaveProperty('pages');
 };
 
-export const expectSubscriptionEnforcement = (
-  response: any,
+export const expectSubscriptionEnforcement = (_response: any,
   expectedCode = 'SUBSCRIPTION_ERROR'
 ) => {
   expect(response.success).toBe(false);
@@ -502,7 +500,7 @@ export const measureExecutionTime = async <T>(
   const endTime = performance.now();
   const duration = endTime - startTime;
 
-  console.log(`${name} executed in ${duration.toFixed(2)}ms`);
+  // console.log(`${name} executed in ${duration.toFixed(2)}ms`);
 
   return { result, duration };
 };
@@ -688,7 +686,7 @@ export const waitForElement = async (page: any, selector: string, timeout = 1000
     await page.waitForSelector(selector, { timeout });
     return true;
   } catch (error) {
-    console.warn(`Element ${selector} not found within ${timeout}ms`);
+    // console.warn(`Element ${selector} not found within ${timeout}ms`);
     return false;
   }
 };
@@ -701,7 +699,7 @@ export const fillFormSafely = async (page: any, selector: string, value: string)
     await page.fill(selector, value);
     return true;
   } catch (error) {
-    console.warn(`Could not fill ${selector} with ${value}: ${error.message}`);
+    // console.warn(`Could not fill ${selector} with ${value}: ${error.message}`);
     return false;
   }
 };
@@ -721,7 +719,7 @@ export const clickElementSafely = async (page: any, selectors: string[]) => {
       // Continue to next selector
     }
   }
-  console.warn(`Could not click any of: ${selectors.join(', ')}`);
+  // console.warn(`Could not click any of: ${selectors.join(', ')}`);
   return false;
 };
 
@@ -789,7 +787,7 @@ export const loginUser = async (
     await page.waitForURL('**/dashboard**', { timeout: 30000 });
     return true;
   } catch (error) {
-    console.warn('Login may have failed - no redirect to dashboard detected');
+    // console.warn('Login may have failed - no redirect to dashboard detected');
     return false;
   }
 };
@@ -832,7 +830,7 @@ export const logoutUser = async (page: any) => {
     await page.waitForURL('**/auth/login**', { timeout: 10000 });
     return true;
   } catch (error) {
-    console.warn('Logout may have failed - no redirect to login detected');
+    // console.warn('Logout may have failed - no redirect to login detected');
     return false;
   }
 };

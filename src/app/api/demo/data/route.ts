@@ -3,7 +3,7 @@ import { getDemoData, getTestUserByEmail, hasPermission } from '@/lib/demo/testU
 import { isDemoModeEnabled, isDevelopmentEnvironment } from '@/config/env';
 
 // GET /api/demo/data - Get demo data for testing
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Only allow in development or demo mode
     if (!isDevelopmentEnvironment() && !isDemoModeEnabled()) {
@@ -144,13 +144,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Demo data API error:', error);
+    // console.error('Demo data API error:', error);
     return NextResponse.json({ error: 'Failed to retrieve demo data' }, { status: 500 });
   }
 }
 
 // POST /api/demo/data - Simulate data operations for testing
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     if (!isDevelopmentEnvironment() && !isDemoModeEnabled()) {
       return NextResponse.json(
@@ -233,7 +233,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
   } catch (error) {
-    console.error('Demo operation error:', error);
+    // console.error('Demo operation error:', error);
     return NextResponse.json({ error: 'Demo operation failed' }, { status: 500 });
   }
 }

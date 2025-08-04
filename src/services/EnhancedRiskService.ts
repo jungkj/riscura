@@ -53,7 +53,7 @@ export class EnhancedRiskService {
         confidenceScore: result.confidence || 0.8,
       };
     } catch (error) {
-      console.error('AI risk analysis failed:', error);
+      // console.error('AI risk analysis failed:', error);
       return {
         suggestedCategory: undefined,
         suggestedLikelihood: undefined,
@@ -81,7 +81,7 @@ export class EnhancedRiskService {
       const result = await response.json();
       return result.category || 'operational';
     } catch (error) {
-      console.error('Risk categorization failed:', error);
+      // console.error('Risk categorization failed:', error);
       return 'operational';
     }
   }
@@ -122,7 +122,7 @@ export class EnhancedRiskService {
         })) || []
       );
     } catch (error) {
-      console.error('Mitigation strategy generation failed:', error);
+      // console.error('Mitigation strategy generation failed:', error);
       return [];
     }
   }
@@ -170,7 +170,7 @@ export class EnhancedRiskService {
           throw new Error(`Unsupported bulk operation: ${operation.type}`);
       }
     } catch (error) {
-      console.error('Bulk operation failed:', error);
+      // console.error('Bulk operation failed:', error);
       return { success: false, errors: [error instanceof Error ? error.message : 'Unknown error'] };
     }
   }
@@ -180,31 +180,31 @@ export class EnhancedRiskService {
     updateData: BulkUpdateData
   ): Promise<{ success: boolean }> {
     // Implementation for bulk update
-    console.log('Bulk updating risks:', riskIds, updateData);
+    // console.log('Bulk updating risks:', riskIds, updateData);
     return { success: true };
   }
 
   private async bulkDelete(riskIds: string[]): Promise<{ success: boolean }> {
     // Implementation for bulk delete
-    console.log('Bulk deleting risks:', riskIds);
+    // console.log('Bulk deleting risks:', riskIds);
     return { success: true };
   }
 
   private async bulkExport(riskIds: string[], options: any): Promise<{ success: boolean }> {
     // Implementation for bulk export
-    console.log('Bulk exporting risks:', riskIds, options);
+    // console.log('Bulk exporting risks:', riskIds, options);
     return { success: true };
   }
 
   private async bulkApprove(riskIds: string[], userId: string): Promise<{ success: boolean }> {
     // Implementation for bulk approve
-    console.log('Bulk approving risks:', riskIds, 'by user:', userId);
+    // console.log('Bulk approving risks:', riskIds, 'by user:', userId);
     return { success: true };
   }
 
   private async bulkAssign(riskIds: string[], assignmentData: any): Promise<{ success: boolean }> {
     // Implementation for bulk assign
-    console.log('Bulk assigning risks:', riskIds, assignmentData);
+    // console.log('Bulk assigning risks:', riskIds, assignmentData);
     return { success: true };
   }
 
@@ -417,7 +417,7 @@ export class EnhancedRiskService {
       const result = await response.json();
       return result.correlations || [];
     } catch (error) {
-      console.error('Risk correlation analysis failed:', error);
+      // console.error('Risk correlation analysis failed:', error);
       return [];
     }
   }
@@ -437,7 +437,7 @@ export class EnhancedRiskService {
       const result = await response.json();
       return result.intelligence || this.getMockRiskIntelligence();
     } catch (error) {
-      console.error('Predictive analysis failed:', error);
+      // console.error('Predictive analysis failed:', error);
       return this.getMockRiskIntelligence();
     }
   }

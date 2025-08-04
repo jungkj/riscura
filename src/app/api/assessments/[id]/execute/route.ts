@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // POST /api/assessments/[id]/execute - Execute assessment analysis
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const resolvedParams = await params;
     const assessmentId = resolvedParams.id;
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       { status: 501 }
     );
   } catch (error) {
-    console.error('Error executing assessment:', error);
+    // console.error('Error executing assessment:', error);
     return NextResponse.json({ error: 'Failed to execute assessment' }, { status: 500 });
   }
 }

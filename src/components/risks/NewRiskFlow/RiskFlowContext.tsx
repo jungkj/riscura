@@ -40,7 +40,7 @@ interface RiskData {
 
 interface RiskFlowContextType {
   riskData: RiskData;
-  updateRiskData: (data: Partial<RiskData>) => void;
+  updateRiskData: (_data: Partial<RiskData>) => void;
   currentStep: RiskFlowStep;
   setCurrentStep: (step: RiskFlowStep) => void;
   isSubmitting: boolean;
@@ -68,7 +68,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
     tags: [],
   });
 
-  const updateRiskData = (data: Partial<RiskData>) => {
+  const updateRiskData = (_data: Partial<RiskData>) => {
     setRiskData((prev) => {
       // Create a copy for validation
       const validated: Partial<RiskData> = {};
@@ -79,7 +79,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
         if (!isNaN(likelihood) && likelihood >= 1 && likelihood <= 5) {
           validated.likelihood = Math.round(likelihood);
         } else {
-          console.warn(`Invalid likelihood value: ${data.likelihood}. Must be between 1-5.`);
+          // console.warn(`Invalid likelihood value: ${data.likelihood}. Must be between 1-5.`);
         }
       }
 
@@ -89,7 +89,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
         if (!isNaN(impact) && impact >= 1 && impact <= 5) {
           validated.impact = Math.round(impact);
         } else {
-          console.warn(`Invalid impact value: ${data.impact}. Must be between 1-5.`);
+          // console.warn(`Invalid impact value: ${data.impact}. Must be between 1-5.`);
         }
       }
 

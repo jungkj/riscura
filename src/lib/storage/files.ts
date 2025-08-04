@@ -88,7 +88,7 @@ export async function uploadFile(
       checksum: hash,
     };
   } catch (error) {
-    console.error('File upload error:', error);
+    // console.error('File upload error:', error);
     throw new Error('Failed to upload file');
   }
 }
@@ -101,7 +101,7 @@ export async function deleteFile(path: string): Promise<void> {
     const fullPath = join(getStorageRoot(), path);
     await unlink(fullPath);
   } catch (error) {
-    console.error('File deletion error:', error);
+    // console.error('File deletion error:', error);
     // Don't throw error if file doesn't exist
     if ((error as any).code !== 'ENOENT') {
       throw new Error('Failed to delete file');
@@ -213,7 +213,7 @@ export function validateFileWithOptions(file: File, options: UploadOptions): Fil
 /**
  * Generate secure file path
  */
-function generateFilePath(organizationId: string, filename: string): string {
+function generateFilePath(_organizationId: string, filename: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -224,7 +224,7 @@ function generateFilePath(organizationId: string, filename: string): string {
 /**
  * Generate directory path for organization
  */
-function getDirectoryPath(organizationId: string): string {
+function getDirectoryPath(_organizationId: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -324,8 +324,7 @@ export function cleanFilename(filename: string): string {
 /**
  * Generate secure path for file upload
  */
-export function generateSecurePath(
-  organizationId: string,
+export function generateSecurePath(_organizationId: string,
   category: string,
   filename: string
 ): string {

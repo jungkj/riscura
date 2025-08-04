@@ -36,7 +36,7 @@ async function handleGet(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error generating API documentation:', error);
+    // console.error('Error generating API documentation:', error);
     return NextResponse.json(
       {
         success: false,

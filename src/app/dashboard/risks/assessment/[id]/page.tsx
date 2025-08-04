@@ -147,7 +147,7 @@ export default function AssessmentDetailPage() {
   };
 
   const handleExport = () => {
-    console.log('Exporting assessment...');
+    // console.log('Exporting assessment...');
   };
 
   return (
@@ -398,7 +398,7 @@ export default function AssessmentDetailPage() {
                 riskCategory="Security"
                 riskSeverity={risk.severity as 'Critical' | 'High' | 'Medium' | 'Low'}
                 onControlsGenerated={(controls, mappings) => {
-                  console.log('Generated controls for risk:', risk.id, controls, mappings);
+                  // console.log('Generated controls for risk:', risk.id, controls, mappings);
                 }} />
             ))}
 
@@ -417,7 +417,7 @@ export default function AssessmentDetailPage() {
               controls={[]} // Would be populated from actual controls
               existingMappings={[]} // Would be populated from existing mappings
               onMappingsUpdate={(mappings) => {
-                console.log('Updated mappings:', mappings);
+                // console.log('Updated mappings:', mappings);
               }} />
           </div>
         </DaisyTabsContent>

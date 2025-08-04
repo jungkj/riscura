@@ -22,7 +22,7 @@ interface AIGenerateResponse {
 }
 
 interface UseAIReturn {
-  generate: (options: AIGenerateOptions) => Promise<AIGenerateResponse | null>;
+  generate: (_options: AIGenerateOptions) => Promise<AIGenerateResponse | null>;
   loading: boolean;
   error: string | null;
 }
@@ -36,7 +36,7 @@ export function useAI(): UseAIReturn {
   const [error, setError] = useState<string | null>(null);
 
   const generate = useCallback(
-    async (options: AIGenerateOptions): Promise<AIGenerateResponse | null> => {
+    async (_options: AIGenerateOptions): Promise<AIGenerateResponse | null> => {
       setLoading(true);
       setError(null);
 

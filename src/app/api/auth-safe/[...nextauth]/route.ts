@@ -22,7 +22,7 @@ async function handler(req: NextRequest, context: any) {
 
     return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
   } catch (error) {
-    console.error('[NextAuth Safe] Error:', error);
+    // console.error('[NextAuth Safe] Error:', error);
 
     // Return a proper JSON error response
     return NextResponse.json(

@@ -13,7 +13,7 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
 
-console.log('[NextAuth Direct] Environment check:', {
+// console.log('[NextAuth Direct] Environment check:', {
   GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID ? `${GOOGLE_CLIENT_ID.substring(0, 10)}...` : 'NOT SET',
   GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET',
   NEXTAUTH_SECRET: NEXTAUTH_SECRET ? 'SET' : 'NOT SET',
@@ -25,7 +25,7 @@ const providers: any[] = [];
 
 // Add Google provider if credentials exist
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
-  console.log('[NextAuth Direct] Adding Google provider with direct env vars');
+  // console.log('[NextAuth Direct] Adding Google provider with direct env vars');
   providers.push(
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -40,9 +40,9 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     })
   );
 } else {
-  console.log('[NextAuth Direct] Google provider not added - missing credentials');
-  console.log('GOOGLE_CLIENT_ID exists:', !!GOOGLE_CLIENT_ID);
-  console.log('GOOGLE_CLIENT_SECRET exists:', !!GOOGLE_CLIENT_SECRET);
+  // console.log('[NextAuth Direct] Google provider not added - missing credentials');
+  // console.log('GOOGLE_CLIENT_ID exists:', !!GOOGLE_CLIENT_ID);
+  // console.log('GOOGLE_CLIENT_SECRET exists:', !!GOOGLE_CLIENT_SECRET);
 }
 
 // Always add credentials provider
@@ -96,7 +96,7 @@ providers.push(
           image: user.avatar,
         } as any;
       } catch (error) {
-        console.error('Authentication error:', error);
+        // console.error('Authentication error:', error);
         return null;
       }
     },
@@ -114,7 +114,7 @@ export const authOptionsDebug: NextAuthOptions = {
   debug: true, // Enable debug mode
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('[NextAuth Direct] SignIn callback:', {
+      // console.log('[NextAuth Direct] SignIn callback:', {
         provider: account?.provider,
         userEmail: user?.email,
       });
@@ -140,7 +140,7 @@ export const authOptionsDebug: NextAuthOptions = {
 
           return true;
         } catch (error) {
-          console.error('[NextAuth Direct] Google sign-in error:', error);
+          // console.error('[NextAuth Direct] Google sign-in error:', error);
           return false;
         }
       }

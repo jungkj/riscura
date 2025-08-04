@@ -10,8 +10,7 @@ export class CompressionService {
   private compressionStats = new Map<string, CompressionStats>();
 
   // API Response Compression
-  async compressAPIResponse(
-    data: any,
+  async compressAPIResponse(_data: any,
     encoding: CompressionEncoding = 'gzip',
     threshold = 1024
   ): Promise<CompressionResult> {
@@ -69,7 +68,7 @@ export class CompressionService {
         duration: Date.now() - startTime,
       };
     } catch (error) {
-      console.error('Compression error:', error);
+      // console.error('Compression error:', error);
       return {
         compressed: false,
         data: data,
@@ -84,7 +83,7 @@ export class CompressionService {
   }
 
   // Decompress Data
-  async decompressData(data: Buffer, encoding: CompressionEncoding): Promise<string> {
+  async decompressData(_data: Buffer, encoding: CompressionEncoding): Promise<string> {
     try {
       let decompressed: Buffer;
 
@@ -251,8 +250,7 @@ export class CompressionService {
   }
 
   // Optimal Encoding Selection
-  async selectOptimalEncoding(
-    data: any,
+  async selectOptimalEncoding(_data: any,
     acceptedEncodings: CompressionEncoding[]
   ): Promise<CompressionEncoding> {
     if (acceptedEncodings.length === 0) {
@@ -368,7 +366,7 @@ export interface CompressionHealthCheck {
 }
 
 // Middleware for Express/Next.js
-export function compressionMiddleware(options: CompressionOptions = {}) {
+export function compressionMiddleware(_options: CompressionOptions = {}) {
   const service = new CompressionService();
 
   return async (req: any, res: any, next: any) => {
@@ -382,7 +380,7 @@ export function compressionMiddleware(options: CompressionOptions = {}) {
     const originalSend = res.send;
 
     // Override send method
-    res.send = async function (data: any) {
+    res.send = async function (_data: any) {
       // Check if should compress
       const contentType = res.get('Content-Type') || 'text/html';
       const shouldCompress = service.shouldCompress(contentType, Buffer.byteLength(data));
@@ -404,7 +402,7 @@ export function compressionMiddleware(options: CompressionOptions = {}) {
           return originalSend.call(res, result.data);
         }
       } catch (error) {
-        console.error('Compression middleware error:', error);
+        // console.error('Compression middleware error:', error);
       }
 
       // Fallback to uncompressed

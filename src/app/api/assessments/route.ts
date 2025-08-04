@@ -7,7 +7,7 @@ export const GET = withApiMiddleware(
     const user = (req as any).user;
 
     if (!user || !user.organizationId) {
-      console.error('[Assessments API] Missing user or organizationId:', {
+      // console.error('[Assessments API] Missing user or organizationId:', {
         hasUser: !!user,
         userId: user?.id,
         organizationId: user?.organizationId,
@@ -19,7 +19,7 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      console.log('[Assessments API] Fetching assessments for organization:', user.organizationId);
+      // console.log('[Assessments API] Fetching assessments for organization:', user.organizationId);
 
       // Check if the organization exists
       const orgExists = await db.client.organization.findUnique({
@@ -27,7 +27,7 @@ export const GET = withApiMiddleware(
       });
 
       if (!orgExists) {
-        console.error('[Assessments API] Organization not found:', user.organizationId);
+        // console.error('[Assessments API] Organization not found:', user.organizationId);
         // Return empty array instead of error for new organizations
         return NextResponse.json({
           success: true,
@@ -52,7 +52,7 @@ export const GET = withApiMiddleware(
         orderBy: { createdAt: 'desc' },
       });
 
-      console.log(`[Assessments API] Found ${assessments.length} assessments`);
+      // console.log(`[Assessments API] Found ${assessments.length} assessments`);
 
       return NextResponse.json({
         success: true,
@@ -63,7 +63,7 @@ export const GET = withApiMiddleware(
             : undefined,
       });
     } catch (error) {
-      console.error('[Assessments API] Error:', error);
+      // console.error('[Assessments API] Error:', error);
 
       // Return empty array for database errors to maintain UI functionality
       return NextResponse.json({

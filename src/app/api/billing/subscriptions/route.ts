@@ -11,7 +11,7 @@ import {
 import { createNotFoundError } from '@/lib/api/error-handler';
 
 export const GET = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const user = (request as any).user;
 
     // Get active subscription for the organization
@@ -61,7 +61,7 @@ export const GET = withApiMiddleware(
 );
 
 export const POST = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const user = (request as any).user;
     const { planId, options } = await request.json();
 
@@ -110,7 +110,7 @@ export const POST = withApiMiddleware(
 );
 
 export const PUT = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const user = (request as any).user;
     const { subscriptionId, planId, action } = await request.json();
 
@@ -166,7 +166,7 @@ export const PUT = withApiMiddleware(
 );
 
 export const DELETE = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const user = (request as any).user;
     const { searchParams } = new URL(request.url);
     const subscriptionId = searchParams.get('id');

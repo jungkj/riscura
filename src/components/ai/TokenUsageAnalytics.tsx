@@ -153,7 +153,7 @@ export const TokenUsageAnalytics: React.FC = () => {
     const success = upgradeTier(tierName);
     if (success) {
       // Show success message
-      console.log(`Successfully upgraded to ${tierName}`);
+      // console.log(`Successfully upgraded to ${tierName}`);
     }
   };
 

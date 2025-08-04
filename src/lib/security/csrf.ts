@@ -242,7 +242,7 @@ export class CSRFProtection {
   /**
    * Set CSRF token in response cookies
    */
-  setTokenCookie(response: NextResponse, token: string): NextResponse {
+  setTokenCookie(_response: NextResponse, token: string): NextResponse {
     const cookieOptions = {
       name: this.config.cookieName,
       value: token,
@@ -262,7 +262,7 @@ export class CSRFProtection {
   /**
    * Get CSRF token from request
    */
-  getTokenFromRequest(request: NextRequest): { headerToken?: string; cookieToken?: string } {
+  getTokenFromRequest(_request: NextRequest): { headerToken?: string; cookieToken?: string } {
     const headerToken = request.headers.get(this.config.headerName) || undefined;
     const cookieToken = request.cookies.get(this.config.cookieName)?.value || undefined;
 
@@ -272,8 +272,7 @@ export class CSRFProtection {
   /**
    * Validate CSRF protection for request
    */
-  validateRequest(
-    request: NextRequest,
+  validateRequest(_request: NextRequest,
     sessionId?: string
   ): {
     isValid: boolean;
@@ -358,7 +357,7 @@ export class CSRFProtection {
    * Middleware for CSRF protection
    */
   middleware() {
-    return async (request: NextRequest): Promise<NextResponse | null> => {
+    return async (_request: NextRequest): Promise<NextResponse | null> => {
       const validation = this.validateRequest(request);
 
       if (!validation.isValid) {
@@ -436,8 +435,7 @@ export function validateCSRFToken(token: string, sessionId?: string): boolean {
   return csrfProtection.validateToken(token, sessionId);
 }
 
-export function validateCSRFRequest(
-  request: NextRequest,
+export function validateCSRFRequest(_request: NextRequest,
   sessionId?: string
 ): {
   isValid: boolean;

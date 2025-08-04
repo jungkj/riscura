@@ -264,7 +264,7 @@ test.describe('Performance and Load Testing', () => {
       expect(metrics.loadTime).toBeLessThan(3000); // < 3 seconds
       expect(metrics.responseTime).toBeLessThan(500); // < 500ms
 
-      console.log(
+      // console.log(
         `${pageTest.name} - Load Time: ${metrics.loadTime}ms, Response Time: ${metrics.responseTime}ms`
       );
     }
@@ -288,7 +288,7 @@ test.describe('Performance and Load Testing', () => {
       expect(result.successRate).toBeGreaterThan(95); // > 95% success rate
       expect(result.errorCount).toBeLessThan(10); // < 10 errors total
 
-      console.log('10 User Load Test Results:', result);
+      // console.log('10 User Load Test Results:', result);
     } finally {
       await orchestrator.cleanup();
     }
@@ -309,7 +309,7 @@ test.describe('Performance and Load Testing', () => {
       expect(result.p95ResponseTime).toBeLessThan(10000); // < 10 seconds 95th percentile
       expect(result.successRate).toBeGreaterThan(90); // > 90% success rate
 
-      console.log('50 User Stress Test Results:', result);
+      // console.log('50 User Stress Test Results:', result);
     } finally {
       await orchestrator.cleanup();
     }
@@ -368,7 +368,7 @@ test.describe('Performance and Load Testing', () => {
       const successCount = results.filter(Boolean).length;
       expect(successCount).toBe(Math.min(batchSize, riskCount - batch * batchSize));
 
-      console.log(`Batch ${batch + 1}/${batches}: ${successCount} risks created in ${batchTime}ms`);
+      // console.log(`Batch ${batch + 1}/${batches}: ${successCount} risks created in ${batchTime}ms`);
     }
 
     // Test query performance with large dataset
@@ -379,8 +379,8 @@ test.describe('Performance and Load Testing', () => {
 
     expect(queryTime).toBeLessThan(5000); // Should load within 5 seconds
 
-    console.log(`Large dataset query time: ${queryTime}ms`);
-    console.log(`Total creation time for ${riskCount} risks: ${totalCreateTime}ms`);
+    // console.log(`Large dataset query time: ${queryTime}ms`);
+    // console.log(`Total creation time for ${riskCount} risks: ${totalCreateTime}ms`);
 
     await page.close();
   });
@@ -434,7 +434,7 @@ test.describe('Performance and Load Testing', () => {
 
     expect(memoryGrowth).toBeLessThan(maxAcceptableGrowth);
 
-    console.log(
+    // console.log(
       `Memory usage: Initial: ${initialMemory}, Final: ${finalMemory}, Growth: ${memoryGrowth}`
     );
 
@@ -487,7 +487,7 @@ test.describe('Performance and Load Testing', () => {
       const avgResponseTime = totalTime / concurrentRequests;
       expect(avgResponseTime).toBeLessThan(1000); // < 1 second average
 
-      console.log(
+      // console.log(
         `${endpoint.method} ${endpoint.url}: ${successCount}/${concurrentRequests} success, ${avgResponseTime}ms avg`
       );
     }
@@ -543,7 +543,7 @@ test.describe('Performance and Load Testing', () => {
 
       expect(uploadTime).toBeLessThan(expectedMaxTime);
 
-      console.log(`${sizeInMB}MB file upload: ${uploadTime}ms`);
+      // console.log(`${sizeInMB}MB file upload: ${uploadTime}ms`);
     }
 
     await page.close();

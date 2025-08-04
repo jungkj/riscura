@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
 import { 
   Copy, 
   RotateCcw, 
@@ -383,7 +383,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   }}
                   onDownload={() => {
                     // Implementation for download
-                    console.log('Download:', attachment.title);
+                    // console.log('Download:', attachment.title);
                   }} />
               ))}
             </div>

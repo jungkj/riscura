@@ -51,8 +51,7 @@ export class ReportDataCollector {
     }
   }
 
-  private async collectRiskAssessmentData(
-    organizationId: string,
+  private async collectRiskAssessmentData(_organizationId: string,
     dateFrom: Date,
     dateTo: Date,
     parameters: Record<string, any>
@@ -181,8 +180,7 @@ export class ReportDataCollector {
     };
   }
 
-  private async collectControlEffectivenessData(
-    organizationId: string,
+  private async collectControlEffectivenessData(_organizationId: string,
     dateFrom: Date,
     dateTo: Date,
     parameters: Record<string, any>
@@ -343,8 +341,7 @@ export class ReportDataCollector {
     };
   }
 
-  private async collectComplianceData(
-    organizationId: string,
+  private async collectComplianceData(_organizationId: string,
     dateFrom: Date,
     dateTo: Date,
     parameters: Record<string, any>
@@ -370,8 +367,7 @@ export class ReportDataCollector {
     };
   }
 
-  private async collectAuditData(
-    organizationId: string,
+  private async collectAuditData(_organizationId: string,
     dateFrom: Date,
     dateTo: Date,
     parameters: Record<string, any>
@@ -397,8 +393,7 @@ export class ReportDataCollector {
     };
   }
 
-  private async collectExecutiveDashboardData(
-    organizationId: string,
+  private async collectExecutiveDashboardData(_organizationId: string,
     dateFrom: Date,
     dateTo: Date,
     parameters: Record<string, any>

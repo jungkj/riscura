@@ -11,7 +11,7 @@ import {
   ResponseOptions,
 } from './response-formatter';
 import { globalErrorHandler, createAuthError, createForbiddenError } from './error-handler';
-import {
+// import {
   parseAndValidate,
   validateQueryParams,
   formatValidationErrors,
@@ -121,8 +121,7 @@ export interface APIResponse<T = any> {
   };
 }
 
-export function createAPIResponse<T>(
-  data: T,
+export function createAPIResponse<T>(_data: T,
   options?: {
     message?: string;
     pagination?: APIResponse['pagination'];
@@ -151,8 +150,7 @@ export function createAPIResponse<T>(
   });
 }
 
-export function createErrorResponse(
-  error: APIError | Error,
+export function createErrorResponse(_error: APIError | Error,
   requestId?: string
 ): NextResponse<APIResponse> {
   const isAPIError = error instanceof APIError;
@@ -399,8 +397,7 @@ export function parseSearch(searchParams: URLSearchParams): string | undefined {
 // SUBSCRIPTION ENFORCEMENT
 // ============================================================================
 
-async function enforceSubscriptionLimits(
-  organizationId: string,
+async function enforceSubscriptionLimits(_organizationId: string,
   subscriptionOptions: NonNullable<MiddlewareOptions['subscription']>
 ): Promise<void> {
   // Check if organization has an active subscription
@@ -489,7 +486,7 @@ async function enforceSubscriptionLimits(
   }
 }
 
-async function getCurrentUsage(organizationId: string, limitType: string): Promise<number> {
+async function getCurrentUsage(_organizationId: string, limitType: string): Promise<number> {
   // This is a simplified implementation. In production, you'd have more sophisticated usage tracking
   switch (limitType) {
     case 'users':
@@ -619,7 +616,7 @@ export function withAPI(
 
           // Development mode bypass: Create a mock user for testing
           if (!user && process.env.NODE_ENV === 'development') {
-            console.log('🔧 Development mode: Using mock authentication');
+            // console.log('🔧 Development mode: Using mock authentication');
             const mockUser = {
               id: 'dev-user-123',
               email: 'dev@riscura.com',
@@ -710,7 +707,7 @@ export function withAPI(
           }
         } catch (error) {
           // Log but don't fail the request for usage tracking errors
-          console.error('Failed to track usage:', error);
+          // console.error('Failed to track usage:', error);
         }
       }
 
@@ -732,7 +729,7 @@ export function withAPI(
 
       return response;
     } catch (error) {
-      console.error('API Error:', error);
+      // console.error('API Error:', error);
 
       if (error instanceof APIError) {
         return createErrorResponse(error, requestId);
@@ -792,7 +789,7 @@ export function withValidation<T, U>(bodySchema?: z.ZodSchema<T>, querySchema?: 
   };
 }
 
-export function withRateLimit(config: RateLimitConfig) {
+export function withRateLimit(_config: RateLimitConfig) {
   return (handler: (req: NextRequest) => Promise<NextResponse> | NextResponse) => {
     return withAPI(handler, { rateLimit: config });
   };

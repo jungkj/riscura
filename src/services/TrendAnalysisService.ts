@@ -252,7 +252,7 @@ export class TrendAnalysisService {
     config?: Partial<TrendAnalysisConfig>
   ): Promise<TrendAnalysisResult> {
     try {
-      console.log(`Analyzing risk trends for ${historicalData.length} data points`);
+      // console.log(`Analyzing risk trends for ${historicalData.length} data points`);
 
       const analysisConfig = this.mergeConfig(config);
 
@@ -361,7 +361,7 @@ export class TrendAnalysisService {
 
       return result;
     } catch (error) {
-      console.error('Error analyzing risk trends:', error);
+      // console.error('Error analyzing risk trends:', error);
       throw new Error('Failed to analyze risk trends');
     }
   }
@@ -384,7 +384,7 @@ export class TrendAnalysisService {
         });
 
         if (historicalData.length < 6) {
-          console.warn(`Insufficient historical data for risk ${risk.id}, skipping prediction`);
+          // console.warn(`Insufficient historical data for risk ${risk.id}, skipping prediction`);
           continue;
         }
 
@@ -429,7 +429,7 @@ export class TrendAnalysisService {
 
       return predictions;
     } catch (error) {
-      console.error('Error predicting future risks:', error);
+      // console.error('Error predicting future risks:', error);
       throw new Error('Failed to predict future risks');
     }
   }
@@ -437,8 +437,7 @@ export class TrendAnalysisService {
   /**
    * Identify pattern anomalies in time series data
    */
-  async identifyPatternAnomalies(
-    data: TimeSeriesData,
+  async identifyPatternAnomalies(_data: TimeSeriesData,
     baselinePattern: Pattern
   ): Promise<Anomaly[]> {
     try {
@@ -472,7 +471,7 @@ export class TrendAnalysisService {
 
       return prioritizedAnomalies;
     } catch (error) {
-      console.error('Error identifying pattern anomalies:', error);
+      // console.error('Error identifying pattern anomalies:', error);
       throw new Error('Failed to identify pattern anomalies');
     }
   }
@@ -500,7 +499,7 @@ export class TrendAnalysisService {
 
       return comparison;
     } catch (error) {
-      console.error('Error comparing trends:', error);
+      // console.error('Error comparing trends:', error);
       throw new Error('Failed to compare trends');
     }
   }
@@ -508,8 +507,7 @@ export class TrendAnalysisService {
   /**
    * Generate trend dashboard data
    */
-  async generateTrendDashboard(
-    userId: string,
+  async generateTrendDashboard(_userId: string,
     filters?: TrendDashboardFilters
   ): Promise<TrendDashboardData> {
     try {
@@ -542,7 +540,7 @@ export class TrendAnalysisService {
         refreshInterval: this.calculateRefreshInterval(filteredEntities),
       };
     } catch (error) {
-      console.error('Error generating trend dashboard:', error);
+      // console.error('Error generating trend dashboard:', error);
       throw new Error('Failed to generate trend dashboard');
     }
   }
@@ -564,7 +562,7 @@ export class TrendAnalysisService {
     return { ...defaultConfig, ...config };
   }
 
-  private async preprocessRiskData(data: RiskData[], timeWindow: TimeWindow): Promise<RiskData[]> {
+  private async preprocessRiskData(_data: RiskData[], timeWindow: TimeWindow): Promise<RiskData[]> {
     // Filter data within time window
     const cutoffDate = this.calculateCutoffDate(timeWindow);
     const filteredData = data.filter((d) => d.timestamp >= cutoffDate);
@@ -578,7 +576,7 @@ export class TrendAnalysisService {
     return cleanedData;
   }
 
-  private extractTimeSeries(data: RiskData[], metric: keyof RiskData): TimeSeriesData[] {
+  private extractTimeSeries(_data: RiskData[], metric: keyof RiskData): TimeSeriesData[] {
     return data.map((d) => ({
       timestamp: d.timestamp,
       value: Number(d[metric]),
@@ -596,7 +594,7 @@ export class TrendAnalysisService {
   ): Promise<TrendAnalysis> {
     // Calculate basic trend metrics
     const linearTrend = await this.calculateLinearTrend(timeSeries);
-    const momentum = await this.calculateMomentum(timeSeries);
+    const _momentum = await this.calculateMomentum(timeSeries);
     const volatility = await this.calculateVolatility(timeSeries);
 
     // Determine trend direction and magnitude
@@ -695,8 +693,7 @@ export class TrendAnalysisService {
     return this.consolidateAnomalies(anomalies);
   }
 
-  private async identifyInfluencingFactors(
-    data: RiskData[],
+  private async identifyInfluencingFactors(_data: RiskData[],
     trend: TrendAnalysis,
     includeExternalFactors: boolean
   ): Promise<InfluencingFactor[]> {
@@ -716,8 +713,7 @@ export class TrendAnalysisService {
     return factors.sort((a, b) => Math.abs(b.influence) - Math.abs(a.influence));
   }
 
-  private async assessAnalysisQuality(
-    data: RiskData[],
+  private async assessAnalysisQuality(_data: RiskData[],
     trend: TrendAnalysis,
     prediction: PredictionData,
     config: TrendAnalysisConfig
@@ -851,7 +847,7 @@ export class TrendAnalysisService {
     return recommendations;
   }
 
-  private extractEntityId(data: RiskData[]): string {
+  private extractEntityId(_data: RiskData[]): string {
     // Extract the most common risk ID from the dataset
     const idCounts = new Map<string, number>();
 
@@ -897,7 +893,7 @@ export class TrendAnalysisService {
     return cutoff;
   }
 
-  private async cleanAndValidateData(data: RiskData[]): Promise<RiskData[]> {
+  private async cleanAndValidateData(_data: RiskData[]): Promise<RiskData[]> {
     return data.filter((item) => {
       // Remove invalid entries
       return (
@@ -974,7 +970,7 @@ export class TrendAnalysisService {
     const ensemble: number[] = [];
 
     for (let i = 0; i < ensembleLength; i++) {
-      const average = forecasts.reduce((sum, forecast) => sum + forecast[i], 0) / forecasts.length;
+      const _average = forecasts.reduce((sum, forecast) => sum + forecast[i], 0) / forecasts.length;
       ensemble.push(average);
     }
 
@@ -1099,33 +1095,31 @@ export class TrendAnalysisService {
     return anomalies;
   }
 
-  private async analyzeInternalFactors(
-    data: RiskData[],
+  private async analyzeInternalFactors(_data: RiskData[],
     trend: TrendAnalysis
   ): Promise<InfluencingFactor[]> {
     // Mock implementation
     return [];
   }
 
-  private async analyzeExternalFactors(
-    data: RiskData[],
+  private async analyzeExternalFactors(_data: RiskData[],
     trend: TrendAnalysis
   ): Promise<InfluencingFactor[]> {
     // Mock implementation
     return [];
   }
 
-  private assessDataCompleteness(data: RiskData[], timeWindow: TimeWindow): number {
+  private assessDataCompleteness(_data: RiskData[], timeWindow: TimeWindow): number {
     // Calculate data completeness score
     const expectedDataPoints = this.calculateExpectedDataPoints(timeWindow);
     return Math.min(100, (data.length / expectedDataPoints) * 100);
   }
 
-  private assessDataConsistency(data: RiskData[]): number {
+  private assessDataConsistency(_data: RiskData[]): number {
     return 0.85;
   }
 
-  private async assessModelAccuracy(data: RiskData[], trend: TrendAnalysis): Promise<number> {
+  private async assessModelAccuracy(_data: RiskData[], trend: TrendAnalysis): Promise<number> {
     return 0.88;
   }
 
@@ -1181,22 +1175,19 @@ export class TrendAnalysisService {
     return [];
   }
 
-  private async detectStatisticalAnomalies(
-    data: TimeSeriesData[],
+  private async detectStatisticalAnomalies(_data: TimeSeriesData[],
     pattern: Pattern
   ): Promise<Anomaly[]> {
     return [];
   }
 
-  private async detectPatternAnomalies(
-    data: TimeSeriesData[],
+  private async detectPatternAnomalies(_data: TimeSeriesData[],
     pattern: Pattern
   ): Promise<Anomaly[]> {
     return [];
   }
 
-  private async detectContextualAnomalies(
-    data: TimeSeriesData[],
+  private async detectContextualAnomalies(_data: TimeSeriesData[],
     pattern: Pattern
   ): Promise<Anomaly[]> {
     return [];
@@ -1233,7 +1224,7 @@ export class TrendAnalysisService {
 
   // Placeholder methods for additional functionality
   private async getEntityHistoricalData(
-    entity: { id: string; type: string },
+    _entity: { id: string; type: string },
     timeWindow: TimeWindow
   ): Promise<RiskData[]> {
     return [];
@@ -1301,8 +1292,7 @@ export class TrendAnalysisService {
     };
   }
 
-  private async getRelevantEntitiesForUser(
-    userId: string,
+  private async getRelevantEntitiesForUser(_userId: string,
     userContext: unknown
   ): Promise<Array<{ id: string; type: string }>> {
     return [
@@ -1349,12 +1339,12 @@ export class TrendAnalysisService {
 
 // Service interfaces and supporting types
 interface AIAnalysisService {
-  detectAnomalies(data: TimeSeriesData[], pattern: Pattern): Promise<Anomaly[]>;
+  detectAnomalies(_data: TimeSeriesData[], pattern: Pattern): Promise<Anomaly[]>;
 }
 
 interface DataRetrievalService {
   getRiskHistoricalData(riskId: string, timeWindow: TimeWindow): Promise<RiskData[]>;
-  getUserContext(userId: string): Promise<unknown>;
+  getUserContext(_userId: string): Promise<unknown>;
 }
 
 interface CacheService {
@@ -1366,20 +1356,18 @@ interface EventService {
 }
 
 interface StatisticsService {
-  detectSeasonality(
-    data: TimeSeriesData[]
+  detectSeasonality(_data: TimeSeriesData[]
   ): Promise<{ detected: boolean; period: string; amplitude: number; confidence: number }>;
-  linearRegression(
-    data: TimeSeriesData[]
+  linearRegression(_data: TimeSeriesData[]
   ): Promise<{ slope: number; intercept: number; r2: number }>;
-  calculateVolatility(data: TimeSeriesData[]): Promise<number>;
-  detectOutliers(data: TimeSeriesData[]): Promise<Anomaly[]>;
+  calculateVolatility(_data: TimeSeriesData[]): Promise<number>;
+  detectOutliers(_data: TimeSeriesData[]): Promise<Anomaly[]>;
 }
 
 interface ForecastingService {
-  linearForecast(data: TimeSeriesData[], horizon: number): Promise<number[]>;
-  exponentialSmoothingForecast(data: TimeSeriesData[], horizon: number): Promise<number[]>;
-  arima(data: TimeSeriesData[], horizon: number): Promise<number[]>;
+  linearForecast(_data: TimeSeriesData[], horizon: number): Promise<number[]>;
+  exponentialSmoothingForecast(_data: TimeSeriesData[], horizon: number): Promise<number[]>;
+  arima(_data: TimeSeriesData[], horizon: number): Promise<number[]>;
 }
 
 // Additional supporting interfaces

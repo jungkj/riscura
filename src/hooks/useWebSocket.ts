@@ -39,7 +39,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log('WebSocket connected');
+        // console.log('WebSocket connected');
         setConnected(true);
         reconnectAttemptsRef.current = 0;
       };
@@ -51,7 +51,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
           // Handle internal messages
           switch (message.type) {
             case 'connected':
-              console.log('WebSocket authenticated', message.payload);
+              // console.log('WebSocket authenticated', message.payload);
               break;
 
             case 'error':
@@ -74,12 +74,12 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
               }
           }
         } catch (error) {
-          console.error('Failed to parse WebSocket message:', error);
+          // console.error('Failed to parse WebSocket message:', error);
         }
       };
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        // console.error('WebSocket error:', error);
         toast({
           title: 'Connection Error',
           description: 'Failed to connect to chat server',
@@ -88,7 +88,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
       };
 
       ws.onclose = (event) => {
-        console.log('WebSocket disconnected', event.code, event.reason);
+        // console.log('WebSocket disconnected', event.code, event.reason);
         setConnected(false);
         wsRef.current = null;
 
@@ -98,13 +98,13 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
           reconnectAttemptsRef.current++;
 
           reconnectTimeoutRef.current = setTimeout(() => {
-            console.log(`Attempting to reconnect (attempt ${reconnectAttemptsRef.current})...`);
+            // console.log(`Attempting to reconnect (attempt ${reconnectAttemptsRef.current})...`);
             connect();
           }, delay);
         }
       };
     } catch (error) {
-      console.error('Failed to create WebSocket connection:', error);
+      // console.error('Failed to create WebSocket connection:', error);
     }
   }, [session, onMessage, toast]);
 
@@ -125,7 +125,7 @@ export function useWebSocket(onMessage?: (message: any) => void): WebSocketHook 
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
     } else {
-      console.error('WebSocket is not connected');
+      // console.error('WebSocket is not connected');
     }
   }, []);
 

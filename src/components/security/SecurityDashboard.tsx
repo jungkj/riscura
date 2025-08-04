@@ -555,7 +555,7 @@ export const SecurityDashboard: React.FC = () => {
     try {
       await ExportService.exportSecurityReport({ format: 'pdf' });
     } catch (error) {
-      console.error('Report generation failed:', error);
+      // console.error('Report generation failed:', error);
     }
   };
 

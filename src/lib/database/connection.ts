@@ -78,7 +78,7 @@ class DatabaseConnection {
       try {
         await this.healthCheck();
       } catch (error) {
-        console.error('Health check failed:', error);
+        // console.error('Health check failed:', error);
       }
     }, 30000);
   }
@@ -92,7 +92,7 @@ class DatabaseConnection {
 
     for (let attempt = 1; attempt <= DATABASE_CONFIG.retry.attempts; attempt++) {
       try {
-        console.log(`Database connection attempt ${attempt}/${DATABASE_CONFIG.retry.attempts}`);
+        // console.log(`Database connection attempt ${attempt}/${DATABASE_CONFIG.retry.attempts}`);
 
         await this.client.$connect();
         await this.client.$queryRaw`SELECT 1`;
@@ -100,16 +100,16 @@ class DatabaseConnection {
         this.isConnected = true;
         this.connectionAttempts = attempt;
 
-        console.log(`Database connected successfully on attempt ${attempt}`);
+        // console.log(`Database connected successfully on attempt ${attempt}`);
         return this.client;
       } catch (error) {
         lastError = error as Error;
-        console.error(`Database connection attempt ${attempt} failed:`, error);
+        // console.error(`Database connection attempt ${attempt} failed:`, error);
 
         if (attempt < DATABASE_CONFIG.retry.attempts) {
           const delay =
             DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
-          console.log(`Retrying in ${delay}ms...`);
+          // console.log(`Retrying in ${delay}ms...`);
           await this.sleep(delay);
         }
       }
@@ -212,7 +212,7 @@ class DatabaseConnection {
         return await operation(this.client);
       } catch (error) {
         lastError = error as Error;
-        console.error(`${operationName} attempt ${attempt} failed:`, error);
+        // console.error(`${operationName} attempt ${attempt} failed:`, error);
 
         if (this.isConnectionError(error)) {
           this.isConnected = false;
@@ -220,7 +220,7 @@ class DatabaseConnection {
           if (attempt < DATABASE_CONFIG.retry.attempts) {
             const delay =
               DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
-            console.log(`Retrying ${operationName} in ${delay}ms...`);
+            // console.log(`Retrying ${operationName} in ${delay}ms...`);
             await this.sleep(delay);
             continue;
           }
@@ -235,7 +235,7 @@ class DatabaseConnection {
     );
   }
 
-  private isConnectionError(error: any): boolean {
+  private isConnectionError(_error: any): boolean {
     const connectionErrorMessages = [
       'connection terminated',
       'connection refused',
@@ -255,7 +255,7 @@ class DatabaseConnection {
   }
 
   async gracefulShutdown(): Promise<void> {
-    console.log('Initiating graceful database shutdown...');
+    // console.log('Initiating graceful database shutdown...');
 
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
@@ -263,9 +263,9 @@ class DatabaseConnection {
 
     try {
       await this.client.$disconnect();
-      console.log('Database disconnected successfully');
+      // console.log('Database disconnected successfully');
     } catch (error) {
-      console.error('Error during database shutdown:', error);
+      // console.error('Error during database shutdown:', error);
     }
   }
 }
@@ -296,12 +296,12 @@ export { databaseConnection, DATABASE_CONFIG };
 // Graceful shutdown handler
 if (typeof process !== 'undefined') {
   process.on('SIGTERM', async () => {
-    console.log('SIGTERM received, shutting down database connection...');
+    // console.log('SIGTERM received, shutting down database connection...');
     await databaseConnection.gracefulShutdown();
   });
 
   process.on('SIGINT', async () => {
-    console.log('SIGINT received, shutting down database connection...');
+    // console.log('SIGINT received, shutting down database connection...');
     await databaseConnection.gracefulShutdown();
   });
 }

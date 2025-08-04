@@ -59,7 +59,7 @@ export const GET = withApiMiddleware(
         data: dashboardData,
       });
     } catch (error) {
-      console.error('Dashboard API error:', error);
+      // console.error('Dashboard API error:', error);
       return NextResponse.json(
         {
           success: false,

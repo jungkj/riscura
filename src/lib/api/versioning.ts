@@ -30,7 +30,7 @@ export class ApiVersionRegistry {
     });
   }
 
-  registerVersion(config: VersionConfig): void {
+  registerVersion(_config: VersionConfig): void {
     this.versions.set(config.version, config);
   }
 
@@ -101,7 +101,7 @@ export class ApiVersionExtractor {
   /**
    * Extract API version from headers
    */
-  static fromHeaders(request: NextRequest): ApiVersion | null {
+  static fromHeaders(_request: NextRequest): ApiVersion | null {
     // Check X-API-Version header
     const versionHeader =
       request.headers.get('X-API-Version') || request.headers.get('x-api-version');
@@ -142,7 +142,7 @@ export class ApiVersionExtractor {
   /**
    * Extract API version using multiple strategies
    */
-  static extract(request: NextRequest): ApiVersion {
+  static extract(_request: NextRequest): ApiVersion {
     const url = new URL(request.url);
 
     // Priority order: URL path > Headers > Query params > Default
@@ -216,8 +216,7 @@ export class ApiVersionMiddleware {
   /**
    * Add version headers to response
    */
-  static addVersionHeaders(
-    response: NextResponse,
+  static addVersionHeaders(_response: NextResponse,
     version: ApiVersion,
     options: {
       includeDeprecationWarning?: boolean;
@@ -271,7 +270,7 @@ export class ApiVersionMiddleware {
   /**
    * Handle version negotiation
    */
-  static async negotiateVersion(request: NextRequest): Promise<{
+  static async negotiateVersion(_request: NextRequest): Promise<{
     success: boolean;
     version?: ApiVersion;
     response?: NextResponse;
@@ -310,8 +309,7 @@ export class VersionedResponseFormatter {
   /**
    * Create versioned success response
    */
-  static success<T>(
-    data: T,
+  static success<T>(_data: T,
     version: ApiVersion,
     options: Parameters<typeof ApiResponseFormatter.success>[1] = {}
   ) {
@@ -349,8 +347,7 @@ export class VersionedResponseFormatter {
   /**
    * Create versioned paginated response
    */
-  static paginated<T>(
-    data: T[],
+  static paginated<T>(_data: T[],
     pagination: Parameters<typeof ApiResponseFormatter.paginated>[1],
     version: ApiVersion,
     options: Parameters<typeof ApiResponseFormatter.paginated>[2] = {}
@@ -371,7 +368,7 @@ export class VersionedResponseFormatter {
 export function withVersioning<T extends any[], R>(
   handler: (version: ApiVersion, ...args: T) => Promise<R>
 ) {
-  return async (request: NextRequest, ...args: T): Promise<R> => {
+  return async (_request: NextRequest, ...args: T): Promise<R> => {
     const negotiation = await ApiVersionMiddleware.negotiateVersion(request);
 
     if (!negotiation.success) {
@@ -382,7 +379,7 @@ export function withVersioning<T extends any[], R>(
   };
 }
 
-export function getApiVersionFromRequest(request: NextRequest): ApiVersion {
+export function getApiVersionFromRequest(_request: NextRequest): ApiVersion {
   return ApiVersionExtractor.extract(request);
 }
 
@@ -440,7 +437,7 @@ export const versionFeatureManager = new VersionFeatureManager();
 export interface MigrationRule {
   fromVersion: ApiVersion;
   toVersion: ApiVersion;
-  transform: (data: any) => any;
+  transform: (_data: any) => any;
 }
 
 export class VersionMigrationManager {
@@ -451,7 +448,7 @@ export class VersionMigrationManager {
     this.migrations.set(key, rule);
   }
 
-  migrate(data: any, fromVersion: ApiVersion, toVersion: ApiVersion): any {
+  migrate(_data: any, fromVersion: ApiVersion, toVersion: ApiVersion): any {
     const key = `${fromVersion}->${toVersion}`;
     const migration = this.migrations.get(key);
 

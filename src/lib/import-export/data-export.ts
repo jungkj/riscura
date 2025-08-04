@@ -206,8 +206,7 @@ export class DataExportService {
   /**
    * Create a new export job
    */
-  async createExportJob(
-    organizationId: string,
+  async createExportJob(_organizationId: string,
     userId: string,
     request: z.infer<typeof ExportRequestSchema>
   ): Promise<ExportJob> {
@@ -273,8 +272,7 @@ export class DataExportService {
   /**
    * List export jobs for organization
    */
-  async listExportJobs(
-    organizationId: string,
+  async listExportJobs(_organizationId: string,
     options: {
       page?: number;
       limit?: number;
@@ -390,7 +388,7 @@ export class DataExportService {
 
       await this.updateExportJob(job);
 
-      console.error(`Export job ${job.id} failed:`, error);
+      // console.error(`Export job ${job.id} failed:`, error);
     } finally {
       this.processingJobs.delete(job.id);
     }
@@ -652,8 +650,7 @@ export class DataExportService {
   // FILE GENERATION
   // ============================================================================
 
-  private async generateExportFile(
-    data: any,
+  private async generateExportFile(_data: any,
     format: ExportFormat,
     parameters: ExportParameters
   ): Promise<Buffer> {
@@ -678,7 +675,7 @@ export class DataExportService {
     }
   }
 
-  private generateCSV(data: any[], parameters: ExportParameters): Buffer {
+  private generateCSV(_data: any[], parameters: ExportParameters): Buffer {
     if (!Array.isArray(data) || data.length === 0) {
       return Buffer.from('', 'utf-8');
     }
@@ -715,20 +712,20 @@ export class DataExportService {
     return Buffer.from(lines.join('\n'), parameters.csvEncoding || 'utf-8');
   }
 
-  private async generateExcel(data: any, parameters: ExportParameters): Promise<Buffer> {
+  private async generateExcel(_data: any, parameters: ExportParameters): Promise<Buffer> {
     // This would use a library like xlsx or exceljs
     // For now, return CSV formatted as Excel
     const csvBuffer = this.generateCSV(Array.isArray(data) ? data : [data], parameters);
     return csvBuffer; // Placeholder - implement actual Excel generation
   }
 
-  private async generatePDF(data: any, parameters: ExportParameters): Promise<Buffer> {
+  private async generatePDF(_data: any, parameters: ExportParameters): Promise<Buffer> {
     // This would use a library like puppeteer or jsPDF
     const jsonString = JSON.stringify(data, null, 2);
     return Buffer.from(`PDF Export:\n\n${jsonString}`, 'utf-8'); // Placeholder
   }
 
-  private generateXML(data: any, parameters: ExportParameters): Buffer {
+  private generateXML(_data: any, parameters: ExportParameters): Buffer {
     // Simple XML generation
     const xmlContent = this.objectToXML(data, 'export');
     return Buffer.from(xmlContent, 'utf-8');
@@ -854,8 +851,7 @@ export class DataExportService {
   // UTILITY METHODS
   // ============================================================================
 
-  private async validateExportPermissions(
-    organizationId: string,
+  private async validateExportPermissions(_organizationId: string,
     userId: string,
     exportType: ExportType
   ): Promise<void> {
@@ -897,8 +893,7 @@ export class DataExportService {
     }
   }
 
-  private async estimateExportMetadata(
-    organizationId: string,
+  private async estimateExportMetadata(_organizationId: string,
     type: ExportType,
     parameters: ExportParameters
   ): Promise<ExportMetadata> {
@@ -953,7 +948,7 @@ export class DataExportService {
     return token === expectedToken;
   }
 
-  private async compressExportData(data: Buffer, jobId: string): Promise<Buffer> {
+  private async compressExportData(_data: Buffer, jobId: string): Promise<Buffer> {
     // This would use a compression library like zlib or archiver
     // For now, return the original data
     return data;
@@ -1003,8 +998,7 @@ export class DataExportService {
   // TEMPLATE METHODS
   // ============================================================================
 
-  async createExportTemplate(
-    organizationId: string,
+  async createExportTemplate(_organizationId: string,
     userId: string,
     template: Omit<ExportTemplate, 'id' | 'organizationId' | 'createdBy' | 'usage'>
   ): Promise<ExportTemplate> {
@@ -1028,7 +1022,7 @@ export class DataExportService {
     return await this.cache.get(`export-template:${templateId}`);
   }
 
-  async listExportTemplates(organizationId: string): Promise<ExportTemplate[]> {
+  async listExportTemplates(_organizationId: string): Promise<ExportTemplate[]> {
     // In a real implementation, this would query the database
     return [];
   }

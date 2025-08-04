@@ -225,7 +225,7 @@ class BusinessAnalytics {
   /**
    * Track user retention
    */
-  trackRetention(userId: string, lastActiveDate: Date, currentDate: Date = new Date()): void {
+  trackRetention(_userId: string, lastActiveDate: Date, currentDate: Date = new Date()): void {
     const daysSinceLastActive = Math.floor(
       (currentDate.getTime() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)
     );

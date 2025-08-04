@@ -279,8 +279,8 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   // UTILITY FUNCTIONS
   // ============================================================================
 
-  const handleApiError = useCallback((error: any, context: string) => {
-    console.error(`RCSA API Error [${context}]:`, error);
+  const handleApiError = useCallback((_error: any, context: string) => {
+    // console.error(`RCSA API Error [${context}]:`, error);
     const message = error?.message || error?.error?.message || `Failed to ${context}`;
     dispatch({ type: 'SET_ERROR', payload: message });
   }, []);
@@ -707,7 +707,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
       const sessionToken = sessionStorage.getItem('auth-token');
 
       if (!token && !sessionToken) {
-        console.log('Skipping RCSA data load - user not authenticated');
+        // console.log('Skipping RCSA data load - user not authenticated');
         return;
       }
 
@@ -724,11 +724,11 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
         results.forEach((result, index) => {
           if (result.status === 'rejected') {
             const operation = ['risks', 'controls', 'mappings', 'analytics'][index];
-            console.warn(`Failed to load ${operation}:`, result.reason);
+            // console.warn(`Failed to load ${operation}:`, result.reason);
           }
         });
       } catch (error) {
-        console.warn('Initial data load failed:', error);
+        // console.warn('Initial data load failed:', error);
       }
     };
 

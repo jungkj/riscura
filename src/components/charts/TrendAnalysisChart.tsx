@@ -41,7 +41,7 @@ import {
   AreaChart as AreaChartIcon
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { format, subDays, subMonths, subYears, parseISO } from 'date-fns';
+// import { format, subDays, subMonths, subYears, parseISO } from 'date-fns';
 
 interface TrendDataPoint {
   date: string;
@@ -74,7 +74,7 @@ interface TrendAnalysisChartProps {
   forecastPeriod?: number; // days
   className?: string;
   onDataPointClick?: (dataPoint: TrendDataPoint) => void;
-  onExport?: (data: any) => void;
+  onExport?: (_data: any) => void;
 }
 
 // Generate sample trend data for demonstration
@@ -107,7 +107,7 @@ const generateSampleData = (days: number = 90): TrendDataPoint[] => {
 };
 
 // Generate forecast data using simple linear regression
-const generateForecast = (data: TrendDataPoint[], metric: keyof TrendDataPoint, days: number): ForecastPoint[] => {
+const generateForecast = (_data: TrendDataPoint[], metric: keyof TrendDataPoint, days: number): ForecastPoint[] => {
   if (data.length < 2) return [];
   
   const values = data.map((d, i) => ({ x: i, y: Number(d[metric]) }));
@@ -184,7 +184,7 @@ export default function TrendAnalysisChart({
     return filteredData.map((point, index) => {
       const start = Math.max(0, index - windowSize + 1);
       const window = filteredData.slice(start, index + 1);
-      const average = window.reduce((sum, p) => sum + Number(p[selectedMetric]), 0) / window.length;
+      const _average = window.reduce((sum, p) => sum + Number(p[selectedMetric]), 0) / window.length;
       
       return {
         ...point,

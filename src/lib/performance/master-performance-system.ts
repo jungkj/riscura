@@ -192,7 +192,7 @@ export class MasterPerformanceSystem {
   private monitoringInterval: NodeJS.Timeout | null = null;
   private isInitialized: boolean = false;
 
-  constructor(config: Partial<MasterPerformanceConfig> = {}) {
+  constructor(_config: Partial<MasterPerformanceConfig> = {}) {
     this.config = { ...DEFAULT_MASTER_CONFIG, ...config };
     this.initializeSystem();
   }
@@ -203,26 +203,26 @@ export class MasterPerformanceSystem {
   private async initializeSystem(): Promise<void> {
     if (this.isInitialized) return;
 
-    console.log('🚀 Initializing Riscura Master Performance System...');
+    // console.log('🚀 Initializing Riscura Master Performance System...');
 
     try {
       // Initialize database optimization
       if (this.config.enableDatabaseOptimization) {
         this.databaseOptimizer = new DatabasePerformanceOptimizer(db.client);
-        console.log('✅ Database optimization initialized');
+        // console.log('✅ Database optimization initialized');
       }
 
       // Initialize memory management
       if (this.config.enableMemoryManagement) {
         this.memoryManager = new MemoryManager();
-        console.log('✅ Memory management initialized');
+        // console.log('✅ Memory management initialized');
       }
 
       // Initialize file upload optimization
       if (this.config.enableFileUploadOptimization) {
         this.fileUploadOptimizer = new FileUploadOptimizer();
         this.datasetProcessor = new LargeDatasetProcessor();
-        console.log('✅ File upload optimization initialized');
+        // console.log('✅ File upload optimization initialized');
       }
 
       // Initialize Core Web Vitals optimization
@@ -232,36 +232,36 @@ export class MasterPerformanceSystem {
           enableOptimizations: true,
           reportingEndpoint: this.config.reportingEndpoint,
         });
-        console.log('✅ Core Web Vitals optimization initialized');
+        // console.log('✅ Core Web Vitals optimization initialized');
       }
 
       // Initialize background task optimization
       if (this.config.enableBackgroundTasks) {
         this.backgroundTaskOptimizer = new BackgroundTaskOptimizer();
-        console.log('✅ Background task optimization initialized');
+        // console.log('✅ Background task optimization initialized');
       }
 
       // Initialize WebSocket optimization
       if (this.config.enableWebSocketOptimization) {
         this.webSocketOptimizer = new WebSocketOptimizer();
-        console.log('✅ WebSocket optimization initialized');
+        // console.log('✅ WebSocket optimization initialized');
       }
 
       // Start real-time monitoring
       if (this.config.enableRealTimeMonitoring) {
         this.startRealTimeMonitoring();
-        console.log('✅ Real-time monitoring started');
+        // console.log('✅ Real-time monitoring started');
       }
 
       this.isInitialized = true;
-      console.log('🎉 Master Performance System initialized successfully!');
+      // console.log('🎉 Master Performance System initialized successfully!');
 
       // Run initial optimization
       if (this.config.enableAutoOptimization) {
         setTimeout(() => this.runAutoOptimization(), 5000);
       }
     } catch (error) {
-      console.error('❌ Failed to initialize Master Performance System:', error);
+      // console.error('❌ Failed to initialize Master Performance System:', error);
       throw error;
     }
   }
@@ -280,7 +280,7 @@ export class MasterPerformanceSystem {
       }
     }, 30000); // Monitor every 30 seconds
 
-    console.log('📊 Real-time monitoring active (30s intervals)');
+    // console.log('📊 Real-time monitoring active (30s intervals)');
   }
 
   /**
@@ -347,7 +347,7 @@ export class MasterPerformanceSystem {
       // Calculate overall system score
       this.calculateOverallScore();
     } catch (error) {
-      console.error('Failed to collect metrics:', error);
+      // console.error('Failed to collect metrics:', error);
     }
   }
 
@@ -446,7 +446,7 @@ export class MasterPerformanceSystem {
     }
 
     if (issues.length > 0) {
-      console.warn('⚠️ Performance issues detected:', issues);
+      // console.warn('⚠️ Performance issues detected:', issues);
     }
   }
 
@@ -559,7 +559,7 @@ export class MasterPerformanceSystem {
       this.alerts = this.alerts.slice(-100);
     }
 
-    console.warn(`🚨 Performance Alert [${type.toUpperCase()}]: ${message}`);
+    // console.warn(`🚨 Performance Alert [${type.toUpperCase()}]: ${message}`);
 
     // Send to reporting endpoint if configured
     if (this.config.reportingEndpoint) {
@@ -605,10 +605,10 @@ export class MasterPerformanceSystem {
           `Auto-optimization: ${optimizations.join(', ')}`,
           'medium'
         );
-        console.log('🔧 Auto-optimizations applied:', optimizations);
+        // console.log('🔧 Auto-optimizations applied:', optimizations);
       }
     } catch (error) {
-      console.error('Failed to run auto-optimization:', error);
+      // console.error('Failed to run auto-optimization:', error);
     }
   }
 
@@ -664,7 +664,7 @@ export class MasterPerformanceSystem {
         }),
       });
     } catch (error) {
-      console.error('Failed to report alert:', error);
+      // console.error('Failed to report alert:', error);
     }
   }
 
@@ -763,7 +763,7 @@ export class MasterPerformanceSystem {
    * Manually trigger optimization
    */
   async triggerOptimization(category?: string): Promise<void> {
-    console.log(`🔧 Manual optimization triggered${category ? ` for ${category}` : ''}`);
+    // console.log(`🔧 Manual optimization triggered${category ? ` for ${category}` : ''}`);
     await this.runAutoOptimization();
   }
 
@@ -776,7 +776,7 @@ export class MasterPerformanceSystem {
       alert.resolved = true;
       alert.resolutionAction = resolutionAction;
       this.metrics.system.alertsActive = this.alerts.filter((a) => !a.resolved).length;
-      console.log(`✅ Alert ${alertId} resolved: ${resolutionAction}`);
+      // console.log(`✅ Alert ${alertId} resolved: ${resolutionAction}`);
     }
   }
 
@@ -797,7 +797,7 @@ export class MasterPerformanceSystem {
     this.backgroundTaskOptimizer?.cleanup();
     this.webSocketOptimizer?.cleanup();
 
-    console.log('🧹 Master Performance System cleaned up');
+    // console.log('🧹 Master Performance System cleaned up');
   }
 }
 

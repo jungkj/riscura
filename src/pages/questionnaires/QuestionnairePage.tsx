@@ -6,7 +6,7 @@ import {
   QuestionnaireType,
   QuestionnaireStatus,
 } from '@/types/questionnaire.types';
-import { formatDate } from '@/lib/utils';
+// import { formatDate } from '@/lib/utils';
 
 // UI Components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -355,20 +355,20 @@ export default function QuestionnairePage() {
 
   const handleDuplicate = async (questionnaire: Questionnaire) => {
     try {
-      console.log('Duplicating questionnaire:', questionnaire.id);
+      // console.log('Duplicating questionnaire:', questionnaire.id);
       // Mock implementation
     } catch (error) {
-      console.error('Failed to duplicate questionnaire:', error);
+      // console.error('Failed to duplicate questionnaire:', error);
     }
   };
 
   const handleDelete = async (questionnaireId: string) => {
     if (confirm('Are you sure you want to delete this questionnaire?')) {
       try {
-        console.log('Deleting questionnaire:', questionnaireId);
+        // console.log('Deleting questionnaire:', questionnaireId);
         // Mock implementation
       } catch (error) {
-        console.error('Failed to delete questionnaire:', error);
+        // console.error('Failed to delete questionnaire:', error);
       }
     }
   };
@@ -377,10 +377,10 @@ export default function QuestionnairePage() {
     try {
       // In a real app, this would open a user selection dialog
       const mockUserIds = ['user1', 'user2', 'user3'];
-      console.log('Distributing questionnaire:', questionnaire.id, 'to:', mockUserIds);
+      // console.log('Distributing questionnaire:', questionnaire.id, 'to:', mockUserIds);
       alert(`Questionnaire distributed to ${mockUserIds.length} users`);
     } catch (error) {
-      console.error('Failed to distribute questionnaire:', error);
+      // console.error('Failed to distribute questionnaire:', error);
     }
   };
 

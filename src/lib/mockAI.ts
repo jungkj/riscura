@@ -537,7 +537,7 @@ async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promis
     const data = await response.json();
     return data.data || data;
   } catch (error) {
-    console.error(`AI API request failed for ${endpoint}:`, error);
+    // console.error(`AI API request failed for ${endpoint}:`, error);
     toast.error(`AI service error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     throw error;
   }
@@ -1102,8 +1102,7 @@ export function isAIEnabled(): boolean {
 }
 
 // Handle AI API errors gracefully
-export function handleAIError(
-  error: unknown,
+export function handleAIError(_error: unknown,
   fallbackMessage: string = 'AI service temporarily unavailable'
 ): string {
   if (!isAIEnabled()) {
@@ -1122,7 +1121,7 @@ export function handleAIError(
 }
 
 // Format AI response for display
-export function formatAIResponse(response: any): string {
+export function formatAIResponse(_response: any): string {
   if (typeof response === 'string') {
     return response;
   }

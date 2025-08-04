@@ -155,7 +155,7 @@ export default function QuickActionsPage() {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch workflow stats:', error);
+        // console.error('Failed to fetch workflow stats:', error);
       } finally {
         setLoading(false);
       }

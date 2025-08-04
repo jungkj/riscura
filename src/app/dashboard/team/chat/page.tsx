@@ -284,7 +284,7 @@ const TeamChatPage: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch channels:', error);
+      // console.error('Failed to fetch channels:', error);
       toast({
         title: 'Error',
         description: 'Failed to load channels',
@@ -303,7 +303,7 @@ const TeamChatPage: React.FC = () => {
         setChannels(prev => prev.map(ch => ch.id === channelId ? data.data : ch));
       }
     } catch (error) {
-      console.error('Failed to fetch channel:', error);
+      // console.error('Failed to fetch channel:', error);
     }
   };
 
@@ -324,7 +324,7 @@ const TeamChatPage: React.FC = () => {
         ));
       }
     } catch (error) {
-      console.error('Failed to fetch messages:', error);
+      // console.error('Failed to fetch messages:', error);
       toast({
         title: 'Error',
         description: 'Failed to load messages',
@@ -362,7 +362,7 @@ const TeamChatPage: React.FC = () => {
         throw new Error(data.error || 'Failed to send message');
       }
     } catch (error) {
-      console.error('Failed to send message:', error);
+      // console.error('Failed to send message:', error);
       toast({
         title: 'Error',
         description: 'Failed to send message',
@@ -458,7 +458,7 @@ const TeamChatPage: React.FC = () => {
           });
         }
       } catch (error) {
-        console.error('Failed to upload file:', error);
+        // console.error('Failed to upload file:', error);
         toast({
           title: 'Error',
           description: 'Failed to upload file',
@@ -481,7 +481,7 @@ const TeamChatPage: React.FC = () => {
         ws.addReaction(messageId, emoji);
       }
     } catch (error) {
-      console.error('Failed to add reaction:', error);
+      // console.error('Failed to add reaction:', error);
     }
   };
 
@@ -509,7 +509,7 @@ const TeamChatPage: React.FC = () => {
         throw new Error(data.error || 'Failed to create channel');
       }
     } catch (error) {
-      console.error('Failed to create channel:', error);
+      // console.error('Failed to create channel:', error);
       toast({
         title: 'Error',
         description: 'Failed to create channel',

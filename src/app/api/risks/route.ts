@@ -19,7 +19,7 @@ export const GET = withApiMiddleware(
     const user = (req as any).user;
 
     if (!user || !user.organizationId) {
-      console.warn('[Risks API] Missing user or organizationId', { user });
+      // console.warn('[Risks API] Missing user or organizationId', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -27,7 +27,7 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      console.log('[Risks API] Fetching risks for organization:', user.organizationId);
+      // console.log('[Risks API] Fetching risks for organization:', user.organizationId);
 
       // Parse pagination parameters from query string
       const { searchParams } = new URL(req.url);
@@ -48,7 +48,7 @@ export const GET = withApiMiddleware(
         take: limit,
       });
 
-      console.log(`[Risks API] Found ${risks.length} risks (page ${page}, total: ${totalCount})`);
+      // console.log(`[Risks API] Found ${risks.length} risks (page ${page}, total: ${totalCount})`);
 
       // If no risks found, return empty array with pagination info
       if (!risks || risks.length === 0) {
@@ -100,7 +100,7 @@ export const GET = withApiMiddleware(
           },
         });
       } catch (relationError) {
-        console.warn(
+        // console.warn(
           '[Risks API] Error fetching relationships, returning basic data:',
           relationError
         );
@@ -117,7 +117,7 @@ export const GET = withApiMiddleware(
         });
       }
     } catch (error) {
-      console.error('[Risks API] Critical error:', {
+      // console.error('[Risks API] Critical error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
@@ -142,7 +142,7 @@ export const POST = withApiMiddleware(
     const user = (req as any).user;
 
     if (!user || !user.organizationId) {
-      console.warn('[Risks API] Missing user or organizationId in POST', { user });
+      // console.warn('[Risks API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -151,14 +151,14 @@ export const POST = withApiMiddleware(
 
     try {
       const body = await req.json();
-      console.log('[Risks API] Creating risk with data:', body);
+      // console.log('[Risks API] Creating risk with data:', body);
 
       const validatedData = CreateRiskSchema.parse(body);
 
       const riskScore = validatedData.likelihood * validatedData.impact;
       const riskLevel = calculateRiskLevel(riskScore);
 
-      console.log('[Risks API] Calculated risk score:', riskScore, 'level:', riskLevel);
+      // console.log('[Risks API] Calculated risk score:', riskScore, 'level:', riskLevel);
 
       const riskData = {
         title: validatedData.title,
@@ -180,13 +180,13 @@ export const POST = withApiMiddleware(
           : undefined,
       };
 
-      console.log('[Risks API] Creating risk with processed data:', riskData);
+      // console.log('[Risks API] Creating risk with processed data:', riskData);
 
       const risk = await db.client.risk.create({
         data: riskData,
       });
 
-      console.log('[Risks API] Risk created successfully:', risk.id);
+      // console.log('[Risks API] Risk created successfully:', risk.id);
 
       // Create activity log if added to RCSA
       if (validatedData.addToRCSA) {
@@ -211,7 +211,7 @@ export const POST = withApiMiddleware(
       );
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('[Risks API] Validation error:', error.errors);
+        // console.error('[Risks API] Validation error:', error.errors);
         return NextResponse.json(
           { success: false, error: 'Validation failed', details: error.errors },
           { status: 400 }
@@ -220,7 +220,7 @@ export const POST = withApiMiddleware(
 
       // Check for foreign key constraint errors
       if (error instanceof Error && error.message.includes('organizationId_fkey')) {
-        console.error('[Risks API] Organization not found:', user.organizationId);
+        // console.error('[Risks API] Organization not found:', user.organizationId);
         return NextResponse.json(
           {
             success: false,
@@ -236,7 +236,7 @@ export const POST = withApiMiddleware(
         );
       }
 
-      console.error('[Risks API] Create risk error:', {
+      // console.error('[Risks API] Create risk error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,

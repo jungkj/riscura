@@ -5,7 +5,7 @@ import { Workflow, WorkflowStep, WorkflowState, WorkflowCondition } from '@/type
 
 interface WorkflowContextType extends WorkflowState {
   // CRUD Operations
-  createWorkflow: (data: Omit<Workflow, 'id' | 'createdAt'>) => Promise<Workflow>;
+  createWorkflow: (_data: Omit<Workflow, 'id' | 'createdAt'>) => Promise<Workflow>;
   updateWorkflow: (id: string, data: Partial<Workflow>) => Promise<Workflow>;
   deleteWorkflow: (id: string) => Promise<void>;
   getWorkflow: (id: string) => Workflow | null;
@@ -187,7 +187,7 @@ const workflowService = {
     return generateMockWorkflows();
   },
 
-  async createWorkflow(data: Omit<Workflow, 'id' | 'createdAt'>): Promise<Workflow> {
+  async createWorkflow(_data: Omit<Workflow, 'id' | 'createdAt'>): Promise<Workflow> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const newWorkflow: Workflow = {
@@ -374,7 +374,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   // CRUD Operations
-  const createWorkflow = async (data: Omit<Workflow, 'id' | 'createdAt'>) => {
+  const createWorkflow = async (_data: Omit<Workflow, 'id' | 'createdAt'>) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const newWorkflow = await workflowService.createWorkflow(data);
@@ -493,7 +493,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     await updateWorkflow(workflowId, updatedWorkflow);
-    console.log(`Started workflow ${workflowId}`, context);
+    // console.log(`Started workflow ${workflowId}`, context);
   };
 
   const completeStep = async (
@@ -605,7 +605,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     type: 'assigned' | 'overdue' | 'escalated'
   ) => {
     await new Promise((resolve) => setTimeout(resolve, 300));
-    console.log(`Sent ${type} notification for workflow ${workflowId}, step ${stepId}`);
+    // console.log(`Sent ${type} notification for workflow ${workflowId}, step ${stepId}`);
   };
 
   // Analytics and Reporting
@@ -675,7 +675,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Utility
   const exportWorkflow = async (workflowId: string, format: 'json' | 'pdf') => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(`Exported workflow ${workflowId} in ${format} format`);
+    // console.log(`Exported workflow ${workflowId} in ${format} format`);
   };
 
   const clearError = () => {

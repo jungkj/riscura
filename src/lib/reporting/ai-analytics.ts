@@ -141,7 +141,7 @@ export class AIAnalyticsEngine {
   }
 
   // Calculate trend for time series data
-  private calculateTrend(data: any[], lookbackDays: number): TrendAnalysis {
+  private calculateTrend(_data: any[], lookbackDays: number): TrendAnalysis {
     // Simple linear regression for trend calculation
     const timeSeriesData = this.extractTimeSeries(data);
 
@@ -184,7 +184,7 @@ export class AIAnalyticsEngine {
   }
 
   // Extract time series data from widget data
-  private extractTimeSeries(data: any[]): { date: Date; value: number }[] {
+  private extractTimeSeries(_data: any[]): { date: Date; value: number }[] {
     return data
       .filter((item) => item.date && item.value !== undefined)
       .map((item) => ({
@@ -195,7 +195,7 @@ export class AIAnalyticsEngine {
   }
 
   // Perform linear regression
-  private linearRegression(data: { date: Date; value: number }[]): {
+  private linearRegression(_data: { date: Date; value: number }[]): {
     slope: number;
     rSquared: number;
   } {
@@ -263,7 +263,7 @@ export class AIAnalyticsEngine {
   }
 
   // Identify trend drivers
-  private identifyTrendDrivers(data: any[]): string[] {
+  private identifyTrendDrivers(_data: any[]): string[] {
     const drivers: string[] = [];
 
     // Analyze data for potential drivers
@@ -345,7 +345,7 @@ export class AIAnalyticsEngine {
   }
 
   // Find anomalies using statistical methods
-  private findAnomalies(data: any[], lookbackDays: number): AnomalyDetection[] {
+  private findAnomalies(_data: any[], lookbackDays: number): AnomalyDetection[] {
     const anomalies: AnomalyDetection[] = [];
     const timeSeriesData = this.extractTimeSeries(data);
 
@@ -600,8 +600,7 @@ export class AIAnalyticsEngine {
   }
 
   // Generate executive summary
-  async generateExecutiveSummary(
-    organizationId: string,
+  async generateExecutiveSummary(_organizationId: string,
     period: { from: Date; to: Date }
   ): Promise<ExecutiveSummary> {
     // Get key metrics
@@ -629,8 +628,7 @@ export class AIAnalyticsEngine {
   }
 
   // Calculate key metrics for executive summary
-  private async calculateKeyMetrics(
-    organizationId: string,
+  private async calculateKeyMetrics(_organizationId: string,
     period: { from: Date; to: Date }
   ): Promise<
     {
@@ -701,8 +699,7 @@ export class AIAnalyticsEngine {
   }
 
   // Get top risks
-  private async getTopRisks(
-    organizationId: string,
+  private async getTopRisks(_organizationId: string,
     limit: number
   ): Promise<
     {
@@ -727,8 +724,7 @@ export class AIAnalyticsEngine {
   }
 
   // Identify achievements
-  private async identifyAchievements(
-    organizationId: string,
+  private async identifyAchievements(_organizationId: string,
     period: { from: Date; to: Date }
   ): Promise<string[]> {
     const achievements: string[] = [];
@@ -763,8 +759,7 @@ export class AIAnalyticsEngine {
   }
 
   // Identify concerns
-  private async identifyConcerns(
-    organizationId: string,
+  private async identifyConcerns(_organizationId: string,
     period: { from: Date; to: Date }
   ): Promise<string[]> {
     const concerns: string[] = [];
@@ -800,7 +795,7 @@ export class AIAnalyticsEngine {
   }
 
   // Generate executive recommendations
-  private async generateExecutiveRecommendations(organizationId: string): Promise<string[]> {
+  private async generateExecutiveRecommendations(_organizationId: string): Promise<string[]> {
     const recommendations: string[] = [];
 
     // Get recent insights

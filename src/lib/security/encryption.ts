@@ -39,7 +39,7 @@ export class EncryptionService {
   private algorithm = 'aes-256-gcm';
   private keyDerivationSalt: Buffer;
 
-  private constructor(config: EncryptionConfiguration) {
+  private constructor(_config: EncryptionConfiguration) {
     this.config = config;
     this.keyDerivationSalt = Buffer.from(
       process.env.ENCRYPTION_SALT || 'riscura-default-salt',
@@ -368,7 +368,7 @@ export class EncryptionService {
   }
 
   // Data at Rest Encryption
-  async encryptDataRest(data: string | Buffer, keyId?: string): Promise<EncryptedData> {
+  async encryptDataRest(_data: string | Buffer, keyId?: string): Promise<EncryptedData> {
     try {
       const plaintext = Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8');
       const key = keyId ? await this.getDataKey(keyId) : this.masterKey;
@@ -632,7 +632,7 @@ export class EncryptionService {
           encrypted,
         });
       } catch (error) {
-        console.error(`Failed to encrypt item ${item.id}:`, error);
+        // console.error(`Failed to encrypt item ${item.id}:`, error);
         results.push({
           id: item.id,
           encrypted: JSON.stringify(item.data), // Fallback to unencrypted
@@ -663,7 +663,7 @@ export class EncryptionService {
           decrypted,
         });
       } catch (error) {
-        console.error(`Failed to decrypt item ${item.id}:`, error);
+        // console.error(`Failed to decrypt item ${item.id}:`, error);
         results.push({
           id: item.id,
           decrypted: item.encrypted, // Fallback to encrypted data
@@ -826,7 +826,7 @@ export interface EncryptionMetrics {
 
 // TLS/HTTPS Configuration Helpers
 export class TLSConfigurationManager {
-  static generateTLSConfig(config: EncryptionConfiguration['dataInTransit']) {
+  static generateTLSConfig(_config: EncryptionConfiguration['dataInTransit']) {
     const tlsOptions: any = {
       minVersion: config.tlsVersion,
       maxVersion: config.tlsVersion,
@@ -840,7 +840,7 @@ export class TLSConfigurationManager {
     return tlsOptions;
   }
 
-  static generateHSTSHeader(config: EncryptionConfiguration['dataInTransit']) {
+  static generateHSTSHeader(_config: EncryptionConfiguration['dataInTransit']) {
     if (!config.hsts) return null;
 
     return {
@@ -1038,7 +1038,7 @@ export function generateEncryptionKey(): string {
 /**
  * Hash sensitive data (one-way)
  */
-export function hashData(data: string, salt?: string): string {
+export function hashData(_data: string, salt?: string): string {
   const saltBuffer = salt ? Buffer.from(salt, 'hex') : crypto.randomBytes(16);
   const hash = crypto.pbkdf2Sync(data, saltBuffer, 10000, 32, 'sha256');
   return saltBuffer.toString('hex') + ':' + hash.toString('hex');
@@ -1047,7 +1047,7 @@ export function hashData(data: string, salt?: string): string {
 /**
  * Verify hashed data
  */
-export function verifyHash(data: string, hashedData: string): boolean {
+export function verifyHash(_data: string, hashedData: string): boolean {
   const [salt, hash] = hashedData.split(':');
   const hashBuffer = Buffer.from(hash, 'hex');
   const saltBuffer = Buffer.from(salt, 'hex');

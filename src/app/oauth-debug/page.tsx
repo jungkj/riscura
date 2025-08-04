@@ -34,24 +34,24 @@ export default function OAuthDebugPage() {
     setError(null);
 
     try {
-      console.log('[OAuth Debug] Starting Google sign-in...');
+      // console.log('[OAuth Debug] Starting Google sign-in...');
 
       const result = await signIn('google', {
         redirect: false,
         callbackUrl: '/dashboard',
       });
 
-      console.log('[OAuth Debug] Sign-in result:', result);
+      // console.log('[OAuth Debug] Sign-in result:', result);
 
       if (result?.error) {
         setError(`Sign-in error: ${result.error}`);
-        console.error('[OAuth Debug] Sign-in error:', result.error);
+        // console.error('[OAuth Debug] Sign-in error:', result.error);
       } else if (result?.url) {
-        console.log('[OAuth Debug] Redirecting to:', result.url);
+        // console.log('[OAuth Debug] Redirecting to:', result.url);
         window.location.href = result.url;
       }
     } catch (err) {
-      console.error('[OAuth Debug] Exception during sign-in:', err);
+      // console.error('[OAuth Debug] Exception during sign-in:', err);
       setError(`Exception: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);

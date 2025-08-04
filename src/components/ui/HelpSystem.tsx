@@ -453,7 +453,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null);
 
-  const categories = ['all', ...Array.from(new Set(articles.map(a => a.category)))];
+  const _categories = ['all', ...Array.from(new Set(articles.map(a => a.category)))];
   
   const filteredArticles = articles.filter(article => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

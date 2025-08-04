@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ProboService } from '@/services/ProboService';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const url = new URL(request.url);
     const category = url.searchParams.get('category');
@@ -31,12 +31,12 @@ export async function GET(request: NextRequest) {
       categories: await proboService.getMitigationCategories(),
     });
   } catch (error) {
-    console.error('Mitigation controls API error:', error);
+    // console.error('Mitigation controls API error:', error);
     return NextResponse.json({ error: 'Failed to fetch mitigation controls' }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const { selectedIds = [] } = await request.json();
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       mitigations: selectedMitigations,
     });
   } catch (error) {
-    console.error('Mitigation controls import error:', error);
+    // console.error('Mitigation controls import error:', error);
     return NextResponse.json({ error: 'Failed to import mitigation controls' }, { status: 500 });
   }
 }

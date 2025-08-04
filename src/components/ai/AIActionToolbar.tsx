@@ -62,14 +62,14 @@ interface AIActionResult {
 // ============================================================================
 
 const createAIActions = (
-  onAnalyzeRisk: (context: any) => Promise<void>,
-  onGenerateReport: (context: any) => Promise<void>,
-  onOptimizeControls: (context: any) => Promise<void>,
-  onGetInsights: (context: any) => Promise<void>,
-  onAnalyzeCompliance: (context: any) => Promise<void>,
-  onGenerateQuestions: (context: any) => Promise<void>,
-  onAnalyzeDocument: (context: any) => Promise<void>,
-  onPredictTrends: (context: any) => Promise<void>
+  onAnalyzeRisk: (_context: any) => Promise<void>,
+  onGenerateReport: (_context: any) => Promise<void>,
+  onOptimizeControls: (_context: any) => Promise<void>,
+  onGetInsights: (_context: any) => Promise<void>,
+  onAnalyzeCompliance: (_context: any) => Promise<void>,
+  onGenerateQuestions: (_context: any) => Promise<void>,
+  onAnalyzeDocument: (_context: any) => Promise<void>,
+  onPredictTrends: (_context: any) => Promise<void>
 ): AIAction[] => [
   {
     id: 'analyze-risk',
@@ -200,7 +200,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
           const stats = await aiService.usage.getUsageStats('30d');
           setUsageStats(stats);
         } catch (error) {
-          console.error('Failed to load AI agents:', error);
+          // console.error('Failed to load AI agents:', error);
         }
       }
     };

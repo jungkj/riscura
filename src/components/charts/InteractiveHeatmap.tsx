@@ -238,7 +238,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
     return 'Low';
   };
 
-  const categories = [...new Set(data.map(risk => risk.category))];
+  const _categories = [...new Set(data.map(risk => risk.category))];
   const statuses = [...new Set(data.map(risk => risk.status))];
 
   return (

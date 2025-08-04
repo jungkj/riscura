@@ -32,7 +32,7 @@ export class BundleOptimizer {
   private loadedChunks: Set<string> = new Set();
   private preloadQueue: string[] = [];
 
-  constructor(config: Partial<BundleOptimizerConfig> = {}) {
+  constructor(_config: Partial<BundleOptimizerConfig> = {}) {
     this.config = {
       preloadCritical: true,
       enableCompression: true,
@@ -248,7 +248,7 @@ export class BundleOptimizer {
   private cleanupUnusedChunks(): void {
     // Implementation for cleaning up unused chunks
     // This would typically involve cache management
-    console.log('Cleaning up unused chunks...');
+    // console.log('Cleaning up unused chunks...');
   }
 
   private async preloadLikelyChunks(): Promise<void> {
@@ -264,10 +264,10 @@ export class BundleOptimizer {
     const nextChunk = likelyNextChunks[currentPath];
     if (nextChunk && !this.loadedChunks.has(nextChunk)) {
       try {
-        console.log(`Preloading chunk: ${nextChunk}`);
+        // console.log(`Preloading chunk: ${nextChunk}`);
         // Actual preloading would happen here
       } catch (error) {
-        console.warn(`Failed to preload chunk ${nextChunk}:`, error);
+        // console.warn(`Failed to preload chunk ${nextChunk}:`, error);
       }
     }
   }
@@ -288,7 +288,7 @@ export class BundleOptimizer {
 
   private preloadForRoute(href: string): void {
     // Implementation for route-based preloading
-    console.log(`Considering preload for route: ${href}`);
+    // console.log(`Considering preload for route: ${href}`);
   }
 
   getMetrics(): Partial<BundleMetrics> {

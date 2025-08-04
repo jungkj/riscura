@@ -10,7 +10,7 @@ class QueryCache {
   private cache: LRUCache<string, QueryCacheEntry>;
   private defaultTTL: number = 5 * 60 * 1000; // 5 minutes
 
-  constructor(options: { max?: number; ttl?: number } = {}) {
+  constructor(_options: { max?: number; ttl?: number } = {}) {
     this.cache = new LRUCache({
       max: options.max || 1000,
       ttl: options.ttl || this.defaultTTL,

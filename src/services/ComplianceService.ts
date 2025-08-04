@@ -126,8 +126,7 @@ export class ComplianceService {
     return framework;
   }
 
-  async getFrameworks(
-    organizationId: string,
+  async getFrameworks(_organizationId: string,
     filters?: { type?: ComplianceFrameworkType; isActive?: boolean }
   ): Promise<ComplianceFramework[]> {
     const cacheKey = `${this.cacheKeyPrefix}frameworks:${organizationId}:${JSON.stringify(filters)}`;
@@ -297,8 +296,7 @@ export class ComplianceService {
     return assessment;
   }
 
-  async getAssessments(
-    organizationId: string,
+  async getAssessments(_organizationId: string,
     filters?: { frameworkId?: string; status?: AssessmentStatus }
   ): Promise<ComplianceAssessment[]> {
     try {
@@ -311,7 +309,7 @@ export class ComplianceService {
           return JSON.parse(cached);
         }
       } catch (cacheError) {
-        console.warn('[ComplianceService] Cache read error:', cacheError);
+        // console.warn('[ComplianceService] Cache read error:', cacheError);
         // Continue without cache
       }
 
@@ -335,13 +333,13 @@ export class ComplianceService {
       try {
         await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(assessments));
       } catch (cacheError) {
-        console.warn('[ComplianceService] Cache write error:', cacheError);
+        // console.warn('[ComplianceService] Cache write error:', cacheError);
         // Continue without caching
       }
 
       return assessments;
     } catch (error) {
-      console.error('[ComplianceService] Error fetching assessments:', error);
+      // console.error('[ComplianceService] Error fetching assessments:', error);
       // Return empty array instead of throwing to maintain UI functionality
       return [];
     }
@@ -636,8 +634,8 @@ export class ComplianceService {
   }
 
   // Cache management
-  private async clearFrameworkCache(organizationId: string): Promise<void> {
-    const pattern = `${this.cacheKeyPrefix}frameworks:${organizationId}:*`;
+  private async clearFrameworkCache(_organizationId: string): Promise<void> {
+    const _pattern = `${this.cacheKeyPrefix}frameworks:${organizationId}:*`;
     // In real implementation, use SCAN to find and delete matching keys
   }
 
@@ -645,8 +643,8 @@ export class ComplianceService {
     await redis.del(`${this.cacheKeyPrefix}requirements:${frameworkId}`);
   }
 
-  private async clearAssessmentCache(organizationId: string): Promise<void> {
-    const pattern = `${this.cacheKeyPrefix}assessments:${organizationId}:*`;
+  private async clearAssessmentCache(_organizationId: string): Promise<void> {
+    const _pattern = `${this.cacheKeyPrefix}assessments:${organizationId}:*`;
     // In real implementation, use SCAN to find and delete matching keys
   }
 

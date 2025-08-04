@@ -97,8 +97,7 @@ export interface ControlEffectivenessAssessment {
 
 export class ComplianceMappingEngine {
   // Automated control mapping using AI analysis
-  async performAutomatedMapping(
-    organizationId: string,
+  async performAutomatedMapping(_organizationId: string,
     frameworkIds: string[]
   ): Promise<ControlMapping[]> {
     const mappings: ControlMapping[] = [];
@@ -461,8 +460,7 @@ export class ComplianceMappingEngine {
   }
 
   // Perform compliance gap analysis
-  async performGapAnalysis(
-    organizationId: string,
+  async performGapAnalysis(_organizationId: string,
     frameworkId: string,
     includeRecommendations: boolean = true
   ): Promise<GapAnalysisResult> {

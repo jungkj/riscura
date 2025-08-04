@@ -67,7 +67,7 @@ const mockSpreadsheets = [
 ];
 
 // GET /api/spreadsheets - List spreadsheets
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -108,13 +108,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Spreadsheets API error:', error);
+    // console.error('Spreadsheets API error:', error);
     return NextResponse.json({ error: 'Failed to retrieve spreadsheets' }, { status: 500 });
   }
 }
 
 // POST /api/spreadsheets - Create new spreadsheet
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
     const { name, description, templateType, templateId, isTemplate = false } = body;
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       data: newSpreadsheet,
     });
   } catch (error) {
-    console.error('Spreadsheet creation error:', error);
+    // console.error('Spreadsheet creation error:', error);
     return NextResponse.json({ error: 'Failed to create spreadsheet' }, { status: 500 });
   }
 }

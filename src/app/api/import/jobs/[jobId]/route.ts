@@ -67,7 +67,7 @@ export const GET = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('Error fetching job status:', error);
+    // console.error('Error fetching job status:', error);
 
     return {
       error: 'Failed to fetch job status',
@@ -120,7 +120,7 @@ export const DELETE = withApiMiddleware({
       jobId,
     };
   } catch (error) {
-    console.error('Error cancelling job:', error);
+    // console.error('Error cancelling job:', error);
 
     return {
       error: 'Failed to cancel job',

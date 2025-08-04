@@ -243,8 +243,7 @@ export class ValidationService {
     }
   }
 
-  public validateObject<T>(
-    data: unknown,
+  public validateObject<T>(_data: unknown,
     schema: z.ZodSchema<T>
   ): {
     isValid: boolean;
@@ -270,7 +269,7 @@ export class ValidationService {
   // Real-time validation
   public createValidator<T>(schema: z.ZodSchema<T>) {
     return {
-      validate: (data: unknown) => this.validateObject(data, schema),
+      validate: (_data: unknown) => this.validateObject(data, schema),
       validateField: (fieldName: string, value: unknown) => {
         try {
           const fieldSchema = (schema as any).shape[fieldName];
@@ -307,7 +306,7 @@ export class ValidationService {
 
         return !existingUser;
       } catch (error) {
-        console.error('Email uniqueness check failed:', error);
+        // console.error('Email uniqueness check failed:', error);
         return false;
       }
     },
@@ -340,9 +339,9 @@ export class ValidationService {
   // Form validation utilities
   public createFormValidator<T extends Record<string, any>>(schema: z.ZodSchema<T>) {
     return {
-      validateAll: (data: T) => this.validateObject(data, schema),
+      validateAll: (_data: T) => this.validateObject(data, schema),
 
-      validatePartial: (data: Partial<T>) => {
+      validatePartial: (_data: Partial<T>) => {
         // For partial validation, we'll validate each field that exists
         const errors: Record<string, string> = {};
         let isValid = true;

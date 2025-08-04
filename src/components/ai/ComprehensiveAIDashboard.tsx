@@ -73,7 +73,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
       const health = await aiIntegrationService.getServiceHealth();
       setServiceHealth(health);
     } catch (error) {
-      console.error('Error loading service health:', error);
+      // console.error('Error loading service health:', error);
     }
   };
 
@@ -110,7 +110,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
       setResponses(prev => [response, ...prev]);
       setQueryText('');
     } catch (error) {
-      console.error('Error processing AI query:', error);
+      // console.error('Error processing AI query:', error);
     } finally {
       setLoading(false);
     }

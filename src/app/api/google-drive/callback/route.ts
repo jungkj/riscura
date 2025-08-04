@@ -44,7 +44,7 @@ export const GET = withApiMiddleware({
     // Validate CSRF token and get user ID
     const userId = await authService.validateCSRFToken(state);
     if (!userId) {
-      console.warn('Invalid or expired CSRF token in Google Drive callback');
+      // console.warn('Invalid or expired CSRF token in Google Drive callback');
       return NextResponse.redirect(new URL('/import?error=google_drive_invalid_state', req.url));
     }
 
@@ -66,7 +66,7 @@ export const GET = withApiMiddleware({
           }
         : 'Unknown error';
 
-    console.error('Google Drive callback error:', sanitizedError);
+    // console.error('Google Drive callback error:', sanitizedError);
 
     return NextResponse.redirect(new URL('/import?error=google_drive_connection_failed', req.url));
   }

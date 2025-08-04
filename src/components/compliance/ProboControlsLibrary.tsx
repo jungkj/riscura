@@ -111,7 +111,7 @@ export function ProboControlsLibrary() {
       setMitigations(mitigationsData);
       setCategories(categoriesData);
     } catch (error) {
-      console.error('Error loading mitigations:', error);
+      // console.error('Error loading mitigations:', error);
       toast.error('Failed to load security controls');
     } finally {
       setLoading(false);
@@ -170,7 +170,7 @@ export function ProboControlsLibrary() {
       toast.success(`Successfully imported ${selectedMitigations.size} security controls`);
       setSelectedMitigations(new Set());
     } catch (error) {
-      console.error('Error importing controls:', error);
+      // console.error('Error importing controls:', error);
       toast.error('Failed to import controls');
     }
   };

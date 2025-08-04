@@ -26,7 +26,7 @@ export class SecurityManager {
   private incidentResponseManager!: IncidentResponseManager;
   private aiSecurityManager!: AISecurityManager;
 
-  constructor(config: SecurityConfiguration) {
+  constructor(_config: SecurityConfiguration) {
     this.config = config;
     this.initializeServices();
   }
@@ -231,8 +231,7 @@ export class SecurityManager {
     }
   }
 
-  async authorizeAction(
-    userId: string,
+  async authorizeAction(_userId: string,
     action: string,
     resource: string,
     context: AuthorizationContext
@@ -287,7 +286,7 @@ export class SecurityManager {
   }
 
   // Data Protection
-  async protectData(data: any, context: DataProtectionContext): Promise<ProtectedData> {
+  async protectData(_data: any, context: DataProtectionContext): Promise<ProtectedData> {
     // Apply encryption if configured
     let protectedData = data;
     if (this.config.encryptionConfig.fieldLevelEncryption.enabled) {
@@ -703,11 +702,11 @@ class ThreatDetectionEngine {
     // Threat analysis implementation
   }
 
-  async checkUserBehavior(userId: string, context: AuthenticationContext): Promise<void> {
+  async checkUserBehavior(_userId: string, context: AuthenticationContext): Promise<void> {
     // User behavior analysis
   }
 
-  async checkFailedLogin(userId: string, context: AuthenticationContext): Promise<void> {
+  async checkFailedLogin(_userId: string, context: AuthenticationContext): Promise<void> {
     // Failed login pattern detection
   }
 
@@ -730,7 +729,7 @@ class DLPEngine {
     // DLP policy checking
   }
 
-  async scanData(data: any, context: DataProtectionContext): Promise<DLPScanResult> {
+  async scanData(_data: any, context: DataProtectionContext): Promise<DLPScanResult> {
     return {
       blocked: false,
       sensitive: false,
@@ -789,7 +788,7 @@ class AccessControlManager {
     private auditService: any
   ) {}
 
-  async checkAccess(context: AuthenticationContext): Promise<AccessCheckResult> {
+  async checkAccess(_context: AuthenticationContext): Promise<AccessCheckResult> {
     return { allowed: true };
   }
 
@@ -964,7 +963,7 @@ export interface HealthCheckResult {
 }
 
 // Factory function
-export const createSecurityManager = (config: SecurityConfiguration): SecurityManager => {
+export const createSecurityManager = (_config: SecurityConfiguration): SecurityManager => {
   return new SecurityManager(config);
 };
 

@@ -150,7 +150,7 @@ const authService = {
     password: string,
     rememberMe: boolean = false
   ): Promise<{ user: AuthUser; token: string }> => {
-    console.log('AuthContext: Attempting login for:', email);
+    // console.log('AuthContext: Attempting login for:', email);
 
     const response = await fetch('/api/auth/login', {
       method: 'POST',
@@ -160,8 +160,8 @@ const authService = {
       body: JSON.stringify({ email, password, rememberMe }),
     });
 
-    console.log('AuthContext: Response status:', response.status);
-    console.log('AuthContext: Response headers:', Object.fromEntries(response.headers.entries()));
+    // console.log('AuthContext: Response status:', response.status);
+    // console.log('AuthContext: Response headers:', Object.fromEntries(response.headers.entries()));
 
     // Check if response is JSON or HTML
     const contentType = response.headers.get('content-type');
@@ -170,11 +170,11 @@ const authService = {
     try {
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
-        console.log('AuthContext: Parsed JSON response:', data);
+        // console.log('AuthContext: Parsed JSON response:', data);
       } else {
         // If not JSON, try to read as text to see what we got
         const text = await response.text();
-        console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500));
+        // console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500));
 
         // Check if it's an HTML error page
         if (text.includes('<!DOCTYPE html>')) {
@@ -186,7 +186,7 @@ const authService = {
         }
       }
     } catch (parseError) {
-      console.error('AuthContext: Failed to parse response:', parseError);
+      // console.error('AuthContext: Failed to parse response:', parseError);
       if (parseError instanceof Error && parseError.message.includes('Server error:')) {
         throw parseError; // Re-throw our custom error
       }
@@ -196,11 +196,11 @@ const authService = {
     }
 
     if (!response.ok) {
-      console.error('AuthContext: Login failed:', data);
+      // console.error('AuthContext: Login failed:', data);
       throw new Error(data.error || 'Login failed');
     }
 
-    console.log('AuthContext: Login successful:', data);
+    // console.log('AuthContext: Login successful:', data);
 
     // Store token based on rememberMe preference
     if (data.tokens?.accessToken) {
@@ -344,7 +344,7 @@ const authService = {
   },
 
   // Update user profile
-  updateProfile: async (userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
+  updateProfile: async (_userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
     const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
     if (!token) {
@@ -402,10 +402,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initializeAuth = async () => {
       // First, always check for OAuth session (priority check)
       try {
-        console.log('[AuthContext] Checking OAuth session first...');
+        // console.log('[AuthContext] Checking OAuth session first...');
         const oauthResponse = await fetch('/api/google-oauth/session');
         const oauthData = await oauthResponse.json();
-        console.log('[AuthContext] OAuth session response:', oauthData);
+        // console.log('[AuthContext] OAuth session response:', oauthData);
 
         if (oauthData && oauthData.user) {
           // Convert simple OAuth user to AuthUser format
@@ -432,7 +432,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return;
         }
       } catch (error) {
-        console.log('[AuthContext] No OAuth session found:', error);
+        // console.log('[AuthContext] No OAuth session found:', error);
       }
 
       // If no OAuth session, check for JWT token
@@ -463,7 +463,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        // console.error('Auth initialization error:', error);
         localStorage.removeItem('accessToken');
         sessionStorage.removeItem('accessToken');
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
@@ -491,7 +491,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             dispatch({ type: 'AUTH_LOGOUT' });
           }
         } catch (error) {
-          console.error('Token refresh error:', error);
+          // console.error('Token refresh error:', error);
           // Don't logout on refresh error, just log it
         }
       },
@@ -527,7 +527,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await authService.logout(logoutType);
     } catch (error) {
-      console.error('Logout error:', error);
+      // console.error('Logout error:', error);
     } finally {
       dispatch({ type: 'AUTH_LOGOUT' });
     }
@@ -568,7 +568,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         dispatch({ type: 'AUTH_LOGOUT' });
       }
     } catch (error) {
-      console.error('Manual token refresh error:', error);
+      // console.error('Manual token refresh error:', error);
       dispatch({ type: 'AUTH_LOGOUT' });
     }
   };

@@ -1251,7 +1251,7 @@ export class ComplianceAIService {
     scope: AssessmentScope
   ): Promise<{ requirements: RequirementAssessment[]; gaps: ComplianceGap[] }> {
     // This would implement detailed framework assessment logic
-    console.log(
+    // console.log(
       'Assessing framework compliance:',
       framework.name,
       existingControls.length,
@@ -1302,7 +1302,7 @@ export class ComplianceAIService {
     frameworks: string[]
   ): Promise<ComplianceRecommendation[]> {
     // Implementation for generating AI-powered recommendations
-    console.log(
+    // console.log(
       'Generating recommendations for',
       requirements.length,
       'requirements across',
@@ -1314,7 +1314,7 @@ export class ComplianceAIService {
 
   private async generateNextActions(requirements: RequirementAssessment[]): Promise<NextAction[]> {
     // Implementation for generating next actions
-    console.log('Generating next actions for', requirements.length, 'requirements');
+    // console.log('Generating next actions for', requirements.length, 'requirements');
     return [];
   }
 
@@ -1323,7 +1323,7 @@ export class ComplianceAIService {
     requirements: RequirementAssessment[]
   ): Promise<AuditReadiness> {
     // Implementation for audit readiness assessment
-    console.log(
+    // console.log(
       'Assessing audit readiness for',
       frameworks.length,
       'frameworks,',
@@ -1349,7 +1349,7 @@ export class ComplianceAIService {
     scope: string[]
   ): Promise<ReadinessAssessment> {
     // Implementation for detailed audit readiness assessment
-    console.log(
+    // console.log(
       'Assessing detailed readiness for audit of',
       framework,
       'covering',
@@ -1403,7 +1403,7 @@ export class ComplianceAIService {
 
   private async generateAIInsights(assessment: ComplianceAssessment): Promise<AIInsight[]> {
     // Implementation for AI insights generation
-    console.log('Generating AI insights for assessment:', assessment.id);
+    // console.log('Generating AI insights for assessment:', assessment.id);
     return [];
   }
 
@@ -1414,7 +1414,7 @@ export class ComplianceAIService {
     framework: string
   ): Promise<ComplianceGap | null> {
     // Implementation for requirement gap analysis
-    console.log(
+    // console.log(
       'Analyzing gap for requirement:',
       requirement.id,
       'in framework:',
@@ -1435,7 +1435,7 @@ export class ComplianceAIService {
     targetMaturity: number
   ): Promise<RoadmapPhase> {
     // Implementation for roadmap phase generation
-    console.log(
+    // console.log(
       'Generating phase',
       phaseNumber,
       'duration:',
@@ -1464,7 +1464,7 @@ export class ComplianceAIService {
     timeline: number
   ): Promise<ComplianceInitiative[]> {
     // Implementation for compliance initiatives generation
-    console.log(
+    // console.log(
       'Generating initiatives for',
       recommendations.length,
       'recommendations across',
@@ -1478,7 +1478,7 @@ export class ComplianceAIService {
 
   private async generateResourcePlan(initiatives: ComplianceInitiative[]): Promise<ResourcePlan> {
     // Implementation for resource planning
-    console.log('Generating resource plan for', initiatives.length, 'initiatives');
+    // console.log('Generating resource plan for', initiatives.length, 'initiatives');
     return {
       personnel: [],
       technology: [],
@@ -1489,7 +1489,7 @@ export class ComplianceAIService {
 
   private async identifyRoadmapRisks(roadmap: ComplianceRoadmap): Promise<RoadmapRisk[]> {
     // Implementation for roadmap risk identification
-    console.log('Identifying risks for roadmap:', roadmap.id);
+    // console.log('Identifying risks for roadmap:', roadmap.id);
     return [];
   }
 
@@ -1498,7 +1498,7 @@ export class ComplianceAIService {
     targetMaturity: number
   ): Promise<SuccessMetric[]> {
     // Implementation for success metrics definition
-    console.log(
+    // console.log(
       'Defining success metrics for',
       frameworks.length,
       'frameworks with target maturity:',
@@ -1510,13 +1510,13 @@ export class ComplianceAIService {
   private async fetchFrameworkChanges(frameworkId: string): Promise<RegulatoryChange[]> {
     // Implementation for fetching regulatory changes
     // This would integrate with regulatory change APIs/feeds
-    console.log('Fetching changes for framework:', frameworkId);
+    // console.log('Fetching changes for framework:', frameworkId);
     return [];
   }
 
   private async analyzeRegulatoryChange(change: RegulatoryChange): Promise<RegulatoryChange> {
     // Implementation for analyzing regulatory changes with AI
-    console.log('Analyzing regulatory change:', change.id);
+    // console.log('Analyzing regulatory change:', change.id);
     return change;
   }
 
@@ -1527,7 +1527,7 @@ export class ComplianceAIService {
     auditDate: Date
   ): Promise<PreparationTask[]> {
     // Implementation for audit preparation task generation
-    console.log(
+    // console.log(
       'Generating preparation tasks for',
       framework,
       auditType,
@@ -1545,7 +1545,7 @@ export class ComplianceAIService {
     existingControls: Control[]
   ): Promise<DocumentationPlan> {
     // Implementation for documentation requirements identification
-    console.log(
+    // console.log(
       'Identifying documentation requirements for',
       framework,
       'covering',
@@ -1566,7 +1566,7 @@ export class ComplianceAIService {
 
   private async planAuditInterviews(framework: string, scope: string[]): Promise<InterviewPlan> {
     // Implementation for audit interview planning
-    console.log('Planning interviews for', framework, 'covering', scope.length, 'areas');
+    // console.log('Planning interviews for', framework, 'covering', scope.length, 'areas');
     return {
       interviewees: [],
       topics: [],
@@ -1590,7 +1590,7 @@ export class ComplianceAIService {
     existingControls: Control[]
   ): Promise<TestingPlan> {
     // Implementation for audit testing planning
-    console.log('Planning testing for', framework, 'with', existingControls.length, 'controls');
+    // console.log('Planning testing for', framework, 'with', existingControls.length, 'controls');
     return {
       controls_to_test: [],
       sampling_methodology: 'Risk-based',
@@ -1608,7 +1608,7 @@ export class ComplianceAIService {
 
   private async identifyAuditRiskAreas(framework: string, scope: string[]): Promise<RiskArea[]> {
     // Implementation for audit risk area identification
-    console.log('Identifying risk areas for', framework, 'covering', scope.length, 'areas');
+    // console.log('Identifying risk areas for', framework, 'covering', scope.length, 'areas');
     return [];
   }
 }

@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
  * GET /api/v1/risks/simplified
  * List risks with basic functionality
  */
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
     const session = (await getServerSession(authOptions)) as any;
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Error fetching risks:', error);
+    // console.error('Error fetching risks:', error);
     return NextResponse.json({ error: 'Failed to fetch risks' }, { status: 500 });
   }
 }
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
  * POST /api/v1/risks/simplified
  * Create a new risk
  */
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
     const session = (await getServerSession(authOptions)) as any;
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating risk:', error);
+    // console.error('Error creating risk:', error);
     return NextResponse.json({ error: 'Failed to create risk' }, { status: 500 });
   }
 }

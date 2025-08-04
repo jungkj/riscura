@@ -9,7 +9,7 @@ export interface InvalidationRule {
     endpoint?: string;
     resource?: string;
     operation?: 'CREATE' | 'UPDATE' | 'DELETE' | 'READ';
-    condition?: (data: any) => boolean;
+    condition?: (_data: any) => boolean;
   };
   targets: {
     queries?: string[];
@@ -482,7 +482,7 @@ class InvalidationService {
         this.eventQueue.push(event);
       }
 
-      console.error('Invalidation event failed:', error);
+      // console.error('Invalidation event failed:', error);
     }
   }
 

@@ -21,7 +21,7 @@ function decryptOldMethod(encryptedKey: string, key: string): string | null {
     decrypted += decipher.final('utf8');
     return decrypted;
   } catch (error) {
-    console.error('Failed to decrypt with old method:', error);
+    // console.error('Failed to decrypt with old method:', error);
     return null;
   }
 }
@@ -57,12 +57,12 @@ class EncryptionService {
 }
 
 async function migrateEncryption() {
-  console.log('🔐 Starting encryption migration...\n');
+  // console.log('🔐 Starting encryption migration...\n');
 
   const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET;
   if (!keySource) {
-    console.error('❌ Error: No encryption key found in environment variables');
-    console.error('   Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET');
+    // console.error('❌ Error: No encryption key found in environment variables');
+    // console.error('   Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET');
     process.exit(1);
   }
 
@@ -78,27 +78,27 @@ async function migrateEncryption() {
       },
     });
 
-    console.log(`Found ${integrations.length} integrations to migrate\n`);
+    // console.log(`Found ${integrations.length} integrations to migrate\n`);
 
     let successCount = 0;
     let failureCount = 0;
 
     for (const integration of integrations) {
-      console.log(`Processing integration for organization: ${integration.organizationId}`);
+      // console.log(`Processing integration for organization: ${integration.organizationId}`);
 
       try {
         // Try to decrypt with old method
         const decryptedKey = decryptOldMethod(integration.apiKeyEncrypted!, keySource);
 
         if (!decryptedKey) {
-          console.log('  ⚠️  Could not decrypt - may already be using new encryption');
+          // console.log('  ⚠️  Could not decrypt - may already be using new encryption');
 
           // Try to verify it's already in new format
           try {
             // If it's base64 and has proper length, it might be new format
             const decoded = Buffer.from(integration.apiKeyEncrypted!, 'base64');
             if (decoded.length > EncryptionService.IV_LENGTH + EncryptionService.TAG_LENGTH) {
-              console.log('  ✓ Appears to be already encrypted with new method');
+              // console.log('  ✓ Appears to be already encrypted with new method');
               successCount++;
               continue;
             }
@@ -119,27 +119,27 @@ async function migrateEncryption() {
           data: { apiKeyEncrypted: newEncrypted },
         });
 
-        console.log('  ✅ Successfully migrated to new encryption');
+        // console.log('  ✅ Successfully migrated to new encryption');
         successCount++;
       } catch (error) {
-        console.error(`  ❌ Error migrating integration: ${error}`);
+        // console.error(`  ❌ Error migrating integration: ${error}`);
         failureCount++;
       }
     }
 
-    console.log('\n📊 Migration Summary:');
-    console.log(`   ✅ Successful: ${successCount}`);
-    console.log(`   ❌ Failed: ${failureCount}`);
-    console.log(`   📋 Total: ${integrations.length}`);
+    // console.log('\n📊 Migration Summary:');
+    // console.log(`   ✅ Successful: ${successCount}`);
+    // console.log(`   ❌ Failed: ${failureCount}`);
+    // console.log(`   📋 Total: ${integrations.length}`);
 
     if (failureCount > 0) {
-      console.log('\n⚠️  Some migrations failed. Please check the logs above.');
+      // console.log('\n⚠️  Some migrations failed. Please check the logs above.');
       process.exit(1);
     } else {
-      console.log('\n🎉 Migration completed successfully!');
+      // console.log('\n🎉 Migration completed successfully!');
     }
   } catch (error) {
-    console.error('❌ Migration failed:', error);
+    // console.error('❌ Migration failed:', error);
     process.exit(1);
   } finally {
     await prisma.$disconnect();

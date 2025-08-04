@@ -17,7 +17,7 @@ const changePasswordSchema = z.object({
 });
 
 // GET /api/users/me - Get current user profile
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
     const session = (await getServerSession(authOptions)) as any;
@@ -57,13 +57,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       user,
     });
   } catch (error) {
-    console.error('Get user profile error:', error);
+    // console.error('Get user profile error:', error);
     return NextResponse.json({ error: 'Failed to get user profile' }, { status: 500 });
   }
 }
 
 // PUT /api/users/me - Update user profile
-export async function PUT(request: NextRequest): Promise<NextResponse> {
+export async function PUT(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
     const session = (await getServerSession(authOptions)) as any;
@@ -125,13 +125,13 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       user: updatedUser,
     });
   } catch (error) {
-    console.error('Update profile error:', error);
+    // console.error('Update profile error:', error);
     return NextResponse.json({ error: 'Failed to update user profile' }, { status: 500 });
   }
 }
 
 // PATCH /api/users/me - Change password
-export async function PATCH(request: NextRequest): Promise<NextResponse> {
+export async function PATCH(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
     const session = (await getServerSession(authOptions)) as any;
@@ -209,7 +209,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       message: 'Password changed successfully',
     });
   } catch (error) {
-    console.error('Change password error:', error);
+    // console.error('Change password error:', error);
     return NextResponse.json({ error: 'Failed to change password' }, { status: 500 });
   }
 }

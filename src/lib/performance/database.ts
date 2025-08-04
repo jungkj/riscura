@@ -130,7 +130,7 @@ export class DatabaseOptimizer {
         await this.executeQuery(`DROP INDEX IF EXISTS ${index.indexname};`, []);
         droppedCount++;
       } catch (error) {
-        console.error(`Failed to drop index ${index.indexname}:`, error);
+        // console.error(`Failed to drop index ${index.indexname}:`, error);
       }
     }
 
@@ -355,7 +355,7 @@ export class DatabaseOptimizer {
     return recommendations;
   }
 
-  private generatePerformanceRecommendations(data: any): string[] {
+  private generatePerformanceRecommendations(_data: any): string[] {
     const recommendations: string[] = [];
 
     if (data.slowQueries.length > 0) {
@@ -373,7 +373,7 @@ export class DatabaseOptimizer {
     return recommendations;
   }
 
-  private calculatePerformanceScore(data: any): number {
+  private calculatePerformanceScore(_data: any): number {
     let score = 100;
 
     // Deduct for slow queries

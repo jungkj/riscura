@@ -43,11 +43,11 @@ async function handler(req: NextRequest): Promise<NextResponse> {
         metrics.splice(0, metrics.length - 1000);
       }
 
-      console.log(`📊 Performance metric recorded: ${metric} = ${value}ms for ${url}`);
+      // console.log(`📊 Performance metric recorded: ${metric} = ${value}ms for ${url}`);
 
       return NextResponse.json({ success: true });
     } catch (error) {
-      console.error('Error storing performance metric:', error);
+      // console.error('Error storing performance metric:', error);
       return NextResponse.json({ error: 'Failed to store metric' }, { status: 500 });
     }
   }
@@ -93,7 +93,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Error retrieving performance metrics:', error);
+      // console.error('Error retrieving performance metrics:', error);
       return NextResponse.json({ error: 'Failed to retrieve metrics' }, { status: 500 });
     }
   }

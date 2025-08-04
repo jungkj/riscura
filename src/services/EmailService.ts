@@ -57,9 +57,9 @@ export class EmailService {
 
       // Verify connection
       await this.transporter.verify();
-      console.log('Email service initialized successfully');
+      // console.log('Email service initialized successfully');
     } catch (error) {
-      console.error('Email service initialization failed:', error);
+      // console.error('Email service initialization failed:', error);
       // Create a mock transporter for development
       this.transporter = nodemailer.createTransport({
         jsonTransport: true,
@@ -70,7 +70,7 @@ export class EmailService {
   /**
    * Send email with optional attachments
    */
-  async sendEmail(options: EmailOptions): Promise<void> {
+  async sendEmail(_options: EmailOptions): Promise<void> {
     try {
       const mailOptions = {
         from: this.config.from,
@@ -92,9 +92,9 @@ export class EmailService {
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      console.log('Email sent successfully:', result.messageId);
+      // console.log('Email sent successfully:', result.messageId);
     } catch (error) {
-      console.error('Failed to send email:', error);
+      // console.error('Failed to send email:', error);
       throw new Error(`Email sending failed: ${error.message}`);
     }
   }

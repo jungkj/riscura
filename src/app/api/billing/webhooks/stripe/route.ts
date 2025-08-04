@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripeService } from '@/lib/billing/stripe';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const body = await request.text();
     const headersList = await request.headers;
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
-      console.error('STRIPE_WEBHOOK_SECRET not configured');
+      // console.error('STRIPE_WEBHOOK_SECRET not configured');
       return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
     }
 
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Stripe webhook error:', error);
+    // console.error('Stripe webhook error:', error);
 
     if (error instanceof Error && error.message.includes('signature')) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });

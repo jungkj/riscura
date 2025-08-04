@@ -5,7 +5,7 @@ interface RouteParams {
 }
 
 // Generate placeholder image
-export async function GET(request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
+export async function GET(_request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Await the params to get the actual values
     const resolvedParams = await params;
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: RouteParams): Promis
       }
     }
 
-    console.log(`Generating placeholder image: ${width}x${height}`);
+    // console.log(`Generating placeholder image: ${width}x${height}`);
 
     // Create a simple SVG placeholder
     const svg = `
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest, { params }: RouteParams): Promis
       },
     });
   } catch (error) {
-    console.error('Error generating placeholder:', error);
+    // console.error('Error generating placeholder:', error);
 
     // Fallback SVG
     const fallbackSvg = `

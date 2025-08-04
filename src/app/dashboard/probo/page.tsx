@@ -74,7 +74,7 @@ const ProboPageContent = () => {
             setStats((prev) => ({ ...prev, vendorAssessments: vendorData.data.length }));
           }
         } else {
-          console.error('Failed to fetch assessments:', vendorRes.status);
+          // console.error('Failed to fetch assessments:', vendorRes.status);
           setVendorAssessmentData([]);
         }
 
@@ -87,7 +87,7 @@ const ProboPageContent = () => {
             setStats((prev) => ({ ...prev, securityControls: controlsData.data.length }));
           }
         } else {
-          console.error('Failed to fetch controls:', controlsRes.status);
+          // console.error('Failed to fetch controls:', controlsRes.status);
           setControlsData([]);
         }
 
@@ -98,7 +98,7 @@ const ProboPageContent = () => {
           if (complianceData.success && complianceData.data) {
             // Calculate average compliance score
             const scores = complianceData.data.map((a) => a.complianceScore || 0);
-            const avgScore =
+            const _avgScore =
               scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
             setStats((prev) => ({ ...prev, complianceScore: avgScore }));
 
@@ -112,11 +112,11 @@ const ProboPageContent = () => {
             }
           }
         } else {
-          console.error('Failed to fetch compliance assessments:', complianceRes.status);
+          // console.error('Failed to fetch compliance assessments:', complianceRes.status);
           setStats((prev) => ({ ...prev, complianceScore: 0 }));
         }
       } catch (error) {
-        console.error('Failed to fetch Probo data:', error);
+        // console.error('Failed to fetch Probo data:', error);
       } finally {
         setLoading(false);
       }

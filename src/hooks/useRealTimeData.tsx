@@ -49,7 +49,7 @@ export interface RealTimeDataActions {
   getControlMetrics: () => Promise<any>;
 }
 
-export function useRealTimeData(options: UseRealTimeDataOptions) {
+export function useRealTimeData(_options: UseRealTimeDataOptions) {
   const { organizationId, autoSubscribe = true, enableLogs = false } = options;
 
   // State
@@ -90,8 +90,8 @@ export function useRealTimeData(options: UseRealTimeDataOptions) {
 
   // Error handler
   const handleError = useCallback(
-    (error: any, context: string) => {
-      console.error(`Real-time data error (${context}):`, error);
+    (_error: any, context: string) => {
+      // console.error(`Real-time data error (${context}):`, error);
       updateState({
         error: error.message || 'An error occurred',
         isLoading: false,
@@ -104,7 +104,7 @@ export function useRealTimeData(options: UseRealTimeDataOptions) {
   const log = useCallback(
     (message: string, data?: any) => {
       if (enableLogs) {
-        console.log(`[useRealTimeData] ${message}`, data);
+        // console.log(`[useRealTimeData] ${message}`, data);
       }
     },
     [enableLogs]

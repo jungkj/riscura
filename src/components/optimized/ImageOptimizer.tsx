@@ -385,7 +385,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to download image:', error);
+      // console.error('Failed to download image:', error);
     }
   }, [src]);
 
@@ -395,7 +395,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       const response = await fetch(src);
       return await response.blob();
     } catch (error) {
-      console.error('Failed to get image data:', error);
+      // console.error('Failed to get image data:', error);
       return null;
     }
   }, [src]);

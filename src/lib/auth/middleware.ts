@@ -132,7 +132,7 @@ export async function withAuth(
 
       return handler(authReq);
     } catch (error) {
-      console.error('Authentication middleware error:', error);
+      // console.error('Authentication middleware error:', error);
       return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
   };
@@ -334,7 +334,7 @@ export interface CORSConfig {
   maxAge?: number;
 }
 
-export function cors(config: CORSConfig = {}) {
+export function cors(_config: CORSConfig = {}) {
   return (req: NextRequest): NextResponse | null => {
     const {
       origin = '*',
@@ -387,7 +387,7 @@ export function securityHeaders() {
   };
 }
 
-export function applySecurityHeaders(response: NextResponse): NextResponse {
+export function applySecurityHeaders(_response: NextResponse): NextResponse {
   // Security headers
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
@@ -420,7 +420,7 @@ export function requestLogger() {
     const userAgent = req.headers.get('user-agent') || 'unknown';
     const ip = req.headers.get('x-forwarded-for') || req.ip || 'unknown';
 
-    console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`);
+    // console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`);
 
     // This would ideally be handled in a response interceptor
     // For now, just log the request
@@ -577,7 +577,7 @@ export async function withApiKey(
 
       return handler(authReq);
     } catch (error) {
-      console.error('API key authentication error:', error);
+      // console.error('API key authentication error:', error);
       return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
   };
@@ -620,7 +620,7 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
       lastLoginAt: user.lastLoginAt,
     };
   } catch (error) {
-    console.error('Session validation error:', error);
+    // console.error('Session validation error:', error);
     return null;
   }
 }

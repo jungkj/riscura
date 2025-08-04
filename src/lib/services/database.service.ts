@@ -39,7 +39,7 @@ export class DatabaseService {
         version,
       };
     } catch (error) {
-      console.error('Database health check failed:', error);
+      // console.error('Database health check failed:', error);
       return {
         isConnected: false,
         isSeeded: false,
@@ -48,8 +48,7 @@ export class DatabaseService {
   }
 
   // Risk operations
-  async getRisks(
-    organizationId: string,
+  async getRisks(_organizationId: string,
     filters?: RiskFilters,
     options?: { page?: number; limit?: number; sortBy?: string; sortOrder?: 'asc' | 'desc' }
   ) {
@@ -138,12 +137,12 @@ export class DatabaseService {
     return riskRepo.delete(riskId, organizationId);
   }
 
-  async getRiskStatistics(organizationId: string) {
+  async getRiskStatistics(_organizationId: string) {
     const riskRepo = await createRiskRepository();
     return riskRepo.getStatistics(organizationId);
   }
 
-  async getRisksForDashboard(organizationId: string) {
+  async getRisksForDashboard(_organizationId: string) {
     const riskRepo = await createRiskRepository();
 
     const [statistics, highPriorityRisks, dueForReview] = await Promise.all([
@@ -167,8 +166,7 @@ export class DatabaseService {
   }
 
   // Transaction operations
-  async executeTransaction<T>(
-    organizationId: string,
+  async executeTransaction<T>(_organizationId: string,
     operation: (prisma: any) => Promise<T>
   ): Promise<T> {
     return db.transaction(operation);
@@ -209,7 +207,7 @@ export class DatabaseService {
   }
 
   // Organization operations
-  async getOrganizationOverview(organizationId: string) {
+  async getOrganizationOverview(_organizationId: string) {
     try {
       const [
         riskStats,
@@ -232,7 +230,7 @@ export class DatabaseService {
         health: await this.checkHealth(),
       };
     } catch (error) {
-      console.error('Failed to get organization overview:', error);
+      // console.error('Failed to get organization overview:', error);
       throw new Error('Failed to retrieve organization data');
     }
   }
@@ -270,7 +268,7 @@ export class DatabaseService {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('Failed to get performance metrics:', error);
+      // console.error('Failed to get performance metrics:', error);
       return null;
     }
   }
@@ -308,7 +306,7 @@ export class DatabaseService {
       operations.push('Maintenance completed successfully');
       return { success: true, operations };
     } catch (error) {
-      console.error('Maintenance operation failed:', error);
+      // console.error('Maintenance operation failed:', error);
       errors.push(error instanceof Error ? error.message : 'Unknown error');
       return { success: false, operations, errors };
     }

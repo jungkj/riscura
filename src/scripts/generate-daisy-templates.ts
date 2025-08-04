@@ -201,7 +201,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
 interface StandardFormProps {
   title: string;
   fields: FormField[];
-  onSubmit: (data: Record<string, string>) => Promise<void>;
+  onSubmit: (_data: Record<string, string>) => Promise<void>;
   submitText?: string;
   isLoading?: boolean;
   className?: string;
@@ -248,7 +248,7 @@ export const StandardForm: React.FC<StandardFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.error('Form submission error:', error);
+      // console.error('Form submission error:', error);
     }
   };
 
@@ -534,7 +534,7 @@ class ComponentTemplateGenerator {
   }
 
   async generateAllTemplates(): Promise<void> {
-    console.log('🏗️  Generating DaisyUI component templates...');
+    // console.log('🏗️  Generating DaisyUI component templates...');
 
     // Ensure output directory exists
     if (!fs.existsSync(this.outputDir)) {
@@ -552,7 +552,7 @@ class ComponentTemplateGenerator {
     // Generate README
     await this.generateReadme();
 
-    console.log(
+    // console.log(
       `✅ Generated ${COMPONENT_TEMPLATES.length} component templates in ${this.outputDir}`
     );
   }
@@ -585,7 +585,7 @@ export default ${template.name};
 `;
 
     fs.writeFileSync(filepath, content);
-    console.log(`📄 Generated: ${filename}`);
+    // console.log(`📄 Generated: ${filename}`);
   }
 
   private async generateIndexFile(): Promise<void> {
@@ -609,7 +609,7 @@ export type { ComponentTemplate } from '../scripts/generate-daisy-templates';
 `;
 
     fs.writeFileSync(indexPath, content);
-    console.log('📄 Generated: index.ts');
+    // console.log('📄 Generated: index.ts');
   }
 
   private async generateReadme(): Promise<void> {
@@ -670,7 +670,7 @@ When adding new templates:
 `;
 
     fs.writeFileSync(readmePath, content);
-    console.log('📄 Generated: README.md');
+    // console.log('📄 Generated: README.md');
   }
 }
 
@@ -680,9 +680,9 @@ async function main() {
 
   try {
     await generator.generateAllTemplates();
-    console.log('🎉 Template generation completed successfully!');
+    // console.log('🎉 Template generation completed successfully!');
   } catch (error) {
-    console.error('❌ Template generation failed:', error);
+    // console.error('❌ Template generation failed:', error);
     process.exit(1);
   }
 }

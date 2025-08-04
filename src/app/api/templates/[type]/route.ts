@@ -271,7 +271,7 @@ export const GET = withApiMiddleware({
       },
     });
   } catch (error) {
-    console.error('Template generation error:', error);
+    // console.error('Template generation error:', error);
     return {
       success: false,
       error: 'Failed to generate template',

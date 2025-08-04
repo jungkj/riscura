@@ -22,7 +22,7 @@ export interface CreateRiskOptions {
 export class RiskFactory {
   private static counter = 1;
 
-  static create(options: CreateRiskOptions = {}): Risk {
+  static create(_options: CreateRiskOptions = {}): Risk {
     const id = options.id || `risk-${this.counter++}`;
     const likelihood = options.likelihood || Math.floor(Math.random() * 5) + 1;
     const impact = options.impact || Math.floor(Math.random() * 5) + 1;
@@ -50,7 +50,7 @@ export class RiskFactory {
     } as Risk;
   }
 
-  static createHighRisk(options: CreateRiskOptions = {}): Risk {
+  static createHighRisk(_options: CreateRiskOptions = {}): Risk {
     return this.create({
       ...options,
       likelihood: options.likelihood || 5,
@@ -60,7 +60,7 @@ export class RiskFactory {
     });
   }
 
-  static createMediumRisk(options: CreateRiskOptions = {}): Risk {
+  static createMediumRisk(_options: CreateRiskOptions = {}): Risk {
     return this.create({
       ...options,
       likelihood: options.likelihood || 3,
@@ -70,7 +70,7 @@ export class RiskFactory {
     });
   }
 
-  static createLowRisk(options: CreateRiskOptions = {}): Risk {
+  static createLowRisk(_options: CreateRiskOptions = {}): Risk {
     return this.create({
       ...options,
       likelihood: options.likelihood || 1,
@@ -88,7 +88,7 @@ export class RiskFactory {
     return Array.from({ length: count }, () => this.create(options));
   }
 
-  static createForOrganization(organizationId: string, count: number = 1): Risk[] {
+  static createForOrganization(_organizationId: string, count: number = 1): Risk[] {
     return this.createBatch(count, { organizationId });
   }
 

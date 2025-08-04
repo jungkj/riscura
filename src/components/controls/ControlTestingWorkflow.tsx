@@ -36,7 +36,7 @@ import {
   BarChart3,
   MessageSquare,
 } from 'lucide-react';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 // Types
 interface TestingWorkflow {
@@ -306,8 +306,8 @@ const EvidenceUpload: React.FC<{
 // Testing Form Component
 const TestingForm: React.FC<{
   workflow: TestingWorkflow;
-  onSave: (data: Partial<TestingWorkflow>) => void;
-  onSubmit: (data: Partial<TestingWorkflow>) => void;
+  onSave: (_data: Partial<TestingWorkflow>) => void;
+  onSubmit: (_data: Partial<TestingWorkflow>) => void;
 }> = ({ workflow, onSave, onSubmit }) => {
   const [formData, setFormData] = useState({
     actualResult: workflow.actualResult || '',
@@ -620,15 +620,15 @@ export const ControlTestingWorkflow: React.FC = () => {
   };
 
   const handleEvidenceUpload = (files: File[]) => {
-    console.log('Uploading evidence files:', files);
+    // console.log('Uploading evidence files:', files);
   };
 
-  const handleTestingSave = (data: Partial<TestingWorkflow>) => {
-    console.log('Saving testing data:', data);
+  const handleTestingSave = (_data: Partial<TestingWorkflow>) => {
+    // console.log('Saving testing data:', data);
   };
 
-  const handleTestingSubmit = (data: Partial<TestingWorkflow>) => {
-    console.log('Submitting testing data:', data);
+  const handleTestingSubmit = (_data: Partial<TestingWorkflow>) => {
+    // console.log('Submitting testing data:', data);
     setTestingDialogOpen(false);
   };
 

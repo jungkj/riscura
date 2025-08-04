@@ -27,8 +27,8 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { formatFileSize } from '@/lib/storage/file-validator';
-import { format } from 'date-fns';
+// import { formatFileSize } from '@/lib/storage/file-validator';
+// import { format } from 'date-fns';
 import DocumentViewer from './DocumentViewer';
 import FileUploadDropzone from './FileUploadDropzone';
 import DocumentSearch from './DocumentSearch';
@@ -161,7 +161,7 @@ export default function DocumentLibrary({
       setDocuments(data.documents);
       setPagination(data.pagination);
     } catch (error) {
-      console.error('Error fetching documents:', error);
+      // console.error('Error fetching documents:', error);
       toast.error('Failed to load documents');
     } finally {
       setLoading(false);
@@ -189,7 +189,7 @@ export default function DocumentLibrary({
 
   const handleDocumentEdit = (document: Document) => {
     // TODO: Open edit dialog
-    console.log('Edit document:', document.id);
+    // console.log('Edit document:', document.id);
   };
 
   const handleDocumentDelete = async (documentId: string) => {
@@ -206,14 +206,14 @@ export default function DocumentLibrary({
       fetchDocuments();
       setViewingDocument(null);
     } catch (error) {
-      console.error('Delete error:', error);
+      // console.error('Delete error:', error);
       toast.error('Failed to delete document');
     }
   };
 
   const handleDocumentShare = (documentId: string) => {
     // TODO: Open share dialog
-    console.log('Share document:', documentId);
+    // console.log('Share document:', documentId);
           toast('Share functionality coming soon');
   };
 
@@ -248,7 +248,7 @@ export default function DocumentLibrary({
       setSelectedDocuments([]);
       fetchDocuments();
     } catch (error) {
-      console.error('Bulk delete error:', error);
+      // console.error('Bulk delete error:', error);
       toast.error('Failed to delete some documents');
     }
   };

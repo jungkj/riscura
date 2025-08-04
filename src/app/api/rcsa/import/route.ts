@@ -285,7 +285,7 @@ export const POST = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('RCSA import error:', error);
+    // console.error('RCSA import error:', error);
     return {
       success: false,
       error: 'Failed to import RCSA data to database',

@@ -104,7 +104,7 @@ async function uploadToS3(
       etag: result.ETag,
     };
   } catch (error) {
-    console.error('S3 upload error:', error);
+    // console.error('S3 upload error:', error);
     throw new Error('Failed to upload file to S3');
   }
 }
@@ -146,7 +146,7 @@ async function uploadToLocal(
       contentType,
     };
   } catch (error) {
-    console.error('Local storage upload error:', error);
+    // console.error('Local storage upload error:', error);
     throw new Error('Failed to upload file to local storage');
   }
 }
@@ -188,7 +188,7 @@ async function getFromS3(key: string): Promise<{ buffer: Buffer; metadata: FileM
 
     return { buffer, metadata };
   } catch (error) {
-    console.error('S3 get error:', error);
+    // console.error('S3 get error:', error);
     throw new Error('Failed to retrieve file from S3');
   }
 }
@@ -213,7 +213,7 @@ async function getFromLocal(key: string): Promise<{ buffer: Buffer; metadata: Fi
       },
     };
   } catch (error) {
-    console.error('Local storage get error:', error);
+    // console.error('Local storage get error:', error);
     throw new Error('Failed to retrieve file from local storage');
   }
 }
@@ -241,7 +241,7 @@ async function deleteFromS3(key: string): Promise<void> {
 
     await s3Client.send(command);
   } catch (error) {
-    console.error('S3 delete error:', error);
+    // console.error('S3 delete error:', error);
     throw new Error('Failed to delete file from S3');
   }
 }
@@ -259,7 +259,7 @@ async function deleteFromLocal(key: string): Promise<void> {
       fs.unlink(metadataPath).catch(() => {}),
     ]);
   } catch (error) {
-    console.error('Local storage delete error:', error);
+    // console.error('Local storage delete error:', error);
     throw new Error('Failed to delete file from local storage');
   }
 }
@@ -280,7 +280,7 @@ export async function generateSignedUrl(key: string, expiresIn: number = 3600): 
 
     return await getSignedUrl(s3Client, command, { expiresIn });
   } catch (error) {
-    console.error('Signed URL generation error:', error);
+    // console.error('Signed URL generation error:', error);
     throw new Error('Failed to generate signed URL');
   }
 }
@@ -325,7 +325,7 @@ export async function getFileMetadata(key: string): Promise<FileMetadata> {
         uploadedAt: new Date(metadata.uploadedAt),
       };
     } catch (error) {
-      console.error('Local metadata get error:', error);
+      // console.error('Local metadata get error:', error);
       throw new Error('Failed to retrieve file metadata');
     }
   } else {
@@ -348,7 +348,7 @@ export async function getFileMetadata(key: string): Promise<FileMetadata> {
         version: parseInt(result.Metadata?.version || '1'),
       };
     } catch (error) {
-      console.error('S3 metadata get error:', error);
+      // console.error('S3 metadata get error:', error);
       throw new Error('Failed to retrieve file metadata from S3');
     }
   }

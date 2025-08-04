@@ -220,8 +220,8 @@ const COMPARISON_DIMENSIONS: ComparisonDimension[] = [
 
 // Main comparative analysis component
 interface ComparativeAnalysisProps {
-  onExport?: (data: any, format: string) => void;
-  onSave?: (config: ComparisonConfig) => void;
+  onExport?: (_data: any, format: string) => void;
+  onSave?: (_config: ComparisonConfig) => void;
   className?: string;
 }
 

@@ -64,7 +64,7 @@ export const POST = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('RCSA analysis error:', error);
+    // console.error('RCSA analysis error:', error);
     return {
       success: false,
       error: 'Failed to analyze RCSA data',

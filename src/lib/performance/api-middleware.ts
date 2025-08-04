@@ -56,7 +56,7 @@ export function withPerformance(
       const duration = performance.now() - startTime;
       apiMonitor.trackRequest(`${endpoint} (ERROR)`, duration);
 
-      console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error);
+      // console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error);
       throw error;
     }
   };
@@ -66,8 +66,7 @@ export function withPerformance(
 // RESPONSE OPTIMIZATION
 // ============================================================================
 
-export function optimizeResponse(
-  data: any,
+export function optimizeResponse(_data: any,
   options: {
     fields?: string[];
     limit?: number;
@@ -120,7 +119,7 @@ export interface PaginationOptions {
   maxPageSize?: number;
 }
 
-export function optimizePagination(options: PaginationOptions) {
+export function optimizePagination(_options: PaginationOptions) {
   const page = Math.max(1, options.page || 1);
   const pageSize = Math.min(options.maxPageSize || 100, Math.max(1, options.pageSize || 20));
 
@@ -132,8 +131,7 @@ export function optimizePagination(options: PaginationOptions) {
   };
 }
 
-export function createPaginatedResponse<T>(
-  data: T[],
+export function createPaginatedResponse<T>(_data: T[],
   total: number,
   pagination: { page: number; pageSize: number }
 ) {

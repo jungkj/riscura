@@ -554,11 +554,11 @@ export const AIPoweredDashboard: React.FC = () => {
   };
 
   const handlePredictionAction = (action: string, prediction: AIPrediction) => {
-    console.log(`Prediction action: ${action}`, prediction);
+    // console.log(`Prediction action: ${action}`, prediction);
   };
 
   const handleRecommendationAction = (action: string, recommendation: AIRecommendation) => {
-    console.log(`Recommendation action: ${action}`, recommendation);
+    // console.log(`Recommendation action: ${action}`, recommendation);
   };
 
   const activePredictions = samplePredictions.filter(p => p.status === 'active').length;

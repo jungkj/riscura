@@ -140,7 +140,7 @@ export default function SmartRiskControlMapper({
       const suggestions = await analyzeRiskForControlSuggestions(risk);
       setAiSuggestions(suggestions);
     } catch (error) {
-      console.error('Error generating AI suggestions:', error);
+      // console.error('Error generating AI suggestions:', error);
     } finally {
       setIsAnalyzing(false);
     }

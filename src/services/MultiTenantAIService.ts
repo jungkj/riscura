@@ -50,7 +50,7 @@ export class MultiTenantAIService {
     const subdomain = domain.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // Create tenant environment with isolation
-    const environment = await this.createTenantEnvironment(tenantId);
+    const _environment = await this.createTenantEnvironment(tenantId);
 
     // Initialize default AI personality
     const defaultPersonality = this.createDefaultAIPersonality(name);
@@ -102,8 +102,7 @@ export class MultiTenantAIService {
   /**
    * Process AI request with complete tenant isolation
    */
-  async processAIRequest(
-    tenantId: string,
+  async processAIRequest(_tenantId: string,
     userId: string,
     sessionId: string,
     conversationId: string,
@@ -178,7 +177,7 @@ export class MultiTenantAIService {
       return filteredResponse;
     } catch (error) {
       // Log error with tenant context
-      console.error(`AI request failed for tenant ${tenantId}:`, error);
+      // console.error(`AI request failed for tenant ${tenantId}:`, error);
 
       // Track failed request
       await this.trackFailedRequest(tenantId, context, error);
@@ -190,8 +189,7 @@ export class MultiTenantAIService {
   /**
    * Update tenant configuration
    */
-  async updateTenantConfiguration(
-    tenantId: string,
+  async updateTenantConfiguration(_tenantId: string,
     updates: Partial<TenantConfiguration>
   ): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
@@ -222,8 +220,7 @@ export class MultiTenantAIService {
   /**
    * Update AI personality for tenant
    */
-  async updateAIPersonality(
-    tenantId: string,
+  async updateAIPersonality(_tenantId: string,
     personality: Partial<AIPersonality>
   ): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
@@ -249,7 +246,7 @@ export class MultiTenantAIService {
   /**
    * Update tenant branding
    */
-  async updateTenantBranding(tenantId: string, branding: Partial<TenantBranding>): Promise<Tenant> {
+  async updateTenantBranding(_tenantId: string, branding: Partial<TenantBranding>): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
     if (!tenant) {
       throw new Error(`Tenant ${tenantId} not found`);
@@ -274,7 +271,7 @@ export class MultiTenantAIService {
   /**
    * Get tenant analytics with isolation
    */
-  async getTenantAnalytics(tenantId: string, period: BillingPeriod): Promise<TenantAnalytics> {
+  async getTenantAnalytics(_tenantId: string, period: BillingPeriod): Promise<TenantAnalytics> {
     await this.validateTenantAccess(tenantId);
 
     const tenant = this.tenants.get(tenantId);
@@ -306,7 +303,7 @@ export class MultiTenantAIService {
   /**
    * Get tenant billing information
    */
-  async getTenantBilling(tenantId: string, period?: BillingPeriod): Promise<TenantBilling> {
+  async getTenantBilling(_tenantId: string, period?: BillingPeriod): Promise<TenantBilling> {
     await this.validateTenantAccess(tenantId);
 
     const tenant = this.tenants.get(tenantId);
@@ -332,7 +329,7 @@ export class MultiTenantAIService {
   /**
    * Create tenant environment with complete isolation
    */
-  private async createTenantEnvironment(tenantId: string): Promise<TenantEnvironment> {
+  private async createTenantEnvironment(_tenantId: string): Promise<TenantEnvironment> {
     const environment: TenantEnvironment = {
       tenantId,
       namespace: `tenant-${tenantId}`,
@@ -434,8 +431,7 @@ export class MultiTenantAIService {
   /**
    * Create conversation context with tenant isolation
    */
-  private async createConversationContext(
-    tenantId: string,
+  private async createConversationContext(_tenantId: string,
     userId: string,
     sessionId: string,
     conversationId: string,
@@ -548,8 +544,7 @@ export class MultiTenantAIService {
   /**
    * Generate AI response using tenant configuration
    */
-  private async generateAIResponse(
-    context: TenantConversationContext,
+  private async generateAIResponse(_context: TenantConversationContext,
     content: string,
     modelOverride?: string
   ): Promise<string> {
@@ -557,7 +552,7 @@ export class MultiTenantAIService {
 
     try {
       // Use custom model training service if available
-      const modelId = modelOverride || context.modelConfiguration.modelId;
+      const _modelId = modelOverride || context.modelConfiguration.modelId;
 
       // For demo purposes, simulate AI response generation
       // In production, this would call the actual AI model
@@ -588,8 +583,7 @@ export class MultiTenantAIService {
   /**
    * Process AI response with tenant filtering
    */
-  private async processAIResponse(
-    tenantId: string,
+  private async processAIResponse(_tenantId: string,
     content: string,
     context: TenantConversationContext
   ): Promise<AIResponse> {
@@ -897,12 +891,12 @@ export class MultiTenantAIService {
   }
 
   // Additional helper methods would be implemented here...
-  private async validateAndGetTenant(tenantId: string): Promise<Tenant | null> {
+  private async validateAndGetTenant(_tenantId: string): Promise<Tenant | null> {
     const tenant = this.tenants.get(tenantId);
     return tenant?.status === 'active' ? tenant : null;
   }
 
-  private async validateSubscriptionLimits(tenantId: string, feature: string): Promise<void> {
+  private async validateSubscriptionLimits(_tenantId: string, feature: string): Promise<void> {
     const tenant = this.tenants.get(tenantId);
     if (!tenant) throw new Error('Tenant not found');
 
@@ -919,7 +913,7 @@ export class MultiTenantAIService {
   }
 
   private getModelConfiguration(tenant: Tenant, modelOverride?: string): ModelConfiguration {
-    const modelId = modelOverride || tenant.configuration.aiModels.defaultModel;
+    const _modelId = modelOverride || tenant.configuration.aiModels.defaultModel;
     const model = tenant.configuration.aiModels.availableModels.find((m) => m.modelId === modelId);
 
     if (!model) {
@@ -955,7 +949,7 @@ export class MultiTenantAIService {
     return instructions.join(' ');
   }
 
-  private async applyResponseFiltering(tenantId: string, content: string): Promise<string> {
+  private async applyResponseFiltering(_tenantId: string, content: string): Promise<string> {
     // Apply tenant-specific content filtering
     // This is a simplified implementation
     return content;
@@ -965,8 +959,7 @@ export class MultiTenantAIService {
     return tokens * (modelConfig.usage.costPerQuery / 1000);
   }
 
-  private async trackUsage(
-    tenantId: string,
+  private async trackUsage(_tenantId: string,
     context: TenantConversationContext,
     response: AIResponse
   ): Promise<void> {
@@ -979,8 +972,7 @@ export class MultiTenantAIService {
     }
   }
 
-  private async trackFailedRequest(
-    tenantId: string,
+  private async trackFailedRequest(_tenantId: string,
     context: TenantConversationContext,
     error: unknown
   ): Promise<void> {
@@ -991,7 +983,7 @@ export class MultiTenantAIService {
   }
 
   // Public API methods
-  public async getTenant(tenantId: string): Promise<Tenant | undefined> {
+  public async getTenant(_tenantId: string): Promise<Tenant | undefined> {
     return this.tenants.get(tenantId);
   }
 
@@ -999,7 +991,7 @@ export class MultiTenantAIService {
     return Array.from(this.tenants.values());
   }
 
-  public async deleteTenant(tenantId: string): Promise<void> {
+  public async deleteTenant(_tenantId: string): Promise<void> {
     // Mark tenant as deactivated
     const tenant = this.tenants.get(tenantId);
     if (tenant) {
@@ -1015,7 +1007,7 @@ export class MultiTenantAIService {
   }
 
   // Placeholder methods for implementation
-  private async initializeTenantIsolation(tenantId: string): Promise<TenantIsolation> {
+  private async initializeTenantIsolation(_tenantId: string): Promise<TenantIsolation> {
     return {
       dataIsolation: {
         strategy: 'schema_per_tenant',
@@ -1227,7 +1219,7 @@ export class MultiTenantAIService {
     };
   }
 
-  private async initializeTenantSecurity(tenantId: string): Promise<TenantSecurity> {
+  private async initializeTenantSecurity(_tenantId: string): Promise<TenantSecurity> {
     return {
       authentication: {
         ssoEnabled: false,
@@ -1371,25 +1363,22 @@ export class MultiTenantAIService {
   }
 
   // Additional placeholder methods
-  private async setupTenantMonitoring(tenantId: string): Promise<void> {}
-  private async initializeBillingCycle(tenantId: string): Promise<void> {}
-  private async validateTenantAccess(tenantId: string): Promise<void> {}
-  private async validateTenantConfiguration(config: TenantConfiguration): Promise<void> {}
+  private async setupTenantMonitoring(_tenantId: string): Promise<void> {}
+  private async initializeBillingCycle(_tenantId: string): Promise<void> {}
+  private async validateTenantAccess(_tenantId: string): Promise<void> {}
+  private async validateTenantConfiguration(_config: TenantConfiguration): Promise<void> {}
   private async validateAIPersonality(personality: AIPersonality): Promise<void> {}
-  private async updateTenantIsolation(tenantId: string): Promise<void> {}
-  private async updateConversationHistory(
-    context: TenantConversationContext,
+  private async updateTenantIsolation(_tenantId: string): Promise<void> {}
+  private async updateConversationHistory(_context: TenantConversationContext,
     request: string,
     response: string
   ): Promise<void> {}
-  private async calculateUsageAnalytics(
-    tenantId: string,
+  private async calculateUsageAnalytics(_tenantId: string,
     period: BillingPeriod
   ): Promise<UsageAnalytics> {
     return this.initializeUsageAnalytics();
   }
-  private async calculatePerformanceAnalytics(
-    tenantId: string,
+  private async calculatePerformanceAnalytics(_tenantId: string,
     period: BillingPeriod
   ): Promise<PerformanceAnalytics> {
     return {
@@ -1406,8 +1395,7 @@ export class MultiTenantAIService {
       bottlenecks: [],
     };
   }
-  private async calculateCostAnalytics(
-    tenantId: string,
+  private async calculateCostAnalytics(_tenantId: string,
     period: BillingPeriod
   ): Promise<CostAnalytics> {
     return {
@@ -1418,8 +1406,7 @@ export class MultiTenantAIService {
       optimizationOpportunities: [],
     };
   }
-  private async calculateUserAnalytics(
-    tenantId: string,
+  private async calculateUserAnalytics(_tenantId: string,
     period: BillingPeriod
   ): Promise<UserAnalytics> {
     return {
@@ -1431,8 +1418,7 @@ export class MultiTenantAIService {
       churnRate: 0,
     };
   }
-  private async generateAnalyticsInsights(
-    tenantId: string,
+  private async generateAnalyticsInsights(_tenantId: string,
     period: BillingPeriod
   ): Promise<AnalyticsInsights> {
     return {
@@ -1442,8 +1428,7 @@ export class MultiTenantAIService {
       predictions: [],
     };
   }
-  private async calculateBillingUsage(
-    tenantId: string,
+  private async calculateBillingUsage(_tenantId: string,
     period: BillingPeriod
   ): Promise<BillingUsage> {
     return {
@@ -1455,8 +1440,7 @@ export class MultiTenantAIService {
       additionalFeatures: {},
     };
   }
-  private async calculateBillingCosts(
-    tenantId: string,
+  private async calculateBillingCosts(_tenantId: string,
     usage: BillingUsage
   ): Promise<BillingCosts> {
     return {
@@ -1469,7 +1453,7 @@ export class MultiTenantAIService {
       currency: 'USD',
     };
   }
-  private async getTenantInvoices(tenantId: string): Promise<Invoice[]> {
+  private async getTenantInvoices(_tenantId: string): Promise<Invoice[]> {
     return [];
   }
   private getCurrentBillingPeriod(): BillingPeriod {

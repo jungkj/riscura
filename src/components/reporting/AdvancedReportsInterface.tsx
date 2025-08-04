@@ -688,27 +688,27 @@ export const AdvancedReportsInterface: React.FC = () => {
   };
 
   const handleExport = () => {
-    console.log('Exporting report...');
+    // console.log('Exporting report...');
   };
 
   const handleRefresh = () => {
-    console.log('Refreshing data...');
+    // console.log('Refreshing data...');
   };
 
   const handleSort = (columnId: string, direction: 'asc' | 'desc') => {
-    console.log('Sorting:', columnId, direction);
+    // console.log('Sorting:', columnId, direction);
   };
 
   const handleRowSelect = (rowId: string, selected: boolean) => {
-    console.log('Row selection:', rowId, selected);
+    // console.log('Row selection:', rowId, selected);
   };
 
   const handleRowAction = (rowId: string, action: string) => {
-    console.log('Row action:', rowId, action);
+    // console.log('Row action:', rowId, action);
   };
 
   const handlePageChange = (page: number) => {
-    console.log('Page change:', page);
+    // console.log('Page change:', page);
   };
 
   return (

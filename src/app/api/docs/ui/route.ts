@@ -209,14 +209,14 @@ async function handleGet(req: NextRequest) {
         },
         responseInterceptor: function(response) {
           // Log API responses for debugging
-          console.log('API Response:', response);
+          // console.log('API Response:', response);
           return response;
         },
         onComplete: function() {
-          console.log('Swagger UI loaded successfully');
+          // console.log('Swagger UI loaded successfully');
         },
         onFailure: function(error) {
-          console.error('Swagger UI failed to load:', error);
+          // console.error('Swagger UI failed to load:', error);
         },
         docExpansion: 'list',
         operationsSorter: 'alpha',

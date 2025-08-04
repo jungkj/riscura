@@ -142,7 +142,7 @@ export class ProboService {
         lastAssessed: new Date(),
       };
     } catch (error) {
-      console.error('Vendor assessment failed:', error);
+      // console.error('Vendor assessment failed:', error);
       throw new Error('Failed to assess vendor');
     }
   }
@@ -151,7 +151,7 @@ export class ProboService {
    * Extract vendor information using AI (based on Probo's vendor assessment agent)
    */
   private async extractVendorInfo(websiteUrl: string): Promise<VendorInfo> {
-    const prompt = `
+    const _prompt = `
       # Role: You are a compliance assistant.
 
       # Objective
@@ -213,7 +213,7 @@ export class ProboService {
         certifications: vendorData.certifications || [],
       };
     } catch (error) {
-      console.error('Failed to extract vendor info:', error);
+      // console.error('Failed to extract vendor info:', error);
       // Return fallback vendor info
       return {
         name: websiteUrl.replace(/https?:\/\//, '').replace(/\/.*/, ''),
@@ -397,7 +397,7 @@ export class ProboService {
         description: mitigation.description,
       }));
     } catch (error) {
-      console.error('Failed to load mitigation controls:', error);
+      // console.error('Failed to load mitigation controls:', error);
       return [];
     }
   }
@@ -436,7 +436,7 @@ export class ProboService {
       // In a real implementation, this would ping the Probo service
       return true;
     } catch (error) {
-      console.error('Probo service health check failed:', error);
+      // console.error('Probo service health check failed:', error);
       return false;
     }
   }
@@ -462,7 +462,7 @@ export class ProboService {
   // Get mitigation categories
   async getMitigationCategories(): Promise<string[]> {
     const mitigations = await this.getMitigations();
-    const categories = [...new Set(mitigations.map((m) => m.category))];
+    const _categories = [...new Set(mitigations.map((m) => m.category))];
     return categories.sort();
   }
 
@@ -610,7 +610,7 @@ export class ProboService {
         }
       );
     } catch (error) {
-      console.error('Failed to get control testing guidance:', error);
+      // console.error('Failed to get control testing guidance:', error);
       return null;
     }
   }

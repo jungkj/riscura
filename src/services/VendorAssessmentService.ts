@@ -116,7 +116,7 @@ export class VendorAssessmentService {
         dueDiligenceChecklist,
       };
     } catch (error) {
-      console.error('Enhanced vendor assessment failed:', error);
+      // console.error('Enhanced vendor assessment failed:', error);
       throw new Error('Failed to perform enhanced vendor assessment');
     }
   }
@@ -125,7 +125,7 @@ export class VendorAssessmentService {
    * Generate comprehensive vendor risk profile
    */
   async generateVendorRiskProfile(assessment: VendorAssessment): Promise<VendorRiskProfile> {
-    const prompt = `
+    const _prompt = `
       # Role: You are a vendor risk assessment expert.
 
       # Task
@@ -148,10 +148,10 @@ export class VendorAssessmentService {
     try {
       // For now, use fallback since generateContent method doesn't exist
       // In the future, this could be replaced with a proper AI analysis method
-      console.log('AI risk profile generation requested but not implemented');
+      // console.log('AI risk profile generation requested but not implemented');
       return this.generateFallbackRiskProfile(assessment);
     } catch (error) {
-      console.error('Risk profile generation failed:', error);
+      // console.error('Risk profile generation failed:', error);
       return this.generateFallbackRiskProfile(assessment);
     }
   }

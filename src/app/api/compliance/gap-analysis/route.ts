@@ -14,7 +14,7 @@ const roadmapSchema = z.object({
   frameworkName: z.string(),
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
   } catch (error) {
-    console.error('Error processing gap analysis request:', error);
+    // console.error('Error processing gap analysis request:', error);
     return NextResponse.json({ error: 'Failed to process gap analysis' }, { status: 500 });
   }
 }

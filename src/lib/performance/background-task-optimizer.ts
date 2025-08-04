@@ -47,7 +47,7 @@ export interface TaskMetrics {
 }
 
 export interface TaskProcessor<T = any, R = any> {
-  (data: T, onProgress?: (progress: number) => void): Promise<R> | R;
+  (_data: T, onProgress?: (progress: number) => void): Promise<R> | R;
 }
 
 export interface SchedulerConfig {
@@ -104,7 +104,7 @@ export class BackgroundTaskOptimizer {
   private metricsInterval: NodeJS.Timeout | null = null;
   private persistenceStore: Map<string, Task> = new Map();
 
-  constructor(config: Partial<SchedulerConfig> = {}) {
+  constructor(_config: Partial<SchedulerConfig> = {}) {
     this.config = { ...DEFAULT_SCHEDULER_CONFIG, ...config };
     this.initializeOptimizer();
   }
@@ -179,7 +179,7 @@ export class BackgroundTaskOptimizer {
     }
 
     this.workerPools.set(poolName, pool);
-    console.log(`Created worker pool "${poolName}" with ${pool.workers.length} workers`);
+    // console.log(`Created worker pool "${poolName}" with ${pool.workers.length} workers`);
   }
 
   /**
@@ -215,7 +215,7 @@ export class BackgroundTaskOptimizer {
 
       return worker;
     } catch (error) {
-      console.error(`Failed to create worker for pool ${poolName}:`, error);
+      // console.error(`Failed to create worker for pool ${poolName}:`, error);
       return null;
     }
   }
@@ -526,7 +526,7 @@ export class BackgroundTaskOptimizer {
       this.persistTask(task);
     }
 
-    console.log(`Scheduled task ${task.id} of type ${taskType}`);
+    // console.log(`Scheduled task ${task.id} of type ${taskType}`);
     return task.id;
   }
 
@@ -588,7 +588,7 @@ export class BackgroundTaskOptimizer {
       try {
         await this.executeTask(task);
       } catch (error) {
-        console.error(`Failed to execute task ${task.id}:`, error);
+        // console.error(`Failed to execute task ${task.id}:`, error);
         this.handleTaskError(task, error as Error);
       }
     }
@@ -622,7 +622,7 @@ export class BackgroundTaskOptimizer {
       this.completedTasks.set(task.id, task);
       this.metrics.completedTasks++;
 
-      console.log(`Task ${task.id} completed successfully`);
+      // console.log(`Task ${task.id} completed successfully`);
     } catch (error) {
       this.handleTaskError(task, error as Error);
     }
@@ -740,14 +740,14 @@ export class BackgroundTaskOptimizer {
       // Add back to queue for retry
       task.status = 'pending';
       this.taskQueue.unshift(task); // Add to front for priority
-      console.log(`Retrying task ${task.id} (attempt ${task.attempts + 1}/${task.config.retries})`);
+      // console.log(`Retrying task ${task.id} (attempt ${task.attempts + 1}/${task.config.retries})`);
     } else {
       // Task failed permanently
       task.status = 'failed';
       task.completedAt = new Date();
       this.completedTasks.set(task.id, task);
       this.metrics.failedTasks++;
-      console.error(`Task ${task.id} failed permanently:`, error);
+      // console.error(`Task ${task.id} failed permanently:`, error);
     }
   }
 
@@ -763,7 +763,7 @@ export class BackgroundTaskOptimizer {
    * Handle worker error
    */
   private handleWorkerError(worker: Worker, error: ErrorEvent): void {
-    console.error('Worker error:', error);
+    // console.error('Worker error:', error);
 
     // Find and restart worker
     for (const [poolName, pool] of this.workerPools.entries()) {
@@ -970,7 +970,7 @@ export class BackgroundTaskOptimizer {
     this.workerPools.clear();
     this.persistenceStore.clear();
 
-    console.log('Background task optimizer cleaned up');
+    // console.log('Background task optimizer cleaned up');
   }
 }
 

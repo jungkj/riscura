@@ -23,7 +23,7 @@ export const usePerformanceMonitor = (componentName: string) => {
     }));
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`${componentName} render #${renderCount.current}: ${renderTime.toFixed(2)}ms`);
+      // console.log(`${componentName} render #${renderCount.current}: ${renderTime.toFixed(2)}ms`);
     }
   }, [componentName]);
 
@@ -68,9 +68,8 @@ export const useThrottle = <T extends unknown[]>(callback: (...args: T) => void,
 };
 
 // Memoized calculation hook
-export const useMemoizedCalculation = <T, R>(
-  data: T[],
-  calculator: (data: T[]) => R,
+export const useMemoizedCalculation = <T, R>(_data: T[],
+  calculator: (_data: T[]) => R,
   dependencies: unknown[] = []
 ): R => {
   return useMemo(() => {
@@ -79,7 +78,7 @@ export const useMemoizedCalculation = <T, R>(
     const end = performance.now();
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Calculation took ${(end - start).toFixed(2)}ms`);
+      // console.log(`Calculation took ${(end - start).toFixed(2)}ms`);
     }
 
     return result;
@@ -117,7 +116,7 @@ export const useVirtualScrolling = <T>(items: T[], itemHeight: number, container
 };
 
 // Intersection observer hook for lazy loading
-export const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
+export const useIntersectionObserver = (_options: IntersectionObserverInit = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
   const elementRef = useRef<HTMLElement>(null);
@@ -312,7 +311,7 @@ export const useComponentPerformance = (componentName: string) => {
     }));
 
     if (process.env.NODE_ENV === 'development' && renderTime > 16) {
-      console.warn(`${componentName} slow render: ${renderTime.toFixed(2)}ms`);
+      // console.warn(`${componentName} slow render: ${renderTime.toFixed(2)}ms`);
     }
   }, [componentName]);
 

@@ -145,7 +145,7 @@ export const typography = {
 export const getHeadingClasses = (level: keyof typeof typography.headings) => {
   const heading = typography.headings[level];
   if (!heading) {
-    console.error(
+    // console.error(
       `Typography heading level "${level}" not found. Available levels:`,
       Object.keys(typography.headings)
     );
@@ -159,7 +159,7 @@ export const getHeadingClasses = (level: keyof typeof typography.headings) => {
 export const getBodyClasses = (variant: keyof typeof typography.body) => {
   const body = typography.body[variant];
   if (!body) {
-    console.error(
+    // console.error(
       `Typography body variant "${variant}" not found. Available variants:`,
       Object.keys(typography.body)
     );

@@ -220,7 +220,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
       setHasChanges(false);
       onOpenChange(false);
     } catch (error) {
-      console.error('Error updating settings:', error);
+      // console.error('Error updating settings:', error);
       toast.error('Failed to update security settings. Please try again.');
     } finally {
       setIsSubmitting(false);

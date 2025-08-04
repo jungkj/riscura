@@ -65,8 +65,7 @@ const PLAN_FEATURES = {
 };
 
 // Get subscription status for a user
-export async function getSubscriptionStatus(
-  userId: string,
+export async function getSubscriptionStatus(_userId: string,
   organizationId: string
 ): Promise<SubscriptionStatus> {
   try {
@@ -137,7 +136,7 @@ export async function getSubscriptionStatus(
       limits: planConfig.limits,
     };
   } catch (error) {
-    console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error);
     // Return free plan as fallback
     return {
       isActive: false,
@@ -235,7 +234,7 @@ export async function withSubscription(
 
     return { subscriptionStatus, user, headers: requestHeaders };
   } catch (error) {
-    console.error('Subscription middleware error:', error);
+    // console.error('Subscription middleware error:', error);
     return NextResponse.json(
       { error: 'Failed to verify subscription', code: 'SUBSCRIPTION_ERROR' },
       { status: 500 }

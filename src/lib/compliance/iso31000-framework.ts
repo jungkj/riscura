@@ -254,8 +254,7 @@ export class ISO31000FrameworkService {
     this.processes.set('risk-assessment', riskAssessment);
   }
 
-  async performISO31000Assessment(
-    organizationId: string,
+  async performISO31000Assessment(_organizationId: string,
     risks: Risk[],
     controls: Control[],
     assessor: string

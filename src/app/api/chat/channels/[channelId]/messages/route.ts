@@ -12,7 +12,7 @@ export async function GET(
   { params }: { params: Promise<{ channelId: string }> }
 ) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { channelId } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -28,7 +28,7 @@ export async function GET(
 
         return ApiResponseFormatter.success(messages);
       } catch (error) {
-        console.error('Failed to fetch messages:', error);
+        // console.error('Failed to fetch messages:', error);
         return ApiResponseFormatter.error(
           'CHAT_ERROR',
           error instanceof Error ? error.message : 'Failed to fetch messages',
@@ -53,7 +53,7 @@ export async function POST(
   { params }: { params: Promise<{ channelId: string }> }
 ) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { channelId } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -82,7 +82,7 @@ export async function POST(
           });
         }
 
-        console.error('Failed to send message:', error);
+        // console.error('Failed to send message:', error);
         return ApiResponseFormatter.error(
           'CHAT_ERROR',
           error instanceof Error ? error.message : 'Failed to send message',

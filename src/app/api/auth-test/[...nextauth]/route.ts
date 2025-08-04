@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Test route with minimal configuration
 async function handler(req: NextRequest, context: any) {
   try {
-    console.log('[NextAuth Test] Initializing with minimal config');
+    // console.log('[NextAuth Test] Initializing with minimal config');
     const handlers = NextAuth(authOptionsMinimal);
 
     // Route to appropriate handler
@@ -19,7 +19,7 @@ async function handler(req: NextRequest, context: any) {
 
     return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
   } catch (error) {
-    console.error('[NextAuth Test] Error:', error);
+    // console.error('[NextAuth Test] Error:', error);
     return NextResponse.json(
       {
         error: 'Auth test failed',

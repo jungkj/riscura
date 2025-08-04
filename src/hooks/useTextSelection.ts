@@ -227,7 +227,7 @@ export function useTextSelection(
         }
       }
     } catch (error) {
-      console.warn('Could not restore DOM selection:', error);
+      // console.warn('Could not restore DOM selection:', error);
     }
   }, []);
 

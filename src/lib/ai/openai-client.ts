@@ -52,7 +52,7 @@ export const MODEL_CONFIGS = {
 export type ModelName = keyof typeof MODEL_CONFIGS;
 
 // Create OpenAI client with configuration
-export function createOpenAIClient(config: OpenAIClientConfig): OpenAI {
+export function createOpenAIClient(_config: OpenAIClientConfig): OpenAI {
   return new OpenAI({
     apiKey: config.apiKey,
     baseURL: config.baseURL,
@@ -297,7 +297,7 @@ export class OpenAIError extends Error {
   }
 }
 
-export function handleOpenAIError(error: any): OpenAIError {
+export function handleOpenAIError(_error: any): OpenAIError {
   if (error.status) {
     switch (error.status) {
       case 401:
@@ -375,7 +375,7 @@ export class OpenAIClient {
       const response = await this.client.chat.completions.create(params);
       this.updateRateLimit();
       return response;
-    } catch (error: any) {
+    } catch (_error: any) {
       if (error.status === 429) {
         this.rateLimitReset = new Date(Date.now() + 60000); // 1 minute cooldown
         throw new Error('Rate limit exceeded. Please try again later.');
@@ -399,7 +399,7 @@ export class OpenAIClient {
       const response = await this.client.embeddings.create(params);
       this.updateRateLimit();
       return response;
-    } catch (error: any) {
+    } catch (_error: any) {
       if (error.status === 429) {
         this.rateLimitReset = new Date(Date.now() + 60000);
         throw new Error('Rate limit exceeded. Please try again later.');
@@ -451,7 +451,7 @@ export class OpenAIClient {
     return response.choices[0]?.message?.content || '';
   }
 
-  async generateRecommendations(context: string, requirements: string): Promise<string[]> {
+  async generateRecommendations(_context: string, requirements: string): Promise<string[]> {
     const response = await this.createChatCompletion({
       model: 'gpt-4',
       messages: [

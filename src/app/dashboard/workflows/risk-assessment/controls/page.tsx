@@ -96,7 +96,7 @@ export default function ReviewRiskControlsPage() {
         averageEffectiveness: Math.round(avgEffectiveness),
       });
     } catch (error) {
-      console.error('Failed to fetch controls:', error);
+      // console.error('Failed to fetch controls:', error);
       toast({
         title: 'Error',
         description: 'Failed to load controls',
@@ -143,7 +143,7 @@ export default function ReviewRiskControlsPage() {
     return categoryMatch && statusMatch;
   });
 
-  const categories = Array.from(new Set(controls.map((c) => c.category)));
+  const _categories = Array.from(new Set(controls.map((c) => c.category)));
 
   return (
     <ProtectedRoute>

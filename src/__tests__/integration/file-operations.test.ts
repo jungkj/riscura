@@ -83,7 +83,7 @@ class FileOperationsHelper {
   }
 
   // File creation utilities
-  async createTestFile(config: (typeof FILE_CONFIGS)[keyof typeof FILE_CONFIGS]): Promise<string> {
+  async createTestFile(_config: (typeof FILE_CONFIGS)[keyof typeof FILE_CONFIGS]): Promise<string> {
     const testDir = path.join(process.cwd(), 'test-files');
 
     // Ensure test directory exists

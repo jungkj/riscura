@@ -47,7 +47,7 @@ export default function ControlLibraryPage() {
   ];
 
   const handleCreateControl = () => {
-    console.log('Create control clicked');
+    // console.log('Create control clicked');
     // TODO: Implement control creation modal or navigation
   };
 
@@ -57,7 +57,7 @@ export default function ControlLibraryPage() {
   };
 
   const handleTestControl = (control: Control) => {
-    console.log('Test control:', control.id);
+    // console.log('Test control:', control.id);
     // TODO: Implement control testing workflow
   };
 

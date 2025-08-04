@@ -13,7 +13,7 @@ interface UseContentAnalysisOptions {
   enableBatching?: boolean;
 }
 
-export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
+export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   const { maxHistory = 50, autoSave = true, enableBatching = true } = options;
 
   const [analysisResults, setAnalysisResults] = useState<ContentAnalysisResult[]>([]);
@@ -224,7 +224,7 @@ export function useContentAnalysis(options: UseContentAnalysisOptions = {}) {
               const result = await analyzeSelection(item.selection, action);
               results.push(result);
             } catch (error) {
-              console.error(`Failed to process action ${action} for item ${item.id}:`, error);
+              // console.error(`Failed to process action ${action} for item ${item.id}:`, error);
             }
           }
 

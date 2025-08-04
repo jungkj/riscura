@@ -72,7 +72,7 @@ interface MetricData {
 
 // Sample Data
 const generateSampleRisks = (count: number): Risk[] => {
-  const categories = ['Operational', 'Financial', 'Compliance', 'Strategic', 'Technology'];
+  const _categories = ['Operational', 'Financial', 'Compliance', 'Strategic', 'Technology'];
   const departments = ['IT', 'Finance', 'Operations', 'Legal', 'Marketing'];
   const owners = ['John Smith', 'Sarah Johnson', 'Mike Chen', 'Lisa Brown', 'David Wilson'];
   const statuses: Risk['status'][] = ['active', 'mitigated', 'monitoring', 'closed'];
@@ -726,7 +726,7 @@ const EnhancedRiskDashboardWithProviders: React.FC = () => {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        console.error('Dashboard Error:', error, errorInfo);
+        // console.error('Dashboard Error:', error, errorInfo);
       }}
     >
       <AccessibilityProvider>

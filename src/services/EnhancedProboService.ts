@@ -137,7 +137,7 @@ export class EnhancedProboService {
     try {
       return schema.parse(value);
     } catch (error) {
-      console.error('Metric value validation failed:', error);
+      // console.error('Metric value validation failed:', error);
       if (error instanceof z.ZodError) {
         throw new Error(
           `Invalid metric data structure: ${error.errors.map((e) => e.message).join(', ')}`
@@ -148,8 +148,7 @@ export class EnhancedProboService {
   }
 
   // Integration Management
-  async setupIntegration(
-    organizationId: string,
+  async setupIntegration(_organizationId: string,
     apiKey: string,
     webhookUrl?: string
   ): Promise<ProboIntegration> {
@@ -185,13 +184,13 @@ export class EnhancedProboService {
     return integration;
   }
 
-  async getIntegration(organizationId: string): Promise<ProboIntegration | null> {
+  async getIntegration(_organizationId: string): Promise<ProboIntegration | null> {
     return await prisma.proboIntegration.findUnique({
       where: { organizationId },
     });
   }
 
-  async disableIntegration(organizationId: string): Promise<void> {
+  async disableIntegration(_organizationId: string): Promise<void> {
     await prisma.proboIntegration.update({
       where: { organizationId },
       data: { isActive: false },
@@ -199,7 +198,7 @@ export class EnhancedProboService {
   }
 
   // Metrics Collection
-  async syncMetrics(organizationId: string): Promise<void> {
+  async syncMetrics(_organizationId: string): Promise<void> {
     const integration = await this.getIntegration(organizationId);
     if (!integration?.isActive) {
       throw new Error('Probo integration is not active');
@@ -257,7 +256,7 @@ export class EnhancedProboService {
     }
   }
 
-  async getLatestMetrics(organizationId: string): Promise<ProboMetrics> {
+  async getLatestMetrics(_organizationId: string): Promise<ProboMetrics> {
     const integration = await this.getIntegration(organizationId);
     if (!integration) {
       // Return default metrics if no integration
@@ -286,7 +285,7 @@ export class EnhancedProboService {
     return this.validateMetricValue(latestMetric.metricValue, ProboMetricsSchema) as ProboMetrics;
   }
 
-  async getComplianceStatus(organizationId: string): Promise<ProboComplianceStatus[]> {
+  async getComplianceStatus(_organizationId: string): Promise<ProboComplianceStatus[]> {
     const integration = await this.getIntegration(organizationId);
     if (!integration) {
       return this.getDefaultComplianceStatus();
@@ -315,7 +314,7 @@ export class EnhancedProboService {
     ) as ProboComplianceStatus[];
   }
 
-  async getInsights(organizationId: string): Promise<ProboInsights> {
+  async getInsights(_organizationId: string): Promise<ProboInsights> {
     const integration = await this.getIntegration(organizationId);
     if (!integration) {
       return this.getDefaultInsights();
@@ -341,7 +340,7 @@ export class EnhancedProboService {
     return this.validateMetricValue(latestMetric.metricValue, ProboInsightsSchema) as ProboInsights;
   }
 
-  async getVendorSummary(organizationId: string): Promise<ProboVendorSummary> {
+  async getVendorSummary(_organizationId: string): Promise<ProboVendorSummary> {
     // Get vendor data from ProboIntegrationService
     const vendorSummary = await this.proboIntegration.getVendorAssessmentSummary();
 
@@ -388,7 +387,7 @@ export class EnhancedProboService {
       // Return as base64 string
       return combined.toString('base64');
     } catch (error) {
-      console.error('Encryption failed:', error);
+      // console.error('Encryption failed:', error);
       throw new Error('Failed to encrypt API key');
     }
   }
@@ -422,7 +421,7 @@ export class EnhancedProboService {
 
       return decrypted.toString('utf8');
     } catch (error) {
-      console.error('Decryption failed:', error);
+      // console.error('Decryption failed:', error);
       throw new Error('Failed to decrypt API key');
     }
   }
@@ -542,7 +541,7 @@ export class EnhancedProboService {
   }
 
   // Webhook Handler
-  async handleWebhook(organizationId: string, webhookData: any, signature: string): Promise<void> {
+  async handleWebhook(_organizationId: string, webhookData: any, signature: string): Promise<void> {
     const integration = await this.getIntegration(organizationId);
     if (!integration?.webhookSecret) {
       throw new Error('Webhook not configured');

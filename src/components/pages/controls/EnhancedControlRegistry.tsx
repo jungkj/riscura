@@ -152,9 +152,9 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
         prev.map(c => c.id === control.id ? updatedControl : c)
       );
 
-      console.log('AI Assessment completed:', aiAssessment);
+      // console.log('AI Assessment completed:', aiAssessment);
     } catch (error) {
-      console.error('AI analysis failed:', error);
+      // console.error('AI analysis failed:', error);
     } finally {
       setAiAnalyzing(false);
     }
@@ -166,13 +166,13 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
     try {
       const result = await enhancedControlService.performBulkOperation(operation);
       if (result.success) {
-        console.log('Bulk operation completed successfully');
+        // console.log('Bulk operation completed successfully');
         setSelectedControls([]);
       } else {
-        console.error('Bulk operation failed:', result.errors);
+        // console.error('Bulk operation failed:', result.errors);
       }
     } catch (error) {
-      console.error('Bulk operation error:', error);
+      // console.error('Bulk operation error:', error);
     } finally {
       setIsLoading(false);
     }

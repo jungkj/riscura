@@ -105,7 +105,7 @@ export default function ImportPage() {
 
   const downloadSampleTemplate = (templateName: string) => {
     // In a real app, this would download actual templates
-    console.log(`Downloading template: ${templateName}`);
+    // console.log(`Downloading template: ${templateName}`);
   };
 
   return (

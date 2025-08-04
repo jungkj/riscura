@@ -9,11 +9,11 @@ import db, {
 // Base repository interface
 export interface IBaseRepository<T> {
   findById(id: string, organizationId: string): Promise<T | null>;
-  findMany(organizationId: string, options?: PaginationOptions): Promise<T[]>;
-  create(data: Partial<T>, organizationId: string, userId?: string): Promise<T>;
+  findMany(_organizationId: string, options?: PaginationOptions): Promise<T[]>;
+  create(_data: Partial<T>, organizationId: string, userId?: string): Promise<T>;
   update(id: string, data: Partial<T>, organizationId: string, userId?: string): Promise<T>;
   delete(id: string, organizationId: string): Promise<T>;
-  count(organizationId: string): Promise<number>;
+  count(_organizationId: string): Promise<number>;
 }
 
 // Base repository implementation
@@ -42,7 +42,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Find many with pagination and organization isolation
-  async findMany(organizationId: string, options: PaginationOptions = {}): Promise<T[]> {
+  async findMany(_organizationId: string, options: PaginationOptions = {}): Promise<T[]> {
     const paginationQuery = buildPaginationQuery(options);
 
     return this.model.findMany({
@@ -54,7 +54,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Create with organization and audit fields
-  async create(data: Partial<T>, organizationId: string, userId?: string): Promise<T> {
+  async create(_data: Partial<T>, organizationId: string, userId?: string): Promise<T> {
     return this.model.create({
       data: {
         ...data,
@@ -89,7 +89,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Count with organization isolation
-  async count(organizationId: string): Promise<number> {
+  async count(_organizationId: string): Promise<number> {
     return this.model.count({
       where: {
         organizationId,
@@ -152,8 +152,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Bulk operations
-  async createMany(
-    data: Partial<T>[],
+  async createMany(_data: Partial<T>[],
     organizationId: string,
     userId?: string
   ): Promise<{ count: number }> {
@@ -194,7 +193,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Aggregation helpers
-  async aggregate(organizationId: string, aggregation: Record<string, any>): Promise<any> {
+  async aggregate(_organizationId: string, aggregation: Record<string, any>): Promise<any> {
     return this.model.aggregate({
       where: {
         organizationId,
@@ -203,8 +202,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     });
   }
 
-  async groupBy(
-    organizationId: string,
+  async groupBy(_organizationId: string,
     groupBy: string[],
     aggregation?: Record<string, any>
   ): Promise<any[]> {
@@ -218,8 +216,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Transaction support
-  async transaction<R>(
-    organizationId: string,
+  async transaction<R>(_organizationId: string,
     fn: (
       prisma: Omit<
         PrismaClient,
@@ -245,8 +242,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     });
   }
 
-  async findManyWithIncludes(
-    organizationId: string,
+  async findManyWithIncludes(_organizationId: string,
     includes: Record<string, any>,
     options: PaginationOptions = {}
   ): Promise<T[]> {
@@ -284,8 +280,7 @@ export interface RepositoryResult<T> {
 }
 
 // Helper function to create paginated results
-export function createPaginatedResult<T>(
-  data: T[],
+export function createPaginatedResult<T>(_data: T[],
   total: number,
   page: number,
   limit: number

@@ -72,18 +72,18 @@ test.describe('Critical User Journeys', () => {
         await expect(
           page.locator('[data-testid="user-menu"], .user-menu, [aria-label*="user"]')
         ).toBeVisible({ timeout: 10000 });
-        console.log('Registration successful - immediate dashboard access');
+        // console.log('Registration successful - immediate dashboard access');
       } else if (currentUrl.includes('/verify') || currentUrl.includes('/confirmation')) {
         // Email verification required
         await expect(page.locator('text=email, text=verify, text=confirmation')).toBeVisible();
-        console.log('Registration successful - email verification required');
+        // console.log('Registration successful - email verification required');
       } else {
         // Check for success message
         const successMessage = page.locator(
           '[data-testid="success-message"], .success, .alert-success'
         );
         if (await successMessage.isVisible()) {
-          console.log('Registration successful - success message displayed');
+          // console.log('Registration successful - success message displayed');
         } else {
           throw new Error(`Unexpected post-registration state: ${currentUrl}`);
         }
@@ -148,13 +148,13 @@ test.describe('Critical User Journeys', () => {
           // Verify navigation worked
           const currentUrl = page.url();
           expect(currentUrl).toContain(section.url.toLowerCase());
-          console.log(`Successfully navigated to ${section.text} section`);
+          // console.log(`Successfully navigated to ${section.text} section`);
 
           // Navigate back to dashboard
           await page.goto('/dashboard');
           await page.waitForLoadState('networkidle');
         } else {
-          console.log(`Navigation link for ${section.text} not found - skipping`);
+          // console.log(`Navigation link for ${section.text} not found - skipping`);
         }
       }
     });
@@ -173,7 +173,7 @@ test.describe('Critical User Journeys', () => {
       for (const selector of dashboardElements) {
         const element = page.locator(selector).first();
         if (await element.isVisible()) {
-          console.log(`Dashboard element found: ${selector}`);
+          // console.log(`Dashboard element found: ${selector}`);
         }
       }
 
@@ -276,7 +276,7 @@ test.describe('Critical User Journeys', () => {
       }
 
       expect(created).toBe(true);
-      console.log(`Risk "${riskTitle}" created successfully`);
+      // console.log(`Risk "${riskTitle}" created successfully`);
     });
 
     test('risk list filtering and search', async () => {
@@ -293,7 +293,7 @@ test.describe('Critical User Journeys', () => {
         await page.waitForTimeout(1000);
 
         // Verify search results are filtered
-        console.log('Search functionality tested');
+        // console.log('Search functionality tested');
       }
 
       // Test filters if available
@@ -305,7 +305,7 @@ test.describe('Critical User Journeys', () => {
         await filterButton.click();
         await page.waitForTimeout(500);
 
-        console.log('Filter functionality tested');
+        // console.log('Filter functionality tested');
       }
     });
   });
@@ -336,7 +336,7 @@ test.describe('Critical User Journeys', () => {
 
       // Verify data is still there
       await expect(page.locator(`text=${testData}`)).toBeVisible({ timeout: 10000 });
-      console.log('Data persistence verified');
+      // console.log('Data persistence verified');
     });
 
     test('form data recovery after page refresh', async () => {
@@ -359,9 +359,9 @@ test.describe('Critical User Journeys', () => {
       // Check if form data is recovered (this depends on implementation)
       const titleInput = page.locator('input[name="title"], [data-testid="risk-title"]');
       if ((await titleInput.inputValue()) === testTitle) {
-        console.log('Form data recovery working');
+        // console.log('Form data recovery working');
       } else {
-        console.log('Form data recovery not implemented (this is optional)');
+        // console.log('Form data recovery not implemented (this is optional)');
       }
     });
   });
@@ -394,9 +394,9 @@ test.describe('Critical User Journeys', () => {
           .first();
         await expect(mobileMenu).toBeVisible();
 
-        console.log('Mobile navigation tested successfully');
+        // console.log('Mobile navigation tested successfully');
       } else {
-        console.log('Mobile menu toggle not found - testing responsive layout');
+        // console.log('Mobile menu toggle not found - testing responsive layout');
 
         // Verify page is still usable on mobile
         await expect(page.locator('body')).toBeVisible();
@@ -418,7 +418,7 @@ test.describe('Critical User Journeys', () => {
         const inputBox = await titleInput.boundingBox();
         expect(inputBox?.width).toBeGreaterThan(200); // Reasonable minimum width
 
-        console.log('Mobile form usability verified');
+        // console.log('Mobile form usability verified');
       }
     });
   });
@@ -443,7 +443,7 @@ test.describe('Critical User Journeys', () => {
 
       // Verify application recovers gracefully
       await page.waitForLoadState('networkidle');
-      console.log('Network error handling tested');
+      // console.log('Network error handling tested');
     });
 
     test('form validation error display', async () => {
@@ -458,7 +458,7 @@ test.describe('Critical User Journeys', () => {
         page.locator('[data-testid*="error"], .error, .text-red, .invalid-feedback')
       ).toBeVisible({ timeout: 5000 });
 
-      console.log('Form validation error display verified');
+      // console.log('Form validation error display verified');
     });
   });
 });

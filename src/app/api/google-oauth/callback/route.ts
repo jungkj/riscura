@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
         // Verify CSRF token
         if (savedCsrf && stateData.csrf !== savedCsrf) {
-          console.warn('[Google OAuth] CSRF token mismatch');
+          // console.warn('[Google OAuth] CSRF token mismatch');
         }
 
         redirectTo = stateData.redirect || '/dashboard';
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       }
     } catch (e) {
       // State might be from old format, continue with default redirect
-      console.log('[Google OAuth] Could not parse state, using default redirect');
+      // console.log('[Google OAuth] Could not parse state, using default redirect');
     }
 
     // Exchange code for tokens
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
 
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text();
-      console.error('[Google OAuth] Token exchange failed:', error);
+      // console.error('[Google OAuth] Token exchange failed:', error);
       const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
       return NextResponse.redirect(`${baseUrl}/auth/login?error=Authentication%20failed`);
     }
@@ -84,8 +84,8 @@ export async function GET(req: NextRequest) {
       const dbModule = await import('@/lib/db');
       db = dbModule.db;
     } catch (dbError) {
-      console.error('[Google OAuth] Database import error:', dbError);
-      console.error('[Google OAuth] Environment check:', {
+      // console.error('[Google OAuth] Database import error:', dbError);
+      // console.error('[Google OAuth] Environment check:', {
         hasDbUrl: !!process.env.DATABASE_URL,
         hasDbUrlLower: !!process.env.database_url,
         hasAnyDb: !!(process.env.DATABASE_URL || process.env.database_url),
@@ -112,8 +112,8 @@ export async function GET(req: NextRequest) {
         include: { organization: true },
       });
     } catch (dbError) {
-      console.error('[Google OAuth] Database query error:', dbError);
-      console.error('[Google OAuth] Query error details:', {
+      // console.error('[Google OAuth] Database query error:', dbError);
+      // console.error('[Google OAuth] Query error details:', {
         errorName: dbError instanceof Error ? dbError.name : 'Unknown',
         errorMessage: dbError instanceof Error ? dbError.message : String(dbError),
         hasDbClient: !!db?.client,
@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (!dbUser) {
-      console.log('[Google OAuth] Creating new user:', googleUser.email);
+      // console.log('[Google OAuth] Creating new user:', googleUser.email);
 
       // Create a default organization for the user
       const orgName = googleUser.email.split('@')[1] || 'My Organization';
@@ -181,7 +181,7 @@ export async function GET(req: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
     const redirectUrl = `${baseUrl}${redirectTo}`;
 
-    console.log('[Google OAuth] Setting session cookie and redirecting:', {
+    // console.log('[Google OAuth] Setting session cookie and redirecting:', {
       baseUrl,
       redirectTo,
       redirectUrl,
@@ -210,7 +210,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    console.log('[Google OAuth] Setting cookie with options:', {
+    // console.log('[Google OAuth] Setting cookie with options:', {
       ...cookieOptions,
       sessionTokenLength: sessionToken.length,
       environment: process.env.NODE_ENV,
@@ -224,7 +224,7 @@ export async function GET(req: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('[Google OAuth] Callback error:', error);
+    // console.error('[Google OAuth] Callback error:', error);
 
     // Always redirect to login with error instead of returning JSON
     const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';

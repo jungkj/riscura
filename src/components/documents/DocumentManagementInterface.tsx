@@ -36,7 +36,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
 import FileUploadDropzone from './FileUploadDropzone';
 import EnhancedDocumentViewer from './EnhancedDocumentViewer';
 import toast from 'react-hot-toast';
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
 
 interface Document {
   id: string;
@@ -124,7 +124,7 @@ export default function DocumentManagementInterface({
       setTotalDocuments(data.meta?.total || 0);
       setTotalPages(Math.ceil((data.meta?.total || 0) / itemsPerPage));
     } catch (error) {
-      console.error('Load documents error:', error);
+      // console.error('Load documents error:', error);
       toast.error('Failed to load documents');
     } finally {
       setLoading(false);
@@ -151,7 +151,7 @@ export default function DocumentManagementInterface({
       setDocuments(prev => prev.filter(doc => doc.id !== documentId));
       setSelectedDocuments(prev => prev.filter(id => id !== documentId));
     } catch (error) {
-      console.error('Delete error:', error);
+      // console.error('Delete error:', error);
       toast.error('Failed to delete document');
     }
   };
@@ -173,7 +173,7 @@ export default function DocumentManagementInterface({
       setDocuments(prev => prev.filter(doc => !selectedDocuments.includes(doc.id)));
       setSelectedDocuments([]);
     } catch (error) {
-      console.error('Bulk delete error:', error);
+      // console.error('Bulk delete error:', error);
       toast.error('Failed to delete some documents');
     } finally {
       setBulkOperating(false);
@@ -204,7 +204,7 @@ export default function DocumentManagementInterface({
 
       toast.success(`Downloaded ${selectedDocuments.length} file(s)`);
     } catch (error) {
-      console.error('Bulk download error:', error);
+      // console.error('Bulk download error:', error);
       toast.error('Failed to download some files');
     } finally {
       setBulkOperating(false);

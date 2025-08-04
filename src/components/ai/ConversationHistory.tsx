@@ -167,7 +167,7 @@ export default function ConversationHistory({
       
       setConversations(mockConversations);
     } catch (error) {
-      console.error('Error fetching conversations:', error);
+      // console.error('Error fetching conversations:', error);
       toast({
         title: 'Error',
         description: 'Failed to load conversation history. Please try again.',

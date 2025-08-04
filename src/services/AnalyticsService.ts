@@ -1,4 +1,4 @@
-import {
+// import {
   startOfDay,
   subDays,
   format,
@@ -71,7 +71,7 @@ export interface TimeRange {
 }
 
 export class AnalyticsService {
-  async getAnalyticsData(organizationId: string, timeRange: TimeRange): Promise<AnalyticsMetrics> {
+  async getAnalyticsData(_organizationId: string, timeRange: TimeRange): Promise<AnalyticsMetrics> {
     const [risks, controls, tasks, activities] = await Promise.all([
       this.getRiskAnalytics(organizationId, timeRange),
       this.getControlAnalytics(organizationId, timeRange),
@@ -90,7 +90,7 @@ export class AnalyticsService {
     };
   }
 
-  private async getRiskAnalytics(organizationId: string, timeRange: TimeRange) {
+  private async getRiskAnalytics(_organizationId: string, timeRange: TimeRange) {
     // Get all risks
     const risks = await prisma.risk.findMany({
       where: { organizationId },
@@ -120,7 +120,7 @@ export class AnalyticsService {
     };
   }
 
-  private async getControlAnalytics(organizationId: string, timeRange: TimeRange) {
+  private async getControlAnalytics(_organizationId: string, timeRange: TimeRange) {
     // Get all controls with test executions
     const controls = await prisma.control.findMany({
       where: { organizationId },
@@ -171,7 +171,7 @@ export class AnalyticsService {
     };
   }
 
-  private async getTaskAnalytics(organizationId: string, timeRange: TimeRange) {
+  private async getTaskAnalytics(_organizationId: string, timeRange: TimeRange) {
     // Get all tasks
     const tasks = await prisma.task.findMany({
       where: {
@@ -207,7 +207,7 @@ export class AnalyticsService {
     };
   }
 
-  private async getActivityAnalytics(organizationId: string, timeRange: TimeRange) {
+  private async getActivityAnalytics(_organizationId: string, timeRange: TimeRange) {
     // Get recent activities
     const activities = await prisma.activity.findMany({
       where: {
@@ -252,7 +252,7 @@ export class AnalyticsService {
     };
   }
 
-  private async getComplianceAnalytics(organizationId: string, risks: any, controls: any) {
+  private async getComplianceAnalytics(_organizationId: string, risks: any, controls: any) {
     // Calculate overall compliance score
     const effectiveControls = Object.entries(controls.byEffectiveness)
       .filter(([status]) => status === 'EFFECTIVE')
@@ -311,7 +311,7 @@ export class AnalyticsService {
     return distribution;
   }
 
-  private async getRiskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
+  private async getRiskTrend(_organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
 
     // Query actual risk data for each day
@@ -342,8 +342,7 @@ export class AnalyticsService {
     return trendData;
   }
 
-  private async getControlTrend(
-    organizationId: string,
+  private async getControlTrend(_organizationId: string,
     timeRange: TimeRange
   ): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
@@ -376,7 +375,7 @@ export class AnalyticsService {
     return trendData;
   }
 
-  private async getTaskTrend(organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
+  private async getTaskTrend(_organizationId: string, timeRange: TimeRange): Promise<TrendData[]> {
     const days = eachDayOfInterval({ start: timeRange.start, end: timeRange.end });
 
     // Query actual task completion data for each day

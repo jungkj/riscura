@@ -19,7 +19,7 @@ export class StripeService {
     this.isEnabled = !!process.env.STRIPE_SECRET_KEY;
 
     if (!process.env.STRIPE_SECRET_KEY) {
-      console.warn('STRIPE_SECRET_KEY not configured - billing features will be disabled');
+      // console.warn('STRIPE_SECRET_KEY not configured - billing features will be disabled');
       this.stripe = null;
       return;
     }
@@ -39,8 +39,7 @@ export class StripeService {
   }
 
   // Customer Management
-  async createCustomer(
-    organizationId: string,
+  async createCustomer(_organizationId: string,
     email: string,
     name: string,
     metadata?: Record<string, any>
@@ -257,8 +256,7 @@ export class StripeService {
   }
 
   // Usage-based Billing (using manual invoice items)
-  async createUsageRecord(
-    organizationId: string,
+  async createUsageRecord(_organizationId: string,
     customerId: string,
     description: string,
     quantity: number,
@@ -403,7 +401,7 @@ export class StripeService {
         processedAt: new Date(),
       });
     } catch (error) {
-      console.error('Webhook processing failed:', error);
+      // console.error('Webhook processing failed:', error);
 
       // Log failed processing
       await this.logBillingEvent({
@@ -457,7 +455,7 @@ export class StripeService {
         break;
 
       default:
-        console.log(`Unhandled webhook event type: ${event.type}`);
+        // console.log(`Unhandled webhook event type: ${event.type}`);
     }
   }
 
@@ -481,7 +479,7 @@ export class StripeService {
       },
     });
 
-    console.log('Subscription canceled:', {
+    // console.log('Subscription canceled:', {
       stripeSubscriptionId: subscription.id,
       organizationId,
     });
@@ -525,7 +523,7 @@ export class StripeService {
       },
     });
 
-    console.log('Payment succeeded:', {
+    // console.log('Payment succeeded:', {
       stripeInvoiceId: invoice.id,
       organizationId: organization.id,
       amount: invoice.amount_paid,
@@ -558,7 +556,7 @@ export class StripeService {
       },
     });
 
-    console.log('Payment failed:', {
+    // console.log('Payment failed:', {
       stripeInvoiceId: invoice.id,
       organizationId: organization.id,
     });
@@ -598,7 +596,7 @@ export class StripeService {
     //   },
     // });
 
-    console.log('Payment intent succeeded:', {
+    // console.log('Payment intent succeeded:', {
       stripePaymentIntentId: paymentIntent.id,
     });
   }
@@ -614,7 +612,7 @@ export class StripeService {
     //   },
     // });
 
-    console.log('Payment intent failed:', {
+    // console.log('Payment intent failed:', {
       stripePaymentIntentId: paymentIntent.id,
     });
   }
@@ -627,7 +625,7 @@ export class StripeService {
     const planId = subscription.items.data[0]?.price.id;
     const sub = subscription as any; // Use any to avoid type issues
 
-    console.log('Storing subscription:', {
+    // console.log('Storing subscription:', {
       stripeSubscriptionId: subscription.id,
       organizationId,
       planId,
@@ -640,7 +638,7 @@ export class StripeService {
     });
 
     if (!plan) {
-      console.error(`No plan found for Stripe price ID: ${planId}`);
+      // console.error(`No plan found for Stripe price ID: ${planId}`);
       throw new Error(`Unable to process subscription: Plan not found for price ID ${planId}`);
     }
 
@@ -676,7 +674,7 @@ export class StripeService {
   }
 
   private async storeInvoice(invoice: Stripe.Invoice, organizationId: string): Promise<void> {
-    console.log('Storing invoice:', {
+    // console.log('Storing invoice:', {
       stripeInvoiceId: invoice.id,
       organizationId,
       invoiceNumber: invoice.number,
@@ -755,7 +753,7 @@ export class StripeService {
   }
 
   private async logBillingEvent(eventData: Partial<BillingEvent>): Promise<void> {
-    console.log('Billing event:', eventData);
+    // console.log('Billing event:', eventData);
 
     // Determine organization ID from event data
     let organizationId = 'system';

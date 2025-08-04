@@ -41,7 +41,7 @@ export class MFAService {
   /**
    * Setup TOTP MFA for a user
    */
-  async setupTOTP(userId: string, appName: string = 'Riscura'): Promise<MFASetupResult> {
+  async setupTOTP(_userId: string, appName: string = 'Riscura'): Promise<MFASetupResult> {
     const user = await this.getUserForMFA(userId);
 
     // Generate secret and QR code
@@ -74,7 +74,7 @@ export class MFAService {
   /**
    * Setup SMS MFA for a user
    */
-  async setupSMS(userId: string, phoneNumber: string): Promise<MFASetupResult> {
+  async setupSMS(_userId: string, phoneNumber: string): Promise<MFASetupResult> {
     const user = await this.getUserForMFA(userId);
 
     // Validate phone number format
@@ -114,8 +114,7 @@ export class MFAService {
   /**
    * Verify MFA setup and enable the method
    */
-  async verifySetup(
-    userId: string,
+  async verifySetup(_userId: string,
     setupToken: string,
     verificationCode: string
   ): Promise<boolean> {
@@ -167,7 +166,7 @@ export class MFAService {
   /**
    * Verify MFA code during login
    */
-  async verifyMFA(userId: string, code: string, methodId?: string): Promise<MFAVerificationResult> {
+  async verifyMFA(_userId: string, code: string, methodId?: string): Promise<MFAVerificationResult> {
     const attempts = await this.getRecentAttempts(userId);
 
     // Check if user is locked out
@@ -228,7 +227,7 @@ export class MFAService {
   /**
    * Generate new backup codes
    */
-  async regenerateBackupCodes(userId: string, methodId: string): Promise<string[]> {
+  async regenerateBackupCodes(_userId: string, methodId: string): Promise<string[]> {
     const method = await this.getMFAMethod(methodId);
     if (!method || method.userId !== userId) {
       throw new Error('MFA method not found');
@@ -248,8 +247,7 @@ export class MFAService {
   /**
    * Disable MFA method
    */
-  async disableMFAMethod(
-    userId: string,
+  async disableMFAMethod(_userId: string,
     methodId: string,
     verificationCode: string
   ): Promise<boolean> {
@@ -281,7 +279,7 @@ export class MFAService {
   /**
    * Get user's MFA status and methods
    */
-  async getUserMFAStatus(userId: string): Promise<{
+  async getUserMFAStatus(_userId: string): Promise<{
     isEnabled: boolean;
     methods: Array<{
       id: string;
@@ -311,7 +309,7 @@ export class MFAService {
   }
 
   // Private helper methods
-  private async getUserForMFA(userId: string) {
+  private async getUserForMFA(_userId: string) {
     // TODO: Implement with actual database query
     return { id: userId, email: 'user@example.com' };
   }
@@ -329,7 +327,7 @@ export class MFAService {
     return codes;
   }
 
-  private generateSetupToken(userId: string, secret: string): string {
+  private generateSetupToken(_userId: string, secret: string): string {
     const payload = {
       userId,
       secretHash: crypto.createHash('sha256').update(secret).digest('hex'),
@@ -350,24 +348,24 @@ export class MFAService {
 
   private async sendSMS(phoneNumber: string, message: string): Promise<void> {
     // TODO: Implement SMS sending (Twilio, AWS SNS, etc.)
-    console.log(`SMS to ${phoneNumber}: ${message}`);
+    // console.log(`SMS to ${phoneNumber}: ${message}`);
   }
 
-  private async storeTempMFASetup(userId: string, setup: any): Promise<void> {
+  private async storeTempMFASetup(_userId: string, setup: any): Promise<void> {
     // TODO: Implement with Redis or database
-    console.log(`Storing temp MFA setup for user ${userId}`);
+    // console.log(`Storing temp MFA setup for user ${userId}`);
   }
 
-  private async getTempMFASetup(userId: string, setupToken: string): Promise<any> {
+  private async getTempMFASetup(_userId: string, setupToken: string): Promise<any> {
     // TODO: Implement with Redis or database
     return null;
   }
 
-  private async cleanupTempMFASetup(userId: string, setupToken: string): Promise<void> {
+  private async cleanupTempMFASetup(_userId: string, setupToken: string): Promise<void> {
     // TODO: Implement cleanup
   }
 
-  private async isFirstMFAMethod(userId: string): Promise<boolean> {
+  private async isFirstMFAMethod(_userId: string): Promise<boolean> {
     const methods = await this.getUserMFAMethods(userId);
     return methods.length === 0;
   }
@@ -376,7 +374,7 @@ export class MFAService {
     // TODO: Implement with database
   }
 
-  private async getUserMFAMethods(userId: string): Promise<MFAMethod[]> {
+  private async getUserMFAMethods(_userId: string): Promise<MFAMethod[]> {
     // TODO: Implement with database
     return [];
   }
@@ -418,16 +416,16 @@ export class MFAService {
     await this.updateMFAMethod(methodId, { lastUsed: new Date() });
   }
 
-  private async getRecentAttempts(userId: string): Promise<Array<{ timestamp: Date }>> {
+  private async getRecentAttempts(_userId: string): Promise<Array<{ timestamp: Date }>> {
     // TODO: Implement with database - get attempts from last 15 minutes
     return [];
   }
 
-  private async recordFailedAttempt(userId: string): Promise<void> {
+  private async recordFailedAttempt(_userId: string): Promise<void> {
     // TODO: Implement with database
   }
 
-  private async clearFailedAttempts(userId: string): Promise<void> {
+  private async clearFailedAttempts(_userId: string): Promise<void> {
     // TODO: Implement with database
   }
 

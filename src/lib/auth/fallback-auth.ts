@@ -95,7 +95,7 @@ export const fallbackAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
-      console.log('[FallbackAuth] Sign in attempt:', {
+      // console.log('[FallbackAuth] Sign in attempt:', {
         provider: account?.provider,
         email: user?.email,
       });
@@ -143,8 +143,8 @@ export const fallbackAuthOptions: NextAuthOptions = {
 };
 
 export function createFallbackAuth(): NextAuthOptions {
-  console.log('[FallbackAuth] Creating fallback authentication configuration');
-  console.log('[FallbackAuth] Available providers:', fallbackAuthOptions.providers.length);
+  // console.log('[FallbackAuth] Creating fallback authentication configuration');
+  // console.log('[FallbackAuth] Available providers:', fallbackAuthOptions.providers.length);
 
   return fallbackAuthOptions;
 }

@@ -752,7 +752,7 @@ Contact support if issues persist.`,
    */
   private async sendTicketNotifications(ticket: SupportTicket, event: string): Promise<void> {
     // Implementation would send emails, Slack messages, etc.
-    console.log(`Sending ${event} notification for ticket ${ticket.id}`);
+    // console.log(`Sending ${event} notification for ticket ${ticket.id}`);
   }
 
   /**
@@ -763,7 +763,7 @@ Contact support if issues persist.`,
     response: TicketResponse
   ): Promise<void> {
     // Implementation would notify appropriate parties
-    console.log(`Sending response notification for ticket ${ticket.id}`);
+    // console.log(`Sending response notification for ticket ${ticket.id}`);
   }
 
   /**
@@ -774,7 +774,7 @@ Contact support if issues persist.`,
     rule: EscalationRule
   ): Promise<void> {
     // Implementation would notify management
-    console.log(`Sending escalation notification for ticket ${ticket.id} (rule: ${rule.name})`);
+    // console.log(`Sending escalation notification for ticket ${ticket.id} (rule: ${rule.name})`);
   }
 
   /**

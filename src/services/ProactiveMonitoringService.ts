@@ -76,14 +76,14 @@ interface PredictiveResult {
 
 // Supporting interfaces for schedule management
 interface ScheduleManager {
-  scheduleTask(task: MonitoringTask): Promise<void>;
+  scheduleTask(_task: MonitoringTask): Promise<void>;
   cancelTask(taskId: string): Promise<void>;
   updateSchedule(taskId: string, schedule: unknown): Promise<void>;
   getActiveSchedules(): Promise<ScheduledAnalysis[]>;
 }
 
 interface MonitoringQueue {
-  enqueue(task: MonitoringTask): Promise<void>;
+  enqueue(_task: MonitoringTask): Promise<void>;
   dequeue(): Promise<MonitoringTask | null>;
   peek(): Promise<MonitoringTask | null>;
   size(): Promise<number>;
@@ -92,7 +92,7 @@ interface MonitoringQueue {
 
 // Enhanced AI Queue for background processing
 interface AIProcessingQueue {
-  enqueue(task: AIProcessingTask): Promise<void>;
+  enqueue(_task: AIProcessingTask): Promise<void>;
   dequeue(): Promise<AIProcessingTask | null>;
   peek(): Promise<AIProcessingTask | null>;
   size(): Promise<number>;
@@ -127,7 +127,7 @@ interface EmergingRisk {
 class InMemoryMonitoringQueue implements MonitoringQueue {
   private queue: MonitoringTask[] = [];
 
-  async enqueue(task: MonitoringTask): Promise<void> {
+  async enqueue(_task: MonitoringTask): Promise<void> {
     this.queue.push(task);
     // Sort by priority (assuming higher priority first)
     this.queue.sort(
@@ -165,7 +165,7 @@ class InMemoryMonitoringQueue implements MonitoringQueue {
 class InMemoryAIProcessingQueue implements AIProcessingQueue {
   private queue: AIProcessingTask[] = [];
 
-  async enqueue(task: AIProcessingTask): Promise<void> {
+  async enqueue(_task: AIProcessingTask): Promise<void> {
     this.queue.push(task);
     // Sort by priority
     this.queue.sort(
@@ -216,7 +216,7 @@ class InMemoryAIProcessingQueue implements AIProcessingQueue {
 class InMemoryScheduleManager implements ScheduleManager {
   private schedules: Map<string, ScheduledAnalysis> = new Map();
 
-  async scheduleTask(task: MonitoringTask): Promise<void> {
+  async scheduleTask(_task: MonitoringTask): Promise<void> {
     const schedule: ScheduledAnalysis = {
       id: generateId('schedule'),
       name: `Auto-generated ${task.type} analysis`,
@@ -290,9 +290,9 @@ class InMemoryScheduleManager implements ScheduleManager {
 // Stub services for development
 interface AIAnalysisService {
   analyzeRisk(risk: Risk): Promise<unknown>;
-  analyzeTrend(data: unknown[]): Promise<TrendAnalysisResult>;
-  detectAnomalies(data: unknown[]): Promise<unknown[]>;
-  generateInsights(context: unknown): Promise<ProactiveInsight[]>;
+  analyzeTrend(_data: unknown[]): Promise<TrendAnalysisResult>;
+  detectAnomalies(_data: unknown[]): Promise<unknown[]>;
+  generateInsights(_context: unknown): Promise<ProactiveInsight[]>;
 }
 
 interface DataRetrievalService {
@@ -311,8 +311,8 @@ interface CacheService {
 
 interface EventService {
   emit(event: string, data: unknown): Promise<void>;
-  subscribe(event: string, handler: (data: unknown) => void): void;
-  unsubscribe(event: string, handler: (data: unknown) => void): void;
+  subscribe(event: string, handler: (_data: unknown) => void): void;
+  unsubscribe(event: string, handler: (_data: unknown) => void): void;
 }
 
 interface PerformanceService {
@@ -405,9 +405,9 @@ export class ProactiveMonitoringService {
   /**
    * Start continuous monitoring for a user
    */
-  async startContinuousMonitoring(userId: string): Promise<void> {
+  async startContinuousMonitoring(_userId: string): Promise<void> {
     try {
-      console.log(`Starting continuous monitoring for user: ${userId}`);
+      // console.log(`Starting continuous monitoring for user: ${userId}`);
 
       // Get user context and organization setup
       const userContext = await this.getUserContext(userId);
@@ -441,7 +441,7 @@ export class ProactiveMonitoringService {
         timestamp: new Date(),
       });
     } catch (error) {
-      console.error(`Error starting continuous monitoring for user ${userId}:`, error);
+      // console.error(`Error starting continuous monitoring for user ${userId}:`, error);
       throw new Error('Failed to start continuous monitoring');
     }
   }
@@ -449,11 +449,11 @@ export class ProactiveMonitoringService {
   /**
    * Stop continuous monitoring for a user
    */
-  async stopContinuousMonitoring(userId: string): Promise<void> {
+  async stopContinuousMonitoring(_userId: string): Promise<void> {
     try {
       const session = this.activeMonitors.get(userId);
       if (!session) {
-        console.warn(`No active monitoring session found for user: ${userId}`);
+        // console.warn(`No active monitoring session found for user: ${userId}`);
         return;
       }
 
@@ -475,7 +475,7 @@ export class ProactiveMonitoringService {
         timestamp: new Date(),
       });
     } catch (error) {
-      console.error(`Error stopping continuous monitoring for user ${userId}:`, error);
+      // console.error(`Error stopping continuous monitoring for user ${userId}:`, error);
       throw new Error('Failed to stop continuous monitoring');
     }
   }
@@ -516,7 +516,7 @@ export class ProactiveMonitoringService {
 
       return scheduledAnalysis;
     } catch (error) {
-      console.error('Error scheduling analysis:', error);
+      // console.error('Error scheduling analysis:', error);
       throw new Error('Failed to schedule analysis');
     }
   }
@@ -524,7 +524,7 @@ export class ProactiveMonitoringService {
   /**
    * Generate proactive insights based on user context
    */
-  async generateProactiveInsights(context: UserContext): Promise<ProactiveInsight[]> {
+  async generateProactiveInsights(_context: UserContext): Promise<ProactiveInsight[]> {
     try {
       const insights: ProactiveInsight[] = [];
 
@@ -554,7 +554,7 @@ export class ProactiveMonitoringService {
       // Limit to top 20 insights to avoid overwhelming users
       return prioritizedInsights.slice(0, 20);
     } catch (error) {
-      console.error('Error generating proactive insights:', error);
+      // console.error('Error generating proactive insights:', error);
       throw new Error('Failed to generate proactive insights');
     }
   }
@@ -562,7 +562,7 @@ export class ProactiveMonitoringService {
   /**
    * Execute scheduled monitoring task
    */
-  async executeMonitoringTask(task: MonitoringTask): Promise<MonitoringResult> {
+  async executeMonitoringTask(_task: MonitoringTask): Promise<MonitoringResult> {
     try {
       const startTime = Date.now();
 
@@ -614,7 +614,7 @@ export class ProactiveMonitoringService {
 
       return result;
     } catch (error) {
-      console.error(`Error executing monitoring task ${task.id}:`, error);
+      // console.error(`Error executing monitoring task ${task.id}:`, error);
 
       // Update task status to failed
       task.status = 'failed';
@@ -627,7 +627,7 @@ export class ProactiveMonitoringService {
   /**
    * Get monitoring status for a user
    */
-  async getMonitoringStatus(userId: string): Promise<MonitoringStatus> {
+  async getMonitoringStatus(_userId: string): Promise<MonitoringStatus> {
     try {
       const session = this.activeMonitors.get(userId);
 
@@ -660,7 +660,7 @@ export class ProactiveMonitoringService {
         recentResults,
       };
     } catch (error) {
-      console.error(`Error getting monitoring status for user ${userId}:`, error);
+      // console.error(`Error getting monitoring status for user ${userId}:`, error);
       throw new Error('Failed to get monitoring status');
     }
   }
@@ -670,14 +670,14 @@ export class ProactiveMonitoringService {
     if (this.isMonitoring) return;
 
     this.isMonitoring = true;
-    console.log('Starting monitoring loop');
+    // console.log('Starting monitoring loop');
 
     // Process monitoring queue every 30 seconds
     this.monitoringInterval = setInterval(async () => {
       try {
         await this.processMonitoringQueue();
       } catch (error) {
-        console.error('Error in monitoring loop:', error);
+        // console.error('Error in monitoring loop:', error);
       }
     }, 30000);
   }
@@ -692,14 +692,14 @@ export class ProactiveMonitoringService {
       this.monitoringInterval = null;
     }
 
-    console.log('Stopped monitoring loop');
+    // console.log('Stopped monitoring loop');
   }
 
   private async processMonitoringQueue(): Promise<void> {
     const queueSize = await this.monitoringQueue.size();
     if (queueSize === 0) return;
 
-    console.log(`Processing monitoring queue with ${queueSize} tasks`);
+    // console.log(`Processing monitoring queue with ${queueSize} tasks`);
 
     // Process tasks in batches to avoid overwhelming the system
     const batchSize = 5;
@@ -715,7 +715,7 @@ export class ProactiveMonitoringService {
     // Execute tasks in parallel
     const taskPromises = tasksToProcess.map((task) =>
       this.executeMonitoringTask(task).catch((error): MonitoringResult | null => {
-        console.error(`Task ${task.id} failed:`, error);
+        // console.error(`Task ${task.id} failed:`, error);
         return null;
       })
     );
@@ -723,7 +723,7 @@ export class ProactiveMonitoringService {
     await Promise.all(taskPromises);
   }
 
-  private async getUserContext(userId: string): Promise<UserContext> {
+  private async getUserContext(_userId: string): Promise<UserContext> {
     // Get user context from cache or data service
     const cached = await this.cacheService.get(`user_context:${userId}`);
     if (cached) return cached as UserContext;
@@ -734,7 +734,7 @@ export class ProactiveMonitoringService {
     return userContext;
   }
 
-  private async getOrganizationContext(organizationId: string): Promise<OrganizationContext> {
+  private async getOrganizationContext(_organizationId: string): Promise<OrganizationContext> {
     const cached = await this.cacheService.get(`org_context:${organizationId}`);
     if (cached) return cached as OrganizationContext;
 
@@ -744,8 +744,7 @@ export class ProactiveMonitoringService {
     return orgContext;
   }
 
-  private async createMonitoringSession(
-    userId: string,
+  private async createMonitoringSession(_userId: string,
     userContext: UserContext,
     orgContext: OrganizationContext
   ): Promise<MonitoringSession> {
@@ -764,8 +763,7 @@ export class ProactiveMonitoringService {
     };
   }
 
-  private async scheduleRiskRegisterAnalysis(
-    userId: string,
+  private async scheduleRiskRegisterAnalysis(_userId: string,
     orgContext: OrganizationContext
   ): Promise<void> {
     const riskIds = orgContext.currentRiskLandscape.map((risk) => risk.id);
@@ -789,8 +787,7 @@ export class ProactiveMonitoringService {
     await this.monitoringQueue.enqueue(task);
   }
 
-  private async scheduleEmergingRiskDetection(
-    userId: string,
+  private async scheduleEmergingRiskDetection(_userId: string,
     orgContext: OrganizationContext
   ): Promise<void> {
     const task: MonitoringTask = {
@@ -812,8 +809,7 @@ export class ProactiveMonitoringService {
     await this.monitoringQueue.enqueue(task);
   }
 
-  private async scheduleControlEffectivenessMonitoring(
-    userId: string,
+  private async scheduleControlEffectivenessMonitoring(_userId: string,
     orgContext: OrganizationContext
   ): Promise<void> {
     // Get all controls from the organization
@@ -841,8 +837,7 @@ export class ProactiveMonitoringService {
     }
   }
 
-  private async scheduleComplianceStatusTracking(
-    userId: string,
+  private async scheduleComplianceStatusTracking(_userId: string,
     orgContext: OrganizationContext
   ): Promise<void> {
     for (const framework of orgContext.regulatoryEnvironment) {
@@ -866,7 +861,7 @@ export class ProactiveMonitoringService {
     }
   }
 
-  private async identifyRisksRequiringAttention(context: UserContext): Promise<ProactiveInsight[]> {
+  private async identifyRisksRequiringAttention(_context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
 
     // Analyze active risks for urgent attention
@@ -969,7 +964,7 @@ export class ProactiveMonitoringService {
     return insights;
   }
 
-  private async identifyOutdatedAssessments(context: UserContext): Promise<ProactiveInsight[]> {
+  private async identifyOutdatedAssessments(_context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
 
     // Check for assessments that haven't been updated in 6+ months
@@ -1072,7 +1067,7 @@ export class ProactiveMonitoringService {
     return insights;
   }
 
-  private async identifyControlTestingDue(context: UserContext): Promise<ProactiveInsight[]> {
+  private async identifyControlTestingDue(_context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
 
     // Check upcoming deadlines for control testing
@@ -1168,7 +1163,7 @@ export class ProactiveMonitoringService {
     return insights;
   }
 
-  private async identifyEmergingIndustryRisks(context: UserContext): Promise<ProactiveInsight[]> {
+  private async identifyEmergingIndustryRisks(_context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
 
     // Get external intelligence about emerging risks
@@ -1271,7 +1266,7 @@ export class ProactiveMonitoringService {
     return insights;
   }
 
-  private async identifyWorkflowInefficiencies(context: UserContext): Promise<ProactiveInsight[]> {
+  private async identifyWorkflowInefficiencies(_context: UserContext): Promise<ProactiveInsight[]> {
     const insights: ProactiveInsight[] = [];
 
     // Analyze recent activities for efficiency patterns
@@ -1516,7 +1511,7 @@ export class ProactiveMonitoringService {
     return await this.dataService.getEntityData(targetId, targetType);
   }
 
-  private async performAnalysis(task: MonitoringTask, targetData: unknown): Promise<unknown> {
+  private async performAnalysis(_task: MonitoringTask, targetData: unknown): Promise<unknown> {
     // Mock analysis implementation
     return {
       status: 'completed',
@@ -1526,7 +1521,7 @@ export class ProactiveMonitoringService {
   }
 
   private async generateFindings(
-    task: MonitoringTask,
+    _task: MonitoringTask,
     analysisResult: unknown
   ): Promise<MonitoringFinding[]> {
     // Mock findings generation
@@ -1534,7 +1529,7 @@ export class ProactiveMonitoringService {
   }
 
   private async generateInsights(
-    task: MonitoringTask,
+    _task: MonitoringTask,
     analysisResult: unknown,
     findings: MonitoringFinding[]
   ): Promise<ProactiveInsight[]> {
@@ -1561,7 +1556,7 @@ export class ProactiveMonitoringService {
     };
   }
 
-  private async getEmergingRisks(organizationId: string): Promise<EmergingRisk[]> {
+  private async getEmergingRisks(_organizationId: string): Promise<EmergingRisk[]> {
     // Mock emerging risks
     return [
       {
@@ -1599,7 +1594,7 @@ export class ProactiveMonitoringService {
     return Math.round(avgInsightConfidence);
   }
 
-  private async cancelUserTasks(userId: string): Promise<void> {
+  private async cancelUserTasks(_userId: string): Promise<void> {
     // Implementation to cancel all tasks for a user
     await this.scheduleManager.cancelTask(userId);
   }
@@ -1647,14 +1642,14 @@ interface MonitoringStatus {
 // Service interfaces
 interface AIAnalysisService {
   analyzeRisk(risk: Risk): Promise<unknown>;
-  analyzeTrend(data: unknown[]): Promise<TrendAnalysisResult>;
-  detectAnomalies(data: unknown[]): Promise<unknown[]>;
-  generateInsights(context: unknown): Promise<ProactiveInsight[]>;
-  getEmergingRisks(organizationId: string): Promise<EmergingRisk[]>;
-  performAnalysis(type: AnalysisType, data: unknown, metadata: unknown): Promise<unknown>;
-  generateFindings(task: MonitoringTask, result: unknown): Promise<MonitoringFinding[]>;
+  analyzeTrend(_data: unknown[]): Promise<TrendAnalysisResult>;
+  detectAnomalies(_data: unknown[]): Promise<unknown[]>;
+  generateInsights(_context: unknown): Promise<ProactiveInsight[]>;
+  getEmergingRisks(_organizationId: string): Promise<EmergingRisk[]>;
+  performAnalysis(_type: AnalysisType, data: unknown, metadata: unknown): Promise<unknown>;
+  generateFindings(_task: MonitoringTask, result: unknown): Promise<MonitoringFinding[]>;
   generateInsights(
-    task: MonitoringTask,
+    _task: MonitoringTask,
     result: unknown,
     findings: MonitoringFinding[]
   ): Promise<ProactiveInsight[]>;
@@ -1665,9 +1660,9 @@ interface AIAnalysisService {
 }
 
 interface DataRetrievalService {
-  getUserContext(userId: string): Promise<UserContext>;
-  getOrganizationContext(organizationId: string): Promise<OrganizationContext>;
-  getOrganizationControls(organizationId: string): Promise<Control[]>;
+  getUserContext(_userId: string): Promise<UserContext>;
+  getOrganizationContext(_organizationId: string): Promise<OrganizationContext>;
+  getOrganizationControls(_organizationId: string): Promise<Control[]>;
   getRisk(riskId: string): Promise<Risk | null>;
   getEntityData(entityId: string, entityType: string): Promise<unknown>;
   getRiskData(riskId: string): Promise<Risk | null>;
@@ -1685,8 +1680,8 @@ interface CacheService {
 
 interface EventService {
   emit(event: string, data: unknown): Promise<void>;
-  subscribe(event: string, handler: (data: unknown) => void): void;
-  unsubscribe(event: string, handler: (data: unknown) => void): void;
+  subscribe(event: string, handler: (_data: unknown) => void): void;
+  unsubscribe(event: string, handler: (_data: unknown) => void): void;
 }
 
 interface PerformanceService {
@@ -1703,7 +1698,7 @@ class InMemoryDataService implements DataRetrievalService {
   private users: Map<string, UserContext> = new Map();
   private organizations: Map<string, OrganizationContext> = new Map();
 
-  async getUserContext(userId: string): Promise<UserContext> {
+  async getUserContext(_userId: string): Promise<UserContext> {
     // Mock user context with minimal required properties
     return {
       userId,
@@ -1755,7 +1750,7 @@ class InMemoryDataService implements DataRetrievalService {
     };
   }
 
-  async getOrganizationContext(organizationId: string): Promise<OrganizationContext> {
+  async getOrganizationContext(_organizationId: string): Promise<OrganizationContext> {
     // Mock organization context with required properties
     return {
       id: organizationId,
@@ -1793,7 +1788,7 @@ class InMemoryDataService implements DataRetrievalService {
     };
   }
 
-  async getOrganizationControls(organizationId: string): Promise<Control[]> {
+  async getOrganizationControls(_organizationId: string): Promise<Control[]> {
     // Mock controls with basic structure
     return [
       {
@@ -1824,12 +1819,12 @@ class InMemoryDataService implements DataRetrievalService {
   }
 
   async getHistoricalData(entityId: string, timeRange: unknown): Promise<unknown[]> {
-    console.log('Getting historical data for', entityId, timeRange);
+    // console.log('Getting historical data for', entityId, timeRange);
     return [];
   }
 
   async getPerformanceMetrics(entityId: string): Promise<PerformanceMetrics> {
-    console.log('Getting performance metrics for', entityId);
+    // console.log('Getting performance metrics for', entityId);
     // Return a structure that matches the complex PerformanceMetrics interface
     return {
       system: {
@@ -1896,7 +1891,7 @@ class InMemoryDataService implements DataRetrievalService {
   }
 
   async getEntityData(entityId: string, entityType: string): Promise<unknown> {
-    console.log('Getting entity data for', entityId, entityType);
+    // console.log('Getting entity data for', entityId, entityType);
     return null;
   }
 }
@@ -1933,7 +1928,7 @@ class InMemoryCacheService implements CacheService {
 }
 
 class InMemoryEventService implements EventService {
-  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
+  private listeners: Map<string, Array<(_data: unknown) => void>> = new Map();
 
   async emit(event: string, data: unknown): Promise<void> {
     const handlers = this.listeners.get(event) || [];
@@ -1941,18 +1936,18 @@ class InMemoryEventService implements EventService {
       try {
         handler(data);
       } catch (error) {
-        console.error('Error in event handler:', error);
+        // console.error('Error in event handler:', error);
       }
     });
   }
 
-  subscribe(event: string, handler: (data: unknown) => void): void {
+  subscribe(event: string, handler: (_data: unknown) => void): void {
     const handlers = this.listeners.get(event) || [];
     handlers.push(handler);
     this.listeners.set(event, handlers);
   }
 
-  unsubscribe(event: string, handler: (data: unknown) => void): void {
+  unsubscribe(event: string, handler: (_data: unknown) => void): void {
     const handlers = this.listeners.get(event) || [];
     const index = handlers.indexOf(handler);
     if (index > -1) {

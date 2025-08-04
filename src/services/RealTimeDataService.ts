@@ -39,8 +39,7 @@ export class RealTimeDataService {
   /**
    * Subscribe to real-time changes for an organization
    */
-  subscribeToOrganization(
-    organizationId: string,
+  subscribeToOrganization(_organizationId: string,
     callbacks: RealTimeCallbacks
   ): RealTimeSubscription {
     const channelName = `org-${organizationId}`;
@@ -59,7 +58,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          console.log('Risk change:', payload);
+          // console.log('Risk change:', payload);
           callbacks.onRiskChange?.(payload as RealtimePostgresChangesPayload<Risk>);
         }
       )
@@ -72,7 +71,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          console.log('Control change:', payload);
+          // console.log('Control change:', payload);
           callbacks.onControlChange?.(payload as RealtimePostgresChangesPayload<Control>);
         }
       )
@@ -85,7 +84,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          console.log('Document change:', payload);
+          // console.log('Document change:', payload);
           callbacks.onDocumentChange?.(payload as RealtimePostgresChangesPayload<Document>);
         }
       )
@@ -98,7 +97,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          console.log('Activity change:', payload);
+          // console.log('Activity change:', payload);
           callbacks.onActivityChange?.(payload as RealtimePostgresChangesPayload<Activity>);
         }
       )
@@ -111,7 +110,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          console.log('User change:', payload);
+          // console.log('User change:', payload);
           callbacks.onUserChange?.(payload as RealtimePostgresChangesPayload<User>);
         }
       )
@@ -195,7 +194,7 @@ export class RealTimeDataService {
   /**
    * Get risks with real-time subscription
    */
-  async getRisks(organizationId: string): Promise<Risk[]> {
+  async getRisks(_organizationId: string): Promise<Risk[]> {
     const { data, error } = await supabase
       .from('risks')
       .select('*')
@@ -203,7 +202,7 @@ export class RealTimeDataService {
       .order('createdAt', { ascending: false });
 
     if (error) {
-      console.error('Error fetching risks:', error);
+      // console.error('Error fetching risks:', error);
       throw error;
     }
 
@@ -217,7 +216,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('risks').insert(risk).select().single();
 
     if (error) {
-      console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error);
       throw error;
     }
 
@@ -246,7 +245,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      console.error('Error updating risk:', error);
+      // console.error('Error updating risk:', error);
       throw error;
     }
 
@@ -260,7 +259,7 @@ export class RealTimeDataService {
     const { error } = await supabase.from('risks').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting risk:', error);
+      // console.error('Error deleting risk:', error);
       throw error;
     }
   }
@@ -268,7 +267,7 @@ export class RealTimeDataService {
   /**
    * Get controls with real-time subscription
    */
-  async getControls(organizationId: string): Promise<Control[]> {
+  async getControls(_organizationId: string): Promise<Control[]> {
     const { data, error } = await supabase
       .from('controls')
       .select('*')
@@ -276,7 +275,7 @@ export class RealTimeDataService {
       .order('createdAt', { ascending: false });
 
     if (error) {
-      console.error('Error fetching controls:', error);
+      // console.error('Error fetching controls:', error);
       throw error;
     }
 
@@ -290,7 +289,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('controls').insert(control).select().single();
 
     if (error) {
-      console.error('Error creating control:', error);
+      // console.error('Error creating control:', error);
       throw error;
     }
 
@@ -319,7 +318,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      console.error('Error updating control:', error);
+      // console.error('Error updating control:', error);
       throw error;
     }
 
@@ -329,7 +328,7 @@ export class RealTimeDataService {
   /**
    * Get documents
    */
-  async getDocuments(organizationId: string): Promise<Document[]> {
+  async getDocuments(_organizationId: string): Promise<Document[]> {
     const { data, error } = await supabase
       .from('documents')
       .select('*')
@@ -337,7 +336,7 @@ export class RealTimeDataService {
       .order('createdAt', { ascending: false });
 
     if (error) {
-      console.error('Error fetching documents:', error);
+      // console.error('Error fetching documents:', error);
       throw error;
     }
 
@@ -347,7 +346,7 @@ export class RealTimeDataService {
   /**
    * Get recent activities
    */
-  async getActivities(organizationId: string, limit: number = 50): Promise<Activity[]> {
+  async getActivities(_organizationId: string, limit: number = 50): Promise<Activity[]> {
     const { data, error } = await supabase
       .from('activities')
       .select('*')
@@ -356,7 +355,7 @@ export class RealTimeDataService {
       .limit(limit);
 
     if (error) {
-      console.error('Error fetching activities:', error);
+      // console.error('Error fetching activities:', error);
       throw error;
     }
 
@@ -370,7 +369,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('activities').insert(activity).select().single();
 
     if (error) {
-      console.error('Error logging activity:', error);
+      // console.error('Error logging activity:', error);
       throw error;
     }
 
@@ -380,7 +379,7 @@ export class RealTimeDataService {
   /**
    * Get organization data
    */
-  async getOrganization(organizationId: string): Promise<Organization> {
+  async getOrganization(_organizationId: string): Promise<Organization> {
     const { data, error } = await supabase
       .from('organizations')
       .select('*')
@@ -388,7 +387,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      console.error('Error fetching organization:', error);
+      // console.error('Error fetching organization:', error);
       throw error;
     }
 
@@ -398,7 +397,7 @@ export class RealTimeDataService {
   /**
    * Get users in organization
    */
-  async getUsers(organizationId: string): Promise<User[]> {
+  async getUsers(_organizationId: string): Promise<User[]> {
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -407,7 +406,7 @@ export class RealTimeDataService {
       .order('firstName', { ascending: true });
 
     if (error) {
-      console.error('Error fetching users:', error);
+      // console.error('Error fetching users:', error);
       throw error;
     }
 
@@ -421,14 +420,14 @@ export class RealTimeDataService {
   /**
    * Get risk metrics for dashboard
    */
-  async getRiskMetrics(organizationId: string) {
+  async getRiskMetrics(_organizationId: string) {
     const { data: risks, error } = await supabase
       .from('risks')
       .select('*')
       .eq('organizationId', organizationId);
 
     if (error) {
-      console.error('Error fetching risk metrics:', error);
+      // console.error('Error fetching risk metrics:', error);
       throw error;
     }
 
@@ -468,14 +467,14 @@ export class RealTimeDataService {
   /**
    * Get control metrics for dashboard
    */
-  async getControlMetrics(organizationId: string) {
+  async getControlMetrics(_organizationId: string) {
     const { data: controls, error } = await supabase
       .from('controls')
       .select('*')
       .eq('organizationId', organizationId);
 
     if (error) {
-      console.error('Error fetching control metrics:', error);
+      // console.error('Error fetching control metrics:', error);
       throw error;
     }
 

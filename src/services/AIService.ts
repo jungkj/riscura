@@ -355,7 +355,7 @@ export class AIService {
     return this._anthropic;
   }
 
-  constructor(config: Partial<AIConfig> = {}) {
+  constructor(_config: Partial<AIConfig> = {}) {
     this.config = {
       apiKey: '',
       baseURL: '/api/ai/proxy',
@@ -461,7 +461,7 @@ export class AIService {
       // Get organization context
       const orgContext = await this.getOrganizationContext(organizationId);
 
-      const prompt = this.buildRiskAnalysisPrompt(riskData, historicalRisks, orgContext);
+      const _prompt = this.buildRiskAnalysisPrompt(riskData, historicalRisks, orgContext);
 
       const response = await this.openai.chat.completions.create({
         model: 'gpt-4',
@@ -491,7 +491,7 @@ export class AIService {
 
       return analysis;
     } catch (error) {
-      console.error('Risk analysis failed:', error);
+      // console.error('Risk analysis failed:', error);
       throw new Error('AI risk analysis failed');
     }
   }
@@ -507,7 +507,7 @@ export class AIService {
       // Get industry best practices
       const industryContext = await this.getIndustryContext(organizationId);
 
-      const prompt = this.buildControlRecommendationPrompt(risk, existingControls, industryContext);
+      const _prompt = this.buildControlRecommendationPrompt(risk, existingControls, industryContext);
 
       const response = await this.anthropic.messages.create({
         model: 'claude-3-sonnet-20240229',
@@ -529,7 +529,7 @@ export class AIService {
       // Rank recommendations by effectiveness and feasibility
       return this.rankControlRecommendations(recommendations, risk);
     } catch (error) {
-      console.error('Control recommendation failed:', error);
+      // console.error('Control recommendation failed:', error);
       throw new Error('AI control recommendation failed');
     }
   }
@@ -548,7 +548,7 @@ export class AIService {
       // Get framework requirements
       const frameworkRequirements = await this.getFrameworkRequirements(framework);
 
-      const prompt = this.buildComplianceGapPrompt(
+      const _prompt = this.buildComplianceGapPrompt(
         complianceData,
         frameworkRequirements,
         framework
@@ -572,7 +572,7 @@ export class AIService {
 
       return this.parseComplianceGaps(response.choices[0].message.content || '');
     } catch (error) {
-      console.error('Compliance gap analysis failed:', error);
+      // console.error('Compliance gap analysis failed:', error);
       throw new Error('AI compliance analysis failed');
     }
   }
@@ -585,7 +585,7 @@ export class AIService {
       const riskSummary = this.summarizeRisks(risks);
       const trends = await this.analyzeRiskTrends(risks, organizationId);
 
-      const prompt = `Generate a comprehensive executive risk report based on the following data:
+      const _prompt = `Generate a comprehensive executive risk report based on the following data:
 
 Risk Summary: ${JSON.stringify(riskSummary)}
 Trends Analysis: ${JSON.stringify(trends)}
@@ -614,7 +614,7 @@ Format as a professional report with clear sections and actionable recommendatio
         ? response.content[0].text
         : JSON.stringify(response.content[0]);
     } catch (error) {
-      console.error('Risk report generation failed:', error);
+      // console.error('Risk report generation failed:', error);
       throw new Error('AI report generation failed');
     }
   }
@@ -637,7 +637,7 @@ Format as a professional report with clear sections and actionable recommendatio
       // Get relevant data based on intent
       const contextData = await this.getRelevantData(intent, organizationId);
 
-      const prompt = this.buildChatPrompt(query, history, contextData, intent);
+      const _prompt = this.buildChatPrompt(query, history, contextData, intent);
 
       const response = await this.openai.chat.completions.create({
         model: 'gpt-4',
@@ -669,7 +669,7 @@ Format as a professional report with clear sections and actionable recommendatio
 
       return chatResponse;
     } catch (error) {
-      console.error('Natural language query failed:', error);
+      // console.error('Natural language query failed:', error);
       return {
         message:
           'I apologize, but I encountered an error processing your request. Please try rephrasing your question.',
@@ -681,7 +681,7 @@ Format as a professional report with clear sections and actionable recommendatio
   /**
    * Generate AI insights for dashboard
    */
-  async generateInsights(organizationId: string): Promise<AIInsight[]> {
+  async generateInsights(_organizationId: string): Promise<AIInsight[]> {
     try {
       const [risks, controls, compliance] = await Promise.all([
         this.getOrganizationRisks(organizationId),
@@ -735,7 +735,7 @@ Format as a professional report with clear sections and actionable recommendatio
 
       return insights.sort((a, b) => a.priority - b.priority);
     } catch (error) {
-      console.error('Insight generation failed:', error);
+      // console.error('Insight generation failed:', error);
       return [];
     }
   }
@@ -743,11 +743,11 @@ Format as a professional report with clear sections and actionable recommendatio
   /**
    * Predict future risk trends using AI
    */
-  async predictRiskTrends(organizationId: string, timeframe: '30d' | '90d' | '1y'): Promise<any> {
+  async predictRiskTrends(_organizationId: string, timeframe: '30d' | '90d' | '1y'): Promise<any> {
     try {
       const historicalData = await this.getHistoricalRiskTrends(organizationId, timeframe);
 
-      const prompt = `Analyze the following historical risk data and predict future trends:
+      const _prompt = `Analyze the following historical risk data and predict future trends:
 
 ${JSON.stringify(historicalData)}
 
@@ -778,14 +778,14 @@ Format as JSON with confidence levels and specific predictions.`;
 
       return JSON.parse(response.choices[0].message.content || '{}');
     } catch (error) {
-      console.error('Risk trend prediction failed:', error);
+      // console.error('Risk trend prediction failed:', error);
       throw new Error('AI trend prediction failed');
     }
   }
 
   // Private helper methods
 
-  private async getHistoricalRiskData(organizationId: string, category: string) {
+  private async getHistoricalRiskData(_organizationId: string, category: string) {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -811,7 +811,7 @@ Format as JSON with confidence levels and specific predictions.`;
     });
   }
 
-  private async getOrganizationContext(organizationId: string) {
+  private async getOrganizationContext(_organizationId: string) {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -826,7 +826,7 @@ Format as JSON with confidence levels and specific predictions.`;
     });
   }
 
-  private async getExistingControls(organizationId: string, category: string) {
+  private async getExistingControls(_organizationId: string, category: string) {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -846,7 +846,7 @@ Format as JSON with confidence levels and specific predictions.`;
     });
   }
 
-  private async getIndustryContext(organizationId: string) {
+  private async getIndustryContext(_organizationId: string) {
     if (!prisma) {
       throw new Error('Prisma client not initialized');
     }
@@ -1004,7 +1004,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     return data;
   }
 
-  private parseRiskAnalysisResponse(response: string): ImportedRiskAnalysis {
+  private parseRiskAnalysisResponse(_response: string): ImportedRiskAnalysis {
     try {
       return JSON.parse(response);
     } catch {
@@ -1040,7 +1040,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     }
   }
 
-  private parseControlRecommendations(response: string): ControlRecommendation[] {
+  private parseControlRecommendations(_response: string): ControlRecommendation[] {
     try {
       return JSON.parse(response);
     } catch {
@@ -1048,7 +1048,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     }
   }
 
-  private parseComplianceGaps(response: string): ComplianceGap[] {
+  private parseComplianceGaps(_response: string): ComplianceGap[] {
     try {
       return JSON.parse(response);
     } catch {
@@ -1056,7 +1056,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     }
   }
 
-  private parseChatResponse(response: string, intent: any, contextData: any): ChatResponse {
+  private parseChatResponse(_response: string, intent: any, contextData: any): ChatResponse {
     return {
       message: response,
       type: 'text',
@@ -1098,10 +1098,10 @@ Be specific and data-driven while maintaining a conversational tone.`;
   /**
    * Build a meaningful prompt for content generation from request requirements and type
    */
-  private buildContentGenerationPrompt(request: ContentGenerationRequest): string {
+  private buildContentGenerationPrompt(_request: ContentGenerationRequest): string {
     const { type, requirements, context } = request;
 
-    let prompt = `Generate ${type} content based on the following requirements:\n\n`;
+    let _prompt = `Generate ${type} content based on the following requirements:\n\n`;
     prompt += `Requirements: ${requirements}\n\n`;
 
     if (context) {
@@ -1168,7 +1168,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
   }
 
   private getTopCategories(risks: any[]) {
-    const categories = risks.reduce((acc, risk) => {
+    const _categories = risks.reduce((acc, risk) => {
       acc[risk.category] = (acc[risk.category] || 0) + 1;
       return acc;
     }, {});
@@ -1180,7 +1180,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
   }
 
   // Additional helper methods for data fetching
-  private async getComplianceData(organizationId: string, framework: string) {
+  private async getComplianceData(_organizationId: string, framework: string) {
     return await prisma.complianceFramework.findFirst({
       where: { organizationId, name: framework },
       include: { requirements: true },
@@ -1192,20 +1192,20 @@ Be specific and data-driven while maintaining a conversational tone.`;
     return [];
   }
 
-  private async getOrganizationRisks(organizationId: string) {
+  private async getOrganizationRisks(_organizationId: string) {
     return await prisma.risk.findMany({
       where: { organizationId },
       orderBy: { riskScore: 'desc' },
     });
   }
 
-  private async getOrganizationControls(organizationId: string) {
+  private async getOrganizationControls(_organizationId: string) {
     return await prisma.control.findMany({
       where: { organizationId },
     });
   }
 
-  private async getOrganizationCompliance(organizationId: string) {
+  private async getOrganizationCompliance(_organizationId: string) {
     return await prisma.complianceFramework.findMany({
       where: { organizationId },
     });
@@ -1240,7 +1240,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
     };
   }
 
-  private async getHistoricalRiskTrends(organizationId: string, timeframe: string) {
+  private async getHistoricalRiskTrends(_organizationId: string, timeframe: string) {
     const daysBack = timeframe === '30d' ? 30 : timeframe === '90d' ? 90 : 365;
 
     return await prisma.risk.findMany({
@@ -1322,7 +1322,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
 
     // Update hourly metrics
     const now = Date.now();
-    const oneHourAgo = now - 3600000;
+    const _oneHourAgo = now - 3600000;
     // This would be more sophisticated in production, tracking by hour
     this.usageMetrics.requestsThisHour++;
     this.usageMetrics.tokensThisHour += usage.totalTokens;
@@ -1462,7 +1462,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
   /**
    * Generate content based on a request
    */
-  async generateContent(request: ContentGenerationRequest): Promise<ContentGenerationResult> {
+  async generateContent(_request: ContentGenerationRequest): Promise<ContentGenerationResult> {
     try {
       // Validate required fields
       if (!request.context || Object.keys(request.context).length === 0) {
@@ -1488,7 +1488,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
       }
 
       // Build meaningful prompt from requirements and type
-      const prompt = this.buildContentGenerationPrompt(request);
+      const _prompt = this.buildContentGenerationPrompt(request);
 
       // Use provided userId and organizationId, or generate defaults if not provided
       const userId = request.userId || generateId();
@@ -1507,7 +1507,7 @@ Be specific and data-driven while maintaining a conversational tone.`;
         confidence,
       };
     } catch (error) {
-      console.error('Content generation failed:', error);
+      // console.error('Content generation failed:', error);
 
       // Re-throw AIServiceError instances
       if (error instanceof AIServiceError) {

@@ -75,7 +75,7 @@ export class TenantProvisioningService {
   /**
    * Provision a new tenant with full setup
    */
-  async provisionTenant(request: TenantProvisioningRequest): Promise<TenantProvisioningResult> {
+  async provisionTenant(_request: TenantProvisioningRequest): Promise<TenantProvisioningResult> {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -170,7 +170,7 @@ export class TenantProvisioningService {
         temporaryPassword,
         setupToken,
       }).catch((error) => {
-        console.error('Failed to send welcome email:', error);
+        // console.error('Failed to send welcome email:', error);
       });
 
       return {
@@ -184,7 +184,7 @@ export class TenantProvisioningService {
         warnings: warnings.length > 0 ? warnings : undefined,
       };
     } catch (error) {
-      console.error('Tenant provisioning error:', error);
+      // console.error('Tenant provisioning error:', error);
       return {
         success: false,
         errors: [
@@ -293,7 +293,7 @@ export class TenantProvisioningService {
   /**
    * Get tenant provisioning status
    */
-  async getProvisioningStatus(organizationId: string): Promise<{
+  async getProvisioningStatus(_organizationId: string): Promise<{
     status: 'pending' | 'in-progress' | 'completed' | 'failed';
     completedSteps: string[];
     totalSteps: number;
@@ -318,8 +318,7 @@ export class TenantProvisioningService {
   /**
    * Update tenant configuration
    */
-  async updateTenantConfiguration(
-    organizationId: string,
+  async updateTenantConfiguration(_organizationId: string,
     configuration: Record<string, any>
   ): Promise<{ success: boolean; errors?: string[] }> {
     try {
@@ -342,7 +341,7 @@ export class TenantProvisioningService {
   }
 
   // Private helper methods
-  private validateProvisioningRequest(request: TenantProvisioningRequest): {
+  private validateProvisioningRequest(_request: TenantProvisioningRequest): {
     valid: boolean;
     errors: string[];
   } {
@@ -376,7 +375,7 @@ export class TenantProvisioningService {
     };
   }
 
-  private async createOrganization(request: TenantProvisioningRequest): Promise<{
+  private async createOrganization(_request: TenantProvisioningRequest): Promise<{
     success: boolean;
     organizationId?: string;
     errors?: string[];
@@ -414,8 +413,7 @@ export class TenantProvisioningService {
     }
   }
 
-  private async createAdminUser(
-    request: TenantProvisioningRequest,
+  private async createAdminUser(_request: TenantProvisioningRequest,
     organizationId: string
   ): Promise<{
     success: boolean;
@@ -459,8 +457,7 @@ export class TenantProvisioningService {
     }
   }
 
-  private async setupBilling(
-    request: TenantProvisioningRequest,
+  private async setupBilling(_request: TenantProvisioningRequest,
     organizationId: string
   ): Promise<{
     status: string;
@@ -498,8 +495,7 @@ export class TenantProvisioningService {
     }
   }
 
-  private async applyTenantTemplate(
-    request: TenantProvisioningRequest,
+  private async applyTenantTemplate(_request: TenantProvisioningRequest,
     organizationId: string
   ): Promise<void> {
     const templates = await this.getTenantTemplates();
@@ -529,8 +525,7 @@ export class TenantProvisioningService {
     });
   }
 
-  private async setupCustomDomain(
-    request: TenantProvisioningRequest,
+  private async setupCustomDomain(_request: TenantProvisioningRequest,
     organizationId: string
   ): Promise<void> {
     if (!request.customDomain) return;
@@ -553,7 +548,7 @@ export class TenantProvisioningService {
     // TODO: Setup DNS verification, SSL certificates, etc.
   }
 
-  private async createSampleData(organizationId: string, industry?: string): Promise<void> {
+  private async createSampleData(_organizationId: string, industry?: string): Promise<void> {
     const templates = await this.getTenantTemplates();
     const template = templates.find((t) => t.industry === industry) || templates[0];
 
@@ -582,8 +577,7 @@ export class TenantProvisioningService {
     }
   }
 
-  private async storeTemporaryCredentials(
-    userId: string,
+  private async storeTemporaryCredentials(_userId: string,
     temporaryPassword: string,
     setupToken: string
   ): Promise<void> {
@@ -599,8 +593,7 @@ export class TenantProvisioningService {
     // TODO: Implement proper storage
   }
 
-  private async sendWelcomeEmail(
-    request: TenantProvisioningRequest,
+  private async sendWelcomeEmail(_request: TenantProvisioningRequest,
     provisioningResult: {
       organizationId: string;
       adminUserId: string;
@@ -609,16 +602,16 @@ export class TenantProvisioningService {
     }
   ): Promise<void> {
     // TODO: Implement email sending
-    console.log(`Sending welcome email to ${request.adminEmail}`);
+    // console.log(`Sending welcome email to ${request.adminEmail}`);
   }
 
-  private async cleanupOrganization(organizationId: string): Promise<void> {
+  private async cleanupOrganization(_organizationId: string): Promise<void> {
     try {
       await db.client.organization.delete({
         where: { id: organizationId },
       });
     } catch (error) {
-      console.error('Failed to cleanup organization:', error);
+      // console.error('Failed to cleanup organization:', error);
     }
   }
 
@@ -628,7 +621,7 @@ export class TenantProvisioningService {
     return emailRegex.test(email);
   }
 
-  private generateSetupToken(organizationId: string, userId: string): string {
+  private generateSetupToken(_organizationId: string, userId: string): string {
     const payload = {
       organizationId,
       userId,
@@ -642,7 +635,7 @@ export class TenantProvisioningService {
     return crypto.randomBytes(12).toString('base64').replace(/[+/=]/g, '').substring(0, 12);
   }
 
-  private generateLoginUrl(organizationId: string, setupToken: string): string {
+  private generateLoginUrl(_organizationId: string, setupToken: string): string {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     return `${baseUrl}/auth/setup?token=${setupToken}&org=${organizationId}`;
   }

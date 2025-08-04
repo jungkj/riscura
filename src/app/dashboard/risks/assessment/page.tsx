@@ -101,13 +101,13 @@ export default function RiskAssessmentPage() {
 
   const handleExportAssessments = () => {
     // Mock export functionality
-    console.log('Exporting assessments...');
+    // console.log('Exporting assessments...');
     // In a real app, this would trigger a download
   };
 
   const handleFilterAssessments = () => {
     // Mock filter functionality
-    console.log('Opening filter modal...');
+    // console.log('Opening filter modal...');
     // In a real app, this would open a filter modal
   };
 

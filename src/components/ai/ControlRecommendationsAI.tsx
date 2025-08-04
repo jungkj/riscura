@@ -709,7 +709,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
       setGapAnalyses(gaps);
       setActiveTab('recommendations');
     } catch (error) {
-      console.error('Failed to generate recommendations:', error);
+      // console.error('Failed to generate recommendations:', error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -733,7 +733,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
       onImplementationPlanGenerated?.(plan);
       setActiveTab('implementation');
     } catch (error) {
-      console.error('Failed to generate implementation plan:', error);
+      // console.error('Failed to generate implementation plan:', error);
     }
   };
 

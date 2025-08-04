@@ -14,7 +14,7 @@ interface RouteParams {
 // GET /api/notifications/[id] - Get single notification
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 // PATCH /api/notifications/[id] - Update notification (mark as read)
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -60,7 +60,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 // DELETE /api/notifications/[id] - Dismiss notification
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {

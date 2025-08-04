@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dashboardIntelligenceService } from '@/services/DashboardIntelligenceService';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId') || 'default-user';
@@ -82,12 +82,12 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Dashboard Insights API Error:', error);
+    // console.error('Dashboard Insights API Error:', error);
     return NextResponse.json({ error: 'Failed to generate dashboard insights' }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const body = await request.json();
     const { userId, preferences, context } = body;
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
       config: updatedConfig,
     });
   } catch (error) {
-    console.error('Dashboard Preferences Update Error:', error);
+    // console.error('Dashboard Preferences Update Error:', error);
     return NextResponse.json({ error: 'Failed to update dashboard preferences' }, { status: 500 });
   }
 }

@@ -1,5 +1,5 @@
 import { Report } from '@prisma/client';
-import { ReportData, ReportSection } from './data-collector';
+// import { ReportData, ReportSection } from './data-collector';
 import ExcelJS from 'exceljs';
 
 export class ExcelGenerator {
@@ -173,14 +173,14 @@ export class ExcelGenerator {
     }
   }
 
-  private addTextContent(data: string, startRow: number): void {
+  private addTextContent(_data: string, startRow: number): void {
     this.worksheet.mergeCells(`A${startRow}:F${startRow}`);
     const cell = this.worksheet.getCell(`A${startRow}`);
     cell.value = data;
     cell.alignment = { wrapText: true, vertical: 'top' };
   }
 
-  private addTableContent(data: { headers: string[]; rows: any[][] }, startRow: number): void {
+  private addTableContent(_data: { headers: string[]; rows: any[][] }, startRow: number): void {
     if (!data.headers || !data.rows) return;
 
     // Add headers
@@ -231,7 +231,7 @@ export class ExcelGenerator {
     }
   }
 
-  private addMetricsContent(data: Record<string, any>, startRow: number): void {
+  private addMetricsContent(_data: Record<string, any>, startRow: number): void {
     let row = startRow;
     const metricsPerRow = 3;
     let colOffset = 0;
@@ -277,7 +277,7 @@ export class ExcelGenerator {
     });
   }
 
-  private addChartData(data: any, startRow: number): void {
+  private addChartData(_data: any, startRow: number): void {
     // Add chart data as a table for now
     // In a real implementation, you might add actual Excel charts
     const headers = ['Category', 'Value'];

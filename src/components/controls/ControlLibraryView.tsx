@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
-import { formatDate } from '@/lib/utils';
+// import { formatDate } from '@/lib/utils';
 
 // UI Components
 import {
@@ -155,7 +155,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         await deleteControls(selectedControls);
         clearSelection();
       } catch (error) {
-        console.error('Failed to delete controls:', error);
+        // console.error('Failed to delete controls:', error);
       }
     }
   };

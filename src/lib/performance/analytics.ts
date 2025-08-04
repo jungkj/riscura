@@ -90,7 +90,7 @@ class PerformanceAnalytics {
   private observers: Map<string, PerformanceObserver> = new Map();
   private startTime: number;
 
-  constructor(config: Partial<AnalyticsConfig> = {}) {
+  constructor(_config: Partial<AnalyticsConfig> = {}) {
     this.config = {
       enableWebVitals: true,
       enableUserInteractions: true,
@@ -163,7 +163,7 @@ class PerformanceAnalytics {
       this.metrics.push(performanceMetric);
 
       if (this.config.enableDebugMode) {
-        console.log('Web Vital recorded:', performanceMetric);
+        // console.log('Web Vital recorded:', performanceMetric);
       }
     };
 
@@ -199,7 +199,7 @@ class PerformanceAnalytics {
       this.interactions.push(interaction);
 
       if (this.config.enableDebugMode) {
-        console.log('User interaction recorded:', interaction);
+        // console.log('User interaction recorded:', interaction);
       }
     };
 
@@ -259,7 +259,7 @@ class PerformanceAnalytics {
           this.resources.push(resource);
 
           if (this.config.enableDebugMode) {
-            console.log('Resource timing recorded:', resource);
+            // console.log('Resource timing recorded:', resource);
           }
         }
       }
@@ -269,7 +269,7 @@ class PerformanceAnalytics {
       observer.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', observer);
     } catch (error) {
-      console.warn('Resource timing observation failed:', error);
+      // console.warn('Resource timing observation failed:', error);
     }
   }
 
@@ -288,7 +288,7 @@ class PerformanceAnalytics {
       this.errors.push(error);
 
       if (this.config.enableDebugMode) {
-        console.log('Error recorded:', error);
+        // console.log('Error recorded:', error);
       }
     });
 
@@ -304,7 +304,7 @@ class PerformanceAnalytics {
       this.errors.push(error);
 
       if (this.config.enableDebugMode) {
-        console.log('Promise rejection recorded:', error);
+        // console.log('Promise rejection recorded:', error);
       }
     });
   }
@@ -364,7 +364,7 @@ class PerformanceAnalytics {
           this.recordCustomMetric('long_task', entry.duration);
 
           if (this.config.enableDebugMode) {
-            console.log('Long task detected:', entry.duration);
+            // console.log('Long task detected:', entry.duration);
           }
         }
       });
@@ -372,7 +372,7 @@ class PerformanceAnalytics {
       longTaskObserver.observe({ entryTypes: ['longtask'] });
       this.observers.set('longtask', longTaskObserver);
     } catch (error) {
-      console.warn('Long task observation not supported');
+      // console.warn('Long task observation not supported');
     }
 
     // Layout Shift Observer
@@ -388,7 +388,7 @@ class PerformanceAnalytics {
       layoutShiftObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.set('layout-shift', layoutShiftObserver);
     } catch (error) {
-      console.warn('Layout shift observation not supported');
+      // console.warn('Layout shift observation not supported');
     }
   }
 
@@ -399,7 +399,7 @@ class PerformanceAnalytics {
     this.customMetrics[name] = value;
 
     if (this.config.enableDebugMode) {
-      console.log('Custom metric recorded:', { name, value });
+      // console.log('Custom metric recorded:', { name, value });
     }
   }
 
@@ -503,10 +503,10 @@ class PerformanceAnalytics {
       }
 
       if (this.config.enableDebugMode) {
-        console.log('Performance report sent:', payload);
+        // console.log('Performance report sent:', payload);
       }
     } catch (error) {
-      console.error('Failed to send performance report:', error);
+      // console.error('Failed to send performance report:', error);
       // Re-add reports to queue for retry
       this.reportQueue.unshift(...reports);
     }

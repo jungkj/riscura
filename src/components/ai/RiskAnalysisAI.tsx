@@ -451,7 +451,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
 
       setActiveTab('report');
     } catch (error) {
-      console.error('Risk analysis failed:', error);
+      // console.error('Risk analysis failed:', error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -465,7 +465,7 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
     if (!currentReport) return;
     
     // Implementation for report export
-    console.log('Exporting report:', currentReport.id);
+    // console.log('Exporting report:', currentReport.id);
   };
 
   return (

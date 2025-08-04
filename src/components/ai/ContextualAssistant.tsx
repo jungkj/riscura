@@ -48,7 +48,7 @@ interface ContextualAssistantProps {
 }
 
 // Context-aware suggestions generator
-const generateContextualSuggestions = (context: WorkflowContext): ContextualSuggestion[] => {
+const generateContextualSuggestions = (_context: WorkflowContext): ContextualSuggestion[] => {
   const suggestions: ContextualSuggestion[] = [];
 
   // Page-specific suggestions
@@ -254,7 +254,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
         const contextualSuggestions = generateContextualSuggestions(context);
         setSuggestions(contextualSuggestions);
       } catch (error) {
-        console.error('Failed to load contextual suggestions:', error);
+        // console.error('Failed to load contextual suggestions:', error);
       } finally {
         setIsLoading(false);
       }

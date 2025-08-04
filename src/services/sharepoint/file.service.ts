@@ -59,7 +59,7 @@ export class SharePointFileService {
         description: site.description || undefined,
       };
     } catch (error) {
-      console.error('Error fetching site info:', error);
+      // console.error('Error fetching site info:', error);
       throw new Error('Failed to fetch SharePoint site information');
     }
   }
@@ -106,7 +106,7 @@ export class SharePointFileService {
         description: site.description || undefined,
       };
     } catch (error) {
-      console.error('Error fetching site by URL:', error);
+      // console.error('Error fetching site by URL:', error);
       throw new Error('Failed to fetch SharePoint site by URL');
     }
   }
@@ -121,7 +121,7 @@ export class SharePointFileService {
 
       return drive.id!;
     } catch (error) {
-      console.error('Error fetching default drive:', error);
+      // console.error('Error fetching default drive:', error);
       throw new Error('Failed to fetch default document library');
     }
   }
@@ -190,7 +190,7 @@ export class SharePointFileService {
         nextPageToken: response['@odata.nextLink'] || undefined,
       };
     } catch (error) {
-      console.error('Error listing Excel files:', error);
+      // console.error('Error listing Excel files:', error);
       throw new Error('Failed to list Excel files from SharePoint');
     }
   }
@@ -214,7 +214,7 @@ export class SharePointFileService {
 
       // Safety limit to prevent infinite loops
       if (allFiles.length >= maxFiles) {
-        console.warn(`Reached maximum file limit of ${maxFiles}. Some files may not be included.`);
+        // console.warn(`Reached maximum file limit of ${maxFiles}. Some files may not be included.`);
         break;
       }
     } while (nextPageToken);
@@ -299,7 +299,7 @@ export class SharePointFileService {
         }
 
         return Buffer.from(buffer);
-      } catch (error: any) {
+      } catch (_error: any) {
         if (error.name === 'AbortError') {
           throw new Error('File download timed out after 30 seconds');
         }
@@ -308,7 +308,7 @@ export class SharePointFileService {
         clearTimeout(timeoutId);
       }
     } catch (error) {
-      console.error('Error downloading file:', error);
+      // console.error('Error downloading file:', error);
       throw new Error('Failed to download file from SharePoint');
     }
   }
@@ -357,7 +357,7 @@ export class SharePointFileService {
         path: relativePath,
       };
     } catch (error) {
-      console.error('Error fetching file by URL:', error);
+      // console.error('Error fetching file by URL:', error);
       throw new Error('Failed to fetch file by relative URL');
     }
   }
@@ -402,7 +402,7 @@ export class SharePointFileService {
         mimeType: fileItem.file.mimeType,
       };
     } catch (error) {
-      console.error('Error fetching file metadata:', error);
+      // console.error('Error fetching file metadata:', error);
       throw new Error('Failed to fetch file metadata');
     }
   }
@@ -422,7 +422,7 @@ export class SharePointFileService {
 
       return true;
     } catch (error) {
-      console.error('Error checking file access:', error);
+      // console.error('Error checking file access:', error);
       return false;
     }
   }
@@ -474,7 +474,7 @@ export class SharePointFileService {
 
       return files;
     } catch (error) {
-      console.error('Error searching files:', error);
+      // console.error('Error searching files:', error);
       throw new Error('Failed to search files in SharePoint');
     }
   }

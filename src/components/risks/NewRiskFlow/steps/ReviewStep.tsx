@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRiskFlow } from '../RiskFlowContext';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
@@ -86,7 +86,7 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
       toast.success('Risk created successfully!');
       onSuccess();
     } catch (error) {
-      console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error);
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to create risk. Please try again.';
       toast.error(errorMessage);

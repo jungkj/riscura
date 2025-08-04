@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 const prisma = db.client;
 
 // POST /api/webhooks/probo - Handle Probo webhook events
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Get signature from headers
     const signature = request.headers.get('x-probo-signature');
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Probo webhook error:', error);
+    // console.error('Probo webhook error:', error);
 
     if (error instanceof Error && error.message === 'Invalid webhook signature') {
       return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });

@@ -69,7 +69,7 @@ interface DashboardMetrics {
   };
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const timeRange: string = searchParams.get('timeRange') ?? '1h';
@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response, { headers });
   } catch (error) {
-    console.error('Dashboard API error:', error);
+    // console.error('Dashboard API error:', error);
 
     Sentry.captureException(error, {
       tags: {
@@ -213,7 +213,7 @@ async function getApiMetrics(timeRange: string) {
         })),
     };
   } catch (error) {
-    console.error('Error getting API metrics:', error);
+    // console.error('Error getting API metrics:', error);
     return {
       averageResponseTime: 0,
       errorRate: 0,
@@ -245,7 +245,7 @@ async function getSystemMetrics() {
       activeConnections,
     };
   } catch (error) {
-    console.error('Error getting system metrics:', error);
+    // console.error('Error getting system metrics:', error);
     return {
       memoryUsage: 0,
       cpuUsage: 0,
@@ -267,7 +267,7 @@ async function getBusinessTrends(timeRange: string) {
       customerSatisfactionScore: 4.2, // 4.2/5 rating
     };
   } catch (error) {
-    console.error('Error getting business trends:', error);
+    // console.error('Error getting business trends:', error);
     return {
       userGrowthRate: 0,
       featureAdoptionRate: 0,
@@ -384,7 +384,7 @@ async function getHistoricalMetrics(timeRange: string) {
 
     return historical;
   } catch (error) {
-    console.error('Error getting historical metrics:', error);
+    // console.error('Error getting historical metrics:', error);
     return null;
   }
 }

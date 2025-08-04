@@ -30,7 +30,7 @@ export const GET = withApiMiddleware(
         data: channels,
       });
     } catch (error) {
-      console.error('Get channels error:', error);
+      // console.error('Get channels error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to fetch channels' },
         { status: 500 }
@@ -78,7 +78,7 @@ export const POST = withApiMiddleware(
           { status: 400 }
         );
       }
-      console.error('Create channel error:', error);
+      // console.error('Create channel error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to create channel' },
         { status: 500 }

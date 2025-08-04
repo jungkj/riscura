@@ -7,7 +7,7 @@ async function seedChatChannels() {
     // Get the first organization
     const organization = await prisma.organization.findFirst();
     if (!organization) {
-      console.error('No organization found. Please seed organizations first.');
+      // console.error('No organization found. Please seed organizations first.');
       return;
     }
 
@@ -16,7 +16,7 @@ async function seedChatChannels() {
       where: { organizationId: organization.id },
     });
     if (!user) {
-      console.error('No user found. Please seed users first.');
+      // console.error('No user found. Please seed users first.');
       return;
     }
 
@@ -26,7 +26,7 @@ async function seedChatChannels() {
     });
 
     if (existingChannels > 0) {
-      console.log(`Organization already has ${existingChannels} channels.`);
+      // console.log(`Organization already has ${existingChannels} channels.`);
       return;
     }
 
@@ -84,7 +84,7 @@ async function seedChatChannels() {
       }),
     ]);
 
-    console.log(
+    // console.log(
       `Created ${channels.length} default channels for organization ${organization.name}`
     );
 
@@ -106,7 +106,7 @@ async function seedChatChannels() {
             role: 'MEMBER',
           })),
         });
-        console.log(`Added ${otherUsers.length} members to the general channel`);
+        // console.log(`Added ${otherUsers.length} members to the general channel`);
       }
     }
 
@@ -122,10 +122,10 @@ async function seedChatChannels() {
           type: 'TEXT',
         },
       });
-      console.log('Created welcome message in general channel');
+      // console.log('Created welcome message in general channel');
     }
   } catch (error) {
-    console.error('Error seeding chat channels:', error);
+    // console.error('Error seeding chat channels:', error);
   } finally {
     await prisma.$disconnect();
   }

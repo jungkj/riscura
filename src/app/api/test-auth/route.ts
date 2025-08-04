@@ -23,7 +23,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Authentication test error:', error);
+    // console.error('Authentication test error:', error);
     return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
   }
 }

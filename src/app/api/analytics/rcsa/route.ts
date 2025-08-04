@@ -127,7 +127,7 @@ export const GET = withApiMiddleware(
         data: analytics,
       });
     } catch (error) {
-      console.error('Get RCSA analytics error:', error);
+      // console.error('Get RCSA analytics error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to fetch RCSA analytics' },
         { status: 500 }

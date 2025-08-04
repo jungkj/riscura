@@ -1,4 +1,4 @@
-import { CSVLink } from 'react-csv';
+// import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import toast from 'react-hot-toast';
@@ -64,7 +64,7 @@ export class ExportService {
 
       toast.success(`Successfully exported ${data.length} records to CSV`);
     } catch (error) {
-      console.error('CSV export failed:', error);
+      // console.error('CSV export failed:', error);
       toast.error('Failed to export CSV file');
     }
   }
@@ -81,7 +81,7 @@ export class ExportService {
 
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
+      const _pageHeight = pdf.internal.pageSize.getHeight();
       let yPosition = 20;
 
       // Add title
@@ -119,7 +119,7 @@ export class ExportService {
       pdf.save(`${filename}.pdf`);
       toast.success(`Successfully exported ${data.length} records to PDF`);
     } catch (error) {
-      console.error('PDF export failed:', error);
+      // console.error('PDF export failed:', error);
       toast.error('Failed to export PDF file');
     }
   }
@@ -148,7 +148,7 @@ export class ExportService {
 
       toast.success(`Successfully exported ${data.length} records to JSON`);
     } catch (error) {
-      console.error('JSON export failed:', error);
+      // console.error('JSON export failed:', error);
       toast.error('Failed to export JSON file');
     }
   }
@@ -188,7 +188,7 @@ export class ExportService {
         `Successfully exported ${risks.length} risks as ${options.format.toUpperCase()}`
       );
     } catch (error) {
-      console.error('Error exporting risks:', error);
+      // console.error('Error exporting risks:', error);
       toast.error('Failed to export risks. Please try again.');
       throw error;
     }
@@ -229,14 +229,14 @@ export class ExportService {
         `Successfully exported ${controls.length} controls as ${options.format.toUpperCase()}`
       );
     } catch (error) {
-      console.error('Error exporting controls:', error);
+      // console.error('Error exporting controls:', error);
       toast.error('Failed to export controls. Please try again.');
       throw error;
     }
   }
 
   // Export security dashboard report
-  public async exportSecurityReport(options: ExportOptions = { format: 'pdf' }): Promise<void> {
+  public async exportSecurityReport(_options: ExportOptions = { format: 'pdf' }): Promise<void> {
     try {
       // Mock security data for demonstration
       const securityData = [
@@ -267,7 +267,7 @@ export class ExportService {
       await this.performExport(exportData, options);
       toast.success('Security report exported successfully');
     } catch (error) {
-      console.error('Error exporting security report:', error);
+      // console.error('Error exporting security report:', error);
       toast.error('Failed to export security report. Please try again.');
       throw error;
     }
@@ -299,7 +299,7 @@ export class ExportService {
 
       toast.success('Dashboard exported successfully');
     } catch (error) {
-      console.error('Dashboard export failed:', error);
+      // console.error('Dashboard export failed:', error);
       toast.error('Failed to export dashboard');
     }
   }
@@ -319,7 +319,7 @@ export class ExportService {
     return String(value);
   }
 
-  private addMetadataToCSV(data: any[], exportData: ExportData): any[] {
+  private addMetadataToCSV(_data: any[], exportData: ExportData): any[] {
     // Add summary row at the beginning
     const metadata = {
       'Export Date': new Date().toLocaleDateString(),
@@ -330,7 +330,7 @@ export class ExportService {
     return [metadata, ...data];
   }
 
-  private generateCSVContent(data: any[], headers: any[]): string {
+  private generateCSVContent(_data: any[], headers: any[]): string {
     const headerRow = headers.map((h) => h.label).join(',');
     const dataRows = data.map((row) =>
       headers
@@ -413,7 +413,7 @@ export class ExportService {
     URL.revokeObjectURL(url);
   }
 
-  private async performExport(data: ExportData, options: ExportOptions): Promise<void> {
+  private async performExport(_data: ExportData, options: ExportOptions): Promise<void> {
     switch (options.format) {
       case 'csv':
         await this.exportToCSV(data);
@@ -432,7 +432,7 @@ export class ExportService {
     }
   }
 
-  private async exportAsXLSX(data: ExportData, options: ExportOptions): Promise<void> {
+  private async exportAsXLSX(_data: ExportData, options: ExportOptions): Promise<void> {
     // For a real implementation, you would use a library like SheetJS
     // This is a simplified version that creates a CSV-like format
 

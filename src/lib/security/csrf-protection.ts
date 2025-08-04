@@ -180,13 +180,13 @@ class CSRFProtection {
 
       return true;
     } catch (error) {
-      console.error('CSRF token validation error:', error);
+      // console.error('CSRF token validation error:', error);
       return false;
     }
   }
 
   // Middleware function for CSRF protection
-  public async middleware(request: NextRequest): Promise<NextResponse | null> {
+  public async middleware(_request: NextRequest): Promise<NextResponse | null> {
     if (!this.config.enableMetrics) {
       this.metrics.totalRequests++;
     }
@@ -262,7 +262,7 @@ class CSRFProtection {
   }
 
   // Extract CSRF token from request
-  private extractToken(request: NextRequest): string | null {
+  private extractToken(_request: NextRequest): string | null {
     // Check header first
     const headerToken = request.headers.get(this.config.headerName);
     if (headerToken) return headerToken;
@@ -281,12 +281,12 @@ class CSRFProtection {
   }
 
   // Extract token from cookie
-  private extractCookieToken(request: NextRequest): string | null {
+  private extractCookieToken(_request: NextRequest): string | null {
     return request.cookies.get(this.config.cookieName)?.value || null;
   }
 
   // Extract session ID from request
-  private extractSessionId(request: NextRequest): string | undefined {
+  private extractSessionId(_request: NextRequest): string | undefined {
     // Try to get session ID from cookie or header
     const sessionCookie = request.cookies.get('session-id')?.value;
     const sessionHeader = request.headers.get('x-session-id');
@@ -305,7 +305,7 @@ class CSRFProtection {
     // Check configured trusted origins
     return this.config.trustedOrigins.some((trustedOrigin) => {
       if (trustedOrigin.includes('*')) {
-        const pattern = trustedOrigin.replace(/\*/g, '.*');
+        const _pattern = trustedOrigin.replace(/\*/g, '.*');
         return new RegExp(`^${pattern}$`).test(origin);
       }
       return origin === trustedOrigin;
@@ -313,7 +313,7 @@ class CSRFProtection {
   }
 
   // Get client IP address
-  private getClientIP(request: NextRequest): string {
+  private getClientIP(_request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for');
     const realIP = request.headers.get('x-real-ip');
     const cfConnectingIP = request.headers.get('cf-connecting-ip');
@@ -372,7 +372,7 @@ class CSRFProtection {
     const ipStats = this.metrics.byIP[result.clientIP];
     if (ipStats.invalid > 10 && ipStats.invalid > ipStats.valid * 2) {
       this.metrics.suspiciousActivity++;
-      console.warn('Suspicious CSRF activity detected:', {
+      // console.warn('Suspicious CSRF activity detected:', {
         ip: result.clientIP,
         invalidCount: ipStats.invalid,
         validCount: ipStats.valid,
@@ -499,7 +499,7 @@ class CSRFProtection {
   }
 
   // Check if request needs CSRF protection
-  public needsProtection(request: NextRequest): boolean {
+  public needsProtection(_request: NextRequest): boolean {
     const method = request.method;
     const pathname = new URL(request.url).pathname;
 
@@ -590,7 +590,7 @@ export function useCSRFToken(): {
       setToken(data.token);
       return data.token;
     } catch (error) {
-      console.error('Error generating CSRF token:', error);
+      // console.error('Error generating CSRF token:', error);
       throw error;
     }
   };

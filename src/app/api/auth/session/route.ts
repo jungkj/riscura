@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(session);
       }
     } catch (nextAuthError) {
-      console.log('[Session] NextAuth session check failed:', nextAuthError);
+      // console.log('[Session] NextAuth session check failed:', nextAuthError);
     }
 
     // Check for simple OAuth session
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
           });
         }
       } catch (e) {
-        console.log('[Session] Invalid simple OAuth session token');
+        // console.log('[Session] Invalid simple OAuth session token');
       }
     }
 
@@ -44,14 +44,14 @@ export async function GET(req: NextRequest) {
           expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
         });
       } catch (e) {
-        console.log('[Session] Invalid demo user cookie');
+        // console.log('[Session] Invalid demo user cookie');
       }
     }
 
     // No valid session found
     return NextResponse.json(null);
   } catch (error) {
-    console.error('[Session] Error checking session:', error);
+    // console.error('[Session] Error checking session:', error);
     return NextResponse.json(null);
   }
 }

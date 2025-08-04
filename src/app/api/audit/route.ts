@@ -115,7 +115,7 @@ async function handleGet(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Audit query error:', error);
+    // console.error('Audit query error:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

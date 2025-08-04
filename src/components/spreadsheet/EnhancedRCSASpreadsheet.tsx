@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 
 interface EnhancedRCSASpreadsheetProps {
   data?: any[];
-  onDataChange?: (data: any[]) => void;
+  onDataChange?: (_data: any[]) => void;
   className?: string;
 }
 

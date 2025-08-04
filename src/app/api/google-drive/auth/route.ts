@@ -19,7 +19,7 @@ export const GET = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('Error generating Google Drive auth URL:', {
+    // console.error('Error generating Google Drive auth URL:', {
       userId: user.id,
       operation: 'generateAuthUrl',
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -47,7 +47,7 @@ export const DELETE = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('Error revoking Google Drive access:', {
+    // console.error('Error revoking Google Drive access:', {
       userId: user.id,
       error: error instanceof Error ? error.message : 'Unknown error',
     });

@@ -344,8 +344,7 @@ const mockSpreadsheetData: Record<string, Spreadsheet> = {
 };
 
 // GET /api/spreadsheets/[id] - Get spreadsheet by ID
-export async function GET(
-  request: NextRequest,
+export async function GET(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -384,14 +383,13 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('Spreadsheet API error:', error);
+    // console.error('Spreadsheet API error:', error);
     return NextResponse.json({ error: 'Failed to retrieve spreadsheet' }, { status: 500 });
   }
 }
 
 // PUT /api/spreadsheets/[id] - Update spreadsheet
-export async function PUT(
-  request: NextRequest,
+export async function PUT(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -420,14 +418,13 @@ export async function PUT(
       data: updatedSpreadsheet,
     });
   } catch (error) {
-    console.error('Spreadsheet update error:', error);
+    // console.error('Spreadsheet update error:', error);
     return NextResponse.json({ error: 'Failed to update spreadsheet' }, { status: 500 });
   }
 }
 
 // DELETE /api/spreadsheets/[id] - Delete spreadsheet
-export async function DELETE(
-  request: NextRequest,
+export async function DELETE(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
@@ -446,7 +443,7 @@ export async function DELETE(
       message: 'Spreadsheet deleted successfully (demo mode)',
     });
   } catch (error) {
-    console.error('Spreadsheet deletion error:', error);
+    // console.error('Spreadsheet deletion error:', error);
     return NextResponse.json({ error: 'Failed to delete spreadsheet' }, { status: 500 });
   }
 }

@@ -18,7 +18,7 @@ interface APIResponse {
   errors?: string[];
 }
 
-async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResponse<APIResponse>> {
+async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextResponse<APIResponse>> {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -140,7 +140,7 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
           : '';
       const controlId =
         columnMapping.controlId > 0 ? values[columnMapping.controlId]?.toString().trim() : '';
-      const controlDescription =
+      const _controlDescription =
         columnMapping.controlDescription > 0
           ? values[columnMapping.controlDescription]?.toString().trim()
           : '';
@@ -270,23 +270,23 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
         }
       });
 
-      console.log('Successfully processed RCSA file:');
-      console.log(`- ${importedRcsaEntries} RCSA entries imported`);
-      console.log(`- Data grouped by Risk ID and stored with associated controls`);
+      // console.log('Successfully processed RCSA file:');
+      // console.log(`- ${importedRcsaEntries} RCSA entries imported`);
+      // console.log(`- Data grouped by Risk ID and stored with associated controls`);
 
       return NextResponse.json({
         success: true,
         importedCount: importedRcsaEntries,
       });
     } catch (error) {
-      console.error('Database error:', error);
+      // console.error('Database error:', error);
 
       // Fallback to demonstration mode if database is not available
       const risks = processedData.filter((row) => row.riskId && row.riskDescription);
       const uniqueRisks = new Set(risks.map((r) => r.riskId)).size;
 
-      console.log('Database error, returning processed count:');
-      console.log(`- ${uniqueRisks} unique RCSA entries would be imported`);
+      // console.log('Database error, returning processed count:');
+      // console.log(`- ${uniqueRisks} unique RCSA entries would be imported`);
 
       return NextResponse.json({
         success: true,
@@ -294,7 +294,7 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
       });
     }
   } catch (error) {
-    console.error('Upload error:', error);
+    // console.error('Upload error:', error);
     return NextResponse.json(
       {
         success: false,
@@ -306,7 +306,7 @@ async function handleRCSAUpload(request: AuthenticatedRequest): Promise<NextResp
 }
 
 // Export the authenticated handler
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   // Apply authentication middleware manually
   try {
     const session = (await getServerSession(authOptions)) as any;
@@ -352,7 +352,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return await handleRCSAUpload(authReq);
   } catch (error) {
-    console.error('Authentication error:', error);
+    // console.error('Authentication error:', error);
     return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
   }
 }

@@ -514,7 +514,7 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
         description: `${demoReports.length} report templates loaded with AI intelligence`,
       });
     } catch (error) {
-      console.error('Failed to load reports:', error);
+      // console.error('Failed to load reports:', error);
       setIsLoading(false);
       toast({
         title: 'Loading Failed',

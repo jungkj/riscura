@@ -10,7 +10,7 @@ import {
 
 // Validate OpenAI API key at module initialization
 if (!process.env.OPENAI_API_KEY) {
-  console.error(
+  // console.error(
     '[RCSA Analysis] OpenAI API key is not configured. AI analysis features will be unavailable.'
   );
 }
@@ -172,7 +172,7 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
   try {
     // Check if OpenAI is available
     if (!openai) {
-      console.warn('[RCSA Analysis] OpenAI not configured, falling back to basic analysis');
+      // console.warn('[RCSA Analysis] OpenAI not configured, falling back to basic analysis');
       return performBasicAnalysis(rows);
     }
 
@@ -201,7 +201,7 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
 
     // Track token usage
     if (completion.usage) {
-      console.log('[RCSA Analysis] Token usage:', {
+      // console.log('[RCSA Analysis] Token usage:', {
         prompt_tokens: completion.usage.prompt_tokens,
         completion_tokens: completion.usage.completion_tokens,
         total_tokens: completion.usage.total_tokens,
@@ -362,7 +362,7 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
       mappedControls,
     };
   } catch (error) {
-    console.error('Error analyzing RCSA data:', error);
+    // console.error('Error analyzing RCSA data:', error);
 
     // Fallback analysis without AI
     return performBasicAnalysis(rows);

@@ -372,10 +372,10 @@ export interface TenantManager {
 }
 
 export interface IsolationManager {
-  createTenantEnvironment(tenantId: string): Promise<TenantEnvironment>;
-  destroyTenantEnvironment(tenantId: string): Promise<void>;
-  isolateData(tenantId: string, data: unknown): Promise<unknown>;
-  validateIsolation(tenantId: string): Promise<IsolationValidationResult>;
+  createTenantEnvironment(_tenantId: string): Promise<TenantEnvironment>;
+  destroyTenantEnvironment(_tenantId: string): Promise<void>;
+  isolateData(_tenantId: string, data: unknown): Promise<unknown>;
+  validateIsolation(_tenantId: string): Promise<IsolationValidationResult>;
 }
 
 export interface TenantEnvironment {
@@ -389,10 +389,10 @@ export interface TenantEnvironment {
 }
 
 export interface BillingManager {
-  calculateUsage(tenantId: string, period: BillingPeriod): Promise<BillingUsage>;
-  generateInvoice(tenantId: string, usage: BillingUsage): Promise<Invoice>;
-  processPayment(tenantId: string, invoice: Invoice): Promise<PaymentResult>;
-  updateLimits(tenantId: string, limits: SubscriptionLimits): Promise<void>;
+  calculateUsage(_tenantId: string, period: BillingPeriod): Promise<BillingUsage>;
+  generateInvoice(_tenantId: string, usage: BillingUsage): Promise<Invoice>;
+  processPayment(_tenantId: string, invoice: Invoice): Promise<PaymentResult>;
+  updateLimits(_tenantId: string, limits: SubscriptionLimits): Promise<void>;
 }
 
 // Conversation Context
@@ -1822,17 +1822,17 @@ export interface ConversationPreference {
 
 // Supporting interfaces that were referenced but not defined
 export interface AnalyticsManager {
-  generateReport(tenantId: string, type: string, period: BillingPeriod): Promise<AnalyticsReport>;
-  trackUsage(tenantId: string, usage: UsageData): Promise<void>;
-  getInsights(tenantId: string): Promise<AnalyticsInsights>;
-  exportData(tenantId: string, format: string): Promise<string>;
+  generateReport(_tenantId: string, type: string, period: BillingPeriod): Promise<AnalyticsReport>;
+  trackUsage(_tenantId: string, usage: UsageData): Promise<void>;
+  getInsights(_tenantId: string): Promise<AnalyticsInsights>;
+  exportData(_tenantId: string, format: string): Promise<string>;
 }
 
 export interface SecurityManager {
-  validateAccess(tenantId: string, userId: string, resource: string): Promise<boolean>;
-  auditAction(tenantId: string, action: AuditAction): Promise<void>;
-  detectThreats(tenantId: string, data: unknown): Promise<ThreatAssessment>;
-  enforcePolicy(tenantId: string, policy: string): Promise<PolicyEnforcement>;
+  validateAccess(_tenantId: string, userId: string, resource: string): Promise<boolean>;
+  auditAction(_tenantId: string, action: AuditAction): Promise<void>;
+  detectThreats(_tenantId: string, data: unknown): Promise<ThreatAssessment>;
+  enforcePolicy(_tenantId: string, policy: string): Promise<PolicyEnforcement>;
 }
 
 export interface AnalyticsReport {

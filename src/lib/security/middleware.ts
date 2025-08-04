@@ -6,7 +6,7 @@ import { documentEncryption } from './document-encryption';
 interface RateLimitConfig {
   windowMs: number;
   maxRequests: number;
-  keyGenerator?: (request: NextRequest) => string;
+  keyGenerator?: (_request: NextRequest) => string;
 }
 
 // Security headers configuration
@@ -55,8 +55,7 @@ export class SecurityMiddleware {
   /**
    * Apply comprehensive security middleware
    */
-  public async applySecurityMiddleware(
-    request: NextRequest,
+  public async applySecurityMiddleware(_request: NextRequest,
     options: {
       requireAuth?: boolean;
       requiredPermissions?: Permission[];
@@ -115,7 +114,7 @@ export class SecurityMiddleware {
       // If all checks pass, return null to continue processing
       return null;
     } catch (error) {
-      console.error('Security middleware error:', error);
+      // console.error('Security middleware error:', error);
       return this.createErrorResponse('Internal Security Error', 500);
     }
   }
@@ -123,8 +122,7 @@ export class SecurityMiddleware {
   /**
    * Rate limiting implementation
    */
-  private checkRateLimit(
-    request: NextRequest,
+  private checkRateLimit(_request: NextRequest,
     config: RateLimitConfig
   ): {
     allowed: boolean;
@@ -152,7 +150,7 @@ export class SecurityMiddleware {
   /**
    * Security checks including suspicious request detection
    */
-  private performSecurityChecks(request: NextRequest): { passed: boolean; reason?: string } {
+  private performSecurityChecks(_request: NextRequest): { passed: boolean; reason?: string } {
     const url = new URL(request.url);
     const userAgent = request.headers.get('user-agent') || '';
     const contentType = request.headers.get('content-type') || '';
@@ -220,7 +218,7 @@ export class SecurityMiddleware {
   /**
    * Handle CORS requests
    */
-  private handleCors(request: NextRequest, allowedOrigins?: string[]): NextResponse | null {
+  private handleCors(_request: NextRequest, allowedOrigins?: string[]): NextResponse | null {
     const origin = request.headers.get('origin');
 
     // Handle preflight requests
@@ -271,7 +269,7 @@ export class SecurityMiddleware {
   /**
    * Authenticate request using various methods
    */
-  private async authenticateRequest(request: NextRequest): Promise<{
+  private async authenticateRequest(_request: NextRequest): Promise<{
     authenticated: boolean;
     userId?: string;
     role?: string;
@@ -371,7 +369,7 @@ export class SecurityMiddleware {
         permissions: apiKeyRecord.permissions as Permission[],
       };
     } catch (error) {
-      console.error('API key authentication error:', error);
+      // console.error('API key authentication error:', error);
       return { valid: false, permissions: [] };
     }
   }
@@ -409,7 +407,7 @@ export class SecurityMiddleware {
   /**
    * Get client IP address
    */
-  private getClientIP(request: NextRequest): string {
+  private getClientIP(_request: NextRequest): string {
     return (
       request.headers.get('cf-connecting-ip') ||
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
@@ -433,7 +431,7 @@ export class SecurityMiddleware {
   /**
    * Apply security headers to response
    */
-  public applySecurityHeaders(response: NextResponse): NextResponse {
+  public applySecurityHeaders(_response: NextResponse): NextResponse {
     Object.entries(SECURITY_HEADERS).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
@@ -481,9 +479,9 @@ export const securityMiddleware = SecurityMiddleware.getInstance();
 // Utility function to create rate limit key generators
 export function createRateLimitKeyGenerator(
   type: 'ip' | 'user' | 'api-key' | 'custom',
-  customGenerator?: (request: NextRequest) => string
+  customGenerator?: (_request: NextRequest) => string
 ) {
-  return (request: NextRequest): string => {
+  return (_request: NextRequest): string => {
     switch (type) {
       case 'ip':
         return securityMiddleware['getClientIP'](request);

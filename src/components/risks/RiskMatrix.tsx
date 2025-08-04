@@ -119,7 +119,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
           riskScore: calculateRiskScore(likelihood, impact),
         });
       } catch (error) {
-        console.error('Failed to update risk position:', error);
+        // console.error('Failed to update risk position:', error);
       }
     }
     

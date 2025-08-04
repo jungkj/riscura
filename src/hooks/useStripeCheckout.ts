@@ -15,7 +15,7 @@ export function useStripeCheckout() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createCheckoutSession = async (options: CheckoutOptions) => {
+  const createCheckoutSession = async (_options: CheckoutOptions) => {
     setLoading(true);
     setError(null);
 
@@ -56,7 +56,7 @@ export function useStripeCheckout() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
-      console.error('Stripe checkout error:', err);
+      // console.error('Stripe checkout error:', err);
     } finally {
       setLoading(false);
     }

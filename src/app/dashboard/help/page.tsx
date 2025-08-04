@@ -163,7 +163,7 @@ export default function HelpPage() {
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const categories = Array.from(new Set(helpArticles.map((a) => a.category)));
+  const _categories = Array.from(new Set(helpArticles.map((a) => a.category)));
 
   return (
     <ProtectedRoute>

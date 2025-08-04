@@ -38,7 +38,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 interface MonitoringDataPoint {
   timestamp: number;
@@ -70,7 +70,7 @@ interface RealTimeMonitoringChartProps {
   showAlerts?: boolean;
   className?: string;
   onAlert?: (alert: { metric: string; value: number; threshold: number; severity: string }) => void;
-  onExport?: (data: any) => void;
+  onExport?: (_data: any) => void;
 }
 
 // Default alert thresholds

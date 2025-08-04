@@ -161,7 +161,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
   };
 
   const handleCloneTemplate = (template: Template) => {
-    console.log(`Cloning template: ${template.title}`);
+    // console.log(`Cloning template: ${template.title}`);
   };
 
   const getDifficultyColor = (difficulty: string) => {

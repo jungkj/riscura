@@ -75,7 +75,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
         setError(data.error);
       }
     } catch (err) {
-      console.error('Error fetching integrations:', err);
+      // console.error('Error fetching integrations:', err);
       setError('Failed to load SharePoint connections');
     } finally {
       setIsLoading(false);
@@ -129,7 +129,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
 
         return { success: false, error: 'Unknown error occurred' };
       } catch (err) {
-        console.error('Error connecting to SharePoint:', err);
+        // console.error('Error connecting to SharePoint:', err);
         const errorMessage = 'Failed to connect to SharePoint';
         setError(errorMessage);
         return { success: false, error: errorMessage };
@@ -161,7 +161,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
 
       return false;
     } catch (err) {
-      console.error('Error disconnecting from SharePoint:', err);
+      // console.error('Error disconnecting from SharePoint:', err);
       setError('Failed to disconnect from SharePoint');
       return false;
     }

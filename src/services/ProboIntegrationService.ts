@@ -68,7 +68,7 @@ export class ProboIntegrationService {
   private proboMitigations: any[] = [];
   private proboCategories: string[] = [];
 
-  private constructor(config: ProboIntegrationConfig) {
+  private constructor(_config: ProboIntegrationConfig) {
     this.proboService = ProboService.getInstance();
     this.vendorService = new VendorAssessmentService();
     this.config = config;
@@ -99,7 +99,7 @@ export class ProboIntegrationService {
       await this.syncWithProbo();
       this.startHealthMonitoring();
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to initialize Probo integration:',
         error instanceof Error ? error.message : String(error)
       );
@@ -115,11 +115,11 @@ export class ProboIntegrationService {
       this.proboMitigations = await this.proboService.getMitigations();
       this.proboCategories = await this.proboService.getMitigationCategories();
 
-      console.log(
+      // console.log(
         `Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`
       );
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to load Probo repository data:',
         error instanceof Error ? error.message : String(error)
       );
@@ -274,7 +274,7 @@ export class ProboIntegrationService {
     recommendations: string[];
   }> {
     const mitigations = await this.proboService.getMitigations();
-    const categories = await this.proboService.getMitigationCategories();
+    const _categories = await this.proboService.getMitigationCategories();
 
     return {
       controlCoverage: Math.round((mitigations.length / 1000) * 100), // Assuming 1000 total possible controls
@@ -406,8 +406,7 @@ export class ProboIntegrationService {
    * Generate AI-powered controls for a specific risk
    * Core feature inspired by Probo's smart automation
    */
-  async generateControlsForRisk(
-    request: ControlGenerationRequest
+  async generateControlsForRisk(_request: ControlGenerationRequest
   ): Promise<ControlGenerationResponse> {
     try {
       // Step 1: Analyze the risk using AI
@@ -456,7 +455,7 @@ export class ProboIntegrationService {
 
       return response;
     } catch (error) {
-      console.error('Error generating controls for risk:', error);
+      // console.error('Error generating controls for risk:', error);
       throw new Error(
         `Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -466,7 +465,7 @@ export class ProboIntegrationService {
   /**
    * AI-powered risk analysis using Probo's methodology
    */
-  private async analyzeRisk(request: ControlGenerationRequest): Promise<ProboAIAnalysis> {
+  private async analyzeRisk(_request: ControlGenerationRequest): Promise<ProboAIAnalysis> {
     // Simulate AI analysis based on Probo's approach
     const analysis: ProboAIAnalysis = {
       riskId: request.riskId,
@@ -498,8 +497,7 @@ export class ProboIntegrationService {
   /**
    * Generate tailored controls based on Probo's control library
    */
-  private async generateTailoredControls(
-    request: ControlGenerationRequest,
+  private async generateTailoredControls(_request: ControlGenerationRequest,
     analysis: ProboAIAnalysis
   ): Promise<ProboControl[]> {
     const controls: ProboControl[] = [];
@@ -580,7 +578,7 @@ export class ProboIntegrationService {
     try {
       // Use actual Probo mitigations as control templates
       const proboMitigations = await this.proboService.getMitigations();
-      const categories = await this.proboService.getMitigationCategories();
+      const _categories = await this.proboService.getMitigationCategories();
 
       this.controlLibrary = {
         categories: this.mapProboCategoriesToControlCategories(categories),
@@ -591,11 +589,11 @@ export class ProboIntegrationService {
         version: '1.0.0',
       };
 
-      console.log(
+      // console.log(
         `Loaded Probo control library with ${this.controlLibrary.controls.length} controls`
       );
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to load Probo control library:',
         error instanceof Error ? error.message : String(error)
       );
@@ -1056,7 +1054,7 @@ export class ProboIntegrationService {
     return preferredFrameworks.length > 0 ? preferredFrameworks : ['SOC2'];
   }
 
-  private getRelevantControlTemplates(request: ControlGenerationRequest): any[] {
+  private getRelevantControlTemplates(_request: ControlGenerationRequest): any[] {
     // Return relevant templates based on risk category and severity
     return [
       {
@@ -1175,7 +1173,7 @@ export class ProboIntegrationService {
     ];
   }
 
-  private generateAIRecommendations(request: ControlGenerationRequest): any[] {
+  private generateAIRecommendations(_request: ControlGenerationRequest): any[] {
     return [
       {
         type: 'New Control',
@@ -1209,8 +1207,7 @@ export class ProboIntegrationService {
     return totalHours * hourlyRate;
   }
 
-  private async findAlternativeControls(
-    request: ControlGenerationRequest,
+  private async findAlternativeControls(_request: ControlGenerationRequest,
     generatedControls: ProboControl[]
   ): Promise<ProboControl[]> {
     // Return alternative control options
@@ -1238,7 +1235,7 @@ export class ProboIntegrationService {
 
   // Missing helper methods implementation
   private findControlCategoryForMitigation(mitigation: any): ProboControlCategory {
-    const categories = this.getProboControlCategories();
+    const _categories = this.getProboControlCategories();
     // Map mitigation category to ProboControlCategory based on mitigation.category
     const categoryMap: { [key: string]: string } = {
       'access-control': 'access-control',

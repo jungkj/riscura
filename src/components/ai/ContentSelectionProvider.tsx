@@ -122,7 +122,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
     try {
       await analyzeSelection(selection, action);
     } catch (error) {
-      console.error('Failed to analyze selection:', error);
+      // console.error('Failed to analyze selection:', error);
     }
   }, [enableAnalysis, analyzeSelection]);
 

@@ -262,7 +262,7 @@ function loadPerformanceConfig(): PerformanceConfig {
   try {
     return performanceConfigSchema.parse(config);
   } catch (error) {
-    console.error('Invalid performance configuration:', error);
+    // console.error('Invalid performance configuration:', error);
     throw new Error('Performance configuration validation failed');
   }
 }

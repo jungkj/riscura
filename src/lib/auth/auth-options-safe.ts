@@ -74,10 +74,10 @@ export async function createAuthOptions(): Promise<NextAuthOptions> {
   try {
     const { db } = await import('@/lib/db');
     adapter = PrismaAdapter(db.client);
-    console.log('[NextAuth] Database adapter loaded successfully');
+    // console.log('[NextAuth] Database adapter loaded successfully');
   } catch (error) {
-    console.error('[NextAuth] Failed to load database adapter:', error);
-    console.warn('[NextAuth] Continuing without database persistence');
+    // console.error('[NextAuth] Failed to load database adapter:', error);
+    // console.warn('[NextAuth] Continuing without database persistence');
   }
 
   return {

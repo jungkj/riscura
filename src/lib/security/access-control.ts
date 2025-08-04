@@ -145,8 +145,7 @@ export class AccessControlService {
   /**
    * Check document access with comprehensive security checks
    */
-  public async checkDocumentAccess(
-    userId: string,
+  public async checkDocumentAccess(_userId: string,
     userRole: string,
     userPermissions: Permission[],
     documentId: string,
@@ -360,7 +359,7 @@ export class AccessControlService {
   /**
    * Extract client IP address
    */
-  private getClientIP(request: NextRequest): string {
+  private getClientIP(_request: NextRequest): string {
     return (
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
       request.headers.get('x-real-ip') ||
@@ -372,8 +371,7 @@ export class AccessControlService {
   /**
    * Log access attempt for audit trail
    */
-  private async logAccess(
-    userId: string,
+  private async logAccess(_userId: string,
     action: string,
     resource: string,
     resourceId: string,
@@ -403,7 +401,7 @@ export class AccessControlService {
 
     // In production, also send to external security monitoring
     if (result === 'denied') {
-      console.warn('ACCESS DENIED:', logEntry);
+      // console.warn('ACCESS DENIED:', logEntry);
       // Could integrate with SIEM systems here
     }
   }

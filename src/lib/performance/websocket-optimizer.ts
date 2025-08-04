@@ -86,7 +86,7 @@ export class WebSocketOptimizer {
   private eventHandlers: Map<string, Set<Function>> = new Map();
   private messageLatencyTracker: Map<string, number> = new Map();
 
-  constructor(config: Partial<WebSocketConfig> = {}) {
+  constructor(_config: Partial<WebSocketConfig> = {}) {
     this.config = { ...DEFAULT_WEBSOCKET_CONFIG, ...config };
     this.connectionPool = {
       connections: new Map(),
@@ -240,7 +240,7 @@ export class WebSocketOptimizer {
       }
     );
 
-    console.log(`WebSocket connection ${connectionState.id} established`);
+    // console.log(`WebSocket connection ${connectionState.id} established`);
   }
 
   /**
@@ -268,7 +268,7 @@ export class WebSocketOptimizer {
       this.connectionPool.connections.delete(connectionState.id);
     }
 
-    console.log(`WebSocket connection ${connectionState.id} closed (code: ${event.code})`);
+    // console.log(`WebSocket connection ${connectionState.id} closed (code: ${event.code})`);
   }
 
   /**
@@ -286,7 +286,7 @@ export class WebSocketOptimizer {
       error: error.message,
     });
 
-    console.error(`WebSocket connection ${connectionState.id} error:`, error);
+    // console.error(`WebSocket connection ${connectionState.id} error:`, error);
   }
 
   /**
@@ -326,7 +326,7 @@ export class WebSocketOptimizer {
         originalEvent: event,
       });
     } catch (error) {
-      console.error(`Failed to parse WebSocket message from ${connectionState.id}:`, error);
+      // console.error(`Failed to parse WebSocket message from ${connectionState.id}:`, error);
       this.emitEvent('message:error', {
         connectionId: connectionState.id,
         error: error instanceof Error ? error.message : String(error),
@@ -402,9 +402,9 @@ export class WebSocketOptimizer {
       this.metrics.messagesOutgoing++;
       this.updateBandwidthUsage(serializedData);
 
-      console.log(`Message ${message.id} sent to connection ${connectionState.id}`);
+      // console.log(`Message ${message.id} sent to connection ${connectionState.id}`);
     } catch (error) {
-      console.error(`Failed to send message ${message.id}:`, error);
+      // console.error(`Failed to send message ${message.id}:`, error);
 
       // Retry if configured
       if (message.retries < message.maxRetries) {
@@ -443,7 +443,7 @@ export class WebSocketOptimizer {
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
 
-    console.log(`Message ${message.id} queued for connection ${connectionState.id}`);
+    // console.log(`Message ${message.id} queued for connection ${connectionState.id}`);
   }
 
   /**
@@ -459,7 +459,7 @@ export class WebSocketOptimizer {
         // Add small delay to prevent overwhelming the connection
         await new Promise((resolve) => setTimeout(resolve, 10));
       } catch (error) {
-        console.error(`Failed to process queued message ${message.id}:`, error);
+        // console.error(`Failed to process queued message ${message.id}:`, error);
         // Re-queue if retries available
         if (message.retries < message.maxRetries) {
           this.queueMessage(connectionState, message);
@@ -473,7 +473,7 @@ export class WebSocketOptimizer {
    */
   private async attemptReconnection(connectionState: ConnectionState): Promise<void> {
     if (connectionState.reconnectAttempts >= this.config.reconnectAttempts) {
-      console.log(`Max reconnection attempts reached for ${connectionState.id}`);
+      // console.log(`Max reconnection attempts reached for ${connectionState.id}`);
       this.connectionPool.connections.delete(connectionState.id);
       this.emitEvent('connection:failed', { connectionId: connectionState.id });
       return;
@@ -489,7 +489,7 @@ export class WebSocketOptimizer {
         await this.establishConnection(connectionState);
         this.emitEvent('connection:reconnected', { connectionId: connectionState.id });
       } catch (error) {
-        console.error(
+        // console.error(
           `Reconnection attempt ${connectionState.reconnectAttempts} failed for ${connectionState.id}:`,
           error
         );
@@ -531,7 +531,7 @@ export class WebSocketOptimizer {
         const timeSinceLastHeartbeat = now.getTime() - connectionState.lastHeartbeat.getTime();
 
         if (timeSinceLastHeartbeat > heartbeatTimeout) {
-          console.warn(`Heartbeat timeout for connection ${connectionId}`);
+          // console.warn(`Heartbeat timeout for connection ${connectionId}`);
 
           // Send ping to check if connection is alive
           this.sendPing(connectionState);
@@ -553,7 +553,7 @@ export class WebSocketOptimizer {
 
         connectionState.socket.send(JSON.stringify(pingData));
       } catch (error) {
-        console.error(`Failed to send ping to ${connectionState.id}:`, error);
+        // console.error(`Failed to send ping to ${connectionState.id}:`, error);
         // Force reconnection
         if (connectionState.metadata.autoReconnect) {
           connectionState.socket.close();
@@ -622,7 +622,7 @@ export class WebSocketOptimizer {
   /**
    * Update bandwidth usage
    */
-  private updateBandwidthUsage(data: string | ArrayBuffer): void {
+  private updateBandwidthUsage(_data: string | ArrayBuffer): void {
     const size = typeof data === 'string' ? data.length : data.byteLength;
     this.metrics.bandwidthUsage += size;
   }
@@ -630,7 +630,7 @@ export class WebSocketOptimizer {
   /**
    * Utility methods
    */
-  private shouldUseBinary(data: any): boolean {
+  private shouldUseBinary(_data: any): boolean {
     // Simple heuristic: use binary for large objects or specific data types
     return (
       data instanceof ArrayBuffer ||
@@ -639,7 +639,7 @@ export class WebSocketOptimizer {
     );
   }
 
-  private serializeToBinary(data: any): ArrayBuffer {
+  private serializeToBinary(_data: any): ArrayBuffer {
     // Simple binary serialization (could be enhanced with protobuf, msgpack, etc.)
     const jsonString = JSON.stringify(data);
     const encoder = new TextEncoder();
@@ -662,7 +662,7 @@ export class WebSocketOptimizer {
         try {
           handler(data);
         } catch (error) {
-          console.error(`Error in event handler for ${eventName}:`, error);
+          // console.error(`Error in event handler for ${eventName}:`, error);
         }
       });
     }
@@ -688,12 +688,12 @@ export class WebSocketOptimizer {
   private setupGlobalErrorHandlers(): void {
     if (typeof window !== 'undefined') {
       window.addEventListener('online', () => {
-        console.log('Network connection restored, attempting to reconnect WebSockets');
+        // console.log('Network connection restored, attempting to reconnect WebSockets');
         this.reconnectAllConnections();
       });
 
       window.addEventListener('offline', () => {
-        console.log('Network connection lost');
+        // console.log('Network connection lost');
         this.emitEvent('network:offline', {});
       });
     }
@@ -800,7 +800,7 @@ export class WebSocketOptimizer {
     this.eventHandlers.clear();
     this.messageLatencyTracker.clear();
 
-    console.log('WebSocket optimizer cleaned up');
+    // console.log('WebSocket optimizer cleaned up');
   }
 }
 

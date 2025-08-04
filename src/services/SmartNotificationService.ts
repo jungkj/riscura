@@ -128,11 +128,11 @@ interface IntelligentPrioritizationResult {
 
 // Enhanced user service interfaces
 interface UserService {
-  getUserContext(userId: string): Promise<UserContext>;
-  getUserPreferences(userId: string): Promise<UserPreferences>;
-  updateUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<void>;
-  getHistoricalEngagement(userId: string): Promise<unknown[]>;
-  recordEngagement(userId: string, notificationId: string, action: string): Promise<void>;
+  getUserContext(_userId: string): Promise<UserContext>;
+  getUserPreferences(_userId: string): Promise<UserPreferences>;
+  updateUserPreferences(_userId: string, preferences: Partial<UserPreferences>): Promise<void>;
+  getHistoricalEngagement(_userId: string): Promise<unknown[]>;
+  recordEngagement(_userId: string, notificationId: string, action: string): Promise<void>;
 }
 
 // Enhanced AI insight service
@@ -147,9 +147,8 @@ interface AIInsightService {
     userContext: UserContext,
     analysis: unknown
   ): Promise<{ insight: string; confidence: number; actionable: boolean }>;
-  generatePersonalizedNotification(request: AINotificationRequest): Promise<AIGeneratedContent>;
-  calculateIntelligentPriority(
-    context: Record<string, unknown>,
+  generatePersonalizedNotification(_request: AINotificationRequest): Promise<AIGeneratedContent>;
+  calculateIntelligentPriority(_context: Record<string, unknown>,
     userProfile: UserContext
   ): Promise<IntelligentPrioritizationResult>;
 }
@@ -271,7 +270,7 @@ export class SmartNotificationService {
 
       return aggregatedNotifications;
     } catch (error) {
-      console.error('Error generating risk alerts:', error);
+      // console.error('Error generating risk alerts:', error);
       throw new Error('Failed to generate risk alerts');
     }
   }
@@ -365,7 +364,7 @@ export class SmartNotificationService {
 
       return notifications;
     } catch (error) {
-      console.error('Error creating control reminders:', error);
+      // console.error('Error creating control reminders:', error);
       throw new Error('Failed to create control reminders');
     }
   }
@@ -459,7 +458,7 @@ export class SmartNotificationService {
 
       return notifications;
     } catch (error) {
-      console.error('Error identifying compliance gaps:', error);
+      // console.error('Error identifying compliance gaps:', error);
       throw new Error('Failed to identify compliance gaps');
     }
   }
@@ -545,7 +544,7 @@ export class SmartNotificationService {
 
       return notifications;
     } catch (error) {
-      console.error('Error suggesting workflow improvements:', error);
+      // console.error('Error suggesting workflow improvements:', error);
       throw new Error('Failed to suggest workflow improvements');
     }
   }
@@ -592,7 +591,7 @@ export class SmartNotificationService {
             await this.handleEscalation(notification, channelConfig.escalation);
           }
         } catch (error) {
-          console.error(`Error delivering to ${channelConfig.channel}:`, error);
+          // console.error(`Error delivering to ${channelConfig.channel}:`, error);
           results.push({
             notificationId: notification.id,
             channel: channelConfig.channel,
@@ -616,7 +615,7 @@ export class SmartNotificationService {
 
       return results;
     } catch (error) {
-      console.error('Error sending notification:', error);
+      // console.error('Error sending notification:', error);
       throw new Error('Failed to send notification');
     }
   }
@@ -624,7 +623,7 @@ export class SmartNotificationService {
   /**
    * Process notification queue for batching
    */
-  async processNotificationQueue(userId: string): Promise<void> {
+  async processNotificationQueue(_userId: string): Promise<void> {
     try {
       const userQueue = this.notificationQueue.get(userId) || [];
       if (userQueue.length === 0) return;
@@ -646,15 +645,14 @@ export class SmartNotificationService {
       // Clear processed queue
       this.notificationQueue.delete(userId);
     } catch (error) {
-      console.error(`Error processing notification queue for user ${userId}:`, error);
+      // console.error(`Error processing notification queue for user ${userId}:`, error);
     }
   }
 
   /**
    * Update notification preferences
    */
-  async updateNotificationPreferences(
-    userId: string,
+  async updateNotificationPreferences(_userId: string,
     preferences: Partial<UserPreferences>
   ): Promise<void> {
     try {
@@ -670,7 +668,7 @@ export class SmartNotificationService {
         timestamp: new Date(),
       });
     } catch (error) {
-      console.error('Error updating notification preferences:', error);
+      // console.error('Error updating notification preferences:', error);
       throw new Error('Failed to update notification preferences');
     }
   }
@@ -678,22 +676,20 @@ export class SmartNotificationService {
   /**
    * Get notification analytics for a user
    */
-  async getNotificationAnalytics(
-    userId: string,
+  async getNotificationAnalytics(_userId: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<NotificationAnalytics[]> {
     try {
       return await this.analyticsService.getNotificationAnalytics(userId, timeRange);
     } catch (error) {
-      console.error('Error getting notification analytics:', error);
+      // console.error('Error getting notification analytics:', error);
       throw new Error('Failed to get notification analytics');
     }
   }
 
   // Private helper methods
 
-  private async buildContextualData(
-    userId: string,
+  private async buildContextualData(_userId: string,
     userContext: UserContext
   ): Promise<ContextualData> {
     const preferences = await this.getUserPreferences(userId);
@@ -713,7 +709,7 @@ export class SmartNotificationService {
   }
 
   private async calculateIntelligentPriority(
-    entity: unknown,
+    _entity: unknown,
     userContext: UserContext,
     analysis: unknown,
     notificationType: string
@@ -942,8 +938,7 @@ export class SmartNotificationService {
     }
   }
 
-  private async processBatchedNotifications(
-    userId: string,
+  private async processBatchedNotifications(_userId: string,
     notifications: SmartNotification[]
   ): Promise<void> {
     // Group notifications by priority and send in batches
@@ -955,8 +950,7 @@ export class SmartNotificationService {
     }
   }
 
-  private async processDigestNotifications(
-    userId: string,
+  private async processDigestNotifications(_userId: string,
     notifications: SmartNotification[]
   ): Promise<void> {
     // Create daily digest
@@ -980,8 +974,7 @@ export class SmartNotificationService {
     return batches;
   }
 
-  private async createBatchNotification(
-    userId: string,
+  private async createBatchNotification(_userId: string,
     batch: SmartNotification[]
   ): Promise<SmartNotification> {
     const userContext = await this.userService.getUserContext(userId);
@@ -1029,8 +1022,7 @@ export class SmartNotificationService {
     };
   }
 
-  private async createDigestNotification(
-    userId: string,
+  private async createDigestNotification(_userId: string,
     notifications: SmartNotification[]
   ): Promise<SmartNotification> {
     const userContext = await this.userService.getUserContext(userId);
@@ -1109,7 +1101,7 @@ export class SmartNotificationService {
   }
 
   private getDigestCategories(notifications: SmartNotification[]): string[] {
-    const categories = new Set<string>();
+    const _categories = new Set<string>();
 
     for (const notification of notifications) {
       categories.add(notification.type);
@@ -1137,14 +1129,14 @@ export class SmartNotificationService {
     return await this.userService.getUsersForEntity('compliance', requirement.id);
   }
 
-  private async getUserPreferences(userId: string): Promise<UserPreferences> {
+  private async getUserPreferences(_userId: string): Promise<UserPreferences> {
     const cached = await this.cacheService.get(`user_preferences:${userId}`);
     if (cached) return cached as UserPreferences;
 
     return await this.userService.getUserPreferences(userId);
   }
 
-  private async getWorkingHours(userId: string): Promise<unknown> {
+  private async getWorkingHours(_userId: string): Promise<unknown> {
     // Mock implementation
     return {
       start: '09:00',
@@ -1153,17 +1145,17 @@ export class SmartNotificationService {
     };
   }
 
-  private async getCurrentActivity(userId: string): Promise<string> {
+  private async getCurrentActivity(_userId: string): Promise<string> {
     // Mock implementation
     return 'reviewing_risks';
   }
 
-  private async getRelevantEntities(userId: string, userContext: UserContext): Promise<string[]> {
+  private async getRelevantEntities(_userId: string, userContext: UserContext): Promise<string[]> {
     // Mock implementation
     return ['entity1', 'entity2'];
   }
 
-  private async getHistoricalContext(userId: string): Promise<unknown> {
+  private async getHistoricalContext(_userId: string): Promise<unknown> {
     // Mock implementation
     return {
       recentActions: [],
@@ -1171,15 +1163,13 @@ export class SmartNotificationService {
     };
   }
 
-  private async getSuppressionRules(
-    userId: string,
+  private async getSuppressionRules(_userId: string,
     notificationType: string
   ): Promise<SuppressionRule[]> {
     return await this.userService.getSuppressionRules(userId, notificationType);
   }
 
-  private async getDeliveryChannels(
-    userId: string,
+  private async getDeliveryChannels(_userId: string,
     priority: InsightPriority
   ): Promise<DeliveryChannel[]> {
     return await this.userService.getDeliveryChannels(userId, priority);
@@ -1223,7 +1213,7 @@ interface AIInsightService {
     analysis: unknown
   ): Promise<{ insight: string }>;
   calculatePriority(
-    entity: unknown,
+    _entity: unknown,
     context: UserContext,
     analysis: unknown,
     type: string
@@ -1243,7 +1233,7 @@ interface AIInsightService {
     insight: unknown
   ): Promise<PersonalizedContent>;
   generateActionItems(
-    type: string,
+    _type: string,
     entity: unknown,
     analysis: unknown,
     context: UserContext
@@ -1252,19 +1242,19 @@ interface AIInsightService {
 }
 
 interface UserContextService {
-  getUserContext(userId: string): Promise<UserContext>;
+  getUserContext(_userId: string): Promise<UserContext>;
   getUsersForEntity(entityType: string, entityId: string): Promise<string[]>;
-  getUserPreferences(userId: string): Promise<UserPreferences>;
-  getWorkingHours(userId: string): Promise<unknown>;
-  getCurrentActivity(userId: string): Promise<string>;
-  getRelevantEntities(userId: string, context: UserContext): Promise<string[]>;
-  getHistoricalContext(userId: string): Promise<unknown>;
-  getSuppressionRules(userId: string, type: string): Promise<SuppressionRule[]>;
-  getDeliveryChannels(userId: string, priority: InsightPriority): Promise<DeliveryChannel[]>;
+  getUserPreferences(_userId: string): Promise<UserPreferences>;
+  getWorkingHours(_userId: string): Promise<unknown>;
+  getCurrentActivity(_userId: string): Promise<string>;
+  getRelevantEntities(_userId: string, context: UserContext): Promise<string[]>;
+  getHistoricalContext(_userId: string): Promise<unknown>;
+  getSuppressionRules(_userId: string, type: string): Promise<SuppressionRule[]>;
+  getDeliveryChannels(_userId: string, priority: InsightPriority): Promise<DeliveryChannel[]>;
 }
 
 interface TemplateService {
-  getTemplate(type: string, language: string): Promise<NotificationTemplate>;
+  getTemplate(_type: string, language: string): Promise<NotificationTemplate>;
 }
 
 interface DeliveryService {
@@ -1273,8 +1263,7 @@ interface DeliveryService {
 }
 
 interface AnalyticsService {
-  getNotificationAnalytics(
-    userId: string,
+  getNotificationAnalytics(_userId: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<NotificationAnalytics[]>;
   recordDeliveryMetrics(analytics: NotificationAnalytics): Promise<void>;

@@ -385,7 +385,7 @@ class AlertingSystem {
       try {
         await this.sendNotification(alert, channel);
       } catch (error) {
-        console.error(`Failed to send notification via ${channel}:`, error);
+        // console.error(`Failed to send notification via ${channel}:`, error);
 
         // Log notification failure
         Sentry.captureException(error, {
@@ -658,7 +658,7 @@ Alert ID: ${alert.id}`;
         try {
           await this.sendNotification(alert, channel);
         } catch (error) {
-          console.error(`Failed to escalate via ${channel}:`, error);
+          // console.error(`Failed to escalate via ${channel}:`, error);
         }
       }
     }

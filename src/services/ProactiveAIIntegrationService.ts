@@ -154,11 +154,11 @@ export class ProactiveAIIntegrationService {
    */
   async startBackgroundProcessing(): Promise<void> {
     if (this.backgroundProcessor) {
-      console.warn('Background processing is already running');
+      // console.warn('Background processing is already running');
       return;
     }
 
-    console.log('Starting background AI processing...');
+    // console.log('Starting background AI processing...');
     this.backgroundProcessor = setInterval(
       () => this.processBatch(),
       this.config.processingInterval
@@ -172,7 +172,7 @@ export class ProactiveAIIntegrationService {
     if (this.backgroundProcessor) {
       clearInterval(this.backgroundProcessor);
       this.backgroundProcessor = null;
-      console.log('Background AI processing stopped');
+      // console.log('Background AI processing stopped');
     }
 
     // Wait for active tasks to complete
@@ -195,7 +195,7 @@ export class ProactiveAIIntegrationService {
     this.processingQueue.push(aiTask);
     this.sortQueueByPriority();
 
-    console.log(
+    // console.log(
       `Queued AI task: ${aiTask.type} for ${aiTask.targetEntity.type}:${aiTask.targetEntity.id}`
     );
     return aiTask.id;
@@ -281,8 +281,7 @@ export class ProactiveAIIntegrationService {
   /**
    * Generate AI-powered smart notifications
    */
-  async generateSmartNotifications(
-    userId: string,
+  async generateSmartNotifications(_userId: string,
     context: UserContext,
     triggers: unknown[] = []
   ): Promise<SmartNotification[]> {
@@ -409,7 +408,7 @@ export class ProactiveAIIntegrationService {
     try {
       await Promise.allSettled(processingPromises);
     } catch (error) {
-      console.error('Error processing AI batch:', error);
+      // console.error('Error processing AI batch:', error);
     } finally {
       this.isProcessing = false;
     }
@@ -437,9 +436,9 @@ export class ProactiveAIIntegrationService {
       };
 
       this.processingResults.set(task.id, processingResult);
-      console.log(`Completed AI task: ${task.type} in ${processingResult.processingTime}ms`);
+      // console.log(`Completed AI task: ${task.type} in ${processingResult.processingTime}ms`);
     } catch (error) {
-      console.error(`Error processing AI task ${task.id}:`, error);
+      // console.error(`Error processing AI task ${task.id}:`, error);
 
       if (task.retryCount < task.maxRetries) {
         task.retryCount++;
@@ -456,9 +455,9 @@ export class ProactiveAIIntegrationService {
           this.sortQueueByPriority();
         }, delay);
 
-        console.log(`Retrying AI task ${task.id} (attempt ${task.retryCount + 1})`);
+        // console.log(`Retrying AI task ${task.id} (attempt ${task.retryCount + 1})`);
       } else {
-        console.error(`Failed AI task ${task.id} after ${task.maxRetries} retries`);
+        // console.error(`Failed AI task ${task.id} after ${task.maxRetries} retries`);
       }
     } finally {
       this.activeProcessingTasks.delete(task.id);

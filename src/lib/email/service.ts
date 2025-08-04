@@ -44,13 +44,13 @@ export interface EmailResult {
 }
 
 export interface EmailProvider {
-  sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }>;
+  sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }>;
 }
 
 // Mock email provider for development
 class MockEmailProvider implements EmailProvider {
-  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
-    console.log('📧 Mock Email Sent:', {
+  async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+    // console.log('📧 Mock Email Sent:', {
       to: options.to,
       subject: options.subject,
       template: options.template,
@@ -71,7 +71,7 @@ class SendGridProvider implements EmailProvider {
     this.apiKey = apiKey;
   }
 
-  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+  async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
     // TODO: Implement actual SendGrid integration
     throw new Error('SendGrid integration not implemented yet');
   }
@@ -79,7 +79,7 @@ class SendGridProvider implements EmailProvider {
 
 // AWS SES email provider (production)
 class SESProvider implements EmailProvider {
-  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+  async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
     // TODO: Implement actual AWS SES integration
     throw new Error('AWS SES integration not implemented yet');
   }
@@ -172,7 +172,7 @@ class EmailService {
   private sesClient?: SESClient;
   private smtpTransporter?: any;
 
-  constructor(config: EmailConfig) {
+  constructor(_config: EmailConfig) {
     this.config = config;
     this.initializeTransporter();
     this.loadTemplates();
@@ -185,7 +185,7 @@ class EmailService {
       } else if (env.AWS_SES_REGION) {
         this.provider = new SESProvider();
       } else {
-        console.warn('No email provider configured for production');
+        // console.warn('No email provider configured for production');
         this.provider = new MockEmailProvider();
       }
     } else {
@@ -195,7 +195,7 @@ class EmailService {
 
   private initializeTransporter() {
     if (!emailConfig.enabled) {
-      console.warn('Email service is disabled. Check your SMTP configuration.');
+      // console.warn('Email service is disabled. Check your SMTP configuration.');
       return;
     }
 
@@ -218,9 +218,9 @@ class EmailService {
     // Verify connection
     this.transporter.verify((error, success) => {
       if (error) {
-        console.error('Email service connection failed:', error);
+        // console.error('Email service connection failed:', error);
       } else {
-        console.log('Email service connected successfully');
+        // console.log('Email service connected successfully');
       }
     });
   }
@@ -399,9 +399,9 @@ class EmailService {
     });
   }
 
-  async send(options: EmailOptions): Promise<EmailResult | null> {
+  async send(_options: EmailOptions): Promise<EmailResult | null> {
     if (!emailConfig.enabled || !this.transporter) {
-      console.warn('Email service is disabled. Email not sent:', options.subject);
+      // console.warn('Email service is disabled. Email not sent:', options.subject);
       return null;
     }
 
@@ -438,7 +438,7 @@ class EmailService {
 
       const result = await this.transporter.sendMail(mailOptions);
 
-      console.log('Email sent successfully:', {
+      // console.log('Email sent successfully:', {
         messageId: result.messageId,
         to: options.to,
         subject: options.subject,
@@ -452,7 +452,7 @@ class EmailService {
         envelope: result.envelope,
       };
     } catch (error) {
-      console.error('Failed to send email:', error);
+      // console.error('Failed to send email:', error);
       throw new Error(
         `Email sending failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
@@ -482,7 +482,7 @@ class EmailService {
   private processTemplate(templateName: string, data: Record<string, any>): EmailTemplate | null {
     const template = this.templates.get(templateName);
     if (!template) {
-      console.error(`Email template not found: ${templateName}`);
+      // console.error(`Email template not found: ${templateName}`);
       return null;
     }
 
@@ -510,7 +510,7 @@ class EmailService {
     };
   }
 
-  async queueEmail(options: EmailOptions): Promise<string> {
+  async queueEmail(_options: EmailOptions): Promise<string> {
     const id = generateId();
     const scheduledAt = options.deliveryTime || new Date();
 
@@ -521,7 +521,7 @@ class EmailService {
       scheduledAt,
     });
 
-    console.log(`Email queued for delivery: ${id}`);
+    // console.log(`Email queued for delivery: ${id}`);
     return id;
   }
 
@@ -541,11 +541,11 @@ class EmailService {
             // Remove from queue on success
             this.queue = this.queue.filter((q) => q.id !== item.id);
           } catch (error) {
-            console.error(`Failed to send queued email ${item.id}:`, error);
+            // console.error(`Failed to send queued email ${item.id}:`, error);
 
             item.retryCount++;
             if (item.retryCount >= 3) {
-              console.error(`Email ${item.id} failed after 3 attempts, removing from queue`);
+              // console.error(`Email ${item.id} failed after 3 attempts, removing from queue`);
               this.queue = this.queue.filter((q) => q.id !== item.id);
             } else {
               // Retry in 5 minutes
@@ -582,7 +582,7 @@ class EmailService {
   /**
    * Send a single email
    */
-  async sendEmail(options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
+  async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
     try {
       // Process template if specified
       if (options.template && EMAIL_TEMPLATES[options.template]) {
@@ -602,7 +602,7 @@ class EmailService {
 
       return result;
     } catch (error) {
-      console.error('Email send error:', error);
+      // console.error('Email send error:', error);
       throw new Error('Failed to send email');
     }
   }
@@ -620,7 +620,7 @@ class EmailService {
         const result = await this.sendEmail(email);
         results.push(result);
       } catch (error) {
-        console.error('Bulk email error:', error);
+        // console.error('Bulk email error:', error);
         results.push({ messageId: '', success: false });
       }
     }
@@ -738,8 +738,7 @@ class EmailService {
   /**
    * Log email in database
    */
-  private async logEmail(
-    options: EmailOptions,
+  private async logEmail(_options: EmailOptions,
     result: { messageId: string; success: boolean }
   ): Promise<void> {
     try {
@@ -754,7 +753,7 @@ class EmailService {
         },
       });
     } catch (error) {
-      console.error('Email logging error:', error);
+      // console.error('Email logging error:', error);
       // Don't throw error, logging is optional
     }
   }

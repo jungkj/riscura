@@ -34,7 +34,7 @@ export class EnhancedProboIntegrationService {
   private proboMitigations: any[] = [];
   private proboCategories: string[] = [];
 
-  private constructor(config: ProboIntegrationConfig) {
+  private constructor(_config: ProboIntegrationConfig) {
     this.proboService = ProboService.getInstance();
     this.vendorService = new VendorAssessmentService();
     this.config = config;
@@ -65,7 +65,7 @@ export class EnhancedProboIntegrationService {
       await this.syncWithProbo();
       this.startHealthMonitoring();
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to initialize Enhanced Probo integration:',
         error instanceof Error ? error.message : String(error)
       );
@@ -81,11 +81,11 @@ export class EnhancedProboIntegrationService {
       this.proboMitigations = await this.proboService.getMitigations();
       this.proboCategories = await this.proboService.getMitigationCategories();
 
-      console.log(
+      // console.log(
         `Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`
       );
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to load Probo repository data:',
         error instanceof Error ? error.message : String(error)
       );
@@ -100,7 +100,7 @@ export class EnhancedProboIntegrationService {
     try {
       // Use actual Probo mitigations as control templates
       const proboMitigations = await this.proboService.getMitigations();
-      const categories = await this.proboService.getMitigationCategories();
+      const _categories = await this.proboService.getMitigationCategories();
 
       this.controlLibrary = {
         categories: this.mapProboCategoriesToControlCategories(categories),
@@ -111,11 +111,11 @@ export class EnhancedProboIntegrationService {
         version: '2.0.0',
       };
 
-      console.log(
+      // console.log(
         `Loaded Enhanced Probo control library with ${this.controlLibrary.controls.length} controls`
       );
     } catch (error) {
-      console.error(
+      // console.error(
         'Failed to load Enhanced Probo control library:',
         error instanceof Error ? error.message : String(error)
       );
@@ -456,7 +456,7 @@ export class EnhancedProboIntegrationService {
   private startHealthMonitoring(): void {
     // Implement health monitoring
     setInterval(() => {
-      console.log('Enhanced Probo Integration Service health check passed');
+      // console.log('Enhanced Probo Integration Service health check passed');
     }, 60000); // Every minute
   }
 
@@ -470,8 +470,7 @@ export class EnhancedProboIntegrationService {
     return this.controlLibrary!;
   }
 
-  async generateControlsForRisk(
-    request: ControlGenerationRequest
+  async generateControlsForRisk(_request: ControlGenerationRequest
   ): Promise<ControlGenerationResponse> {
     // Enhanced control generation using actual Probo data
     const relevantMitigations = this.proboMitigations.filter((m) =>
@@ -528,7 +527,7 @@ export class EnhancedProboIntegrationService {
     }));
   }
 
-  private async analyzeRisk(request: ControlGenerationRequest): Promise<ProboAIAnalysis> {
+  private async analyzeRisk(_request: ControlGenerationRequest): Promise<ProboAIAnalysis> {
     return {
       riskLevel: request.riskSeverity,
       controlGaps: [],

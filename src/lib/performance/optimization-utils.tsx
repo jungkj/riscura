@@ -83,7 +83,7 @@ export class PerformanceTimer {
   end(label: string): number {
     const startTime = this.timers.get(label);
     if (!startTime) {
-      console.warn(`Timer '${label}' was not started`);
+      // console.warn(`Timer '${label}' was not started`);
       return 0;
     }
 
@@ -91,7 +91,7 @@ export class PerformanceTimer {
     this.timers.delete(label);
 
     if (duration > 100) {
-      console.warn(`Slow operation detected: ${label} took ${duration.toFixed(2)}ms`);
+      // console.warn(`Slow operation detected: ${label} took ${duration.toFixed(2)}ms`);
     }
 
     return duration;

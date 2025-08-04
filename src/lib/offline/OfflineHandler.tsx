@@ -50,7 +50,7 @@ class OfflineHandler {
   private syncInterval: NodeJS.Timeout | null = null;
   private eventListeners: Map<string, Function[]> = new Map();
 
-  constructor(config: Partial<OfflineConfig> = {}) {
+  constructor(_config: Partial<OfflineConfig> = {}) {
     this.config = {
       maxStorageSize: 50, // 50MB default
       maxRetries: 3,
@@ -298,7 +298,7 @@ class OfflineHandler {
         return false;
       }
     } catch (error) {
-      console.error('Sync action failed:', error);
+      // console.error('Sync action failed:', error);
       return false;
     }
   }
@@ -363,7 +363,7 @@ class OfflineHandler {
     return `offline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private generateChecksum(data: any): string {
+  private generateChecksum(_data: any): string {
     // Simple checksum implementation
     const str = JSON.stringify(data);
     let hash = 0;
@@ -375,7 +375,7 @@ class OfflineHandler {
     return hash.toString();
   }
 
-  private compressData(data: any): any {
+  private compressData(_data: any): any {
     if (!this.config.enableCompression) {
       return data;
     }
@@ -391,7 +391,7 @@ class OfflineHandler {
     }
   }
 
-  private decompressData(data: any): any {
+  private decompressData(_data: any): any {
     if (!this.config.enableCompression) {
       return data;
     }
@@ -413,7 +413,7 @@ class OfflineHandler {
       );
       localStorage.setItem('riscura_offline_actions', serialized);
     } catch (error) {
-      console.error('Failed to persist action queue:', error);
+      // console.error('Failed to persist action queue:', error);
     }
   }
 
@@ -429,7 +429,7 @@ class OfflineHandler {
       }));
       localStorage.setItem('riscura_offline_data', JSON.stringify(dataArray));
     } catch (error) {
-      console.error('Failed to persist offline data:', error);
+      // console.error('Failed to persist offline data:', error);
     }
   }
 
@@ -463,7 +463,7 @@ class OfflineHandler {
         );
       }
     } catch (error) {
-      console.error('Failed to load persisted data:', error);
+      // console.error('Failed to load persisted data:', error);
     }
   }
 
@@ -546,21 +546,21 @@ class OfflineHandler {
   }
 
   // Critical function handlers
-  public async saveRiskAssessment(data: any): Promise<string> {
+  public async saveRiskAssessment(_data: any): Promise<string> {
     return this.queueAction('risk-assessment', data, {
       priority: 'critical',
       metadata: { type: 'risk-assessment' },
     });
   }
 
-  public async updateCompliance(data: any): Promise<string> {
+  public async updateCompliance(_data: any): Promise<string> {
     return this.queueAction('compliance-update', data, {
       priority: 'high',
       metadata: { type: 'compliance-update' },
     });
   }
 
-  public async reportIncident(data: any): Promise<string> {
+  public async reportIncident(_data: any): Promise<string> {
     return this.queueAction('incident-report', data, {
       priority: 'critical',
       metadata: { type: 'incident-report' },

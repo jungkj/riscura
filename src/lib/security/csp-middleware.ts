@@ -62,7 +62,7 @@ class CSPManager {
   private nonce: string = '';
   private violations: CSPViolationReport[] = [];
 
-  constructor(config: Partial<CSPConfig> = {}) {
+  constructor(_config: Partial<CSPConfig> = {}) {
     this.config = {
       defaultSrc: ["'self'"],
       scriptSrc: [
@@ -261,7 +261,7 @@ class CSPManager {
     } as any);
 
     // Log violation for monitoring
-    console.warn('CSP Violation:', {
+    // console.warn('CSP Violation:', {
       directive: report['csp-report']['violated-directive'],
       blockedUri: report['csp-report']['blocked-uri'],
       documentUri: report['csp-report']['document-uri'],
@@ -284,7 +284,7 @@ class CSPManager {
         body: JSON.stringify(report),
       });
     } catch (error) {
-      console.error('Failed to send CSP violation to monitoring:', error);
+      // console.error('Failed to send CSP violation to monitoring:', error);
     }
   }
 
@@ -347,7 +347,7 @@ class CSPManager {
 export const cspManager = new CSPManager();
 
 // Middleware function for Next.js
-export function cspMiddleware(request: NextRequest, config?: Partial<CSPConfig>): NextResponse {
+export function cspMiddleware(_request: NextRequest, config?: Partial<CSPConfig>): NextResponse {
   const manager = config ? new CSPManager(config) : cspManager;
 
   // Generate nonce for this request

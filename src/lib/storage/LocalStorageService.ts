@@ -38,7 +38,7 @@ export class LocalStorageService {
       localStorage.setItem(key, JSON.stringify(value));
       return true;
     } catch (error) {
-      console.error('LocalStorage setItem error:', error);
+      // console.error('LocalStorage setItem error:', error);
       return false;
     }
   }
@@ -48,7 +48,7 @@ export class LocalStorageService {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (error) {
-      console.error('LocalStorage getItem error:', error);
+      // console.error('LocalStorage getItem error:', error);
       return null;
     }
   }
@@ -58,7 +58,7 @@ export class LocalStorageService {
       localStorage.removeItem(key);
       return true;
     } catch (error) {
-      console.error('LocalStorage removeItem error:', error);
+      // console.error('LocalStorage removeItem error:', error);
       return false;
     }
   }
@@ -295,7 +295,7 @@ export class LocalStorageService {
         }
       }
     } catch (error) {
-      console.error('Error calculating storage usage:', error);
+      // console.error('Error calculating storage usage:', error);
     }
 
     const quota = 5 * 1024 * 1024; // Assume 5MB quota
@@ -314,7 +314,7 @@ export class LocalStorageService {
       this.initializeStorage();
       return true;
     } catch (error) {
-      console.error('Error clearing storage:', error);
+      // console.error('Error clearing storage:', error);
       return false;
     }
   }
@@ -338,7 +338,7 @@ export class LocalStorageService {
       });
       return true;
     } catch (error) {
-      console.error('Error importing data:', error);
+      // console.error('Error importing data:', error);
       return false;
     }
   }

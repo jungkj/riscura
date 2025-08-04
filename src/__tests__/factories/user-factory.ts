@@ -16,7 +16,7 @@ export interface CreateUserOptions {
 export class UserFactory {
   private static counter = 1;
 
-  static create(options: CreateUserOptions = {}): User {
+  static create(_options: CreateUserOptions = {}): User {
     const id = options.id || `user-${this.counter++}`;
 
     return {
@@ -42,7 +42,7 @@ export class UserFactory {
     } as User;
   }
 
-  static createAdmin(options: CreateUserOptions = {}): User {
+  static createAdmin(_options: CreateUserOptions = {}): User {
     return this.create({
       ...options,
       role: UserRole.ADMIN,
@@ -50,7 +50,7 @@ export class UserFactory {
     });
   }
 
-  static createRiskManager(options: CreateUserOptions = {}): User {
+  static createRiskManager(_options: CreateUserOptions = {}): User {
     return this.create({
       ...options,
       role: UserRole.RISK_MANAGER,
@@ -58,7 +58,7 @@ export class UserFactory {
     });
   }
 
-  static createAuditor(options: CreateUserOptions = {}): User {
+  static createAuditor(_options: CreateUserOptions = {}): User {
     return this.create({
       ...options,
       role: UserRole.AUDITOR,
@@ -75,7 +75,7 @@ export class UserFactory {
     );
   }
 
-  static createForOrganization(organizationId: string, count: number = 1): User[] {
+  static createForOrganization(_organizationId: string, count: number = 1): User[] {
     return this.createBatch(count, { organizationId });
   }
 

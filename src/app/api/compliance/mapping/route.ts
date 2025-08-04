@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { complianceMappingEngine } from '@/lib/compliance/mapping';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Simplified validation for now
     const body = await request.json();
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    console.error('Error in compliance mapping:', error);
+    // console.error('Error in compliance mapping:', error);
     return NextResponse.json({ error: 'Failed to perform compliance mapping' }, { status: 500 });
   }
 }

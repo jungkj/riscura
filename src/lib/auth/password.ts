@@ -33,7 +33,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   try {
     return await bcrypt.compare(password, hash);
   } catch (error) {
-    console.error('Password verification error:', error);
+    // console.error('Password verification error:', error);
     return false;
   }
 }

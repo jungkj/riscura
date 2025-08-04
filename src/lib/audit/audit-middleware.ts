@@ -181,7 +181,7 @@ export function withAuditLogging<T extends any[]>(
       userId = session?.user?.id;
     } catch (error) {
       // Session retrieval failed, continue without user context
-      console.warn('Failed to retrieve session for audit logging:', error);
+      // console.warn('Failed to retrieve session for audit logging:', error);
     }
 
     const auditLogger = getAuditLogger(prisma);
@@ -192,7 +192,7 @@ export function withAuditLogging<T extends any[]>(
       try {
         entityId = entityId(req, args[0]);
       } catch (error) {
-        console.warn('Failed to extract entity ID for audit logging:', error);
+        // console.warn('Failed to extract entity ID for audit logging:', error);
         entityId = undefined;
       }
     }

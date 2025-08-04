@@ -52,7 +52,7 @@ export default function UpdateRiskAssessmentPage() {
       const data = await response.json();
       setRisks(data.data || []);
     } catch (error) {
-      console.error('Failed to fetch risks:', error);
+      // console.error('Failed to fetch risks:', error);
       toast({
         title: 'Error',
         description: 'Failed to load risks',

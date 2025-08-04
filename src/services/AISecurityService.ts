@@ -239,7 +239,7 @@ export class AISecurityService {
   private piiPatterns: Map<PIIType, RegExp> = new Map();
   private contentFilters: Map<ContentFlagType, RegExp> = new Map();
 
-  constructor(config: AISecurityConfig) {
+  constructor(_config: AISecurityConfig) {
     this.config = config;
     this.encryptionKey = config.encryptionKey;
     this.initializePIIPatterns();
@@ -249,7 +249,7 @@ export class AISecurityService {
   /**
    * Process AI request with full security pipeline
    */
-  async processSecureAIRequest(request: {
+  async processSecureAIRequest(_request: {
     content: string;
     userId: string;
     sessionId: string;
@@ -327,7 +327,7 @@ export class AISecurityService {
         warnings,
       };
     } catch (error) {
-      console.error('Security processing error:', error);
+      // console.error('Security processing error:', error);
       throw new Error('Security processing failed');
     }
   }
@@ -378,7 +378,7 @@ export class AISecurityService {
         warnings,
       };
     } catch (error) {
-      console.error('Response security processing error:', error);
+      // console.error('Response security processing error:', error);
       throw new Error('Response security processing failed');
     }
   }
@@ -531,8 +531,7 @@ export class AISecurityService {
   /**
    * Perform comprehensive security analysis
    */
-  private async performSecurityAnalysis(
-    request: { userId: string; action: AIAction; metadata?: Record<string, unknown> },
+  private async performSecurityAnalysis(_request: { userId: string; action: AIAction; metadata?: Record<string, unknown> },
     piiResult: { piiDetected: PIIEntity[] }
   ): Promise<SecurityAnalysis> {
     const anomalies: SecurityAnomaly[] = [];
@@ -577,8 +576,7 @@ export class AISecurityService {
   /**
    * Check compliance requirements
    */
-  private async checkCompliance(
-    request: { action: AIAction },
+  private async checkCompliance(_request: { action: AIAction },
     piiResult: { piiDetected: PIIEntity[] },
     classification: DataClassification
   ): Promise<ComplianceFlag[]> {
@@ -687,7 +685,7 @@ export class AISecurityService {
   /**
    * Encrypt sensitive data
    */
-  private encryptData(data: string): string {
+  private encryptData(_data: string): string {
     return CryptoJS.AES.encrypt(data, this.encryptionKey).toString();
   }
 
@@ -921,13 +919,13 @@ export class AISecurityService {
     return 'low';
   }
 
-  private async detectUnusualAccess(userId: string, action: AIAction): Promise<boolean> {
+  private async detectUnusualAccess(_userId: string, action: AIAction): Promise<boolean> {
     // Simple unusual access detection
     // In production, implement sophisticated behavioral analysis
     return Math.random() < 0.1; // 10% chance for demo
   }
 
-  private async checkAccessControl(userId: string): Promise<AccessControlCheck> {
+  private async checkAccessControl(_userId: string): Promise<AccessControlCheck> {
     return {
       authorized: true,
       permissions: ['read', 'write', 'ai_query'],

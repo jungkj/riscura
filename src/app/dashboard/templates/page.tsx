@@ -111,7 +111,7 @@ export default function TemplatesPage() {
         description: 'Your Excel template has been downloaded successfully.',
       });
     } catch (error) {
-      console.error('Download error:', error);
+      // console.error('Download error:', error);
       toast({
         title: 'Download Failed',
         description: 'Unable to download the template. Please try again.',

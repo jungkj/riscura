@@ -89,7 +89,7 @@ interface DraggableItemProps {
   children: React.ReactNode;
   onDragStart?: () => void;
   onDragEnd?: () => void;
-  onDrop?: (data: any) => void;
+  onDrop?: (_data: any) => void;
   dragData?: any;
   className?: string;
 }

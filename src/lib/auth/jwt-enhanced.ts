@@ -82,15 +82,14 @@ export class EnhancedJWTService {
       process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
 
     if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
-      console.warn('JWT secrets not set in environment variables. Using generated secrets.');
+      // console.warn('JWT secrets not set in environment variables. Using generated secrets.');
     }
   }
 
   /**
    * Generate token pair with enhanced security
    */
-  async generateTokenPair(
-    userId: string,
+  async generateTokenPair(_userId: string,
     organizationId: string,
     email: string,
     role: string,
@@ -274,7 +273,7 @@ export class EnhancedJWTService {
   /**
    * Terminate all sessions for a user
    */
-  async terminateAllSessions(userId: string, exceptSessionId?: string): Promise<void> {
+  async terminateAllSessions(_userId: string, exceptSessionId?: string): Promise<void> {
     const userSessions = await this.getUserSessions(userId);
 
     for (const session of userSessions) {
@@ -287,7 +286,7 @@ export class EnhancedJWTService {
   /**
    * Get active sessions for a user
    */
-  async getUserSessions(userId: string): Promise<SessionInfo[]> {
+  async getUserSessions(_userId: string): Promise<SessionInfo[]> {
     // TODO: Implement database query
     return Array.from(this.activeSessions.values()).filter((s) => s.userId === userId);
   }
@@ -295,7 +294,7 @@ export class EnhancedJWTService {
   /**
    * Calculate risk score based on device and location
    */
-  private async calculateRiskScore(userId: string, ip: string, deviceId: string): Promise<number> {
+  private async calculateRiskScore(_userId: string, ip: string, deviceId: string): Promise<number> {
     let riskScore = 0;
 
     // Check if device is known
@@ -334,7 +333,7 @@ export class EnhancedJWTService {
   /**
    * Enforce session limits per user
    */
-  private async enforceSessionLimits(userId: string): Promise<void> {
+  private async enforceSessionLimits(_userId: string): Promise<void> {
     const userSessions = await this.getUserSessions(userId);
     const activeSessions = userSessions.filter((s) => s.isActive);
 
@@ -364,7 +363,7 @@ export class EnhancedJWTService {
   // Database interface methods (to be implemented with actual database)
   private async storeSession(session: SessionInfo): Promise<void> {
     // TODO: Implement with database
-    console.log(`Storing session ${session.id} for user ${session.userId}`);
+    // console.log(`Storing session ${session.id} for user ${session.userId}`);
   }
 
   private async getSession(sessionId: string): Promise<SessionInfo | null> {
@@ -385,25 +384,25 @@ export class EnhancedJWTService {
 
   private async storeRevokedToken(tokenHash: string): Promise<void> {
     // TODO: Implement with database
-    console.log(`Storing revoked token hash: ${tokenHash}`);
+    // console.log(`Storing revoked token hash: ${tokenHash}`);
   }
 
-  private async isKnownDevice(userId: string, deviceId: string): Promise<boolean> {
+  private async isKnownDevice(_userId: string, deviceId: string): Promise<boolean> {
     // TODO: Implement device tracking
     return false;
   }
 
-  private async isUsualLocation(userId: string, ip: string): Promise<boolean> {
+  private async isUsualLocation(_userId: string, ip: string): Promise<boolean> {
     // TODO: Implement location tracking
     return true;
   }
 
-  private async isUsualLoginTime(userId: string): Promise<boolean> {
+  private async isUsualLoginTime(_userId: string): Promise<boolean> {
     // TODO: Implement time pattern analysis
     return true;
   }
 
-  private async getRecentFailedAttempts(userId: string): Promise<number> {
+  private async getRecentFailedAttempts(_userId: string): Promise<number> {
     // TODO: Implement failed attempt tracking
     return 0;
   }

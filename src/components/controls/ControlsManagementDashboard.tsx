@@ -472,7 +472,7 @@ const ControlLibrary: React.FC = () => {
     }
   };
 
-  const categories = [...new Set(sampleControls.map(c => c.category))];
+  const _categories = [...new Set(sampleControls.map(c => c.category))];
   const frameworks = [...new Set(sampleControls.flatMap(c => c.framework))];
   const statuses = [...new Set(sampleControls.map(c => c.status))];
 
@@ -588,7 +588,7 @@ export const ControlsManagementDashboard: React.FC = () => {
     try {
       await ExportService.exportControls(sampleControls, { format });
     } catch (error) {
-      console.error('Export failed:', error);
+      // console.error('Export failed:', error);
     }
   };
 
@@ -620,7 +620,7 @@ export const ControlsManagementDashboard: React.FC = () => {
           setProboControls(result.data || []);
         }
       } catch (error) {
-        console.error('Failed to load Probo controls:', error);
+        // console.error('Failed to load Probo controls:', error);
       } finally {
         setIsLoadingProbo(false);
       }

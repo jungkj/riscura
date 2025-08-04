@@ -7,7 +7,7 @@ import { z } from 'zod';
 // GET /api/reports/[id]/download - Download report file
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const user = (request as any).user;
       const { id } = await params;
 
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           },
         });
       } catch (error) {
-        console.error('Error downloading report:', error);
+        // console.error('Error downloading report:', error);
         return NextResponse.json({ error: 'Failed to download report file' }, { status: 500 });
       }
     },
@@ -65,7 +65,7 @@ const downloadReportSchema = z.object({
 // POST /api/reports/[id]/download - Generate and download report
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const user = (request as any).user;
       const { id } = await params;
 
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           );
         }
 
-        console.error('Error generating report:', error);
+        // console.error('Error generating report:', error);
         return NextResponse.json({ error: 'Failed to generate report' }, { status: 500 });
       }
     },

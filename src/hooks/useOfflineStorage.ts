@@ -93,7 +93,7 @@ class IndexedDBStorage {
     });
   }
 
-  async addToSyncQueue(data: any): Promise<void> {
+  async addToSyncQueue(_data: any): Promise<void> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {
@@ -139,7 +139,7 @@ class IndexedDBStorage {
 
 const indexedDBStorage = new IndexedDBStorage();
 
-export function useOfflineStorage<T>(options: StorageOptions) {
+export function useOfflineStorage<T>(_options: StorageOptions) {
   const {
     key,
     defaultValue,
@@ -184,7 +184,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
             return null;
         }
       } catch (error) {
-        console.error('Error reading from storage:', error);
+        // console.error('Error reading from storage:', error);
         return null;
       }
     },
@@ -214,7 +214,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
             break;
         }
       } catch (error) {
-        console.error('Error saving to storage:', error);
+        // console.error('Error saving to storage:', error);
       }
     },
     [storage]
@@ -241,7 +241,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
             break;
         }
       } catch (error) {
-        console.error('Error removing from storage:', error);
+        // console.error('Error removing from storage:', error);
       }
     },
     [storage]
@@ -282,7 +282,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
 
         return true;
       } catch (error) {
-        console.error('Sync to server failed:', error);
+        // console.error('Sync to server failed:', error);
 
         // Add to sync queue for later retry
         if (storage === 'indexedDB') {
@@ -316,7 +316,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
       const serverData = await response.json();
       return serverData.data;
     } catch (error) {
-      console.error('Sync from server failed:', error);
+      // console.error('Sync from server failed:', error);
       return null;
     }
   }, [syncToServer, syncEndpoint, syncStatus.isOnline, key]);
@@ -340,7 +340,7 @@ export function useOfflineStorage<T>(options: StorageOptions) {
         await indexedDBStorage.clearSyncQueue();
       }
     } catch (error) {
-      console.error('Error processing sync queue:', error);
+      // console.error('Error processing sync queue:', error);
     }
   }, [storage, syncStatus.isOnline, syncToServerFunc]);
 
@@ -523,7 +523,7 @@ export function useOfflineSync() {
   const [syncQueue, setSyncQueue] = useState<any[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const addToQueue = useCallback(async (data: any) => {
+  const addToQueue = useCallback(async (_data: any) => {
     await indexedDBStorage.addToSyncQueue(data);
     const queue = await indexedDBStorage.getSyncQueue();
     setSyncQueue(queue);
@@ -550,7 +550,7 @@ export function useOfflineSync() {
               throw new Error(`Sync failed: ${response.statusText}`);
             }
           } catch (error) {
-            console.error('Failed to sync item:', error);
+            // console.error('Failed to sync item:', error);
             // In a real implementation, you might want to increment attempt count
             // and remove items that have failed too many times
           }
@@ -559,7 +559,7 @@ export function useOfflineSync() {
         await indexedDBStorage.clearSyncQueue();
         setSyncQueue([]);
       } catch (error) {
-        console.error('Error processing sync queue:', error);
+        // console.error('Error processing sync queue:', error);
       } finally {
         setIsSyncing(false);
       }

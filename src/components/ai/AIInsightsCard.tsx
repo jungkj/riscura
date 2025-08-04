@@ -222,7 +222,7 @@ export default function AIInsightsCard({
       
       setInsights(mockInsights);
     } catch (error) {
-      console.error('Error fetching insights:', error);
+      // console.error('Error fetching insights:', error);
       toast({
         title: 'Error',
         description: 'Failed to load AI insights. Please try again.',

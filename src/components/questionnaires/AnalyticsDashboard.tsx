@@ -95,14 +95,14 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
   };
 
   const handleExport = (format: 'csv' | 'pdf' | 'excel') => {
-    console.log(`Exporting analytics in ${format} format...`);
+    // console.log(`Exporting analytics in ${format} format...`);
   };
 
   // Calculate summary metrics
   const totalResponses = data.responsesTrend.reduce((sum, day) => sum + day.responses, 0);
   const totalCompletions = data.responsesTrend.reduce((sum, day) => sum + day.completions, 0);
   const avgCompletionRate = Math.round((totalCompletions / totalResponses) * 100);
-  const avgScore = Math.round(data.performanceMetrics.reduce((sum, metric) => sum + metric.avgScore, 0) / data.performanceMetrics.length);
+  const _avgScore = Math.round(data.performanceMetrics.reduce((sum, metric) => sum + metric.avgScore, 0) / data.performanceMetrics.length);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {

@@ -5,7 +5,7 @@ import { createRateLimitError } from './error-handler';
 export interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
   max: number; // Maximum requests per window
-  keyGenerator?: (request: NextRequest) => string;
+  keyGenerator?: (_request: NextRequest) => string;
   skipSuccessfulRequests?: boolean;
   skipFailedRequests?: boolean;
   message?: string;
@@ -130,7 +130,7 @@ export class RateLimiter {
   private store: RateLimitStore;
   private config: Required<RateLimitConfig>;
 
-  constructor(config: RateLimitConfig, store?: RateLimitStore) {
+  constructor(_config: RateLimitConfig, store?: RateLimitStore) {
     this.store = store || new MemoryRateLimitStore();
     this.config = {
       windowMs: config.windowMs,
@@ -144,7 +144,7 @@ export class RateLimiter {
     };
   }
 
-  async checkLimit(request: NextRequest): Promise<RateLimitResult> {
+  async checkLimit(_request: NextRequest): Promise<RateLimitResult> {
     const key = this.config.keyGenerator(request);
     const { totalHits, reset } = await this.store.increment(key, this.config.windowMs);
 
@@ -165,7 +165,7 @@ export class RateLimiter {
     return result;
   }
 
-  async handleRequest(request: NextRequest): Promise<RateLimitResult> {
+  async handleRequest(_request: NextRequest): Promise<RateLimitResult> {
     const result = await this.checkLimit(request);
 
     if (!result.success) {
@@ -175,7 +175,7 @@ export class RateLimiter {
     return result;
   }
 
-  private defaultKeyGenerator(request: NextRequest): string {
+  private defaultKeyGenerator(_request: NextRequest): string {
     // Use IP address or user ID if available
     const forwarded = request.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
@@ -299,14 +299,14 @@ export class RateLimiterManager {
     this.limiters.set(type, limiter);
   }
 
-  async checkLimits(request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
+  async checkLimits(_request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
     const results = await Promise.all(
       types.map((type) => this.getLimiter(type).checkLimit(request))
     );
     return results;
   }
 
-  async handleRequest(request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
+  async handleRequest(_request: NextRequest, types: string[]): Promise<RateLimitResult[]> {
     const results = await Promise.all(
       types.map((type) => this.getLimiter(type).handleRequest(request))
     );
@@ -350,8 +350,7 @@ export function getRateLimiterForEndpoint(path: string, method: string): string[
 }
 
 // Middleware function for applying rate limiting
-export async function applyRateLimit(
-  request: NextRequest,
+export async function applyRateLimit(_request: NextRequest,
   limiters?: string[]
 ): Promise<{ success: boolean; headers: Record<string, string>; error?: any }> {
   try {

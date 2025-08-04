@@ -18,20 +18,20 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
   const refreshMetrics = () => {
     // Disabled to prevent console errors
     // setMetrics(getPerformanceMetrics());
-    console.log('Performance metrics refresh disabled for clean development');
+    // console.log('Performance metrics refresh disabled for clean development');
   };
 
   useEffect(() => {
     const init = async () => {
       try {
         // Performance monitoring disabled to prevent console errors
-        console.log('Performance monitoring disabled for clean development experience');
+        // console.log('Performance monitoring disabled for clean development experience');
         setIsInitialized(true);
         // await initializePerformance();
         // setIsInitialized(isPerformanceInitialized());
         // refreshMetrics();
       } catch (error) {
-        console.error('Failed to initialize performance optimizations:', error);
+        // console.error('Failed to initialize performance optimizations:', error);
       }
     };
 

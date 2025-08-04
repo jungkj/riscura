@@ -86,7 +86,7 @@ export class OfflineManager {
   }
 
   private handleOnline = (): void => {
-    console.log('Connection restored');
+    // console.log('Connection restored');
     this.isOnline = true;
     this.notifyListeners(true);
 
@@ -97,7 +97,7 @@ export class OfflineManager {
   };
 
   private handleOffline = (): void => {
-    console.log('Connection lost');
+    // console.log('Connection lost');
     this.isOnline = false;
     this.notifyListeners(false);
   };
@@ -143,7 +143,7 @@ export class OfflineManager {
       timestamp: queuedOp.timestamp,
     });
 
-    console.log(`Queued operation: ${operation.type} ${operation.resource}`);
+    // console.log(`Queued operation: ${operation.type} ${operation.resource}`);
 
     // Try immediate sync if online
     if (this.isOnline && !this.isSyncing) {
@@ -188,7 +188,7 @@ export class OfflineManager {
     }
 
     this.isSyncing = true;
-    console.log('Starting sync of pending operations...');
+    // console.log('Starting sync of pending operations...');
 
     const operations = this.getSortedOperations();
     const errors: Array<{ operationId: string; error: string }> = [];
@@ -203,7 +203,7 @@ export class OfflineManager {
           if (success) {
             this.removeOperation(operation.id);
             syncedCount++;
-            console.log(`Synced operation: ${operation.id}`);
+            // console.log(`Synced operation: ${operation.id}`);
           } else {
             operation.retryCount++;
 
@@ -251,7 +251,7 @@ export class OfflineManager {
         nextSyncTime: new Date(Date.now() + this.config.syncInterval),
       };
 
-      console.log('Sync completed:', result);
+      // console.log('Sync completed:', result);
       return result;
     } finally {
       this.isSyncing = false;
@@ -288,7 +288,7 @@ export class OfflineManager {
       });
 
       if (!response.ok) {
-        console.error(`Operation failed: ${response.status} ${response.statusText}`);
+        // console.error(`Operation failed: ${response.status} ${response.statusText}`);
         return false;
       }
 
@@ -304,7 +304,7 @@ export class OfflineManager {
 
       return true;
     } catch (error) {
-      console.error('Operation execution failed:', error);
+      // console.error('Operation execution failed:', error);
       return false;
     }
   }
@@ -337,7 +337,7 @@ export class OfflineManager {
       this.operationQueue.set(op.id, op);
     });
 
-    console.log(`Loaded ${operations.length} queued operations`);
+    // console.log(`Loaded ${operations.length} queued operations`);
   }
 
   // Network status methods
@@ -390,10 +390,10 @@ export class OfflineManager {
       this.operationQueue.clear();
       localStorageService.clearOfflineQueue();
       localStorageService.setCachedData('offline_operations', []);
-      console.log('Offline data cleared');
+      // console.log('Offline data cleared');
       return true;
     } catch (error) {
-      console.error('Failed to clear offline data:', error);
+      // console.error('Failed to clear offline data:', error);
       return false;
     }
   }

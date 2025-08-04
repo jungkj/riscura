@@ -3,7 +3,7 @@ import { billingManager } from '@/lib/billing/manager';
 import { withApiMiddleware, createAPIResponse, AuthenticationError } from '@/lib/api/middleware';
 
 export const GET = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
     const active = searchParams.get('active');
@@ -24,7 +24,7 @@ export const GET = withApiMiddleware(
 );
 
 export const POST = withApiMiddleware(
-  async (request: NextRequest) => {
+  async (_request: NextRequest) => {
     const user = (request as any).user;
 
     if (user.role !== 'ADMIN') {

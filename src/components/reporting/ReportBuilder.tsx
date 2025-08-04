@@ -63,8 +63,8 @@ interface ReportConfig {
 }
 
 interface ReportBuilderProps {
-  onGenerate: (config: ReportConfig) => Promise<void>;
-  onSchedule?: (config: ReportConfig) => Promise<void>;
+  onGenerate: (_config: ReportConfig) => Promise<void>;
+  onSchedule?: (_config: ReportConfig) => Promise<void>;
   isGenerating?: boolean;
 }
 

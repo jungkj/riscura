@@ -1,5 +1,5 @@
 import ExcelJS from 'exceljs';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import * as XLSX from 'xlsx';
 import fs from 'fs/promises';
 import path from 'path';
@@ -204,8 +204,7 @@ export class ExcelExporter {
 }
 
 // Convenience functions for common export scenarios
-export const exportToExcel = async (
-  data: ExcelWorkbookData,
+export const exportToExcel = async (_data: ExcelWorkbookData,
   options: ExcelExportOptions = {}
 ): Promise<Buffer> => {
   const exporter = new ExcelExporter();
@@ -256,7 +255,7 @@ export const exportTableToExcel = async (
 };
 
 // CSV Export functionality
-export const exportToCSV = (data: ExcelTableData): string => {
+export const exportToCSV = (_data: ExcelTableData): string => {
   const csvRows: string[] = [];
 
   // Add title as comment if provided
@@ -490,8 +489,7 @@ export const createAuditTrailExport = (auditData: any[]): ExcelWorkbookData => (
 /**
  * Export data to Excel format (generic)
  */
-export async function exportDataToExcel(
-  data: any,
+export async function exportDataToExcel(_data: any,
   options: ExcelExportOptions
 ): Promise<ExportResult> {
   const reportsDir = '/tmp/reports';
@@ -534,7 +532,7 @@ export async function exportDataToExcel(
       fileName: options.fileName,
     };
   } catch (error) {
-    console.error('Excel export failed:', error);
+    // console.error('Excel export failed:', error);
     throw new Error(`Excel export failed: ${error.message}`);
   }
 }
@@ -542,7 +540,7 @@ export async function exportDataToExcel(
 /**
  * Create worksheet from various data formats
  */
-function createWorksheetFromData(data: any): XLSX.WorkSheet {
+function createWorksheetFromData(_data: any): XLSX.WorkSheet {
   if (Array.isArray(data)) {
     return XLSX.utils.json_to_sheet(data);
   } else if (data.headers && data.rows) {
@@ -698,7 +696,7 @@ export async function exportMultipleSheetsToExcel(
       fileName,
     };
   } catch (error) {
-    console.error('Multi-sheet Excel export failed:', error);
+    // console.error('Multi-sheet Excel export failed:', error);
     throw new Error(`Multi-sheet Excel export failed: ${error.message}`);
   }
 }
@@ -706,8 +704,7 @@ export async function exportMultipleSheetsToExcel(
 /**
  * Export data with custom formatting
  */
-export async function exportToExcelWithFormatting(
-  data: any[],
+export async function exportToExcelWithFormatting(_data: any[],
   options: ExcelExportOptions & {
     columnWidths?: number[];
     headerBackgroundColor?: string;
@@ -743,7 +740,7 @@ export async function exportToExcelWithFormatting(
       fileName: options.fileName,
     };
   } catch (error) {
-    console.error('Formatted Excel export failed:', error);
+    // console.error('Formatted Excel export failed:', error);
     throw new Error(`Formatted Excel export failed: ${error.message}`);
   }
 }
@@ -751,7 +748,7 @@ export async function exportToExcelWithFormatting(
 /**
  * Utility function to validate export data
  */
-export function validateExportData(data: any): { isValid: boolean; errors: string[] } {
+export function validateExportData(_data: any): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!data) {
@@ -780,7 +777,7 @@ export function validateExportData(data: any): { isValid: boolean; errors: strin
 /**
  * Get export format recommendations based on data size
  */
-export function getExportRecommendations(data: any): {
+export function getExportRecommendations(_data: any): {
   recommendedFormat: 'csv' | 'excel';
   reason: string;
   estimatedSize: string;

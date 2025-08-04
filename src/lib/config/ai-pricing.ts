@@ -62,7 +62,7 @@ export type AIModel = keyof typeof AI_MODEL_PRICING;
 export function getModelPricing(model: string): { prompt: number; completion: number } {
   // Input validation
   if (!model || typeof model !== 'string') {
-    console.warn(`Invalid model provided: ${model}. Using default pricing.`);
+    // console.warn(`Invalid model provided: ${model}. Using default pricing.`);
     return AI_MODEL_PRICING['gpt-3.5-turbo'];
   }
 
@@ -75,7 +75,7 @@ export function getModelPricing(model: string): { prompt: number; completion: nu
   }
 
   // Log warning for unknown model
-  console.warn(`Unknown AI model: ${model}. Using gpt-3.5-turbo pricing as fallback.`);
+  // console.warn(`Unknown AI model: ${model}. Using gpt-3.5-turbo pricing as fallback.`);
 
   // Return most cost-effective model as fallback
   return AI_MODEL_PRICING['gpt-3.5-turbo'];

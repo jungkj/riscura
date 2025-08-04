@@ -110,7 +110,7 @@ export interface ChatActions {
   searchMessages: (query: string) => void;
   clearSearch: () => void;
   exportConversation: (format: 'json' | 'pdf' | 'markdown') => Promise<void>;
-  setContext: (context: Partial<RiskContext>) => void;
+  setContext: (_context: Partial<RiskContext>) => void;
   enrichContext: (selectedEntities: {
     risks?: Risk[];
     controls?: Control[];
@@ -311,7 +311,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         },
       }));
     } catch (error) {
-      console.error('Error refreshing context:', error);
+      // console.error('Error refreshing context:', error);
     }
   }, [
     user,
@@ -625,7 +625,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     sendMessageWithContext,
     regenerateMessage: async (messageId: string) => {
       // Implementation for message regeneration
-      console.log('Regenerating message:', messageId);
+      // console.log('Regenerating message:', messageId);
     },
     applySuggestion: async (suggestion: AISuggestion) => {
       await suggestion.action();
@@ -633,15 +633,15 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     applySmartSuggestion,
     startVoiceInput: () => {
       // Implementation for voice input
-      console.log('Starting voice input...');
+      // console.log('Starting voice input...');
     },
     stopVoiceInput: () => {
       // Implementation for stopping voice input
-      console.log('Stopping voice input...');
+      // console.log('Stopping voice input...');
     },
     uploadFiles: async (files: File[]) => {
       // Implementation for file upload
-      console.log('Uploading files:', files);
+      // console.log('Uploading files:', files);
     },
     searchMessages,
     clearSearch: () => {
@@ -649,9 +649,9 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     },
     exportConversation: async (format: 'json' | 'pdf' | 'markdown') => {
       // Implementation for export
-      console.log('Exporting conversation as:', format);
+      // console.log('Exporting conversation as:', format);
     },
-    setContext: (context: Partial<RiskContext>) => {
+    setContext: (_context: Partial<RiskContext>) => {
       setState((prev) => ({
         ...prev,
         context: { ...prev.context, ...context },

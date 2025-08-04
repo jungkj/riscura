@@ -1,12 +1,12 @@
 import { Report } from '@prisma/client';
-import { ReportData, ReportSection } from './data-collector';
+// import { ReportData, ReportSection } from './data-collector';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 // Extend jsPDF type for autoTable
 declare module 'jspdf' {
   interface jsPDF {
-    autoTable: (options: any) => jsPDF;
+    autoTable: (_options: any) => jsPDF;
     lastAutoTable: {
       finalY: number;
     };
@@ -171,7 +171,7 @@ export class PDFGenerator {
     this.currentY += 10;
   }
 
-  private addTextSection(data: string): void {
+  private addTextSection(_data: string): void {
     this.doc.setFontSize(11);
     this.doc.setFont('helvetica', 'normal');
 
@@ -183,7 +183,7 @@ export class PDFGenerator {
     });
   }
 
-  private addTableSection(data: { headers: string[]; rows: any[][] }): void {
+  private addTableSection(_data: { headers: string[]; rows: any[][] }): void {
     if (!data.headers || !data.rows) return;
 
     this.doc.autoTable({
@@ -204,7 +204,7 @@ export class PDFGenerator {
       alternateRowStyles: {
         fillColor: [245, 245, 245],
       },
-      didDrawPage: (data: any) => {
+      didDrawPage: (_data: any) => {
         // Update current Y position after table
         this.currentY = data.cursor.y + 10;
       },
@@ -213,7 +213,7 @@ export class PDFGenerator {
     this.currentY = this.doc.lastAutoTable.finalY + 10;
   }
 
-  private addMetricsSection(data: Record<string, any>): void {
+  private addMetricsSection(_data: Record<string, any>): void {
     const metricsPerRow = 3;
     const metricWidth = (this.pageWidth - 2 * this.margin) / metricsPerRow;
     let currentX = this.margin;
@@ -250,7 +250,7 @@ export class PDFGenerator {
     this.currentY += 25;
   }
 
-  private addChartSection(data: any): void {
+  private addChartSection(_data: any): void {
     // Since we can't directly render charts in jsPDF, we'll create a text representation
     // In a real implementation, you might generate chart images server-side
     this.doc.setFontSize(10);

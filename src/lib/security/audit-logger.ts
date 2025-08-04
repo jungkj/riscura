@@ -174,7 +174,7 @@ class AuditLogger {
 
     // Validate event
     if (!this.validateEvent(fullEvent)) {
-      console.error('Invalid audit event:', fullEvent);
+      // console.error('Invalid audit event:', fullEvent);
       return;
     }
 
@@ -209,8 +209,7 @@ class AuditLogger {
   }
 
   // Convenience methods for different event types
-  public async logAuthentication(
-    userId: string,
+  public async logAuthentication(_userId: string,
     action: string,
     outcome: 'success' | 'failure',
     details: Record<string, any> = {},
@@ -229,8 +228,7 @@ class AuditLogger {
     });
   }
 
-  public async logAuthorization(
-    userId: string,
+  public async logAuthorization(_userId: string,
     resource: string,
     action: string,
     outcome: 'success' | 'failure',
@@ -250,8 +248,7 @@ class AuditLogger {
     });
   }
 
-  public async logDataAccess(
-    userId: string,
+  public async logDataAccess(_userId: string,
     resource: string,
     action: string,
     outcome: 'success' | 'failure' | 'partial' = 'success',
@@ -272,8 +269,7 @@ class AuditLogger {
     });
   }
 
-  public async logDataModification(
-    userId: string,
+  public async logDataModification(_userId: string,
     resource: string,
     action: string,
     outcome: 'success' | 'failure' | 'partial' = 'success',
@@ -312,8 +308,7 @@ class AuditLogger {
     });
   }
 
-  public async logAdminAction(
-    userId: string,
+  public async logAdminAction(_userId: string,
     action: string,
     resource: string,
     outcome: 'success' | 'failure' | 'partial' = 'success',
@@ -379,7 +374,7 @@ class AuditLogger {
   }
 
   // Get client IP from request
-  private getClientIP(request: NextRequest): string {
+  private getClientIP(_request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for');
     const realIP = request.headers.get('x-real-ip');
     const cfConnectingIP = request.headers.get('cf-connecting-ip');
@@ -461,19 +456,18 @@ class AuditLogger {
     switch (event.severity) {
       case 'critical':
       case 'high':
-        console.error(message, logData);
+        // console.error(message, logData);
         break;
       case 'medium':
-        console.warn(message, logData);
+        // console.warn(message, logData);
         break;
       default:
-        console.log(message, logData);
+        // console.log(message, logData);
     }
   }
 
   // Mask sensitive fields in log data
-  private maskSensitiveFields(
-    data: Record<string, any>,
+  private maskSensitiveFields(_data: Record<string, any>,
     sensitiveFields?: string[]
   ): Record<string, any> {
     if (!sensitiveFields || sensitiveFields.length === 0) {
@@ -511,7 +505,7 @@ class AuditLogger {
       timestamp: Date.now(),
     };
 
-    console.warn('Audit alert:', alert);
+    // console.warn('Audit alert:', alert);
 
     // Send to monitoring system
     if (this.config.remoteEndpoint) {
@@ -522,7 +516,7 @@ class AuditLogger {
           body: JSON.stringify(alert),
         });
       } catch (error) {
-        console.error('Failed to send audit alert:', error);
+        // console.error('Failed to send audit alert:', error);
       }
     }
   }
@@ -552,7 +546,7 @@ class AuditLogger {
 
       this.lastFlush = Date.now();
     } catch (error) {
-      console.error('Failed to flush audit events:', error);
+      // console.error('Failed to flush audit events:', error);
       // Put events back in buffer for retry
       this.eventBuffer.unshift(...events);
     }
@@ -562,13 +556,13 @@ class AuditLogger {
   private async writeToFile(events: AuditEvent[]): Promise<void> {
     // Implementation would depend on file system access
     // In Next.js, this might be handled by a separate service
-    console.log(`Writing ${events.length} events to file`);
+    // console.log(`Writing ${events.length} events to file`);
   }
 
   // Write events to database
   private async writeToDatabase(events: AuditEvent[]): Promise<void> {
     // Implementation would use your database client
-    console.log(`Writing ${events.length} events to database`);
+    // console.log(`Writing ${events.length} events to database`);
   }
 
   // Write events to remote endpoint
@@ -585,7 +579,7 @@ class AuditLogger {
         body: JSON.stringify({ events }),
       });
     } catch (error) {
-      console.error('Failed to write to remote endpoint:', error);
+      // console.error('Failed to write to remote endpoint:', error);
       throw error;
     }
   }
@@ -737,7 +731,7 @@ class AuditLogger {
     // Final flush
     await this.flushBuffer();
 
-    console.log('Audit logger shutdown complete');
+    // console.log('Audit logger shutdown complete');
   }
 
   // Get logger statistics

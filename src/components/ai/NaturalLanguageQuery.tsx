@@ -332,7 +332,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
 
       setQuery('');
     } catch (error) {
-      console.error('Query processing failed:', error);
+      // console.error('Query processing failed:', error);
     } finally {
       setIsLoading(false);
     }

@@ -94,7 +94,7 @@ export function SOC2Assessment() {
         setFramework(data);
       }
     } catch (error) {
-      console.error('Failed to load SOC 2 framework:', error);
+      // console.error('Failed to load SOC 2 framework:', error);
     } finally {
       setLoading(false);
     }
@@ -115,7 +115,7 @@ export function SOC2Assessment() {
         setFramework(data);
       }
     } catch (error) {
-      console.error('Failed to import SOC 2 framework:', error);
+      // console.error('Failed to import SOC 2 framework:', error);
     } finally {
       setImporting(false);
     }
@@ -196,7 +196,7 @@ export function SOC2Assessment() {
       (control) => selectedCategory === 'all' || control.category === selectedCategory
     ) || [];
 
-  const categories =
+  const _categories =
     framework?.controls.reduce((acc, control) => {
       if (!acc.includes(control.category)) {
         acc.push(control.category);

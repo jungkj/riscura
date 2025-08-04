@@ -438,7 +438,7 @@ export class AuditLogger {
       // Update audit statistics
       await this.updateAuditStatistics(events);
     } catch (error) {
-      console.error('Failed to process audit batch:', error);
+      // console.error('Failed to process audit batch:', error);
 
       // Re-queue events if database fails
       this.batchQueue.unshift(...events);
@@ -463,7 +463,7 @@ export class AuditLogger {
   /**
    * Query audit events with filters and pagination
    */
-  async query(options: AuditQueryOptions): Promise<AuditQueryResult> {
+  async query(_options: AuditQueryOptions): Promise<AuditQueryResult> {
     const {
       organizationId,
       userId,
@@ -576,8 +576,7 @@ export class AuditLogger {
   /**
    * Generate compliance audit report
    */
-  async generateReport(
-    organizationId: string,
+  async generateReport(_organizationId: string,
     reportType: AuditReport['reportType'],
     filters: AuditQueryOptions,
     generatedBy: string

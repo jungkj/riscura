@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<
   {
     children: ReactNode;
     fallback?: ReactNode;
-    onError?: (error: Error, errorInfo: ErrorInfo) => void;
+    onError?: (_error: Error, errorInfo: ErrorInfo) => void;
     resetOnPropsChange?: boolean;
     resetKeys?: Array<string | number | boolean>;
   },
@@ -58,11 +58,11 @@ export class ErrorBoundary extends Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(_error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
     this.props.onError?.(error, errorInfo);
 

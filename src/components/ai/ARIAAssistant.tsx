@@ -114,7 +114,7 @@ export default function ARIAAssistant({
         recognition.onstart = () => setIsListening(true);
         recognition.onend = () => setIsListening(false);
         recognition.onerror = (event: Event) => {
-          console.error('Speech recognition error:', event);
+          // console.error('Speech recognition error:', event);
           setIsListening(false);
           toast({
             title: 'Voice Recognition Error',
@@ -240,12 +240,12 @@ How can I assist you today?`,
       } else {
         throw new Error(data.message || 'Failed to get AI response');
       }
-    } catch (error: any) {
+    } catch (_error: any) {
       if (error.name === 'AbortError') {
         return; // Request was cancelled
       }
 
-      console.error('Chat error:', error);
+      // console.error('Chat error:', error);
       
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
@@ -325,7 +325,7 @@ How can I assist you today?`,
           sendMessage('What control recommendations do you have?');
           break;
         default:
-          console.log('Action triggered:', action, parameters);
+          // console.log('Action triggered:', action, parameters);
       }
     }
   };
@@ -344,7 +344,7 @@ How can I assist you today?`,
         description: 'Message copied to clipboard',
       });
     } catch (error) {
-      console.error('Copy failed:', error);
+      // console.error('Copy failed:', error);
     }
   };
 

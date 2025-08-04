@@ -543,7 +543,7 @@ export const ComplianceMapping: React.FC = () => {
   const [activeView, setActiveView] = useState<'overview' | 'mapping' | 'gaps'>('overview');
 
   const handleControlMapping = (requirementId: string, controlId: string) => {
-    console.log(`Mapping control ${controlId} to requirement ${requirementId}`);
+    // console.log(`Mapping control ${controlId} to requirement ${requirementId}`);
   };
 
   return (

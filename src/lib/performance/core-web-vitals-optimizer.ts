@@ -114,7 +114,7 @@ export class CoreWebVitalsOptimizer {
   private intersectionObserver?: IntersectionObserver;
   private isMonitoring: boolean = false;
 
-  constructor(config: Partial<OptimizationConfig> = {}) {
+  constructor(_config: Partial<OptimizationConfig> = {}) {
     this.config = { ...DEFAULT_OPTIMIZATION_CONFIG, ...config };
     this.initializeOptimizer();
   }
@@ -230,7 +230,7 @@ export class CoreWebVitalsOptimizer {
       inpObserver.observe({ entryTypes: ['event'] });
       this.observers.push(inpObserver);
     } catch (error) {
-      console.warn('INP monitoring not supported:', error);
+      // console.warn('INP monitoring not supported:', error);
     }
   }
 
@@ -248,7 +248,7 @@ export class CoreWebVitalsOptimizer {
           // Check for slow loading resources
           if (entry.duration > 1000) {
             // 1 second
-            console.warn(`Slow resource detected: ${entry.name} (${entry.duration}ms)`);
+            // console.warn(`Slow resource detected: ${entry.name} (${entry.duration}ms)`);
 
             // Suggest optimizations based on resource type
             if (entry.name.includes('.js')) {
@@ -265,7 +265,7 @@ export class CoreWebVitalsOptimizer {
       resourceObserver.observe({ entryTypes: ['resource'] });
       this.observers.push(resourceObserver);
     } catch (error) {
-      console.warn('Resource monitoring not supported:', error);
+      // console.warn('Resource monitoring not supported:', error);
     }
   }
 
@@ -281,7 +281,7 @@ export class CoreWebVitalsOptimizer {
 
         entries.forEach((entry: any) => {
           if (entry.value > 0.1) {
-            console.warn('Large layout shift detected:', entry);
+            // console.warn('Large layout shift detected:', entry);
             this.identifyLayoutShiftCause(entry);
           }
         });
@@ -290,7 +290,7 @@ export class CoreWebVitalsOptimizer {
       clsObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.push(clsObserver);
     } catch (error) {
-      console.warn('Layout shift monitoring not supported:', error);
+      // console.warn('Layout shift monitoring not supported:', error);
     }
   }
 
@@ -432,7 +432,7 @@ export class CoreWebVitalsOptimizer {
           entries.forEach((entry) => {
             if (entry.duration > 50) {
               // Long task threshold
-              console.warn(`Long task detected: ${entry.duration}ms`);
+              // console.warn(`Long task detected: ${entry.duration}ms`);
               this.suggestTaskOptimization(entry);
             }
           });
@@ -441,7 +441,7 @@ export class CoreWebVitalsOptimizer {
         longTaskObserver.observe({ entryTypes: ['longtask'] });
         this.observers.push(longTaskObserver);
       } catch (error) {
-        console.warn('Long task monitoring not supported:', error);
+        // console.warn('Long task monitoring not supported:', error);
       }
     }
   }
@@ -761,7 +761,7 @@ export class CoreWebVitalsOptimizer {
 
     // Log critical issues
     if (issue.severity === 'critical') {
-      console.error(
+      // console.error(
         `Critical performance issue: ${issue.metric} = ${issue.value}ms (target: ${issue.target}ms)`
       );
     }
@@ -788,7 +788,7 @@ export class CoreWebVitalsOptimizer {
           'Content-Type': 'application/json',
         },
       }).catch((error) => {
-        console.warn('Failed to report metric:', error);
+        // console.warn('Failed to report metric:', error);
       });
     }
   }
@@ -797,15 +797,15 @@ export class CoreWebVitalsOptimizer {
    * Utility methods for optimization suggestions
    */
   private suggestJSOptimization(entry: PerformanceResourceTiming): void {
-    console.log(`JS Optimization needed for: ${entry.name}`);
+    // console.log(`JS Optimization needed for: ${entry.name}`);
   }
 
   private suggestCSSOptimization(entry: PerformanceResourceTiming): void {
-    console.log(`CSS Optimization needed for: ${entry.name}`);
+    // console.log(`CSS Optimization needed for: ${entry.name}`);
   }
 
   private suggestImageOptimization(entry: PerformanceResourceTiming): void {
-    console.log(`Image Optimization needed for: ${entry.name}`);
+    // console.log(`Image Optimization needed for: ${entry.name}`);
   }
 
   private isImageResource(url: string): boolean {
@@ -817,11 +817,11 @@ export class CoreWebVitalsOptimizer {
   }
 
   private identifyLayoutShiftCause(entry: any): void {
-    console.log('Layout shift cause analysis:', entry);
+    // console.log('Layout shift cause analysis:', entry);
   }
 
   private suggestTaskOptimization(entry: PerformanceEntry): void {
-    console.log(`Long task optimization needed: ${entry.duration}ms`);
+    // console.log(`Long task optimization needed: ${entry.duration}ms`);
   }
 
   private debounceScrollHandlers(): void {

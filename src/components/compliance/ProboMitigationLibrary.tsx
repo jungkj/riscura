@@ -69,7 +69,7 @@ export function ProboMitigationLibrary() {
         setMitigations(data);
       }
     } catch (error) {
-      console.error('Failed to load mitigations:', error);
+      // console.error('Failed to load mitigations:', error);
     } finally {
       setLoading(false);
     }
@@ -115,11 +115,11 @@ export function ProboMitigationLibrary() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Import successful:', result);
+        // console.log('Import successful:', result);
         setSelectedMitigations([]);
       }
     } catch (error) {
-      console.error('Import failed:', error);
+      // console.error('Import failed:', error);
     } finally {
       setImporting(false);
     }
@@ -165,7 +165,7 @@ export function ProboMitigationLibrary() {
     return <Settings className="h-4 w-4" />;
   };
 
-  const categories = [
+  const _categories = [
     'Access Control', 'Network Security', 'Data Protection', 'System Security',
     'Audit & Compliance', 'Personnel Security', 'Physical Security', 'Operational Security'
   ];

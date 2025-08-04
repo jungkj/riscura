@@ -385,7 +385,7 @@ export const RiskRegisterTable: React.FC = () => {
       label: 'Assign',
       icon: Send,
       action: (selectedRows: RiskData[]) => {
-        console.log('Assigning risks:', selectedRows.map(r => r.id));
+        // console.log('Assigning risks:', selectedRows.map(r => r.id));
       },
     },
     {
@@ -393,7 +393,7 @@ export const RiskRegisterTable: React.FC = () => {
       label: 'Export',
       icon: Download,
       action: (selectedRows: RiskData[]) => {
-        console.log('Exporting risks:', selectedRows.map(r => r.id));
+        // console.log('Exporting risks:', selectedRows.map(r => r.id));
       },
     },
     {
@@ -402,18 +402,18 @@ export const RiskRegisterTable: React.FC = () => {
       icon: Archive,
       variant: 'destructive' as const,
       action: (selectedRows: RiskData[]) => {
-        console.log('Archiving risks:', selectedRows.map(r => r.id));
+        // console.log('Archiving risks:', selectedRows.map(r => r.id));
       },
     },
   ];
 
   const handleRowClick = (row: RiskData) => {
-    console.log('Viewing risk details:', row.id);
+    // console.log('Viewing risk details:', row.id);
     // Navigate to risk details page
   };
 
   const handleRowSelect = (selectedRows: RiskData[]) => {
-    console.log('Selected risks:', selectedRows.map(r => r.id));
+    // console.log('Selected risks:', selectedRows.map(r => r.id));
   };
 
   return (

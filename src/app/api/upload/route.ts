@@ -52,7 +52,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       },
     });
   } catch (error) {
-    console.error('Upload error:', error);
+    // console.error('Upload error:', error);
     return NextResponse.json({ success: false, error: 'Failed to upload file' }, { status: 500 });
   }
 });
@@ -80,7 +80,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
       },
     });
   } catch (error) {
-    console.error('Failed to get storage stats:', error);
+    // console.error('Failed to get storage stats:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to get storage statistics' },
       { status: 500 }

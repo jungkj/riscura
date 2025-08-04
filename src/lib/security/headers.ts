@@ -374,7 +374,7 @@ export class SecurityHeaders {
   /**
    * Apply security headers to NextResponse
    */
-  applyToResponse(response: NextResponse, nonce?: string): NextResponse {
+  applyToResponse(_response: NextResponse, nonce?: string): NextResponse {
     const headers = this.getHeaders(nonce);
 
     Object.entries(headers).forEach(([key, value]) => {
@@ -383,7 +383,7 @@ export class SecurityHeaders {
 
     // Log CSP violations in development
     if (!productionGuard.isProduction() && this.config.csp?.reportOnly) {
-      console.log('🛡️ Security headers applied (report-only mode)');
+      // console.log('🛡️ Security headers applied (report-only mode)');
     }
 
     return response;
@@ -401,7 +401,7 @@ export class SecurityHeaders {
   /**
    * Update configuration
    */
-  updateConfig(config: Partial<SecurityHeadersConfig>): void {
+  updateConfig(_config: Partial<SecurityHeadersConfig>): void {
     this.config = { ...this.config, ...config };
   }
 
@@ -463,7 +463,7 @@ export class SecurityHeaders {
 export const securityHeaders = SecurityHeaders.getInstance();
 
 // Utility functions
-export function applySecurityHeaders(response: NextResponse, nonce?: string): NextResponse {
+export function applySecurityHeaders(_response: NextResponse, nonce?: string): NextResponse {
   return securityHeaders.applyToResponse(response, nonce);
 }
 
@@ -499,7 +499,7 @@ export function withSecurityHeaders(
  */
 export function handleCSPReport(report: any): void {
   if (!productionGuard.isProduction()) {
-    console.warn('🚨 CSP Violation Report:', report);
+    // console.warn('🚨 CSP Violation Report:', report);
     return;
   }
 

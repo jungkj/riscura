@@ -106,7 +106,7 @@ export default function GenerateRiskReportPage() {
         });
       }
     } catch (error) {
-      console.error('Failed to fetch stats:', error);
+      // console.error('Failed to fetch stats:', error);
     } finally {
       setLoading(false);
     }

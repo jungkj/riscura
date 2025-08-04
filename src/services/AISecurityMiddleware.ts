@@ -84,7 +84,7 @@ export class AISecurityMiddleware {
 
       if (!postValidation.isValid) {
         // Log security violation but don't block (response already generated)
-        console.warn('Post-execution security validation failed:', postValidation.violations);
+        // console.warn('Post-execution security validation failed:', postValidation.violations);
       }
 
       return {
@@ -110,8 +110,7 @@ export class AISecurityMiddleware {
   /**
    * Validate security before AI execution
    */
-  private async validatePreExecution(
-    context: SecurityContext,
+  private async validatePreExecution(_context: SecurityContext,
     request: { content: string; action: AIAction }
   ): Promise<SecurityValidationResult> {
     const violations: SecurityViolation[] = [];
@@ -178,8 +177,7 @@ export class AISecurityMiddleware {
   /**
    * Validate security after AI execution
    */
-  private async validatePostExecution(
-    context: SecurityContext,
+  private async validatePostExecution(_context: SecurityContext,
     result: unknown,
     responseResult: { filteredResponse: string; approved: boolean; warnings: string[] }
   ): Promise<SecurityValidationResult> {
@@ -268,7 +266,7 @@ export class AISecurityMiddleware {
   /**
    * Check rate limiting for user
    */
-  private async checkRateLimit(userId: string): Promise<boolean> {
+  private async checkRateLimit(_userId: string): Promise<boolean> {
     // Simple rate limiting check (in production, use Redis or similar)
     const key = `rate_limit_${userId}`;
     const stored = localStorage.getItem(key);
@@ -310,8 +308,7 @@ export class AISecurityMiddleware {
   /**
    * Detect suspicious activity patterns
    */
-  private async detectSuspiciousActivity(
-    context: SecurityContext,
+  private async detectSuspiciousActivity(_context: SecurityContext,
     request: { content: string; action: AIAction }
   ): Promise<boolean> {
     // Check for unusual request patterns
@@ -329,7 +326,7 @@ export class AISecurityMiddleware {
   /**
    * Check high security compliance
    */
-  private isHighSecurityCompliant(request: { content: string; action: AIAction }): boolean {
+  private isHighSecurityCompliant(_request: { content: string; action: AIAction }): boolean {
     // For maximum security, require specific conditions
     return (
       request.content.length < 5000 && // Limit content length
@@ -462,8 +459,7 @@ export class AISecurityMiddleware {
   /**
    * Calculate pre-execution risk score
    */
-  private calculatePreExecutionRiskScore(
-    context: SecurityContext,
+  private calculatePreExecutionRiskScore(_context: SecurityContext,
     request: { content: string; action: AIAction },
     violations: SecurityViolation[],
     warnings: SecurityWarning[]
@@ -534,8 +530,7 @@ export class AISecurityMiddleware {
   /**
    * Log security incident
    */
-  private async logSecurityIncident(
-    context: SecurityContext,
+  private async logSecurityIncident(_context: SecurityContext,
     request: { content: string; action: AIAction },
     error: unknown
   ): Promise<void> {
@@ -550,7 +545,7 @@ export class AISecurityMiddleware {
       resolved: false,
     };
 
-    console.error('Security incident logged:', incident);
+    // console.error('Security incident logged:', incident);
 
     // In production, send to security monitoring system
     // await securityMonitoringService.reportIncident(incident);
@@ -559,8 +554,7 @@ export class AISecurityMiddleware {
   /**
    * Create security context from request data
    */
-  public createSecurityContext(
-    userId: string,
+  public createSecurityContext(_userId: string,
     sessionId: string,
     organizationId: string,
     permissions: string[],

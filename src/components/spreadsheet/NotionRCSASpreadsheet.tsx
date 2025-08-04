@@ -501,7 +501,7 @@ export const NotionRCSASpreadsheet = () => {
 
   const handleMore = (row: EntityRow) => {
     // Show context menu with more options
-    console.log('More options for:', row);
+    // console.log('More options for:', row);
   };
 
   const handleControlGenerated = async (control: any) => {

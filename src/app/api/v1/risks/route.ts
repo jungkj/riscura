@@ -24,7 +24,7 @@ import { getApiVersionFromRequest, ApiVersionMiddleware } from '@/lib/api/versio
  * GET /api/v1/risks
  * List risks with filtering, pagination, and search
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // 1. Rate limiting
     const rateLimitResult = await applyRateLimit(request);
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     if (!queryValidation.success) {
       const errors = (queryValidation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        errors.map((error: any) => ({
+        errors.map((_error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code,
@@ -220,7 +220,7 @@ export async function GET(request: NextRequest) {
  * POST /api/v1/risks
  * Create a new risk
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // 1. Rate limiting
     const rateLimitResult = await applyRateLimit(request, ['standard', 'bulk']);
@@ -252,7 +252,7 @@ export async function POST(request: NextRequest) {
     if (!validation.success) {
       const errors = (validation as { success: false; errors: any[] }).errors;
       return ApiResponseFormatter.validationError(
-        errors.map((error: any) => ({
+        errors.map((_error: any) => ({
           field: error.path.join('.'),
           message: error.message,
           code: error.code,

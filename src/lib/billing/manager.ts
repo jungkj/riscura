@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { stripeService } from './stripe';
 import { notificationManager } from '@/lib/collaboration/notifications';
 import { v4 as uuidv4 } from 'uuid';
-import { addMonths, addDays } from 'date-fns';
+// import { addMonths, addDays } from 'date-fns';
 import type {
   SubscriptionPlan,
   OrganizationSubscription,
@@ -15,8 +15,7 @@ import type {
 
 export class BillingManager {
   // Organization Subscription Queries
-  async getOrganizationSubscription(
-    organizationId: string
+  async getOrganizationSubscription(_organizationId: string
   ): Promise<OrganizationSubscription | null> {
     const subscription = await db.client.organizationSubscription.findFirst({
       where: { organizationId },
@@ -31,7 +30,7 @@ export class BillingManager {
     };
   }
 
-  async getActiveSubscription(organizationId: string): Promise<OrganizationSubscription | null> {
+  async getActiveSubscription(_organizationId: string): Promise<OrganizationSubscription | null> {
     const subscription = await db.client.organizationSubscription.findFirst({
       where: {
         organizationId,
@@ -108,8 +107,7 @@ export class BillingManager {
   }
 
   // Organization Subscription Management
-  async createSubscription(
-    organizationId: string,
+  async createSubscription(_organizationId: string,
     planId: string,
     options?: {
       trialDays?: number;
@@ -249,8 +247,7 @@ export class BillingManager {
   }
 
   // Usage Tracking
-  async trackUsage(
-    organizationId: string,
+  async trackUsage(_organizationId: string,
     type: UsageMetric['type'],
     quantity: number,
     metadata?: Record<string, any>
@@ -285,8 +282,7 @@ export class BillingManager {
   }
 
   // Payment Method Management
-  async addPaymentMethod(
-    organizationId: string,
+  async addPaymentMethod(_organizationId: string,
     stripePaymentMethodId: string,
     setAsDefault: boolean = false
   ): Promise<PaymentMethod> {

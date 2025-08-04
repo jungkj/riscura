@@ -437,7 +437,7 @@ export const AIChatInterface: React.FC<{
   };
 
   const handleAction = (action: string) => {
-    console.log('Action triggered:', action);
+    // console.log('Action triggered:', action);
     // Handle specific actions here
   };
 

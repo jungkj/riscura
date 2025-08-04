@@ -416,7 +416,7 @@ export class PredictiveRiskModelingService {
 
       return forecast;
     } catch (error) {
-      console.error('Error generating risk forecast:', error);
+      // console.error('Error generating risk forecast:', error);
       throw new Error('Failed to generate risk forecast');
     }
   }
@@ -460,7 +460,7 @@ export class PredictiveRiskModelingService {
 
       return simulation;
     } catch (error) {
-      console.error('Error executing Monte Carlo simulation:', error);
+      // console.error('Error executing Monte Carlo simulation:', error);
       throw new Error('Failed to execute Monte Carlo simulation');
     }
   }
@@ -468,8 +468,7 @@ export class PredictiveRiskModelingService {
   /**
    * Train machine learning model for risk prediction
    */
-  async trainPredictiveModel(
-    data: TimeSeriesPoint[],
+  async trainPredictiveModel(_data: TimeSeriesPoint[],
     modelType: PredictiveModel['type'],
     externalFactors: ExternalFactor[] = [],
     config?: Partial<ModelConfiguration>
@@ -512,7 +511,7 @@ export class PredictiveRiskModelingService {
 
       return predictiveModel;
     } catch (error) {
-      console.error('Error training predictive model:', error);
+      // console.error('Error training predictive model:', error);
       throw new Error('Failed to train predictive model');
     }
   }
@@ -528,9 +527,9 @@ export class PredictiveRiskModelingService {
 
       await Promise.allSettled(updatePromises);
 
-      console.log('External factors updated successfully');
+      // console.log('External factors updated successfully');
     } catch (error) {
-      console.error('Error updating external factors:', error);
+      // console.error('Error updating external factors:', error);
       throw new Error('Failed to update external factors');
     }
   }
@@ -551,7 +550,7 @@ export class PredictiveRiskModelingService {
       // Check if retraining is needed
       const performanceThreshold = 0.8;
       if (currentPerformance.accuracy < performanceThreshold) {
-        console.log(`Model ${modelId} performance degraded, retraining...`);
+        // console.log(`Model ${modelId} performance degraded, retraining...`);
 
         // Combine old and new data
         const combinedData = [...model.trainingData, ...newData];
@@ -571,7 +570,7 @@ export class PredictiveRiskModelingService {
 
       return false;
     } catch (error) {
-      console.error('Error validating and retraining model:', error);
+      // console.error('Error validating and retraining model:', error);
       throw new Error('Failed to validate and retrain model');
     }
   }
@@ -588,15 +587,14 @@ export class PredictiveRiskModelingService {
 
       return model.validationMetrics;
     } catch (error) {
-      console.error('Error getting model performance:', error);
+      // console.error('Error getting model performance:', error);
       throw new Error('Failed to get model performance');
     }
   }
 
   // Private helper methods
 
-  private async preprocessTimeSeriesData(
-    data: TimeSeriesPoint[],
+  private async preprocessTimeSeriesData(_data: TimeSeriesPoint[],
     config: ModelConfiguration
   ): Promise<TimeSeriesPoint[]> {
     let processedData = [...data];
@@ -634,15 +632,14 @@ export class PredictiveRiskModelingService {
         );
         relevantFactors.push(...filteredFactors);
       } catch (error) {
-        console.warn(`Failed to fetch data from source ${sourceId}:`, error);
+        // console.warn(`Failed to fetch data from source ${sourceId}:`, error);
       }
     }
 
     return relevantFactors;
   }
 
-  private async selectBestModel(
-    data: TimeSeriesPoint[],
+  private async selectBestModel(_data: TimeSeriesPoint[],
     externalFactors: ExternalFactor[],
     config: ModelConfiguration
   ): Promise<PredictiveModel> {
@@ -1078,7 +1075,7 @@ export class PredictiveRiskModelingService {
     const numIterations = results.length;
 
     // Calculate summary statistics for each variable
-    const summaries = Array(numVariables)
+    const _summaries = Array(numVariables)
       .fill(null)
       .map((_, varIndex) => {
         const values = results.map((iteration) => iteration[varIndex]);
@@ -1374,7 +1371,7 @@ export class PredictiveRiskModelingService {
     };
   }
 
-  private async calculateSimpleTrend(data: TimeSeriesPoint[]): Promise<number> {
+  private async calculateSimpleTrend(_data: TimeSeriesPoint[]): Promise<number> {
     if (data.length < 2) return 0;
 
     const firstValue = data[0].value;
@@ -1467,7 +1464,7 @@ export class PredictiveRiskModelingService {
     return 'very_high';
   }
 
-  private async calculateDataUncertainty(data: TimeSeriesPoint[]): Promise<number> {
+  private async calculateDataUncertainty(_data: TimeSeriesPoint[]): Promise<number> {
     // Calculate uncertainty based on data quality factors
     const completeness = data.length > 100 ? 1 : data.length / 100;
     const consistency = await this.calculateDataConsistency(data);
@@ -1475,7 +1472,7 @@ export class PredictiveRiskModelingService {
     return 1 - completeness * consistency;
   }
 
-  private async calculateDataConsistency(data: TimeSeriesPoint[]): Promise<number> {
+  private async calculateDataConsistency(_data: TimeSeriesPoint[]): Promise<number> {
     if (data.length < 2) return 0.5;
 
     // Calculate coefficient of variation as a measure of consistency
@@ -1516,9 +1513,9 @@ export class PredictiveRiskModelingService {
     try {
       // Simulate API call to update external data
       source.lastUpdated = new Date();
-      console.log(`Updated data source: ${source.name}`);
+      // console.log(`Updated data source: ${source.name}`);
     } catch (error) {
-      console.error(`Failed to update data source ${source.name}:`, error);
+      // console.error(`Failed to update data source ${source.name}:`, error);
     }
   }
 
@@ -1601,20 +1598,19 @@ export class PredictiveRiskModelingService {
   }
 
   // Stub implementations for complex algorithms
-  private async handleOutliers(
-    data: TimeSeriesPoint[],
+  private async handleOutliers(_data: TimeSeriesPoint[],
     treatment: string
   ): Promise<TimeSeriesPoint[]> {
     // Implementation would handle outlier detection and treatment
     return data;
   }
 
-  private async applySmoothing(data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
+  private async applySmoothing(_data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
     // Implementation would apply smoothing algorithms
     return data;
   }
 
-  private async interpolateMissingValues(data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
+  private async interpolateMissingValues(_data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
     // Implementation would interpolate missing values
     return data;
   }
@@ -1630,7 +1626,7 @@ export class PredictiveRiskModelingService {
   }
 
   private async trainModel(
-    type: PredictiveModel['type'],
+    _type: PredictiveModel['type'],
     features: number[][],
     data: TimeSeriesPoint[]
   ): Promise<{ parameters: Record<string, unknown> }> {
@@ -1663,8 +1659,7 @@ export class PredictiveRiskModelingService {
     return (metrics.accuracy + metrics.r2 + metrics.f1Score) / 3;
   }
 
-  private async splitTrainingData(
-    data: TimeSeriesPoint[],
+  private async splitTrainingData(_data: TimeSeriesPoint[],
     testRatio: number
   ): Promise<{ trainingData: TimeSeriesPoint[]; validationData: TimeSeriesPoint[] }> {
     const splitIndex = Math.floor(data.length * (1 - testRatio));
@@ -1674,8 +1669,7 @@ export class PredictiveRiskModelingService {
     };
   }
 
-  private async createFeatureMatrix(
-    data: TimeSeriesPoint[],
+  private async createFeatureMatrix(_data: TimeSeriesPoint[],
     externalFactors: ExternalFactor[]
   ): Promise<number[][]> {
     // Implementation would create feature matrix for ML models

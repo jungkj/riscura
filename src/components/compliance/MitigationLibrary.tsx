@@ -78,7 +78,7 @@ export function MitigationLibrary() {
         setMitigations(data);
       }
     } catch (error) {
-      console.error('Failed to load mitigations:', error);
+      // console.error('Failed to load mitigations:', error);
     } finally {
       setLoading(false);
     }
@@ -124,11 +124,11 @@ export function MitigationLibrary() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Import successful:', result);
+        // console.log('Import successful:', result);
         setSelectedMitigations([]);
       }
     } catch (error) {
-      console.error('Import failed:', error);
+      // console.error('Import failed:', error);
     } finally {
       setImporting(false);
     }

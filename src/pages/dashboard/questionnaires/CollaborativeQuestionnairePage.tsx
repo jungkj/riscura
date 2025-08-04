@@ -461,7 +461,7 @@ export default function CollaborativeQuestionnairePage({
         isOpen={showShareDialog}
         onOpenChange={setShowShareDialog}
         onShare={(settings) => {
-          console.log('Share settings:', settings);
+          // console.log('Share settings:', settings);
           setShowShareDialog(false);
           toast({
             title: 'Questionnaire Shared',

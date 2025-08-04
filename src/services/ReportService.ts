@@ -1,7 +1,7 @@
 import { ReportType, ReportStatus, Report, ReportTemplate, ReportSchedule } from '@prisma/client';
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import {
+// import {
   subDays,
   startOfMonth,
   endOfMonth,
@@ -12,7 +12,7 @@ import {
 } from 'date-fns';
 import { PDFGenerator } from '@/lib/reports/pdf-generator';
 import { ExcelGenerator } from '@/lib/reports/excel-generator';
-import { ReportDataCollector } from '@/lib/reports/data-collector';
+// import { ReportDataCollector } from '@/lib/reports/data-collector';
 import { CloudStorageService } from '@/services/CloudStorageService';
 import { prisma } from '@/lib/prisma';
 
@@ -74,8 +74,7 @@ export class ReportService {
   }
 
   // Report CRUD operations
-  async createReport(
-    data: z.infer<typeof CreateReportSchema>,
+  async createReport(_data: z.infer<typeof CreateReportSchema>,
     userId: string,
     organizationId: string
   ): Promise<Report> {
@@ -109,8 +108,7 @@ export class ReportService {
     });
   }
 
-  async getReports(
-    organizationId: string,
+  async getReports(_organizationId: string,
     filters: ReportFilters = {},
     page: number = 1,
     limit: number = 10
@@ -271,8 +269,7 @@ export class ReportService {
   }
 
   // Report Templates
-  async createReportTemplate(
-    data: z.infer<typeof CreateReportTemplateSchema>,
+  async createReportTemplate(_data: z.infer<typeof CreateReportTemplateSchema>,
     userId: string,
     organizationId: string
   ): Promise<ReportTemplate> {
@@ -295,7 +292,7 @@ export class ReportService {
     });
   }
 
-  async getReportTemplates(organizationId: string, type?: ReportType): Promise<ReportTemplate[]> {
+  async getReportTemplates(_organizationId: string, type?: ReportType): Promise<ReportTemplate[]> {
     return await prisma.reportTemplate.findMany({
       where: {
         organizationId,
@@ -359,8 +356,7 @@ export class ReportService {
   }
 
   // Report Schedules
-  async createReportSchedule(
-    data: z.infer<typeof CreateReportScheduleSchema>,
+  async createReportSchedule(_data: z.infer<typeof CreateReportScheduleSchema>,
     userId: string,
     organizationId: string
   ): Promise<ReportSchedule> {
@@ -389,7 +385,7 @@ export class ReportService {
     });
   }
 
-  async getReportSchedules(organizationId: string): Promise<ReportSchedule[]> {
+  async getReportSchedules(_organizationId: string): Promise<ReportSchedule[]> {
     return await prisma.reportSchedule.findMany({
       where: { organizationId, isActive: true },
       orderBy: { nextRunAt: 'asc' },

@@ -203,14 +203,13 @@ export class ContextIntelligenceService {
 
   private initializeService(): void {
     // Initialize context intelligence service
-    console.log('ContextIntelligenceService initialized');
+    // console.log('ContextIntelligenceService initialized');
   }
 
   /**
    * Get comprehensive context for AI prompt injection
    */
-  async getIntelligentContext(
-    userId: string,
+  async getIntelligentContext(_userId: string,
     currentPage: string,
     selectedEntities: {
       risks?: Risk[];
@@ -247,8 +246,7 @@ export class ContextIntelligenceService {
   /**
    * Analyze context relevance and quality
    */
-  async analyzeContext(
-    context: IntelligentContext,
+  async analyzeContext(_context: IntelligentContext,
     query: string,
     agentType: AgentType
   ): Promise<ContextAnalysisResult> {
@@ -272,8 +270,7 @@ export class ContextIntelligenceService {
   /**
    * Generate smart context for AI prompt injection
    */
-  async generateSmartContext(
-    context: IntelligentContext,
+  async generateSmartContext(_context: IntelligentContext,
     query: string,
     agentType: AgentType,
     options: ContextInjectionOptions
@@ -299,8 +296,7 @@ export class ContextIntelligenceService {
   /**
    * Get smart context suggestions
    */
-  async getSmartSuggestions(
-    userId: string,
+  async getSmartSuggestions(_userId: string,
     context: IntelligentContext,
     currentQuery?: string
   ): Promise<SmartContextSuggestion[]> {
@@ -340,7 +336,7 @@ export class ContextIntelligenceService {
   /**
    * Update context based on user interaction
    */
-  async updateContext(userId: string, activity: ActivityContext): Promise<void> {
+  async updateContext(_userId: string, activity: ActivityContext): Promise<void> {
     const context = this.contexts.get(userId);
     if (!context) return;
 
@@ -360,8 +356,7 @@ export class ContextIntelligenceService {
   /**
    * Persist conversation context
    */
-  async persistConversationContext(
-    userId: string,
+  async persistConversationContext(_userId: string,
     conversationId: string,
     context: IntelligentContext,
     agentType: AgentType,
@@ -395,7 +390,7 @@ export class ContextIntelligenceService {
   /**
    * Load persisted context
    */
-  async loadPersistedContext(userId: string): Promise<IntelligentContext | null> {
+  async loadPersistedContext(_userId: string): Promise<IntelligentContext | null> {
     try {
       const stored = localStorage.getItem(`aria_context_${userId}`);
       if (!stored) return null;
@@ -412,13 +407,13 @@ export class ContextIntelligenceService {
 
       return context;
     } catch (error) {
-      console.error('Error loading persisted context:', error);
+      // console.error('Error loading persisted context:', error);
       return null;
     }
   }
 
   // Private helper methods
-  private async getUserContext(userId: string): Promise<UserContext> {
+  private async getUserContext(_userId: string): Promise<UserContext> {
     // In a real implementation, this would fetch from user service
     return {
       id: userId,
@@ -440,7 +435,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async getOrganizationalContext(userId: string): Promise<OrganizationalContext> {
+  private async getOrganizationalContext(_userId: string): Promise<OrganizationalContext> {
     // In a real implementation, this would fetch from organization service
     return {
       companyProfile: {
@@ -532,7 +527,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async getUserPreferences(userId: string): Promise<UserPreferences> {
+  private async getUserPreferences(_userId: string): Promise<UserPreferences> {
     // Load from user preferences or use defaults
     return {
       communicationStyle: 'detailed',
@@ -544,8 +539,7 @@ export class ContextIntelligenceService {
     };
   }
 
-  private async calculateRelevanceScore(
-    context: IntelligentContext,
+  private async calculateRelevanceScore(_context: IntelligentContext,
     query: string,
     agentType: AgentType
   ): Promise<number> {
@@ -562,7 +556,7 @@ export class ContextIntelligenceService {
     return Math.min(score, 1.0);
   }
 
-  private async extractKeyInsights(context: IntelligentContext, query: string): Promise<string[]> {
+  private async extractKeyInsights(_context: IntelligentContext, query: string): Promise<string[]> {
     const insights: string[] = [];
 
     if (context.current.selectedEntities.risks.length > 0) {
@@ -576,8 +570,7 @@ export class ContextIntelligenceService {
     return insights;
   }
 
-  private async generateContextRecommendations(
-    context: IntelligentContext,
+  private async generateContextRecommendations(_context: IntelligentContext,
     agentType: AgentType
   ): Promise<string[]> {
     const recommendations: string[] = [];
@@ -598,7 +591,7 @@ export class ContextIntelligenceService {
     return recommendations;
   }
 
-  private assessDataQuality(context: IntelligentContext): 'high' | 'medium' | 'low' {
+  private assessDataQuality(_context: IntelligentContext): 'high' | 'medium' | 'low' {
     // Simple assessment - in reality, this would be more sophisticated
     const hasSelectedEntities =
       context.current.selectedEntities.risks.length > 0 ||
@@ -607,7 +600,7 @@ export class ContextIntelligenceService {
     return hasSelectedEntities ? 'high' : 'medium';
   }
 
-  private calculateCompleteness(context: IntelligentContext): number {
+  private calculateCompleteness(_context: IntelligentContext): number {
     let score = 0;
 
     if (context.user.id) score += 0.2;
@@ -619,7 +612,7 @@ export class ContextIntelligenceService {
     return score;
   }
 
-  private calculateFreshness(context: IntelligentContext): number {
+  private calculateFreshness(_context: IntelligentContext): number {
     // Calculate based on how recent the data is
     const now = new Date();
     let totalFreshness = 0;
@@ -636,8 +629,7 @@ export class ContextIntelligenceService {
     return count > 0 ? totalFreshness / count : 0.5;
   }
 
-  private generateMinimalContext(
-    context: IntelligentContext,
+  private generateMinimalContext(_context: IntelligentContext,
     options: ContextInjectionOptions
   ): string {
     const parts: string[] = [];
@@ -662,8 +654,7 @@ export class ContextIntelligenceService {
     return parts.join('\n');
   }
 
-  private generateModerateContext(
-    context: IntelligentContext,
+  private generateModerateContext(_context: IntelligentContext,
     analysis: ContextAnalysisResult,
     options: ContextInjectionOptions
   ): string {
@@ -709,8 +700,7 @@ export class ContextIntelligenceService {
     return parts.join('\n');
   }
 
-  private generateComprehensiveContext(
-    context: IntelligentContext,
+  private generateComprehensiveContext(_context: IntelligentContext,
     analysis: ContextAnalysisResult,
     options: ContextInjectionOptions
   ): string {
@@ -758,8 +748,7 @@ export class ContextIntelligenceService {
   }
 
   // Suggestion generation methods
-  private async generateDataInsightSuggestions(
-    context: IntelligentContext
+  private async generateDataInsightSuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
     const suggestions: SmartContextSuggestion[] = [];
 
@@ -775,7 +764,7 @@ export class ContextIntelligenceService {
           label: 'Analyze Correlations',
           action: async () => {
             // Implement correlation analysis
-            console.log('Analyzing risk correlations...');
+            // console.log('Analyzing risk correlations...');
           },
         },
         metadata: { riskCount: context.current.selectedEntities.risks.length },
@@ -785,8 +774,7 @@ export class ContextIntelligenceService {
     return suggestions;
   }
 
-  private async generateMissingContextSuggestions(
-    context: IntelligentContext
+  private async generateMissingContextSuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
     const suggestions: SmartContextSuggestion[] = [];
 
@@ -805,7 +793,7 @@ export class ContextIntelligenceService {
           label: 'Browse Risks',
           action: async () => {
             // Navigate to risk selection
-            console.log('Opening risk selection...');
+            // console.log('Opening risk selection...');
           },
         },
         metadata: { contextType: 'risk_selection' },
@@ -815,8 +803,7 @@ export class ContextIntelligenceService {
     return suggestions;
   }
 
-  private async generateRelatedEntitySuggestions(
-    context: IntelligentContext
+  private async generateRelatedEntitySuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
     const suggestions: SmartContextSuggestion[] = [];
 
@@ -835,7 +822,7 @@ export class ContextIntelligenceService {
           label: 'View Related Controls',
           action: async () => {
             // Show related controls
-            console.log('Showing related controls...');
+            // console.log('Showing related controls...');
           },
         },
         metadata: { entityType: 'controls' },
@@ -845,8 +832,7 @@ export class ContextIntelligenceService {
     return suggestions;
   }
 
-  private async generateActionItemSuggestions(
-    context: IntelligentContext
+  private async generateActionItemSuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
     const suggestions: SmartContextSuggestion[] = [];
 
@@ -863,7 +849,7 @@ export class ContextIntelligenceService {
           label: 'View Recent Changes',
           action: async () => {
             // Show recent changes
-            console.log('Showing recent changes...');
+            // console.log('Showing recent changes...');
           },
         },
         metadata: { actionType: 'review' },
@@ -873,8 +859,7 @@ export class ContextIntelligenceService {
     return suggestions;
   }
 
-  private async generateEfficiencySuggestions(
-    context: IntelligentContext
+  private async generateEfficiencySuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
     const suggestions: SmartContextSuggestion[] = [];
 
@@ -890,7 +875,7 @@ export class ContextIntelligenceService {
           label: 'Open Bulk Tools',
           action: async () => {
             // Open bulk operations
-            console.log('Opening bulk operations...');
+            // console.log('Opening bulk operations...');
           },
         },
         metadata: { feature: 'bulk_operations' },
@@ -900,7 +885,7 @@ export class ContextIntelligenceService {
     return suggestions;
   }
 
-  private async updatePatterns(userId: string, activity: ActivityContext): Promise<void> {
+  private async updatePatterns(_userId: string, activity: ActivityContext): Promise<void> {
     // Update pattern analysis based on new activity
     const patterns = this.patternCache.get(userId) || [];
 

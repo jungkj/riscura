@@ -376,7 +376,7 @@ const RiskRegister: React.FC = () => {
     }
   };
 
-  const categories = [...new Set(sampleRisks.map(r => r.category))];
+  const _categories = [...new Set(sampleRisks.map(r => r.category))];
   const statuses = [...new Set(sampleRisks.map(r => r.status))];
 
   return (
@@ -515,7 +515,7 @@ export const RiskManagementDashboard: React.FC = () => {
         const mappings = await proboService.mapControlsToRisks('org-1'); // Replace with actual org ID
         setProboMappings(mappings);
       } catch (error) {
-        console.error('Failed to load Probo mappings:', error);
+        // console.error('Failed to load Probo mappings:', error);
       } finally {
         setIsLoadingMappings(false);
       }
@@ -543,7 +543,7 @@ export const RiskManagementDashboard: React.FC = () => {
         // Controls imported successfully, result contains import details
       }
     } catch (error) {
-      console.error('Failed to import Probo controls:', error);
+      // console.error('Failed to import Probo controls:', error);
       toast.error('Failed to import Probo controls');
     }
   };
@@ -552,7 +552,7 @@ export const RiskManagementDashboard: React.FC = () => {
     try {
       await ExportService.exportRisks(sampleRisks, { format });
     } catch (error) {
-      console.error('Export failed:', error);
+      // console.error('Export failed:', error);
     }
   };
 

@@ -61,15 +61,14 @@ export const generatePDF = async (reportData: any): Promise<Buffer> => {
 };
 
 // Mock formatting functions
-export const formatTableData = (data: any[], columns: any[]) => {
+export const formatTableData = (_data: any[], columns: any[]) => {
   return {
     headers: columns.map((col) => col.header),
     rows: data.map((item) => columns.map((col) => item[col.key] || '')),
   };
 };
 
-export const formatChartData = (
-  data: any[],
+export const formatChartData = (_data: any[],
   labelKey: string,
   valueKey: string,
   chartType?: string

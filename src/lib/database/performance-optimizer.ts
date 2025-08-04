@@ -185,9 +185,9 @@ export class DatabasePerformanceOptimizer {
       });
 
       await this.redis.connect();
-      console.log('Redis cache initialized successfully');
+      // console.log('Redis cache initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize Redis cache:', error);
+      // console.error('Failed to initialize Redis cache:', error);
       this.config.enableQueryCache = false;
     }
   }
@@ -206,9 +206,9 @@ export class DatabasePerformanceOptimizer {
 
         await replicaClient.$connect();
         this.readReplicas.push(replicaClient);
-        console.log(`Read replica initialized: ${replica.url}`);
+        // console.log(`Read replica initialized: ${replica.url}`);
       } catch (error) {
-        console.error(`Failed to initialize read replica: ${replica.url}`, error);
+        // console.error(`Failed to initialize read replica: ${replica.url}`, error);
       }
     }
   }
@@ -227,9 +227,9 @@ export class DatabasePerformanceOptimizer {
 
         await shardClient.$connect();
         this.shardClients.set(shard.id, shardClient);
-        console.log(`Shard initialized: ${shard.id}`);
+        // console.log(`Shard initialized: ${shard.id}`);
       } catch (error) {
-        console.error(`Failed to initialize shard: ${shard.id}`, error);
+        // console.error(`Failed to initialize shard: ${shard.id}`, error);
       }
     }
   }
@@ -258,14 +258,14 @@ export class DatabasePerformanceOptimizer {
 
         // Log slow queries
         if (duration > this.config.slowQueryThreshold) {
-          console.warn(`Slow query detected: ${params.model}.${params.action} (${duration}ms)`);
+          // console.warn(`Slow query detected: ${params.model}.${params.action} (${duration}ms)`);
           this.metrics.slowQueries++;
         }
 
         this.metrics.totalQueries++;
         return result;
       } catch (error) {
-        console.error(`Query error: ${params.model}.${params.action}`, error);
+        // console.error(`Query error: ${params.model}.${params.action}`, error);
         throw error;
       }
     });
@@ -292,9 +292,9 @@ export class DatabasePerformanceOptimizer {
         SET SESSION max_connections = ${this.config.connectionPool.max};
       `;
 
-      console.log('Connection pool optimized');
+      // console.log('Connection pool optimized');
     } catch (error) {
-      console.error('Failed to optimize connection pool:', error);
+      // console.error('Failed to optimize connection pool:', error);
     }
   }
 
@@ -342,7 +342,7 @@ export class DatabasePerformanceOptimizer {
 
       return result;
     } catch (error) {
-      console.error('Cache operation failed, falling back to direct query:', error);
+      // console.error('Cache operation failed, falling back to direct query:', error);
       return queryFn();
     }
   }
@@ -370,7 +370,7 @@ export class DatabasePerformanceOptimizer {
       });
       return result;
     } catch (error) {
-      console.error('Read replica query failed, falling back to primary:', error);
+      // console.error('Read replica query failed, falling back to primary:', error);
       return queryFn(this.prisma);
     }
   }
@@ -390,7 +390,7 @@ export class DatabasePerformanceOptimizer {
     const shardClient = this.shardClients.get(shardId);
 
     if (!shardClient) {
-      console.warn(`Shard ${shardId} not available, using primary`);
+      // console.warn(`Shard ${shardId} not available, using primary`);
       return queryFn(this.prisma);
     }
 
@@ -399,7 +399,7 @@ export class DatabasePerformanceOptimizer {
       this.metrics.shardDistribution[shardId] = (this.metrics.shardDistribution[shardId] || 0) + 1;
       return result;
     } catch (error) {
-      console.error(`Shard query failed on ${shardId}, falling back to primary:`, error);
+      // console.error(`Shard query failed on ${shardId}, falling back to primary:`, error);
       return queryFn(this.prisma);
     }
   }
@@ -436,7 +436,7 @@ export class DatabasePerformanceOptimizer {
         if (result.status === 'fulfilled') {
           results.push(result.value);
         } else {
-          console.error('Batch query failed:', result.reason);
+          // console.error('Batch query failed:', result.reason);
           throw result.reason;
         }
       }
@@ -557,7 +557,7 @@ export class DatabasePerformanceOptimizer {
         await this.measureReplicationLag();
       }
     } catch (error) {
-      console.error('Failed to update metrics:', error);
+      // console.error('Failed to update metrics:', error);
     }
   }
 
@@ -574,7 +574,7 @@ export class DatabasePerformanceOptimizer {
       // For now, we'll simulate
       this.metrics.replicationLag = Math.random() * 100; // Simulated lag in ms
     } catch (error) {
-      console.error('Failed to measure replication lag:', error);
+      // console.error('Failed to measure replication lag:', error);
     }
   }
 
@@ -647,7 +647,7 @@ export class DatabasePerformanceOptimizer {
         await this.redis.del(...keys);
       }
     } catch (error) {
-      console.error('Failed to invalidate cache:', error);
+      // console.error('Failed to invalidate cache:', error);
     }
   }
 

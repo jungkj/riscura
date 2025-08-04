@@ -35,7 +35,7 @@ export class CustomModelTrainingService {
   /**
    * Get training jobs for an organization
    */
-  public async getOrganizationModels(organizationId: string): Promise<TrainingJob[]> {
+  public async getOrganizationModels(_organizationId: string): Promise<TrainingJob[]> {
     return Array.from(this.trainingJobs.values()).filter(
       (job) => job.config.organizationId === organizationId
     );
@@ -69,7 +69,7 @@ export class CustomModelTrainingService {
   /**
    * Create a new training job
    */
-  async createTrainingJob(config: {
+  async createTrainingJob(_config: {
     organizationId: string;
     modelName: string;
   }): Promise<TrainingJob> {

@@ -45,7 +45,7 @@ interface FailedRequest {
   retryCount: number;
   timestamp: number;
   resolve: (value: any) => void;
-  reject: (error: any) => void;
+  reject: (_error: any) => void;
 }
 
 // Network error handler props

@@ -66,7 +66,7 @@ export const apiMonitor = {
       status: statusCode.toString(),
     });
   },
-  recordError: async (error: Error, context: Record<string, any> = {}) => {
+  recordError: async (_error: Error, context: Record<string, any> = {}) => {
     await monitoringService.recordMetric('api_error', 1, {
       error: error.message,
       ...context,

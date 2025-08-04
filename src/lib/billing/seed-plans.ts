@@ -248,14 +248,14 @@ const DEFAULT_PLANS: Omit<SubscriptionPlan, 'id' | 'createdAt' | 'updatedAt'>[] 
 ];
 
 export async function seedSubscriptionPlans(): Promise<void> {
-  console.log('🌱 Seeding subscription plans...');
+  // console.log('🌱 Seeding subscription plans...');
 
   try {
     // Check if plans already exist
     const existingPlans = await db.client.subscriptionPlan.findMany();
 
     if (existingPlans.length > 0) {
-      console.log('📋 Subscription plans already exist, skipping seed...');
+      // console.log('📋 Subscription plans already exist, skipping seed...');
       return;
     }
 
@@ -278,18 +278,17 @@ export async function seedSubscriptionPlans(): Promise<void> {
         },
       });
 
-      console.log(`✅ Created plan: ${planData.name}`);
+      // console.log(`✅ Created plan: ${planData.name}`);
     }
 
-    console.log('🎉 Successfully seeded subscription plans!');
+    // console.log('🎉 Successfully seeded subscription plans!');
   } catch (error) {
-    console.error('❌ Error seeding subscription plans:', error);
+    // console.error('❌ Error seeding subscription plans:', error);
     throw error;
   }
 }
 
-export async function createDefaultSubscriptionForOrganization(
-  organizationId: string
+export async function createDefaultSubscriptionForOrganization(_organizationId: string
 ): Promise<void> {
   try {
     // Check if organization already has a subscription
@@ -298,7 +297,7 @@ export async function createDefaultSubscriptionForOrganization(
     });
 
     if (existingSubscription) {
-      console.log(`Organization ${organizationId} already has a subscription`);
+      // console.log(`Organization ${organizationId} already has a subscription`);
       return;
     }
 
@@ -332,9 +331,9 @@ export async function createDefaultSubscriptionForOrganization(
       },
     });
 
-    console.log(`✅ Created free subscription for organization: ${organizationId}`);
+    // console.log(`✅ Created free subscription for organization: ${organizationId}`);
   } catch (error) {
-    console.error('❌ Error creating default subscription:', error);
+    // console.error('❌ Error creating default subscription:', error);
     throw error;
   }
 }
@@ -355,8 +354,7 @@ export async function getPlanByType(type: string): Promise<SubscriptionPlan | nu
 }
 
 // Helper function to upgrade organization to a different plan
-export async function upgradeOrganizationPlan(
-  organizationId: string,
+export async function upgradeOrganizationPlan(_organizationId: string,
   newPlanType: string
 ): Promise<void> {
   const newPlan = await getPlanByType(newPlanType);
@@ -383,5 +381,5 @@ export async function upgradeOrganizationPlan(
     },
   });
 
-  console.log(`✅ Upgraded organization ${organizationId} to ${newPlan.name} plan`);
+  // console.log(`✅ Upgraded organization ${organizationId} to ${newPlan.name} plan`);
 }

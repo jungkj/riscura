@@ -15,7 +15,7 @@ interface RouteParams {
 // GET /api/compliance/assessments/[id]/gaps - Get assessment gaps
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -54,7 +54,7 @@ const createGapSchema = z.object({
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       if (!user) {

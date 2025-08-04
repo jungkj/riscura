@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/database/prisma';
 import bcrypt from 'bcryptjs';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Only allow in development
     if (process.env.NODE_ENV === 'production') {
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error creating test user:', error);
+    // console.error('Error creating test user:', error);
     return NextResponse.json(
       {
         error: 'Failed to create test user',

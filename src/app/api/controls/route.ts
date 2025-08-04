@@ -33,7 +33,7 @@ export const GET = withApiMiddleware(
     const { user } = req as AuthenticatedRequest;
 
     if (!user || !user.organizationId) {
-      console.warn('[Controls API] Missing user or organizationId', { user });
+      // console.warn('[Controls API] Missing user or organizationId', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -41,7 +41,7 @@ export const GET = withApiMiddleware(
     }
 
     try {
-      console.log('[Controls API] Fetching controls for organization:', user.organizationId);
+      // console.log('[Controls API] Fetching controls for organization:', user.organizationId);
 
       // Parse pagination parameters from query string
       const { searchParams } = new URL(req.url);
@@ -87,7 +87,7 @@ export const GET = withApiMiddleware(
           take: limit,
         });
       } catch (relationError) {
-        console.warn(
+        // console.warn(
           '[Controls API] Error fetching relationships, falling back to basic query:',
           relationError
         );
@@ -100,7 +100,7 @@ export const GET = withApiMiddleware(
         });
       }
 
-      console.log(
+      // console.log(
         `[Controls API] Found ${controls.length} controls (page ${page}, total: ${totalCount})`
       );
 
@@ -116,7 +116,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('[Controls API] Critical error:', {
+      // console.error('[Controls API] Critical error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
@@ -141,7 +141,7 @@ export const POST = withApiMiddleware(
     const { user } = req as AuthenticatedRequest;
 
     if (!user || !user.organizationId) {
-      console.warn('[Controls API] Missing user or organizationId in POST', { user });
+      // console.warn('[Controls API] Missing user or organizationId in POST', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
@@ -150,11 +150,11 @@ export const POST = withApiMiddleware(
 
     try {
       const body = await req.json();
-      console.log('[Controls API] Creating control with data:', body);
+      // console.log('[Controls API] Creating control with data:', body);
 
       const validatedData = CreateControlSchema.parse(body);
 
-      console.log('[Controls API] Creating control with processed data');
+      // console.log('[Controls API] Creating control with processed data');
 
       const control = await db.client.control.create({
         data: {
@@ -178,7 +178,7 @@ export const POST = withApiMiddleware(
         },
       });
 
-      console.log('[Controls API] Control created successfully:', control.id);
+      // console.log('[Controls API] Control created successfully:', control.id);
 
       return NextResponse.json(
         {
@@ -189,7 +189,7 @@ export const POST = withApiMiddleware(
       );
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error('[Controls API] Validation error:', error.errors);
+        // console.error('[Controls API] Validation error:', error.errors);
         return NextResponse.json(
           { success: false, error: 'Validation failed', details: error.errors },
           { status: 400 }
@@ -198,7 +198,7 @@ export const POST = withApiMiddleware(
 
       // Check for foreign key constraint errors
       if (error instanceof Error && error.message.includes('organizationId_fkey')) {
-        console.error('[Controls API] Organization not found:', user.organizationId);
+        // console.error('[Controls API] Organization not found:', user.organizationId);
         return NextResponse.json(
           {
             success: false,
@@ -214,7 +214,7 @@ export const POST = withApiMiddleware(
         );
       }
 
-      console.error('[Controls API] Create control error:', {
+      // console.error('[Controls API] Create control error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,

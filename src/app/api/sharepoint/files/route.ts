@@ -63,7 +63,7 @@ export const POST = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('Error listing SharePoint files:', error);
+    // console.error('Error listing SharePoint files:', error);
 
     return {
       error: 'Failed to list files from SharePoint. Please check your connection and try again.',
@@ -123,7 +123,7 @@ export const PUT = withApiMiddleware({
       resultCount: files.length,
     };
   } catch (error) {
-    console.error('Error searching SharePoint files:', error);
+    // console.error('Error searching SharePoint files:', error);
 
     return {
       error: 'Failed to search files in SharePoint. Please try again.',

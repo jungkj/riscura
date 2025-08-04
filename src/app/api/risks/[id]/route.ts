@@ -225,7 +225,7 @@ export const GET = withAPI(async (req: NextRequest) => {
       data: enrichedRisk,
     });
   } catch (error) {
-    console.error('Error fetching risk:', error);
+    // console.error('Error fetching risk:', error);
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk ID format', error.errors);
     }
@@ -385,7 +385,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
       message: 'Risk updated successfully',
     });
   } catch (error) {
-    console.error('Error updating risk:', error);
+    // console.error('Error updating risk:', error);
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk data', error.errors);
     }
@@ -491,7 +491,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       message: 'Risk deleted successfully',
     });
   } catch (error) {
-    console.error('Error deleting risk:', error);
+    // console.error('Error deleting risk:', error);
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk ID format', error.errors);
     }

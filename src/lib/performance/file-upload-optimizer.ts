@@ -117,7 +117,7 @@ export class FileUploadOptimizer {
   private progressCallbacks: Map<string, (progress: UploadProgress) => void> = new Map();
   private workers: Worker[] = [];
 
-  constructor(config: Partial<UploadConfig> = {}) {
+  constructor(_config: Partial<UploadConfig> = {}) {
     this.config = { ...DEFAULT_UPLOAD_CONFIG, ...config };
     this.initializeWorkers();
   }
@@ -221,7 +221,7 @@ export class FileUploadOptimizer {
         }
       );
     } catch (error) {
-      console.warn('Failed to create web worker:', error);
+      // console.warn('Failed to create web worker:', error);
     }
   }
 
@@ -234,7 +234,7 @@ export class FileUploadOptimizer {
     options: {
       onProgress?: (progress: UploadProgress) => void;
       onComplete?: (result: any) => void;
-      onError?: (error: Error) => void;
+      onError?: (_error: Error) => void;
       metadata?: Record<string, any>;
     } = {}
   ): Promise<string> {
@@ -684,7 +684,7 @@ export class LargeDatasetProcessor {
   private workers: Worker[] = [];
   private currentCacheSize: number = 0;
 
-  constructor(config: Partial<DatasetConfig> = {}) {
+  constructor(_config: Partial<DatasetConfig> = {}) {
     this.config = { ...DEFAULT_DATASET_CONFIG, ...config };
     this.initializeWorkers();
   }
@@ -834,7 +834,7 @@ export class LargeDatasetProcessor {
 
       return worker;
     } catch (error) {
-      console.warn('Failed to create processing worker:', error);
+      // console.warn('Failed to create processing worker:', error);
       return null;
     }
   }
@@ -842,8 +842,7 @@ export class LargeDatasetProcessor {
   /**
    * Process large dataset in batches
    */
-  async processDataset<T>(
-    data: T[],
+  async processDataset<T>(_data: T[],
     processor: (batch: T[]) => Promise<T[]> | T[],
     options: {
       onProgress?: (processed: number, total: number) => void;
@@ -875,7 +874,7 @@ export class LargeDatasetProcessor {
         // Yield control to prevent blocking
         await new Promise((resolve) => setTimeout(resolve, 0));
       } catch (error) {
-        console.error(`Error processing batch ${batchIndex}:`, error);
+        // console.error(`Error processing batch ${batchIndex}:`, error);
         throw error;
       }
     }
@@ -886,8 +885,7 @@ export class LargeDatasetProcessor {
   /**
    * Process using web workers
    */
-  async processWithWorkers<T>(
-    data: T[],
+  async processWithWorkers<T>(_data: T[],
     processingType: 'PROCESS_BATCH' | 'AGGREGATE_DATA' | 'FILTER_DATA',
     options: any = {}
   ): Promise<any> {
@@ -1006,7 +1004,7 @@ export class LargeDatasetProcessor {
   /**
    * Estimate data size in bytes
    */
-  private estimateDataSize(data: any): number {
+  private estimateDataSize(_data: any): number {
     if (typeof data === 'string') {
       return data.length * 2; // Assume UTF-16
     }

@@ -132,7 +132,7 @@ export const POST = withApiMiddleware({
       },
     };
   } catch (error) {
-    console.error('Excel import error:', error);
+    // console.error('Excel import error:', error);
     return {
       success: false,
       error: 'Failed to import Excel file. Please check the file format and try again.',

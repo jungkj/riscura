@@ -26,7 +26,7 @@ class ImageOptimizer {
   private cache: Map<string, string> = new Map();
   private loadingImages: Set<string> = new Set();
 
-  constructor(config: Partial<OptimizedImageLoaderConfig> = {}) {
+  constructor(_config: Partial<OptimizedImageLoaderConfig> = {}) {
     this.config = { ...defaultConfig, ...config };
   }
 
@@ -162,7 +162,7 @@ class ImageOptimizer {
         // Show placeholder or error image
         img.src = '/images/placeholder.png';
         img.classList.add('error');
-        console.warn('Failed to load image:', src, fallbackError);
+        // console.warn('Failed to load image:', src, fallbackError);
       }
     } finally {
       this.loadingImages.delete(src);

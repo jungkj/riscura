@@ -67,7 +67,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
         }
       }
     } catch (err) {
-      console.error('Error fetching job status:', err);
+      // console.error('Error fetching job status:', err);
       setError('Failed to fetch import job status');
     } finally {
       setIsLoading(false);
@@ -102,7 +102,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
       return false;
     } catch (err) {
-      console.error('Error cancelling job:', err);
+      // console.error('Error cancelling job:', err);
       setError('Failed to cancel import job');
       return false;
     }
@@ -196,7 +196,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
 
         return { success: false, error: 'Unknown error occurred' };
       } catch (err) {
-        console.error('Error creating import job:', err);
+        // console.error('Error creating import job:', err);
         const errorMessage = 'Failed to create import job';
         setError(errorMessage);
         return { success: false, error: errorMessage };
@@ -243,7 +243,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
           setJobs([]);
         }
       } catch (err) {
-        console.error('Error fetching import jobs:', err);
+        // console.error('Error fetching import jobs:', err);
         setError('Failed to load import history');
         setJobs([]);
       } finally {

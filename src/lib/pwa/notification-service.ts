@@ -45,7 +45,7 @@ export class NotificationService {
   private subscription: PushSubscription | null = null;
   private registration: ServiceWorkerRegistration | null = null;
 
-  constructor(config: PushSubscriptionConfig) {
+  constructor(_config: PushSubscriptionConfig) {
     this.vapidKey = config.vapidKey;
     this.endpoint = config.endpoint;
     this.init();
@@ -53,7 +53,7 @@ export class NotificationService {
 
   private async init(): Promise<void> {
     if (!this.isSupported()) {
-      console.warn('Push notifications not supported');
+      // console.warn('Push notifications not supported');
       return;
     }
 
@@ -61,7 +61,7 @@ export class NotificationService {
       await this.getServiceWorkerRegistration();
       await this.checkExistingSubscription();
     } catch (error) {
-      console.error('Notification service initialization failed:', error);
+      // console.error('Notification service initialization failed:', error);
     }
   }
 
@@ -82,7 +82,7 @@ export class NotificationService {
     try {
       this.subscription = await this.registration.pushManager.getSubscription();
     } catch (error) {
-      console.error('Failed to check existing subscription:', error);
+      // console.error('Failed to check existing subscription:', error);
     }
   }
 
@@ -96,7 +96,7 @@ export class NotificationService {
       const permission = await Notification.requestPermission();
       return permission;
     } catch (error) {
-      console.error('Permission request failed:', error);
+      // console.error('Permission request failed:', error);
       return 'denied';
     }
   }
@@ -132,7 +132,7 @@ export class NotificationService {
 
       return this.subscription;
     } catch (error) {
-      console.error('Subscription failed:', error);
+      // console.error('Subscription failed:', error);
       return null;
     }
   }
@@ -157,13 +157,13 @@ export class NotificationService {
 
       return success;
     } catch (error) {
-      console.error('Unsubscribe failed:', error);
+      // console.error('Unsubscribe failed:', error);
       return false;
     }
   }
 
   // Show local notification
-  public async showNotification(options: NotificationOptions): Promise<void> {
+  public async showNotification(_options: NotificationOptions): Promise<void> {
     if (!this.isSupported() || Notification.permission !== 'granted') {
       throw new Error('Notifications not permitted');
     }
@@ -192,7 +192,7 @@ export class NotificationService {
 
       await this.registration.showNotification(options.title, notificationOptions);
     } catch (error) {
-      console.error('Failed to show notification:', error);
+      // console.error('Failed to show notification:', error);
       throw error;
     }
   }
@@ -214,7 +214,7 @@ export class NotificationService {
         }),
       });
     } catch (error) {
-      console.error('Failed to send subscription to server:', error);
+      // console.error('Failed to send subscription to server:', error);
     }
   }
 
@@ -233,7 +233,7 @@ export class NotificationService {
         }),
       });
     } catch (error) {
-      console.error('Failed to remove subscription from server:', error);
+      // console.error('Failed to remove subscription from server:', error);
     }
   }
 
@@ -273,7 +273,7 @@ export class NotificationService {
       const notifications = await this.registration.getNotifications(tag ? { tag } : undefined);
       notifications.forEach((notification) => notification.close());
     } catch (error) {
-      console.error('Failed to clear notifications:', error);
+      // console.error('Failed to clear notifications:', error);
     }
   }
 
@@ -284,14 +284,14 @@ export class NotificationService {
     try {
       return await this.registration.getNotifications(tag ? { tag } : undefined);
     } catch (error) {
-      console.error('Failed to get active notifications:', error);
+      // console.error('Failed to get active notifications:', error);
       return [];
     }
   }
 }
 
 // Hook for notification management
-export function useNotifications(config: PushSubscriptionConfig) {
+export function useNotifications(_config: PushSubscriptionConfig) {
   const [service] = useState(() => new NotificationService(config));
   const [permissionState, setPermissionState] = useState<NotificationPermissionState>({
     permission: 'default',
@@ -345,7 +345,7 @@ export function useNotifications(config: PushSubscriptionConfig) {
 
   // Show notification
   const showNotification = useCallback(
-    async (options: NotificationOptions) => {
+    async (_options: NotificationOptions) => {
       await service.showNotification(options);
     },
     [service]
@@ -503,10 +503,10 @@ export const notificationUtils = {
       const audio = new Audio(soundUrl);
       audio.volume = 0.5;
       audio.play().catch((error) => {
-        console.warn('Failed to play notification sound:', error);
+        // console.warn('Failed to play notification sound:', error);
       });
     } catch (error) {
-      console.warn('Notification sound not available:', error);
+      // console.warn('Notification sound not available:', error);
     }
   },
 

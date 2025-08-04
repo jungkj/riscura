@@ -199,7 +199,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
       setActiveTab('basic');
       onOpenChange(false);
     } catch (error) {
-      console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error);
       toast.error('Failed to create risk. Please try again.');
     } finally {
       setIsSubmitting(false);

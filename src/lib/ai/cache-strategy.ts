@@ -200,7 +200,7 @@ export class EnhancedAICacheStrategy {
     return Date.now() - entry.timestamp < entry.ttl;
   }
 
-  private calculateDynamicTTL(response: any): number {
+  private calculateDynamicTTL(_response: any): number {
     // Longer TTL for static content
     if (this.isStaticContent(response)) {
       return 3600000; // 1 hour
@@ -219,7 +219,7 @@ export class EnhancedAICacheStrategy {
     return this.defaultTTL;
   }
 
-  private isStaticContent(response: any): boolean {
+  private isStaticContent(_response: any): boolean {
     // Check for static content indicators
     const content = JSON.stringify(response).toLowerCase();
     return (
@@ -229,13 +229,13 @@ export class EnhancedAICacheStrategy {
     );
   }
 
-  private isDynamicContent(response: any): boolean {
+  private isDynamicContent(_response: any): boolean {
     // Check for dynamic content indicators
     const content = JSON.stringify(response).toLowerCase();
     return content.includes('current') || content.includes('today') || content.includes('realtime');
   }
 
-  private isAnalysisContent(response: any): boolean {
+  private isAnalysisContent(_response: any): boolean {
     // Check for analysis content indicators
     const content = JSON.stringify(response).toLowerCase();
     return (
@@ -245,7 +245,7 @@ export class EnhancedAICacheStrategy {
     );
   }
 
-  private shouldPersist(response: any, entry: CacheEntry): boolean {
+  private shouldPersist(_response: any, entry: CacheEntry): boolean {
     // Persist high-value responses
     const responseSize = JSON.stringify(response).length;
 

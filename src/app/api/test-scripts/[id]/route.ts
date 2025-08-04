@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 import { TestScriptType, TestFrequency, UpdateTestScriptRequest } from '@/types/rcsa.types';
 
@@ -34,7 +34,7 @@ const updateTestScriptSchema = z.object({
 // GET /api/test-scripts/[id] - Get a single test script
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       const testScript = await db.client.testScript.findFirst({
@@ -99,7 +99,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 // PATCH /api/test-scripts/[id] - Update a test script
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists and belongs to organization
@@ -194,7 +194,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 // DELETE /api/test-scripts/[id] - Delete a test script
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists and belongs to organization

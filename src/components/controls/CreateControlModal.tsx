@@ -233,7 +233,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
       onOpenChange(false);
 
     } catch (error) {
-      console.error('Error creating control:', error);
+      // console.error('Error creating control:', error);
       toast.error('Failed to create control. Please try again.');
     } finally {
       setIsSubmitting(false);

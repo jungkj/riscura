@@ -22,7 +22,7 @@ function OAuthTestContent() {
           setGoogleConfig({ configured: data.configured });
         }
       } catch (error) {
-        console.error('Failed to check OAuth config:', error);
+        // console.error('Failed to check OAuth config:', error);
       }
     };
     checkConfig();

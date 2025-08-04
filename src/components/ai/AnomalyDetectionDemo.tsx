@@ -322,7 +322,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       }
       
     } catch (error) {
-      console.error('Error starting anomaly detection:', error);
+      // console.error('Error starting anomaly detection:', error);
     }
   };
 

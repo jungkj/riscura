@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { complianceAIIntelligence } from '@/lib/compliance/ai-intelligence';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const body = await request.json();
     const { action, query, context, userId, organizationId, updateId, assessorId } = body;
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    console.error('Error in AI compliance intelligence:', error);
+    // console.error('Error in AI compliance intelligence:', error);
     return NextResponse.json({ error: 'Failed to process AI compliance request' }, { status: 500 });
   }
 }

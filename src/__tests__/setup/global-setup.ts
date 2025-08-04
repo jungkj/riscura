@@ -5,8 +5,8 @@
 
 import { chromium, FullConfig } from '@playwright/test';
 
-async function globalSetup(config: FullConfig) {
-  console.log('🧪 Starting global test setup...');
+async function globalSetup(_config: FullConfig) {
+  // console.log('🧪 Starting global test setup...');
 
   // Create browser instance for setup operations
   const browser = await chromium.launch();
@@ -14,7 +14,7 @@ async function globalSetup(config: FullConfig) {
 
   try {
     // 1. Wait for application to be ready
-    console.log('📡 Waiting for application to be ready...');
+    // console.log('📡 Waiting for application to be ready...');
     const baseURL = config.projects[0].use?.baseURL || 'http://localhost:3000';
 
     // Wait for health check endpoint
@@ -35,16 +35,16 @@ async function globalSetup(config: FullConfig) {
       throw new Error('Application did not become ready within timeout');
     }
 
-    console.log('✅ Application is ready');
+    // console.log('✅ Application is ready');
 
     // 2. Clean existing test data
-    console.log('🧹 Cleaning existing test data...');
+    // console.log('🧹 Cleaning existing test data...');
     await page.request.post(`${baseURL}/api/test/cleanup`, {
       data: { confirm: true },
     });
 
     // 3. Seed database with test data
-    console.log('🌱 Seeding test database...');
+    // console.log('🌱 Seeding test database...');
 
     // Create test organizations
     const organizations = [
@@ -75,11 +75,11 @@ async function globalSetup(config: FullConfig) {
       });
       const result = await response.json();
       createdOrgs.push(result.data);
-      console.log(`  ✅ Created organization: ${org.name}`);
+      // console.log(`  ✅ Created organization: ${org.name}`);
     }
 
     // 4. Create test users
-    console.log('👥 Creating test users...');
+    // console.log('👥 Creating test users...');
 
     const testUsers = [
       // Admin users
@@ -157,11 +157,11 @@ async function globalSetup(config: FullConfig) {
       );
 
       await Promise.all(promises);
-      console.log(`  ✅ Created ${batch.length} users (batch ${Math.floor(i / batchSize) + 1})`);
+      // console.log(`  ✅ Created ${batch.length} users (batch ${Math.floor(i / batchSize) + 1})`);
     }
 
     // 5. Create sample data for testing
-    console.log('📊 Creating sample test data...');
+    // console.log('📊 Creating sample test data...');
 
     // Create sample risks for each organization
     for (const org of createdOrgs) {
@@ -198,7 +198,7 @@ async function globalSetup(config: FullConfig) {
         await page.request.post(`${baseURL}/api/test/risks`, { data: risk });
       }
 
-      console.log(`  ✅ Created sample risks for ${org.name}`);
+      // console.log(`  ✅ Created sample risks for ${org.name}`);
     }
 
     // Create sample controls
@@ -226,11 +226,11 @@ async function globalSetup(config: FullConfig) {
         await page.request.post(`${baseURL}/api/test/controls`, { data: control });
       }
 
-      console.log(`  ✅ Created sample controls for ${org.name}`);
+      // console.log(`  ✅ Created sample controls for ${org.name}`);
     }
 
     // 6. Create test documents
-    console.log('📄 Creating test documents...');
+    // console.log('📄 Creating test documents...');
 
     const testDocuments = [
       {
@@ -251,19 +251,19 @@ async function globalSetup(config: FullConfig) {
       await page.request.post(`${baseURL}/api/test/documents`, { data: doc });
     }
 
-    console.log('  ✅ Created test documents');
+    // console.log('  ✅ Created test documents');
 
     // 7. Set up performance monitoring
-    console.log('📈 Setting up performance monitoring...');
+    // console.log('📈 Setting up performance monitoring...');
 
     await page.request.post(`${baseURL}/api/test/performance/setup`, {
       data: { enableMonitoring: true },
     });
 
-    console.log('  ✅ Performance monitoring enabled');
+    // console.log('  ✅ Performance monitoring enabled');
 
     // 8. Create test fixtures
-    console.log('🏗️ Creating test fixtures...');
+    // console.log('🏗️ Creating test fixtures...');
 
     // Store test data in global state for use in tests
     const testData = {
@@ -278,9 +278,9 @@ async function globalSetup(config: FullConfig) {
       (globalThis as any).testSetupData = data;
     }, testData);
 
-    console.log('✅ Global test setup completed successfully');
+    // console.log('✅ Global test setup completed successfully');
   } catch (error) {
-    console.error('❌ Global test setup failed:', error);
+    // console.error('❌ Global test setup failed:', error);
     throw error;
   } finally {
     await browser.close();

@@ -81,13 +81,13 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       }
     } catch (err) {
       setError('Failed to load tenants');
-      console.error('Error loading tenants:', err);
+      // console.error('Error loading tenants:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadTenantData = async (tenantId: string) => {
+  const loadTenantData = async (_tenantId: string) => {
     try {
       setLoading(true);
       const currentPeriod = {
@@ -105,7 +105,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       setBilling(billingData);
     } catch (err) {
       setError('Failed to load tenant data');
-      console.error('Error loading tenant data:', err);
+      // console.error('Error loading tenant data:', err);
     } finally {
       setLoading(false);
     }
@@ -194,7 +194,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       setSelectedTenant(newTenant);
     } catch (err) {
       setError('Failed to create tenant');
-      console.error('Error creating tenant:', err);
+      // console.error('Error creating tenant:', err);
     }
   };
 

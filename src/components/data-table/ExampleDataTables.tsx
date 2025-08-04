@@ -174,11 +174,11 @@ export const RiskRegisterTable: React.FC = () => {
   ];
 
   const handleRowAction = (action: string, row: RiskRecord) => {
-    console.log(`Action: ${action}`, row);
+    // console.log(`Action: ${action}`, row);
   };
 
   const handleBulkAction = (action: string, rows: RiskRecord[]) => {
-    console.log(`Bulk action: ${action}`, rows);
+    // console.log(`Bulk action: ${action}`, rows);
   };
 
   return (

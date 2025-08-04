@@ -14,7 +14,7 @@ import type {
 export class SSOService {
   private config: SSOConfiguration;
 
-  constructor(config: SSOConfiguration) {
+  constructor(_config: SSOConfiguration) {
     this.config = config;
   }
 
@@ -62,7 +62,7 @@ export class SSOService {
         },
       };
     } catch (error) {
-      console.error('SAML authentication failed:', error);
+      // console.error('SAML authentication failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'SAML authentication failed',
@@ -149,7 +149,7 @@ export class SSOService {
         },
       };
     } catch (error) {
-      console.error('OIDC authentication failed:', error);
+      // console.error('OIDC authentication failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'OIDC authentication failed',
@@ -224,7 +224,7 @@ export class SSOService {
         },
       };
     } catch (error) {
-      console.error('OAuth2 authentication failed:', error);
+      // console.error('OAuth2 authentication failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'OAuth2 authentication failed',
@@ -302,7 +302,7 @@ export class SSOService {
         },
       };
     } catch (error) {
-      console.error('LDAP authentication failed:', error);
+      // console.error('LDAP authentication failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'LDAP authentication failed',
@@ -601,7 +601,7 @@ export class SSOService {
     return response.json();
   }
 
-  private async createLDAPClient(config: LDAPConfig): Promise<any> {
+  private async createLDAPClient(_config: LDAPConfig): Promise<any> {
     // Simplified LDAP client - use proper LDAP library in production
     return {
       bind: async (dn: string, password: string) => {
@@ -711,7 +711,7 @@ export class SSOService {
   }
 
   // Test Methods
-  private async testSAMLProvider(config: SAMLConfig): Promise<ProviderTestResult> {
+  private async testSAMLProvider(_config: SAMLConfig): Promise<ProviderTestResult> {
     try {
       // Test SAML metadata endpoint
       const response = await fetch(config.ssoUrl);
@@ -725,7 +725,7 @@ export class SSOService {
     }
   }
 
-  private async testOIDCProvider(config: OIDCConfig): Promise<ProviderTestResult> {
+  private async testOIDCProvider(_config: OIDCConfig): Promise<ProviderTestResult> {
     try {
       // Test OIDC discovery endpoint
       const response = await fetch(`${config.issuer}/.well-known/openid_configuration`);
@@ -750,7 +750,7 @@ export class SSOService {
     }
   }
 
-  private async testOAuth2Provider(config: OAuth2Config): Promise<ProviderTestResult> {
+  private async testOAuth2Provider(_config: OAuth2Config): Promise<ProviderTestResult> {
     try {
       // Test OAuth2 authorization endpoint
       const response = await fetch(config.authorizationUrl, { method: 'HEAD' });
@@ -768,7 +768,7 @@ export class SSOService {
     }
   }
 
-  private async testLDAPProvider(config: LDAPConfig): Promise<ProviderTestResult> {
+  private async testLDAPProvider(_config: LDAPConfig): Promise<ProviderTestResult> {
     try {
       // Test LDAP connection
       const client = await this.createLDAPClient(config);
@@ -892,7 +892,7 @@ export interface ProviderTestResult {
 }
 
 // Factory function
-export const createSSOService = (config: SSOConfiguration): SSOService => {
+export const createSSOService = (_config: SSOConfiguration): SSOService => {
   return new SSOService(config);
 };
 

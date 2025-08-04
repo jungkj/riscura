@@ -232,7 +232,7 @@ export class AnomalyDetectionAIService {
 
         alerts.push(...combinedAnomalies);
       } catch (error) {
-        console.error(`Error detecting anomalies for risk ${risk.id}:`, error);
+        // console.error(`Error detecting anomalies for risk ${risk.id}:`, error);
       }
     }
 
@@ -249,7 +249,7 @@ export class AnomalyDetectionAIService {
    * Statistical anomaly detection using multiple algorithms
    */
   async detectStatisticalAnomalies(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     data: any[],
     config: AnomalyDetectionConfig['statistical']
   ): Promise<AnomalyAlert[]> {
@@ -311,7 +311,7 @@ export class AnomalyDetectionAIService {
    * Pattern-based anomaly detection using clustering and behavioral analysis
    */
   async detectPatternAnomalies(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     data: any[],
     config: AnomalyDetectionConfig['patterns']
   ): Promise<AnomalyAlert[]> {
@@ -344,7 +344,7 @@ export class AnomalyDetectionAIService {
 
       alerts.push(...behaviorAnomalies);
     } catch (error) {
-      console.error('Error in pattern anomaly detection:', error);
+      // console.error('Error in pattern anomaly detection:', error);
     }
 
     return alerts;
@@ -354,7 +354,7 @@ export class AnomalyDetectionAIService {
    * Time series anomaly detection for trend and seasonal patterns
    */
   async detectTimeSeriesAnomalies(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     data: any[],
     config: AnomalyDetectionConfig['timeSeries']
   ): Promise<AnomalyAlert[]> {
@@ -408,7 +408,7 @@ export class AnomalyDetectionAIService {
         alerts.push(alert);
       }
     } catch (error) {
-      console.error('Error in time series anomaly detection:', error);
+      // console.error('Error in time series anomaly detection:', error);
     }
 
     return alerts;
@@ -430,14 +430,14 @@ export class AnomalyDetectionAIService {
       await this.performMonitoringCycle();
     }, intervalMs);
 
-    console.log(`Started real-time monitoring for ${targets.length} targets`);
+    // console.log(`Started real-time monitoring for ${targets.length} targets`);
   }
 
   /**
    * Perform root cause analysis for an anomaly
    */
   async performRootCauseAnalysis(
-    alert: AnomalyAlert,
+    _alert: AnomalyAlert,
     contextData?: any
   ): Promise<RootCauseAnalysis> {
     try {
@@ -472,7 +472,7 @@ export class AnomalyDetectionAIService {
 
       return rootCauseAnalysis;
     } catch (error) {
-      console.error('Error performing root cause analysis:', error);
+      // console.error('Error performing root cause analysis:', error);
       throw new Error('Failed to perform root cause analysis');
     }
   }
@@ -563,7 +563,7 @@ export class AnomalyDetectionAIService {
   }
 
   // Helper methods for processing and analysis
-  private extractNumericMetrics(data: any[]): Record<string, number[]> {
+  private extractNumericMetrics(_data: any[]): Record<string, number[]> {
     const metrics: Record<string, number[]> = {};
 
     for (const item of data) {
@@ -590,7 +590,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async createAnomalyAlert(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     metric: string,
     currentValue: number,
     detectionResult: StatisticalAnomalyResult,
@@ -677,7 +677,7 @@ export class AnomalyDetectionAIService {
     return Math.random() * 0.5 + 0.3; // Placeholder
   }
 
-  private async extractPatternFeatures(data: any[]): Promise<number[][]> {
+  private async extractPatternFeatures(_data: any[]): Promise<number[][]> {
     // Extract meaningful features for pattern analysis
     return data.map((item, index) => [
       index, // Time component
@@ -726,7 +726,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async combineAnomalyResults(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     results: AnomalyAlert[][]
   ): Promise<AnomalyAlert[]> {
     return results.flat();
@@ -745,7 +745,7 @@ export class AnomalyDetectionAIService {
   private async sendAnomalyNotifications(alerts: AnomalyAlert[]): Promise<void> {
     // Check if notification service is available
     if (!this.notificationService) {
-      console.log('Notification service not available, skipping notifications');
+      // console.log('Notification service not available, skipping notifications');
       return;
     }
 
@@ -822,7 +822,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async gatherAnomalyContext(
-    alert: AnomalyAlert,
+    _alert: AnomalyAlert,
     contextData?: any
   ): Promise<AnomalyContext> {
     return {
@@ -836,7 +836,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async generateRecommendations(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     result: StatisticalAnomalyResult
   ): Promise<string[]> {
     return [
@@ -849,7 +849,7 @@ export class AnomalyDetectionAIService {
 
   // Monitoring and lifecycle methods
   private initializeMonitoring(): void {
-    console.log('Anomaly Detection AI Service initialized');
+    // console.log('Anomaly Detection AI Service initialized');
   }
 
   private async performMonitoringCycle(): Promise<void> {
@@ -872,18 +872,18 @@ export class AnomalyDetectionAIService {
         // Update last checked timestamp
         target.lastChecked = new Date();
       } catch (error) {
-        console.error(`Error monitoring target ${targetId}:`, error);
+        // console.error(`Error monitoring target ${targetId}:`, error);
       }
     }
   }
 
-  private async getTargetData(target: MonitoringTarget): Promise<any[]> {
+  private async getTargetData(_target: MonitoringTarget): Promise<any[]> {
     // Implementation to fetch current data for the target
     return [];
   }
 
   private async detectTargetAnomalies(
-    target: MonitoringTarget,
+    _target: MonitoringTarget,
     data: any[]
   ): Promise<AnomalyAlert[]> {
     // Implementation for target-specific anomaly detection
@@ -892,14 +892,14 @@ export class AnomalyDetectionAIService {
 
   // Placeholder implementations for complex analysis methods
   private async detectBehaviorAnomalies(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     data: any[],
     config: any
   ): Promise<AnomalyAlert[]> {
     return [];
   }
 
-  private prepareTimeSeriesData(data: any[]): any[] {
+  private prepareTimeSeriesData(_data: any[]): any[] {
     return data;
   }
 
@@ -912,7 +912,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async detectSeasonalAnomalies(
-    seasonal: any[],
+    _seasonal: any[],
     residual: any[],
     config: any
   ): Promise<any[]> {
@@ -924,7 +924,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async detectForecastAnomalies(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     timeSeries: any[],
     horizon: number
   ): Promise<any[]> {
@@ -932,7 +932,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async createTimeSeriesAnomalyAlert(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     anomaly: any
   ): Promise<AnomalyAlert> {
     return {
@@ -958,7 +958,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async createPatternAnomalyAlert(
-    entity: Risk | Control,
+    _entity: Risk | Control,
     deviation: any,
     type: string
   ): Promise<AnomalyAlert> {
@@ -985,21 +985,21 @@ export class AnomalyDetectionAIService {
   }
 
   private async analyzeCorrelations(
-    alert: AnomalyAlert,
+    _alert: AnomalyAlert,
     context: AnomalyContext
   ): Promise<CorrelationInsight[]> {
     return [];
   }
 
   private async analyzeTimeline(
-    alert: AnomalyAlert,
+    _alert: AnomalyAlert,
     context: AnomalyContext
   ): Promise<TimelineEvent[]> {
     return [];
   }
 
   private async generateCauseHypotheses(
-    alert: AnomalyAlert,
+    _alert: AnomalyAlert,
     context: AnomalyContext,
     correlations: CorrelationInsight[]
   ): Promise<CauseHypothesis[]> {

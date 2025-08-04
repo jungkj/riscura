@@ -36,7 +36,7 @@ interface ServiceStatus {
 }
 
 // Main health check endpoint
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   const startTime = Date.now();
 
   try {
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Health check failed:', error);
+    // console.error('Health check failed:', error);
 
     return NextResponse.json(
       {

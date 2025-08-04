@@ -173,7 +173,7 @@ export class TaskManager {
           userId: taskData.createdBy || 'system',
         });
       } catch (error) {
-        console.warn('Failed to send real-time notification:', error);
+        // console.warn('Failed to send real-time notification:', error);
       }
     }
 
@@ -394,8 +394,7 @@ export class TaskManager {
   }
 
   // Get tasks for user with filtering
-  async getUserTasks(
-    userId: string,
+  async getUserTasks(_userId: string,
     organizationId: string,
     filters: {
       status?: string[];
@@ -727,7 +726,7 @@ export class TaskManager {
         });
       }
     } catch (error) {
-      console.error('Failed to create task notification:', error);
+      // console.error('Failed to create task notification:', error);
     }
   }
 

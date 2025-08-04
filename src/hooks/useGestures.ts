@@ -33,7 +33,7 @@ interface GestureState {
   pullDistance: number;
 }
 
-export function useGestures(config: GestureConfig = {}) {
+export function useGestures(_config: GestureConfig = {}) {
   const {
     onSwipeLeft,
     onSwipeRight,
@@ -258,7 +258,7 @@ export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled 
         try {
           await onRefresh();
         } catch (error) {
-          console.error('Pull to refresh failed:', error);
+          // console.error('Pull to refresh failed:', error);
         } finally {
           isRefreshing.current = false;
         }

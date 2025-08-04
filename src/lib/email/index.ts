@@ -56,8 +56,8 @@ const createTransporter = () => {
   // Fallback to console logging in development
   if (process.env.NODE_ENV === 'development') {
     return {
-      sendMail: async (options: any) => {
-        console.log('📧 Email would be sent:', {
+      sendMail: async (_options: any) => {
+        // console.log('📧 Email would be sent:', {
           to: options.to,
           subject: options.subject,
           preview: options.text?.substring(0, 100) || options.html?.substring(0, 100),
@@ -75,7 +75,7 @@ const createTransporter = () => {
 let transporter: any = null;
 
 // Send email function
-export async function sendEmail(options: EmailOptions): Promise<void> {
+export async function sendEmail(_options: EmailOptions): Promise<void> {
   try {
     if (!transporter) {
       transporter = createTransporter();
@@ -92,16 +92,16 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
+    // console.log('Email sent:', info.messageId);
   } catch (error) {
-    console.error('Failed to send email:', error);
+    // console.error('Failed to send email:', error);
     throw error;
   }
 }
 
 // Email templates
 export const emailTemplates = {
-  notification: (data: {
+  notification: (_data: {
     title: string;
     message: string;
     actionUrl?: string;
@@ -176,7 +176,7 @@ export const emailTemplates = {
     `;
   },
 
-  digest: (data: {
+  digest: (_data: {
     frequency: string;
     notifications: Array<{
       category: string;

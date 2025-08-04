@@ -289,7 +289,7 @@ const SAMPLE_STORY: DataStory = {
 // Main data storytelling component
 interface DataStorytellingEngineProps {
   story?: DataStory;
-  onGenerateStory?: (config: any) => void;
+  onGenerateStory?: (_config: any) => void;
   onSaveStory?: (story: DataStory) => void;
   onShareStory?: (story: DataStory) => void;
   className?: string;

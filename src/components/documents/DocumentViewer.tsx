@@ -26,8 +26,8 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { formatFileSize } from '@/lib/storage/file-validator';
-import { format } from 'date-fns';
+// import { formatFileSize } from '@/lib/storage/file-validator';
+// import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
 interface DocumentViewerProps {
@@ -138,7 +138,7 @@ export default function DocumentViewer({
 
       toast.success('File downloaded successfully');
     } catch (error) {
-      console.error('Download error:', error);
+      // console.error('Download error:', error);
       toast.error('Failed to download file');
     } finally {
       setLoading(false);
@@ -164,7 +164,7 @@ export default function DocumentViewer({
       setPreviewUrl(url);
       setPreviewOpen(true);
     } catch (error) {
-      console.error('Preview error:', error);
+      // console.error('Preview error:', error);
       toast.error('Failed to load preview');
     } finally {
       setLoading(false);

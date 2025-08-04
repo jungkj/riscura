@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import ExcelJS from 'exceljs';
 import html2canvas from 'html2canvas';
-import {
+// import {
   ReportData,
   ReportWidget,
   ExportFormat,
@@ -38,7 +38,7 @@ export class ReportExporter {
     });
 
     const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    const _pageHeight = pdf.internal.pageSize.getHeight();
     let currentY = 20;
 
     // Add title
@@ -161,7 +161,7 @@ export class ReportExporter {
         pdf.addImage(imgData, 'PNG', 20, currentY, imgWidth, imgHeight);
         currentY += imgHeight + 10;
       } catch (error) {
-        console.error('Failed to capture chart:', error);
+        // console.error('Failed to capture chart:', error);
         // Add placeholder text
         pdf.setFontSize(10);
         pdf.text('[Chart could not be rendered]', 20, currentY);
@@ -367,7 +367,7 @@ export class ReportExporter {
       const buffer = await workbook.xlsx.writeBuffer();
       return Buffer.from(buffer);
     } catch (error) {
-      console.error('Error exporting to Excel:', error);
+      // console.error('Error exporting to Excel:', error);
       throw new Error(
         `Excel export failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );

@@ -29,7 +29,7 @@ export class AutoSaveService {
   private timers: Map<string, NodeJS.Timeout> = new Map();
   private isOnline: boolean = navigator.onLine;
   private config: AutoSaveConfig;
-  private listeners: Set<(data: AutoSaveData) => void> = new Set();
+  private listeners: Set<(_data: AutoSaveData) => void> = new Set();
 
   private constructor(config?: Partial<AutoSaveConfig>) {
     this.config = {
@@ -199,7 +199,7 @@ export class AutoSaveService {
         }, this.config.retryDelay * saveData.retryCount);
       }
 
-      console.error('Auto-save failed:', error);
+      // console.error('Auto-save failed:', error);
       return false;
     }
   }
@@ -236,7 +236,7 @@ export class AutoSaveService {
 
       return true;
     } catch (error) {
-      console.error('Server sync error:', error);
+      // console.error('Server sync error:', error);
       return false;
     }
   }
@@ -353,15 +353,15 @@ export class AutoSaveService {
   }
 
   // Event listeners for UI updates
-  public addListener(callback: (data: AutoSaveData) => void): void {
+  public addListener(callback: (_data: AutoSaveData) => void): void {
     this.listeners.add(callback);
   }
 
-  public removeListener(callback: (data: AutoSaveData) => void): void {
+  public removeListener(callback: (_data: AutoSaveData) => void): void {
     this.listeners.delete(callback);
   }
 
-  private notifyListeners(data: AutoSaveData): void {
+  private notifyListeners(_data: AutoSaveData): void {
     this.listeners.forEach((callback) => callback(data));
   }
 

@@ -381,7 +381,7 @@ export default function GlobalSearch({
       localStorage.setItem('riscura-search-history', JSON.stringify(updatedHistory));
       
     } catch (error) {
-      console.error('Search error:', error);
+      // console.error('Search error:', error);
       toast({
         title: 'Search Error',
         description: 'Failed to perform search. Please try again.',

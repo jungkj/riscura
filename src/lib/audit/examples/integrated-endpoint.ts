@@ -80,7 +80,7 @@ async function handleGetRisks(
       },
     });
   } catch (error) {
-    console.error('Risk list error:', error);
+    // console.error('Risk list error:', error);
     // Error logging is automatically handled by the audit middleware
     throw error;
   }
@@ -164,7 +164,7 @@ async function handleCreateRisk(
       { status: 201 }
     );
   } catch (error) {
-    console.error('Risk creation error:', error);
+    // console.error('Risk creation error:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -298,7 +298,7 @@ async function handleUpdateRisk(
       data: updatedRisk,
     });
   } catch (error) {
-    console.error('Risk update error:', error);
+    // console.error('Risk update error:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -399,7 +399,7 @@ async function handleDeleteRisk(
       message: 'Risk deleted successfully',
     });
   } catch (error) {
-    console.error('Risk deletion error:', error);
+    // console.error('Risk deletion error:', error);
     throw error;
   }
 }
@@ -484,7 +484,7 @@ async function handleLogin(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
+    // console.error('Login error:', error);
     throw error;
   }
 }

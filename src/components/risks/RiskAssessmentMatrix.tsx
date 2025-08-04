@@ -334,7 +334,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         const risks = Array.isArray(response.data) ? response.data : [];
         setExistingRisks(risks);
       } catch (error) {
-        console.error('Failed to load risks:', error);
+        // console.error('Failed to load risks:', error);
       }
     };
     loadRisks();
@@ -421,7 +421,7 @@ const RiskAssessmentMatrix: React.FC = () => {
 
       toast.success('AI analysis completed');
     } catch (error) {
-      console.error('AI analysis failed:', error);
+      // console.error('AI analysis failed:', error);
       toast.error('Failed to get AI analysis');
     } finally {
       setAiAnalyzing(false);
@@ -463,7 +463,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         status: 'DRAFT',
       }));
     } catch (error) {
-      console.error('Failed to save assessment:', error);
+      // console.error('Failed to save assessment:', error);
       toast.error('Failed to save risk assessment');
     } finally {
       setLoading(false);

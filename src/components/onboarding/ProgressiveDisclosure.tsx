@@ -282,7 +282,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
   const unlockedFeatures = features.filter(f => f.isUnlocked).length;
   const progressPercentage = (unlockedFeatures / totalFeatures) * 100;
 
-  const categories = [
+  const _categories = [
     { id: 'all', name: 'All Features', color: 'bg-gray-100' },
     { id: 'basic', name: 'Basic', color: 'bg-green-100' },
     { id: 'intermediate', name: 'Intermediate', color: 'bg-blue-100' },

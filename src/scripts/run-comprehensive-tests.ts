@@ -41,8 +41,8 @@ class ComprehensiveTestRunner {
   private startTime: number = Date.now();
 
   constructor() {
-    console.log('🚀 Starting Comprehensive Test Suite for Riscura\n');
-    console.log('='.repeat(60));
+    // console.log('🚀 Starting Comprehensive Test Suite for Riscura\n');
+    // console.log('='.repeat(60));
   }
 
   async runAllTests(): Promise<void> {
@@ -84,7 +84,7 @@ class ComprehensiveTestRunner {
       },
     ];
 
-    console.log(`Running ${testSuites.length} test suites...\n`);
+    // console.log(`Running ${testSuites.length} test suites...\n`);
 
     for (const suite of testSuites) {
       await this.runTestSuite(suite);
@@ -100,8 +100,8 @@ class ComprehensiveTestRunner {
     command: string;
     critical: boolean;
   }): Promise<void> {
-    console.log(`\n📋 Running: ${suite.name}`);
-    console.log('-'.repeat(50));
+    // console.log(`\n📋 Running: ${suite.name}`);
+    // console.log('-'.repeat(50));
 
     const startTime = Date.now();
     let testResult: TestResult;
@@ -115,12 +115,12 @@ class ComprehensiveTestRunner {
       const duration = Date.now() - startTime;
       testResult = this.parseTestOutput(suite.name, output, duration);
 
-      console.log(`✅ ${suite.name} completed successfully`);
-      console.log(`   Tests: ${testResult.passed} passed, ${testResult.failed} failed`);
-      console.log(`   Duration: ${duration}ms`);
-    } catch (error: any) {
+      // console.log(`✅ ${suite.name} completed successfully`);
+      // console.log(`   Tests: ${testResult.passed} passed, ${testResult.failed} failed`);
+      // console.log(`   Duration: ${duration}ms`);
+    } catch (_error: any) {
       const duration = Date.now() - startTime;
-      console.log(`❌ ${suite.name} failed`);
+      // console.log(`❌ ${suite.name} failed`);
 
       if (error.stdout) {
         testResult = this.parseTestOutput(suite.name, error.stdout, duration);
@@ -133,12 +133,12 @@ class ComprehensiveTestRunner {
         };
       }
 
-      console.log(`   Tests: ${testResult.passed} passed, ${testResult.failed} failed`);
-      console.log(`   Duration: ${duration}ms`);
-      console.log(`   Error: ${error.message.split('\n')[0]}`);
+      // console.log(`   Tests: ${testResult.passed} passed, ${testResult.failed} failed`);
+      // console.log(`   Duration: ${duration}ms`);
+      // console.log(`   Error: ${error.message.split('\n')[0]}`);
 
       if (suite.critical) {
-        console.log(`\n💥 Critical test suite failed! Stopping execution.`);
+        // console.log(`\n💥 Critical test suite failed! Stopping execution.`);
         process.exit(1);
       }
     }
@@ -191,7 +191,7 @@ class ComprehensiveTestRunner {
   }
 
   private async generateCoverageReport(): Promise<void> {
-    console.log('\n📊 Generating comprehensive coverage report...');
+    // console.log('\n📊 Generating comprehensive coverage report...');
 
     try {
       const coverageOutput = execSync('npm test -- --coverage --watchAll=false', {
@@ -199,7 +199,7 @@ class ComprehensiveTestRunner {
         timeout: 180000, // 3 minutes
       });
 
-      console.log('✅ Coverage report generated successfully');
+      // console.log('✅ Coverage report generated successfully');
 
       // Save coverage to file
       const coverageDir = join(process.cwd(), 'test-results');
@@ -208,16 +208,16 @@ class ComprehensiveTestRunner {
       }
 
       writeFileSync(join(coverageDir, 'coverage-output.txt'), coverageOutput);
-    } catch (error: any) {
-      console.log('⚠️  Coverage report generation had issues');
-      console.log(`   Error: ${error.message.split('\n')[0]}`);
+    } catch (_error: any) {
+      // console.log('⚠️  Coverage report generation had issues');
+      // console.log(`   Error: ${error.message.split('\n')[0]}`);
     }
   }
 
   private generateSummary(): void {
-    console.log('\n' + '='.repeat(60));
-    console.log('📈 TEST EXECUTION SUMMARY');
-    console.log('='.repeat(60));
+    // console.log('\n' + '='.repeat(60));
+    // console.log('📈 TEST EXECUTION SUMMARY');
+    // console.log('='.repeat(60));
 
     const summary: TestRunSummary = {
       results: this.results,
@@ -252,39 +252,39 @@ class ComprehensiveTestRunner {
       };
     }
 
-    console.log(`\n📊 Overall Results:`);
-    console.log(`   Total Tests: ${summary.totalTests}`);
-    console.log(
+    // console.log(`\n📊 Overall Results:`);
+    // console.log(`   Total Tests: ${summary.totalTests}`);
+    // console.log(
       `   Passed: ${summary.totalPassed} (${((summary.totalPassed / summary.totalTests) * 100).toFixed(1)}%)`
     );
-    console.log(
+    // console.log(
       `   Failed: ${summary.totalFailed} (${((summary.totalFailed / summary.totalTests) * 100).toFixed(1)}%)`
     );
-    console.log(`   Duration: ${(summary.totalDuration / 1000).toFixed(2)}s`);
+    // console.log(`   Duration: ${(summary.totalDuration / 1000).toFixed(2)}s`);
 
-    console.log(`\n📋 Test Suite Breakdown:`);
+    // console.log(`\n📋 Test Suite Breakdown:`);
     this.results.forEach((result) => {
       const status = result.failed === 0 ? '✅' : '❌';
       const total = result.passed + result.failed;
       const successRate = total > 0 ? ((result.passed / total) * 100).toFixed(1) : '0.0';
 
-      console.log(`   ${status} ${result.suite}`);
-      console.log(`      Tests: ${result.passed}/${total} (${successRate}%)`);
-      console.log(`      Duration: ${(result.duration / 1000).toFixed(2)}s`);
+      // console.log(`   ${status} ${result.suite}`);
+      // console.log(`      Tests: ${result.passed}/${total} (${successRate}%)`);
+      // console.log(`      Duration: ${(result.duration / 1000).toFixed(2)}s`);
 
       if (result.coverage) {
-        console.log(
+        // console.log(
           `      Coverage: L:${result.coverage.lines.toFixed(1)}% F:${result.coverage.functions.toFixed(1)}% B:${result.coverage.branches.toFixed(1)}% S:${result.coverage.statements.toFixed(1)}%`
         );
       }
     });
 
     if (coverageResults.length > 0) {
-      console.log(`\n📊 Overall Coverage:`);
-      console.log(`   Lines: ${summary.overallCoverage.lines.toFixed(1)}%`);
-      console.log(`   Functions: ${summary.overallCoverage.functions.toFixed(1)}%`);
-      console.log(`   Branches: ${summary.overallCoverage.branches.toFixed(1)}%`);
-      console.log(`   Statements: ${summary.overallCoverage.statements.toFixed(1)}%`);
+      // console.log(`\n📊 Overall Coverage:`);
+      // console.log(`   Lines: ${summary.overallCoverage.lines.toFixed(1)}%`);
+      // console.log(`   Functions: ${summary.overallCoverage.functions.toFixed(1)}%`);
+      // console.log(`   Branches: ${summary.overallCoverage.branches.toFixed(1)}%`);
+      // console.log(`   Statements: ${summary.overallCoverage.statements.toFixed(1)}%`);
     }
 
     // Save summary to JSON
@@ -295,13 +295,13 @@ class ComprehensiveTestRunner {
 
     writeFileSync(join(resultsDir, 'test-summary.json'), JSON.stringify(summary, null, 2));
 
-    console.log(`\n💾 Test results saved to: ./test-results/`);
+    // console.log(`\n💾 Test results saved to: ./test-results/`);
   }
 
   private generateRecommendations(): void {
-    console.log('\n' + '='.repeat(60));
-    console.log('💡 RECOMMENDATIONS');
-    console.log('='.repeat(60));
+    // console.log('\n' + '='.repeat(60));
+    // console.log('💡 RECOMMENDATIONS');
+    // console.log('='.repeat(60));
 
     const failedSuites = this.results.filter((r) => r.failed > 0);
     const lowCoverageSuites = this.results.filter(
@@ -311,62 +311,62 @@ class ComprehensiveTestRunner {
     );
 
     if (failedSuites.length === 0) {
-      console.log('🎉 All test suites passed! Excellent work!');
+      // console.log('🎉 All test suites passed! Excellent work!');
     } else {
-      console.log('❌ Failed Test Suites:');
+      // console.log('❌ Failed Test Suites:');
       failedSuites.forEach((suite) => {
-        console.log(`   • ${suite.suite}: ${suite.failed} failing tests`);
+        // console.log(`   • ${suite.suite}: ${suite.failed} failing tests`);
       });
-      console.log('\n   Action: Review failing tests and fix issues before deployment');
+      // console.log('\n   Action: Review failing tests and fix issues before deployment');
     }
 
     if (lowCoverageSuites.length > 0) {
-      console.log('\n📉 Low Coverage Areas:');
+      // console.log('\n📉 Low Coverage Areas:');
       lowCoverageSuites.forEach((suite) => {
-        console.log(`   • ${suite.suite}:`);
+        // console.log(`   • ${suite.suite}:`);
         if (suite.coverage!.lines < 80)
-          console.log(`     - Lines: ${suite.coverage!.lines.toFixed(1)}% (target: 80%)`);
+          // console.log(`     - Lines: ${suite.coverage!.lines.toFixed(1)}% (target: 80%)`);
         if (suite.coverage!.functions < 80)
-          console.log(`     - Functions: ${suite.coverage!.functions.toFixed(1)}% (target: 80%)`);
+          // console.log(`     - Functions: ${suite.coverage!.functions.toFixed(1)}% (target: 80%)`);
         if (suite.coverage!.branches < 70)
-          console.log(`     - Branches: ${suite.coverage!.branches.toFixed(1)}% (target: 70%)`);
+          // console.log(`     - Branches: ${suite.coverage!.branches.toFixed(1)}% (target: 70%)`);
       });
-      console.log('\n   Action: Add more test cases to improve coverage');
+      // console.log('\n   Action: Add more test cases to improve coverage');
     }
 
     const slowSuites = this.results.filter((r) => r.duration > 30000); / /> 30s
     if (slowSuites.length > 0) {
-      console.log('\n🐌 Slow Test Suites:');
+      // console.log('\n🐌 Slow Test Suites:');
       slowSuites.forEach((suite) => {
-        console.log(`   • ${suite.suite}: ${(suite.duration / 1000).toFixed(2)}s`);
+        // console.log(`   • ${suite.suite}: ${(suite.duration / 1000).toFixed(2)}s`);
       });
-      console.log('\n   Action: Optimize slow tests with better mocking and parallel execution');
+      // console.log('\n   Action: Optimize slow tests with better mocking and parallel execution');
     }
 
-    console.log('\n✨ Next Steps:');
-    console.log('   1. Review and fix any failing tests');
-    console.log('   2. Improve test coverage in critical areas');
-    console.log('   3. Add integration tests for new features');
-    console.log('   4. Set up continuous integration with these tests');
-    console.log('   5. Consider adding E2E tests for user workflows');
+    // console.log('\n✨ Next Steps:');
+    // console.log('   1. Review and fix any failing tests');
+    // console.log('   2. Improve test coverage in critical areas');
+    // console.log('   3. Add integration tests for new features');
+    // console.log('   4. Set up continuous integration with these tests');
+    // console.log('   5. Consider adding E2E tests for user workflows');
 
     // Overall assessment
     const successRate =
       this.results.reduce((sum, r) => sum + r.passed, 0) /
       this.results.reduce((sum, r) => sum + r.passed + r.failed, 0);
 
-    console.log('\n🎯 Overall Assessment:');
+    // console.log('\n🎯 Overall Assessment:');
     if (successRate >= 0.95) {
-      console.log('   EXCELLENT: Test suite is comprehensive and reliable');
+      // console.log('   EXCELLENT: Test suite is comprehensive and reliable');
     } else if (successRate >= 0.85) {
-      console.log('   GOOD: Test suite is solid with room for improvement');
+      // console.log('   GOOD: Test suite is solid with room for improvement');
     } else if (successRate >= 0.7) {
-      console.log('   FAIR: Test suite needs attention before production');
+      // console.log('   FAIR: Test suite needs attention before production');
     } else {
-      console.log('   POOR: Critical issues need immediate attention');
+      // console.log('   POOR: Critical issues need immediate attention');
     }
 
-    console.log('\n' + '='.repeat(60));
+    // console.log('\n' + '='.repeat(60));
   }
 }
 
@@ -376,9 +376,9 @@ async function main() {
 
   try {
     await runner.runAllTests();
-    console.log('\n🏁 Comprehensive test execution completed!');
+    // console.log('\n🏁 Comprehensive test execution completed!');
   } catch (error) {
-    console.error('\n💥 Test execution failed:', error);
+    // console.error('\n💥 Test execution failed:', error);
     process.exit(1);
   }
 }

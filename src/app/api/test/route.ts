@@ -6,7 +6,7 @@ import { withCSRFProtection } from '@/lib/security/csrf';
  * This endpoint helps test CSRF protection and rate limiting
  */
 
-async function handler(request: NextRequest) {
+async function handler(_request: NextRequest) {
   const method = request.method;
 
   try {
@@ -57,7 +57,7 @@ async function handler(request: NextRequest) {
         return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     }
   } catch (error) {
-    console.error('Test endpoint error:', error);
+    // console.error('Test endpoint error:', error);
 
     return NextResponse.json(
       {

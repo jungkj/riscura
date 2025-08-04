@@ -195,7 +195,7 @@ describe('JSX Validation Tests', () => {
 
         return [...new Set(files)];
       } catch (error) {
-        console.warn('Could not find component files:', error);
+        // console.warn('Could not find component files:', error);
         return [];
       }
     };
@@ -244,11 +244,11 @@ describe('JSX Validation Tests', () => {
       const componentFiles = findComponentFiles();
 
       if (componentFiles.length === 0) {
-        console.warn('No component files found for validation');
+        // console.warn('No component files found for validation');
         return;
       }
 
-      console.log(`Validating ${componentFiles.length} component files...`);
+      // console.log(`Validating ${componentFiles.length} component files...`);
 
       let totalErrors = 0;
       let totalWarnings = 0;
@@ -260,20 +260,20 @@ describe('JSX Validation Tests', () => {
         if (errors.length > 0) {
           totalErrors += errors.length;
           problematicFiles.push(file);
-          console.warn(`Errors in ${file}:`, errors);
+          // console.warn(`Errors in ${file}:`, errors);
         }
 
         if (warnings.length > 0) {
           totalWarnings += warnings.length;
-          console.warn(`Warnings in ${file}:`, warnings);
+          // console.warn(`Warnings in ${file}:`, warnings);
         }
       });
 
-      console.log(`Validation complete: ${totalErrors} errors, ${totalWarnings} warnings`);
+      // console.log(`Validation complete: ${totalErrors} errors, ${totalWarnings} warnings`);
 
       // The test should not fail for warnings, only for critical errors
       if (totalErrors > 0) {
-        console.error(`Found critical JSX errors in ${problematicFiles.length} files`);
+        // console.error(`Found critical JSX errors in ${problematicFiles.length} files`);
 
         // For now, we'll log errors but not fail the test to avoid breaking CI
         // In a stricter environment, you might want to uncomment the line below:

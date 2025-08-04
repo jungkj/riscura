@@ -298,7 +298,7 @@ class InputValidator {
         this.sanitizationStats.threatsBlocked++;
       }
     } catch (error) {
-      console.error('Validation error:', error);
+      // console.error('Validation error:', error);
       result.isValid = false;
       result.errors.push({
         field: 'root',
@@ -559,7 +559,7 @@ class InputValidator {
       const sanitized = DOMPurify.sanitize(input, purifyConfig);
       return typeof sanitized === 'string' ? sanitized : sanitized.toString();
     } catch (error) {
-      console.error('HTML sanitization error:', error);
+      // console.error('HTML sanitization error:', error);
       // Fallback: strip all HTML tags
       return input.replace(/<[^>]*>/g, '');
     }

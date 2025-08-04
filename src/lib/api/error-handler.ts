@@ -226,12 +226,12 @@ export class RateLimitError extends ApiError {
 
 // Error logger interface
 export interface ErrorLogger {
-  log(error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>;
+  log(_error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>;
 }
 
 // Console error logger implementation
 export class ConsoleErrorLogger implements ErrorLogger {
-  async log(error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void> {
+  async log(_error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void> {
     const logEntry = {
       timestamp: new Date().toISOString(),
       error: {
@@ -254,9 +254,9 @@ export class ConsoleErrorLogger implements ErrorLogger {
     };
 
     if (error.severity === ErrorSeverity.CRITICAL || error.severity === ErrorSeverity.HIGH) {
-      console.error('API Error:', JSON.stringify(logEntry, null, 2));
+      // console.error('API Error:', JSON.stringify(logEntry, null, 2));
     } else {
-      console.warn('API Warning:', JSON.stringify(logEntry, null, 2));
+      // console.warn('API Warning:', JSON.stringify(logEntry, null, 2));
     }
   }
 }
@@ -272,7 +272,7 @@ export class ApiErrorHandler {
   /**
    * Handle and format any error for API response
    */
-  async handleError(error: unknown, request?: NextRequest, context?: Record<string, any>) {
+  async handleError(_error: unknown, request?: NextRequest, context?: Record<string, any>) {
     const responseOptions = request ? ApiResponseFormatter.createResponseOptions(request) : {};
 
     // Handle ApiError instances
@@ -304,7 +304,7 @@ export class ApiErrorHandler {
   /**
    * Handle Zod validation errors
    */
-  private handleZodError(error: ZodError): ValidationError {
+  private handleZodError(_error: ZodError): ValidationError {
     const validationErrors = error.issues.map((issue) => ({
       field: issue.path.join('.'),
       message: issue.message,
@@ -317,7 +317,7 @@ export class ApiErrorHandler {
   /**
    * Handle Prisma database errors
    */
-  private handlePrismaError(error: any): ApiError {
+  private handlePrismaError(_error: any): ApiError {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       switch (error.code) {
         case 'P2002':
@@ -402,7 +402,7 @@ export class ApiErrorHandler {
   /**
    * Handle generic JavaScript errors
    */
-  private handleGenericError(error: unknown): ApiError {
+  private handleGenericError(_error: unknown): ApiError {
     if (error instanceof Error) {
       // Check for specific error types
       if (error.message.includes('timeout')) {
@@ -449,7 +449,7 @@ export class ApiErrorHandler {
   /**
    * Format ApiError for response
    */
-  private formatApiError(error: ApiError, responseOptions: ResponseOptions) {
+  private formatApiError(_error: ApiError, responseOptions: ResponseOptions) {
     if (error instanceof ValidationError) {
       return ApiResponseFormatter.validationError(error.validationErrors, responseOptions);
     }
@@ -475,7 +475,7 @@ export class ApiErrorHandler {
   /**
    * Check if error is a Prisma error
    */
-  private isPrismaError(error: unknown): boolean {
+  private isPrismaError(_error: unknown): boolean {
     return (
       error instanceof Prisma.PrismaClientKnownRequestError ||
       error instanceof Prisma.PrismaClientUnknownRequestError ||

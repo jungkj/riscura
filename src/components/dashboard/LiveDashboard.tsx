@@ -154,7 +154,7 @@ export function LiveDashboard() {
       setData(result.data);
       setError(null);
     } catch (err) {
-      console.error('Error fetching dashboard data:', err);
+      // console.error('Error fetching dashboard data:', err);
       setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
     } finally {
       setLoading(false);

@@ -385,13 +385,13 @@ export function validateTestCredentials(email: string, password: string): TestUs
 }
 
 // Get user permissions
-export function getUserPermissions(userId: string): string[] {
+export function getUserPermissions(_userId: string): string[] {
   const user = TEST_USERS.find((u) => u.id === userId);
   return user?.permissions || [];
 }
 
 // Check if user has permission
-export function hasPermission(userId: string, permission: string): boolean {
+export function hasPermission(_userId: string, permission: string): boolean {
   const permissions = getUserPermissions(userId);
   return permissions.includes('*') || permissions.includes(permission);
 }

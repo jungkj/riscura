@@ -305,7 +305,7 @@ export default function RiskAssessmentWizard({
           results.push(result.data);
 
         } catch (error) {
-          console.error(`Error processing ${fileObj.file.name}:`, error);
+          // console.error(`Error processing ${fileObj.file.name}:`, error);
           
           setFiles(prev => prev.map(f => 
             f.id === fileObj.id 
@@ -334,7 +334,7 @@ export default function RiskAssessmentWizard({
       ));
 
     } catch (error) {
-      console.error('Analysis failed:', error);
+      // console.error('Analysis failed:', error);
       toast({
         title: "Analysis Failed",
         description: "There was an error processing your files",

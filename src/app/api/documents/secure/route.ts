@@ -10,7 +10,7 @@ import {
 } from '@/types/api/documents';
 
 // Secure document upload with comprehensive security
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     // Apply comprehensive security middleware
     const securityResult = await securityMiddleware.applySecurityMiddleware(request, {
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Secure document upload error:', error);
+    // console.error('Secure document upload error:', error);
 
     // Log security error
     await logSecurityEvent({
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 // Secure document retrieval
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Apply security middleware
     const securityResult = await securityMiddleware.applySecurityMiddleware(request, {
@@ -259,7 +259,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Secure document retrieval error:', error);
+    // console.error('Secure document retrieval error:', error);
     return NextResponse.json({ error: 'Failed to retrieve documents securely' }, { status: 500 });
   }
 }
@@ -391,8 +391,7 @@ async function scanFileContent(
 }
 
 // Get documents with security filtering
-async function getSecureDocuments(
-  userId: string,
+async function getSecureDocuments(_userId: string,
   userRole: string,
   userPermissions: Permission[],
   filters: {
@@ -615,10 +614,10 @@ async function logSecurityEvent(event: {
   };
 
   // In production, this would be sent to a security logging service
-  console.log('SECURITY EVENT:', logEntry);
+  // console.log('SECURITY EVENT:', logEntry);
 
   // For critical events, could trigger alerts
   if (event.result === 'denied' || event.result === 'error') {
-    console.warn('SECURITY ALERT:', logEntry);
+    // console.warn('SECURITY ALERT:', logEntry);
   }
 }

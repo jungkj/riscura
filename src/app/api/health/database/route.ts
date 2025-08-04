@@ -16,7 +16,7 @@ import {
  * - Connection pool utilization
  * - Response times
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const startTime = Date.now();
 
   try {
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
     const responseTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : 'Unknown database error';
 
-    console.error('❌ Database health check failed:', error);
+    // console.error('❌ Database health check failed:', error);
 
     const errorResponse = {
       status: 'unhealthy',
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/health/database - Comprehensive status check
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const body = await request.json();
     const { action } = body;
@@ -210,7 +210,7 @@ export async function POST(request: NextRequest) {
         );
     }
   } catch (error) {
-    console.error('❌ Health check POST API error:', error);
+    // console.error('❌ Health check POST API error:', error);
 
     return NextResponse.json(
       {

@@ -71,10 +71,10 @@ export default function EditAssessmentPage() {
     try {
       // Mock API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Saving assessment:', formData);
+      // console.log('Saving assessment:', formData);
       router.push(`/dashboard/risks/assessment/${assessmentId}`);
     } catch (error) {
-      console.error('Error saving assessment:', error);
+      // console.error('Error saving assessment:', error);
     } finally {
       setIsLoading(false);
     }

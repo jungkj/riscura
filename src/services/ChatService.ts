@@ -161,7 +161,7 @@ export class ChatService {
     return channel;
   }
 
-  async getUserChannels(userId: string, organizationId: string) {
+  async getUserChannels(_userId: string, organizationId: string) {
     const channels = await prisma.chatChannel.findMany({
       where: {
         organizationId,
@@ -697,7 +697,7 @@ export class ChatService {
   }
 
   // Search
-  async searchMessages(organizationId: string, userId: string, query: string, channelId?: string) {
+  async searchMessages(_organizationId: string, userId: string, query: string, channelId?: string) {
     // Get user's accessible channels
     const accessibleChannels = await prisma.chatChannelMember.findMany({
       where: { userId },
@@ -810,7 +810,7 @@ export class ChatService {
   }
 
   async getTypingUsers(channelId: string): Promise<string[]> {
-    const pattern = `typing:${channelId}:*`;
+    const _pattern = `typing:${channelId}:*`;
     const typingUserIds: string[] = [];
     let cursor = '0';
 

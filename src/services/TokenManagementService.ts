@@ -202,7 +202,7 @@ export class TokenManagementService {
   calculateCost(promptTokens: number, completionTokens: number, model: string): number {
     const pricing = MODEL_PRICING[model];
     if (!pricing) {
-      console.warn(`Unknown model pricing for: ${model}, using default`);
+      // console.warn(`Unknown model pricing for: ${model}, using default`);
       // Default to gpt-4o-mini pricing
       const defaultPricing = MODEL_PRICING['gpt-4o-mini'];
       const promptCost = (promptTokens / 1000) * defaultPricing.inputCostPer1k;
@@ -261,7 +261,7 @@ export class TokenManagementService {
   /**
    * Get user usage statistics
    */
-  getUserUsage(userId: string): UserUsage | null {
+  getUserUsage(_userId: string): UserUsage | null {
     return this.userUsageCache.get(userId) || null;
   }
 
@@ -275,8 +275,7 @@ export class TokenManagementService {
   /**
    * Check if user can make a request (quota enforcement)
    */
-  canMakeRequest(
-    userId: string,
+  canMakeRequest(_userId: string,
     estimatedTokens: number = 1000
   ): {
     allowed: boolean;
@@ -335,7 +334,7 @@ export class TokenManagementService {
   /**
    * Get active alerts for user
    */
-  getActiveAlerts(userId: string): UsageAlert[] {
+  getActiveAlerts(_userId: string): UsageAlert[] {
     return this.usageAlerts.filter((alert) => alert.userId === userId && !alert.acknowledged);
   }
 
@@ -353,8 +352,7 @@ export class TokenManagementService {
   /**
    * Generate usage report
    */
-  generateUsageReport(
-    userId: string,
+  generateUsageReport(_userId: string,
     period: 'daily' | 'weekly' | 'monthly' | 'custom',
     startDate?: Date,
     endDate?: Date
@@ -455,7 +453,7 @@ export class TokenManagementService {
   /**
    * Get real-time usage stats for dashboard
    */
-  getRealTimeStats(userId: string): {
+  getRealTimeStats(_userId: string): {
     currentSession: {
       tokens: number;
       cost: number;
@@ -481,7 +479,7 @@ export class TokenManagementService {
     const quotas = userUsage.tier.quotas;
 
     // Current session stats (last hour)
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const _oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const sessionTransactions = this.tokenTransactions.filter(
       (txn) => txn.userId === userId && txn.timestamp >= oneHourAgo
     );
@@ -557,8 +555,7 @@ export class TokenManagementService {
   /**
    * Export usage data
    */
-  exportUsageData(
-    userId: string,
+  exportUsageData(_userId: string,
     format: 'json' | 'csv',
     period: 'daily' | 'weekly' | 'monthly' | 'all' = 'monthly'
   ): string {
@@ -576,7 +573,7 @@ export class TokenManagementService {
   /**
    * Reset user usage (for testing/admin purposes)
    */
-  resetUserUsage(userId: string): void {
+  resetUserUsage(_userId: string): void {
     const userUsage = this.getUserUsageOrCreate(userId);
     userUsage.dailyTokens = 0;
     userUsage.weeklyTokens = 0;
@@ -594,7 +591,7 @@ export class TokenManagementService {
   /**
    * Upgrade user tier
    */
-  upgradeUserTier(userId: string, tierName: string): boolean {
+  upgradeUserTier(_userId: string, tierName: string): boolean {
     const tier = PRICING_TIERS[tierName];
     if (!tier) {
       return false;
@@ -610,7 +607,7 @@ export class TokenManagementService {
 
   // Private helper methods
 
-  private getUserUsageOrCreate(userId: string): UserUsage {
+  private getUserUsageOrCreate(_userId: string): UserUsage {
     let userUsage = this.userUsageCache.get(userId);
 
     if (!userUsage) {
@@ -664,7 +661,7 @@ export class TokenManagementService {
     this.conversationUsageCache.set(conversationId, convUsage);
   }
 
-  private async updateUserUsage(userId: string, usage: TokenUsage): Promise<void> {
+  private async updateUserUsage(_userId: string, usage: TokenUsage): Promise<void> {
     const userUsage = this.getUserUsageOrCreate(userId);
 
     userUsage.dailyTokens += usage.totalTokens;
@@ -677,7 +674,7 @@ export class TokenManagementService {
     this.userUsageCache.set(userId, userUsage);
   }
 
-  private async checkQuotasAndGenerateAlerts(userId: string): Promise<void> {
+  private async checkQuotasAndGenerateAlerts(_userId: string): Promise<void> {
     const userUsage = this.getUserUsageOrCreate(userId);
     const quotas = userUsage.tier.quotas;
 
@@ -725,8 +722,7 @@ export class TokenManagementService {
     }
   }
 
-  private generateAlert(
-    userId: string,
+  private generateAlert(_userId: string,
     type: UsageAlert['type'],
     message: string,
     threshold: number,
@@ -974,7 +970,7 @@ export class TokenManagementService {
         }));
       }
     } catch (error) {
-      console.error('Error loading stored token management data:', error);
+      // console.error('Error loading stored token management data:', error);
     }
   }
 
@@ -1005,7 +1001,7 @@ export class TokenManagementService {
         .slice(0, 100);
       localStorage.setItem(this.USAGE_ALERTS_KEY, JSON.stringify(recentAlerts));
     } catch (error) {
-      console.error('Error persisting token management data:', error);
+      // console.error('Error persisting token management data:', error);
     }
   }
 

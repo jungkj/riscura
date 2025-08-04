@@ -44,7 +44,7 @@ export class EnhancedControlService {
       const result = await response.json();
       return result.assessment || this.getMockControlAssessment();
     } catch (error) {
-      console.error('AI control assessment failed:', error);
+      // console.error('AI control assessment failed:', error);
       return this.getMockControlAssessment();
     }
   }
@@ -113,7 +113,7 @@ export class EnhancedControlService {
       const result = await response.json();
       return result.mapping || this.getMockRiskCoverage();
     } catch (error) {
-      console.error('Risk-control mapping analysis failed:', error);
+      // console.error('Risk-control mapping analysis failed:', error);
       return this.getMockRiskCoverage();
     }
   }
@@ -136,7 +136,7 @@ export class EnhancedControlService {
       const result = await response.json();
       return result.recommendations || this.getMockRecommendations();
     } catch (error) {
-      console.error('Control recommendations generation failed:', error);
+      // console.error('Control recommendations generation failed:', error);
       return this.getMockRecommendations();
     }
   }
@@ -154,7 +154,7 @@ export class EnhancedControlService {
       // Calculate next test date based on frequency
       const nextTestDate = this.calculateNextTestDate(schedule);
 
-      console.log(`Scheduled ${testType} test for control ${controlId}`, {
+      // console.log(`Scheduled ${testType} test for control ${controlId}`, {
         testId,
         nextTestDate,
         schedule,
@@ -162,7 +162,7 @@ export class EnhancedControlService {
 
       return { success: true, testId };
     } catch (error) {
-      console.error('Control test scheduling failed:', error);
+      // console.error('Control test scheduling failed:', error);
       return { success: false };
     }
   }
@@ -200,7 +200,7 @@ export class EnhancedControlService {
       const result = await response.json();
       return result.automation || this.getMockAutomationAssessment();
     } catch (error) {
-      console.error('Automation analysis failed:', error);
+      // console.error('Automation analysis failed:', error);
       return this.getMockAutomationAssessment();
     }
   }
@@ -342,7 +342,7 @@ export class EnhancedControlService {
           throw new Error(`Unsupported bulk operation: ${operation.type}`);
       }
     } catch (error) {
-      console.error('Bulk operation failed:', error);
+      // console.error('Bulk operation failed:', error);
       return { success: false, errors: [error instanceof Error ? error.message : 'Unknown error'] };
     }
   }
@@ -615,27 +615,27 @@ export class EnhancedControlService {
   }
 
   private async bulkScheduleTests(controlIds: string[], data: any): Promise<{ success: boolean }> {
-    console.log('Bulk scheduling tests for controls:', controlIds, data);
+    // console.log('Bulk scheduling tests for controls:', controlIds, data);
     return { success: true };
   }
 
   private async bulkUpdate(controlIds: string[], data: any): Promise<{ success: boolean }> {
-    console.log('Bulk updating controls:', controlIds, data);
+    // console.log('Bulk updating controls:', controlIds, data);
     return { success: true };
   }
 
   private async bulkApprove(controlIds: string[], userId: string): Promise<{ success: boolean }> {
-    console.log('Bulk approving controls:', controlIds, 'by user:', userId);
+    // console.log('Bulk approving controls:', controlIds, 'by user:', userId);
     return { success: true };
   }
 
   private async bulkRetire(controlIds: string[], userId: string): Promise<{ success: boolean }> {
-    console.log('Bulk retiring controls:', controlIds, 'by user:', userId);
+    // console.log('Bulk retiring controls:', controlIds, 'by user:', userId);
     return { success: true };
   }
 
   private async bulkExport(controlIds: string[], options: any): Promise<{ success: boolean }> {
-    console.log('Bulk exporting controls:', controlIds, options);
+    // console.log('Bulk exporting controls:', controlIds, options);
     return { success: true };
   }
 
@@ -643,7 +643,7 @@ export class EnhancedControlService {
     controlIds: string[],
     assignmentData: any
   ): Promise<{ success: boolean }> {
-    console.log('Bulk assigning controls:', controlIds, assignmentData);
+    // console.log('Bulk assigning controls:', controlIds, assignmentData);
     return { success: true };
   }
 

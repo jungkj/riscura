@@ -15,7 +15,7 @@ export interface CreateOrganizationOptions {
 export class OrganizationFactory {
   private static counter = 1;
 
-  static create(options: CreateOrganizationOptions = {}): Organization {
+  static create(_options: CreateOrganizationOptions = {}): Organization {
     const id = options.id || `org-${this.counter++}`;
 
     return {
@@ -38,7 +38,7 @@ export class OrganizationFactory {
     } as Organization;
   }
 
-  static createEnterprise(options: CreateOrganizationOptions = {}): Organization {
+  static createEnterprise(_options: CreateOrganizationOptions = {}): Organization {
     return this.create({
       ...options,
       plan: 'enterprise',
@@ -56,7 +56,7 @@ export class OrganizationFactory {
     });
   }
 
-  static createPro(options: CreateOrganizationOptions = {}): Organization {
+  static createPro(_options: CreateOrganizationOptions = {}): Organization {
     return this.create({
       ...options,
       plan: 'pro',
@@ -74,7 +74,7 @@ export class OrganizationFactory {
     });
   }
 
-  static createFree(options: CreateOrganizationOptions = {}): Organization {
+  static createFree(_options: CreateOrganizationOptions = {}): Organization {
     return this.create({
       ...options,
       plan: 'free',

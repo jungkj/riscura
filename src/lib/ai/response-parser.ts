@@ -13,7 +13,7 @@ export class ResponseParser {
   /**
    * Parse JSON response from AI with fallback handling
    */
-  static parseJSON<T>(response: string): ParsedResponse<T> {
+  static parseJSON<T>(_response: string): ParsedResponse<T> {
     try {
       // Clean response - remove markdown code blocks if present
       const cleanedResponse = this.cleanResponse(response);
@@ -55,7 +55,7 @@ export class ResponseParser {
   /**
    * Parse risk analysis response
    */
-  static parseRiskAnalysis(response: string): ParsedResponse<any> {
+  static parseRiskAnalysis(_response: string): ParsedResponse<any> {
     const jsonResult = this.parseJSON(response);
 
     if (jsonResult.success) {
@@ -108,7 +108,7 @@ export class ResponseParser {
   /**
    * Parse control recommendations response
    */
-  static parseControlRecommendations(response: string): ParsedResponse<any[]> {
+  static parseControlRecommendations(_response: string): ParsedResponse<any[]> {
     const jsonResult = this.parseJSON<any[]>(response);
 
     if (jsonResult.success && Array.isArray(jsonResult.data)) {
@@ -157,7 +157,7 @@ export class ResponseParser {
   /**
    * Parse compliance gaps response
    */
-  static parseComplianceGaps(response: string): ParsedResponse<any[]> {
+  static parseComplianceGaps(_response: string): ParsedResponse<any[]> {
     const jsonResult = this.parseJSON<any[]>(response);
 
     if (jsonResult.success && Array.isArray(jsonResult.data)) {
@@ -202,7 +202,7 @@ export class ResponseParser {
   /**
    * Parse chat response with intent classification
    */
-  static parseChatResponse(response: string, intent?: any, contextData?: any): ParsedResponse<any> {
+  static parseChatResponse(_response: string, intent?: any, contextData?: any): ParsedResponse<any> {
     try {
       const chatResponse = {
         message: response.trim(),
@@ -229,7 +229,7 @@ export class ResponseParser {
   /**
    * Parse trend predictions response
    */
-  static parseTrendPredictions(response: string): ParsedResponse<any> {
+  static parseTrendPredictions(_response: string): ParsedResponse<any> {
     const jsonResult = this.parseJSON(response);
 
     if (jsonResult.success) {
@@ -264,7 +264,7 @@ export class ResponseParser {
 
   // Helper methods for extraction
 
-  private static cleanResponse(response: string): string {
+  private static cleanResponse(_response: string): string {
     // Remove markdown code blocks
     let cleaned = response.replace(/```(?:json|javascript)?\n?([\s\S]*?)\n?```/g, '$1');
 
@@ -280,7 +280,7 @@ export class ResponseParser {
     return cleaned;
   }
 
-  private static extractJSON(response: string): string | null {
+  private static extractJSON(_response: string): string | null {
     // Try to find JSON objects or arrays in the response
     const jsonMatches = response.match(/[{\[][\s\S]*[}\]]/g);
 
@@ -355,7 +355,7 @@ export class ResponseParser {
   }
 
   private static extractCategory(text: string): string {
-    const categories = ['Technical', 'Administrative', 'Physical', 'Automated', 'Manual'];
+    const _categories = ['Technical', 'Administrative', 'Physical', 'Automated', 'Manual'];
     const lowerText = text.toLowerCase();
 
     for (const category of categories) {
@@ -441,7 +441,7 @@ export class ResponseParser {
     return timelineMatch ? timelineMatch[1].trim() : null;
   }
 
-  private static classifyResponseType(response: string): string {
+  private static classifyResponseType(_response: string): string {
     const lowerResponse = response.toLowerCase();
 
     if (lowerResponse.includes('chart') || lowerResponse.includes('graph')) {
@@ -455,7 +455,7 @@ export class ResponseParser {
     }
   }
 
-  private static extractFollowUpQuestions(response: string): string[] {
+  private static extractFollowUpQuestions(_response: string): string[] {
     const defaultQuestions = [
       'Would you like more details about any specific aspect?',
       'Do you need help with implementation?',
@@ -471,8 +471,7 @@ export class ResponseParser {
     return defaultQuestions.slice(0, 2);
   }
 
-  private static extractActions(
-    response: string
+  private static extractActions(_response: string
   ): Array<{ label: string; action: string; parameters?: any }> {
     const actions: Array<{ label: string; action: string; parameters?: any }> = [];
 
@@ -493,7 +492,7 @@ export class ResponseParser {
     return actions;
   }
 
-  private static extractTrends(response: string): any[] {
+  private static extractTrends(_response: string): any[] {
     // Simple trend extraction - would be enhanced based on actual response patterns
     return [
       {
@@ -506,7 +505,7 @@ export class ResponseParser {
     ];
   }
 
-  private static extractAlerts(response: string): any[] {
+  private static extractAlerts(_response: string): any[] {
     // Simple alert extraction - would be enhanced based on actual response patterns
     const alerts: any[] = [];
 

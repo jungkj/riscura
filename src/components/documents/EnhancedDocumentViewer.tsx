@@ -33,7 +33,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import toast from 'react-hot-toast';
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
 
 interface DocumentViewerProps {
   documentId: string;
@@ -138,7 +138,7 @@ export default function EnhancedDocumentViewer({
 
       toast.success('File downloaded successfully');
     } catch (error) {
-      console.error('Download error:', error);
+      // console.error('Download error:', error);
       toast.error('Failed to download file');
     }
   };

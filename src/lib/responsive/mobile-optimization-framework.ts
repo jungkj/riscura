@@ -315,7 +315,7 @@ export interface SwipeGestureConfig {
   velocity?: number;
 }
 
-export function useSwipeGesture(config: SwipeGestureConfig) {
+export function useSwipeGesture(_config: SwipeGestureConfig) {
   const startTouch = useRef<Touch | null>(null);
   const endTouch = useRef<Touch | null>(null);
 

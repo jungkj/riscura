@@ -60,11 +60,11 @@ export interface ImportStore {
 
   // Upload state management
   setRcsaLoading: (loading: boolean) => void;
-  setRcsaError: (error: string | null) => void;
+  setRcsaError: (_error: string | null) => void;
   setRcsaSuccess: (success: boolean) => void;
 
   setPolicyLoading: (loading: boolean) => void;
-  setPolicyError: (error: string | null) => void;
+  setPolicyError: (_error: string | null) => void;
   setPolicySuccess: (success: boolean) => void;
 
   // Async thunks
@@ -201,7 +201,7 @@ export const useImportStore = create<ImportStore>()(
             throw new Error(result.error || 'Upload failed');
           }
         } catch (error) {
-          console.error('RCSA upload error:', error);
+          // console.error('RCSA upload error:', error);
           setRcsaError(error instanceof Error ? error.message : 'Upload failed');
         }
       },
@@ -241,7 +241,7 @@ export const useImportStore = create<ImportStore>()(
             throw new Error(result.error || 'Upload failed');
           }
         } catch (error) {
-          console.error('Policy upload error:', error);
+          // console.error('Policy upload error:', error);
           setPolicyError(error instanceof Error ? error.message : 'Upload failed');
         }
       },

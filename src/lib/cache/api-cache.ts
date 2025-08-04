@@ -107,7 +107,7 @@ class APICache {
   private revalidationQueue: Set<string> = new Set();
   private stats: APICacheStats;
 
-  private constructor(config: Partial<APICacheConfig> = {}) {
+  private constructor(_config: Partial<APICacheConfig> = {}) {
     this.config = {
       defaultTTL: 300, // 5 minutes
       maxResponseSize: 1024 * 1024, // 1MB
@@ -183,7 +183,7 @@ class APICache {
   }
 
   // Check if request should be cached
-  public shouldCache(request: NextRequest): boolean {
+  public shouldCache(_request: NextRequest): boolean {
     const { pathname } = new URL(request.url);
     const method = request.method.toUpperCase();
 
@@ -275,7 +275,7 @@ class APICache {
   }
 
   // Get cached response
-  public async getCachedResponse(request: NextRequest): Promise<{
+  public async getCachedResponse(_request: NextRequest): Promise<{
     response: NextResponse | null;
     isStale: boolean;
   }> {
@@ -351,8 +351,7 @@ class APICache {
   }
 
   // Cache response
-  public async cacheResponse(
-    request: NextRequest,
+  public async cacheResponse(_request: NextRequest,
     response: NextResponse,
     ttl?: number
   ): Promise<void> {
@@ -492,7 +491,7 @@ class APICache {
     return `public, max-age=${ttl}, stale-while-revalidate=${this.config.staleTime}`;
   }
 
-  private extractRelevantHeaders(request: NextRequest): Record<string, string> {
+  private extractRelevantHeaders(_request: NextRequest): Record<string, string> {
     const headers: Record<string, string> = {};
     this.config.varyHeaders.forEach((header) => {
       const value = request.headers.get(header);
@@ -503,7 +502,7 @@ class APICache {
     return headers;
   }
 
-  private generateCacheTags(request: NextRequest): string[] {
+  private generateCacheTags(_request: NextRequest): string[] {
     const url = new URL(request.url);
     const pathSegments = url.pathname.split('/').filter(Boolean);
     const tags: string[] = [];
@@ -528,7 +527,7 @@ class APICache {
     return tags;
   }
 
-  private async compress(data: any): Promise<string> {
+  private async compress(_data: any): Promise<string> {
     // Simple compression using JSON stringification + base64
     // In production, consider using gzip or brotli
     const jsonString = JSON.stringify(data);
@@ -631,8 +630,7 @@ class APICache {
   }
 
   // Add cache headers to response
-  public addCacheHeaders(
-    response: CachedResponse,
+  public addCacheHeaders(_response: CachedResponse,
     headers: Record<string, string> = {}
   ): Record<string, string> {
     const age = Math.floor((Date.now() - response.timestamp) / 1000);
@@ -768,7 +766,7 @@ export const withAPICache = (
 ) => {
   const cache = new APICache(options);
 
-  return async (request: NextRequest): Promise<NextResponse> => {
+  return async (_request: NextRequest): Promise<NextResponse> => {
     // Check if request should be cached
     if (!cache.shouldCache(request)) {
       return handler(request);

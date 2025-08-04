@@ -81,7 +81,7 @@ export const POST = withApiMiddleware({
       metadata: validationResult.metadata,
     };
   } catch (error) {
-    console.error('Error creating Google Drive import job:', error);
+    // console.error('Error creating Google Drive import job:', error);
 
     if (error instanceof Error && error.message.includes('No valid Google Drive authentication')) {
       return {

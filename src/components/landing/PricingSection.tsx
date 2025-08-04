@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Zap, Star, Crown, ArrowRight } from 'lucide-react';
-import { SUBSCRIPTION_PLANS, formatPrice } from '@/lib/stripe';
+// import { SUBSCRIPTION_PLANS, formatPrice } from '@/lib/stripe';
 import { useRouter } from 'next/navigation';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 

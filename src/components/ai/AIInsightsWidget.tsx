@@ -148,7 +148,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch AI insights');
-      console.error('Error fetching AI insights:', err);
+      // console.error('Error fetching AI insights:', err);
     } finally {
       setLoading(false);
     }
@@ -181,7 +181,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       );
       setAssistance(assistanceData);
     } catch (err) {
-      console.error('Error getting assistance:', err);
+      // console.error('Error getting assistance:', err);
     }
   }, []);
 

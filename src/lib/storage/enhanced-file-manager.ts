@@ -115,7 +115,7 @@ export class EnhancedFileManager {
           thumbnailUrl = thumbnailResult.url;
         }
       } catch (error) {
-        console.warn('Thumbnail generation failed:', error);
+        // console.warn('Thumbnail generation failed:', error);
         warnings.push('Thumbnail generation failed');
       }
     }
@@ -126,7 +126,7 @@ export class EnhancedFileManager {
       try {
         extractedText = await extractTextContent(buffer, validationResult.fileInfo.detectedType);
       } catch (error) {
-        console.warn('Text extraction failed:', error);
+        // console.warn('Text extraction failed:', error);
         warnings.push('Text extraction failed');
       }
     }
@@ -464,7 +464,7 @@ export class EnhancedFileManager {
           : document.id;
         await deleteFile(fileName);
       } catch (error) {
-        console.warn('Storage deletion failed:', error);
+        // console.warn('Storage deletion failed:', error);
       }
     }
 
@@ -568,7 +568,7 @@ export class EnhancedFileManager {
   ): Promise<void> {
     // Since there's no audit log model in the schema, we'll skip this for now
     // In a real implementation, you would create an audit log entry
-    console.log('Audit log:', { action, entityId, userId, details });
+    // console.log('Audit log:', { action, entityId, userId, details });
   }
 
   private formatFileSize(bytes: number): string {

@@ -150,7 +150,7 @@ export default function SpreadsheetsPage() {
           setFilteredSpreadsheets(data.data);
         }
       } catch (error) {
-        console.error('Failed to fetch spreadsheets:', error);
+        // console.error('Failed to fetch spreadsheets:', error);
       } finally {
         setLoading(false);
       }
@@ -203,7 +203,7 @@ export default function SpreadsheetsPage() {
         }
       }
     } catch (error) {
-      console.error('Failed to create spreadsheet:', error);
+      // console.error('Failed to create spreadsheet:', error);
     }
   };
 

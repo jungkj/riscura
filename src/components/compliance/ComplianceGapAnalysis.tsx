@@ -39,7 +39,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { useToast } from '@/components/ui/DaisyToast';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { ComplianceFrameworkSelector } from './ComplianceFrameworkSelector';
 import { ComplianceGapList } from './ComplianceGapList';
 import { ComplianceRequirementAssessment } from './ComplianceRequirementAssessment';
@@ -117,7 +117,7 @@ export function ComplianceGapAnalysis() {
         setFrameworks(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch frameworks:', error);
+      // console.error('Failed to fetch frameworks:', error);
       toast({
         title: 'Error',
         description: 'Failed to load compliance frameworks',
@@ -134,7 +134,7 @@ export function ComplianceGapAnalysis() {
         setAssessments(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch assessments:', error);
+      // console.error('Failed to fetch assessments:', error);
     }
   };
 
@@ -154,7 +154,7 @@ export function ComplianceGapAnalysis() {
         });
       }
     } catch (error) {
-      console.error('Failed to perform gap analysis:', error);
+      // console.error('Failed to perform gap analysis:', error);
       toast({
         title: 'Error',
         description: 'Failed to perform gap analysis',
@@ -226,7 +226,7 @@ export function ComplianceGapAnalysis() {
         window.URL.revokeObjectURL(url);
       }
     } catch (error) {
-      console.error('Failed to export report:', error);
+      // console.error('Failed to export report:', error);
       toast({
         title: 'Error',
         description: 'Failed to export report',

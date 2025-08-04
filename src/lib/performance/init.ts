@@ -9,11 +9,11 @@ let performanceMetrics: any = {};
  */
 export async function initializePerformance() {
   if (isInitialized) {
-    console.log('Performance optimizations already initialized');
+    // console.log('Performance optimizations already initialized');
     return;
   }
 
-  console.log('Initializing performance optimizations...');
+  // console.log('Initializing performance optimizations...');
 
   try {
     // Initialize Core Web Vitals monitoring
@@ -42,15 +42,15 @@ export async function initializePerformance() {
     }
 
     // Start performance monitoring - DISABLED to prevent console errors
-    console.log('Performance monitoring disabled for clean development experience');
+    // console.log('Performance monitoring disabled for clean development experience');
     // if (performanceConfig.monitoring.enabled) {
     //   startPerformanceMonitoring();
     // }
 
     isInitialized = true;
-    console.log('Performance optimizations initialized successfully');
+    // console.log('Performance optimizations initialized successfully');
   } catch (error) {
-    console.error('Failed to initialize performance optimizations:', error);
+    // console.error('Failed to initialize performance optimizations:', error);
   }
 }
 
@@ -64,7 +64,7 @@ async function initializeWebVitals() {
     // Check if web-vitals is available, if not, skip initialization
     const webVitalsModule = await import('web-vitals').catch(() => null);
     if (!webVitalsModule) {
-      console.log('Web vitals module not available, skipping Core Web Vitals monitoring');
+      // console.log('Web vitals module not available, skipping Core Web Vitals monitoring');
       return;
     }
 
@@ -73,14 +73,14 @@ async function initializeWebVitals() {
     getCLS((metric) => {
       performanceMetrics.cls = metric.value;
       if (metric.value > performanceConfig.webVitals.thresholds.cls) {
-        console.warn('CLS threshold exceeded:', metric.value);
+        // console.warn('CLS threshold exceeded:', metric.value);
       }
     });
 
     getFID((metric) => {
       performanceMetrics.fid = metric.value;
       if (metric.value > performanceConfig.webVitals.thresholds.fidMs) {
-        console.warn('FID threshold exceeded:', metric.value);
+        // console.warn('FID threshold exceeded:', metric.value);
       }
     });
 
@@ -91,7 +91,7 @@ async function initializeWebVitals() {
     getLCP((metric) => {
       performanceMetrics.lcp = metric.value;
       if (metric.value > performanceConfig.webVitals.thresholds.lcpMs) {
-        console.warn('LCP threshold exceeded:', metric.value);
+        // console.warn('LCP threshold exceeded:', metric.value);
       }
     });
 
@@ -99,9 +99,9 @@ async function initializeWebVitals() {
       performanceMetrics.ttfb = metric.value;
     });
 
-    console.log('Core Web Vitals monitoring initialized');
+    // console.log('Core Web Vitals monitoring initialized');
   } catch (error) {
-    console.error('Failed to initialize Core Web Vitals:', error);
+    // console.error('Failed to initialize Core Web Vitals:', error);
   }
 }
 
@@ -120,7 +120,7 @@ function initializeMemoryManagement() {
       performanceMetrics.memoryUsage = usagePercent;
 
       if (usagePercent > performanceConfig.alerts.memoryUsageThreshold) {
-        console.warn('Memory usage threshold exceeded:', usagePercent);
+        // console.warn('Memory usage threshold exceeded:', usagePercent);
 
         // Trigger garbage collection if available
         if ('gc' in window && typeof (window as any).gc === 'function') {
@@ -136,7 +136,7 @@ function initializeMemoryManagement() {
   // Initial check
   checkMemory();
 
-  console.log('Memory management initialized');
+  // console.log('Memory management initialized');
 }
 
 /**
@@ -145,9 +145,9 @@ function initializeMemoryManagement() {
 function initializeBackgroundTasks() {
   // Set up Web Workers for background tasks if available
   if (typeof Worker !== 'undefined') {
-    console.log('Background task optimization initialized with Web Workers');
+    // console.log('Background task optimization initialized with Web Workers');
   } else {
-    console.log('Background task optimization initialized (Web Workers not available)');
+    // console.log('Background task optimization initialized (Web Workers not available)');
   }
 }
 
@@ -174,12 +174,12 @@ function initializeWebSocketOptimization() {
 
       // Check connection limits
       if (activeConnections > performanceConfig.websocket.connectionPoolSize) {
-        console.warn('WebSocket connection limit exceeded:', activeConnections);
+        // console.warn('WebSocket connection limit exceeded:', activeConnections);
       }
     }
   };
 
-  console.log('WebSocket optimization initialized');
+  // console.log('WebSocket optimization initialized');
 }
 
 /**
@@ -187,7 +187,7 @@ function initializeWebSocketOptimization() {
  */
 function initializeFileUploadOptimization() {
   // Basic file upload optimization setup
-  console.log('File upload optimization initialized');
+  // console.log('File upload optimization initialized');
 }
 
 /**
@@ -197,11 +197,11 @@ function startPerformanceMonitoring() {
   if (typeof window === 'undefined') return;
 
   // Performance monitoring disabled to prevent console errors
-  console.log('Performance monitoring disabled for clean development experience');
+  // console.log('Performance monitoring disabled for clean development experience');
   return;
 
   // Performance monitoring disabled to prevent console errors
-  console.log('Performance monitoring disabled for clean development experience');
+  // console.log('Performance monitoring disabled for clean development experience');
   return;
 
   const reportMetrics = async () => {
@@ -221,10 +221,10 @@ function startPerformanceMonitoring() {
       });
 
       if (!response.ok) {
-        console.warn('Failed to report performance metrics:', response.status);
+        // console.warn('Failed to report performance metrics:', response.status);
       }
     } catch (error) {
-      console.error('Error reporting performance metrics:', error);
+      // console.error('Error reporting performance metrics:', error);
     }
   };
 
@@ -234,7 +234,7 @@ function startPerformanceMonitoring() {
   // Report metrics on page unload
   window.addEventListener('beforeunload', reportMetrics);
 
-  console.log('Performance monitoring started');
+  // console.log('Performance monitoring started');
 }
 
 /**

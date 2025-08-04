@@ -289,8 +289,7 @@ export class DashboardIntelligenceService {
   /**
    * Generate comprehensive dashboard insights using AI
    */
-  async generateDashboardInsights(
-    config: DashboardConfig,
+  async generateDashboardInsights(_config: DashboardConfig,
     risks: Risk[],
     controls: Control[]
   ): Promise<DashboardInsight[]> {
@@ -326,7 +325,7 @@ export class DashboardIntelligenceService {
 
       return prioritizedInsights;
     } catch (error) {
-      console.error('Error generating dashboard insights:', error);
+      // console.error('Error generating dashboard insights:', error);
       return [];
     }
   }
@@ -348,7 +347,7 @@ export class DashboardIntelligenceService {
         predictions.push(prediction);
         this.predictions.set(prediction.id, prediction);
       } catch (error) {
-        console.error(`Error predicting metric ${metricName}:`, error);
+        // console.error(`Error predicting metric ${metricName}:`, error);
       }
     }
 
@@ -358,13 +357,12 @@ export class DashboardIntelligenceService {
   /**
    * Generate smart recommendations based on current context
    */
-  async generateSmartRecommendations(
-    config: DashboardConfig,
+  async generateSmartRecommendations(_config: DashboardConfig,
     currentInsights: DashboardInsight[]
   ): Promise<SmartRecommendation[]> {
     const context = this.buildRecommendationContext(config, currentInsights);
 
-    const prompt = `
+    const _prompt = `
     Based on the following risk management dashboard context, generate smart, actionable recommendations:
     
     Current Context:
@@ -391,7 +389,7 @@ export class DashboardIntelligenceService {
 
       return recommendations;
     } catch (error) {
-      console.error('Error generating recommendations:', error);
+      // console.error('Error generating recommendations:', error);
       return [];
     }
   }
@@ -424,7 +422,7 @@ export class DashboardIntelligenceService {
         quickActions: this.generateQuickActions(elementType, elementData),
       };
     } catch (error) {
-      console.error('Error generating interactive assistance:', error);
+      // console.error('Error generating interactive assistance:', error);
       return {
         id: generateId('assistance'),
         contextType: elementType as any,
@@ -439,7 +437,7 @@ export class DashboardIntelligenceService {
   /**
    * Start real-time intelligence updates
    */
-  startRealTimeUpdates(config: DashboardConfig, callback: (update: RealTimeUpdate) => void): void {
+  startRealTimeUpdates(_config: DashboardConfig, callback: (update: RealTimeUpdate) => void): void {
     const subscriptionId = generateId('subscription');
     this.subscribers.set(subscriptionId, callback);
 
@@ -575,7 +573,7 @@ export class DashboardIntelligenceService {
         }
       }
     } catch (error) {
-      console.error('Error generating anomaly insights:', error);
+      // console.error('Error generating anomaly insights:', error);
     }
 
     return insights;
@@ -615,7 +613,7 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateOptimizationInsights(config: DashboardConfig): Promise<DashboardInsight[]> {
+  private async generateOptimizationInsights(_config: DashboardConfig): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
 
     // Generate resource optimization suggestions
@@ -686,7 +684,7 @@ export class DashboardIntelligenceService {
   ): Promise<PredictiveAnalytics> {
     // Simple trend-based prediction (in production, use more sophisticated ML models)
     const recentValues = values.slice(-7); // Last 7 data points
-    const average = recentValues.reduce((sum, val) => sum + val, 0) / recentValues.length;
+    const _average = recentValues.reduce((sum, val) => sum + val, 0) / recentValues.length;
     const trend = this.calculateLinearTrend(recentValues);
 
     const currentValue = values[values.length - 1];
@@ -763,8 +761,7 @@ export class DashboardIntelligenceService {
     });
   }
 
-  private buildRecommendationContext(
-    config: DashboardConfig,
+  private buildRecommendationContext(_config: DashboardConfig,
     insights: DashboardInsight[]
   ): string {
     return JSON.stringify(
@@ -902,7 +899,7 @@ export class DashboardIntelligenceService {
     return baseActions;
   }
 
-  private async broadcastUpdates(config: DashboardConfig): Promise<void> {
+  private async broadcastUpdates(_config: DashboardConfig): Promise<void> {
     // Simulate real-time updates
     const update: RealTimeUpdate = {
       id: generateId('update'),
@@ -929,7 +926,7 @@ export class DashboardIntelligenceService {
     significance: number;
   } {
     // Simplified trend calculation
-    const avgScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length;
+    const _avgScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length;
     const change = Math.random() * 0.2 - 0.1; // Simulate change
 
     return {

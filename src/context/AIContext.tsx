@@ -108,8 +108,8 @@ interface EnhancedError {
 interface AIContextType {
   analyzeRisk: (risk: Risk) => Promise<unknown>;
   recommendControls: (risk: Risk) => Promise<unknown>;
-  generateContent: (request: ContentGenerationRequest) => Promise<unknown>;
-  explainContent: (request: ExplanationRequest) => Promise<unknown>;
+  generateContent: (_request: ContentGenerationRequest) => Promise<unknown>;
+  explainContent: (_request: ExplanationRequest) => Promise<unknown>;
   isLoading: boolean;
   performanceMetrics: PerformanceMetrics;
   rateLimitStatus: RateLimitStatus;
@@ -225,7 +225,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   const userId = 'current-user'; // Would come from auth context
 
   // Enhanced error handling utility
-  const enhanceError = useCallback((error: unknown, context: string): EnhancedError => {
+  const enhanceError = useCallback((_error: unknown, context: string): EnhancedError => {
     if (error instanceof AIServiceError) {
       return {
         type: 'service_error',
@@ -269,7 +269,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     if (!aiEnabled || !hasApiKey) {
       // Only log once in development, suppress in production
       if (process.env.NODE_ENV === 'development' && !hasApiKey) {
-        console.warn(
+        // console.warn(
           'AI features disabled: Missing OpenAI API key. Set NEXT_PUBLIC_OPENAI_API_KEY in your environment.'
         );
       }
@@ -332,7 +332,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         },
       ]);
     } catch (error) {
-      console.error('Failed to initialize AI Service:', error);
+      // console.error('Failed to initialize AI Service:', error);
       const enhancedError = enhanceError(error, 'AI Service initialization');
       setError(enhancedError);
       setLastError(enhancedError);
@@ -415,7 +415,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           isLimited: rateLimit.isLimited,
         });
       } catch (error) {
-        console.error('Error updating metrics:', error);
+        // console.error('Error updating metrics:', error);
         // Use default values if methods don't exist
         setPerformanceMetrics({
           averageResponseTime: 0,
@@ -442,8 +442,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return () => clearInterval(interval);
   }, [aiService]);
 
-  const handleError = useCallback((error: unknown, requestFn?: () => Promise<unknown>) => {
-    console.error('AI Service Error:', error);
+  const handleError = useCallback((_error: unknown, requestFn?: () => Promise<unknown>) => {
+    // console.error('AI Service Error:', error);
 
     if (error instanceof RateLimitError) {
       setError({
@@ -620,7 +620,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const generateContent = async (request: ContentGenerationRequest) => {
+  const generateContent = async (_request: ContentGenerationRequest) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -648,7 +648,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     return requestFn();
   };
 
-  const explainContent = async (request: ExplanationRequest) => {
+  const explainContent = async (_request: ExplanationRequest) => {
     if (!aiService) {
       throw new Error('AI Service not initialized. Please check your API configuration.');
     }
@@ -786,7 +786,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
 
   const toggleARIA = () => {
     // Toggle ARIA widget visibility - implementation would depend on UI structure
-    console.log('Toggle ARIA widget');
+    // console.log('Toggle ARIA widget');
   };
 
   const clearError = () => {

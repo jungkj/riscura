@@ -99,7 +99,7 @@ export function VendorAssessmentDashboard() {
         setAssessments(data);
       }
     } catch (error) {
-      console.error('Failed to load assessments:', error);
+      // console.error('Failed to load assessments:', error);
     } finally {
       setLoading(false);
     }
@@ -126,10 +126,10 @@ export function VendorAssessmentDashboard() {
         setActiveTab('results');
         await loadAssessments(); // Refresh the list
       } else {
-        console.error('Assessment failed');
+        // console.error('Assessment failed');
       }
     } catch (error) {
-      console.error('Assessment error:', error);
+      // console.error('Assessment error:', error);
     } finally {
       setIsAssessing(false);
     }

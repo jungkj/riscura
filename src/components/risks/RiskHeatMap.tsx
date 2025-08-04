@@ -189,11 +189,11 @@ export const RiskHeatMap: React.FC = () => {
     );
   }, [filteredRisks, groupBy]);
 
-  const categories = [...new Set(sampleHeatMapData.map((r) => r.category))];
+  const _categories = [...new Set(sampleHeatMapData.map((r) => r.category))];
   const frameworks = [...new Set(sampleHeatMapData.map((r) => r.framework))];
 
   const handleExport = () => {
-    console.log('Export heat map');
+    // console.log('Export heat map');
   };
 
   const handleReset = () => {

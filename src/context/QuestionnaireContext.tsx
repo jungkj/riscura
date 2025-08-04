@@ -12,8 +12,7 @@ import {
 
 interface QuestionnaireContextType extends QuestionnaireState {
   // CRUD Operations
-  createQuestionnaire: (
-    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  createQuestionnaire: (_data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
   ) => Promise<Questionnaire>;
   updateQuestionnaire: (id: string, data: Partial<Questionnaire>) => Promise<Questionnaire>;
   deleteQuestionnaire: (id: string) => Promise<void>;
@@ -192,8 +191,7 @@ const questionnaireService = {
     return generateMockQuestionnaires();
   },
 
-  async createQuestionnaire(
-    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  async createQuestionnaire(_data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
   ): Promise<Questionnaire> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -405,8 +403,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   // CRUD Operations
-  const createQuestionnaire = async (
-    data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
+  const createQuestionnaire = async (_data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
   ) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
@@ -597,12 +594,12 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   // Distribution
   const distributeQuestionnaire = async (questionnaireId: string, userIds: string[]) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`);
+    // console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`);
   };
 
   const sendReminders = async (questionnaireId: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log(`Sent reminders for questionnaire ${questionnaireId}`);
+    // console.log(`Sent reminders for questionnaire ${questionnaireId}`);
   };
 
   // Conditional Logic
@@ -656,7 +653,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const exportResponses = async (questionnaireId: string, format: 'csv' | 'excel') => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`);
+    // console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`);
   };
 
   const clearError = () => {

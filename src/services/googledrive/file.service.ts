@@ -16,7 +16,7 @@ export class GoogleDriveFileService {
   /**
    * List Excel files from Google Drive
    */
-  async listExcelFiles(userId: string, folderId?: string): Promise<GoogleDriveFile[]> {
+  async listExcelFiles(_userId: string, folderId?: string): Promise<GoogleDriveFile[]> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -44,7 +44,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      console.error('Error listing Google Drive files:', error);
+      // console.error('Error listing Google Drive files:', error);
       throw new Error('Failed to list files from Google Drive');
     }
   }
@@ -52,7 +52,7 @@ export class GoogleDriveFileService {
   /**
    * Get file metadata
    */
-  async getFileMetadata(userId: string, fileId: string): Promise<GoogleDriveFile> {
+  async getFileMetadata(_userId: string, fileId: string): Promise<GoogleDriveFile> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -64,7 +64,7 @@ export class GoogleDriveFileService {
 
       return response.data as GoogleDriveFile;
     } catch (error) {
-      console.error('Error getting file metadata:', error);
+      // console.error('Error getting file metadata:', error);
       throw new Error('Failed to get file information');
     }
   }
@@ -72,7 +72,7 @@ export class GoogleDriveFileService {
   /**
    * Download file content
    */
-  async downloadFile(userId: string, fileId: string): Promise<Buffer> {
+  async downloadFile(_userId: string, fileId: string): Promise<Buffer> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -89,7 +89,7 @@ export class GoogleDriveFileService {
 
       return Buffer.from(response.data as ArrayBuffer);
     } catch (error) {
-      console.error('Error downloading file:', error);
+      // console.error('Error downloading file:', error);
       throw new Error('Failed to download file from Google Drive');
     }
   }
@@ -97,7 +97,7 @@ export class GoogleDriveFileService {
   /**
    * List folders
    */
-  async listFolders(userId: string, parentId?: string): Promise<GoogleDriveFile[]> {
+  async listFolders(_userId: string, parentId?: string): Promise<GoogleDriveFile[]> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -118,7 +118,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      console.error('Error listing folders:', error);
+      // console.error('Error listing folders:', error);
       throw new Error('Failed to list folders from Google Drive');
     }
   }
@@ -126,7 +126,7 @@ export class GoogleDriveFileService {
   /**
    * Search for files
    */
-  async searchFiles(userId: string, query: string): Promise<GoogleDriveFile[]> {
+  async searchFiles(_userId: string, query: string): Promise<GoogleDriveFile[]> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -158,7 +158,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      console.error('Error searching files:', error);
+      // console.error('Error searching files:', error);
       throw new Error('Failed to search files in Google Drive');
     }
   }
@@ -166,7 +166,7 @@ export class GoogleDriveFileService {
   /**
    * Check if user has access to Google Drive
    */
-  async checkAccess(userId: string): Promise<boolean> {
+  async checkAccess(_userId: string): Promise<boolean> {
     try {
       const authService = getGoogleDriveAuthService();
       const drive = await authService.getDriveClient(userId);
@@ -175,7 +175,7 @@ export class GoogleDriveFileService {
       await drive.about.get({ fields: 'user' });
       return true;
     } catch (error) {
-      console.error('Error checking access:', error);
+      // console.error('Error checking access:', error);
       return false;
     }
   }

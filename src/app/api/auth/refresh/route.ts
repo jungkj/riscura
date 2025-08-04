@@ -6,7 +6,7 @@ import { env } from '@/config/env';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
 import { createSecureAPIHandler, SECURITY_PROFILES } from '@/lib/security/middleware-integration';
 
-export const POST = createSecureAPIHandler(async (request: NextRequest): Promise<NextResponse> => {
+export const POST = createSecureAPIHandler(async (_request: NextRequest): Promise<NextResponse> => {
   try {
     // Get refresh token from cookie or body
     let refreshToken = request.cookies.get('refreshToken')?.value;
@@ -90,7 +90,7 @@ export const POST = createSecureAPIHandler(async (request: NextRequest): Promise
         });
 
         // Log demo token refresh (development only)
-        console.log('🎭 Demo token refreshed for user:', demoUser.id);
+        // console.log('🎭 Demo token refreshed for user:', demoUser.id);
 
         return response;
       } catch (parseError) {
@@ -209,7 +209,7 @@ export const POST = createSecureAPIHandler(async (request: NextRequest): Promise
       return NextResponse.json({ error: 'Failed to refresh token' }, { status: 500 });
     }
   } catch (error) {
-    console.error('Token refresh error:', error);
+    // console.error('Token refresh error:', error);
 
     productionGuard.logSecurityEvent('token_refresh_error', {
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -249,7 +249,7 @@ async function logAuthEvent(
     }
 
     // For audit purposes, log the authentication event
-    console.log('Authentication Event:', {
+    // console.log('Authentication Event:', {
       type,
       ipAddress,
       email,
@@ -268,7 +268,7 @@ async function logAuthEvent(
       metadata,
     });
   } catch (error) {
-    console.error('Failed to log auth event:', error);
+    // console.error('Failed to log auth event:', error);
   }
 }
 

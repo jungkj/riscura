@@ -21,7 +21,7 @@ const mapRisksSchema = z.object({
   organizationId: z.string(),
 });
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
@@ -55,12 +55,12 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching Probo controls:', error);
+    // console.error('Error fetching Probo controls:', error);
     return NextResponse.json({ error: 'Failed to fetch controls' }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
   } catch (error) {
-    console.error('Error processing Probo controls request:', error);
+    // console.error('Error processing Probo controls request:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }

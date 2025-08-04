@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 import {
   GenerateTestScriptRequest,
@@ -45,7 +45,7 @@ export const POST = withApiMiddleware(
 
       return ApiResponseFormatter.success(response);
     } catch (error) {
-      console.error('Test script generation error:', error);
+      // console.error('Test script generation error:', error);
 
       return ApiResponseFormatter.error('AI_GENERATION_ERROR', 'Failed to generate test script', {
         status: 500,

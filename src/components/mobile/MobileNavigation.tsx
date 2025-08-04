@@ -456,7 +456,7 @@ export default function MobileNavigation({
                 className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                 onClick={() => {
                   // Handle logout
-                  console.log('Logging out...');
+                  // console.log('Logging out...');
                 }}
               >
                 <LogOut className="w-5 h-5 mr-3" />

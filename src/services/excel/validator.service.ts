@@ -246,8 +246,7 @@ export class ExcelValidatorService {
   /**
    * Validate risk data
    */
-  private validateRiskData(
-    data: RiskData[],
+  private validateRiskData(_data: RiskData[],
     errors: ValidationError[],
     warnings: ValidationError[]
   ): void {
@@ -331,8 +330,7 @@ export class ExcelValidatorService {
   /**
    * Validate control data
    */
-  private validateControlData(
-    data: ControlData[],
+  private validateControlData(_data: ControlData[],
     errors: ValidationError[],
     warnings: ValidationError[]
   ): void {
@@ -414,8 +412,7 @@ export class ExcelValidatorService {
   /**
    * Validate assessment data
    */
-  private validateAssessmentData(
-    data: AssessmentData[],
+  private validateAssessmentData(_data: AssessmentData[],
     errors: ValidationError[],
     warnings: ValidationError[]
   ): void {

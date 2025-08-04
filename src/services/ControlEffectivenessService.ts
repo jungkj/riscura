@@ -520,7 +520,7 @@ export class ControlEffectivenessService {
   // Helper methods
   private identifyGapAreas(allRisks: Risk[], coveredRiskIds: string[]): string[] {
     const uncoveredRisks = allRisks.filter((risk) => !coveredRiskIds.includes(risk.id));
-    const categories = [...new Set(uncoveredRisks.map((risk) => risk.category))];
+    const _categories = [...new Set(uncoveredRisks.map((risk) => risk.category))];
     return categories.map((cat) => `${cat} risks not adequately covered`);
   }
 

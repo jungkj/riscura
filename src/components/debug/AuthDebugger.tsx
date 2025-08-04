@@ -9,12 +9,12 @@ export const AuthDebugger = () => {
 
   useEffect(() => {
     setMounted(true);
-    console.log('[AuthDebugger] Component mounted, auth state:', auth);
+    // console.log('[AuthDebugger] Component mounted, auth state:', auth);
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      console.log('[AuthDebugger] Auth state changed:', {
+      // console.log('[AuthDebugger] Auth state changed:', {
         isAuthenticated: auth.isAuthenticated,
         isLoading: auth.isLoading,
         isInitialized: auth.isInitialized,

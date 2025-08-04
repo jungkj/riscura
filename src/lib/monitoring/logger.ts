@@ -70,17 +70,17 @@ class Logger {
 
     switch (entry.level) {
       case 'debug':
-        console.debug(formatted);
+        // console.debug(formatted);
         break;
       case 'info':
-        console.info(formatted);
+        // console.info(formatted);
         break;
       case 'warn':
-        console.warn(formatted);
+        // console.warn(formatted);
         break;
       case 'error':
       case 'fatal':
-        console.error(formatted);
+        // console.error(formatted);
         break;
     }
   }
@@ -158,7 +158,7 @@ class Logger {
   }
 
   // User action logging
-  public userAction(userId: string, action: string, data?: any): void {
+  public userAction(_userId: string, action: string, data?: any): void {
     const entry = this.formatMessage('info', `User action: ${action}`, data);
     entry.userId = userId;
     this.output(entry);

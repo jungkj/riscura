@@ -29,7 +29,7 @@ export const POST = withApiMiddleware({
       })),
     };
   } catch (error) {
-    console.error('Error listing Google Drive files:', error);
+    // console.error('Error listing Google Drive files:', error);
 
     if (error instanceof Error && error.message.includes('No valid Google Drive authentication')) {
       return {
@@ -72,7 +72,7 @@ export const PUT = withApiMiddleware({
       query,
     };
   } catch (error) {
-    console.error('Error searching Google Drive files:', error);
+    // console.error('Error searching Google Drive files:', error);
     return {
       error: 'Failed to search files in Google Drive',
     };

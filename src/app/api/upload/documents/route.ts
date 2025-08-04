@@ -149,7 +149,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
       message: `${uploadedDocuments.length} document(s) uploaded successfully`,
     });
   } catch (error) {
-    console.error('Document upload error:', error);
+    // console.error('Document upload error:', error);
     throw new Error(error instanceof Error ? error.message : 'Failed to upload documents');
   }
 });
@@ -179,7 +179,7 @@ export const GET = withAPI(async (req: NextRequest) => {
       data: progress,
     });
   } catch (error) {
-    console.error('Error getting upload progress:', error);
+    // console.error('Error getting upload progress:', error);
     throw new Error('Failed to get upload progress');
   }
 });
@@ -243,7 +243,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
       // Validate each extracted file
       const validation = await validateFile(extractedFile.file);
       if (!validation.isValid) {
-        console.warn(
+        // console.warn(
           `Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`
         );
         continue;
@@ -267,7 +267,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
       });
 
       if (!uploadResult.success) {
-        console.warn(`Failed to upload ${extractedFile.name}: ${uploadResult.error}`);
+        // console.warn(`Failed to upload ${extractedFile.name}: ${uploadResult.error}`);
         continue;
       }
 
@@ -319,7 +319,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
       message: `Bulk upload completed: ${uploadedDocuments.length}/${extractedFiles.length} documents uploaded successfully`,
     });
   } catch (error) {
-    console.error('Bulk document upload error:', error);
+    // console.error('Bulk document upload error:', error);
     throw new Error(error instanceof Error ? error.message : 'Failed to upload documents');
   }
 });
@@ -372,7 +372,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       try {
         await deleteFileFromStorage(document.content);
       } catch (error) {
-        console.warn(`Failed to delete file from storage: ${document.content}`, error);
+        // console.warn(`Failed to delete file from storage: ${document.content}`, error);
       }
     }
 
@@ -401,7 +401,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       message: 'Document deleted successfully',
     });
   } catch (error) {
-    console.error('Document deletion error:', error);
+    // console.error('Document deletion error:', error);
     throw new Error(error instanceof Error ? error.message : 'Failed to delete document');
   }
 });
@@ -410,5 +410,5 @@ export const DELETE = withAPI(async (req: NextRequest) => {
 async function deleteFileFromStorage(filePath: string): Promise<void> {
   // Implementation would depend on storage provider (AWS S3, Azure Blob, etc.)
   // For now, this is a placeholder
-  console.log(`Deleting file from storage: ${filePath}`);
+  // console.log(`Deleting file from storage: ${filePath}`);
 }

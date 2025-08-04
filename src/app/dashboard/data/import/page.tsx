@@ -108,7 +108,7 @@ export default function ImportDataPage() {
               : f
           )
         );
-      } catch (error: any) {
+      } catch (_error: any) {
         // Update with error
         setFiles((prev) =>
           prev.map((f, index) =>

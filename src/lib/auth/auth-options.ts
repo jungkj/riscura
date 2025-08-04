@@ -16,7 +16,7 @@ import { db } from '@/lib/db';
 const providers: any[] = [];
 
 // Debug logging for Google OAuth configuration
-console.log('[NextAuth] Google OAuth configuration check:', {
+// console.log('[NextAuth] Google OAuth configuration check:', {
   hasClientId: !!env.GOOGLE_CLIENT_ID,
   hasClientSecret: !!env.GOOGLE_CLIENT_SECRET,
   clientIdLength: env.GOOGLE_CLIENT_ID?.length || 0,
@@ -27,7 +27,7 @@ console.log('[NextAuth] Google OAuth configuration check:', {
 
 // Only add Google provider if credentials are available
 if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-  console.log('[NextAuth] Adding Google provider');
+  // console.log('[NextAuth] Adding Google provider');
   providers.push(
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -42,7 +42,7 @@ if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
     })
   );
 } else {
-  console.log('[NextAuth] Google provider not added - missing credentials');
+  // console.log('[NextAuth] Google provider not added - missing credentials');
 }
 
 // Always add credentials provider
@@ -77,7 +77,7 @@ providers.push(
         const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
 
         if (!isHealthy.isHealthy) {
-          console.warn('[NextAuth] Database not available, falling back to demo mode only');
+          // console.warn('[NextAuth] Database not available, falling back to demo mode only');
           return null;
         }
 
@@ -118,7 +118,7 @@ providers.push(
           image: user.avatar,
         } as any;
       } catch (error) {
-        console.error('Authentication error:', error);
+        // console.error('Authentication error:', error);
         return null;
       }
     },
@@ -129,7 +129,7 @@ providers.push(
 async function getDatabaseAdapter() {
   // During build time, skip database initialization
   if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
-    console.log('[NextAuth] Skipping database adapter during build');
+    // console.log('[NextAuth] Skipping database adapter during build');
     return null;
   }
 
@@ -142,14 +142,14 @@ async function getDatabaseAdapter() {
     const healthCheck = await db.healthCheck().catch(() => ({ isHealthy: false }));
 
     if (healthCheck.isHealthy) {
-      console.log('[NextAuth] Database adapter initialized successfully');
+      // console.log('[NextAuth] Database adapter initialized successfully');
       return PrismaAdapter(db.client);
     } else {
-      console.warn('[NextAuth] Database not available, running without adapter');
+      // console.warn('[NextAuth] Database not available, running without adapter');
       return null;
     }
   } catch (error) {
-    console.error('[NextAuth] Failed to initialize database adapter:', error);
+    // console.error('[NextAuth] Failed to initialize database adapter:', error);
     return null;
   }
 }
@@ -184,20 +184,20 @@ export const authOptions: NextAuthOptions = {
   },
   logger: {
     error(code, metadata) {
-      console.error('[NextAuth Error]', { code, metadata });
+      // console.error('[NextAuth Error]', { code, metadata });
     },
     warn(code) {
-      console.warn('[NextAuth Warning]', code);
+      // console.warn('[NextAuth Warning]', code);
     },
     debug(code, metadata) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[NextAuth Debug]', { code, metadata });
+        // console.log('[NextAuth Debug]', { code, metadata });
       }
     },
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('[NextAuth] signIn callback:', {
+      // console.log('[NextAuth] signIn callback:', {
         provider: account?.provider,
         email: user?.email,
         accountId: account?.providerAccountId,
@@ -211,7 +211,7 @@ export const authOptions: NextAuthOptions = {
 
           if (!isHealthy.isHealthy) {
             // Database not available, allow OAuth login without persistence
-            console.warn('[NextAuth] Database not available, OAuth login without persistence');
+            // console.warn('[NextAuth] Database not available, OAuth login without persistence');
             return true;
           }
 
@@ -221,7 +221,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!existingUser) {
-            console.log('[NextAuth] No existing user found for email:', user.email);
+            // console.log('[NextAuth] No existing user found for email:', user.email);
             // For OAuth, we need an organization invite or allow self-registration
             return `/auth/error?error=NoInvite`;
           }
@@ -237,7 +237,7 @@ export const authOptions: NextAuthOptions = {
 
           return true;
         } catch (error) {
-          console.error('OAuth sign-in error:', error);
+          // console.error('OAuth sign-in error:', error);
           return false;
         }
       }
@@ -274,7 +274,7 @@ export const authOptions: NextAuthOptions = {
             token.permissions = [];
           }
         } catch (error) {
-          console.error('JWT callback error:', error);
+          // console.error('JWT callback error:', error);
         }
       }
 
@@ -305,7 +305,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
         } catch (error) {
-          console.error('Token refresh error:', error);
+          // console.error('Token refresh error:', error);
         }
       }
 
@@ -338,7 +338,7 @@ export const authOptions: NextAuthOptions = {
             }
             token.lastSessionCheck = Date.now();
           } catch (error) {
-            console.error('Session validation error:', error);
+            // console.error('Session validation error:', error);
           }
         }
       }
@@ -362,7 +362,7 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, account, isNewUser }) {
       // Log successful sign-in
-      console.log(`User ${user.email} signed in with ${account?.provider || 'credentials'}`);
+      // console.log(`User ${user.email} signed in with ${account?.provider || 'credentials'}`);
 
       // Create activity log if database is available
       if (user.id && user.id !== 'demo-admin-id') {
@@ -385,7 +385,7 @@ export const authOptions: NextAuthOptions = {
             });
           }
         } catch (error) {
-          console.error('Failed to log sign-in activity:', error);
+          // console.error('Failed to log sign-in activity:', error);
         }
       }
     },
@@ -409,7 +409,7 @@ export const authOptions: NextAuthOptions = {
             });
           }
         } catch (error) {
-          console.error('Failed to log sign-out activity:', error);
+          // console.error('Failed to log sign-out activity:', error);
         }
       }
     },
@@ -425,7 +425,7 @@ getDatabaseAdapter()
     }
   })
   .catch((error) => {
-    console.error('[NextAuth] Failed to set database adapter:', error);
+    // console.error('[NextAuth] Failed to set database adapter:', error);
   });
 
 export default authOptions;

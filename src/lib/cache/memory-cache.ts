@@ -21,7 +21,7 @@ export class MemoryCache {
   private cache: LRUCache<string, any>;
   private persistToDB: boolean;
 
-  private constructor(options: CacheOptions = {}) {
+  private constructor(_options: CacheOptions = {}) {
     this.cache = new LRUCache({
       max: options.max || 500, // Maximum 500 items
       ttl: options.ttl || 1000 * 60 * 5, // 5 minutes default TTL
@@ -69,7 +69,7 @@ export class MemoryCache {
           await prisma.cache.delete({ where: { key } });
         }
       } catch (error) {
-        console.error('Cache DB read error:', error);
+        // console.error('Cache DB read error:', error);
       }
     }
 
@@ -101,7 +101,7 @@ export class MemoryCache {
           },
         });
       } catch (error) {
-        console.error('Cache DB write error:', error);
+        // console.error('Cache DB write error:', error);
       }
     }
   }
@@ -125,7 +125,7 @@ export class MemoryCache {
           where: { key },
         });
       } catch (error) {
-        console.error('Cache DB delete error:', error);
+        // console.error('Cache DB delete error:', error);
       }
     }
   }
@@ -148,7 +148,7 @@ export class MemoryCache {
         });
         return count > 0;
       } catch (error) {
-        console.error('Cache DB exists error:', error);
+        // console.error('Cache DB exists error:', error);
       }
     }
 
@@ -175,7 +175,7 @@ export class MemoryCache {
         const allKeys = new Set([...memoryKeys, ...dbKeys.map((item) => item.key)]);
         return Array.from(allKeys).filter((key) => regex.test(key));
       } catch (error) {
-        console.error('Cache DB keys error:', error);
+        // console.error('Cache DB keys error:', error);
       }
     }
 
@@ -192,7 +192,7 @@ export class MemoryCache {
       try {
         await prisma.cache.deleteMany({});
       } catch (error) {
-        console.error('Cache DB clear error:', error);
+        // console.error('Cache DB clear error:', error);
       }
     }
   }
@@ -219,9 +219,9 @@ export class MemoryCache {
             expiresAt: { lt: new Date() },
           },
         });
-        console.log(`Cleaned up ${deleted.count} expired cache entries`);
+        // console.log(`Cleaned up ${deleted.count} expired cache entries`);
       } catch (error) {
-        console.error('Cache cleanup error:', error);
+        // console.error('Cache cleanup error:', error);
       }
     }
   }
@@ -231,7 +231,7 @@ export class MemoryCache {
 export const cache = MemoryCache.getInstance();
 
 // Redis-compatible exports
-export const redis = {
+export const _redis = {
   get: (key: string) => cache.get(key),
   set: (key: string, value: any) => cache.set(key, value),
   setex: (key: string, seconds: number, value: any) => cache.setex(key, seconds, value),

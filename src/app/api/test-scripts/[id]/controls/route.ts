@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 
 // Validation schemas
@@ -17,7 +17,7 @@ const disassociateControlsSchema = z.object({
 // GET /api/test-scripts/[id]/controls - Get controls associated with a test script
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 // POST /api/test-scripts/[id]/controls - Associate controls with a test script
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 // DELETE /api/test-scripts/[id]/controls - Disassociate controls from a test script
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists

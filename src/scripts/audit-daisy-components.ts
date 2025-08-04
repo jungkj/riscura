@@ -79,7 +79,7 @@ class DaisyUIAuditor {
   private processedFiles = 0;
 
   async auditDirectory(directory: string): Promise<AuditResults> {
-    console.log(`🔍 Auditing DaisyUI components in: ${directory}`);
+    // console.log(`🔍 Auditing DaisyUI components in: ${directory}`);
 
     const files = await glob('**/*.{tsx,ts,jsx,js}', {
       cwd: directory,
@@ -87,7 +87,7 @@ class DaisyUIAuditor {
     });
 
     this.processedFiles = files.length;
-    console.log(`📁 Found ${files.length} files to audit`);
+    // console.log(`📁 Found ${files.length} files to audit`);
 
     for (const file of files) {
       const fullPath = path.join(directory, file);
@@ -129,7 +129,7 @@ class DaisyUIAuditor {
         this.checkFragmentUsage(filePath, line, lineNumber);
       });
     } catch (error) {
-      console.error(`❌ Error reading file ${filePath}:`, error);
+      // console.error(`❌ Error reading file ${filePath}:`, error);
     }
   }
 
@@ -289,18 +289,18 @@ class DaisyUIAuditor {
 
 // Report generation
 function generateReport(results: AuditResults) {
-  console.log('\n📊 DAISY UI COMPONENT AUDIT REPORT');
-  console.log('=====================================');
+  // console.log('\n📊 DAISY UI COMPONENT AUDIT REPORT');
+  // console.log('=====================================');
 
-  console.log(`\n📈 Summary:`);
-  console.log(`   • Files scanned: ${results.summary.totalFiles}`);
-  console.log(`   • Issues found: ${results.summary.issuesFound}`);
-  console.log(`   • Errors: ${results.summary.errorCount}`);
-  console.log(`   • Warnings: ${results.summary.warningCount}`);
-  console.log(`   • Info: ${results.summary.infoCount}`);
+  // console.log(`\n📈 Summary:`);
+  // console.log(`   • Files scanned: ${results.summary.totalFiles}`);
+  // console.log(`   • Issues found: ${results.summary.issuesFound}`);
+  // console.log(`   • Errors: ${results.summary.errorCount}`);
+  // console.log(`   • Warnings: ${results.summary.warningCount}`);
+  // console.log(`   • Info: ${results.summary.infoCount}`);
 
   if (results.issues.length === 0) {
-    console.log('\n✅ No issues found! Your DaisyUI components are properly standardized.');
+    // console.log('\n✅ No issues found! Your DaisyUI components are properly standardized.');
     return;
   }
 
@@ -314,14 +314,14 @@ function generateReport(results: AuditResults) {
     {} as Record<string, ComponentIssue[]>
   );
 
-  console.log(`\n🔍 Issues by file:`);
+  // console.log(`\n🔍 Issues by file:`);
   Object.entries(issuesByFile).forEach(([file, issues]) => {
-    console.log(`\n📄 ${file.replace(process.cwd(), '.')}`);
+    // console.log(`\n📄 ${file.replace(process.cwd(), '.')}`);
     issues.forEach((issue) => {
       const icon = issue.severity === 'error' ? '❌' : issue.severity === 'warning' ? '⚠️' : 'ℹ️';
-      console.log(`   ${icon} Line ${issue.line}: ${issue.issue}`);
+      // console.log(`   ${icon} Line ${issue.line}: ${issue.issue}`);
       if (issue.suggestion) {
-        console.log(`      💡 ${issue.suggestion}`);
+        // console.log(`      💡 ${issue.suggestion}`);
       }
     });
   });
@@ -335,20 +335,20 @@ function generateReport(results: AuditResults) {
     {} as Record<string, number>
   );
 
-  console.log(`\n🏆 Most common issues:`);
+  // console.log(`\n🏆 Most common issues:`);
   Object.entries(issueCounts)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
     .forEach(([issue, count]) => {
-      console.log(`   • ${issue}: ${count} occurrences`);
+      // console.log(`   • ${issue}: ${count} occurrences`);
     });
 
-  console.log(`\n🛠️  Next steps:`);
-  console.log(`   1. Fix all errors (${results.summary.errorCount}) first`);
-  console.log(`   2. Address warnings (${results.summary.warningCount}) for better practices`);
-  console.log(`   3. Review info items (${results.summary.infoCount}) for optimization`);
-  console.log(`   4. Run 'npm run type-check:full' after fixes`);
-  console.log(`   5. Test components in development mode`);
+  // console.log(`\n🛠️  Next steps:`);
+  // console.log(`   1. Fix all errors (${results.summary.errorCount}) first`);
+  // console.log(`   2. Address warnings (${results.summary.warningCount}) for better practices`);
+  // console.log(`   3. Review info items (${results.summary.infoCount}) for optimization`);
+  // console.log(`   4. Run 'npm run type-check:full' after fixes`);
+  // console.log(`   5. Test components in development mode`);
 }
 
 // CLI execution
@@ -356,7 +356,7 @@ async function main() {
   const auditor = new DaisyUIAuditor();
   const srcPath = path.join(process.cwd(), 'src');
 
-  console.log('🚀 Starting DaisyUI Component Audit...\n');
+  // console.log('🚀 Starting DaisyUI Component Audit...\n');
 
   try {
     const results = await auditor.auditDirectory(srcPath);
@@ -364,14 +364,14 @@ async function main() {
 
     // Exit with error code if critical issues found
     if (results.summary.errorCount > 0) {
-      console.log('\n🚨 Critical issues found. Please fix errors before committing.');
+      // console.log('\n🚨 Critical issues found. Please fix errors before committing.');
       process.exit(1);
     } else {
-      console.log('\n✅ Audit completed successfully!');
+      // console.log('\n✅ Audit completed successfully!');
       process.exit(0);
     }
   } catch (error) {
-    console.error('❌ Audit failed:', error);
+    // console.error('❌ Audit failed:', error);
     process.exit(1);
   }
 }

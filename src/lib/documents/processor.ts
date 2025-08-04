@@ -105,7 +105,7 @@ export class DocumentProcessor {
         const fileText = await this.extractTextFromFile(fileBuffer, file.mimeType);
         extractedText += fileText + '\n\n';
       } catch (error) {
-        console.error(`Failed to extract text from file ${file.id}:`, error);
+        // console.error(`Failed to extract text from file ${file.id}:`, error);
       }
     }
 
@@ -227,7 +227,7 @@ export class DocumentProcessor {
 
       return response.choices[0]?.message?.content || '';
     } catch (error) {
-      console.error('Failed to extract text from image:', error);
+      // console.error('Failed to extract text from image:', error);
       return '';
     }
   }
@@ -260,7 +260,7 @@ export class DocumentProcessor {
     confidence: number;
     suggestedTags: string[];
   }> {
-    const prompt = `
+    const _prompt = `
 Analyze the following document text and classify it into one of these categories:
 - policy: Corporate policies and procedures
 - procedure: Step-by-step operational procedures
@@ -320,7 +320,7 @@ Return a JSON response with:
         suggestedTags: result.suggestedTags || [],
       };
     } catch (error) {
-      console.error('Failed to classify document:', error);
+      // console.error('Failed to classify document:', error);
       return {
         category: currentCategory || 'other',
         confidence: 0.0,
@@ -336,7 +336,7 @@ Return a JSON response with:
     controls: ExtractedControl[];
     compliance: ComplianceMapping[];
   }> {
-    const prompt = `
+    const _prompt = `
 Analyze the following document text and extract:
 1. Risks mentioned or implied
 2. Controls described or recommended
@@ -402,7 +402,7 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
         compliance: result.compliance || [],
       };
     } catch (error) {
-      console.error('Failed to extract risks and controls:', error);
+      // console.error('Failed to extract risks and controls:', error);
       return {
         text,
         risks: [],
@@ -414,7 +414,7 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
 
   // Generate document summary
   private async generateSummary(text: string): Promise<string> {
-    const prompt = `
+    const _prompt = `
 Summarize the following document focusing on:
 - Key objectives and purpose
 - Main risks identified
@@ -454,7 +454,7 @@ ${text.substring(0, 4000)}...
 
       return response.choices[0]?.message?.content || 'Summary generation failed';
     } catch (error) {
-      console.error('Failed to generate summary:', error);
+      // console.error('Failed to generate summary:', error);
       return 'Summary could not be generated';
     }
   }

@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Analyt
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     const resolvedParams = await params;
-    console.error(`Error fetching ${resolvedParams.type} analytics:`, error);
+    // console.error(`Error fetching ${resolvedParams.type} analytics:`, error);
     return NextResponse.json(
       { error: `Failed to fetch ${resolvedParams.type} analytics data` },
       { status: 500 }

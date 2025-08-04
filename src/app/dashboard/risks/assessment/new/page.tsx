@@ -116,13 +116,13 @@ export default function NewAssessmentPage() {
     try {
       // Mock API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('Creating new assessment:', formData);
+      // console.log('Creating new assessment:', formData);
 
       // Generate a mock ID and redirect to the new assessment
       const newAssessmentId = Math.floor(Math.random() * 1000) + 1;
       router.push(`/dashboard/risks/assessment/${newAssessmentId}`);
     } catch (error) {
-      console.error('Error creating assessment:', error);
+      // console.error('Error creating assessment:', error);
     } finally {
       setIsLoading(false);
     }

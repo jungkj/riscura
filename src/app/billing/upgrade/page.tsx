@@ -86,7 +86,7 @@ export default function UpgradePage() {
       const { url } = await response.json();
       window.location.href = url;
     } catch (error) {
-      console.error('Error creating checkout session:', error);
+      // console.error('Error creating checkout session:', error);
       // You could show a toast notification here
     }
   };

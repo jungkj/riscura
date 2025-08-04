@@ -48,7 +48,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch recent actions:', error);
+        // console.error('Failed to fetch recent actions:', error);
       } finally {
         setLoading(false);
       }

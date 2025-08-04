@@ -12,7 +12,7 @@ interface ProcessingOptions {
   previewMode: boolean;
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       data: result,
     });
   } catch (error) {
-    console.error('Import processing error:', error);
+    // console.error('Import processing error:', error);
     return NextResponse.json(
       {
         error: 'Processing failed',
@@ -110,7 +110,7 @@ async function processExcelRCSA(
     const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase());
     const sheetType = detectSheetType(headers);
 
-    console.log(`Processing sheet "${sheetName}" as ${sheetType}`);
+    // console.log(`Processing sheet "${sheetName}" as ${sheetType}`);
 
     if (sheetType === 'risk' || sheetType === 'mixed') {
       const risks = await processRiskData(data, organizationId, userId, options);
@@ -251,8 +251,7 @@ function detectSheetType(headers: string[]): 'risk' | 'control' | 'mapping' | 'm
   return 'mixed';
 }
 
-async function processRiskData(
-  data: any[],
+async function processRiskData(_data: any[],
   organizationId: string,
   userId: string,
   options: ProcessingOptions
@@ -281,10 +280,10 @@ async function processRiskData(
     if (options.aiAnalysis && risk.description) {
       try {
         // TODO: Re-implement AI enhancement when AIService is available
-        console.log('AI enhancement requested but not available');
+        // console.log('AI enhancement requested but not available');
         risk.aiConfidence = 0.5; // Default confidence
       } catch (error) {
-        console.error('AI enhancement failed for risk:', error);
+        // console.error('AI enhancement failed for risk:', error);
       }
     }
 
@@ -294,8 +293,7 @@ async function processRiskData(
   return risks;
 }
 
-async function processControlData(
-  data: any[],
+async function processControlData(_data: any[],
   organizationId: string,
   userId: string,
   options: ProcessingOptions
@@ -320,10 +318,10 @@ async function processControlData(
     if (options.aiAnalysis && control.description) {
       try {
         // TODO: Re-implement AI enhancement when AIService is available
-        console.log('AI enhancement requested but not available');
+        // console.log('AI enhancement requested but not available');
         control.aiConfidence = 0.5; // Default confidence
       } catch (error) {
-        console.error('AI enhancement failed for control:', error);
+        // console.error('AI enhancement failed for control:', error);
       }
     }
 
@@ -333,7 +331,7 @@ async function processControlData(
   return controls;
 }
 
-function processMappingData(data: any[], organizationId: string): any[] {
+function processMappingData(_data: any[], organizationId: string): any[] {
   const mappings: any[] = [];
 
   for (const row of data) {
@@ -355,7 +353,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
   confidence: number;
   summary: string;
 }> {
-  const prompt = `
+  const _prompt = `
     Analyze the following policy document and extract:
     1. All risks mentioned or implied
     2. All controls, safeguards, or mitigation measures
@@ -389,7 +387,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
 
   try {
     // TODO: Re-implement AI document analysis when AIService is available
-    console.log('AI document analysis requested but not available');
+    // console.log('AI document analysis requested but not available');
 
     // Return empty results for now
     return {
@@ -399,7 +397,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
       summary: 'AI document analysis not available',
     };
   } catch (error) {
-    console.error('AI extraction failed:', error);
+    // console.error('AI extraction failed:', error);
   }
 
   // Fallback if AI fails
@@ -418,7 +416,7 @@ async function extractPDFText(buffer: Buffer): Promise<string> {
     const data = await pdfParse.default(buffer);
     return data.text;
   } catch (error) {
-    console.error('PDF extraction failed:', error);
+    // console.error('PDF extraction failed:', error);
     return '';
   }
 }
@@ -429,7 +427,7 @@ async function extractWordText(buffer: Buffer): Promise<string> {
     const result = await mammoth.extractRawText({ buffer });
     return result.value;
   } catch (error) {
-    console.error('Word extraction failed:', error);
+    // console.error('Word extraction failed:', error);
     return '';
   }
 }

@@ -13,7 +13,7 @@ import {
 import { redis } from '@/lib/cache/memory-cache';
 import webpush from 'web-push';
 import { sendEmail } from '@/lib/email';
-import { add, isAfter, isBefore, parseISO, format } from 'date-fns';
+// import { add, isAfter, isBefore, parseISO, format } from 'date-fns';
 
 // Configure web push with VAPID keys
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY && process.env.VAPID_EMAIL) {
@@ -140,8 +140,7 @@ export class NotificationService {
   }
 
   // Get user notifications with filters
-  async getUserNotifications(
-    userId: string,
+  async getUserNotifications(_userId: string,
     filters: NotificationFilters = {},
     page = 1,
     limit = 20
@@ -239,7 +238,7 @@ export class NotificationService {
   }
 
   // Get unread count
-  async getUnreadCount(userId: string): Promise<number> {
+  async getUnreadCount(_userId: string): Promise<number> {
     const cacheKey = `${this.cacheKeyPrefix}unread:${userId}`;
     const cached = await redis.get(cacheKey);
 
@@ -260,7 +259,7 @@ export class NotificationService {
   }
 
   // Get or create user preferences
-  async getUserPreferences(userId: string): Promise<NotificationPreference> {
+  async getUserPreferences(_userId: string): Promise<NotificationPreference> {
     let preferences = await prisma.notificationPreference.findUnique({
       where: { userId },
     });
@@ -287,8 +286,7 @@ export class NotificationService {
   }
 
   // Update user preferences
-  async updateUserPreferences(
-    userId: string,
+  async updateUserPreferences(_userId: string,
     updates: Partial<NotificationPreference>
   ): Promise<NotificationPreference> {
     const preferences = await prisma.notificationPreference.upsert({
@@ -304,8 +302,7 @@ export class NotificationService {
   }
 
   // Subscribe to push notifications
-  async subscribeToPush(
-    userId: string,
+  async subscribeToPush(_userId: string,
     subscription: PushSubscriptionJSON,
     deviceInfo?: Record<string, any>
   ): Promise<PushSubscription> {
@@ -381,7 +378,7 @@ export class NotificationService {
         },
       });
     } catch (error) {
-      console.error('Failed to send email notification:', error);
+      // console.error('Failed to send email notification:', error);
     }
   }
 
@@ -422,7 +419,7 @@ export class NotificationService {
           where: { id: sub.id },
           data: { lastUsedAt: new Date() },
         });
-      } catch (error: any) {
+      } catch (_error: any) {
         // Handle expired subscriptions
         if (error.statusCode === 410) {
           await prisma.pushSubscription.delete({
@@ -531,7 +528,7 @@ export class NotificationService {
       // Update digest
       await this.updateDigestSchedule(digest);
     } catch (error) {
-      console.error('Failed to send digest:', error);
+      // console.error('Failed to send digest:', error);
     }
   }
 
@@ -597,8 +594,8 @@ export class NotificationService {
   }
 
   // Clear user notification cache
-  private async clearUserNotificationCache(userId: string): Promise<void> {
-    const pattern = `${this.cacheKeyPrefix}user:${userId}:*`;
+  private async clearUserNotificationCache(_userId: string): Promise<void> {
+    const _pattern = `${this.cacheKeyPrefix}user:${userId}:*`;
     const unreadKey = `${this.cacheKeyPrefix}unread:${userId}`;
 
     // In a real Redis implementation, you'd use SCAN to find and delete matching keys
@@ -631,7 +628,7 @@ export class NotificationService {
     const resolvedOrgId = organizationId || users[0]?.organizationId;
 
     if (!resolvedOrgId) {
-      console.error('Failed to create system notification: No organizationId available');
+      // console.error('Failed to create system notification: No organizationId available');
       throw new Error('Organization ID is required to create notifications');
     }
 

@@ -179,7 +179,7 @@ export class CoreWebVitalsMonitor {
 
       observer.observe({ entryTypes: ['paint'] });
     } catch (error) {
-      console.warn('FMP measurement not supported:', error);
+      // console.warn('FMP measurement not supported:', error);
     }
   }
 

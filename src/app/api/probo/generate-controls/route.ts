@@ -13,7 +13,7 @@ import {
  * POST /api/probo/generate-controls
  * Generate AI-powered controls for a specific risk using Probo integration
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -51,13 +51,13 @@ export async function POST(request: NextRequest) {
     const response = await proboService.generateControlsForRisk(body);
 
     // Log the generation for analytics
-    console.log(
+    // console.log(
       `Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`
     );
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error generating controls:', error);
+    // console.error('Error generating controls:', error);
 
     return NextResponse.json(
       {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
  * GET /api/probo/generate-controls
  * Get generation status and history
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Check authentication
     const session = (await getServerSession(authOptions)) as any;
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error getting generation status:', error);
+    // console.error('Error getting generation status:', error);
 
     return NextResponse.json(
       {

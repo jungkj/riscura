@@ -222,7 +222,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           riskScore: newRiskScore,
         });
       } catch (error) {
-        console.error('Failed to update risk position:', error);
+        // console.error('Failed to update risk position:', error);
       }
     }
     
@@ -257,7 +257,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       link.href = canvas.toDataURL();
       link.click();
     } catch (error) {
-      console.error('Export to PNG failed:', error);
+      // console.error('Export to PNG failed:', error);
     } finally {
       setIsExporting(false);
     }
@@ -281,7 +281,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, imgWidth, imgHeight);
       pdf.save(`risk-matrix-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
-      console.error('Export to PDF failed:', error);
+      // console.error('Export to PDF failed:', error);
     } finally {
       setIsExporting(false);
     }
@@ -289,7 +289,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   const exportToSVG = useCallback(() => {
     // SVG export implementation would go here
-    console.log('SVG export not yet implemented');
+    // console.log('SVG export not yet implemented');
   }, []);
 
   // View controls

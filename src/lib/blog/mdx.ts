@@ -128,7 +128,7 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
     .map((item) => item.post);
 }
 
-export const categories = [
+export const _categories = [
   'Risk Management Basics',
   'Excel to GRC Migration',
   'Compliance Guides',

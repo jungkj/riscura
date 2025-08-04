@@ -14,7 +14,7 @@ export async function POST(
   { params }: { params: Promise<{ messageId: string }> }
 ) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { messageId } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -37,7 +37,7 @@ export async function POST(
           return ApiResponseFormatter.validationError(error.errors);
         }
 
-        console.error('Failed to add reaction:', error);
+        // console.error('Failed to add reaction:', error);
         return ApiResponseFormatter.error(
           error instanceof Error && error.message === 'Access denied'
             ? 'ACCESS_DENIED'
@@ -58,7 +58,7 @@ export async function DELETE(
   { params }: { params: Promise<{ messageId: string }> }
 ) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { messageId } = await params;
       const user = (request as any).user;
       if (!user) {
@@ -80,7 +80,7 @@ export async function DELETE(
 
         return ApiResponseFormatter.success({ message: 'Reaction removed successfully' });
       } catch (error) {
-        console.error('Failed to remove reaction:', error);
+        // console.error('Failed to remove reaction:', error);
         return ApiResponseFormatter.error('INTERNAL_ERROR', 'Failed to remove reaction', {
           status: 500,
         });

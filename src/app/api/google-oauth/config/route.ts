@@ -12,7 +12,7 @@ export async function GET() {
       clientId: configured ? googleConfig.clientId : null,
     });
   } catch (error) {
-    console.error('OAuth config check error:', error);
+    // console.error('OAuth config check error:', error);
     return NextResponse.json({ error: 'Failed to check OAuth configuration' }, { status: 500 });
   }
 }

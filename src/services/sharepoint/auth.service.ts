@@ -83,7 +83,7 @@ export class SharePointAuthService {
 
       return tokenResponse.token;
     } catch (error) {
-      console.error('Error acquiring access token:', error);
+      // console.error('Error acquiring access token:', error);
       throw new Error('Failed to authenticate with SharePoint');
     }
   }
@@ -118,7 +118,7 @@ export class SharePointAuthService {
       // Convert certificate to base64 string
       return Buffer.from(certificate.cer).toString('base64');
     } catch (error) {
-      console.error('Error retrieving certificate from Key Vault:', error);
+      // console.error('Error retrieving certificate from Key Vault:', error);
       throw error;
     }
   }
@@ -148,7 +148,7 @@ export class SharePointAuthService {
 
       return token;
     } catch (error) {
-      console.error('Redis cache error:', error);
+      // console.error('Redis cache error:', error);
       return null;
     }
   }
@@ -173,7 +173,7 @@ export class SharePointAuthService {
         (Date.now() + effectiveExpiry * 1000).toString()
       );
     } catch (error) {
-      console.error('Redis cache error:', error);
+      // console.error('Redis cache error:', error);
     }
   }
 
@@ -187,7 +187,7 @@ export class SharePointAuthService {
 
       return !!site;
     } catch (error) {
-      console.error('Site validation error:', error);
+      // console.error('Site validation error:', error);
       return false;
     }
   }
@@ -204,7 +204,7 @@ export class SharePointAuthService {
       await redis.del(this.tokenCacheKey);
       await redis.del(this.tokenExpiryKey);
     } catch (error) {
-      console.error('Redis cache clear error:', error);
+      // console.error('Redis cache clear error:', error);
     }
   }
 }

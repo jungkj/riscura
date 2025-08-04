@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
     const redirectUri = `${baseUrl}/api/google-oauth/callback`;
 
-    console.log('[Google OAuth] Login initialization:', {
+    // console.log('[Google OAuth] Login initialization:', {
       baseUrl,
       redirectUri,
       hasClientId: !!clientId,
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
       rememberMe = searchParams.get('remember') === 'true';
     }
 
-    console.log('[Google OAuth] Login params:', {
+    // console.log('[Google OAuth] Login params:', {
       intendedRedirect,
       rememberMe,
       hasRedirectParam: searchParams.has('redirect'),
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('[Google OAuth] Login error:', error);
+    // console.error('[Google OAuth] Login error:', error);
     return NextResponse.json(
       {
         error: 'OAuth initialization failed',

@@ -192,34 +192,34 @@ const dashboardWidgets = [
 // ========== MAIN COMPONENT ==========
 export const ExecutiveDashboard: React.FC = () => {
   const handleWidgetClick = (widget: any) => {
-    console.log('Widget clicked:', widget.id);
+    // console.log('Widget clicked:', widget.id);
     if (widget.drillDown) {
       window.location.href = widget.drillDown;
     }
   };
 
   const handleExport = (widget: any, format: string) => {
-    console.log('Exporting widget:', widget.id, 'as', format);
+    // console.log('Exporting widget:', widget.id, 'as', format);
     // Implement export logic
   };
 
   const handleCreateRisk = () => {
-    console.log('Creating new risk...');
+    // console.log('Creating new risk...');
     // Navigate to risk creation form
   };
 
   const handleExportDashboard = () => {
-    console.log('Exporting dashboard...');
+    // console.log('Exporting dashboard...');
     // Implement dashboard export
   };
 
   const handleShareDashboard = () => {
-    console.log('Sharing dashboard...');
+    // console.log('Sharing dashboard...');
     // Implement dashboard sharing
   };
 
   const handleBookmarkDashboard = () => {
-    console.log('Bookmarking dashboard...');
+    // console.log('Bookmarking dashboard...');
     // Implement bookmarking
   };
 

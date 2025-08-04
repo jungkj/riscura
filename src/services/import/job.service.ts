@@ -76,7 +76,7 @@ export class ImportJobService {
           tls: url.protocol === 'rediss:' ? {} : undefined,
         };
       } catch (error) {
-        console.error('Invalid REDIS_URL format:', error);
+        // console.error('Invalid REDIS_URL format:', error);
         throw new Error('Invalid REDIS_URL configuration');
       }
     }
@@ -140,7 +140,7 @@ export class ImportJobService {
       });
 
       // Add job to Bull queue
-      const bullJob = await this.queue.add(
+      const _bullJob = await this.queue.add(
         {
           jobId: job.id,
           organizationId: params.organizationId,
@@ -158,7 +158,7 @@ export class ImportJobService {
 
       return job.id;
     } catch (error) {
-      console.error('Error creating import job:', error);
+      // console.error('Error creating import job:', error);
       throw new Error('Failed to create import job');
     }
   }
@@ -177,7 +177,7 @@ export class ImportJobService {
       }
 
       // Get Bull job for additional details
-      const bullJob = await this.queue.getJob(jobId);
+      const _bullJob = await this.queue.getJob(jobId);
       if (bullJob) {
         // Update progress from Bull job if available
         const progress = bullJob.progress();
@@ -213,7 +213,7 @@ export class ImportJobService {
 
       return job;
     } catch (error) {
-      console.error('Error getting job status:', error);
+      // console.error('Error getting job status:', error);
       throw new Error('Failed to get job status');
     }
   }
@@ -234,14 +234,14 @@ export class ImportJobService {
       });
 
       // Remove from Bull queue
-      const bullJob = await this.queue.getJob(jobId);
+      const _bullJob = await this.queue.getJob(jobId);
       if (bullJob) {
         await bullJob.remove();
       }
 
       return true;
     } catch (error) {
-      console.error('Error cancelling job:', error);
+      // console.error('Error cancelling job:', error);
       return false;
     }
   }
@@ -326,7 +326,7 @@ export class ImportJobService {
 
         return { success: true, importResult };
       } catch (error) {
-        console.error('Job processing error:', error);
+        // console.error('Job processing error:', error);
 
         // Update job as failed
         await this.updateJobStatus(
@@ -348,13 +348,13 @@ export class ImportJobService {
    */
   private setupEventHandlers(): void {
     this.queue.on('completed', async (job, result) => {
-      console.log(`Job ${job.id} completed successfully`);
+      // console.log(`Job ${job.id} completed successfully`);
       // Emit websocket event for real-time updates
       this.emitJobUpdate(job.id, 'completed', result);
     });
 
     this.queue.on('failed', async (job, err) => {
-      console.error(`Job ${job.id} failed:`, err);
+      // console.error(`Job ${job.id} failed:`, err);
       // Emit websocket event for real-time updates
       this.emitJobUpdate(job.id, 'failed', { error: err.message });
     });
@@ -365,7 +365,7 @@ export class ImportJobService {
     });
 
     this.queue.on('error', (error) => {
-      console.error('Queue error:', error);
+      // console.error('Queue error:', error);
     });
   }
 
@@ -382,7 +382,7 @@ export class ImportJobService {
         },
       });
     } catch (error) {
-      console.error('Error updating job progress:', error);
+      // console.error('Error updating job progress:', error);
     }
   }
 
@@ -421,7 +421,7 @@ export class ImportJobService {
         data: updateData,
       });
     } catch (error) {
-      console.error('Error updating job status:', error);
+      // console.error('Error updating job status:', error);
     }
   }
 
@@ -431,7 +431,7 @@ export class ImportJobService {
   private emitJobUpdate(jobId: string, event: string, data: any): void {
     // TODO: Implement websocket emission for real-time updates
     // This would integrate with your existing websocket infrastructure
-    console.log(`Job ${jobId} - ${event}:`, data);
+    // console.log(`Job ${jobId} - ${event}:`, data);
   }
 
   /**

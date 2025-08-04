@@ -599,7 +599,7 @@ export const SmartNotifications: React.FC<{
   const [activeTab, setActiveTab] = useState('all');
 
   const handleAction = (action: string, notification: SmartNotification) => {
-    console.log(`Action: ${action}`, notification);
+    // console.log(`Action: ${action}`, notification);
     // Handle notification actions here
   };
 

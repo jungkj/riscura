@@ -16,7 +16,7 @@ interface WizardStep {
   title: string;
   description?: string;
   component: React.ComponentType<WizardStepProps>;
-  validation?: (data: any) => Promise<ValidationResult>;
+  validation?: (_data: any) => Promise<ValidationResult>;
   optional?: boolean;
   disabled?: boolean;
   icon?: React.ComponentType<any>;
@@ -30,7 +30,7 @@ interface ValidationResult {
 
 interface WizardStepProps {
   data: any;
-  onDataChange: (data: any) => void;
+  onDataChange: (_data: any) => void;
   onValidationChange: (result: ValidationResult) => void;
   isActive: boolean;
   isCompleted: boolean;
@@ -53,8 +53,8 @@ interface WizardContext {
 interface WizardContainerProps {
   steps: WizardStep[];
   initialData?: any;
-  onComplete: (data: any) => Promise<void>;
-  onSave?: (data: any) => Promise<void>;
+  onComplete: (_data: any) => Promise<void>;
+  onSave?: (_data: any) => Promise<void>;
   onCancel?: () => void;
   autoSave?: boolean;
   autoSaveInterval?: number;
@@ -230,7 +230,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     try {
       await onComplete(wizardData);
     } catch (error) {
-      console.error('Wizard submission failed:', error);
+      // console.error('Wizard submission failed:', error);
     } finally {
       setIsSubmitting(false);
     }

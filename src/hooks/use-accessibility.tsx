@@ -7,7 +7,7 @@ interface UseAccessibilityOptions {
   trapFocus?: boolean;
 }
 
-export const useAccessibility = (options: UseAccessibilityOptions = {}) => {
+export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
   const {
     enableKeyboardNavigation = true,
     enableFocusManagement = true,
@@ -158,8 +158,7 @@ export const useAccessibility = (options: UseAccessibilityOptions = {}) => {
 
   // ARIA helpers
   const getAriaProps = useCallback(
-    (
-      options: {
+    (_options: {
         label?: string;
         labelledBy?: string;
         describedBy?: string;

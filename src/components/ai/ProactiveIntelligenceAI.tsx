@@ -105,7 +105,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
         setIsMonitoringActive(true);
       }
     } catch (error) {
-      console.error('Failed to toggle monitoring:', error);
+      // console.error('Failed to toggle monitoring:', error);
     }
   };
 
@@ -125,7 +125,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
           );
           newInsights.push(...riskInsights);
         } catch (error) {
-          console.error(`Failed to generate insights for risk ${risk.id}:`, error);
+          // console.error(`Failed to generate insights for risk ${risk.id}:`, error);
         }
       }
 
@@ -139,7 +139,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
           );
           newInsights.push(...controlInsights);
         } catch (error) {
-          console.error(`Failed to generate insights for control ${control.id}:`, error);
+          // console.error(`Failed to generate insights for control ${control.id}:`, error);
         }
       }
 
@@ -150,7 +150,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       newInsights.forEach(insight => onInsightGenerated?.(insight));
 
     } catch (error) {
-      console.error('Failed to generate insights:', error);
+      // console.error('Failed to generate insights:', error);
     } finally {
       setIsGeneratingInsights(false);
     }
@@ -167,7 +167,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       );
       setPredictions(predictions);
     } catch (error) {
-      console.error('Failed to perform predictive modeling:', error);
+      // console.error('Failed to perform predictive modeling:', error);
     }
   };
 
@@ -231,7 +231,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
 
       setNotifications(prev => [...newNotifications, ...prev].slice(0, 20)); // Keep latest 20
     } catch (error) {
-      console.error('Failed to generate notifications:', error);
+      // console.error('Failed to generate notifications:', error);
     }
   };
 

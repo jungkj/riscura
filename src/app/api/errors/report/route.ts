@@ -12,7 +12,7 @@ interface ErrorReport {
   retryCount: number;
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const errorReport: ErrorReport = await request.json();
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     // 3. Send alerts for critical errors
 
     // For now, we'll just log to console and return success
-    console.error('Error Report:', {
+    // console.error('Error Report:', {
       errorId: errorReport.errorId,
       level: errorReport.level,
       message: errorReport.message,
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // If it's a critical error, you might want to send additional alerts
     if (errorReport.level === 'critical') {
-      console.error('CRITICAL ERROR DETECTED:', errorReport);
+      // console.error('CRITICAL ERROR DETECTED:', errorReport);
     }
 
     return NextResponse.json({
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       message: 'Error report received',
     });
   } catch (error) {
-    console.error('Failed to process error report:', error);
+    // console.error('Failed to process error report:', error);
 
     return NextResponse.json(
       {

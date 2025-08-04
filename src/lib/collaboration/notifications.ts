@@ -71,7 +71,7 @@ export interface NotificationDigest {
 
 export class NotificationManager {
   // Get user notification preferences
-  async getUserPreferences(userId: string): Promise<NotificationPreferences> {
+  async getUserPreferences(_userId: string): Promise<NotificationPreferences> {
     const preferences = await db.client.notificationPreferences.findUnique({
       where: { userId },
     });
@@ -85,8 +85,7 @@ export class NotificationManager {
   }
 
   // Update user notification preferences
-  async updateUserPreferences(
-    userId: string,
+  async updateUserPreferences(_userId: string,
     preferences: Partial<NotificationPreferences>
   ): Promise<NotificationPreferences> {
     const updated = await db.client.notificationPreferences.upsert({
@@ -107,7 +106,7 @@ export class NotificationManager {
     // Log preference change
     // NOTE: Activity logging for user events is temporarily disabled
     // since USER is not a valid EntityType in the schema
-    console.log('Notification Preferences Updated:', {
+    // console.log('Notification Preferences Updated:', {
       type: 'NOTIFICATION_PREFERENCES_UPDATED',
       entityType: 'USER',
       entityId: userId,
@@ -214,7 +213,7 @@ export class NotificationManager {
             break;
         }
       } catch (error) {
-        console.error(`Failed to send ${channel} notification:`, error);
+        // console.error(`Failed to send ${channel} notification:`, error);
 
         // Queue for retry if critical
         if (notification.urgency === 'urgent' || notification.urgency === 'high') {
@@ -293,7 +292,7 @@ export class NotificationManager {
     // Get email template
     const template = await this.getNotificationTemplate(notification.type, 'email');
     if (!template) {
-      console.warn(`No email template found for notification type: ${notification.type}`);
+      // console.warn(`No email template found for notification type: ${notification.type}`);
       return;
     }
 
@@ -506,7 +505,7 @@ export class NotificationManager {
         //   },
         // });
       } catch (error) {
-        console.error(`Failed to deliver queued notification ${notification.id}:`, error);
+        // console.error(`Failed to deliver queued notification ${notification.id}:`, error);
 
         const newAttempts = notification.attempts + 1;
         if (newAttempts >= notification.maxAttempts) {
@@ -556,9 +555,9 @@ export class NotificationManager {
   }
 
   // Deliver email
-  private async deliverEmail(data: any): Promise<void> {
+  private async deliverEmail(_data: any): Promise<void> {
     // Implementation would use email service like SendGrid, AWS SES, etc.
-    console.log('Sending email:', {
+    // console.log('Sending email:', {
       to: data.to,
       subject: data.subject,
       html: data.html,
@@ -574,9 +573,9 @@ export class NotificationManager {
   }
 
   // Deliver push notification
-  private async deliverPush(data: any): Promise<void> {
+  private async deliverPush(_data: any): Promise<void> {
     // Implementation would use Web Push API
-    console.log('Sending push notification:', {
+    // console.log('Sending push notification:', {
       subscription: data.subscription,
       payload: {
         title: data.title,
@@ -600,9 +599,9 @@ export class NotificationManager {
   }
 
   // Deliver SMS
-  private async deliverSMS(data: any): Promise<void> {
+  private async deliverSMS(_data: any): Promise<void> {
     // Implementation would use SMS service like Twilio, AWS SNS, etc.
-    console.log('Sending SMS:', {
+    // console.log('Sending SMS:', {
       to: data.to,
       message: data.message,
     });
@@ -615,9 +614,9 @@ export class NotificationManager {
   }
 
   // Deliver Slack notification
-  private async deliverSlack(data: any): Promise<void> {
+  private async deliverSlack(_data: any): Promise<void> {
     // Implementation would use Slack webhook
-    console.log('Sending Slack notification:', {
+    // console.log('Sending Slack notification:', {
       webhookUrl: data.webhookUrl,
       message: data.message,
     });
@@ -653,7 +652,7 @@ export class NotificationManager {
   }
 
   // Generate digest for specific user
-  private async generateUserDigest(userId: string, frequency: 'daily' | 'weekly'): Promise<void> {
+  private async generateUserDigest(_userId: string, frequency: 'daily' | 'weekly'): Promise<void> {
     const since =
       frequency === 'daily'
         ? new Date(Date.now() - 24 * 60 * 60 * 1000)
@@ -724,7 +723,7 @@ export class NotificationManager {
   }
 
   // Create default preferences for new user
-  private async createDefaultPreferences(userId: string): Promise<NotificationPreferences> {
+  private async createDefaultPreferences(_userId: string): Promise<NotificationPreferences> {
     return {
       userId,
       email: {
@@ -881,8 +880,7 @@ export class NotificationManager {
   }
 
   // Add notification to digest queue
-  private async addToDigest(
-    userId: string,
+  private async addToDigest(_userId: string,
     notification: any,
     frequency: 'daily' | 'weekly'
   ): Promise<void> {
@@ -1021,7 +1019,7 @@ export class NotificationManager {
   }
 
   // Mark all notifications as read for user
-  async markAllAsRead(userId: string): Promise<void> {
+  async markAllAsRead(_userId: string): Promise<void> {
     await db.client.notification.updateMany({
       where: {
         recipientId: userId,
@@ -1045,7 +1043,7 @@ export class NotificationManager {
   }
 
   // Get unread notification count
-  async getUnreadCount(userId: string): Promise<number> {
+  async getUnreadCount(_userId: string): Promise<number> {
     return await db.client.notification.count({
       where: {
         recipientId: userId,
@@ -1055,8 +1053,7 @@ export class NotificationManager {
   }
 
   // Get user notifications with pagination
-  async getUserNotifications(
-    userId: string,
+  async getUserNotifications(_userId: string,
     options: {
       limit?: number;
       offset?: number;
@@ -1116,7 +1113,7 @@ export function startNotificationProcessor(): void {
     try {
       await notificationManager.processQueue();
     } catch (error) {
-      console.error('Error processing notification queue:', error);
+      // console.error('Error processing notification queue:', error);
     }
   }, 60 * 1000);
 

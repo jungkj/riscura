@@ -32,7 +32,7 @@ export class GoogleDriveAuthService {
   /**
    * Generate the authorization URL for OAuth consent with CSRF protection
    */
-  async getAuthUrl(userId: string): Promise<string> {
+  async getAuthUrl(_userId: string): Promise<string> {
     const scopes = [
       'https://www.googleapis.com/auth/drive.readonly',
       'https://www.googleapis.com/auth/drive.file',
@@ -88,7 +88,7 @@ export class GoogleDriveAuthService {
 
       return state.userId;
     } catch (error) {
-      console.error('Error parsing CSRF state:', error);
+      // console.error('Error parsing CSRF state:', error);
       return null;
     }
   }
@@ -101,7 +101,7 @@ export class GoogleDriveAuthService {
       const { tokens } = await this.oauth2Client.getToken(code);
       return tokens as GoogleDriveTokens;
     } catch (error) {
-      console.error('Error exchanging code for tokens:', error);
+      // console.error('Error exchanging code for tokens:', error);
       throw new Error('Failed to authenticate with Google Drive');
     }
   }
@@ -109,7 +109,7 @@ export class GoogleDriveAuthService {
   /**
    * Store tokens in Redis cache
    */
-  async storeTokens(userId: string, tokens: GoogleDriveTokens): Promise<void> {
+  async storeTokens(_userId: string, tokens: GoogleDriveTokens): Promise<void> {
     if (!redis) return;
 
     try {
@@ -125,14 +125,14 @@ export class GoogleDriveAuthService {
         await redis.set(`${cacheKey}:refresh`, tokens.refresh_token);
       }
     } catch (error) {
-      console.error('Error storing tokens:', error);
+      // console.error('Error storing tokens:', error);
     }
   }
 
   /**
    * Get tokens from cache or refresh if needed
    */
-  async getValidTokens(userId: string): Promise<GoogleDriveTokens | null> {
+  async getValidTokens(_userId: string): Promise<GoogleDriveTokens | null> {
     if (!redis) return null;
 
     try {
@@ -152,7 +152,7 @@ export class GoogleDriveAuthService {
 
       return null;
     } catch (error) {
-      console.error('Error getting tokens:', error);
+      // console.error('Error getting tokens:', error);
       return null;
     }
   }
@@ -160,8 +160,7 @@ export class GoogleDriveAuthService {
   /**
    * Refresh access token using refresh token
    */
-  private async refreshAccessToken(
-    userId: string,
+  private async refreshAccessToken(_userId: string,
     refreshToken: string
   ): Promise<GoogleDriveTokens | null> {
     try {
@@ -179,7 +178,7 @@ export class GoogleDriveAuthService {
       await this.storeTokens(userId, tokens);
       return tokens;
     } catch (error) {
-      console.error('Error refreshing token:', error);
+      // console.error('Error refreshing token:', error);
       return null;
     }
   }
@@ -187,7 +186,7 @@ export class GoogleDriveAuthService {
   /**
    * Get authenticated Google Drive client
    */
-  async getDriveClient(userId: string) {
+  async getDriveClient(_userId: string) {
     const tokens = await this.getValidTokens(userId);
     if (!tokens) {
       throw new Error('No valid Google Drive authentication found');
@@ -200,7 +199,7 @@ export class GoogleDriveAuthService {
   /**
    * Revoke access
    */
-  async revokeAccess(userId: string): Promise<void> {
+  async revokeAccess(_userId: string): Promise<void> {
     try {
       const tokens = await this.getValidTokens(userId);
       if (tokens) {
@@ -214,7 +213,7 @@ export class GoogleDriveAuthService {
         await redis.del(`${cacheKey}:refresh`);
       }
     } catch (error) {
-      console.error('Error revoking access:', error);
+      // console.error('Error revoking access:', error);
     }
   }
 }

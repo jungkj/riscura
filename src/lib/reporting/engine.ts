@@ -126,8 +126,7 @@ export interface ReportTemplate {
 
 export class ReportingEngine {
   // Create a new report
-  async createReport(
-    config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>
+  async createReport(_config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<ReportConfig> {
     const report = await db.client.report.create({
       data: {
@@ -309,7 +308,7 @@ export class ReportingEngine {
   }
 
   // Apply aggregations to data
-  private applyAggregations(data: any[], aggregations: AggregationConfig[]): any[] {
+  private applyAggregations(_data: any[], aggregations: AggregationConfig[]): any[] {
     let result = [...data];
 
     for (const agg of aggregations) {
@@ -336,7 +335,7 @@ export class ReportingEngine {
   }
 
   // Group and sum data
-  private groupAndSum(data: any[], groupBy: string, field: string): any[] {
+  private groupAndSum(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
       const key = item[groupBy];
       if (!acc[key]) {
@@ -351,7 +350,7 @@ export class ReportingEngine {
   }
 
   // Group and count data
-  private groupAndCount(data: any[], groupBy: string): any[] {
+  private groupAndCount(_data: any[], groupBy: string): any[] {
     const grouped = data.reduce((acc, item) => {
       const key = item[groupBy];
       if (!acc[key]) {
@@ -365,7 +364,7 @@ export class ReportingEngine {
   }
 
   // Group and average data
-  private groupAndAverage(data: any[], groupBy: string, field: string): any[] {
+  private groupAndAverage(_data: any[], groupBy: string, field: string): any[] {
     const grouped = this.groupAndSum(data, groupBy, field);
     return grouped.map((item) => ({
       ...item,
@@ -374,7 +373,7 @@ export class ReportingEngine {
   }
 
   // Group and get max value
-  private groupAndMax(data: any[], groupBy: string, field: string): any[] {
+  private groupAndMax(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
       const key = item[groupBy];
       if (!acc[key]) {
@@ -389,7 +388,7 @@ export class ReportingEngine {
   }
 
   // Group and get min value
-  private groupAndMin(data: any[], groupBy: string, field: string): any[] {
+  private groupAndMin(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
       const key = item[groupBy];
       if (!acc[key]) {
@@ -619,7 +618,7 @@ export class ReportingEngine {
           },
         });
       } catch (error) {
-        console.error(`Failed to generate scheduled report ${scheduledRun.id}:`, error);
+        // console.error(`Failed to generate scheduled report ${scheduledRun.id}:`, error);
       }
     }
   }
@@ -666,7 +665,7 @@ export class ReportingEngine {
   // Send report via email
   private async sendReportEmail(scheduledRun: any, reportData: any): Promise<void> {
     // Implementation would send HTML email with embedded charts
-    console.log('Sending report email to:', scheduledRun.recipients);
+    // console.log('Sending report email to:', scheduledRun.recipients);
   }
 
   // Deliver report file to user
@@ -677,7 +676,7 @@ export class ReportingEngine {
     mimeType: string
   ): Promise<void> {
     // Implementation would store file and notify user
-    console.log('Delivering report file:', filename, 'to user:', recipientId);
+    // console.log('Delivering report file:', filename, 'to user:', recipientId);
   }
 }
 

@@ -118,7 +118,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       setSecurityEvents(events);
       
     } catch (error) {
-      console.error('Error fetching security data:', error);
+      // console.error('Error fetching security data:', error);
     } finally {
       setLoading(false);
     }
@@ -190,7 +190,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error exporting audit logs:', error);
+      // console.error('Error exporting audit logs:', error);
     }
   };
 

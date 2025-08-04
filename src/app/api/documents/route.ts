@@ -69,7 +69,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('Get documents error:', error);
+      // console.error('Get documents error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to fetch documents' },
         { status: 500 }
@@ -123,7 +123,7 @@ export const POST = withApiMiddleware(
         { status: 201 }
       );
     } catch (error) {
-      console.error('Create document error:', error);
+      // console.error('Create document error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to create document' },
         { status: 500 }

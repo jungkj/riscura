@@ -73,7 +73,7 @@ export default function EmptyStateWizard({
           // Keep only the last 10 imports
           localStorage.setItem('recentExcelImports', JSON.stringify(imports.slice(0, 10)));
         } catch (error) {
-          console.error('Failed to save import history:', error);
+          // console.error('Failed to save import history:', error);
         }
         
         toast({

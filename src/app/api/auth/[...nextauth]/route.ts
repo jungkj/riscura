@@ -7,7 +7,7 @@ async function authHandler(req: NextRequest, context: any) {
   try {
     // Log the request for debugging
     const pathname = req.nextUrl.pathname;
-    console.log(`[NextAuth] Handling ${req.method} ${pathname}`);
+    // console.log(`[NextAuth] Handling ${req.method} ${pathname}`);
 
     // Check if this is an API call expecting JSON
     const acceptHeader = req.headers.get('accept') || '';
@@ -30,7 +30,7 @@ async function authHandler(req: NextRequest, context: any) {
             });
           }
         } catch (e) {
-          console.log('[NextAuth] Invalid simple OAuth session token');
+          // console.log('[NextAuth] Invalid simple OAuth session token');
         }
       }
 
@@ -42,13 +42,13 @@ async function authHandler(req: NextRequest, context: any) {
     let handlers;
     try {
       handlers = NextAuth(authOptions);
-      console.log('[NextAuth] Handlers initialized successfully');
+      // console.log('[NextAuth] Handlers initialized successfully');
     } catch (initError) {
-      console.error('[NextAuth] Failed to initialize:', initError);
+      // console.error('[NextAuth] Failed to initialize:', initError);
 
       // For session endpoint, return null instead of error to allow fallback
       if (pathname.endsWith('/api/auth/session')) {
-        console.log('[NextAuth] Returning null session due to initialization error');
+        // console.log('[NextAuth] Returning null session due to initialization error');
         return NextResponse.json(null);
       }
 
@@ -89,7 +89,7 @@ async function authHandler(req: NextRequest, context: any) {
 
     // If NextAuth returns an HTML error page for an API call, convert to JSON
     if (response && isApiCall && response.headers.get('content-type')?.includes('text/html')) {
-      console.warn('[NextAuth] HTML response detected for API call, converting to JSON');
+      // console.warn('[NextAuth] HTML response detected for API call, converting to JSON');
 
       // Try to parse the HTML to get error details
       let errorMessage = 'Authentication configuration error';
@@ -120,14 +120,14 @@ async function authHandler(req: NextRequest, context: any) {
 
     return response;
   } catch (error) {
-    console.error('[NextAuth] Error in auth handler:', error);
-    console.error(
+    // console.error('[NextAuth] Error in auth handler:', error);
+    // console.error(
       '[NextAuth] Error stack:',
       error instanceof Error ? error.stack : 'No stack trace'
     );
 
     // Log environment variables (without exposing secrets)
-    console.log('[NextAuth] Environment check:', {
+    // console.log('[NextAuth] Environment check:', {
       hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
       hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
       hasNextAuthUrl: !!process.env.NEXTAUTH_URL,

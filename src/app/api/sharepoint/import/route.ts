@@ -106,7 +106,7 @@ export const POST = withApiMiddleware({
       status: 'QUEUED',
     };
   } catch (error) {
-    console.error('Error creating import job:', error);
+    // console.error('Error creating import job:', error);
 
     return {
       error: 'Failed to start import. Please try again.',

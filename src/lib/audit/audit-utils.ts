@@ -9,7 +9,7 @@ import { AuditEntity } from './audit-logger';
 /**
  * Extract IP address from request headers
  */
-export function extractIpAddress(request: NextRequest): string {
+export function extractIpAddress(_request: NextRequest): string {
   return (
     request.headers.get('x-forwarded-for')?.split(',')[0] ||
     request.headers.get('x-real-ip') ||

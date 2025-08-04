@@ -13,7 +13,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { useToast } from '@/components/ui/DaisyToast';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';
@@ -55,7 +55,7 @@ export function NotificationCenter() {
         setNotifications(data.data.notifications);
       }
     } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+      // console.error('Failed to fetch notifications:', error);
       toast({
         title: 'Error',
         description: 'Failed to load notifications',
@@ -76,7 +76,7 @@ export function NotificationCenter() {
         setUnreadCount(data.data.count);
       }
     } catch (error) {
-      console.error('Failed to fetch unread count:', error);
+      // console.error('Failed to fetch unread count:', error);
     }
   };
 
@@ -94,7 +94,7 @@ export function NotificationCenter() {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
-      console.error('Failed to mark as read:', error);
+      // console.error('Failed to mark as read:', error);
     }
   };
 
@@ -119,7 +119,7 @@ export function NotificationCenter() {
         });
       }
     } catch (error) {
-      console.error('Failed to mark all as read:', error);
+      // console.error('Failed to mark all as read:', error);
       toast({
         title: 'Error',
         description: 'Failed to mark notifications as read',
@@ -143,7 +143,7 @@ export function NotificationCenter() {
         });
       }
     } catch (error) {
-      console.error('Failed to dismiss notification:', error);
+      // console.error('Failed to dismiss notification:', error);
     }
   };
 

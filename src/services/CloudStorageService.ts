@@ -39,7 +39,7 @@ export class CloudStorageService {
       // For now, return a path that can be served by Next.js API
       return `/api/files/${relativePath.replace(/\\/g, '/')}`;
     } catch (error) {
-      console.error('Error uploading file:', error);
+      // console.error('Error uploading file:', error);
       throw new Error('Failed to upload file');
     }
   }
@@ -62,7 +62,7 @@ export class CloudStorageService {
       const buffer = await fs.readFile(resolvedPath);
       return buffer;
     } catch (error) {
-      console.error('Error downloading file:', error);
+      // console.error('Error downloading file:', error);
       throw new Error('Failed to download file');
     }
   }
@@ -84,7 +84,7 @@ export class CloudStorageService {
       // Delete file
       await fs.unlink(resolvedPath);
     } catch (error) {
-      console.error('Error deleting file:', error);
+      // console.error('Error deleting file:', error);
       // Don't throw error if file doesn't exist
       if ((error as any).code !== 'ENOENT') {
         throw new Error('Failed to delete file');
@@ -151,7 +151,7 @@ export class CloudStorageService {
         lastModified: stats.mtime,
       };
     } catch (error) {
-      console.error('Error getting file metadata:', error);
+      // console.error('Error getting file metadata:', error);
       return null;
     }
   }

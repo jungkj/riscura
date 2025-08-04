@@ -588,7 +588,7 @@ export class TourManager {
     return TourManager.instance;
   }
 
-  setUserContext(context: UserContext) {
+  setUserContext(_context: UserContext) {
     this.userContext = context;
   }
 
@@ -636,7 +636,7 @@ export class TourManager {
         this.completedTours = new Set(JSON.parse(saved));
       }
     } catch (error) {
-      console.error('Failed to load completed tours:', error);
+      // console.error('Failed to load completed tours:', error);
     }
   }
 }
@@ -654,7 +654,7 @@ export const useTour = () => {
     completeTour: (tourId: string) => manager.completeTour(tourId),
     isCompleted: (tourId: string) => manager.isCompleted(tourId),
     getRecommendedTour: () => manager.getRecommendedTour(),
-    setUserContext: (context: UserContext) => manager.setUserContext(context)
+    setUserContext: (_context: UserContext) => manager.setUserContext(context)
   };
 };
 

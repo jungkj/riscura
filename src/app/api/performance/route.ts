@@ -25,7 +25,7 @@ interface PerformancePayload {
 }
 
 // POST - Collect performance metrics
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const payload: PerformancePayload = await request.json();
 
@@ -69,13 +69,13 @@ export async function POST(request: NextRequest) {
       sessionId: payload.sessionId,
     });
   } catch (error) {
-    console.error('Performance metrics collection error:', error);
+    // console.error('Performance metrics collection error:', error);
     return NextResponse.json({ error: 'Failed to process metrics' }, { status: 500 });
   }
 }
 
 // GET - Retrieve performance metrics
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get('sessionId');
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
 
     if (sessionId) {
       // Get metrics for specific session
-      const pattern = `performance:${sessionId}:*`;
+      const _pattern = `performance:${sessionId}:*`;
       const keys = await redisClient.smembers(`pattern:${pattern}`);
 
       for (const key of keys) {
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
       total: metrics.length,
     });
   } catch (error) {
-    console.error('Performance metrics retrieval error:', error);
+    // console.error('Performance metrics retrieval error:', error);
     return NextResponse.json({ error: 'Failed to retrieve metrics' }, { status: 500 });
   }
 }
@@ -212,7 +212,7 @@ async function checkPerformanceAlerts(metrics: any[]) {
     await redisClient.set(alertsKey, JSON.stringify(alerts), 86400); // 24 hours
 
     // You could also send notifications here
-    console.warn(`Performance alerts generated:`, alerts);
+    // console.warn(`Performance alerts generated:`, alerts);
   }
 }
 
@@ -265,7 +265,7 @@ async function getAggregatedMetrics(
             key,
           });
         } catch (error) {
-          console.error('Failed to parse metric data:', error);
+          // console.error('Failed to parse metric data:', error);
         }
       }
     }

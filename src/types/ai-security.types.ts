@@ -320,7 +320,7 @@ export interface SecurityValidationRule {
   enabled: boolean;
   configuration: Record<string, unknown>;
   lastUpdated: Date;
-  validationFunction: (data: unknown, context: SecurityContext) => SecurityValidationResult;
+  validationFunction: (_data: unknown, context: SecurityContext) => SecurityValidationResult;
 }
 
 // Type guards for runtime validation

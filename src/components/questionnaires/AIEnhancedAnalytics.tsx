@@ -328,7 +328,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       // Simulate AI processing updates
-      console.log('AI analysis running...');
+      // console.log('AI analysis running...');
     }, 10000);
 
     return () => clearInterval(interval);

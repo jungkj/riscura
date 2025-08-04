@@ -175,7 +175,7 @@ export function AIQuestionSuggestions({
 
       setSuggestions(mockSuggestions);
     } catch (error) {
-      console.error('Failed to generate suggestions:', error);
+      // console.error('Failed to generate suggestions:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -208,7 +208,7 @@ export function AIQuestionSuggestions({
       setSuggestions(prev => [customSuggestion, ...prev]);
       setCustomPrompt('');
     } catch (error) {
-      console.error('Failed to generate custom suggestion:', error);
+      // console.error('Failed to generate custom suggestion:', error);
     } finally {
       setIsGenerating(false);
     }

@@ -21,7 +21,7 @@ interface ErrorBoundaryState {
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onError?: (_error: Error, errorInfo: ErrorInfo) => void;
   showReportButton?: boolean;
   maxRetries?: number;
   level?: 'page' | 'component' | 'critical';
@@ -45,7 +45,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+  static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
     const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
@@ -56,15 +56,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
 
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
       console.group('🚨 Error Boundary Caught Error');
-      console.error('Error:', error);
-      console.error('Error Info:', errorInfo);
-      console.error('Component Stack:', errorInfo.componentStack);
+      // console.error('Error:', error);
+      // console.error('Error Info:', errorInfo);
+      // console.error('Component Stack:', errorInfo.componentStack);
       console.groupEnd();
     }
 
@@ -87,7 +87,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.retryTimeouts.forEach((timeout) => clearTimeout(timeout));
   }
 
-  private trackError = (error: Error, errorInfo: ErrorInfo) => {
+  private trackError = (_error: Error, errorInfo: ErrorInfo) => {
     try {
       // Send to analytics service
       if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -109,7 +109,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         });
       }
     } catch (trackingError) {
-      console.warn('Failed to track error:', trackingError);
+      // console.warn('Failed to track error:', trackingError);
     }
   };
 
@@ -145,12 +145,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         this.setState({ reportSent: true, isReporting: false });
       } else {
         // Log the error but don't throw to prevent cascading errors
-        console.warn('Error report failed with status:', response.status);
+        // console.warn('Error report failed with status:', response.status);
         this.setState({ isReporting: false });
       }
     } catch (reportError) {
       // Silently handle reporting errors to prevent error cascades
-      console.warn(
+      // console.warn(
         'Error reporting failed:',
         reportError instanceof Error ? reportError.message : 'Unknown error'
       );

@@ -172,7 +172,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       }
       
     } catch (error) {
-      console.error('Error generating forecast:', error);
+      // console.error('Error generating forecast:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -233,7 +233,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       setInsights(prev => [...newInsights, ...prev]);
       
     } catch (error) {
-      console.error('Error running Monte Carlo simulation:', error);
+      // console.error('Error running Monte Carlo simulation:', error);
     } finally {
       setIsGenerating(false);
     }

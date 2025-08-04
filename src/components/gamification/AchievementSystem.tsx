@@ -465,7 +465,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
     return acc;
   }, {} as Record<string, Achievement[]>);
 
-  const categories = [
+  const _categories = [
     { id: 'all', name: 'All', icon: Star },
     { id: 'onboarding', name: 'Getting Started', icon: Target },
     { id: 'exploration', name: 'Exploration', icon: Zap },
@@ -727,7 +727,7 @@ export const useAchievements = () => {
 
   const trackAction = useCallback((action: string, metadata?: any) => {
     // This would integrate with the AchievementSystem component
-    console.log('Action tracked:', action, metadata);
+    // console.log('Action tracked:', action, metadata);
   }, []);
 
   return {

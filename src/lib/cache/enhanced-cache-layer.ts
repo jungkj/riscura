@@ -66,7 +66,7 @@ export class EnhancedCacheLayer {
   private warmupInProgress: boolean = false;
   private prefetchQueue: Set<string> = new Set();
 
-  constructor(config: Partial<CacheLayerConfig> = {}) {
+  constructor(_config: Partial<CacheLayerConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.metrics = {
       totalRequests: 0,
@@ -517,7 +517,7 @@ export class EnhancedCacheLayer {
   // COMPRESSION OPTIMIZATION
   // ============================================================================
 
-  private async compressIfNeeded(data: any): Promise<{ data: any; compressed: boolean }> {
+  private async compressIfNeeded(_data: any): Promise<{ data: any; compressed: boolean }> {
     if (!this.config.enableCompressionOptimization) {
       return { data, compressed: false };
     }
@@ -539,7 +539,7 @@ export class EnhancedCacheLayer {
     return { data, compressed: false };
   }
 
-  private decompressIfNeeded(data: any, compressed: boolean): any {
+  private decompressIfNeeded(_data: any, compressed: boolean): any {
     if (!compressed || !this.config.enableCompressionOptimization) {
       return data;
     }

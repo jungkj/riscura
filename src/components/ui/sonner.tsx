@@ -12,7 +12,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
     const themeHook = useTheme();
     theme = themeHook?.theme || 'system';
   } catch (error) {
-    console.error('Error using useTheme:', error);
+    // console.error('Error using useTheme:', error);
     theme = 'system';
   }
 

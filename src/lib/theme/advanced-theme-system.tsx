@@ -116,7 +116,7 @@ export class ThemeManager {
         this.settings = { ...this.settings, ...parsedSettings };
       }
     } catch (error) {
-      console.warn('Failed to load theme settings from storage:', error);
+      // console.warn('Failed to load theme settings from storage:', error);
     }
   }
 
@@ -126,7 +126,7 @@ export class ThemeManager {
     try {
       localStorage.setItem('riscura-theme-settings', JSON.stringify(this.settings));
     } catch (error) {
-      console.warn('Failed to save theme settings to storage:', error);
+      // console.warn('Failed to save theme settings to storage:', error);
     }
   }
 

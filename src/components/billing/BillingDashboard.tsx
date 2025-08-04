@@ -26,7 +26,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 interface BillingData {
   subscription: {
@@ -116,7 +116,7 @@ class BillingService {
       }
       return await response.json();
     } catch (error) {
-      console.error('Billing service error:', error);
+      // console.error('Billing service error:', error);
       // Return mock data for development
       return this.getMockBillingData();
     }
@@ -131,7 +131,7 @@ class BillingService {
       }
       return await response.json();
     } catch (error) {
-      console.error('Plans service error:', error);
+      // console.error('Plans service error:', error);
       return this.getMockPlans();
     }
   }
@@ -151,7 +151,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      console.error('Subscription update error:', error);
+      // console.error('Subscription update error:', error);
       throw error;
     }
   }
@@ -169,7 +169,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      console.error('Subscription cancellation error:', error);
+      // console.error('Subscription cancellation error:', error);
       throw error;
     }
   }
@@ -189,7 +189,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      console.error('Payment method error:', error);
+      // console.error('Payment method error:', error);
       throw error;
     }
   }
@@ -212,7 +212,7 @@ class BillingService {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Invoice download error:', error);
+      // console.error('Invoice download error:', error);
       throw error;
     }
   }
@@ -370,7 +370,7 @@ const BillingDashboard: React.FC = () => {
       setBillingData(billing);
       setAvailablePlans(plans);
     } catch (error) {
-      console.error('Failed to load billing data:', error);
+      // console.error('Failed to load billing data:', error);
       toast.error('Failed to load billing information');
     } finally {
       setLoading(false);

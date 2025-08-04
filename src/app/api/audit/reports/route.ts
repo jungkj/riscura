@@ -182,7 +182,7 @@ async function handlePost(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Audit report generation error:', error);
+    // console.error('Audit report generation error:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

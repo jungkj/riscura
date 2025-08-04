@@ -8,8 +8,7 @@ export interface ValidatedUser {
   permissions: string[];
 }
 
-export async function validateRequest(
-  request: NextRequest
+export async function validateRequest(_request: NextRequest
 ): Promise<{ user: ValidatedUser | null }> {
   try {
     // Simplified validation - in a real implementation, this would validate JWT tokens
@@ -31,7 +30,7 @@ export async function validateRequest(
 
     return { user };
   } catch (error) {
-    console.error('Error validating request:', error);
+    // console.error('Error validating request:', error);
     return { user: null };
   }
 }

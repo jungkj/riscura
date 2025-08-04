@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 import { AIService } from '@/services/AIService';
 import { db } from '@/lib/db';
@@ -121,7 +121,7 @@ export const POST = withApiMiddleware(
         id: response.id,
       });
     } catch (error) {
-      console.error('AI generation error:', error);
+      // console.error('AI generation error:', error);
 
       // Calculate response time for failed request
       const responseTime = Date.now() - startTime;
@@ -165,8 +165,7 @@ export const POST = withApiMiddleware(
 );
 
 // Helper function to check user's AI usage quota
-async function checkUserAIQuota(
-  userId: string,
+async function checkUserAIQuota(_userId: string,
   organizationId: string
 ): Promise<{
   allowed: boolean;
@@ -218,7 +217,7 @@ async function checkUserAIQuota(
 }
 
 // Helper function to track AI usage
-async function trackAIUsage(data: {
+async function trackAIUsage(_data: {
   userId: string;
   organizationId: string;
   model: string;
@@ -245,7 +244,7 @@ async function trackAIUsage(data: {
       },
     });
   } catch (error) {
-    console.error('Failed to track AI usage:', error);
+    // console.error('Failed to track AI usage:', error);
     // Don't fail the request if tracking fails
   }
 }

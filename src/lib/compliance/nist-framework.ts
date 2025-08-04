@@ -427,8 +427,7 @@ export class NISTFrameworkService {
     this.functions.set('recover', recoverFunction);
   }
 
-  async performNISTAssessment(
-    organizationId: string,
+  async performNISTAssessment(_organizationId: string,
     risks: Risk[],
     controls: Control[],
     assessor: string,

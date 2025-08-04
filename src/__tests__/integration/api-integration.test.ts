@@ -85,7 +85,7 @@ class APITestHelper {
     try {
       await this.makeAuthenticatedRequest('DELETE', '/test/cleanup');
     } catch (error) {
-      console.warn('Cleanup failed:', error);
+      // console.warn('Cleanup failed:', error);
     }
   }
 }
@@ -1026,7 +1026,7 @@ test.describe('API Performance and Load Testing', () => {
       const responseTime = endTime - startTime;
       expect(responseTime).toBeLessThan(2000); // Should respond within 2 seconds
 
-      console.log(`${endpoint} response time: ${responseTime}ms`);
+      // console.log(`${endpoint} response time: ${responseTime}ms`);
     }
   });
 
@@ -1051,7 +1051,7 @@ test.describe('API Performance and Load Testing', () => {
       expect(data.pagination).toBeDefined();
       expect(data.pagination.limit).toBe(pageSize);
 
-      console.log(`Page size ${pageSize} response time: ${responseTime}ms`);
+      // console.log(`Page size ${pageSize} response time: ${responseTime}ms`);
     }
   });
 
@@ -1076,7 +1076,7 @@ test.describe('API Performance and Load Testing', () => {
       const responseTime = endTime - startTime;
       expect(responseTime).toBeLessThan(2000);
 
-      console.log(`Search "${query}" response time: ${responseTime}ms`);
+      // console.log(`Search "${query}" response time: ${responseTime}ms`);
     }
   });
 
@@ -1107,7 +1107,7 @@ test.describe('API Performance and Load Testing', () => {
     const createdRisks = await bulkResponse.json();
     expect(createdRisks.length).toBe(10);
 
-    console.log(`Bulk creation of 10 risks: ${responseTime}ms`);
+    // console.log(`Bulk creation of 10 risks: ${responseTime}ms`);
 
     // Cleanup
     for (const risk of createdRisks) {

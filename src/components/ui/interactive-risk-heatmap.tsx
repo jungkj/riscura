@@ -54,7 +54,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch risks:', error);
+        // console.error('Failed to fetch risks:', error);
       } finally {
         setLoading(false);
       }

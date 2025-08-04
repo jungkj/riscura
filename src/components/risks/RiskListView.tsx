@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRisks } from '@/context/RiskContext';
 import { Risk, RiskCategory } from '@/types';
-import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+// import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 
 // UI Components
 import {
@@ -140,7 +140,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
         await deleteRisks(selectedRisks);
         clearSelection();
       } catch (error) {
-        console.error('Failed to delete risks:', error);
+        // console.error('Failed to delete risks:', error);
       }
     }
   };

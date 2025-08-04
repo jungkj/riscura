@@ -269,17 +269,17 @@ const VantaInspiredRiskInterface = () => {
   const stats = getRiskStats();
 
   const handleRiskView = useCallback((risk: RiskData) => {
-    console.log('View risk:', risk);
+    // console.log('View risk:', risk);
     setSelectedRisk(risk);
   }, []);
 
   const handleRiskEdit = useCallback((risk: RiskData) => {
-    console.log('Edit risk:', risk);
+    // console.log('Edit risk:', risk);
     setSelectedRisk(risk);
   }, []);
 
   const handleRiskArchive = useCallback((risk: RiskData) => {
-    console.log('Archive risk:', risk);
+    // console.log('Archive risk:', risk);
     // TODO: Archive risk
   }, []);
 

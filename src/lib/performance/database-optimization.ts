@@ -34,7 +34,7 @@ class DatabaseOptimizer {
 
     // Log slow queries
     if (duration > 100) {
-      console.warn(`🐌 Slow database query: ${queryKey} took ${duration.toFixed(2)}ms`);
+      // console.warn(`🐌 Slow database query: ${queryKey} took ${duration.toFixed(2)}ms`);
     }
 
     // Cache result
@@ -145,7 +145,7 @@ export const dbOptimizer = new DatabaseOptimizer();
 // Common query patterns with optimization
 export const optimizedQueries = {
   // Get user with organization (cached)
-  getUserWithOrg: async (userId: string) => {
+  getUserWithOrg: async (_userId: string) => {
     return dbOptimizer.cachedQuery(
       `user_with_org:${userId}`,
       () =>
@@ -167,8 +167,7 @@ export const optimizedQueries = {
   },
 
   // Get organization risks with pagination
-  getOrganizationRisks: async (
-    organizationId: string,
+  getOrganizationRisks: async (_organizationId: string,
     page: number,
     pageSize: number,
     filters?: any
@@ -197,7 +196,7 @@ export const optimizedQueries = {
   },
 
   // Get dashboard statistics (heavily cached)
-  getDashboardStats: async (organizationId: string) => {
+  getDashboardStats: async (_organizationId: string) => {
     return dbOptimizer.cachedQuery(
       `dashboard_stats:${organizationId}`,
       async () => {
@@ -267,18 +266,18 @@ export const requiredIndexes = [
 
 // Function to create indexes
 export async function createOptimizationIndexes(): Promise<void> {
-  console.log('🏗️ Creating database optimization indexes...');
+  // console.log('🏗️ Creating database optimization indexes...');
 
   for (const indexSql of requiredIndexes) {
     try {
       await db.client.$executeRawUnsafe(indexSql);
-      console.log(`✅ Created index: ${indexSql.split(' ')[5]}`);
+      // console.log(`✅ Created index: ${indexSql.split(' ')[5]}`);
     } catch (error) {
-      console.warn(`⚠️ Index creation failed: ${error}`);
+      // console.warn(`⚠️ Index creation failed: ${error}`);
     }
   }
 
-  console.log('✅ Database optimization indexes created');
+  // console.log('✅ Database optimization indexes created');
 }
 
 // ============================================================================

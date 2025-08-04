@@ -88,7 +88,7 @@ export class DataTablePerformanceOptimizer<T = any> {
       this.indexedFields.set(field, index);
     });
 
-    console.log(
+    // console.log(
       `Built indexes for ${indexFields.length} fields in ${performance.now() - startTime}ms`
     );
   }
@@ -130,7 +130,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Optimized sorting with caching
    */
-  sortData(data: T[], sorts: SortState[]): T[] {
+  sortData(_data: T[], sorts: SortState[]): T[] {
     const startTime = performance.now();
     const cacheKey = this.generateSortCacheKey(data, sorts);
 
@@ -164,8 +164,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Virtual scrolling for large datasets
    */
-  getVirtualizedData(
-    data: T[],
+  getVirtualizedData(_data: T[],
     startIndex: number,
     endIndex: number
   ): {
@@ -232,8 +231,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Streaming export for large datasets
    */
-  async *streamExport(
-    data: T[],
+  async *streamExport(_data: T[],
     config: ExportConfig,
     columns: { field: string; header: string; formatter?: (value: any) => string }[]
   ): AsyncGenerator<string, void, unknown> {
@@ -292,8 +290,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   /**
    * Memory-efficient aggregations
    */
-  computeAggregations(
-    data: T[],
+  computeAggregations(_data: T[],
     aggregations: {
       field: string;
       operations: ('sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct')[];
@@ -342,7 +339,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 
-  private applyFilter(data: T[], filter: FilterState): T[] {
+  private applyFilter(_data: T[], filter: FilterState): T[] {
     // Use index if available
     if (filter.operator === 'equals' && this.indexedFields.has(filter.field)) {
       const index = this.indexedFields.get(filter.field)!;
@@ -416,7 +413,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     );
   }
 
-  private generateSortCacheKey(data: T[], sorts: SortState[]): string {
+  private generateSortCacheKey(_data: T[], sorts: SortState[]): string {
     const dataHash = this.hashArray(data.slice(0, 100)); // Sample for performance
     const sortKey = JSON.stringify(sorts);
     return `${dataHash}-${sortKey}`;
@@ -460,8 +457,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     return value;
   }
 
-  private async *streamExcelExport(
-    data: T[],
+  private async *streamExcelExport(_data: T[],
     columns: { field: string; header: string; formatter?: (value: any) => string }[],
     config: ExportConfig
   ): AsyncGenerator<string, void, unknown> {
@@ -545,8 +541,7 @@ class Semaphore {
 /**
  * React hook for using the performance optimizer
  */
-export const useDataTableOptimizer = <T>(
-  data: T[],
+export const useDataTableOptimizer = <T>(_data: T[],
   virtualizationConfig: VirtualizationConfig,
   bulkConfig: BulkOperationConfig
 ) => {
@@ -567,12 +562,12 @@ export const useDataTableOptimizer = <T>(
   );
 
   const sortData = useCallback(
-    (data: T[], sorts: SortState[]) => optimizer.sortData(data, sorts),
+    (_data: T[], sorts: SortState[]) => optimizer.sortData(data, sorts),
     [optimizer]
   );
 
   const getVirtualizedData = useCallback(
-    (data: T[], startIndex: number, endIndex: number) =>
+    (_data: T[], startIndex: number, endIndex: number) =>
       optimizer.getVirtualizedData(data, startIndex, endIndex),
     [optimizer]
   );
@@ -587,8 +582,7 @@ export const useDataTableOptimizer = <T>(
   );
 
   const streamExport = useCallback(
-    (
-      data: T[],
+    (_data: T[],
       config: ExportConfig,
       columns: { field: string; header: string; formatter?: (value: any) => string }[]
     ) => optimizer.streamExport(data, config, columns),
@@ -601,8 +595,7 @@ export const useDataTableOptimizer = <T>(
   );
 
   const computeAggregations = useCallback(
-    (
-      data: T[],
+    (_data: T[],
       aggregations: {
         field: string;
         operations: ('sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct')[];

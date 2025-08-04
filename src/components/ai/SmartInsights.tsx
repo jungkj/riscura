@@ -47,7 +47,7 @@ interface SmartInsightsProps {
 }
 
 // Mock insights data (replace with actual AI service)
-const generateMockInsights = (context: string): Insight[] => {
+const generateMockInsights = (_context: string): Insight[] => {
   const baseInsights: Insight[] = [
     {
       id: 'risk-trend-1',
@@ -238,7 +238,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
         const mockInsights = generateMockInsights(context);
         setInsights(mockInsights);
       } catch (error) {
-        console.error('Failed to load insights:', error);
+        // console.error('Failed to load insights:', error);
       } finally {
         setIsLoading(false);
       }

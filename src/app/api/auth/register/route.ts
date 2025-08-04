@@ -27,7 +27,7 @@ const registerSchema = z.object({
     .refine((val) => val === true, 'You must accept the terms and conditions'),
 });
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     // Rate limiting by IP
     const clientIP =
@@ -245,7 +245,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     }
   } catch (error) {
-    console.error('Registration error:', error);
+    // console.error('Registration error:', error);
 
     await logAuthEvent(
       'REGISTER_ERROR',
@@ -333,9 +333,9 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
       verificationUrl,
     });
 
-    console.log(`Verification email sent to ${email} for user ${userId}`);
+    // console.log(`Verification email sent to ${email} for user ${userId}`);
   } catch (error) {
-    console.error('Failed to send verification email:', error);
+    // console.error('Failed to send verification email:', error);
     // Don't throw error to prevent registration failure due to email issues
   }
 }
@@ -343,7 +343,7 @@ async function sendVerificationEmail(email: string, userId: string): Promise<voi
 /**
  * Generate verification token
  */
-function generateVerificationToken(userId: string): string {
+function generateVerificationToken(_userId: string): string {
   return jwt.sign(
     {
       userId,
@@ -385,7 +385,7 @@ async function logAuthEvent(
     }
 
     // For audit purposes, log the authentication event
-    console.log('Authentication Event:', {
+    // console.log('Authentication Event:', {
       type,
       ipAddress,
       email,
@@ -395,7 +395,7 @@ async function logAuthEvent(
       ...metadata,
     });
   } catch (error) {
-    console.error('Failed to log auth event:', error);
+    // console.error('Failed to log auth event:', error);
   }
 }
 

@@ -3,7 +3,7 @@ import { invalidateSession, invalidateAllSessions } from '@/lib/auth/session';
 import { extractTokenFromHeader, verifyAccessToken } from '@/lib/auth/jwt';
 import { db } from '@/lib/db';
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     const authHeader = request.headers.get('authorization');
     let sessionId: string | undefined;
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return response;
   } catch (error) {
-    console.error('Logout error:', error);
+    // console.error('Logout error:', error);
 
     // Even if there's an error, we should clear cookies and return success
     // because the user is trying to logout
@@ -127,7 +127,7 @@ async function logAuthEvent(
     }
 
     // For audit purposes, log the logout event
-    console.log('Logout Event:', {
+    // console.log('Logout Event:', {
       type: 'LOGOUT',
       userId: metadata.userId,
       sessionId: metadata.sessionId,
@@ -137,7 +137,7 @@ async function logAuthEvent(
       timestamp: new Date(),
     });
   } catch (error) {
-    console.error('Failed to log auth event:', error);
+    // console.error('Failed to log auth event:', error);
   }
 }
 

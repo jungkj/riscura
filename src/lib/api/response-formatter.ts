@@ -47,8 +47,7 @@ export class ApiResponseFormatter {
   /**
    * Create standardized success response
    */
-  static success<T>(
-    data: T,
+  static success<T>(_data: T,
     options: ResponseOptions & {
       pagination?: Partial<PaginationMeta>;
     } = {}
@@ -143,8 +142,7 @@ export class ApiResponseFormatter {
   /**
    * Create paginated success response
    */
-  static paginated<T>(
-    data: T[],
+  static paginated<T>(_data: T[],
     pagination: {
       page: number;
       limit: number;
@@ -319,21 +317,21 @@ export class ApiResponseFormatter {
   /**
    * Extract request ID from headers or generate new one
    */
-  static getOrCreateRequestId(request: Request): string {
+  static getOrCreateRequestId(_request: Request): string {
     return request.headers.get('X-Request-ID') || uuidv4();
   }
 
   /**
    * Extract API version from headers
    */
-  static getApiVersion(request: Request): string {
+  static getApiVersion(_request: Request): string {
     return request.headers.get('X-API-Version') || request.headers.get('Accept-Version') || 'v1';
   }
 
   /**
    * Create standardized response options from request
    */
-  static createResponseOptions(request: Request): ResponseOptions {
+  static createResponseOptions(_request: Request): ResponseOptions {
     return {
       requestId: this.getOrCreateRequestId(request),
       version: this.getApiVersion(request),
@@ -344,8 +342,7 @@ export class ApiResponseFormatter {
 /**
  * Helper function for creating success responses
  */
-export function successResponse<T>(
-  data: T,
+export function successResponse<T>(_data: T,
   options?: ResponseOptions & { pagination?: Partial<PaginationMeta> }
 ): NextResponse<ApiSuccessResponse<T>> {
   return ApiResponseFormatter.success(data, options);
@@ -365,8 +362,7 @@ export function errorResponse(
 /**
  * Helper function for creating paginated responses
  */
-export function paginatedResponse<T>(
-  data: T[],
+export function paginatedResponse<T>(_data: T[],
   pagination: { page: number; limit: number; total: number },
   options?: ResponseOptions
 ): NextResponse<ApiSuccessResponse<T[]>> {
@@ -376,8 +372,7 @@ export function paginatedResponse<T>(
 /**
  * Type guard to check if response is success
  */
-export function isSuccessResponse<T>(
-  response: ApiSuccessResponse<T> | ApiErrorResponse
+export function isSuccessResponse<T>(_response: ApiSuccessResponse<T> | ApiErrorResponse
 ): response is ApiSuccessResponse<T> {
   return response.success === true;
 }
@@ -385,14 +380,13 @@ export function isSuccessResponse<T>(
 /**
  * Type guard to check if response is error
  */
-export function isErrorResponse(
-  response: ApiSuccessResponse<any> | ApiErrorResponse
+export function isErrorResponse(_response: ApiSuccessResponse<any> | ApiErrorResponse
 ): response is ApiErrorResponse {
   return response.success === false;
 }
 
 // TODO: Implement real versioned response formatting
-export function VersionedResponseFormatter(data: any) {
+export function VersionedResponseFormatter(_data: any) {
   return data;
 }
 

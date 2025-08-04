@@ -494,7 +494,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
       const avgCompletion = demoQuestionnaires.reduce(
         (sum, q) => sum + q.analytics.overview.completionRate, 0
       ) / demoQuestionnaires.length;
-      const avgScore = demoQuestionnaires.reduce(
+      const _avgScore = demoQuestionnaires.reduce(
         (sum, q) => sum + q.analytics.overview.averageScore, 0
       ) / demoQuestionnaires.length;
       const aiEnabled = demoQuestionnaires.filter(q => q.aiSettings.enabled).length;
@@ -517,7 +517,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
         description: `${demoQuestionnaires.length} questionnaires ready with AI intelligence`,
       });
     } catch (error) {
-      console.error('Failed to load questionnaires:', error);
+      // console.error('Failed to load questionnaires:', error);
       setIsLoading(false);
       toast({
         title: 'Loading Failed',
@@ -867,7 +867,7 @@ setSearchQuery(e.target.value)}
                 selectedQuestionnaire={selectedQuestionnaire}
                 onApplySuggestion={(suggestion) => {
                   // Handle applying AI suggestions
-                  console.log('Applying suggestion:', suggestion);
+                  // console.log('Applying suggestion:', suggestion);
                   // Could navigate to builder or update questionnaire
                 }} />
             </motion.aside>

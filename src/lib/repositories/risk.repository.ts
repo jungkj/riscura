@@ -33,8 +33,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find risks with advanced filtering
-  async findFiltered(
-    organizationId: string,
+  async findFiltered(_organizationId: string,
     filters: RiskFilters = {},
     options: PaginationOptions = {}
   ): Promise<RepositoryResult<Risk>> {
@@ -226,8 +225,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find risks by category with statistics
-  async findByCategory(
-    organizationId: string,
+  async findByCategory(_organizationId: string,
     category: PrismaRiskCategory,
     options: PaginationOptions = {}
   ): Promise<RepositoryResult<Risk>> {
@@ -235,7 +233,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find high-priority risks
-  async findHighPriority(organizationId: string, options: PaginationOptions = {}): Promise<Risk[]> {
+  async findHighPriority(_organizationId: string, options: PaginationOptions = {}): Promise<Risk[]> {
     return this.model.findMany({
       where: {
         organizationId,
@@ -263,7 +261,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Find risks due for review
-  async findDueForReview(organizationId: string, daysAhead: number = 30): Promise<Risk[]> {
+  async findDueForReview(_organizationId: string, daysAhead: number = 30): Promise<Risk[]> {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + daysAhead);
 
@@ -294,7 +292,7 @@ export class RiskRepository extends BaseRepository<Risk> {
   }
 
   // Get risk statistics by organization
-  async getStatistics(organizationId: string): Promise<{
+  async getStatistics(_organizationId: string): Promise<{
     total: number;
     byCategory: Record<PrismaRiskCategory, number>;
     byLevel: Record<'low' | 'medium' | 'high' | 'critical', number>;

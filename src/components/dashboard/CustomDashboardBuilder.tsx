@@ -310,7 +310,7 @@ export default function CustomDashboardBuilder({
   const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
   
   // Widget categories
-  const categories = useMemo(() => {
+  const _categories = useMemo(() => {
     const cats = new Set(widgetLibrary.map(w => w.category));
     return Array.from(cats);
   }, []);

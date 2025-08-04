@@ -56,7 +56,7 @@ interface DashboardLayout {
 
 interface WidgetProps {
   config: any;
-  onConfigChange: (config: any) => void;
+  onConfigChange: (_config: any) => void;
   size: WidgetSize;
   isEditing: boolean;
 }
@@ -65,7 +65,7 @@ interface CustomizableDashboardProps {
   userId: string;
   userType: string;
   onLayoutSave?: (layout: DashboardLayout) => Promise<void>;
-  onLayoutLoad?: (userId: string) => Promise<DashboardLayout[]>;
+  onLayoutLoad?: (_userId: string) => Promise<DashboardLayout[]>;
   className?: string;
 }
 
@@ -351,7 +351,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
 
         setAvailableLayouts(layouts);
       } catch (error) {
-        console.error('Failed to load dashboard:', error);
+        // console.error('Failed to load dashboard:', error);
         // Fallback to smart default
         const defaultLayout = createSmartDefaultLayout(userType);
         setCurrentLayout(defaultLayout);
@@ -425,7 +425,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
         prev.map((layout) => (layout.id === updatedLayout.id ? updatedLayout : layout))
       );
     } catch (error) {
-      console.error('Failed to save layout:', error);
+      // console.error('Failed to save layout:', error);
     }
   };
 

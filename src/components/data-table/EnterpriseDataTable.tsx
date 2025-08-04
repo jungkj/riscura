@@ -46,7 +46,7 @@ interface EnterpriseDataTableProps<T extends TableData> {
   onRowClick?: (row: T) => void;
   onRowEdit?: (row: T) => void;
   onRowDelete?: (row: T) => void;
-  onExport?: (data: T[], format: string) => void;
+  onExport?: (_data: T[], format: string) => void;
 }
 
 export default function EnterpriseDataTable<T extends TableData>({

@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
 
 interface RealTimeDashboardProps {
   organizationId: string;
@@ -88,7 +88,7 @@ export default function RealTimeDashboard({
           controls: controlMetrics,
         });
       } catch (error) {
-        console.error('Error loading metrics:', error);
+        // console.error('Error loading metrics:', error);
       }
     };
 

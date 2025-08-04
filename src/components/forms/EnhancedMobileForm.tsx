@@ -820,7 +820,7 @@ export function EnhancedMobileForm({
       }, 2000);
     } catch (error) {
       setAutoSaveStatus('error');
-      console.error('Auto-save failed:', error);
+      // console.error('Auto-save failed:', error);
     }
   }, [values]);
 
@@ -884,7 +884,7 @@ export function EnhancedMobileForm({
         keys.forEach(key => localStorage.removeItem(key));
       }
     } catch (error) {
-      console.error('Form submission failed:', error);
+      // console.error('Form submission failed:', error);
       announce('Form submission failed. Please try again.', 'assertive');
     } finally {
       setIsSubmitting(false);

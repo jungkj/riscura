@@ -124,7 +124,7 @@ export const POST = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('RCSA sync error:', error);
+      // console.error('RCSA sync error:', error);
       return NextResponse.json(
         {
           success: false,

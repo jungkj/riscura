@@ -92,7 +92,7 @@ interface SetupStep {
 }
 
 // Organization setup component
-const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdate }) => {
+const OrganizationSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpdate }) => {
   const [formData, setFormData] = useState({
     name: '',
     industry: '',
@@ -174,7 +174,7 @@ setFormData({ ...formData, name: e.target.value })}
 };
 
 // Preferences setup component
-const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdate }) => {
+const PreferencesSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpdate }) => {
   const [preferences, setPreferences] = useState({
     notifications: {
       email: true,

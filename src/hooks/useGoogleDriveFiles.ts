@@ -51,7 +51,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
         setFiles([]);
       }
     } catch (err) {
-      console.error('Error listing Google Drive files:', err);
+      // console.error('Error listing Google Drive files:', err);
       setError('Failed to load files from Google Drive');
       setFiles([]);
     } finally {
@@ -88,7 +88,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
           setFiles([]);
         }
       } catch (err) {
-        console.error('Error searching Google Drive files:', err);
+        // console.error('Error searching Google Drive files:', err);
         setError('Failed to search files in Google Drive');
         setFiles([]);
       } finally {

@@ -119,7 +119,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       setModelOverviews(overviews);
       
     } catch (error) {
-      console.error('Error fetching training data:', error);
+      // console.error('Error fetching training data:', error);
     } finally {
       setLoading(false);
     }
@@ -358,7 +358,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       await customModelTrainingService.startTraining(jobId);
       await fetchTrainingData();
     } catch (error) {
-      console.error('Error starting training:', error);
+      // console.error('Error starting training:', error);
     }
   };
 

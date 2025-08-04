@@ -16,7 +16,7 @@ function getOpenAIClient() {
 
 // Mock security service for build time
 const mockSecurityService = {
-  async processSecureAIRequest(request: any): Promise<any> {
+  async processSecureAIRequest(_request: any): Promise<any> {
     return {
       securityApproved: true,
       sanitizedContent: request.content,
@@ -38,7 +38,7 @@ const mockSecurityService = {
   },
 };
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const { content, agentType, userId, sessionId } = await request.json();
 
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('AI Proxy Error:', error);
+    // console.error('AI Proxy Error:', error);
 
     return NextResponse.json({ error: 'AI service temporarily unavailable' }, { status: 500 });
   }

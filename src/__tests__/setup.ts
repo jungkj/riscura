@@ -136,7 +136,7 @@ afterAll(() => {
 
 // Global test utilities
 global.testUtils = {
-  mockApiResponse: (data: any, status = 200) => ({
+  mockApiResponse: (_data: any, status = 200) => ({
     json: () => Promise.resolve(data),
     status,
     ok: status < 400,
@@ -172,7 +172,7 @@ declare global {
   }
 
   var testUtils: {
-    mockApiResponse: (data: any, status?: number) => any;
+    mockApiResponse: (_data: any, status?: number) => any;
     createMockUser: (overrides?: any) => any;
     createMockOrganization: (overrides?: any) => any;
   };

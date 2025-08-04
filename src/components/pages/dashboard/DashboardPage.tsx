@@ -203,7 +203,7 @@ function DashboardPage() {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
+        // console.error('Failed to fetch dashboard data:', error);
       } finally {
         setLoading(false);
       }
@@ -237,7 +237,7 @@ function DashboardPage() {
         setRecentImports(sortedImports);
       }
     } catch (error) {
-      console.error('Failed to load recent imports:', error);
+      // console.error('Failed to load recent imports:', error);
     }
   }, []);
 
@@ -340,7 +340,7 @@ function DashboardPage() {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch insights:', error);
+        // console.error('Failed to fetch insights:', error);
       }
     };
 

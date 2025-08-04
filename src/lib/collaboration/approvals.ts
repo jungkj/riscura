@@ -155,7 +155,7 @@ export class ApprovalWorkflowManager {
   }
 
   // List workflows for organization
-  async listWorkflows(organizationId: string): Promise<ApprovalWorkflow[]> {
+  async listWorkflows(_organizationId: string): Promise<ApprovalWorkflow[]> {
     return await db.client.approvalWorkflow.findMany({
       where: { organizationId },
       orderBy: { createdAt: 'desc' },
@@ -163,7 +163,7 @@ export class ApprovalWorkflowManager {
   }
 
   // Create approval request
-  async createRequest(request: Omit<ApprovalRequest, 'id' | 'currentStepId' | 'status' | 'approvals' | 'createdAt' | 'updatedAt'>): Promise<ApprovalRequest> {
+  async createRequest(_request: Omit<ApprovalRequest, 'id' | 'currentStepId' | 'status' | 'approvals' | 'createdAt' | 'updatedAt'>): Promise<ApprovalRequest> {
     // Validate request
     approvalRequestSchema.parse(request);
 
@@ -317,7 +317,7 @@ export class ApprovalWorkflowManager {
   }
 
   // List requests for user
-  async listRequestsForUser(userId: string): Promise<ApprovalRequest[]> {
+  async listRequestsForUser(_userId: string): Promise<ApprovalRequest[]> {
     return await db.client.approvalRequest.findMany({
       where: {
         OR: [
@@ -453,15 +453,15 @@ export class ApprovalWorkflowManager {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 
-  private async notifyApprovers(request: ApprovalRequest, step: ApprovalStep): Promise<void> {
+  private async notifyApprovers(_request: ApprovalRequest, step: ApprovalStep): Promise<void> {
     // Implementation would send notifications to approvers
     // This could integrate with email, Slack, or in-app notifications
-    console.log(`Notifying approvers for step: ${step.name}`);
+    // console.log(`Notifying approvers for step: ${step.name}`);
   }
 
-  private async notifyCompletion(request: ApprovalRequest, status: string): Promise<void> {
+  private async notifyCompletion(_request: ApprovalRequest, status: string): Promise<void> {
     // Implementation would send completion notification to requester
-    console.log(`Request ${request.id} completed with status: ${status}`);
+    // console.log(`Request ${request.id} completed with status: ${status}`);
   }
 }
 

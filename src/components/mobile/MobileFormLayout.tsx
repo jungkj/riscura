@@ -82,7 +82,7 @@ interface MobileFormLayoutProps {
   description?: string;
   sections: FormSection[];
   initialData?: Record<string, any>;
-  onSubmit: (data: Record<string, any>) => void | Promise<void>;
+  onSubmit: (_data: Record<string, any>) => void | Promise<void>;
   onCancel?: () => void;
   submitLabel?: string;
   cancelLabel?: string;
@@ -272,7 +272,7 @@ export default function MobileFormLayout({
       localStorage.setItem(`form-draft-${title}`, JSON.stringify(formData));
       setLastAutoSave(new Date());
     } catch (error) {
-      console.error('Auto-save failed:', error);
+      // console.error('Auto-save failed:', error);
     }
   };
   
@@ -288,7 +288,7 @@ export default function MobileFormLayout({
         // Clear draft on successful submission
         localStorage.removeItem(`form-draft-${title}`);
       } catch (error) {
-        console.error('Form submission failed:', error);
+        // console.error('Form submission failed:', error);
       } finally {
         setIsSubmitting(false);
       }

@@ -250,7 +250,7 @@ const SAMPLE_TEMPLATES: DataTemplate[] = [
 
 // Sample data loader component
 interface SampleDataLoaderProps {
-  onDataLoaded?: (data: any) => void;
+  onDataLoaded?: (_data: any) => void;
   userRole?: string;
   industry?: string;
   className?: string;

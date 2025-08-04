@@ -103,7 +103,7 @@ export const POST = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('Error creating checkout session:', error);
+      // console.error('Error creating checkout session:', error);
 
       if (error instanceof z.ZodError) {
         throw new ValidationError('Invalid request data');

@@ -60,15 +60,14 @@ export class ReportScheduler {
         await this.scheduleJob(schedule);
       }
 
-      console.log(`Initialized ${activeSchedules.length} scheduled reports`);
+      // console.log(`Initialized ${activeSchedules.length} scheduled reports`);
     } catch (error) {
-      console.error('Failed to initialize report scheduler:', error);
+      // console.error('Failed to initialize report scheduler:', error);
     }
   }
 
   // Create a new scheduled report
-  async createSchedule(
-    config: Omit<ScheduleConfig, 'id' | 'createdAt' | 'nextRun' | 'failureCount'>
+  async createSchedule(_config: Omit<ScheduleConfig, 'id' | 'createdAt' | 'nextRun' | 'failureCount'>
   ): Promise<ScheduleConfig> {
     const nextRun = this.calculateNextRun(config);
     const cronExpression = config.cronExpression || this.generateCronExpression(config);
@@ -173,7 +172,7 @@ export class ReportScheduler {
   }
 
   // Generate cron expression from frequency
-  private generateCronExpression(config: Pick<ScheduleConfig, 'frequency'>): string {
+  private generateCronExpression(_config: Pick<ScheduleConfig, 'frequency'>): string {
     switch (config.frequency) {
       case 'daily':
         return '0 9 * * *'; // 9 AM daily
@@ -191,8 +190,7 @@ export class ReportScheduler {
   }
 
   // Calculate next run time
-  private calculateNextRun(
-    config: Pick<ScheduleConfig, 'frequency' | 'cronExpression' | 'timezone'>
+  private calculateNextRun(_config: Pick<ScheduleConfig, 'frequency' | 'cronExpression' | 'timezone'>
   ): Date {
     const now = new Date();
     const nextRun = new Date(now);
@@ -246,7 +244,7 @@ export class ReportScheduler {
         return;
       }
 
-      console.log(`Executing scheduled report: ${schedule.name}`);
+      // console.log(`Executing scheduled report: ${schedule.name}`);
 
       // Generate report data
       const rawReportData = await reportingEngine.generateReportData(
@@ -364,11 +362,11 @@ export class ReportScheduler {
       // Send notifications
       await this.sendDeliveryNotifications(schedule, successCount, totalDeliveries);
 
-      console.log(
+      // console.log(
         `Completed scheduled report: ${schedule.name} (${successCount}/${totalDeliveries} deliveries)`
       );
     } catch (error) {
-      console.error(`Failed to execute scheduled report ${scheduleId}:`, error);
+      // console.error(`Failed to execute scheduled report ${scheduleId}:`, error);
 
       // Log failure
       await this.logDelivery({
@@ -518,7 +516,7 @@ export class ReportScheduler {
   }
 
   // Get all schedules for an organization
-  async getSchedules(organizationId: string): Promise<ScheduleConfig[]> {
+  async getSchedules(_organizationId: string): Promise<ScheduleConfig[]> {
     return db.client.reportSchedule.findMany({
       where: { organizationId },
       include: {
@@ -547,8 +545,7 @@ export class ReportScheduler {
   }
 
   // Get delivery statistics
-  async getDeliveryStats(
-    organizationId: string,
+  async getDeliveryStats(_organizationId: string,
     dateRange?: {
       from: Date;
       to: Date;

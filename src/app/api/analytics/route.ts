@@ -59,7 +59,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      console.error('Error fetching analytics:', error);
+      // console.error('Error fetching analytics:', error);
       return NextResponse.json(
         {
           success: false,
@@ -73,7 +73,7 @@ export const GET = withApiMiddleware(
   { requireAuth: true }
 );
 
-async function getDashboardAnalytics(organizationId: string, startDate: Date) {
+async function getDashboardAnalytics(_organizationId: string, startDate: Date) {
   const [totalCounts, riskTrends, controlEffectiveness, recentActivity, complianceStatus] =
     await Promise.all([
       // Total counts
@@ -163,7 +163,7 @@ async function getDashboardAnalytics(organizationId: string, startDate: Date) {
   };
 }
 
-async function getRiskAnalytics(organizationId: string, startDate: Date) {
+async function getRiskAnalytics(_organizationId: string, startDate: Date) {
   const [risksByLevel, risksByCategory, risksByStatus, riskTrends] = await Promise.all([
     db.client.risk.groupBy({
       by: ['riskLevel'],
@@ -220,7 +220,7 @@ async function getRiskAnalytics(organizationId: string, startDate: Date) {
   };
 }
 
-async function getControlAnalytics(organizationId: string, startDate: Date) {
+async function getControlAnalytics(_organizationId: string, startDate: Date) {
   const [controlsByStatus, controlsByType, effectivenessStats] = await Promise.all([
     db.client.control.groupBy({
       by: ['status'],
@@ -266,7 +266,7 @@ async function getControlAnalytics(organizationId: string, startDate: Date) {
   };
 }
 
-async function getComplianceAnalytics(organizationId: string, startDate: Date) {
+async function getComplianceAnalytics(_organizationId: string, startDate: Date) {
   const [riskCategories, controlsByFramework, documentsByCategory] = await Promise.all([
     db.client.risk.groupBy({
       by: ['category'],

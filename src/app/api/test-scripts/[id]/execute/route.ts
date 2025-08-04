@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 import { TestStatus, ExecuteTestRequest } from '@/types/rcsa.types';
 
@@ -27,7 +27,7 @@ const executeTestSchema = z.object({
 // POST /api/test-scripts/[id]/execute - Execute a test script
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
-    async (request: NextRequest) => {
+    async (_request: NextRequest) => {
       const { id } = await params;
       const user = (request as any).user;
 

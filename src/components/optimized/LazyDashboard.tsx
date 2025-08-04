@@ -123,7 +123,7 @@ const LazyWidget: React.FC<{
   widget: DashboardWidget;
   state: WidgetState;
   onLoad: () => void;
-  onError: (error: Error) => void;
+  onError: (_error: Error) => void;
   onStateChange: (state: Partial<WidgetState>) => void;
   inView?: boolean;
   enableIntersectionLoading?: boolean;
@@ -509,7 +509,7 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
   }, []);
 
   const handleWidgetError = useCallback((widgetId: string, error: Error) => {
-    console.error(`Widget ${widgetId} failed to load:`, error);
+    // console.error(`Widget ${widgetId} failed to load:`, error);
   }, []);
 
   return {

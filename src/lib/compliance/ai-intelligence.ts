@@ -671,7 +671,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Generate compliance insights
-  async generateComplianceInsights(organizationId: string): Promise<ComplianceInsight[]> {
+  async generateComplianceInsights(_organizationId: string): Promise<ComplianceInsight[]> {
     const insights: ComplianceInsight[] = [];
 
     // Risk-based prioritization insight
@@ -733,8 +733,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Analyze risk-based prioritization
-  private async analyzeRiskBasedPrioritization(
-    organizationId: string
+  private async analyzeRiskBasedPrioritization(_organizationId: string
   ): Promise<ControlPrioritization[]> {
     const controls = await db.client.control.findMany({
       where: { organizationId },
@@ -847,7 +846,7 @@ export class ComplianceAIIntelligence {
   }
 
   // Analyze control optimization opportunities
-  private async analyzeControlOptimization(organizationId: string): Promise<
+  private async analyzeControlOptimization(_organizationId: string): Promise<
     {
       id: any;
       name: any;

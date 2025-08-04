@@ -20,7 +20,7 @@ export interface SubscriptionRequirement {
 }
 
 // Get subscription status for a user/organization
-export async function getSubscriptionStatus(organizationId: string): Promise<SubscriptionStatus> {
+export async function getSubscriptionStatus(_organizationId: string): Promise<SubscriptionStatus> {
   try {
     const organization = await db.client.organization.findUnique({
       where: { id: organizationId },
@@ -80,7 +80,7 @@ export async function getSubscriptionStatus(organizationId: string): Promise<Sub
       needsUpgrade: !isActive && plan === 'free',
     };
   } catch (error) {
-    console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error);
     return createFreeStatus();
   }
 }
@@ -153,7 +153,7 @@ export function withSubscriptionAuth(requirements: SubscriptionRequirement = {})
 
       return null; // Allow the request to continue
     } catch (error) {
-      console.error('Subscription auth error:', error);
+      // console.error('Subscription auth error:', error);
       return NextResponse.json({ error: 'Subscription verification failed' }, { status: 500 });
     }
   };
