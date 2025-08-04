@@ -12,7 +12,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     // Try to get session from access token
     if (authHeader) {
       try {
-        const _token = extractTokenFromHeader(authHeader)
+        const _token = extractTokenFromHeader(authHeader);
         const payload = verifyAccessToken(token);
         sessionId = payload.sessionId;
         userId = payload.userId;
@@ -22,12 +22,12 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Get logout type from body
-    const body = await request.json().catch(() => ({}))
+    const body = await request.json().catch(() => ({}));
     const logoutType = body.logoutType || 'current'; // 'current' or 'all'
 
     if (logoutType === 'all' && userId) {
       // Logout from all devices
-      await invalidateAllSessions(userId)
+      await invalidateAllSessions(userId);
 
       await logAuthEvent(
         'LOGOUT_ALL_DEVICES',
@@ -37,7 +37,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       );
     } else if (sessionId) {
       // Logout from current session only
-      await invalidateSession(sessionId)
+      await invalidateSession(sessionId);
 
       await logAuthEvent(
         'LOGOUT_SUCCESS',
@@ -51,7 +51,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     const response = NextResponse.json({
       message: 'Logout successful',
       logoutType,
-    })
+    });
 
     // Clear cookies
     response.cookies.set('refreshToken', '', {
@@ -60,7 +60,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       sameSite: 'strict',
       maxAge: 0,
       path: '/',
-    })
+    });
 
     response.cookies.set('csrf-token', '', {
       httpOnly: false,
@@ -79,7 +79,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     const response = NextResponse.json({
       message: 'Logout completed',
       note: 'Some cleanup operations may have failed',
-    })
+    });
 
     // Clear cookies
     response.cookies.set('refreshToken', '', {
@@ -88,7 +88,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       sameSite: 'strict',
       maxAge: 0,
       path: '/',
-    })
+    });
 
     response.cookies.set('csrf-token', '', {
       httpOnly: false,
@@ -105,7 +105,8 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 /**
  * Log authentication events
  */
-async function logAuthEvent(_type: string,
+async function logAuthEvent(
+  _type: string,
   ipAddress: string,
   email: string | null,
   metadata: any = {}
@@ -127,14 +128,14 @@ async function logAuthEvent(_type: string,
 
     // For audit purposes, log the logout event
     // console.log('Logout Event:', {
-      type: 'LOGOUT',
-      userId: metadata.userId,
-      sessionId: metadata.sessionId,
-      organizationId: organizationId,
-      reason: type,
-      source: 'manual',
-      timestamp: new Date(),
-    })
+    //   type: 'LOGOUT',
+    //   userId: metadata.userId,
+    //   sessionId: metadata.sessionId,
+    //   organizationId: organizationId,
+    //   reason: type,
+    //   source: 'manual',
+    //   timestamp: new Date(),
+    // });
   } catch (error) {
     // console.error('Failed to log auth event:', error)
   }
@@ -146,5 +147,5 @@ export async function GET(): Promise<NextResponse> {
     status: 'ok',
     endpoint: 'logout',
     timestamp: new Date().toISOString(),
-  })
+  });
 }

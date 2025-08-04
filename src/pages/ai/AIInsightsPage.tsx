@@ -105,8 +105,7 @@ export default function AIInsightsPage() {
           id: '4',
           type: 'recommendation',
           title: 'Risk Assessment Optimization',
-          // description: // Fixed expression expected error
-            'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
+          description: 'AI suggests implementing quarterly risk assessments for high-impact processes to improve early detection by 40%.',
           confidence: 85,
           impact: 'high',
           category: 'Process',

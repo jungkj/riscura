@@ -14,7 +14,7 @@ const loginSchema = z.object({
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-const simpleRateLimit = (key: string, limit: number, windowMs: number) {
+const simpleRateLimit = (key: string, limit: number, windowMs: number) => {
   const now = Date.now();
   const record = rateLimitMap.get(key);
 

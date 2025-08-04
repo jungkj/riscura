@@ -169,7 +169,6 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     timeout = setTimeout(() => func(...args), wait);
   };
 }
-}
 
 // Local storage utilities (for development/testing only)
 export const storage = {
