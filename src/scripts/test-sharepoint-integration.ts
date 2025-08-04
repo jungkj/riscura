@@ -48,13 +48,13 @@ async function testSharePointIntegration() {
     const response = await graphClient
       .api('/me')
       .get()
-      .catch(() => null)
+      .catch(() => null);
 
     if (response) {
       // console.log('✅ Graph API access confirmed (user context)')
     } else {
       // Try app-only context
-      const _sitesResponse = await graphClient.api('/sites').top(1).get()
+      const _sitesResponse = await graphClient.api('/sites').top(1).get();
       // console.log('✅ Graph API access confirmed (app-only context)')
     }
   } catch (error) {
@@ -98,4 +98,4 @@ async function testSharePointIntegration() {
 }
 
 // Run the test
-testSharePointIntegration().catch(console.error)
+testSharePointIntegration().catch(console.error);

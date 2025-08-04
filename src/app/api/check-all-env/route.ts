@@ -5,7 +5,7 @@ export const revalidate = 0;
 
 export async function GET() {
   // Get all environment variables that might contain database URLs
-  const envVars: Record<string, string | undefined> = {}
+  const envVars: Record<string, string | undefined> = {};
 
   // Check all possible database-related env vars
   const possibleKeys = [
@@ -21,12 +21,12 @@ export async function GET() {
     'postgres_prisma_url',
     'POSTGRES_URL_NO_SSL',
     'postgres_url_no_ssl',
-  ]
+  ];
 
   for (const key of possibleKeys) {
     if (process.env[key]) {
       // Show first 50 chars and last 20 chars
-      const value = process.env[key]!
+      const value = process.env[key]!;
       if (value.length > 70) {
         envVars[key] = value.substring(0, 50) + '...' + value.substring(value.length - 20);
       } else {
@@ -42,10 +42,10 @@ export async function GET() {
     VERCEL_URL: process.env.VERCEL_URL,
     VERCEL_REGION: process.env.VERCEL_REGION,
     NODE_ENV: process.env.NODE_ENV,
-  }
+  };
 
   // Parse the actual database URL being used
-  const actualUrl = process.env.DATABASE_URL || process.env.database_url
+  const actualUrl = process.env.DATABASE_URL || process.env.database_url;
   let urlType = 'unknown';
   if (actualUrl) {
     if (actualUrl.includes('pooler.supabase.com')) {

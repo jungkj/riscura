@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { PrismaClient } from '@prisma/client';
 
 // Load environment variables
-config({ path: resolve(process.cwd(), '.env') })
+config({ path: resolve(process.cwd(), '.env') });
 
 const prisma = new PrismaClient();
 
@@ -33,7 +33,7 @@ async function testInfrastructure() {
     const { storageService } = await import('@/lib/storage/supabase-storage');
 
     // List buckets
-    const _buckets = ['documents', 'attachments', 'reports', 'avatars']
+    const _buckets = ['documents', 'attachments', 'reports', 'avatars'];
     // console.log('✅ Storage buckets available:', buckets)
 
     // 4. Test Models
@@ -45,7 +45,7 @@ async function testInfrastructure() {
       ChatMessages: await prisma.chatMessage.count(),
       Risks: await prisma.risk.count(),
       Controls: await prisma.control.count(),
-    }
+    };
 
     // console.log('📊 Model record counts:')
     Object.entries(modelCounts).forEach(([model, count]) => {
@@ -58,13 +58,13 @@ async function testInfrastructure() {
     // Database size
     const _dbSize = await prisma.$queryRaw<Array<{ size: string }>>`
       SELECT pg_database_size(current_database())::bigint / 1024 / 1024 || ' MB' as size
-    `
+    `;
     // console.log(`💾 Database: ${dbSize[0].size} / 500 MB`)
 
     // Connection count
     const _connections = await prisma.$queryRaw<Array<{ count: number }>>`
       SELECT count(*) FROM pg_stat_activity WHERE datname = current_database()
-    `
+    `;
     // console.log(`🔗 Connections: ${connections[0].count} / 60`)
 
     // 6. Summary

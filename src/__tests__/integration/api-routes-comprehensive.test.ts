@@ -40,7 +40,7 @@ describe('API Routes Comprehensive Tests', () => {
           success: true,
           user: mockUser,
           token: 'mock-jwt-token',
-        })
+        });
 
         const response = await testUtils.callApiRoute('/api/auth/login', req, res);
 
@@ -109,7 +109,7 @@ describe('API Routes Comprehensive Tests', () => {
         const responses = await Promise.all(requests);
 
         // At least one should be rate limited
-        const rateLimitedResponses = responses.filter((r) => r.status === 429)
+        const rateLimitedResponses = responses.filter((r) => r.status === 429);
         expect(rateLimitedResponses.length).toBeGreaterThan(0);
       });
     });
@@ -171,7 +171,7 @@ describe('API Routes Comprehensive Tests', () => {
     beforeEach(() => {
       // Mock authentication for these tests
       jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
-        req.user = mockUser
+        req.user = mockUser;
         return Promise.resolve();
       });
     });
@@ -238,7 +238,7 @@ describe('API Routes Comprehensive Tests', () => {
 
         expect(response.status).toBe(200);
         // Verify search was applied (implementation dependent)
-      })
+      });
     });
 
     describe('POST /api/risks', () => {
@@ -249,14 +249,14 @@ describe('API Routes Comprehensive Tests', () => {
           category: 'security',
           likelihood: 3,
           impact: 4,
-        }
+        };
 
         const mockCreatedRisk = {
           id: 'new-risk-id',
           ...newRiskData,
           organizationId: mockUser.organizationId,
           createdBy: mockUser.id,
-        }
+        };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
@@ -284,7 +284,7 @@ describe('API Routes Comprehensive Tests', () => {
         const invalidRiskData = {
           // Missing required title
           description: 'A test risk without title',
-        }
+        };
 
         const { req, res } = createMocks({
           method: 'POST',
@@ -307,7 +307,7 @@ describe('API Routes Comprehensive Tests', () => {
           description: 'Test description',
           likelihood: 10, // Invalid: should be 1-5
           impact: -1, // Invalid: should be 1-5
-        }
+        };
 
         const { req, res } = createMocks({
           method: 'POST',
@@ -330,14 +330,14 @@ describe('API Routes Comprehensive Tests', () => {
         const updateData = {
           title: 'Updated Risk Title',
           likelihood: 4,
-        }
+        };
 
         const mockUpdatedRisk = {
           id: riskId,
           title: updateData.title,
           likelihood: updateData.likelihood,
           organizationId: mockUser.organizationId,
-        }
+        };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
@@ -368,7 +368,7 @@ describe('API Routes Comprehensive Tests', () => {
           id: riskId,
           title: 'Other Org Risk',
           organizationId: 'other-org-id', // Different organization
-        }
+        };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
@@ -399,7 +399,7 @@ describe('API Routes Comprehensive Tests', () => {
           id: riskId,
           title: 'Risk to Delete',
           organizationId: mockUser.organizationId,
-        }
+        };
 
         jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
           risk: {
@@ -455,7 +455,7 @@ describe('API Routes Comprehensive Tests', () => {
         const updateData = {
           firstName: 'Updated',
           lastName: 'Name',
-        }
+        };
 
         jest
           .spyOn(require('@/lib/auth/middleware'), 'requireAuth')
@@ -573,11 +573,11 @@ describe('API Routes Comprehensive Tests', () => {
 
   describe('Multi-Tenant Isolation', () => {
     it('should isolate data between organizations', async () => {
-      const user1 = { ...mockUser, organizationId: 'org-1' }
-      const user2 = { ...mockUser, id: 'user-2', organizationId: 'org-2' }
+      const user1 = { ...mockUser, organizationId: 'org-1' };
+      const user2 = { ...mockUser, id: 'user-2', organizationId: 'org-2' };
 
       // Mock risks for different organizations
-      const org1Risks = [{ id: 'risk-1', organizationId: 'org-1' }]
+      const org1Risks = [{ id: 'risk-1', organizationId: 'org-1' }];
       const org2Risks = [{ id: 'risk-2', organizationId: 'org-2' }];
 
       jest.spyOn(require('@/lib/db'), 'default').mockImplementation(() => ({
@@ -592,7 +592,7 @@ describe('API Routes Comprehensive Tests', () => {
 
       // Test user 1 can only see org 1 risks
       jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
-        req.user = user1
+        req.user = user1;
         return Promise.resolve();
       });
 
@@ -607,7 +607,7 @@ describe('API Routes Comprehensive Tests', () => {
 
       // Test user 2 can only see org 2 risks
       jest.spyOn(require('@/lib/auth/middleware'), 'requireAuth').mockImplementation((req: any) => {
-        req.user = user2
+        req.user = user2;
         return Promise.resolve();
       });
 

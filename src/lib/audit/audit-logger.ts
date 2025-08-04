@@ -14,7 +14,7 @@ import { extractIpAddress, getEntityComplianceFlags, generateEventId } from './a
 // ============================================================================
 
 export interface AuditEvent {
-  id?: string
+  id?: string;
   timestamp: Date;
   userId?: string;
   organizationId: string;
@@ -41,7 +41,7 @@ export interface AuditEvent {
     region?: string;
     city?: string;
     timezone?: string;
-  }
+  };
   complianceFlags?: string[];
   retentionPeriod?: number; // days
   encrypted?: boolean;
@@ -132,7 +132,7 @@ export type AuditAction =
   | 'AI_MODEL_UPDATE'
   | 'PROBO_ANALYSIS'
   | 'RISK_PREDICTION'
-  | 'CONTROL_GENERATION'
+  | 'CONTROL_GENERATION';
 
 export type AuditEntity =
   | 'USER'
@@ -210,10 +210,10 @@ export interface AuditReport {
     failureRate: number;
     topActions: Array<{ action: AuditAction; count: number }>;
     topUsers: Array<{ userId: string; count: number }>;
-    timeRange: { start: Date; end: Date }
+    timeRange: { start: Date; end: Date };
     complianceScore?: number;
     riskScore?: number;
-  }
+  };
   generatedAt: Date;
   generatedBy: string;
   format: 'JSON' | 'CSV' | 'PDF' | 'XLSX';
@@ -224,7 +224,7 @@ export interface AuditReport {
 // ============================================================================
 
 export class AuditLogger {
-  private prisma: PrismaClient
+  private prisma: PrismaClient;
   private cache: typeof enhancedCache;
   private batchQueue: AuditEvent[] = [];
   private batchTimeout: NodeJS.Timeout | null = null;
@@ -250,26 +250,27 @@ export class AuditLogger {
       timestamp: new Date(),
       retentionPeriod: this.getRetentionPeriod(event.action),
       encrypted: this.shouldEncrypt(event.action, event.entity),
-    }
+    };
 
     // Add to batch queue for performance
-    this.batchQueue.push(fullEvent)
+    this.batchQueue.push(fullEvent);
 
     // Process batch if it's full or this is a critical event
     if (this.batchQueue.length >= this.batchSize || event.severity === 'CRITICAL') {
-      await this.processBatch()
+      await this.processBatch();
     } else {
       this.scheduleBatchProcessing();
     }
 
     // Cache recent events for quick access
-    await this.cacheRecentEvent(fullEvent)
+    await this.cacheRecentEvent(fullEvent);
   }
 
   /**
    * Log authentication events
    */
-  async logAuth(_action: Extract<
+  async logAuth(
+    _action: Extract<
       AuditAction,
       'LOGIN' | 'LOGOUT' | 'LOGIN_FAILED' | 'PASSWORD_CHANGE' | 'PASSWORD_RESET'
     >,
@@ -301,7 +302,8 @@ export class AuditLogger {
   /**
    * Log data modification events
    */
-  async logDataChange(_action: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'BULK_UPDATE' | 'BULK_DELETE'>,
+  async logDataChange(
+    _action: Extract<AuditAction, 'CREATE' | 'UPDATE' | 'DELETE' | 'BULK_UPDATE' | 'BULK_DELETE'>,
     entity: AuditEntity,
     entityId: string,
     userId: string,
@@ -329,7 +331,8 @@ export class AuditLogger {
   /**
    * Log access attempts (both successful and failed)
    */
-  async logAccess(_action: Extract<AuditAction, 'READ' | 'ACCESS_DENIED'>,
+  async logAccess(
+    _action: Extract<AuditAction, 'READ' | 'ACCESS_DENIED'>,
     entity: AuditEntity,
     entityId: string | undefined,
     userId: string | undefined,
@@ -358,7 +361,8 @@ export class AuditLogger {
   /**
    * Log system events
    */
-  async logSystem(_action: Extract<
+  async logSystem(
+    _action: Extract<
       AuditAction,
       'SYSTEM_START' | 'SYSTEM_STOP' | 'CONFIG_CHANGE' | 'BACKUP_CREATE'
     >,
@@ -384,7 +388,7 @@ export class AuditLogger {
   // ============================================================================
 
   private async processBatch(): Promise<void> {
-    if (this.batchQueue.length === 0) return
+    if (this.batchQueue.length === 0) return;
 
     const events = [...this.batchQueue];
     this.batchQueue = [];
@@ -423,24 +427,24 @@ export class AuditLogger {
         complianceFlags: event.complianceFlags ? JSON.stringify(event.complianceFlags) : null,
         retentionPeriod: event.retentionPeriod,
         encrypted: event.encrypted,
-      }))
+      }));
 
       // Bulk insert into database
       await this.prisma.auditLog.createMany({
         data: auditData,
         skipDuplicates: true,
-      })
+      });
 
       // Update audit statistics
-      await this.updateAuditStatistics(events)
+      await this.updateAuditStatistics(events);
     } catch (error) {
       // console.error('Failed to process audit batch:', error)
 
       // Re-queue events if database fails
-      this.batchQueue.unshift(...events)
+      this.batchQueue.unshift(...events);
 
       // Implement exponential backoff for retries
-      setTimeout(() => this.processBatch(), 10000)
+      setTimeout(() => this.processBatch(), 10000);
     }
   }
 
@@ -476,10 +480,10 @@ export class AuditLogger {
       sortOrder = 'desc',
       includeMetadata = false,
       complianceFlags,
-    } = options
+    } = options;
 
     // Build where clause
-    const where: any = {}
+    const where: any = {};
 
     if (organizationId) where.organizationId = organizationId;
     if (userId) where.userId = userId;
@@ -489,7 +493,7 @@ export class AuditLogger {
     if (status) where.status = Array.isArray(status) ? { in: status } : status;
 
     if (startDate || endDate) {
-      where.timestamp = {}
+      where.timestamp = {};
       if (startDate) where.timestamp.gte = startDate;
       if (endDate) where.timestamp.lte = endDate;
     }
@@ -505,7 +509,7 @@ export class AuditLogger {
     if (complianceFlags && complianceFlags.length > 0) {
       where.complianceFlags = {
         contains: JSON.stringify(complianceFlags),
-      }
+      };
     }
 
     // Execute query with pagination
@@ -545,7 +549,7 @@ export class AuditLogger {
         },
       }),
       this.prisma.auditLog.count({ where }),
-    ])
+    ]);
 
     const totalPages = Math.ceil(totalCount / limit);
 
@@ -566,13 +570,14 @@ export class AuditLogger {
       totalPages,
       hasNextPage: page < totalPages,
       hasPreviousPage: page > 1,
-    }
+    };
   }
 
   /**
    * Generate compliance audit report
    */
-  async generateReport(_organizationId: string,
+  async generateReport(
+    _organizationId: string,
     reportType: AuditReport['reportType'],
     filters: AuditQueryOptions,
     generatedBy: string
@@ -591,7 +596,7 @@ export class AuditLogger {
     // Calculate top actions
     const actionCounts = events.reduce(
       (acc, event) => {
-        acc[event.action] = (acc[event.action] || 0) + 1
+        acc[event.action] = (acc[event.action] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>
@@ -606,7 +611,7 @@ export class AuditLogger {
     const userCounts = events.reduce(
       (acc, event) => {
         if (event.userId) {
-          acc[event.userId] = (acc[event.userId] || 0) + 1
+          acc[event.userId] = (acc[event.userId] || 0) + 1;
         }
         return acc;
       },
@@ -619,7 +624,7 @@ export class AuditLogger {
       .map(([userId, count]) => ({ userId, count }));
 
     // Calculate time range
-    const timestamps = events.map((e) => e.timestamp)
+    const timestamps = events.map((e) => e.timestamp);
     const timeRange = {
       start:
         timestamps.length > 0
@@ -629,7 +634,7 @@ export class AuditLogger {
         timestamps.length > 0
           ? new Date(Math.max(...timestamps.map((t) => t.getTime())))
           : new Date(),
-    }
+    };
 
     const report: AuditReport = {
       id: generateEventId(),
@@ -652,7 +657,7 @@ export class AuditLogger {
       generatedAt: new Date(),
       generatedBy,
       format: 'JSON',
-    }
+    };
 
     // Cache the report
     await this.cache.set(`audit-report:${report.id}`, report, 24 * 60 * 60); // 24 hours
@@ -672,32 +677,33 @@ export class AuditLogger {
       DELETE: 'DELETE',
       BULK_UPDATE: 'PATCH',
       BULK_DELETE: 'DELETE',
-    }
+    };
     return methodMap[action] || 'UNKNOWN';
   }
 
-  private calculateSeverity(_action: AuditAction,
+  private calculateSeverity(
+    _action: AuditAction,
     entity: AuditEntity,
     changes?: AuditChanges
   ): AuditSeverity {
     // Critical entities
     if (['USER', 'ROLE', 'PERMISSION', 'SYSTEM'].includes(entity)) {
-      return action === 'DELETE' ? 'CRITICAL' : 'HIGH'
+      return action === 'DELETE' ? 'CRITICAL' : 'HIGH';
     }
 
     // Sensitive data entities
     if (['RISK', 'COMPLIANCE_FRAMEWORK', 'DOCUMENT'].includes(entity)) {
-      return action === 'DELETE' ? 'HIGH' : 'MEDIUM'
+      return action === 'DELETE' ? 'HIGH' : 'MEDIUM';
     }
 
     // Bulk operations are always high severity
     if (action.startsWith('BULK_')) {
-      return 'HIGH'
+      return 'HIGH';
     }
 
     // Large change sets
     if (changes && changes.fields.length > 10) {
-      return 'HIGH'
+      return 'HIGH';
     }
 
     return 'MEDIUM';
@@ -731,11 +737,11 @@ export class AuditLogger {
 
   private shouldEncrypt(_action: AuditAction, entity: AuditEntity): boolean {
     // Always encrypt sensitive entities
-    const sensitiveEntities = ['USER', 'PAYMENT', 'DOCUMENT', 'API_KEY']
+    const sensitiveEntities = ['USER', 'PAYMENT', 'DOCUMENT', 'API_KEY'];
     if (sensitiveEntities.includes(entity)) return true;
 
     // Always encrypt authentication events
-    const authActions = ['LOGIN', 'LOGIN_FAILED', 'PASSWORD_CHANGE', 'PASSWORD_RESET']
+    const authActions = ['LOGIN', 'LOGIN_FAILED', 'PASSWORD_CHANGE', 'PASSWORD_RESET'];
     if (authActions.includes(action)) return true;
 
     return false;
@@ -754,7 +760,7 @@ export class AuditLogger {
   private async updateAuditStatistics(events: AuditEvent[]): Promise<void> {
     for (const event of events) {
       const statsKey = `audit-stats:${event.organizationId}:${new Date().toISOString().split('T')[0]}`;
-      const _stats = (await this.cache.get<Record<string, number>>(statsKey)) || {}
+      const _stats = (await this.cache.get<Record<string, number>>(statsKey)) || {};
 
       stats.totalEvents = (stats.totalEvents || 0) + 1;
       stats[`${event.action}_count`] = (stats[`${event.action}_count`] || 0) + 1;
@@ -774,7 +780,7 @@ export class AuditLogger {
 
     // Weight different statuses
     const score =
-      ((successCount * 1.0 + warningCount * 0.5 + failureCount * 0.0) / events.length) * 100
+      ((successCount * 1.0 + warningCount * 0.5 + failureCount * 0.0) / events.length) * 100;
     return Math.round(score);
   }
 
@@ -782,14 +788,14 @@ export class AuditLogger {
     if (events.length === 0) return 0;
 
     let riskScore = 0;
-    const weights = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 }
+    const weights = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
 
     for (const event of events) {
       riskScore += weights[event.severity];
 
       // Extra weight for failures
       if (event.status === 'FAILURE') {
-        riskScore += weights[event.severity]
+        riskScore += weights[event.severity];
       }
     }
 
@@ -815,9 +821,9 @@ export class AuditLogger {
           },
         },
       },
-    })
+    });
 
-    return { deletedCount: result.count }
+    return { deletedCount: result.count };
   }
 }
 
@@ -825,7 +831,7 @@ export class AuditLogger {
 // GLOBAL INSTANCE
 // ============================================================================
 
-let auditLogger: AuditLogger | null = null
+let auditLogger: AuditLogger | null = null;
 
 export function getAuditLogger(prisma: PrismaClient): AuditLogger {
   if (!auditLogger) {
@@ -842,7 +848,7 @@ export async function logAuditEvent(
   prisma: PrismaClient,
   event: Omit<AuditEvent, 'id' | 'timestamp'>
 ): Promise<void> {
-  const logger = getAuditLogger(prisma)
+  const logger = getAuditLogger(prisma);
   await logger.log(event);
 }
 
@@ -876,4 +882,4 @@ export async function logDataChangeEvent(
 // EXPORTS
 // ============================================================================
 
-export default AuditLogger
+export default AuditLogger;

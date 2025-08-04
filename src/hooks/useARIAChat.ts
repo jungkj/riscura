@@ -14,20 +14,20 @@ import {
 
 // Enhanced RiskContext with real data integration
 export interface RiskContext {
-  currentRisk?: Risk
+  currentRisk?: Risk;
   currentControl?: Control;
   currentDocument?: Document;
   relatedEntities: {
     risks: string[];
     controls: string[];
     documents: string[];
-  }
+  };
   pageContext?: {
     section: string;
     data: Record<string, unknown>;
-  }
+  };
   // Enhanced with intelligent context
-  intelligentContext?: IntelligentContext
+  intelligentContext?: IntelligentContext;
   contextRelevance?: number;
   smartSuggestions?: SmartContextSuggestion[];
 }
@@ -50,7 +50,7 @@ export interface ChatMessage extends ConversationMessage {
     relevanceScore: number;
     keyInsights: string[];
     relatedEntities: string[];
-  }
+  };
 }
 
 export interface ChatState {
@@ -73,12 +73,12 @@ export interface ChatState {
     isLimited: boolean;
   } | null;
   // Enhanced context features
-  smartSuggestions: SmartContextSuggestion[]
+  smartSuggestions: SmartContextSuggestion[];
   contextQuality: {
     relevance: number;
     completeness: number;
     freshness: number;
-  }
+  };
   contextMode: 'minimal' | 'moderate' | 'comprehensive';
   autoContextUpdate: boolean;
   recentActivity: ActivityContext[];
@@ -97,7 +97,8 @@ export interface ConversationTemplate {
 
 export interface ChatActions {
   sendMessage: (_content: string, attachments?: MessageAttachment[]) => Promise<void>;
-  sendMessageWithContext: (_content: string,
+  sendMessageWithContext: (
+    _content: string,
     contextOverride?: Partial<RiskContext>
   ) => Promise<void>;
   regenerateMessage: (messageId: string) => Promise<void>;
@@ -179,11 +180,11 @@ const defaultTemplates: ConversationTemplate[] = [
       'How can I improve my risk management efficiency?',
     ],
   },
-]
+];
 
 // Custom hook for enhanced ARIA chat with deep context integration
 export const useARIAChat = (initialContext?: RiskContext) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { user } = useAuth();
   const {
@@ -223,13 +224,13 @@ export const useARIAChat = (initialContext?: RiskContext) => {
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [state.messages]);
 
   // Initialize context intelligence
   useEffect(() => {
     if (user && state.autoContextUpdate) {
-      refreshContext()
+      refreshContext();
 
       // Set up periodic context updates
       contextUpdateTimer.current = setInterval(refreshContext, 30000); // Every 30 seconds
@@ -238,7 +239,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         if (contextUpdateTimer.current) {
           clearInterval(contextUpdateTimer.current);
         }
-      }
+      };
     }
   }, [user, state.autoContextUpdate]);
 
@@ -250,16 +251,16 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         entityType: 'document', // Page navigation
         entityId: pathname,
         context: { page: pathname, search: searchParams?.toString() || '' },
-      })
+      });
 
       // Refresh context on navigation
-      setTimeout(refreshContext, 1000)
+      setTimeout(refreshContext, 1000);
     }
   }, [pathname]);
 
   // Enhanced context refresh
   const refreshContext = useCallback(async () => {
-    if (!user || !pathname) return
+    if (!user || !pathname) return;
 
     try {
       // Get intelligent context
@@ -279,20 +280,20 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           summarizationLevel: state.contextMode,
           agentType: selectedAgent,
         }
-      )
+      );
 
       // Get smart suggestions
       const smartSuggestions = await contextIntelligenceService.getSmartSuggestions(
         user.id,
         intelligentContext
-      )
+      );
 
       // Analyze context quality
       const analysis = await contextIntelligenceService.analyzeContext(
         intelligentContext,
         state.messages.length > 0 ? state.messages[state.messages.length - 1].content : '',
         selectedAgent
-      )
+      );
 
       setState((prev) => ({
         ...prev,
@@ -324,21 +325,21 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   // Track user activity
   const trackActivity = useCallback(
     (activity: Omit<ActivityContext, 'timestamp'>) => {
-      if (!user) return
+      if (!user) return;
 
       const fullActivity: ActivityContext = {
         ...activity,
         timestamp: new Date(),
-      }
+      };
 
       // Update local state
       setState((prev) => ({
         ...prev,
         recentActivity: [fullActivity, ...prev.recentActivity.slice(0, 49)], // Keep last 50
-      }))
+      }));
 
       // Update context intelligence service
-      contextIntelligenceService.updateContext(user.id, fullActivity)
+      contextIntelligenceService.updateContext(user.id, fullActivity);
     },
     [user]
   );
@@ -346,7 +347,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   // Enhanced send message with context injection
   const sendMessage = useCallback(
     async (_content: string, attachments?: MessageAttachment[]) => {
-      if (!content.trim() || state.isLoading) return
+      if (!content.trim() || state.isLoading) return;
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
@@ -361,7 +362,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
             agentType: selectedAgent,
             hasAttachments: !!attachments?.length,
           },
-        })
+        });
 
         // Create user message
         const userMessage: ChatMessage = {
@@ -370,7 +371,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           content,
           timestamp: new Date(),
           attachments,
-        }
+        };
 
         setState((prev) => ({
           ...prev,
@@ -379,7 +380,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         }));
 
         // Generate context-enhanced prompt
-        let enhancedContent = content
+        let enhancedContent = content;
         if (state.context.intelligentContext && state.contextMode !== 'minimal') {
           const contextString = await contextIntelligenceService.generateSmartContext(
             state.context.intelligentContext,
@@ -401,12 +402,12 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         }
 
         // Send to AI with enhanced context
-        await aiSendMessage(enhancedContent, attachments)
+        await aiSendMessage(enhancedContent, attachments);
 
         setState((prev) => ({ ...prev, typingIndicator: false }));
 
         // Refresh context after message
-        setTimeout(refreshContext, 2000)
+        setTimeout(refreshContext, 2000);
       } catch (error) {
         setState((prev) => ({
           ...prev,
@@ -436,10 +437,10 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         setState((prev) => ({
           ...prev,
           context: { ...prev.context, ...contextOverride },
-        }))
+        }));
 
         // Refresh context with new data
-        await refreshContext()
+        await refreshContext();
       }
 
       await sendMessage(content);
@@ -462,7 +463,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           controlsCount: selectedEntities.controls?.length || 0,
           documentsCount: selectedEntities.documents?.length || 0,
         },
-      })
+      });
 
       // Update context with selected entities
       setState((prev) => ({
@@ -481,10 +482,10 @@ export const useARIAChat = (initialContext?: RiskContext) => {
               prev.context.relatedEntities.documents,
           },
         },
-      }))
+      }));
 
       // Refresh intelligent context
-      await refreshContext()
+      await refreshContext();
     },
     [user, trackActivity, refreshContext]
   );
@@ -500,7 +501,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           suggestionType: suggestion.type,
           relevanceScore: suggestion.relevanceScore,
         },
-      })
+      });
 
       if (suggestion.quickAction) {
         await suggestion.quickAction.action();
@@ -510,7 +511,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
       setState((prev) => ({
         ...prev,
         smartSuggestions: prev.smartSuggestions.filter((s) => s.id !== suggestion.id),
-      }))
+      }));
     },
     [trackActivity]
   );
@@ -518,7 +519,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   // Set context mode
   const setContextMode = useCallback(
     (mode: 'minimal' | 'moderate' | 'comprehensive') => {
-      setState((prev) => ({ ...prev, contextMode: mode }))
+      setState((prev) => ({ ...prev, contextMode: mode }));
 
       trackActivity({
         action: 'change_context_mode',
@@ -528,7 +529,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
       });
 
       // Refresh context with new mode
-      setTimeout(refreshContext, 1000)
+      setTimeout(refreshContext, 1000);
     },
     [trackActivity, refreshContext]
   );
@@ -544,14 +545,14 @@ export const useARIAChat = (initialContext?: RiskContext) => {
           category: template.category,
           requiredContext: template.requiredContext,
         },
-      })
+      });
 
       // Check if required context is available
       if (template.requiredContext) {
         const missingContext = template.requiredContext.filter((required) => {
           switch (required) {
             case 'risks':
-              return !state.context.relatedEntities.risks.length
+              return !state.context.relatedEntities.risks.length;
             case 'controls':
               return !state.context.relatedEntities.controls.length;
             case 'documents':
@@ -582,11 +583,11 @@ export const useARIAChat = (initialContext?: RiskContext) => {
         setState((prev) => ({
           ...prev,
           context: { ...prev.context, ...template.context },
-        }))
+        }));
       }
 
       // Send template message
-      await sendMessage(template.initialMessage)
+      await sendMessage(template.initialMessage);
     },
     [state.context, trackActivity, sendMessage]
   );
@@ -594,7 +595,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
   // Enhanced search with context awareness
   const searchMessages = useCallback(
     (_query: string) => {
-      setState((prev) => ({ ...prev, searchQuery: query }))
+      setState((prev) => ({ ...prev, searchQuery: query }));
 
       if (!query.trim()) {
         setState((prev) => ({ ...prev, filteredMessages: [] }));
@@ -677,7 +678,7 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     setContextMode,
     refreshContext,
     trackActivity,
-  }
+  };
 
   return {
     state: {
@@ -687,5 +688,5 @@ export const useARIAChat = (initialContext?: RiskContext) => {
     },
     actions,
     messagesEndRef,
-  }
-}
+  };
+};

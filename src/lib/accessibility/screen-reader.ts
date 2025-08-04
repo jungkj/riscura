@@ -2,17 +2,17 @@
 
 // Screen reader utilities for enhanced accessibility
 export class ScreenReaderUtils {
-  private static announceElement: HTMLElement | null = null
+  private static announceElement: HTMLElement | null = null;
   private static politeElement: HTMLElement | null = null;
   private static assertiveElement: HTMLElement | null = null;
 
   // Initialize screen reader announcement elements
   static init(): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
 
     // Create live regions for announcements
     if (!this.announceElement) {
-      this.announceElement = document.createElement('div')
+      this.announceElement = document.createElement('div');
       this.announceElement.setAttribute('aria-live', 'polite');
       this.announceElement.setAttribute('aria-atomic', 'true');
       this.announceElement.className = 'sr-only';
@@ -41,7 +41,7 @@ export class ScreenReaderUtils {
 
   // Announce message to screen readers
   static announce(message: string, priority: 'polite' | 'assertive' = 'polite', delay = 100): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
 
     this.init();
 
@@ -49,33 +49,33 @@ export class ScreenReaderUtils {
     if (!element) return;
 
     // Clear previous message
-    element.textContent = ''
+    element.textContent = '';
 
     // Set new message with slight delay to ensure screen readers pick it up
     setTimeout(() => {
-      element.textContent = message
+      element.textContent = message;
     }, delay);
 
     // Clear message after announcement
     setTimeout(() => {
-      element.textContent = ''
+      element.textContent = '';
     }, delay + 3000);
   }
 
   // Announce form validation errors
   static announceFormError(fieldName: string, error: string): void {
-    this.announce(`${fieldName}: ${error}`, 'assertive')
+    this.announce(`${fieldName}: ${error}`, 'assertive');
   }
 
   // Announce navigation changes
   static announceNavigation(location: string): void {
-    this.announce(`Navigated to ${location}`, 'polite')
+    this.announce(`Navigated to ${location}`, 'polite');
   }
 
   // Announce data loading states
   static announceLoading(isLoading: boolean, context = ''): void {
     if (isLoading) {
-      this.announce(`Loading ${context}...`, 'polite')
+      this.announce(`Loading ${context}...`, 'polite');
     } else {
       this.announce(`${context} loaded`, 'polite');
     }
@@ -83,18 +83,18 @@ export class ScreenReaderUtils {
 
   // Announce action completion
   static announceAction(_action: string, success = true): void {
-    const message = success ? `${action} completed successfully` : `${action} failed`
+    const message = success ? `${action} completed successfully` : `${action} failed`;
     this.announce(message, success ? 'polite' : 'assertive');
   }
 
   // Announce dynamic content changes
   static announceContentChange(description: string): void {
-    this.announce(`Content updated: ${description}`, 'polite')
+    this.announce(`Content updated: ${description}`, 'polite');
   }
 
   // Create accessible description for complex UI elements
   static createDescription(element: HTMLElement, description: string): string {
-    const descId = `desc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const descId = `desc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     const descElement = document.createElement('div');
     descElement.id = descId;
@@ -110,7 +110,7 @@ export class ScreenReaderUtils {
   // Cleanup function
   static cleanup(): void {
     if (this.announceElement) {
-      this.announceElement.remove()
+      this.announceElement.remove();
       this.announceElement = null;
     }
     if (this.politeElement) {
@@ -127,7 +127,7 @@ export class ScreenReaderUtils {
 // Hook for screen reader announcements
 export function useScreenReader() {
   useEffect(() => {
-    ScreenReaderUtils.init()
+    ScreenReaderUtils.init();
     return () => ScreenReaderUtils.cleanup();
   }, []);
 
@@ -162,30 +162,30 @@ export function useScreenReader() {
     announceLoading,
     announceAction,
     announceContentChange,
-  }
+  };
 }
 
 // Utility functions for ARIA attributes
 export const ariaUtils = {
   // Generate unique IDs for ARIA relationships
   generateId: (prefix = 'aria'): string => {
-    return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   },
 
   // Create ARIA label from text content
   createLabel: (text: string, context?: string): string => {
-    const cleanText = text.replace(/[^\w\s]/gi, '').trim()
+    const cleanText = text.replace(/[^\w\s]/gi, '').trim();
     return context ? `${context}: ${cleanText}` : cleanText;
   },
 
   // Get accessible name for element
   getAccessibleName: (element: HTMLElement): string => {
     // Check aria-label first
-    const ariaLabel = element.getAttribute('aria-label')
+    const ariaLabel = element.getAttribute('aria-label');
     if (ariaLabel) return ariaLabel;
 
     // Check aria-labelledby
-    const labelledBy = element.getAttribute('aria-labelledby')
+    const labelledBy = element.getAttribute('aria-labelledby');
     if (labelledBy) {
       const labelElement = document.getElementById(labelledBy);
       if (labelElement) return labelElement.textContent || '';
@@ -193,16 +193,16 @@ export const ariaUtils = {
 
     // Check associated label
     if (element.id) {
-      const label = document.querySelector(`label[for="${element.id}"]`)
+      const label = document.querySelector(`label[for="${element.id}"]`);
       if (label) return label.textContent || '';
     }
 
     // Check placeholder
-    const placeholder = element.getAttribute('placeholder')
+    const placeholder = element.getAttribute('placeholder');
     if (placeholder) return placeholder;
 
     // Check text content
-    return element.textContent || ''
+    return element.textContent || '';
   },
 
   // Set up ARIA relationships
@@ -212,7 +212,7 @@ export const ariaUtils = {
     relationship: 'labelledby' | 'describedby' | 'controls' | 'owns'
   ): void => {
     if (!relatedElement.id) {
-      relatedElement.id = ariaUtils.generateId()
+      relatedElement.id = ariaUtils.generateId();
     }
 
     const existingIds = element.getAttribute(`aria-${relationship}`) || '';
@@ -227,7 +227,7 @@ export const ariaUtils = {
     relatedElementId: string,
     relationship: 'labelledby' | 'describedby' | 'controls' | 'owns'
   ): void => {
-    const existingIds = element.getAttribute(`aria-${relationship}`) || ''
+    const existingIds = element.getAttribute(`aria-${relationship}`) || '';
     const newIds = existingIds
       .split(' ')
       .filter((id) => id !== relatedElementId)
@@ -239,15 +239,15 @@ export const ariaUtils = {
       element.removeAttribute(`aria-${relationship}`);
     }
   },
-}
+};
 
 // Screen reader detection
 export function detectScreenReader(): {
-  hasScreenReader: boolean
+  hasScreenReader: boolean;
   type: string | null;
 } {
   if (typeof window === 'undefined') {
-    return { hasScreenReader: false, type: null }
+    return { hasScreenReader: false, type: null };
   }
 
   const userAgent = navigator.userAgent.toLowerCase();
@@ -260,11 +260,11 @@ export function detectScreenReader(): {
     { name: 'TalkBack', indicators: ['talkback'] },
     { name: 'Orca', indicators: ['orca'] },
     { name: 'Dragon', indicators: ['dragon'] },
-  ]
+  ];
 
   for (const sr of screenReaders) {
     if (sr.indicators.some((indicator) => userAgent.includes(indicator))) {
-      return { hasScreenReader: true, type: sr.name }
+      return { hasScreenReader: true, type: sr.name };
     }
   }
 
@@ -273,12 +273,12 @@ export function detectScreenReader(): {
     window.speechSynthesis ||
     'speechSynthesis' in window ||
     navigator.userAgent.includes('accessibility') ||
-    document.documentElement.hasAttribute('data-screen-reader')
+    document.documentElement.hasAttribute('data-screen-reader');
 
   return {
     hasScreenReader: hasAccessibilityFeatures,
     type: hasAccessibilityFeatures ? 'Unknown' : null,
-  }
+  };
 }
 
 // Focus management utilities
@@ -287,9 +287,9 @@ export const focusUtils = {
   trapFocus: (element: HTMLElement): (() => void) => {
     const focusableElements = element.querySelectorAll(
       'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])'
-    ) as NodeListOf<HTMLElement>
+    ) as NodeListOf<HTMLElement>;
 
-    if (focusableElements.length === 0) return () => {}
+    if (focusableElements.length === 0) return () => {};
 
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
@@ -308,20 +308,20 @@ export const focusUtils = {
           e.preventDefault();
         }
       }
-    }
+    };
 
     element.addEventListener('keydown', handleTabKey);
     firstElement.focus();
 
     // Return cleanup function
     return () => {
-      element.removeEventListener('keydown', handleTabKey)
-    }
+      element.removeEventListener('keydown', handleTabKey);
+    };
   },
 
   // Move focus to element
   moveFocusTo: (element: HTMLElement, options: { preventScroll?: boolean } = {}) => {
-    element.focus({ preventScroll: options.preventScroll })
+    element.focus({ preventScroll: options.preventScroll });
   },
 
   // Get next focusable element
@@ -333,7 +333,7 @@ export const focusUtils = {
       document.querySelectorAll(
         'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])'
       )
-    ) as HTMLElement[]
+    ) as HTMLElement[];
 
     const currentIndex = focusableElements.indexOf(current);
     if (currentIndex === -1) return null;
@@ -357,7 +357,7 @@ export const focusUtils = {
       'input[type="checkbox"]',
       'select',
       '[tabindex]:not([tabindex="-1"])',
-    ]
+    ];
 
     return (
       focusableSelectors.some((selector) => element.matches(selector)) &&
@@ -365,6 +365,6 @@ export const focusUtils = {
       element.offsetParent !== null
     );
   },
-}
+};
 
 export default ScreenReaderUtils;

@@ -15,7 +15,7 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           id: id,
           userId: user.id,
         },
-      })
+      });
 
       if (!notification) {
         return ApiResponseFormatter.notFoundError('Notification not found');
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');

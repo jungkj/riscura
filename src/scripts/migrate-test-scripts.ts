@@ -13,7 +13,7 @@ import { execSync } from 'child_process';
 import { db } from '@/lib/db';
 
 // Parse command line arguments
-const args = process.argv.slice(2)
+const args = process.argv.slice(2);
 const orgIdIndex = args.indexOf('--org-id');
 const skipTest = args.includes('--skip-test');
 const organizationId = orgIdIndex !== -1 && args[orgIdIndex + 1] ? args[orgIdIndex + 1] : null;
@@ -35,13 +35,13 @@ async function runMigration() {
 
     if (!skipTest) {
       // Determine organization ID for test data
-      let testOrgId = organizationId
+      let testOrgId = organizationId;
 
       if (!testOrgId) {
         // Try to find an existing organization
         const existingOrg = await db.organization.findFirst({
           select: { id: true, name: true },
-        })
+        });
 
         if (existingOrg) {
           testOrgId = existingOrg.id;
@@ -84,14 +84,14 @@ async function runMigration() {
           tags: ['migration', 'verification'],
           organizationId: testOrgId,
         },
-      })
+      });
 
       // console.log('✅ Test script created:', testScript.id)
 
       // Clean up
       await db.testScript.delete({
         where: { id: testScript.id },
-      })
+      });
 
       // console.log('🧹 Test data cleaned up')
     } else {
@@ -112,4 +112,4 @@ async function runMigration() {
 }
 
 // Run the migration
-runMigration().catch(console.error)
+runMigration().catch(console.error);

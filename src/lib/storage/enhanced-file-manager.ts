@@ -58,7 +58,8 @@ export class EnhancedFileManager {
   /**
    * Upload a single file with comprehensive validation and processing
    */
-  async uploadFile(_file: File | Buffer,
+  async uploadFile(
+    _file: File | Buffer,
     fileName: string,
     mimeType: string,
     userId: string,
@@ -74,7 +75,7 @@ export class EnhancedFileManager {
       category: metadata.category,
       enforceSecurityChecks: true,
       maxSize: this.MAX_FILE_SIZE,
-    })
+    });
 
     if (!validationResult.isValid) {
       throw new Error(`File validation failed: ${validationResult.errors.join(', ')}`);
@@ -83,13 +84,13 @@ export class EnhancedFileManager {
     warnings.push(...validationResult.warnings);
 
     // Perform virus scan
-    const virusScanResult = await performVirusScan(buffer)
+    const virusScanResult = await performVirusScan(buffer);
     if (!virusScanResult.isClean) {
       throw new Error(`File failed virus scan: ${virusScanResult.threat}`);
     }
 
     // Check for duplicate files
-    const existingDocument = await this.findDuplicateDocument(fileHash, organizationId)
+    const existingDocument = await this.findDuplicateDocument(fileHash, organizationId);
     if (existingDocument) {
       warnings.push('File already exists in the system');
     }
@@ -99,10 +100,10 @@ export class EnhancedFileManager {
       uploadedBy: userId,
       category: metadata.category,
       tags: metadata.tags,
-    })
+    });
 
     // Generate thumbnail for images
-    let thumbnailUrl: string | undefined
+    let thumbnailUrl: string | undefined;
     if (validationResult.fileInfo.isImage) {
       try {
         const thumbnail = await generateThumbnail(buffer, validationResult.fileInfo.detectedType);
@@ -120,7 +121,7 @@ export class EnhancedFileManager {
     }
 
     // Extract text content for searchable documents
-    let extractedText: string | undefined
+    let extractedText: string | undefined;
     if (validationResult.fileInfo.isDocument) {
       try {
         extractedText = await extractTextContent(buffer, validationResult.fileInfo.detectedType);
@@ -132,7 +133,7 @@ export class EnhancedFileManager {
 
     // Save document metadata to database
     if (!prisma) {
-      throw new Error('Database connection not available')
+      throw new Error('Database connection not available');
     }
 
     const document = await prisma.document.create({
@@ -165,7 +166,7 @@ export class EnhancedFileManager {
       fileType: mimeType,
       category: metadata.category,
       warnings,
-    })
+    });
 
     return {
       id: document.id,
@@ -177,7 +178,7 @@ export class EnhancedFileManager {
       extractedText,
       hash: fileHash,
       warnings,
-    }
+    };
   }
 
   /**
@@ -238,11 +239,11 @@ export class EnhancedFileManager {
       }
 
       // Update progress
-      const progress = ((i + 1) / files.length) * 100
+      const progress = ((i + 1) / files.length) * 100;
       onProgress?.(progress);
     }
 
-    return { successful, failed, warnings }
+    return { successful, failed, warnings };
   }
 
   /**
@@ -258,7 +259,7 @@ export class EnhancedFileManager {
   ): Promise<FileUploadResult> {
     // Get existing document
     if (!prisma) {
-      throw new Error('Database connection not available')
+      throw new Error('Database connection not available');
     }
 
     const existingDocument = await prisma.document.findUnique({
@@ -277,7 +278,7 @@ export class EnhancedFileManager {
       userId,
       existingDocument.organizationId,
       { category: 'version' }
-    )
+    );
 
     // Update document with new version
     await prisma!.document.update({
@@ -303,7 +304,7 @@ export class EnhancedFileManager {
         },
         updatedAt: new Date(),
       },
-    })
+    });
 
     await this.createAuditLog('DOCUMENT_VERSION_CREATE', documentId, userId, {
       fileName,
@@ -317,7 +318,8 @@ export class EnhancedFileManager {
   /**
    * Search documents with full-text search
    */
-  async searchDocuments(_query: string,
+  async searchDocuments(
+    _query: string,
     organizationId: string,
     filters: {
       type?: string[];
@@ -333,19 +335,19 @@ export class EnhancedFileManager {
   }> {
     const whereClause: any = {
       organizationId,
-    }
+    };
 
     // Add search functionality
     if (query) {
       whereClause.OR = [
         { name: { contains: query, mode: 'insensitive' } },
         { extractedText: { contains: query, mode: 'insensitive' } },
-      ]
+      ];
     }
 
     // Add filters
     if (filters.type?.length) {
-      whereClause.type = { in: filters.type }
+      whereClause.type = { in: filters.type };
     }
 
     if (filters.uploadedBy) {
@@ -353,7 +355,7 @@ export class EnhancedFileManager {
     }
 
     if (filters.dateFrom || filters.dateTo) {
-      whereClause.uploadedAt = {}
+      whereClause.uploadedAt = {};
       if (filters.dateFrom) whereClause.uploadedAt.gte = filters.dateFrom;
       if (filters.dateTo) whereClause.uploadedAt.lte = filters.dateTo;
     }
@@ -382,7 +384,7 @@ export class EnhancedFileManager {
       prisma!.document.count({ where: whereClause }),
     ]);
 
-    return { documents, total }
+    return { documents, total };
   }
 
   /**
@@ -412,7 +414,7 @@ export class EnhancedFileManager {
     }
 
     // Check access permissions
-    const hasAccess = await this.checkDocumentAccess(document, userId)
+    const hasAccess = await this.checkDocumentAccess(document, userId);
     if (!hasAccess) {
       throw new Error('Access denied');
     }
@@ -421,14 +423,14 @@ export class EnhancedFileManager {
     await this.createAuditLog('DOCUMENT_ACCESS', documentId, userId, {
       fileName: document.name,
       action: 'view',
-    })
+    });
 
     return {
       ...document,
       downloadUrl: `/api/documents/${document.id}/download`,
       previewUrl: this.canPreview(document.type) ? `/api/documents/${document.id}/preview` : null,
       thumbnailUrl: (document.aiAnalysis as any)?.thumbnailUrl,
-    }
+    };
   }
 
   /**
@@ -448,7 +450,7 @@ export class EnhancedFileManager {
     }
 
     // Check delete permissions
-    const canDelete = await this.checkDeletePermission(document, userId)
+    const canDelete = await this.checkDeletePermission(document, userId);
     if (!canDelete) {
       throw new Error('Insufficient permissions to delete document');
     }
@@ -459,7 +461,7 @@ export class EnhancedFileManager {
         // Extract filename from URL or use document ID
         const fileName = document.content.includes('/')
           ? document.content.split('/').pop() || document.id
-          : document.id
+          : document.id;
         await deleteFile(fileName);
       } catch (error) {
         // console.warn('Storage deletion failed:', error)
@@ -469,7 +471,7 @@ export class EnhancedFileManager {
     // Delete from database
     await prisma.document.delete({
       where: { id: documentId },
-    })
+    });
 
     await this.createAuditLog('DOCUMENT_DELETE', documentId, userId, {
       fileName: document.name,
@@ -489,18 +491,18 @@ export class EnhancedFileManager {
 
     if (document.content?.startsWith('http')) {
       // For S3 URLs, generate signed URL
-      const fileName = document.content.split('/').pop()
+      const fileName = document.content.split('/').pop();
       return await generateSignedUrl(fileName, expiresIn);
     } else {
       // For local storage, return API endpoint
-      return `/api/documents/${documentId}/download`
+      return `/api/documents/${documentId}/download`;
     }
   }
 
   // Helper methods
   private async findDuplicateDocument(hash: string, organizationId: string): Promise<any> {
     if (!prisma) {
-      throw new Error('Database connection not available')
+      throw new Error('Database connection not available');
     }
 
     return await prisma.document.findFirst({
@@ -516,7 +518,7 @@ export class EnhancedFileManager {
 
   private async checkDocumentAccess(document: any, userId: string): Promise<boolean> {
     // Owner can always access
-    if (document.uploadedBy === userId) return true
+    if (document.uploadedBy === userId) return true;
 
     if (!prisma) {
       throw new Error('Database connection not available');
@@ -526,21 +528,21 @@ export class EnhancedFileManager {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { role: true, organizationId: true },
-    })
+    });
 
     if (!user) return false;
     if (user.organizationId !== document.organizationId) return false;
 
     // Admins can access all documents
-    if (user.role === 'ADMIN') return true
+    if (user.role === 'ADMIN') return true;
 
     // For now, allow access to all users in the same organization
-    return true
+    return true;
   }
 
   private async checkDeletePermission(document: any, userId: string): Promise<boolean> {
     // Only owner or admin can delete
-    if (document.uploadedBy === userId) return true
+    if (document.uploadedBy === userId) return true;
 
     if (!prisma) {
       throw new Error('Database connection not available');
@@ -558,7 +560,8 @@ export class EnhancedFileManager {
     return this.SUPPORTED_PREVIEW_TYPES.includes(mimeType);
   }
 
-  private async createAuditLog(_action: string,
+  private async createAuditLog(
+    _action: string,
     entityId: string,
     userId: string,
     details: any

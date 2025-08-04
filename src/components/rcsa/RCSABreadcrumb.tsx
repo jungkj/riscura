@@ -48,7 +48,7 @@ export const RCSABreadcrumb = ({
           href: `/risks/${currentRisk.id}`,
           icon: showIcons ? Shield : undefined,
         }
-      )
+      );
 
       // If we navigated to a control from this risk
       if (currentControl && navigationContext.fromEntity === 'risk') {
@@ -56,7 +56,7 @@ export const RCSABreadcrumb = ({
           label: `Control: ${truncateText(currentControl.title, 25)}`,
           current: true,
           icon: showIcons ? FileText : undefined,
-        })
+        });
       }
     } else if (currentControl) {
       items.push(
@@ -78,7 +78,7 @@ export const RCSABreadcrumb = ({
           label: 'From Risk Analysis',
           href: `/risks/${navigationContext.fromId}`,
           icon: showIcons ? BarChart3 : undefined,
-        })
+        });
       }
     }
 
@@ -88,17 +88,17 @@ export const RCSABreadcrumb = ({
         items[0], // Always keep dashboard
         { label: '...', icon: undefined }, // Ellipsis indicator
         ...items.slice(-(maxItems - 2)), // Keep last few items
-      ]
+      ];
       return truncated;
     }
 
     return items;
-  }
+  };
 
   const truncateText = (text: string, maxLength: number): string => {
     if (text.length <= maxLength) return text;
     return `${text.substring(0, maxLength)}...`;
-  }
+  };
 
   const breadcrumbs = buildBreadcrumbs();
 
@@ -154,11 +154,11 @@ export const RCSABreadcrumb = ({
       ))}
     </nav>
   );
-}
+};
 
 // Variant for mobile with simplified display
 export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
-  const { currentRisk, currentControl, navigationContext } = useRCSA()
+  const { currentRisk, currentControl, navigationContext } = useRCSA();
 
   const getCurrentContext = () => {
     if (currentRisk) {
@@ -167,7 +167,7 @@ export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
         subtitle: 'Risk Analysis',
         backHref: '/risks',
         backLabel: 'Back to Risks',
-      }
+      };
     }
 
     if (currentControl) {
@@ -179,11 +179,11 @@ export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
             ? `/risks/${navigationContext.fromId}`
             : '/controls',
         backLabel: navigationContext.fromEntity === 'risk' ? 'Back to Risk' : 'Back to Controls',
-      }
+      };
     }
 
     return null;
-  }
+  };
 
   const context = getCurrentContext();
 
@@ -204,12 +204,12 @@ export const MobileRCSABreadcrumb = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-}
+};
 
 // Context indicator component for showing relationship information
 export const RCSAContextIndicator = ({ className }: { className?: string }) => {
   const { currentRisk, currentControl, navigationContext, getRelatedControls, getRelatedRisks } =
-    useRCSA()
+    useRCSA();
 
   if (!navigationContext.maintainContext) return null;
 
@@ -224,7 +224,7 @@ export const RCSAContextIndicator = ({ className }: { className?: string }) => {
           message: `This control mitigates "${sourceRisk.title}"`,
           actionHref: `/risks/${sourceRisk.id}`,
           actionLabel: 'View Risk Details',
-        }
+        };
       }
     }
 
@@ -238,12 +238,12 @@ export const RCSAContextIndicator = ({ className }: { className?: string }) => {
           message: `This risk is mitigated by "${sourceControl.title}"`,
           actionHref: `/controls/${sourceControl.id}`,
           actionLabel: 'View Control Details',
-        }
+        };
       }
     }
 
     return null;
-  }
+  };
 
   const contextInfo = getContextInfo();
 
@@ -270,6 +270,6 @@ export const RCSAContextIndicator = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-}
+};
 
 export default RCSABreadcrumb;

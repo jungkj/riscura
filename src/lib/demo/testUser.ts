@@ -1,5 +1,5 @@
 // Test User Service for Demo/Development Environment
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 export interface TestUser {
   id: string;
@@ -14,7 +14,7 @@ export interface TestUser {
     name: string;
     domain: string;
     isActive: boolean;
-  }
+  };
   isActive: boolean;
   emailVerified: Date;
   lastLogin?: Date;
@@ -24,7 +24,7 @@ export interface TestUser {
     department: string;
     phone?: string;
     timezone: string;
-  }
+  };
 }
 
 export interface TestOrganization {
@@ -36,11 +36,11 @@ export interface TestOrganization {
     plan: string;
     status: string;
     expiresAt: Date;
-  }
+  };
   settings: {
     features: string[];
     limits: Record<string, number>;
-  }
+  };
 }
 
 export interface DemoData {
@@ -73,7 +73,7 @@ export const TEST_ORGANIZATION: TestOrganization = {
       storage: 100, // GB
     },
   },
-}
+};
 
 // Test Users with different roles and permissions
 export const TEST_USERS: TestUser[] = [
@@ -176,7 +176,7 @@ export const TEST_USERS: TestUser[] = [
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     },
   },
-]
+];
 
 // Demo Risks Data
 export const DEMO_RISKS = [
@@ -234,7 +234,7 @@ export const DEMO_RISKS = [
     createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
   },
-]
+];
 
 // Demo Controls Data
 export const DEMO_CONTROLS = [
@@ -272,7 +272,7 @@ export const DEMO_CONTROLS = [
     nextTest: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
   },
-]
+];
 
 // Demo Documents Data
 export const DEMO_DOCUMENTS = [
@@ -306,7 +306,7 @@ export const DEMO_DOCUMENTS = [
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     size: 1.8, // MB
   },
-]
+];
 
 // Dashboard Metrics
 export const DEMO_DASHBOARD_METRICS = {
@@ -353,7 +353,7 @@ export const DEMO_DASHBOARD_METRICS = {
       user: 'Alex Administrator',
     },
   ],
-}
+};
 
 // Main function to get complete demo data
 export function getDemoData(): DemoData {
@@ -364,21 +364,21 @@ export function getDemoData(): DemoData {
     controls: DEMO_CONTROLS,
     documents: DEMO_DOCUMENTS,
     dashboardMetrics: DEMO_DASHBOARD_METRICS,
-  }
+  };
 }
 
 // Helper function to get user by email
 export function getTestUserByEmail(email: string): TestUser | null {
-  return TEST_USERS.find((user) => user.email === email) || null
+  return TEST_USERS.find((user) => user.email === email) || null;
 }
 
 // Helper function to validate test credentials
 export function validateTestCredentials(email: string, password: string): TestUser | null {
-  const user = getTestUserByEmail(email)
+  const user = getTestUserByEmail(email);
 
   // Test password is 'demo123' for all test users
   if (user && password === 'demo123') {
-    return user
+    return user;
   }
 
   return null;
@@ -386,12 +386,12 @@ export function validateTestCredentials(email: string, password: string): TestUs
 
 // Get user permissions
 export function getUserPermissions(_userId: string): string[] {
-  const user = TEST_USERS.find((u) => u.id === userId)
+  const user = TEST_USERS.find((u) => u.id === userId);
   return user?.permissions || [];
 }
 
 // Check if user has permission
 export function hasPermission(_userId: string, permission: string): boolean {
-  const permissions = getUserPermissions(userId)
+  const permissions = getUserPermissions(userId);
   return permissions.includes('*') || permissions.includes(permission);
 }

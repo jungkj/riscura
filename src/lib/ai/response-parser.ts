@@ -16,19 +16,19 @@ export class ResponseParser {
   static parseJSON<T>(_response: string): ParsedResponse<T> {
     try {
       // Clean response - remove markdown code blocks if present
-      const cleanedResponse = this.cleanResponse(response)
+      const cleanedResponse = this.cleanResponse(response);
 
       // Try to parse as JSON
-      const data = JSON.parse(cleanedResponse)
+      const data = JSON.parse(cleanedResponse);
 
       return {
         success: true,
         data,
         confidence: 0.9,
-      }
+      };
     } catch (error) {
       // Attempt to extract JSON from within the response
-      const extractedJSON = this.extractJSON(response)
+      const extractedJSON = this.extractJSON(response);
 
       if (extractedJSON) {
         try {
@@ -37,7 +37,7 @@ export class ResponseParser {
             success: true,
             data,
             confidence: 0.7,
-          }
+          };
         } catch (e) {
           // JSON extraction failed
         }
@@ -48,7 +48,7 @@ export class ResponseParser {
         data: null,
         error: `Failed to parse JSON response: ${error instanceof Error ? error.message : 'Unknown error'}`,
         confidence: 0,
-      }
+      };
     }
   }
 
@@ -89,19 +89,19 @@ export class ResponseParser {
           ),
           severity: this.extractRiskLevel(response) || 'MEDIUM',
         },
-      }
+      };
 
       return {
         success: true,
         data: fallbackData,
         confidence: 0.5,
-      }
+      };
     } catch (error) {
       return {
         success: false,
         data: null,
         error: `Failed to parse risk analysis: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
+      };
     }
   }
 
@@ -117,7 +117,7 @@ export class ResponseParser {
 
     // Fallback parsing
     try {
-      const recommendations: any[] = []
+      const recommendations: any[] = [];
       const controlBlocks = response.split(/(?:control|recommendation)\s*\d*[:\-]/gi);
 
       for (let i = 1; i < controlBlocks.length && i <= 5; i++) {
@@ -135,7 +135,7 @@ export class ResponseParser {
           reasoning: this.extractReasoning(block) || 'AI-generated recommendation',
           dependencies: this.extractList(block, /dependencies?[:\s]*([^:]*?)(?:\n\n|\n[A-Z]|$)/i),
           metrics: this.extractList(block, /metrics?[:\s]*([^:]*?)(?:\n\n|\n[A-Z]|$)/i),
-        }
+        };
 
         recommendations.push(recommendation);
       }
@@ -144,13 +144,13 @@ export class ResponseParser {
         success: true,
         data: recommendations,
         confidence: 0.6,
-      }
+      };
     } catch (error) {
       return {
         success: false,
         data: null,
         error: `Failed to parse control recommendations: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
+      };
     }
   }
 
@@ -166,7 +166,7 @@ export class ResponseParser {
 
     // Fallback parsing
     try {
-      const gaps: any[] = []
+      const gaps: any[] = [];
       const gapBlocks = response.split(/gap\s*\d*[:\-]/gi);
 
       for (let i = 1; i < gapBlocks.length && i <= 10; i++) {
@@ -180,7 +180,7 @@ export class ResponseParser {
           recommendedActions: this.extractList(block, /actions?[:\s]*([^:]*?)(?:\n\n|\n[A-Z]|$)/i),
           timeline: this.extractTimeline(block) || `${i * 2}-${i * 3} months`,
           resources: this.extractList(block, /resources?[:\s]*([^:]*?)(?:\n\n|\n[A-Z]|$)/i),
-        }
+        };
 
         gaps.push(gap);
       }
@@ -189,20 +189,24 @@ export class ResponseParser {
         success: true,
         data: gaps,
         confidence: 0.6,
-      }
+      };
     } catch (error) {
       return {
         success: false,
         data: null,
         error: `Failed to parse compliance gaps: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
+      };
     }
   }
 
   /**
    * Parse chat response with intent classification
    */
-  static parseChatResponse(_response: string, intent?: any, contextData?: any): ParsedResponse<any> {
+  static parseChatResponse(
+    _response: string,
+    intent?: any,
+    contextData?: any
+  ): ParsedResponse<any> {
     try {
       const chatResponse = {
         message: response.trim(),
@@ -210,19 +214,19 @@ export class ResponseParser {
         data: contextData || null,
         followUpQuestions: this.extractFollowUpQuestions(response),
         actions: this.extractActions(response),
-      }
+      };
 
       return {
         success: true,
         data: chatResponse,
         confidence: 0.8,
-      }
+      };
     } catch (error) {
       return {
         success: false,
         data: null,
         error: `Failed to parse chat response: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
+      };
     }
   }
 
@@ -246,19 +250,19 @@ export class ResponseParser {
           /recommendations?[:\s]*([^:]*?)(?:\n\n|\n[A-Z]|$)/i
         ),
         alerts: this.extractAlerts(response),
-      }
+      };
 
       return {
         success: true,
         data: fallbackData,
         confidence: 0.5,
-      }
+      };
     } catch (error) {
       return {
         success: false,
         data: null,
         error: `Failed to parse trend predictions: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
+      };
     }
   }
 
@@ -266,13 +270,13 @@ export class ResponseParser {
 
   private static cleanResponse(_response: string): string {
     // Remove markdown code blocks
-    let cleaned = response.replace(/```(?:json|javascript)?\n?([\s\S]*?)\n?```/g, '$1')
+    let cleaned = response.replace(/```(?:json|javascript)?\n?([\s\S]*?)\n?```/g, '$1');
 
     // Remove leading/trailing whitespace
-    cleaned = cleaned.trim()
+    cleaned = cleaned.trim();
 
     // Remove any explanatory text before JSON
-    const jsonStart = cleaned.search(/[{\[]/)
+    const jsonStart = cleaned.search(/[{\[]/);
     if (jsonStart > 0) {
       cleaned = cleaned.substring(jsonStart);
     }
@@ -282,11 +286,11 @@ export class ResponseParser {
 
   private static extractJSON(_response: string): string | null {
     // Try to find JSON objects or arrays in the response
-    const jsonMatches = response.match(/[{\[][\s\S]*[}\]]/g)
+    const jsonMatches = response.match(/[{\[][\s\S]*[}\]]/g);
 
     if (jsonMatches && jsonMatches.length > 0) {
       // Return the largest JSON-like string
-      return jsonMatches.reduce((a, b) => (a.length > b.length ? a : b))
+      return jsonMatches.reduce((a, b) => (a.length > b.length ? a : b));
     }
 
     return null;
@@ -463,7 +467,7 @@ export class ResponseParser {
     ];
 
     // Try to extract questions from response
-    const questionMatches = response.match(/\?[^?]*$/g)
+    const questionMatches = response.match(/\?[^?]*$/g);
     if (questionMatches && questionMatches.length > 0) {
       return questionMatches.slice(0, 3);
     }
@@ -471,7 +475,8 @@ export class ResponseParser {
     return defaultQuestions.slice(0, 2);
   }
 
-  private static extractActions(_response: string
+  private static extractActions(
+    _response: string
   ): Array<{ label: string; action: string; parameters?: any }> {
     const actions: Array<{ label: string; action: string; parameters?: any }> = [];
 
@@ -502,12 +507,12 @@ export class ResponseParser {
         description: 'Risk levels have remained relatively stable',
         predictions: [],
       },
-    ]
+    ];
   }
 
   private static extractAlerts(_response: string): any[] {
     // Simple alert extraction - would be enhanced based on actual response patterns
-    const alerts: any[] = []
+    const alerts: any[] = [];
 
     if (response.toLowerCase().includes('critical') || response.toLowerCase().includes('urgent')) {
       alerts.push({

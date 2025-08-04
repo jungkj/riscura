@@ -3,11 +3,11 @@
 import { toast } from 'sonner';
 
 // API base configuration
-const API_BASE = '/api'
+const API_BASE = '/api';
 
 // Generic API request function with error handling
 async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE}${endpoint}`
+  const url = `${API_BASE}${endpoint}`;
 
   const defaultOptions: RequestInit = {
     headers: {
@@ -15,7 +15,7 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
       ...options.headers,
     },
     ...options,
-  }
+  };
 
   try {
     const response = await fetch(url, defaultOptions);
@@ -41,7 +41,7 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
 // ============================================================================
 
 export interface Risk {
-  id: string
+  id: string;
   title: string;
   description: string;
   category: 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY';
@@ -63,14 +63,14 @@ export interface Risk {
     firstName: string;
     lastName: string;
     email: string;
-  }
+  };
   controls?: Control[];
   _count?: {
     controls: number;
     evidence: number;
     comments: number;
     tasks: number;
-  }
+  };
 }
 
 export interface Control {
@@ -93,7 +93,7 @@ export interface Control {
     firstName: string;
     lastName: string;
     email: string;
-  }
+  };
 }
 
 export interface RiskQueryParams {
@@ -117,7 +117,7 @@ export interface ApiResponse<T> {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
     totalPages: number;
-  }
+  };
   summary?: Record<string, any>;
   message?: string;
 }
@@ -126,7 +126,7 @@ export interface ApiResponse<T> {
 export const riskAPI = {
   // Get all risks with filtering and pagination
   async getRisks(params: RiskQueryParams = {}): Promise<ApiResponse<Risk[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -138,7 +138,7 @@ export const riskAPI = {
 
   // Get single risk by ID
   async getRisk(id: string): Promise<Risk> {
-    return apiRequest<Risk>(`/risks/${id}`)
+    return apiRequest<Risk>(`/risks/${id}`);
   },
 
   // Create new risk
@@ -146,7 +146,7 @@ export const riskAPI = {
     return apiRequest<Risk>('/risks', {
       method: 'POST',
       body: JSON.stringify(risk),
-    })
+    });
   },
 
   // Update risk
@@ -154,19 +154,19 @@ export const riskAPI = {
     return apiRequest<Risk>(`/risks/${id}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
-    })
+    });
   },
 
   // Delete risk
   async deleteRisk(id: string): Promise<{ id: string }> {
     return apiRequest<{ id: string }>(`/risks/${id}`, {
       method: 'DELETE',
-    })
+    });
   },
 
   // Bulk operations
   async bulkUpdateRisks(operations: {
-    create?: Partial<Risk>[]
+    create?: Partial<Risk>[];
     update?: Array<{ id: string } & Partial<Risk>>;
     delete?: string[];
   }): Promise<{ created: number; updated: number; deleted: number; errors: string[] }> {
@@ -175,7 +175,7 @@ export const riskAPI = {
       body: JSON.stringify(operations),
     });
   },
-}
+};
 
 // ============================================================================
 // CONTROL API INTEGRATION
@@ -184,7 +184,7 @@ export const riskAPI = {
 export const controlAPI = {
   // Get all controls with filtering and pagination
   async getControls(params: RiskQueryParams = {}): Promise<ApiResponse<Control[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -196,7 +196,7 @@ export const controlAPI = {
 
   // Get single control by ID
   async getControl(id: string): Promise<Control> {
-    return apiRequest<Control>(`/controls/${id}`)
+    return apiRequest<Control>(`/controls/${id}`);
   },
 
   // Create new control
@@ -204,7 +204,7 @@ export const controlAPI = {
     return apiRequest<Control>('/controls', {
       method: 'POST',
       body: JSON.stringify(control),
-    })
+    });
   },
 
   // Update control
@@ -212,23 +212,23 @@ export const controlAPI = {
     return apiRequest<Control>(`/controls/${id}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
-    })
+    });
   },
 
   // Delete control
   async deleteControl(id: string): Promise<{ id: string }> {
     return apiRequest<{ id: string }>(`/controls/${id}`, {
       method: 'DELETE',
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // DOCUMENT API INTEGRATION
 // ============================================================================
 
 export interface Document {
-  id: string
+  id: string;
   title: string;
   description?: string;
   category:
@@ -259,7 +259,7 @@ export interface Document {
 export const documentAPI = {
   // Get all documents
   async getDocuments(params: RiskQueryParams = {}): Promise<ApiResponse<Document[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -271,7 +271,7 @@ export const documentAPI = {
 
   // Upload document
   async uploadDocument(_file: File, metadata: Partial<Document>): Promise<Document> {
-    const formData = new FormData()
+    const formData = new FormData();
     formData.append('file', file);
     formData.append('metadata', JSON.stringify(metadata));
 
@@ -286,16 +286,16 @@ export const documentAPI = {
   async deleteDocument(id: string): Promise<{ id: string }> {
     return apiRequest<{ id: string }>(`/documents/${id}`, {
       method: 'DELETE',
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // ASSESSMENT API INTEGRATION
 // ============================================================================
 
 export interface Assessment {
-  id: string
+  id: string;
   name: string;
   description?: string;
   type: 'ASSESSMENT';
@@ -314,13 +314,13 @@ export interface Assessment {
     scope?: string;
     objectives?: string[];
     methodology?: string;
-  }
+  };
 }
 
 export const assessmentAPI = {
   // Get all assessments
   async getAssessments(params: RiskQueryParams = {}): Promise<ApiResponse<Assessment[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -335,7 +335,7 @@ export const assessmentAPI = {
     return apiRequest<Assessment>('/assessments', {
       method: 'POST',
       body: JSON.stringify(assessment),
-    })
+    });
   },
 
   // Update assessment
@@ -343,16 +343,16 @@ export const assessmentAPI = {
     return apiRequest<Assessment>(`/assessments/${id}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // QUESTIONNAIRE API INTEGRATION
 // ============================================================================
 
 export interface Questionnaire {
-  id: string
+  id: string;
   title: string;
   description?: string;
   type:
@@ -370,13 +370,13 @@ export interface Questionnaire {
   organizationId: string;
   _count?: {
     responses: number;
-  }
+  };
 }
 
 export const questionnaireAPI = {
   // Get all questionnaires
   async getQuestionnaires(params: RiskQueryParams = {}): Promise<ApiResponse<Questionnaire[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -391,7 +391,7 @@ export const questionnaireAPI = {
     return apiRequest<Questionnaire>('/questionnaires', {
       method: 'POST',
       body: JSON.stringify(questionnaire),
-    })
+    });
   },
 
   // Submit questionnaire response
@@ -402,16 +402,16 @@ export const questionnaireAPI = {
         questionnaireId,
         responses,
       }),
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // REPORT API INTEGRATION
 // ============================================================================
 
 export interface Report {
-  id: string
+  id: string;
   title: string;
   description?: string;
   type:
@@ -432,7 +432,7 @@ export interface Report {
 export const reportAPI = {
   // Get all reports
   async getReports(params: RiskQueryParams = {}): Promise<ApiResponse<Report[]>> {
-    const searchParams = new URLSearchParams()
+    const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         searchParams.append(key, String(value));
@@ -451,7 +451,7 @@ export const reportAPI = {
         parameters,
         format,
       }),
-    })
+    });
   },
 
   // Create new report
@@ -459,16 +459,16 @@ export const reportAPI = {
     return apiRequest<Report>('/reports', {
       method: 'POST',
       body: JSON.stringify(report),
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // NOTIFICATION API INTEGRATION
 // ============================================================================
 
 export interface Notification {
-  id: string
+  id: string;
   type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'REMINDER';
   title: string;
   message: string;
@@ -501,30 +501,30 @@ export const notificationAPI = {
   async markAsRead(id: string): Promise<Notification> {
     return apiRequest<Notification>(`/notifications/${id}/read`, {
       method: 'POST',
-    })
+    });
   },
 
   // Mark all notifications as read
   async markAllAsRead(): Promise<{ updated: number }> {
     return apiRequest('/notifications/read-all', {
       method: 'POST',
-    })
+    });
   },
 
   // Delete notification
   async deleteNotification(id: string): Promise<{ id: string }> {
     return apiRequest<{ id: string }>(`/notifications/${id}`, {
       method: 'DELETE',
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // USER API INTEGRATION
 // ============================================================================
 
 export interface User {
-  id: string
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -549,7 +549,7 @@ export const userAPI = {
     return apiRequest<User>('/users/me', {
       method: 'PUT',
       body: JSON.stringify(updates),
-    })
+    });
   },
 
   // Change password
@@ -563,9 +563,9 @@ export const userAPI = {
         currentPassword,
         newPassword,
       }),
-    })
+    });
   },
-}
+};
 
 // ============================================================================
 // ANALYTICS API INTEGRATION
@@ -580,14 +580,14 @@ export const analyticsAPI = {
 
   // Get risk trends
   async getRiskTrends(_period: string = '30d'): Promise<any> {
-    return apiRequest(`/analytics/risks/trends?period=${period}`)
+    return apiRequest(`/analytics/risks/trends?period=${period}`);
   },
 
   // Get control effectiveness metrics
   async getControlEffectiveness(): Promise<any> {
-    return apiRequest('/analytics/controls/effectiveness')
+    return apiRequest('/analytics/controls/effectiveness');
   },
-}
+};
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -595,14 +595,14 @@ export const analyticsAPI = {
 
 // Format date for API
 export function formatDateForAPI(date: Date | string): string {
-  if (typeof date === 'string') return date
+  if (typeof date === 'string') return date;
   return date.toISOString();
 }
 
 // Handle API errors consistently
 export function handleAPIError(__error: unknown): string {
   if (error instanceof Error) {
-    return error.message
+    return error.message;
   }
   return 'An unexpected error occurred';
 }
@@ -638,7 +638,7 @@ export const api = {
   notifications: notificationAPI,
   users: userAPI,
   analytics: analyticsAPI,
-}
+};
 
 // ============================================================================
 // LEGACY MOCK DATA GENERATORS (for backward compatibility)
@@ -691,7 +691,7 @@ export function generateMockRisks(): any[] {
       updatedAt: new Date().toISOString(),
       organizationId: 'demo-org',
     },
-  ]
+  ];
 }
 
 export function generateMockControls(): any[] {

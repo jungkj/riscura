@@ -3,41 +3,41 @@
 // Enhanced Risk Management Types
 export interface EnhancedRisk extends Risk {
   // Workflow states
-  workflowState: 'identified' | 'assessed' | 'mitigated' | 'monitored' | 'closed'
+  workflowState: 'identified' | 'assessed' | 'mitigated' | 'monitored' | 'closed';
   workflowHistory: WorkflowTransition[];
 
   // AI-powered fields
-  aiSuggestions?: AISuggestions
+  aiSuggestions?: AISuggestions;
   aiConfidence: number;
   aiLastAnalyzed?: Date;
 
   // Enhanced metadata
-  priority: 'critical' | 'high' | 'medium' | 'low'
+  priority: 'critical' | 'high' | 'medium' | 'low';
   businessUnit?: string;
   riskOwner: string;
   riskApprover?: string;
 
   // Collaboration
-  riskComments: RiskComment[]
+  riskComments: RiskComment[];
   approvals: RiskApproval[];
   assignments: RiskAssignment[];
 
   // Analytics
-  trendData?: RiskTrend[]
+  trendData?: RiskTrend[];
   correlatedRisks?: string[];
   mitigationStrategies: MitigationStrategy[];
 
   // Templates and categorization
-  template?: RiskTemplate
+  template?: RiskTemplate;
   subCategory?: string;
   tags: string[];
 
   // Compliance and regulatory
-  regulatoryFrameworks: string[]
+  regulatoryFrameworks: string[];
   complianceRequirements: string[];
 
   // Financial impact
-  potentialLoss?: FinancialImpact
+  potentialLoss?: FinancialImpact;
   costOfMitigation?: number;
 }
 
@@ -141,7 +141,7 @@ export interface FinancialImpact {
 
 // Bulk Operations
 export interface BulkOperation {
-  type: 'update' | 'delete' | 'export' | 'approve' | 'assign'
+  type: 'update' | 'delete' | 'export' | 'approve' | 'assign';
   riskIds: string[];
   data?: any;
   userId: string;
@@ -159,42 +159,42 @@ export interface BulkUpdateData {
 // Advanced Filtering
 export interface AdvancedRiskFilters {
   // Basic filters
-  category?: string[]
+  category?: string[];
   status?: string[];
   priority?: string[];
   riskLevel?: string[];
 
   // Date filters
   dateRange?: {
-    start: Date
+    start: Date;
     end: Date;
     field: 'createdAt' | 'updatedAt' | 'lastAssessed' | 'nextReview';
-  }
+  };
 
   // Score filters
   scoreRange?: {
-    min: number
+    min: number;
     max: number;
-  }
+  };
 
   // Assignment filters
-  assignedTo?: string[]
+  assignedTo?: string[];
   owner?: string[];
   approver?: string[];
 
   // AI filters
   aiConfidenceRange?: {
-    min: number
+    min: number;
     max: number;
-  }
+  };
 
   // Custom filters
-  tags?: string[]
+  tags?: string[];
   businessUnit?: string[];
   regulatoryFramework?: string[];
 
   // Advanced queries
-  searchQuery?: string
+  searchQuery?: string;
   correlatedWith?: string; // risk ID
   hasComments?: boolean;
   requiresApproval?: boolean;
@@ -202,7 +202,7 @@ export interface AdvancedRiskFilters {
 
 // Import/Export
 export interface RiskImportData {
-  risks: Partial<EnhancedRisk>[]
+  risks: Partial<EnhancedRisk>[];
   mapping: FieldMapping;
   validation: ValidationSettings;
 }
@@ -225,12 +225,12 @@ export interface RiskExportOptions {
   dateRange?: {
     start: Date;
     end: Date;
-  }
+  };
 }
 
 // Analytics and Reporting
 export interface RiskAnalytics {
-  totalRisks: number
+  totalRisks: number;
   risksByCategory: Record<string, number>;
   risksByStatus: Record<string, number>;
   risksByPriority: Record<string, number>;
@@ -253,7 +253,7 @@ export interface TrendDataPoint {
 
 // AI Risk Intelligence
 export interface RiskIntelligence {
-  predictiveAnalysis: PredictiveAnalysis
+  predictiveAnalysis: PredictiveAnalysis;
   correlationInsights: CorrelationInsight[];
   emergingRisks: EmergingRisk[];
   industryBenchmarks: IndustryBenchmark[];

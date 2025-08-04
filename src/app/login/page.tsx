@@ -9,7 +9,7 @@ const LoginRedirectContent = () => {
 
   useEffect(() => {
     // Preserve all query parameters when redirecting
-    const queryString = searchParams?.toString()
+    const queryString = searchParams?.toString();
     const redirectUrl = queryString ? `/auth/login?${queryString}` : '/auth/login';
     router.replace(redirectUrl);
   }, [router, searchParams]);
@@ -19,7 +19,7 @@ const LoginRedirectContent = () => {
       <p>Redirecting to login...</p>
     </div>
   );
-}
+};
 
 export default function LoginRedirect() {
   return (

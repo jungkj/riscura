@@ -13,7 +13,7 @@ export default function OAuthDebugPage() {
 
   useEffect(() => {
     // Check for error in URL params
-    const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search);
     const errorParam = urlParams.get('error');
     if (errorParam) {
       setError(`OAuth Error: ${errorParam}`);
@@ -28,7 +28,7 @@ export default function OAuthDebugPage() {
     } catch (err) {
       setError('Failed to fetch debug info');
     }
-  }
+  };
 
   const testGoogleSignIn = async () => {
     setLoading(true);
@@ -57,7 +57,7 @@ export default function OAuthDebugPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchDebugInfo();

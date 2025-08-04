@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 
 // Define metadata type for RCSA tracking
 interface RCSAMetadata {
-  includedInRCSA?: boolean
+  includedInRCSA?: boolean;
   lastRCSASync?: string;
   [key: string]: any; // Allow other metadata fields
 }
@@ -48,7 +48,7 @@ export const POST = withApiMiddleware(
             },
           },
         },
-      })
+      });
 
       if (!risk) {
         return NextResponse.json(
@@ -65,7 +65,7 @@ export const POST = withApiMiddleware(
 
       if (action === 'add' || action === 'update') {
         // Mark risk as included in RCSA if not already
-        const existingMetadata = (risk.metadata as RCSAMetadata) || {}
+        const existingMetadata = (risk.metadata as RCSAMetadata) || {};
         await db.client.risk.update({
           where: { id: riskId },
           data: {
@@ -87,10 +87,10 @@ export const POST = withApiMiddleware(
             userId: user.id,
             organizationId,
           },
-        })
+        });
       } else if (action === 'remove') {
         // Mark risk as excluded from RCSA
-        const existingMetadata = (risk.metadata as RCSAMetadata) || {}
+        const existingMetadata = (risk.metadata as RCSAMetadata) || {};
         await db.client.risk.update({
           where: { id: riskId },
           data: {
@@ -112,7 +112,7 @@ export const POST = withApiMiddleware(
             userId: user.id,
             organizationId,
           },
-        })
+        });
       }
 
       return NextResponse.json({

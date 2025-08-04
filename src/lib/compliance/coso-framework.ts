@@ -251,7 +251,7 @@ export class COSOFrameworkService {
           },
         },
       ],
-    }
+    };
 
     // Risk Assessment Component
     const riskAssessment: COSOComponent = {
@@ -284,7 +284,7 @@ export class COSOFrameworkService {
           },
         },
       ],
-    }
+    };
 
     // Control Activities Component
     const controlActivities: COSOComponent = {
@@ -321,7 +321,7 @@ export class COSOFrameworkService {
           },
         },
       ],
-    }
+    };
 
     // Information & Communication Component
     const informationCommunication: COSOComponent = {
@@ -350,7 +350,7 @@ export class COSOFrameworkService {
           },
         },
       ],
-    }
+    };
 
     // Monitoring Activities Component
     const monitoringActivities: COSOComponent = {
@@ -383,17 +383,17 @@ export class COSOFrameworkService {
           },
         },
       ],
-    }
+    };
 
     // Store components
-    this.components.set('control-environment', controlEnvironment)
+    this.components.set('control-environment', controlEnvironment);
     this.components.set('risk-assessment', riskAssessment);
     this.components.set('control-activities', controlActivities);
     this.components.set('information-communication', informationCommunication);
     this.components.set('monitoring-activities', monitoringActivities);
 
     // Initialize principles (17 principles total)
-    this.initializeCOSOPrinciples()
+    this.initializeCOSOPrinciples();
   }
 
   /**
@@ -463,13 +463,13 @@ export class COSOFrameworkService {
         ],
       },
       // Additional principles would be added here...
-    ]
+    ];
 
     principles.forEach((principle) => {
       this.principles.set(principle.id, principle);
 
       // Add principle to its component
-      const component = this.components.get(principle.component)
+      const component = this.components.get(principle.component);
       if (component) {
         component.principles.push(principle);
       }
@@ -479,7 +479,8 @@ export class COSOFrameworkService {
   /**
    * Perform comprehensive COSO assessment
    */
-  async performCOSOAssessment(_organizationId: string,
+  async performCOSOAssessment(
+    _organizationId: string,
     risks: Risk[],
     controls: Control[],
     assessor: string,
@@ -489,26 +490,26 @@ export class COSOFrameworkService {
 
     // Assess each component
     for (const [componentId, component] of this.components) {
-      const componentAssessment = await this.assessComponent(component, risks, controls)
+      const componentAssessment = await this.assessComponent(component, risks, controls);
       componentAssessments.push(componentAssessment);
     }
 
     // Calculate overall rating and score
-    const overallScore = this.calculateOverallScore(componentAssessments)
+    const overallScore = this.calculateOverallScore(componentAssessments);
     const overallRating = this.determineOverallRating(overallScore);
 
     // Identify deficiencies and material weaknesses
-    const deficiencies = this.identifyDeficiencies(componentAssessments)
+    const deficiencies = this.identifyDeficiencies(componentAssessments);
     const materialWeaknesses = this.identifyMaterialWeaknesses(deficiencies);
 
     // Generate recommendations
     const recommendations = await this.generateCOSORecommendations(
       componentAssessments,
       deficiencies
-    )
+    );
 
     // Create action plan
-    const actionPlan = this.createActionPlan(recommendations, materialWeaknesses)
+    const actionPlan = this.createActionPlan(recommendations, materialWeaknesses);
 
     return {
       organizationId,
@@ -523,7 +524,7 @@ export class COSOFrameworkService {
       recommendations,
       actionPlan,
       nextAssessment: this.calculateNextAssessmentDate(overallScore),
-    }
+    };
   }
 
   /**
@@ -547,7 +548,7 @@ export class COSOFrameworkService {
         effort: this.determineGapEffort(targetMaturity - compAssessment.componentScore),
         priority: this.calculateGapPriority(compAssessment),
         recommendations: compAssessment.recommendations,
-      }
+      };
       componentGaps.push(gap);
 
       // Analyze principle gaps within component
@@ -560,31 +561,31 @@ export class COSOFrameworkService {
           deficiencies: princAssessment.deficiencies,
           recommendations: this.generatePrincipleRecommendations(princAssessment),
           effort: this.determineGapEffort(targetMaturity - princAssessment.score),
-        }
+        };
         principleGaps.push(principleGap);
       });
     });
 
     // Calculate overall maturity
-    const overallMaturity = currentAssessment.overallScore
+    const overallMaturity = currentAssessment.overallScore;
 
     // Identify priority areas
     const priorityAreas = componentGaps
       .filter((gap) => gap.impact === 'high' && gap.gap > 20)
-      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId)
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
 
     // Identify quick wins
     const quickWins = componentGaps
       .filter((gap) => gap.effort === 'low' && gap.gap > 10)
-      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId)
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
 
     // Identify long-term initiatives
     const longTermInitiatives = componentGaps
       .filter((gap) => gap.effort === 'high' && gap.impact === 'high')
-      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId)
+      .map((gap) => this.components.get(gap.componentId)?.name || gap.componentId);
 
     // Calculate risk exposure
-    const riskExposure = Math.max(0, 100 - overallMaturity)
+    const riskExposure = Math.max(0, 100 - overallMaturity);
 
     return {
       componentGaps,
@@ -594,7 +595,7 @@ export class COSOFrameworkService {
       quickWins,
       longTermInitiatives,
       riskExposure,
-    }
+    };
   }
 
   /**
@@ -652,7 +653,7 @@ export class COSOFrameworkService {
       recommendations,
       actionPlan,
       timeline,
-    }
+    };
   }
 
   // Helper methods
@@ -661,11 +662,11 @@ export class COSOFrameworkService {
     risks: Risk[],
     controls: Control[]
   ): Promise<ComponentAssessment> {
-    const principleAssessments: PrincipleAssessment[] = []
+    const principleAssessments: PrincipleAssessment[] = [];
 
     // Assess each principle in the component
     component.principles.forEach((principle) => {
-      const assessment = this.assessPrinciple(principle, risks, controls)
+      const assessment = this.assessPrinciple(principle, risks, controls);
       principleAssessments.push(assessment);
     });
 
@@ -675,21 +676,21 @@ export class COSOFrameworkService {
         ? Math.round(
             principleAssessments.reduce((sum, p) => sum + p.score, 0) / principleAssessments.length
           )
-        : 0
+        : 0;
 
     const componentRating = this.determineRating(componentScore);
 
     // Identify strengths and deficiencies
     const strengths = principleAssessments
       .filter((p) => p.score >= 80)
-      .map((p) => `Strong ${this.principles.get(p.principleId)?.title}`)
+      .map((p) => `Strong ${this.principles.get(p.principleId)?.title}`);
 
     const deficiencies = principleAssessments
       .filter((p) => p.score < 60)
       .flatMap((p) => p.deficiencies);
 
     // Generate component-level recommendations
-    const recommendations = this.generateComponentRecommendations(component, principleAssessments)
+    const recommendations = this.generateComponentRecommendations(component, principleAssessments);
 
     return {
       componentId: component.id,
@@ -699,7 +700,7 @@ export class COSOFrameworkService {
       strengths,
       deficiencies,
       recommendations,
-    }
+    };
   }
 
   private assessPrinciple(
@@ -710,7 +711,7 @@ export class COSOFrameworkService {
     // Simplified assessment logic - in practice would be more sophisticated
     const relevantControls = controls.filter((control) =>
       this.isControlRelevantToPrinciple(control, principle)
-    )
+    );
 
     let score = 50; // baseline
 
@@ -721,7 +722,7 @@ export class COSOFrameworkService {
           const effectiveness =
             typeof control.effectiveness === 'number'
               ? control.effectiveness
-              : this.convertEffectivenessToNumber(control.effectiveness)
+              : this.convertEffectivenessToNumber(control.effectiveness);
           return sum + effectiveness;
         }, 0) / relevantControls.length;
 
@@ -738,7 +739,7 @@ export class COSOFrameworkService {
       quality: 'medium',
       relevance: 'direct',
       date: new Date(),
-    }))
+    }));
 
     const testingResults: TestingResult[] = [];
     const findings: string[] = [];
@@ -756,7 +757,7 @@ export class COSOFrameworkService {
       testingResults,
       findings,
       deficiencies,
-    }
+    };
   }
 
   private calculateOverallScore(componentAssessments: ComponentAssessment[]): number {
@@ -803,7 +804,7 @@ export class COSOFrameworkService {
 
   private isControlRelevantToPrinciple(control: Control, principle: COSOPrinciple): boolean {
     // Simplified mapping logic - would be more sophisticated in practice
-    const controlKeywords = [control.title.toLowerCase(), control.description.toLowerCase()]
+    const controlKeywords = [control.title.toLowerCase(), control.description.toLowerCase()];
     const principleKeywords = principle.title.toLowerCase();
 
     return controlKeywords.some(
@@ -887,7 +888,7 @@ export class COSOFrameworkService {
           cost: 25000,
           benefit: 'Improved internal control effectiveness',
           success: ['Score improvement to >70%', 'Reduced deficiencies'],
-        })
+        });
       }
     });
 
@@ -912,7 +913,7 @@ export class COSOFrameworkService {
         status: 'not_started',
         dependencies: [],
         progress: 0,
-      })
+      });
     });
 
     // Create action items for material weaknesses
@@ -927,7 +928,7 @@ export class COSOFrameworkService {
         status: 'not_started',
         dependencies: [],
         progress: 0,
-      })
+      });
     });
 
     return actionItems;
@@ -938,7 +939,7 @@ export class COSOFrameworkService {
     let monthsUntilNext = 12; // Default annual
 
     // More frequent assessments for lower scores
-    if (overallScore < 50) monthsUntilNext = 6
+    if (overallScore < 50) monthsUntilNext = 6;
     else if (overallScore < 70) monthsUntilNext = 9;
 
     now.setMonth(now.getMonth() + monthsUntilNext);
@@ -947,7 +948,7 @@ export class COSOFrameworkService {
 
   // Additional helper methods for gap analysis and reporting
   private determineGapImpact(gap: number): 'high' | 'medium' | 'low' {
-    if (gap > 30) return 'high'
+    if (gap > 30) return 'high';
     if (gap > 15) return 'medium';
     return 'low';
   }
@@ -960,7 +961,7 @@ export class COSOFrameworkService {
 
   private calculateGapPriority(assessment: ComponentAssessment): number {
     // Priority based on score and number of deficiencies
-    const scoreFactor = (100 - assessment.componentScore) / 100
+    const scoreFactor = (100 - assessment.componentScore) / 100;
     const deficiencyFactor = assessment.deficiencies.length / 10;
     return Math.round((scoreFactor + deficiencyFactor) * 100);
   }
@@ -996,7 +997,7 @@ export class COSOFrameworkService {
 
   private identifyRelevantPrinciples(control: Control): string[] {
     // Simplified mapping - would use more sophisticated logic in practice
-    const relevantPrinciples: string[] = []
+    const relevantPrinciples: string[] = [];
 
     // Map based on control type and description
     if (control.type === 'preventive') {
@@ -1042,20 +1043,20 @@ export class COSOFrameworkService {
     const findings: string[] = [];
 
     // Overall findings
-    findings.push(`Overall internal control effectiveness: ${assessment.overallRating}`)
+    findings.push(`Overall internal control effectiveness: ${assessment.overallRating}`);
 
     // Component findings
     assessment.componentAssessments.forEach((comp) => {
       if (comp.componentScore < 60) {
         findings.push(
           `${this.components.get(comp.componentId)?.name} requires significant improvement`
-        )
+        );
       }
     });
 
     // Material weakness findings
     if (assessment.materialWeaknesses.length > 0) {
-      findings.push(`${assessment.materialWeaknesses.length} material weaknesses identified`)
+      findings.push(`${assessment.materialWeaknesses.length} material weaknesses identified`);
     }
 
     return findings;

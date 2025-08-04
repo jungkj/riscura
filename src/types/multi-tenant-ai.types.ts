@@ -2,7 +2,7 @@
 
 // Core Tenant Management
 export interface Tenant {
-  id: string
+  id: string;
   name: string;
   domain: string;
   subdomain: string;
@@ -79,7 +79,7 @@ export interface SubscriptionFeatures {
 
 // Tenant Configuration
 export interface TenantConfiguration {
-  aiModels: TenantAIModels
+  aiModels: TenantAIModels;
   dataRetention: DataRetentionPolicy;
   privacy: PrivacySettings;
   integrations: TenantIntegrations;
@@ -139,7 +139,7 @@ export interface CustomModelConfig {
 
 // AI Personality & Branding
 export interface AIPersonality {
-  name: string
+  name: string;
   description: string;
   tone: PersonalityTone;
   communication: CommunicationStyle;
@@ -219,7 +219,7 @@ export interface BrandMessaging {
 
 // Tenant Isolation
 export interface TenantIsolation {
-  dataIsolation: DataIsolationConfig
+  dataIsolation: DataIsolationConfig;
   computeIsolation: ComputeIsolationConfig;
   networkIsolation: NetworkIsolationConfig;
   storageIsolation: StorageIsolationConfig;
@@ -271,7 +271,7 @@ export interface StorageIsolationConfig {
 
 // Analytics & Billing
 export interface TenantAnalytics {
-  usage: UsageAnalytics
+  usage: UsageAnalytics;
   performance: PerformanceAnalytics;
   costs: CostAnalytics;
   users: UserAnalytics;
@@ -328,7 +328,7 @@ export interface BillingCosts {
 
 // Security & Compliance
 export interface TenantSecurity {
-  authentication: AuthenticationConfig
+  authentication: AuthenticationConfig;
   authorization: AuthorizationConfig;
   encryption: EncryptionConfig;
   compliance: ComplianceConfig;
@@ -364,7 +364,7 @@ export interface TenantRole {
 
 // Multi-Tenant Management
 export interface TenantManager {
-  tenants: Map<string, Tenant>
+  tenants: Map<string, Tenant>;
   isolation: IsolationManager;
   billing: BillingManager;
   analytics: AnalyticsManager;
@@ -397,7 +397,7 @@ export interface BillingManager {
 
 // Conversation Context
 export interface TenantConversationContext {
-  tenantId: string
+  tenantId: string;
   userId: string;
   sessionId: string;
   conversationId: string;
@@ -442,7 +442,7 @@ export interface ResponseMetadata {
 
 // Utility Interfaces
 export interface TimeSeriesData {
-  timestamp: Date
+  timestamp: Date;
   value: number;
   metadata?: Record<string, unknown>;
 }
@@ -564,7 +564,7 @@ export interface BillingSettings {
 
 // Additional supporting interfaces
 export interface BillingInfo {
-  billingEmail: string
+  billingEmail: string;
   billingAddress: Address;
   paymentMethod: PaymentMethod;
   taxInformation: TaxInfo;
@@ -711,7 +711,7 @@ export interface CustomPrompts {
 export interface BrandAsset {
   url: string;
   altText: string;
-  dimensions: { width: number; height: number }
+  dimensions: { width: number; height: number };
   format: string;
 }
 
@@ -933,7 +933,7 @@ export interface PredictionInsight {
 
 export interface PaymentMethodDetails {
   // Varies by payment method type
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 export interface ArchivalPolicy {
@@ -1477,8 +1477,8 @@ export const isTenant = (obj: unknown): obj is Tenant => {
     'name' in obj &&
     'status' in obj &&
     'subscription' in obj
-  )
-}
+  );
+};
 
 export const isTenantConversationContext = (obj: unknown): obj is TenantConversationContext => {
   return (
@@ -1488,7 +1488,7 @@ export const isTenantConversationContext = (obj: unknown): obj is TenantConversa
     'userId' in obj &&
     'sessionId' in obj
   );
-}
+};
 
 export const isAIResponse = (obj: unknown): obj is AIResponse => {
   return (
@@ -1498,11 +1498,11 @@ export const isAIResponse = (obj: unknown): obj is AIResponse => {
     'metadata' in obj &&
     'tenantContext' in obj
   );
-}
+};
 
 // Missing interfaces for security and compliance
 export interface PerformanceAnalytics {
-  responseTime: TimeSeriesData[]
+  responseTime: TimeSeriesData[];
   throughput: TimeSeriesData[];
   errorRates: TimeSeriesData[];
   availability: TimeSeriesData[];
@@ -1589,7 +1589,7 @@ export interface AccessPolicy {
 
 // Supporting interfaces for the above
 export interface UserExperienceMetrics {
-  pageLoadTime: number
+  pageLoadTime: number;
   interactionDelay: number;
   errorRate: number;
   satisfactionScore: number;
@@ -1802,7 +1802,7 @@ export interface ThreatIndicator {
 
 // Supporting interfaces for conversation management
 export interface ConversationCustomization {
-  theme: string
+  theme: string;
   language: string;
   personalizations: PersonalizationSetting[];
   preferences: ConversationPreference[];
@@ -1822,7 +1822,7 @@ export interface ConversationPreference {
 
 // Supporting interfaces that were referenced but not defined
 export interface AnalyticsManager {
-  generateReport(_tenantId: string, type: string, period: BillingPeriod): Promise<AnalyticsReport>
+  generateReport(_tenantId: string, type: string, period: BillingPeriod): Promise<AnalyticsReport>;
   trackUsage(_tenantId: string, usage: UsageData): Promise<void>;
   getInsights(_tenantId: string): Promise<AnalyticsInsights>;
   exportData(_tenantId: string, format: string): Promise<string>;

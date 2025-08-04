@@ -7,7 +7,7 @@ import { ReportType } from '@prisma/client';
 // GET /api/reports/templates - List report templates
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user
+    const user = (req as any).user;
 
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type') as ReportType | undefined;
@@ -27,14 +27,14 @@ export const GET = withApiMiddleware(
 // POST /api/reports/templates - Create report template
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user
+    const user = (req as any).user;
 
     // Check if user has admin permissions
     if (user.role !== 'ADMIN' && user.role !== 'OWNER') {
       return NextResponse.json(
         { error: 'Insufficient permissions to create templates' },
         { status: 403 }
-      )
+      );
     }
 
     const body = await req.json();

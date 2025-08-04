@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 // Types
 export interface KeyboardShortcut {
-  key: string
+  key: string;
   description: string;
   action: () => void;
   category?: string;
@@ -67,12 +67,12 @@ export const defaultShortcuts: ShortcutGroup[] = [
       },
     ],
   },
-]
+];
 
 // Keyboard combination utility
 export class KeyCombination {
   static format(shortcut: KeyboardShortcut): string {
-    const parts: string[] = []
+    const parts: string[] = [];
 
     if (shortcut.ctrl) parts.push('Ctrl');
     if (shortcut.alt) parts.push('Alt');
@@ -97,7 +97,7 @@ export class KeyCombination {
 
 // Keyboard shortcuts manager
 export class KeyboardShortcutsManager {
-  private shortcuts: Map<string, KeyboardShortcut> = new Map()
+  private shortcuts: Map<string, KeyboardShortcut> = new Map();
   private isEnabled = true;
 
   constructor() {
@@ -115,7 +115,7 @@ export class KeyboardShortcutsManager {
     if (!this.isEnabled) return;
 
     // Skip if user is typing in an input
-    const target = event.target as HTMLElement
+    const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
       return;
     }
@@ -123,7 +123,7 @@ export class KeyboardShortcutsManager {
     // Check for matches
     for (const shortcut of this.shortcuts.values()) {
       if (KeyCombination.matches(event, shortcut)) {
-        event.preventDefault()
+        event.preventDefault();
         shortcut.action();
         break;
       }
@@ -167,7 +167,7 @@ export class KeyboardShortcutsManager {
 
 // Keyboard shortcut display component
 export const KeyboardShortcutDisplay: React.FC<{
-  shortcut: KeyboardShortcut
+  shortcut: KeyboardShortcut;
   className?: string;
 }> = ({ shortcut, className = '' }) => {
   const style = {
@@ -181,18 +181,18 @@ export const KeyboardShortcutDisplay: React.FC<{
     fontSize: '12px',
     fontFamily: 'monospace',
     color: '#374151',
-  }
+  };
 
   return (
     <kbd className={className} style={style}>
       {KeyCombination.format(shortcut)}
     </kbd>
   );
-}
+};
 
 // Main keyboard shortcuts overlay component
 export const KeyboardShortcutsOverlay: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -206,7 +206,7 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
       if (event.key === 'Escape') {
         setIsOpen(false);
       }
-    }
+    };
 
     document.addEventListener('keydown', handleKeydown);
     return () => document.removeEventListener('keydown', handleKeydown);
@@ -314,11 +314,11 @@ export const KeyboardShortcutsOverlay: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 // Hook for using keyboard shortcuts
 export const useKeyboardShortcuts = () => {
-  const [manager] = useState(() => new KeyboardShortcutsManager())
+  const [manager] = useState(() => new KeyboardShortcutsManager());
 
   const addShortcut = useCallback(
     (shortcut: KeyboardShortcut) => {
@@ -348,7 +348,7 @@ export const useKeyboardShortcuts = () => {
     enable,
     disable,
     shortcuts: manager.getShortcuts(),
-  }
-}
+  };
+};
 
 export default KeyboardShortcutsManager;

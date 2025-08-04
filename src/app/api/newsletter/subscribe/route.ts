@@ -40,7 +40,7 @@ export const POST = withApiMiddleware({
     return {
       success: true,
       message: 'Successfully subscribed to newsletter',
-    }
+    };
   } catch (error) {
     // console.error('Newsletter subscription error:', error)
     throw new Error('Failed to subscribe to newsletter');

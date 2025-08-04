@@ -11,7 +11,7 @@ export interface VendorRiskProfile {
     compliance: number;
     operational: number;
     financial: number;
-  }
+  };
   riskFactors: RiskFactor[];
   recommendations: string[];
   complianceGaps: ComplianceGap[];
@@ -97,10 +97,10 @@ export class VendorAssessmentService {
   ): Promise<EnhancedVendorAssessment> {
     try {
       // Get initial assessment from Probo
-      const proboAssessment = await this.proboService.assessVendor(websiteUrl)
+      const proboAssessment = await this.proboService.assessVendor(websiteUrl);
 
       // Enhance with Riscura's AI capabilities
-      const riskProfile = await this.generateVendorRiskProfile(proboAssessment)
+      const riskProfile = await this.generateVendorRiskProfile(proboAssessment);
       const complianceAnalysis = await this.analyzeCompliance(proboAssessment.vendorInfo);
       const contractualRecommendations =
         await this.generateContractualRecommendations(proboAssessment);
@@ -114,7 +114,7 @@ export class VendorAssessmentService {
         complianceAnalysis,
         contractualRecommendations,
         dueDiligenceChecklist,
-      }
+      };
     } catch (error) {
       // console.error('Enhanced vendor assessment failed:', error)
       throw new Error('Failed to perform enhanced vendor assessment');
@@ -165,11 +165,11 @@ export class VendorAssessmentService {
     const analysis: ComplianceAnalysis = {
       frameworks: [],
       certifications: [],
-    }
+    };
 
     // Analyze each framework
     for (const framework of frameworks) {
-      const coverage = this.calculateFrameworkCoverage(vendorInfo, framework)
+      const coverage = this.calculateFrameworkCoverage(vendorInfo, framework);
       const gaps = this.identifyFrameworkGaps(vendorInfo, framework);
       const recommendations = this.generateFrameworkRecommendations(vendorInfo, framework);
 
@@ -187,7 +187,7 @@ export class VendorAssessmentService {
         name: cert,
         status: 'UNKNOWN', // Would need to verify with actual cert databases
         validationNeeded: true,
-      })
+      });
     }
 
     return analysis;
@@ -209,7 +209,7 @@ export class VendorAssessmentService {
         priority: 'HIGH',
         template:
           'Vendor shall implement and maintain information security controls equivalent to SOC 2 Type II standards.',
-      })
+      });
 
       recommendations.push({
         clause: 'Right to Audit',
@@ -220,7 +220,7 @@ export class VendorAssessmentService {
     }
 
     // Data processing vendors need DPA
-    const dataCategories = ['DATA_STORAGE_AND_PROCESSING', 'CLOUD_PROVIDER', 'ANALYTICS']
+    const dataCategories = ['DATA_STORAGE_AND_PROCESSING', 'CLOUD_PROVIDER', 'ANALYTICS'];
     if (dataCategories.includes(assessment.vendorInfo.category)) {
       recommendations.push({
         clause: 'Data Processing Agreement',
@@ -238,7 +238,7 @@ export class VendorAssessmentService {
         reason: 'Vendor lacks security certifications',
         priority: 'MEDIUM',
         template: 'Vendor agrees to obtain SOC 2 Type II certification within 12 months.',
-      })
+      });
     }
 
     return recommendations;
@@ -315,7 +315,7 @@ export class VendorAssessmentService {
       recommendations: this.generateBasicRecommendations(assessment),
       complianceGaps: this.identifyComplianceGaps(assessment),
       mitigationStrategies: this.generateMitigationStrategies(assessment),
-    }
+    };
   }
 
   private extractRiskFactors(assessment: VendorAssessment): RiskFactor[] {
@@ -408,7 +408,7 @@ export class VendorAssessmentService {
 
   private calculateFrameworkCoverage(vendorInfo: VendorInfo, framework: string): number {
     // Simplified coverage calculation
-    let coverage = 0
+    let coverage = 0;
 
     if (vendorInfo.certifications.includes(framework)) coverage += 40;
     if (vendorInfo.securityPageURL) coverage += 20;

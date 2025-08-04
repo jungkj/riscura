@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 // Types
 interface PerformanceMetrics {
-  pageLoadTime: number
+  pageLoadTime: number;
   firstContentfulPaint: number;
   largestContentfulPaint: number;
   cumulativeLayoutShift: number;
@@ -46,16 +46,16 @@ interface PerformanceContextType {
 }
 
 // Context
-const PerformanceContext = createContext<PerformanceContextType | undefined>(undefined)
+const PerformanceContext = createContext<PerformanceContextType | undefined>(undefined);
 
 // Custom Hooks
 export const usePerformance = () => {
-  const context = useContext(PerformanceContext)
+  const context = useContext(PerformanceContext);
   if (!context) {
     throw new Error('usePerformance must be used within PerformanceProvider');
   }
   return context;
-}
+};
 
 export const useVirtualScrolling = (
   items: any[],
@@ -71,7 +71,7 @@ export const useVirtualScrolling = (
       items.length - 1,
       Math.floor((scrollTop + containerHeight) / itemHeight) + overscan
     );
-    return { startIndex, endIndex }
+    return { startIndex, endIndex };
   }, [scrollTop, itemHeight, containerHeight, overscan, items.length]);
 
   const visibleItems = useMemo(() => {
@@ -96,8 +96,8 @@ export const useVirtualScrolling = (
       style: { height: containerHeight },
       onScroll: handleScroll,
     },
-  }
-}
+  };
+};
 
 export const useOfflineData = () => {
   const { isOnline, cacheData, getCachedData } = usePerformance();
@@ -106,7 +106,7 @@ export const useOfflineData = () => {
     async (key: string, fetcher: () => Promise<any>, ttl: number = 300000) => {
       // Try cache first if offline
       if (!isOnline) {
-        const _cached = getCachedData(key)
+        const _cached = getCachedData(key);
         if (cached) return cached;
         throw new Error('No cached data available offline');
       }
@@ -117,7 +117,7 @@ export const useOfflineData = () => {
         return data;
       } catch (error) {
         // Fallback to cache on network error
-        const _cached = getCachedData(key)
+        const _cached = getCachedData(key);
         if (cached) return cached;
         throw error;
       }
@@ -125,12 +125,12 @@ export const useOfflineData = () => {
     [isOnline, cacheData, getCachedData]
   );
 
-  return { fetchWithCache, isOnline }
-}
+  return { fetchWithCache, isOnline };
+};
 
 // Cache Implementation
 class PerformanceCache {
-  private cache = new Map()
+  private cache = new Map();
   private maxSize: number;
 
   constructor(maxSize: number = 100) {
@@ -140,7 +140,7 @@ class PerformanceCache {
   set(key: string, data: any, ttl: number = 300000): void {
     // Remove oldest entries if cache is full
     if (this.cache.size >= this.maxSize) {
-      const oldestKey = Array.from(this.cache.keys())[0]
+      const oldestKey = Array.from(this.cache.keys())[0];
       this.cache.delete(oldestKey);
     }
 
@@ -157,7 +157,7 @@ class PerformanceCache {
 
     // Check if expired
     if (Date.now() - entry.timestamp > entry.ttl) {
-      this.cache.delete(key)
+      this.cache.delete(key);
       return null;
     }
 
@@ -183,7 +183,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     firstInputDelay: 0,
     memoryUsage: 0,
     networkSpeed: 'unknown',
-  })
+  });
 
   const [settings, setSettings] = useState<PerformanceSettings>({
     enableVirtualScrolling: true,
@@ -201,7 +201,7 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   // Monitor online status
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
+    const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
@@ -210,12 +210,12 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-    }
+    };
   }, []);
 
   // Update cache size when settings change
   useEffect(() => {
-    cacheRef.current = new PerformanceCache(settings.maxCacheSize)
+    cacheRef.current = new PerformanceCache(settings.maxCacheSize);
   }, [settings.maxCacheSize]);
 
   const updateSettings = useCallback((newSettings: Partial<PerformanceSettings>) => {
@@ -272,14 +272,14 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     clearCache,
     preloadComponent,
     measurePerformance,
-  }
+  };
 
   return <PerformanceContext.Provider value={contextValue}>{children}</PerformanceContext.Provider>;
-}
+};
 
 // Simplified Components
 export const LazyImage: React.FC<{
-  src: string
+  src: string;
   alt: string;
   width?: number;
   height?: number;
@@ -364,7 +364,7 @@ export const LazyImage: React.FC<{
       />
     </div>
   );
-}
+};
 
 export const VirtualScrollContainer: React.FC<{
   items: any[];
@@ -401,6 +401,6 @@ export const VirtualScrollContainer: React.FC<{
       </div>
     </div>
   );
-}
+};
 
 export default PerformanceProvider;

@@ -7,7 +7,7 @@ import { z } from 'zod';
 // POST /api/chat/messages/[messageId]/reactions - Add a reaction
 const addReactionSchema = z.object({
   emoji: z.string().min(1).max(10),
-})
+});
 
 export async function POST(
   req: NextRequest,
@@ -59,7 +59,7 @@ export async function DELETE(
 ) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { messageId } = await params
+      const { messageId } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError();
@@ -67,7 +67,7 @@ export async function DELETE(
 
       try {
         // Get emoji from query params since it's not in the route path
-        const { searchParams } = new URL(request.url)
+        const { searchParams } = new URL(request.url);
         const emoji = searchParams.get('emoji');
 
         if (!emoji) {

@@ -41,7 +41,7 @@ export enum TicketCategory {
 
 // Support ticket interface
 interface SupportTicket {
-  id: string
+  id: string;
   title: string;
   description: string;
   category: TicketCategory;
@@ -49,18 +49,18 @@ interface SupportTicket {
   status: TicketStatus;
 
   // Customer information
-  customerId: string
+  customerId: string;
   customerEmail: string;
   customerName: string;
   organizationId: string;
   organizationName: string;
 
   // Assignment and tracking
-  assignedTo?: string
+  assignedTo?: string;
   assignedTeam?: string;
 
   // Timestamps
-  createdAt: number
+  createdAt: number;
   updatedAt: number;
   firstResponseAt?: number;
   resolvedAt?: number;
@@ -71,16 +71,16 @@ interface SupportTicket {
   slaBreached: boolean;
 
   // Metadata
-  tags: string[]
+  tags: string[];
   attachments: string[];
   relatedTickets: string[];
 
   // Internal notes and customer communication
-  notes: TicketNote[]
+  notes: TicketNote[];
   responses: TicketResponse[];
 
   // Analytics
-  viewCount: number
+  viewCount: number;
   escalationCount: number;
   satisfactionRating?: number;
   satisfactionFeedback?: string;
@@ -88,7 +88,7 @@ interface SupportTicket {
 
 // Ticket note (internal)
 interface TicketNote {
-  id: string
+  id: string;
   ticketId: string;
   authorId: string;
   authorName: string;
@@ -99,7 +99,7 @@ interface TicketNote {
 
 // Ticket response (customer communication)
 interface TicketResponse {
-  id: string
+  id: string;
   ticketId: string;
   authorId: string;
   authorName: string;
@@ -112,7 +112,7 @@ interface TicketResponse {
 
 // Knowledge base article
 interface KnowledgeBaseArticle {
-  id: string
+  id: string;
   title: string;
   content: string;
   category: TicketCategory;
@@ -128,42 +128,42 @@ interface SLAConfig {
   [TicketPriority.LOW]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
-  }
+  };
   [TicketPriority.MEDIUM]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
-  }
+  };
   [TicketPriority.HIGH]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
-  }
+  };
   [TicketPriority.URGENT]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
-  }
+  };
   [TicketPriority.CRITICAL]: {
     firstResponseTime: number; // minutes
     resolutionTime: number; // minutes
-  }
+  };
 }
 
 // Escalation rules
 interface EscalationRule {
-  id: string
+  id: string;
   name: string;
   conditions: {
     priority: TicketPriority[];
     category: TicketCategory[];
     ageInMinutes: number;
     slaBreached: boolean;
-  }
+  };
   actions: {
     assignToTeam?: string;
     assignToUser?: string;
     increasePriority?: boolean;
     notifyManagement?: boolean;
     addTags?: string[];
-  }
+  };
   enabled: boolean;
 }
 
@@ -178,7 +178,7 @@ class SupportTicketingSystem {
     [TicketPriority.HIGH]: { firstResponseTime: 120, resolutionTime: 480 }, // 2h, 8h
     [TicketPriority.URGENT]: { firstResponseTime: 60, resolutionTime: 240 }, // 1h, 4h
     [TicketPriority.CRITICAL]: { firstResponseTime: 15, resolutionTime: 60 }, // 15m, 1h
-  }
+  };
 
   constructor() {
     this.initializeEscalationRules();
@@ -197,7 +197,7 @@ class SupportTicketingSystem {
     const classification = await this.classifyTicket(
       ticketData.title || '',
       ticketData.description || ''
-    )
+    );
 
     const ticket: SupportTicket = {
       id: ticketId,
@@ -228,15 +228,15 @@ class SupportTicketingSystem {
 
       viewCount: 0,
       escalationCount: 0,
-    }
+    };
 
     this.tickets.set(ticketId, ticket);
 
     // Auto-assign based on category and workload
-    await this.autoAssignTicket(ticket)
+    await this.autoAssignTicket(ticket);
 
     // Send notifications
-    await this.sendTicketNotifications(ticket, 'created')
+    await this.sendTicketNotifications(ticket, 'created');
 
     // Track analytics
     getAnalytics().trackBusinessEvent('support_ticket_created', {
@@ -245,7 +245,7 @@ class SupportTicketingSystem {
       priority: ticket.priority,
       customer_id: ticket.customerId,
       organization_id: ticket.organizationId,
-    })
+    });
 
     // Log to Sentry
     Sentry.addBreadcrumb({
@@ -257,7 +257,7 @@ class SupportTicketingSystem {
         category: ticket.category,
         priority: ticket.priority,
       },
-    })
+    });
 
     return ticket;
   }
@@ -282,17 +282,17 @@ class SupportTicketingSystem {
       isFromCustomer: responseData.isFromCustomer || false,
       createdAt: Date.now(),
       attachments: responseData.attachments || [],
-    }
+    };
 
     ticket.responses.push(response);
     ticket.updatedAt = Date.now();
 
     // Set first response time if this is the first staff response
     if (!response.isFromCustomer && !ticket.firstResponseAt) {
-      ticket.firstResponseAt = Date.now()
+      ticket.firstResponseAt = Date.now();
 
       // Check SLA compliance
-      const responseTime = ticket.firstResponseAt - ticket.createdAt
+      const responseTime = ticket.firstResponseAt - ticket.createdAt;
       const slaTarget = this.slaConfig[ticket.priority].firstResponseTime * 60 * 1000; // Convert to ms
 
       if (responseTime > slaTarget) {
@@ -309,17 +309,17 @@ class SupportTicketingSystem {
             responseTime: responseTime / 1000 / 60, // in minutes
             slaTarget: this.slaConfig[ticket.priority].firstResponseTime,
           },
-        })
+        });
       }
     }
 
     // Update status if customer responded
     if (response.isFromCustomer && ticket.status === TicketStatus.WAITING_FOR_CUSTOMER) {
-      ticket.status = TicketStatus.IN_PROGRESS
+      ticket.status = TicketStatus.IN_PROGRESS;
     }
 
     // Send notifications
-    await this.sendResponseNotifications(ticket, response)
+    await this.sendResponseNotifications(ticket, response);
 
     // Track analytics
     getAnalytics().trackBusinessEvent('support_response_added', {
@@ -328,7 +328,7 @@ class SupportTicketingSystem {
       response_time_minutes: ticket.firstResponseAt
         ? (ticket.firstResponseAt - ticket.createdAt) / 1000 / 60
         : null,
-    })
+    });
   }
 
   /**
@@ -350,10 +350,10 @@ class SupportTicketingSystem {
 
     // Set resolution/closure timestamps
     if (newStatus === TicketStatus.RESOLVED && !ticket.resolvedAt) {
-      ticket.resolvedAt = Date.now()
+      ticket.resolvedAt = Date.now();
 
       // Check resolution SLA
-      const resolutionTime = ticket.resolvedAt - ticket.createdAt
+      const resolutionTime = ticket.resolvedAt - ticket.createdAt;
       const slaTarget = this.slaConfig[ticket.priority].resolutionTime * 60 * 1000;
 
       if (resolutionTime > slaTarget && !ticket.slaBreached) {
@@ -371,10 +371,10 @@ class SupportTicketingSystem {
       authorName: 'System',
       content: `Status changed from ${oldStatus} to ${newStatus}`,
       isInternal: true,
-    })
+    });
 
     // Send notifications
-    await this.sendTicketNotifications(ticket, 'status_updated')
+    await this.sendTicketNotifications(ticket, 'status_updated');
 
     // Track analytics
     getAnalytics().trackBusinessEvent('support_ticket_status_updated', {
@@ -382,7 +382,7 @@ class SupportTicketingSystem {
       old_status: oldStatus,
       new_status: newStatus,
       updated_by: updatedBy,
-    })
+    });
   }
 
   /**
@@ -403,7 +403,7 @@ class SupportTicketingSystem {
       content: noteData.content || '',
       isInternal: noteData.isInternal || true,
       createdAt: Date.now(),
-    }
+    };
 
     ticket.notes.push(note);
     ticket.updatedAt = Date.now();
@@ -423,7 +423,7 @@ class SupportTicketingSystem {
     const text = `${title} ${description}`.toLowerCase();
 
     // Category classification
-    let category = TicketCategory.OTHER
+    let category = TicketCategory.OTHER;
 
     if (text.includes('bug') || text.includes('error') || text.includes('crash')) {
       category = TicketCategory.BUG_REPORT;
@@ -448,7 +448,7 @@ class SupportTicketingSystem {
     }
 
     // Priority classification
-    let priority = TicketPriority.MEDIUM
+    let priority = TicketPriority.MEDIUM;
 
     if (
       text.includes('urgent') ||
@@ -466,7 +466,7 @@ class SupportTicketingSystem {
     }
 
     // Generate suggested tags
-    const suggestedTags: string[] = []
+    const suggestedTags: string[] = [];
 
     if (text.includes('rcsa')) suggestedTags.push('rcsa');
     if (text.includes('assessment')) suggestedTags.push('assessment');
@@ -476,7 +476,7 @@ class SupportTicketingSystem {
     if (text.includes('control')) suggestedTags.push('control');
     if (text.includes('risk')) suggestedTags.push('risk');
 
-    return { category, priority, suggestedTags }
+    return { category, priority, suggestedTags };
   }
 
   /**
@@ -494,7 +494,7 @@ class SupportTicketingSystem {
       [TicketCategory.DATA_IMPORT]: 'tech-support',
       [TicketCategory.REPORTING]: 'tech-support',
       [TicketCategory.OTHER]: 'general-support',
-    }
+    };
 
     ticket.assignedTeam = assignmentRules[ticket.category];
 
@@ -558,7 +558,7 @@ class SupportTicketingSystem {
         },
         enabled: true,
       },
-    ]
+    ];
   }
 
   /**
@@ -642,7 +642,7 @@ Contact support if issues persist.`,
     // Check for escalations every 5 minutes
     setInterval(
       () => {
-        this.checkEscalations()
+        this.checkEscalations();
       },
       5 * 60 * 1000
     );
@@ -665,7 +665,7 @@ Contact support if issues persist.`,
         if (!rule.enabled) continue;
 
         // Check if ticket matches escalation conditions
-        const matchesPriority = rule.conditions.priority.includes(ticket.priority)
+        const matchesPriority = rule.conditions.priority.includes(ticket.priority);
         const matchesCategory = rule.conditions.category.includes(ticket.category);
         const exceededAge = ticketAgeMinutes >= rule.conditions.ageInMinutes;
         const slaConditionMet = !rule.conditions.slaBreached || ticket.slaBreached;
@@ -685,7 +685,7 @@ Contact support if issues persist.`,
 
     // Apply escalation actions
     if (rule.actions.assignToTeam) {
-      ticket.assignedTeam = rule.actions.assignToTeam
+      ticket.assignedTeam = rule.actions.assignToTeam;
     }
 
     if (rule.actions.assignToUser) {
@@ -718,11 +718,11 @@ Contact support if issues persist.`,
       authorName: 'System',
       content: `Ticket escalated due to rule: ${rule.name}`,
       isInternal: true,
-    })
+    });
 
     // Send notifications
     if (rule.actions.notifyManagement) {
-      await this.sendEscalationNotification(ticket, rule)
+      await this.sendEscalationNotification(ticket, rule);
     }
 
     // Log escalation
@@ -736,7 +736,7 @@ Contact support if issues persist.`,
         ticket_age_minutes: (Date.now() - ticket.createdAt) / 1000 / 60,
         escalation_count: ticket.escalationCount,
       },
-    })
+    });
 
     // Track analytics
     getAnalytics().trackBusinessEvent('support_ticket_escalated', {
@@ -744,7 +744,7 @@ Contact support if issues persist.`,
       escalation_rule: rule.id,
       escalation_count: ticket.escalationCount,
       ticket_age_minutes: (Date.now() - ticket.createdAt) / 1000 / 60,
-    })
+    });
   }
 
   /**
@@ -865,7 +865,7 @@ Contact support if issues persist.`,
       avgResolutionTime,
       slaBreaches,
       satisfactionScore,
-    }
+    };
   }
 
   searchKnowledgeBase(_query: string): KnowledgeBaseArticle[] {
@@ -883,14 +883,14 @@ Contact support if issues persist.`,
 }
 
 // Singleton instance
-let supportSystem: SupportTicketingSystem | null = null
+let supportSystem: SupportTicketingSystem | null = null;
 
 export const getSupportSystem = (): SupportTicketingSystem => {
   if (!supportSystem) {
     supportSystem = new SupportTicketingSystem();
   }
   return supportSystem;
-}
+};
 
 // Export types and enums
 export {
@@ -899,4 +899,4 @@ export {
   type TicketResponse,
   type KnowledgeBaseArticle,
   type EscalationRule,
-}
+};

@@ -198,14 +198,14 @@ export interface ProboIntegrationResponse {
     responseTime: number;
     version: string;
     confidence: number;
-  }
+  };
 
   /** Error information if integration failed */
   error?: {
     code: string;
     message: string;
     details?: any;
-  }
+  };
 }
 
 /**

@@ -10,7 +10,7 @@ async function handler(req: NextRequest, context: any) {
 
     // Route to appropriate handler
     if (typeof handlers === 'function') {
-      return handlers(req, context)
+      return handlers(req, context);
     } else if (req.method === 'GET' && handlers.GET) {
       return handlers.GET(req, context);
     } else if (req.method === 'POST' && handlers.POST) {
@@ -31,4 +31,4 @@ async function handler(req: NextRequest, context: any) {
   }
 }
 
-export { handler as GET, handler as POST, handler as PUT, handler as DELETE }
+export { handler as GET, handler as POST, handler as PUT, handler as DELETE };

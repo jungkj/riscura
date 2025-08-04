@@ -8,7 +8,7 @@ const CallbackQuerySchema = z.object({
   code: z.string().optional(),
   state: z.string().optional(),
   error: z.string().optional(),
-})
+});
 
 export const GET = withApiMiddleware({
   requireAuth: false, // OAuth callback doesn't require authentication
@@ -21,7 +21,7 @@ export const GET = withApiMiddleware({
     code: searchParams.get('code'),
     state: searchParams.get('state'),
     error: searchParams.get('error'),
-  })
+  });
 
   if (!queryValidation.success) {
     return NextResponse.redirect(new URL('/import?error=google_drive_invalid_params', req.url));
@@ -31,7 +31,7 @@ export const GET = withApiMiddleware({
 
   // Handle errors
   if (error) {
-    return NextResponse.redirect(new URL(`/import?error=google_drive_auth_${error}`, req.url))
+    return NextResponse.redirect(new URL(`/import?error=google_drive_auth_${error}`, req.url));
   }
 
   if (!code || !state) {
@@ -42,20 +42,20 @@ export const GET = withApiMiddleware({
     const authService = getGoogleDriveAuthService();
 
     // Validate CSRF token and get user ID
-    const userId = await authService.validateCSRFToken(state)
+    const userId = await authService.validateCSRFToken(state);
     if (!userId) {
       // console.warn('Invalid or expired CSRF token in Google Drive callback')
       return NextResponse.redirect(new URL('/import?error=google_drive_invalid_state', req.url));
     }
 
     // Exchange code for tokens
-    const tokens = await authService.getTokensFromCode(code)
+    const tokens = await authService.getTokensFromCode(code);
 
     // Store tokens for the user
-    await authService.storeTokens(userId, tokens)
+    await authService.storeTokens(userId, tokens);
 
     // Redirect back to import page with success
-    return NextResponse.redirect(new URL('/import?google_drive_connected=true', req.url))
+    return NextResponse.redirect(new URL('/import?google_drive_connected=true', req.url));
   } catch (error) {
     // Sanitize error logging to avoid exposing sensitive information
     const sanitizedError =
@@ -64,7 +64,7 @@ export const GET = withApiMiddleware({
             message: error.message,
             name: error.name,
           }
-        : 'Unknown error'
+        : 'Unknown error';
 
     // console.error('Google Drive callback error:', sanitizedError)
 

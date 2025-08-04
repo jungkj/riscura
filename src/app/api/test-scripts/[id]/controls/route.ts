@@ -8,7 +8,7 @@ import { z } from 'zod';
 const associateControlsSchema = z.object({
   controlIds: z.array(z.string()).min(1),
   isMandatory: z.boolean().optional().default(true),
-})
+});
 
 const disassociateControlsSchema = z.object({
   controlIds: z.array(z.string()).min(1),
@@ -18,7 +18,7 @@ const disassociateControlsSchema = z.object({
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists
       const testScript = await db.client.testScript.findFirst({
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           id,
           organizationId: user.organizationId,
         },
-      })
+      });
 
       if (!testScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
             },
           },
         },
-      })
+      });
 
       return ApiResponseFormatter.success(controlAssociations);
     },
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists
       const testScript = await db.client.testScript.findFirst({
@@ -66,14 +66,14 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           id,
           organizationId: user.organizationId,
         },
-      })
+      });
 
       if (!testScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
       }
 
       // Parse and validate request body
-      const body = await request.json()
+      const body = await request.json();
       const validationResult = associateControlsSchema.safeParse(body);
 
       if (!validationResult.success) {
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           id: { in: controlIds },
           organizationId: user.organizationId,
         },
-      })
+      });
 
       if (controls.length !== controlIds.length) {
         return ApiResponseFormatter.error('INVALID_CONTROLS', 'One or more controls not found', {
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           testScriptId: id,
           controlId: { in: controlIds },
         },
-      })
+      });
 
       const existingControlIds = existingAssociations.map((a) => a.controlId);
       const newControlIds = controlIds.filter((cId) => !existingControlIds.includes(cId));
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             controlId,
             isMandatory,
           })),
-        })
+        });
       }
 
       // Log activity
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             isMandatory,
           },
         },
-      })
+      });
 
       return ApiResponseFormatter.success({
         associated: newControlIds.length,
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       // Verify test script exists
       const testScript = await db.client.testScript.findFirst({
@@ -160,14 +160,14 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
           id,
           organizationId: user.organizationId,
         },
-      })
+      });
 
       if (!testScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
       }
 
       // Parse and validate request body
-      const body = await request.json()
+      const body = await request.json();
       const validationResult = disassociateControlsSchema.safeParse(body);
 
       if (!validationResult.success) {
@@ -185,7 +185,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
           testScriptId: id,
           controlId: { in: controlIds },
         },
-      })
+      });
 
       // Log activity
       await db.client.activity.create({
@@ -202,7 +202,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
             removedCount: result.count,
           },
         },
-      })
+      });
 
       return ApiResponseFormatter.success({
         removed: result.count,

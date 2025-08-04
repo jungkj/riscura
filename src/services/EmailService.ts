@@ -23,7 +23,7 @@ export interface EmailServiceConfig {
   auth: {
     user: string;
     pass: string;
-  }
+  };
   from: string;
 }
 
@@ -41,7 +41,7 @@ export class EmailService {
         pass: process.env.SMTP_PASS || '',
       },
       from: process.env.SMTP_FROM || 'reports@riscura.com',
-    }
+    };
 
     this.initializeTransporter();
   }
@@ -56,14 +56,14 @@ export class EmailService {
       });
 
       // Verify connection
-      await this.transporter.verify()
+      await this.transporter.verify();
       // console.log('Email service initialized successfully')
     } catch (error) {
       // console.error('Email service initialization failed:', error)
       // Create a mock transporter for development
       this.transporter = nodemailer.createTransport({
         jsonTransport: true,
-      })
+      });
     }
   }
 
@@ -89,7 +89,7 @@ export class EmailService {
         text: options.text,
         html: options.html,
         attachments: options.attachments,
-      }
+      };
 
       const _result = await this.transporter.sendMail(mailOptions);
       // console.log('Email sent successfully:', result.messageId)
@@ -115,7 +115,7 @@ export class EmailService {
           filename: report.filename,
           content,
           contentType: this.getContentType(report.format),
-        }
+        };
       })
     );
 
@@ -327,9 +327,9 @@ export class EmailService {
   async testConnection(): Promise<{ success: boolean; message: string }> {
     try {
       await this.transporter.verify();
-      return { success: true, message: 'Email service connection successful' }
+      return { success: true, message: 'Email service connection successful' };
     } catch (error) {
-      return { success: false, message: `Email service connection failed: ${error.message}` }
+      return { success: false, message: `Email service connection failed: ${error.message}` };
     }
   }
 

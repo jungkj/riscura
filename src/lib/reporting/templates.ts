@@ -95,7 +95,7 @@ export const riskRegisterTemplate: ReportTemplate = {
   requiredFields: ['risks', 'users'],
   tags: ['risk', 'register', 'management'],
   isSystem: true,
-}
+};
 
 // Control Matrix Template
 export const controlMatrixTemplate: ReportTemplate = {
@@ -201,7 +201,7 @@ export const controlMatrixTemplate: ReportTemplate = {
   requiredFields: ['controls', 'users', 'risks'],
   tags: ['control', 'matrix', 'effectiveness'],
   isSystem: true,
-}
+};
 
 // SOX Compliance Template
 export const soxComplianceTemplate: ReportTemplate = {
@@ -385,7 +385,7 @@ export const soxComplianceTemplate: ReportTemplate = {
   requiredFields: ['controls', 'users'],
   tags: ['sox', 'compliance', 'regulatory'],
   isSystem: true,
-}
+};
 
 // ISO 27001 Template
 export const iso27001Template: ReportTemplate = {
@@ -529,7 +529,7 @@ export const iso27001Template: ReportTemplate = {
   requiredFields: ['controls', 'users', 'risks'],
   tags: ['iso27001', 'security', 'compliance'],
   isSystem: true,
-}
+};
 
 // Executive Summary Template
 export const executiveSummaryTemplate: ReportTemplate = {
@@ -691,7 +691,7 @@ export const executiveSummaryTemplate: ReportTemplate = {
   requiredFields: ['risks', 'controls'],
   tags: ['executive', 'summary', 'dashboard'],
   isSystem: true,
-}
+};
 
 // Export all templates
 export const reportTemplates: ReportTemplate[] = [
@@ -700,7 +700,7 @@ export const reportTemplates: ReportTemplate[] = [
   soxComplianceTemplate,
   iso27001Template,
   executiveSummaryTemplate,
-]
+];
 
 // Template categories
 export const templateCategories = {
@@ -708,19 +708,19 @@ export const templateCategories = {
   control: [controlMatrixTemplate],
   compliance: [soxComplianceTemplate, iso27001Template],
   executive: [executiveSummaryTemplate],
-}
+};
 
 // Get template by ID
 export function getTemplateById(id: string): ReportTemplate | undefined {
-  return reportTemplates.find((template) => template.id === id)
+  return reportTemplates.find((template) => template.id === id);
 }
 
 // Get templates by category
 export function getTemplatesByCategory(category: string): ReportTemplate[] {
-  return reportTemplates.filter((template) => template.category === category)
+  return reportTemplates.filter((template) => template.category === category);
 }
 
 // Get templates by type
 export function getTemplatesByType(_type: string): ReportTemplate[] {
-  return reportTemplates.filter((template) => template.type === type)
+  return reportTemplates.filter((template) => template.type === type);
 }

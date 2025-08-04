@@ -123,7 +123,7 @@ export const animations = {
     duration: 600,
     easing: 'ease-in-out',
   },
-} as const
+} as const;
 
 export type AnimationName = keyof typeof animations;
 
@@ -140,7 +140,7 @@ export const easings = {
   easeOutElastic: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   easeInBounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   easeOutBounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-} as const
+} as const;
 
 // Animation utilities
 export class AnimationUtils {
@@ -148,7 +148,7 @@ export class AnimationUtils {
     element: HTMLElement,
     animationName: AnimationName,
     options?: {
-      duration?: number
+      duration?: number;
       delay?: number;
       easing?: string;
       iterations?: number;
@@ -164,7 +164,7 @@ export class AnimationUtils {
       iterations: options?.iterations || 1,
       direction: options?.direction || 'normal',
       fill: options?.fillMode || 'forwards',
-    }
+    };
 
     if ('keyframes' in animation) {
       return element.animate(animation.keyframes, animationOptions);
@@ -246,10 +246,10 @@ export class AnimationUtils {
       mass?: number;
     }
   ): Animation {
-    const { stiffness = 100, damping = 10, mass = 1 } = options || {}
+    const { stiffness = 100, damping = 10, mass = 1 } = options || {};
 
     // Simple spring physics approximation
-    const omega = Math.sqrt(stiffness / mass)
+    const omega = Math.sqrt(stiffness / mass);
     const zeta = damping / (2 * Math.sqrt(stiffness * mass));
 
     let _duration = 1000;
@@ -306,7 +306,7 @@ export class AnimationUtils {
       down: ['translateY(-100%)', 'translateY(0)'],
       left: ['translateX(100%)', 'translateX(0)'],
       right: ['translateX(-100%)', 'translateX(0)'],
-    }
+    };
 
     return element.animate(
       [
@@ -324,7 +324,7 @@ export class AnimationUtils {
 
 // Intersection Observer based animations
 export class ScrollAnimationUtils {
-  private static observer: IntersectionObserver | null = null
+  private static observer: IntersectionObserver | null = null;
   private static callbacks: Map<Element, () => void> = new Map();
 
   public static initialize(): void {
@@ -363,7 +363,7 @@ export class ScrollAnimationUtils {
 
     const callback = () => {
       AnimationUtils.createAnimation(element, animationName);
-    }
+    };
 
     this.callbacks.set(element, callback);
     this.observer.observe(element);
@@ -382,7 +382,7 @@ export function useAnimation(
   animationName: AnimationName,
   trigger: boolean = true,
   options?: {
-    duration?: number
+    duration?: number;
     delay?: number;
     easing?: string;
   }
@@ -397,7 +397,7 @@ export function useAnimation(
 
     return () => {
       animation.cancel();
-    }
+    };
   }, [animationName, trigger, options, prefersReducedMotion]);
 
   return ref;
@@ -470,7 +470,7 @@ export function useSpringAnimation(
 
     return () => {
       animation.cancel();
-    }
+    };
   }, [from, to, trigger, options, prefersReducedMotion]);
 
   return ref;
@@ -502,12 +502,12 @@ export function useAnimationQueue() {
       }
 
       setIsAnimating(false);
-    }
+    };
 
     processQueue();
   }, [queue, isAnimating]);
 
-  return { addToQueue, clearQueue, isAnimating, queueLength: queue.length }
+  return { addToQueue, clearQueue, isAnimating, queueLength: queue.length };
 }
 
 // CSS Animation utilities
@@ -515,13 +515,13 @@ export function generateAnimationCSS(
   animationName: AnimationName,
   className: string = 'animate'
 ): string {
-  const animation = animations[animationName]
+  const animation = animations[animationName];
 
   if ('keyframes' in animation) {
     // Generate keyframes CSS
     const keyframesCSS = animation.keyframes
       .map((keyframe, index) => {
-        const percent = keyframe.offset * 100
+        const percent = keyframe.offset * 100;
         const properties = Object.entries(keyframe)
           .filter(([key]) => key !== 'offset')
           .map(([key, value]) => `${key}: ${value}`)
@@ -563,5 +563,5 @@ export function generateAnimationCSS(
 
 // Initialize scroll animations
 if (typeof window !== 'undefined') {
-  ScrollAnimationUtils.initialize()
+  ScrollAnimationUtils.initialize();
 }

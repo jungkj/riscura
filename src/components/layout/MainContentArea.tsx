@@ -20,7 +20,7 @@ import Link from 'next/link';
 
 // ========== TYPES ==========
 export interface BreadcrumbItem {
-  label: string
+  label: string;
   href?: string;
   icon?: React.ComponentType<any>;
   current?: boolean;
@@ -47,24 +47,24 @@ export interface MainContentAreaProps {
   children: ReactNode;
 
   // Header Configuration
-  title: string
+  title: string;
   subtitle?: string;
   breadcrumbs?: BreadcrumbItem[];
 
   // Actions
-  primaryAction?: ActionButton
+  primaryAction?: ActionButton;
   secondaryActions?: ActionButton[];
 
   // Page Statistics
-  stats?: PageStats[]
+  stats?: PageStats[];
 
   // Layout Options
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
   headerSeparator?: boolean;
   contentPadding?: boolean;
 
   // Styling
-  className?: string
+  className?: string;
   headerClassName?: string;
   contentClassName?: string;
 }
@@ -106,15 +106,15 @@ const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) => {
         </React.Fragment>
       ))}
     </nav>
-  )
-}
+  );
+};
 
 // ========== PAGE STATS COMPONENT ==========
 const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
   const getTrendIcon = (trend?: 'up' | 'down' | 'neutral') => {
     switch (trend) {
       case 'up':
-        return '↗'
+        return '↗';
       case 'down':
         return '↘';
       case 'neutral':
@@ -122,7 +122,7 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
       default:
         return null;
     }
-  }
+  };
 
   const getTrendColor = (trend?: 'up' | 'down' | 'neutral') => {
     switch (trend) {
@@ -135,7 +135,7 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
       default:
         return 'text-gray-500';
     }
-  }
+  };
 
   return (
     <div className="flex items-center space-x-6">
@@ -155,11 +155,11 @@ const PageStats: React.FC<{ stats: PageStats[] }> = ({ stats }) => {
       ))}
     </div>
   );
-}
+};
 
 // ========== ACTION BUTTONS COMPONENT ==========
 const ActionButtons: React.FC<{
-  primary?: ActionButton
+  primary?: ActionButton;
   secondary?: ActionButton[];
 }> = ({ primary, secondary = [] }) => {
   return (
@@ -211,7 +211,7 @@ const ActionButtons: React.FC<{
       )}
     </div>
   );
-}
+};
 
 // ========== MAIN COMPONENT ==========
 export const MainContentArea: React.FC<MainContentAreaProps> = ({
@@ -232,7 +232,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
   const getMaxWidthClass = (width: string) => {
     switch (width) {
       case 'sm':
-        return 'max-w-3xl'
+        return 'max-w-3xl';
       case 'md':
         return 'max-w-4xl';
       case 'lg':
@@ -246,7 +246,7 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
       default:
         return 'max-w-6xl';
     }
-  }
+  };
 
   return (
     <div className={cn('min-h-screen bg-gray-50', className)}>
@@ -288,11 +288,11 @@ export const MainContentArea: React.FC<MainContentAreaProps> = ({
       </div>
     </div>
   );
-}
+};
 
 // ========== CONTENT SECTION COMPONENT ==========
 export interface ContentSectionProps {
-  children: ReactNode
+  children: ReactNode;
   title?: string;
   subtitle?: string;
   action?: ActionButton;
@@ -319,7 +319,7 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       default:
         return 'space-y-6 md:space-y-8';
     }
-  }
+  };
 
   return (
     <section className={cn(getSpacingClass(spacing), className)}>
@@ -347,11 +347,11 @@ export const ContentSection: React.FC<ContentSectionProps> = ({
       <div>{children}</div>
     </section>
   );
-}
+};
 
 // ========== CONTENT CARD COMPONENT ==========
 export interface ContentCardProps {
-  children: ReactNode
+  children: ReactNode;
   title?: string;
   subtitle?: string;
   action?: ActionButton;
@@ -382,7 +382,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       default:
         return 'p-6';
     }
-  }
+  };
 
   return (
     <div
@@ -430,6 +430,6 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       )}
     </div>
   );
-}
+};
 
 export default MainContentArea;

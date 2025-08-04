@@ -10,7 +10,7 @@ export class ApiClient {
   private async getHeaders(): Promise<HeadersInit> {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
-    }
+    };
 
     // Add CSRF token if available
     if (typeof document !== 'undefined') {
@@ -38,7 +38,7 @@ export class ApiClient {
         ...options.headers,
       },
       credentials: 'include', // Important for NextAuth cookies
-    }
+    };
 
     const response = await fetch(url, config);
 

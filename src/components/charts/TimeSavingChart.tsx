@@ -162,4 +162,4 @@ export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
       </div>
     </section>
   );
-}
+};

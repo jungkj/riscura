@@ -19,7 +19,7 @@ interface ApiResponse<T> {
     totalPages: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
-  }
+  };
 }
 
 interface CacheEntry<T> {
@@ -29,7 +29,7 @@ interface CacheEntry<T> {
 }
 
 // Simple in-memory cache
-const cache = new Map<string, CacheEntry<any>>()
+const cache = new Map<string, CacheEntry<any>>();
 
 export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {}) {
   const {
@@ -49,11 +49,11 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
   const isMountedRef = useRef(true);
 
   // Memoize dependencies to prevent unnecessary re-renders
-  const dependenciesString = useMemo(() => JSON.stringify(dependencies), [dependencies])
+  const dependenciesString = useMemo(() => JSON.stringify(dependencies), [dependencies]);
 
   // Check cache first
   const getCachedData = useCallback((): T | null => {
-    const _cached = cache.get(cacheKey)
+    const _cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < cached.staleTime) {
       return cached.data;
     }
@@ -67,7 +67,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
         data: newData,
         timestamp: Date.now(),
         staleTime,
-      })
+      });
     },
     [cacheKey, staleTime]
   );
@@ -75,15 +75,15 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
   const fetchData = useCallback(
     async (showLoading = true) => {
       // Don't fetch if component is unmounted
-      if (!isMountedRef.current) return
+      if (!isMountedRef.current) return;
 
       // Cancel any existing request
       if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
+        abortControllerRef.current.abort();
       }
 
       // Check cache first
-      const cachedData = getCachedData()
+      const cachedData = getCachedData();
       if (cachedData && !showLoading) {
         if (isMountedRef.current) {
           setData(cachedData);
@@ -116,11 +116,11 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
 
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
-        }
+        };
 
         // Add authentication header if we have a token
         if (token && endpoint.startsWith('/api/') && !endpoint.includes('/api/auth/')) {
-          headers['Authorization'] = `Bearer ${token}`
+          headers['Authorization'] = `Bearer ${token}`;
         }
 
         const response = await fetch(endpoint, {
@@ -150,7 +150,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
           setError(err instanceof Error ? err.message : 'Failed to fetch data');
 
           // Fallback to cached data if available
-          const cachedData = getCachedData()
+          const cachedData = getCachedData();
           if (cachedData) {
             setData(cachedData);
           }
@@ -171,19 +171,19 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
   // Initial fetch and dependency changes
   useEffect(() => {
     if (enabled) {
-      fetchData()
+      fetchData();
     }
   }, [enabled, endpoint, dependenciesString]);
 
   // Cleanup on unmount
   useEffect(() => {
-    isMountedRef.current = true
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
-    }
+    };
   }, []);
 
   // Polling interval
@@ -205,7 +205,7 @@ export function useApiData<T>(endpoint: string, options: UseApiDataOptions = {})
     refetch,
     lastFetchTime,
     isStale: lastFetchTime > 0 && Date.now() - lastFetchTime > staleTime,
-  }
+  };
 }
 
 // Enhanced specific hooks for different endpoints
@@ -215,7 +215,7 @@ export function useDashboardData(_timeRange: string = '30d') {
     staleTime: 2 * 60 * 1000, // 2 minutes for dashboard
     refetchInterval: 5 * 60 * 1000, // Auto-refresh every 5 minutes
     dependencies: [timeRange],
-  })
+  });
 }
 
 export function useRisksData(_filters: Record<string, any> = {}) {
@@ -293,12 +293,12 @@ export function useItemData<T>(endpoint: string, id: string | null) {
     cacheKey: `${endpoint}-${id}`,
     staleTime: 5 * 60 * 1000, // 5 minutes for single items
     dependencies: [id],
-  })
+  });
 }
 
 // Hook for analytics data
 export function useAnalyticsData(_type: string, filters: Record<string, any> = {}) {
-  const queryParams = new URLSearchParams()
+  const queryParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
       queryParams.append(key, String(value));
@@ -319,7 +319,7 @@ export function clearCache(pattern?: string) {
   if (pattern) {
     for (const key of cache.keys()) {
       if (key.includes(pattern)) {
-        cache.delete(key)
+        cache.delete(key);
       }
     }
   } else {

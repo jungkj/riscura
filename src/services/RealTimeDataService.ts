@@ -39,13 +39,14 @@ export class RealTimeDataService {
   /**
    * Subscribe to real-time changes for an organization
    */
-  subscribeToOrganization(_organizationId: string,
+  subscribeToOrganization(
+    _organizationId: string,
     callbacks: RealTimeCallbacks
   ): RealTimeSubscription {
-    const channelName = `org-${organizationId}`
+    const channelName = `org-${organizationId}`;
 
     // Remove existing subscription if any
-    this.unsubscribe(channelName)
+    this.unsubscribe(channelName);
 
     const channel = supabase
       .channel(channelName)
@@ -122,7 +123,7 @@ export class RealTimeDataService {
         supabase.removeChannel(channel);
         this.subscriptions.delete(channelName);
       },
-    }
+    };
 
     this.subscriptions.set(channelName, subscription);
     return subscription;
@@ -131,14 +132,15 @@ export class RealTimeDataService {
   /**
    * Subscribe to specific table changes
    */
-  subscribeToTable<T extends keyof Tables>(_table: T,
+  subscribeToTable<T extends keyof Tables>(
+    _table: T,
     organizationId: string,
     callback: (payload: RealtimePostgresChangesPayload<DaisyTables[T]['Row']>) => void
   ): RealTimeSubscription {
     const channelName = `${table}-${organizationId}`;
 
     // Remove existing subscription if any
-    this.unsubscribe(channelName)
+    this.unsubscribe(channelName);
 
     const channel = supabase
       .channel(channelName)
@@ -160,7 +162,7 @@ export class RealTimeDataService {
         supabase.removeChannel(channel);
         this.subscriptions.delete(channelName);
       },
-    }
+    };
 
     this.subscriptions.set(channelName, subscription);
     return subscription;
@@ -198,7 +200,7 @@ export class RealTimeDataService {
       .from('risks')
       .select('*')
       .eq('organizationId', organizationId)
-      .order('createdAt', { ascending: false })
+      .order('createdAt', { ascending: false });
 
     if (error) {
       // console.error('Error fetching risks:', error)
@@ -227,7 +229,7 @@ export class RealTimeDataService {
       entityId: data.id,
       userId: risk.createdBy!,
       organizationId: risk.organizationId,
-    })
+    });
 
     return data;
   }
@@ -300,7 +302,7 @@ export class RealTimeDataService {
       entityId: data.id,
       userId: control.createdBy!,
       organizationId: control.organizationId,
-    })
+    });
 
     return data;
   }
@@ -423,7 +425,7 @@ export class RealTimeDataService {
     const { data: risks, error } = await supabase
       .from('risks')
       .select('*')
-      .eq('organizationId', organizationId)
+      .eq('organizationId', organizationId);
 
     if (error) {
       // console.error('Error fetching risk metrics:', error)
@@ -443,7 +445,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {}
+      ) || {};
 
     const byCategory =
       risks?.reduce(
@@ -452,7 +454,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {}
+      ) || {};
 
     return {
       total,
@@ -460,7 +462,7 @@ export class RealTimeDataService {
       byStatus,
       byCategory,
       averageScore: risks?.reduce((sum, r) => sum + r.riskScore, 0) / total || 0,
-    }
+    };
   }
 
   /**
@@ -488,7 +490,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {}
+      ) || {};
 
     const byCategory =
       controls?.reduce(
@@ -497,7 +499,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {}
+      ) || {};
 
     const byEffectiveness =
       controls?.reduce(
@@ -508,7 +510,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {}
+      ) || {};
 
     return {
       total,
@@ -518,11 +520,11 @@ export class RealTimeDataService {
       byType,
       byCategory,
       byEffectiveness,
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const realTimeDataService = new RealTimeDataService()
+export const realTimeDataService = new RealTimeDataService();
 
 export default RealTimeDataService;

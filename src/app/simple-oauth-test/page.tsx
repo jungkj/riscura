@@ -11,7 +11,7 @@ export default function SimpleOAuthTest() {
     fetch('/api/google-oauth/session')
       .then((res) => res.json())
       .then((data) => {
-        setUser(data.user)
+        setUser(data.user);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -19,12 +19,12 @@ export default function SimpleOAuthTest() {
 
   const signIn = () => {
     window.location.href = '/api/google-oauth/login';
-  }
+  };
 
   const signOut = () => {
     document.cookie = 'session-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     setUser(null);
-  }
+  };
 
   if (loading) {
     return (

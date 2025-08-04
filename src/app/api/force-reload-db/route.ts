@@ -9,15 +9,15 @@ export async function GET() {
     DATABASE_URL: process.env.DATABASE_URL,
     database_url: process.env.database_url,
     actualUsed: process.env.DATABASE_URL || process.env.database_url,
-  }
+  };
 
   // Check if it's already a pooled URL
-  const url = dbUrls.actualUsed
+  const url = dbUrls.actualUsed;
   const isPooled = url?.includes('pooler.supabase.com');
   const isDirectUrl = url?.includes('db.') && url?.includes('.supabase.co');
 
   // Try to connect with the current URL
-  let connectionTest = null
+  let connectionTest = null;
   if (url) {
     try {
       const { PrismaClient } = await import('@prisma/client');
@@ -36,12 +36,12 @@ export async function GET() {
       connectionTest = {
         success: true,
         result,
-      }
+      };
     } catch (error) {
       connectionTest = {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-      }
+      };
     }
   }
 

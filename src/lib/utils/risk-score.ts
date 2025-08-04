@@ -7,11 +7,11 @@ export function parseRiskScore(_value: string | number | undefined | null): numb
 
   // Handle number values - clamp between 1 and 5
   if (typeof value === 'number') {
-    return Math.max(1, Math.min(5, Math.round(value)))
+    return Math.max(1, Math.min(5, Math.round(value)));
   }
 
   // Handle string values
-  const strValue = value.toString().toLowerCase().trim()
+  const strValue = value.toString().toLowerCase().trim();
 
   // Handle text values
   const textToScore: { [key: string]: number } = {
@@ -26,21 +26,21 @@ export function parseRiskScore(_value: string | number | undefined | null): numb
     veryhigh: 5,
     very_high: 5,
     critical: 5,
-  }
+  };
 
   // Check for text value match - use Object.hasOwn to handle falsy values
   if (Object.hasOwn(textToScore, strValue)) {
-    return textToScore[strValue]
+    return textToScore[strValue];
   }
 
   // Try to parse as number
-  const numValue = parseFloat(strValue)
+  const numValue = parseFloat(strValue);
   if (!isNaN(numValue)) {
     return Math.max(1, Math.min(5, Math.round(numValue)));
   }
 
   // Default to 0 if unable to parse
-  return 0
+  return 0;
 }
 
 /**
@@ -60,7 +60,7 @@ export function riskScoreToText(score: number): string {
     3: 'Medium',
     4: 'High',
     5: 'Very High',
-  }
+  };
 
   return scoreToText[Math.round(score)] || 'Unknown';
 }

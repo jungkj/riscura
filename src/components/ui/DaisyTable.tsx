@@ -21,7 +21,7 @@ export const DaisyTable = ({
     sm: 'table-sm',
     md: '',
     lg: 'table-lg',
-  }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -40,4 +40,4 @@ export const DaisyTable = ({
       </table>
     </div>
   );
-}
+};

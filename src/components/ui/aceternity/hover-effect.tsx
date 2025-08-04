@@ -37,16 +37,16 @@ export const HoverEffect: React.FC<HoverEffectProps> = ({
       x: (x - centerX) / centerX,
       y: (y - centerY) / centerY,
     });
-  }
+  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-  }
+  };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
     setMousePosition({ x: 0, y: 0 });
-  }
+  };
 
   return (
     <div
@@ -121,7 +121,7 @@ export const HoverEffect: React.FC<HoverEffectProps> = ({
       </motion.div>
     </div>
   );
-}
+};
 
 interface HoverCardProps {
   children: React.ReactNode;
@@ -142,4 +142,4 @@ export const HoverCard: React.FC<HoverCardProps> = ({ children, className, hover
       {children}
     </HoverEffect>
   );
-}
+};

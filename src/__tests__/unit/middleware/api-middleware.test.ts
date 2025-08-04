@@ -26,7 +26,7 @@ import {
 } from '../../utils/test-helpers';
 
 // Mock the database
-const mockPrisma = createMockPrismaClient()
+const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
     client: mockPrisma,
@@ -38,7 +38,7 @@ const mockBillingManager = {
   getActiveSubscription: jest.fn(),
   getSubscriptionPlans: jest.fn(),
   trackUsage: jest.fn(),
-}
+};
 
 jest.mock('@/lib/billing/manager', () => ({
   billingManager: mockBillingManager,
@@ -62,10 +62,10 @@ describe('API Middleware', () => {
     mockHandler = jest.fn();
 
     // Setup default successful responses
-    mockHandler.mockResolvedValue(NextResponse.json({ data: 'success' }, { status: 200 }))
+    mockHandler.mockResolvedValue(NextResponse.json({ data: 'success' }, { status: 200 }));
 
     // Reset all mocks
-    jest.clearAllMocks()
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -78,7 +78,7 @@ describe('API Middleware', () => {
 
   describe('withAPI Basic Functionality', () => {
     it('should execute handler successfully without options', async () => {
-      const wrappedHandler = withAPI(mockHandler)
+      const wrappedHandler = withAPI(mockHandler);
       const request = createMockRequest();
 
       const response = await wrappedHandler(request);
@@ -135,7 +135,7 @@ describe('API Middleware', () => {
 
   describe('Authentication', () => {
     it('should require authentication when specified', async () => {
-      const wrappedHandler = withAPI(mockHandler, { requireAuth: true })
+      const wrappedHandler = withAPI(mockHandler, { requireAuth: true });
       const request = createMockRequest();
 
       const response = await wrappedHandler(request);
@@ -168,7 +168,7 @@ describe('API Middleware', () => {
       const userWithoutPermission = {
         ...testUser,
         permissions: ['read:risks'],
-      }
+      };
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
         user: userWithoutPermission,
@@ -190,7 +190,7 @@ describe('API Middleware', () => {
       const adminUser = {
         ...testUser,
         permissions: ['*'],
-      }
+      };
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/test', {
         user: adminUser,
@@ -210,7 +210,7 @@ describe('API Middleware', () => {
   describe('Subscription Enforcement', () => {
     describe('Active Subscription Requirements', () => {
       it('should require active subscription when specified', async () => {
-        mockBillingManager.getActiveSubscription.mockResolvedValue(null)
+        mockBillingManager.getActiveSubscription.mockResolvedValue(null);
 
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
@@ -257,7 +257,7 @@ describe('API Middleware', () => {
           ...testSubscription,
           trialEnd: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
           status: 'trialing',
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(expiredTrialSubscription);
 
@@ -284,7 +284,7 @@ describe('API Middleware', () => {
           ...testSubscription,
           cancelAtPeriodEnd: true,
           currentPeriodEnd: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(canceledSubscription);
 
@@ -320,7 +320,7 @@ describe('API Middleware', () => {
               included: true,
             },
           ],
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithoutFeature]);
@@ -356,7 +356,7 @@ describe('API Middleware', () => {
               included: true,
             },
           ],
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithFeature]);
@@ -388,13 +388,13 @@ describe('API Middleware', () => {
             risks: 10,
             aiQueries: 100,
           },
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithLimits]);
 
         // Mock current usage at limit
-        mockPrisma.risk.count.mockResolvedValue(10)
+        mockPrisma.risk.count.mockResolvedValue(10);
 
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
@@ -423,13 +423,13 @@ describe('API Middleware', () => {
           limits: {
             risks: 100,
           },
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithLimits]);
 
         // Mock current usage under limit
-        mockPrisma.risk.count.mockResolvedValue(5)
+        mockPrisma.risk.count.mockResolvedValue(5);
 
         const wrappedHandler = withAPI(mockHandler, {
           requireAuth: true,
@@ -456,7 +456,7 @@ describe('API Middleware', () => {
           limits: {
             risks: -1, // Unlimited
           },
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithUnlimited]);
@@ -565,7 +565,7 @@ describe('API Middleware', () => {
   describe('Helper Middleware Functions', () => {
     describe('withSubscription', () => {
       it('should create subscription-enforced handler', async () => {
-        mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription)
+        mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
 
         const wrappedHandler = withSubscription({
           requireActive: true,
@@ -601,7 +601,7 @@ describe('API Middleware', () => {
               included: true,
             },
           ],
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithFeature]);
@@ -644,7 +644,7 @@ describe('API Middleware', () => {
         const planWithLimits = {
           ...testPlan,
           limits: { risks: 100 },
-        }
+        };
 
         mockBillingManager.getActiveSubscription.mockResolvedValue(testSubscription);
         mockBillingManager.getSubscriptionPlans.mockResolvedValue([planWithLimits]);
@@ -670,7 +670,7 @@ describe('API Middleware', () => {
 
   describe('Edge Cases and Error Handling', () => {
     it('should handle missing organization ID', async () => {
-      const userWithoutOrg = { ...testUser, organizationId: undefined }
+      const userWithoutOrg = { ...testUser, organizationId: undefined };
 
       const wrappedHandler = withAPI(mockHandler, {
         requireAuth: true,

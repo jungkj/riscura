@@ -12,21 +12,21 @@ export enum TreatmentStrategy {
 }
 
 // Define valid step names as a union type
-export type RiskFlowStep = 'basic' | 'matrix' | 'details' | 'review'
+export type RiskFlowStep = 'basic' | 'matrix' | 'details' | 'review';
 
 interface RiskData {
   // Basic Info
-  title: string
+  title: string;
   description: string;
   category: RiskCategory | null;
 
   // Risk Assessment
-  likelihood: number
+  likelihood: number;
   impact: number;
   riskScore?: number;
 
   // Details
-  owner: string
+  owner: string;
   status: RiskStatus;
   treatmentStrategy: TreatmentStrategy | null;
   controlMeasures: string;
@@ -34,7 +34,7 @@ interface RiskData {
   nextReview?: Date;
 
   // Compliance
-  frameworkIds: string[]
+  frameworkIds: string[];
   tags: string[];
 }
 
@@ -71,11 +71,11 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
   const updateRiskData = (_data: Partial<RiskData>) => {
     setRiskData((prev) => {
       // Create a copy for validation
-      const validated: Partial<RiskData> = {}
+      const validated: Partial<RiskData> = {};
 
       // Validate likelihood (1-5)
       if ('likelihood' in data && data.likelihood !== undefined) {
-        const likelihood = Number(data.likelihood)
+        const likelihood = Number(data.likelihood);
         if (!isNaN(likelihood) && likelihood >= 1 && likelihood <= 5) {
           validated.likelihood = Math.round(likelihood);
         } else {
@@ -85,7 +85,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
 
       // Validate impact (1-5)
       if ('impact' in data && data.impact !== undefined) {
-        const impact = Number(data.impact)
+        const impact = Number(data.impact);
         if (!isNaN(impact) && impact >= 1 && impact <= 5) {
           validated.impact = Math.round(impact);
         } else {
@@ -95,7 +95,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
 
       // Validate string fields (non-empty for required fields)
       if ('title' in data && typeof data.title === 'string') {
-        validated.title = data.title.trim()
+        validated.title = data.title.trim();
       }
 
       if ('description' in data && typeof data.description === 'string') {
@@ -116,7 +116,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
         (data.category === null ||
           Object.values(RiskCategory).includes(data.category as RiskCategory))
       ) {
-        validated.category = data.category
+        validated.category = data.category;
       }
 
       if ('status' in data && Object.values(RiskStatus).includes(data.status as RiskStatus)) {
@@ -134,7 +134,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
       // Validate dates
       if ('dateIdentified' in data) {
         if (data.dateIdentified instanceof Date && !isNaN(data.dateIdentified.getTime())) {
-          validated.dateIdentified = data.dateIdentified
+          validated.dateIdentified = data.dateIdentified;
         } else if (typeof data.dateIdentified === 'string') {
           const date = new Date(data.dateIdentified);
           if (!isNaN(date.getTime())) {
@@ -158,7 +158,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
 
       // Validate arrays
       if ('frameworkIds' in data && Array.isArray(data.frameworkIds)) {
-        validated.frameworkIds = data.frameworkIds.filter((id) => typeof id === 'string')
+        validated.frameworkIds = data.frameworkIds.filter((id) => typeof id === 'string');
       }
 
       if ('tags' in data && Array.isArray(data.tags)) {
@@ -166,16 +166,16 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // Merge validated data
-      const updated = { ...prev, ...validated }
+      const updated = { ...prev, ...validated };
 
       // Auto-calculate risk score if likelihood or impact changed
       if ('likelihood' in validated || 'impact' in validated) {
-        updated.riskScore = updated.likelihood * updated.impact
+        updated.riskScore = updated.likelihood * updated.impact;
       }
 
       return updated;
     });
-  }
+  };
 
   return (
     <RiskFlowContext.Provider
@@ -191,7 +191,7 @@ export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </RiskFlowContext.Provider>
   );
-}
+};
 
 export function useRiskFlow() {
   const context = useContext(RiskFlowContext);

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Types
-export type ThemeMode = 'light' | 'dark' | 'system'
+export type ThemeMode = 'light' | 'dark' | 'system';
 export type ColorScheme = 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'neutral';
 
 export interface ThemeSettings {
@@ -31,12 +31,12 @@ export interface ThemeConfig {
     md: string;
     lg: string;
     xl: string;
-  }
+  };
   borderRadius: {
     sm: string;
     md: string;
     lg: string;
-  }
+  };
 }
 
 // Default themes
@@ -62,7 +62,7 @@ export const lightTheme: ThemeConfig = {
     md: '0.375rem',
     lg: '0.5rem',
   },
-}
+};
 
 export const darkTheme: ThemeConfig = {
   colors: {
@@ -86,7 +86,7 @@ export const darkTheme: ThemeConfig = {
     md: '0.375rem',
     lg: '0.5rem',
   },
-}
+};
 
 // Theme Manager
 export class ThemeManager {
@@ -95,13 +95,13 @@ export class ThemeManager {
     colorScheme: 'blue',
     reducedMotion: false,
     highContrast: false,
-  }
+  };
 
   private listeners: ((theme: ThemeConfig, settings: ThemeSettings) => void)[] = [];
 
   constructor(initialSettings?: Partial<ThemeSettings>) {
     if (initialSettings) {
-      this.settings = { ...this.settings, ...initialSettings }
+      this.settings = { ...this.settings, ...initialSettings };
     }
     this.loadFromStorage();
   }
@@ -113,7 +113,7 @@ export class ThemeManager {
       const stored = localStorage.getItem('riscura-theme-settings');
       if (stored) {
         const parsedSettings = JSON.parse(stored);
-        this.settings = { ...this.settings, ...parsedSettings }
+        this.settings = { ...this.settings, ...parsedSettings };
       }
     } catch (error) {
       // console.warn('Failed to load theme settings from storage:', error)
@@ -146,7 +146,7 @@ export class ThemeManager {
   }
 
   updateSettings(newSettings: Partial<ThemeSettings>): void {
-    this.settings = { ...this.settings, ...newSettings }
+    this.settings = { ...this.settings, ...newSettings };
     this.saveToStorage();
     this.notifyListeners();
   }
@@ -159,7 +159,7 @@ export class ThemeManager {
 
     // Apply CSS variables
     Object.entries(theme.colors).forEach(([key, value]) => {
-      root.style.setProperty(`--color-${key}`, value)
+      root.style.setProperty(`--color-${key}`, value);
     });
 
     Object.entries(theme.spacing).forEach(([key, value]) => {
@@ -171,7 +171,7 @@ export class ThemeManager {
     });
 
     // Apply mode class
-    const mode = this.getEffectiveMode()
+    const mode = this.getEffectiveMode();
     root.classList.remove('light', 'dark');
     root.classList.add(mode);
   }
@@ -184,7 +184,7 @@ export class ThemeManager {
       if (index > -1) {
         this.listeners.splice(index, 1);
       }
-    }
+    };
   }
 
   private notifyListeners(): void {
@@ -193,13 +193,13 @@ export class ThemeManager {
   }
 
   getSettings(): ThemeSettings {
-    return { ...this.settings }
+    return { ...this.settings };
   }
 }
 
 // Theme context
 export const ThemeContext = createContext<{
-  theme: ThemeConfig
+  theme: ThemeConfig;
   settings: ThemeSettings;
   updateSettings: (_settings: Partial<ThemeSettings>) => void;
   manager: ThemeManager;
@@ -221,11 +221,11 @@ export const useTheme = () => {
     throw new Error('useTheme must be used within ThemeProvider');
   }
   return context;
-}
+};
 
 // Theme provider component
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [manager] = useState(() => new ThemeManager())
+  const [manager] = useState(() => new ThemeManager());
   const [theme, setTheme] = useState(() => manager.getCurrentTheme());
   const [settings, setSettings] = useState(() => manager.getSettings());
 
@@ -236,20 +236,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
 
     // Apply initial theme
-    manager.applyTheme()
+    manager.applyTheme();
 
     return unsubscribe;
   }, [manager]);
 
   const updateSettings = (newSettings: Partial<ThemeSettings>) => {
     manager.updateSettings(newSettings);
-  }
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, settings, updateSettings, manager }}>
       {children}
     </ThemeContext.Provider>
   );
-}
+};
 
 export default ThemeManager;

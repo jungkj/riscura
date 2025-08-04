@@ -18,7 +18,7 @@ import {
 
 // Enhanced Interactive Button with Micro-Interactions
 interface EnhancedInteractiveButtonProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   onClick?: () => void;
   loading?: boolean;
   success?: boolean;
@@ -59,20 +59,20 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
     } finally {
       setIsPressed(false);
     }
-  }
+  };
 
   const variantClasses = {
     primary: 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700',
     secondary: 'bg-slate-600 text-white border-slate-600 hover:bg-slate-700',
     outline: 'bg-transparent text-blue-600 border-blue-600 hover:bg-blue-50',
     ghost: 'bg-transparent text-slate-600 border-transparent hover:bg-slate-100',
-  }
+  };
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
     lg: 'px-6 py-3 text-lg',
-  }
+  };
 
   return (
     <motion.button
@@ -138,11 +138,11 @@ export const EnhancedInteractiveButton: React.FC<EnhancedInteractiveButtonProps>
       </motion.span>
     </motion.button>
   );
-}
+};
 
 // Enhanced Draggable Card
 interface EnhancedDraggableCardProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   onDragEnd?: (info: any) => void;
   dragConstraints?: any;
   className?: string;
@@ -193,11 +193,11 @@ export const EnhancedDraggableCard: React.FC<EnhancedDraggableCardProps> = ({
       {children}
     </motion.div>
   );
-}
+};
 
 // Enhanced Loading Skeleton with Shimmer Effect
 interface EnhancedSkeletonProps {
-  className?: string
+  className?: string;
   lines?: number;
   avatar?: boolean;
   height?: string;
@@ -269,11 +269,11 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({
       </div>
     </div>
   );
-}
+};
 
 // Enhanced Progress Indicator with Smooth Animations
 interface EnhancedProgressProps {
-  value: number
+  value: number;
   max?: number;
   className?: string;
   showPercentage?: boolean;
@@ -298,13 +298,13 @@ export const EnhancedProgress: React.FC<EnhancedProgressProps> = ({
     green: 'bg-green-600',
     red: 'bg-red-600',
     yellow: 'bg-yellow-600',
-  }
+  };
 
   const sizeClasses = {
     sm: 'h-1',
     md: 'h-2',
     lg: 'h-3',
-  }
+  };
 
   return (
     <div className={cn('relative', className)}>
@@ -346,11 +346,11 @@ export const EnhancedProgress: React.FC<EnhancedProgressProps> = ({
       )}
     </div>
   );
-}
+};
 
 // Enhanced Notification Toast
 interface EnhancedToastProps {
-  message: string
+  message: string;
   type?: 'success' | 'error' | 'warning' | 'info';
   onClose?: () => void;
   autoClose?: number;
@@ -382,14 +382,14 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
     error: 'bg-red-50 border-red-200 text-red-800',
     warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
     info: 'bg-blue-50 border-blue-200 text-blue-800',
-  }
+  };
 
   const icons = {
     success: '✓',
     error: '✕',
     warning: '⚠',
     info: 'ℹ',
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -444,11 +444,11 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
       )}
     </AnimatePresence>
   );
-}
+};
 
 // Enhanced Hover Card with Smooth Reveal
 interface EnhancedHoverCardProps {
-  trigger: React.ReactNode
+  trigger: React.ReactNode;
   content: React.ReactNode;
   placement?: 'top' | 'bottom' | 'left' | 'right';
   className?: string;
@@ -467,7 +467,7 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
     bottom: 'top-full mt-2',
     left: 'right-full mr-2',
     right: 'left-full ml-2',
-  }
+  };
 
   return (
     <div
@@ -511,4 +511,4 @@ export const EnhancedHoverCard: React.FC<EnhancedHoverCardProps> = ({
       </AnimatePresence>
     </div>
   );
-}
+};

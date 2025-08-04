@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   try {
     // Try NextAuth session first
     try {
-      const session = await getServerSession(authOptions)
+      const session = await getServerSession(authOptions);
       if (session) {
         return NextResponse.json(session);
       }
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Check for simple OAuth session
-    const sessionToken = req.cookies.get('session-token')?.value
+    const sessionToken = req.cookies.get('session-token')?.value;
     if (sessionToken) {
       try {
         const sessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Check for demo user session
-    const demoUserCookie = req.cookies.get('demo-user')?.value
+    const demoUserCookie = req.cookies.get('demo-user')?.value;
     if (demoUserCookie) {
       try {
         const demoUser = JSON.parse(demoUserCookie);
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     }
 
     // No valid session found
-    return NextResponse.json(null)
+    return NextResponse.json(null);
   } catch (error) {
     // console.error('[Session] Error checking session:', error)
     return NextResponse.json(null);

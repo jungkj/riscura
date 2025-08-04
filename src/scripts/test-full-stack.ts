@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 
 // Load environment variables
-config({ path: resolve(process.cwd(), '.env') })
+config({ path: resolve(process.cwd(), '.env') });
 
 // console.log('🚀 Full Stack Testing Suite for Riscura\n')
 // console.log('=====================================\n')

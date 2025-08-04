@@ -102,7 +102,7 @@ class APICache {
     avgResponseTime: 0,
     hitRate: 0,
     bandwidthSaved: 0,
-  }
+  };
   private responseTimes: number[] = [];
   private revalidationQueue: Set<string> = new Set();
   private stats: APICacheStats;
@@ -163,7 +163,7 @@ class APICache {
         },
       },
       ...config,
-    }
+    };
 
     this.stats = {
       hits: 0,
@@ -172,7 +172,7 @@ class APICache {
       revalidations: 0,
       compressionSaved: 0,
       avgResponseTime: 0,
-    }
+    };
   }
 
   public static getInstance(config?: Partial<APICacheConfig>): APICache {
@@ -184,22 +184,22 @@ class APICache {
 
   // Check if request should be cached
   public shouldCache(_request: NextRequest): boolean {
-    const { pathname } = new URL(request.url)
+    const { pathname } = new URL(request.url);
     const method = request.method.toUpperCase();
 
     // Only cache GET requests by default
     if (method !== 'GET') {
-      return false
+      return false;
     }
 
     // Check exclude patterns
     if (this.config.excludePatterns.some((pattern) => pattern.test(pathname))) {
-      return false
+      return false;
     }
 
     // Check include patterns
     if (this.config.includePatterns.length > 0) {
-      return this.config.includePatterns.some((pattern) => pattern.test(pathname))
+      return this.config.includePatterns.some((pattern) => pattern.test(pathname));
     }
 
     return true;
@@ -212,7 +212,7 @@ class APICache {
     headers: Record<string, string> = {},
     query: Record<string, any> = {}
   ): string {
-    const strategy = this.findMatchingStrategy(method, url)
+    const strategy = this.findMatchingStrategy(method, url);
     const varyHeaders = strategy?.varyHeaders || [];
 
     const keyData = {
@@ -226,7 +226,7 @@ class APICache {
         },
         {} as Record<string, string>
       ),
-    }
+    };
 
     const hash = crypto
       .createHash('sha256')
@@ -247,7 +247,7 @@ class APICache {
   }
 
   private sortObject(obj: Record<string, any>): Record<string, any> {
-    const sorted: Record<string, any> = {}
+    const sorted: Record<string, any> = {};
     Object.keys(obj)
       .sort()
       .forEach((key) => {
@@ -276,7 +276,7 @@ class APICache {
 
   // Get cached response
   public async getCachedResponse(_request: NextRequest): Promise<{
-    response: NextResponse | null
+    response: NextResponse | null;
     isStale: boolean;
   }> {
     const startTime = Date.now();
@@ -296,7 +296,7 @@ class APICache {
       if (!cached) {
         this.metrics.cacheMisses++;
         logger.cache('get', cacheKey, false, Date.now() - startTime);
-        return { response: null, isStale: false }
+        return { response: null, isStale: false };
       }
 
       const now = Date.now();
@@ -306,22 +306,22 @@ class APICache {
 
       // If very stale, treat as miss
       if (isVeryStale) {
-        this.metrics.cacheMisses++
+        this.metrics.cacheMisses++;
         await redisClient.delete(cacheKey);
         logger.cache('get', cacheKey, false, Date.now() - startTime);
-        return { response: null, isStale: false }
+        return { response: null, isStale: false };
       }
 
       // If stale but within tolerance, serve stale and revalidate
       if (isStale && this.config.enableStaleWhileRevalidate) {
-        this.metrics.staleHits++
+        this.metrics.staleHits++;
         this.scheduleRevalidation(cacheKey, request);
       } else {
         this.metrics.cacheHits++;
       }
 
       // Decompress if needed
-      let responseData = cached.data
+      let responseData = cached.data;
       if (cached.compressed && this.config.enableCompression) {
         responseData = await this.decompress(cached.data);
       }
@@ -336,32 +336,33 @@ class APICache {
           'X-Cache-Age': Math.floor(age / 1000).toString(),
           ...(this.config.enableETag && { ETag: cached.metadata.etag }),
         },
-      })
+      });
 
       const responseTime = Date.now() - startTime;
       this.updateMetrics(responseTime, cached.metadata.size);
 
       logger.cache('get', cacheKey, true, Date.now() - startTime);
-      return { response, isStale }
+      return { response, isStale };
     } catch (error) {
       logger.error('API cache get error:', error);
       this.metrics.cacheMisses++;
-      return { response: null, isStale: false }
+      return { response: null, isStale: false };
     }
   }
 
   // Cache response
-  public async cacheResponse(_request: NextRequest,
+  public async cacheResponse(
+    _request: NextRequest,
     response: NextResponse,
     ttl?: number
   ): Promise<void> {
     try {
-      const responseData = await response.clone().json()
+      const responseData = await response.clone().json();
       const responseSize = JSON.stringify(responseData).length;
 
       // Skip caching if response is too large
       if (responseSize > this.config.maxResponseSize) {
-        return
+        return;
       }
 
       const cacheKey = this.generateCacheKey(
@@ -374,10 +375,10 @@ class APICache {
       const finalTTL = ttl || this.config.defaultTTL;
 
       // Generate ETag
-      const etag = this.config.enableETag ? `"${hashKey(JSON.stringify(responseData))}"` : ''
+      const etag = this.config.enableETag ? `"${hashKey(JSON.stringify(responseData))}"` : '';
 
       // Compress if enabled and beneficial
-      let dataToCache = responseData
+      let dataToCache = responseData;
       let compressed = false;
       if (this.config.enableCompression && responseSize > 1024) {
         const compressedData = await this.compress(responseData);
@@ -385,7 +386,7 @@ class APICache {
 
         if (compressionRatio < 0.8) {
           // Only use if >20% savings
-          dataToCache = compressedData
+          dataToCache = compressedData;
           compressed = true;
           this.metrics.compressionSavings += responseSize - compressedData.length;
         }
@@ -401,16 +402,16 @@ class APICache {
         contentType: response.headers.get('content-type') || 'application/json',
         size: responseSize,
         compressed,
-      }
+      };
 
       const cacheEntry: CacheEntry = {
         data: dataToCache,
         metadata,
         compressed,
-      }
+      };
 
       // Cache with appropriate tags
-      const tags = this.generateCacheTags(request)
+      const tags = this.generateCacheTags(request);
       await redisClient.set(cacheKey, cacheEntry, finalTTL, tags);
     } catch (error) {
       logger.error('API cache set error:', error);
@@ -419,18 +420,18 @@ class APICache {
 
   // Invalidate cache by pattern
   public async invalidateByPattern(_pattern: string): Promise<number> {
-    return await redisClient.invalidateByTags([pattern])
+    return await redisClient.invalidateByTags([pattern]);
   }
 
   // Invalidate cache by endpoint
   public async invalidateByEndpoint(endpoint: string): Promise<number> {
-    const tag = `endpoint:${endpoint}`
+    const tag = `endpoint:${endpoint}`;
     return await redisClient.invalidateByTags([tag]);
   }
 
   // Invalidate cache by resource
   public async invalidateByResource(resource: string, id?: string): Promise<number> {
-    const tags = id ? [`resource:${resource}:${id}`] : [`resource:${resource}`]
+    const tags = id ? [`resource:${resource}:${id}`] : [`resource:${resource}`];
     return await redisClient.invalidateByTags(tags);
   }
 
@@ -451,7 +452,7 @@ class APICache {
 
           if (!exists) {
             // Trigger background fetch to warm cache
-            this.scheduleRevalidation(cacheKey, request)
+            this.scheduleRevalidation(cacheKey, request);
           }
         }
       } catch (error) {
@@ -464,7 +465,7 @@ class APICache {
 
   // Get cache metrics
   public getMetrics(): APICacheMetrics {
-    return { ...this.metrics }
+    return { ...this.metrics };
   }
 
   // Reset metrics
@@ -479,20 +480,20 @@ class APICache {
       avgResponseTime: 0,
       hitRate: 0,
       bandwidthSaved: 0,
-    }
+    };
     this.responseTimes = [];
   }
 
   // Private helper methods
   private generateCacheControlHeader(ttl: number, isStale: boolean): string {
     if (isStale) {
-      return `public, max-age=0, stale-while-revalidate=${this.config.staleTime}`
+      return `public, max-age=0, stale-while-revalidate=${this.config.staleTime}`;
     }
     return `public, max-age=${ttl}, stale-while-revalidate=${this.config.staleTime}`;
   }
 
   private extractRelevantHeaders(_request: NextRequest): Record<string, string> {
-    const headers: Record<string, string> = {}
+    const headers: Record<string, string> = {};
     this.config.varyHeaders.forEach((header) => {
       const value = request.headers.get(header);
       if (value) {
@@ -508,7 +509,7 @@ class APICache {
     const tags: string[] = [];
 
     // Add endpoint tag
-    tags.push(`endpoint:${url.pathname}`)
+    tags.push(`endpoint:${url.pathname}`);
 
     // Add resource tags based on path
     if (pathSegments.length >= 2) {
@@ -517,12 +518,12 @@ class APICache {
 
       // Add specific resource ID if present
       if (pathSegments.length >= 3 && pathSegments[2] !== 'search') {
-        tags.push(`resource:${resource}:${pathSegments[2]}`)
+        tags.push(`resource:${resource}:${pathSegments[2]}`);
       }
     }
 
     // Add method tag
-    tags.push(`method:${request.method.toLowerCase()}`)
+    tags.push(`method:${request.method.toLowerCase()}`);
 
     return tags;
   }
@@ -530,13 +531,13 @@ class APICache {
   private async compress(_data: any): Promise<string> {
     // Simple compression using JSON stringification + base64
     // In production, consider using gzip or brotli
-    const jsonString = JSON.stringify(data)
+    const jsonString = JSON.stringify(data);
     return Buffer.from(jsonString).toString('base64');
   }
 
   private async decompress(compressedData: string): Promise<any> {
     // Decompress base64 encoded data
-    const jsonString = Buffer.from(compressedData, 'base64').toString()
+    const jsonString = Buffer.from(compressedData, 'base64').toString();
     return JSON.parse(jsonString);
   }
 
@@ -553,10 +554,10 @@ class APICache {
       try {
         // In a real implementation, this would trigger a background job
         // to fetch fresh data and update the cache
-        logger.info(`Revalidating cache for: ${request.url}`)
+        logger.info(`Revalidating cache for: ${request.url}`);
 
         // Remove from queue after processing
-        this.revalidationQueue.delete(cacheKey)
+        this.revalidationQueue.delete(cacheKey);
       } catch (error) {
         logger.error('Cache revalidation error:', error);
         this.revalidationQueue.delete(cacheKey);
@@ -570,12 +571,12 @@ class APICache {
 
     // Keep only last 1000 response times
     if (this.responseTimes.length > 1000) {
-      this.responseTimes.shift()
+      this.responseTimes.shift();
     }
 
     // Update averages
     this.metrics.avgResponseTime =
-      this.responseTimes.reduce((sum, time) => sum + time, 0) / this.responseTimes.length
+      this.responseTimes.reduce((sum, time) => sum + time, 0) / this.responseTimes.length;
 
     const totalRequests =
       this.metrics.cacheHits + this.metrics.cacheMisses + this.metrics.staleHits;
@@ -606,13 +607,13 @@ class APICache {
             etag: cachedResponse.etag,
             'cache-control': `max-age=${cachedResponse.ttl}`,
           },
-        }
+        };
       }
     }
 
     // Check Last-Modified
     if (ifModifiedSince && cachedResponse.lastModified) {
-      const modifiedTime = new Date(cachedResponse.lastModified).getTime()
+      const modifiedTime = new Date(cachedResponse.lastModified).getTime();
       const requestTime = new Date(ifModifiedSince).getTime();
 
       if (modifiedTime <= requestTime) {
@@ -622,7 +623,7 @@ class APICache {
             'last-modified': cachedResponse.lastModified,
             'cache-control': `max-age=${cachedResponse.ttl}`,
           },
-        }
+        };
       }
     }
 
@@ -630,10 +631,11 @@ class APICache {
   }
 
   // Add cache headers to response
-  public addCacheHeaders(_response: CachedResponse,
+  public addCacheHeaders(
+    _response: CachedResponse,
     headers: Record<string, string> = {}
   ): Record<string, string> {
-    const age = Math.floor((Date.now() - response.timestamp) / 1000)
+    const age = Math.floor((Date.now() - response.timestamp) / 1000);
     const maxAge = Math.max(0, response.ttl - age);
 
     return {
@@ -643,12 +645,12 @@ class APICache {
       etag: response.etag || '',
       'last-modified': response.lastModified || '',
       'x-cache': 'HIT',
-    }
+    };
   }
 
   // Invalidate cache by tags
   public async invalidateByTags(tags: string[]): Promise<number> {
-    let totalInvalidated = 0
+    let totalInvalidated = 0;
 
     try {
       for (const tag of tags) {
@@ -675,7 +677,7 @@ class APICache {
   public async revalidate(
     cacheKey: string,
     revalidateFn: () => Promise<{
-      data: any
+      data: any;
       headers: Record<string, string>;
       status: number;
     }>
@@ -691,7 +693,7 @@ class APICache {
       const response = await revalidateFn();
       // The cache key needs to be reconstructed from the original request
       // This is a simplified version - in practice, you'd store request metadata
-      logger.info(`Revalidated cache entry: ${cacheKey}`)
+      logger.info(`Revalidated cache entry: ${cacheKey}`);
     } catch (error) {
       logger.error(`Revalidation failed for ${cacheKey}:`, error);
     } finally {
@@ -704,7 +706,7 @@ class APICache {
     try {
       const fullPattern = pattern
         ? `${this.config.keyPrefix}${pattern}`
-        : `${this.config.keyPrefix}*`
+        : `${this.config.keyPrefix}*`;
 
       const invalidated = await redisClient.invalidatePattern(fullPattern);
       logger.info(`Purged ${invalidated} API cache entries`);
@@ -717,18 +719,18 @@ class APICache {
 
   // Get cache statistics
   public getStats(): APICacheStats {
-    return { ...this.stats }
+    return { ...this.stats };
   }
 
   // Get cache hit ratio
   public getHitRatio(): number {
-    const total = this.metrics.cacheHits + this.metrics.cacheMisses + this.metrics.staleHits
+    const total = this.metrics.cacheHits + this.metrics.cacheMisses + this.metrics.staleHits;
     return total > 0 ? ((this.metrics.cacheHits + this.metrics.staleHits) / total) * 100 : 0;
   }
 
   // Health check
   public async healthCheck(): Promise<{
-    status: 'healthy' | 'unhealthy'
+    status: 'healthy' | 'unhealthy';
     details: Record<string, any>;
   }> {
     try {
@@ -743,52 +745,52 @@ class APICache {
           revalidationQueue: this.revalidationQueue.size,
           compressionSaved: this.metrics.compressionSavings,
         },
-      }
+      };
     } catch (error) {
       return {
         status: 'unhealthy',
         details: { error: error.message },
-      }
+      };
     }
   }
 }
 
 // Export singleton instance
-export const apiCache = APICache.getInstance()
+export const apiCache = APICache.getInstance();
 
 // Export class for custom instances
-export { APICache }
+export { APICache };
 
 // Middleware function for Next.js API routes
 export const withAPICache = (
   handler: (req: NextRequest) => Promise<NextResponse>,
   options: Partial<APICacheConfig> = {}
 ) => {
-  const cache = new APICache(options)
+  const cache = new APICache(options);
 
   return async (_request: NextRequest): Promise<NextResponse> => {
     // Check if request should be cached
     if (!cache.shouldCache(request)) {
-      return handler(request)
+      return handler(request);
     }
 
     // Try to get cached response
-    const { response: cachedResponse, isStale } = await cache.getCachedResponse(request)
+    const { response: cachedResponse, isStale } = await cache.getCachedResponse(request);
 
     if (cachedResponse && !isStale) {
       return cachedResponse;
     }
 
     // Execute handler and cache response
-    const response = await handler(request)
+    const response = await handler(request);
 
     // Only cache successful responses
     if (response.status >= 200 && response.status < 300) {
-      await cache.cacheResponse(request, response)
+      await cache.cacheResponse(request, response);
     }
 
     // Add cache headers
-    const headers = new Headers(response.headers)
+    const headers = new Headers(response.headers);
     headers.set('X-Cache', 'MISS');
 
     return new NextResponse(response.body, {
@@ -796,17 +798,17 @@ export const withAPICache = (
       statusText: response.statusText,
       headers,
     });
-  }
-}
+  };
+};
 
 // Utility functions for common invalidation patterns
 export const invalidateUserAPI = async (userId?: string): Promise<number> => {
   const patterns = userId
     ? [`resource:users:${userId}`, 'endpoint:/api/users']
-    : ['resource:users', 'endpoint:/api/users']
+    : ['resource:users', 'endpoint:/api/users'];
 
   return await redisClient.invalidateByTags(patterns);
-}
+};
 
 export const invalidateRiskAPI = async (riskId?: string): Promise<number> => {
   const patterns = riskId
@@ -814,7 +816,7 @@ export const invalidateRiskAPI = async (riskId?: string): Promise<number> => {
     : ['resource:risks', 'endpoint:/api/risks'];
 
   return await redisClient.invalidateByTags(patterns);
-}
+};
 
 export const invalidateComplianceAPI = async (complianceId?: string): Promise<number> => {
   const patterns = complianceId
@@ -822,4 +824,4 @@ export const invalidateComplianceAPI = async (complianceId?: string): Promise<nu
     : ['resource:compliance', 'endpoint:/api/compliance'];
 
   return await redisClient.invalidateByTags(patterns);
-}
+};

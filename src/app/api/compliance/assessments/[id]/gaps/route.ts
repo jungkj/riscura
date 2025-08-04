@@ -16,7 +16,7 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       const filters = {
         ...(status && { status }),
         ...(severity && { severity }),
-      }
+      };
 
       const gaps = await complianceService.getGaps(id, filters);
 
@@ -50,7 +50,7 @@ const createGapSchema = z.object({
   estimatedEffort: z.number().optional(),
   targetDate: z.string().datetime().optional(),
   assignedTo: z.string().optional(),
-})
+});
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(

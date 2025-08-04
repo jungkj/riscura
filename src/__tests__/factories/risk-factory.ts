@@ -96,7 +96,7 @@ export class RiskFactory {
     // This would be used in integration tests where we also create controls
     return this.create({
       title: `Risk with ${controlCount} controls`,
-    })
+    });
   }
 
   private static calculateRiskLevel(riskScore: number): RiskLevel {
@@ -152,4 +152,4 @@ export const testRisks = {
     likelihood: 2,
     impact: 4,
   }),
-}
+};

@@ -29,7 +29,7 @@ async function globalTeardown(_config: FullConfig) {
         // console.log(`  - Peak Memory Usage: ${metrics.peakMemoryUsage || 'N/A'}MB`)
 
         // Save metrics to file for CI/CD
-        const fs = require('fs')
+        const fs = require('fs');
         const path = require('path');
 
         const resultsDir = path.join(process.cwd(), 'test-results');
@@ -63,7 +63,7 @@ async function globalTeardown(_config: FullConfig) {
         // console.log(`  - Multi-tenant Features: ${coverage.multiTenant || 'N/A'}%`)
 
         // Save coverage data
-        const fs = require('fs')
+        const fs = require('fs');
         const path = require('path');
 
         fs.writeFileSync(
@@ -100,7 +100,7 @@ async function globalTeardown(_config: FullConfig) {
           'multi-tenant-isolation',
           'ai-document-processing',
           'performance-benchmarks',
-        ]
+        ];
 
         // console.log('🔍 Critical Workflow Status:')
         criticalWorkflows.forEach((workflow) => {
@@ -110,7 +110,7 @@ async function globalTeardown(_config: FullConfig) {
         });
 
         // Save summary
-        const fs = require('fs')
+        const fs = require('fs');
         const path = require('path');
 
         fs.writeFileSync(
@@ -125,7 +125,7 @@ async function globalTeardown(_config: FullConfig) {
     }
 
     // 4. Clean up test data (optional, configurable)
-    const cleanupTestData = process.env.CLEANUP_TEST_DATA !== 'false'
+    const cleanupTestData = process.env.CLEANUP_TEST_DATA !== 'false';
 
     if (cleanupTestData) {
       // console.log('🧹 Cleaning up test data...')
@@ -137,7 +137,7 @@ async function globalTeardown(_config: FullConfig) {
             confirm: true,
             preserveMetrics: true,
           },
-        })
+        });
 
         if (cleanupResponse.ok()) {
           // console.log('  ✅ Test data cleaned up successfully')
@@ -166,7 +166,7 @@ async function globalTeardown(_config: FullConfig) {
         // console.log(`  - Memory Usage: ${health.memoryUsage || 'unknown'}`)
 
         // Check for any critical issues
-        const criticalIssues = []
+        const criticalIssues = [];
         if (health.database !== 'healthy') criticalIssues.push('database');
         if (health.redis !== 'healthy') criticalIssues.push('redis');
 
@@ -195,7 +195,7 @@ async function globalTeardown(_config: FullConfig) {
         multiTenantIsolationVerified: true, // This would be calculated from tenant tests
         aiServicesValidated: true, // This would be calculated from AI tests
         recommendedForDeployment: true, // Overall recommendation
-      }
+      };
 
       fs.writeFileSync(
         path.join(process.cwd(), 'test-results', 'deployment-readiness.json'),
@@ -210,7 +210,7 @@ async function globalTeardown(_config: FullConfig) {
     // console.error('❌ Global test teardown failed:', error)
     // Don't throw error to avoid failing the test suite
   } finally {
-    await browser.close()
+    await browser.close();
   }
 }
 

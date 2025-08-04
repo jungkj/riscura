@@ -13,7 +13,7 @@ import type { SubscriptionPlan, OrganizationSubscription } from '@/lib/billing/t
 // ============================================================================
 
 export interface TestUser extends User {
-  organization: Organization
+  organization: Organization;
 }
 
 export interface TestOrganization extends Organization {
@@ -178,7 +178,7 @@ export const createTestSubscriptionPlan = (
   createdAt: new Date(),
   updatedAt: new Date(),
   ...overrides,
-})
+});
 
 export const createTestSubscription = (
   overrides: Partial<OrganizationSubscription> = {}
@@ -212,7 +212,7 @@ export const createMockRequest = (
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' = 'GET',
   url = 'http://localhost:3000/api/test',
   options: {
-    body?: any
+    body?: any;
     headers?: Record<string, string>;
     searchParams?: Record<string, string>;
     user?: TestUser;
@@ -234,7 +234,7 @@ export const createMockRequest = (
   const init: RequestInit = {
     method,
     headers,
-  }
+  };
 
   if (options.body && ['POST', 'PUT', 'PATCH'].includes(method)) {
     init.body = JSON.stringify(options.body);
@@ -244,13 +244,14 @@ export const createMockRequest = (
 
   // Attach user for authenticated requests
   if (options.user) {
-    (request as any).user = options.user
+    (request as any).user = options.user;
   }
 
   return request;
-}
+};
 
-export const createMockResponse = (_data: any = {},
+export const createMockResponse = (
+  _data: any = {},
   status = 200,
   headers: Record<string, string> = {}
 ): NextResponse => {
@@ -261,7 +262,7 @@ export const createMockResponse = (_data: any = {},
       ...headers,
     },
   });
-}
+};
 
 // ============================================================================
 // DATABASE MOCKING
@@ -362,8 +363,8 @@ export const createMockPrismaClient = () => {
     },
     $disconnect: jest.fn(),
     $transaction: jest.fn(),
-  }
-}
+  };
+};
 
 // ============================================================================
 // STRIPE MOCKING
@@ -378,7 +379,7 @@ export const createMockStripeCustomer = (overrides: any = {}) => ({
   },
   created: Math.floor(Date.now() / 1000),
   ...overrides,
-})
+});
 
 export const createMockStripeSubscription = (overrides: any = {}) => ({
   id: 'sub_test123',
@@ -438,7 +439,7 @@ export const createMockStripeInvoice = (overrides: any = {}) => ({
 // ============================================================================
 
 export const expectValidApiResponse = (_response: any) => {
-  expect(response).toHaveProperty('success')
+  expect(response).toHaveProperty('success');
   expect(response).toHaveProperty('data');
   if (response.success === false) {
     expect(response).toHaveProperty('error');
@@ -447,7 +448,7 @@ export const expectValidApiResponse = (_response: any) => {
   }
   expect(response).toHaveProperty('meta');
   expect(response.meta).toHaveProperty('timestamp');
-}
+};
 
 export const expectValidPaginationResponse = (_response: any) => {
   expectValidApiResponse(response);
@@ -456,15 +457,16 @@ export const expectValidPaginationResponse = (_response: any) => {
   expect(response.pagination).toHaveProperty('limit');
   expect(response.pagination).toHaveProperty('total');
   expect(response.pagination).toHaveProperty('pages');
-}
+};
 
-export const expectSubscriptionEnforcement = (_response: any,
+export const expectSubscriptionEnforcement = (
+  _response: any,
   expectedCode = 'SUBSCRIPTION_ERROR'
 ) => {
   expect(response.success).toBe(false);
   expect(response.error.code).toBe(expectedCode);
   expect(response.error.message).toContain('subscription');
-}
+};
 
 // ============================================================================
 // TEST CLEANUP UTILITIES
@@ -472,7 +474,7 @@ export const expectSubscriptionEnforcement = (_response: any,
 
 export const cleanupTestData = async (prisma: any) => {
   // Clean up in reverse dependency order
-  await prisma.usageRecord.deleteMany({ where: { organizationId: { startsWith: 'test-' } } })
+  await prisma.usageRecord.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.invoice.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.organizationSubscription.deleteMany({
     where: { organizationId: { startsWith: 'test-' } },
@@ -485,7 +487,7 @@ export const cleanupTestData = async (prisma: any) => {
   await prisma.user.deleteMany({ where: { organizationId: { startsWith: 'test-' } } });
   await prisma.organization.deleteMany({ where: { id: { startsWith: 'test-' } } });
   await prisma.subscriptionPlan.deleteMany({ where: { id: { startsWith: 'test-' } } });
-}
+};
 
 // ============================================================================
 // PERFORMANCE TESTING UTILITIES
@@ -502,18 +504,18 @@ export const measureExecutionTime = async <T>(
 
   // console.log(`${name} executed in ${duration.toFixed(2)}ms`)
 
-  return { result, duration }
-}
+  return { result, duration };
+};
 
 export const expectPerformance = (duration: number, maxMs: number) => {
   expect(duration).toBeLessThan(maxMs);
-}
+};
 
 // ============================================================================
 // EXPORTS
 // ============================================================================
 
-export type MockPrismaClient = ReturnType<typeof createMockPrismaClient>
+export type MockPrismaClient = ReturnType<typeof createMockPrismaClient>;
 
 // ============================================================================
 // API ROUTE TESTING UTILITIES
@@ -529,10 +531,10 @@ export const callApiRoute = async (
 ): Promise<{ status: number; data: any; headers: any }> => {
   try {
     // Dynamic import of the route handler
-    const handler = await import(`@/app/api${routePath}/route`)
+    const handler = await import(`@/app/api${routePath}/route`);
 
     // Determine which HTTP method to call
-    const method = req.method || 'GET'
+    const method = req.method || 'GET';
     const routeHandler = handler[method];
 
     if (!routeHandler) {
@@ -540,26 +542,26 @@ export const callApiRoute = async (
         status: 405,
         data: { error: 'Method not allowed' },
         headers: {},
-      }
+      };
     }
 
     // Call the route handler
-    const response = await routeHandler(req)
+    const response = await routeHandler(req);
 
     // Extract response data
-    const data = response.json ? await response.json() : response
+    const data = response.json ? await response.json() : response;
     const status = response.status || 200;
-    const headers = response.headers || {}
+    const headers = response.headers || {};
 
-    return { status, data, headers }
+    return { status, data, headers };
   } catch (error) {
     return {
       status: 500,
       data: { error: error.message },
       headers: {},
-    }
+    };
   }
-}
+};
 
 /**
  * Setup authenticated request with user context
@@ -579,7 +581,7 @@ export const createAuthenticatedRequest = (
     'Content-Type': 'application/json',
     Authorization: `Bearer mock-jwt-token`,
     ...options.headers,
-  }
+  };
 
   const request = {
     method,
@@ -587,10 +589,10 @@ export const createAuthenticatedRequest = (
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
     user, // Attach user for middleware
-  }
+  };
 
   return request;
-}
+};
 
 /**
  * Mock authentication middleware for testing
@@ -600,7 +602,7 @@ export const mockAuthMiddleware = (user: TestUser = createTestUser()) => {
     req.user = user;
     return Promise.resolve();
   });
-}
+};
 
 /**
  * Mock rate limiting for testing
@@ -614,7 +616,7 @@ export const mockRateLimiter = (shouldLimit = false) => {
     }
     return Promise.resolve();
   });
-}
+};
 
 // ============================================================================
 // DATABASE TESTING UTILITIES
@@ -628,8 +630,8 @@ export const getTestDatabaseUrl = (): string => {
     process.env.TEST_DATABASE_URL ||
     process.env.DATABASE_URL ||
     'postgresql://test:test@localhost:5432/test_db'
-  )
-}
+  );
+};
 
 /**
  * Setup test database with sample data
@@ -638,7 +640,7 @@ export const setupTestDatabase = async (prisma: any) => {
   // Create test organization
   const testOrg = await prisma.organization.create({
     data: createTestOrganization(),
-  })
+  });
 
   // Create test user
   const testUser = await prisma.user.create({
@@ -646,7 +648,7 @@ export const setupTestDatabase = async (prisma: any) => {
       ...createTestUser(),
       organizationId: testOrg.id,
     },
-  })
+  });
 
   // Create test risks
   const testRisk = await prisma.risk.create({
@@ -655,7 +657,7 @@ export const setupTestDatabase = async (prisma: any) => {
       organizationId: testOrg.id,
       createdBy: testUser.id,
     },
-  })
+  });
 
   // Create test controls
   const testControl = await prisma.control.create({
@@ -664,15 +666,15 @@ export const setupTestDatabase = async (prisma: any) => {
       organizationId: testOrg.id,
       createdBy: testUser.id,
     },
-  })
+  });
 
   return {
     organization: testOrg,
     user: testUser,
     risk: testRisk,
     control: testControl,
-  }
-}
+  };
+};
 
 // ============================================================================
 // E2E TESTING UTILITIES
@@ -683,13 +685,13 @@ export const setupTestDatabase = async (prisma: any) => {
  */
 export const waitForElement = async (page: any, selector: string, timeout = 10000) => {
   try {
-    await page.waitForSelector(selector, { timeout })
+    await page.waitForSelector(selector, { timeout });
     return true;
   } catch (error) {
     // console.warn(`Element ${selector} not found within ${timeout}ms`)
     return false;
   }
-}
+};
 
 /**
  * Fill form with error handling
@@ -702,7 +704,7 @@ export const fillFormSafely = async (page: any, selector: string, value: string)
     // console.warn(`Could not fill ${selector} with ${value}: ${error.message}`)
     return false;
   }
-}
+};
 
 /**
  * Click element with multiple selector attempts
@@ -721,7 +723,7 @@ export const clickElementSafely = async (page: any, selectors: string[]) => {
   }
   // console.warn(`Could not click any of: ${selectors.join(', ')}`)
   return false;
-}
+};
 
 /**
  * Login helper for E2E tests
@@ -739,7 +741,7 @@ export const loginUser = async (
     'input[type="email"]',
     'input[name="email"]',
     'input[placeholder*="email" i]',
-  ]
+  ];
 
   const passwordSelectors = [
     '[data-testid="password-input"]',
@@ -756,7 +758,7 @@ export const loginUser = async (
   ];
 
   // Fill form
-  let emailFilled = false
+  let emailFilled = false;
   for (const selector of emailSelectors) {
     if (await fillFormSafely(page, selector, email)) {
       emailFilled = true;
@@ -777,20 +779,20 @@ export const loginUser = async (
   }
 
   // Submit form
-  const submitted = await clickElementSafely(page, submitSelectors)
+  const submitted = await clickElementSafely(page, submitSelectors);
   if (!submitted) {
     throw new Error('Could not submit login form');
   }
 
   // Wait for redirect to dashboard
   try {
-    await page.waitForURL('**/dashboard**', { timeout: 30000 })
+    await page.waitForURL('**/dashboard**', { timeout: 30000 });
     return true;
   } catch (error) {
     // console.warn('Login may have failed - no redirect to dashboard detected')
     return false;
   }
-}
+};
 
 /**
  * Logout helper for E2E tests
@@ -811,29 +813,29 @@ export const logoutUser = async (page: any) => {
   ];
 
   // Click user menu
-  const menuClicked = await clickElementSafely(page, userMenuSelectors)
+  const menuClicked = await clickElementSafely(page, userMenuSelectors);
   if (!menuClicked) {
     throw new Error('Could not find user menu');
   }
 
   // Wait a bit for menu to open
-  await page.waitForTimeout(500)
+  await page.waitForTimeout(500);
 
   // Click logout
-  const loggedOut = await clickElementSafely(page, logoutSelectors)
+  const loggedOut = await clickElementSafely(page, logoutSelectors);
   if (!loggedOut) {
     throw new Error('Could not find logout button');
   }
 
   // Wait for redirect to login
   try {
-    await page.waitForURL('**/auth/login**', { timeout: 10000 })
+    await page.waitForURL('**/auth/login**', { timeout: 10000 });
     return true;
   } catch (error) {
     // console.warn('Logout may have failed - no redirect to login detected')
     return false;
   }
-}
+};
 
 // ============================================================================
 // DEPLOYMENT TESTING UTILITIES
@@ -844,7 +846,7 @@ export const logoutUser = async (page: any) => {
  */
 export const checkUrlAccessibility = async (url: string, timeout = 10000): Promise<boolean> => {
   try {
-    const controller = new AbortController()
+    const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     const response = await fetch(url, {
@@ -857,7 +859,7 @@ export const checkUrlAccessibility = async (url: string, timeout = 10000): Promi
   } catch (error) {
     return false;
   }
-}
+};
 
 /**
  * Measure page load time
@@ -867,7 +869,7 @@ export const measurePageLoadTime = async (page: any, url: string): Promise<numbe
   await page.goto(url);
   await page.waitForLoadState('networkidle');
   return Date.now() - startTime;
-}
+};
 
 /**
  * Check for console errors
@@ -882,4 +884,4 @@ export const checkConsoleErrors = async (page: any): Promise<string[]> => {
   });
 
   return errors;
-}
+};

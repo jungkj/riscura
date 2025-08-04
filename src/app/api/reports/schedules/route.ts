@@ -6,7 +6,7 @@ import { z } from 'zod';
 // GET /api/reports/schedules - List report schedules
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user
+    const user = (req as any).user;
 
     const schedules = await ReportService.getReportSchedules(user.organizationId);
 
@@ -23,7 +23,7 @@ export const GET = withApiMiddleware(
 // POST /api/reports/schedules - Create report schedule
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user
+    const user = (req as any).user;
 
     const body = await req.json();
 

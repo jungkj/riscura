@@ -6,7 +6,7 @@ export const PaginationSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
   sort: z.string().optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
-})
+});
 
 export const SearchSchema = z.object({
   search: z.string().min(1).max(255).optional(),
@@ -24,7 +24,7 @@ export const LoginSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   rememberMe: z.boolean().optional().default(false),
-})
+});
 
 export const RegisterSchema = z
   .object({
@@ -77,7 +77,7 @@ export const RiskCreateSchema = z.object({
   impact: z.number().int().min(1).max(5),
   riskOwner: z.string().uuid().optional(),
   linkedControls: z.array(z.string().uuid()).optional(),
-})
+});
 
 export const RiskUpdateSchema = RiskCreateSchema.partial().extend({
   id: z.string().uuid(),
@@ -139,7 +139,7 @@ export const ControlCreateSchema = z.object({
   cost: z.number().min(0).optional(),
   tags: z.array(z.string().max(50)).max(10).optional(),
   metadata: z.record(z.any()).optional(),
-})
+});
 
 export const ControlUpdateSchema = ControlCreateSchema.partial().extend({
   id: z.string().uuid(),
@@ -187,7 +187,7 @@ export const AssessmentCreateSchema = z.object({
       })
     )
     .optional(),
-})
+});
 
 export const AssessmentUpdateSchema = z.object({
   name: z.string().min(3).max(255).optional(),
@@ -253,7 +253,7 @@ export const DocumentUploadSchema = z.object({
   controlId: z.string().uuid().optional(),
   tags: z.array(z.string().max(50)).max(10).optional(),
   description: z.string().max(500).optional(),
-})
+});
 
 export const DocumentAnalysisSchema = z.object({
   documentId: z.string().uuid(),
@@ -284,7 +284,7 @@ export const ReportGenerateSchema = z.object({
       watermark: z.string().max(100).optional(),
     })
     .optional(),
-})
+});
 
 // User and organization schemas
 export const UserUpdateSchema = z.object({
@@ -293,7 +293,7 @@ export const UserUpdateSchema = z.object({
   role: z.enum(['USER', 'ADMIN', 'RISK_MANAGER', 'AUDITOR']).optional(),
   preferences: z.record(z.any()).optional(),
   isActive: z.boolean().optional(),
-})
+});
 
 export const OrganizationUpdateSchema = z.object({
   name: z.string().min(2).max(255).optional(),
@@ -315,7 +315,7 @@ export const FileUploadSchema = z.object({
   tags: z.array(z.string().max(50)).max(20).optional(),
   description: z.string().max(1000).optional(),
   isPublic: z.boolean().default(false),
-})
+});
 
 // Bulk operation schemas
 export const BulkRiskUpdateSchema = z.object({
@@ -342,7 +342,7 @@ export const BulkRiskUpdateSchema = z.object({
       tags: z.array(z.string().max(50)).max(10).optional(),
     })
     .refine((data) => Object.keys(data).length > 0, 'At least one update field is required'),
-})
+});
 
 export const BulkControlUpdateSchema = z.object({
   controlIds: z.array(z.string().uuid()).min(1).max(100),
@@ -368,7 +368,7 @@ export const ExportSchema = z.object({
   format: z.enum(['CSV', 'EXCEL', 'JSON']),
   filters: z.record(z.any()).optional(),
   includeRelated: z.boolean().default(false),
-})
+});
 
 export const ImportSchema = z.object({
   file: z
@@ -395,7 +395,7 @@ export const ImportSchema = z.object({
 });
 
 // Query parameter schemas for different endpoints
-export const RiskQuerySchema = PaginationSchema.merge(SearchSchema).merge(RiskFilterSchema)
+export const RiskQuerySchema = PaginationSchema.merge(SearchSchema).merge(RiskFilterSchema);
 export const ControlQuerySchema = PaginationSchema.merge(SearchSchema).merge(ControlFilterSchema);
 export const AssessmentQuerySchema =
   PaginationSchema.merge(SearchSchema).merge(AssessmentFilterSchema);
@@ -407,7 +407,7 @@ export const ApiHeadersSchema = z.object({
   'x-request-id': z.string().uuid().optional(),
   authorization: z.string().optional(),
   'content-type': z.string().optional(),
-})
+});
 
 // Validation utilities
 export function parseAndValidate<T>(
@@ -417,10 +417,10 @@ export function parseAndValidate<T>(
 ): { success: true; data: T } | { success: false; errors: z.ZodIssue[] } {
   try {
     const _result = schema.parse(data);
-    return { success: true, data: result }
+    return { success: true, data: result };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return { success: false, errors: error.issues }
+      return { success: false, errors: error.issues };
     }
     throw error;
   }
@@ -430,12 +430,12 @@ export function validateQueryParams<T>(
   schema: z.ZodSchema<T>,
   searchParams: URLSearchParams
 ): { success: true; data: T } | { success: false; errors: z.ZodIssue[] } {
-  const queryObj: Record<string, any> = {}
+  const queryObj: Record<string, any> = {};
 
   for (const [key, value] of searchParams.entries()) {
     // Handle array parameters (e.g., tags[]=value1&tags[]=value2)
     if (key.endsWith('[]')) {
-      const arrayKey = key.slice(0, -2)
+      const arrayKey = key.slice(0, -2);
       if (!queryObj[arrayKey]) {
         queryObj[arrayKey] = [];
       }
@@ -443,18 +443,18 @@ export function validateQueryParams<T>(
     }
     // Handle nested object parameters (e.g., filter[category]=OPERATIONAL)
     else if (key.includes('[') && key.includes(']')) {
-      const match = key.match(/^([^[]+)\[([^\]]+)\]$/)
+      const match = key.match(/^([^[]+)\[([^\]]+)\]$/);
       if (match) {
         const [, objectKey, subKey] = match;
         if (!queryObj[objectKey]) {
-          queryObj[objectKey] = {}
+          queryObj[objectKey] = {};
         }
         queryObj[objectKey][subKey] = value;
       }
     }
     // Handle simple parameters
     else {
-      queryObj[key] = value
+      queryObj[key] = value;
     }
   }
 

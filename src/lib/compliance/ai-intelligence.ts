@@ -18,7 +18,7 @@ export interface ComplianceQuery {
     industry?: string;
     geography?: string;
     riskProfile?: string;
-  }
+  };
   response: ComplianceQueryResponse;
   confidence: number;
   timestamp: Date;
@@ -84,13 +84,13 @@ export interface OrganizationImpact {
     newGaps: number;
     modifiedGaps: number;
     resolvedGaps: number;
-  }
+  };
   actionPlan?: {
     tasks: ComplianceAction[];
     timeline: number; // days
     effort: 'low' | 'medium' | 'high';
     cost: 'low' | 'medium' | 'high';
-  }
+  };
   assessedAt: Date;
   assessedBy: string;
 }
@@ -130,15 +130,16 @@ export interface ControlPrioritization {
 
 export class ComplianceAIIntelligence {
   // Process natural language compliance query
-  async processComplianceQuery(_query: string,
+  async processComplianceQuery(
+    _query: string,
     context: ComplianceQuery['context'],
     userId: string
   ): Promise<ComplianceQueryResponse> {
     // Determine query intent
-    const intent = this.classifyQueryIntent(query)
+    const intent = this.classifyQueryIntent(query);
 
     // Generate response based on intent
-    const response = await this.generateQueryResponse(query, intent, context)
+    const response = await this.generateQueryResponse(query, intent, context);
 
     // Store query for learning
     await this.storeQuery({
@@ -150,14 +151,14 @@ export class ComplianceAIIntelligence {
       confidence: response.confidence || 0.8,
       timestamp: new Date(),
       userId,
-    })
+    });
 
     return response;
   }
 
   // Classify query intent using NLP analysis
   private classifyQueryIntent(_query: string): ComplianceQuery['intent'] {
-    const lowerQuery = query.toLowerCase()
+    const lowerQuery = query.toLowerCase();
 
     // Framework search patterns
     if (
@@ -170,7 +171,7 @@ export class ComplianceAIIntelligence {
         lowerQuery.includes('tell me about') ||
         lowerQuery.includes('explain')
       ) {
-        return 'interpretation'
+        return 'interpretation';
       }
       return 'framework-search';
     }
@@ -186,7 +187,7 @@ export class ComplianceAIIntelligence {
         lowerQuery.includes('mapping') ||
         lowerQuery.includes('implement')
       ) {
-        return 'control-mapping'
+        return 'control-mapping';
       }
       return 'requirement-lookup';
     }
@@ -197,7 +198,7 @@ export class ComplianceAIIntelligence {
       lowerQuery.includes('missing') ||
       lowerQuery.includes('coverage')
     ) {
-      return 'gap-analysis'
+      return 'gap-analysis';
     }
 
     // Recommendation patterns
@@ -206,21 +207,22 @@ export class ComplianceAIIntelligence {
       lowerQuery.includes('suggest') ||
       lowerQuery.includes('should')
     ) {
-      return 'recommendation'
+      return 'recommendation';
     }
 
     // Default to interpretation for complex queries
-    return 'interpretation'
+    return 'interpretation';
   }
 
   // Generate response based on intent
-  private async generateQueryResponse(_query: string,
+  private async generateQueryResponse(
+    _query: string,
     intent: ComplianceQuery['intent'],
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     switch (intent) {
       case 'framework-search':
-        return await this.handleFrameworkSearch(query, context)
+        return await this.handleFrameworkSearch(query, context);
       case 'requirement-lookup':
         return await this.handleRequirementLookup(query, context);
       case 'control-mapping':
@@ -237,12 +239,13 @@ export class ComplianceAIIntelligence {
   }
 
   // Handle framework search queries
-  private async handleFrameworkSearch(_query: string,
+  private async handleFrameworkSearch(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
       frameworks: context.frameworks,
-    })
+    });
 
     const frameworks = searchResults.frameworks;
 
@@ -256,7 +259,7 @@ export class ComplianceAIIntelligence {
           'Show me frameworks for financial services',
           'What frameworks apply to my industry?',
         ],
-      }
+      };
     }
 
     const frameworkList = frameworks
@@ -280,16 +283,17 @@ export class ComplianceAIIntelligence {
         parameters: { frameworkId: f.id },
         priority: 'medium' as const,
       })),
-    }
+    };
   }
 
   // Handle requirement lookup queries
-  private async handleRequirementLookup(_query: string,
+  private async handleRequirementLookup(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     const searchResults = await complianceFrameworkManager.searchFrameworks(query, {
       frameworks: context.frameworks,
-    })
+    });
 
     const requirements = searchResults.requirements;
 
@@ -303,7 +307,7 @@ export class ComplianceAIIntelligence {
           'What are the critical requirements?',
           'How do I implement this requirement?',
         ],
-      }
+      };
     }
 
     const requirementList = requirements
@@ -331,18 +335,19 @@ export class ComplianceAIIntelligence {
         parameters: { requirementId: r.id, frameworkId: (r as any).frameworkId || r.id },
         priority: r.priority as any,
       })),
-    }
+    };
   }
 
   // Handle control mapping queries
-  private async handleControlMapping(_query: string,
+  private async handleControlMapping(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Extract requirement/control information from query
-    const keywords = this.extractKeywords(query)
+    const keywords = this.extractKeywords(query);
 
     // For demonstration, provide intelligent mapping guidance
-    const mappingGuidance = this.generateMappingGuidance(keywords, context)
+    const mappingGuidance = this.generateMappingGuidance(keywords, context);
 
     return {
       type: 'control-mapping',
@@ -355,11 +360,12 @@ export class ComplianceAIIntelligence {
         'What evidence do I need for this control?',
       ],
       followUpActions: mappingGuidance.actions,
-    }
+    };
   }
 
   // Handle gap analysis queries
-  private async handleGapAnalysis(_query: string,
+  private async handleGapAnalysis(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Perform gap analysis for specified frameworks
@@ -367,7 +373,7 @@ export class ComplianceAIIntelligence {
       context.frameworks.map((frameworkId) =>
         complianceMappingEngine.performGapAnalysis(context.organizationId, frameworkId)
       )
-    )
+    );
 
     const totalGaps = gapAnalyses.reduce((sum, analysis) => sum + analysis.gaps.length, 0);
     const criticalGaps = gapAnalyses.reduce(
@@ -401,18 +407,19 @@ export class ComplianceAIIntelligence {
           priority: 'high',
         },
       ],
-    }
+    };
   }
 
   // Handle interpretation queries
-  private async handleInterpretation(_query: string,
+  private async handleInterpretation(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Extract key concepts from query
-    const concepts = this.extractComplianceConcepts(query)
+    const concepts = this.extractComplianceConcepts(query);
 
     // Generate interpretation based on concepts
-    const interpretation = this.generateInterpretation(concepts, context)
+    const interpretation = this.generateInterpretation(concepts, context);
 
     return {
       type: 'answer',
@@ -421,15 +428,16 @@ export class ComplianceAIIntelligence {
       sources: interpretation.sources,
       relatedQueries: interpretation.relatedQueries,
       followUpActions: interpretation.actions,
-    }
+    };
   }
 
   // Handle recommendation queries
-  private async handleRecommendation(_query: string,
+  private async handleRecommendation(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<ComplianceQueryResponse> {
     // Generate recommendations based on query and context
-    const recommendations = await this.generateRecommendations(query, context)
+    const recommendations = await this.generateRecommendations(query, context);
 
     return {
       type: 'recommendations',
@@ -442,7 +450,7 @@ export class ComplianceAIIntelligence {
         'What resources do I need?',
       ],
       followUpActions: recommendations.actions,
-    }
+    };
   }
 
   // Generate generic response for unclassified queries
@@ -456,7 +464,7 @@ export class ComplianceAIIntelligence {
         'How do I perform a gap analysis?',
         'What controls do I need for SOX compliance?',
       ],
-    }
+    };
   }
 
   // Extract keywords from query
@@ -476,7 +484,7 @@ export class ComplianceAIIntelligence {
       'of',
       'with',
       'by',
-    ]
+    ];
     return query
       .toLowerCase()
       .split(/\s+/)
@@ -502,7 +510,7 @@ export class ComplianceAIIntelligence {
       'maturity',
       'effectiveness',
       'monitoring',
-    ]
+    ];
 
     const queryLower = query.toLowerCase();
     return complianceConcepts.filter((concept) => queryLower.includes(concept));
@@ -522,7 +530,7 @@ export class ComplianceAIIntelligence {
           priority: 'medium' as const,
         },
       ],
-    }
+    };
   }
 
   // Generate interpretation
@@ -537,11 +545,12 @@ export class ComplianceAIIntelligence {
         'How do I measure compliance effectiveness?',
       ],
       actions: [],
-    }
+    };
   }
 
   // Generate recommendations
-  private async generateRecommendations(_query: string,
+  private async generateRecommendations(
+    _query: string,
     context: ComplianceQuery['context']
   ): Promise<any> {
     // Analyze current state and generate recommendations
@@ -551,7 +560,7 @@ export class ComplianceAIIntelligence {
       '**Establish Testing Programs**: Create systematic testing and monitoring procedures',
       '**Document Everything**: Maintain comprehensive documentation for audit purposes',
       '**Train Your Team**: Ensure staff understand their compliance responsibilities',
-    ]
+    ];
 
     return {
       content: `Based on your query and organizational context, here are my recommendations:\n\n${recommendations.map((r, i) => `${i + 1}. ${r}`).join('\n\n')}`,
@@ -565,14 +574,14 @@ export class ComplianceAIIntelligence {
           priority: 'high' as const,
         },
       ],
-    }
+    };
   }
 
   // Store query for learning
   private async storeQuery(_query: ComplianceQuery): Promise<void> {
     await db.client.complianceQuery.create({
       data: query,
-    })
+    });
   }
 
   // Monitor regulatory updates
@@ -603,13 +612,13 @@ export class ComplianceAIIntelligence {
         isProcessed: false,
         createdAt: new Date(),
       },
-    ]
+    ];
 
     // Store updates
     for (const update of mockUpdates) {
       await db.client.regulatoryUpdate.create({
         data: update,
-      })
+      });
     }
 
     return mockUpdates;
@@ -623,7 +632,7 @@ export class ComplianceAIIntelligence {
   ): Promise<OrganizationImpact> {
     const update = await db.client.regulatoryUpdate.findUnique({
       where: { id: updateId },
-    })
+    });
 
     if (!update) {
       throw new Error('Regulatory update not found');
@@ -647,7 +656,7 @@ export class ComplianceAIIntelligence {
       },
       assessedAt: new Date(),
       assessedBy: assessorId,
-    }
+    };
 
     // Update the regulatory update with impact assessment
     await db.client.regulatoryUpdate.update({
@@ -656,17 +665,17 @@ export class ComplianceAIIntelligence {
         organizationImpact: impact,
         isProcessed: true,
       },
-    })
+    });
 
     return impact;
   }
 
   // Generate compliance insights
   async generateComplianceInsights(_organizationId: string): Promise<ComplianceInsight[]> {
-    const insights: ComplianceInsight[] = []
+    const insights: ComplianceInsight[] = [];
 
     // Risk-based prioritization insight
-    const prioritization = await this.analyzeRiskBasedPrioritization(organizationId)
+    const prioritization = await this.analyzeRiskBasedPrioritization(organizationId);
     if (prioritization.length > 0) {
       insights.push({
         id: `insight_priority_${Date.now()}`,
@@ -690,7 +699,7 @@ export class ComplianceAIIntelligence {
     }
 
     // Control optimization insight
-    const optimizations = await this.analyzeControlOptimization(organizationId)
+    const optimizations = await this.analyzeControlOptimization(organizationId);
     if (optimizations.length > 0) {
       insights.push({
         id: `insight_optimization_${Date.now()}`,
@@ -717,14 +726,15 @@ export class ComplianceAIIntelligence {
     for (const insight of insights) {
       await db.client.complianceInsight.create({
         data: insight,
-      })
+      });
     }
 
     return insights;
   }
 
   // Analyze risk-based prioritization
-  private async analyzeRiskBasedPrioritization(_organizationId: string
+  private async analyzeRiskBasedPrioritization(
+    _organizationId: string
   ): Promise<ControlPrioritization[]> {
     const controls = await db.client.control.findMany({
       where: { organizationId },
@@ -732,12 +742,12 @@ export class ComplianceAIIntelligence {
         risks: true,
         requirements: true,
       },
-    })
+    });
 
     return controls
       .map((control) => {
         // Calculate prioritization score
-        const riskReduction = this.calculateRiskReduction(control)
+        const riskReduction = this.calculateRiskReduction(control);
         const complianceImpact = this.calculateComplianceImpact(control);
         const implementationEffort = this.calculateImplementationEffort(control);
         const costBenefit = (riskReduction + complianceImpact) / implementationEffort;
@@ -757,14 +767,14 @@ export class ComplianceAIIntelligence {
           businessValue,
           reasons: this.generatePrioritizationReasons(control, priority),
           recommendations: this.generatePrioritizationRecommendations(control, priority),
-        }
+        };
       })
       .sort((a, b) => b.priority - a.priority);
   }
 
   // Calculate various scores for prioritization
   private calculateRiskReduction(control: any): number {
-    const riskCount = control.risks?.length || 0
+    const riskCount = control.risks?.length || 0;
     const avgRiskScore =
       control.risks?.reduce((sum: number, r: any) => sum + r.likelihood * r.impact, 0) /
         Math.max(riskCount, 1) || 0;
@@ -839,7 +849,7 @@ export class ComplianceAIIntelligence {
   // Analyze control optimization opportunities
   private async analyzeControlOptimization(_organizationId: string): Promise<
     {
-      id: any
+      id: any;
       name: any;
       opportunity: string;
       recommendation: string;
@@ -865,12 +875,12 @@ export class ComplianceAIIntelligence {
 
       // Check for automation opportunities
       if (!control.automated && control.frequency === 'continuous') {
-        opportunities.push('Automation opportunity for continuous monitoring')
+        opportunities.push('Automation opportunity for continuous monitoring');
       }
 
       // Check for effectiveness improvements
       if (control.effectivenessScore < 70) {
-        opportunities.push('Effectiveness improvement needed')
+        opportunities.push('Effectiveness improvement needed');
       }
 
       // Check for testing optimization
@@ -878,7 +888,7 @@ export class ComplianceAIIntelligence {
         !control.lastTested ||
         new Date(control.lastTested) < new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
       ) {
-        opportunities.push('Testing program needs enhancement')
+        opportunities.push('Testing program needs enhancement');
       }
 
       if (opportunities.length > 0) {

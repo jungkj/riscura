@@ -16,7 +16,7 @@ export const DaisyInput = forwardRef<HTMLInputElement, InputProps>(
       sm: 'input-sm',
       md: 'input-md',
       lg: 'input-lg',
-    }
+    };
 
     const colorClasses = {
       primary: 'input-primary',
@@ -26,7 +26,7 @@ export const DaisyInput = forwardRef<HTMLInputElement, InputProps>(
       success: 'input-success',
       warning: 'input-warning',
       error: 'input-error',
-    }
+    };
 
     return (
       <input

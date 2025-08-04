@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/nextjs';
 
 // User engagement events
 interface UserEvent {
-  userId?: string
+  userId?: string;
   organizationId?: string;
   event: string;
   properties: Record<string, any>;
@@ -19,33 +19,33 @@ interface UserEvent {
 // Business KPIs
 interface BusinessKPIs {
   // User metrics
-  dailyActiveUsers: number
+  dailyActiveUsers: number;
   weeklyActiveUsers: number;
   monthlyActiveUsers: number;
   newUserRegistrations: number;
   userRetentionRate: number;
 
   // Feature usage
-  rcsaAssessmentsCreated: number
+  rcsaAssessmentsCreated: number;
   documentsProcessed: number;
   reportsGenerated: number;
   controlsCreated: number;
   risksIdentified: number;
 
   // Business metrics
-  averageTimeToFirstRCSA: number
+  averageTimeToFirstRCSA: number;
   averageAssessmentCompletionTime: number;
   documentProcessingSuccessRate: number;
 
   // Support metrics
-  supportTicketsCreated: number
+  supportTicketsCreated: number;
   averageResolutionTime: number;
   customerSatisfactionScore: number;
 }
 
 // Feature usage tracking
 interface FeatureUsage {
-  feature: string
+  feature: string;
   userId: string;
   organizationId: string;
   duration: number;
@@ -55,7 +55,7 @@ interface FeatureUsage {
 
 class BusinessAnalytics {
   private eventQueue: UserEvent[] = [];
-  private kpis: Partial<BusinessKPIs> = {}
+  private kpis: Partial<BusinessKPIs> = {};
   private sessionStartTime: number = Date.now();
 
   constructor() {
@@ -87,23 +87,23 @@ class BusinessAnalytics {
    */
   private setupEventListeners(): void {
     // Track page views
-    this.trackPageView()
+    this.trackPageView();
 
     // Track form interactions
-    this.setupFormTracking()
+    this.setupFormTracking();
 
     // Track button clicks
-    this.setupButtonTracking()
+    this.setupButtonTracking();
 
     // Track errors
-    this.setupErrorTracking()
+    this.setupErrorTracking();
 
     // Track session end
     window.addEventListener('beforeunload', () => {
       this.track('session_end', {
         session_duration: Date.now() - this.sessionStartTime,
         timestamp: Date.now(),
-      })
+      });
       this.flushEvents();
     });
   }
@@ -136,21 +136,21 @@ class BusinessAnalytics {
       timestamp: Date.now(),
       sessionId: this.getSessionId(),
       page: typeof window !== 'undefined' ? window.location.pathname : '',
-    }
+    };
 
     this.eventQueue.push(userEvent);
 
     // Send to external analytics immediately for critical events
     if (this.isCriticalEvent(event)) {
-      this.sendToExternalAnalytics(userEvent)
+      this.sendToExternalAnalytics(userEvent);
     }
 
     // Update KPIs based on event
-    this.updateKPIs(event, properties)
+    this.updateKPIs(event, properties);
 
     // Flush queue if it gets too large
     if (this.eventQueue.length >= 10) {
-      this.flushEvents()
+      this.flushEvents();
     }
   }
 
@@ -176,7 +176,7 @@ class BusinessAnalytics {
       duration,
       success,
       errorMessage,
-    }
+    };
 
     this.track('feature_usage', usage);
 
@@ -188,7 +188,7 @@ class BusinessAnalytics {
         message: `Slow feature usage: ${feature}`,
         level: 'warning',
         data: usage,
-      })
+      });
     }
   }
 
@@ -218,7 +218,7 @@ class BusinessAnalytics {
             price: value,
           },
         ],
-      })
+      });
     }
   }
 
@@ -258,10 +258,10 @@ class BusinessAnalytics {
       risk_identified: () => {
         this.kpis.risksIdentified = (this.kpis.risksIdentified || 0) + 1;
       },
-    }
+    };
 
     // Update KPIs
-    const handler = businessEvents[event as keyof typeof businessEvents]
+    const handler = businessEvents[event as keyof typeof businessEvents];
     if (handler) {
       handler();
     }
@@ -292,7 +292,7 @@ class BusinessAnalytics {
 
     // Track form field interactions
     document.addEventListener('focusin', (event) => {
-      const target = event.target as HTMLElement
+      const target = event.target as HTMLElement;
       if (
         target.tagName === 'INPUT' ||
         target.tagName === 'TEXTAREA' ||
@@ -390,7 +390,7 @@ class BusinessAnalytics {
     const currentCount = this.kpis.documentsProcessed || 1;
 
     // Calculate new success rate
-    const _successCount = Math.round((currentRate / 100) * (currentCount - 1))
+    const _successCount = Math.round((currentRate / 100) * (currentCount - 1));
     const newSuccessCount = successCount + (success ? 1 : 0);
     this.kpis.documentProcessingSuccessRate = (newSuccessCount / currentCount) * 100;
   }
@@ -433,7 +433,7 @@ class BusinessAnalytics {
         organizationId: event.organizationId,
         sessionId: event.sessionId,
         page: event.page,
-      })
+      });
     }
 
     // Send to Google Analytics 4
@@ -442,7 +442,7 @@ class BusinessAnalytics {
         ...event.properties,
         custom_parameter_user_id: event.userId,
         custom_parameter_org_id: event.organizationId,
-      })
+      });
     }
   }
 
@@ -465,7 +465,7 @@ class BusinessAnalytics {
         body: JSON.stringify({ events }),
       }).catch(() => {
         // Silently fail - re-add events to queue for retry
-        this.eventQueue.unshift(...events)
+        this.eventQueue.unshift(...events);
       });
     }
   }
@@ -476,12 +476,12 @@ class BusinessAnalytics {
   private startPeriodicReporting(): void {
     // Flush events every 30 seconds
     setInterval(() => {
-      this.flushEvents()
+      this.flushEvents();
     }, 30000);
 
     // Send KPI snapshot every 5 minutes
     setInterval(() => {
-      this.sendKPISnapshot()
+      this.sendKPISnapshot();
     }, 300000);
   }
 
@@ -502,7 +502,7 @@ class BusinessAnalytics {
         }),
       }).catch(() => {
         // Silently fail
-      })
+      });
     }
   }
 
@@ -529,7 +529,7 @@ class BusinessAnalytics {
       }
     }
 
-    return undefined
+    return undefined;
   }
 
   /**
@@ -553,7 +553,7 @@ class BusinessAnalytics {
       }
     }
 
-    return undefined
+    return undefined;
   }
 
   /**
@@ -575,7 +575,7 @@ class BusinessAnalytics {
    * Get current KPIs
    */
   getKPIs(): Partial<BusinessKPIs> {
-    return { ...this.kpis }
+    return { ...this.kpis };
   }
 
   /**
@@ -587,19 +587,19 @@ class BusinessAnalytics {
 }
 
 // Singleton instance
-let analytics: BusinessAnalytics | null = null
+let analytics: BusinessAnalytics | null = null;
 
 export const getAnalytics = (): BusinessAnalytics => {
   if (!analytics) {
     analytics = new BusinessAnalytics();
   }
   return analytics;
-}
+};
 
 // Convenience functions
 export const track = (event: string, properties?: Record<string, any>) => {
-  getAnalytics().track(event, properties)
-}
+  getAnalytics().track(event, properties);
+};
 
 export const trackFeatureUsage = (
   feature: string,
@@ -608,18 +608,18 @@ export const trackFeatureUsage = (
   errorMessage?: string
 ) => {
   getAnalytics().trackFeatureUsage(feature, startTime, success, errorMessage);
-}
+};
 
 export const trackConversion = (event: string, value?: number, currency?: string) => {
   getAnalytics().trackConversion(event, value, currency);
-}
+};
 
 export const trackBusinessEvent = (event: string, data: Record<string, any>) => {
   getAnalytics().trackBusinessEvent(event, data);
-}
+};
 
 export const getKPIs = () => {
   return getAnalytics().getKPIs();
-}
+};
 
-export { type BusinessKPIs, type FeatureUsage, type UserEvent }
+export { type BusinessKPIs, type FeatureUsage, type UserEvent };

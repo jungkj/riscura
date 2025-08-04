@@ -21,7 +21,7 @@ export interface JWTPayload {
     userAgent: string;
     ip: string;
     deviceId: string;
-  }
+  };
   mfaVerified?: boolean;
   lastActivity: Date;
 }
@@ -35,7 +35,7 @@ export interface SessionInfo {
     ip: string;
     deviceId: string;
     location?: string;
-  }
+  };
   isActive: boolean;
   lastActivity: Date;
   createdAt: Date;
@@ -73,7 +73,7 @@ export class EnhancedJWTService {
     allowedDevices: 3,
     sessionTimeout: 30 * 60, // 30 minutes of inactivity
     enableDeviceTracking: true,
-  }
+  };
 
   constructor(settings?: Partial<SecuritySettings>) {
     this.accessTokenSecret =
@@ -89,7 +89,8 @@ export class EnhancedJWTService {
   /**
    * Generate token pair with enhanced security
    */
-  async generateTokenPair(_userId: string,
+  async generateTokenPair(
+    _userId: string,
     organizationId: string,
     email: string,
     role: string,
@@ -102,14 +103,14 @@ export class EnhancedJWTService {
     mfaVerified: boolean = false
   ): Promise<TokenPair> {
     // Generate unique session ID
-    const sessionId = crypto.randomUUID()
+    const sessionId = crypto.randomUUID();
     const deviceId = deviceInfo.deviceId || this.generateDeviceId(deviceInfo);
 
     // Calculate risk score
-    const riskScore = await this.calculateRiskScore(userId, deviceInfo.ip, deviceId)
+    const riskScore = await this.calculateRiskScore(userId, deviceInfo.ip, deviceId);
 
     // Check session limits
-    await this.enforceSessionLimits(userId)
+    await this.enforceSessionLimits(userId);
 
     const now = new Date();
     const accessExpiresAt = new Date(now.getTime() + this.defaultSettings.accessTokenTTL * 1000);
@@ -129,7 +130,7 @@ export class EnhancedJWTService {
       },
       mfaVerified,
       lastActivity: now,
-    }
+    };
 
     // Generate tokens
     const accessToken = jwt.sign({ ...basePayload, tokenType: 'access' }, this.accessTokenSecret, {
@@ -138,7 +139,7 @@ export class EnhancedJWTService {
       audience: organizationId,
       subject: userId,
       jwtid: crypto.randomUUID(),
-    })
+    });
 
     const refreshToken = jwt.sign(
       { ...basePayload, tokenType: 'refresh' },
@@ -168,7 +169,7 @@ export class EnhancedJWTService {
       refreshTokenHash: crypto.createHash('sha256').update(refreshToken).digest('hex'),
       mfaVerified,
       riskScore,
-    }
+    };
 
     await this.storeSession(sessionInfo);
     this.activeSessions.set(sessionId, sessionInfo);
@@ -178,7 +179,7 @@ export class EnhancedJWTService {
       refreshToken,
       expiresAt: accessExpiresAt,
       refreshExpiresAt,
-    }
+    };
   }
 
   /**
@@ -188,7 +189,7 @@ export class EnhancedJWTService {
     try {
       // Check if token is blacklisted
       if (this.tokenBlacklist.has(this.getTokenHash(token))) {
-        throw new Error('Token has been revoked')
+        throw new Error('Token has been revoked');
       }
 
       const secret = tokenType === 'access' ? this.accessTokenSecret : this.refreshTokenSecret;
@@ -197,17 +198,17 @@ export class EnhancedJWTService {
 
       // Verify token type matches
       if (decoded.tokenType !== tokenType) {
-        throw new Error('Invalid token type')
+        throw new Error('Invalid token type');
       }
 
       // Check if session is still active
-      const session = await this.getSession(decoded.sessionId)
+      const session = await this.getSession(decoded.sessionId);
       if (!session || !session.isActive) {
         throw new Error('Session is no longer active');
       }
 
       // Check session timeout
-      const now = new Date()
+      const now = new Date();
       const timeSinceLastActivity = now.getTime() - session.lastActivity.getTime();
       if (timeSinceLastActivity > this.defaultSettings.sessionTimeout * 1000) {
         await this.terminateSession(decoded.sessionId);
@@ -215,7 +216,7 @@ export class EnhancedJWTService {
       }
 
       // Update last activity
-      await this.updateSessionActivity(decoded.sessionId)
+      await this.updateSessionActivity(decoded.sessionId);
 
       return decoded;
     } catch (error) {
@@ -233,7 +234,7 @@ export class EnhancedJWTService {
     }
 
     // Invalidate old refresh token
-    await this.revokeToken(refreshToken)
+    await this.revokeToken(refreshToken);
 
     // Generate new token pair
     return this.generateTokenPair(
@@ -244,7 +245,7 @@ export class EnhancedJWTService {
       decoded.permissions,
       decoded.deviceInfo!,
       decoded.mfaVerified
-    )
+    );
   }
 
   /**
@@ -255,7 +256,7 @@ export class EnhancedJWTService {
     this.tokenBlacklist.add(tokenHash);
 
     // Store in persistent storage
-    await this.storeRevokedToken(tokenHash)
+    await this.storeRevokedToken(tokenHash);
   }
 
   /**
@@ -288,7 +289,7 @@ export class EnhancedJWTService {
    */
   async getUserSessions(_userId: string): Promise<SessionInfo[]> {
     // TODO: Implement database query
-    return Array.from(this.activeSessions.values()).filter((s) => s.userId === userId)
+    return Array.from(this.activeSessions.values()).filter((s) => s.userId === userId);
   }
 
   /**
@@ -298,25 +299,25 @@ export class EnhancedJWTService {
     let riskScore = 0;
 
     // Check if device is known
-    const knownDevice = await this.isKnownDevice(userId, deviceId)
+    const knownDevice = await this.isKnownDevice(userId, deviceId);
     if (!knownDevice) {
       riskScore += 30;
     }
 
     // Check if IP is from unusual location
-    const usualLocation = await this.isUsualLocation(userId, ip)
+    const usualLocation = await this.isUsualLocation(userId, ip);
     if (!usualLocation) {
       riskScore += 20;
     }
 
     // Check login time patterns
-    const usualTime = await this.isUsualLoginTime(userId)
+    const usualTime = await this.isUsualLoginTime(userId);
     if (!usualTime) {
       riskScore += 10;
     }
 
     // Check recent failed login attempts
-    const recentFailures = await this.getRecentFailedAttempts(userId)
+    const recentFailures = await this.getRecentFailedAttempts(userId);
     riskScore += Math.min(recentFailures * 5, 40);
 
     return Math.min(riskScore, 100);
@@ -341,7 +342,7 @@ export class EnhancedJWTService {
       // Terminate oldest sessions
       const sortedSessions = activeSessions.sort(
         (a, b) => a.lastActivity.getTime() - b.lastActivity.getTime()
-      )
+      );
       const sessionsToTerminate = sortedSessions.slice(
         0,
         sortedSessions.length - this.defaultSettings.maxActiveSessions + 1
@@ -389,22 +390,22 @@ export class EnhancedJWTService {
 
   private async isKnownDevice(_userId: string, deviceId: string): Promise<boolean> {
     // TODO: Implement device tracking
-    return false
+    return false;
   }
 
   private async isUsualLocation(_userId: string, ip: string): Promise<boolean> {
     // TODO: Implement location tracking
-    return true
+    return true;
   }
 
   private async isUsualLoginTime(_userId: string): Promise<boolean> {
     // TODO: Implement time pattern analysis
-    return true
+    return true;
   }
 
   private async getRecentFailedAttempts(_userId: string): Promise<number> {
     // TODO: Implement failed attempt tracking
-    return 0
+    return 0;
   }
 
   /**
@@ -416,7 +417,7 @@ export class EnhancedJWTService {
     // Remove expired sessions
     for (const [sessionId, session] of this.activeSessions.entries()) {
       if (session.expiresAt < now) {
-        await this.terminateSession(sessionId)
+        await this.terminateSession(sessionId);
       }
     }
 
@@ -427,7 +428,7 @@ export class EnhancedJWTService {
    * Get security metrics
    */
   getSecurityMetrics(): {
-    activeSessions: number
+    activeSessions: number;
     blacklistedTokens: number;
     averageRiskScore: number;
     suspiciousActivities: number;
@@ -441,19 +442,19 @@ export class EnhancedJWTService {
       blacklistedTokens: this.tokenBlacklist.size,
       averageRiskScore,
       suspiciousActivities: sessions.filter((s) => s.riskScore > 50).length,
-    }
+    };
   }
 }
 
 // Singleton instance
-let jwtService: EnhancedJWTService
+let jwtService: EnhancedJWTService;
 
 export const getJWTService = (): EnhancedJWTService => {
   if (!jwtService) {
     jwtService = new EnhancedJWTService();
   }
   return jwtService;
-}
+};
 
 // Middleware for request validation
 export const validateJWTMiddleware = async (
@@ -466,30 +467,30 @@ export const validateJWTMiddleware = async (
     const payload = await jwtService.verifyToken(token, 'access');
 
     if (!payload) {
-      return { valid: false, error: 'Invalid or expired token' }
+      return { valid: false, error: 'Invalid or expired token' };
     }
 
     // Check MFA requirement
     if (requireMFA && !payload.mfaVerified) {
-      return { valid: false, error: 'MFA verification required' }
+      return { valid: false, error: 'MFA verification required' };
     }
 
     // Check permissions
     if (requiredPermissions && requiredPermissions.length > 0) {
       const hasPermission = requiredPermissions.some((permission) =>
         payload.permissions.includes(permission)
-      )
+      );
 
       if (!hasPermission) {
-        return { valid: false, error: 'Insufficient permissions' }
+        return { valid: false, error: 'Insufficient permissions' };
       }
     }
 
-    return { valid: true, payload }
+    return { valid: true, payload };
   } catch (error) {
     return {
       valid: false,
       error: error instanceof Error ? error.message : 'Token validation failed',
-    }
+    };
   }
-}
+};

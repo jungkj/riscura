@@ -24,7 +24,7 @@ const aiServiceHandlers = [
           },
         },
       ],
-    })
+    });
   }),
 
   // Document analysis API mock
@@ -32,7 +32,7 @@ const aiServiceHandlers = [
     return HttpResponse.json({
       analysis: 'Mock analysis result',
       confidence: 0.95,
-    })
+    });
   }),
 ];
 
@@ -97,17 +97,17 @@ class AIServiceTestUtils {
         4. Risk Monitoring
         Risks should be monitored monthly and reported quarterly.
       `,
-    }
+    };
 
     return documents[type];
   }
 
   static async uploadTestDocument(documentContent: string, filename: string) {
     // Simulate file upload
-    const buffer = Buffer.from(documentContent, 'utf-8')
+    const buffer = Buffer.from(documentContent, 'utf-8');
 
     // Mock FormData for file upload
-    const formData = new FormData()
+    const formData = new FormData();
     const blob = new Blob([buffer], { type: 'application/pdf' });
     formData.append('file', blob, filename);
     formData.append('documentType', 'policy');
@@ -285,7 +285,7 @@ describe('AI Service Integration Tests', () => {
         No encryption was in place.
         No access controls were functioning.
         Backup systems failed.
-      `
+      `;
 
       const formData = await AIServiceTestUtils.uploadTestDocument(
         highRiskContent,
@@ -307,7 +307,7 @@ describe('AI Service Integration Tests', () => {
             risk.impact.financial >= 4 ||
             risk.impact.reputational >= 4 ||
             risk.impact.regulatory >= 4
-        )
+        );
 
         expect(hasHighImpactRisk).toBe(true);
       }
@@ -337,7 +337,7 @@ describe('AI Service Integration Tests', () => {
             control.name.toLowerCase().includes('data') ||
             control.name.toLowerCase().includes('access') ||
             control.name.toLowerCase().includes('encryption')
-        )
+        );
 
         expect(hasRelevantControls).toBe(true);
       }
@@ -403,7 +403,7 @@ describe('AI Service Integration Tests', () => {
                 ],
               },
               { status: 408 }
-            )
+            );
           }
         )
       );
@@ -420,7 +420,7 @@ describe('AI Service Integration Tests', () => {
       });
 
       // Should handle timeout gracefully
-      expect(response.status).toBe(408)
+      expect(response.status).toBe(408);
 
       const _result = await response.json();
       expect(result.success).toBe(false);
@@ -456,7 +456,7 @@ describe('AI Service Integration Tests', () => {
                   message: { content: 'Mock response with higher confidence' },
                 },
               ],
-            })
+            });
           }
         )
       );
@@ -507,7 +507,7 @@ describe('AI Service Integration Tests', () => {
       });
 
       // Should handle malformed response gracefully
-      const _result = await response.json()
+      const _result = await response.json();
       expect(result.success).toBe(false);
       expect(result.error).toContain('parsing');
     });
@@ -566,7 +566,7 @@ describe('AI Service Integration Tests', () => {
       // Create a large document
       const largeContent = Array(1000)
         .fill(AIServiceTestUtils.createTestDocument('policy'))
-        .join('\n\n')
+        .join('\n\n');
 
       const formData = await AIServiceTestUtils.uploadTestDocument(largeContent, 'large-doc.pdf');
 
@@ -609,4 +609,4 @@ describe('AI Service Integration Tests', () => {
   });
 });
 
-export { AIServiceTestUtils }
+export { AIServiceTestUtils };

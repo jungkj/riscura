@@ -30,7 +30,7 @@ export async function POST(_request: NextRequest) {
       case 'analyze':
         const analysisData = gapAnalysisSchema.parse(body);
         // TODO: Get existing controls and risks from database
-        const existingControls: any[] = [] as any[]
+        const existingControls: any[] = [] as any[];
         const risks: any[] = [] as any[];
 
         const gaps = await complianceAIService.identifyComplianceGaps(
@@ -67,7 +67,7 @@ export async function POST(_request: NextRequest) {
           aiInsights: [] as any[],
           createdAt: new Date(),
           lastUpdated: new Date(),
-        }
+        };
 
         const roadmap = await complianceAIService.generateComplianceRoadmap(
           [roadmapData.frameworkName],

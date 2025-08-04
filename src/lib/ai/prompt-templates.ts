@@ -93,7 +93,7 @@ RESPONSE STRUCTURE:
 - Recommendations: Holistic improvement strategies
 - Implementation: Change management guidance
 - Success Metrics: KPIs and measurement approaches`,
-}
+};
 
 // Specialized prompt templates for specific tasks
 export const TASK_PROMPTS = {
@@ -297,7 +297,7 @@ REPORT REQUIREMENTS:
 8. Visual data representations and dashboard metrics
 
 Please generate a comprehensive ${reportType} risk report with actionable insights.`,
-}
+};
 
 // Context enhancement templates
 export const CONTEXT_ENHANCERS = {
@@ -363,7 +363,7 @@ SMALL ORGANIZATION CHARACTERISTICS:
 - Basic technology infrastructure with resource constraints
 - Focus on practical, cost-effective risk solutions`,
   },
-}
+};
 
 // Response formatting templates
 export const RESPONSE_FORMATS = {
@@ -402,7 +402,7 @@ export const RESPONSE_FORMATS = {
     tone: 'Technical and precise',
     length: 'Comprehensive with technical depth',
   },
-}
+};
 
 // Utility functions for prompt generation
 export const PromptUtils = {
@@ -410,7 +410,7 @@ export const PromptUtils = {
    * Generate agent-specific prompt
    */
   getAgentPrompt(_agentType: AgentType): string {
-    return AGENT_PROMPTS[agentType] || AGENT_PROMPTS.general_assistant
+    return AGENT_PROMPTS[agentType] || AGENT_PROMPTS.general_assistant;
   },
 
   /**
@@ -434,18 +434,18 @@ export const PromptUtils = {
 
     // Add industry context
     if (context.industry && CONTEXT_ENHANCERS.industry[context.industry]) {
-      enhancedPrompt += '\n\n' + CONTEXT_ENHANCERS.industry[context.industry]
+      enhancedPrompt += '\n\n' + CONTEXT_ENHANCERS.industry[context.industry];
     }
 
     // Add organization size context
     if (context.size && CONTEXT_ENHANCERS.organizationSize[context.size]) {
-      enhancedPrompt += '\n\n' + CONTEXT_ENHANCERS.organizationSize[context.size]
+      enhancedPrompt += '\n\n' + CONTEXT_ENHANCERS.organizationSize[context.size];
     }
 
     // Add risk appetite guidance
     if (context.riskAppetite) {
       enhancedPrompt += `\n\nRISK APPETITE: ${context.riskAppetite}
-Consider this risk appetite when making recommendations and assessments.`
+Consider this risk appetite when making recommendations and assessments.`;
     }
 
     return enhancedPrompt;
@@ -461,7 +461,8 @@ Consider this risk appetite when making recommendations and assessments.`
   /**
    * Generate comprehensive system prompt
    */
-  generateSystemPrompt(_agentType: AgentType,
+  generateSystemPrompt(
+    _agentType: AgentType,
     taskType: keyof typeof TASK_PROMPTS,
     context?: any,
     responseFormat?: keyof typeof RESPONSE_FORMATS
@@ -470,7 +471,7 @@ Consider this risk appetite when making recommendations and assessments.`
 
     // Add response format guidance
     if (responseFormat) {
-      const format = this.getResponseFormat(responseFormat)
+      const format = this.getResponseFormat(responseFormat);
       systemPrompt += `\n\nRESPONSE FORMAT:
 Structure: ${format.structure.join(' → ')}
 Tone: ${format.tone}
@@ -478,11 +479,11 @@ Length: ${format.length}`;
     }
 
     // Enhance with context
-    systemPrompt = this.enhanceWithContext(systemPrompt, context)
+    systemPrompt = this.enhanceWithContext(systemPrompt, context);
 
     return systemPrompt;
   },
-}
+};
 
 export const RISK_ANALYSIS_TEMPLATE = `
 You are ARIA, an expert AI risk management analyst. Analyze the provided risk with precision, considering industry best practices, regulatory requirements, and organizational context.
@@ -816,10 +817,11 @@ export function buildRiskAnalysisPrompt(
 ): string {
   return RISK_ANALYSIS_TEMPLATE.replace('{riskData}', JSON.stringify(riskData, null, 2))
     .replace('{historicalRisks}', JSON.stringify(historicalRisks, null, 2))
-    .replace('{organizationContext}', JSON.stringify(orgContext, null, 2))
+    .replace('{organizationContext}', JSON.stringify(orgContext, null, 2));
 }
 
-export function buildControlRecommendationPrompt(_risk: any,
+export function buildControlRecommendationPrompt(
+  _risk: any,
   existingControls: any[],
   industryContext: any
 ): string {
@@ -838,7 +840,8 @@ export function buildComplianceGapPrompt(
     .replace('{frameworkRequirements}', JSON.stringify(requirements, null, 2));
 }
 
-export function buildChatPrompt(_query: string,
+export function buildChatPrompt(
+  _query: string,
   history: any[],
   contextData: any,
   intent: any

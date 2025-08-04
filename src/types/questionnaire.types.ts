@@ -1,7 +1,7 @@
 // === Questionnaire System Types ===
 
 export interface Questionnaire {
-  id: string
+  id: string;
   title: string;
   description: string;
   category: QuestionnaireCategory;
@@ -10,28 +10,28 @@ export interface Questionnaire {
   status: QuestionnaireStatus;
 
   // Configuration
-  config: QuestionnaireConfig
+  config: QuestionnaireConfig;
   template?: QuestionnaireTemplate;
 
   // Content
-  sections: QuestionnaireSection[]
+  sections: QuestionnaireSection[];
   scoring: ScoringConfig;
 
   // Metadata
-  createdBy: string
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;
   archivedAt?: Date;
 
   // Analytics
-  analytics: QuestionnaireAnalytics
+  analytics: QuestionnaireAnalytics;
 
   // AI Features
-  aiSettings: AISettings
+  aiSettings: AISettings;
 
   // Collaboration
-  workflow?: WorkflowConfig
+  workflow?: WorkflowConfig;
   permissions: QuestionnairePermissions;
 }
 
@@ -103,21 +103,21 @@ export interface Question {
   order: number;
 
   // Question Configuration
-  config: QuestionConfig
+  config: QuestionConfig;
 
   // Validation
-  validation?: ValidationRule[]
+  validation?: ValidationRule[];
 
   // Conditional Logic
-  conditions?: Condition[]
+  conditions?: Condition[];
   triggers?: Trigger[];
 
   // AI Features
-  aiGenerated: boolean
+  aiGenerated: boolean;
   aiContext?: AIQuestionContext;
 
   // Metadata
-  tags: string[]
+  tags: string[];
   category?: string;
   riskIndicators?: RiskIndicator[];
 }
@@ -170,7 +170,7 @@ export interface ScaleConfig {
   min: number;
   max: number;
   step: number;
-  labels?: { [key: number]: string }
+  labels?: { [key: number]: string };
   showLabels: boolean;
 }
 
@@ -271,7 +271,7 @@ export type ActionType =
 // === AI Features ===
 
 export interface AISettings {
-  enabled: boolean
+  enabled: boolean;
   questionGeneration: AIQuestionGeneration;
   responseAnalysis: AIResponseAnalysis;
   riskAssessment: AIRiskAssessment;
@@ -344,7 +344,7 @@ export interface AIRiskAssessment {
 
 export interface ScoringModel {
   type: 'weighted' | 'matrix' | 'ml_model' | 'rule_based';
-  weights: { [questionId: string]: number }
+  weights: { [questionId: string]: number };
   rules: ScoringRule[];
   mlModelId?: string;
 }
@@ -398,7 +398,7 @@ export interface SuggestedQuestion {
 // === Scoring System ===
 
 export interface ScoringConfig {
-  type: 'simple' | 'weighted' | 'matrix' | 'ai_enhanced'
+  type: 'simple' | 'weighted' | 'matrix' | 'ai_enhanced';
   maxScore: number;
   categories: ScoreCategory[];
   aggregation: AggregationMethod;
@@ -418,26 +418,26 @@ export type AggregationMethod = 'sum' | 'average' | 'weighted_average' | 'max' |
 // === Response Management ===
 
 export interface QuestionnaireResponse {
-  id: string
+  id: string;
   questionnaireId: string;
   version: string;
   respondent: RespondentInfo;
 
   // Response Data
-  responses: Response[]
+  responses: Response[];
   metadata: ResponseMetadata;
 
   // Status
-  status: ResponseStatus
+  status: ResponseStatus;
   progress: ResponseProgress;
 
   // Scores and Analysis
-  scores: ScoreResult[]
+  scores: ScoreResult[];
   analysis: ResponseAnalysis;
   riskAssessment?: RiskAssessmentResult;
 
   // Timeline
-  startedAt: Date
+  startedAt: Date;
   lastSavedAt: Date;
   submittedAt?: Date;
   reviewedAt?: Date;
@@ -599,7 +599,7 @@ export interface AnalysisFlag {
 // === Risk Assessment Integration ===
 
 export interface RiskAssessmentResult {
-  id: string
+  id: string;
   responseId: string;
   overallRisk: RiskLevel;
   categories: RiskCategoryResult[];
@@ -693,7 +693,7 @@ export interface NotificationStatus {
 // === Workflow and Collaboration ===
 
 export interface WorkflowConfig {
-  enabled: boolean
+  enabled: boolean;
   steps: WorkflowStep[];
   approvers: WorkflowApprover[];
   notifications: WorkflowNotification[];
@@ -763,7 +763,7 @@ export type EscalationTrigger = 'overdue' | 'no_response' | 'high_risk' | 'criti
 // === Analytics and Reporting ===
 
 export interface QuestionnaireAnalytics {
-  overview: AnalyticsOverview
+  overview: AnalyticsOverview;
   completion: CompletionAnalytics;
   performance: PerformanceAnalytics;
   responses: ResponseAnalytics;
@@ -864,7 +864,7 @@ export interface ResponsePattern {
 
 export interface ResponseDistribution {
   questionId: string;
-  distribution: { [value: string]: number }
+  distribution: { [value: string]: number };
   mean?: number;
   median?: number;
   mode?: unknown;
@@ -914,13 +914,13 @@ export interface Forecast {
   period: string;
   predicted: number;
   confidence: number;
-  range: { min: number; max: number }
+  range: { min: number; max: number };
 }
 
 // === Permissions and Security ===
 
 export interface QuestionnairePermissions {
-  read: string[]
+  read: string[];
   write: string[];
   admin: string[];
   respond: string[];
@@ -946,7 +946,7 @@ export interface AccessRestriction {
 // === Template System ===
 
 export interface TemplateQuestion {
-  id: string
+  id: string;
   text: string;
   type: QuestionType;
   category: string;
@@ -986,7 +986,7 @@ export interface TemplateAction {
 // === Utility Types ===
 
 export interface AIAnalysisResult {
-  riskIndicators: RiskIndicator[]
+  riskIndicators: RiskIndicator[];
   sentiment: 'positive' | 'neutral' | 'negative';
   confidence: number;
   suggestions: string[];

@@ -20,7 +20,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
     setTimeout(() => {
       setStep('complete');
     }, 2000);
-  }
+  };
 
   if (step === 'upload') {
     return (

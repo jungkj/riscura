@@ -1,6 +1,6 @@
 // User Types
 export interface User {
-  id: string
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -14,7 +14,7 @@ export interface User {
 }
 
 // Risk Types
-export type RiskCategory = 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY'
+export type RiskCategory = 'OPERATIONAL' | 'FINANCIAL' | 'STRATEGIC' | 'COMPLIANCE' | 'TECHNOLOGY';
 
 export interface Risk {
   id: string;
@@ -59,7 +59,7 @@ export interface RiskControlMapping {
 
 // Control Types
 export interface Control {
-  id: string
+  id: string;
   title: string;
   description: string;
   type: 'preventive' | 'detective' | 'corrective';
@@ -99,7 +99,7 @@ export interface ControlRiskMapping {
 
 // Document Types
 export interface Document {
-  id: string
+  id: string;
   name: string;
   type: string;
   size: number;
@@ -109,7 +109,7 @@ export interface Document {
     risks: string[];
     controls: string[];
     confidence: number;
-  }
+  };
   uploadedBy: string;
   uploadedAt: string;
   sharedWith?: string[]; // user IDs
@@ -118,7 +118,7 @@ export interface Document {
 
 // Enhanced Questionnaire Types
 export interface Question {
-  id: string
+  id: string;
   text: string;
   type: 'text' | 'multiple_choice' | 'rating' | 'yes_no' | 'file_upload';
   options?: string[];
@@ -126,7 +126,7 @@ export interface Question {
   conditional?: {
     dependsOn: string;
     showWhen: unknown;
-  }
+  };
   aiGenerated?: boolean;
   order: number;
   category?: string;
@@ -170,7 +170,7 @@ export interface QuestionnaireAnalytics {
 
 // Workflow Management Types
 export interface Workflow {
-  id: string
+  id: string;
   name: string;
   description: string;
   type: 'approval' | 'review' | 'assessment' | 'custom';
@@ -186,7 +186,7 @@ export interface Workflow {
     risks?: string[];
     controls?: string[];
     documents?: string[];
-  }
+  };
 }
 
 export interface WorkflowStep {
@@ -219,7 +219,7 @@ export interface EscalationRule {
 
 // Reporting Types
 export interface ReportTemplate {
-  id: string
+  id: string;
   name: string;
   description: string;
   type: 'executive_dashboard' | 'risk_register' | 'control_effectiveness' | 'compliance' | 'custom';
@@ -243,12 +243,12 @@ export interface ReportSection {
     filters?: Record<string, unknown>;
     columns?: string[];
     aggregation?: 'sum' | 'avg' | 'count' | 'max' | 'min';
-  }
+  };
   styling?: {
     width?: string;
     height?: string;
     backgroundColor?: string;
-  }
+  };
 }
 
 export interface ReportParameter {
@@ -297,14 +297,14 @@ export interface ReportData {
   }[];
   metadata: {
     totalRecords: number;
-    dateRange: { start: string; end: string }
+    dateRange: { start: string; end: string };
     filters: Record<string, unknown>;
-  }
+  };
 }
 
 // Collaboration Types
 export interface Message {
-  id: string
+  id: string;
   content: string;
   senderId: string;
   recipientIds: string[];
@@ -354,7 +354,7 @@ export interface Notification {
 
 // Task Management Types
 export interface Task {
-  id: string
+  id: string;
   title: string;
   description: string;
   type: 'risk_assessment' | 'control_testing' | 'document_review' | 'workflow_step' | 'custom';
@@ -374,7 +374,7 @@ export interface Task {
     controls?: string[];
     workflows?: string[];
     documents?: string[];
-  }
+  };
   subtasks?: SubTask[];
   comments?: Comment[];
   attachments?: Document[];
@@ -390,7 +390,7 @@ export interface SubTask {
 
 // Activity Feed Types
 export interface Activity {
-  id: string
+  id: string;
   type:
     | 'risk_created'
     | 'control_updated'
@@ -409,7 +409,7 @@ export interface Activity {
 
 // State Management Types
 export interface RiskState {
-  risks: Risk[]
+  risks: Risk[];
   selectedRisk: Risk | null;
   filters: RiskFilters;
   loading: boolean;
@@ -510,19 +510,19 @@ export interface AppState {
 
 // API Response Types
 export interface ApiResponse<T> {
-  success: boolean
+  success: boolean;
   data?: T;
   error?: {
     code: string;
     message: string;
     details?: unknown;
-  }
+  };
   pagination?: {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
-  }
+  };
 }
 
 export interface AuthResponse {
@@ -533,7 +533,7 @@ export interface AuthResponse {
 
 // AI Analysis Types
 export interface AIAnalysisResponse {
-  jobId: string
+  jobId: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   results?: {
     identifiedRisks: Array<{
@@ -547,7 +547,7 @@ export interface AIAnalysisResponse {
       confidence: number;
     }>;
     documentSummary: string;
-  }
+  };
   processingTime: number;
   error?: string;
 }

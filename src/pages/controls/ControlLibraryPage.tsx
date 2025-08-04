@@ -9,7 +9,7 @@ import {
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
-} from '@/components/ui/DaisyTabs'
+} from '@/components/ui/DaisyTabs';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -22,10 +22,10 @@ import {
 } from '@/components/ui/dialog';
 
 // Icons
-import { Plus, Shield, BarChart3, Network, Calendar } from 'lucide-react'
+import { Plus, Shield, BarChart3, Network, Calendar } from 'lucide-react';
 
 // Force dynamic rendering to avoid prerender issues
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export default function ControlLibraryPage() {
   const [activeTab, setActiveTab] = useState('library');
@@ -40,7 +40,7 @@ export default function ControlLibraryPage() {
     averageEffectiveness: 3.2,
     overdueTests: 2,
     coverageGaps: 1,
-  }
+  };
 
   const coverage = [
     { riskId: 'risk-1', controlCount: 3, effectivenessScore: 4.2 },
@@ -51,17 +51,17 @@ export default function ControlLibraryPage() {
   const handleCreateControl = () => {
     // console.log('Create control clicked')
     // TODO: Implement control creation modal or navigation
-  }
+  };
 
   const handleEditControl = (control: Control) => {
     setSelectedControl(control);
     // Navigate to edit form or open edit modal
-  }
+  };
 
   const handleTestControl = (control: Control) => {
     // console.log('Test control:', control.id)
     // TODO: Implement control testing workflow
-  }
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">

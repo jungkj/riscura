@@ -21,7 +21,7 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY && process.env
     `mailto:${process.env.VAPID_EMAIL}`,
     process.env.VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY
-  )
+  );
 }
 
 interface CreateNotificationInput {
@@ -97,13 +97,13 @@ export class NotificationService {
         risk: true,
         report: true,
       },
-    })
+    });
 
     // Clear user's notification cache
-    await this.clearUserNotificationCache(input.userId)
+    await this.clearUserNotificationCache(input.userId);
 
     // Send real-time notification if preferences allow
-    await this.sendRealtimeNotification(notification)
+    await this.sendRealtimeNotification(notification);
 
     return notification;
   }
@@ -122,10 +122,10 @@ export class NotificationService {
         data: input.data || Prisma.JsonNull,
         actionUrl: input.actionUrl,
       })),
-    })
+    });
 
     // Clear cache for all users
-    await Promise.all(input.userIds.map((userId) => this.clearUserNotificationCache(userId)))
+    await Promise.all(input.userIds.map((userId) => this.clearUserNotificationCache(userId)));
 
     return prisma.notification.findMany({
       where: {
@@ -140,7 +140,8 @@ export class NotificationService {
   }
 
   // Get user notifications with filters
-  async getUserNotifications(_userId: string,
+  async getUserNotifications(
+    _userId: string,
     filters: NotificationFilters = {},
     page = 1,
     limit = 20
@@ -163,7 +164,7 @@ export class NotificationService {
             },
           }
         : {}),
-    }
+    };
 
     const [notifications, total] = await prisma.$transaction([
       prisma.notification.findMany({
@@ -179,7 +180,7 @@ export class NotificationService {
       prisma.notification.count({ where }),
     ]);
 
-    const _result = { notifications, total }
+    const _result = { notifications, total };
     await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(result));
 
     return result;
@@ -196,7 +197,7 @@ export class NotificationService {
         read: true,
         readAt: new Date(),
       },
-    })
+    });
 
     await this.clearUserNotificationCache(userId);
     return notification;
@@ -214,7 +215,7 @@ export class NotificationService {
         read: true,
         readAt: new Date(),
       },
-    })
+    });
 
     await this.clearUserNotificationCache(userId);
     return result.count;
@@ -231,7 +232,7 @@ export class NotificationService {
         dismissed: true,
         dismissedAt: new Date(),
       },
-    })
+    });
 
     await this.clearUserNotificationCache(userId);
     return notification;
@@ -239,7 +240,7 @@ export class NotificationService {
 
   // Get unread count
   async getUnreadCount(_userId: string): Promise<number> {
-    const cacheKey = `${this.cacheKeyPrefix}unread:${userId}`
+    const cacheKey = `${this.cacheKeyPrefix}unread:${userId}`;
     const _cached = await redis.get(cacheKey);
 
     if (cached !== null) {
@@ -262,7 +263,7 @@ export class NotificationService {
   async getUserPreferences(_userId: string): Promise<NotificationPreference> {
     let preferences = await prisma.notificationPreference.findUnique({
       where: { userId },
-    })
+    });
 
     if (!preferences) {
       preferences = await prisma.notificationPreference.create({
@@ -286,7 +287,8 @@ export class NotificationService {
   }
 
   // Update user preferences
-  async updateUserPreferences(_userId: string,
+  async updateUserPreferences(
+    _userId: string,
     updates: Partial<NotificationPreference>
   ): Promise<NotificationPreference> {
     const preferences = await prisma.notificationPreference.upsert({
@@ -296,13 +298,14 @@ export class NotificationService {
         userId,
         ...updates,
       },
-    })
+    });
 
     return preferences;
   }
 
   // Subscribe to push notifications
-  async subscribeToPush(_userId: string,
+  async subscribeToPush(
+    _userId: string,
     subscription: PushSubscriptionJSON,
     deviceInfo?: Record<string, any>
   ): Promise<PushSubscription> {
@@ -314,7 +317,7 @@ export class NotificationService {
         p256dh: subscription.keys!.p256dh,
         deviceInfo: deviceInfo || Prisma.JsonNull,
       },
-    })
+    });
   }
 
   // Unsubscribe from push notifications
@@ -322,29 +325,29 @@ export class NotificationService {
     await prisma.pushSubscription.update({
       where: { endpoint },
       data: { active: false },
-    })
+    });
   }
 
   // Send real-time notification
   private async sendRealtimeNotification(
     notification: Notification & { user: any }
   ): Promise<void> {
-    const preferences = await this.getUserPreferences(notification.userId)
+    const preferences = await this.getUserPreferences(notification.userId);
 
     // Check if within quiet hours
     if (preferences.quietHours && this.isWithinQuietHours(preferences.quietHours)) {
-      return
+      return;
     }
 
     // Check category preferences
-    const categoryPrefs = preferences.categories as Record<string, boolean>
+    const categoryPrefs = preferences.categories as Record<string, boolean>;
     const categoryKey = notification.category.toLowerCase();
     if (categoryPrefs[categoryKey] === false) {
       return;
     }
 
     // Send based on preferences
-    const promises: Promise<any>[] = []
+    const promises: Promise<any>[] = [];
 
     if (preferences.email && notification.priority !== NotificationPriority.LOW) {
       promises.push(this.sendEmailNotification(notification));
@@ -368,7 +371,7 @@ export class NotificationService {
           <p>${notification.message}</p>
           ${notification.actionUrl ? `<p><a href="${notification.actionUrl}">View Details</a></p>` : ''}
         `,
-      })
+      });
 
       await prisma.notification.update({
         where: { id: notification.id },
@@ -389,7 +392,7 @@ export class NotificationService {
         userId: notification.userId,
         active: true,
       },
-    })
+    });
 
     const payload = JSON.stringify({
       title: notification.title,
@@ -424,7 +427,7 @@ export class NotificationService {
         if (error.statusCode === 410) {
           await prisma.pushSubscription.delete({
             where: { id: sub.id },
-          })
+          });
         }
       }
     });
@@ -444,7 +447,7 @@ export class NotificationService {
 
   // Process notification digests
   async processDigests(): Promise<void> {
-    const now = new Date()
+    const now = new Date();
 
     const digestsToProcess = await prisma.notificationDigest.findMany({
       where: {
@@ -472,11 +475,11 @@ export class NotificationService {
         emailSent: false,
       },
       orderBy: { createdAt: 'desc' },
-    })
+    });
 
     if (notifications.length === 0) {
       // Update next send time
-      await this.updateDigestSchedule(digest)
+      await this.updateDigestSchedule(digest);
       return;
     }
 
@@ -484,7 +487,7 @@ export class NotificationService {
     const grouped = notifications.reduce(
       (acc, notif) => {
         if (!acc[notif.category]) {
-          acc[notif.category] = []
+          acc[notif.category] = [];
         }
         acc[notif.category].push(notif);
         return acc;
@@ -493,7 +496,7 @@ export class NotificationService {
     );
 
     // Build email content
-    let htmlContent = `<h2>Your ${digest.frequency.toLowerCase()} notification digest</h2>`
+    let htmlContent = `<h2>Your ${digest.frequency.toLowerCase()} notification digest</h2>`;
 
     for (const [category, notifs] of Object.entries(grouped)) {
       htmlContent += `<h3>${category}</h3><ul>`;
@@ -523,10 +526,10 @@ export class NotificationService {
           emailSent: true,
           emailSentAt: new Date(),
         },
-      })
+      });
 
       // Update digest
-      await this.updateDigestSchedule(digest)
+      await this.updateDigestSchedule(digest);
     } catch (error) {
       // console.error('Failed to send digest:', error)
     }
@@ -534,7 +537,7 @@ export class NotificationService {
 
   // Update digest schedule
   private async updateDigestSchedule(digest: any): Promise<void> {
-    let nextSendAt: Date
+    let nextSendAt: Date;
 
     switch (digest.frequency) {
       case DigestFrequency.HOURLY:
@@ -566,7 +569,7 @@ export class NotificationService {
   // Check if within quiet hours
   private isWithinQuietHours(quietHours: any): boolean {
     if (!quietHours || typeof quietHours !== 'object') {
-      return false
+      return false;
     }
 
     const { start, end, timezone = 'UTC' } = quietHours;
@@ -575,7 +578,7 @@ export class NotificationService {
     }
 
     // Simple implementation - can be enhanced with proper timezone handling
-    const now = new Date()
+    const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     const currentTime = currentHour * 60 + currentMinute;
@@ -589,18 +592,18 @@ export class NotificationService {
       return currentTime >= startTime && currentTime <= endTime;
     } else {
       // Quiet hours span midnight
-      return currentTime >= startTime || currentTime <= endTime
+      return currentTime >= startTime || currentTime <= endTime;
     }
   }
 
   // Clear user notification cache
   private async clearUserNotificationCache(_userId: string): Promise<void> {
-    const _pattern = `${this.cacheKeyPrefix}user:${userId}:*`
+    const _pattern = `${this.cacheKeyPrefix}user:${userId}:*`;
     const unreadKey = `${this.cacheKeyPrefix}unread:${userId}`;
 
     // In a real Redis implementation, you'd use SCAN to find and delete matching keys
     // For now, just clear the unread count
-    await redis.del(unreadKey)
+    await redis.del(unreadKey);
   }
 
   // Create system notifications
@@ -610,10 +613,10 @@ export class NotificationService {
     userIds?: string[],
     organizationId?: string
   ): Promise<void> {
-    const where: Prisma.UserWhereInput = {}
+    const where: Prisma.UserWhereInput = {};
 
     if (userIds) {
-      where.id = { in: userIds }
+      where.id = { in: userIds };
     }
     if (organizationId) {
       where.organizationId = organizationId;
@@ -625,7 +628,7 @@ export class NotificationService {
     });
 
     // Determine organizationId with proper validation
-    const resolvedOrgId = organizationId || users[0]?.organizationId
+    const resolvedOrgId = organizationId || users[0]?.organizationId;
 
     if (!resolvedOrgId) {
       // console.error('Failed to create system notification: No organizationId available')
@@ -647,4 +650,4 @@ export class NotificationService {
 export const notificationService = NotificationService.getInstance();
 
 // Default export for compatibility
-export default NotificationService
+export default NotificationService;

@@ -25,7 +25,7 @@ export const useToast = () => {
     throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
-}
+};
 
 interface ToastProviderProps {
   children: React.ReactNode;
@@ -49,7 +49,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
   const addToast = useCallback(
     (toast: Omit<Toast, 'id'>) => {
       const id = Math.random().toString(36).substr(2, 9);
-      const newToast = { ...toast, id }
+      const newToast = { ...toast, id };
 
       setToasts((prev) => {
         const updated = [newToast, ...prev];
@@ -57,7 +57,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
       });
 
       // Announce to screen readers
-      const announcement = `${toast.type}: ${toast.message}`
+      const announcement = `${toast.type}: ${toast.message}`;
       announceToScreenReader(announcement);
     },
     [maxToasts]
@@ -78,7 +78,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
     'bottom-left': 'bottom-4 left-4',
     'top-center': 'top-4 left-1/2 transform -translate-x-1/2',
     'bottom-center': 'bottom-4 left-1/2 transform -translate-x-1/2',
-  }
+  };
 
   return (
     <ToastContext.Provider value={{ addToast, removeToast, clearToasts }}>
@@ -121,11 +121,11 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         )}
     </ToastContext.Provider>
   );
-}
+};
 
 // Utility function to announce to screen readers
 const announceToScreenReader = (message: string) => {
-  const announcement = document.createElement('div')
+  const announcement = document.createElement('div');
   announcement.setAttribute('aria-live', 'assertive');
   announcement.setAttribute('aria-atomic', 'true');
   announcement.style.position = 'absolute';
@@ -140,11 +140,11 @@ const announceToScreenReader = (message: string) => {
   setTimeout(() => {
     document.body.removeChild(announcement);
   }, 1000);
-}
+};
 
 // Convenience hooks for different toast types
 export const useToastHelpers = () => {
-  const { addToast } = useToast()
+  const { addToast } = useToast();
 
   return {
     success: (message: string, autoClose?: number) =>
@@ -153,5 +153,5 @@ export const useToastHelpers = () => {
     warning: (message: string, autoClose?: number) =>
       addToast({ message, type: 'warning', autoClose }),
     info: (message: string, autoClose?: number) => addToast({ message, type: 'info', autoClose }),
-  }
-}
+  };
+};

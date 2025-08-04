@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // This endpoint forces the use of pooled connection and tests it
 export async function GET() {
-  const dbUrl = process.env.DATABASE_URL || process.env.database_url
+  const dbUrl = process.env.DATABASE_URL || process.env.database_url;
 
   if (!dbUrl) {
     return NextResponse.json({ error: 'No database URL found' }, { status: 500 });
@@ -10,7 +10,7 @@ export async function GET() {
 
   // Force convert to pooled URL
   const supabaseDirectPattern =
-    /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/
+    /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/;
   const match = dbUrl.match(supabaseDirectPattern);
 
   if (!match) {
@@ -25,12 +25,12 @@ export async function GET() {
 
   const [, password, projectRef] = match;
   // Get the region from environment or default to us-east-1
-  const region = process.env.SUPABASE_REGION || 'us-east-1'
+  const region = process.env.SUPABASE_REGION || 'us-east-1';
   const pooledUrl = `postgresql://postgres.${projectRef}:${password}@aws-0-${region}.pooler.supabase.com:6543/postgres`;
 
   // Test the pooled connection
   try {
-    const { PrismaClient } = await import('@prisma/client')
+    const { PrismaClient } = await import('@prisma/client');
     const testUrl = new URL(pooledUrl);
     testUrl.searchParams.set('pgbouncer', 'true');
     testUrl.searchParams.set('connection_limit', '1');

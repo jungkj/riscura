@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 export async function POST(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -16,7 +16,7 @@ export async function POST(_request: NextRequest) {
     const user = await db.client.user.findUnique({
       where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true },
-    })
+    });
 
     if (!user?.organizationId) {
       return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
@@ -30,7 +30,7 @@ export async function POST(_request: NextRequest) {
       return NextResponse.json(
         { error: 'templateId, name, frequency, and recipients are required' },
         { status: 400 }
-      )
+      );
     }
 
     // Validate frequency
@@ -38,16 +38,16 @@ export async function POST(_request: NextRequest) {
       return NextResponse.json(
         { error: 'frequency must be daily, weekly, monthly, or quarterly' },
         { status: 400 }
-      )
+      );
     }
 
     // Validate recipients
     if (!Array.isArray(recipients) || recipients.length === 0) {
-      return NextResponse.json({ error: 'recipients must be a non-empty array' }, { status: 400 })
+      return NextResponse.json({ error: 'recipients must be a non-empty array' }, { status: 400 });
     }
 
     // Validate email addresses
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const invalidEmails = recipients.filter((email) => !emailRegex.test(email));
     if (invalidEmails.length > 0) {
       return NextResponse.json(
@@ -57,7 +57,7 @@ export async function POST(_request: NextRequest) {
     }
 
     // Create scheduled report
-    const reportingService = new ReportingService()
+    const reportingService = new ReportingService();
     const scheduledReport = await reportingService.scheduleReport({
       name,
       type: ReportType.RISK_ASSESSMENT,
@@ -93,7 +93,7 @@ export async function POST(_request: NextRequest) {
 export async function GET(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -102,7 +102,7 @@ export async function GET(_request: NextRequest) {
     const user = await db.client.user.findUnique({
       where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true },
-    })
+    });
 
     if (!user?.organizationId) {
       return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
@@ -142,7 +142,7 @@ export async function GET(_request: NextRequest) {
 export async function PUT(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -151,7 +151,7 @@ export async function PUT(_request: NextRequest) {
     const user = await db.client.user.findUnique({
       where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true },
-    })
+    });
 
     if (!user?.organizationId) {
       return NextResponse.json({ error: 'User organization not found' }, { status: 400 });
@@ -162,7 +162,7 @@ export async function PUT(_request: NextRequest) {
 
     // Validate required fields
     if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 })
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
     }
 
     // Validate frequency if provided
@@ -170,7 +170,7 @@ export async function PUT(_request: NextRequest) {
       return NextResponse.json(
         { error: 'frequency must be daily, weekly, monthly, or quarterly' },
         { status: 400 }
-      )
+      );
     }
 
     // Validate recipients if provided
@@ -179,7 +179,7 @@ export async function PUT(_request: NextRequest) {
         return NextResponse.json(
           { error: 'recipients must be a non-empty array' },
           { status: 400 }
-        )
+        );
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -197,11 +197,11 @@ export async function PUT(_request: NextRequest) {
       return NextResponse.json(
         { error: 'status must be active, paused, or error' },
         { status: 400 }
-      )
+      );
     }
 
     // Update scheduled report
-    const updates: any = {}
+    const updates: any = {};
     if (name !== undefined) updates.name = name;
     if (frequency !== undefined) updates.frequency = frequency;
     if (recipients !== undefined) updates.recipients = recipients;
@@ -233,7 +233,7 @@ export async function PUT(_request: NextRequest) {
 export async function DELETE(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -242,7 +242,7 @@ export async function DELETE(_request: NextRequest) {
     const user = await db.client.user.findUnique({
       where: { id: (session.user as any).id || 'unknown' },
       select: { organizationId: true },
-    })
+    });
 
     if (!user?.organizationId) {
       return NextResponse.json({ error: 'User organization not found' }, { status: 400 });

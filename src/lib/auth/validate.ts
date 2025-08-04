@@ -8,15 +8,16 @@ export interface ValidatedUser {
   permissions: string[];
 }
 
-export async function validateRequest(_request: NextRequest
+export async function validateRequest(
+  _request: NextRequest
 ): Promise<{ user: ValidatedUser | null }> {
   try {
     // Simplified validation - in a real implementation, this would validate JWT tokens
     // from cookies or Authorization headers
-    const authHeader = request.headers.get('authorization')
+    const authHeader = request.headers.get('authorization');
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return { user: null }
+      return { user: null };
     }
 
     // Mock user for demonstration
@@ -26,11 +27,11 @@ export async function validateRequest(_request: NextRequest
       role: 'ADMIN',
       organizationId: 'org_123',
       permissions: ['*'], // Admin has all permissions
-    }
+    };
 
-    return { user }
+    return { user };
   } catch (error) {
     // console.error('Error validating request:', error)
-    return { user: null }
+    return { user: null };
   }
 }

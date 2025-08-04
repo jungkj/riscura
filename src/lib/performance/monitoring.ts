@@ -4,14 +4,14 @@ import { compressionService } from './compression';
 
 // Simplified interfaces for build compatibility
 export interface Metric {
-  name: string
+  name: string;
   value: number;
   timestamp: number;
   tags: Record<string, string>;
 }
 
 export interface PerformanceReport {
-  timeRange: { start: number; end: number }
+  timeRange: { start: number; end: number };
   overallScore: number;
   generatedAt: number;
 }
@@ -33,7 +33,7 @@ export class MonitoringService {
       value,
       timestamp: Date.now(),
       tags,
-    }
+    };
 
     const existing = this.metrics.get(name) || [];
     existing.push(metric);
@@ -50,12 +50,12 @@ export class MonitoringService {
       timeRange: { start: Date.now() - 86400000, end: Date.now() },
       overallScore: 95,
       generatedAt: Date.now(),
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const monitoringService = new MonitoringService()
+export const monitoringService = new MonitoringService();
 
 // Add apiMonitor export for middleware compatibility
 export const apiMonitor = {
@@ -64,7 +64,7 @@ export const apiMonitor = {
       method,
       path,
       status: statusCode.toString(),
-    })
+    });
   },
   recordError: async (__error: Error, context: Record<string, any> = {}) => {
     await monitoringService.recordMetric('api_error', 1, {
@@ -72,7 +72,7 @@ export const apiMonitor = {
       ...context,
     });
   },
-}
+};
 
 // Simplified web vitals functions for build compatibility
 export function initWebVitals() {
@@ -86,5 +86,5 @@ export function getWebVitals() {
     cls: 0,
     fcp: 0,
     ttfb: 0,
-  }
+  };
 }

@@ -8,7 +8,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 
 const AuthErrorContent = () => {
   const searchParams = useSearchParams();
@@ -37,7 +37,7 @@ const AuthErrorContent = () => {
       default:
         return 'An unexpected error occurred during authentication. Please try again.';
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
@@ -117,7 +117,7 @@ const AuthErrorContent = () => {
       </div>
     </div>
   );
-}
+};
 
 export default function AuthErrorPage() {
   return (

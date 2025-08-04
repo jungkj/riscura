@@ -2,7 +2,7 @@
 
 // Enhanced control recommendation interfaces
 export interface ControlFramework {
-  id: string
+  id: string;
   name: string;
   description: string;
   version: string;
@@ -322,7 +322,7 @@ export interface ControlGap {
 }
 
 export interface PriorityMatrix {
-  axes: { x: string; y: string }
+  axes: { x: string; y: string };
   items: PriorityItem[];
   quadrants: Quadrant[];
 }
@@ -438,7 +438,7 @@ const CONTROL_FRAMEWORKS: Record<string, ControlFramework> = {
       regulatoryRequirements: ['SOX', 'SEC'],
     },
   },
-}
+};
 
 interface DependencyGraph {
   nodes: string[];
@@ -495,7 +495,7 @@ export class ControlRecommendationAIService {
 
   private async loadControlTemplates(): Promise<void> {
     // Load control templates from industry frameworks
-    const templates = await this.buildControlTemplateLibrary()
+    const templates = await this.buildControlTemplateLibrary();
     templates.forEach((template) => {
       this.controlTemplates.set(template.id, template);
     });
@@ -504,7 +504,8 @@ export class ControlRecommendationAIService {
   /**
    * Generate smart control recommendations for risks
    */
-  async generateControlRecommendations(_risks: Risk[],
+  async generateControlRecommendations(
+    _risks: Risk[],
     existingControls: Control[],
     options: {
       frameworks?: string[];
@@ -527,7 +528,7 @@ export class ControlRecommendationAIService {
     }
 
     // Optimize and prioritize recommendations
-    const optimizedRecommendations = await this.optimizeRecommendations(recommendations, options)
+    const optimizedRecommendations = await this.optimizeRecommendations(recommendations, options);
 
     return optimizedRecommendations;
   }
@@ -535,7 +536,8 @@ export class ControlRecommendationAIService {
   /**
    * Perform comprehensive control gap analysis
    */
-  async performControlGapAnalysis(_risks: Risk[],
+  async performControlGapAnalysis(
+    _risks: Risk[],
     existingControls: Control[],
     targetFramework?: string
   ): Promise<ControlGapAnalysis[]> {
@@ -566,23 +568,24 @@ export class ControlRecommendationAIService {
     } = {}
   ): Promise<ImplementationPlan> {
     // Analyze dependencies and constraints
-    const dependencyGraph = await this.buildDependencyGraph(recommendations)
+    const dependencyGraph = await this.buildDependencyGraph(recommendations);
 
     // Optimize implementation sequence
     const optimizedSequence = await this.optimizeImplementationSequence(
       recommendations,
       dependencyGraph,
       constraints
-    )
+    );
 
     // Generate detailed roadmap
-    return this.buildImplementationRoadmap(optimizedSequence, constraints)
+    return this.buildImplementationRoadmap(optimizedSequence, constraints);
   }
 
   /**
    * Perform cost-benefit analysis for control investments
    */
-  async performCostBenefitAnalysis(_recommendation: ControlRecommendation,
+  async performCostBenefitAnalysis(
+    _recommendation: ControlRecommendation,
     context: {
       organizationProfile?: OrganizationProfile;
       historicalData?: HistoricalRiskData;
@@ -593,26 +596,26 @@ export class ControlRecommendationAIService {
     const implementationCosts = await this.calculateImplementationCosts(
       recommendation,
       context.organizationProfile
-    )
+    );
 
     // Calculate operational costs
     const operationalCosts = await this.calculateOperationalCosts(
       recommendation,
       context.organizationProfile
-    )
+    );
 
     // Estimate benefits
-    const benefits = await this.estimateBenefits(recommendation, context)
+    const benefits = await this.estimateBenefits(recommendation, context);
 
     // Perform financial analysis
     const financialMetrics = await this.calculateFinancialMetrics(
       implementationCosts,
       operationalCosts,
       benefits
-    )
+    );
 
     // Sensitivity analysis
-    const sensitivityAnalysis = await this.performSensitivityAnalysis(recommendation, context)
+    const sensitivityAnalysis = await this.performSensitivityAnalysis(recommendation, context);
 
     return {
       implementation: implementationCosts,
@@ -623,13 +626,14 @@ export class ControlRecommendationAIService {
       npv: financialMetrics.npv,
       irr: financialMetrics.irr,
       sensitivityAnalysis,
-    }
+    };
   }
 
   /**
    * Predict control effectiveness using AI
    */
-  async predictControlEffectiveness(_controlTemplate: ControlTemplate,
+  async predictControlEffectiveness(
+    _controlTemplate: ControlTemplate,
     context: {
       risk: Risk;
       organizationProfile?: OrganizationProfile;
@@ -646,23 +650,23 @@ export class ControlRecommendationAIService {
     const designEffectiveness = await this.analyzeDesignEffectiveness(
       controlTemplate,
       context.risk
-    )
+    );
 
     // Predict operating effectiveness
     const operatingEffectiveness = await this.predictOperatingEffectiveness(
       controlTemplate,
       context
-    )
+    );
 
     // Consider contextual factors
-    const contextualFactors = await this.analyzeContextualFactors(controlTemplate, context)
+    const contextualFactors = await this.analyzeContextualFactors(controlTemplate, context);
 
     // Calculate overall effectiveness
     const overallEffectiveness = this.calculateOverallEffectiveness(
       designEffectiveness,
       operatingEffectiveness,
       contextualFactors
-    )
+    );
 
     return overallEffectiveness;
   }
@@ -670,15 +674,16 @@ export class ControlRecommendationAIService {
   // Private helper methods implementation would continue...
   private async buildControlTemplateLibrary(): Promise<ControlTemplate[]> {
     // This would integrate with actual framework databases
-    return []
+    return [];
   }
 
-  private async generateRiskSpecificRecommendations(_risk: Risk,
+  private async generateRiskSpecificRecommendations(
+    _risk: Risk,
     existingControls: Control[],
     options: OptimizationOptions
   ): Promise<ControlRecommendation[]> {
     // Implementation for risk-specific recommendations
-    return []
+    return [];
   }
 
   private async optimizeRecommendations(
@@ -686,10 +691,11 @@ export class ControlRecommendationAIService {
     options: OptimizationOptions
   ): Promise<ControlRecommendation[]> {
     // Implementation for recommendation optimization
-    return recommendations
+    return recommendations;
   }
 
-  private async analyzeControlGapsForRisk(_risk: Risk,
+  private async analyzeControlGapsForRisk(
+    _risk: Risk,
     existingControls: Control[],
     targetFramework?: string
   ): Promise<ControlGapAnalysis> {
@@ -705,7 +711,7 @@ export class ControlRecommendationAIService {
         quadrants: [],
       },
       implementationRoadmap: [],
-    }
+    };
   }
 
   // Additional private methods would be implemented here...
@@ -716,7 +722,7 @@ export class ControlRecommendationAIService {
     return {
       nodes: recommendations.map((r) => r.id),
       edges: [],
-    }
+    };
   }
 
   private async optimizeImplementationSequence(
@@ -725,10 +731,11 @@ export class ControlRecommendationAIService {
     constraints: ImplementationConstraints
   ): Promise<ControlRecommendation[]> {
     // Optimize implementation sequence based on dependencies and constraints
-    return recommendations
+    return recommendations;
   }
 
-  private async buildImplementationRoadmap(_optimizedSequence: ControlRecommendation[],
+  private async buildImplementationRoadmap(
+    _optimizedSequence: ControlRecommendation[],
     constraints: ImplementationConstraints
   ): Promise<ImplementationPlan> {
     // Build detailed implementation roadmap
@@ -739,10 +746,11 @@ export class ControlRecommendationAIService {
       dependencies: [],
       milestones: [],
       riskMitigation: [],
-    }
+    };
   }
 
-  private async calculateImplementationCosts(_recommendation: ControlRecommendation,
+  private async calculateImplementationCosts(
+    _recommendation: ControlRecommendation,
     organizationProfile?: OrganizationProfile
   ): Promise<CostBreakdown> {
     // Calculate implementation costs
@@ -753,10 +761,11 @@ export class ControlRecommendationAIService {
       external: 15000,
       ongoing: 5000,
       total: 105000,
-    }
+    };
   }
 
-  private async calculateOperationalCosts(_recommendation: ControlRecommendation,
+  private async calculateOperationalCosts(
+    _recommendation: ControlRecommendation,
     organizationProfile?: OrganizationProfile
   ): Promise<CostBreakdown> {
     // Calculate annual operational costs
@@ -767,10 +776,11 @@ export class ControlRecommendationAIService {
       external: 8000,
       ongoing: 12000,
       total: 70000,
-    }
+    };
   }
 
-  private async estimateBenefits(_recommendation: ControlRecommendation,
+  private async estimateBenefits(
+    _recommendation: ControlRecommendation,
     context: BenefitEstimationContext
   ): Promise<BenefitAnalysis> {
     // Estimate benefits from control implementation
@@ -786,7 +796,7 @@ export class ControlRecommendationAIService {
         'Enhanced regulatory compliance',
         'Better risk visibility',
       ],
-    }
+    };
   }
 
   private async calculateFinancialMetrics(
@@ -800,7 +810,7 @@ export class ControlRecommendationAIService {
     irr: number;
   }> {
     // Calculate financial metrics
-    const totalImplementation = implementationCosts.total
+    const totalImplementation = implementationCosts.total;
     const annualCosts = operationalCosts.total;
     const annualBenefits = benefits.total;
     const netAnnualBenefit = annualBenefits - annualCosts;
@@ -810,10 +820,11 @@ export class ControlRecommendationAIService {
       roi: netAnnualBenefit / totalImplementation,
       npv: netAnnualBenefit * 5 - totalImplementation, // 5-year NPV
       irr: 0.25, // 25% IRR
-    }
+    };
   }
 
-  private async performSensitivityAnalysis(_recommendation: ControlRecommendation,
+  private async performSensitivityAnalysis(
+    _recommendation: ControlRecommendation,
     context: BenefitEstimationContext
   ): Promise<SensitivityAnalysis> {
     // Perform sensitivity analysis
@@ -843,17 +854,19 @@ export class ControlRecommendationAIService {
       ],
       variables: [],
       recommendations: ['Monitor implementation closely', 'Ensure proper change management'],
-    }
+    };
   }
 
-  private async analyzeDesignEffectiveness(_controlTemplate: ControlTemplate,
+  private async analyzeDesignEffectiveness(
+    _controlTemplate: ControlTemplate,
     risk: Risk
   ): Promise<EffectivenessAnalysis> {
     // Analyze control design effectiveness
-    return { effectiveness: 0.8, confidence: 0.75 }
+    return { effectiveness: 0.8, confidence: 0.75 };
   }
 
-  private async predictOperatingEffectiveness(_controlTemplate: ControlTemplate,
+  private async predictOperatingEffectiveness(
+    _controlTemplate: ControlTemplate,
     context: {
       risk: Risk;
       organizationProfile?: OrganizationProfile;
@@ -862,10 +875,11 @@ export class ControlRecommendationAIService {
     }
   ): Promise<EffectivenessAnalysis> {
     // Predict operating effectiveness
-    return { effectiveness: 0.75, confidence: 0.7 }
+    return { effectiveness: 0.75, confidence: 0.7 };
   }
 
-  private async analyzeContextualFactors(_controlTemplate: ControlTemplate,
+  private async analyzeContextualFactors(
+    _controlTemplate: ControlTemplate,
     context: {
       risk: Risk;
       organizationProfile?: OrganizationProfile;
@@ -874,10 +888,11 @@ export class ControlRecommendationAIService {
     }
   ): Promise<ContextualAnalysis> {
     // Analyze contextual factors
-    return { factors: [], impact: 0.1 }
+    return { factors: [], impact: 0.1 };
   }
 
-  private calculateOverallEffectiveness(_designEffectiveness: EffectivenessAnalysis,
+  private calculateOverallEffectiveness(
+    _designEffectiveness: EffectivenessAnalysis,
     operatingEffectiveness: EffectivenessAnalysis,
     contextualFactors: ContextualAnalysis
   ): {
@@ -892,7 +907,7 @@ export class ControlRecommendationAIService {
       confidence: 0.72,
       factors: [],
       recommendations: ['Regular monitoring recommended', 'Consider automation opportunities'],
-    }
+    };
   }
 }
 

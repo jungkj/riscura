@@ -54,4 +54,4 @@ export const AuthStorage = {
     }
     return null;
   },
-}
+};

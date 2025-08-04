@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 // Define integration partners type
 interface IntegrationPartner {
-  id: string
+  id: string;
   name: string;
   logo: string;
   color: string;
@@ -63,7 +63,7 @@ const integrationPartners: IntegrationPartner[] = [
     description: 'AI-powered risk analysis',
     available: true,
   },
-]
+];
 
 export const IntegrationPartners: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
@@ -75,12 +75,12 @@ export const IntegrationPartners: React.FC = () => {
 
   // Check for prefers-reduced-motion
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
-    }
+    };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
@@ -99,14 +99,14 @@ export const IntegrationPartners: React.FC = () => {
 
         // Reset scroll when reaching the end
         if (scrollPosition >= scrollContainer.scrollWidth / 2) {
-          scrollPosition = 0
+          scrollPosition = 0;
         }
 
         scrollContainer.scrollLeft = scrollPosition;
       }
 
       animationRef.current = requestAnimationFrame(animate);
-    }
+    };
 
     animate();
 
@@ -114,7 +114,7 @@ export const IntegrationPartners: React.FC = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-    }
+    };
   }, [isPaused, prefersReducedMotion]);
 
   return (
@@ -258,4 +258,4 @@ export const IntegrationPartners: React.FC = () => {
       </style>
     </section>
   );
-}
+};

@@ -197,7 +197,7 @@ export default function FeatureShowcase() {
 
     return () => {
       observers.forEach((observer) => observer.disconnect());
-    }
+    };
   }, []);
 
   return (

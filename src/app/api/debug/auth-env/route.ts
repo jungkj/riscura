@@ -46,7 +46,7 @@ export async function GET() {
         key.includes('JWT') ||
         key.includes('SESSION')
     ),
-  }
+  };
 
   return NextResponse.json(envCheck, { status: 200 });
 }

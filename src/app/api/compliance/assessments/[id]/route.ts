@@ -14,7 +14,7 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
       // Verify user has access to this assessment
       if (assessment.organizationId !== user.organizationId) {
-        return ApiResponseFormatter.forbiddenError('Access denied')
+        return ApiResponseFormatter.forbiddenError('Access denied');
       }
 
       return ApiResponseFormatter.success(assessment);

@@ -9,4 +9,4 @@ export const ClientProviders = ({ children }: { children: React.ReactNode }) => 
       {children}
     </ThemeProvider>
   );
-}
+};

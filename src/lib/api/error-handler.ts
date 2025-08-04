@@ -65,7 +65,7 @@ export enum ErrorSeverity {
 
 // Base error interface
 export interface BaseError {
-  code: ErrorCode
+  code: ErrorCode;
   message: string;
   severity: ErrorSeverity;
   context?: Record<string, any>;
@@ -76,7 +76,7 @@ export interface BaseError {
 
 // Specific error classes
 export class ApiError extends Error implements BaseError {
-  public readonly code: ErrorCode
+  public readonly code: ErrorCode;
   public readonly severity: ErrorSeverity;
   public readonly context?: Record<string, any>;
   public readonly cause?: Error;
@@ -140,7 +140,7 @@ export class ApiError extends Error implements BaseError {
       [ErrorCode.SERVICE_UNAVAILABLE]: 503,
       [ErrorCode.TIMEOUT]: 504,
       [ErrorCode.MAINTENANCE_MODE]: 503,
-    }
+    };
 
     return statusMap[code] || 500;
   }
@@ -156,7 +156,7 @@ export class ApiError extends Error implements BaseError {
       retryable: this.retryable,
       userMessage: this.userMessage,
       stack: process.env.NODE_ENV === 'development' ? this.stack : undefined,
-    }
+    };
   }
 }
 
@@ -185,13 +185,13 @@ export class BusinessLogicError extends ApiError {
       context,
       statusCode: 422,
       userMessage: message,
-    })
+    });
   }
 }
 
 // External service error class
 export class ExternalServiceError extends ApiError {
-  public readonly serviceName: string
+  public readonly serviceName: string;
 
   constructor(serviceName: string, message: string, cause?: Error) {
     super(ErrorCode.EXTERNAL_SERVICE_ERROR, message, {
@@ -207,7 +207,7 @@ export class ExternalServiceError extends ApiError {
 
 // Rate limit error class
 export class RateLimitError extends ApiError {
-  public readonly retryAfter: number
+  public readonly retryAfter: number;
   public readonly limit: number;
   public readonly remaining: number;
 
@@ -226,12 +226,16 @@ export class RateLimitError extends ApiError {
 
 // Error logger interface
 export interface ErrorLogger {
-  log(__error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>
+  log(__error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void>;
 }
 
 // Console error logger implementation
 export class ConsoleErrorLogger implements ErrorLogger {
-  async log(__error: BaseError, request?: NextRequest, context?: Record<string, any>): Promise<void> {
+  async log(
+    __error: BaseError,
+    request?: NextRequest,
+    context?: Record<string, any>
+  ): Promise<void> {
     const logEntry = {
       timestamp: new Date().toISOString(),
       error: {
@@ -251,7 +255,7 @@ export class ConsoleErrorLogger implements ErrorLogger {
         : undefined,
       context,
       stack: process.env.NODE_ENV === 'development' && error.cause ? error.cause.stack : undefined,
-    }
+    };
 
     if (error.severity === ErrorSeverity.CRITICAL || error.severity === ErrorSeverity.HIGH) {
       // console.error('API Error:', JSON.stringify(logEntry, null, 2))
@@ -263,7 +267,7 @@ export class ConsoleErrorLogger implements ErrorLogger {
 
 // Error handler class
 export class ApiErrorHandler {
-  private logger: ErrorLogger
+  private logger: ErrorLogger;
 
   constructor(logger?: ErrorLogger) {
     this.logger = logger || new ConsoleErrorLogger();
@@ -273,30 +277,30 @@ export class ApiErrorHandler {
    * Handle and format any error for API response
    */
   async handleError(__error: unknown, request?: NextRequest, context?: Record<string, any>) {
-    const responseOptions = request ? ApiResponseFormatter.createResponseOptions(request) : {}
+    const responseOptions = request ? ApiResponseFormatter.createResponseOptions(request) : {};
 
     // Handle ApiError instances
     if (error instanceof ApiError) {
-      await this.logger.log(error, request, context)
+      await this.logger.log(error, request, context);
       return this.formatApiError(error, responseOptions);
     }
 
     // Handle Zod validation errors
     if (error instanceof ZodError) {
-      const validationError = this.handleZodError(error)
+      const validationError = this.handleZodError(error);
       await this.logger.log(validationError, request, context);
       return this.formatApiError(validationError, responseOptions);
     }
 
     // Handle Prisma errors
     if (this.isPrismaError(error)) {
-      const prismaError = this.handlePrismaError(error)
+      const prismaError = this.handlePrismaError(error);
       await this.logger.log(prismaError, request, context);
       return this.formatApiError(prismaError, responseOptions);
     }
 
     // Handle generic errors
-    const genericError = this.handleGenericError(error)
+    const genericError = this.handleGenericError(error);
     await this.logger.log(genericError, request, context);
     return this.formatApiError(genericError, responseOptions);
   }
@@ -411,7 +415,7 @@ export class ApiErrorHandler {
           cause: error,
           retryable: true,
           statusCode: 504,
-        })
+        });
       }
 
       if (error.message.includes('ECONNREFUSED') || error.message.includes('ENOTFOUND')) {
@@ -487,7 +491,7 @@ export class ApiErrorHandler {
 }
 
 // Global error handler instance
-export const globalErrorHandler = new ApiErrorHandler()
+export const globalErrorHandler = new ApiErrorHandler();
 
 // Error factory functions
 export const createAuthError = (message?: string) =>
@@ -495,7 +499,7 @@ export const createAuthError = (message?: string) =>
     severity: ErrorSeverity.LOW,
     statusCode: 401,
     userMessage: 'Please log in to access this resource',
-  })
+  });
 
 export const createForbiddenError = (message?: string) =>
   new ApiError(ErrorCode.FORBIDDEN, message || 'Access denied', {
@@ -528,15 +532,15 @@ export const createRateLimitError = (retryAfter: number, limit: number, remainin
 export function withErrorHandling<T extends any[], R>(handler: (...args: T) => Promise<R>) {
   return async (...args: T): Promise<R> => {
     try {
-      return await handler(...args)
+      return await handler(...args);
     } catch (error) {
       // If the error is already an ApiError, re-throw it
       if (error instanceof ApiError) {
-        throw error
+        throw error;
       }
 
       // Convert other errors to ApiError
-      throw await globalErrorHandler.handleError(error)
+      throw await globalErrorHandler.handleError(error);
     }
-  }
+  };
 }

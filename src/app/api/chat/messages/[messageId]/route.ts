@@ -7,7 +7,7 @@ import { z } from 'zod';
 // PATCH /api/chat/messages/[messageId] - Update a message
 const updateMessageSchema = z.object({
   content: z.string().min(1).max(2000),
-})
+});
 
 export async function PATCH(
   req: NextRequest,
@@ -58,7 +58,7 @@ export async function DELETE(
 ) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { messageId } = await params
+      const { messageId } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError();

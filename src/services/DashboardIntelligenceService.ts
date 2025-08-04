@@ -7,7 +7,7 @@ import type { Risk, Control } from '@/types';
 
 // Dashboard Intelligence Types
 export interface DashboardInsight {
-  id: string
+  id: string;
   type:
     | 'critical_alert'
     | 'trend_prediction'
@@ -128,13 +128,13 @@ export interface DashboardConfig {
     notificationLevel: 'minimal' | 'standard' | 'verbose';
     showPredictions: boolean;
     enableInteractiveHelp: boolean;
-  }
+  };
   context: {
     currentView: string;
     activeFilters: Record<string, any>;
-    timeRange: { start: Date; end: Date }
+    timeRange: { start: Date; end: Date };
     selectedEntities: string[];
-  }
+  };
 }
 
 export interface RealTimeUpdate {
@@ -165,34 +165,34 @@ export class DashboardIntelligenceService {
     // Create mock implementations for TrendAnalysisService dependencies
     const mockAIAnalysisService = {
       detectAnomalies: async () => [],
-    }
+    };
 
     const mockDataRetrievalService = {
       getRiskHistoricalData: async () => [],
       getUserContext: async () => ({}),
-    }
+    };
 
     const mockCacheService = {
       set: async () => {},
       get: async () => undefined,
-    }
+    };
 
     const mockEventService = {
       emit: async () => {},
-    }
+    };
 
     const mockStatisticsService = {
       detectSeasonality: async () => ({ detected: false, period: '', amplitude: 0, confidence: 0 }),
       linearRegression: async () => ({ slope: 0, intercept: 0, r2: 0 }),
       calculateVolatility: async () => 0,
       detectOutliers: async () => [],
-    }
+    };
 
     const mockForecastingService = {
       linearForecast: async () => [],
       exponentialSmoothingForecast: async () => [],
       arima: async () => [],
-    }
+    };
 
     this.trendService = new TrendAnalysisService(
       mockAIAnalysisService as any,
@@ -234,7 +234,7 @@ export class DashboardIntelligenceService {
       }),
       generateActionItems: async () => [],
       evaluateCondition: async () => false,
-    }
+    };
 
     const mockUserContextService = {
       getUserContext: async () => ({}),
@@ -246,7 +246,7 @@ export class DashboardIntelligenceService {
       getHistoricalContext: async () => ({}),
       getSuppressionRules: async () => [],
       getDeliveryChannels: async () => [],
-    }
+    };
 
     const mockTemplateService = {
       getTemplate: async () => ({
@@ -258,7 +258,7 @@ export class DashboardIntelligenceService {
         tone: 'professional' as any,
         language: 'en',
       }),
-    }
+    };
 
     const mockDeliveryService = {
       deliver: async () => ({
@@ -268,12 +268,12 @@ export class DashboardIntelligenceService {
         timestamp: new Date(),
       }),
       escalate: async () => {},
-    }
+    };
 
     const mockAnalyticsService = {
       getNotificationAnalytics: async () => [],
       recordDeliveryMetrics: async () => {},
-    }
+    };
 
     this.notificationService = new SmartNotificationService(
       mockAIInsightService as any,
@@ -289,7 +289,8 @@ export class DashboardIntelligenceService {
   /**
    * Generate comprehensive dashboard insights using AI
    */
-  async generateDashboardInsights(_config: DashboardConfig,
+  async generateDashboardInsights(
+    _config: DashboardConfig,
     risks: Risk[],
     controls: Control[]
   ): Promise<DashboardInsight[]> {
@@ -309,7 +310,7 @@ export class DashboardIntelligenceService {
         this.generateTrendInsights(risks, controls, config),
         this.generateOptimizationInsights(config),
         this.generateComplianceInsights(controls, config),
-      ])
+      ]);
 
       insights.push(
         ...riskInsights,
@@ -320,7 +321,7 @@ export class DashboardIntelligenceService {
       );
 
       // Prioritize and cache insights
-      const prioritizedInsights = this.prioritizeInsights(insights)
+      const prioritizedInsights = this.prioritizeInsights(insights);
       prioritizedInsights.forEach((insight) => this.insights.set(insight.id, insight));
 
       return prioritizedInsights;
@@ -357,7 +358,8 @@ export class DashboardIntelligenceService {
   /**
    * Generate smart recommendations based on current context
    */
-  async generateSmartRecommendations(_config: DashboardConfig,
+  async generateSmartRecommendations(
+    _config: DashboardConfig,
     currentInsights: DashboardInsight[]
   ): Promise<SmartRecommendation[]> {
     const context = this.buildRecommendationContext(config, currentInsights);
@@ -420,7 +422,7 @@ export class DashboardIntelligenceService {
         suggestions: this.parseSuggestions(response.content),
         explanations: userQuestion ? this.parseExplanations(response.content, userQuestion) : [],
         quickActions: this.generateQuickActions(elementType, elementData),
-      }
+      };
     } catch (error) {
       // console.error('Error generating interactive assistance:', error)
       return {
@@ -430,7 +432,7 @@ export class DashboardIntelligenceService {
         suggestions: [],
         explanations: [],
         quickActions: [],
-      }
+      };
     }
   }
 
@@ -444,7 +446,7 @@ export class DashboardIntelligenceService {
     // Start refresh interval if not already running
     if (!this.refreshInterval) {
       this.refreshInterval = setInterval(async () => {
-        await this.broadcastUpdates(config)
+        await this.broadcastUpdates(config);
       }, config.preferences.refreshRate);
     }
   }
@@ -466,13 +468,14 @@ export class DashboardIntelligenceService {
   }
 
   // Private helper methods
-  private async generateRiskInsights(_risks: Risk[],
+  private async generateRiskInsights(
+    _risks: Risk[],
     config: DashboardConfig
   ): Promise<DashboardInsight[]> {
-    const insights: DashboardInsight[] = []
+    const insights: DashboardInsight[] = [];
 
     // Analyze high-risk items
-    const highRisks = risks.filter((r) => r.riskScore >= 15)
+    const highRisks = risks.filter((r) => r.riskScore >= 15);
     if (highRisks.length > 0) {
       insights.push({
         id: generateId('insight'),
@@ -503,7 +506,7 @@ export class DashboardIntelligenceService {
     }
 
     // Risk score trend analysis
-    const riskTrend = this.calculateRiskTrend(risks)
+    const riskTrend = this.calculateRiskTrend(risks);
     if (riskTrend.significance > 0.7) {
       insights.push({
         id: generateId('insight'),
@@ -529,14 +532,15 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateAnomalyInsights(_risks: Risk[],
+  private async generateAnomalyInsights(
+    _risks: Risk[],
     controls: Control[]
   ): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
 
     try {
       // Get recent anomaly alerts
-      const alerts = await this.anomalyService.getActiveAlerts()
+      const alerts = await this.anomalyService.getActiveAlerts();
 
       if (alerts.length > 0) {
         const criticalAlerts = alerts.filter(
@@ -577,14 +581,15 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateTrendInsights(_risks: Risk[],
+  private async generateTrendInsights(
+    _risks: Risk[],
     controls: Control[],
     config: DashboardConfig
   ): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
 
     // Analyze compliance trends
-    const complianceData = this.extractComplianceMetrics(controls)
+    const complianceData = this.extractComplianceMetrics(controls);
     if (complianceData.trend && Math.abs(complianceData.change) > 0.05) {
       insights.push({
         id: generateId('insight'),
@@ -610,7 +615,9 @@ export class DashboardIntelligenceService {
     return insights;
   }
 
-  private async generateOptimizationInsights(_config: DashboardConfig): Promise<DashboardInsight[]> {
+  private async generateOptimizationInsights(
+    _config: DashboardConfig
+  ): Promise<DashboardInsight[]> {
     const insights: DashboardInsight[] = [];
 
     // Generate resource optimization suggestions
@@ -634,7 +641,7 @@ export class DashboardIntelligenceService {
       dataPoints: { currentRefreshRate: config.preferences.refreshRate, suggestedRate: 45000 },
       relatedEntities: [],
       priority: 6,
-    })
+    });
 
     return insights;
   }
@@ -646,7 +653,7 @@ export class DashboardIntelligenceService {
     const insights: DashboardInsight[] = [];
 
     // Check for gaps in control coverage
-    const inactiveControls = controls.filter((c) => c.status !== 'active')
+    const inactiveControls = controls.filter((c) => c.status !== 'active');
     if (inactiveControls.length > 0) {
       insights.push({
         id: generateId('insight'),
@@ -689,7 +696,7 @@ export class DashboardIntelligenceService {
     const confidence = Math.max(0.5, 1 - Math.abs(trend.rSquared - 1));
 
     // Generate chart data
-    const chartData: TimeSeriesData[] = []
+    const chartData: TimeSeriesData[] = [];
     const now = new Date();
 
     // Historical data
@@ -697,7 +704,7 @@ export class DashboardIntelligenceService {
       chartData.push({
         timestamp: new Date(now.getTime() - (29 - index) * 24 * 60 * 60 * 1000),
         actual: value,
-      })
+      });
     });
 
     // Predicted data
@@ -738,27 +745,28 @@ export class DashboardIntelligenceService {
         currentValue
       ),
       chartData,
-    }
+    };
   }
 
   private prioritizeInsights(_insights: DashboardInsight[]): DashboardInsight[] {
     return insights.sort((a, b) => {
       // Sort by priority (lower number = higher priority)
       if (a.priority !== b.priority) {
-        return a.priority - b.priority
+        return a.priority - b.priority;
       }
 
       // Then by impact
-      const impactOrder = { critical: 4, high: 3, medium: 2, low: 1 }
+      const impactOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       const impactDiff = impactOrder[b.impact] - impactOrder[a.impact];
       if (impactDiff !== 0) return impactDiff;
 
       // Finally by confidence
-      return b.confidence - a.confidence
+      return b.confidence - a.confidence;
     });
   }
 
-  private buildRecommendationContext(_config: DashboardConfig,
+  private buildRecommendationContext(
+    _config: DashboardConfig,
     insights: DashboardInsight[]
   ): string {
     return JSON.stringify(
@@ -778,16 +786,16 @@ export class DashboardIntelligenceService {
   private parseRecommendations(_content: string): SmartRecommendation[] {
     // Parse AI-generated recommendations from response content
     // This is a simplified parser - in production, use more robust parsing
-    const recommendations: SmartRecommendation[] = []
+    const recommendations: SmartRecommendation[] = [];
 
     const lines = content.split('\n').filter((line) => line.trim());
-    let currentRec: Partial<SmartRecommendation> = {}
+    let currentRec: Partial<SmartRecommendation> = {};
 
     lines.forEach((line) => {
       if (line.includes('**') || line.includes('##')) {
         if (currentRec.title) {
           recommendations.push(this.completeRecommendation(currentRec));
-          currentRec = {}
+          currentRec = {};
         }
         currentRec.title = line.replace(/[*#]/g, '').trim();
         currentRec.id = generateId('recommendation');
@@ -821,12 +829,12 @@ export class DashboardIntelligenceService {
       timeline: '1-2 weeks',
       dependencies: [],
       risks: ['Implementation complexity', 'Resource availability'],
-    }
+    };
   }
 
   private parseSuggestions(_content: string): AssistanceSuggestion[] {
     // Parse AI suggestions from content
-    const suggestions: AssistanceSuggestion[] = []
+    const suggestions: AssistanceSuggestion[] = [];
 
     const lines = content.split('\n').filter((line) => line.trim());
     lines.forEach((line, index) => {
@@ -890,7 +898,7 @@ export class DashboardIntelligenceService {
         icon: 'Maximize',
         description: 'View chart in full screen mode',
         enabled: true,
-      })
+      });
     }
 
     return baseActions;
@@ -909,7 +917,7 @@ export class DashboardIntelligenceService {
       timestamp: new Date(),
       source: 'realtime_monitor',
       priority: Math.floor(Math.random() * 5) + 1,
-    }
+    };
 
     this.subscribers.forEach((callback) => {
       callback(update);
@@ -918,19 +926,19 @@ export class DashboardIntelligenceService {
 
   // Utility methods
   private calculateRiskTrend(_risks: Risk[]): {
-    direction: 'increasing' | 'decreasing'
+    direction: 'increasing' | 'decreasing';
     change: number;
     significance: number;
   } {
     // Simplified trend calculation
-    const _avgScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length
+    const _avgScore = risks.reduce((sum, r) => sum + r.riskScore, 0) / risks.length;
     const change = Math.random() * 0.2 - 0.1; // Simulate change
 
     return {
       direction: change > 0 ? 'increasing' : 'decreasing',
       change: Math.abs(change),
       significance: 0.8,
-    }
+    };
   }
 
   private extractComplianceMetrics(controls: Control[]): {
@@ -947,12 +955,12 @@ export class DashboardIntelligenceService {
       trend: true,
       change,
       current,
-    }
+    };
   }
 
   private calculateLinearTrend(values: number[]): { slope: number; rSquared: number } {
     // Simple linear regression
-    const n = values.length
+    const n = values.length;
     const x = Array.from({ length: n }, (_, i) => i);
     const xMean = x.reduce((sum, val) => sum + val, 0) / n;
     const yMean = values.reduce((sum, val) => sum + val, 0) / n;
@@ -963,7 +971,7 @@ export class DashboardIntelligenceService {
     const slope = denominator !== 0 ? numerator / denominator : 0;
     const rSquared = 0.7 + Math.random() * 0.3; // Simplified
 
-    return { slope, rSquared }
+    return { slope, rSquared };
   }
 
   private categorizeTrend(slope: number): 'increasing' | 'decreasing' | 'stable' | 'volatile' {
@@ -1001,7 +1009,7 @@ export class DashboardIntelligenceService {
 
   // Public getters for cached data
   public getInsights(): DashboardInsight[] {
-    return Array.from(this.insights.values())
+    return Array.from(this.insights.values());
   }
 
   public getPredictions(): PredictiveAnalytics[] {
@@ -1014,4 +1022,4 @@ export class DashboardIntelligenceService {
 }
 
 // Export singleton instance
-export const dashboardIntelligenceService = new DashboardIntelligenceService()
+export const dashboardIntelligenceService = new DashboardIntelligenceService();

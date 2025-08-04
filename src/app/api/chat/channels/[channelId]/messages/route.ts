@@ -13,7 +13,7 @@ export async function GET(
 ) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { channelId } = await params
+      const { channelId } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -46,7 +46,7 @@ const sendMessageSchema = z.object({
   type: z.nativeEnum(ChatMessageType).optional(),
   attachments: z.array(z.any()).optional(),
   parentId: z.string().optional(),
-})
+});
 
 export async function POST(
   req: NextRequest,

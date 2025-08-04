@@ -21,19 +21,19 @@ export interface EncryptionConfiguration {
     keyRotationDays: number;
     keyManagement: 'internal' | 'hsm' | 'cloud_kms';
     backupEncryption: boolean;
-  }
+  };
   dataInTransit: {
     enforceHTTPS: boolean;
     tlsVersion: '1.2' | '1.3';
     certificateValidation: boolean;
     hsts: boolean;
     cipherSuites: string[];
-  }
+  };
   fieldLevelEncryption: {
     enabled: boolean;
     encryptedFields: string[];
     searchableEncryption: boolean;
-  }
+  };
 }
 
 export interface SSOConfiguration {
@@ -103,7 +103,7 @@ export interface LDAPConfig {
     firstName: string;
     lastName: string;
     groups: string;
-  }
+  };
   ssl: boolean;
   startTLS: boolean;
 }
@@ -248,7 +248,7 @@ export interface BehaviorAnalysisConfig {
     enabled: boolean;
     buildingPeriodDays: number;
     updateFrequency: 'daily' | 'weekly' | 'monthly';
-  }
+  };
   riskScoring: {
     enabled: boolean;
     factors: BehaviorRiskFactor[];
@@ -257,8 +257,8 @@ export interface BehaviorAnalysisConfig {
       medium: number;
       high: number;
       critical: number;
-    }
-  }
+    };
+  };
   patterns: BehaviorPattern[];
 }
 
@@ -318,7 +318,7 @@ export interface AutomatedResponseConfig {
     immediateAlert: boolean;
     dailySummary: boolean;
     weeklyReport: boolean;
-  }
+  };
 }
 
 export interface AutomatedResponseRule {
@@ -379,7 +379,7 @@ export interface DashboardWidget {
   type: 'chart' | 'metric' | 'list' | 'map' | 'gauge' | 'alert_summary';
   title: string;
   configuration: Record<string, any>;
-  position: { x: number; y: number; width: number; height: number }
+  position: { x: number; y: number; width: number; height: number };
 }
 
 export interface SecurityAlert {
@@ -631,13 +631,13 @@ export interface AuditPreparation {
     version_control: boolean;
     access_controls: boolean;
     retention_policies: boolean;
-  }
+  };
   audit_trails: {
     comprehensive_logging: boolean;
     tamper_evidence: boolean;
     long_term_retention: boolean;
     search_capabilities: boolean;
-  }
+  };
 }
 
 export interface DataRetentionPolicy {
@@ -673,7 +673,7 @@ export interface LegalHold {
   custodians: string[];
   data_sources: string[];
   keywords: string[];
-  date_range: { start: Date; end?: Date }
+  date_range: { start: Date; end?: Date };
   status: 'active' | 'released' | 'expired';
   created_by: string;
   created_date: Date;
@@ -690,7 +690,7 @@ export interface PurgingSchedule {
     before_purge: boolean;
     after_purge: boolean;
     failure_alert: boolean;
-  }
+  };
 }
 
 export interface RetentionException {
@@ -773,7 +773,7 @@ export interface BreachNotificationSettings {
     internal_notification_hours: number;
     regulator_notification_hours: number;
     subject_notification_hours: number;
-  }
+  };
   notification_templates: NotificationTemplate[];
   escalation_procedures: EscalationProcedure[];
 }
@@ -835,7 +835,7 @@ export interface GeoRestrictionConfig {
     requireAdditionalAuth: boolean;
     logOnly: boolean;
     alertAdmin: boolean;
-  }
+  };
 }
 
 export interface DeviceTrustConfig {
@@ -976,7 +976,7 @@ export interface IncidentCommunicationConfig {
     channels: string[];
     updateFrequency: number;
     escalationCriteria: string[];
-  }
+  };
 }
 
 export interface ForensicsConfig {
@@ -991,7 +991,7 @@ export interface ForensicsConfig {
 
 // Event and Audit Types
 export interface SecurityAuditEvent {
-  id: string
+  id: string;
   timestamp: Date;
   organizationId: string;
   userId?: string;
@@ -1013,7 +1013,7 @@ export interface SecurityAuditEvent {
     userAgent?: string;
     location?: GeoLocation;
     device?: DeviceInfo;
-  }
+  };
   outcome: 'success' | 'failure' | 'partial';
   severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
   details: Record<string, any>;
@@ -1208,7 +1208,7 @@ export interface HuntingFinding {
 
 // AI Security Types
 export interface AISecurityConfiguration {
-  enabled: boolean
+  enabled: boolean;
   modelSecurity: ModelSecurityConfig;
   dataGovernance: DataGovernanceConfig;
   privacyPreserving: PrivacyPreservingConfig;

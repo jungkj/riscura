@@ -66,4 +66,4 @@ export const designSystem = {
     slow: '300ms',
     easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
   },
-} as const
+} as const;

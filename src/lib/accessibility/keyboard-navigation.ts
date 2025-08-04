@@ -4,7 +4,7 @@ import { useEffect, useCallback, useRef } from 'react';
 
 // Types for keyboard navigation
 export interface KeyboardShortcut {
-  key: string
+  key: string;
   ctrlKey?: boolean;
   altKey?: boolean;
   shiftKey?: boolean;
@@ -35,7 +35,7 @@ export interface FocusableElement extends HTMLElement {
 
 // Keyboard navigation utilities
 export class KeyboardNavigationManager {
-  private shortcuts: Map<string, KeyboardShortcut> = new Map()
+  private shortcuts: Map<string, KeyboardShortcut> = new Map();
   private focusableSelectors = [
     'a[href]:not([disabled])',
     'button:not([disabled])',
@@ -57,10 +57,10 @@ export class KeyboardNavigationManager {
     if (typeof window === 'undefined') return;
 
     // Global keyboard event listener
-    document.addEventListener('keydown', this.handleGlobalKeydown.bind(this))
+    document.addEventListener('keydown', this.handleGlobalKeydown.bind(this));
 
     // Add default shortcuts
-    this.addDefaultShortcuts()
+    this.addDefaultShortcuts();
   }
 
   private addDefaultShortcuts(): void {
@@ -71,7 +71,7 @@ export class KeyboardNavigationManager {
       action: () => this.skipToMain(),
       description: 'Skip to main content',
       scope: 'global',
-    })
+    });
 
     // Focus search
     this.addShortcut({
@@ -80,7 +80,7 @@ export class KeyboardNavigationManager {
       description: 'Focus search input',
       scope: 'global',
       preventDefault: true,
-    })
+    });
 
     // Open help
     this.addShortcut({
@@ -90,7 +90,7 @@ export class KeyboardNavigationManager {
       description: 'Open keyboard shortcuts help',
       scope: 'global',
       preventDefault: true,
-    })
+    });
 
     // Close modal/dialog
     this.addShortcut({
@@ -98,18 +98,18 @@ export class KeyboardNavigationManager {
       action: () => this.closeModal(),
       description: 'Close modal or dialog',
       scope: 'global',
-    })
+    });
   }
 
   // Add keyboard shortcut
   addShortcut(shortcut: KeyboardShortcut): void {
-    const key = this.getShortcutKey(shortcut)
+    const key = this.getShortcutKey(shortcut);
     this.shortcuts.set(key, shortcut);
   }
 
   // Remove keyboard shortcut
   removeShortcut(shortcut: Omit<KeyboardShortcut, 'action' | 'description'>): void {
-    const key = this.getShortcutKey(shortcut)
+    const key = this.getShortcutKey(shortcut);
     this.shortcuts.delete(key);
   }
 
@@ -122,7 +122,7 @@ export class KeyboardNavigationManager {
       shortcut.metaKey && 'meta',
     ]
       .filter(Boolean)
-      .join('+')
+      .join('+');
 
     return modifiers ? `${modifiers}+${shortcut.key}` : shortcut.key || '';
   }
@@ -135,7 +135,7 @@ export class KeyboardNavigationManager {
       altKey: event.altKey,
       shiftKey: event.shiftKey,
       metaKey: event.metaKey,
-    })
+    });
 
     const shortcut = this.shortcuts.get(key);
     if (shortcut && (shortcut.scope === 'global' || !shortcut.scope)) {
@@ -150,21 +150,21 @@ export class KeyboardNavigationManager {
   getFocusableElements(container: HTMLElement = document.body): FocusableElement[] {
     const elements = Array.from(
       container.querySelectorAll(this.focusableSelectors)
-    ) as FocusableElement[]
+    ) as FocusableElement[];
 
     return elements.filter((element) => {
       // Check if element is visible
       if (element.offsetParent === null && element.tagName !== 'SUMMARY') {
-        return false
+        return false;
       }
 
       // Check if element is disabled
       if (element.disabled || element.getAttribute('aria-disabled') === 'true') {
-        return false
+        return false;
       }
 
       // Check tabindex
-      const tabIndex = element.tabIndex
+      const tabIndex = element.tabIndex;
       if (tabIndex < 0) {
         return false;
       }
@@ -175,7 +175,7 @@ export class KeyboardNavigationManager {
 
   // Focus first focusable element
   focusFirst(container: HTMLElement = document.body): boolean {
-    const focusable = this.getFocusableElements(container)
+    const focusable = this.getFocusableElements(container);
     if (focusable.length > 0) {
       focusable[0].focus();
       return true;
@@ -185,7 +185,7 @@ export class KeyboardNavigationManager {
 
   // Focus last focusable element
   focusLast(container: HTMLElement = document.body): boolean {
-    const focusable = this.getFocusableElements(container)
+    const focusable = this.getFocusableElements(container);
     if (focusable.length > 0) {
       focusable[focusable.length - 1].focus();
       return true;
@@ -195,7 +195,7 @@ export class KeyboardNavigationManager {
 
   // Focus next/previous element
   focusNext(current: HTMLElement, container: HTMLElement = document.body, wrap = true): boolean {
-    const focusable = this.getFocusableElements(container)
+    const focusable = this.getFocusableElements(container);
     const currentIndex = focusable.indexOf(current as FocusableElement);
 
     if (currentIndex === -1) return false;
@@ -238,8 +238,8 @@ export class KeyboardNavigationManager {
 
   // Create focus trap
   createFocusTrap(container: HTMLElement): () => void {
-    const focusable = this.getFocusableElements(container)
-    if (focusable.length === 0) return () => {}
+    const focusable = this.getFocusableElements(container);
+    if (focusable.length === 0) return () => {};
 
     const firstElement = focusable[0];
     const lastElement = focusable[focusable.length - 1];
@@ -250,32 +250,32 @@ export class KeyboardNavigationManager {
       if (event.shiftKey) {
         // Shift + Tab
         if (document.activeElement === firstElement) {
-          event.preventDefault()
+          event.preventDefault();
           lastElement.focus();
         }
       } else {
         // Tab
         if (document.activeElement === lastElement) {
-          event.preventDefault()
+          event.preventDefault();
           firstElement.focus();
         }
       }
-    }
+    };
 
     container.addEventListener('keydown', handleKeyDown);
 
     // Focus first element
-    firstElement.focus()
+    firstElement.focus();
 
     // Return cleanup function
     return () => {
-      container.removeEventListener('keydown', handleKeyDown)
-    }
+      container.removeEventListener('keydown', handleKeyDown);
+    };
   }
 
   // Default shortcut actions
   private skipToMain(): void {
-    const main = document.querySelector('main, [role="main"], #main-content')
+    const main = document.querySelector('main, [role="main"], #main-content');
     if (main) {
       (main as HTMLElement).focus();
       main.scrollIntoView({ behavior: 'smooth' });
@@ -293,14 +293,14 @@ export class KeyboardNavigationManager {
 
   private openHelp(): void {
     // Dispatch custom event for help modal
-    document.dispatchEvent(new CustomEvent('keyboard-help-requested'))
+    document.dispatchEvent(new CustomEvent('keyboard-help-requested'));
   }
 
   private closeModal(): void {
     // Find and close any open modals/dialogs
     const modal = document.querySelector(
       '[role="dialog"][aria-modal="true"], .modal[aria-hidden="false"]'
-    )
+    );
     if (modal) {
       const closeButton = modal.querySelector(
         '[aria-label*="close" i], .close-button, .modal-close'
@@ -309,25 +309,25 @@ export class KeyboardNavigationManager {
         (closeButton as HTMLElement).click();
       } else {
         // Dispatch custom close event
-        modal.dispatchEvent(new CustomEvent('modal-close-requested'))
+        modal.dispatchEvent(new CustomEvent('modal-close-requested'));
       }
     }
   }
 
   // Get all shortcuts for help display
   getShortcuts(): KeyboardShortcut[] {
-    return Array.from(this.shortcuts.values())
+    return Array.from(this.shortcuts.values());
   }
 
   // Cleanup
   destroy(): void {
-    document.removeEventListener('keydown', this.handleGlobalKeydown.bind(this))
+    document.removeEventListener('keydown', this.handleGlobalKeydown.bind(this));
     this.shortcuts.clear();
   }
 }
 
 // Create global instance
-export const keyboardNav = new KeyboardNavigationManager()
+export const keyboardNav = new KeyboardNavigationManager();
 
 // Hook for keyboard navigation within components
 export function useKeyboardNavigation(
@@ -344,7 +344,7 @@ export function useKeyboardNavigation(
     wrap = true,
     skipDisabled = true,
     autoFocus = false,
-  } = config
+  } = config;
 
   const shortcutsRef = useRef<KeyboardShortcut[]>([]);
 
@@ -356,7 +356,7 @@ export function useKeyboardNavigation(
       const container = containerRef.current;
 
       // Check if event should be handled
-      if (!container.contains(target)) return
+      if (!container.contains(target)) return;
 
       let handled = false;
 
@@ -405,7 +405,7 @@ export function useKeyboardNavigation(
 
       if (enableEscapeHandling && event.key === 'Escape') {
         // Blur current element or close component
-        target.blur()
+        target.blur();
         handled = true;
       }
 
@@ -429,7 +429,7 @@ export function useKeyboardNavigation(
 
   // Add component-specific shortcuts
   const addShortcut = useCallback((shortcut: Omit<KeyboardShortcut, 'scope'>) => {
-    const componentShortcut = { ...shortcut, scope: 'component' as const }
+    const componentShortcut = { ...shortcut, scope: 'component' as const };
     keyboardNav.addShortcut(componentShortcut);
     shortcutsRef.current.push(componentShortcut);
   }, []);
@@ -437,7 +437,7 @@ export function useKeyboardNavigation(
   // Remove component shortcuts
   const removeShortcut = useCallback(
     (shortcut: Omit<KeyboardShortcut, 'action' | 'description' | 'scope'>) => {
-      keyboardNav.removeShortcut(shortcut)
+      keyboardNav.removeShortcut(shortcut);
       shortcutsRef.current = shortcutsRef.current.filter(
         (s) => keyboardNav['getShortcutKey'](s) !== keyboardNav['getShortcutKey'](shortcut)
       );
@@ -448,7 +448,7 @@ export function useKeyboardNavigation(
   // Focus management
   const focusFirst = useCallback(() => {
     if (containerRef.current) {
-      return keyboardNav.focusFirst(containerRef.current)
+      return keyboardNav.focusFirst(containerRef.current);
     }
     return false;
   }, [containerRef]);
@@ -464,19 +464,19 @@ export function useKeyboardNavigation(
     if (containerRef.current) {
       return keyboardNav.createFocusTrap(containerRef.current);
     }
-    return () => {}
+    return () => {};
   }, [containerRef]);
 
   // Setup and cleanup
   useEffect(() => {
-    const container = containerRef.current
+    const container = containerRef.current;
     if (!container) return;
 
     container.addEventListener('keydown', handleKeyDown);
 
     // Auto focus if enabled
     if (autoFocus) {
-      focusFirst()
+      focusFirst();
     }
 
     return () => {
@@ -484,10 +484,10 @@ export function useKeyboardNavigation(
 
       // Clean up component shortcuts
       shortcutsRef.current.forEach((shortcut) => {
-        keyboardNav.removeShortcut(shortcut)
+        keyboardNav.removeShortcut(shortcut);
       });
       shortcutsRef.current = [];
-    }
+    };
   }, [handleKeyDown, autoFocus, focusFirst]);
 
   return {
@@ -498,7 +498,7 @@ export function useKeyboardNavigation(
     createFocusTrap,
     getFocusableElements: () =>
       containerRef.current ? keyboardNav.getFocusableElements(containerRef.current) : [],
-  }
+  };
 }
 
 // Hook for managing focus within modals/dialogs
@@ -515,13 +515,13 @@ export function useFocusTrap(
     if (!isActive || !containerRef.current) {
       // Clean up existing trap
       if (cleanupRef.current) {
-        cleanupRef.current()
+        cleanupRef.current();
         cleanupRef.current = null;
       }
 
       // Restore focus if needed
       if (!isActive && restoreFocus && previousFocusRef.current) {
-        previousFocusRef.current.focus()
+        previousFocusRef.current.focus();
         previousFocusRef.current = null;
       }
 
@@ -530,15 +530,15 @@ export function useFocusTrap(
 
     // Store current focus
     if (restoreFocus) {
-      previousFocusRef.current = document.activeElement as HTMLElement
+      previousFocusRef.current = document.activeElement as HTMLElement;
     }
 
     // Create focus trap
-    cleanupRef.current = keyboardNav.createFocusTrap(containerRef.current)
+    cleanupRef.current = keyboardNav.createFocusTrap(containerRef.current);
 
     // Auto focus first element if needed
     if (autoFocus) {
-      keyboardNav.focusFirst(containerRef.current)
+      keyboardNav.focusFirst(containerRef.current);
     }
 
     return () => {
@@ -546,19 +546,19 @@ export function useFocusTrap(
         cleanupRef.current();
         cleanupRef.current = null;
       }
-    }
+    };
   }, [isActive, containerRef, autoFocus, restoreFocus]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (cleanupRef.current) {
-        cleanupRef.current()
+        cleanupRef.current();
       }
       if (restoreFocus && previousFocusRef.current) {
         previousFocusRef.current.focus();
       }
-    }
+    };
   }, [restoreFocus]);
 }
 
@@ -569,7 +569,7 @@ export function useSkipLinks() {
     { href: '#navigation', label: 'Skip to navigation' },
     { href: '#search', label: 'Skip to search' },
     { href: '#footer', label: 'Skip to footer' },
-  ]
+  ];
 
   const createSkipLink = useCallback((link: { href: string; label: string }) => {
     const skipLink = document.createElement('a');
@@ -594,19 +594,19 @@ export function useSkipLinks() {
     return skipLinks.map((link) => createSkipLink(link));
   }, [createSkipLink]);
 
-  return { skipLinks, renderSkipLinks }
+  return { skipLinks, renderSkipLinks };
 }
 
 // Utility functions
 export const keyboardUtils = {
   // Check if element is focusable
   isFocusable: (element: HTMLElement): boolean => {
-    return keyboardNav.getFocusableElements().includes(element as FocusableElement)
+    return keyboardNav.getFocusableElements().includes(element as FocusableElement);
   },
 
   // Get next focusable element in tab order
   getNextFocusable: (current: HTMLElement): HTMLElement | null => {
-    const focusable = keyboardNav.getFocusableElements()
+    const focusable = keyboardNav.getFocusableElements();
     const currentIndex = focusable.indexOf(current as FocusableElement);
 
     if (currentIndex === -1 || currentIndex === focusable.length - 1) {
@@ -618,7 +618,7 @@ export const keyboardUtils = {
 
   // Get previous focusable element in tab order
   getPreviousFocusable: (current: HTMLElement): HTMLElement | null => {
-    const focusable = keyboardNav.getFocusableElements()
+    const focusable = keyboardNav.getFocusableElements();
     const currentIndex = focusable.indexOf(current as FocusableElement);
 
     if (currentIndex <= 0) {
@@ -636,12 +636,12 @@ export const keyboardUtils = {
       !!event.altKey === !!shortcut.altKey &&
       !!event.shiftKey === !!shortcut.shiftKey &&
       !!event.metaKey === !!shortcut.metaKey
-    )
+    );
   },
 
   // Format shortcut for display
   formatShortcut: (shortcut: Partial<KeyboardShortcut>): string => {
-    const modifiers = []
+    const modifiers = [];
 
     if (shortcut.ctrlKey) modifiers.push('Ctrl');
     if (shortcut.altKey) modifiers.push('Alt');
@@ -652,6 +652,6 @@ export const keyboardUtils = {
 
     return modifiers.join(' + ');
   },
-}
+};
 
 export default KeyboardNavigationManager;

@@ -15,7 +15,7 @@ export interface SubscriptionStatus {
     risks: number;
     storage: string;
     aiQueries: number;
-  }
+  };
 }
 
 export function useSubscription() {
@@ -60,17 +60,17 @@ export function useSubscription() {
   const canAccess = (feature: string) => {
     if (!subscription) return false;
     return subscription.features.includes(feature) || subscription.isActive;
-  }
+  };
 
   const hasReachedLimit = (_type: 'users' | 'risks' | 'aiQueries') => {
     if (!subscription) return true;
     const limit = subscription.limits[type];
     return limit !== -1; // -1 means unlimited
-  }
+  };
 
   const getUpgradeUrl = () => {
     return '/billing/upgrade';
-  }
+  };
 
   return {
     subscription,
@@ -85,5 +85,5 @@ export function useSubscription() {
     isFree: subscription?.plan === 'free' || !subscription?.isActive,
     isTrialing: subscription?.status === 'TRIALING',
     trialDaysLeft: subscription?.trialDaysLeft || 0,
-  }
+  };
 }

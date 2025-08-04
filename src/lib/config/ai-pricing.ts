@@ -67,7 +67,7 @@ export function getModelPricing(_model: string): { prompt: number; completion: n
   }
 
   // Check if model exists in pricing table
-  const normalizedModel = model.trim().toLowerCase()
+  const normalizedModel = model.trim().toLowerCase();
   const pricing = AI_MODEL_PRICING[normalizedModel as AIModel];
 
   if (pricing) {
@@ -78,5 +78,5 @@ export function getModelPricing(_model: string): { prompt: number; completion: n
   // console.warn(`Unknown AI model: ${model}. Using gpt-3.5-turbo pricing as fallback.`)
 
   // Return most cost-effective model as fallback
-  return AI_MODEL_PRICING['gpt-3.5-turbo']
+  return AI_MODEL_PRICING['gpt-3.5-turbo'];
 }

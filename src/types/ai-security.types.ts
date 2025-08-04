@@ -24,14 +24,14 @@ export type {
   ComplianceSummary,
   ComplianceFinding,
   ComplianceRecommendation,
-} from '@/services/AISecurityService'
+} from '@/services/AISecurityService';
 
 // Import types for type guards
-import type { PIIEntity, ComplianceFlag } from '@/services/AISecurityService'
+import type { PIIEntity, ComplianceFlag } from '@/services/AISecurityService';
 
 // Additional security utility types
 export interface SecurityContext {
-  userId: string
+  userId: string;
   sessionId: string;
   organizationId: string;
   permissions: string[];
@@ -223,7 +223,7 @@ export interface PrivacySafeguard {
 
 // Security event types for real-time monitoring
 export interface SecurityEvent {
-  id: string
+  id: string;
   timestamp: Date;
   type: SecurityEventType;
   severity: 'info' | 'warning' | 'error' | 'critical';
@@ -251,7 +251,7 @@ export type SecurityEventType =
 
 // Configuration for security monitoring
 export interface SecurityMonitoringConfig {
-  realTimeMonitoring: boolean
+  realTimeMonitoring: boolean;
   anomalyDetection: boolean;
   alertThresholds: SecurityAlertThresholds;
   notificationChannels: NotificationChannel[];
@@ -291,24 +291,24 @@ export interface EscalationRule {
 
 // Utility types for security operations
 export interface SecureDataContainer<T> {
-  data: T
+  data: T;
   encrypted: boolean;
   encryptionMetadata?: {
     algorithm: string;
     keyId: string;
     timestamp: Date;
-  }
+  };
   integrity: {
     hash: string;
     algorithm: string;
     verified: boolean;
     lastVerified: Date;
-  }
+  };
   access: {
     lastAccessed: Date;
     accessCount: number;
     accessedBy: string[];
-  }
+  };
 }
 
 export interface SecurityValidationRule {
@@ -332,8 +332,8 @@ export const isSecurityEvent = (obj: unknown): obj is SecurityEvent => {
     'timestamp' in obj &&
     'type' in obj &&
     'severity' in obj
-  )
-}
+  );
+};
 
 export const isPIIEntity = (obj: unknown): obj is PIIEntity => {
   return (
@@ -343,7 +343,7 @@ export const isPIIEntity = (obj: unknown): obj is PIIEntity => {
     'value' in obj &&
     'confidence' in obj
   );
-}
+};
 
 export const isComplianceFlag = (obj: unknown): obj is ComplianceFlag => {
   return (
@@ -353,4 +353,4 @@ export const isComplianceFlag = (obj: unknown): obj is ComplianceFlag => {
     'requirement' in obj &&
     'status' in obj
   );
-}
+};

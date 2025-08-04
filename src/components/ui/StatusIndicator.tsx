@@ -148,7 +148,7 @@ const statusConfig = {
     semanticLabel: 'Deactivated',
     ariaLabel: 'Status: Deactivated',
   },
-}
+};
 
 const sizeConfig = {
   sm: {
@@ -169,7 +169,7 @@ const sizeConfig = {
     fontSize: 'text-base',
     gap: 'gap-2',
   },
-}
+};
 
 export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   status,
@@ -194,21 +194,21 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
           backgroundColor: config.bgColor,
           color: config.color,
           border: 'none',
-        }
+        };
       case 'outline':
         return {
           backgroundColor: 'transparent',
           color: config.color,
           border: `1px solid ${config.color}`,
-        }
+        };
       default:
         return {
           backgroundColor: config.bgColor,
           color: config.color,
           border: `1px solid ${config.borderColor}`,
-        }
+        };
     }
-  }
+  };
 
   const variantStyles = getVariantStyles();
 
@@ -260,12 +260,12 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
       <span>{label}</span>
       {Boolean(description) && <span className="sr-only">. {description}</span>}
     </div>
-  )
-}
+  );
+};
 
 // Specialized status indicators for common use cases
 export const ComplianceStatusIndicator: React.FC<{
-  status: 'compliant' | 'non-compliant' | 'in-progress' | 'pending'
+  status: 'compliant' | 'non-compliant' | 'in-progress' | 'pending';
   framework?: string;
   score?: number;
   className?: string;
@@ -275,14 +275,14 @@ export const ComplianceStatusIndicator: React.FC<{
       return `${score}%`;
     }
     return statusConfig[status].semanticLabel;
-  }
+  };
 
   const getDescription = () => {
     let desc = '';
     if (framework) desc += `${framework} compliance`;
     if (score !== undefined) desc += ` score: ${score}%`;
     return desc;
-  }
+  };
 
   return (
     <StatusIndicator
@@ -293,7 +293,7 @@ export const ComplianceStatusIndicator: React.FC<{
       ariaLabel={`${framework || 'Compliance'} status: ${statusConfig[status].semanticLabel}${score ? ` with score ${score}%` : ''}`}
     />
   );
-}
+};
 
 export const RiskStatusIndicator: React.FC<{
   level: 'critical' | 'high' | 'medium' | 'low';
@@ -306,21 +306,21 @@ export const RiskStatusIndicator: React.FC<{
     high: 'warning' as StatusType,
     medium: 'info' as StatusType,
     low: 'success' as StatusType,
-  }
+  };
 
   const getLabel = () => {
     if (score !== undefined) {
       return `${score}`;
     }
     return level.charAt(0).toUpperCase() + level.slice(1);
-  }
+  };
 
   const getDescription = () => {
     let desc = `${level} risk level`;
     if (title) desc += ` for ${title}`;
     if (score !== undefined) desc += ` with score ${score}`;
     return desc;
-  }
+  };
 
   return (
     <StatusIndicator
@@ -331,7 +331,7 @@ export const RiskStatusIndicator: React.FC<{
       ariaLabel={`Risk level: ${level}${score ? ` with score ${score}` : ''}${title ? ` for ${title}` : ''}`}
     />
   );
-}
+};
 
 export const TaskStatusIndicator: React.FC<{
   status: 'completed' | 'in-progress' | 'pending' | 'overdue' | 'not-started';
@@ -348,7 +348,7 @@ export const TaskStatusIndicator: React.FC<{
       if (isOverdue) desc += ' (overdue)';
     }
     return desc;
-  }
+  };
 
   return (
     <StatusIndicator
@@ -358,7 +358,7 @@ export const TaskStatusIndicator: React.FC<{
       className={className}
     />
   );
-}
+};
 
 // High contrast mode support
 export const HighContrastStatusIndicator: React.FC<StatusIndicatorProps> = (props) => {
@@ -366,7 +366,7 @@ export const HighContrastStatusIndicator: React.FC<StatusIndicatorProps> = (prop
     <div className="high-contrast">
       <StatusIndicator {...props} variant="outline" />
     </div>
-  )
-}
+  );
+};
 
 export default StatusIndicator;

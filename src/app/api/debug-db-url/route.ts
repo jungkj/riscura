@@ -10,13 +10,13 @@ export async function GET() {
     database_url: process.env.database_url,
     DIRECT_URL: process.env.DIRECT_URL,
     direct_url: process.env.direct_url,
-  }
+  };
 
   // Check what we're actually using
-  const actualUrl = process.env.DATABASE_URL || process.env.database_url
+  const actualUrl = process.env.DATABASE_URL || process.env.database_url;
 
   // Analyze the URL
-  let urlInfo = null
+  let urlInfo = null;
   if (actualUrl) {
     try {
       const url = new URL(actualUrl);
@@ -32,14 +32,14 @@ export async function GET() {
           url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[1] ||
           url.hostname.match(/postgres\.([^:]+):|db\.([^.]+)\./)?.[2] ||
           null,
-      }
+      };
     } catch (e) {
-      urlInfo = { error: 'Invalid URL format' }
+      urlInfo = { error: 'Invalid URL format' };
     }
   }
 
   // Test if we can actually connect
-  let connectionTest = null
+  let connectionTest = null;
   if (actualUrl) {
     try {
       const { PrismaClient } = await import('@prisma/client');
@@ -54,13 +54,13 @@ export async function GET() {
 
       const _result = await testClient.$queryRaw`SELECT 1 as test`;
       await testClient.$disconnect();
-      connectionTest = { success: true, result }
+      connectionTest = { success: true, result };
     } catch (error) {
       connectionTest = {
         success: false,
         error: error instanceof Error ? error.message : String(error),
         errorName: error instanceof Error ? error.name : 'Unknown',
-      }
+      };
     }
   }
 

@@ -23,16 +23,16 @@ export const POST = withApiMiddleware({
         organizationId,
         isActive: true,
       },
-    })
+    });
 
     if (!integration) {
       return {
         error: 'SharePoint integration not found',
-      }
+      };
     }
 
     // Get file service
-    const fileService = getSharePointFileService()
+    const fileService = getSharePointFileService();
 
     // List Excel files - use listAllExcelFiles for backward compatibility
     const files = await fileService.listAllExcelFiles(
@@ -40,13 +40,13 @@ export const POST = withApiMiddleware({
       integration.driveId || undefined,
       path,
       500 // Reasonable limit for UI display
-    )
+    );
 
     // Update last synced timestamp
     await prisma.sharePointIntegration.update({
       where: { id: integrationId },
       data: { lastSyncedAt: new Date() },
-    })
+    });
 
     return {
       files: files.map((file) => ({
@@ -61,13 +61,13 @@ export const POST = withApiMiddleware({
         id: integration.id,
         displayName: integration.displayName,
       },
-    }
+    };
   } catch (error) {
     // console.error('Error listing SharePoint files:', error)
 
     return {
       error: 'Failed to list files from SharePoint. Please check your connection and try again.',
-    }
+    };
   }
 });
 
@@ -76,7 +76,7 @@ const searchFilesSchema = z.object({
   integrationId: z.string().min(1),
   query: z.string().min(1),
   fileTypes: z.array(z.string()).optional(),
-})
+});
 
 export const PUT = withApiMiddleware({
   requireAuth: true,
@@ -93,23 +93,23 @@ export const PUT = withApiMiddleware({
         organizationId,
         isActive: true,
       },
-    })
+    });
 
     if (!integration) {
       return {
         error: 'SharePoint integration not found',
-      }
+      };
     }
 
     // Get file service
-    const fileService = getSharePointFileService()
+    const fileService = getSharePointFileService();
 
     // Search for files
     const files = await fileService.searchFiles(
       integration.siteId,
       query,
       fileTypes || ['xlsx', 'xls']
-    )
+    );
 
     return {
       files: files.map((file) => ({
@@ -121,12 +121,12 @@ export const PUT = withApiMiddleware({
       })),
       query,
       resultCount: files.length,
-    }
+    };
   } catch (error) {
     // console.error('Error searching SharePoint files:', error)
 
     return {
       error: 'Failed to search files in SharePoint. Please try again.',
-    }
+    };
   }
 });

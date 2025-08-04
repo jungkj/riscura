@@ -46,12 +46,12 @@ export function useTextSelection(
 
   // Generate unique element ID for selection tracking
   const generateElementId = useCallback((element: Element): string => {
-    return element.id || `selection-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    return element.id || `selection-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }, []);
 
   // Get text selection with precise positioning
   const getSelectionInfo = useCallback((): TextSelection | null => {
-    const selection = window.getSelection()
+    const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0 || !containerRef.current) {
       return null;
     }
@@ -65,7 +65,7 @@ export function useTextSelection(
 
     // Check if selection is within our container
     if (!containerRef.current.contains(range.commonAncestorContainer)) {
-      return null
+      return null;
     }
 
     const boundingRect = range.getBoundingClientRect();
@@ -81,12 +81,12 @@ export function useTextSelection(
       context,
       boundingRect,
       timestamp: new Date(),
-    }
+    };
   }, [containerRef, context, minLength, maxLength, generateElementId]);
 
   // Handle selection change with debouncing
   const handleSelectionChange = useCallback(() => {
-    if (!enabled) return
+    if (!enabled) return;
 
     if (selectionTimeoutRef.current) {
       clearTimeout(selectionTimeoutRef.current);
@@ -113,7 +113,7 @@ export function useTextSelection(
 
   // Mouse event handlers
   const handleMouseDown = useCallback(() => {
-    if (!enabled) return
+    if (!enabled) return;
     setIsSelecting(true);
   }, [enabled]);
 
@@ -125,10 +125,10 @@ export function useTextSelection(
   // Touch event handlers for mobile support
   const handleTouchStart = useCallback(
     (event: TouchEvent) => {
-      if (!enabled) return
+      if (!enabled) return;
 
       const touch = event.touches[0];
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY }
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
       setIsSelecting(true);
     },
     [enabled]
@@ -146,7 +146,7 @@ export function useTextSelection(
 
       // Only trigger selection if touch moved significantly (long press behavior)
       if (distance < 10) {
-        setTimeout(handleSelectionChange, 100)
+        setTimeout(handleSelectionChange, 100);
       } else {
         handleSelectionChange();
       }
@@ -159,20 +159,20 @@ export function useTextSelection(
   // Keyboard selection support
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!enabled) return
+      if (!enabled) return;
 
       // Handle Shift + Arrow keys for keyboard selection
       if (
         event.shiftKey &&
         ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)
       ) {
-        setIsSelecting(true)
+        setIsSelecting(true);
         setTimeout(handleSelectionChange, 50);
       }
 
       // Handle Escape to clear selection
       if (event.key === 'Escape') {
-        clearSelection()
+        clearSelection();
       }
     },
     [enabled, handleSelectionChange]
@@ -180,7 +180,7 @@ export function useTextSelection(
 
   // Clear current selection
   const clearSelection = useCallback(() => {
-    setCurrentSelection(null)
+    setCurrentSelection(null);
     setIsSelecting(false);
 
     const selection = window.getSelection();
@@ -191,24 +191,24 @@ export function useTextSelection(
 
   // Clear selection history
   const clearHistory = useCallback(() => {
-    setSelectionHistory([])
+    setSelectionHistory([]);
   }, []);
 
   // Get selection by index from history
   const getHistorySelection = useCallback(
     (_index: number): TextSelection | null => {
-      return selectionHistory[index] || null
+      return selectionHistory[index] || null;
     },
     [selectionHistory]
   );
 
   // Restore a previous selection
   const restoreSelection = useCallback((selection: TextSelection) => {
-    setCurrentSelection(selection)
+    setCurrentSelection(selection);
 
     // Try to restore the actual DOM selection (best effort)
     try {
-      const element = document.getElementById(selection.elementId)
+      const element = document.getElementById(selection.elementId);
       if (element) {
         const range = document.createRange();
         const textNode = element.childNodes[0];
@@ -233,22 +233,22 @@ export function useTextSelection(
 
   // Set up event listeners
   useEffect(() => {
-    const container = containerRef.current
+    const container = containerRef.current;
     if (!container || !enabled) return;
 
     // Mouse events
-    container.addEventListener('mousedown', handleMouseDown)
+    container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mouseup', handleMouseUp);
 
     // Touch events
-    container.addEventListener('touchstart', handleTouchStart)
+    container.addEventListener('touchstart', handleTouchStart);
     container.addEventListener('touchend', handleTouchEnd);
 
     // Keyboard events
-    container.addEventListener('keydown', handleKeyDown)
+    container.addEventListener('keydown', handleKeyDown);
 
     // Selection change event
-    document.addEventListener('selectionchange', handleSelectionChange)
+    document.addEventListener('selectionchange', handleSelectionChange);
 
     return () => {
       container.removeEventListener('mousedown', handleMouseDown);
@@ -261,7 +261,7 @@ export function useTextSelection(
       if (selectionTimeoutRef.current) {
         clearTimeout(selectionTimeoutRef.current);
       }
-    }
+    };
   }, [
     enabled,
     handleMouseDown,
@@ -282,5 +282,5 @@ export function useTextSelection(
     restoreSelection,
     hasSelection: currentSelection !== null,
     historyCount: selectionHistory.length,
-  }
+  };
 }

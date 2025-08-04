@@ -28,7 +28,7 @@ async function testDatabaseConnection() {
       documents: await prisma.document.count(),
       chatChannels: await prisma.chatChannel.count(),
       chatMessages: await prisma.chatMessage.count(),
-    }
+    };
 
     // console.log('📊 Record counts:')
     Object.entries(counts).forEach(([table, count]) => {

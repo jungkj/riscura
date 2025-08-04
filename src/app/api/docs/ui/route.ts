@@ -11,7 +11,7 @@ import { withAPI } from '@/lib/api/middleware';
 // ============================================================================
 
 async function handleGet(req: NextRequest) {
-  const { origin } = new URL(req.url)
+  const { origin } = new URL(req.url);
   const docsUrl = `${origin}/api/docs`;
 
   const html = `
@@ -330,4 +330,4 @@ export const GET = withAPI(handleGet, {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
   },
-})
+});

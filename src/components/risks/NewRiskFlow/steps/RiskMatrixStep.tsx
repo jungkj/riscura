@@ -30,7 +30,7 @@ export const RiskMatrixStep = ({ onNext, onBack }: RiskMatrixStepProps) => {
 
   const handleMatrixClick = (likelihood: number, impact: number) => {
     updateRiskData({ likelihood, impact });
-  }
+  };
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (!matrixRef.current) return;
@@ -61,14 +61,14 @@ export const RiskMatrixStep = ({ onNext, onBack }: RiskMatrixStepProps) => {
 
     updateRiskData({ likelihood, impact });
     setIsDragging(false);
-  }
+  };
 
   const getRiskLevel = (score: number) => {
-    if (score <= 5) return { level: 'Low', color: 'text-green-600' }
-    if (score <= 10) return { level: 'Medium', color: 'text-yellow-600' }
-    if (score <= 15) return { level: 'High', color: 'text-orange-600' }
-    return { level: 'Critical', color: 'text-red-600' }
-  }
+    if (score <= 5) return { level: 'Low', color: 'text-green-600' };
+    if (score <= 10) return { level: 'Medium', color: 'text-yellow-600' };
+    if (score <= 15) return { level: 'High', color: 'text-orange-600' };
+    return { level: 'Critical', color: 'text-red-600' };
+  };
 
   const riskScore = riskData.likelihood * riskData.impact;
   const riskLevel = getRiskLevel(riskScore);
@@ -242,4 +242,4 @@ export const RiskMatrixStep = ({ onNext, onBack }: RiskMatrixStepProps) => {
       </motion.div>
     </div>
   );
-}
+};

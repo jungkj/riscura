@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 interface RouteParams {
   params: {
     jobId: string;
-  }
+  };
 }
 
 // GET job status
@@ -13,7 +13,7 @@ export const GET = withApiMiddleware({
   requireAuth: true,
   rateLimiters: ['standard'],
 })(async (context, _, { params }: RouteParams) => {
-  const { organizationId } = context
+  const { organizationId } = context;
   const { jobId } = params;
 
   try {
@@ -23,14 +23,14 @@ export const GET = withApiMiddleware({
     if (!job) {
       return {
         error: 'Import job not found',
-      }
+      };
     }
 
     // Verify organization access
     if (job.organizationId !== organizationId) {
       return {
         error: 'Access denied',
-      }
+      };
     }
 
     // Get additional details
@@ -45,7 +45,7 @@ export const GET = withApiMiddleware({
           },
         },
       },
-    })
+    });
 
     return {
       job: {
@@ -65,13 +65,13 @@ export const GET = withApiMiddleware({
             }
           : null,
       },
-    }
+    };
   } catch (error) {
     // console.error('Error fetching job status:', error)
 
     return {
       error: 'Failed to fetch job status',
-    }
+    };
   }
 });
 
@@ -80,7 +80,7 @@ export const DELETE = withApiMiddleware({
   requireAuth: true,
   rateLimiters: ['standard'],
 })(async (context, _, { params }: RouteParams) => {
-  const { user, organizationId } = context
+  const { user, organizationId } = context;
   const { jobId } = params;
 
   try {
@@ -90,40 +90,40 @@ export const DELETE = withApiMiddleware({
         id: jobId,
         organizationId,
       },
-    })
+    });
 
     if (!job) {
       return {
         error: 'Import job not found',
-      }
+      };
     }
 
     // Check if job can be cancelled
     if (job.status === 'COMPLETED' || job.status === 'FAILED') {
       return {
         error: 'Cannot cancel a completed or failed job',
-      }
+      };
     }
 
     // Cancel the job
-    const jobService = getImportJobService()
+    const jobService = getImportJobService();
     const cancelled = await jobService.cancelJob(jobId);
 
     if (!cancelled) {
       return {
         error: 'Failed to cancel job',
-      }
+      };
     }
 
     return {
       message: 'Import job cancelled successfully',
       jobId,
-    }
+    };
   } catch (error) {
     // console.error('Error cancelling job:', error)
 
     return {
       error: 'Failed to cancel job',
-    }
+    };
   }
 });

@@ -6,7 +6,7 @@ import { generateMockControls } from '@/lib/mockData';
 
 interface ControlContextType extends ControlState {
   // CRUD Operations
-  createControl: (controlData: Omit<Control, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Control>
+  createControl: (controlData: Omit<Control, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Control>;
   updateControl: (id: string, controlData: Partial<Control>) => Promise<Control>;
   deleteControl: (id: string) => Promise<void>;
   deleteControls: (ids: string[]) => Promise<void>;
@@ -17,7 +17,7 @@ interface ControlContextType extends ControlState {
     controlId: string,
     riskId: string,
     mapping: Omit<ControlRiskMapping, 'controlId' | 'riskId'>
-  ) => Promise<void>
+  ) => Promise<void>;
   unmapControlFromRisk: (controlId: string, riskId: string) => Promise<void>;
   getControlRiskMappings: (controlId?: string, riskId?: string) => ControlRiskMapping[];
   updateControlEffectiveness: (
@@ -27,7 +27,7 @@ interface ControlContextType extends ControlState {
   ) => Promise<void>;
 
   // Testing and Evidence
-  addControlEvidence: (controlId: string, evidence: Document) => Promise<void>
+  addControlEvidence: (controlId: string, evidence: Document) => Promise<void>;
   removeControlEvidence: (controlId: string, evidenceId: string) => Promise<void>;
   scheduleControlTest: (controlId: string, testDate: Date) => Promise<void>;
   completeControlTest: (
@@ -36,43 +36,43 @@ interface ControlContextType extends ControlState {
   ) => Promise<void>;
 
   // Filtering and Search
-  setFilters: (_filters: Partial<ControlFilters>) => void
+  setFilters: (_filters: Partial<ControlFilters>) => void;
   clearFilters: () => void;
   setSearch: (search: string) => void;
 
   // Selection and Bulk Operations
-  selectedControls: string[]
+  selectedControls: string[];
   setSelectedControls: (ids: string[]) => void;
   selectAllControls: () => void;
   clearSelection: () => void;
 
   // Sorting and Pagination
-  sortBy: string
+  sortBy: string;
   sortDirection: 'asc' | 'desc';
   setSorting: (field: string, direction: 'asc' | 'desc') => void;
 
   // Analytics and Reporting
   getControlStats: () => {
-    total: number
+    total: number;
     byType: Record<Control['type'], number>;
     byEffectiveness: Record<Control['effectiveness'], number>;
     byStatus: Record<Control['status'], number>;
     averageEffectiveness: number;
     overdueTests: number;
     coverageGaps: number;
-  }
+  };
   getControlCoverage: () => { riskId: string; controlCount: number; effectivenessScore: number }[];
   getEffectivenessTrends: () => { date: string; effectiveness: number }[];
 
   // Templates and Standards
-  getControlTemplates: () => Control[]
+  getControlTemplates: () => Control[];
   createFromTemplate: (templateId: string, customizations?: Partial<Control>) => Promise<Control>;
 
   // Utility functions
-  getFilteredControls: () => Control[]
+  getFilteredControls: () => Control[];
 
   // Error handling
-  clearError: () => void
+  clearError: () => void;
 }
 
 // Control Actions
@@ -93,11 +93,11 @@ type ControlAction =
   | { type: 'SET_CONTROL_RISK_MAPPINGS'; payload: ControlRiskMapping[] }
   | { type: 'ADD_CONTROL_RISK_MAPPING'; payload: ControlRiskMapping }
   | { type: 'REMOVE_CONTROL_RISK_MAPPING'; payload: { controlId: string; riskId: string } }
-  | { type: 'UPDATE_CONTROL_RISK_MAPPING'; payload: ControlRiskMapping }
+  | { type: 'UPDATE_CONTROL_RISK_MAPPING'; payload: ControlRiskMapping };
 
 // Initial state
 const initialState: ControlState & {
-  selectedControls: string[]
+  selectedControls: string[];
   sortBy: string;
   sortDirection: 'asc' | 'desc';
   controlRiskMappings: ControlRiskMapping[];
@@ -111,29 +111,29 @@ const initialState: ControlState & {
   sortBy: 'createdAt',
   sortDirection: 'desc',
   controlRiskMappings: [],
-}
+};
 
 // Control reducer
 const controlReducer = (state: typeof initialState, action: ControlAction): typeof initialState => {
   switch (action.type) {
     case 'SET_LOADING':
-      return { ...state, loading: action.payload }
+      return { ...state, loading: action.payload };
 
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false }
+      return { ...state, error: action.payload, loading: false };
 
     case 'CLEAR_ERROR':
-      return { ...state, error: null }
+      return { ...state, error: null };
 
     case 'SET_CONTROLS':
-      return { ...state, controls: action.payload, loading: false }
+      return { ...state, controls: action.payload, loading: false };
 
     case 'ADD_CONTROL':
       return {
         ...state,
         controls: [action.payload, ...state.controls],
         loading: false,
-      }
+      };
 
     case 'UPDATE_CONTROL':
       return {
@@ -144,7 +144,7 @@ const controlReducer = (state: typeof initialState, action: ControlAction): type
         selectedControl:
           state.selectedControl?.id === action.payload.id ? action.payload : state.selectedControl,
         loading: false,
-      }
+      };
 
     case 'DELETE_CONTROL':
       return {
@@ -154,7 +154,7 @@ const controlReducer = (state: typeof initialState, action: ControlAction): type
           state.selectedControl?.id === action.payload ? null : state.selectedControl,
         selectedControls: state.selectedControls.filter((id) => id !== action.payload),
         loading: false,
-      }
+      };
 
     case 'DELETE_CONTROLS':
       return {
@@ -165,38 +165,38 @@ const controlReducer = (state: typeof initialState, action: ControlAction): type
           : state.selectedControl,
         selectedControls: [],
         loading: false,
-      }
+      };
 
     case 'SET_SELECTED_CONTROL':
-      return { ...state, selectedControl: action.payload }
+      return { ...state, selectedControl: action.payload };
 
     case 'SET_FILTERS':
       return {
         ...state,
         filters: { ...state.filters, ...action.payload },
-      }
+      };
 
     case 'CLEAR_FILTERS':
-      return { ...state, filters: {} }
+      return { ...state, filters: {} };
 
     case 'SET_SELECTED_CONTROLS':
-      return { ...state, selectedControls: action.payload }
+      return { ...state, selectedControls: action.payload };
 
     case 'SET_SORTING':
       return {
         ...state,
         sortBy: action.payload.field,
         sortDirection: action.payload.direction,
-      }
+      };
 
     case 'SET_CONTROL_RISK_MAPPINGS':
-      return { ...state, controlRiskMappings: action.payload }
+      return { ...state, controlRiskMappings: action.payload };
 
     case 'ADD_CONTROL_RISK_MAPPING':
       return {
         ...state,
         controlRiskMappings: [...state.controlRiskMappings, action.payload],
-      }
+      };
 
     case 'REMOVE_CONTROL_RISK_MAPPING':
       return {
@@ -208,7 +208,7 @@ const controlReducer = (state: typeof initialState, action: ControlAction): type
               mapping.riskId === action.payload.riskId
             )
         ),
-      }
+      };
 
     case 'UPDATE_CONTROL_RISK_MAPPING':
       return {
@@ -218,12 +218,12 @@ const controlReducer = (state: typeof initialState, action: ControlAction): type
             ? action.payload
             : mapping
         ),
-      }
+      };
 
     default:
       return state;
   }
-}
+};
 
 const ControlContext = createContext<ControlContextType>({} as ControlContextType);
 
@@ -233,12 +233,12 @@ export const useControls = () => {
     throw new Error('useControls must be used within ControlProvider');
   }
   return context;
-}
+};
 
 // Mock API service
 const controlService = {
   async getAllControls(): Promise<Control[]> {
-    await new Promise((resolve) => setTimeout(resolve, 800))
+    await new Promise((resolve) => setTimeout(resolve, 800));
     return generateMockControls();
   },
 
@@ -252,7 +252,7 @@ const controlService = {
       id: `control-${Date.now()}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    }
+    };
 
     return newControl;
   },
@@ -264,7 +264,7 @@ const controlService = {
       ...(controlData as Control),
       id,
       updatedAt: new Date().toISOString(),
-    }
+    };
 
     return updatedControl;
   },
@@ -276,7 +276,7 @@ const controlService = {
   async deleteControls(): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   },
-}
+};
 
 export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(controlReducer, initialState);
@@ -284,7 +284,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Load initial controls
   useEffect(() => {
     const loadControls = async () => {
-      dispatch({ type: 'SET_LOADING', payload: true })
+      dispatch({ type: 'SET_LOADING', payload: true });
       try {
         const controls = await controlService.getAllControls();
         dispatch({ type: 'SET_CONTROLS', payload: controls });
@@ -300,20 +300,20 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
           ).toISOString(),
           evidence: [],
           mitigationImpact: 0.2 + Math.random() * 0.6, // 20-80% impact
-        }))
+        }));
 
         dispatch({ type: 'SET_CONTROL_RISK_MAPPINGS', payload: mockMappings });
       } catch {
         dispatch({ type: 'SET_ERROR', payload: 'Failed to load controls' });
       }
-    }
+    };
 
     loadControls();
   }, []);
 
   // CRUD Operations
   const createControl = async (controlData: Omit<Control, 'id' | 'createdAt' | 'updatedAt'>) => {
-    dispatch({ type: 'SET_LOADING', payload: true })
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const newControl = await controlService.createControl(controlData);
       dispatch({ type: 'ADD_CONTROL', payload: newControl });
@@ -322,7 +322,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dispatch({ type: 'SET_ERROR', payload: 'Failed to create control' });
       throw error;
     }
-  }
+  };
 
   const updateControl = async (id: string, controlData: Partial<Control>) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -334,7 +334,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dispatch({ type: 'SET_ERROR', payload: 'Failed to update control' });
       throw error;
     }
-  }
+  };
 
   const deleteControl = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -345,7 +345,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dispatch({ type: 'SET_ERROR', payload: 'Failed to delete control' });
       throw error;
     }
-  }
+  };
 
   const deleteControls = async (ids: string[]) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -356,11 +356,11 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dispatch({ type: 'SET_ERROR', payload: 'Failed to delete controls' });
       throw error;
     }
-  }
+  };
 
   const getControl = (id: string) => {
     return state.controls.find((control) => control.id === id) || null;
-  }
+  };
 
   // Control-Risk Mapping (simplified implementations)
   const mapControlToRisk = async (
@@ -368,20 +368,20 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
     riskId: string,
     mapping: Omit<ControlRiskMapping, 'controlId' | 'riskId'>
   ) => {
-    const newMapping: ControlRiskMapping = { controlId, riskId, ...mapping }
+    const newMapping: ControlRiskMapping = { controlId, riskId, ...mapping };
     dispatch({ type: 'ADD_CONTROL_RISK_MAPPING', payload: newMapping });
-  }
+  };
 
   const unmapControlFromRisk = async (controlId: string, riskId: string) => {
     dispatch({ type: 'REMOVE_CONTROL_RISK_MAPPING', payload: { controlId, riskId } });
-  }
+  };
 
   const getControlRiskMappings = (controlId?: string, riskId?: string) => {
     let mappings = state.controlRiskMappings;
     if (controlId) mappings = mappings.filter((m) => m.controlId === controlId);
     if (riskId) mappings = mappings.filter((m) => m.riskId === riskId);
     return mappings;
-  }
+  };
 
   const updateControlEffectiveness = async (
     controlId: string,
@@ -396,35 +396,35 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
         ...mapping,
         effectivenessRating: effectiveness,
         lastTested: new Date().toISOString(),
-      }
+      };
       dispatch({ type: 'UPDATE_CONTROL_RISK_MAPPING', payload: updated });
     }
-  }
+  };
 
   // Testing and Evidence (simplified implementations)
   const addControlEvidence = async (controlId: string, evidence: Document) => {
-    const control = getControl(controlId)
+    const control = getControl(controlId);
     if (control) {
-      const updated = { ...control, evidence: [...control.evidence, evidence] }
+      const updated = { ...control, evidence: [...control.evidence, evidence] };
       dispatch({ type: 'UPDATE_CONTROL', payload: updated });
     }
-  }
+  };
 
   const removeControlEvidence = async (controlId: string, evidenceId: string) => {
     const control = getControl(controlId);
     if (control) {
-      const updated = { ...control, evidence: control.evidence.filter((e) => e.id !== evidenceId) }
+      const updated = { ...control, evidence: control.evidence.filter((e) => e.id !== evidenceId) };
       dispatch({ type: 'UPDATE_CONTROL', payload: updated });
     }
-  }
+  };
 
   const scheduleControlTest = async (controlId: string, testDate: Date) => {
     const control = getControl(controlId);
     if (control) {
-      const updated = { ...control, nextTestDate: testDate.toISOString() }
+      const updated = { ...control, nextTestDate: testDate.toISOString() };
       dispatch({ type: 'UPDATE_CONTROL', payload: updated });
     }
-  }
+  };
 
   const completeControlTest = async (
     controlId: string,
@@ -442,46 +442,46 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
               : ('low' as const),
         lastTestDate: new Date().toISOString(),
         evidence: results.evidence ? [...control.evidence, ...results.evidence] : control.evidence,
-      }
+      };
       dispatch({ type: 'UPDATE_CONTROL', payload: updated });
     }
-  }
+  };
 
   // Filtering and Search
   const setFilters = (_filters: Partial<ControlFilters>) => {
-    dispatch({ type: 'SET_FILTERS', payload: filters })
-  }
+    dispatch({ type: 'SET_FILTERS', payload: filters });
+  };
 
   const clearFilters = () => {
     dispatch({ type: 'CLEAR_FILTERS' });
-  }
+  };
 
   const setSearch = (search: string) => {
     dispatch({ type: 'SET_FILTERS', payload: { search } });
-  }
+  };
 
   // Selection
   const setSelectedControls = (ids: string[]) => {
-    dispatch({ type: 'SET_SELECTED_CONTROLS', payload: ids })
-  }
+    dispatch({ type: 'SET_SELECTED_CONTROLS', payload: ids });
+  };
 
   const selectAllControls = () => {
     const filteredControls = getFilteredControls();
     dispatch({ type: 'SET_SELECTED_CONTROLS', payload: filteredControls.map((c) => c.id) });
-  }
+  };
 
   const clearSelection = () => {
     dispatch({ type: 'SET_SELECTED_CONTROLS', payload: [] });
-  }
+  };
 
   // Sorting
   const setSorting = (field: string, direction: 'asc' | 'desc') => {
-    dispatch({ type: 'SET_SORTING', payload: { field, direction } })
-  }
+    dispatch({ type: 'SET_SORTING', payload: { field, direction } });
+  };
 
   // Utility functions
   const getFilteredControls = (): Control[] => {
-    let filtered = [...state.controls]
+    let filtered = [...state.controls];
 
     if (state.filters.type) {
       filtered = filtered.filter((control) => control.type === state.filters.type);
@@ -507,7 +507,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     return filtered;
-  }
+  };
 
   const getControlStats = () => {
     const controls = state.controls;
@@ -549,8 +549,8 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       averageEffectiveness,
       overdueTests,
       coverageGaps,
-    }
-  }
+    };
+  };
 
   const getControlCoverage = () => {
     return state.controlRiskMappings.map((mapping) => ({
@@ -558,7 +558,7 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       controlCount: 1,
       effectivenessScore: mapping.effectivenessRating,
     }));
-  }
+  };
 
   const getEffectivenessTrends = () => {
     const trends: Array<{ date: string; effectiveness: number }> = [];
@@ -571,13 +571,13 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       });
     }
     return trends;
-  }
+  };
 
   const getControlTemplates = (): Control[] => {
     // Mock implementation - return empty array for now
     // In a real implementation, this would fetch from API
-    return []
-  }
+    return [];
+  };
 
   const createFromTemplate = async (
     templateId: string,
@@ -595,19 +595,19 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       id: undefined,
       createdAt: undefined,
       updatedAt: undefined,
-    }
+    };
 
     // Remove undefined properties
     const cleanedData = Object.fromEntries(
       Object.entries(controlData).filter(([, value]) => value !== undefined)
-    ) as Omit<Control, 'id' | 'createdAt' | 'updatedAt'>
+    ) as Omit<Control, 'id' | 'createdAt' | 'updatedAt'>;
 
     return createControl(cleanedData);
-  }
+  };
 
   const clearError = () => {
     dispatch({ type: 'CLEAR_ERROR' });
-  }
+  };
 
   return (
     <ControlContext.Provider
@@ -645,4 +645,4 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
       {children}
     </ControlContext.Provider>
   );
-}
+};

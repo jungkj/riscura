@@ -17,7 +17,7 @@ export const DaisySlider = forwardRef<HTMLInputElement, SliderProps>(
       const newValue = Number(e.target.value);
       onValueChange?.([newValue]);
       onChange?.(e);
-    }
+    };
 
     return (
       <input

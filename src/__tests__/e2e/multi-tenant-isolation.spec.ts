@@ -34,7 +34,7 @@ const createTenantData = (tenantName: string) => ({
     controlName: `${tenantName} Internal Control`,
     reportName: `${tenantName} Executive Report`,
   },
-})
+});
 
 // Multi-tenant app wrapper
 class MultiTenantRiscuraApp {
@@ -45,7 +45,7 @@ class MultiTenantRiscuraApp {
 
   async setupTenant(tenantData: any) {
     // Register organization admin
-    await this.page.goto('/auth/register')
+    await this.page.goto('/auth/register');
 
     await this.page.fill('[data-testid="email-input"]', tenantData.admin.email);
     await this.page.fill('[data-testid="password-input"]', tenantData.admin.password);
@@ -57,7 +57,7 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="register-button"]');
 
     // Complete organization setup
-    await this.page.fill('[data-testid="organization-domain"]', tenantData.organization.domain)
+    await this.page.fill('[data-testid="organization-domain"]', tenantData.organization.domain);
     await this.page.selectOption(
       '[data-testid="industry-select"]',
       tenantData.organization.industry
@@ -67,7 +67,7 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="complete-setup-button"]');
 
     // Get organization ID for tenant validation
-    const orgId = await this.page.locator('[data-testid="organization-id"]').textContent()
+    const orgId = await this.page.locator('[data-testid="organization-id"]').textContent();
     if (!orgId) {
       throw new Error('Organization ID not found');
     }
@@ -132,7 +132,7 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="upload-document-button"]');
 
     // Upload a test document
-    const testFile = 'test-sensitive-document.pdf'
+    const testFile = 'test-sensitive-document.pdf';
     await this.page.setInputFiles('[data-testid="file-input"]', testFile);
 
     await this.page.fill('[data-testid="document-title"]', docData.title);
@@ -155,7 +155,7 @@ class MultiTenantRiscuraApp {
       document: `/dashboard/documents/${resourceId}`,
       control: `/dashboard/controls/${resourceId}`,
       report: `/dashboard/reports/${resourceId}`,
-    }
+    };
 
     const targetUrl = urls[resourceType as keyof typeof urls];
     if (!targetUrl) throw new Error(`Unknown resource type: ${resourceType}`);
@@ -163,7 +163,7 @@ class MultiTenantRiscuraApp {
     await this.page.goto(targetUrl);
 
     // Should see access denied or not found, never the actual resource
-    const hasAccessDenied = await this.page.locator('[data-testid="access-denied"]').isVisible()
+    const hasAccessDenied = await this.page.locator('[data-testid="access-denied"]').isVisible();
     const hasNotFound = await this.page.locator('[data-testid="not-found"]').isVisible();
     const hasUnauthorized = await this.page.locator('[data-testid="unauthorized"]').isVisible();
 
@@ -175,19 +175,19 @@ class MultiTenantRiscuraApp {
     await this.page.click('[data-testid="search-button"]');
 
     // Wait for search results
-    await this.page.waitForSelector('[data-testid="search-results"]')
+    await this.page.waitForSelector('[data-testid="search-results"]');
 
     const results = await this.page.locator('[data-testid="search-result-item"]').count();
     const resultTexts = await this.page
       .locator('[data-testid="search-result-item"]')
       .allTextContents();
 
-    return { count: results, texts: resultTexts }
+    return { count: results, texts: resultTexts };
   }
 
   async verifyTenantIsolationInDatabase() {
     // This would be implemented as an API call to verify database-level isolation
-    const response = await this.page.request.get('/api/admin/tenant-isolation-check')
+    const response = await this.page.request.get('/api/admin/tenant-isolation-check');
     const data = await response.json();
 
     return data.isolated === true && data.crossTenantAccess === false;
@@ -207,7 +207,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
     browser = testBrowser;
 
     // Create separate browser contexts for each tenant
-    tenantAContext = await browser.newContext()
+    tenantAContext = await browser.newContext();
     tenantBContext = await browser.newContext();
 
     const tenantAPage = await tenantAContext.newPage();
@@ -230,7 +230,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 
     // Step 1: Set up both tenants
     await test.step('Setup Tenant A', async () => {
-      const orgIdA = await tenantAApp.setupTenant(tenantAData)
+      const orgIdA = await tenantAApp.setupTenant(tenantAData);
       expect(orgIdA).toBeTruthy();
     });
 
@@ -241,7 +241,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 
     // Step 2: Create users in each tenant
     await test.step('Create users in both tenants', async () => {
-      await tenantAApp.loginAsAdmin(tenantAData)
+      await tenantAApp.loginAsAdmin(tenantAData);
       await tenantAApp.createUser(tenantAData.user);
 
       await tenantBApp.loginAsAdmin(tenantBData);
@@ -249,7 +249,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
     });
 
     // Step 3: Create sensitive data in each tenant
-    let tenantARiskId: string
+    let tenantARiskId: string;
     let tenantBRiskId: string;
     let tenantADocId: string;
     let tenantBDocId: string;
@@ -274,7 +274,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 
     // Step 4: Test cross-tenant access attempts (should all fail)
     await test.step('Verify Tenant A cannot access Tenant B data', async () => {
-      const riskAccessDenied = await tenantAApp.attemptCrossTenantAccess('risk', tenantBRiskId)
+      const riskAccessDenied = await tenantAApp.attemptCrossTenantAccess('risk', tenantBRiskId);
       const docAccessDenied = await tenantAApp.attemptCrossTenantAccess('document', tenantBDocId);
 
       expect(riskAccessDenied).toBe(true);
@@ -291,7 +291,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 
     // Step 5: Test search isolation
     await test.step('Verify search does not return cross-tenant results', async () => {
-      await tenantAApp.loginAsUser(tenantAData)
+      await tenantAApp.loginAsUser(tenantAData);
       const searchResults = await tenantAApp.searchForCrossTenantData(
         tenantBData.sensitiveData.riskTitle
       );
@@ -302,36 +302,36 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 
     // Step 6: Database-level isolation verification
     await test.step('Verify database-level tenant isolation', async () => {
-      const isolationValid = await tenantAApp.verifyTenantIsolationInDatabase()
+      const isolationValid = await tenantAApp.verifyTenantIsolationInDatabase();
       expect(isolationValid).toBe(true);
     });
   });
 
   test('User permission boundaries within tenant', async () => {
     // Test role-based access control within a single tenant
-    await tenantAApp.loginAsUser(tenantAData)
+    await tenantAApp.loginAsUser(tenantAData);
 
     // User should not be able to access admin functions
-    await tenantAApp.page.goto('/dashboard/admin/users')
+    await tenantAApp.page.goto('/dashboard/admin/users');
     const hasAdminAccess = await tenantAApp.page.locator('[data-testid="admin-panel"]').isVisible();
     expect(hasAdminAccess).toBe(false);
 
     // User should not be able to delete organization data
     const canDeleteOrg = await tenantAApp.page
       .locator('[data-testid="delete-organization"]')
-      .isVisible()
+      .isVisible();
     expect(canDeleteOrg).toBe(false);
   });
 
   test('Session isolation between tenants', async () => {
     // Login to both tenants simultaneously
-    await tenantAApp.loginAsAdmin(tenantAData)
+    await tenantAApp.loginAsAdmin(tenantAData);
     await tenantBApp.loginAsAdmin(tenantBData);
 
     // Verify each session only sees their own data
     const tenantAOrgName = await tenantAApp.page
       .locator('[data-testid="organization-name"]')
-      .textContent()
+      .textContent();
     const tenantBOrgName = await tenantBApp.page
       .locator('[data-testid="organization-name"]')
       .textContent();
@@ -349,17 +349,17 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
       headers: {
         'X-Tenant-Override': 'tenant-b', // Attempt to override tenant
       },
-    })
+    });
 
     // Should either reject the request or ignore the override
-    expect(response.status()).toBeGreaterThanOrEqual(400)
+    expect(response.status()).toBeGreaterThanOrEqual(400);
   });
 
   test('File storage isolation', async () => {
     await tenantAApp.loginAsAdmin(tenantAData);
 
     // Attempt to access another tenant's file directly
-    const response = await tenantAApp.page.request.get('/api/documents/download/tenant-b-file-id')
+    const response = await tenantAApp.page.request.get('/api/documents/download/tenant-b-file-id');
 
     expect(response.status()).toBeGreaterThanOrEqual(400);
   });
@@ -368,12 +368,12 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
     await tenantAApp.loginAsAdmin(tenantAData);
 
     // Access audit logs
-    await tenantAApp.page.goto('/dashboard/admin/audit-logs')
+    await tenantAApp.page.goto('/dashboard/admin/audit-logs');
 
     // Verify only tenant A activities are visible
     const auditEntries = await tenantAApp.page
       .locator('[data-testid="audit-entry"]')
-      .allTextContents()
+      .allTextContents();
 
     auditEntries.forEach((entry) => {
       expect(entry).not.toContain(tenantBData.organization.name);
@@ -385,7 +385,7 @@ test.describe('Multi-Tenant Security and Data Isolation', () => {
 // Performance test for multi-tenant scalability
 test.describe('Multi-Tenant Performance', () => {
   test('System handles multiple tenants concurrently', async ({ browser }) => {
-    const tenantCount = 5
+    const tenantCount = 5;
     const contexts: BrowserContext[] = [];
     const apps: MultiTenantRiscuraApp[] = [];
 
@@ -401,7 +401,7 @@ test.describe('Multi-Tenant Performance', () => {
 
     // Simulate concurrent tenant operations
     const operations = apps.map(async (app, index) => {
-      const tenantData = createTenantData(`ConcurrentTenant${index}`)
+      const tenantData = createTenantData(`ConcurrentTenant${index}`);
       await app.setupTenant(tenantData);
       await app.loginAsAdmin(tenantData);
       await app.createSensitiveRisk({
@@ -410,11 +410,11 @@ test.describe('Multi-Tenant Performance', () => {
     });
 
     // All operations should complete successfully
-    await Promise.all(operations)
+    await Promise.all(operations);
 
     // Cleanup
-    await Promise.all(contexts.map((ctx) => ctx.close()))
+    await Promise.all(contexts.map((ctx) => ctx.close()));
   });
 });
 
-export { MultiTenantRiscuraApp, createTenantData }
+export { MultiTenantRiscuraApp, createTenantData };

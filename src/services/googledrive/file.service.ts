@@ -23,12 +23,12 @@ export class GoogleDriveFileService {
 
       // Query for Excel files
       let query =
-        "(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel')"
+        "(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel')";
 
       if (folderId) {
         // Validate folderId to prevent injection attacks
         // Google Drive folder IDs are alphanumeric with hyphens and underscores
-        const isValidFolderId = /^[a-zA-Z0-9_-]+$/.test(folderId)
+        const isValidFolderId = /^[a-zA-Z0-9_-]+$/.test(folderId);
         if (!isValidFolderId) {
           throw new Error('Invalid folder ID format');
         }
@@ -147,7 +147,7 @@ export class GoogleDriveFileService {
         .replace(/\}/g, '\\}'); // Escape closing braces
 
       // Search for Excel files containing the query
-      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`
+      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`;
 
       const response = await drive.files.list({
         q: searchQuery,
@@ -172,7 +172,7 @@ export class GoogleDriveFileService {
       const drive = await authService.getDriveClient(userId);
 
       // Try to get About information
-      await drive.about.get({ fields: 'user' })
+      await drive.about.get({ fields: 'user' });
       return true;
     } catch (error) {
       // console.error('Error checking access:', error)
@@ -182,7 +182,7 @@ export class GoogleDriveFileService {
 }
 
 // Singleton instance
-let fileServiceInstance: GoogleDriveFileService | null = null
+let fileServiceInstance: GoogleDriveFileService | null = null;
 
 export function getGoogleDriveFileService(): GoogleDriveFileService {
   if (!fileServiceInstance) {

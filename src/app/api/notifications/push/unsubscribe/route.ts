@@ -8,7 +8,7 @@ import { z } from 'zod';
 // POST /api/notifications/push/unsubscribe - Unsubscribe from push notifications
 const unsubscribeSchema = z.object({
   endpoint: z.string().url(),
-})
+});
 
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = (req as any).user;

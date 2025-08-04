@@ -22,7 +22,7 @@ interface SyncStatus {
 
 // IndexedDB wrapper for complex data storage
 class IndexedDBStorage {
-  private dbName = 'RiscuraOfflineDB'
+  private dbName = 'RiscuraOfflineDB';
   private version = 1;
   private db: IDBDatabase | null = null;
 
@@ -34,20 +34,20 @@ class IndexedDBStorage {
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
-      }
+      };
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
 
         // Create object stores
         if (!db.objectStoreNames.contains('data')) {
-          db.createObjectStore('data', { keyPath: 'key' })
+          db.createObjectStore('data', { keyPath: 'key' });
         }
 
         if (!db.objectStoreNames.contains('sync_queue')) {
           db.createObjectStore('sync_queue', { keyPath: 'id', autoIncrement: true });
         }
-      }
+      };
     });
   }
 
@@ -63,7 +63,7 @@ class IndexedDBStorage {
       request.onsuccess = () => {
         const _result = request.result;
         resolve(result ? result.value : null);
-      }
+      };
     });
   }
 
@@ -168,7 +168,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
       try {
         switch (storage) {
           case 'localStorage':
-            if (typeof window === 'undefined') return null
+            if (typeof window === 'undefined') return null;
             const localItem = localStorage.getItem(storageKey);
             return localItem ? JSON.parse(localItem) : null;
 
@@ -251,7 +251,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
   const syncToServerFunc = useCallback(
     async (_value: T): Promise<boolean> => {
       if (!syncToServer || !syncEndpoint || !syncStatus.isOnline) {
-        return false
+        return false;
       }
 
       setSyncStatus((prev) => ({ ...prev, pendingSync: true, syncError: null }));
@@ -286,7 +286,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
         // Add to sync queue for later retry
         if (storage === 'indexedDB') {
-          await indexedDBStorage.addToSyncQueue({ key, data: value })
+          await indexedDBStorage.addToSyncQueue({ key, data: value });
         }
 
         setSyncStatus((prev) => ({
@@ -323,7 +323,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Process sync queue when coming back online
   const processSyncQueue = useCallback(async () => {
-    if (storage !== 'indexedDB' || !syncStatus.isOnline) return
+    if (storage !== 'indexedDB' || !syncStatus.isOnline) return;
 
     try {
       const queueItems = await indexedDBStorage.getSyncQueue();
@@ -337,7 +337,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
       }
 
       if (queueItems.length > 0) {
-        await indexedDBStorage.clearSyncQueue()
+        await indexedDBStorage.clearSyncQueue();
       }
     } catch (error) {
       // console.error('Error processing sync queue:', error)
@@ -348,14 +348,14 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
   const updateData = useCallback(
     async (_newData: T | ((prev: T) => T)) => {
       const updatedData =
-        typeof newData === 'function' ? (newData as (prev: T) => T)(data) : newData
+        typeof newData === 'function' ? (newData as (prev: T) => T)(data) : newData;
 
       setData(updatedData);
       await saveToStorage(key, updatedData);
 
       // Sync to server if enabled
       if (syncToServer && syncStatus.isOnline) {
-        await syncToServerFunc(updatedData)
+        await syncToServerFunc(updatedData);
       }
     },
     [data, key, saveToStorage, syncToServer, syncStatus.isOnline, syncToServerFunc]
@@ -363,19 +363,19 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Clear data
   const clearData = useCallback(async () => {
-    setData(defaultValue)
+    setData(defaultValue);
     await removeFromStorage(key);
   }, [defaultValue, key, removeFromStorage]);
 
   // Force sync
   const forceSync = useCallback(async () => {
-    if (!syncStatus.isOnline) return false
+    if (!syncStatus.isOnline) return false;
 
     // Sync current data to server
-    const syncSuccess = await syncToServerFunc(data)
+    const syncSuccess = await syncToServerFunc(data);
 
     // Try to get updated data from server
-    const serverData = await syncFromServer()
+    const serverData = await syncFromServer();
     if (serverData) {
       setData(serverData);
       await saveToStorage(key, serverData);
@@ -386,7 +386,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Initialize data from storage
   useEffect(() => {
-    if (isInitialized.current) return
+    if (isInitialized.current) return;
 
     const initializeData = async () => {
       const storedData = await getFromStorage(key);
@@ -400,7 +400,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
       // Try to sync from server on initialization
       if (syncToServer && syncStatus.isOnline) {
-        const serverData = await syncFromServer()
+        const serverData = await syncFromServer();
         if (serverData) {
           setData(serverData);
           await saveToStorage(key, serverData);
@@ -408,7 +408,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
       }
 
       isInitialized.current = true;
-    }
+    };
 
     initializeData();
   }, [
@@ -423,16 +423,16 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
 
   // Handle online/offline status
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
 
     const handleOnline = () => {
       setSyncStatus((prev) => ({ ...prev, isOnline: true }));
       processSyncQueue();
-    }
+    };
 
     const handleOffline = () => {
       setSyncStatus((prev) => ({ ...prev, isOnline: false }));
-    }
+    };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -440,12 +440,12 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-    }
+    };
   }, [processSyncQueue]);
 
   // Auto-sync interval
   useEffect(() => {
-    if (!syncToServer || !syncInterval) return
+    if (!syncToServer || !syncInterval) return;
 
     syncTimer.current = setInterval(() => {
       if (syncStatus.isOnline) {
@@ -457,7 +457,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
       if (syncTimer.current) {
         clearInterval(syncTimer.current);
       }
-    }
+    };
   }, [syncToServer, syncInterval, syncStatus.isOnline, forceSync]);
 
   return {
@@ -467,7 +467,7 @@ export function useOfflineStorage<T>(_options: StorageOptions) {
     forceSync,
     syncStatus,
     isLoading: !isInitialized.current,
-  }
+  };
 }
 
 // Hook for managing offline form data
@@ -486,7 +486,7 @@ export function useOfflineForm<T extends Record<string, any>>(
     key: `form-${formId}`,
     defaultValue: initialData,
     ...options,
-  })
+  });
 
   const updateField = useCallback(
     (fieldName: keyof T, value: any) => {
@@ -515,12 +515,12 @@ export function useOfflineForm<T extends Record<string, any>>(
     isDirty: isDirty(),
     syncStatus,
     isLoading,
-  }
+  };
 }
 
 // Hook for offline data synchronization
 export function useOfflineSync() {
-  const [syncQueue, setSyncQueue] = useState<any[]>([])
+  const [syncQueue, setSyncQueue] = useState<any[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
 
   const addToQueue = useCallback(async (_data: any) => {
@@ -556,7 +556,7 @@ export function useOfflineSync() {
           }
         }
 
-        await indexedDBStorage.clearSyncQueue()
+        await indexedDBStorage.clearSyncQueue();
         setSyncQueue([]);
       } catch (error) {
         // console.error('Error processing sync queue:', error)
@@ -571,7 +571,7 @@ export function useOfflineSync() {
     const loadQueue = async () => {
       const queue = await indexedDBStorage.getSyncQueue();
       setSyncQueue(queue);
-    }
+    };
 
     loadQueue();
   }, []);
@@ -582,7 +582,7 @@ export function useOfflineSync() {
     isSyncing,
     addToQueue,
     processQueue,
-  }
+  };
 }
 
 export default useOfflineStorage;

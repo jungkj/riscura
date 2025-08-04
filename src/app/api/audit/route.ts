@@ -33,14 +33,14 @@ const AuditQuerySchema = z.object({
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
   includeMetadata: z.boolean().default(false),
   complianceFlags: z.array(z.string()).optional(),
-})
+});
 
 // ============================================================================
 // GET /api/audit - Query Audit Logs
 // ============================================================================
 
 async function handleGet(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
+  const { searchParams } = new URL(req.url);
   const user = (req as any).user;
 
   if (!user || !user.organizationId) {
@@ -75,7 +75,7 @@ async function handleGet(req: NextRequest) {
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
       includeMetadata: searchParams.get('includeMetadata') === 'true',
       complianceFlags: searchParams.get('complianceFlags')?.split(','),
-    }
+    };
 
     const validatedQuery = AuditQuerySchema.parse(queryData);
 
@@ -87,10 +87,10 @@ async function handleGet(req: NextRequest) {
       endDate: validatedQuery.endDate ? new Date(validatedQuery.endDate) : undefined,
       action: validatedQuery.action as AuditAction | undefined,
       entity: validatedQuery.entity as AuditEntity | undefined,
-    }
+    };
 
     // Query audit logs
-    const auditLogger = getAuditLogger(db.client)
+    const auditLogger = getAuditLogger(db.client);
     const _result = await auditLogger.query(queryOptions);
 
     return NextResponse.json({
@@ -157,4 +157,4 @@ export const GET = withAPI(handleGet, {
     maxRequests: 100,
   },
   validateQuery: AuditQuerySchema,
-})
+});

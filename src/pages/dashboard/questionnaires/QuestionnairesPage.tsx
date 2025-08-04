@@ -9,6 +9,6 @@ const QuestionnairesPage = () => {
       <p className="text-gray-600">Questionnaires feature is being updated.</p>
     </div>
   );
-}
+};
 
 export default QuestionnairesPage;

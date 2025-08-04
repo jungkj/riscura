@@ -49,7 +49,7 @@ export class SharePointFileService {
           ]
             .filter(Boolean)
             .join(', ')}`
-        )
+        );
       }
 
       return {
@@ -57,7 +57,7 @@ export class SharePointFileService {
         displayName: site.displayName,
         webUrl: site.webUrl,
         description: site.description || undefined,
-      }
+      };
     } catch (error) {
       // console.error('Error fetching site info:', error)
       throw new Error('Failed to fetch SharePoint site information');
@@ -72,14 +72,14 @@ export class SharePointFileService {
       const client = await this.ensureClient();
 
       // Parse the site URL to get hostname and site path
-      const url = new URL(siteUrl)
+      const url = new URL(siteUrl);
       const hostname = url.hostname;
       const sitePath = url.pathname;
 
       // Use Graph API search to find the site
       const searchPath = sitePath.startsWith('/sites/')
         ? `${hostname}:${sitePath}`
-        : `${hostname}:/sites/${sitePath.replace(/^\//, '')}`
+        : `${hostname}:/sites/${sitePath.replace(/^\//, '')}`;
 
       const site: Site = await client
         .api(`/sites/${searchPath}`)
@@ -96,7 +96,7 @@ export class SharePointFileService {
           ]
             .filter(Boolean)
             .join(', ')}`
-        )
+        );
       }
 
       return {
@@ -104,7 +104,7 @@ export class SharePointFileService {
         displayName: site.displayName,
         webUrl: site.webUrl,
         description: site.description || undefined,
-      }
+      };
     } catch (error) {
       // console.error('Error fetching site by URL:', error)
       throw new Error('Failed to fetch SharePoint site by URL');
@@ -140,10 +140,10 @@ export class SharePointFileService {
       const client = await this.ensureClient();
 
       // If no driveId provided, get the default drive
-      const targetDriveId = driveId || (await this.getDefaultDrive(siteId))
+      const targetDriveId = driveId || (await this.getDefaultDrive(siteId));
 
       // Build the API path
-      let apiPath = `/sites/${siteId}/drives/${targetDriveId}`
+      let apiPath = `/sites/${siteId}/drives/${targetDriveId}`;
       if (path) {
         apiPath += `/root:/${path}:/children`;
       } else {
@@ -155,11 +155,11 @@ export class SharePointFileService {
         .api(apiPath)
         .filter("file ne null and (name endsWith '.xlsx' or name endsWith '.xls')")
         .select('id,name,size,lastModifiedDateTime,webUrl,file,@microsoft.graph.downloadUrl')
-        .top(pageSize)
+        .top(pageSize);
 
       // If we have a next page token, use it
       if (nextPageToken) {
-        request = client.api(nextPageToken)
+        request = client.api(nextPageToken);
       }
 
       const response = await request.get();
@@ -179,7 +179,7 @@ export class SharePointFileService {
               webUrl: item.webUrl,
               mimeType: item.file.mimeType,
               path: path || '/',
-            })
+            });
           }
         }
       }
@@ -188,7 +188,7 @@ export class SharePointFileService {
       return {
         files,
         nextPageToken: response['@odata.nextLink'] || undefined,
-      }
+      };
     } catch (error) {
       // console.error('Error listing Excel files:', error)
       throw new Error('Failed to list Excel files from SharePoint');
@@ -233,7 +233,7 @@ export class SharePointFileService {
       const fileItem: DriveItem = await client
         .api(`/sites/${siteId}/drives/${driveId}/items/${itemId}`)
         .select('@microsoft.graph.downloadUrl')
-        .get()
+        .get();
 
       if (!fileItem['@microsoft.graph.downloadUrl']) {
         throw new Error('Download URL not available');
@@ -244,7 +244,7 @@ export class SharePointFileService {
       const DOWNLOAD_TIMEOUT = 30000; // 30 seconds
 
       // Create abort controller for timeout
-      const controller = new AbortController()
+      const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), DOWNLOAD_TIMEOUT);
 
       try {
@@ -259,7 +259,7 @@ export class SharePointFileService {
         }
 
         // Check content length if available
-        const contentLength = response.headers.get('content-length')
+        const contentLength = response.headers.get('content-length');
         if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
           throw new Error(
             `File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB`
@@ -267,7 +267,7 @@ export class SharePointFileService {
         }
 
         // Download with size monitoring
-        const reader = response.body?.getReader()
+        const reader = response.body?.getReader();
         if (!reader) {
           throw new Error('Unable to read response body');
         }
@@ -291,7 +291,7 @@ export class SharePointFileService {
         }
 
         // Combine chunks into single buffer
-        const buffer = new Uint8Array(totalSize)
+        const buffer = new Uint8Array(totalSize);
         let position = 0;
         for (const chunk of chunks) {
           buffer.set(chunk, position);
@@ -321,7 +321,7 @@ export class SharePointFileService {
       const client = await this.ensureClient();
 
       // Encode the path properly
-      const encodedPath = encodeURIComponent(relativePath)
+      const encodedPath = encodeURIComponent(relativePath);
 
       const fileItem: DriveItem = await client
         .api(`/sites/${siteId}/drive/root:/${encodedPath}`)
@@ -343,7 +343,7 @@ export class SharePointFileService {
           ]
             .filter(Boolean)
             .join(', ')}`
-        )
+        );
       }
 
       return {
@@ -355,7 +355,7 @@ export class SharePointFileService {
         webUrl: fileItem.webUrl,
         mimeType: fileItem.file.mimeType,
         path: relativePath,
-      }
+      };
     } catch (error) {
       // console.error('Error fetching file by URL:', error)
       throw new Error('Failed to fetch file by relative URL');
@@ -389,7 +389,7 @@ export class SharePointFileService {
           ]
             .filter(Boolean)
             .join(', ')}`
-        )
+        );
       }
 
       return {
@@ -400,7 +400,7 @@ export class SharePointFileService {
         downloadUrl: fileItem['@microsoft.graph.downloadUrl'],
         webUrl: fileItem.webUrl,
         mimeType: fileItem.file.mimeType,
-      }
+      };
     } catch (error) {
       // console.error('Error fetching file metadata:', error)
       throw new Error('Failed to fetch file metadata');
@@ -418,7 +418,7 @@ export class SharePointFileService {
       await client
         .api(`/sites/${siteId}/drives/${driveId}/items/${itemId}/permissions`)
         .top(1)
-        .get()
+        .get();
 
       return true;
     } catch (error) {
@@ -439,7 +439,7 @@ export class SharePointFileService {
       const client = await this.ensureClient();
 
       // Build search query
-      const typeFilter = fileTypes.map((ext) => `filetype:${ext}`).join(' OR ')
+      const typeFilter = fileTypes.map((ext) => `filetype:${ext}`).join(' OR ');
       const fullQuery = `${searchQuery} AND (${typeFilter}) AND path:https://*/sites/*`;
 
       const response = await client.api('/search/query').post({
@@ -481,7 +481,7 @@ export class SharePointFileService {
 }
 
 // Singleton instance
-let fileServiceInstance: SharePointFileService | null = null
+let fileServiceInstance: SharePointFileService | null = null;
 
 export function getSharePointFileService(): SharePointFileService {
   if (!fileServiceInstance) {

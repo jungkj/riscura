@@ -120,13 +120,14 @@ export class ComplianceService {
           select: { requirements: true, assessments: true },
         },
       },
-    })
+    });
 
     await this.clearFrameworkCache(input.organizationId);
     return framework;
   }
 
-  async getFrameworks(_organizationId: string,
+  async getFrameworks(
+    _organizationId: string,
     filters?: { type?: ComplianceFrameworkType; isActive?: boolean }
   ): Promise<ComplianceFramework[]> {
     const cacheKey = `${this.cacheKeyPrefix}frameworks:${organizationId}:${JSON.stringify(filters)}`;
@@ -177,7 +178,7 @@ export class ComplianceService {
         framework: true,
         parent: true,
       },
-    })
+    });
 
     await this.clearRequirementCache(input.frameworkId);
     return requirement;
@@ -229,7 +230,7 @@ export class ComplianceService {
         requirement: true,
         control: true,
       },
-    })
+    });
 
     await this.clearRequirementCache(mapping.requirement.frameworkId);
     return mapping;
@@ -266,10 +267,10 @@ export class ComplianceService {
         assessor: true,
         organization: true,
       },
-    })
+    });
 
     // Create assessment items for all requirements
-    const requirements = await this.getRequirements(input.frameworkId)
+    const requirements = await this.getRequirements(input.frameworkId);
     await prisma.complianceAssessmentItem.createMany({
       data: requirements.map((req) => ({
         assessmentId: assessment.id,
@@ -290,13 +291,14 @@ export class ComplianceService {
         category: NotificationCategory.COMPLIANCE,
         priority: NotificationPriority.HIGH,
         actionUrl: `/compliance/assessments/${assessment.id}`,
-      })
+      });
     }
 
     return assessment;
   }
 
-  async getAssessments(_organizationId: string,
+  async getAssessments(
+    _organizationId: string,
     filters?: { frameworkId?: string; status?: AssessmentStatus }
   ): Promise<ComplianceAssessment[]> {
     try {
@@ -304,7 +306,7 @@ export class ComplianceService {
 
       // Try to get from cache
       try {
-        const _cached = await redis.get(cacheKey)
+        const _cached = await redis.get(cacheKey);
         if (cached) {
           return JSON.parse(cached);
         }
@@ -327,21 +329,21 @@ export class ComplianceService {
           },
         },
         orderBy: { assessmentDate: 'desc' },
-      })
+      });
 
       // Try to cache the result
       try {
-        await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(assessments))
+        await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(assessments));
       } catch (cacheError) {
         // console.warn('[ComplianceService] Cache write error:', cacheError)
         // Continue without caching
       }
 
-      return assessments
+      return assessments;
     } catch (error) {
       // console.error('[ComplianceService] Error fetching assessments:', error)
       // Return empty array instead of throwing to maintain UI functionality
-      return []
+      return [];
     }
   }
 
@@ -403,7 +405,7 @@ export class ComplianceService {
         requirement: true,
         assessment: true,
       },
-    })
+    });
 
     // Automatically create gap if non-compliant
     if (input.status === ComplianceStatus.NON_COMPLIANT && input.findings) {
@@ -414,7 +416,7 @@ export class ComplianceService {
         severity: this.determineSeverity(item.requirement.criticality),
         description: input.findings,
         remediationPlan: input.recommendations,
-      })
+      });
     }
 
     await this.updateAssessmentProgress(input.assessmentId);
@@ -429,7 +431,7 @@ export class ComplianceService {
         assessment: true,
         assignee: true,
       },
-    })
+    });
 
     // Send notification to assignee
     if (input.assignedTo) {
@@ -441,7 +443,7 @@ export class ComplianceService {
         category: NotificationCategory.COMPLIANCE,
         priority: this.getNotificationPriority(gap.severity),
         actionUrl: `/compliance/gaps/${gap.id}`,
-      })
+      });
     }
 
     await this.clearGapCache(gap.assessmentId);
@@ -459,7 +461,7 @@ export class ComplianceService {
         closedAt: new Date(),
         closureNotes,
       }),
-    }
+    };
 
     const gap = await prisma.complianceGap.update({
       where: { id: gapId },
@@ -492,7 +494,7 @@ export class ComplianceService {
 
   // Gap Analysis
   async performGapAnalysis(assessmentId: string): Promise<GapAnalysisResult> {
-    const assessment = await this.getAssessment(assessmentId)
+    const assessment = await this.getAssessment(assessmentId);
     if (!assessment) {
       throw new Error('Assessment not found');
     }
@@ -519,13 +521,13 @@ export class ComplianceService {
     const criticalGaps = assessment.gaps.filter((g) => g.severity === GapSeverity.CRITICAL);
 
     // Generate recommendations
-    const recommendations = this.generateRecommendations(assessment)
+    const recommendations = this.generateRecommendations(assessment);
 
     // Update assessment overall score
     await prisma.complianceAssessment.update({
       where: { id: assessmentId },
       data: { overallScore: overallCompliance },
-    })
+    });
 
     return {
       framework: assessment.framework,
@@ -539,14 +541,14 @@ export class ComplianceService {
       gaps: assessment.gaps,
       criticalGaps,
       recommendations,
-    }
+    };
   }
 
   // Helper methods
   private async updateAssessmentProgress(assessmentId: string): Promise<void> {
     const items = await prisma.complianceAssessmentItem.findMany({
       where: { assessmentId },
-    })
+    });
 
     const assessedCount = items.filter((i) => i.status !== ComplianceStatus.NOT_ASSESSED).length;
     const totalCount = items.length;
@@ -593,7 +595,7 @@ export class ComplianceService {
     const recommendations: string[] = [];
 
     // Critical gaps
-    const criticalGaps = assessment.gaps.filter((g: any) => g.severity === GapSeverity.CRITICAL)
+    const criticalGaps = assessment.gaps.filter((g: any) => g.severity === GapSeverity.CRITICAL);
     if (criticalGaps.length > 0) {
       recommendations.push(`Address ${criticalGaps.length} critical compliance gaps immediately`);
     }
@@ -601,7 +603,7 @@ export class ComplianceService {
     // Unmapped requirements
     const unmappedCount = assessment.items.filter(
       (_i: any) => i.requirement.controlMappings?.length === 0
-    ).length
+    ).length;
     if (unmappedCount > 0) {
       recommendations.push(
         `Map controls to ${unmappedCount} requirements without control coverage`
@@ -609,7 +611,7 @@ export class ComplianceService {
     }
 
     // Low scoring areas
-    const lowScoreItems = assessment.items.filter((_i: any) => i.score !== null && i.score < 50)
+    const lowScoreItems = assessment.items.filter((_i: any) => i.score !== null && i.score < 50);
     if (lowScoreItems.length > 0) {
       recommendations.push(`Improve controls in ${lowScoreItems.length} low-scoring areas`);
     }
@@ -617,7 +619,7 @@ export class ComplianceService {
     // Missing documentation
     const missingDocsCount = assessment.gaps.filter(
       (g: any) => g.gapType === GapType.MISSING_DOCUMENTATION
-    ).length
+    ).length;
     if (missingDocsCount > 0) {
       recommendations.push(`Complete documentation for ${missingDocsCount} requirements`);
     }
@@ -625,7 +627,7 @@ export class ComplianceService {
     // Training gaps
     const trainingGaps = assessment.gaps.filter(
       (g: any) => g.gapType === GapType.TRAINING_GAP
-    ).length
+    ).length;
     if (trainingGaps > 0) {
       recommendations.push(`Implement training programs to address ${trainingGaps} knowledge gaps`);
     }
@@ -635,12 +637,12 @@ export class ComplianceService {
 
   // Cache management
   private async clearFrameworkCache(_organizationId: string): Promise<void> {
-    const _pattern = `${this.cacheKeyPrefix}frameworks:${organizationId}:*`
+    const _pattern = `${this.cacheKeyPrefix}frameworks:${organizationId}:*`;
     // In real implementation, use SCAN to find and delete matching keys
   }
 
   private async clearRequirementCache(frameworkId: string): Promise<void> {
-    await redis.del(`${this.cacheKeyPrefix}requirements:${frameworkId}`)
+    await redis.del(`${this.cacheKeyPrefix}requirements:${frameworkId}`);
   }
 
   private async clearAssessmentCache(_organizationId: string): Promise<void> {
@@ -649,12 +651,12 @@ export class ComplianceService {
   }
 
   private async clearGapCache(assessmentId: string): Promise<void> {
-    await redis.del(`${this.cacheKeyPrefix}gaps:${assessmentId}`)
+    await redis.del(`${this.cacheKeyPrefix}gaps:${assessmentId}`);
   }
 
   // Reporting
   async generateComplianceReport(assessmentId: string): Promise<any> {
-    const analysis = await this.performGapAnalysis(assessmentId)
+    const analysis = await this.performGapAnalysis(assessmentId);
 
     return {
       summary: {
@@ -692,11 +694,11 @@ export class ComplianceService {
           findings: i.findings,
           recommendations: i.recommendations,
         })),
-    }
+    };
   }
 }
 
 export const complianceService = ComplianceService.getInstance();
 
 // Default export for compatibility
-export default ComplianceService
+export default ComplianceService;

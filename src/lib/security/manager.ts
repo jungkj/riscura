@@ -33,34 +33,34 @@ export class SecurityManager {
 
   private initializeServices(): void {
     // Initialize SSO service
-    this.ssoService = createSSOService(this.config.ssoConfig)
+    this.ssoService = createSSOService(this.config.ssoConfig);
 
     // Initialize audit service
-    this.auditService = createAuditService(this.config.auditConfig)
+    this.auditService = createAuditService(this.config.auditConfig);
 
     // Initialize threat detection
     this.threatDetectionEngine = new ThreatDetectionEngine(
       this.config.threatConfig,
       this.auditService
-    )
+    );
 
     // Initialize DLP
-    this.dlpEngine = new DLPEngine(this.config.dlpConfig, this.auditService)
+    this.dlpEngine = new DLPEngine(this.config.dlpConfig, this.auditService);
 
     // Initialize compliance manager
-    this.complianceManager = new ComplianceManager(this.config.complianceConfig, this.auditService)
+    this.complianceManager = new ComplianceManager(this.config.complianceConfig, this.auditService);
 
     // Initialize access control
     this.accessControlManager = new AccessControlManager(
       this.config.accessConfig,
       this.auditService
-    )
+    );
 
     // Initialize incident response
     this.incidentResponseManager = new IncidentResponseManager(
       this.config.incidentConfig,
       this.auditService
-    )
+    );
 
     // Initialize AI security
     this.aiSecurityManager = new AISecurityManager({
@@ -130,27 +130,27 @@ export class SecurityManager {
         robustness_testing: true,
         attack_simulation: false,
       },
-    })
+    });
   }
 
   // Security Event Processing
   async processSecurityEvent(event: Partial<SecurityAuditEvent>): Promise<void> {
     // Log the event
-    await this.auditService.logEvent(event)
+    await this.auditService.logEvent(event);
 
     // Run threat detection
-    await this.threatDetectionEngine.analyzeEvent(event)
+    await this.threatDetectionEngine.analyzeEvent(event);
 
     // Check DLP policies
     if (event.category === 'data_access' || event.category === 'data_modification') {
-      await this.dlpEngine.checkPolicies(event)
+      await this.dlpEngine.checkPolicies(event);
     }
 
     // Update compliance status
-    await this.complianceManager.assessCompliance(event)
+    await this.complianceManager.assessCompliance(event);
 
     // Check access control violations
-    await this.accessControlManager.validateAccess(event)
+    await this.accessControlManager.validateAccess(event);
   }
 
   // User Authentication & Authorization
@@ -158,7 +158,7 @@ export class SecurityManager {
     credentials: UserCredentials,
     context: AuthenticationContext
   ): Promise<AuthenticationResult> {
-    const startTime = Date.now()
+    const startTime = Date.now();
 
     try {
       // Log authentication attempt
@@ -169,10 +169,10 @@ export class SecurityManager {
         method: credentials.method,
         provider: credentials.provider,
         source: context.source,
-      })
+      });
 
       // Check access control restrictions
-      const accessCheck = await this.accessControlManager.checkAccess(context)
+      const accessCheck = await this.accessControlManager.checkAccess(context);
       if (!accessCheck.allowed) {
         throw new Error(accessCheck.reason || 'Access denied');
       }
@@ -182,7 +182,7 @@ export class SecurityManager {
       // Route to appropriate authentication method
       switch (credentials.method) {
         case 'sso':
-          authResult = await this.ssoService.authenticate(credentials)
+          authResult = await this.ssoService.authenticate(credentials);
           break;
         case 'local':
           authResult = await this.authenticateLocal(credentials);
@@ -206,10 +206,10 @@ export class SecurityManager {
           deviceTrusted: context.deviceTrusted,
           sessionDuration: Date.now() - startTime,
           source: context.source,
-        })
+        });
 
         // Check for anomalies
-        await this.threatDetectionEngine.checkUserBehavior(authResult.user.id, context)
+        await this.threatDetectionEngine.checkUserBehavior(authResult.user.id, context);
       }
 
       return authResult;
@@ -222,16 +222,17 @@ export class SecurityManager {
         method: credentials.method,
         failureReason: error instanceof Error ? error.message : 'Unknown error',
         source: context.source,
-      })
+      });
 
       // Check for suspicious patterns
-      await this.threatDetectionEngine.checkFailedLogin(credentials.identifier, context)
+      await this.threatDetectionEngine.checkFailedLogin(credentials.identifier, context);
 
       throw error;
     }
   }
 
-  async authorizeAction(_userId: string,
+  async authorizeAction(
+    _userId: string,
     action: string,
     resource: string,
     context: AuthorizationContext
@@ -241,14 +242,14 @@ export class SecurityManager {
       const user = await db.client.user.findUnique({
         where: { id: userId },
         include: { roles: true, permissions: true },
-      })
+      });
 
       if (!user) {
         throw new Error('User not found');
       }
 
       // Check permissions
-      const hasPermission = await this.checkPermissions(user, action, resource)
+      const hasPermission = await this.checkPermissions(user, action, resource);
 
       // Log authorization attempt
       await this.auditService.logAuthorization({
@@ -261,14 +262,14 @@ export class SecurityManager {
         role: user.role,
         deniedReason: hasPermission ? undefined : 'Insufficient permissions',
         source: context.source,
-      })
+      });
 
       return {
         authorized: hasPermission,
         user,
         permissions: user.permissions.map((p) => p.name),
         restrictions: hasPermission ? [] : ['insufficient_permissions'],
-      }
+      };
     } catch (error) {
       await this.auditService.logAuthorization({
         action: 'access_denied',
@@ -288,7 +289,7 @@ export class SecurityManager {
   // Data Protection
   async protectData(_data: any, context: DataProtectionContext): Promise<ProtectedData> {
     // Apply encryption if configured
-    let protectedData = data
+    let protectedData = data;
     if (this.config.encryptionConfig.fieldLevelEncryption.enabled) {
       protectedData = await encryptionService.encryptModel(
         data,
@@ -297,7 +298,7 @@ export class SecurityManager {
     }
 
     // Apply DLP policies
-    const dlpResult = await this.dlpEngine.scanData(data, context)
+    const dlpResult = await this.dlpEngine.scanData(data, context);
     if (dlpResult.blocked) {
       throw new Error(`DLP policy violation: ${dlpResult.reason}`);
     }
@@ -312,14 +313,14 @@ export class SecurityManager {
       classification: context.classification,
       sensitive: dlpResult.sensitive,
       source: context.source,
-    })
+    });
 
     return {
       data: protectedData,
       classification: context.classification,
       dlpTags: dlpResult.tags,
       encrypted: this.config.encryptionConfig.fieldLevelEncryption.enabled,
-    }
+    };
   }
 
   // Security Monitoring
@@ -343,12 +344,12 @@ export class SecurityManager {
         complianceMetrics,
         incidentMetrics,
       }),
-    }
+    };
   }
 
   // Incident Response
   async reportSecurityIncident(incident: SecurityIncidentReport): Promise<string> {
-    const incidentId = uuidv4()
+    const incidentId = uuidv4();
 
     // Create incident record
     await this.incidentResponseManager.createIncident({
@@ -356,7 +357,7 @@ export class SecurityManager {
       id: incidentId,
       reportedAt: new Date(),
       status: 'new',
-    })
+    });
 
     // Log security event
     await this.auditService.logSecurityEvent({
@@ -367,17 +368,17 @@ export class SecurityManager {
       threatLevel: incident.severity,
       severity: incident.severity,
       source: incident.source,
-    })
+    });
 
     // Trigger automated response if configured
-    await this.incidentResponseManager.triggerAutomatedResponse(incidentId)
+    await this.incidentResponseManager.triggerAutomatedResponse(incidentId);
 
     return incidentId;
   }
 
   // Compliance Management
   async runComplianceAssessment(frameworkId: string): Promise<ComplianceAssessmentResult> {
-    return await this.complianceManager.runAssessment(frameworkId)
+    return await this.complianceManager.runAssessment(frameworkId);
   }
 
   async generateComplianceReport(
@@ -392,10 +393,10 @@ export class SecurityManager {
     updates: Partial<SecurityConfiguration>,
     updatedBy: string
   ): Promise<SecurityConfiguration> {
-    const oldConfig = { ...this.config }
+    const oldConfig = { ...this.config };
 
     // Apply updates
-    this.config = { ...this.config, ...updates }
+    this.config = { ...this.config, ...updates };
 
     // Save to database
     await db.client.securityConfiguration.upsert({
@@ -410,7 +411,7 @@ export class SecurityManager {
         lastUpdated: new Date(),
         updatedBy,
       },
-    })
+    });
 
     // Log configuration change
     await this.auditService.logConfigurationChange({
@@ -423,10 +424,10 @@ export class SecurityManager {
       newConfiguration: this.config,
       changes: this.getConfigurationChanges(oldConfig, this.config),
       source: { ip: '127.0.0.1' }, // Would get from request context
-    })
+    });
 
     // Reinitialize services with new configuration
-    this.initializeServices()
+    this.initializeServices();
 
     return this.config;
   }
@@ -439,7 +440,7 @@ export class SecurityManager {
       this.checkAuditHealth(),
       this.checkThreatDetectionHealth(),
       this.checkComplianceHealth(),
-    ])
+    ]);
 
     const overallHealth = checks.every((check) => check.status === 'healthy')
       ? 'healthy'
@@ -452,7 +453,7 @@ export class SecurityManager {
       overallHealth,
       checks,
       recommendations: this.generateHealthRecommendations(checks),
-    }
+    };
   }
 
   // Private Helper Methods
@@ -460,14 +461,14 @@ export class SecurityManager {
     // Simplified local authentication
     const user = await db.client.user.findUnique({
       where: { email: credentials.identifier },
-    })
+    });
 
     if (!user || !user.isActive) {
       throw new Error('Invalid credentials');
     }
 
     // Verify password (simplified)
-    const passwordValid = await this.verifyPassword(credentials.secret!, user.password)
+    const passwordValid = await this.verifyPassword(credentials.secret!, user.password);
     if (!passwordValid) {
       throw new Error('Invalid credentials');
     }
@@ -480,7 +481,7 @@ export class SecurityManager {
         userId: user.id,
         loginTime: new Date(),
       },
-    }
+    };
   }
 
   private async authenticateApiKey(credentials: UserCredentials): Promise<AuthenticationResult> {
@@ -488,7 +489,7 @@ export class SecurityManager {
     const apiKey = await db.client.apiKey.findUnique({
       where: { key: credentials.secret },
       include: { user: true },
-    })
+    });
 
     if (!apiKey || !apiKey.isActive || apiKey.expiresAt < new Date()) {
       throw new Error('Invalid API key');
@@ -502,19 +503,19 @@ export class SecurityManager {
         apiKeyId: apiKey.id,
         userId: apiKey.user.id,
       },
-    }
+    };
   }
 
   private async verifyPassword(plaintext: string, hashed: string): Promise<boolean> {
     // Simplified password verification - use proper bcrypt in production
-    return plaintext === hashed
+    return plaintext === hashed;
   }
 
   private async checkPermissions(user: any, action: string, resource: string): Promise<boolean> {
     // Simplified permission checking
     const hasDirectPermission = user.permissions.some(
       (p: any) => p.resource === resource && p.action === action
-    )
+    );
 
     if (hasDirectPermission) return true;
 
@@ -524,26 +525,26 @@ export class SecurityManager {
         roleId: { in: user.roles.map((r: any) => r.id) },
         permission: { resource, action },
       },
-    })
+    });
 
     return rolePermissions.length > 0;
   }
 
   private calculateOverallRiskScore(metrics: any): number {
     // Simplified risk calculation
-    let riskScore = 0
+    let riskScore = 0;
 
     // Factor in audit metrics
-    riskScore += metrics.auditMetrics.averageRiskScore * 0.3
+    riskScore += metrics.auditMetrics.averageRiskScore * 0.3;
 
     // Factor in threat metrics
-    riskScore += (metrics.threatMetrics.detectedThreats / 100) * 0.4
+    riskScore += (metrics.threatMetrics.detectedThreats / 100) * 0.4;
 
     // Factor in compliance metrics
-    riskScore += (1 - metrics.complianceMetrics.overallScore / 100) * 10 * 0.2
+    riskScore += (1 - metrics.complianceMetrics.overallScore / 100) * 10 * 0.2;
 
     // Factor in incidents
-    riskScore += metrics.incidentMetrics.openIncidents * 2 * 0.1
+    riskScore += metrics.incidentMetrics.openIncidents * 2 * 0.1;
 
     return Math.min(riskScore, 10);
   }
@@ -554,7 +555,7 @@ export class SecurityManager {
     // Simplified change detection
     Object.keys(newConfig).forEach((key) => {
       if (JSON.stringify(oldConfig[key]) !== JSON.stringify(newConfig[key])) {
-        changes.push(`${key} modified`)
+        changes.push(`${key} modified`);
       }
     });
 
@@ -569,21 +570,21 @@ export class SecurityManager {
         status: 'healthy',
         message: `Encryption service operational. ${metrics.operationsCount} operations processed.`,
         details: metrics,
-      }
+      };
     } catch (error) {
       return {
         component: 'encryption',
         status: 'critical',
         message: 'Encryption service error',
         error: error instanceof Error ? error.message : 'Unknown error',
-      }
+      };
     }
   }
 
   private async checkSSOHealth(): Promise<HealthCheckResult> {
     try {
       // Test SSO providers
-      const providers = this.config.ssoConfig.providers.filter((p) => p.enabled)
+      const providers = this.config.ssoConfig.providers.filter((p) => p.enabled);
       const providerResults = await Promise.all(
         providers.map((provider) => this.ssoService.testProvider(provider.id))
       );
@@ -595,14 +596,14 @@ export class SecurityManager {
         status: failedProviders.length === 0 ? 'healthy' : 'warning',
         message: `${providers.length - failedProviders.length}/${providers.length} SSO providers healthy`,
         details: { providers: providers.length, failed: failedProviders.length },
-      }
+      };
     } catch (error) {
       return {
         component: 'sso',
         status: 'critical',
         message: 'SSO service error',
         error: error instanceof Error ? error.message : 'Unknown error',
-      }
+      };
     }
   }
 
@@ -612,21 +613,21 @@ export class SecurityManager {
       const recentEvents = await this.auditService.searchEvents({
         startDate: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
         limit: 1,
-      })
+      });
 
       return {
         component: 'audit',
         status: 'healthy',
         message: 'Audit service operational',
         details: { recentEvents: recentEvents.total },
-      }
+      };
     } catch (error) {
       return {
         component: 'audit',
         status: 'critical',
         message: 'Audit service error',
         error: error instanceof Error ? error.message : 'Unknown error',
-      }
+      };
     }
   }
 
@@ -642,14 +643,14 @@ export class SecurityManager {
         status: 'healthy',
         message: 'Threat detection operational',
         details: metrics,
-      }
+      };
     } catch (error) {
       return {
         component: 'threat_detection',
         status: 'critical',
         message: 'Threat detection error',
         error: error instanceof Error ? error.message : 'Unknown error',
-      }
+      };
     }
   }
 
@@ -665,14 +666,14 @@ export class SecurityManager {
         status: metrics.overallScore >= 80 ? 'healthy' : 'warning',
         message: `Compliance score: ${metrics.overallScore}%`,
         details: metrics,
-      }
+      };
     } catch (error) {
       return {
         component: 'compliance',
         status: 'critical',
         message: 'Compliance service error',
         error: error instanceof Error ? error.message : 'Unknown error',
-      }
+      };
     }
   }
 
@@ -715,7 +716,7 @@ class ThreatDetectionEngine {
       detectedThreats: 0,
       blockedThreats: 0,
       averageThreatLevel: 'low',
-    }
+    };
   }
 }
 
@@ -735,7 +736,7 @@ class DLPEngine {
       sensitive: false,
       tags: [],
       violations: [],
-    }
+    };
   }
 }
 
@@ -756,7 +757,7 @@ class ComplianceManager {
       findings: [],
       recommendations: [],
       completedAt: new Date(),
-    }
+    };
   }
 
   async generateReport(
@@ -770,7 +771,7 @@ class ComplianceManager {
       controls: [],
       gaps: [],
       generatedAt: new Date(),
-    }
+    };
   }
 
   async getMetrics(_period: { start: Date; end: Date }): Promise<any> {
@@ -778,7 +779,7 @@ class ComplianceManager {
       overallScore: 85,
       frameworks: 2,
       openFindings: 3,
-    }
+    };
   }
 }
 
@@ -789,7 +790,7 @@ class AccessControlManager {
   ) {}
 
   async checkAccess(_context: AuthenticationContext): Promise<AccessCheckResult> {
-    return { allowed: true }
+    return { allowed: true };
   }
 
   async validateAccess(event: Partial<SecurityAuditEvent>): Promise<void> {
@@ -817,7 +818,7 @@ class IncidentResponseManager {
       openIncidents: 2,
       resolvedIncidents: 3,
       averageResolutionTime: 24,
-    }
+    };
   }
 }
 
@@ -829,13 +830,13 @@ class AISecurityManager {
   }
 
   async checkBias(modelId: string, data: any): Promise<any> {
-    return { biasDetected: false }
+    return { biasDetected: false };
   }
 }
 
 // Types
 export interface UserCredentials {
-  identifier: string
+  identifier: string;
   secret?: string;
   method: 'local' | 'sso' | 'api_key' | 'certificate';
   provider?: string;
@@ -847,7 +848,7 @@ export interface AuthenticationContext {
     userAgent?: string;
     location?: any;
     device?: any;
-  }
+  };
   deviceTrusted?: boolean;
   mfaRequired?: boolean;
 }
@@ -856,7 +857,7 @@ export interface AuthorizationContext {
   source: {
     ip: string;
     userAgent?: string;
-  }
+  };
   resourceId?: string;
   action?: string;
 }
@@ -871,7 +872,7 @@ export interface DataProtectionContext {
   source: {
     ip: string;
     userAgent?: string;
-  }
+  };
 }
 
 export interface AuthenticationResult {
@@ -905,7 +906,7 @@ export interface DLPScanResult {
 }
 
 export interface SecurityMetrics {
-  period: { start: Date; end: Date }
+  period: { start: Date; end: Date };
   audit: any;
   threats: any;
   compliance: any;
@@ -922,7 +923,7 @@ export interface SecurityIncidentReport {
   source: {
     ip: string;
     userAgent?: string;
-  }
+  };
 }
 
 export interface ComplianceAssessmentResult {
@@ -935,7 +936,7 @@ export interface ComplianceAssessmentResult {
 
 export interface ComplianceReport {
   frameworkId: string;
-  period: { start: Date; end: Date }
+  period: { start: Date; end: Date };
   score: number;
   controls: any[];
   gaps: any[];
@@ -964,8 +965,8 @@ export interface HealthCheckResult {
 
 // Factory function
 export const createSecurityManager = (_config: SecurityConfiguration): SecurityManager => {
-  return new SecurityManager(config)
-}
+  return new SecurityManager(config);
+};
 
 // Default security configuration
 export const createDefaultSecurityConfig = (): SecurityConfiguration => ({
@@ -1262,4 +1263,4 @@ export const createDefaultSecurityConfig = (): SecurityConfiguration => ({
   isActive: true,
   lastUpdated: new Date(),
   updatedBy: 'system',
-})
+});

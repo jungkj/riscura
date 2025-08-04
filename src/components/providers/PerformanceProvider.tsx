@@ -19,7 +19,7 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
     // Disabled to prevent console errors
     // setMetrics(getPerformanceMetrics())
     // console.log('Performance metrics refresh disabled for clean development')
-  }
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -33,7 +33,7 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
       } catch (error) {
         // console.error('Failed to initialize performance optimizations:', error)
       }
-    }
+    };
 
     init();
 
@@ -47,7 +47,7 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
       {children}
     </PerformanceContext.Provider>
   );
-}
+};
 
 export function usePerformance() {
   const context = useContext(PerformanceContext);

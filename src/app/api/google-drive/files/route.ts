@@ -12,7 +12,7 @@ export const POST = withApiMiddleware({
   bodySchema: listFilesSchema,
   rateLimiters: ['standard'],
 })(async (context, { folderId }) => {
-  const { user } = context
+  const { user } = context;
 
   try {
     const fileService = getGoogleDriveFileService();
@@ -27,7 +27,7 @@ export const POST = withApiMiddleware({
         mimeType: file.mimeType,
         webViewLink: file.webViewLink,
       })),
-    }
+    };
   } catch (error) {
     // console.error('Error listing Google Drive files:', error)
 
@@ -35,19 +35,19 @@ export const POST = withApiMiddleware({
       return {
         error: 'Not authenticated with Google Drive',
         code: 'AUTH_REQUIRED',
-      }
+      };
     }
 
     return {
       error: 'Failed to list files from Google Drive',
-    }
+    };
   }
 });
 
 // Search files
 const searchFilesSchema = z.object({
   query: z.string().min(1),
-})
+});
 
 export const PUT = withApiMiddleware({
   requireAuth: true,
@@ -70,11 +70,11 @@ export const PUT = withApiMiddleware({
         webViewLink: file.webViewLink,
       })),
       query,
-    }
+    };
   } catch (error) {
     // console.error('Error searching Google Drive files:', error)
     return {
       error: 'Failed to search files in Google Drive',
-    }
+    };
   }
 });

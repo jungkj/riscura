@@ -21,7 +21,7 @@ test.describe('Enhanced Authentication Flows', () => {
         .locator(
           '[data-testid="google-login"], button:has-text("Google"), button:has-text("Continue with Google"), .google-auth-button'
         )
-        .first()
+        .first();
 
       if (await googleButton.isVisible()) {
         // Mock Google OAuth flow for testing
@@ -32,7 +32,7 @@ test.describe('Enhanced Authentication Flows', () => {
             headers: {
               Location: `${page.url().split('/auth')[0]}/api/auth/callback/google?code=mock_auth_code&state=mock_state`,
             },
-          })
+          });
         });
 
         // Mock the OAuth callback
@@ -42,7 +42,7 @@ test.describe('Enhanced Authentication Flows', () => {
             headers: {
               Location: '/dashboard',
             },
-          })
+          });
         });
 
         await googleButton.click();
@@ -52,7 +52,7 @@ test.describe('Enhanced Authentication Flows', () => {
         // console.log('Google OAuth button interaction tested')
 
         // Verify OAuth flow initiation (URL change or popup)
-        await page.waitForTimeout(1000)
+        await page.waitForTimeout(1000);
       } else {
         // console.log('Google OAuth not implemented or button not found')
       }
@@ -73,14 +73,14 @@ test.describe('Enhanced Authentication Flows', () => {
             headers: {
               Location: `${page.url().split('/auth')[0]}/auth/login?error=oauth_error&error_description=Access denied`,
             },
-          })
+          });
         });
 
         await googleButton.click();
         await page.waitForTimeout(2000);
 
         // Check for error message
-        const errorMessage = page.locator('[data-testid="oauth-error"], .error, .alert-error')
+        const errorMessage = page.locator('[data-testid="oauth-error"], .error, .alert-error');
         if (await errorMessage.isVisible()) {
           await expect(errorMessage).toContainText(/error|denied|failed/i);
           // console.log('OAuth error handling verified')
@@ -92,7 +92,7 @@ test.describe('Enhanced Authentication Flows', () => {
   test.describe('Multi-Factor Authentication', () => {
     test('MFA setup flow', async ({ page }) => {
       // First login with regular credentials
-      await page.goto('/auth/login')
+      await page.goto('/auth/login');
       await page.fill('input[type="email"]', process.env.TEST_USER_EMAIL || 'testuser@riscura.com');
       await page.fill('input[type="password"]', process.env.TEST_USER_PASSWORD || 'test123');
       await page.click('button[type="submit"]');
@@ -100,7 +100,7 @@ test.describe('Enhanced Authentication Flows', () => {
       await page.waitForURL('**/dashboard/**', { timeout: 30000 });
 
       // Navigate to security settings
-      const paths = ['/settings/security', '/profile/security', '/dashboard/settings']
+      const paths = ['/settings/security', '/profile/security', '/dashboard/settings'];
       let settingsFound = false;
 
       for (const path of paths) {
@@ -119,7 +119,7 @@ test.describe('Enhanced Authentication Flows', () => {
               .locator(
                 '[data-testid="enable-mfa"], button:has-text("Enable"), button:has-text("Setup")'
               )
-              .first()
+              .first();
             if (await enableMfaButton.isVisible()) {
               await enableMfaButton.click();
 
@@ -128,7 +128,7 @@ test.describe('Enhanced Authentication Flows', () => {
                 page.locator(
                   '[data-testid="mfa-setup"], .mfa-setup, text=QR code, text=authenticator'
                 )
-              ).toBeVisible({ timeout: 10000 })
+              ).toBeVisible({ timeout: 10000 });
               // console.log('MFA setup flow verified')
             }
             break;
@@ -145,7 +145,7 @@ test.describe('Enhanced Authentication Flows', () => {
 
     test('MFA login verification', async ({ page }) => {
       // This test assumes MFA is already set up for the test user
-      await page.goto('/auth/login')
+      await page.goto('/auth/login');
       await page.fill(
         'input[type="email"]',
         process.env.TEST_MFA_USER_EMAIL || 'mfauser@riscura.com'
@@ -156,13 +156,13 @@ test.describe('Enhanced Authentication Flows', () => {
       // Check for MFA prompt
       const mfaPrompt = page.locator(
         '[data-testid="mfa-prompt"], .mfa-verification, input[placeholder*="code"], input[name*="token"]'
-      )
+      );
 
       if (await mfaPrompt.isVisible({ timeout: 5000 })) {
         // Simulate MFA code entry
         const codeInput = page
           .locator('input[placeholder*="code"], input[name*="token"], input[name*="mfa"]')
-          .first()
+          .first();
         await codeInput.fill('123456'); // Mock MFA code
 
         await page.click(
@@ -179,14 +179,14 @@ test.describe('Enhanced Authentication Flows', () => {
   test.describe('Advanced Session Management', () => {
     test('concurrent session handling', async ({ browser }) => {
       // Create two browser contexts to simulate different sessions
-      const context1 = await browser.newContext()
+      const context1 = await browser.newContext();
       const context2 = await browser.newContext();
 
       const page1 = await context1.newPage();
       const page2 = await context2.newPage();
 
       // Login in first session
-      await page1.goto('/auth/login')
+      await page1.goto('/auth/login');
       await page1.fill(
         'input[type="email"]',
         process.env.TEST_USER_EMAIL || 'testuser@riscura.com'
@@ -196,7 +196,7 @@ test.describe('Enhanced Authentication Flows', () => {
       await page1.waitForURL('**/dashboard/**');
 
       // Login in second session with same user
-      await page2.goto('/auth/login')
+      await page2.goto('/auth/login');
       await page2.fill(
         'input[type="email"]',
         process.env.TEST_USER_EMAIL || 'testuser@riscura.com'
@@ -206,7 +206,7 @@ test.describe('Enhanced Authentication Flows', () => {
       await page2.waitForURL('**/dashboard/**');
 
       // Verify both sessions are active (or test session invalidation if implemented)
-      await expect(page1.locator('[data-testid="user-menu"], .user-menu')).toBeVisible()
+      await expect(page1.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
       await expect(page2.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
 
       // console.log('Concurrent session handling tested')
@@ -228,15 +228,15 @@ test.describe('Enhanced Authentication Flows', () => {
           status: 401,
           contentType: 'application/json',
           body: JSON.stringify({ error: 'Session expired' }),
-        })
+        });
       });
 
       // Trigger an API call that would check session
-      await page.reload()
+      await page.reload();
       await page.waitForTimeout(2000);
 
       // Should redirect to login or show session expired message
-      const currentUrl = page.url()
+      const currentUrl = page.url();
       if (currentUrl.includes('/auth/login')) {
         // console.log('Session timeout redirect to login verified')
       } else {
@@ -269,7 +269,7 @@ test.describe('Enhanced Authentication Flows', () => {
         await page.waitForURL('**/dashboard/**');
 
         // Close browser and reopen to test persistence
-        await page.context().close()
+        await page.context().close();
 
         const newContext = await page.context().browser()?.newContext();
         const newPage = await newContext?.newPage();
@@ -278,7 +278,7 @@ test.describe('Enhanced Authentication Flows', () => {
           await newPage.goto('/dashboard');
 
           // Check if still logged in (this depends on implementation)
-          const userMenu = newPage.locator('[data-testid="user-menu"], .user-menu')
+          const userMenu = newPage.locator('[data-testid="user-menu"], .user-menu');
           if (await userMenu.isVisible({ timeout: 5000 })) {
             // console.log('Remember me functionality working')
           } else {
@@ -304,7 +304,7 @@ test.describe('Enhanced Authentication Flows', () => {
 
       if (await passwordInput.isVisible()) {
         // Test weak password
-        await passwordInput.fill('123')
+        await passwordInput.fill('123');
         await page.waitForTimeout(500);
 
         if (await strengthIndicator.isVisible()) {
@@ -313,7 +313,7 @@ test.describe('Enhanced Authentication Flows', () => {
         }
 
         // Test strong password
-        await passwordInput.fill('StrongPassword123!@#')
+        await passwordInput.fill('StrongPassword123!@#');
         await page.waitForTimeout(500);
 
         if (await strengthIndicator.isVisible()) {
@@ -338,7 +338,7 @@ test.describe('Enhanced Authentication Flows', () => {
         await page.fill(
           'input[type="email"]',
           process.env.TEST_USER_EMAIL || 'testuser@riscura.com'
-        )
+        );
         await page.click(
           '[data-testid="send-reset"], button[type="submit"], button:has-text("Send")'
         );
@@ -346,7 +346,7 @@ test.describe('Enhanced Authentication Flows', () => {
         // Verify success message
         await expect(
           page.locator('[data-testid="reset-sent"], .success, text=email sent')
-        ).toBeVisible({ timeout: 10000 })
+        ).toBeVisible({ timeout: 10000 });
 
         // console.log('Password reset flow verified')
       } else {
@@ -371,14 +371,14 @@ test.describe('Enhanced Authentication Flows', () => {
         await page.waitForTimeout(1000);
 
         // Clear fields for next attempt
-        await page.fill('input[type="email"]', '')
+        await page.fill('input[type="email"]', '');
         await page.fill('input[type="password"]', '');
       }
 
       // Check for lockout message
       const lockoutMessage = page.locator(
         '[data-testid="account-locked"], text=locked, text=too many attempts'
-      )
+      );
 
       if (await lockoutMessage.isVisible()) {
         // console.log('Account lockout protection verified')
@@ -399,7 +399,7 @@ test.describe('Enhanced Authentication Flows', () => {
           'x-content-type-options',
           'strict-transport-security',
           'content-security-policy',
-        ]
+        ];
 
         securityHeaders.forEach((header) => {
           if (headers[header]) {
@@ -416,7 +416,7 @@ test.describe('Enhanced Authentication Flows', () => {
     ['chromium', 'firefox', 'webkit'].forEach((browserName) => {
       test(`authentication flow in ${browserName}`, async ({ page }) => {
         // This test will run across different browsers due to Playwright config
-        await page.goto('/auth/login')
+        await page.goto('/auth/login');
 
         await page.fill(
           'input[type="email"]',
@@ -428,7 +428,7 @@ test.describe('Enhanced Authentication Flows', () => {
         await page.waitForURL('**/dashboard/**', { timeout: 30000 });
 
         // Verify successful login across browsers
-        await expect(page.locator('[data-testid="user-menu"], .user-menu')).toBeVisible()
+        await expect(page.locator('[data-testid="user-menu"], .user-menu')).toBeVisible();
 
         // console.log(`Authentication successful in ${browserName}`)
       });
@@ -443,7 +443,7 @@ test.describe('Enhanced Authentication Flows', () => {
           email: process.env.TEST_USER_EMAIL || 'testuser@riscura.com',
           password: process.env.TEST_USER_PASSWORD || 'test123',
         },
-      })
+      });
 
       if (loginResponse.ok()) {
         const loginData = await loginResponse.json();
@@ -454,11 +454,11 @@ test.describe('Enhanced Authentication Flows', () => {
       }
 
       // Test session API
-      const sessionResponse = await request.get('/api/auth/session')
+      const sessionResponse = await request.get('/api/auth/session');
       // console.log(`Session API status: ${sessionResponse.status()}`)
 
       // Test logout API
-      const logoutResponse = await request.post('/api/auth/logout')
+      const logoutResponse = await request.post('/api/auth/logout');
       // console.log(`Logout API status: ${logoutResponse.status()}`)
     });
   });

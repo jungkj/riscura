@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Lazy load PDF parser only when needed
 async function processPdfFile(buffer: Buffer) {
   // Dynamic import - only loads when this function is called
-  const { default: pdfParse } = await import('pdf-parse')
+  const { default: pdfParse } = await import('pdf-parse');
 
   try {
     const data = await pdfParse(buffer);
@@ -17,7 +17,7 @@ async function processPdfFile(buffer: Buffer) {
       pages: data.numpages,
       text: data.text,
       info: data.info,
-    }
+    };
   } catch (error) {
     throw new Error(
       `PDF processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -36,14 +36,14 @@ export async function POST(_request: NextRequest) {
 
     // Validate file type
     if (!file.type.includes('pdf')) {
-      return NextResponse.json({ error: 'Only PDF files are supported' }, { status: 400 })
+      return NextResponse.json({ error: 'Only PDF files are supported' }, { status: 400 });
     }
 
     // Convert to buffer
-    const buffer = Buffer.from(await file.arrayBuffer())
+    const buffer = Buffer.from(await file.arrayBuffer());
 
     // Process PDF with lazy loading
-    const _result = await processPdfFile(buffer)
+    const _result = await processPdfFile(buffer);
 
     return NextResponse.json(result);
   } catch (error) {

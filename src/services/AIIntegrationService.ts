@@ -3,7 +3,7 @@ import { generateId } from '@/lib/utils';
 
 // Service result types
 interface ServiceResult {
-  content: string
+  content: string;
   confidence?: number;
   sources?: string[];
   modelUsed?: string;
@@ -24,7 +24,7 @@ interface SecurityContext {
 
 // Core integration types
 export interface AIIntegrationContext {
-  tenantId?: string
+  tenantId?: string;
   userId: string;
   sessionId: string;
   organizationId: string;
@@ -48,7 +48,7 @@ export interface AIServiceRequest {
     modelOverride?: string;
     securityLevel?: 'standard' | 'enhanced' | 'strict';
     enableProactiveMonitoring?: boolean;
-  }
+  };
 }
 
 export interface AIServiceResponse {
@@ -63,7 +63,7 @@ export interface AIServiceResponse {
     securityApproved: boolean;
     tenantIsolated: boolean;
     complianceValidated: boolean;
-  }
+  };
   recommendations?: unknown[];
   insights?: unknown[];
   warnings?: string[];
@@ -86,10 +86,10 @@ export class AIIntegrationService {
 
     try {
       // 1. Validate request context
-      await this.validateRequestContext(request.context)
+      await this.validateRequestContext(request.context);
 
       // 2. Apply security middleware if tenant is specified
-      let securityContext: SecurityContext | null = null
+      let securityContext: SecurityContext | null = null;
       if (request.context.tenantId) {
         securityContext = {
           userId: request.context.userId,
@@ -97,14 +97,14 @@ export class AIIntegrationService {
           organizationId: request.context.organizationId,
           ipAddress: 'unknown',
           userAgent: 'ai_integration_service',
-        }
+        };
       }
 
       // 3. Route to appropriate AI service
-      const serviceResult = await this.routeToAIService(request)
+      const serviceResult = await this.routeToAIService(request);
 
       // 4. Apply tenant isolation if needed
-      let finalResult = serviceResult
+      let finalResult = serviceResult;
       if (request.context.tenantId && securityContext) {
         finalResult = await this.applyTenantIsolation(
           request.context.tenantId,
@@ -131,10 +131,10 @@ export class AIIntegrationService {
         recommendations: finalResult.recommendations,
         insights: finalResult.insights,
         warnings: finalResult.warnings || [],
-      }
+      };
 
       // Cache successful responses
-      this.requestCache.set(requestId, response)
+      this.requestCache.set(requestId, response);
 
       return response;
     } catch (error) {
@@ -155,7 +155,7 @@ export class AIIntegrationService {
           complianceValidated: false,
         },
         warnings: [`Processing error: ${error instanceof Error ? error.message : 'Unknown error'}`],
-      }
+      };
     }
   }
 
@@ -207,7 +207,7 @@ export class AIIntegrationService {
           'Impact assessment completed',
           'Mitigation strategies available',
         ],
-      }
+      };
     } catch (error) {
       // console.error('Risk analysis error:', error)
       return {
@@ -219,7 +219,7 @@ export class AIIntegrationService {
         securityApproved: true,
         complianceValidated: true,
         warnings: ['Advanced risk analysis temporarily unavailable'],
-      }
+      };
     }
   }
 
@@ -245,7 +245,7 @@ export class AIIntegrationService {
           'Regulatory requirements reviewed',
           'Action plan available',
         ],
-      }
+      };
     } catch (error) {
       // console.error('Compliance check error:', error)
       return {
@@ -257,7 +257,7 @@ export class AIIntegrationService {
         securityApproved: true,
         complianceValidated: true,
         warnings: ['Advanced compliance analysis temporarily unavailable'],
-      }
+      };
     }
   }
 
@@ -283,7 +283,7 @@ export class AIIntegrationService {
           'Implementation roadmap created',
           'Cost-benefit analysis available',
         ],
-      }
+      };
     } catch (error) {
       // console.error('Control recommendation error:', error)
       return {
@@ -295,7 +295,7 @@ export class AIIntegrationService {
         securityApproved: true,
         complianceValidated: true,
         warnings: ['Advanced control recommendations temporarily unavailable'],
-      }
+      };
     }
   }
 
@@ -317,7 +317,7 @@ export class AIIntegrationService {
           'Establish response procedures',
         ],
         insights: ['Trend analysis completed', 'Anomalies detected', 'Predictive model activated'],
-      }
+      };
     } catch (error) {
       // console.error('Proactive monitoring error:', error)
       return {
@@ -329,7 +329,7 @@ export class AIIntegrationService {
         securityApproved: true,
         complianceValidated: true,
         warnings: ['Advanced proactive monitoring temporarily unavailable'],
-      }
+      };
     }
   }
 
@@ -346,13 +346,14 @@ export class AIIntegrationService {
       complianceValidated: true,
       recommendations: [],
       insights: [],
-    }
+    };
   }
 
   /**
    * Apply tenant isolation to AI service results
    */
-  private async applyTenantIsolation(_tenantId: string,
+  private async applyTenantIsolation(
+    _tenantId: string,
     request: AIServiceRequest,
     serviceResult: ServiceResult,
     securityContext: SecurityContext
@@ -369,7 +370,7 @@ export class AIIntegrationService {
           modelOverride: request.options?.modelOverride,
           customInstructions: [`Original request: ${request.content}`],
         }
-      )
+      );
 
       return {
         ...serviceResult,
@@ -377,7 +378,7 @@ export class AIIntegrationService {
         modelUsed: tenantResponse.metadata.modelUsed,
         securityApproved: tenantResponse.isolation.dataEncrypted,
         complianceValidated: tenantResponse.isolation.complianceValidated,
-      }
+      };
     } catch (error) {
       // console.warn('Tenant isolation failed, using direct result:', error)
       return serviceResult;
@@ -429,7 +430,7 @@ export class AIIntegrationService {
       compliance: true,
       controlRecommendation: true,
       proactiveAI: true,
-    }
+    };
 
     const healthyServices = Object.values(services).filter(Boolean).length;
     const totalServices = Object.values(services).length;
@@ -446,9 +447,9 @@ export class AIIntegrationService {
       status,
       services,
       uptime: Date.now(), // Simplified uptime calculation
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const aiIntegrationService = new AIIntegrationService()
+export const aiIntegrationService = new AIIntegrationService();

@@ -26,12 +26,12 @@ export const GET = withApiMiddleware(
 
     try {
       // Parse and validate pagination parameters from query string
-      const { searchParams } = new URL(req.url)
+      const { searchParams } = new URL(req.url);
       const pageParam = parseInt(searchParams.get('page') || '1');
       const limitParam = parseInt(searchParams.get('limit') || '50');
 
       // Validate pagination parameters
-      const page = Math.max(1, pageParam || 1)
+      const page = Math.max(1, pageParam || 1);
       const MAX_LIMIT = 100;
       const limit = Math.min(MAX_LIMIT, Math.max(1, limitParam || 50));
       const offset = (page - 1) * limit;
@@ -39,7 +39,7 @@ export const GET = withApiMiddleware(
       // Get total count for pagination
       const totalCount = await db.client.document.count({
         where: { organizationId: user.organizationId },
-      })
+      });
 
       const documents = await db.client.document.findMany({
         where: { organizationId: user.organizationId },

@@ -36,7 +36,7 @@ export interface GapAnalysisResult {
     timeToCompliance: number; // days
     resourcesRequired: number;
     priority: 'low' | 'medium' | 'high' | 'critical';
-  }
+  };
 }
 
 export interface ComplianceGap {
@@ -51,13 +51,13 @@ export interface ComplianceGap {
     existing: string[];
     recommended: string[];
     missing: string[];
-  }
+  };
   remediation: {
     effort: 'low' | 'medium' | 'high';
     timeline: number; // days
     cost: 'low' | 'medium' | 'high';
     dependencies: string[];
-  }
+  };
 }
 
 export interface ComplianceRecommendation {
@@ -75,7 +75,7 @@ export interface ComplianceRecommendation {
     cost: 'low' | 'medium' | 'high';
     resources: string[];
     dependencies: string[];
-  }
+  };
   riskReduction: number;
   complianceImpact: number;
 }
@@ -97,10 +97,11 @@ export interface ControlEffectivenessAssessment {
 
 export class ComplianceMappingEngine {
   // Automated control mapping using AI analysis
-  async performAutomatedMapping(_organizationId: string,
+  async performAutomatedMapping(
+    _organizationId: string,
     frameworkIds: string[]
   ): Promise<ControlMapping[]> {
-    const mappings: ControlMapping[] = []
+    const mappings: ControlMapping[] = [];
 
     // Get organization controls
     const controls = await db.client.control.findMany({
@@ -109,7 +110,7 @@ export class ComplianceMappingEngine {
         risks: true,
         requirements: true,
       },
-    })
+    });
 
     for (const frameworkId of frameworkIds) {
       const framework = await complianceFrameworkManager.getFramework(frameworkId);
@@ -131,7 +132,7 @@ export class ComplianceMappingEngine {
 
     // Store mappings in database
     for (const mapping of mappings) {
-      await this.createControlMapping(mapping)
+      await this.createControlMapping(mapping);
     }
 
     return mappings;
@@ -144,16 +145,16 @@ export class ComplianceMappingEngine {
     requirement: any,
     organizationId: string
   ): Promise<ControlMapping | null> {
-    let bestMatch: any = null
+    let bestMatch: any = null;
     let bestScore = 0;
 
     // Use semantic analysis to find best matching control
     for (const control of controls) {
-      const score = this.calculateMappingScore(control, requirement)
+      const score = this.calculateMappingScore(control, requirement);
 
       if (score > bestScore && score > 0.3) {
         // Minimum confidence threshold
-        bestScore = score
+        bestScore = score;
         bestMatch = control;
       }
     }
@@ -161,7 +162,7 @@ export class ComplianceMappingEngine {
     if (!bestMatch) return null;
 
     // Determine mapping type and coverage
-    const mappingType = this.determineMappingType(bestMatch, requirement, bestScore)
+    const mappingType = this.determineMappingType(bestMatch, requirement, bestScore);
     const coverage = this.calculateCoverage(bestMatch, requirement);
 
     return {
@@ -180,29 +181,29 @@ export class ComplianceMappingEngine {
       lastAssessed: new Date(),
       nextAssessment: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
       organizationId,
-    }
+    };
   }
 
   // Calculate mapping score using semantic similarity
   private calculateMappingScore(control: any, requirement: any): number {
-    let score = 0
+    let score = 0;
 
     // Title similarity
-    const titleScore = this.textSimilarity(control.name, requirement.title)
+    const titleScore = this.textSimilarity(control.name, requirement.title);
     score += titleScore * 0.3;
 
     // Description similarity
-    const descScore = this.textSimilarity(control.description, requirement.description)
+    const descScore = this.textSimilarity(control.description, requirement.description);
     score += descScore * 0.4;
 
     // Category matching
     if (control.category && requirement.category) {
-      const categoryScore = this.categorySimilarity(control.category, requirement.category)
+      const categoryScore = this.categorySimilarity(control.category, requirement.category);
       score += categoryScore * 0.2;
     }
 
     // Keywords matching
-    const keywordScore = this.keywordMatching(control, requirement)
+    const keywordScore = this.keywordMatching(control, requirement);
     score += keywordScore * 0.1;
 
     return Math.min(score, 1.0);
@@ -210,7 +211,7 @@ export class ComplianceMappingEngine {
 
   // Text similarity using basic NLP techniques
   private textSimilarity(text1: string, text2: string): number {
-    if (!text1 || !text2) return 0
+    if (!text1 || !text2) return 0;
 
     const words1 = text1.toLowerCase().split(/\s+/);
     const words2 = text2.toLowerCase().split(/\s+/);
@@ -230,7 +231,7 @@ export class ComplianceMappingEngine {
       'incident-response': ['incident', 'response', 'recovery', 'business-continuity'],
       'risk-management': ['risk', 'assessment', 'evaluation', 'treatment'],
       governance: ['policy', 'procedure', 'management', 'oversight'],
-    }
+    };
 
     const mapped1 = categoryMappings[cat1.toLowerCase()] || [cat1.toLowerCase()];
     const mapped2 = categoryMappings[cat2.toLowerCase()] || [cat2.toLowerCase()];
@@ -241,7 +242,7 @@ export class ComplianceMappingEngine {
 
   // Keyword matching
   private keywordMatching(control: any, requirement: any): number {
-    const controlKeywords = this.extractKeywords(control)
+    const controlKeywords = this.extractKeywords(control);
     const requirementKeywords = requirement.tags || [];
 
     const matches = controlKeywords.filter((keyword) =>
@@ -253,7 +254,7 @@ export class ComplianceMappingEngine {
 
   // Extract keywords from control
   private extractKeywords(control: any): string[] {
-    const text = `${control.name} ${control.description}`.toLowerCase()
+    const text = `${control.name} ${control.description}`.toLowerCase();
 
     // Common compliance keywords
     const keywords = [
@@ -280,7 +281,7 @@ export class ComplianceMappingEngine {
       'privacy',
       'data',
       'protection',
-    ]
+    ];
 
     return keywords.filter((keyword) => text.includes(keyword));
   }
@@ -291,7 +292,7 @@ export class ComplianceMappingEngine {
     requirement: any,
     score: number
   ): 'direct' | 'partial' | 'inherited' | 'compensating' {
-    if (score > 0.8) return 'direct'
+    if (score > 0.8) return 'direct';
     if (score > 0.6) return 'partial';
     if (score > 0.4) return 'inherited';
     return 'compensating';
@@ -303,7 +304,7 @@ export class ComplianceMappingEngine {
     let coverage = 50; // Base coverage
 
     // Adjust based on control maturity
-    if (control.effectivenessScore > 80) coverage += 30
+    if (control.effectivenessScore > 80) coverage += 30;
     else if (control.effectivenessScore > 60) coverage += 20;
     else if (control.effectivenessScore > 40) coverage += 10;
 
@@ -312,12 +313,12 @@ export class ComplianceMappingEngine {
       control.lastTested &&
       new Date(control.lastTested) > new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
     ) {
-      coverage += 10
+      coverage += 10;
     }
 
     // Adjust based on evidence availability
     if (control.evidence && control.evidence.length > 0) {
-      coverage += 10
+      coverage += 10;
     }
 
     return Math.min(coverage, 100);
@@ -325,7 +326,7 @@ export class ComplianceMappingEngine {
 
   // Determine evidence requirements
   private determineEvidenceRequirements(requirement: any): string[] {
-    const evidenceTypes = requirement.evidenceTypes || []
+    const evidenceTypes = requirement.evidenceTypes || [];
 
     const mappings: Record<string, string[]> = {
       policies: ['Policy documents', 'Procedure manuals', 'Management approval'],
@@ -333,7 +334,7 @@ export class ComplianceMappingEngine {
       documentation: ['Process documentation', 'Control descriptions', 'Flowcharts'],
       certification: ['Management certifications', 'Officer attestations', 'Sign-off documents'],
       'monitoring-reports': ['Monitoring dashboards', 'Exception reports', 'Performance metrics'],
-    }
+    };
 
     const evidence: string[] = [];
     for (const type of evidenceTypes) {
@@ -347,7 +348,7 @@ export class ComplianceMappingEngine {
 
   // Determine testing requirements
   private determineTestingRequirements(requirement: any): string[] {
-    const frequency = requirement.frequency || 'annual'
+    const frequency = requirement.frequency || 'annual';
     const testable = requirement.testable || false;
 
     if (!testable) return [];
@@ -371,17 +372,17 @@ export class ComplianceMappingEngine {
 
   // Identify deficiencies
   private async identifyDeficiencies(control: any, requirement: any): Promise<string[]> {
-    const deficiencies: string[] = []
+    const deficiencies: string[] = [];
 
     // Check control effectiveness
     if (control.effectivenessScore < 70) {
-      deficiencies.push('Control effectiveness below threshold')
+      deficiencies.push('Control effectiveness below threshold');
     }
 
     // Check testing frequency
     if (control.lastTested) {
       const daysSinceTest =
-        (Date.now() - new Date(control.lastTested).getTime()) / (1000 * 60 * 60 * 24)
+        (Date.now() - new Date(control.lastTested).getTime()) / (1000 * 60 * 60 * 24);
       const requiredFrequency = this.getTestingFrequency(requirement.frequency);
 
       if (daysSinceTest > requiredFrequency) {
@@ -393,12 +394,12 @@ export class ComplianceMappingEngine {
 
     // Check documentation
     if (!control.description || control.description.length < 50) {
-      deficiencies.push('Insufficient control documentation')
+      deficiencies.push('Insufficient control documentation');
     }
 
     // Check evidence
     if (!control.evidence || control.evidence.length === 0) {
-      deficiencies.push('Missing supporting evidence')
+      deficiencies.push('Missing supporting evidence');
     }
 
     return deficiencies;
@@ -408,7 +409,7 @@ export class ComplianceMappingEngine {
   private getTestingFrequency(frequency: string): number {
     switch (frequency) {
       case 'continuous':
-        return 30
+        return 30;
       case 'monthly':
         return 30;
       case 'quarterly':
@@ -422,31 +423,31 @@ export class ComplianceMappingEngine {
 
   // Generate mapping recommendations
   private async generateMappingRecommendations(control: any, requirement: any): Promise<string[]> {
-    const recommendations: string[] = []
+    const recommendations: string[] = [];
 
     // Effectiveness recommendations
     if (control.effectivenessScore < 80) {
-      recommendations.push('Enhance control design and implementation')
+      recommendations.push('Enhance control design and implementation');
     }
 
     // Testing recommendations
     if (!control.lastTested) {
-      recommendations.push('Implement regular control testing program')
+      recommendations.push('Implement regular control testing program');
     }
 
     // Documentation recommendations
     if (!control.description || control.description.length < 100) {
-      recommendations.push('Improve control documentation and procedures')
+      recommendations.push('Improve control documentation and procedures');
     }
 
     // Automation recommendations
     if (control.automated === false && requirement.frequency === 'continuous') {
-      recommendations.push('Consider automation for continuous compliance monitoring')
+      recommendations.push('Consider automation for continuous compliance monitoring');
     }
 
     // Training recommendations
     if (!control.owner || !control.responsible) {
-      recommendations.push('Assign clear control ownership and responsibilities')
+      recommendations.push('Assign clear control ownership and responsibilities');
     }
 
     return recommendations;
@@ -456,15 +457,16 @@ export class ComplianceMappingEngine {
   async createControlMapping(mapping: ControlMapping): Promise<ControlMapping> {
     return await db.client.controlMapping.create({
       data: mapping,
-    })
+    });
   }
 
   // Perform compliance gap analysis
-  async performGapAnalysis(_organizationId: string,
+  async performGapAnalysis(
+    _organizationId: string,
     frameworkId: string,
     includeRecommendations: boolean = true
   ): Promise<GapAnalysisResult> {
-    const framework = await complianceFrameworkManager.getFramework(frameworkId)
+    const framework = await complianceFrameworkManager.getFramework(frameworkId);
     if (!framework) {
       throw new Error('Framework not found');
     }
@@ -479,35 +481,35 @@ export class ComplianceMappingEngine {
         control: true,
         requirement: true,
       },
-    })
+    });
 
     const totalRequirements = framework.requirements.length;
     const mappedRequirements = mappings.length;
     const coveragePercentage = (mappedRequirements / totalRequirements) * 100;
 
     // Calculate maturity score
-    const maturityScore = this.calculateMaturityScore(mappings)
+    const maturityScore = this.calculateMaturityScore(mappings);
 
     // Identify gaps
-    const gaps = await this.identifyComplianceGaps(framework, mappings, organizationId)
+    const gaps = await this.identifyComplianceGaps(framework, mappings, organizationId);
 
     // Generate recommendations
     const recommendations = includeRecommendations
       ? await this.generateComplianceRecommendations(gaps, framework, organizationId)
-      : []
+      : [];
 
     // Calculate risk score
-    const riskScore = this.calculateComplianceRiskScore(gaps, mappings)
+    const riskScore = this.calculateComplianceRiskScore(gaps, mappings);
 
     // Determine readiness level
     const readinessLevel = this.determineReadinessLevel(
       coveragePercentage,
       maturityScore,
       riskScore
-    )
+    );
 
     // Estimate effort
-    const estimatedEffort = this.estimateComplianceEffort(gaps, recommendations)
+    const estimatedEffort = this.estimateComplianceEffort(gaps, recommendations);
 
     return {
       frameworkId,
@@ -520,12 +522,12 @@ export class ComplianceMappingEngine {
       riskScore,
       readinessLevel,
       estimatedEffort,
-    }
+    };
   }
 
   // Calculate maturity score
   private calculateMaturityScore(mappings: any[]): number {
-    if (mappings.length === 0) return 0
+    if (mappings.length === 0) return 0;
 
     const totalScore = mappings.reduce((sum, mapping) => {
       const controlScore = mapping.control?.effectivenessScore || 0;
@@ -537,17 +539,18 @@ export class ComplianceMappingEngine {
   }
 
   // Identify compliance gaps
-  private async identifyComplianceGaps(_framework: any,
+  private async identifyComplianceGaps(
+    _framework: any,
     mappings: any[],
     organizationId: string
   ): Promise<ComplianceGap[]> {
-    const gaps: ComplianceGap[] = []
+    const gaps: ComplianceGap[] = [];
     const mappedRequirements = new Set(mappings.map((m) => m.requirementId));
 
     // Get organization controls for reference
     const controls = await db.client.control.findMany({
       where: { organizationId },
-    })
+    });
 
     for (const requirement of framework.requirements) {
       if (!mappedRequirements.has(requirement.id)) {
@@ -571,10 +574,10 @@ export class ComplianceMappingEngine {
             cost: this.estimateRemediationCost(requirement),
             dependencies: requirement.relatedRequirements || [],
           },
-        })
+        });
       } else {
         // Check existing mappings for effectiveness
-        const mapping = mappings.find((m) => m.requirementId === requirement.id)
+        const mapping = mappings.find((m) => m.requirementId === requirement.id);
         if (mapping && mapping.coverage < 70) {
           gaps.push({
             requirementId: requirement.id,
@@ -610,7 +613,7 @@ export class ComplianceMappingEngine {
     // Adjust based on priority
     switch (requirement.priority) {
       case 'critical':
-        risk = 10
+        risk = 10;
         break;
       case 'high':
         risk = 8;
@@ -625,12 +628,12 @@ export class ComplianceMappingEngine {
 
     // Adjust based on mandatory nature
     if (requirement.mandatory) {
-      risk += 2
+      risk += 2;
     }
 
     // Adjust based on category
     if (['security', 'privacy', 'financial'].includes(requirement.category)) {
-      risk += 1
+      risk += 1;
     }
 
     return Math.min(risk, 10);
@@ -638,10 +641,10 @@ export class ComplianceMappingEngine {
 
   // Recommend controls for requirement
   private recommendControlsForRequirement(requirement: any, controls: any[]): string[] {
-    const recommendations: string[] = []
+    const recommendations: string[] = [];
 
     // Use simple keyword matching for recommendations
-    const keywords = requirement.tags || []
+    const keywords = requirement.tags || [];
 
     for (const control of controls) {
       const controlText = `${control.name} ${control.description}`.toLowerCase();
@@ -656,7 +659,7 @@ export class ComplianceMappingEngine {
 
     // Add generic recommendations based on category
     if (requirement.category === 'access-control') {
-      recommendations.push('Identity and Access Management Control')
+      recommendations.push('Identity and Access Management Control');
     }
     if (requirement.category === 'data-protection') {
       recommendations.push('Data Protection Control');
@@ -667,7 +670,7 @@ export class ComplianceMappingEngine {
 
   // Estimate remediation parameters
   private estimateRemediationEffort(requirement: any): 'low' | 'medium' | 'high' {
-    if (requirement.priority === 'critical') return 'high'
+    if (requirement.priority === 'critical') return 'high';
     if (requirement.priority === 'high') return 'medium';
     return 'low';
   }
@@ -697,10 +700,10 @@ export class ComplianceMappingEngine {
     framework: any,
     organizationId: string
   ): Promise<ComplianceRecommendation[]> {
-    const recommendations: ComplianceRecommendation[] = []
+    const recommendations: ComplianceRecommendation[] = [];
 
     // Analyze gaps and generate strategic recommendations
-    const criticalGaps = gaps.filter((g) => g.priority === 'critical')
+    const criticalGaps = gaps.filter((g) => g.priority === 'critical');
     const highGaps = gaps.filter((g) => g.priority === 'high');
 
     if (criticalGaps.length > 0) {
@@ -726,7 +729,7 @@ export class ComplianceMappingEngine {
     }
 
     // Technology recommendations
-    const techGaps = gaps.filter((g) => g.category === 'technology')
+    const techGaps = gaps.filter((g) => g.category === 'technology');
     if (techGaps.length > 2) {
       recommendations.push({
         id: `rec_tech_${Date.now()}`,
@@ -754,7 +757,7 @@ export class ComplianceMappingEngine {
 
   // Calculate compliance risk score
   private calculateComplianceRiskScore(gaps: ComplianceGap[], mappings: any[]): number {
-    const gapRisk = gaps.reduce((sum, gap) => sum + gap.riskLevel, 0)
+    const gapRisk = gaps.reduce((sum, gap) => sum + gap.riskLevel, 0);
     const mappingRisk = mappings.reduce((sum, mapping) => {
       const coverageRisk = (100 - mapping.coverage) / 10;
       return sum + coverageRisk;
@@ -772,7 +775,7 @@ export class ComplianceMappingEngine {
     maturity: number,
     risk: number
   ): 'low' | 'medium' | 'high' {
-    const overallScore = (coverage + maturity) / 2 - risk * 5
+    const overallScore = (coverage + maturity) / 2 - risk * 5;
 
     if (overallScore >= 70) return 'high';
     if (overallScore >= 40) return 'medium';
@@ -784,7 +787,7 @@ export class ComplianceMappingEngine {
     gaps: ComplianceGap[],
     recommendations: ComplianceRecommendation[]
   ): {
-    timeToCompliance: number
+    timeToCompliance: number;
     resourcesRequired: number;
     priority: 'low' | 'medium' | 'high' | 'critical';
   } {
@@ -801,12 +804,12 @@ export class ComplianceMappingEngine {
       timeToCompliance: Math.max(totalTimeline / 4, 30), // Parallel execution
       resourcesRequired: gaps.length + recommendations.length,
       priority,
-    }
+    };
   }
 
   // Additional helper methods for control enhancements
   private recommendEnhancementsForControl(control: any, requirement: any): string[] {
-    const enhancements: string[] = []
+    const enhancements: string[] = [];
 
     if (control.effectivenessScore < 70) {
       enhancements.push('Improve control design');

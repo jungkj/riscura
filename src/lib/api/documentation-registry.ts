@@ -84,7 +84,7 @@ apiRegistry.registerEndpoint({
     requests: 5,
     window: '15m',
   },
-})
+});
 
 apiRegistry.registerEndpoint({
   path: '/api/auth/register',
@@ -276,7 +276,7 @@ apiRegistry.registerEndpoint({
     '403': { $ref: '#/components/responses/Forbidden' },
   },
   permissions: ['risk:read'],
-})
+});
 
 apiRegistry.registerEndpoint({
   path: '/api/v1/risks',
@@ -371,7 +371,7 @@ apiRegistry.registerEndpoint({
     '401': { $ref: '#/components/responses/Unauthorized' },
   },
   permissions: ['control:read'],
-})
+});
 
 // ============================================================================
 // BILLING ENDPOINTS
@@ -403,7 +403,7 @@ apiRegistry.registerEndpoint({
       },
     },
   },
-})
+});
 
 // ============================================================================
 // SCHEMA DEFINITIONS
@@ -494,7 +494,7 @@ apiRegistry.registerSchema('Risk', {
       description: 'Associated documents and files',
     },
   },
-})
+});
 
 apiRegistry.registerSchema('CreateRiskRequest', {
   type: 'object',
@@ -591,4 +591,4 @@ apiRegistry.registerSchema('SubscriptionPlan', {
 // EXPORT REGISTRY
 // ============================================================================
 
-export { apiRegistry }
+export { apiRegistry };

@@ -79,7 +79,7 @@ export default function GuidedTour({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Tour launcher component
@@ -87,7 +87,7 @@ export const TourLauncher = ({
   tours = ['platform-overview', 'risk-assessment-workflow'],
   className = '',
 }: {
-  tours?: string[]
+  tours?: string[];
   className?: string;
 }) => {
   return (
@@ -103,4 +103,4 @@ export const TourLauncher = ({
       </div>
     </div>
   );
-}
+};

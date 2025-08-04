@@ -17,7 +17,7 @@ interface AIGenerateResponse {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
-  }
+  };
   id?: string;
 }
 
@@ -69,7 +69,7 @@ export function useAI(): UseAIReturn {
         if (errorMessage.includes('quota exceeded')) {
           toast.error(
             'AI generation quota exceeded. Please upgrade your plan or wait for the quota to reset.'
-          )
+          );
         } else if (errorMessage.includes('rate limit')) {
           toast.error('Too many requests. Please wait a moment before trying again.');
         } else {
@@ -88,7 +88,7 @@ export function useAI(): UseAIReturn {
     generate,
     loading,
     error,
-  }
+  };
 }
 
 /**

@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest) {
         },
         selectedEntities: [] as any[],
       },
-    }
+    };
 
     // Mock risks and controls data
     const mockRisks = [
@@ -46,7 +46,7 @@ export async function GET(_request: NextRequest) {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
-    ]
+    ];
 
     const mockControls = [
       {
@@ -116,7 +116,7 @@ export async function POST(_request: NextRequest) {
         },
         selectedEntities: [] as any[],
       },
-    }
+    };
 
     return NextResponse.json({
       message: 'Dashboard preferences updated successfully',

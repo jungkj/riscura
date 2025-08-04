@@ -21,12 +21,12 @@ export default function OAuthTestPage() {
       setLoading(true);
 
       // Fetch environment data
-      const envResponse = await fetch('/api/check-env')
+      const envResponse = await fetch('/api/check-env');
       const envJson = await envResponse.json();
       setEnvData(envJson);
 
       // Fetch database test data
-      const dbResponse = await fetch('/api/test-db')
+      const dbResponse = await fetch('/api/test-db');
       const dbJson = await dbResponse.json();
       setDbTestData(dbJson);
     } catch (err) {
@@ -34,11 +34,11 @@ export default function OAuthTestPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const testGoogleLogin = () => {
     window.location.href = '/api/google-oauth/login?redirect=/dashboard';
-  }
+  };
 
   if (loading) {
     return (

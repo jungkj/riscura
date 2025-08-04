@@ -34,7 +34,7 @@ export interface StorageProvider {
 
 // Local Storage Provider
 export class LocalStorageProvider implements StorageProvider {
-  private basePath: string
+  private basePath: string;
   private fileRegistry: Map<string, string> = new Map();
 
   constructor(basePath: string = './uploads') {
@@ -47,13 +47,13 @@ export class LocalStorageProvider implements StorageProvider {
     const filePath = this.getFilePath(fileId, filename);
 
     // Ensure directory exists
-    await fs.mkdir(path.dirname(filePath), { recursive: true })
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
 
     // Write file
-    await fs.writeFile(filePath, file)
+    await fs.writeFile(filePath, file);
 
     // Calculate checksum
-    const checksum = crypto.createHash('sha256').update(file).digest('hex')
+    const checksum = crypto.createHash('sha256').update(file).digest('hex');
 
     // Save metadata
     const metadata = {
@@ -61,12 +61,12 @@ export class LocalStorageProvider implements StorageProvider {
       originalName: filename,
       uploadedAt: new Date().toISOString(),
       checksum,
-    }
+    };
 
     await fs.writeFile(`${filePath}.meta`, JSON.stringify(metadata, null, 2));
 
     // Register file path for retrieval
-    this.fileRegistry.set(fileId, filePath)
+    this.fileRegistry.set(fileId, filePath);
 
     return {
       id: fileId,
@@ -77,7 +77,7 @@ export class LocalStorageProvider implements StorageProvider {
       path: filePath,
       checksum,
       metadata,
-    }
+    };
   }
 
   async download(fileId: string): Promise<Buffer> {
@@ -97,7 +97,7 @@ export class LocalStorageProvider implements StorageProvider {
   async getUrl(fileId: string, expiresIn?: number): Promise<string> {
     // For local storage, return a local URL
     // In production, this would be served through your web server
-    return `/api/documents/${fileId}/download`
+    return `/api/documents/${fileId}/download`;
   }
 
   async exists(fileId: string): Promise<boolean> {
@@ -118,7 +118,7 @@ export class LocalStorageProvider implements StorageProvider {
       const metaData = await fs.readFile(metaPath, 'utf-8');
       return JSON.parse(metaData);
     } catch {
-      return {}
+      return {};
     }
   }
 
@@ -157,7 +157,7 @@ export class LocalStorageProvider implements StorageProvider {
       '.gif': 'image/gif',
       '.txt': 'text/plain',
       '.csv': 'text/csv',
-    }
+    };
 
     return mimeTypes[ext] || 'application/octet-stream';
   }
@@ -168,14 +168,15 @@ export function createStorageProvider(): StorageProvider {
   switch (storageConfig.type) {
     case 'local':
     default:
-      return new LocalStorageProvider()
+      return new LocalStorageProvider();
   }
 }
 
 // File validation utilities
-export function validateFile(_file: File,
+export function validateFile(
+  _file: File,
   options: {
-    maxSize?: number
+    maxSize?: number;
     allowedTypes?: string[];
     allowedExtensions?: string[];
   }
@@ -184,17 +185,17 @@ export function validateFile(_file: File,
 
   // Check file size
   if (options.maxSize && file.size > options.maxSize) {
-    errors.push(`File size exceeds maximum allowed size of ${formatFileSize(options.maxSize)}`)
+    errors.push(`File size exceeds maximum allowed size of ${formatFileSize(options.maxSize)}`);
   }
 
   // Check file type
   if (options.allowedTypes && !options.allowedTypes.includes(file.type)) {
-    errors.push(`File type ${file.type} is not allowed`)
+    errors.push(`File type ${file.type} is not allowed`);
   }
 
   // Check file extension
   if (options.allowedExtensions) {
-    const extension = path.extname(file.name).toLowerCase()
+    const extension = path.extname(file.name).toLowerCase();
     if (!options.allowedExtensions.includes(extension)) {
       errors.push(`File extension ${extension} is not allowed`);
     }
@@ -203,7 +204,7 @@ export function validateFile(_file: File,
   return {
     valid: errors.length === 0,
     errors,
-  }
+  };
 }
 
 export function formatFileSize(bytes: number): string {
@@ -236,10 +237,10 @@ export function getFileIcon(filename: string): string {
     '.csv': '📊',
     '.zip': '🗜️',
     '.rar': '🗜️',
-  }
+  };
 
   return iconMap[ext] || '📎';
 }
 
 // Export singleton instance
-export const storage = createStorageProvider()
+export const storage = createStorageProvider();

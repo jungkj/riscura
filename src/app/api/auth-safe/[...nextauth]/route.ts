@@ -6,14 +6,14 @@ import { NextRequest, NextResponse } from 'next/server';
 async function handler(req: NextRequest, context: any) {
   try {
     // Get auth options dynamically
-    const authOptions = await getAuthOptions()
+    const authOptions = await getAuthOptions();
 
     // Initialize NextAuth with the options
-    const handlers = NextAuth(authOptions)
+    const handlers = NextAuth(authOptions);
 
     // Route to appropriate handler
     if (typeof handlers === 'function') {
-      return handlers(req, context)
+      return handlers(req, context);
     } else if (req.method === 'GET' && handlers.GET) {
       return handlers.GET(req, context);
     } else if (req.method === 'POST' && handlers.POST) {
@@ -44,8 +44,8 @@ async function handler(req: NextRequest, context: any) {
           'Cache-Control': 'no-store',
         },
       }
-    )
+    );
   }
 }
 
-export { handler as GET, handler as POST, handler as PUT, handler as DELETE }
+export { handler as GET, handler as POST, handler as PUT, handler as DELETE };

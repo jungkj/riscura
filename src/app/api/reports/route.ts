@@ -8,7 +8,7 @@ import { ReportType, ReportStatus } from '@prisma/client';
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
-    const user = (req as any).user
+    const user = (req as any).user;
 
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -18,7 +18,7 @@ export const GET = withApiMiddleware(
     }
 
     // Parse query parameters
-    const { searchParams } = new URL(req.url)
+    const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
 
@@ -27,10 +27,10 @@ export const GET = withApiMiddleware(
       status: searchParams.get('status') as ReportStatus | undefined,
       createdBy: searchParams.get('createdBy') || undefined,
       search: searchParams.get('search') || undefined,
-    }
+    };
 
     // Parse date filters
-    const dateFrom = searchParams.get('dateFrom')
+    const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
     if (dateFrom) filters.dateFrom = new Date(dateFrom);
     if (dateTo) filters.dateTo = new Date(dateTo);
@@ -57,13 +57,13 @@ const CreateReportSchema = z.object({
   type: z.nativeEnum(ReportType),
   templateId: z.string().optional(),
   parameters: z.record(z.any()).optional(),
-})
+});
 
 // POST /api/reports - Create new report
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
-    const user = (req as any).user
+    const user = (req as any).user;
 
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -97,7 +97,7 @@ export const PUT = withApiMiddleware(
     return NextResponse.json(
       { error: 'Bulk update not supported. Use /api/reports/[id] for individual updates.' },
       { status: 400 }
-    )
+    );
   },
   { requireAuth: true }
 );
@@ -106,7 +106,7 @@ export const PUT = withApiMiddleware(
 export const DELETE = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
-    const user = (req as any).user
+    const user = (req as any).user;
 
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -117,7 +117,7 @@ export const DELETE = withApiMiddleware(
 
     // Check if user has admin permissions
     if (user.role !== 'ADMIN' && user.role !== 'OWNER') {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
     const body = await req.json();
@@ -130,7 +130,7 @@ export const DELETE = withApiMiddleware(
     // Delete reports one by one
     const results = await Promise.allSettled(
       reportIds.map((id) => ReportService.deleteReport(id, user.organizationId))
-    )
+    );
 
     const successful = results.filter((r) => r.status === 'fulfilled').length;
     const failed = results.filter((r) => r.status === 'rejected').length;

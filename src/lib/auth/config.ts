@@ -1,6 +1,6 @@
 // Mock auth configuration
 export interface User {
-  id: string
+  id: string;
   email: string;
   name: string;
   role: string;
@@ -13,18 +13,18 @@ export const getCurrentUser = async (): Promise<User | null> => {
     email: 'user@example.com',
     name: 'John Doe',
     role: 'admin',
-  }
-}
+  };
+};
 
 export const requireAuth = () => {
   // Mock auth middleware
-  return true
-}
+  return true;
+};
 
 export const hasPermission = (user: User, permission: string): boolean => {
   // Mock permission check
-  return true
-}
+  return true;
+};
 
 // Mock NextAuth configuration - compatibility export
 export const authOptions = {
@@ -33,7 +33,7 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }: any) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
         token.role = user.role;
       }
       return token;
@@ -46,4 +46,4 @@ export const authOptions = {
       return session;
     },
   },
-}
+};

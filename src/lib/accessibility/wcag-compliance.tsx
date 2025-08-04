@@ -41,7 +41,7 @@ export const WCAGThresholds = {
   LARGE_TEXT_WEIGHT: 700,
   TOUCH_TARGET_SIZE: 44, // px minimum
   FOCUS_INDICATOR_WIDTH: 2, // px minimum
-} as const
+} as const;
 
 export class ContrastCalculator {
   /**
@@ -49,24 +49,24 @@ export class ContrastCalculator {
    */
   static getRelativeLuminance(hexColor: string): number {
     // Remove # if present
-    const hex = hexColor.replace('#', '')
+    const hex = hexColor.replace('#', '');
 
     // Convert to RGB
-    const r = parseInt(hex.substr(0, 2), 16) / 255
+    const r = parseInt(hex.substr(0, 2), 16) / 255;
     const g = parseInt(hex.substr(2, 2), 16) / 255;
     const b = parseInt(hex.substr(4, 2), 16) / 255;
 
     // Apply gamma correction
     const getRGBValue = (_val: number) => {
-      return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4)
-    }
+      return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+    };
 
     const rLin = getRGBValue(r);
     const gLin = getRGBValue(g);
     const bLin = getRGBValue(b);
 
     // Calculate relative luminance
-    return 0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin
+    return 0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin;
   }
 
   /**
@@ -97,7 +97,7 @@ export class ContrastCalculator {
     // Determine if text is considered "large"
     const isLargeText =
       fontSize >= WCAGThresholds.LARGE_TEXT_SIZE ||
-      (fontSize >= 14 && fontWeight >= WCAGThresholds.LARGE_TEXT_WEIGHT)
+      (fontSize >= 14 && fontWeight >= WCAGThresholds.LARGE_TEXT_WEIGHT);
 
     // Get required ratio based on level and text size
     const requiredRatio =
@@ -107,10 +107,10 @@ export class ContrastCalculator {
           : WCAGThresholds.CONTRAST_AAA_NORMAL
         : isLargeText
           ? WCAGThresholds.CONTRAST_AA_LARGE
-          : WCAGThresholds.CONTRAST_AA_NORMAL
+          : WCAGThresholds.CONTRAST_AA_NORMAL;
 
     // Determine compliance level
-    let complianceLevel: 'AAA' | 'AA' | 'A' | 'FAIL'
+    let complianceLevel: 'AAA' | 'AA' | 'A' | 'FAIL';
     if (ratio >= WCAGThresholds.CONTRAST_AAA_NORMAL) {
       complianceLevel = 'AAA';
     } else if (ratio >= WCAGThresholds.CONTRAST_AA_NORMAL) {
@@ -125,7 +125,7 @@ export class ContrastCalculator {
       ratio: Math.round(ratio * 100) / 100,
       level: complianceLevel,
       passes: ratio >= requiredRatio,
-    }
+    };
   }
 
   /**
@@ -139,21 +139,21 @@ export class ContrastCalculator {
     const backgroundLuminance = this.getRelativeLuminance(background);
 
     // Calculate required foreground luminance
-    const requiredLighterLuminance = (backgroundLuminance + 0.05) * targetRatio - 0.05
+    const requiredLighterLuminance = (backgroundLuminance + 0.05) * targetRatio - 0.05;
     const requiredDarkerLuminance = (backgroundLuminance + 0.05) / targetRatio - 0.05;
 
     // Convert luminance back to hex (simplified approach)
     const luminanceToHex = (luminance: number): string => {
-      const value = Math.round(Math.pow(luminance / 0.2126, 1 / 2.4) * 255)
+      const value = Math.round(Math.pow(luminance / 0.2126, 1 / 2.4) * 255);
       const clampedValue = Math.max(0, Math.min(255, value));
       const hex = clampedValue.toString(16).padStart(2, '0');
       return `#${hex}${hex}${hex}`;
-    }
+    };
 
     return {
       lighter: luminanceToHex(Math.min(1, requiredLighterLuminance)),
       darker: luminanceToHex(Math.max(0, requiredDarkerLuminance)),
-    }
+    };
   }
 }
 
@@ -194,7 +194,7 @@ export class ColorBlindnessSimulator {
         -webkit-filter: grayscale(100%);
       `,
     },
-  }
+  };
 
   /**
    * Generate SVG filters for color blindness simulation
@@ -256,20 +256,20 @@ export class ColorBlindnessSimulator {
     foreground: string,
     background: string
   ): Record<string, { accessible: boolean; alternative?: string }> {
-    const results: Record<string, { accessible: boolean; alternative?: string }> = {}
+    const results: Record<string, { accessible: boolean; alternative?: string }> = {};
 
     // For each color blindness type, check if the combination is still distinguishable
     Object.keys(this.filters).forEach((filterType) => {
       // This is a simplified check - in a real implementation,
       // you would apply the color transformation and check contrast
-      const contrast = ContrastCalculator.getContrastRatio(foreground, background)
+      const contrast = ContrastCalculator.getContrastRatio(foreground, background);
       results[filterType] = {
         accessible: contrast >= WCAGThresholds.CONTRAST_AA_NORMAL,
         alternative:
           contrast < WCAGThresholds.CONTRAST_AA_NORMAL
             ? ContrastCalculator.suggestAccessibleColors(foreground, background).darker
             : undefined,
-      }
+      };
     });
 
     return results;
@@ -295,7 +295,7 @@ export class FocusManager {
       outlineOffset: '2px',
       boxShadow: '0 0 0 2px #ffffff, 0 0 0 6px #000000',
     },
-  }
+  };
 
   /**
    * Apply focus indicator style to element
@@ -340,17 +340,17 @@ export class FocusManager {
           firstElement.focus();
         }
       }
-    }
+    };
 
     container.addEventListener('keydown', handleTabKey);
 
     // Focus first element
-    firstElement?.focus()
+    firstElement?.focus();
 
     // Return cleanup function
     return () => {
-      container.removeEventListener('keydown', handleTabKey)
-    }
+      container.removeEventListener('keydown', handleTabKey);
+    };
   }
 
   /**
@@ -391,7 +391,7 @@ export class ScreenReaderOptimizer {
     nextPage: 'Next page',
     firstPage: 'First page',
     lastPage: 'Last page',
-  }
+  };
 
   /**
    * Create live region for announcements
@@ -420,7 +420,7 @@ export class ScreenReaderOptimizer {
 
     // Clean up after announcement
     setTimeout(() => {
-      document.body.removeChild(liveRegion)
+      document.body.removeChild(liveRegion);
     }, 1000);
   }
 
@@ -438,38 +438,38 @@ export class ScreenReaderOptimizer {
           container: 'table',
           items: 'tr',
           labels: ['role="table"', 'aria-label', 'caption'],
-        }
+        };
       case 'list':
         return {
           container: 'ul',
           items: 'li',
           labels: ['role="list"', 'aria-label'],
-        }
+        };
       case 'navigation':
         return {
           container: 'nav',
           items: 'a',
           labels: ['role="navigation"', 'aria-label="Main navigation"'],
-        }
+        };
       case 'form':
         return {
           container: 'form',
           items: 'fieldset',
           labels: ['role="form"', 'aria-label', 'novalidate'],
-        }
+        };
       default:
         return {
           container: 'div',
           items: 'div',
           labels: [],
-        }
+        };
     }
   }
 }
 
 // WCAG Compliance Context
 export const WCAGComplianceContext = createContext<{
-  settings: WCAGComplianceSettings
+  settings: WCAGComplianceSettings;
   updateSettings: (_settings: Partial<WCAGComplianceSettings>) => void;
   checkContrast: (fg: string, bg: string) => ContrastRatio;
   applyColorBlindFilter: (filter: string) => void;
@@ -498,7 +498,7 @@ export const useWCAGCompliance = () => {
     throw new Error('useWCAGCompliance must be used within WCAGComplianceProvider');
   }
   return context;
-}
+};
 
 // WCAG Compliance Provider Component
 export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -512,11 +512,11 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
     screenReaderOptimizations: true,
     keyboardNavigation: true,
     autoAnnouncements: true,
-  })
+  });
 
   const updateSettings = (newSettings: Partial<WCAGComplianceSettings>) => {
     setSettings((prev) => ({ ...prev, ...newSettings }));
-  }
+  };
 
   const checkContrast = (foreground: string, background: string): ContrastRatio => {
     return ContrastCalculator.checkContrastCompliance(
@@ -526,7 +526,7 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
       400,
       settings.contrastLevel
     );
-  }
+  };
 
   const applyColorBlindFilter = (filterType: string) => {
     const bodyElement = document.body;
@@ -538,13 +538,13 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
         filterType as keyof typeof ColorBlindnessSimulator.filters
       );
     }
-  }
+  };
 
   const announceToScreenReader = (message: string) => {
     if (settings.autoAnnouncements) {
       ScreenReaderOptimizer.announce(message, 'polite');
     }
-  }
+  };
 
   // Apply global settings when they change
   useEffect(() => {
@@ -554,31 +554,31 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
       medium: '16px',
       large: '18px',
       'x-large': '20px',
-    }[settings.fontSize]
+    }[settings.fontSize];
 
     document.documentElement.style.fontSize = fontSize;
 
     // Apply high contrast mode
     if (settings.highContrast) {
-      document.body.classList.add('high-contrast')
+      document.body.classList.add('high-contrast');
     } else {
       document.body.classList.remove('high-contrast');
     }
 
     // Apply reduced motion
     if (settings.reducedMotion) {
-      document.body.classList.add('reduce-motion')
+      document.body.classList.add('reduce-motion');
     } else {
       document.body.classList.remove('reduce-motion');
     }
 
     // Apply color blind filter
-    applyColorBlindFilter(settings.colorBlindMode)
+    applyColorBlindFilter(settings.colorBlindMode);
   }, [settings]);
 
   // Add SVG filters to DOM
   useEffect(() => {
-    const svgFilters = ColorBlindnessSimulator.generateSVGFilters()
+    const svgFilters = ColorBlindnessSimulator.generateSVGFilters();
     const div = document.createElement('div');
     div.innerHTML = svgFilters;
     document.body.appendChild(div.firstChild as Node);
@@ -588,7 +588,7 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
       if (svgElement) {
         document.body.removeChild(svgElement);
       }
-    }
+    };
   }, []);
 
   return (
@@ -604,18 +604,18 @@ export const WCAGComplianceProvider: React.FC<{ children: React.ReactNode }> = (
       {children}
     </WCAGComplianceContext.Provider>
   );
-}
+};
 
 // Utility functions for React components
 export const useContrastCheck = (foreground: string, background: string) => {
-  const { checkContrast } = useWCAGCompliance()
+  const { checkContrast } = useWCAGCompliance();
   return checkContrast(foreground, background);
-}
+};
 
 export const useScreenReaderAnnouncement = () => {
   const { announceToScreenReader } = useWCAGCompliance();
   return announceToScreenReader;
-}
+};
 
 export const useFocusTrap = (isActive: boolean) => {
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
@@ -628,4 +628,4 @@ export const useFocusTrap = (isActive: boolean) => {
   }, [isActive, containerRef]);
 
   return setContainerRef;
-}
+};

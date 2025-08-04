@@ -20,14 +20,14 @@ const Logo: React.FC<LogoProps> = ({
     md: { width: 120, height: 40, iconWidth: 32, iconHeight: 32 },
     lg: { width: 160, height: 54, iconWidth: 48, iconHeight: 48 },
     xl: { width: 200, height: 67, iconWidth: 64, iconHeight: 64 },
-  }
+  };
 
   // Logo source mapping
   const logoSrc = {
     full: '/images/logo/riscura.png',
     icon: '/images/logo/riscura.png', // Using same logo for now
     white: '/images/logo/riscura.png', // Using same logo for now
-  }
+  };
 
   const { width, height, iconWidth, iconHeight } = sizeMap[size];
   const isIcon = variant === 'icon';
@@ -44,7 +44,7 @@ const Logo: React.FC<LogoProps> = ({
       />
     </div>
   );
-}
+};
 
 // Placeholder component (until you upload your logo)
 export const LogoPlaceholder: React.FC<LogoProps> = ({
@@ -57,7 +57,7 @@ export const LogoPlaceholder: React.FC<LogoProps> = ({
     md: { width: 120, height: 40 },
     lg: { width: 160, height: 54 },
     xl: { width: 200, height: 67 },
-  }
+  };
 
   const { width, height } = sizeMap[size];
   const isIcon = variant === 'icon';
@@ -110,6 +110,6 @@ export const LogoPlaceholder: React.FC<LogoProps> = ({
       </span>
     </div>
   );
-}
+};
 
 export default Logo;

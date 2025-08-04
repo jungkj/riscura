@@ -50,13 +50,13 @@ export class MultiTenantAIService {
     const subdomain = domain.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // Create tenant environment with isolation
-    const _environment = await this.createTenantEnvironment(tenantId)
+    const _environment = await this.createTenantEnvironment(tenantId);
 
     // Initialize default AI personality
-    const defaultPersonality = this.createDefaultAIPersonality(name)
+    const defaultPersonality = this.createDefaultAIPersonality(name);
 
     // Initialize default branding
-    const defaultBranding = this.createDefaultBranding(name, subdomain)
+    const defaultBranding = this.createDefaultBranding(name, subdomain);
 
     const tenant: Tenant = {
       id: tenantId,
@@ -84,16 +84,16 @@ export class MultiTenantAIService {
         tags: [],
         notes: '',
       },
-    }
+    };
 
     // Store tenant and initialize tracking
-    this.tenants.set(tenantId, tenant)
+    this.tenants.set(tenantId, tenant);
     this.conversations.set(tenantId, new Map());
     this.usageTracking.set(tenantId, this.initializeUsageAnalytics());
     this.activeSessions.set(tenantId, new Set());
 
     // Set up monitoring and billing
-    await this.setupTenantMonitoring(tenantId)
+    await this.setupTenantMonitoring(tenantId);
     await this.initializeBillingCycle(tenantId);
 
     return tenant;
@@ -102,7 +102,8 @@ export class MultiTenantAIService {
   /**
    * Process AI request with complete tenant isolation
    */
-  async processAIRequest(_tenantId: string,
+  async processAIRequest(
+    _tenantId: string,
     userId: string,
     sessionId: string,
     conversationId: string,
@@ -114,13 +115,13 @@ export class MultiTenantAIService {
     } = {}
   ): Promise<AIResponse> {
     // Validate tenant and get context
-    const tenant = await this.validateAndGetTenant(tenantId)
+    const tenant = await this.validateAndGetTenant(tenantId);
     if (!tenant) {
       throw new Error(`Tenant ${tenantId} not found or inactive`);
     }
 
     // Check subscription limits
-    await this.validateSubscriptionLimits(tenantId, 'ai_query')
+    await this.validateSubscriptionLimits(tenantId, 'ai_query');
 
     // Create conversation context with isolation
     const context = await this.createConversationContext(
@@ -129,7 +130,7 @@ export class MultiTenantAIService {
       sessionId,
       conversationId,
       options
-    )
+    );
 
     // Apply tenant-specific security and filtering
     const securityResult = await aiSecurityService.processSecureAIRequest({
@@ -144,7 +145,7 @@ export class MultiTenantAIService {
         userAgent: 'multi_tenant_service',
       },
       metadata: { tenantId },
-    })
+    });
 
     if (!securityResult.securityApproved) {
       throw new Error('Request blocked by security filters');
@@ -156,23 +157,23 @@ export class MultiTenantAIService {
         securityResult.sanitizedContent,
         context.aiPersonality,
         options.customInstructions
-      )
+      );
 
       // Get AI response using tenant-specific model
       const aiResponse = await this.generateAIResponse(
         context,
         processedContent,
         options.modelOverride
-      )
+      );
 
       // Apply response filtering and tenant customization
-      const filteredResponse = await this.processAIResponse(tenantId, aiResponse, context)
+      const filteredResponse = await this.processAIResponse(tenantId, aiResponse, context);
 
       // Track usage and costs
-      await this.trackUsage(tenantId, context, filteredResponse)
+      await this.trackUsage(tenantId, context, filteredResponse);
 
       // Update conversation history with isolation
-      await this.updateConversationHistory(context, content, filteredResponse.content)
+      await this.updateConversationHistory(context, content, filteredResponse.content);
 
       return filteredResponse;
     } catch (error) {
@@ -180,7 +181,7 @@ export class MultiTenantAIService {
       // console.error(`AI request failed for tenant ${tenantId}:`, error)
 
       // Track failed request
-      await this.trackFailedRequest(tenantId, context, error)
+      await this.trackFailedRequest(tenantId, context, error);
 
       throw error;
     }
@@ -189,7 +190,8 @@ export class MultiTenantAIService {
   /**
    * Update tenant configuration
    */
-  async updateTenantConfiguration(_tenantId: string,
+  async updateTenantConfiguration(
+    _tenantId: string,
     updates: Partial<TenantConfiguration>
   ): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
@@ -201,16 +203,16 @@ export class MultiTenantAIService {
     tenant.configuration = {
       ...tenant.configuration,
       ...updates,
-    }
+    };
 
     tenant.updatedAt = new Date();
 
     // Validate configuration changes
-    await this.validateTenantConfiguration(tenant.configuration)
+    await this.validateTenantConfiguration(tenant.configuration);
 
     // Update isolation if needed
     if (updates.privacy || updates.dataRetention) {
-      await this.updateTenantIsolation(tenantId)
+      await this.updateTenantIsolation(tenantId);
     }
 
     this.tenants.set(tenantId, tenant);
@@ -220,7 +222,8 @@ export class MultiTenantAIService {
   /**
    * Update AI personality for tenant
    */
-  async updateAIPersonality(_tenantId: string,
+  async updateAIPersonality(
+    _tenantId: string,
     personality: Partial<AIPersonality>
   ): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
@@ -232,12 +235,12 @@ export class MultiTenantAIService {
     tenant.aiPersonality = {
       ...tenant.aiPersonality,
       ...personality,
-    }
+    };
 
     tenant.updatedAt = new Date();
 
     // Validate personality configuration
-    await this.validateAIPersonality(tenant.aiPersonality)
+    await this.validateAIPersonality(tenant.aiPersonality);
 
     this.tenants.set(tenantId, tenant);
     return tenant;
@@ -246,7 +249,10 @@ export class MultiTenantAIService {
   /**
    * Update tenant branding
    */
-  async updateTenantBranding(_tenantId: string, branding: Partial<TenantBranding>): Promise<Tenant> {
+  async updateTenantBranding(
+    _tenantId: string,
+    branding: Partial<TenantBranding>
+  ): Promise<Tenant> {
     const tenant = this.tenants.get(tenantId);
     if (!tenant) {
       throw new Error(`Tenant ${tenantId} not found`);
@@ -254,14 +260,14 @@ export class MultiTenantAIService {
 
     // Validate branding permissions
     if (branding.whiteLabel && !tenant.subscription.features.whiteLabeling) {
-      throw new Error('White labeling not available in current subscription')
+      throw new Error('White labeling not available in current subscription');
     }
 
     // Merge branding updates
     tenant.branding = {
       ...tenant.branding,
       ...branding,
-    }
+    };
 
     tenant.updatedAt = new Date();
     this.tenants.set(tenantId, tenant);
@@ -280,7 +286,7 @@ export class MultiTenantAIService {
     }
 
     // Calculate analytics for the specified period
-    const usage = await this.calculateUsageAnalytics(tenantId, period)
+    const usage = await this.calculateUsageAnalytics(tenantId, period);
     const performance = await this.calculatePerformanceAnalytics(tenantId, period);
     const costs = await this.calculateCostAnalytics(tenantId, period);
     const users = await this.calculateUserAnalytics(tenantId, period);
@@ -297,7 +303,7 @@ export class MultiTenantAIService {
         custom: [],
         exports: [],
       },
-    }
+    };
   }
 
   /**
@@ -323,7 +329,7 @@ export class MultiTenantAIService {
       invoices,
       paymentMethods: tenant.billing.paymentMethods,
       billing: tenant.billing.billing,
-    }
+    };
   }
 
   /**
@@ -422,7 +428,7 @@ export class MultiTenantAIService {
           structured: true,
         },
       },
-    }
+    };
 
     this.tenantEnvironments.set(tenantId, environment);
     return environment;
@@ -431,7 +437,8 @@ export class MultiTenantAIService {
   /**
    * Create conversation context with tenant isolation
    */
-  private async createConversationContext(_tenantId: string,
+  private async createConversationContext(
+    _tenantId: string,
     userId: string,
     sessionId: string,
     conversationId: string,
@@ -446,12 +453,12 @@ export class MultiTenantAIService {
     }
 
     // Get model configuration
-    const modelConfig = this.getModelConfiguration(tenant, options.modelOverride)
+    const modelConfig = this.getModelConfiguration(tenant, options.modelOverride);
 
     // Apply personality overrides
     const personality = options.personalityOverride
       ? { ...tenant.aiPersonality, ...options.personalityOverride }
-      : tenant.aiPersonality
+      : tenant.aiPersonality;
 
     const context: TenantConversationContext = {
       tenantId,
@@ -496,15 +503,15 @@ export class MultiTenantAIService {
         personalizations: [],
         preferences: [],
       },
-    }
+    };
 
     // Store conversation context with tenant isolation
-    const tenantConversations = this.conversations.get(tenantId) || new Map()
+    const tenantConversations = this.conversations.get(tenantId) || new Map();
     tenantConversations.set(conversationId, context);
     this.conversations.set(tenantId, tenantConversations);
 
     // Track active session
-    const activeSessions = this.activeSessions.get(tenantId) || new Set()
+    const activeSessions = this.activeSessions.get(tenantId) || new Set();
     activeSessions.add(sessionId);
     this.activeSessions.set(tenantId, activeSessions);
 
@@ -514,7 +521,8 @@ export class MultiTenantAIService {
   /**
    * Apply tenant personality to content
    */
-  private async applyTenantPersonality(_content: string,
+  private async applyTenantPersonality(
+    _content: string,
     personality: AIPersonality,
     customInstructions?: string[]
   ): Promise<string> {
@@ -522,17 +530,17 @@ export class MultiTenantAIService {
 
     // Apply system prompt
     if (personality.customPrompts.systemPrompt) {
-      enhancedContent = `${personality.customPrompts.systemPrompt}\n\n${enhancedContent}`
+      enhancedContent = `${personality.customPrompts.systemPrompt}\n\n${enhancedContent}`;
     }
 
     // Apply custom instructions
     if (customInstructions && customInstructions.length > 0) {
-      const instructions = customInstructions.join('\n')
+      const instructions = customInstructions.join('\n');
       enhancedContent = `${instructions}\n\n${enhancedContent}`;
     }
 
     // Apply communication style
-    const styleInstructions = this.generateStyleInstructions(personality)
+    const styleInstructions = this.generateStyleInstructions(personality);
     if (styleInstructions) {
       enhancedContent = `${styleInstructions}\n\n${enhancedContent}`;
     }
@@ -543,7 +551,8 @@ export class MultiTenantAIService {
   /**
    * Generate AI response using tenant configuration
    */
-  private async generateAIResponse(_context: TenantConversationContext,
+  private async generateAIResponse(
+    _context: TenantConversationContext,
     content: string,
     modelOverride?: string
   ): Promise<string> {
@@ -551,11 +560,11 @@ export class MultiTenantAIService {
 
     try {
       // Use custom model training service if available
-      const _modelId = modelOverride || context.modelConfiguration.modelId
+      const _modelId = modelOverride || context.modelConfiguration.modelId;
 
       // For demo purposes, simulate AI response generation
       // In production, this would call the actual AI model
-      await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 400))
+      await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 400));
 
       const responses = [
         `Based on your risk management query about "${content.substring(0, 50)}...", I can provide the following analysis...`,
@@ -567,7 +576,7 @@ export class MultiTenantAIService {
       const responseContent = responses[Math.floor(Math.random() * responses.length)];
 
       // Track response time
-      const responseTime = Date.now() - startTime
+      const responseTime = Date.now() - startTime;
       context.tracking.performance.latency = responseTime;
 
       return responseContent;
@@ -582,15 +591,16 @@ export class MultiTenantAIService {
   /**
    * Process AI response with tenant filtering
    */
-  private async processAIResponse(_tenantId: string,
+  private async processAIResponse(
+    _tenantId: string,
     content: string,
     context: TenantConversationContext
   ): Promise<AIResponse> {
     // Apply tenant-specific response filtering
-    const filteredContent = await this.applyResponseFiltering(tenantId, content)
+    const filteredContent = await this.applyResponseFiltering(tenantId, content);
 
     // Calculate token usage (simplified)
-    const tokenCount = Math.ceil(content.length / 4)
+    const tokenCount = Math.ceil(content.length / 4);
 
     const metadata: ResponseMetadata = {
       modelUsed: context.modelConfiguration.modelId,
@@ -600,7 +610,7 @@ export class MultiTenantAIService {
       sources: ['tenant_knowledge_base', 'general_knowledge'],
       personalityApplied: true,
       customizationsApplied: ['branding', 'tone', 'expertise'],
-    }
+    };
 
     return {
       content: filteredContent,
@@ -618,7 +628,7 @@ export class MultiTenantAIService {
         auditLogged: true,
         complianceValidated: true,
       },
-    }
+    };
   }
 
   // Helper methods
@@ -688,7 +698,7 @@ export class MultiTenantAIService {
         errorPrompts: ['I apologize for the error. Let me try to help you in a different way.'],
         closingPrompts: ['Is there anything else I can help you with regarding risk management?'],
       },
-    }
+    };
   }
 
   private createDefaultBranding(tenantName: string, subdomain: string): TenantBranding {
@@ -763,7 +773,7 @@ export class MultiTenantAIService {
         customIcons: [],
         backgroundImages: [],
       },
-    }
+    };
   }
 
   private mergeWithDefaultConfiguration(
@@ -884,14 +894,14 @@ export class MultiTenantAIService {
         behaviorCustomizations: [],
         featureToggles: [],
       },
-    }
+    };
 
-    return { ...defaultConfig, ...config }
+    return { ...defaultConfig, ...config };
   }
 
   // Additional helper methods would be implemented here...
   private async validateAndGetTenant(_tenantId: string): Promise<Tenant | null> {
-    const tenant = this.tenants.get(tenantId)
+    const tenant = this.tenants.get(tenantId);
     return tenant?.status === 'active' ? tenant : null;
   }
 
@@ -907,7 +917,7 @@ export class MultiTenantAIService {
       feature === 'ai_query' &&
       usage.aiQueries.totalQueries >= tenant.subscription.limits.maxAIQueries
     ) {
-      throw new Error('AI query limit exceeded')
+      throw new Error('AI query limit exceeded');
     }
   }
 
@@ -928,7 +938,7 @@ export class MultiTenantAIService {
     // Add communication style instructions
     switch (personality.communication.verbosity) {
       case 'concise':
-        instructions.push('Be concise and direct in your responses.')
+        instructions.push('Be concise and direct in your responses.');
         break;
       case 'detailed':
         instructions.push('Provide detailed explanations with context.');
@@ -940,7 +950,7 @@ export class MultiTenantAIService {
 
     // Add tone instructions
     if (personality.tone.formal > 70) {
-      instructions.push('Maintain a formal and professional tone.')
+      instructions.push('Maintain a formal and professional tone.');
     } else if (personality.tone.friendly > 70) {
       instructions.push('Use a friendly and approachable tone.');
     }
@@ -951,14 +961,15 @@ export class MultiTenantAIService {
   private async applyResponseFiltering(_tenantId: string, content: string): Promise<string> {
     // Apply tenant-specific content filtering
     // This is a simplified implementation
-    return content
+    return content;
   }
 
   private calculateResponseCost(tokens: number, modelConfig: ModelConfiguration): number {
     return tokens * (modelConfig.usage.costPerQuery / 1000);
   }
 
-  private async trackUsage(_tenantId: string,
+  private async trackUsage(
+    _tenantId: string,
     context: TenantConversationContext,
     response: AIResponse
   ): Promise<void> {
@@ -971,7 +982,8 @@ export class MultiTenantAIService {
     }
   }
 
-  private async trackFailedRequest(_tenantId: string,
+  private async trackFailedRequest(
+    _tenantId: string,
     context: TenantConversationContext,
     error: unknown
   ): Promise<void> {
@@ -983,7 +995,7 @@ export class MultiTenantAIService {
 
   // Public API methods
   public async getTenant(_tenantId: string): Promise<Tenant | undefined> {
-    return this.tenants.get(tenantId)
+    return this.tenants.get(tenantId);
   }
 
   public async getAllTenants(): Promise<Tenant[]> {
@@ -992,14 +1004,14 @@ export class MultiTenantAIService {
 
   public async deleteTenant(_tenantId: string): Promise<void> {
     // Mark tenant as deactivated
-    const tenant = this.tenants.get(tenantId)
+    const tenant = this.tenants.get(tenantId);
     if (tenant) {
       tenant.status = 'deactivated';
       tenant.updatedAt = new Date();
     }
 
     // Clean up resources
-    this.conversations.delete(tenantId)
+    this.conversations.delete(tenantId);
     this.usageTracking.delete(tenantId);
     this.activeSessions.delete(tenantId);
     this.tenantEnvironments.delete(tenantId);
@@ -1083,7 +1095,7 @@ export class MultiTenantAIService {
         encryptionAtRest: true,
         encryptionInTransit: true,
       },
-    }
+    };
   }
 
   private initializeTenantAnalytics(): TenantAnalytics {
@@ -1179,7 +1191,7 @@ export class MultiTenantAIService {
         custom: [],
         exports: [],
       },
-    }
+    };
   }
 
   private initializeTenantBilling(subscription: TenantSubscription): TenantBilling {
@@ -1215,7 +1227,7 @@ export class MultiTenantAIService {
         invoiceDelivery: 'email',
         currency: subscription.plan.currency,
       },
-    }
+    };
   }
 
   private async initializeTenantSecurity(_tenantId: string): Promise<TenantSecurity> {
@@ -1303,7 +1315,7 @@ export class MultiTenantAIService {
         },
       },
       incidents: [],
-    }
+    };
   }
 
   private initializeUsageAnalytics(): UsageAnalytics {
@@ -1358,7 +1370,7 @@ export class MultiTenantAIService {
         peakUsage: 0,
         averageUsage: 0,
       },
-    }
+    };
   }
 
   // Additional placeholder methods
@@ -1368,16 +1380,19 @@ export class MultiTenantAIService {
   private async validateTenantConfiguration(_config: TenantConfiguration): Promise<void> {}
   private async validateAIPersonality(_personality: AIPersonality): Promise<void> {}
   private async updateTenantIsolation(_tenantId: string): Promise<void> {}
-  private async updateConversationHistory(_context: TenantConversationContext,
+  private async updateConversationHistory(
+    _context: TenantConversationContext,
     request: string,
     response: string
   ): Promise<void> {}
-  private async calculateUsageAnalytics(_tenantId: string,
+  private async calculateUsageAnalytics(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<UsageAnalytics> {
-    return this.initializeUsageAnalytics()
+    return this.initializeUsageAnalytics();
   }
-  private async calculatePerformanceAnalytics(_tenantId: string,
+  private async calculatePerformanceAnalytics(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<PerformanceAnalytics> {
     return {
@@ -1392,9 +1407,10 @@ export class MultiTenantAIService {
         satisfactionScore: 0,
       },
       bottlenecks: [],
-    }
+    };
   }
-  private async calculateCostAnalytics(_tenantId: string,
+  private async calculateCostAnalytics(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<CostAnalytics> {
     return {
@@ -1403,9 +1419,10 @@ export class MultiTenantAIService {
       trends: [],
       projections: [],
       optimizationOpportunities: [],
-    }
+    };
   }
-  private async calculateUserAnalytics(_tenantId: string,
+  private async calculateUserAnalytics(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<UserAnalytics> {
     return {
@@ -1415,9 +1432,10 @@ export class MultiTenantAIService {
       userGrowth: 0,
       retentionRate: 0,
       churnRate: 0,
-    }
+    };
   }
-  private async generateAnalyticsInsights(_tenantId: string,
+  private async generateAnalyticsInsights(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<AnalyticsInsights> {
     return {
@@ -1425,9 +1443,10 @@ export class MultiTenantAIService {
       anomalies: [],
       recommendations: [],
       predictions: [],
-    }
+    };
   }
-  private async calculateBillingUsage(_tenantId: string,
+  private async calculateBillingUsage(
+    _tenantId: string,
     period: BillingPeriod
   ): Promise<BillingUsage> {
     return {
@@ -1437,9 +1456,10 @@ export class MultiTenantAIService {
       bandwidthUsed: 0,
       customModels: 0,
       additionalFeatures: {},
-    }
+    };
   }
-  private async calculateBillingCosts(_tenantId: string,
+  private async calculateBillingCosts(
+    _tenantId: string,
     usage: BillingUsage
   ): Promise<BillingCosts> {
     return {
@@ -1450,7 +1470,7 @@ export class MultiTenantAIService {
       taxes: 0,
       total: 0,
       currency: 'USD',
-    }
+    };
   }
   private async getTenantInvoices(_tenantId: string): Promise<Invoice[]> {
     return [];
@@ -1460,9 +1480,9 @@ export class MultiTenantAIService {
       start: new Date(),
       end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       status: 'current',
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const multiTenantAIService = new MultiTenantAIService()
+export const multiTenantAIService = new MultiTenantAIService();

@@ -18,7 +18,7 @@ import {
 } from '../../../utils/test-helpers';
 
 // Mock the database
-const mockPrisma = createMockPrismaClient()
+const mockPrisma = createMockPrismaClient();
 jest.mock('@/lib/db', () => ({
   db: {
     client: mockPrisma,
@@ -35,7 +35,7 @@ const mockBillingManager = {
   getBillingAnalytics: jest.fn(),
   reactivateSubscription: jest.fn(),
   createSubscriptionPlan: jest.fn(),
-}
+};
 
 jest.mock('@/lib/billing/manager', () => ({
   billingManager: mockBillingManager,
@@ -54,7 +54,7 @@ describe('/api/billing/subscriptions', () => {
     testSubscription = createTestSubscription();
 
     // Reset all mocks
-    jest.clearAllMocks()
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -67,13 +67,13 @@ describe('/api/billing/subscriptions', () => {
 
   describe('GET /api/billing/plans', () => {
     it('should return all active subscription plans', async () => {
-      const mockPlans = [testPlan, { ...testPlan, id: 'plan-456', name: 'Enterprise' }]
+      const mockPlans = [testPlan, { ...testPlan, id: 'plan-456', name: 'Enterprise' }];
       mockBillingManager.getSubscriptionPlans.mockResolvedValue(mockPlans);
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/plans');
 
       // Import the route handler dynamically to ensure mocks are applied
-      const { GET } = await import('@/app/api/billing/plans/route')
+      const { GET } = await import('@/app/api/billing/plans/route');
       const response = await GET(request);
       const data = await response.json();
 
@@ -146,17 +146,18 @@ describe('/api/billing/subscriptions', () => {
   describe('POST /api/billing/subscriptions', () => {
     it('should create a new subscription successfully', async () => {
       // Mock database checks
-      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({
-        ...testPlan,
-        isActive: true,
-      })
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null);
+      (mockPrisma.subscriptionPlan.findUnique as any)
+        .mockResolvedValue({
+          ...testPlan,
+          isActive: true,
+        })(mockPrisma.organizationSubscription.findFirst as any)
+        .mockResolvedValue(null);
       mockBillingManager.createSubscription.mockResolvedValue(testSubscription);
 
       const requestBody = {
         planId: testPlan.id,
         options: { trialDays: 14 },
-      }
+      };
 
       const request = createMockRequest('POST', 'http://localhost:3000/api/billing/subscriptions', {
         body: requestBody,
@@ -212,11 +213,12 @@ describe('/api/billing/subscriptions', () => {
 
     it('should handle duplicate subscription errors', async () => {
       // Mock database checks showing existing subscription
-      (mockPrisma.subscriptionPlan.findUnique as any).mockResolvedValue({
-        ...testPlan,
-        isActive: true,
-      })
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription);
+      (mockPrisma.subscriptionPlan.findUnique as any)
+        .mockResolvedValue({
+          ...testPlan,
+          isActive: true,
+        })(mockPrisma.organizationSubscription.findFirst as any)
+        .mockResolvedValue(testSubscription);
 
       const request = createMockRequest('POST', 'http://localhost:3000/api/billing/subscriptions', {
         body: { planId: testPlan.id },
@@ -243,7 +245,7 @@ describe('/api/billing/subscriptions', () => {
       (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue({
         ...testSubscription,
         plan: testPlan,
-      })
+      });
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/subscriptions', {
         user: testUser,
@@ -271,7 +273,7 @@ describe('/api/billing/subscriptions', () => {
 
     it('should return free plan when no subscription found', async () => {
       // Mock no subscription found
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null)
+      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null);
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/billing/subscriptions', {
         user: testUser,
@@ -306,9 +308,10 @@ describe('/api/billing/subscriptions', () => {
 
   describe('PUT /api/billing/subscriptions', () => {
     it('should update subscription plan successfully', async () => {
-      const updatedSubscription = { ...testSubscription, planId: 'new-plan-123' }
-      // Mock database check for subscription ownership
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription)
+      const updatedSubscription = { ...testSubscription, planId: 'new-plan-123' }(
+        // Mock database check for subscription ownership
+        mockPrisma.organizationSubscription.findFirst as any
+      ).mockResolvedValue(testSubscription);
       mockBillingManager.changeSubscriptionPlan.mockResolvedValue(updatedSubscription);
 
       const request = createMockRequest('PUT', 'http://localhost:3000/api/billing/subscriptions', {
@@ -331,7 +334,7 @@ describe('/api/billing/subscriptions', () => {
     });
 
     it('should require billing permissions for plan changes', async () => {
-      const regularUser = { ...testUser, role: 'USER', permissions: ['read:risks'] }
+      const regularUser = { ...testUser, role: 'USER', permissions: ['read:risks'] };
 
       const request = createMockRequest('PUT', 'http://localhost:3000/api/billing/subscriptions', {
         body: { subscriptionId: testSubscription.id, planId: 'new-plan-123', action: 'upgrade' },
@@ -353,9 +356,10 @@ describe('/api/billing/subscriptions', () => {
 
   describe('DELETE /api/billing/subscriptions', () => {
     it('should cancel subscription immediately', async () => {
-      const canceledSubscription = { ...testSubscription, status: 'canceled' }
-      // Mock database check for subscription ownership
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription)
+      const canceledSubscription = { ...testSubscription, status: 'canceled' }(
+        // Mock database check for subscription ownership
+        mockPrisma.organizationSubscription.findFirst as any
+      ).mockResolvedValue(testSubscription);
       mockBillingManager.cancelSubscription.mockResolvedValue(canceledSubscription);
 
       const request = createMockRequest(
@@ -376,9 +380,10 @@ describe('/api/billing/subscriptions', () => {
     });
 
     it('should schedule cancellation at period end by default', async () => {
-      const scheduledCancellation = { ...testSubscription, cancelAtPeriodEnd: true }
-      // Mock database check for subscription ownership
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(testSubscription)
+      const scheduledCancellation = { ...testSubscription, cancelAtPeriodEnd: true }(
+        // Mock database check for subscription ownership
+        mockPrisma.organizationSubscription.findFirst as any
+      ).mockResolvedValue(testSubscription);
       mockBillingManager.cancelSubscription.mockResolvedValue(scheduledCancellation);
 
       const request = createMockRequest(
@@ -401,7 +406,7 @@ describe('/api/billing/subscriptions', () => {
 
     it('should handle subscription not found', async () => {
       // Mock database check returning null for subscription
-      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null)
+      (mockPrisma.organizationSubscription.findFirst as any).mockResolvedValue(null);
 
       const request = createMockRequest(
         'DELETE',
@@ -426,7 +431,7 @@ describe('/api/billing/subscriptions', () => {
   describe('Subscription Enforcement', () => {
     it('should enforce feature gates on premium endpoints', async () => {
       // Mock no active subscription
-      mockBillingManager.getActiveSubscription.mockResolvedValue(null)
+      mockBillingManager.getActiveSubscription.mockResolvedValue(null);
 
       const request = createMockRequest('GET', 'http://localhost:3000/api/advanced-analytics', {
         user: testUser,
@@ -436,7 +441,7 @@ describe('/api/billing/subscriptions', () => {
       // The actual implementation would use the withSubscription middleware
 
       // For testing purposes, we'll simulate the enforcement
-      const subscription = await mockBillingManager.getActiveSubscription(testUser.organizationId)
+      const subscription = await mockBillingManager.getActiveSubscription(testUser.organizationId);
 
       if (!subscription) {
         const response = {
@@ -445,7 +450,7 @@ describe('/api/billing/subscriptions', () => {
             code: 'SUBSCRIPTION_ERROR',
             message: 'Active subscription required',
           },
-        }
+        };
 
         expectSubscriptionEnforcement(response);
       }

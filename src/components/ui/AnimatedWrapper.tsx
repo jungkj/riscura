@@ -46,7 +46,8 @@ export interface AnimatedWrapperProps {
 }
 
 // Predefined animation variants
-const getAnimationVariants = (_type: AnimationType,
+const getAnimationVariants = (
+  _type: AnimationType,
   distance: number = 30,
   duration: number = 0.6,
   easing: string | number[] = 'easeOut'
@@ -54,50 +55,50 @@ const getAnimationVariants = (_type: AnimationType,
   const baseTransition = {
     duration,
     ease: easing,
-  }
+  };
 
   switch (type) {
     case 'fade':
       return {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: baseTransition },
-      }
+      };
 
     case 'slide-up':
       return {
         hidden: { opacity: 0, y: distance },
         visible: { opacity: 1, y: 0, transition: baseTransition },
-      }
+      };
 
     case 'slide-down':
       return {
         hidden: { opacity: 0, y: -distance },
         visible: { opacity: 1, y: 0, transition: baseTransition },
-      }
+      };
 
     case 'slide-left':
       return {
         hidden: { opacity: 0, x: distance },
         visible: { opacity: 1, x: 0, transition: baseTransition },
-      }
+      };
 
     case 'slide-right':
       return {
         hidden: { opacity: 0, x: -distance },
         visible: { opacity: 1, x: 0, transition: baseTransition },
-      }
+      };
 
     case 'scale':
       return {
         hidden: { opacity: 0, scale: 0.8 },
         visible: { opacity: 1, scale: 1, transition: baseTransition },
-      }
+      };
 
     case 'zoom':
       return {
         hidden: { opacity: 0, scale: 0.5 },
         visible: { opacity: 1, scale: 1, transition: baseTransition },
-      }
+      };
 
     case 'bounce':
       return {
@@ -111,25 +112,25 @@ const getAnimationVariants = (_type: AnimationType,
             bounce: 0.4,
           },
         },
-      }
+      };
 
     case 'rotate':
       return {
         hidden: { opacity: 0, rotate: -180 },
         visible: { opacity: 1, rotate: 0, transition: baseTransition },
-      }
+      };
 
     default:
       return {
         hidden: {},
         visible: {},
-      }
+      };
   }
-}
+};
 
 // Hook to detect reduced motion preference
 const useReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -137,14 +138,14 @@ const useReducedMotion = () => {
 
     const handleChange = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches);
-    }
+    };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return prefersReducedMotion;
-}
+};
 
 export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
   children,
@@ -167,14 +168,14 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
   // If user prefers reduced motion and we respect it, render fallback or static content
   if (respectReducedMotion && prefersReducedMotion) {
     if (fallbackComponent) {
-      return <>{fallbackComponent}</>
+      return <>{fallbackComponent}</>;
     }
     return <div className={className}>{children}</div>;
   }
 
   // Use custom variants if provided, otherwise generate from animationType
   const variants =
-    customVariants || getAnimationVariants(animationType, distance, duration, easing)
+    customVariants || getAnimationVariants(animationType, distance, duration, easing);
 
   // Configure motion props
   const motionProps: any = {
@@ -182,32 +183,32 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
     initial: 'hidden',
     className,
     transition: { delay },
-  }
+  };
 
   // Add animation triggers based on props
   if (whileInView) {
-    motionProps.whileInView = 'visible'
-    motionProps.viewport = { once }
+    motionProps.whileInView = 'visible';
+    motionProps.viewport = { once };
   } else {
     motionProps.animate = 'visible';
   }
 
   // Add interaction animations
   if (onHover) {
-    motionProps.whileHover = { scale: 1.05, transition: { duration: 0.2 } }
+    motionProps.whileHover = { scale: 1.05, transition: { duration: 0.2 } };
   }
 
   if (onTap) {
-    motionProps.whileTap = { scale: 0.95, transition: { duration: 0.1 } }
+    motionProps.whileTap = { scale: 0.95, transition: { duration: 0.1 } };
   }
 
   return <motion.div {...motionProps}>{children}</motion.div>;
-}
+};
 
 // Convenient preset components
 export const FadeIn: React.FC<Omit<AnimatedWrapperProps, 'animationType'>> = (props) => (
   <AnimatedWrapper {...props} animationType="fade" />
-)
+);
 
 export const SlideUp: React.FC<Omit<AnimatedWrapperProps, 'animationType'>> = (props) => (
   <AnimatedWrapper {...props} animationType="slide-up" />
@@ -250,10 +251,10 @@ export const withAnimation = <P extends object>(
     <AnimatedWrapper {...animationProps}>
       <Component {...props} />
     </AnimatedWrapper>
-  )
+  );
 
   AnimatedComponent.displayName = `withAnimation(${Component.displayName || Component.name})`;
   return AnimatedComponent;
-}
+};
 
 export default AnimatedWrapper;

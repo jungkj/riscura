@@ -29,7 +29,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   // Perform AI analysis on selected text
   const analyzeSelection = useCallback(
     async (selection: TextSelection, action: AIAction): Promise<ContentAnalysisResult> => {
-      const resultId = generateId('analysis')
+      const resultId = generateId('analysis');
 
       // Create pending result
       const pendingResult: ContentAnalysisResult = {
@@ -43,10 +43,10 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
         },
         timestamp: new Date(),
         status: 'pending',
-      }
+      };
 
       // Add to results immediately
-      setAnalysisResults((prev) => [pendingResult, ...prev.slice(0, maxHistory - 1)])
+      setAnalysisResults((prev) => [pendingResult, ...prev.slice(0, maxHistory - 1)]);
       setIsAnalysisPanelOpen(true);
 
       try {
@@ -127,7 +127,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
                 type: 'risk_analysis',
                 context: { text: selection.text, purpose: action },
                 requirements: 'Analyze content based on action type',
-              })) as string
+              })) as string;
             }
             break;
           }
@@ -143,7 +143,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
             alternatives,
           },
           status: 'completed',
-        }
+        };
 
         setAnalysisResults((prev) =>
           prev.map((result) => (result.id === resultId ? completedResult : result))
@@ -159,7 +159,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
             confidence: 0,
           },
           status: 'error',
-        }
+        };
 
         setAnalysisResults((prev) =>
           prev.map((result) => (result.id === resultId ? errorResult : result))
@@ -189,7 +189,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
       actions: AIAction[],
       priority: BatchSelectionItem['priority'] = 'medium'
     ) => {
-      if (!enableBatching) return
+      if (!enableBatching) return;
 
       const batchItem: BatchSelectionItem = {
         id: generateId('batch'),
@@ -198,7 +198,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
         priority,
         status: 'pending',
         timestamp: new Date(),
-      }
+      };
 
       setBatchSelections((prev) => [...prev, batchItem]);
 
@@ -213,7 +213,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   // Process batch selections
   const processBatch = useCallback(
     async (items: BatchSelectionItem[], actions: AIAction[]) => {
-      setIsProcessing(true)
+      setIsProcessing(true);
 
       try {
         const promises = items.map(async (item) => {
@@ -235,7 +235,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
                 ? { ...batchItem, results, status: 'completed' as const }
                 : batchItem
             )
-          )
+          );
 
           return results;
         });
@@ -263,35 +263,35 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   const updateBatchItem = useCallback((itemId: string, updates: Partial<BatchSelectionItem>) => {
     setBatchSelections((prev) =>
       prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item))
-    )
+    );
   }, []);
 
   // Remove batch item
   const removeBatchItem = useCallback((itemId: string) => {
-    setBatchSelections((prev) => prev.filter((item) => item.id !== itemId))
+    setBatchSelections((prev) => prev.filter((item) => item.id !== itemId));
   }, []);
 
   // Clear all batch items
   const clearBatch = useCallback(() => {
-    setBatchSelections([])
+    setBatchSelections([]);
   }, []);
 
   // Approve analysis result (apply changes)
   const approveResult = useCallback(
     (resultId: string) => {
-      const _result = analysisResults.find((r) => r.id === resultId)
+      const _result = analysisResults.find((r) => r.id === resultId);
       if (!result) return;
 
       // This would integrate with the actual content editing system
       toast({
         title: 'Changes Applied',
         description: 'The AI suggestion has been applied to your content.',
-      })
+      });
 
       // Mark as approved in results
       setAnalysisResults((prev) =>
         prev.map((r) => (r.id === resultId ? { ...r, feedback: 'positive' as const } : r))
-      )
+      );
     },
     [analysisResults, toast]
   );
@@ -300,18 +300,18 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
   const rejectResult = useCallback((resultId: string) => {
     setAnalysisResults((prev) =>
       prev.map((r) => (r.id === resultId ? { ...r, feedback: 'negative' as const } : r))
-    )
+    );
   }, []);
 
   // Provide feedback on result
   const provideFeedback = useCallback((resultId: string, feedback: 'positive' | 'negative') => {
-    setAnalysisResults((prev) => prev.map((r) => (r.id === resultId ? { ...r, feedback } : r)))
+    setAnalysisResults((prev) => prev.map((r) => (r.id === resultId ? { ...r, feedback } : r)));
   }, []);
 
   // Retry failed result
   const retryResult = useCallback(
     async (resultId: string) => {
-      const _result = analysisResults.find((r) => r.id === resultId)
+      const _result = analysisResults.find((r) => r.id === resultId);
       if (!result) return;
 
       await analyzeSelection(result.selection, result.action);
@@ -321,7 +321,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
 
   // Clear analysis history
   const clearAnalysisHistory = useCallback(() => {
-    setAnalysisResults([])
+    setAnalysisResults([]);
   }, []);
 
   // Helper functions
@@ -329,7 +329,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
     switch (action) {
       case 'regenerate':
       case 'improve':
-        return 'replacement'
+        return 'replacement';
       case 'alternatives':
         return 'suggestion';
       case 'analyze-risk':
@@ -338,7 +338,7 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
       default:
         return 'explanation';
     }
-  }
+  };
 
   const getContentType = (contentType: string) => {
     const typeMap: Record<string, string> = {
@@ -346,9 +346,9 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
       control: 'control_procedure',
       'test-script': 'training_material',
       document: 'policy_document',
-    }
+    };
     return typeMap[contentType] || 'policy_document';
-  }
+  };
 
   return {
     // State
@@ -384,5 +384,5 @@ export function useContentAnalysis(_options: UseContentAnalysisOptions = {}) {
       batchItems: batchSelections.length,
       pendingBatchItems: batchSelections.filter((i) => i.status === 'pending').length,
     },
-  }
+  };
 }

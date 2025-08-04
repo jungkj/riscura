@@ -9,12 +9,12 @@ export async function GET(_request: NextRequest) {
     const search = url.searchParams.get('search');
 
     // Get mitigation controls from Probo service
-    const proboService = ProboService.getInstance()
+    const proboService = ProboService.getInstance();
     let mitigations = await proboService.getMitigations();
 
     // Filter by parameters if provided
     if (category && category !== 'all') {
-      mitigations = mitigations.filter((m) => m.category === category)
+      mitigations = mitigations.filter((m) => m.category === category);
     }
 
     if (importance && importance !== 'all') {
@@ -54,7 +54,7 @@ export async function POST(_request: NextRequest) {
       total: selectedMitigations.length,
       imported: selectedMitigations.length,
       mitigations: selectedMitigations,
-    })
+    });
   } catch (error) {
     // console.error('Mitigation controls import error:', error)
     return NextResponse.json({ error: 'Failed to import mitigation controls' }, { status: 500 });

@@ -7,29 +7,29 @@ import { SmartNotificationService } from './SmartNotificationService';
 // Core anomaly detection interfaces
 export interface AnomalyDetectionConfig {
   statistical: {
-    zScoreThreshold: number
+    zScoreThreshold: number;
     iqrMultiplier: number;
     madThreshold: number;
     isolationForestContamination: number;
-  }
+  };
   timeSeries: {
     seasonalityPeriod: number;
     trendSensitivity: number;
     changePointThreshold: number;
     forecastHorizon: number;
-  }
+  };
   patterns: {
     clusteringAlgorithm: 'kmeans' | 'dbscan' | 'hierarchical';
     patternMatchThreshold: number;
     behaviorBaselineWindow: number;
     adaptiveLearning: boolean;
-  }
+  };
   alerts: {
     severityLevels: ('low' | 'medium' | 'high' | 'critical')[];
     notificationChannels: string[];
     escalationRules: EscalationRule[];
     suppressionPeriod: number;
-  }
+  };
 }
 
 export interface EscalationRule {
@@ -173,7 +173,7 @@ export class AnomalyDetectionAIService {
       escalationRules: [],
       suppressionPeriod: 60,
     },
-  }
+  };
 
   constructor(
     aiService?: AIService,
@@ -190,44 +190,45 @@ export class AnomalyDetectionAIService {
   /**
    * Main anomaly detection method for risks
    */
-  async detectRiskAnomalies(_risks: Risk[],
+  async detectRiskAnomalies(
+    _risks: Risk[],
     config?: Partial<AnomalyDetectionConfig>
   ): Promise<AnomalyAlert[]> {
-    const effectiveConfig = { ...this.defaultConfig, ...config }
+    const effectiveConfig = { ...this.defaultConfig, ...config };
     const alerts: AnomalyAlert[] = [];
 
     for (const risk of risks) {
       try {
         // Get historical data for the risk
-        const historicalData = await this.getHistoricalRiskData(risk.id)
+        const historicalData = await this.getHistoricalRiskData(risk.id);
 
         // Statistical anomaly detection
         const statisticalResults = await this.detectStatisticalAnomalies(
           risk,
           historicalData,
           effectiveConfig.statistical
-        )
+        );
 
         // Pattern-based detection
         const patternResults = await this.detectPatternAnomalies(
           risk,
           historicalData,
           effectiveConfig.patterns
-        )
+        );
 
         // Time series anomaly detection
         const timeSeriesResults = await this.detectTimeSeriesAnomalies(
           risk,
           historicalData,
           effectiveConfig.timeSeries
-        )
+        );
 
         // Combine and process results
         const combinedAnomalies = await this.combineAnomalyResults(risk, [
           statisticalResults,
           patternResults,
           timeSeriesResults,
-        ])
+        ]);
 
         alerts.push(...combinedAnomalies);
       } catch (error) {
@@ -236,10 +237,10 @@ export class AnomalyDetectionAIService {
     }
 
     // Process and prioritize alerts
-    const processedAlerts = await this.processAnomalyAlerts(alerts)
+    const processedAlerts = await this.processAnomalyAlerts(alerts);
 
     // Send notifications for high-priority alerts
-    await this.sendAnomalyNotifications(processedAlerts)
+    await this.sendAnomalyNotifications(processedAlerts);
 
     return processedAlerts;
   }
@@ -259,7 +260,7 @@ export class AnomalyDetectionAIService {
     }
 
     // Extract numeric metrics
-    const metrics = this.extractNumericMetrics(data)
+    const metrics = this.extractNumericMetrics(data);
 
     for (const [metricName, values] of Object.entries(metrics)) {
       if (values.length < 5) continue;
@@ -267,29 +268,29 @@ export class AnomalyDetectionAIService {
       const currentValue = values[values.length - 1];
 
       // Z-Score based detection
-      const zScoreResult = this.detectZScoreAnomaly(values, config.zScoreThreshold)
+      const zScoreResult = this.detectZScoreAnomaly(values, config.zScoreThreshold);
 
       // Interquartile Range (IQR) based detection
-      const iqrResult = this.detectIQRAnomaly(values, config.iqrMultiplier)
+      const iqrResult = this.detectIQRAnomaly(values, config.iqrMultiplier);
 
       // Median Absolute Deviation (MAD) based detection
-      const madResult = this.detectMADAnomaly(values, config.madThreshold)
+      const madResult = this.detectMADAnomaly(values, config.madThreshold);
 
       // Isolation Forest (simplified implementation)
       const isolationResult = await this.detectIsolationForestAnomaly(
         values,
         config.isolationForestContamination
-      )
+      );
 
       // Combine results and create alerts
-      const detectionResults = [zScoreResult, iqrResult, madResult, isolationResult]
+      const detectionResults = [zScoreResult, iqrResult, madResult, isolationResult];
       const anomalyCount = detectionResults.filter((r) => r.isAnomaly).length;
 
       if (anomalyCount >= 2) {
         // Require multiple methods to agree
         const bestResult = detectionResults.reduce((best, current) =>
           current.score > best.score ? current : best
-        )
+        );
 
         const alert = await this.createAnomalyAlert(
           entity,
@@ -322,13 +323,13 @@ export class AnomalyDetectionAIService {
 
     try {
       // Extract feature vectors for pattern analysis
-      const features = await this.extractPatternFeatures(data)
+      const features = await this.extractPatternFeatures(data);
 
       // Perform clustering to identify normal patterns
-      const clusters = await this.performClustering(features, config.clusteringAlgorithm)
+      const clusters = await this.performClustering(features, config.clusteringAlgorithm);
 
       // Analyze current behavior against established patterns
-      const currentFeatures = features[features.length - 1]
+      const currentFeatures = features[features.length - 1];
       const patternDeviation = await this.calculatePatternDeviation(currentFeatures, clusters);
 
       if (patternDeviation.isAnomaly) {
@@ -337,7 +338,7 @@ export class AnomalyDetectionAIService {
       }
 
       // Check for behavioral baseline violations
-      const baselineWindow = Math.min(config.behaviorBaselineWindow, data.length)
+      const baselineWindow = Math.min(config.behaviorBaselineWindow, data.length);
       const baselineData = data.slice(-baselineWindow);
       const behaviorAnomalies = await this.detectBehaviorAnomalies(entity, baselineData, config);
 
@@ -365,36 +366,36 @@ export class AnomalyDetectionAIService {
 
     try {
       // Prepare time series data
-      const timeSeries = this.prepareTimeSeriesData(data)
+      const timeSeries = this.prepareTimeSeriesData(data);
 
       // Seasonal decomposition
       const decomposition = await this.performSeasonalDecomposition(
         timeSeries,
         config.seasonalityPeriod
-      )
+      );
 
       // Trend change detection
       const trendAnomalies = await this.detectTrendChanges(
         decomposition.trend,
         config.trendSensitivity
-      )
+      );
 
       // Seasonal pattern violations
       const seasonalAnomalies = await this.detectSeasonalAnomalies(
         decomposition.seasonal,
         decomposition.residual,
         config
-      )
+      );
 
       // Change point detection
-      const changePoints = await this.detectChangePoints(timeSeries, config.changePointThreshold)
+      const changePoints = await this.detectChangePoints(timeSeries, config.changePointThreshold);
 
       // Forecast-based anomaly detection
       const forecastAnomalies = await this.detectForecastAnomalies(
         entity,
         timeSeries,
         config.forecastHorizon
-      )
+      );
 
       // Convert detected anomalies to alerts
       for (const anomaly of [
@@ -403,7 +404,7 @@ export class AnomalyDetectionAIService {
         ...changePoints,
         ...forecastAnomalies,
       ]) {
-        const alert = await this.createTimeSeriesAnomalyAlert(entity, anomaly)
+        const alert = await this.createTimeSeriesAnomalyAlert(entity, anomaly);
         alerts.push(alert);
       }
     } catch (error) {
@@ -426,7 +427,7 @@ export class AnomalyDetectionAIService {
 
     // Start monitoring loop
     setInterval(async () => {
-      await this.performMonitoringCycle()
+      await this.performMonitoringCycle();
     }, intervalMs);
 
     // console.log(`Started real-time monitoring for ${targets.length} targets`)
@@ -441,19 +442,19 @@ export class AnomalyDetectionAIService {
   ): Promise<RootCauseAnalysis> {
     try {
       // Gather related data and context
-      const context = await this.gatherAnomalyContext(alert, contextData)
+      const context = await this.gatherAnomalyContext(alert, contextData);
 
       // Analyze correlations with other entities
-      const correlations = await this.analyzeCorrelations(alert, context)
+      const correlations = await this.analyzeCorrelations(alert, context);
 
       // Perform timeline analysis
-      const timeline = await this.analyzeTimeline(alert, context)
+      const timeline = await this.analyzeTimeline(alert, context);
 
       // Generate cause hypotheses using AI
-      const hypotheses = await this.generateCauseHypotheses(alert, context, correlations)
+      const hypotheses = await this.generateCauseHypotheses(alert, context, correlations);
 
       // Prioritize and validate hypotheses
-      const prioritizedHypotheses = await this.prioritizeHypotheses(hypotheses, context)
+      const prioritizedHypotheses = await this.prioritizeHypotheses(hypotheses, context);
 
       const rootCauseAnalysis: RootCauseAnalysis = {
         primaryCauses: prioritizedHypotheses.slice(0, 3),
@@ -467,7 +468,7 @@ export class AnomalyDetectionAIService {
           'AI-Powered Hypothesis Generation',
           'Statistical Validation',
         ],
-      }
+      };
 
       return rootCauseAnalysis;
     } catch (error) {
@@ -478,7 +479,7 @@ export class AnomalyDetectionAIService {
 
   // Statistical detection methods
   private detectZScoreAnomaly(values: number[], threshold: number): StatisticalAnomalyResult {
-    const mean = values.reduce((sum, val) => sum + val, 0) / values.length
+    const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const stdDev = Math.sqrt(
       values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length
     );
@@ -492,7 +493,7 @@ export class AnomalyDetectionAIService {
       method: 'Z-Score',
       threshold,
       details: { mean, stdDev, zScore },
-    }
+    };
   }
 
   private detectIQRAnomaly(values: number[], multiplier: number): StatisticalAnomalyResult {
@@ -517,7 +518,7 @@ export class AnomalyDetectionAIService {
       method: 'IQR',
       threshold: multiplier,
       details: { q1, q3, iqr, lowerBound, upperBound },
-    }
+    };
   }
 
   private detectMADAnomaly(values: number[], threshold: number): StatisticalAnomalyResult {
@@ -535,7 +536,7 @@ export class AnomalyDetectionAIService {
       method: 'MAD',
       threshold,
       details: { median, mad, modifiedZScore },
-    }
+    };
   }
 
   private async detectIsolationForestAnomaly(
@@ -543,12 +544,12 @@ export class AnomalyDetectionAIService {
     contamination: number
   ): Promise<StatisticalAnomalyResult> {
     // Simplified isolation forest implementation
-    const forest = await this.buildIsolationForest(values, 100, 0.1)
+    const forest = await this.buildIsolationForest(values, 100, 0.1);
     const currentValue = values[values.length - 1];
     const isolationScore = await this.calculateIsolationScore(currentValue, forest);
 
     // Determine threshold based on contamination rate
-    const sortedScores = forest.scores.sort((a, b) => b - a)
+    const sortedScores = forest.scores.sort((a, b) => b - a);
     const thresholdIndex = Math.floor(sortedScores.length * contamination);
     const threshold = sortedScores[thresholdIndex] || 0.5;
 
@@ -558,12 +559,12 @@ export class AnomalyDetectionAIService {
       method: 'Isolation Forest',
       threshold,
       details: { isolationScore, contamination },
-    }
+    };
   }
 
   // Helper methods for processing and analysis
   private extractNumericMetrics(_data: any[]): Record<string, number[]> {
-    const metrics: Record<string, number[]> = {}
+    const metrics: Record<string, number[]> = {};
 
     for (const item of data) {
       for (const [key, value] of Object.entries(item)) {
@@ -597,11 +598,11 @@ export class AnomalyDetectionAIService {
   ): Promise<AnomalyAlert> {
     // Calculate expected value and deviation
     const expectedValue =
-      detectionResult.details.mean || detectionResult.details.median || currentValue
+      detectionResult.details.mean || detectionResult.details.median || currentValue;
     const deviation = Math.abs(((currentValue - expectedValue) / expectedValue) * 100);
 
     // Determine severity based on score
-    const severity = this.determineSeverity(detectionResult.score, type)
+    const severity = this.determineSeverity(detectionResult.score, type);
 
     // Create the alert object first
     const alert: AnomalyAlert = {
@@ -623,15 +624,15 @@ export class AnomalyDetectionAIService {
       recommendations: [],
       status: 'new',
       tags: [type, detectionResult.method.toLowerCase()],
-    }
+    };
 
     // Now populate the context and analysis that require the alert object
-    alert.context = await this.gatherAnomalyContext(alert)
+    alert.context = await this.gatherAnomalyContext(alert);
     alert.rootCauseAnalysis = await this.performRootCauseAnalysis(alert);
     alert.recommendations = await this.generateRecommendations(entity, detectionResult);
 
     // Cache the alert
-    this.alerts.set(alert.id, alert)
+    this.alerts.set(alert.id, alert);
 
     return alert;
   }
@@ -644,7 +645,7 @@ export class AnomalyDetectionAIService {
       behavior: { low: 2.0, medium: 3.0, high: 5.0 },
       trend: { low: 1.0, medium: 2.0, high: 3.0 },
       outlier: { low: 2.0, medium: 3.5, high: 5.0 },
-    }
+    };
 
     const threshold = thresholds[type] || thresholds.statistical;
 
@@ -661,14 +662,14 @@ export class AnomalyDetectionAIService {
     sampleRatio: number
   ): Promise<any> {
     // Simplified isolation forest - in production, use proper ML library
-    const sampleSize = Math.floor(values.length * sampleRatio)
+    const sampleSize = Math.floor(values.length * sampleRatio);
     const scores = values.map((val) => Math.random() * 0.8 + 0.1); // Placeholder scores
 
     return {
       trees,
       sampleSize,
       scores,
-    }
+    };
   }
 
   private async calculateIsolationScore(_value: number, forest: any): Promise<number> {
@@ -684,13 +685,13 @@ export class AnomalyDetectionAIService {
         .filter((v) => typeof v === 'number')
         .reduce((sum: number, val: any) => sum + val, 0),
       // Add more sophisticated feature extraction here
-    ])
+    ]);
   }
 
   private async performClustering(_features: number[][], algorithm: string): Promise<any> {
     // Simplified clustering implementation
     // In production, integrate with proper ML clustering libraries
-    const numClusters = Math.min(3, Math.floor(features.length / 10))
+    const numClusters = Math.min(3, Math.floor(features.length / 10));
 
     return {
       algorithm,
@@ -700,7 +701,7 @@ export class AnomalyDetectionAIService {
         () => features[Math.floor(Math.random() * features.length)]
       ),
       assignments: features.map(() => Math.floor(Math.random() * numClusters)),
-    }
+    };
   }
 
   private async calculatePatternDeviation(_features: number[], clusters: any): Promise<any> {
@@ -709,19 +710,19 @@ export class AnomalyDetectionAIService {
       ...clusters.centroids.map((centroid: number[]) =>
         Math.sqrt(features.reduce((sum, val, i) => sum + Math.pow(val - centroid[i], 2), 0))
       )
-    )
+    );
 
     return {
       isAnomaly: minDistance > 2.0, // Threshold
       score: minDistance,
       nearestCluster: 0,
-    }
+    };
   }
 
   // Additional helper methods
   private async getHistoricalRiskData(riskId: string): Promise<any[]> {
     // Retrieve historical data for the risk
-    return this.historicalData.get(riskId) || []
+    return this.historicalData.get(riskId) || [];
   }
 
   private async combineAnomalyResults(
@@ -734,7 +735,7 @@ export class AnomalyDetectionAIService {
   private async processAnomalyAlerts(alerts: AnomalyAlert[]): Promise<AnomalyAlert[]> {
     // Sort by severity and confidence
     return alerts.sort((a, b) => {
-      const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
+      const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
       if (severityDiff !== 0) return severityDiff;
       return b.confidence - a.confidence;
@@ -813,7 +814,7 @@ export class AnomalyDetectionAIService {
             currentValue: alert.currentValue,
             generatedAt: new Date(),
           },
-        }
+        };
 
         await this.notificationService.sendNotification(notification);
       }
@@ -831,7 +832,7 @@ export class AnomalyDetectionAIService {
       historicalPatterns: [],
       correlatedAnomalies: [],
       dataQualityScore: 0.9,
-    }
+    };
   }
 
   private async generateRecommendations(
@@ -857,19 +858,19 @@ export class AnomalyDetectionAIService {
 
       try {
         // Get fresh data for the target
-        const data = await this.getTargetData(target)
+        const data = await this.getTargetData(target);
 
         // Run anomaly detection
-        const alerts = await this.detectTargetAnomalies(target, data)
+        const alerts = await this.detectTargetAnomalies(target, data);
 
         // Process any new alerts
         if (alerts.length > 0) {
-          await this.processAnomalyAlerts(alerts)
+          await this.processAnomalyAlerts(alerts);
           await this.sendAnomalyNotifications(alerts);
         }
 
         // Update last checked timestamp
-        target.lastChecked = new Date()
+        target.lastChecked = new Date();
       } catch (error) {
         // console.error(`Error monitoring target ${targetId}:`, error)
       }
@@ -878,7 +879,7 @@ export class AnomalyDetectionAIService {
 
   private async getTargetData(_target: MonitoringTarget): Promise<any[]> {
     // Implementation to fetch current data for the target
-    return []
+    return [];
   }
 
   private async detectTargetAnomalies(
@@ -886,7 +887,7 @@ export class AnomalyDetectionAIService {
     data: any[]
   ): Promise<AnomalyAlert[]> {
     // Implementation for target-specific anomaly detection
-    return []
+    return [];
   }
 
   // Placeholder implementations for complex analysis methods
@@ -895,7 +896,7 @@ export class AnomalyDetectionAIService {
     data: any[],
     config: any
   ): Promise<AnomalyAlert[]> {
-    return []
+    return [];
   }
 
   private prepareTimeSeriesData(_data: any[]): any[] {
@@ -903,7 +904,7 @@ export class AnomalyDetectionAIService {
   }
 
   private async performSeasonalDecomposition(_timeSeries: any[], period: number): Promise<any> {
-    return { trend: [], seasonal: [], residual: [] }
+    return { trend: [], seasonal: [], residual: [] };
   }
 
   private async detectTrendChanges(_trend: any[], sensitivity: number): Promise<any[]> {
@@ -953,7 +954,7 @@ export class AnomalyDetectionAIService {
       recommendations: [],
       status: 'new',
       tags: ['timeseries'],
-    }
+    };
   }
 
   private async createPatternAnomalyAlert(
@@ -980,7 +981,7 @@ export class AnomalyDetectionAIService {
       recommendations: [],
       status: 'new',
       tags: ['pattern'],
-    }
+    };
   }
 
   private async analyzeCorrelations(
@@ -1021,7 +1022,7 @@ export class AnomalyDetectionAIService {
 
   // Public API methods
   async getActiveAlerts(): Promise<AnomalyAlert[]> {
-    return Array.from(this.alerts.values()).filter((alert) => alert.status !== 'resolved')
+    return Array.from(this.alerts.values()).filter((alert) => alert.status !== 'resolved');
   }
 
   async acknowledgeAlert(alertId: string, userId: string): Promise<void> {
@@ -1050,10 +1051,10 @@ export class AnomalyDetectionAIService {
   ): Promise<void> {
     const target = this.monitoringTargets.get(targetId);
     if (target) {
-      target.configuration = { ...target.configuration, ...config }
+      target.configuration = { ...target.configuration, ...config };
     }
   }
 }
 
 // Export singleton instance
-export const anomalyDetectionAIService = new AnomalyDetectionAIService()
+export const anomalyDetectionAIService = new AnomalyDetectionAIService();

@@ -53,7 +53,7 @@ export class OfflineManager {
       enablePushNotifications: false,
       maxOfflineStorage: 50, // 50MB
       ...config,
-    }
+    };
 
     this.initializeEventListeners();
     this.loadQueuedOperations();
@@ -69,19 +69,19 @@ export class OfflineManager {
 
   private initializeEventListeners(): void {
     // Online/offline event listeners
-    window.addEventListener('online', this.handleOnline)
+    window.addEventListener('online', this.handleOnline);
     window.addEventListener('offline', this.handleOffline);
 
     // Visibility change for background sync
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && this.isOnline) {
-        this.syncPendingOperations()
+        this.syncPendingOperations();
       }
     });
 
     // Page unload to save pending operations
     window.addEventListener('beforeunload', () => {
-      this.saveQueuedOperations()
+      this.saveQueuedOperations();
     });
   }
 
@@ -92,15 +92,15 @@ export class OfflineManager {
 
     // Start immediate sync when coming back online
     setTimeout(() => {
-      this.syncPendingOperations()
+      this.syncPendingOperations();
     }, 1000);
-  }
+  };
 
   private handleOffline = (): void => {
     // console.log('Connection lost')
     this.isOnline = false;
     this.notifyListeners(false);
-  }
+  };
 
   private startSyncTimer(): void {
     if (!this.config.enableBackgroundSync) return;
@@ -123,14 +123,14 @@ export class OfflineManager {
   public queueOperation(
     operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>
   ): string {
-    const id = `op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const id = `op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const queuedOp: QueuedOperation = {
       id,
       timestamp: new Date().toISOString(),
       retryCount: 0,
       ...operation,
-    }
+    };
 
     this.operationQueue.set(id, queuedOp);
 
@@ -141,13 +141,13 @@ export class OfflineManager {
       endpoint: operation.endpoint,
       data: operation.data,
       timestamp: queuedOp.timestamp,
-    })
+    });
 
     // console.log(`Queued operation: ${operation.type} ${operation.resource}`)
 
     // Try immediate sync if online
     if (this.isOnline && !this.isSyncing) {
-      setTimeout(() => this.syncPendingOperations(), 100)
+      setTimeout(() => this.syncPendingOperations(), 100);
     }
 
     return id;
@@ -155,7 +155,7 @@ export class OfflineManager {
 
   // Remove operation from queue
   public removeOperation(operationId: string): boolean {
-    const removed = this.operationQueue.delete(operationId)
+    const removed = this.operationQueue.delete(operationId);
     if (removed) {
       localStorageService.removeFromOfflineQueue(operationId);
     }
@@ -164,12 +164,12 @@ export class OfflineManager {
 
   // Get queued operations
   public getQueuedOperations(): QueuedOperation[] {
-    return Array.from(this.operationQueue.values())
+    return Array.from(this.operationQueue.values());
   }
 
   // Get operations by type or resource
   public getOperationsByType(_type: QueuedOperation['type']): QueuedOperation[] {
-    return this.getQueuedOperations().filter((op) => op.type === type)
+    return this.getQueuedOperations().filter((op) => op.type === type);
   }
 
   public getOperationsByResource(resource: string): QueuedOperation[] {
@@ -184,7 +184,7 @@ export class OfflineManager {
         syncedOperations: 0,
         failedOperations: 0,
         errors: [],
-      }
+      };
     }
 
     this.isSyncing = true;
@@ -216,7 +216,7 @@ export class OfflineManager {
               failedCount++;
             } else {
               // Update retry count in storage
-              this.operationQueue.set(operation.id, operation)
+              this.operationQueue.set(operation.id, operation);
             }
           }
         } catch (error) {
@@ -236,7 +236,7 @@ export class OfflineManager {
 
         // Break if we've gone offline during sync
         if (!this.isOnline) {
-          break
+          break;
         }
       }
 
@@ -249,7 +249,7 @@ export class OfflineManager {
         failedOperations: failedCount,
         errors,
         nextSyncTime: new Date(Date.now() + this.config.syncInterval),
-      }
+      };
 
       // console.log('Sync completed:', result)
       return result;
@@ -263,7 +263,7 @@ export class OfflineManager {
 
     // Sort by priority and timestamp
     return operations.sort((a, b) => {
-      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
+      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       const aPriority = priorityOrder[a.priority];
       const bPriority = priorityOrder[b.priority];
 
@@ -299,7 +299,7 @@ export class OfflineManager {
         // Update local storage with server response
         autoSaveService.autoSave(operation.data.id, operation.resource as any, result.data, {
           immediate: true,
-        })
+        });
       }
 
       return true;
@@ -324,7 +324,7 @@ export class OfflineManager {
 
   // Save/load operations to/from local storage
   private saveQueuedOperations(): void {
-    const operations = Array.from(this.operationQueue.values())
+    const operations = Array.from(this.operationQueue.values());
     localStorageService.setCachedData('offline_operations', operations);
   }
 
@@ -342,7 +342,7 @@ export class OfflineManager {
 
   // Network status methods
   public isOnlineMode(): boolean {
-    return this.isOnline
+    return this.isOnline;
   }
 
   public getLastSyncTime(): Date | null {
@@ -355,7 +355,7 @@ export class OfflineManager {
 
   // Event listeners
   public addOnlineListener(callback: (isOnline: boolean) => void): void {
-    this.listeners.add(callback)
+    this.listeners.add(callback);
   }
 
   public removeOnlineListener(callback: (isOnline: boolean) => void): void {
@@ -368,7 +368,7 @@ export class OfflineManager {
 
   // Storage management
   public async getStorageUsage(): Promise<{
-    used: number
+    used: number;
     available: number;
     quota: number;
     percentage: number;
@@ -382,7 +382,7 @@ export class OfflineManager {
       available: quotaMB - usedMB,
       quota: quotaMB,
       percentage: (usedMB / quotaMB) * 100,
-    }
+    };
   }
 
   public async clearOfflineData(): Promise<boolean> {
@@ -400,20 +400,20 @@ export class OfflineManager {
 
   // Configuration management
   public updateConfig(newConfig: Partial<OfflineConfig>): void {
-    this.config = { ...this.config, ...newConfig }
+    this.config = { ...this.config, ...newConfig };
 
     // Restart sync timer if interval changed
     if (newConfig.syncInterval !== undefined || newConfig.enableBackgroundSync !== undefined) {
-      this.stopSyncTimer()
+      this.stopSyncTimer();
       this.startSyncTimer();
     }
 
     // Save config to local storage
-    localStorageService.saveUserPreference('offlineConfig', this.config)
+    localStorageService.saveUserPreference('offlineConfig', this.config);
   }
 
   public getConfig(): OfflineConfig {
-    return { ...this.config }
+    return { ...this.config };
   }
 
   // Utility methods
@@ -433,7 +433,7 @@ export class OfflineManager {
       high: operations.filter((op) => op.priority === 'high').length,
       medium: operations.filter((op) => op.priority === 'medium').length,
       low: operations.filter((op) => op.priority === 'low').length,
-    }
+    };
   }
 
   public async forceSync(): Promise<SyncResult> {
@@ -443,7 +443,7 @@ export class OfflineManager {
         syncedOperations: 0,
         failedOperations: 0,
         errors: [{ operationId: 'none', error: 'Device is offline' }],
-      }
+      };
     }
 
     return this.syncPendingOperations();
@@ -451,7 +451,7 @@ export class OfflineManager {
 
   // Cleanup
   public destroy(): void {
-    this.stopSyncTimer()
+    this.stopSyncTimer();
     this.listeners.clear();
     this.saveQueuedOperations();
 
@@ -461,11 +461,11 @@ export class OfflineManager {
 }
 
 // Export singleton instance
-export const offlineManager = OfflineManager.getInstance()
+export const offlineManager = OfflineManager.getInstance();
 
 // Hook for React components
 export function useOfflineStatus() {
-  const [isOnline, setIsOnline] = React.useState(offlineManager.isOnlineMode())
+  const [isOnline, setIsOnline] = React.useState(offlineManager.isOnlineMode());
   const [pendingCount, setPendingCount] = React.useState(
     offlineManager.getPendingOperationsCount()
   );
@@ -476,29 +476,29 @@ export function useOfflineStatus() {
       setIsOnline(online);
       setPendingCount(offlineManager.getPendingOperationsCount());
       setLastSync(offlineManager.getLastSyncTime());
-    }
+    };
 
     offlineManager.addOnlineListener(handleStatusChange);
 
     // Update pending count periodically
     const interval = setInterval(() => {
-      setPendingCount(offlineManager.getPendingOperationsCount())
+      setPendingCount(offlineManager.getPendingOperationsCount());
       setLastSync(offlineManager.getLastSyncTime());
     }, 5000);
 
     return () => {
       offlineManager.removeOnlineListener(handleStatusChange);
       clearInterval(interval);
-    }
+    };
   }, []);
 
   const queueOperation = (operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>) => {
     return offlineManager.queueOperation(operation);
-  }
+  };
 
   const forceSync = () => {
     return offlineManager.forceSync();
-  }
+  };
 
   return {
     isOnline,
@@ -507,7 +507,7 @@ export function useOfflineStatus() {
     queueOperation,
     forceSync,
     isSyncing: offlineManager.isSyncInProgress(),
-  }
+  };
 }
 
 import React from 'react';

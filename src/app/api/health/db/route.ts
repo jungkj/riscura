@@ -12,17 +12,17 @@ export async function GET() {
           timestamp: new Date().toISOString(),
         },
         { status: 500 }
-      )
+      );
     }
 
     // Mask the database URL for security
-    const dbUrl = process.env.DATABASE_URL
+    const dbUrl = process.env.DATABASE_URL;
     const maskedUrl = dbUrl
       .replace(/:[^:@]+@/, ':****@') // Mask password
       .replace(/\?.*$/, '?...'); // Mask query params
 
     // Try to connect and run a simple query
-    const startTime = Date.now()
+    const startTime = Date.now();
     const healthCheck = await db.healthCheck();
 
     return NextResponse.json({

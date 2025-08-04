@@ -13,13 +13,13 @@ export async function GET() {
       'next-auth.session-token': cookieStore.get('next-auth.session-token')?.value,
       '__Secure-next-auth.session-token': cookieStore.get('__Secure-next-auth.session-token')
         ?.value,
-    }
+    };
 
     // Check if any session exists
-    const hasSession = Object.values(sessionCookies).some((v) => !!v)
+    const hasSession = Object.values(sessionCookies).some((v) => !!v);
 
     // Try to decode the session if it exists
-    let sessionData = null
+    let sessionData = null;
     let sessionError = null;
 
     const activeSession = sessionCookies['session-token'];
@@ -33,7 +33,7 @@ export async function GET() {
     }
 
     // Check database connection
-    let dbStatus = null
+    let dbStatus = null;
     try {
       const { db } = await import('@/lib/db');
       await db.healthCheck();
@@ -44,7 +44,7 @@ export async function GET() {
         const user = await db.client.user.findUnique({
           where: { email: sessionData.user.email },
           select: { id: true, email: true, organizationId: true },
-        })
+        });
         dbStatus = user ? 'Connected - User exists' : 'Connected - User NOT found';
       }
     } catch (e) {

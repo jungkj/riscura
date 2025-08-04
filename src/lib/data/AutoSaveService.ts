@@ -41,7 +41,7 @@ export class AutoSaveService {
       syncToServer: true,
       backupLocally: true,
       ...config,
-    }
+    };
 
     this.initializeEventListeners();
     this.startPeriodicSync();
@@ -57,7 +57,7 @@ export class AutoSaveService {
   private initializeEventListeners(): void {
     // Online/offline event listeners
     window.addEventListener('online', () => {
-      this.isOnline = true
+      this.isOnline = true;
       this.syncPendingChanges();
     });
 
@@ -68,9 +68,9 @@ export class AutoSaveService {
     // Page unload listener to save any pending changes
     window.addEventListener('beforeunload', (event) => {
       if (this.hasPendingChanges()) {
-        this.forceSaveAll()
+        this.forceSaveAll();
         // Note: Modern browsers ignore custom messages in beforeunload
-        event.preventDefault()
+        event.preventDefault();
         return 'You have unsaved changes. Are you sure you want to leave?';
       }
     });
@@ -78,7 +78,7 @@ export class AutoSaveService {
     // Visibility change listener for mobile/tab switching
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        this.forceSaveAll()
+        this.forceSaveAll();
       }
     });
   }
@@ -97,7 +97,7 @@ export class AutoSaveService {
     type: AutoSaveData['type'],
     data: any,
     options?: {
-      immediate?: boolean
+      immediate?: boolean;
       skipValidation?: boolean;
       customDebounce?: number;
     }
@@ -119,24 +119,24 @@ export class AutoSaveService {
       isOnline: this.isOnline,
       syncStatus: 'pending',
       retryCount: 0,
-    }
+    };
 
     this.saveQueue.set(id, saveData);
 
     // Clear existing timer for this item
-    const existingTimer = this.timers.get(id)
+    const existingTimer = this.timers.get(id);
     if (existingTimer) {
       clearTimeout(existingTimer);
     }
 
     // Notify listeners
-    this.notifyListeners(saveData)
+    this.notifyListeners(saveData);
 
     if (options?.immediate) {
       return this.performSave(id);
     } else {
       // Debounced save
-      const debounceTime = options?.customDebounce || this.config.debounceTime
+      const debounceTime = options?.customDebounce || this.config.debounceTime;
       const timer = setTimeout(() => {
         this.performSave(id);
       }, debounceTime);
@@ -157,7 +157,7 @@ export class AutoSaveService {
           ...saveData.data,
           autoSaveVersion: saveData.version,
           lastAutoSave: saveData.lastModified,
-        })
+        });
 
         if (!success) {
           throw new Error('Failed to save to local storage');
@@ -166,7 +166,7 @@ export class AutoSaveService {
 
       // Try to sync to server if online
       if (this.config.syncToServer && this.isOnline) {
-        const syncSuccess = await this.syncToServer(saveData)
+        const syncSuccess = await this.syncToServer(saveData);
         if (syncSuccess) {
           saveData.syncStatus = 'synced';
           saveData.isDirty = false;
@@ -177,7 +177,7 @@ export class AutoSaveService {
         }
       } else {
         // Queue for later sync when online
-        saveData.syncStatus = 'pending'
+        saveData.syncStatus = 'pending';
       }
 
       this.saveQueue.set(id, saveData);
@@ -195,7 +195,7 @@ export class AutoSaveService {
       // Schedule retry if under max retry limit
       if (saveData.retryCount < this.config.maxRetries) {
         setTimeout(() => {
-          this.performSave(id)
+          this.performSave(id);
         }, this.config.retryDelay * saveData.retryCount);
       }
 
@@ -207,7 +207,7 @@ export class AutoSaveService {
   private async syncToServer(saveData: AutoSaveData): Promise<boolean> {
     try {
       // This would be replaced with actual API calls
-      const endpoint = this.getEndpointForType(saveData.type)
+      const endpoint = this.getEndpointForType(saveData.type);
       const response = await fetch(endpoint, {
         method: 'PUT',
         headers: {
@@ -229,7 +229,7 @@ export class AutoSaveService {
 
       // Handle version conflicts
       if (result.conflict) {
-        saveData.syncStatus = 'conflict'
+        saveData.syncStatus = 'conflict';
         saveData.errorMessage = 'Version conflict detected';
         return false;
       }
@@ -261,7 +261,7 @@ export class AutoSaveService {
 
   // Sync all pending changes
   public async syncPendingChanges(): Promise<void> {
-    if (!this.isOnline || !this.config.syncToServer) return
+    if (!this.isOnline || !this.config.syncToServer) return;
 
     const pendingItems = Array.from(this.saveQueue.values()).filter(
       (item) => item.syncStatus === 'pending' || item.syncStatus === 'error'
@@ -273,43 +273,43 @@ export class AutoSaveService {
 
   // Force save all items immediately
   public forceSaveAll(): void {
-    const allTimers = Array.from(this.timers.values())
+    const allTimers = Array.from(this.timers.values());
     allTimers.forEach((timer) => clearTimeout(timer));
     this.timers.clear();
 
     const savePromises = Array.from(this.saveQueue.keys()).map((id) => this.performSave(id));
 
     // Use Promise.allSettled to ensure all saves are attempted
-    Promise.allSettled(savePromises)
+    Promise.allSettled(savePromises);
   }
 
   // Get save status for an item
   public getSaveStatus(id: string): AutoSaveData | null {
-    return this.saveQueue.get(id) || null
+    return this.saveQueue.get(id) || null;
   }
 
   // Get all save statuses
   public getAllSaveStatuses(): AutoSaveData[] {
-    return Array.from(this.saveQueue.values())
+    return Array.from(this.saveQueue.values());
   }
 
   // Check if there are any pending changes
   public hasPendingChanges(): boolean {
     return Array.from(this.saveQueue.values()).some(
       (item) => item.isDirty || item.syncStatus === 'pending'
-    )
+    );
   }
 
   // Get pending changes count
   public getPendingChangesCount(): number {
     return Array.from(this.saveQueue.values()).filter(
       (item) => item.isDirty || item.syncStatus === 'pending'
-    ).length
+    ).length;
   }
 
   // Clear save data for an item
   public clearSaveData(id: string): void {
-    const timer = this.timers.get(id)
+    const timer = this.timers.get(id);
     if (timer) {
       clearTimeout(timer);
       this.timers.delete(id);
@@ -319,42 +319,42 @@ export class AutoSaveService {
 
   // Clear all save data
   public clearAllSaveData(): void {
-    Array.from(this.timers.values()).forEach((timer) => clearTimeout(timer))
+    Array.from(this.timers.values()).forEach((timer) => clearTimeout(timer));
     this.timers.clear();
     this.saveQueue.clear();
   }
 
   // Load draft from local storage
   public loadDraft(_type: string, id: string): any | null {
-    return localStorageService.getDraft(type, id)
+    return localStorageService.getDraft(type, id);
   }
 
   // Check if draft exists
   public hasDraft(_type: string, id: string): boolean {
-    return localStorageService.getDraft(type, id) !== null
+    return localStorageService.getDraft(type, id) !== null;
   }
 
   // Delete draft
   public deleteDraft(_type: string, id: string): boolean {
-    this.clearSaveData(id)
+    this.clearSaveData(id);
     return localStorageService.deleteDraft(type, id);
   }
 
   // Configuration management
   public updateConfig(newConfig: Partial<AutoSaveConfig>): void {
-    this.config = { ...this.config, ...newConfig }
+    this.config = { ...this.config, ...newConfig };
 
     // Save config to local storage
-    localStorageService.saveUserPreference('autoSaveConfig', this.config)
+    localStorageService.saveUserPreference('autoSaveConfig', this.config);
   }
 
   public getConfig(): AutoSaveConfig {
-    return { ...this.config }
+    return { ...this.config };
   }
 
   // Event listeners for UI updates
   public addListener(callback: (_data: AutoSaveData) => void): void {
-    this.listeners.add(callback)
+    this.listeners.add(callback);
   }
 
   public removeListener(callback: (_data: AutoSaveData) => void): void {
@@ -367,7 +367,7 @@ export class AutoSaveService {
 
   // Utility methods
   public isOnlineMode(): boolean {
-    return this.isOnline
+    return this.isOnline;
   }
 
   public getLastSaveTime(id: string): Date | null {
@@ -386,7 +386,7 @@ export class AutoSaveService {
     resolution: 'keep_local' | 'keep_server' | 'merge',
     mergedData?: any
   ): boolean {
-    const saveData = this.saveQueue.get(id)
+    const saveData = this.saveQueue.get(id);
     if (!saveData || saveData.syncStatus !== 'conflict') {
       return false;
     }
@@ -420,7 +420,7 @@ export class AutoSaveService {
 
   // Statistics
   public getStatistics(): {
-    totalItems: number
+    totalItems: number;
     pendingSync: number;
     errors: number;
     conflicts: number;
@@ -437,16 +437,16 @@ export class AutoSaveService {
         items.length > 0
           ? new Date(Math.max(...items.map((item) => new Date(item.lastModified).getTime())))
           : null,
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const autoSaveService = AutoSaveService.getInstance()
+export const autoSaveService = AutoSaveService.getInstance();
 
 // Export configuration helper
 export const getAutoSaveConfig = (): AutoSaveConfig => {
-  const savedConfig = localStorageService.getUserPreference<AutoSaveConfig>('autoSaveConfig')
+  const savedConfig = localStorageService.getUserPreference<AutoSaveConfig>('autoSaveConfig');
   return (
     savedConfig || {
       interval: 30000,
@@ -458,4 +458,4 @@ export const getAutoSaveConfig = (): AutoSaveConfig => {
       backupLocally: true,
     }
   );
-}
+};

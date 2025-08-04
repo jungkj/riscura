@@ -1,32 +1,32 @@
 // Mock PDF generator to avoid JSX compilation issues
 
 export interface ReportData {
-  title: string
+  title: string;
   subtitle?: string;
   generatedAt: Date;
   generatedBy: {
     name: string;
     email: string;
-  }
+  };
   company: {
     name: string;
     logo?: string;
-  }
+  };
   summary?: {
     totalRisks?: number;
     criticalRisks?: number;
     controlsImplemented?: number;
     complianceScore?: number;
-  }
+  };
   sections: ReportSection[];
   metadata?: {
     reportType: string;
     period?: {
       from: Date;
       to: Date;
-    }
+    };
     filters?: Record<string, any>;
-  }
+  };
 }
 
 export interface ReportSection {
@@ -55,20 +55,21 @@ export const generatePDF = async (reportData: any): Promise<Buffer> => {
         )
         .join('\n    ') || 'No sections'
     }
-  `
+  `;
 
   return Buffer.from(mockPdfContent, 'utf-8');
-}
+};
 
 // Mock formatting functions
 export const formatTableData = (_data: any[], columns: any[]) => {
   return {
     headers: columns.map((col) => col.header),
     rows: data.map((item) => columns.map((col) => item[col.key] || '')),
-  }
-}
+  };
+};
 
-export const formatChartData = (_data: any[],
+export const formatChartData = (
+  _data: any[],
   labelKey: string,
   valueKey: string,
   chartType?: string
@@ -79,5 +80,5 @@ export const formatChartData = (_data: any[],
       label: item[labelKey],
       value: item[valueKey],
     })),
-  }
-}
+  };
+};

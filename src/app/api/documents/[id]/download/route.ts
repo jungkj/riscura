@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET /api/documents/[id]/download - Secure file download (stub implementation)
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const resolvedParams = await params
+    const resolvedParams = await params;
     const { id } = resolvedParams;
 
     return NextResponse.json(

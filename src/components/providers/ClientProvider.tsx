@@ -17,7 +17,7 @@ export default function ClientProvider({ children }: ClientProviderProps) {
         'data-1p-ignore',
         'data-grammarly-shadow-root',
         'spellcheck',
-      ]
+      ];
 
       extensionAttributes.forEach((attr) => {
         const elements = document.querySelectorAll(`[${attr}]`);
@@ -27,16 +27,16 @@ export default function ClientProvider({ children }: ClientProviderProps) {
           }
         });
       });
-    }
+    };
 
     // Clean immediately after mount
-    handleExtensionInterference()
+    handleExtensionInterference();
 
     // Set up a MutationObserver to clean up any future extension interference
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes') {
-          const target = mutation.target as Element
+          const target = mutation.target as Element;
           const attributeName = mutation.attributeName;
 
           // Remove problematic attributes added by extensions
@@ -49,7 +49,7 @@ export default function ClientProvider({ children }: ClientProviderProps) {
               'data-grammarly-shadow-root',
             ].includes(attributeName)
           ) {
-            target.removeAttribute(attributeName)
+            target.removeAttribute(attributeName);
           }
         }
       });
@@ -65,12 +65,12 @@ export default function ClientProvider({ children }: ClientProviderProps) {
         'data-grammarly-shadow-root',
       ],
       subtree: true,
-    })
+    });
 
     // Cleanup observer on unmount
     return () => {
-      observer.disconnect()
-    }
+      observer.disconnect();
+    };
   }, []);
 
   return <>{children}</>;

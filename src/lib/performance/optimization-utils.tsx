@@ -13,7 +13,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
   fallback?: ReactNode
 ) {
-  const LazyComponent = lazy(importFunc)
+  const LazyComponent = lazy(importFunc);
 
   return function LazyWrapper(props: React.ComponentProps<T>) {
     return (
@@ -21,7 +21,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
         <LazyComponent {...props} />
       </Suspense>
     );
-  }
+  };
 }
 
 /**
@@ -104,7 +104,7 @@ export class PerformanceTimer {
     this.start(label);
     const _result = await fn();
     const _duration = this.end(label);
-    return { result, duration }
+    return { result, duration };
   }
 }
 

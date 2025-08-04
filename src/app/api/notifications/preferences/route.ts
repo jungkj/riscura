@@ -8,7 +8,7 @@ import { DigestFrequency } from '@prisma/client';
 
 // GET /api/notifications/preferences - Get user preferences
 export const GET = withApiMiddleware(async (req: NextRequest) => {
-  const user = (req as any).user
+  const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
   }
@@ -32,7 +32,7 @@ const updatePreferencesSchema = z.object({
       timezone: z.string().optional(),
     })
     .optional(),
-})
+});
 
 export const PUT = withApiMiddleware(async (req: NextRequest) => {
   const user = (req as any).user;

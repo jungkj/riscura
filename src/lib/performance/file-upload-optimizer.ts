@@ -53,23 +53,23 @@ export interface DatasetConfig {
     rowHeight: number;
     bufferSize: number;
     overscan: number;
-  }
+  };
   pagination: {
     pageSize: number;
     prefetchPages: number;
     maxCachedPages: number;
-  }
+  };
   processing: {
     batchSize: number;
     maxWorkers: number;
     useWebWorkers: boolean;
     streamProcessing: boolean;
-  }
+  };
   memory: {
     maxCacheSize: number; // MB
     gcThreshold: number; // MB
     enableCompression: boolean;
-  }
+  };
 }
 
 // Default configurations
@@ -83,7 +83,7 @@ export const DEFAULT_UPLOAD_CONFIG: UploadConfig = {
   supportedFormats: ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.csv', '.txt', '.json'],
   enableProgressReporting: true,
   enableResumableUpload: true,
-}
+};
 
 export const DEFAULT_DATASET_CONFIG: DatasetConfig = {
   virtualScrolling: {
@@ -108,7 +108,7 @@ export const DEFAULT_DATASET_CONFIG: DatasetConfig = {
     gcThreshold: 30, // 30MB
     enableCompression: true,
   },
-}
+};
 
 export class FileUploadOptimizer {
   private config: UploadConfig;
@@ -118,7 +118,7 @@ export class FileUploadOptimizer {
   private workers: Worker[] = [];
 
   constructor(_config: Partial<UploadConfig> = {}) {
-    this.config = { ...DEFAULT_UPLOAD_CONFIG, ...config }
+    this.config = { ...DEFAULT_UPLOAD_CONFIG, ...config };
     this.initializeWorkers();
   }
 
@@ -216,7 +216,7 @@ export class FileUploadOptimizer {
         'webWorker',
         'FileUploadOptimizer',
         () => {
-          worker.terminate()
+          worker.terminate();
           URL.revokeObjectURL(workerUrl);
         }
       );
@@ -228,7 +228,8 @@ export class FileUploadOptimizer {
   /**
    * Upload file with chunking and progress tracking
    */
-  async uploadFile(_file: File,
+  async uploadFile(
+    _file: File,
     uploadUrl: string,
     options: {
       onProgress?: (progress: UploadProgress) => void;
@@ -240,7 +241,7 @@ export class FileUploadOptimizer {
     const { onProgress, onComplete, onError, metadata = {} } = options;
 
     // Validate file
-    const validationResult = await this.validateFile(file)
+    const validationResult = await this.validateFile(file);
     if (!validationResult.isValid) {
       const error = new Error(`File validation failed: ${validationResult.errors.join(', ')}`);
       onError?.(error);
@@ -248,33 +249,33 @@ export class FileUploadOptimizer {
     }
 
     // Create upload session
-    const sessionId = this.createUploadSession(file, metadata)
+    const sessionId = this.createUploadSession(file, metadata);
     const session = this.sessions.get(sessionId)!;
 
     // Register progress callback
     if (onProgress) {
-      this.progressCallbacks.set(sessionId, onProgress)
+      this.progressCallbacks.set(sessionId, onProgress);
     }
 
     // Create abort controller
-    const abortController = new AbortController()
+    const abortController = new AbortController();
     this.activeUploads.set(sessionId, abortController);
 
     try {
       // Prepare chunks
-      await this.prepareChunks(session)
+      await this.prepareChunks(session);
 
       // Update progress
-      this.updateProgress(sessionId, { status: 'uploading' })
+      this.updateProgress(sessionId, { status: 'uploading' });
 
       // Upload chunks concurrently
-      await this.uploadChunks(session, uploadUrl, abortController.signal)
+      await this.uploadChunks(session, uploadUrl, abortController.signal);
 
       // Complete upload
-      const _result = await this.completeUpload(session, uploadUrl)
+      const _result = await this.completeUpload(session, uploadUrl);
 
       // Update progress
-      this.updateProgress(sessionId, { status: 'completed' })
+      this.updateProgress(sessionId, { status: 'completed' });
 
       onComplete?.(result);
       return sessionId;
@@ -287,7 +288,7 @@ export class FileUploadOptimizer {
       throw error;
     } finally {
       // Cleanup
-      this.activeUploads.delete(sessionId)
+      this.activeUploads.delete(sessionId);
       this.progressCallbacks.delete(sessionId);
     }
   }
@@ -305,13 +306,13 @@ export class FileUploadOptimizer {
     if (file.size > this.config.maxFileSize) {
       errors.push(
         `File size (${Math.round(file.size / 1024 / 1024)}MB) exceeds maximum limit (${Math.round(this.config.maxFileSize / 1024 / 1024)}MB)`
-      )
+      );
     }
 
     // Check file format
     const isValidFormat = this.config.supportedFormats.some((format) =>
       file.name.toLowerCase().endsWith(format.toLowerCase())
-    )
+    );
 
     if (!isValidFormat) {
       errors.push(
@@ -321,13 +322,13 @@ export class FileUploadOptimizer {
 
     // Check for empty file
     if (file.size === 0) {
-      errors.push('File is empty')
+      errors.push('File is empty');
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-    }
+    };
   }
 
   /**
@@ -363,7 +364,7 @@ export class FileUploadOptimizer {
       startTime: new Date(),
       lastActivity: new Date(),
       metadata: { ...metadata, file },
-    }
+    };
 
     this.sessions.set(sessionId, session);
     return sessionId;
@@ -378,7 +379,7 @@ export class FileUploadOptimizer {
 
     if (!worker) {
       // Fallback to main thread processing
-      await this.prepareChunksMainThread(session, file)
+      await this.prepareChunksMainThread(session, file);
       return;
     }
 
@@ -401,13 +402,13 @@ export class FileUploadOptimizer {
           worker.removeEventListener('message', handleMessage);
           reject(new Error(`Chunk hashing failed: ${error}`));
         }
-      }
+      };
 
       worker.addEventListener('message', handleMessage);
 
       // Send chunks to worker for hashing
       session.chunks.forEach((chunk, index) => {
-        const chunkBlob = file.slice(chunk.start, chunk.end)
+        const chunkBlob = file.slice(chunk.start, chunk.end);
         worker.postMessage({
           type: 'HASH_CHUNK',
           data: { chunk: chunkBlob, chunkIndex: index },
@@ -425,7 +426,7 @@ export class FileUploadOptimizer {
       const chunkBlob = file.slice(chunk.start, chunk.end);
 
       // Calculate hash
-      const buffer = await chunkBlob.arrayBuffer()
+      const buffer = await chunkBlob.arrayBuffer();
       const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       chunk.hash = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -450,7 +451,7 @@ export class FileUploadOptimizer {
       await Promise.all(batch.map((chunk) => this.uploadChunk(session, chunk, uploadUrl, signal)));
 
       // Update progress after each batch
-      this.updateProgress(session.id)
+      this.updateProgress(session.id);
     }
   }
 
@@ -513,7 +514,7 @@ export class FileUploadOptimizer {
         }
 
         // Wait before retry with exponential backoff
-        await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt)))
+        await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
       }
     }
   }
@@ -575,7 +576,7 @@ export class FileUploadOptimizer {
       remainingTime,
       status: 'uploading',
       ...updates,
-    }
+    };
 
     callback(progress);
   }
@@ -601,7 +602,7 @@ export class FileUploadOptimizer {
     }
 
     // Create new abort controller
-    const abortController = new AbortController()
+    const abortController = new AbortController();
     this.activeUploads.set(sessionId, abortController);
 
     try {
@@ -653,7 +654,7 @@ export class FileUploadOptimizer {
       speed: 0,
       remainingTime: 0,
       status: session.uploadedChunks.size === session.chunks.length ? 'completed' : 'uploading',
-    }
+    };
   }
 
   /**
@@ -662,29 +663,29 @@ export class FileUploadOptimizer {
   cleanup(): void {
     // Cancel all active uploads
     for (const [sessionId, abortController] of this.activeUploads) {
-      abortController.abort()
+      abortController.abort();
     }
 
     // Clear all data
-    this.sessions.clear()
+    this.sessions.clear();
     this.activeUploads.clear();
     this.progressCallbacks.clear();
 
     // Terminate workers
-    this.workers.forEach((worker) => worker.terminate())
+    this.workers.forEach((worker) => worker.terminate());
     this.workers = [];
   }
 }
 
 // Large dataset processing optimizer
 export class LargeDatasetProcessor {
-  private config: DatasetConfig
+  private config: DatasetConfig;
   private cache: Map<string, any> = new Map();
   private workers: Worker[] = [];
   private currentCacheSize: number = 0;
 
   constructor(_config: Partial<DatasetConfig> = {}) {
-    this.config = { ...DEFAULT_DATASET_CONFIG, ...config }
+    this.config = { ...DEFAULT_DATASET_CONFIG, ...config };
     this.initializeWorkers();
   }
 
@@ -826,7 +827,7 @@ export class LargeDatasetProcessor {
         'webWorker',
         'LargeDatasetProcessor',
         () => {
-          worker.terminate()
+          worker.terminate();
           URL.revokeObjectURL(workerUrl);
         }
       );
@@ -841,7 +842,8 @@ export class LargeDatasetProcessor {
   /**
    * Process large dataset in batches
    */
-  async processDataset<T>(_data: T[],
+  async processDataset<T>(
+    _data: T[],
     processor: (batch: T[]) => Promise<T[]> | T[],
     options: {
       onProgress?: (processed: number, total: number) => void;
@@ -867,11 +869,11 @@ export class LargeDatasetProcessor {
 
         // Memory management
         if (this.shouldTriggerGC()) {
-          await this.performGC()
+          await this.performGC();
         }
 
         // Yield control to prevent blocking
-        await new Promise((resolve) => setTimeout(resolve, 0))
+        await new Promise((resolve) => setTimeout(resolve, 0));
       } catch (error) {
         // console.error(`Error processing batch ${batchIndex}:`, error)
         throw error;
@@ -884,7 +886,8 @@ export class LargeDatasetProcessor {
   /**
    * Process using web workers
    */
-  async processWithWorkers<T>(_data: T[],
+  async processWithWorkers<T>(
+    _data: T[],
     processingType: 'PROCESS_BATCH' | 'AGGREGATE_DATA' | 'FILTER_DATA',
     options: any = {}
   ): Promise<any> {
@@ -935,14 +938,14 @@ export class LargeDatasetProcessor {
         } else if (responseType.endsWith('_ERROR')) {
           reject(new Error(error));
         }
-      }
+      };
 
       worker.addEventListener('message', handleMessage);
       worker.postMessage({ type, data: { ...data, ...options }, id });
 
       // Timeout handling
       setTimeout(() => {
-        worker.removeEventListener('message', handleMessage)
+        worker.removeEventListener('message', handleMessage);
         reject(new Error('Worker processing timeout'));
       }, 30000);
     });
@@ -974,7 +977,7 @@ export class LargeDatasetProcessor {
 
     // Check cache size limit
     if (this.currentCacheSize + size > this.config.memory.maxCacheSize * 1024 * 1024) {
-      this.evictOldestEntries(size)
+      this.evictOldestEntries(size);
     }
 
     this.cache.set(key, {
@@ -1049,11 +1052,11 @@ export class LargeDatasetProcessor {
   private async performGC(): Promise<void> {
     // Force garbage collection if available
     if ('gc' in window && typeof (window as any).gc === 'function') {
-      (window as any).gc()
+      (window as any).gc();
     }
 
     // Clear half of the cache
-    const entries = Array.from(this.cache.entries())
+    const entries = Array.from(this.cache.entries());
     const entriesToRemove = entries
       .sort((a, b) => a[1].lastAccess - b[1].lastAccess)
       .slice(0, Math.floor(entries.length / 2));
@@ -1073,7 +1076,7 @@ export class LargeDatasetProcessor {
       cacheEntries: this.cache.size,
       workersActive: this.workers.length,
       memoryUsage: (this.currentCacheSize / (this.config.memory.maxCacheSize * 1024 * 1024)) * 100,
-    }
+    };
   }
 
   /**
@@ -1081,17 +1084,17 @@ export class LargeDatasetProcessor {
    */
   cleanup(): void {
     // Terminate workers
-    this.workers.forEach((worker) => worker.terminate())
+    this.workers.forEach((worker) => worker.terminate());
     this.workers = [];
 
     // Clear cache
-    this.cache.clear()
+    this.cache.clear();
     this.currentCacheSize = 0;
   }
 }
 
 // Global instances
-export const fileUploadOptimizer = new FileUploadOptimizer()
+export const fileUploadOptimizer = new FileUploadOptimizer();
 export const datasetProcessor = new LargeDatasetProcessor();
 
 export default {
@@ -1099,4 +1102,4 @@ export default {
   LargeDatasetProcessor,
   fileUploadOptimizer,
   datasetProcessor,
-}
+};

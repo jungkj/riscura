@@ -1,6 +1,6 @@
 // Enhanced Logger for Performance Monitoring
 export interface LogEntry {
-  timestamp: string
+  timestamp: string;
   level: LogLevel;
   message: string;
   data?: any;
@@ -37,7 +37,7 @@ class Logger {
       warn: 2,
       error: 3,
       fatal: 4,
-    }
+    };
 
     return levels[level] >= levels[this.logLevel];
   }
@@ -49,7 +49,7 @@ class Logger {
       message,
       data,
       context: this.getContext(),
-    }
+    };
   }
 
   private getContext(): string {
@@ -124,7 +124,7 @@ class Logger {
     if (error instanceof Error) {
       entry.error = error;
     } else if (error) {
-      entry.data = { ...entry.data, error }
+      entry.data = { ...entry.data, error };
     }
     this.output(entry);
   }
@@ -134,14 +134,14 @@ class Logger {
     if (error instanceof Error) {
       entry.error = error;
     } else if (error) {
-      entry.data = { ...entry.data, error }
+      entry.data = { ...entry.data, error };
     }
     this.output(entry);
   }
 
   // Performance logging
   public performance(operation: string, duration: number, data?: any): void {
-    const entry = this.formatMessage('info', `Performance: ${operation}`, data)
+    const entry = this.formatMessage('info', `Performance: ${operation}`, data);
     entry.duration = duration;
     this.output(entry);
   }
@@ -152,14 +152,14 @@ class Logger {
       method,
       url,
       status,
-    })
+    });
     entry.duration = duration;
     this.output(entry);
   }
 
   // User action logging
   public userAction(_userId: string, action: string, data?: any): void {
-    const entry = this.formatMessage('info', `User action: ${action}`, data)
+    const entry = this.formatMessage('info', `User action: ${action}`, data);
     entry.userId = userId;
     this.output(entry);
   }
@@ -170,7 +170,7 @@ class Logger {
       operation,
       key,
       hit,
-    })
+    });
     if (duration) {
       entry.duration = duration;
     }
@@ -182,14 +182,14 @@ class Logger {
     const entry = this.formatMessage('debug', `Database query`, {
       query: query.substring(0, 100) + (query.length > 100 ? '...' : ''),
       rows,
-    })
+    });
     entry.duration = duration;
     this.output(entry);
   }
 
   // Security logging
   public security(event: string, userId?: string, data?: any): void {
-    const entry = this.formatMessage('warn', `Security event: ${event}`, data)
+    const entry = this.formatMessage('warn', `Security event: ${event}`, data);
     if (userId) {
       entry.userId = userId;
     }
@@ -198,17 +198,17 @@ class Logger {
 
   // Set log level dynamically
   public setLogLevel(level: LogLevel): void {
-    this.logLevel = level
+    this.logLevel = level;
   }
 
   // Get current log level
   public getLogLevel(): LogLevel {
-    return this.logLevel
+    return this.logLevel;
   }
 }
 
 // Export singleton instance
-export const logger = Logger.getInstance()
+export const logger = Logger.getInstance();
 
 // Export class for testing
-export { Logger }
+export { Logger };

@@ -5,7 +5,7 @@ import { variants, timings, easings } from '@/lib/design-system/micro-interactio
 
 // Enhanced Draggable Item
 interface EnhancedDraggableProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   id: string;
   data?: any;
   onDragStart?: (id: string, data?: any) => void;
@@ -31,18 +31,18 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
   const y = useMotionValue(0);
 
   // 3D tilt effects based on drag position
-  const rotateX = useTransform(y, [-100, 100], [5, -5])
+  const rotateX = useTransform(y, [-100, 100], [5, -5]);
   const rotateY = useTransform(x, [-100, 100], [-5, 5]);
 
   const handleDragStart = () => {
     setIsDragging(true);
     onDragStart?.(id, data);
-  }
+  };
 
   const handleDragEnd = (event: any, info: any) => {
     setIsDragging(false);
     onDragEnd?.(id, info);
-  }
+  };
 
   return (
     <motion.div
@@ -103,11 +103,11 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
       {children}
     </motion.div>
   );
-}
+};
 
 // Enhanced Drop Zone
 interface EnhancedDropZoneProps {
-  children?: React.ReactNode
+  children?: React.ReactNode;
   onDrop?: (draggedId: string, data?: any) => void;
   onDragOver?: (draggedId: string) => void;
   onDragLeave?: () => void;
@@ -135,13 +135,13 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
     e.preventDefault();
     if (disabled) return;
     setIsOver(true);
-  }
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     if (disabled) return;
     setIsOver(true);
-  }
+  };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
@@ -151,7 +151,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
       setIsOver(false);
       onDragLeave?.();
     }
-  }
+  };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -162,7 +162,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
     const draggedData = e.dataTransfer.getData('application/json');
 
     onDrop?.(draggedId, draggedData ? JSON.parse(draggedData) : undefined);
-  }
+  };
 
   return (
     <motion.div
@@ -251,7 +251,7 @@ export const EnhancedDropZone: React.FC<EnhancedDropZoneProps> = ({
       )}
     </motion.div>
   );
-}
+};
 
 // Sortable List Component
 interface SortableListProps {
@@ -273,11 +273,11 @@ export const SortableList: React.FC<SortableListProps> = ({
 
   const handleDragStart = (id: string) => {
     setDraggedItem(id);
-  }
+  };
 
   const handleDragEnd = () => {
     setDraggedItem(null);
-  }
+  };
 
   const handleDrop = (targetId: string) => {
     if (!draggedItem || draggedItem === targetId) return;
@@ -291,7 +291,7 @@ export const SortableList: React.FC<SortableListProps> = ({
     newOrder.splice(targetIndex, 0, draggedItem);
 
     onReorder(newOrder);
-  }
+  };
 
   return (
     <div className={cn('space-y-2', className)} style={{ gap }}>
@@ -326,4 +326,4 @@ export const SortableList: React.FC<SortableListProps> = ({
       ))}
     </div>
   );
-}
+};

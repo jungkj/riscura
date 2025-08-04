@@ -14,7 +14,7 @@ export class SharePointAuthService {
   constructor() {
     // Validate required environment variables
     if (!process.env.AZURE_KEY_VAULT_NAME) {
-      throw new Error('AZURE_KEY_VAULT_NAME environment variable is required')
+      throw new Error('AZURE_KEY_VAULT_NAME environment variable is required');
     }
 
     this.keyVaultUrl = `https://${process.env.AZURE_KEY_VAULT_NAME}.vault.azure.net`;
@@ -25,7 +25,7 @@ export class SharePointAuthService {
       if (!process.env.AZURE_AD_TENANT_ID || !process.env.AZURE_AD_CLIENT_ID) {
         throw new Error(
           'AZURE_AD_TENANT_ID and AZURE_AD_CLIENT_ID are required when using client secret authentication'
-        )
+        );
       }
 
       this.credential = new ClientSecretCredential(
@@ -35,7 +35,7 @@ export class SharePointAuthService {
       );
     } else {
       // Production: Use certificate from Key Vault
-      this.credential = new DefaultAzureCredential()
+      this.credential = new DefaultAzureCredential();
     }
   }
 
@@ -46,10 +46,10 @@ export class SharePointAuthService {
     // Create custom auth provider that uses Azure credentials
     const authProvider: AuthenticationProvider = {
       getAccessToken: async () => {
-        const _token = await this.getAccessToken()
+        const _token = await this.getAccessToken();
         return token;
       },
-    }
+    };
 
     return Client.initWithMiddleware({
       authProvider: authProvider,
@@ -63,7 +63,7 @@ export class SharePointAuthService {
   async getAccessToken(): Promise<string> {
     try {
       // Check cache first
-      const cachedToken = await this.getCachedToken()
+      const cachedToken = await this.getCachedToken();
       if (cachedToken) {
         return cachedToken;
       }
@@ -71,14 +71,14 @@ export class SharePointAuthService {
       // Acquire new token
       const tokenResponse = await this.credential.getToken(
         process.env.GRAPH_API_SCOPE || 'https://graph.microsoft.com/.default'
-      )
+      );
 
       if (!tokenResponse) {
         throw new Error('Failed to acquire access token');
       }
 
       // Cache the token
-      const expiresInSeconds = Math.floor((tokenResponse.expiresOnTimestamp - Date.now()) / 1000)
+      const expiresInSeconds = Math.floor((tokenResponse.expiresOnTimestamp - Date.now()) / 1000);
       await this.cacheToken(tokenResponse.token, expiresInSeconds);
 
       return tokenResponse.token;
@@ -97,12 +97,12 @@ export class SharePointAuthService {
       if (!process.env.AZURE_KEY_VAULT_CERTIFICATE_NAME) {
         throw new Error(
           'AZURE_KEY_VAULT_CERTIFICATE_NAME environment variable is required for certificate authentication'
-        )
+        );
       }
 
       // Ensure credential is properly typed
       if (!(this.credential instanceof DefaultAzureCredential)) {
-        throw new Error('DefaultAzureCredential is required for Key Vault access')
+        throw new Error('DefaultAzureCredential is required for Key Vault access');
       }
 
       const certificateClient = new CertificateClient(this.keyVaultUrl, this.credential);
@@ -116,7 +116,7 @@ export class SharePointAuthService {
       }
 
       // Convert certificate to base64 string
-      return Buffer.from(certificate.cer).toString('base64')
+      return Buffer.from(certificate.cer).toString('base64');
     } catch (error) {
       // console.error('Error retrieving certificate from Key Vault:', error)
       throw error;
@@ -138,10 +138,10 @@ export class SharePointAuthService {
       }
 
       // Check if token is expired
-      const expiry = await redis.get(this.tokenExpiryKey)
+      const expiry = await redis.get(this.tokenExpiryKey);
       if (!expiry || Date.now() >= parseInt(expiry)) {
         // Token expired, clear cache
-        await redis.del(this.tokenCacheKey)
+        await redis.del(this.tokenCacheKey);
         await redis.del(this.tokenExpiryKey);
         return null;
       }
@@ -163,7 +163,7 @@ export class SharePointAuthService {
 
     try {
       // Set a buffer of 5 minutes before actual expiry
-      const bufferSeconds = 300
+      const bufferSeconds = 300;
       const effectiveExpiry = Math.max(expiresInSeconds - bufferSeconds, 60);
 
       await redis.setex(this.tokenCacheKey, effectiveExpiry, token);
@@ -210,7 +210,7 @@ export class SharePointAuthService {
 }
 
 // Singleton instance
-let authServiceInstance: SharePointAuthService | null = null
+let authServiceInstance: SharePointAuthService | null = null;
 
 export function getSharePointAuthService(): SharePointAuthService {
   if (!authServiceInstance) {

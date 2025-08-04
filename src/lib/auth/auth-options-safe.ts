@@ -1,5 +1,5 @@
 // Safe NextAuth configuration that handles initialization errors gracefully
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 // Safe environment getter
 const safeEnv = {
   get GOOGLE_CLIENT_ID() {
-    return process.env.GOOGLE_CLIENT_ID
+    return process.env.GOOGLE_CLIENT_ID;
   },
   get GOOGLE_CLIENT_SECRET() {
     return process.env.GOOGLE_CLIENT_SECRET;
@@ -22,10 +22,10 @@ const safeEnv = {
   get NODE_ENV() {
     return process.env.NODE_ENV;
   },
-}
+};
 
 // Build providers array
-const providers: any[] = []
+const providers: any[] = [];
 
 // Only add Google provider if credentials are available
 if (safeEnv.GOOGLE_CLIENT_ID && safeEnv.GOOGLE_CLIENT_SECRET) {
@@ -41,7 +41,7 @@ if (safeEnv.GOOGLE_CLIENT_ID && safeEnv.GOOGLE_CLIENT_SECRET) {
         },
       },
     })
-  )
+  );
 }
 
 // Always add credentials provider for fallback
@@ -59,7 +59,7 @@ providers.push(
           id: 'demo-admin-id',
           email: 'admin@riscura.com',
           name: 'Demo Admin',
-        }
+        };
       }
       return null;
     },
@@ -68,11 +68,11 @@ providers.push(
 
 // Create auth options factory
 export async function createAuthOptions(): Promise<NextAuthOptions> {
-  let adapter
+  let adapter;
 
   // Try to get database adapter
   try {
-    const { db } = await import('@/lib/db')
+    const { db } = await import('@/lib/db');
     adapter = PrismaAdapter(db.client);
     // console.log('[NextAuth] Database adapter loaded successfully')
   } catch (error) {
@@ -97,7 +97,7 @@ export async function createAuthOptions(): Promise<NextAuthOptions> {
           ...token,
           iat: Math.floor(Date.now() / 1000),
           exp: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
-        }
+        };
         return jwt.sign(payload, secret, { algorithm: 'HS256' });
       },
       decode: async ({ secret, token }) => {
@@ -133,11 +133,11 @@ export async function createAuthOptions(): Promise<NextAuthOptions> {
       signIn: '/auth/login',
       error: '/auth/error',
     },
-  }
+  };
 }
 
 // Create a cached version
-let cachedOptions: NextAuthOptions | null = null
+let cachedOptions: NextAuthOptions | null = null;
 
 export async function getAuthOptions(): Promise<NextAuthOptions> {
   if (!cachedOptions) {

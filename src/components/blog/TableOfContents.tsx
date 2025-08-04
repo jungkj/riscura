@@ -20,7 +20,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   useEffect(() => {
     // Extract headings from content
-    const headingRegex = /^(#{2,3})\s+(.+)$/gm
+    const headingRegex = /^(#{2,3})\s+(.+)$/gm;
     const extractedHeadings: TOCItem[] = [];
     let match;
 
@@ -66,7 +66,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           observer.unobserve(element);
         }
       });
-    }
+    };
   }, [headings]);
 
   const scrollToHeading = (id: string) => {
@@ -79,7 +79,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         behavior: 'smooth',
       });
     }
-  }
+  };
 
   if (headings.length === 0) {
     return null;

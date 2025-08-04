@@ -12,7 +12,7 @@ import { LoadingStates } from '@/components/states/LoadingState';
 
 // Wizard types and interfaces
 interface WizardStep {
-  id: string
+  id: string;
   title: string;
   description?: string;
   component: React.ComponentType<WizardStepProps>;
@@ -96,7 +96,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   // Auto-save functionality
   const performAutoSave = useCallback(async () => {
-    if (!onSave || !hasUnsavedChanges) return
+    if (!onSave || !hasUnsavedChanges) return;
 
     setAutoSaveStatus({ status: 'saving' });
     try {
@@ -117,7 +117,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   // Set up auto-save interval
   useEffect(() => {
-    if (!autoSave || !onSave) return
+    if (!autoSave || !onSave) return;
 
     const interval = setInterval(performAutoSave, autoSaveInterval);
     return () => clearInterval(interval);
@@ -125,10 +125,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   // Debounced auto-save on data changes
   useEffect(() => {
-    if (!autoSave || !onSave) return
+    if (!autoSave || !onSave) return;
 
     // Check if data actually changed
-    const dataChanged = JSON.stringify(wizardData) !== JSON.stringify(lastSaveDataRef.current)
+    const dataChanged = JSON.stringify(wizardData) !== JSON.stringify(lastSaveDataRef.current);
     if (!dataChanged) return;
 
     setHasUnsavedChanges(true);
@@ -136,7 +136,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
     // Clear existing timeout
     if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current)
+      clearTimeout(autoSaveTimeoutRef.current);
     }
 
     // Set new timeout for debounced save
@@ -146,7 +146,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       if (autoSaveTimeoutRef.current) {
         clearTimeout(autoSaveTimeoutRef.current);
       }
-    }
+    };
   }, [wizardData, autoSave, onSave, performAutoSave]);
 
   // Handle data changes from steps
@@ -154,7 +154,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setWizardData((prev) => ({
       ...prev,
       ...stepData,
-    }))
+    }));
   }, []);
 
   // Handle validation changes from steps
@@ -162,12 +162,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setStepValidations((prev) => ({
       ...prev,
       [stepIndex]: validation,
-    }))
+    }));
   }, []);
 
   // Navigation functions
   const canGoNext = useCallback(() => {
-    if (currentStep >= steps.length - 1) return false
+    if (currentStep >= steps.length - 1) return false;
 
     const currentValidation = stepValidations[currentStep];
     if (!allowStepSkipping && currentValidation && !currentValidation.isValid) {
@@ -214,12 +214,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const submitWizard = useCallback(async () => {
     // Validate all steps before submission
-    const allValid = Object.values(stepValidations).every((validation) => validation.isValid)
+    const allValid = Object.values(stepValidations).every((validation) => validation.isValid);
     if (!allValid) {
       // Find first invalid step and navigate to it
       const firstInvalidStep = Object.entries(stepValidations).find(
         ([_, validation]) => !validation.isValid
-      )
+      );
       if (firstInvalidStep) {
         goToStep(parseInt(firstInvalidStep[0]));
       }
@@ -248,14 +248,14 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     nextStep,
     previousStep,
     submitWizard,
-  }
+  };
 
   // Get step completion status
   const getStepStatus = (stepIndex: number) => {
-    if (stepIndex < currentStep) return 'completed'
+    if (stepIndex < currentStep) return 'completed';
     if (stepIndex === currentStep) return 'current';
     return 'upcoming';
-  }
+  };
 
   const getStepValidationStatus = (stepIndex: number) => {
     const validation = stepValidations[stepIndex];
@@ -264,16 +264,16 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     if (validation.errors && Object.keys(validation.errors).length > 0) return 'invalid';
     if (validation.warnings && Object.keys(validation.warnings).length > 0) return 'warning';
     return 'unknown';
-  }
+  };
 
   // Prevent navigation away with unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
-        e.preventDefault()
+        e.preventDefault();
         e.returnValue = '';
       }
-    }
+    };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -288,7 +288,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            {Boolean(title) && <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>}
+            {Boolean(title) && (
+              <h1 className="text-xl font-semibold text-gray-900 mb-1">{title}</h1>
+            )}
             {Boolean(description) && <p className="text-sm text-gray-600">{description}</p>}
           </div>
 
@@ -495,6 +497,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       </div>
     </div>
   );
-}
+};
 
 export default WizardContainer;

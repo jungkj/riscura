@@ -1,5 +1,5 @@
 // SharePoint Integration Types
-import { ValidationError } from '@/services/excel/validator.service'
+import { ValidationError } from '@/services/excel/validator.service';
 
 export interface SharePointIntegration {
   id: string;
@@ -88,17 +88,17 @@ export interface ExcelValidationResult {
     riskCount?: number;
     controlCount?: number;
     assessmentCount?: number;
-  }
+  };
 }
 
 // API Request/Response Types
 
 export interface ConnectSharePointRequest {
-  siteUrl: string
+  siteUrl: string;
 }
 
 export interface ConnectSharePointResponse {
-  integration?: SharePointIntegration & { webUrl?: string }
+  integration?: SharePointIntegration & { webUrl?: string };
   message?: string;
   error?: string;
 }
@@ -113,7 +113,7 @@ export interface ListSharePointFilesResponse {
   integration?: {
     id: string;
     displayName: string;
-  }
+  };
   error?: string;
 }
 
@@ -149,8 +149,8 @@ export interface GetImportJobResponse {
       id: string;
       name?: string | null;
       email?: string | null;
-    }
-  }
+    };
+  };
   error?: string;
 }
 
@@ -161,7 +161,7 @@ export interface ListImportJobsResponse {
         id: string;
         name?: string | null;
         email?: string | null;
-      }
+      };
     }
   >;
   total?: number;
@@ -173,7 +173,7 @@ export interface ListImportJobsResponse {
 // Hook Return Types
 
 export interface UseSharePointIntegrationReturn {
-  integrations: SharePointIntegration[]
+  integrations: SharePointIntegration[];
   isLoading: boolean;
   isConnecting: boolean;
   error: string | null;
@@ -220,7 +220,7 @@ export interface UseImportJobsReturn {
 // Service Types
 
 export interface SharePointAuthConfig {
-  tenantId: string
+  tenantId: string;
   clientId: string;
   clientSecret?: string;
   certificateName?: string;

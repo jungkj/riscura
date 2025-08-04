@@ -18,7 +18,7 @@ import Image from 'next/image';
 interface BlogPostPageProps {
   params: {
     slug: string;
-  }
+  };
 }
 
 export async function generateStaticParams() {
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return {
       title: 'Post Not Found | Riscura Blog',
       description: 'The requested blog post could not be found.',
-    }
+    };
   }
   return generateBlogPostMetadata(post);
 }

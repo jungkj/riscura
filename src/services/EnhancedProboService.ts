@@ -14,7 +14,7 @@ const ProboMetricsSchema = z.object({
   complianceFrameworks: z.number(),
   riskReduction: z.number(),
   lastUpdated: z.date().or(z.string().transform((str) => new Date(str))),
-})
+});
 
 const ProboComplianceStatusSchema = z.object({
   framework: z.string(),
@@ -116,7 +116,7 @@ export class EnhancedProboService {
     }
 
     // Enforce secure key requirement
-    const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET
+    const keySource = process.env.PROBO_ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET;
     if (!keySource) {
       throw new Error(
         'Encryption key not configured. Please set PROBO_ENCRYPTION_KEY or NEXTAUTH_SECRET environment variable.'
@@ -124,12 +124,12 @@ export class EnhancedProboService {
     }
 
     // Derive a proper 256-bit key from the source
-    this.encryptionKey = this.deriveKey(keySource)
+    this.encryptionKey = this.deriveKey(keySource);
   }
 
   private deriveKey(keySource: string): Buffer {
     // Use a consistent salt for key derivation (in production, this could be stored separately)
-    const salt = crypto.createHash('sha256').update('probo-encryption-salt').digest()
+    const salt = crypto.createHash('sha256').update('probo-encryption-salt').digest();
     return crypto.pbkdf2Sync(keySource, salt, 100000, 32, 'sha256');
   }
 
@@ -148,15 +148,16 @@ export class EnhancedProboService {
   }
 
   // Integration Management
-  async setupIntegration(_organizationId: string,
+  async setupIntegration(
+    _organizationId: string,
     apiKey: string,
     webhookUrl?: string
   ): Promise<ProboIntegration> {
     // Encrypt API key
-    const encryptedKey = this.encryptApiKey(apiKey)
+    const encryptedKey = this.encryptApiKey(apiKey);
 
     // Generate webhook secret
-    const webhookSecret = webhookUrl ? crypto.randomBytes(32).toString('hex') : null
+    const webhookSecret = webhookUrl ? crypto.randomBytes(32).toString('hex') : null;
 
     // Create or update integration
     const integration = await prisma.proboIntegration.upsert({
@@ -179,7 +180,7 @@ export class EnhancedProboService {
         webhookSecret,
         isActive: true,
       },
-    })
+    });
 
     return integration;
   }
@@ -199,14 +200,14 @@ export class EnhancedProboService {
 
   // Metrics Collection
   async syncMetrics(_organizationId: string): Promise<void> {
-    const integration = await this.getIntegration(organizationId)
+    const integration = await this.getIntegration(organizationId);
     if (!integration?.isActive) {
       throw new Error('Probo integration is not active');
     }
 
     try {
       // Get metrics from ProboIntegrationService
-      const metrics = await this.proboIntegration.getIntegrationMetrics()
+      const metrics = await this.proboIntegration.getIntegrationMetrics();
       const complianceStatus = await this.proboIntegration.getComplianceStatus();
       const proboInsights = await this.proboIntegration.getProboInsights();
 
@@ -224,14 +225,14 @@ export class EnhancedProboService {
           affectedFrameworks: ['SOC2', 'ISO27001'],
           timestamp: new Date(),
         })),
-      }
+      };
 
       // Store metrics in database
       await Promise.all([
         this.storeMetric(integration.id, 'metrics_summary', metrics),
         this.storeMetric(integration.id, 'compliance_status', complianceStatus),
         this.storeMetric(integration.id, 'insights', insights),
-      ])
+      ]);
 
       // Update sync status
       await prisma.proboIntegration.update({
@@ -241,7 +242,7 @@ export class EnhancedProboService {
           lastSyncStatus: 'success',
           lastSyncError: null,
         },
-      })
+      });
     } catch (error) {
       // Update sync error
       await prisma.proboIntegration.update({
@@ -251,7 +252,7 @@ export class EnhancedProboService {
           lastSyncStatus: 'error',
           lastSyncError: error instanceof Error ? error.message : 'Unknown error',
         },
-      })
+      });
       throw error;
     }
   }
@@ -260,7 +261,7 @@ export class EnhancedProboService {
     const integration = await this.getIntegration(organizationId);
     if (!integration) {
       // Return default metrics if no integration
-      return this.getDefaultMetrics()
+      return this.getDefaultMetrics();
     }
 
     // Get latest metrics from database
@@ -270,12 +271,12 @@ export class EnhancedProboService {
         metricType: 'metrics_summary',
       },
       orderBy: { timestamp: 'desc' },
-    })
+    });
 
     if (!latestMetric) {
       // Try to sync and return default if fails
       try {
-        await this.syncMetrics(organizationId)
+        await this.syncMetrics(organizationId);
         return await this.getLatestMetrics(organizationId);
       } catch {
         return this.getDefaultMetrics();
@@ -342,7 +343,7 @@ export class EnhancedProboService {
 
   async getVendorSummary(_organizationId: string): Promise<ProboVendorSummary> {
     // Get vendor data from ProboIntegrationService
-    const vendorSummary = await this.proboIntegration.getVendorAssessmentSummary()
+    const vendorSummary = await this.proboIntegration.getVendorAssessmentSummary();
 
     return vendorSummary;
   }
@@ -363,29 +364,29 @@ export class EnhancedProboService {
           version: '1.0',
         },
       },
-    })
+    });
   }
 
   private encryptApiKey(apiKey: string): string {
     try {
       // Generate random IV
-      const iv = crypto.randomBytes(EnhancedProboService.IV_LENGTH)
+      const iv = crypto.randomBytes(EnhancedProboService.IV_LENGTH);
 
       // Create cipher
-      const cipher = crypto.createCipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv)
+      const cipher = crypto.createCipheriv(EnhancedProboService.ALGORITHM, this.encryptionKey, iv);
 
       // Encrypt the API key
-      let encrypted = cipher.update(apiKey, 'utf8')
+      let encrypted = cipher.update(apiKey, 'utf8');
       encrypted = Buffer.concat([encrypted, cipher.final()]);
 
       // Get the authentication tag
-      const tag = cipher.getAuthTag()
+      const tag = cipher.getAuthTag();
 
       // Combine IV, tag, and encrypted data
-      const combined = Buffer.concat([iv, tag, encrypted])
+      const combined = Buffer.concat([iv, tag, encrypted]);
 
       // Return as base64 string
-      return combined.toString('base64')
+      return combined.toString('base64');
     } catch (error) {
       // console.error('Encryption failed:', error)
       throw new Error('Failed to encrypt API key');
@@ -395,10 +396,10 @@ export class EnhancedProboService {
   private decryptApiKey(encryptedKey: string): string {
     try {
       // Decode from base64
-      const combined = Buffer.from(encryptedKey, 'base64')
+      const combined = Buffer.from(encryptedKey, 'base64');
 
       // Extract IV, tag, and encrypted data
-      const iv = combined.slice(0, EnhancedProboService.IV_LENGTH)
+      const iv = combined.slice(0, EnhancedProboService.IV_LENGTH);
       const tag = combined.slice(
         EnhancedProboService.IV_LENGTH,
         EnhancedProboService.IV_LENGTH + EnhancedProboService.TAG_LENGTH
@@ -412,11 +413,11 @@ export class EnhancedProboService {
         EnhancedProboService.ALGORITHM,
         this.encryptionKey,
         iv
-      )
+      );
       decipher.setAuthTag(tag);
 
       // Decrypt the data
-      let decrypted = decipher.update(encrypted)
+      let decrypted = decipher.update(encrypted);
       decrypted = Buffer.concat([decrypted, decipher.final()]);
 
       return decrypted.toString('utf8');
@@ -435,7 +436,7 @@ export class EnhancedProboService {
       complianceFrameworks: 4,
       riskReduction: 78,
       lastUpdated: new Date(),
-    }
+    };
   }
 
   private getDefaultComplianceStatus(): ProboComplianceStatus[] {
@@ -537,12 +538,12 @@ export class EnhancedProboService {
       totalInsights: 5,
       criticalInsights: 2,
       recommendations,
-    }
+    };
   }
 
   // Webhook Handler
   async handleWebhook(_organizationId: string, webhookData: any, signature: string): Promise<void> {
-    const integration = await this.getIntegration(organizationId)
+    const integration = await this.getIntegration(organizationId);
     if (!integration?.webhookSecret) {
       throw new Error('Webhook not configured');
     }
@@ -551,7 +552,7 @@ export class EnhancedProboService {
     const expectedSignature = crypto
       .createHmac('sha256', integration.webhookSecret)
       .update(JSON.stringify(webhookData))
-      .digest('hex')
+      .digest('hex');
 
     if (signature !== expectedSignature) {
       throw new Error('Invalid webhook signature');
@@ -559,16 +560,16 @@ export class EnhancedProboService {
 
     // Process webhook data
     if (webhookData.type === 'metrics.updated') {
-      await this.syncMetrics(organizationId)
+      await this.syncMetrics(organizationId);
     } else if (webhookData.type === 'control.created') {
       // Handle new control created in Probo
-      await this.storeMetric(integration.id, 'control_event', webhookData)
+      await this.storeMetric(integration.id, 'control_event', webhookData);
     }
   }
 }
 
 // Lazy initialization to avoid instantiation during build
-let serviceInstance: EnhancedProboService | null = null
+let serviceInstance: EnhancedProboService | null = null;
 
 export function getEnhancedProboService(): EnhancedProboService {
   if (!serviceInstance) {
@@ -578,4 +579,4 @@ export function getEnhancedProboService(): EnhancedProboService {
 }
 
 // Export the getter function, not the result
-export default getEnhancedProboService
+export default getEnhancedProboService;

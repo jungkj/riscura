@@ -16,7 +16,7 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -39,7 +39,7 @@ const createRequirementSchema = z.object({
   criticality: z.nativeEnum(RequirementCriticality),
   parentId: z.string().optional(),
   order: z.number().optional(),
-})
+});
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
       // Handle bulk creation
       if (Array.isArray(body)) {
-        const parsedRequirements = body.map((item) => createRequirementSchema.parse(item))
+        const parsedRequirements = body.map((item) => createRequirementSchema.parse(item));
         const requirements = parsedRequirements.map((req) => ({
           requirementId: req.requirementId,
           title: req.title,
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       }
 
       // Handle single creation
-      const validatedData = createRequirementSchema.parse(body)
+      const validatedData = createRequirementSchema.parse(body);
       const requirement = await complianceService.createRequirement({
         frameworkId: id,
         requirementId: validatedData.requirementId,

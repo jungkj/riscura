@@ -47,7 +47,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   useEffect(() => {
     const fetchRisks = async () => {
       try {
-        const response = await fetch('/api/risks')
+        const response = await fetch('/api/risks');
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
@@ -59,7 +59,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchRisks();
   }, []);
@@ -255,14 +255,14 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       createdAt: '2024-01-19T08:30:00Z',
       updatedAt: '2024-02-01T16:50:00Z',
     },
-  ]
+  ];
 
   // Use real risks if available, otherwise use empty data
-  const activeRisks = risks.length > 0 ? risks : []
+  const activeRisks = risks.length > 0 ? risks : [];
 
   // Generate heat map data from actual risks
   const generateHeatMapData = (): HeatMapData[] => {
-    const data: HeatMapData[] = []
+    const data: HeatMapData[] = [];
     const impactLevels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
     const likelihoodLevels = [
       'Very unlikely',
@@ -282,7 +282,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
         ).length;
 
         // Determine risk level based on impact and likelihood
-        let level: 'low' | 'medium' | 'high' | 'critical' = 'low'
+        let level: 'low' | 'medium' | 'high' | 'critical' = 'low';
         const score = impactValue * likelihoodValue;
         if (score >= 20) level = 'critical';
         else if (score >= 12) level = 'high';
@@ -293,7 +293,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     });
 
     return data;
-  }
+  };
 
   const heatMapData = generateHeatMapData();
 
@@ -333,7 +333,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     { impact: 'Very Low', likelihood: 'Somewhat unlikely', count: 2, level: 'low' },
     { impact: 'Very Low', likelihood: 'Likely', count: 1, level: 'low' },
     { impact: 'Very Low', likelihood: 'Very likely', count: 4, level: 'low' },
-  ]
+  ];
 
   const impactLevels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
   const likelihoodLevels = [
@@ -346,7 +346,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
 
   const getCellData = (impact: string, likelihood: string) => {
     return heatMapData.find((d) => d.impact === impact && d.likelihood === likelihood);
-  }
+  };
 
   const getCellColor = (level: 'low' | 'medium' | 'high' | 'critical') => {
     switch (level) {
@@ -360,13 +360,13 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       default:
         return 'bg-green-400 text-white border-green-500';
     }
-  }
+  };
 
   // Map impact and likelihood text to numeric values for filtering risks
   const getImpactValue = (impact: string): number => {
     switch (impact) {
       case 'Very High':
-        return 5
+        return 5;
       case 'High':
         return 4;
       case 'Medium':
@@ -378,7 +378,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       default:
         return 1;
     }
-  }
+  };
 
   const getLikelihoodValue = (likelihood: string): number => {
     switch (likelihood) {
@@ -395,7 +395,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       default:
         return 1;
     }
-  }
+  };
 
   const getRisksForCell = (impact: string, likelihood: string): Risk[] => {
     const impactValue = getImpactValue(impact);
@@ -404,15 +404,15 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     return activeRisks.filter(
       (risk) => risk.impact === impactValue && risk.likelihood === likelihoodValue
     );
-  }
+  };
 
   const handleCellClick = (impact: string, likelihood: string) => {
     const risks = getRisksForCell(impact, likelihood);
     setSelectedCell({ impact, likelihood, risks });
-  }
+  };
 
   // Simplified level labels for compact display
-  const compactImpactLabels = ['Very High', 'High', 'Medium', 'Low', 'Very Low']
+  const compactImpactLabels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
   const compactLikelihoodLabels = [
     'Very unlikely',
     'Unlikely',
@@ -422,7 +422,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   ];
 
   // Calculate total risks from heatMapData
-  const totalRisks = heatMapData.reduce((sum, cell) => sum + cell.count, 0)
+  const totalRisks = heatMapData.reduce((sum, cell) => sum + cell.count, 0);
 
   return (
     <Fragment>
@@ -594,4 +594,4 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       />
     </Fragment>
   );
-}
+};

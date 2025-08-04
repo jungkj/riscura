@@ -24,7 +24,7 @@ export async function GET(_request: NextRequest) {
     const [basicStatus, detailedConnection] = await Promise.all([
       getDatabaseStatus(),
       checkDatabaseConnectionDetailed(),
-    ])
+    ]);
 
     const responseTime = Date.now() - startTime;
 
@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest) {
         ? 'healthy'
         : basicStatus.status === 'degraded'
           ? 'degraded'
-          : 'unhealthy'
+          : 'unhealthy';
 
     const healthData = {
       status: overallStatus,
@@ -78,7 +78,7 @@ export async function GET(_request: NextRequest) {
         responseTime: detailedConnection.responseTime < 5000,
       },
       lastHealthCheck: basicStatus.lastHealthCheck,
-    }
+    };
 
     // Return appropriate HTTP status based on health
     const httpStatus =
@@ -133,7 +133,7 @@ export async function GET(_request: NextRequest) {
       },
       error: errorMessage,
       lastHealthCheck: new Date(),
-    }
+    };
 
     return NextResponse.json(errorResponse, {
       status: 503,
@@ -149,7 +149,7 @@ export async function GET(_request: NextRequest) {
 // POST /api/health/database - Comprehensive status check
 export async function POST(_request: NextRequest) {
   try {
-    const body = await request.json()
+    const body = await request.json();
     const { action } = body;
 
     switch (action) {

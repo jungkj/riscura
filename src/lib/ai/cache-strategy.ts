@@ -40,7 +40,7 @@ export class EnhancedAICacheStrategy {
       hitRate: 0,
       size: 0,
       memoryUsage: 0,
-    }
+    };
 
     this.persistentStore = new Map();
     this.loadPersistentCache();
@@ -54,7 +54,7 @@ export class EnhancedAICacheStrategy {
     const cacheKey = this.generateCacheKey(key);
 
     // Try memory cache first (fastest)
-    let entry = this.memoryCache.get(cacheKey)
+    let entry = this.memoryCache.get(cacheKey);
 
     if (entry) {
       if (this.isEntryValid(entry)) {
@@ -69,13 +69,13 @@ export class EnhancedAICacheStrategy {
     }
 
     // Try persistent cache (slower but larger)
-    entry = this.persistentStore.get(cacheKey)
+    entry = this.persistentStore.get(cacheKey);
     if (entry && this.isEntryValid(entry)) {
       entry.hitCount++;
       entry.lastAccessed = Date.now();
 
       // Promote to memory cache for faster future access
-      this.memoryCache.set(cacheKey, entry)
+      this.memoryCache.set(cacheKey, entry);
 
       this.stats.hits++;
       this.updateHitRate();
@@ -83,7 +83,7 @@ export class EnhancedAICacheStrategy {
     }
 
     // Cache miss
-    this.stats.misses++
+    this.stats.misses++;
     this.updateHitRate();
     return null;
   }
@@ -101,18 +101,18 @@ export class EnhancedAICacheStrategy {
       ttl,
       hitCount: 0,
       lastAccessed: Date.now(),
-    }
+    };
 
     // Always store in memory cache for fast access
-    this.memoryCache.set(cacheKey, entry)
+    this.memoryCache.set(cacheKey, entry);
 
     // Store in persistent cache based on importance
     if (this.shouldPersist(response, entry)) {
-      this.persistentStore.set(cacheKey, entry)
+      this.persistentStore.set(cacheKey, entry);
 
       // Cleanup persistent cache if it gets too large
       if (this.persistentStore.size > this.maxPersistentSize) {
-        this.cleanupPersistentCache()
+        this.cleanupPersistentCache();
       }
     }
 
@@ -127,7 +127,7 @@ export class EnhancedAICacheStrategy {
 
     if (!pattern) {
       // Clear all caches
-      this.memoryCache.clear()
+      this.memoryCache.clear();
       this.persistentStore.clear();
       invalidatedCount = this.stats.size;
     } else {
@@ -136,7 +136,7 @@ export class EnhancedAICacheStrategy {
       // Invalidate matching entries
       for (const key of this.memoryCache.keys()) {
         if (regex.test(key)) {
-          this.memoryCache.delete(key)
+          this.memoryCache.delete(key);
           invalidatedCount++;
         }
       }
@@ -157,7 +157,7 @@ export class EnhancedAICacheStrategy {
    * Get cache statistics
    */
   getStats(): CacheStats {
-    return { ...this.stats }
+    return { ...this.stats };
   }
 
   /**
@@ -173,8 +173,8 @@ export class EnhancedAICacheStrategy {
    * Export cache for backup/analysis
    */
   export(): Record<string, any> {
-    const memoryEntries: Record<string, any> = {}
-    const persistentEntries: Record<string, any> = {}
+    const memoryEntries: Record<string, any> = {};
+    const persistentEntries: Record<string, any> = {};
 
     for (const [key, value] of this.memoryCache.entries()) {
       memoryEntries[key] = value;
@@ -189,7 +189,7 @@ export class EnhancedAICacheStrategy {
       persistent: persistentEntries,
       stats: this.stats,
       timestamp: new Date().toISOString(),
-    }
+    };
   }
 
   private generateCacheKey(input: string): string {
@@ -221,7 +221,7 @@ export class EnhancedAICacheStrategy {
 
   private isStaticContent(_response: any): boolean {
     // Check for static content indicators
-    const content = JSON.stringify(response).toLowerCase()
+    const content = JSON.stringify(response).toLowerCase();
     return (
       content.includes('framework') ||
       content.includes('definition') ||
@@ -231,13 +231,13 @@ export class EnhancedAICacheStrategy {
 
   private isDynamicContent(_response: any): boolean {
     // Check for dynamic content indicators
-    const content = JSON.stringify(response).toLowerCase()
+    const content = JSON.stringify(response).toLowerCase();
     return content.includes('current') || content.includes('today') || content.includes('realtime');
   }
 
   private isAnalysisContent(_response: any): boolean {
     // Check for analysis content indicators
-    const content = JSON.stringify(response).toLowerCase()
+    const content = JSON.stringify(response).toLowerCase();
     return (
       content.includes('analysis') ||
       content.includes('assessment') ||
@@ -247,16 +247,16 @@ export class EnhancedAICacheStrategy {
 
   private shouldPersist(_response: any, entry: CacheEntry): boolean {
     // Persist high-value responses
-    const responseSize = JSON.stringify(response).length
+    const responseSize = JSON.stringify(response).length;
 
     // Don't persist very large responses
     if (responseSize > 100000) {
       // 100KB
-      return false
+      return false;
     }
 
     // Persist analysis results and frameworks
-    return this.isAnalysisContent(response) || this.isStaticContent(response)
+    return this.isAnalysisContent(response) || this.isStaticContent(response);
   }
 
   private cleanupPersistentCache(): void {
@@ -267,7 +267,7 @@ export class EnhancedAICacheStrategy {
         entry,
         score: entry.hitCount / Math.max(1, Date.now() - entry.lastAccessed),
       }))
-      .sort((a, b) => a.score - b.score)
+      .sort((a, b) => a.score - b.score);
 
     // Remove least valuable entries
     const toRemove = Math.floor(this.maxPersistentSize * 0.2); // Remove 20%
@@ -288,7 +288,7 @@ export class EnhancedAICacheStrategy {
 
   private calculateMemoryUsage(): number {
     // Rough estimate of memory usage
-    let usage = 0
+    let usage = 0;
     for (const entry of this.memoryCache.values()) {
       usage += JSON.stringify(entry).length;
     }
@@ -303,7 +303,7 @@ export class EnhancedAICacheStrategy {
   private startMaintenanceTasks(): void {
     // Cleanup expired entries every 5 minutes
     setInterval(() => {
-      this.performMaintenance()
+      this.performMaintenance();
     }, 300000);
   }
 
@@ -311,7 +311,7 @@ export class EnhancedAICacheStrategy {
     // Remove expired entries from persistent store
     for (const [key, entry] of this.persistentStore.entries()) {
       if (!this.isEntryValid(entry)) {
-        this.persistentStore.delete(key)
+        this.persistentStore.delete(key);
       }
     }
 

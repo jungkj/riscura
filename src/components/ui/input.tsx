@@ -29,9 +29,9 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
         ref={ref}
         {...props}
       />
-    )
+    );
   }
 );
 Input.displayName = 'Input';
 
-export { Input }
+export { Input };

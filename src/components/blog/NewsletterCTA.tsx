@@ -30,7 +30,7 @@ export default function NewsletterCTA() {
       setStatus('error');
       setMessage('Something went wrong. Please try again.');
     }
-  }
+  };
 
   return (
     <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-8 md:p-12 text-white">

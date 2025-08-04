@@ -13,7 +13,7 @@ import { stringify as yamlStringify } from 'yaml';
 // ============================================================================
 
 async function handleGet(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
+  const { searchParams } = new URL(req.url);
   const format = searchParams.get('format') || 'json';
 
   try {
@@ -21,7 +21,7 @@ async function handleGet(req: NextRequest) {
 
     if (format === 'yaml') {
       // Convert to YAML if requested
-      const yaml = yamlStringify(openApiSpec)
+      const yaml = yamlStringify(openApiSpec);
       return new NextResponse(yaml, {
         headers: {
           'Content-Type': 'application/yaml',
@@ -63,4 +63,4 @@ export const GET = withAPI(handleGet, {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
   },
-})
+});

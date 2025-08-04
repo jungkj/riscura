@@ -8,7 +8,7 @@ import db, {
 
 // Base repository interface
 export interface IBaseRepository<T> {
-  findById(id: string, organizationId: string): Promise<T | null>
+  findById(id: string, organizationId: string): Promise<T | null>;
   findMany(_organizationId: string, options?: PaginationOptions): Promise<T[]>;
   create(_data: Partial<T>, organizationId: string, userId?: string): Promise<T>;
   update(id: string, data: Partial<T>, organizationId: string, userId?: string): Promise<T>;
@@ -18,7 +18,7 @@ export interface IBaseRepository<T> {
 
 // Base repository implementation
 export abstract class BaseRepository<T> implements IBaseRepository<T> {
-  protected prisma: PrismaClient
+  protected prisma: PrismaClient;
   protected modelName: string;
 
   constructor(modelName: string) {
@@ -28,7 +28,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
 
   // Get the Prisma model delegate
   protected get model() {
-    return (this.prisma as any)[this.modelName]
+    return (this.prisma as any)[this.modelName];
   }
 
   // Find by ID with organization isolation
@@ -38,12 +38,12 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         id,
         organizationId,
       },
-    })
+    });
   }
 
   // Find many with pagination and organization isolation
   async findMany(_organizationId: string, options: PaginationOptions = {}): Promise<T[]> {
-    const paginationQuery = buildPaginationQuery(options)
+    const paginationQuery = buildPaginationQuery(options);
 
     return this.model.findMany({
       where: {
@@ -61,7 +61,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         organizationId,
         ...withAuditFields(userId),
       },
-    })
+    });
   }
 
   // Update with audit fields
@@ -75,7 +75,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         ...data,
         ...withAuditFields(userId),
       },
-    })
+    });
   }
 
   // Delete with organization isolation
@@ -85,7 +85,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         id,
         organizationId,
       },
-    })
+    });
   }
 
   // Count with organization isolation
@@ -94,7 +94,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       where: {
         organizationId,
       },
-    })
+    });
   }
 
   // Soft delete (if supported by model)
@@ -108,7 +108,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         isActive: false,
         deletedAt: new Date(),
       },
-    })
+    });
   }
 
   // Find with custom filters
@@ -117,7 +117,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     organizationId: string,
     options: PaginationOptions = {}
   ): Promise<T[]> {
-    const paginationQuery = buildPaginationQuery(options)
+    const paginationQuery = buildPaginationQuery(options);
 
     return this.model.findMany({
       where: {
@@ -135,7 +135,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
     organizationId: string,
     options: PaginationOptions = {}
   ): Promise<T[]> {
-    const paginationQuery = buildPaginationQuery(options)
+    const paginationQuery = buildPaginationQuery(options);
 
     return this.model.findMany({
       where: {
@@ -152,7 +152,8 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Bulk operations
-  async createMany(_data: Partial<T>[],
+  async createMany(
+    _data: Partial<T>[],
     organizationId: string,
     userId?: string
   ): Promise<{ count: number }> {
@@ -162,7 +163,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         organizationId,
         ...withAuditFields(userId),
       })),
-    })
+    });
   }
 
   async updateMany(
@@ -199,10 +200,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         organizationId,
       },
       ...aggregation,
-    })
+    });
   }
 
-  async groupBy(_organizationId: string,
+  async groupBy(
+    _organizationId: string,
     groupBy: string[],
     aggregation?: Record<string, any>
   ): Promise<any[]> {
@@ -216,7 +218,8 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   // Transaction support
-  async transaction<R>(_organizationId: string,
+  async transaction<R>(
+    _organizationId: string,
     fn: (
       prisma: Omit<
         PrismaClient,
@@ -224,7 +227,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
       >
     ) => Promise<R>
   ): Promise<R> {
-    return this.prisma.$transaction(fn)
+    return this.prisma.$transaction(fn);
   }
 
   // Include relationships
@@ -239,10 +242,11 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
         organizationId,
       },
       include: includes,
-    })
+    });
   }
 
-  async findManyWithIncludes(_organizationId: string,
+  async findManyWithIncludes(
+    _organizationId: string,
     includes: Record<string, any>,
     options: PaginationOptions = {}
   ): Promise<T[]> {
@@ -260,7 +264,7 @@ export abstract class BaseRepository<T> implements IBaseRepository<T> {
 
 // Helper types for repository operations
 export interface RepositoryOptions {
-  include?: Record<string, any>
+  include?: Record<string, any>;
   select?: Record<string, any>;
   orderBy?: Record<string, any>;
 }
@@ -272,7 +276,7 @@ export interface SearchOptions extends PaginationOptions {
 
 // Repository result wrapper
 export interface RepositoryResult<T> {
-  data: T[]
+  data: T[];
   total: number;
   page: number;
   limit: number;
@@ -280,7 +284,8 @@ export interface RepositoryResult<T> {
 }
 
 // Helper function to create paginated results
-export function createPaginatedResult<T>(_data: T[],
+export function createPaginatedResult<T>(
+  _data: T[],
   total: number,
   page: number,
   limit: number
@@ -291,5 +296,5 @@ export function createPaginatedResult<T>(_data: T[],
     page,
     limit,
     totalPages: Math.ceil(total / limit),
-  }
+  };
 }

@@ -181,10 +181,14 @@ const nextConfig = {
             test: /\.(js|css|html|svg)$/,
             threshold: 8192,
             minRatio: 0.8,
+            deleteOriginalAssets: false,
           })
         );
       } catch (error) {
-        console.warn('Compression plugin not available:', error.message);
+        // Silently skip compression if plugin is not available in production environment
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('Compression plugin not available:', error.message);
+        }
       }
     }
 

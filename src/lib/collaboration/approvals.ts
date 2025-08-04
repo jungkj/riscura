@@ -486,7 +486,7 @@ export type {
 
 // Temporary placeholder exports to maintain compatibility
 export interface ApprovalWorkflow {
-  id: string
+  id: string;
   name: string;
   description: string;
   steps: any[];

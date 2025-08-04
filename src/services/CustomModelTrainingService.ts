@@ -2,27 +2,27 @@ import { generateId } from '@/lib/utils';
 
 // Minimal types for basic functionality
 export interface TrainingJob {
-  id: string
+  id: string;
   name: string;
   status: 'pending' | 'training' | 'completed' | 'failed';
   config: {
     organizationId: string;
     modelName: string;
-  }
+  };
   metrics?: {
     accuracy: number[];
     trainingLoss?: number[];
-  }
+  };
   progress?: {
     currentEpoch: number;
     totalEpochs: number;
     progressPercentage: number;
     currentStep?: number;
     remainingTime?: number;
-  }
+  };
   resources?: {
     estimatedCost: number;
-  }
+  };
   createdAt: Date;
   completedAt?: Date;
   startedAt?: Date;
@@ -30,7 +30,7 @@ export interface TrainingJob {
 
 // Simple implementation of CustomModelTrainingService
 export class CustomModelTrainingService {
-  private trainingJobs: Map<string, TrainingJob> = new Map()
+  private trainingJobs: Map<string, TrainingJob> = new Map();
 
   /**
    * Get training jobs for an organization
@@ -55,11 +55,11 @@ export class CustomModelTrainingService {
     }
 
     // Update status to training
-    job.status = 'training'
+    job.status = 'training';
 
     // Simulate training completion after 5 seconds
     setTimeout(() => {
-      const currentJob = this.trainingJobs.get(jobId)
+      const currentJob = this.trainingJobs.get(jobId);
       if (currentJob) {
         currentJob.status = 'completed';
       }
@@ -81,7 +81,7 @@ export class CustomModelTrainingService {
       status: 'pending',
       config,
       createdAt: new Date(),
-    }
+    };
 
     this.trainingJobs.set(jobId, job);
     return job;
@@ -96,11 +96,11 @@ export class CustomModelTrainingService {
 }
 
 // Export service instance
-export const customModelTrainingService = new CustomModelTrainingService()
+export const customModelTrainingService = new CustomModelTrainingService();
 
 // Export additional types that might be imported elsewhere
 export interface TrainingConfiguration {
-  organizationId: string
+  organizationId: string;
   modelName: string;
 }
 
@@ -117,23 +117,23 @@ export interface KnowledgeBase {
     indexConfig: any;
     totalVectors: number;
     lastUpdated: Date;
-  }
+  };
   indexConfig?: {
     similarity: string;
     numResults: number;
     threshold: number;
-  }
+  };
   accessConfig?: {
     permissions: string[];
     userGroups: string[];
     apiAccess: boolean;
-  }
+  };
   qualityMetrics?: {
     averageQuality: number;
     totalDocuments: number;
     categoryCoverage: Record<string, number>;
     lastAssessment: Date;
-  }
+  };
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -156,7 +156,7 @@ export interface ABTestExperiment {
   trafficAllocation?: {
     strategy: string;
     allocations: Record<string, number>;
-  }
+  };
   successMetrics?: Array<{
     name: string;
     type: string;
@@ -170,7 +170,7 @@ export interface ABTestExperiment {
     significanceLevel: number;
     power: number;
     earlyStoppingEnabled: boolean;
-  }
+  };
   createdAt?: Date;
 }
 
@@ -187,7 +187,7 @@ export interface ModelDeployment {
     resources: any;
     scaling: any;
     monitoring: any;
-  }
+  };
   status: string;
   health?: {
     status: string;
@@ -195,23 +195,23 @@ export interface ModelDeployment {
     errorRate: number;
     latency: number;
     throughput: number;
-  }
+  };
   metrics?: {
     requestCount: number;
     successRate: number;
     averageLatency: number;
     errorCount: number;
     lastUpdated: Date;
-  }
+  };
   rolloutStrategy?: {
     type: string;
     percentage: number;
-  }
+  };
   rollbackConfig?: {
     enabled: boolean;
     triggers: string[];
     maxRollbackAttempts: number;
-  }
+  };
   deployedAt?: Date;
   lastHealthCheck?: Date;
 }
@@ -222,7 +222,7 @@ export interface ModelPerformance {
   period?: {
     start: Date;
     end: Date;
-  }
+  };
   metrics?: {
     accuracy: number;
     latency: {
@@ -230,7 +230,7 @@ export interface ModelPerformance {
       p95: number;
       p99: number;
       average: number;
-    }
+    };
     throughput: number;
     errorRate: number;
     userSatisfaction: number;
@@ -239,14 +239,14 @@ export interface ModelPerformance {
       revenueImpact: number;
       customerSatisfaction: number;
       operationalEfficiency: number;
-    }
+    };
     technicalMetrics: {
       memoryUsage: number;
       cpuUtilization: number;
       diskUsage: number;
       networkLatency: number;
-    }
-  }
+    };
+  };
   degradationAlerts?: any[];
   driftDetection?: {
     detected: boolean;
@@ -256,14 +256,14 @@ export interface ModelPerformance {
     affectedFeatures: string[];
     recommendations: string[];
     detectedAt: Date;
-  }
+  };
   feedbackAnalysis?: {
     totalFeedback: number;
     averageRating: number;
     sentimentDistribution: Record<string, number>;
     commonIssues: string[];
     improvements: string[];
-  }
+  };
   recommendations?: Array<{
     type: string;
     priority: string;

@@ -2,7 +2,7 @@
 // Based on https://github.com/getprobo/probo
 
 export interface ProboControl {
-  id: string
+  id: string;
   title: string;
   description: string;
   category: ProboControlCategory;
@@ -220,20 +220,20 @@ export interface ProboIntegrationStatus {
     automatedMapping: boolean;
     realTimeSync: boolean;
     bulkOperations: boolean;
-  }
+  };
   usage: {
     controlsGenerated: number;
     mappingsCreated: number;
     aiAnalysesRun: number;
     lastActivity: string;
-  }
+  };
   health: 'Healthy' | 'Warning' | 'Error';
   errors: string[];
 }
 
 // Event Types for Real-time Updates
 export interface ProboEvent {
-  type: 'control.generated' | 'mapping.created' | 'analysis.completed' | 'sync.updated'
+  type: 'control.generated' | 'mapping.created' | 'analysis.completed' | 'sync.updated';
   timestamp: string;
   data: any;
   source: 'ai' | 'user' | 'automation';
@@ -241,7 +241,7 @@ export interface ProboEvent {
 
 // Bulk Operations
 export interface BulkControlOperation {
-  operation: 'generate' | 'update' | 'delete' | 'map'
+  operation: 'generate' | 'update' | 'delete' | 'map';
   riskIds: string[];
   options: any;
   batchSize: number;

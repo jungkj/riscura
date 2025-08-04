@@ -8,7 +8,7 @@ import { ReportStatus } from '@prisma/client';
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const user = (request as any).user
+      const user = (request as any).user;
       const { id } = await params;
 
       const report = await ReportService.getReportById(id, user.organizationId);
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
 
       const body = await request.json();
@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         status: z.nativeEnum(ReportStatus).optional(),
         data: z.record(z.any()).optional(),
         parameters: z.record(z.any()).optional(),
-      })
+      });
 
       const validatedData = UpdateReportSchema.parse(body);
 
@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
 
       await ReportService.deleteReport(id, user.organizationId);
@@ -75,7 +75,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
 
       const body = await request.json();

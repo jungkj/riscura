@@ -22,17 +22,17 @@ const executeTestSchema = z.object({
   evidence: z.array(z.string()).optional(),
   notes: z.string().optional(),
   duration: z.number().min(0).optional(),
-})
+});
 
 // POST /api/test-scripts/[id]/execute - Execute a test script
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params
+      const { id } = await params;
       const user = (request as any).user;
 
       // Parse and validate request body
-      const body = await request.json()
+      const body = await request.json();
       const validationResult = executeTestSchema.safeParse(body);
 
       if (!validationResult.success) {
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             where: { controlId: data.controlId },
           },
         },
-      })
+      });
 
       if (!testScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           id: data.controlId,
           organizationId: user.organizationId,
         },
-      })
+      });
 
       if (!control) {
         return ApiResponseFormatter.error('CONTROL_NOT_FOUND', 'Control not found', {
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       }
 
       // Determine overall test status based on results
-      const failedSteps = data.results.filter((r) => r.status === 'failed').length
+      const failedSteps = data.results.filter((r) => r.status === 'failed').length;
       const passedSteps = data.results.filter((r) => r.status === 'passed').length;
       const totalSteps = data.results.length;
 
@@ -128,7 +128,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             },
           },
         },
-      })
+      });
 
       // Update control's last test date and results
       await db.client.control.update({
@@ -144,7 +144,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             effectiveness: Math.max(control.effectiveness - 0.2, 0),
           }),
         },
-      })
+      });
 
       // Log activity
       await db.client.activity.create({
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             totalSteps,
           },
         },
-      })
+      });
 
       return ApiResponseFormatter.success(testExecution, {
         status: 201,

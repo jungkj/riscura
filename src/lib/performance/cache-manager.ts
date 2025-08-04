@@ -17,14 +17,14 @@ const DEFAULT_CACHE_CONFIG: CacheConfig = {
   prefix: 'riscura',
   compress: true,
   serialize: true,
-}
+};
 
 // ============================================================================
 // REDIS CLIENT
 // ============================================================================
 
 class RedisClient {
-  private client: Redis | null = null
+  private client: Redis | null = null;
   private isConnected = false;
 
   async connect(): Promise<void> {
@@ -84,7 +84,7 @@ class MemoryCache {
   set(key: string, value: any, ttl: number): void {
     // Cleanup expired entries if cache is getting full
     if (this.cache.size >= this.maxSize) {
-      this.cleanup()
+      this.cleanup();
     }
 
     const expires = Date.now() + ttl * 1000;
@@ -132,10 +132,10 @@ const memoryCache = new MemoryCache();
 // ============================================================================
 
 export class CacheManager {
-  private config: CacheConfig
+  private config: CacheConfig;
 
   constructor(_config: Partial<CacheConfig> = {}) {
-    this.config = { ...DEFAULT_CACHE_CONFIG, ...config }
+    this.config = { ...DEFAULT_CACHE_CONFIG, ...config };
   }
 
   private generateKey(key: string): string {
@@ -164,7 +164,7 @@ export class CacheManager {
     try {
       // Try Redis first
       if (redisClient.isHealthy()) {
-        const client = redisClient.getClient()
+        const client = redisClient.getClient();
         if (client) {
           await client.setex(cacheKey, cacheTtl, serializedValue);
           return;
@@ -175,7 +175,7 @@ export class CacheManager {
     }
 
     // Fallback to memory cache
-    memoryCache.set(cacheKey, value, cacheTtl)
+    memoryCache.set(cacheKey, value, cacheTtl);
   }
 
   async get<T = any>(key: string): Promise<T | null> {
@@ -184,7 +184,7 @@ export class CacheManager {
     try {
       // Try Redis first
       if (redisClient.isHealthy()) {
-        const client = redisClient.getClient()
+        const client = redisClient.getClient();
         if (client) {
           const value = await client.get(cacheKey);
           if (value !== null) {
@@ -197,7 +197,7 @@ export class CacheManager {
     }
 
     // Fallback to memory cache
-    return memoryCache.get(cacheKey)
+    return memoryCache.get(cacheKey);
   }
 
   async delete(key: string): Promise<void> {
@@ -206,7 +206,7 @@ export class CacheManager {
     try {
       // Try Redis first
       if (redisClient.isHealthy()) {
-        const client = redisClient.getClient()
+        const client = redisClient.getClient();
         if (client) {
           await client.del(cacheKey);
         }
@@ -216,14 +216,14 @@ export class CacheManager {
     }
 
     // Also clear from memory cache
-    memoryCache.delete(cacheKey)
+    memoryCache.delete(cacheKey);
   }
 
   async clear(pattern?: string): Promise<void> {
     try {
       // Clear Redis
       if (redisClient.isHealthy()) {
-        const client = redisClient.getClient()
+        const client = redisClient.getClient();
         if (client) {
           if (pattern) {
             const keys = await client.keys(`${this.config.prefix}:${pattern}`);
@@ -240,7 +240,7 @@ export class CacheManager {
     }
 
     // Clear memory cache
-    memoryCache.clear()
+    memoryCache.clear();
   }
 
   async getOrSet<T>(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T> {
@@ -260,7 +260,7 @@ export class CacheManager {
     try {
       // Try Redis first
       if (redisClient.isHealthy()) {
-        const client = redisClient.getClient()
+        const client = redisClient.getClient();
         if (client) {
           const values = await client.mget(...cacheKeys);
           return values.map((value) => (value ? this.deserialize(value) : null));
@@ -271,7 +271,7 @@ export class CacheManager {
     }
 
     // Fallback to memory cache
-    return cacheKeys.map((key) => memoryCache.get(key))
+    return cacheKeys.map((key) => memoryCache.get(key));
   }
 
   async mset(entries: Array<{ key: string; value: any; ttl?: number }>): Promise<void> {
@@ -317,7 +317,7 @@ export class CacheManager {
     }
 
     // Fallback for memory cache
-    const current = (await this.get<number>(key)) || 0
+    const current = (await this.get<number>(key)) || 0;
     const newValue = current + value;
     await this.set(key, newValue);
     return newValue;
@@ -336,7 +336,7 @@ export enum CacheStrategy {
 }
 
 export interface CacheOptions {
-  strategy?: CacheStrategy
+  strategy?: CacheStrategy;
   ttl?: number;
   tags?: string[];
   compress?: boolean;
@@ -350,7 +350,7 @@ export interface CacheOptions {
 export const sessionCache = new CacheManager({
   prefix: 'riscura:session',
   ttl: 3600, // 1 hour
-})
+});
 
 export const queryCache = new CacheManager({
   prefix: 'riscura:query',
@@ -377,7 +377,7 @@ export const staticCache = new CacheManager({
 // ============================================================================
 
 export class CacheWarmer {
-  private cacheManager: CacheManager
+  private cacheManager: CacheManager;
 
   constructor(cacheManager: CacheManager) {
     this.cacheManager = cacheManager;
@@ -410,7 +410,7 @@ export class CacheWarmer {
 
 export async function initializeCache(): Promise<void> {
   try {
-    await redisClient.connect()
+    await redisClient.connect();
   } catch (error) {
     // console.warn('Cache initialization warning:', error)
   }
@@ -425,7 +425,7 @@ export async function closeCacheConnections(): Promise<void> {
 // ============================================================================
 
 export async function getCacheHealth(): Promise<{
-  redis: boolean
+  redis: boolean;
   memory: boolean;
   memorySize: number;
 }> {
@@ -433,5 +433,5 @@ export async function getCacheHealth(): Promise<{
     redis: redisClient.isHealthy(),
     memory: true,
     memorySize: memoryCache.size(),
-  }
+  };
 }

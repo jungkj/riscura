@@ -7,7 +7,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Crown, Zap, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
+import {
+  DaisyCard,
+  DaisyCardBody,
+  DaisyCardTitle,
+  DaisyCardDescription,
+} from '@/components/ui/daisy-components';
 
 const plans = [
   {
@@ -90,7 +95,7 @@ export default function UpgradePage() {
       // console.error('Error creating checkout session:', error)
       // You could show a toast notification here
     }
-  }
+  };
 
   if (loading) {
     return (

@@ -2,7 +2,7 @@ import React from 'react';
 
 // Accessibility utility functions and components
 export interface AccessibilityOptions {
-  announceToScreenReader?: boolean
+  announceToScreenReader?: boolean;
   focusManagement?: boolean;
   keyboardNavigation?: boolean;
   colorContrast?: boolean;
@@ -11,13 +11,13 @@ export interface AccessibilityOptions {
 
 // Screen reader announcement service
 export class ScreenReaderService {
-  private static announcer: HTMLElement | null = null
+  private static announcer: HTMLElement | null = null;
 
   public static initialize(): void {
     if (typeof document === 'undefined') return;
 
     // Create live region for announcements
-    this.announcer = document.createElement('div')
+    this.announcer = document.createElement('div');
     this.announcer.setAttribute('aria-live', 'polite');
     this.announcer.setAttribute('aria-atomic', 'true');
     this.announcer.style.position = 'absolute';
@@ -38,7 +38,7 @@ export class ScreenReaderService {
     // Clear after announcement to avoid repetition
     setTimeout(() => {
       if (this.announcer) {
-        this.announcer.textContent = ''
+        this.announcer.textContent = '';
       }
     }, 1000);
   }
@@ -46,7 +46,7 @@ export class ScreenReaderService {
 
 // Focus management utilities
 export class FocusManager {
-  private static focusStack: HTMLElement[] = []
+  private static focusStack: HTMLElement[] = [];
   private static trapStack: { container: HTMLElement; restoreFocus: HTMLElement | null }[] = [];
 
   public static saveFocus(): void {
@@ -73,7 +73,7 @@ export class FocusManager {
 
     // Focus first element
     if (firstElement) {
-      firstElement.focus()
+      firstElement.focus();
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -82,28 +82,28 @@ export class FocusManager {
       if (event.shiftKey) {
         // Shift + Tab
         if (document.activeElement === firstElement) {
-          event.preventDefault()
+          event.preventDefault();
           lastElement?.focus();
         }
       } else {
         // Tab
         if (document.activeElement === lastElement) {
-          event.preventDefault()
+          event.preventDefault();
           firstElement?.focus();
         }
       }
-    }
+    };
 
     container.addEventListener('keydown', handleKeyDown);
 
     // Return cleanup function
     return () => {
-      container.removeEventListener('keydown', handleKeyDown)
+      container.removeEventListener('keydown', handleKeyDown);
       const trap = this.trapStack.pop();
       if (trap?.restoreFocus) {
         trap.restoreFocus.focus();
       }
-    }
+    };
   }
 
   public static getFocusableElements(container: HTMLElement): HTMLElement[] {
@@ -142,7 +142,7 @@ export class FocusManager {
 // Color contrast utilities
 export class ColorContrastUtils {
   public static calculateContrast(color1: string, color2: string): number {
-    const rgb1 = this.hexToRgb(color1)
+    const rgb1 = this.hexToRgb(color1);
     const rgb2 = this.hexToRgb(color2);
 
     if (!rgb1 || !rgb2) return 0;
@@ -189,12 +189,12 @@ export class ColorContrastUtils {
 // Motion preference utilities
 export class MotionUtils {
   public static prefersReducedMotion(): boolean {
-    if (typeof window === 'undefined') return false
+    if (typeof window === 'undefined') return false;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   public static addMotionListener(callback: (prefersReduced: boolean) => void): () => void {
-    if (typeof window === 'undefined') return () => {}
+    if (typeof window === 'undefined') return () => {};
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handleChange = (e: MediaQueryListEvent) => callback(e.matches);
@@ -213,7 +213,7 @@ export class KeyboardNavigation {
     currentIndex: number,
     orientation: 'horizontal' | 'vertical' | 'both' = 'vertical'
   ): number {
-    let newIndex = currentIndex
+    let newIndex = currentIndex;
 
     switch (event.key) {
       case 'ArrowDown':
@@ -261,7 +261,7 @@ export class KeyboardNavigation {
 // ARIA utilities
 export class AriaUtils {
   public static generateId(prefix: string = 'riscura'): string {
-    return `${prefix}-${Math.random().toString(36).substr(2, 9)}`
+    return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   public static announcePolite(message: string): void {
@@ -303,7 +303,7 @@ export function useAccessibleAnnouncement() {
   return {
     announcePolite: (message: string) => ScreenReaderService.announce(message, 'polite'),
     announceAssertive: (message: string) => ScreenReaderService.announce(message, 'assertive'),
-  }
+  };
 }
 
 export function useFocusTrap(isActive: boolean) {
@@ -322,7 +322,7 @@ export function useFocusTrap(isActive: boolean) {
       if (cleanupRef.current) {
         cleanupRef.current();
       }
-    }
+    };
   }, [isActive]);
 
   return ref;
@@ -364,12 +364,12 @@ export function useKeyboardNavigation(
     [items, currentIndex, orientation]
   );
 
-  return { currentIndex, setCurrentIndex, handleKeyDown }
+  return { currentIndex, setCurrentIndex, handleKeyDown };
 }
 
 // High-level accessibility component
 export interface AccessibleContainerProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   role?: string;
   ariaLabel?: string;
   ariaDescribedBy?: string;
@@ -407,9 +407,9 @@ export const AccessibleContainer: React.FC<AccessibleContainerProps> = ({
     },
     children
   );
-}
+};
 
 // Initialize services
 if (typeof document !== 'undefined') {
-  ScreenReaderService.initialize()
+  ScreenReaderService.initialize();
 }

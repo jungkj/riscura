@@ -8,7 +8,7 @@ import { AssessmentStatus } from '@prisma/client';
 
 // GET /api/compliance/assessments - Get assessments
 export const GET = withApiMiddleware(async (req: NextRequest) => {
-  const user = (req as any).user
+  const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
   }
@@ -20,7 +20,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
   const filters = {
     ...(frameworkId && { frameworkId }),
     ...(status && { status }),
-  }
+  };
 
   const assessments = await complianceService.getAssessments(user.organizationId, filters);
 
@@ -34,7 +34,7 @@ const createAssessmentSchema = z.object({
   description: z.string().optional(),
   dueDate: z.string().datetime().optional(),
   assessorId: z.string().optional(),
-})
+});
 
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = (req as any).user;

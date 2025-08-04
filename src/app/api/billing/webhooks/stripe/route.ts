@@ -21,10 +21,10 @@ export async function POST(_request: NextRequest) {
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
-    )
+    );
 
     // Handle the webhook event
-    await stripeService.handleWebhook(event)
+    await stripeService.handleWebhook(event);
 
     return NextResponse.json({ received: true });
   } catch (error) {

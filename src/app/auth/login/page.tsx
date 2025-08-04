@@ -10,8 +10,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { DaisyCardBody } from '@/components/ui/daisy-components';
-import { CheckCircle } from 'lucide-react';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/daisy-components';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -37,14 +36,14 @@ const LoginForm = () => {
     if (authError) {
       clearError();
     }
-  }
+  };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
       rememberMe: e.target.checked,
     }));
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,27 +52,27 @@ const LoginForm = () => {
     try {
       await login(formData.email, formData.password, formData.rememberMe);
       // If login is successful, redirect to the intended page
-      router.push(redirectTo)
+      router.push(redirectTo);
     } catch (err: any) {
       setError(err.message || 'Invalid credentials. Please try again.');
     }
-  }
+  };
 
   const handleGoogleLogin = async () => {
     try {
       // Store the redirect URL in session storage
-      sessionStorage.setItem('oauth_redirect', redirectTo)
+      sessionStorage.setItem('oauth_redirect', redirectTo);
 
       // Use our working simple OAuth implementation with remember me preference and redirect
-      const redirectParam = encodeURIComponent(redirectTo)
+      const redirectParam = encodeURIComponent(redirectTo);
       window.location.href = `/api/google-oauth/login?remember=${formData.rememberMe}&redirect=${redirectParam}`;
 
       // Note: This won't return since we're redirecting
-      return
+      return;
     } catch (err) {
       setError('Google login failed. Please try again.');
     }
-  }
+  };
 
   // Demo credentials for development
   const handleDemoLogin = () => {
@@ -81,8 +80,8 @@ const LoginForm = () => {
       email: 'admin@riscura.com',
       password: 'admin123',
       rememberMe: false,
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
@@ -239,7 +238,7 @@ const LoginForm = () => {
       </div>
     </div>
   );
-}
+};
 
 export default function LoginPage() {
   return (

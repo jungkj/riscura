@@ -54,7 +54,7 @@ export interface SecureDocumentResponse {
   metadata: SecureDocumentMetadata;
   _count: {
     versions: number;
-  }
+  };
 }
 
 export interface DocumentUploadResponse {
@@ -65,7 +65,7 @@ export interface DocumentUploadResponse {
     encrypted: boolean;
     watermarked: boolean;
     auditLogged: boolean;
-  }
+  };
 }
 
 export interface DocumentDownloadResponse {
@@ -76,7 +76,7 @@ export interface DocumentDownloadResponse {
     downloadToken: string;
     expiresAt: Date;
     watermark?: string;
-  }
+  };
 }
 
 export interface SecurityEvent {

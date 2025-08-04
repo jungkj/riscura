@@ -18,7 +18,7 @@ export interface ExportOptions {
   dateRange?: {
     start: Date;
     end: Date;
-  }
+  };
   filters?: Record<string, any>;
 }
 
@@ -35,17 +35,17 @@ export class ExportService {
   // Export to CSV
   public async exportToCSV(_exportData: ExportData): Promise<void> {
     try {
-      const { data, filename, headers } = exportData
+      const { data, filename, headers } = exportData;
 
       // Validate data
       if (!data || data.length === 0) {
-        toast.error('No data available to export')
+        toast.error('No data available to export');
         return;
       }
 
       // Transform data for CSV export
       const csvData = data.map((item) => {
-        const row: any = {}
+        const row: any = {};
         headers.forEach((header) => {
           const value = this.getNestedValue(item, header.key);
           row[header.key] = this.formatValueForCSV(value);
@@ -54,13 +54,13 @@ export class ExportService {
       });
 
       // Add metadata row if requested
-      const finalData = this.addMetadataToCSV(csvData, exportData)
+      const finalData = this.addMetadataToCSV(csvData, exportData);
 
       // Create CSV content
-      const csvContent = this.generateCSVContent(finalData, headers)
+      const csvContent = this.generateCSVContent(finalData, headers);
 
       // Download file
-      this.downloadFile(csvContent, `${filename}.csv`, 'text/csv')
+      this.downloadFile(csvContent, `${filename}.csv`, 'text/csv');
 
       toast.success(`Successfully exported ${data.length} records to CSV`);
     } catch (error) {
@@ -72,7 +72,7 @@ export class ExportService {
   // Export to PDF
   public async exportToPDF(_exportData: ExportData, elementId?: string): Promise<void> {
     try {
-      const { data, filename, title, subtitle } = exportData
+      const { data, filename, title, subtitle } = exportData;
 
       if (!data || data.length === 0) {
         toast.error('No data available to export');
@@ -86,7 +86,7 @@ export class ExportService {
 
       // Add title
       if (title) {
-        pdf.setFontSize(20)
+        pdf.setFontSize(20);
         pdf.setFont('helvetica', 'bold');
         pdf.text(title, pageWidth / 2, yPosition, { align: 'center' });
         yPosition += 15;
@@ -94,14 +94,14 @@ export class ExportService {
 
       // Add subtitle
       if (subtitle) {
-        pdf.setFontSize(12)
+        pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
         pdf.text(subtitle, pageWidth / 2, yPosition, { align: 'center' });
         yPosition += 10;
       }
 
       // Add metadata
-      pdf.setFontSize(10)
+      pdf.setFontSize(10);
       pdf.text(`Generated on: ${new Date().toLocaleString()}`, 20, yPosition);
       yPosition += 5;
       pdf.text(`Total records: ${data.length}`, 20, yPosition);
@@ -109,14 +109,14 @@ export class ExportService {
 
       // If specific element should be captured
       if (elementId) {
-        await this.exportElementToPDF(pdf, elementId, yPosition)
+        await this.exportElementToPDF(pdf, elementId, yPosition);
       } else {
         // Generate table from data
-        await this.generatePDFTable(pdf, exportData, yPosition)
+        await this.generatePDFTable(pdf, exportData, yPosition);
       }
 
       // Save PDF
-      pdf.save(`${filename}.pdf`)
+      pdf.save(`${filename}.pdf`);
       toast.success(`Successfully exported ${data.length} records to PDF`);
     } catch (error) {
       // console.error('PDF export failed:', error)
@@ -127,7 +127,7 @@ export class ExportService {
   // Export to JSON
   public async exportToJSON(_exportData: ExportData): Promise<void> {
     try {
-      const { data, filename } = exportData
+      const { data, filename } = exportData;
 
       if (!data || data.length === 0) {
         toast.error('No data available to export');
@@ -141,7 +141,7 @@ export class ExportService {
           exportedBy: 'Riscura Platform',
         },
         data: data,
-      }
+      };
 
       const jsonContent = JSON.stringify(exportObject, null, 2);
       this.downloadFile(jsonContent, `${filename}.json`, 'application/json');
@@ -154,7 +154,8 @@ export class ExportService {
   }
 
   // Export risks data
-  public async exportRisks(_risks: any[],
+  public async exportRisks(
+    _risks: any[],
     options: ExportOptions = { format: 'csv' }
   ): Promise<void> {
     try {
@@ -180,7 +181,7 @@ export class ExportService {
         ],
         title: 'Risk Register Export',
         subtitle: `Generated from Riscura Risk Management Platform`,
-      }
+      };
 
       await this.performExport(exportData, options);
       toast.success(
@@ -221,7 +222,7 @@ export class ExportService {
         ],
         title: 'Controls Library Export',
         subtitle: `Generated from Riscura Controls Management Platform`,
-      }
+      };
 
       await this.performExport(exportData, options);
       toast.success(
@@ -249,7 +250,7 @@ export class ExportService {
         { metric: 'SOC 2 Compliance', value: '98%', status: 'Compliant' },
         { metric: 'ISO 27001 Compliance', value: '95%', status: 'Compliant' },
         { metric: 'GDPR Compliance', value: '94%', status: 'Compliant' },
-      ]
+      ];
 
       const exportData: ExportData = {
         data: securityData,
@@ -261,7 +262,7 @@ export class ExportService {
         ],
         title: 'Security Dashboard Report',
         subtitle: 'Comprehensive security posture and compliance status report',
-      }
+      };
 
       await this.performExport(exportData, options);
       toast.success('Security report exported successfully');
@@ -275,7 +276,7 @@ export class ExportService {
   // Export dashboard data
   public async exportDashboard(elementId: string, filename: string): Promise<void> {
     try {
-      const element = document.getElementById(elementId)
+      const element = document.getElementById(elementId);
       if (!element) {
         toast.error('Dashboard element not found');
         return;
@@ -286,10 +287,10 @@ export class ExportService {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
-      })
+      });
 
       // Create PDF from canvas
-      const pdf = new jsPDF('l', 'mm', 'a4')
+      const pdf = new jsPDF('l', 'mm', 'a4');
       const imgWidth = pdf.internal.pageSize.getWidth();
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -305,7 +306,7 @@ export class ExportService {
 
   // Utility methods
   private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj)
+    return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 
   private formatValueForCSV(_value: any): string {
@@ -324,7 +325,7 @@ export class ExportService {
       'Export Date': new Date().toLocaleDateString(),
       'Total Records': data.length,
       'Exported By': 'Riscura Platform',
-    }
+    };
 
     return [metadata, ...data];
   }
@@ -336,7 +337,7 @@ export class ExportService {
         .map((h) => {
           const value = row[h.key] || '';
           // Escape commas and quotes in CSV
-          return `"${String(value).replace(/"/g, '""')}"`
+          return `"${String(value).replace(/"/g, '""')}"`;
         })
         .join(',')
     );
@@ -356,7 +357,7 @@ export class ExportService {
     let currentY = startY;
 
     // Table headers
-    pdf.setFontSize(8)
+    pdf.setFontSize(8);
     pdf.setFont('helvetica', 'bold');
 
     const visibleHeaders = headers.slice(0, 4); // Show first 4 columns
@@ -367,11 +368,11 @@ export class ExportService {
     currentY += 10;
 
     // Table data
-    pdf.setFont('helvetica', 'normal')
+    pdf.setFont('helvetica', 'normal');
     data.forEach((row, rowIndex) => {
       if (currentY > 250) {
         // New page if needed
-        pdf.addPage()
+        pdf.addPage();
         currentY = 20;
       }
 
@@ -440,7 +441,7 @@ export class ExportService {
       ...data.data.map((row) =>
         data.headers
           .map((h) => {
-            const value = this.getNestedValue(row, h.key)
+            const value = this.getNestedValue(row, h.key);
             return this.formatValueForCSV(value);
           })
           .join('\t')

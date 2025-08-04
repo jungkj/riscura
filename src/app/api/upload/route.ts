@@ -5,7 +5,7 @@ import { storageService } from '@/lib/storage/supabase-storage';
 
 // POST /api/upload - Upload files to Supabase Storage
 export const POST = withApiMiddleware(async (req: NextRequest) => {
-  const user = getAuthenticatedUser(req)
+  const user = getAuthenticatedUser(req);
   if (!user) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
@@ -25,7 +25,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       return NextResponse.json(
         { success: false, error: 'File size exceeds 10MB limit' },
         { status: 400 }
-      )
+      );
     }
 
     // Upload to Supabase Storage
@@ -35,14 +35,14 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
       organizationId: user.organizationId,
       userId: user.id,
       metadata: metadata ? JSON.parse(metadata as string) : undefined,
-    })
+    });
 
     // Get signed URL for immediate access
     const signedUrl = await storageService.getSignedUrl(
       uploadedFile.bucket,
       uploadedFile.path,
       3600 // 1 hour expiry
-    )
+    );
 
     return NextResponse.json({
       success: true,
@@ -59,7 +59,7 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
 
 // GET /api/upload/stats - Get storage usage statistics
 export const GET = withApiMiddleware(async (req: NextRequest) => {
-  const user = getAuthenticatedUser(req)
+  const user = getAuthenticatedUser(req);
   if (!user) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
@@ -68,7 +68,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
     const _stats = await storageService.getStorageStats(user.organizationId);
 
     // Add usage percentage (1GB = 1073741824 bytes)
-    const usagePercentage = (stats.totalSize / 1073741824) * 100
+    const usagePercentage = (stats.totalSize / 1073741824) * 100;
 
     return NextResponse.json({
       success: true,

@@ -9,7 +9,7 @@ export const GET = withApiMiddleware(
     const active = searchParams.get('active');
     const currency = searchParams.get('currency');
 
-    const filters: any = {}
+    const filters: any = {};
     if (type) filters.type = type.split(',');
     if (active !== null) filters.active = active === 'true';
     if (currency) filters.currency = currency;

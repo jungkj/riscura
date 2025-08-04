@@ -35,20 +35,20 @@ const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1].id);
     }
-  }
+  };
 
   const handleBack = () => {
     const currentIndex = steps.findIndex((s) => s.id === currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1].id);
     }
-  }
+  };
 
   const handleClose = () => {
     if (!isSubmitting) {
       onOpenChange(false);
     }
-  }
+  };
 
   return (
     <div className="relative h-full flex flex-col">
@@ -130,7 +130,7 @@ const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
       </div>
     </div>
   );
-}
+};
 
 export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps) => {
   return (
@@ -142,4 +142,4 @@ export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps)
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}
+};

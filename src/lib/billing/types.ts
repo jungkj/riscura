@@ -81,7 +81,7 @@ export interface UsageBilling {
   billingPeriod: {
     start: Date;
     end: Date;
-  }
+  };
   usageData: UsageMetric[];
   totalAmount: number;
   currency: string;
@@ -123,7 +123,7 @@ export interface Invoice {
   billingPeriod: {
     start: Date;
     end: Date;
-  }
+  };
   lineItems: InvoiceLineItem[];
   paymentMethod?: PaymentMethod;
   paidAt?: Date;
@@ -144,7 +144,7 @@ export interface InvoiceLineItem {
   period?: {
     start: Date;
     end: Date;
-  }
+  };
   metadata?: Record<string, any>;
 }
 
@@ -159,13 +159,13 @@ export interface PaymentMethod {
     expMonth: number;
     expYear: number;
     fingerprint: string;
-  }
+  };
   bankAccount?: {
     bankName: string;
     last4: string;
     routingNumber: string;
     accountType: 'checking' | 'savings';
-  }
+  };
   isDefault: boolean;
   isActive: boolean;
   metadata: Record<string, any>;
@@ -292,33 +292,33 @@ export interface BillingAnalytics {
   period: {
     start: Date;
     end: Date;
-  }
+  };
   revenue: {
     total: number;
     recurring: number;
     oneTime: number;
     usage: number;
     currency: string;
-  }
+  };
   subscriptions: {
     total: number;
     active: number;
     trial: number;
     canceled: number;
     churnRate: number;
-  }
+  };
   customers: {
     total: number;
     new: number;
     churned: number;
-  }
+  };
   metrics: {
     mrr: number; // Monthly Recurring Revenue
     arr: number; // Annual Recurring Revenue
     ltv: number; // Lifetime Value
     cac: number; // Customer Acquisition Cost
     arpu: number; // Average Revenue Per User
-  }
+  };
   planDistribution: PlanMetric[];
   paymentMethods: PaymentMethodMetric[];
 }
@@ -350,18 +350,18 @@ export interface BillingConfiguration {
     enabled: boolean;
     daysBeforeDue: number[];
     daysAfterDue: number[];
-  }
+  };
   retrySettings: {
     enabled: boolean;
     maxRetries: number;
     retryIntervals: number[]; // days
-  }
+  };
   webhookEndpoints: WebhookEndpoint[];
   accounting: {
     provider?: 'quickbooks' | 'xero' | 'netsuite';
     configuration?: Record<string, any>;
     syncEnabled: boolean;
-  }
+  };
   updatedAt: Date;
 }
 

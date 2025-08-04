@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react'
 
 // Performance monitoring hook
 export const usePerformanceMonitor = (componentName: string) => {
-  const renderCount = useRef(0)
+  const renderCount = useRef(0);
   const startTime = useRef<number>(0);
   const [metrics, setMetrics] = useState({
     renderCount: 0,
@@ -32,11 +32,11 @@ export const usePerformanceMonitor = (componentName: string) => {
   });
 
   return metrics;
-}
+};
 
 // Debounced value hook for performance optimization
 export const useDebounce = <T>(_value: T, delay: number): T => {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -45,15 +45,15 @@ export const useDebounce = <T>(_value: T, delay: number): T => {
 
     return () => {
       clearTimeout(handler);
-    }
+    };
   }, [value, delay]);
 
   return debouncedValue;
-}
+};
 
 // Throttled callback hook
 export const useThrottle = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
-  const lastRun = useRef<number>(0)
+  const lastRun = useRef<number>(0);
 
   return useCallback(
     (...args: T) => {
@@ -65,15 +65,16 @@ export const useThrottle = <T extends unknown[]>(callback: (...args: T) => void,
     },
     [callback, delay]
   );
-}
+};
 
 // Memoized calculation hook
-export const useMemoizedCalculation = <T, R>(_data: T[],
+export const useMemoizedCalculation = <T, R>(
+  _data: T[],
   calculator: (_data: T[]) => R,
   dependencies: unknown[] = []
 ): R => {
   return useMemo(() => {
-    const start = performance.now()
+    const start = performance.now();
     const _result = calculator(data);
     const end = performance.now();
 
@@ -83,11 +84,11 @@ export const useMemoizedCalculation = <T, R>(_data: T[],
 
     return result;
   }, [data, calculator, ...dependencies]);
-}
+};
 
 // Virtual scrolling hook for large lists
 export const useVirtualScrolling = <T>(items: T[], itemHeight: number, containerHeight: number) => {
-  const [scrollTop, setScrollTop] = useState(0)
+  const [scrollTop, setScrollTop] = useState(0);
 
   const visibleItems = useMemo(() => {
     const startIndex = Math.floor(scrollTop / itemHeight);
@@ -102,7 +103,7 @@ export const useVirtualScrolling = <T>(items: T[], itemHeight: number, container
       items: items.slice(startIndex, endIndex),
       totalHeight: items.length * itemHeight,
       offsetY: startIndex * itemHeight,
-    }
+    };
   }, [items, itemHeight, containerHeight, scrollTop]);
 
   const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
@@ -112,12 +113,12 @@ export const useVirtualScrolling = <T>(items: T[], itemHeight: number, container
   return {
     ...visibleItems,
     handleScroll,
-  }
-}
+  };
+};
 
 // Intersection observer hook for lazy loading
 export const useIntersectionObserver = (_options: IntersectionObserverInit = {}) => {
-  const [isIntersecting, setIsIntersecting] = useState(false)
+  const [isIntersecting, setIsIntersecting] = useState(false);
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
   const elementRef = useRef<HTMLElement>(null);
 
@@ -134,15 +135,15 @@ export const useIntersectionObserver = (_options: IntersectionObserverInit = {})
 
     return () => {
       observer.unobserve(element);
-    }
+    };
   }, [options]);
 
-  return { elementRef, isIntersecting, entry }
-}
+  return { elementRef, isIntersecting, entry };
+};
 
 // Image lazy loading hook
 export const useLazyImage = (src: string, placeholder?: string) => {
-  const [imageSrc, setImageSrc] = useState(placeholder || '')
+  const [imageSrc, setImageSrc] = useState(placeholder || '');
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   const { elementRef, isIntersecting } = useIntersectionObserver({
@@ -157,11 +158,11 @@ export const useLazyImage = (src: string, placeholder?: string) => {
       img.onload = () => {
         setImageSrc(src);
         setIsLoaded(true);
-      }
+      };
 
       img.onerror = () => {
         setIsError(true);
-      }
+      };
 
       img.src = src;
     }
@@ -173,13 +174,13 @@ export const useLazyImage = (src: string, placeholder?: string) => {
     isLoaded,
     isError,
     isIntersecting,
-  }
-}
+  };
+};
 
 // Memory usage monitoring hook
 export const useMemoryMonitor = () => {
   const [memoryInfo, setMemoryInfo] = useState<{
-    usedJSHeapSize: number
+    usedJSHeapSize: number;
     totalJSHeapSize: number;
     jsHeapSizeLimit: number;
   } | null>(null);
@@ -189,7 +190,7 @@ export const useMemoryMonitor = () => {
       if ('memory' in performance) {
         const memory = (
           performance as {
-            memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number }
+            memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number };
           }
         ).memory;
         setMemoryInfo({
@@ -198,7 +199,7 @@ export const useMemoryMonitor = () => {
           jsHeapSizeLimit: memory.jsHeapSizeLimit,
         });
       }
-    }
+    };
 
     updateMemoryInfo();
     const interval = setInterval(updateMemoryInfo, 5000);
@@ -207,12 +208,12 @@ export const useMemoryMonitor = () => {
   }, []);
 
   return memoryInfo;
-}
+};
 
 // Bundle size analyzer hook
 export const useBundleAnalyzer = () => {
   const [bundleInfo, setBundleInfo] = useState<{
-    loadTime: number
+    loadTime: number;
     resourceCount: number;
     totalSize: number;
   } | null>(null);
@@ -233,7 +234,7 @@ export const useBundleAnalyzer = () => {
         resourceCount: resources.length,
         totalSize,
       });
-    }
+    };
 
     if (document.readyState === 'complete') {
       analyzeBundleSize();
@@ -244,11 +245,11 @@ export const useBundleAnalyzer = () => {
   }, []);
 
   return bundleInfo;
-}
+};
 
 // Optimized state update hook
 export const useOptimizedState = <T>(initialValue: T) => {
-  const [state, setState] = useState(initialValue)
+  const [state, setState] = useState(initialValue);
   const stateRef = useRef(state);
 
   const optimizedSetState = useCallback((newValue: T | ((prev: T) => T)) => {
@@ -258,7 +259,7 @@ export const useOptimizedState = <T>(initialValue: T) => {
 
       // Only update if value actually changed
       if (Object.is(nextState, stateRef.current)) {
-        return prevState
+        return prevState;
       }
 
       stateRef.current = nextState;
@@ -271,22 +272,22 @@ export const useOptimizedState = <T>(initialValue: T) => {
   }, [state]);
 
   return [state, optimizedSetState] as const;
-}
+};
 
 // Performance-optimized component wrapper
 export const withPerformanceOptimization = <P extends object>(
   Component: React.ComponentType<P>,
   displayName?: string
 ) => {
-  const OptimizedComponent = React.memo(Component)
+  const OptimizedComponent = React.memo(Component);
   OptimizedComponent.displayName =
     displayName || `Optimized(${Component.displayName || Component.name})`;
   return OptimizedComponent;
-}
+};
 
 // Hook for measuring component performance
 export const useComponentPerformance = (componentName: string) => {
-  const renderStartTime = useRef<number>(0)
+  const renderStartTime = useRef<number>(0);
   const renderCount = useRef<number>(0);
   const [performanceData, setPerformanceData] = useState({
     averageRenderTime: 0,
@@ -295,7 +296,7 @@ export const useComponentPerformance = (componentName: string) => {
   });
 
   // Mark render start
-  renderStartTime.current = performance.now()
+  renderStartTime.current = performance.now();
   renderCount.current += 1;
 
   useEffect(() => {
@@ -316,4 +317,4 @@ export const useComponentPerformance = (componentName: string) => {
   }, [componentName]);
 
   return performanceData;
-}
+};

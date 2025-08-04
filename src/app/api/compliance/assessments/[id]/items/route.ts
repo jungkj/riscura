@@ -20,7 +20,7 @@ const assessRequirementSchema = z.object({
   evidence: z.array(z.any()).optional(),
   findings: z.string().optional(),
   recommendations: z.string().optional(),
-})
+});
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(

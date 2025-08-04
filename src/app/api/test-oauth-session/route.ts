@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
       headers: {
         cookie: req.headers.get('cookie') || '',
       },
-    })
+    });
 
     const data = await response.json();
 

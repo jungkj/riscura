@@ -13,4 +13,4 @@ export const DaisyLabel = ({ className, children, required, ...props }: LabelPro
       </span>
     </label>
   );
-}
+};

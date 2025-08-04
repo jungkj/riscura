@@ -27,7 +27,7 @@ export interface ReportLayout {
     margin: [number, number];
     containerPadding: [number, number];
     breakpoints: Record<string, number>;
-  }
+  };
 }
 
 export interface ReportWidget {
@@ -39,7 +39,7 @@ export interface ReportWidget {
     y: number;
     w: number;
     h: number;
-  }
+  };
   dataSource: DataSourceConfig;
   visualization: VisualizationConfig;
   filters: WidgetFilter[];
@@ -108,7 +108,7 @@ export interface KPIDefinition {
     critical: number;
     warning: number;
     target: number;
-  }
+  };
   organizationId: string;
 }
 
@@ -126,7 +126,8 @@ export interface ReportTemplate {
 
 export class ReportingEngine {
   // Create a new report
-  async createReport(_config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>
+  async createReport(
+    _config: Omit<ReportConfig, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<ReportConfig> {
     const report = await db.client.report.create({
       data: {
@@ -134,7 +135,7 @@ export class ReportingEngine {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    })
+    });
 
     // Log activity
     await db.client.activity.create({
@@ -151,7 +152,7 @@ export class ReportingEngine {
         },
         isPublic: false,
       },
-    })
+    });
 
     return report;
   }
@@ -162,19 +163,19 @@ export class ReportingEngine {
     filters: Record<string, any> = {}
   ): Promise<{
     widgets: Array<{
-      id: string
+      id: string;
       data: any[];
       metadata: {
         totalRecords: number;
         lastUpdated: Date;
         executionTime: number;
-      }
+      };
     }>;
     summary: {
       totalWidgets: number;
       dataPoints: number;
       generatedAt: Date;
-    }
+    };
   }> {
     const startTime = Date.now();
 
@@ -197,7 +198,7 @@ export class ReportingEngine {
             lastUpdated: new Date(),
             executionTime: data.executionTime,
           },
-        }
+        };
       })
     );
 
@@ -213,7 +214,7 @@ export class ReportingEngine {
         dataPoints: totalDataPoints,
         generatedAt: new Date(),
       },
-    }
+    };
   }
 
   // Generate data for a specific widget
@@ -221,7 +222,7 @@ export class ReportingEngine {
     widget: ReportWidget,
     globalFilters: Record<string, any>
   ): Promise<{
-    records: any[]
+    records: any[];
     total: number;
     executionTime: number;
   }> {
@@ -254,12 +255,12 @@ export class ReportingEngine {
 
     // Apply aggregations
     if (widget.dataSource.aggregations) {
-      data = this.applyAggregations(data, widget.dataSource.aggregations)
+      data = this.applyAggregations(data, widget.dataSource.aggregations);
     }
 
     const executionTime = Date.now() - startTime;
 
-    return { records: data, total, executionTime }
+    return { records: data, total, executionTime };
   }
 
   // Execute database query
@@ -267,7 +268,7 @@ export class ReportingEngine {
     dataSource: DataSourceConfig,
     filters: Record<string, any>
   ): Promise<{
-    records: any[]
+    records: any[];
     total: number;
   }> {
     const { query, parameters = {} } = dataSource;
@@ -277,7 +278,7 @@ export class ReportingEngine {
     }
 
     // Build parameterized query with filters
-    const mergedParams = { ...parameters, ...filters }
+    const mergedParams = { ...parameters, ...filters };
 
     // This is a simplified example - in practice you'd want proper query building
     const records = await db.client.$queryRaw`
@@ -286,12 +287,12 @@ export class ReportingEngine {
       ${Object.entries(filters)
         .map(([key, value]) => (value !== undefined ? `AND ${key} = ${value}` : ''))
         .join(' ')}
-    `
+    `;
 
     return {
       records: Array.isArray(records) ? records : [],
       total: Array.isArray(records) ? records.length : 0,
-    }
+    };
   }
 
   // Call external API
@@ -299,17 +300,17 @@ export class ReportingEngine {
     dataSource: DataSourceConfig,
     filters: Record<string, any>
   ): Promise<{
-    data: any[]
+    data: any[];
     total: number;
   }> {
     // Implementation for external API calls
     // This would integrate with external risk/compliance systems
-    return { data: [], total: 0 }
+    return { data: [], total: 0 };
   }
 
   // Apply aggregations to data
   private applyAggregations(_data: any[], aggregations: AggregationConfig[]): any[] {
-    let _result = [...data]
+    let _result = [...data];
 
     for (const agg of aggregations) {
       switch (agg.type) {
@@ -337,9 +338,9 @@ export class ReportingEngine {
   // Group and sum data
   private groupAndSum(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
-      const key = item[groupBy]
+      const key = item[groupBy];
       if (!acc[key]) {
-        acc[key] = { [groupBy]: key, [field]: 0, count: 0 }
+        acc[key] = { [groupBy]: key, [field]: 0, count: 0 };
       }
       acc[key][field] += Number(item[field]) || 0;
       acc[key].count++;
@@ -352,9 +353,9 @@ export class ReportingEngine {
   // Group and count data
   private groupAndCount(_data: any[], groupBy: string): any[] {
     const grouped = data.reduce((acc, item) => {
-      const key = item[groupBy]
+      const key = item[groupBy];
       if (!acc[key]) {
-        acc[key] = { [groupBy]: key, count: 0 }
+        acc[key] = { [groupBy]: key, count: 0 };
       }
       acc[key].count++;
       return acc;
@@ -365,7 +366,7 @@ export class ReportingEngine {
 
   // Group and average data
   private groupAndAverage(_data: any[], groupBy: string, field: string): any[] {
-    const grouped = this.groupAndSum(data, groupBy, field)
+    const grouped = this.groupAndSum(data, groupBy, field);
     return grouped.map((item) => ({
       ...item,
       [field]: item[field] / item.count,
@@ -375,9 +376,9 @@ export class ReportingEngine {
   // Group and get max value
   private groupAndMax(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
-      const key = item[groupBy]
+      const key = item[groupBy];
       if (!acc[key]) {
-        acc[key] = { [groupBy]: key, [field]: Number(item[field]) || 0 }
+        acc[key] = { [groupBy]: key, [field]: Number(item[field]) || 0 };
       } else {
         acc[key][field] = Math.max(acc[key][field], Number(item[field]) || 0);
       }
@@ -390,9 +391,9 @@ export class ReportingEngine {
   // Group and get min value
   private groupAndMin(_data: any[], groupBy: string, field: string): any[] {
     const grouped = data.reduce((acc, item) => {
-      const key = item[groupBy]
+      const key = item[groupBy];
       if (!acc[key]) {
-        acc[key] = { [groupBy]: key, [field]: Number(item[field]) || 0 }
+        acc[key] = { [groupBy]: key, [field]: Number(item[field]) || 0 };
       } else {
         acc[key][field] = Math.min(acc[key][field], Number(item[field]) || 0);
       }
@@ -407,7 +408,7 @@ export class ReportingEngine {
     return filters.reduce(
       (acc, filter) => {
         if (filter.value !== undefined && filter.value !== null) {
-          acc[filter.field] = filter.value
+          acc[filter.field] = filter.value;
         }
         return acc;
       },
@@ -419,19 +420,19 @@ export class ReportingEngine {
   async exportToPDF(reportId: string, filters: Record<string, any> = {}): Promise<Buffer> {
     // Implementation would use jsPDF and html2canvas
     // to convert the report to PDF
-    throw new Error('PDF export not yet implemented')
+    throw new Error('PDF export not yet implemented');
   }
 
   // Export report to Excel
   async exportToExcel(reportId: string, filters: Record<string, any> = {}): Promise<Buffer> {
     // Implementation would use xlsx library
     // to generate Excel file
-    throw new Error('Excel export not yet implemented')
+    throw new Error('Excel export not yet implemented');
   }
 
   // Get report templates
   async getReportTemplates(category?: string): Promise<ReportTemplate[]> {
-    const where: any = {}
+    const where: any = {};
     if (category) {
       where.category = category;
     }
@@ -446,7 +447,7 @@ export class ReportingEngine {
   async createKPI(kpi: Omit<KPIDefinition, 'id'>): Promise<KPIDefinition> {
     return await db.client.kpiDefinition.create({
       data: kpi,
-    })
+    });
   }
 
   // Calculate KPI value
@@ -468,7 +469,7 @@ export class ReportingEngine {
     }
 
     // Execute KPI formula (simplified implementation)
-    const value = await this.executeKPIFormula(kpi.formula, dateRange)
+    const value = await this.executeKPIFormula(kpi.formula, dateRange);
 
     // Calculate previous period for trend
     const previousPeriod = {
@@ -476,20 +477,20 @@ export class ReportingEngine {
         dateRange.from.getTime() - (dateRange.to.getTime() - dateRange.from.getTime())
       ),
       to: dateRange.from,
-    }
+    };
     const previousValue = await this.executeKPIFormula(kpi.formula, previousPeriod);
 
     // Determine trend
-    let trend: 'up' | 'down' | 'stable' = 'stable'
+    let trend: 'up' | 'down' | 'stable' = 'stable';
     if (value > previousValue * 1.05) trend = 'up';
     else if (value < previousValue * 0.95) trend = 'down';
 
     // Determine status
-    let status: 'critical' | 'warning' | 'good' = 'good'
+    let status: 'critical' | 'warning' | 'good' = 'good';
     if (value >= kpi.threshold.critical) status = 'critical';
     else if (value >= kpi.threshold.warning) status = 'warning';
 
-    return { value, previousValue, trend, status }
+    return { value, previousValue, trend, status };
   }
 
   // Execute KPI formula
@@ -511,12 +512,12 @@ export class ReportingEngine {
           createdAt: { gte: dateRange.from, lte: dateRange.to },
           status: 'open',
         },
-      })
+      });
       return count;
     }
 
     // Add more formula implementations as needed
-    return 0
+    return 0;
   }
 
   // Schedule report generation
@@ -524,7 +525,7 @@ export class ReportingEngine {
     reportId: string,
     schedule: Omit<ScheduledRun, 'id' | 'lastRun' | 'nextRun'>
   ): Promise<ScheduledRun> {
-    const nextRun = this.calculateNextRun(schedule)
+    const nextRun = this.calculateNextRun(schedule);
 
     const scheduledRun = await db.client.scheduledRun.create({
       data: {
@@ -541,7 +542,7 @@ export class ReportingEngine {
   private calculateNextRun(
     schedule: Pick<ScheduledRun, 'frequency' | 'dayOfWeek' | 'dayOfMonth' | 'time' | 'timezone'>
   ): Date {
-    const now = new Date()
+    const now = new Date();
     const [hours, minutes] = schedule.time.split(':').map(Number);
 
     const nextRun = new Date(now);
@@ -602,14 +603,14 @@ export class ReportingEngine {
       include: {
         report: true,
       },
-    })
+    });
 
     for (const scheduledRun of dueReports) {
       try {
         await this.generateScheduledReport(scheduledRun);
 
         // Update next run time
-        const nextRun = this.calculateNextRun(scheduledRun)
+        const nextRun = this.calculateNextRun(scheduledRun);
         await db.client.scheduledRun.update({
           where: { id: scheduledRun.id },
           data: {
@@ -625,7 +626,7 @@ export class ReportingEngine {
 
   // Generate and deliver scheduled report
   private async generateScheduledReport(scheduledRun: any): Promise<void> {
-    const reportData = await this.generateReportData(scheduledRun.reportId)
+    const reportData = await this.generateReportData(scheduledRun.reportId);
 
     let fileBuffer: Buffer | undefined;
     let filename: string | undefined;
@@ -646,18 +647,18 @@ export class ReportingEngine {
 
       case 'csv':
         // Implementation for CSV export
-        throw new Error('CSV export not yet implemented')
+        throw new Error('CSV export not yet implemented');
 
       case 'email':
         // Send email with embedded report
-        await this.sendReportEmail(scheduledRun, reportData)
+        await this.sendReportEmail(scheduledRun, reportData);
         return;
     }
 
     // Send report file to recipients
     if (fileBuffer && filename && mimeType) {
       for (const recipientId of scheduledRun.recipients) {
-        await this.deliverReportFile(recipientId, filename, fileBuffer, mimeType)
+        await this.deliverReportFile(recipientId, filename, fileBuffer, mimeType);
       }
     }
   }

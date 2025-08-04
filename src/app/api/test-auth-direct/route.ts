@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 // Direct test to see what happens when we manually set auth
 export async function GET() {
-  const cookieStore = cookies()
+  const cookieStore = cookies();
   const sessionToken = cookieStore.get('session-token')?.value;
 
   if (!sessionToken) {
@@ -20,7 +20,7 @@ export async function GET() {
       message: 'Redirecting to dashboard with fixed session',
       sessionData,
       fixes: ['Converting role to lowercase', 'Ensuring proper format'],
-    })
+    });
 
     // Set a new session cookie with the role in lowercase
     const fixedSession = {
@@ -29,7 +29,7 @@ export async function GET() {
         ...sessionData.user,
         role: sessionData.user.role.toLowerCase(), // Fix: convert to lowercase
       },
-    }
+    };
 
     const newToken = Buffer.from(JSON.stringify(fixedSession)).toString('base64');
 
@@ -42,7 +42,7 @@ export async function GET() {
     });
 
     // Add redirect header
-    response.headers.set('Location', '/dashboard')
+    response.headers.set('Location', '/dashboard');
     response.headers.set('Refresh', '2; url=/dashboard');
 
     return response;

@@ -36,7 +36,7 @@ export const GET = withApiMiddleware(
           },
           _avg: { effectiveness: true },
         }),
-      ])
+      ]);
 
       const dashboardData = {
         metrics: {
@@ -52,7 +52,7 @@ export const GET = withApiMiddleware(
           role: user.role,
           organization: user.organizationId,
         },
-      }
+      };
 
       return NextResponse.json({
         success: true,

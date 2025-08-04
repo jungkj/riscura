@@ -38,13 +38,13 @@ export interface SessionResult {
     id: string;
     token: string;
     expiresAt: Date;
-  }
+  };
   tokens: {
     accessToken: string;
     refreshToken: string;
     expiresIn: number;
     refreshExpiresIn: number;
-  }
+  };
 }
 
 /**
@@ -63,7 +63,7 @@ export async function createSession(
 
   try {
     // Generate session token
-    const sessionToken = generateSecureToken()
+    const sessionToken = generateSecureToken();
 
     // Create session record
     const session = await db.client.session.create({
@@ -74,14 +74,14 @@ export async function createSession(
         ipAddress,
         userAgent,
       },
-    })
+    });
 
     // Generate JWT tokens
-    const accessToken = generateSecureToken()
+    const accessToken = generateSecureToken();
     const refreshToken = generateSecureToken();
 
     // Clean up old sessions (keep only 10 most recent)
-    await cleanupOldSessions(user.id)
+    await cleanupOldSessions(user.id);
 
     return {
       session: {
@@ -95,7 +95,7 @@ export async function createSession(
         expiresIn: accessTokenExpiry,
         refreshExpiresIn: refreshTokenExpiry,
       },
-    }
+    };
   } catch (error) {
     // console.error('Session creation error:', error)
     throw new Error('Failed to create session');
@@ -167,7 +167,7 @@ export async function validateSession(sessionToken: string): Promise<{
     });
 
     if (!session) {
-      return { isValid: false }
+      return { isValid: false };
     }
 
     // Check if session has expired
@@ -175,23 +175,23 @@ export async function validateSession(sessionToken: string): Promise<{
       // Clean up expired session
       await db.client.session.delete({
         where: { id: session.id },
-      })
-      return { isValid: false }
+      });
+      return { isValid: false };
     }
 
     // Check if user is still active
     if (!session.user.isActive) {
-      return { isValid: false }
+      return { isValid: false };
     }
 
     return {
       isValid: true,
       user: session.user,
       session,
-    }
+    };
   } catch (error) {
     // console.error('Session validation error:', error)
-    return { isValid: false }
+    return { isValid: false };
   }
 }
 
@@ -216,7 +216,7 @@ export async function invalidateAllSessions(_userId: string): Promise<void> {
   try {
     await db.client.session.deleteMany({
       where: { userId },
-    })
+    });
   } catch (error) {
     // console.error('All sessions invalidation error:', error)
     throw new Error('Failed to invalidate sessions');
@@ -233,11 +233,11 @@ export async function cleanupOldSessions(_userId: string, keepCount: number = 10
       where: { userId },
       orderBy: { createdAt: 'desc' },
       select: { id: true },
-    })
+    });
 
     // Delete sessions beyond the keep count
     if (sessions.length > keepCount) {
-      const sessionsToDelete = sessions.slice(keepCount)
+      const sessionsToDelete = sessions.slice(keepCount);
       const sessionIdsToDelete = sessionsToDelete.map((s) => s.id);
 
       await db.client.session.deleteMany({
@@ -261,7 +261,7 @@ export async function cleanupExpiredSessions(): Promise<void> {
       where: {
         expiresAt: { lt: new Date() },
       },
-    })
+    });
   } catch (error) {
     // console.error('Expired sessions cleanup error:', error)
   }
@@ -318,7 +318,7 @@ export async function updateSessionActivity(
  * Get session statistics for monitoring
  */
 export async function getSessionStatistics(): Promise<{
-  activeSessions: number
+  activeSessions: number;
   totalSessions: number;
   expiredSessions: number;
   averageSessionDuration: number;
@@ -349,7 +349,7 @@ export async function getSessionStatistics(): Promise<{
     orderBy: {
       createdAt: 'desc',
     },
-  })
+  });
 
   const averageSessionDuration =
     sessions.length > 0
@@ -367,7 +367,7 @@ export async function getSessionStatistics(): Promise<{
     totalSessions,
     expiredSessions,
     averageSessionDuration,
-  }
+  };
 }
 
 /**
@@ -416,26 +416,26 @@ export function parseUserAgent(userAgent?: string): {
   os?: string;
   device?: string;
 } {
-  if (!userAgent) return {}
+  if (!userAgent) return {};
 
   // Simple user agent parsing (in production, consider using a library like ua-parser-js)
-  const result: { browser?: string; os?: string; device?: string } = {}
+  const result: { browser?: string; os?: string; device?: string } = {};
 
   // Browser detection
-  if (userAgent.includes('Chrome')) result.browser = 'Chrome'
+  if (userAgent.includes('Chrome')) result.browser = 'Chrome';
   else if (userAgent.includes('Firefox')) result.browser = 'Firefox';
   else if (userAgent.includes('Safari')) result.browser = 'Safari';
   else if (userAgent.includes('Edge')) result.browser = 'Edge';
 
   // OS detection
-  if (userAgent.includes('Windows')) result.os = 'Windows'
+  if (userAgent.includes('Windows')) result.os = 'Windows';
   else if (userAgent.includes('Mac OS')) result.os = 'macOS';
   else if (userAgent.includes('Linux')) result.os = 'Linux';
   else if (userAgent.includes('Android')) result.os = 'Android';
   else if (userAgent.includes('iOS')) result.os = 'iOS';
 
   // Device detection
-  if (userAgent.includes('Mobile')) result.device = 'Mobile'
+  if (userAgent.includes('Mobile')) result.device = 'Mobile';
   else if (userAgent.includes('Tablet')) result.device = 'Tablet';
   else result.device = 'Desktop';
 

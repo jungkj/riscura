@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware';
 
 // Types
 export interface RcsaEntry {
-  id: string
+  id: string;
   riskId: string;
   riskDescription: string;
   organizationId: string;
@@ -46,20 +46,20 @@ export interface UploadState {
 // Store interface
 export interface ImportStore {
   // State
-  rcsaEntries: RcsaEntry[]
+  rcsaEntries: RcsaEntry[];
   policyExtraction: PolicyExtraction | null;
   uploadStates: {
     rcsa: UploadState;
     policy: UploadState;
-  }
+  };
 
   // Actions
-  addRcsaEntries: (entries: RcsaEntry[]) => void
+  addRcsaEntries: (entries: RcsaEntry[]) => void;
   setPolicyExtraction: (extraction: PolicyExtraction) => void;
   clearImports: () => void;
 
   // Upload state management
-  setRcsaLoading: (loading: boolean) => void
+  setRcsaLoading: (loading: boolean) => void;
   setRcsaError: (__error: string | null) => void;
   setRcsaSuccess: (success: boolean) => void;
 
@@ -68,7 +68,7 @@ export interface ImportStore {
   setPolicySuccess: (success: boolean) => void;
 
   // Async thunks
-  uploadRcsaFile: (_file: File) => Promise<void>
+  uploadRcsaFile: (_file: File) => Promise<void>;
   uploadPolicyFile: (_file: File) => Promise<void>;
 }
 
@@ -77,7 +77,7 @@ const initialUploadState: UploadState = {
   loading: false,
   error: null,
   success: false,
-}
+};
 
 // Create store
 export const useImportStore = create<ImportStore>()(
@@ -161,7 +161,7 @@ export const useImportStore = create<ImportStore>()(
 
       // Async thunk for RCSA file upload
       uploadRcsaFile: async (_file: File) => {
-        const { setRcsaLoading, setRcsaError, setRcsaSuccess, addRcsaEntries } = get()
+        const { setRcsaLoading, setRcsaError, setRcsaSuccess, addRcsaEntries } = get();
 
         try {
           setRcsaLoading(true);
@@ -193,7 +193,7 @@ export const useImportStore = create<ImportStore>()(
               createdAt: new Date(entry.createdAt),
               updatedAt: new Date(entry.updatedAt),
               controls: entry.controls || [],
-            }))
+            }));
 
             addRcsaEntries(entries);
             setRcsaSuccess(true);
@@ -208,7 +208,7 @@ export const useImportStore = create<ImportStore>()(
 
       // Async thunk for policy file upload
       uploadPolicyFile: async (_file: File) => {
-        const { setPolicyLoading, setPolicyError, setPolicySuccess, setPolicyExtraction } = get()
+        const { setPolicyLoading, setPolicyError, setPolicySuccess, setPolicyExtraction } = get();
 
         try {
           setPolicyLoading(true);
@@ -233,7 +233,7 @@ export const useImportStore = create<ImportStore>()(
             const extraction: PolicyExtraction = {
               risks: result.data.risks || [],
               controls: result.data.controls || [],
-            }
+            };
 
             setPolicyExtraction(extraction);
             setPolicySuccess(true);
@@ -253,7 +253,7 @@ export const useImportStore = create<ImportStore>()(
 );
 
 // Selector hooks for better performance
-export const useRcsaEntries = () => useImportStore((state) => state.rcsaEntries)
+export const useRcsaEntries = () => useImportStore((state) => state.rcsaEntries);
 export const usePolicyExtraction = () => useImportStore((state) => state.policyExtraction);
 export const useUploadStates = () => useImportStore((state) => state.uploadStates);
 
@@ -264,7 +264,7 @@ export const useRcsaUpload = () =>
     loading: state.uploadStates.rcsa.loading,
     error: state.uploadStates.rcsa.error,
     success: state.uploadStates.rcsa.success,
-  }))
+  }));
 
 export const usePolicyUpload = () =>
   useImportStore((state) => ({

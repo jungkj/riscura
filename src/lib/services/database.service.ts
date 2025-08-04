@@ -19,7 +19,7 @@ export class DatabaseService {
 
   // Health and status operations
   async checkHealth(): Promise<{
-    isConnected: boolean
+    isConnected: boolean;
     isSeeded: boolean;
     version?: string;
   }> {
@@ -37,18 +37,19 @@ export class DatabaseService {
         isConnected,
         isSeeded,
         version,
-      }
+      };
     } catch (error) {
       // console.error('Database health check failed:', error)
       return {
         isConnected: false,
         isSeeded: false,
-      }
+      };
     }
   }
 
   // Risk operations
-  async getRisks(_organizationId: string,
+  async getRisks(
+    _organizationId: string,
     filters?: RiskFilters,
     options?: { page?: number; limit?: number; sortBy?: string; sortOrder?: 'asc' | 'desc' }
   ) {
@@ -76,7 +77,7 @@ export class DatabaseService {
     const riskRepo = await createRiskRepository();
 
     // Calculate risk score if likelihood and impact provided
-    const riskScore = (riskData.likelihood || 1) * (riskData.impact || 1)
+    const riskScore = (riskData.likelihood || 1) * (riskData.impact || 1);
     let riskLevel: 'low' | 'medium' | 'high' | 'critical';
 
     if (riskScore >= 20) {
@@ -126,7 +127,7 @@ export class DatabaseService {
         updateData.likelihood || 1,
         updateData.impact || 1,
         userId
-      )
+      );
     }
 
     return riskRepo.update(riskId, updateData, organizationId, userId);
@@ -162,19 +163,21 @@ export class DatabaseService {
         averageScore: Math.round(statistics.averageScore * 10) / 10,
         dueForReviewCount: statistics.dueForReview,
       },
-    }
+    };
   }
 
   // Transaction operations
-  async executeTransaction<T>(_organizationId: string,
+  async executeTransaction<T>(
+    _organizationId: string,
     operation: (prisma: any) => Promise<T>
   ): Promise<T> {
-    return db.transaction(operation)
+    return db.transaction(operation);
   }
 
   // Bulk operations
-  async bulkCreateRisks(_risks: Array<{
-      title: string
+  async bulkCreateRisks(
+    _risks: Array<{
+      title: string;
       description: string;
       category: any;
       likelihood?: number;
@@ -216,7 +219,7 @@ export class DatabaseService {
         this.getRiskStatistics(organizationId),
         db.client.user.count({ where: { organizationId } }),
         // Add more counts here
-      ])
+      ]);
 
       return {
         organization: {
@@ -227,7 +230,7 @@ export class DatabaseService {
           users: userCount,
         },
         health: await this.checkHealth(),
-      }
+      };
     } catch (error) {
       // console.error('Failed to get organization overview:', error)
       throw new Error('Failed to retrieve organization data');
@@ -235,7 +238,8 @@ export class DatabaseService {
   }
 
   // Activity logging helper
-  async logActivity(_type: string,
+  async logActivity(
+    _type: string,
     entityType: string,
     entityId: string,
     description: string,
@@ -254,17 +258,17 @@ export class DatabaseService {
         userId,
         isPublic: true,
       },
-    })
+    });
   }
 
   // Performance monitoring
   async getPerformanceMetrics() {
     try {
-      const metrics = await db.metrics
+      const metrics = await db.metrics;
       return {
         ...metrics,
         timestamp: new Date(),
-      }
+      };
     } catch (error) {
       // console.error('Failed to get performance metrics:', error)
       return null;
@@ -273,7 +277,7 @@ export class DatabaseService {
 
   // Database maintenance operations
   async runMaintenance(): Promise<{
-    success: boolean
+    success: boolean;
     operations: string[];
     errors?: string[];
   }> {
@@ -282,7 +286,7 @@ export class DatabaseService {
 
     try {
       // Update computed fields that might be stale
-      operations.push('Updating risk scores')
+      operations.push('Updating risk scores');
       await db.raw`
         UPDATE risks 
         SET risk_score = likelihood * impact,
@@ -291,7 +295,7 @@ export class DatabaseService {
       `;
 
       // Clean up old activities (older than 1 year)
-      operations.push('Cleaning old activities')
+      operations.push('Cleaning old activities');
       await db.client.activity.deleteMany({
         where: {
           createdAt: {
@@ -302,22 +306,22 @@ export class DatabaseService {
       });
 
       operations.push('Maintenance completed successfully');
-      return { success: true, operations }
+      return { success: true, operations };
     } catch (error) {
       // console.error('Maintenance operation failed:', error)
       errors.push(error instanceof Error ? error.message : 'Unknown error');
-      return { success: false, operations, errors }
+      return { success: false, operations, errors };
     }
   }
 
   // Cleanup method for testing
   async cleanup(): Promise<void> {
     if (process.env.NODE_ENV !== 'test') {
-      throw new Error('Cleanup can only be called in test environment')
+      throw new Error('Cleanup can only be called in test environment');
     }
 
     // Clean all data for testing
-    await db.client.activity.deleteMany({})
+    await db.client.activity.deleteMany({});
     await db.client.notification.deleteMany({});
     await db.client.comment.deleteMany({});
     await db.client.message.deleteMany({});
@@ -337,9 +341,9 @@ export class DatabaseService {
 }
 
 // Export singleton instance
-export const databaseService = DatabaseService.getInstance()
+export const databaseService = DatabaseService.getInstance();
 
 // Export types for external use
-export type DatabaseHealthStatus = Awaited<ReturnType<DatabaseService['checkHealth']>>
+export type DatabaseHealthStatus = Awaited<ReturnType<DatabaseService['checkHealth']>>;
 export type OrganizationOverview = Awaited<ReturnType<DatabaseService['getOrganizationOverview']>>;
 export type RiskDashboardData = Awaited<ReturnType<DatabaseService['getRisksForDashboard']>>;

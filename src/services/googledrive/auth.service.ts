@@ -39,14 +39,14 @@ export class GoogleDriveAuthService {
     ];
 
     // Generate CSRF token
-    const csrfToken = crypto.randomBytes(32).toString('hex')
+    const csrfToken = crypto.randomBytes(32).toString('hex');
 
     // Store CSRF state in Redis with 10 minute expiration
     const stateData: CSRFState = {
       userId,
       token: csrfToken,
       createdAt: Date.now(),
-    }
+    };
 
     const stateKey = `googledrive:csrf:${csrfToken}`;
     await redis.setex(stateKey, 600, JSON.stringify(stateData)); // 10 minute TTL
@@ -79,12 +79,12 @@ export class GoogleDriveAuthService {
 
       // Validate token age (10 minutes max)
       if (Date.now() - state.createdAt > 600000) {
-        await redis.del(stateKey)
+        await redis.del(stateKey);
         return null;
       }
 
       // Delete token after validation (one-time use)
-      await redis.del(stateKey)
+      await redis.del(stateKey);
 
       return state.userId;
     } catch (error) {
@@ -122,7 +122,7 @@ export class GoogleDriveAuthService {
 
       // Store refresh token separately with no expiry
       if (tokens.refresh_token) {
-        await redis.set(`${cacheKey}:refresh`, tokens.refresh_token)
+        await redis.set(`${cacheKey}:refresh`, tokens.refresh_token);
       }
     } catch (error) {
       // console.error('Error storing tokens:', error)
@@ -139,13 +139,13 @@ export class GoogleDriveAuthService {
       const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`;
 
       // Try to get cached tokens
-      const cachedTokens = await redis.get(cacheKey)
+      const cachedTokens = await redis.get(cacheKey);
       if (cachedTokens) {
         return JSON.parse(cachedTokens);
       }
 
       // Try to refresh using refresh token
-      const refreshToken = await redis.get(`${cacheKey}:refresh`)
+      const refreshToken = await redis.get(`${cacheKey}:refresh`);
       if (refreshToken) {
         return await this.refreshAccessToken(userId, refreshToken);
       }
@@ -160,7 +160,8 @@ export class GoogleDriveAuthService {
   /**
    * Refresh access token using refresh token
    */
-  private async refreshAccessToken(_userId: string,
+  private async refreshAccessToken(
+    _userId: string,
     refreshToken: string
   ): Promise<GoogleDriveTokens | null> {
     try {
@@ -173,7 +174,7 @@ export class GoogleDriveAuthService {
         scope: credentials.scope!,
         token_type: credentials.token_type!,
         expiry_date: credentials.expiry_date!,
-      }
+      };
 
       await this.storeTokens(userId, tokens);
       return tokens;
@@ -208,7 +209,7 @@ export class GoogleDriveAuthService {
 
       // Clear cached tokens
       if (redis) {
-        const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`
+        const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`;
         await redis.del(cacheKey);
         await redis.del(`${cacheKey}:refresh`);
       }
@@ -219,7 +220,7 @@ export class GoogleDriveAuthService {
 }
 
 // Singleton instance
-let authServiceInstance: GoogleDriveAuthService | null = null
+let authServiceInstance: GoogleDriveAuthService | null = null;
 
 export function getGoogleDriveAuthService(): GoogleDriveAuthService {
   if (!authServiceInstance) {

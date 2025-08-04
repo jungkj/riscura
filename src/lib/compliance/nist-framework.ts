@@ -227,10 +227,10 @@ export class NISTFrameworkService {
         integratedRiskManagement: 'Fully integrated enterprise approach',
         externalParticipation: 'Proactive external participation',
       },
-    ]
+    ];
 
     // Initialize NIST Functions
-    this.initializeIdentifyFunction()
+    this.initializeIdentifyFunction();
     this.initializeProtectFunction();
     this.initializeDetectFunction();
     this.initializeRespondFunction();
@@ -289,7 +289,7 @@ export class NISTFrameworkService {
         'Risk assessment is performed',
         'Risk management strategy is established',
       ],
-    }
+    };
 
     this.functions.set('identify', identifyFunction);
   }
@@ -324,7 +324,7 @@ export class NISTFrameworkService {
         'Maintenance activities are performed',
         'Protective technology is deployed',
       ],
-    }
+    };
 
     this.functions.set('protect', protectFunction);
   }
@@ -356,7 +356,7 @@ export class NISTFrameworkService {
         'Security continuous monitoring is performed',
         'Detection processes are maintained',
       ],
-    }
+    };
 
     this.functions.set('detect', detectFunction);
   }
@@ -390,7 +390,7 @@ export class NISTFrameworkService {
         'Mitigation activities are implemented',
         'Improvements are incorporated',
       ],
-    }
+    };
 
     this.functions.set('respond', respondFunction);
   }
@@ -422,25 +422,26 @@ export class NISTFrameworkService {
         'Improvements are incorporated',
         'Communications are coordinated',
       ],
-    }
+    };
 
     this.functions.set('recover', recoverFunction);
   }
 
-  async performNISTAssessment(_organizationId: string,
+  async performNISTAssessment(
+    _organizationId: string,
     risks: Risk[],
     controls: Control[],
     assessor: string,
     targetTier: number = 3
   ): Promise<NISTAssessment> {
     // Create current profile
-    const currentProfile = await this.createCurrentProfile(risks, controls)
+    const currentProfile = await this.createCurrentProfile(risks, controls);
 
     // Create target profile
-    const targetProfile = await this.createTargetProfile(targetTier)
+    const targetProfile = await this.createTargetProfile(targetTier);
 
     // Assess each function
-    const functionAssessments: FunctionAssessment[] = []
+    const functionAssessments: FunctionAssessment[] = [];
     for (const [functionId, nistFunction] of this.functions) {
       const assessment = await this.assessFunction(nistFunction, risks, controls);
       functionAssessments.push(assessment);
@@ -449,16 +450,16 @@ export class NISTFrameworkService {
     // Calculate overall tier
     const overallTier = Math.round(
       functionAssessments.reduce((sum, f) => sum + f.tier, 0) / functionAssessments.length
-    )
+    );
 
     // Identify gaps
-    const gaps = this.identifyNISTGaps(currentProfile, targetProfile)
+    const gaps = this.identifyNISTGaps(currentProfile, targetProfile);
 
     // Generate recommendations
-    const recommendations = await this.generateNISTRecommendations(functionAssessments, gaps)
+    const recommendations = await this.generateNISTRecommendations(functionAssessments, gaps);
 
     // Create implementation plan
-    const implementationPlan = this.createNISTImplementationPlan(recommendations, gaps)
+    const implementationPlan = this.createNISTImplementationPlan(recommendations, gaps);
 
     return {
       organizationId,
@@ -472,7 +473,7 @@ export class NISTFrameworkService {
       gaps,
       recommendations,
       implementationPlan,
-    }
+    };
   }
 
   async performNISTGapAnalysis(currentAssessment: NISTAssessment): Promise<{
@@ -487,18 +488,18 @@ export class NISTFrameworkService {
     // Identify priority areas (high impact, high gap)
     const priorityAreas = functionGaps
       .filter((gap) => gap.impact === 'high' && gap.gap >= 2)
-      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId)
+      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId);
 
     // Identify quick wins (low effort, medium+ gap)
     const quickWins = functionGaps
       .filter((gap) => gap.effort === 'low' && gap.gap >= 1)
-      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId)
+      .map((gap) => this.functions.get(gap.functionId)?.name || gap.functionId);
 
     // Create implementation roadmap
-    const roadmap = this.createNISTRoadmap(functionGaps)
+    const roadmap = this.createNISTRoadmap(functionGaps);
 
     // Calculate potential risk reduction
-    const riskReduction = this.calculateRiskReduction(functionGaps)
+    const riskReduction = this.calculateRiskReduction(functionGaps);
 
     return {
       functionGaps,
@@ -506,7 +507,7 @@ export class NISTFrameworkService {
       quickWins,
       roadmap,
       riskReduction,
-    }
+    };
   }
 
   private async createCurrentProfile(_risks: Risk[], controls: Control[]): Promise<NISTProfile> {
@@ -516,7 +517,7 @@ export class NISTFrameworkService {
 
     // Assess each function
     for (const [functionId, nistFunction] of this.functions) {
-      const functionMaturity = this.assessFunctionMaturity(nistFunction, controls)
+      const functionMaturity = this.assessFunctionMaturity(nistFunction, controls);
 
       functionOutcomes.push({
         functionId,
@@ -527,7 +528,7 @@ export class NISTFrameworkService {
 
       // Assess categories
       nistFunction.categories.forEach((category) => {
-        const categoryMaturity = this.assessCategoryMaturity(category, controls)
+        const categoryMaturity = this.assessCategoryMaturity(category, controls);
         const relevantControls = this.getRelevantControls(category, controls);
 
         categoryOutcomes.push({
@@ -540,7 +541,7 @@ export class NISTFrameworkService {
 
         // Assess subcategories
         category.subcategories.forEach((subcategory) => {
-          const subcategoryMaturity = this.assessSubcategoryMaturity(subcategory, controls)
+          const subcategoryMaturity = this.assessSubcategoryMaturity(subcategory, controls);
           const subcategoryControls = this.getRelevantControls(subcategory, controls);
 
           subcategoryOutcomes.push({
@@ -566,7 +567,7 @@ export class NISTFrameworkService {
       categoryOutcomes,
       subcategoryOutcomes,
       overallMaturity,
-    }
+    };
   }
 
   private async createTargetProfile(targetTier: number): Promise<NISTProfile> {
@@ -581,7 +582,7 @@ export class NISTFrameworkService {
         maturityLevel: targetTier,
         implementationStatus: 'fully_implemented',
         priority: 'high',
-      })
+      });
 
       nistFunction.categories.forEach((category) => {
         categoryOutcomes.push({
@@ -612,7 +613,7 @@ export class NISTFrameworkService {
       categoryOutcomes,
       subcategoryOutcomes,
       overallMaturity: targetTier,
-    }
+    };
   }
 
   private async assessFunction(
@@ -624,7 +625,7 @@ export class NISTFrameworkService {
 
     // Assess each category
     nistFunction.categories.forEach((category) => {
-      const subcategoryAssessments: SubcategoryAssessment[] = []
+      const subcategoryAssessments: SubcategoryAssessment[] = [];
 
       category.subcategories.forEach((subcategory) => {
         const tier = this.assessSubcategoryMaturity(subcategory, controls);
@@ -677,7 +678,7 @@ export class NISTFrameworkService {
       strengths: functionTier >= 3 ? [`Strong ${nistFunction.name} implementation`] : [],
       weaknesses: functionTier < 3 ? [`Weak ${nistFunction.name} implementation`] : [],
       recommendations: functionTier < 3 ? [`Enhance ${nistFunction.name} capabilities`] : [],
-    }
+    };
   }
 
   // Helper methods
@@ -685,7 +686,7 @@ export class NISTFrameworkService {
     // Simplified maturity assessment based on control coverage
     const relevantControls = controls.filter((control) =>
       this.isControlRelevantToFunction(control, nistFunction)
-    )
+    );
 
     if (relevantControls.length === 0) return 1;
     if (relevantControls.length < 3) return 2;
@@ -715,7 +716,7 @@ export class NISTFrameworkService {
     // Simplified relevance check based on keywords
     return controls.filter((control) =>
       this.isControlRelevant(control, item.name + ' ' + item.description)
-    )
+    );
   }
 
   private isControlRelevant(control: Control, context: string): boolean {
@@ -723,7 +724,7 @@ export class NISTFrameworkService {
     const contextText = context.toLowerCase();
 
     // Simple keyword matching
-    const keywords = ['access', 'identity', 'asset', 'data', 'network', 'incident', 'recovery']
+    const keywords = ['access', 'identity', 'asset', 'data', 'network', 'incident', 'recovery'];
     return keywords.some(
       (keyword) => controlText.includes(keyword) && contextText.includes(keyword)
     );
@@ -750,7 +751,7 @@ export class NISTFrameworkService {
     risks: Risk[]
   ): 'low' | 'medium' | 'high' | 'critical' {
     // Determine priority based on risk exposure
-    const techRisks = risks.filter((r) => r.category === 'TECHNOLOGY').length
+    const techRisks = risks.filter((r) => r.category === 'TECHNOLOGY').length;
 
     if (functionId === 'protect' && techRisks > 10) return 'critical';
     if (functionId === 'detect' && techRisks > 5) return 'high';
@@ -879,18 +880,18 @@ export class NISTFrameworkService {
         'Incident response time',
         'Recovery time objectives',
       ],
-    }
+    };
   }
 
   private createNISTRoadmap(gaps: NISTGap[]): ImplementationPhase[] {
     // Sort gaps by priority
-    const sortedGaps = gaps.sort((a, b) => b.priority - a.priority)
+    const sortedGaps = gaps.sort((a, b) => b.priority - a.priority);
 
     const phases: ImplementationPhase[] = [];
     let currentPhase = 1;
 
     // Group gaps into phases based on function dependencies
-    const functionOrder = ['identify', 'protect', 'detect', 'respond', 'recover']
+    const functionOrder = ['identify', 'protect', 'detect', 'respond', 'recover'];
 
     functionOrder.forEach((functionId) => {
       const functionGaps = sortedGaps.filter((gap) => gap.functionId === functionId);
@@ -917,12 +918,12 @@ export class NISTFrameworkService {
   private calculateRiskReduction(gaps: NISTGap[]): number {
     // Calculate potential risk reduction based on gap closure
     const totalGapImpact = gaps.reduce((sum, gap) => {
-      const impactScore = gap.impact === 'high' ? 3 : gap.impact === 'medium' ? 2 : 1
+      const impactScore = gap.impact === 'high' ? 3 : gap.impact === 'medium' ? 2 : 1;
       return sum + gap.gap * impactScore;
     }, 0);
 
     // Convert to percentage (simplified calculation)
-    return Math.min(75, totalGapImpact * 5)
+    return Math.min(75, totalGapImpact * 5);
   }
 
   private determineGapImpact(gap: number): 'high' | 'medium' | 'low' {
@@ -941,7 +942,7 @@ export class NISTFrameworkService {
     let priority = gap * 25; // Base priority on gap size
 
     // Adjust based on function criticality
-    const criticalFunctions = ['protect', 'detect']
+    const criticalFunctions = ['protect', 'detect'];
     if (criticalFunctions.includes(functionId)) {
       priority += 25;
     }

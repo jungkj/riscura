@@ -33,14 +33,14 @@ const AuditReportRequestSchema = z.object({
   includeDetailedEvents: z.boolean().default(true),
   includeStatistics: z.boolean().default(true),
   includeComplianceScore: z.boolean().default(true),
-})
+});
 
 // ============================================================================
 // POST /api/audit/reports - Generate Audit Report
 // ============================================================================
 
 async function handlePost(req: NextRequest) {
-  const user = (req as any).user
+  const user = (req as any).user;
 
   if (!user || !user.organizationId) {
     return NextResponse.json(
@@ -70,7 +70,7 @@ async function handlePost(req: NextRequest) {
       endDate: new Date(validatedData.filters.endDate),
       action: validatedData.filters.action as AuditAction | undefined,
       entity: validatedData.filters.entity as AuditEntity | undefined,
-    }
+    };
 
     // Validate date range
     if (filters.startDate >= filters.endDate) {
@@ -83,7 +83,7 @@ async function handlePost(req: NextRequest) {
           },
         },
         { status: 400 }
-      )
+      );
     }
 
     // Check if date range is reasonable (not more than 1 year)
@@ -102,7 +102,7 @@ async function handlePost(req: NextRequest) {
     }
 
     // Generate the report
-    const auditLogger = getAuditLogger(db.client)
+    const auditLogger = getAuditLogger(db.client);
 
     // Log audit start event
     await auditLogger.log({
@@ -125,7 +125,7 @@ async function handlePost(req: NextRequest) {
         regulatoryImplications: true,
         reportType: validatedData.reportType,
       },
-    })
+    });
 
     const report = await auditLogger.generateReport(
       organizationId,
@@ -135,7 +135,7 @@ async function handlePost(req: NextRequest) {
     );
 
     // Apply format-specific processing
-    let responseData: any = report
+    let responseData: any = report;
     let contentType = 'application/json';
 
     switch (validatedData.format) {
@@ -157,7 +157,7 @@ async function handlePost(req: NextRequest) {
           responseData = {
             ...report,
             events: [], // Remove detailed events
-          }
+          };
         }
         break;
     }
@@ -235,7 +235,7 @@ async function convertReportToCSV(report: AuditReport): Promise<string> {
     'IP Address',
     'User Agent',
     'Error Message',
-  ]
+  ];
 
   const rows = report.events.map((event) => [
     event.timestamp.toISOString(),
@@ -287,7 +287,7 @@ async function convertReportToPDF(report: AuditReport): Promise<Buffer> {
           `${event.timestamp.toISOString()} - ${event.action} - ${event.entity} - ${event.status}`
       )
       .join('\n')}
-  `
+  `;
 
   return Buffer.from(pdfContent, 'utf-8');
 }
@@ -305,7 +305,7 @@ async function convertReportToXLSX(report: AuditReport): Promise<Buffer> {
       status: event.status,
       severity: event.severity,
     })),
-  })
+  });
 
   return Buffer.from(xlsxContent, 'utf-8');
 }
@@ -322,4 +322,4 @@ export const POST = withAPI(handlePost, {
     maxRequests: 10,
   },
   validateBody: AuditReportRequestSchema,
-})
+});

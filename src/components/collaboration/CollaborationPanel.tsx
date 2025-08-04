@@ -10,7 +10,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Simplified version for testing
 interface CollaborationPanelProps {
-  questionnaireId: string
+  questionnaireId: string;
   currentUser: any;
   onUserActivity?: (activity: any) => void;
   className?: string;

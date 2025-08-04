@@ -9,7 +9,7 @@ describe('RiskAnalysisAIService', () => {
 
   // Helper function to create properly typed AppRisk objects
   const createAppRisk = (overrides: any = {}): AppRisk => {
-    const baseRisk = RiskFactory.create(overrides)
+    const baseRisk = RiskFactory.create(overrides);
     return {
       ...baseRisk,
       controls: [],
@@ -19,7 +19,7 @@ describe('RiskAnalysisAIService', () => {
       updatedAt: new Date().toISOString(),
       riskLevel: baseRisk.riskLevel || 'medium',
     } as AppRisk;
-  }
+  };
 
   beforeEach(() => {
     service = new RiskAnalysisAIService();
@@ -87,7 +87,7 @@ describe('RiskAnalysisAIService', () => {
         expect(nistResult.methodology).toBe('nist');
 
         // All should return valid scores
-        expect(cosoResult.score).toBeGreaterThan(0)
+        expect(cosoResult.score).toBeGreaterThan(0);
         expect(isoResult.score).toBeGreaterThan(0);
         expect(nistResult.score).toBeGreaterThan(0);
       });
@@ -97,13 +97,13 @@ describe('RiskAnalysisAIService', () => {
           industry: 'financial',
           organizationSize: 'large' as const,
           riskTolerance: 'low' as const,
-        }
+        };
 
         const techContext = {
           industry: 'technology',
           organizationSize: 'small' as const,
           riskTolerance: 'high' as const,
-        }
+        };
 
         const financialResult = await service.generateAutomatedRiskScore(
           mockRisk,
@@ -128,14 +128,14 @@ describe('RiskAnalysisAIService', () => {
       });
 
       it('should include confidence score based on data quality', async () => {
-        const minimalContext = {}
+        const minimalContext = {};
         const richContext = {
           industry: 'financial',
           organizationSize: 'large' as const,
           riskTolerance: 'low' as const,
           historicalData: RiskFactory.createBatch(10) as unknown as AppRisk[],
           controls: [],
-        }
+        };
 
         const minimalResult = await service.generateAutomatedRiskScore(
           mockRisk,
@@ -179,7 +179,7 @@ describe('RiskAnalysisAIService', () => {
         },
         timeHorizon: 12,
         iterations: 1000,
-      }
+      };
 
       const _result = await service.performMonteCarloSimulation(mockRisk, parameters, 1000);
 
@@ -207,7 +207,7 @@ describe('RiskAnalysisAIService', () => {
           likelihoodDistribution: dist,
           impactDistribution: dist,
           timeHorizon: 12,
-        }
+        };
 
         const _result = await service.performMonteCarloSimulation(mockRisk, parameters, 100);
 
@@ -229,7 +229,7 @@ describe('RiskAnalysisAIService', () => {
         },
         timeHorizon: 12,
         iterations: 10000,
-      }
+      };
 
       const _result = await service.performMonteCarloSimulation(mockRisk, parameters, 10000);
 
@@ -238,10 +238,10 @@ describe('RiskAnalysisAIService', () => {
       expect(result.expectedValue).toBeCloseTo(expectedMean, 0);
 
       // Standard deviation should be relatively small
-      expect(result.standardDeviation).toBeLessThan(expectedMean * 0.5)
+      expect(result.standardDeviation).toBeLessThan(expectedMean * 0.5);
 
       // Confidence intervals should be ordered
-      const ci95 = result.confidenceIntervals.find((ci) => ci.level === 0.95)
+      const ci95 = result.confidenceIntervals.find((ci) => ci.level === 0.95);
       expect(ci95).toBeDefined();
       expect(ci95!.lower).toBeLessThan(result.expectedValue);
       expect(ci95!.upper).toBeGreaterThan(result.expectedValue);
@@ -329,7 +329,7 @@ describe('RiskAnalysisAIService', () => {
       expect(compReport.recommendations.length).toBeGreaterThan(0);
 
       // Compliance risks should have specific recommendation types
-      const complianceRecs = compReport.recommendations
+      const complianceRecs = compReport.recommendations;
       expect(
         complianceRecs.some(
           (r) =>
@@ -365,7 +365,7 @@ describe('RiskAnalysisAIService', () => {
       expect(analysis.systemicRisk).toBeDefined();
 
       // Network metrics should be valid
-      expect(analysis.networkMetrics.density).toBeWithinRange(0, 1)
+      expect(analysis.networkMetrics.density).toBeWithinRange(0, 1);
       expect(analysis.networkMetrics.clustering).toBeWithinRange(0, 1);
       expect(analysis.networkMetrics.averagePathLength).toBeGreaterThan(0);
     });
@@ -400,7 +400,7 @@ describe('RiskAnalysisAIService', () => {
         (pair) =>
           (pair.risk1Id === techRisk1.id && pair.risk2Id === techRisk2.id) ||
           (pair.risk1Id === techRisk2.id && pair.risk2Id === techRisk1.id)
-      )
+      );
 
       expect(techCorrelations.length).toBeGreaterThan(0);
       if (techCorrelations.length > 0) {
@@ -419,7 +419,7 @@ describe('RiskAnalysisAIService', () => {
         description: '',
         likelihood: 0,
         impact: 0,
-      }
+      };
 
       const _result = await service.generateAutomatedRiskScore(invalidRisk as any, 'coso');
 
@@ -443,7 +443,7 @@ describe('RiskAnalysisAIService', () => {
           parameters: { min: 1, max: 1000, mode: 5 }, // Extreme range
         },
         timeHorizon: 12,
-      }
+      };
 
       const _result = await service.performMonteCarloSimulation(mockRisk, extremeParameters, 100);
 

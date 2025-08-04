@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 // Mock dependencies
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-}))
+}));
 
 jest.mock('@/lib/api/rcsa-client', () => ({
   rcsaApiClient: {
@@ -43,7 +43,7 @@ const mockRisks = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-]
+];
 
 const mockControls = [
   {
@@ -154,7 +154,7 @@ describe('NotionRCSASpreadsheet', () => {
       fireEvent.click(expandButton);
 
       // Verify expansion logic
-      expect(screen.getByText('Access Control')).toBeVisible()
+      expect(screen.getByText('Access Control')).toBeVisible();
     });
   });
 
@@ -185,7 +185,7 @@ describe('NotionRCSASpreadsheet', () => {
       fireEvent.click(generateButton);
 
       // AI Generator modal should be visible
-      expect(screen.getByText(/AI Control Generator/i)).toBeInTheDocument()
+      expect(screen.getByText(/AI Control Generator/i)).toBeInTheDocument();
     });
   });
 

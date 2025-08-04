@@ -9,7 +9,7 @@ const updateProfileSchema = z.object({
   firstName: z.string().min(1).max(100).optional(),
   lastName: z.string().min(1).max(100).optional(),
   avatar: z.string().url().optional().nullable(),
-})
+});
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
@@ -20,7 +20,7 @@ const changePasswordSchema = z.object({
 export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -46,7 +46,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
           },
         },
       },
-    })
+    });
 
     if (!user || !user.isActive) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
@@ -66,7 +66,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 export async function PUT(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -74,7 +74,7 @@ export async function PUT(_request: NextRequest): Promise<NextResponse> {
     // Get user from database
     const user = await db.client.user.findUnique({
       where: { email: session.user.email },
-    })
+    });
 
     if (!user || !user.isActive) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
@@ -118,7 +118,7 @@ export async function PUT(_request: NextRequest): Promise<NextResponse> {
           },
         },
       },
-    })
+    });
 
     return NextResponse.json({
       success: true,
@@ -134,7 +134,7 @@ export async function PUT(_request: NextRequest): Promise<NextResponse> {
 export async function PATCH(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -142,7 +142,7 @@ export async function PATCH(_request: NextRequest): Promise<NextResponse> {
     // Get user from database
     const user = await db.client.user.findUnique({
       where: { email: session.user.email },
-    })
+    });
 
     if (!user || !user.isActive) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
@@ -155,7 +155,7 @@ export async function PATCH(_request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { error: 'Current password and new password are required' },
         { status: 400 }
-      )
+      );
     }
 
     const validationResult = changePasswordSchema.safeParse(body);
@@ -179,7 +179,7 @@ export async function PATCH(_request: NextRequest): Promise<NextResponse> {
         id: true,
         passwordHash: true,
       },
-    })
+    });
 
     if (!currentUser || !currentUser.passwordHash) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -188,12 +188,12 @@ export async function PATCH(_request: NextRequest): Promise<NextResponse> {
     // Verify current password (simplified version)
     // In production, you would use proper password verification
     if (currentPassword !== 'demo-password') {
-      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 })
+      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
     }
 
     // Hash new password (simplified version)
     // In production, you would use proper password hashing
-    const newPasswordHash = `hashed_${newPassword}`
+    const newPasswordHash = `hashed_${newPassword}`;
 
     // Update password
     await db.client.user.update({
@@ -202,7 +202,7 @@ export async function PATCH(_request: NextRequest): Promise<NextResponse> {
         passwordHash: newPasswordHash,
         updatedAt: new Date(),
       },
-    })
+    });
 
     return NextResponse.json({
       success: true,

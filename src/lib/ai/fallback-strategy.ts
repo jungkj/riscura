@@ -42,18 +42,18 @@ export class AIFallbackStrategy {
         disclaimer:
           'This response is generated from pre-configured templates. AI analysis is currently unavailable.',
         actionable: true,
-      }
+      };
     }
 
     // Fallback to basic analysis
-    const basicAnalysis = this.generateBasicRiskAnalysis(risk)
+    const basicAnalysis = this.generateBasicRiskAnalysis(risk);
     return {
       content: basicAnalysis,
       confidence: 0.4,
       fallbackType: 'static',
       disclaimer: 'This is a basic risk analysis. Enhanced AI insights are currently unavailable.',
       actionable: true,
-    }
+    };
   }
 
   /**
@@ -71,7 +71,7 @@ export class AIFallbackStrategy {
         disclaimer:
           'Control recommendations based on industry best practices. AI optimization unavailable.',
         actionable: true,
-      }
+      };
     }
 
     const basicRecommendations = this.generateBasicControlRecommendations(risk);
@@ -82,7 +82,7 @@ export class AIFallbackStrategy {
       disclaimer:
         'Basic control recommendations. Enhanced AI suggestions are currently unavailable.',
       actionable: true,
-    }
+    };
   }
 
   /**
@@ -100,7 +100,7 @@ export class AIFallbackStrategy {
         disclaimer:
           'This response is from our knowledge base. AI assistance is currently unavailable.',
         actionable: false,
-      }
+      };
     }
 
     return {
@@ -110,7 +110,7 @@ export class AIFallbackStrategy {
       disclaimer:
         'AI assistance is currently unavailable. Please try again later or contact support.',
       actionable: false,
-    }
+    };
   }
 
   /**
@@ -128,7 +128,7 @@ export class AIFallbackStrategy {
           fallbackType: 'offline',
           disclaimer: 'Response from offline knowledge base. Real-time AI analysis unavailable.',
           actionable: knowledge.actionable || false,
-        }
+        };
       }
     }
 
@@ -163,7 +163,7 @@ export class AIFallbackStrategy {
       fallbackType: 'static',
       disclaimer: 'System status information is current as of the last update.',
       actionable: true,
-    }
+    };
   }
 
   private initializeTemplates(): void {

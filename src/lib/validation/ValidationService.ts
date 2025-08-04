@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Validation Service for comprehensive data validation
 export class ValidationService {
-  private static instance: ValidationService
+  private static instance: ValidationService;
 
   private constructor() {}
 
@@ -23,7 +23,7 @@ export class ValidationService {
     nonEmpty: z.string().min(1, 'This field is required'),
     positiveNumber: z.number().positive('Must be a positive number'),
     percentage: z.number().min(0).max(100, 'Must be between 0 and 100'),
-  }
+  };
 
   // Questionnaire validation schemas
   public questionnaireSchemas = {
@@ -104,7 +104,7 @@ export class ValidationService {
       timeLimit: z.number().positive().optional(),
       maxRetries: z.number().int().nonnegative().optional(),
     }),
-  }
+  };
 
   // Risk validation schemas
   public riskSchemas = {
@@ -142,7 +142,7 @@ export class ValidationService {
       budget: z.number().nonnegative('Budget must be non-negative').optional(),
       priority: z.enum(['low', 'medium', 'high', 'critical']),
     }),
-  }
+  };
 
   // Control validation schemas
   public controlSchemas = {
@@ -174,7 +174,7 @@ export class ValidationService {
       recommendations: z.array(z.string()).optional(),
       nextReviewDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be YYYY-MM-DD'),
     }),
-  }
+  };
 
   // User validation schemas
   public userSchemas = {
@@ -221,28 +221,30 @@ export class ValidationService {
       autoSave: z.boolean().default(true),
       autoSaveInterval: z.number().min(30).max(300).default(60), // seconds
     }),
-  }
+  };
 
   // Generic validation methods
-  public validateField<T>(_value: T,
+  public validateField<T>(
+    _value: T,
     schema: z.ZodSchema<T>
   ): {
-    isValid: boolean
+    isValid: boolean;
     error?: string;
     data?: T;
   } {
     try {
       const _result = schema.parse(value);
-      return { isValid: true, data: result }
+      return { isValid: true, data: result };
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return { isValid: false, error: error.errors[0]?.message || 'Validation failed' }
+        return { isValid: false, error: error.errors[0]?.message || 'Validation failed' };
       }
-      return { isValid: false, error: 'Unknown validation error' }
+      return { isValid: false, error: 'Unknown validation error' };
     }
   }
 
-  public validateObject<T>(_data: unknown,
+  public validateObject<T>(
+    _data: unknown,
     schema: z.ZodSchema<T>
   ): {
     isValid: boolean;
@@ -251,17 +253,17 @@ export class ValidationService {
   } {
     try {
       const _result = schema.parse(data);
-      return { isValid: true, data: result }
+      return { isValid: true, data: result };
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors: Record<string, string> = {}
+        const errors: Record<string, string> = {};
         error.errors.forEach((err) => {
           const path = err.path.join('.');
           errors[path] = err.message;
         });
-        return { isValid: false, errors }
+        return { isValid: false, errors };
       }
-      return { isValid: false, errors: { general: 'Unknown validation error' } }
+      return { isValid: false, errors: { general: 'Unknown validation error' } };
     }
   }
 
@@ -271,22 +273,22 @@ export class ValidationService {
       validate: (_data: unknown) => this.validateObject(data, schema),
       validateField: (fieldName: string, value: unknown) => {
         try {
-          const fieldSchema = (schema as any).shape[fieldName]
+          const fieldSchema = (schema as any).shape[fieldName];
           if (!fieldSchema) {
-            return { isValid: false, error: 'Field not found' }
+            return { isValid: false, error: 'Field not found' };
           }
           return this.validateField(value, fieldSchema);
         } catch (error) {
-          return { isValid: false, error: 'Validation error' }
+          return { isValid: false, error: 'Validation error' };
         }
       },
-    }
+    };
   }
 
   // Custom validation rules
   public customValidators = {
     strongPassword: (password: string): boolean => {
-      const hasUpperCase = /[A-Z]/.test(password)
+      const hasUpperCase = /[A-Z]/.test(password);
       const hasLowerCase = /[a-z]/.test(password);
       const hasNumbers = /\d/.test(password);
       const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
@@ -296,12 +298,12 @@ export class ValidationService {
     uniqueEmail: async (email: string): Promise<boolean> => {
       try {
         // Import database connection
-        const { db } = await import('@/lib/database/connection')
+        const { db } = await import('@/lib/database/connection');
 
         // Check if email already exists
         const existingUser = await db.user.findUnique({
           where: { email: email.toLowerCase() },
-        })
+        });
 
         return !existingUser;
       } catch (error) {
@@ -333,7 +335,7 @@ export class ValidationService {
       const sum = values.reduce((acc, val) => acc + val, 0);
       return Math.abs(sum - 100) < 0.01; // Allow for floating point precision
     },
-  }
+  };
 
   // Form validation utilities
   public createFormValidator<T extends Record<string, any>>(schema: z.ZodSchema<T>) {
@@ -342,7 +344,7 @@ export class ValidationService {
 
       validatePartial: (_data: Partial<T>) => {
         // For partial validation, we'll validate each field that exists
-        const errors: Record<string, string> = {}
+        const errors: Record<string, string> = {};
         let isValid = true;
 
         Object.entries(data).forEach(([key, value]) => {
@@ -358,13 +360,13 @@ export class ValidationService {
           } catch {
             // Ignore validation errors for partial validation
           }
-        })
+        });
 
         return {
           isValid,
           errors: isValid ? undefined : errors,
           data: isValid ? (data as T) : undefined,
-        }
+        };
       },
 
       getFieldError: (fieldName: keyof T, value: any) => {
@@ -390,7 +392,7 @@ export class ValidationService {
           return false;
         }
       },
-    }
+    };
   }
 
   // Sanitization utilities
@@ -423,12 +425,12 @@ export class ValidationService {
     normalize: (input: string): string => {
       return input.toLowerCase().trim().replace(/\s+/g, ' ');
     },
-  }
+  };
 
   // Error message formatting
   public formatErrors(errors: Record<string, string>): string[] {
     return Object.entries(errors).map(([field, message]) => {
-      const fieldName = field.split('.').pop() || field
+      const fieldName = field.split('.').pop() || field;
       return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}: ${message}`;
     });
   }
@@ -440,10 +442,10 @@ export class ValidationService {
 }
 
 // Export singleton instance
-export const validationService = ValidationService.getInstance()
+export const validationService = ValidationService.getInstance();
 
 // Export commonly used schemas
-export const schemas = validationService.questionnaireSchemas
+export const schemas = validationService.questionnaireSchemas;
 export const riskSchemas = validationService.riskSchemas;
 export const controlSchemas = validationService.controlSchemas;
 export const userSchemas = validationService.userSchemas;

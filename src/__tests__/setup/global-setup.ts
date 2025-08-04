@@ -9,7 +9,7 @@ async function globalSetup(_config: FullConfig) {
   // console.log('🧪 Starting global test setup...')
 
   // Create browser instance for setup operations
-  const browser = await chromium.launch()
+  const browser = await chromium.launch();
   const page = await browser.newPage();
 
   try {
@@ -18,7 +18,7 @@ async function globalSetup(_config: FullConfig) {
     const baseURL = config.projects[0].use?.baseURL || 'http://localhost:3000';
 
     // Wait for health check endpoint
-    let retries = 30
+    let retries = 30;
     while (retries > 0) {
       try {
         const response = await page.request.get(`${baseURL}/api/health`);
@@ -27,7 +27,7 @@ async function globalSetup(_config: FullConfig) {
         // Application not ready yet
       }
 
-      retries--
+      retries--;
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
@@ -66,7 +66,7 @@ async function globalSetup(_config: FullConfig) {
         industry: 'healthcare',
         size: 'enterprise',
       },
-    ]
+    ];
 
     const createdOrgs: any[] = [];
     for (const org of organizations) {
@@ -145,10 +145,10 @@ async function globalSetup(_config: FullConfig) {
         role: 'risk_manager',
         organizationId: createdOrgs[2]?.id || 'default-org-id',
       },
-    ]
+    ];
 
     // Create users in batches to avoid overwhelming the system
-    const batchSize = 10
+    const batchSize = 10;
     for (let i = 0; i < testUsers.length; i += batchSize) {
       const batch = testUsers.slice(i, i + batchSize);
 
@@ -192,7 +192,7 @@ async function globalSetup(_config: FullConfig) {
           },
           organizationId: org.id,
         },
-      ]
+      ];
 
       for (const risk of sampleRisks) {
         await page.request.post(`${baseURL}/api/test/risks`, { data: risk });
@@ -220,7 +220,7 @@ async function globalSetup(_config: FullConfig) {
           effectiveness: 3,
           organizationId: org.id,
         },
-      ]
+      ];
 
       for (const control of sampleControls) {
         await page.request.post(`${baseURL}/api/test/controls`, { data: control });
@@ -271,11 +271,11 @@ async function globalSetup(_config: FullConfig) {
       baseURL,
       setupComplete: true,
       timestamp: new Date().toISOString(),
-    }
+    };
 
     // Save test data to file for access during tests
     await page.evaluate((data) => {
-      (globalThis as any).testSetupData = data
+      (globalThis as any).testSetupData = data;
     }, testData);
 
     // console.log('✅ Global test setup completed successfully')

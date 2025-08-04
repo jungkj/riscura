@@ -20,7 +20,7 @@ const mockRiskOperations = {
   findUnique: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-}
+};
 
 jest.mock('@/lib/db', () => ({
   db: {
@@ -38,7 +38,7 @@ const mockDb = {
 // Mock authentication
 jest.mock('@/lib/auth/auth-options', () => ({
   authOptions: {},
-}))
+}));
 
 jest.mock('next-auth/next', () => ({
   getServerSession: jest.fn(),
@@ -57,7 +57,7 @@ describe('/api/risks', () => {
     mockRisk = testRisks.operational;
 
     // Setup default auth mock
-    const { getServerSession } = require('next-auth/next')
+    const { getServerSession } = require('next-auth/next');
     getServerSession.mockResolvedValue({ user: mockUser });
   });
 
@@ -205,7 +205,7 @@ describe('/api/risks', () => {
       status: 'identified' as const,
       controls: [],
       evidence: [],
-    }
+    };
 
     it('should create a new risk with valid data', async () => {
       const createdRisk = RiskFactory.create({
@@ -254,7 +254,7 @@ describe('/api/risks', () => {
         category: 'OPERATIONAL' as const,
         likelihood: 6, // Out of range
         impact: 0, // Out of range
-      }
+      };
 
       const request = new NextRequest('http://localhost:3000/api/risks', {
         method: 'POST',
@@ -273,7 +273,7 @@ describe('/api/risks', () => {
     });
 
     it('should calculate risk score automatically', async () => {
-      const riskData = { ...validRiskData, likelihood: 4, impact: 5 }
+      const riskData = { ...validRiskData, likelihood: 4, impact: 5 };
       const expectedScore = 20; // 4 * 5
 
       const createdRisk = RiskFactory.create({
@@ -331,9 +331,7 @@ describe('/api/risks', () => {
         comments: [],
         creator: mockUser,
         assignedUser: mockUser,
-      }
-
-      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRiskWithDetails);
+      }(mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRiskWithDetails);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`);
       const response = await GetSingle(request);
@@ -403,7 +401,7 @@ describe('/api/risks', () => {
       likelihood: 4,
       impact: 3,
       status: 'MITIGATED',
-    }
+    };
 
     it('should update an existing risk', async () => {
       const riskId = 'test-risk-id';
@@ -412,9 +410,7 @@ describe('/api/risks', () => {
         ...updateData,
         riskScore: 12, // 4 * 3
         updatedAt: new Date(),
-      }
-
-      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
+      }(mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
       (mockDb.risk.update as jest.Mock).mockResolvedValue(updatedRisk);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
@@ -447,9 +443,7 @@ describe('/api/risks', () => {
         likelihood: 10, // Invalid value
         impact: -1, // Invalid value
         status: 'INVALID_STATUS',
-      }
-
-      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
+      }(mockDb.risk.findUnique as jest.Mock).mockResolvedValue(mockRisk);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${riskId}`, {
         method: 'PUT',
@@ -551,7 +545,7 @@ describe('/api/risks', () => {
       const otherOrgRisks = RiskFactory.createForOrganization('other-org-id', 2);
 
       // Mock should only return risks from user's organization
-      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(userOrgRisks)
+      (mockDb.risk.findMany as jest.Mock).mockResolvedValue(userOrgRisks);
 
       const request = new NextRequest('http://localhost:3000/api/risks');
       const response = await GET(request);
@@ -576,7 +570,7 @@ describe('/api/risks', () => {
       const otherOrgRiskId = 'other-org-risk-id';
 
       // Risk exists but in different organization
-      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null)
+      (mockDb.risk.findUnique as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost:3000/api/risks/${otherOrgRiskId}`);
       const response = await GetSingle(request, { params: { id: otherOrgRiskId } });

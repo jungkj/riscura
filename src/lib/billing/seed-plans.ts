@@ -252,7 +252,7 @@ export async function seedSubscriptionPlans(): Promise<void> {
 
   try {
     // Check if plans already exist
-    const existingPlans = await db.client.subscriptionPlan.findMany()
+    const existingPlans = await db.client.subscriptionPlan.findMany();
 
     if (existingPlans.length > 0) {
       // console.log('📋 Subscription plans already exist, skipping seed...')
@@ -276,7 +276,7 @@ export async function seedSubscriptionPlans(): Promise<void> {
           stripeProductId: planData.stripeProductId,
           stripePriceId: planData.stripePriceId,
         },
-      })
+      });
 
       // console.log(`✅ Created plan: ${planData.name}`)
     }
@@ -288,13 +288,14 @@ export async function seedSubscriptionPlans(): Promise<void> {
   }
 }
 
-export async function createDefaultSubscriptionForOrganization(_organizationId: string
+export async function createDefaultSubscriptionForOrganization(
+  _organizationId: string
 ): Promise<void> {
   try {
     // Check if organization already has a subscription
     const existingSubscription = await db.client.organizationSubscription.findFirst({
       where: { organizationId },
-    })
+    });
 
     if (existingSubscription) {
       // console.log(`Organization ${organizationId} already has a subscription`)
@@ -304,14 +305,14 @@ export async function createDefaultSubscriptionForOrganization(_organizationId: 
     // Find the free plan
     const freePlan = await db.client.subscriptionPlan.findFirst({
       where: { type: 'freemium', isActive: true },
-    })
+    });
 
     if (!freePlan) {
       throw new Error('Free plan not found. Please run seedSubscriptionPlans() first.');
     }
 
     // Create a free subscription for the organization
-    const now = new Date()
+    const now = new Date();
     const periodEnd = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year
 
     await db.client.organizationSubscription.create({
@@ -342,7 +343,7 @@ export async function createDefaultSubscriptionForOrganization(_organizationId: 
 export async function getPlanByType(_type: string): Promise<SubscriptionPlan | null> {
   const plan = await db.client.subscriptionPlan.findFirst({
     where: { type, isActive: true },
-  })
+  });
 
   if (!plan) return null;
 
@@ -350,14 +351,15 @@ export async function getPlanByType(_type: string): Promise<SubscriptionPlan | n
     ...plan,
     features: plan.features as any,
     limits: plan.limits as any,
-  }
+  };
 }
 
 // Helper function to upgrade organization to a different plan
-export async function upgradeOrganizationPlan(_organizationId: string,
+export async function upgradeOrganizationPlan(
+  _organizationId: string,
   newPlanType: string
 ): Promise<void> {
-  const newPlan = await getPlanByType(newPlanType)
+  const newPlan = await getPlanByType(newPlanType);
 
   if (!newPlan) {
     throw new Error(`Plan type '${newPlanType}' not found`);

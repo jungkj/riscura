@@ -1,9 +1,9 @@
 // API Integration Tests - Frontend-Backend Communication
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 import { Page } from '@playwright/test';
 
 // Test configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 const TEST_TIMEOUT = 30000;
 
 // Test data
@@ -12,14 +12,14 @@ const TEST_USER = {
   password: 'TestPassword123!',
   name: 'Integration Test User',
   role: 'admin',
-}
+};
 
 const TEST_ORGANIZATION = {
   name: 'Test Organization',
   industry: 'Technology',
   size: 'Medium',
   country: 'United States',
-}
+};
 
 class APITestHelper {
   public authToken: string = '';
@@ -33,7 +33,7 @@ class APITestHelper {
         email: TEST_USER.email,
         password: TEST_USER.password,
       },
-    })
+    });
 
     expect(response.status()).toBe(200);
 
@@ -48,7 +48,7 @@ class APITestHelper {
         Authorization: `Bearer ${this.authToken}`,
         'Content-Type': 'application/json',
       },
-    }
+    };
 
     if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
       options.data = data;
@@ -72,7 +72,7 @@ class APITestHelper {
 
   // Database connectivity test
   async verifyDatabaseConnection(): Promise<void> {
-    const response = await this.makeAuthenticatedRequest('GET', '/health/database')
+    const response = await this.makeAuthenticatedRequest('GET', '/health/database');
     expect(response.status()).toBe(200);
 
     const data = await response.json();
@@ -83,7 +83,7 @@ class APITestHelper {
   async cleanup(): Promise<void> {
     // Clean up test data created during tests
     try {
-      await this.makeAuthenticatedRequest('DELETE', '/test/cleanup')
+      await this.makeAuthenticatedRequest('DELETE', '/test/cleanup');
     } catch (error) {
       // console.warn('Cleanup failed:', error)
     }
@@ -113,7 +113,7 @@ test.describe('API Health and Connectivity', () => {
         email: TEST_USER.email,
         password: TEST_USER.password,
       },
-    })
+    });
 
     expect(loginResponse.status()).toBe(200);
 
@@ -122,7 +122,7 @@ test.describe('API Health and Connectivity', () => {
     expect(loginData.tokens || loginData.token).toBeTruthy();
 
     // Test token validation
-    const _token = loginData.tokens?.accessToken || loginData.token
+    const _token = loginData.tokens?.accessToken || loginData.token;
     const validateResponse = await helper.page.request.get(`${API_BASE_URL}/auth/validate`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -153,10 +153,10 @@ test.describe('Risk Management API Integration', () => {
       likelihood: 3,
       impact: 4,
       owner: TEST_USER.email,
-    }
+    };
 
     // Create risk
-    const createResponse = await helper.makeAuthenticatedRequest('POST', '/risks', riskData)
+    const createResponse = await helper.makeAuthenticatedRequest('POST', '/risks', riskData);
     expect(createResponse.status()).toBe(201);
 
     const createdRisk = await createResponse.json();
@@ -166,14 +166,14 @@ test.describe('Risk Management API Integration', () => {
     const riskId = createdRisk.data?.id || createdRisk.id;
 
     // Read risk
-    const readResponse = await helper.makeAuthenticatedRequest('GET', `/risks/${riskId}`)
+    const readResponse = await helper.makeAuthenticatedRequest('GET', `/risks/${riskId}`);
     expect(readResponse.status()).toBe(200);
 
     const retrievedRisk = await readResponse.json();
     expect(retrievedRisk.data?.title || retrievedRisk.title).toBe(riskData.title);
 
     // Update risk
-    const updateData = { ...riskData, title: 'Updated Test Risk' }
+    const updateData = { ...riskData, title: 'Updated Test Risk' };
     const updateResponse = await helper.makeAuthenticatedRequest(
       'PUT',
       `/risks/${riskId}`,
@@ -185,7 +185,7 @@ test.describe('Risk Management API Integration', () => {
     expect(updatedRisk.data?.title || updatedRisk.title).toBe('Updated Test Risk');
 
     // List risks
-    const listResponse = await helper.makeAuthenticatedRequest('GET', '/risks')
+    const listResponse = await helper.makeAuthenticatedRequest('GET', '/risks');
     expect(listResponse.status()).toBe(200);
 
     const risks = await listResponse.json();
@@ -194,11 +194,11 @@ test.describe('Risk Management API Integration', () => {
     expect(risksList.some((r: any) => r.id === riskId)).toBe(true);
 
     // Delete risk
-    const deleteResponse = await helper.makeAuthenticatedRequest('DELETE', `/risks/${riskId}`)
+    const deleteResponse = await helper.makeAuthenticatedRequest('DELETE', `/risks/${riskId}`);
     expect(deleteResponse.status()).toBe(200);
 
     // Verify deletion
-    const verifyDeleteResponse = await helper.makeAuthenticatedRequest('GET', `/risks/${riskId}`)
+    const verifyDeleteResponse = await helper.makeAuthenticatedRequest('GET', `/risks/${riskId}`);
     expect(verifyDeleteResponse.status()).toBe(404);
   });
 
@@ -209,10 +209,10 @@ test.describe('Risk Management API Integration', () => {
       type: 'preventive',
       frequency: 'monthly',
       owner: TEST_USER.email,
-    }
+    };
 
     // Create control
-    const createResponse = await helper.makeAuthenticatedRequest('POST', '/controls', controlData)
+    const createResponse = await helper.makeAuthenticatedRequest('POST', '/controls', controlData);
     expect(createResponse.status()).toBe(201);
 
     const createdControl = await createResponse.json();
@@ -222,14 +222,14 @@ test.describe('Risk Management API Integration', () => {
     const controlId = createdControl.data?.id || createdControl.id;
 
     // Read control
-    const readResponse = await helper.makeAuthenticatedRequest('GET', `/controls/${controlId}`)
+    const readResponse = await helper.makeAuthenticatedRequest('GET', `/controls/${controlId}`);
     expect(readResponse.status()).toBe(200);
 
     const retrievedControl = await readResponse.json();
     expect(retrievedControl.data?.name || retrievedControl.name).toBe(controlData.name);
 
     // Update control
-    const updateData = { ...controlData, name: 'Updated Test Control' }
+    const updateData = { ...controlData, name: 'Updated Test Control' };
     const updateResponse = await helper.makeAuthenticatedRequest(
       'PUT',
       `/controls/${controlId}`,
@@ -241,7 +241,7 @@ test.describe('Risk Management API Integration', () => {
     expect(updatedControl.data?.name || updatedControl.name).toBe('Updated Test Control');
 
     // List controls
-    const listResponse = await helper.makeAuthenticatedRequest('GET', '/controls')
+    const listResponse = await helper.makeAuthenticatedRequest('GET', '/controls');
     expect(listResponse.status()).toBe(200);
 
     const controls = await listResponse.json();
@@ -253,14 +253,14 @@ test.describe('Risk Management API Integration', () => {
     const deleteResponse = await helper.makeAuthenticatedRequest(
       'DELETE',
       `/controls/${controlId}`
-    )
+    );
     expect(deleteResponse.status()).toBe(200);
 
     // Verify deletion
     const verifyDeleteResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/controls/${controlId}`
-    )
+    );
     expect(verifyDeleteResponse.status()).toBe(404);
   });
 
@@ -269,7 +269,7 @@ test.describe('Risk Management API Integration', () => {
     const invalidRisk = {
       title: '', // Required field empty
       description: 'Test description',
-    }
+    };
 
     const response = await helper.makeAuthenticatedRequest('POST', '/risks', invalidRisk);
     expect(response.status()).toBe(400);
@@ -296,7 +296,7 @@ test.describe('Risk Management API Integration', () => {
         probability: 'Medium',
         impact: 'Medium',
       },
-    ]
+    ];
 
     const createdRisks: any[] = [];
     for (const risk of risks) {
@@ -309,7 +309,7 @@ test.describe('Risk Management API Integration', () => {
     const searchResponse = await helper.makeAuthenticatedRequest(
       'GET',
       '/risks?search=cybersecurity'
-    )
+    );
     expect(searchResponse.status()).toBe(200);
 
     const searchResults = await searchResponse.json();
@@ -320,7 +320,7 @@ test.describe('Risk Management API Integration', () => {
     const filterResponse = await helper.makeAuthenticatedRequest(
       'GET',
       '/risks?category=Technology'
-    )
+    );
     expect(filterResponse.status()).toBe(200);
 
     const filterResults = await filterResponse.json();
@@ -329,7 +329,7 @@ test.describe('Risk Management API Integration', () => {
 
     // Cleanup
     for (const risk of createdRisks) {
-      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`)
+      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`);
     }
   });
 });
@@ -354,10 +354,10 @@ test.describe('Control Management API Integration', () => {
       category: 'Access Control',
       frequency: 'Monthly',
       owner: TEST_USER.email,
-    }
+    };
 
     // Create control
-    const createResponse = await helper.makeAuthenticatedRequest('POST', '/controls', controlData)
+    const createResponse = await helper.makeAuthenticatedRequest('POST', '/controls', controlData);
     expect(createResponse.status()).toBe(201);
 
     const control = await createResponse.json();
@@ -371,7 +371,7 @@ test.describe('Control Management API Integration', () => {
         implementationDate: new Date().toISOString(),
         implementationNotes: 'Control implemented successfully',
       }
-    )
+    );
     expect(implementResponse.status()).toBe(200);
 
     // Test control testing
@@ -384,14 +384,14 @@ test.describe('Control Management API Integration', () => {
         testNotes: 'Control test passed',
         evidence: 'Test evidence',
       }
-    )
+    );
     expect(testResponse.status()).toBe(200);
 
     // Get control effectiveness
     const effectivenessResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/controls/${controlId}/effectiveness`
-    )
+    );
     expect(effectivenessResponse.status()).toBe(200);
 
     const effectiveness = await effectivenessResponse.json();
@@ -399,7 +399,7 @@ test.describe('Control Management API Integration', () => {
     expect(effectiveness.trend).toBeDefined();
 
     // Cleanup
-    await helper.makeAuthenticatedRequest('DELETE', `/controls/${controlId}`)
+    await helper.makeAuthenticatedRequest('DELETE', `/controls/${controlId}`);
   });
 
   test('Control-Risk mapping', async () => {
@@ -410,7 +410,7 @@ test.describe('Control Management API Integration', () => {
       category: 'Operational',
       probability: 'High',
       impact: 'Medium',
-    }
+    };
 
     const riskResponse = await helper.makeAuthenticatedRequest('POST', '/risks', riskData);
     const risk = await riskResponse.json();
@@ -421,7 +421,7 @@ test.describe('Control Management API Integration', () => {
       description: 'Control to be mapped to risk',
       type: 'Detective',
       category: 'Monitoring',
-    }
+    };
 
     const controlResponse = await helper.makeAuthenticatedRequest('POST', '/controls', controlData);
     const control = await controlResponse.json();
@@ -435,14 +435,14 @@ test.describe('Control Management API Integration', () => {
         mappingType: 'MITIGATES',
         effectiveness: 'High',
       }
-    )
+    );
     expect(mappingResponse.status()).toBe(201);
 
     // Verify mapping
     const riskWithControlsResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/risks/${risk.id}?include=controls`
-    )
+    );
     expect(riskWithControlsResponse.status()).toBe(200);
 
     const riskWithControls = await riskWithControlsResponse.json();
@@ -450,7 +450,7 @@ test.describe('Control Management API Integration', () => {
     expect(riskWithControls.controls.some((c: any) => c.id === control.id)).toBe(true);
 
     // Cleanup
-    await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`)
+    await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`);
     await helper.makeAuthenticatedRequest('DELETE', `/controls/${control.id}`);
   });
 });
@@ -469,7 +469,7 @@ test.describe('Document Management API Integration', () => {
 
   test('Document upload and download workflow', async () => {
     // Create test file content
-    const testContent = 'This is a test document for API integration testing'
+    const testContent = 'This is a test document for API integration testing';
     const testFile = Buffer.from(testContent);
 
     // Upload document
@@ -490,7 +490,7 @@ test.describe('Document Management API Integration', () => {
           tags: ['test', 'api', 'integration'],
         }),
       },
-    })
+    });
 
     expect(uploadResponse.status()).toBe(201);
 
@@ -504,7 +504,7 @@ test.describe('Document Management API Integration', () => {
     const metadataResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/documents/${documentId}`
-    )
+    );
     expect(metadataResponse.status()).toBe(200);
 
     const metadata = await metadataResponse.json();
@@ -515,14 +515,14 @@ test.describe('Document Management API Integration', () => {
     const downloadResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/documents/${documentId}/download`
-    )
+    );
     expect(downloadResponse.status()).toBe(200);
 
     const downloadedContent = await downloadResponse.text();
     expect(downloadedContent).toBe(testContent);
 
     // Search documents
-    const searchResponse = await helper.makeAuthenticatedRequest('GET', '/documents?search=test')
+    const searchResponse = await helper.makeAuthenticatedRequest('GET', '/documents?search=test');
     expect(searchResponse.status()).toBe(200);
 
     const searchResults = await searchResponse.json();
@@ -533,7 +533,7 @@ test.describe('Document Management API Integration', () => {
     const deleteResponse = await helper.makeAuthenticatedRequest(
       'DELETE',
       `/documents/${documentId}`
-    )
+    );
     expect(deleteResponse.status()).toBe(200);
   });
 
@@ -558,7 +558,7 @@ test.describe('Document Management API Integration', () => {
           category: 'procedure',
         }),
       },
-    })
+    });
 
     const document = await uploadResponse.json();
     const documentId = document.id;
@@ -579,7 +579,7 @@ test.describe('Document Management API Integration', () => {
           changelog: 'Updated content for version 2',
         },
       }
-    )
+    );
 
     expect(versionResponse.status()).toBe(201);
 
@@ -587,7 +587,7 @@ test.describe('Document Management API Integration', () => {
     const versionsResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/documents/${documentId}/versions`
-    )
+    );
     expect(versionsResponse.status()).toBe(200);
 
     const versions = await versionsResponse.json();
@@ -599,14 +599,14 @@ test.describe('Document Management API Integration', () => {
     const version1Response = await helper.makeAuthenticatedRequest(
       'GET',
       `/documents/${documentId}/versions/1/download`
-    )
+    );
     expect(version1Response.status()).toBe(200);
 
     const version1Content = await version1Response.text();
     expect(version1Content).toBe(testContent1);
 
     // Cleanup
-    await helper.makeAuthenticatedRequest('DELETE', `/documents/${documentId}`)
+    await helper.makeAuthenticatedRequest('DELETE', `/documents/${documentId}`);
   });
 });
 
@@ -630,7 +630,7 @@ test.describe('Reporting API Integration', () => {
       category: 'Operational',
       probability: 'High',
       impact: 'Medium',
-    }
+    };
 
     const riskResponse = await helper.makeAuthenticatedRequest('POST', '/risks', riskData);
     const risk = await riskResponse.json();
@@ -648,7 +648,7 @@ test.describe('Reporting API Integration', () => {
           end: new Date().toISOString(),
         },
       },
-    }
+    };
 
     const generateResponse = await helper.makeAuthenticatedRequest(
       'POST',
@@ -664,7 +664,7 @@ test.describe('Reporting API Integration', () => {
     const reportId = report.id;
 
     // Poll for report completion
-    let attempts = 0
+    let attempts = 0;
     let reportStatus = 'GENERATING';
     while (reportStatus === 'GENERATING' && attempts < 10) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -684,7 +684,7 @@ test.describe('Reporting API Integration', () => {
     const completedReportResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/reports/${reportId}`
-    )
+    );
     expect(completedReportResponse.status()).toBe(200);
 
     const completedReport = await completedReportResponse.json();
@@ -695,7 +695,7 @@ test.describe('Reporting API Integration', () => {
     const exportResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/reports/${reportId}/export/pdf`
-    )
+    );
     expect(exportResponse.status()).toBe(200);
 
     const pdfBuffer = await exportResponse.body();
@@ -703,13 +703,13 @@ test.describe('Reporting API Integration', () => {
     expect(pdfBuffer.length).toBeGreaterThan(0);
 
     // Cleanup
-    await helper.makeAuthenticatedRequest('DELETE', `/reports/${reportId}`)
+    await helper.makeAuthenticatedRequest('DELETE', `/reports/${reportId}`);
     await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`);
   });
 
   test('Report templates and customization', async () => {
     // Get available report templates
-    const templatesResponse = await helper.makeAuthenticatedRequest('GET', '/reports/templates')
+    const templatesResponse = await helper.makeAuthenticatedRequest('GET', '/reports/templates');
     expect(templatesResponse.status()).toBe(200);
 
     const templates = await templatesResponse.json();
@@ -729,7 +729,7 @@ test.describe('Reporting API Integration', () => {
           includeLogos: true,
         },
       },
-    }
+    };
 
     const createTemplateResponse = await helper.makeAuthenticatedRequest(
       'POST',
@@ -750,7 +750,7 @@ test.describe('Reporting API Integration', () => {
         includeExecutiveSummary: true,
         includeRiskMatrix: true,
       },
-    }
+    };
 
     const templateReportResponse = await helper.makeAuthenticatedRequest(
       'POST',
@@ -760,7 +760,7 @@ test.describe('Reporting API Integration', () => {
     expect(templateReportResponse.status()).toBe(201);
 
     // Cleanup
-    await helper.makeAuthenticatedRequest('DELETE', `/reports/templates/${createdTemplate.id}`)
+    await helper.makeAuthenticatedRequest('DELETE', `/reports/templates/${createdTemplate.id}`);
   });
 });
 
@@ -776,7 +776,7 @@ test.describe('AI Integration API', () => {
     const chatRequest = {
       message: 'What are the top cybersecurity risks for my organization?',
       context: 'risk-analysis',
-    }
+    };
 
     const chatResponse = await helper.makeAuthenticatedRequest('POST', '/ai/chat', chatRequest);
     expect(chatResponse.status()).toBe(200);
@@ -795,7 +795,7 @@ test.describe('AI Integration API', () => {
         size: 'Medium',
         geography: 'United States',
       },
-    }
+    };
 
     const analysisResponse = await helper.makeAuthenticatedRequest(
       'POST',
@@ -819,7 +819,7 @@ test.describe('AI Integration API', () => {
       type: 'policy_analysis',
       extractRisks: true,
       extractControls: true,
-    }
+    };
 
     const docAnalysisResponse = await helper.makeAuthenticatedRequest(
       'POST',
@@ -839,7 +839,7 @@ test.describe('AI Integration API', () => {
     const message1 = await helper.makeAuthenticatedRequest('POST', '/ai/chat', {
       message: 'What is risk assessment?',
       context: 'general',
-    })
+    });
 
     const response1 = await message1.json();
     const sessionId = response1.sessionId;
@@ -849,7 +849,7 @@ test.describe('AI Integration API', () => {
       message: 'How often should I perform risk assessments?',
       sessionId: sessionId,
       context: 'general',
-    })
+    });
 
     expect(message2.status()).toBe(200);
 
@@ -857,7 +857,7 @@ test.describe('AI Integration API', () => {
     const historyResponse = await helper.makeAuthenticatedRequest(
       'GET',
       `/ai/conversations/${sessionId}`
-    )
+    );
     expect(historyResponse.status()).toBe(200);
 
     const history = await historyResponse.json();
@@ -880,7 +880,7 @@ test.describe('API Error Handling and Edge Cases', () => {
       headers: {
         Authorization: 'Bearer invalid-token',
       },
-    })
+    });
     expect(invalidResponse.status()).toBe(401);
 
     // Test expired token simulation
@@ -888,7 +888,7 @@ test.describe('API Error Handling and Edge Cases', () => {
       headers: {
         Authorization: 'Bearer expired-token-simulation',
       },
-    })
+    });
     expect(expiredResponse.status()).toBe(401);
   });
 
@@ -896,7 +896,7 @@ test.describe('API Error Handling and Edge Cases', () => {
     // Test missing required fields
     const invalidRisk = {
       description: 'Risk without title',
-    }
+    };
 
     const response = await helper.makeAuthenticatedRequest('POST', '/risks', invalidRisk);
     expect(response.status()).toBe(400);
@@ -919,7 +919,7 @@ test.describe('API Error Handling and Edge Cases', () => {
 
   test('Rate limiting handling', async () => {
     // Make multiple rapid requests to trigger rate limiting
-    const promises = []
+    const promises = [];
     for (let i = 0; i < 20; i++) {
       promises.push(helper.makeAuthenticatedRequest('GET', '/risks'));
     }
@@ -927,11 +927,11 @@ test.describe('API Error Handling and Edge Cases', () => {
     const responses = await Promise.all(promises);
 
     // Check if any responses are rate limited (429)
-    const rateLimitedResponses = responses.filter((r) => r.status() === 429)
+    const rateLimitedResponses = responses.filter((r) => r.status() === 429);
 
     if (rateLimitedResponses.length > 0) {
       // Verify rate limit response includes appropriate headers
-      const rateLimitResponse = rateLimitedResponses[0]
+      const rateLimitResponse = rateLimitedResponses[0];
       const headers = rateLimitResponse.headers();
 
       expect(headers['x-ratelimit-limit']).toBeDefined();
@@ -962,7 +962,7 @@ test.describe('API Error Handling and Edge Cases', () => {
     });
 
     // Should return 413 (Payload Too Large) or 400 (Bad Request)
-    expect([400, 413]).toContain(uploadResponse.status())
+    expect([400, 413]).toContain(uploadResponse.status());
 
     const errorData = await uploadResponse.json();
     expect(errorData.error.toLowerCase()).toContain('size');
@@ -976,11 +976,11 @@ test.describe('API Error Handling and Edge Cases', () => {
       category: 'Operational',
       probability: 'Medium',
       impact: 'Medium',
-    }
+    };
 
     const promises = [];
     for (let i = 0; i < 5; i++) {
-      const data = { ...riskData, title: `${riskData.title} ${i}` }
+      const data = { ...riskData, title: `${riskData.title} ${i}` };
       promises.push(helper.makeAuthenticatedRequest('POST', '/risks', data));
     }
 
@@ -988,17 +988,17 @@ test.describe('API Error Handling and Edge Cases', () => {
 
     // All requests should succeed
     responses.forEach((response) => {
-      expect(response.status()).toBe(201)
+      expect(response.status()).toBe(201);
     });
 
     // Verify all risks were created with unique IDs
-    const createdRisks = await Promise.all(responses.map((r) => r.json()))
+    const createdRisks = await Promise.all(responses.map((r) => r.json()));
     const uniqueIds = new Set(createdRisks.map((r) => r.id));
     expect(uniqueIds.size).toBe(5);
 
     // Cleanup
     for (const risk of createdRisks) {
-      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`)
+      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`);
     }
   });
 });
@@ -1032,7 +1032,7 @@ test.describe('API Performance and Load Testing', () => {
 
   test('Pagination performance with large datasets', async () => {
     // Test pagination with different page sizes
-    const pageSizes = [10, 50, 100]
+    const pageSizes = [10, 50, 100];
 
     for (const pageSize of pageSizes) {
       const startTime = Date.now();
@@ -1082,7 +1082,7 @@ test.describe('API Performance and Load Testing', () => {
 
   test('Bulk operations performance', async () => {
     // Test bulk creation
-    const bulkRisks = []
+    const bulkRisks = [];
     for (let i = 0; i < 10; i++) {
       bulkRisks.push({
         title: `Bulk Risk ${i}`,
@@ -1111,7 +1111,7 @@ test.describe('API Performance and Load Testing', () => {
 
     // Cleanup
     for (const risk of createdRisks) {
-      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`)
+      await helper.makeAuthenticatedRequest('DELETE', `/risks/${risk.id}`);
     }
   });
 });

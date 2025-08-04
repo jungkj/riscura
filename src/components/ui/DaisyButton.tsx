@@ -46,20 +46,20 @@ export const DaisyButton = forwardRef<HTMLButtonElement, ButtonProps>(
       success: 'btn-success',
       warning: 'btn-warning',
       info: 'btn-info',
-    }
+    };
 
     const sizeClasses = {
       xs: 'btn-xs',
       sm: 'btn-sm',
       md: '',
       lg: 'btn-lg',
-    }
+    };
 
     const shapeClasses = {
       default: '',
       circle: 'btn-circle',
       square: 'btn-square',
-    }
+    };
 
     return (
       <button

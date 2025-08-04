@@ -10,20 +10,20 @@ import { productionGuard } from '@/lib/security/production-guard';
 export interface SecurityHeadersConfig {
   // Content Security Policy
   csp?: {
-    reportOnly?: boolean
+    reportOnly?: boolean;
     reportUri?: string;
     directives?: CSPDirectives;
-  }
+  };
 
   // HTTP Strict Transport Security
   hsts?: {
-    maxAge?: number
+    maxAge?: number;
     includeSubDomains?: boolean;
     preload?: boolean;
-  }
+  };
 
   // Additional headers
-  xFrameOptions?: 'DENY' | 'SAMEORIGIN' | string
+  xFrameOptions?: 'DENY' | 'SAMEORIGIN' | string;
   xContentTypeOptions?: boolean;
   referrerPolicy?: string;
   permissionsPolicy?: string;
@@ -32,7 +32,7 @@ export interface SecurityHeadersConfig {
   crossOriginResourcePolicy?: string;
 
   // Custom headers
-  customHeaders?: Record<string, string>
+  customHeaders?: Record<string, string>;
 }
 
 export interface CSPDirectives {
@@ -161,7 +161,7 @@ const DEFAULT_SECURITY_CONFIG: SecurityHeadersConfig = {
   crossOriginEmbedderPolicy: 'unsafe-none', // More permissive for third-party integrations
   crossOriginOpenerPolicy: 'same-origin-allow-popups', // For OAuth popups
   crossOriginResourcePolicy: 'cross-origin', // Allow cross-origin requests for API
-}
+};
 
 /**
  * Production-specific security configuration with stricter rules
@@ -203,7 +203,7 @@ const PRODUCTION_SECURITY_CONFIG: SecurityHeadersConfig = {
   },
   crossOriginEmbedderPolicy: 'require-corp',
   crossOriginResourcePolicy: 'same-site',
-}
+};
 
 /**
  * Security Headers Manager
@@ -216,7 +216,7 @@ export class SecurityHeaders {
   private constructor(config?: SecurityHeadersConfig) {
     this.config = productionGuard.isProduction()
       ? { ...PRODUCTION_SECURITY_CONFIG, ...config }
-      : { ...DEFAULT_SECURITY_CONFIG, ...config }
+      : { ...DEFAULT_SECURITY_CONFIG, ...config };
   }
 
   public static getInstance(config?: SecurityHeadersConfig): SecurityHeaders {
@@ -256,7 +256,7 @@ export class SecurityHeaders {
       let directiveName = directive;
 
       // Convert camelCase to kebab-case
-      directiveName = directiveName.replace(/([A-Z])/g, '-$1').toLowerCase()
+      directiveName = directiveName.replace(/([A-Z])/g, '-$1').toLowerCase();
 
       if (typeof value === 'boolean') {
         if (value) {
@@ -267,7 +267,7 @@ export class SecurityHeaders {
 
         // Replace nonce placeholder with actual nonce
         if (nonce) {
-          sources = sources.map((source) => source.replace('{NONCE}', nonce))
+          sources = sources.map((source) => source.replace('{NONCE}', nonce));
         }
 
         cspParts.push(`${directiveName} ${sources.join(' ')}`);
@@ -283,7 +283,7 @@ export class SecurityHeaders {
    * Build HSTS header value
    */
   private buildHSTS(): string {
-    const { maxAge, includeSubDomains, preload } = this.config.hsts || {}
+    const { maxAge, includeSubDomains, preload } = this.config.hsts || {};
 
     let hsts = `max-age=${maxAge || 31536000}`;
 
@@ -302,11 +302,11 @@ export class SecurityHeaders {
    * Get all security headers
    */
   getHeaders(nonce?: string): Record<string, string> {
-    const headers: Record<string, string> = {}
+    const headers: Record<string, string> = {};
 
     // Content Security Policy
     if (this.config.csp?.directives) {
-      const cspValue = this.buildCSP(this.config.csp.directives, nonce)
+      const cspValue = this.buildCSP(this.config.csp.directives, nonce);
       const headerName = this.config.csp.reportOnly
         ? 'Content-Security-Policy-Report-Only'
         : 'Content-Security-Policy';
@@ -315,57 +315,57 @@ export class SecurityHeaders {
 
     // HTTP Strict Transport Security (HTTPS only)
     if (productionGuard.isProduction() && this.config.hsts) {
-      headers['Strict-Transport-Security'] = this.buildHSTS()
+      headers['Strict-Transport-Security'] = this.buildHSTS();
     }
 
     // X-Frame-Options
     if (this.config.xFrameOptions) {
-      headers['X-Frame-Options'] = this.config.xFrameOptions
+      headers['X-Frame-Options'] = this.config.xFrameOptions;
     }
 
     // X-Content-Type-Options
     if (this.config.xContentTypeOptions) {
-      headers['X-Content-Type-Options'] = 'nosniff'
+      headers['X-Content-Type-Options'] = 'nosniff';
     }
 
     // Referrer-Policy
     if (this.config.referrerPolicy) {
-      headers['Referrer-Policy'] = this.config.referrerPolicy
+      headers['Referrer-Policy'] = this.config.referrerPolicy;
     }
 
     // Permissions-Policy
     if (this.config.permissionsPolicy) {
-      headers['Permissions-Policy'] = this.config.permissionsPolicy
+      headers['Permissions-Policy'] = this.config.permissionsPolicy;
     }
 
     // Cross-Origin-Embedder-Policy
     if (this.config.crossOriginEmbedderPolicy) {
-      headers['Cross-Origin-Embedder-Policy'] = this.config.crossOriginEmbedderPolicy
+      headers['Cross-Origin-Embedder-Policy'] = this.config.crossOriginEmbedderPolicy;
     }
 
     // Cross-Origin-Opener-Policy
     if (this.config.crossOriginOpenerPolicy) {
-      headers['Cross-Origin-Opener-Policy'] = this.config.crossOriginOpenerPolicy
+      headers['Cross-Origin-Opener-Policy'] = this.config.crossOriginOpenerPolicy;
     }
 
     // Cross-Origin-Resource-Policy
     if (this.config.crossOriginResourcePolicy) {
-      headers['Cross-Origin-Resource-Policy'] = this.config.crossOriginResourcePolicy
+      headers['Cross-Origin-Resource-Policy'] = this.config.crossOriginResourcePolicy;
     }
 
     // Security-related headers
-    headers['X-DNS-Prefetch-Control'] = 'off'
+    headers['X-DNS-Prefetch-Control'] = 'off';
     headers['X-Download-Options'] = 'noopen';
     headers['X-Permitted-Cross-Domain-Policies'] = 'none';
 
     // Custom application headers
-    headers['X-Powered-By'] = 'Riscura Security Platform'
+    headers['X-Powered-By'] = 'Riscura Security Platform';
     headers['X-Content-Type-Options'] = 'nosniff';
     headers['X-XSS-Protection'] = '1; mode=block';
 
     // Add custom headers
     if (this.config.customHeaders) {
-      Object.assign(headers, this.config.customHeaders)
+      Object.assign(headers, this.config.customHeaders);
     }
 
     return headers;
@@ -393,7 +393,7 @@ export class SecurityHeaders {
    * Create a new response with security headers
    */
   createSecureResponse(body?: any, init?: ResponseInit & { nonce?: string }): NextResponse {
-    const { nonce, ...responseInit } = init || {}
+    const { nonce, ...responseInit } = init || {};
     const response = NextResponse.json(body, responseInit);
     return this.applyToResponse(response, nonce);
   }
@@ -402,7 +402,7 @@ export class SecurityHeaders {
    * Update configuration
    */
   updateConfig(_config: Partial<SecurityHeadersConfig>): void {
-    this.config = { ...this.config, ...config }
+    this.config = { ...this.config, ...config };
   }
 
   /**
@@ -424,7 +424,7 @@ export class SecurityHeaders {
 
     // Check CSP configuration
     if (!this.config.csp?.directives?.defaultSrc) {
-      warnings.push('CSP default-src directive not configured')
+      warnings.push('CSP default-src directive not configured');
     }
 
     if (
@@ -443,28 +443,28 @@ export class SecurityHeaders {
 
     // Check HSTS configuration
     if (productionGuard.isProduction() && !this.config.hsts) {
-      warnings.push('HSTS not configured for production')
+      warnings.push('HSTS not configured for production');
     }
 
     // Check frame options
     if (!this.config.xFrameOptions || this.config.xFrameOptions === 'SAMEORIGIN') {
-      warnings.push('Consider using X-Frame-Options: DENY for better security')
+      warnings.push('Consider using X-Frame-Options: DENY for better security');
     }
 
     return {
       isValid: errors.length === 0,
       warnings,
       errors,
-    }
+    };
   }
 }
 
 // Export singleton instance
-export const securityHeaders = SecurityHeaders.getInstance()
+export const securityHeaders = SecurityHeaders.getInstance();
 
 // Utility functions
 export function applySecurityHeaders(_response: NextResponse, nonce?: string): NextResponse {
-  return securityHeaders.applyToResponse(response, nonce)
+  return securityHeaders.applyToResponse(response, nonce);
 }
 
 export function createSecureResponse(
@@ -491,7 +491,7 @@ export function withSecurityHeaders(
   return async () => {
     const response = await handler();
     return applySecurityHeaders(response);
-  }
+  };
 }
 
 /**
@@ -511,5 +511,5 @@ export function handleCSPReport(report: any): void {
     blockedUri: report['blocked-uri'],
     violatedDirective: report['violated-directive'],
     originalPolicy: report['original-policy'],
-  })
+  });
 }

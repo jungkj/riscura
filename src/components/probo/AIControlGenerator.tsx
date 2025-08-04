@@ -32,12 +32,12 @@ export default function AIControlGenerator({
     setIsGenerating(true);
     // Simulate generation
     setTimeout(() => {
-      setIsGenerating(false)
+      setIsGenerating(false);
       if (onControlsGenerated) {
         onControlsGenerated([], []);
       }
     }, 2000);
-  }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -52,7 +52,7 @@ export default function AIControlGenerator({
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -151,4 +151,4 @@ export default function AIControlGenerator({
 }
 
 // Export the component
-export { AIControlGenerator }
+export { AIControlGenerator };

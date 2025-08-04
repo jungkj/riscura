@@ -2,11 +2,11 @@
 import { ControlType } from '@/types/rcsa.types';
 
 // Import actual Probo data
-import mitigationsData from '@/data/mitigations.json'
+import mitigationsData from '@/data/mitigations.json';
 
 // Testing guidance interfaces
 export interface ControlTestStep {
-  description: string
+  description: string;
   expectedResult: string;
   dataRequired: string;
   notes: string;
@@ -129,7 +129,7 @@ export class ProboService {
   async assessVendor(websiteUrl: string): Promise<VendorAssessment> {
     try {
       // Use Probo's vendor assessment agent logic
-      const vendorInfo = await this.extractVendorInfo(websiteUrl)
+      const vendorInfo = await this.extractVendorInfo(websiteUrl);
       const riskScore = this.calculateVendorRiskScore(vendorInfo);
       const findings = await this.generateVendorFindings(vendorInfo);
 
@@ -140,7 +140,7 @@ export class ProboService {
         complianceStatus: this.determineComplianceStatus(riskScore),
         findings,
         lastAssessed: new Date(),
-      }
+      };
     } catch (error) {
       // console.error('Vendor assessment failed:', error)
       throw new Error('Failed to assess vendor');
@@ -211,7 +211,7 @@ export class ProboService {
         termsOfServiceURL: vendorData.terms_of_service_url || '',
         statusPageURL: vendorData.status_page_url || '',
         certifications: vendorData.certifications || [],
-      }
+      };
     } catch (error) {
       // console.error('Failed to extract vendor info:', error)
       // Return fallback vendor info
@@ -231,7 +231,7 @@ export class ProboService {
         termsOfServiceURL: '',
         statusPageURL: '',
         certifications: [],
-      }
+      };
     }
   }
 
@@ -242,23 +242,23 @@ export class ProboService {
     let riskScore = 50; // Base risk score
 
     // Lower risk for established certifications
-    if (vendorInfo.certifications.includes('SOC2')) riskScore -= 15
+    if (vendorInfo.certifications.includes('SOC2')) riskScore -= 15;
     if (vendorInfo.certifications.includes('ISO27001')) riskScore -= 10;
     if (vendorInfo.certifications.includes('PCI DSS')) riskScore -= 10;
 
     // Lower risk for having security documentation
-    if (vendorInfo.securityPageURL) riskScore -= 5
+    if (vendorInfo.securityPageURL) riskScore -= 5;
     if (vendorInfo.privacyPolicyURL) riskScore -= 5;
     if (vendorInfo.dataProcessingAgreementURL) riskScore -= 5;
 
     // Higher risk for certain categories
-    const higherRiskCategories = ['CLOUD_PROVIDER', 'DATA_STORAGE_AND_PROCESSING', 'FINANCE']
+    const higherRiskCategories = ['CLOUD_PROVIDER', 'DATA_STORAGE_AND_PROCESSING', 'FINANCE'];
     if (higherRiskCategories.includes(vendorInfo.category)) {
       riskScore += 10;
     }
 
     // Ensure score is within bounds
-    return Math.max(0, Math.min(100, riskScore))
+    return Math.max(0, Math.min(100, riskScore));
   }
 
   /**
@@ -276,7 +276,7 @@ export class ProboService {
         description: 'Vendor does not have a publicly accessible security page',
         remediation: 'Request security documentation from vendor',
         status: 'OPEN',
-      })
+      });
     }
 
     if (!vendorInfo.privacyPolicyURL) {
@@ -299,7 +299,7 @@ export class ProboService {
         description: 'Vendor has no visible security certifications',
         remediation: 'Request compliance certifications (SOC2, ISO27001, etc.)',
         status: 'OPEN',
-      })
+      });
     }
 
     return findings;
@@ -326,7 +326,7 @@ export class ProboService {
       version: '2017',
       controls: await this.getSOC2Controls(),
       requirements: await this.getSOC2Requirements(),
-    }
+    };
   }
 
   /**
@@ -359,7 +359,7 @@ export class ProboService {
         standards: ['SOC2'],
       },
       // Add more SOC 2 controls as needed
-    ]
+    ];
   }
 
   /**
@@ -380,7 +380,7 @@ export class ProboService {
         controls: ['a1.1', 'a1.2', 'a1.3'],
       },
       // Add more requirements as needed
-    ]
+    ];
   }
 
   /**
@@ -425,7 +425,7 @@ export class ProboService {
         frameworkId: 'soc2-framework',
         sectionTitle: 'Data Protection',
       },
-    ]
+    ];
   }
 
   /**
@@ -434,7 +434,7 @@ export class ProboService {
   async healthCheck(): Promise<boolean> {
     try {
       // In a real implementation, this would ping the Probo service
-      return true
+      return true;
     } catch (error) {
       // console.error('Probo service health check failed:', error)
       return false;
@@ -450,25 +450,25 @@ export class ProboService {
       importance: mitigation.importance as 'MANDATORY' | 'PREFERRED' | 'ADVANCED',
       standards: mitigation.standards,
       description: mitigation.description,
-    }))
+    }));
   }
 
   // Filter mitigations by category
   async getMitigationsByCategory(category: string): Promise<ProboMitigation[]> {
-    const mitigations = await this.getMitigations()
+    const mitigations = await this.getMitigations();
     return mitigations.filter((m) => m.category === category);
   }
 
   // Get mitigation categories
   async getMitigationCategories(): Promise<string[]> {
-    const mitigations = await this.getMitigations()
+    const mitigations = await this.getMitigations();
     const _categories = [...new Set(mitigations.map((m) => m.category))];
     return categories.sort();
   }
 
   // Search mitigations
   async searchMitigations(_query: string): Promise<ProboMitigation[]> {
-    const mitigations = await this.getMitigations()
+    const mitigations = await this.getMitigations();
     const lowerQuery = query.toLowerCase();
     return mitigations.filter(
       (m) =>
@@ -590,7 +590,7 @@ export class ProboService {
             'Measure compliance rates and understanding',
           ],
         },
-      }
+      };
 
       return (
         testingGuidance[controlType] || {

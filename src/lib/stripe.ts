@@ -65,7 +65,7 @@ export const SUBSCRIPTION_PLANS = {
       storage: 'Unlimited',
     },
   },
-} as const
+} as const;
 
 export type SubscriptionPlan = keyof typeof SUBSCRIPTION_PLANS;
 
@@ -74,7 +74,7 @@ export const FREE_TRIAL_CONFIG = {
   duration: 7, // 7 days
   plan: 'PRO' as SubscriptionPlan,
   autoCancel: true,
-}
+};
 
 // Helper functions
 export function formatPrice(price: number): string {
@@ -82,7 +82,7 @@ export function formatPrice(price: number): string {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-  }).format(price)
+  }).format(price);
 }
 
 export function getPlanByPriceId(priceId: string): SubscriptionPlan | null {

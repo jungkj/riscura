@@ -46,4 +46,4 @@ export const LoginStatus: React.FC<LoginStatusProps> = ({ className = '' }) => {
       )}
     </div>
   );
-}
+};

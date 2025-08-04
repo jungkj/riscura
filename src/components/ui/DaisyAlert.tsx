@@ -19,14 +19,14 @@ export const DaisyAlert = ({
     success: 'alert-success',
     warning: 'alert-warning',
     error: 'alert-error',
-  }
+  };
 
   const icons = {
     info: <Info className="h-6 w-6" />,
     success: <CheckCircle className="h-6 w-6" />,
     warning: <AlertCircle className="h-6 w-6" />,
     error: <XCircle className="h-6 w-6" />,
-  }
+  };
 
   return (
     <div className={cn('alert', variantClasses[variant], className)} {...props}>
@@ -34,4 +34,4 @@ export const DaisyAlert = ({
       <span>{children}</span>
     </div>
   );
-}
+};

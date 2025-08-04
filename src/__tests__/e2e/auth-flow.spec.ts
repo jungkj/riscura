@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 
 // Helper function for authentication
 async function login(page: Page, email?: string, password?: string) {
-  const testEmail = email || process.env.TEST_USER_EMAIL || 'test@example.com'
+  const testEmail = email || process.env.TEST_USER_EMAIL || 'test@example.com';
   const testPassword = password || process.env.TEST_USER_PASSWORD || 'password123';
 
   await page.goto('/auth/login');
@@ -21,7 +21,7 @@ async function logout(page: Page) {
 test.describe('Authentication Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Setup test data if needed
-  })
+  });
 
   test.describe('User Login', () => {
     test('should successfully log in with valid credentials', async ({ page }) => {
@@ -53,13 +53,13 @@ test.describe('Authentication Flow', () => {
             },
             token: 'test-jwt-token',
           }),
-        })
+        });
       });
 
       await page.click('[data-testid="login-button"]');
 
       // Verify successful login
-      await expect(page).toHaveURL(/.*dashboard/)
+      await expect(page).toHaveURL(/.*dashboard/);
       await expect(page.locator('[data-testid="user-menu"]')).toBeVisible();
       await expect(page.locator('[data-testid="welcome-message"]')).toContainText(
         'Welcome, Test User'
@@ -81,35 +81,35 @@ test.describe('Authentication Flow', () => {
             success: false,
             error: 'Invalid credentials',
           }),
-        })
+        });
       });
 
       await page.click('[data-testid="login-button"]');
 
       // Verify error message
-      await expect(page.locator('[data-testid="error-message"]')).toBeVisible()
+      await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
       await expect(page.locator('[data-testid="error-message"]')).toContainText(
         'Invalid credentials'
       );
 
       // Should remain on login page
-      await expect(page).toHaveURL(/.*auth\/login/)
+      await expect(page).toHaveURL(/.*auth\/login/);
     });
 
     test('should validate form fields', async ({ page }) => {
       await page.goto('/auth/login');
 
       // Try to submit empty form
-      await page.click('[data-testid="login-button"]')
+      await page.click('[data-testid="login-button"]');
 
       // Should show validation errors
-      await expect(page.locator('[data-testid="email-error"]')).toContainText('Email is required')
+      await expect(page.locator('[data-testid="email-error"]')).toContainText('Email is required');
       await expect(page.locator('[data-testid="password-error"]')).toContainText(
         'Password is required'
       );
 
       // Test invalid email format
-      await page.fill('[data-testid="email-input"]', 'invalid-email')
+      await page.fill('[data-testid="email-input"]', 'invalid-email');
       await expect(page.locator('[data-testid="email-error"]')).toContainText(
         'Please enter a valid email'
       );
@@ -146,7 +146,7 @@ test.describe('Authentication Flow', () => {
       await page.goto('/auth/register');
 
       // Fill registration form
-      await page.fill('[data-testid="first-name-input"]', 'New')
+      await page.fill('[data-testid="first-name-input"]', 'New');
       await page.fill('[data-testid="last-name-input"]', 'User');
       await page.fill('[data-testid="email-input"]', 'newuser@example.com');
       await page.fill('[data-testid="password-input"]', 'password123');
@@ -169,13 +169,13 @@ test.describe('Authentication Flow', () => {
               lastName: 'User',
             },
           }),
-        })
+        });
       });
 
       await page.click('[data-testid="register-button"]');
 
       // Should redirect to verification page
-      await expect(page).toHaveURL(/.*auth\/verify-email/)
+      await expect(page).toHaveURL(/.*auth\/verify-email/);
       await expect(page.locator('[data-testid="verification-message"]')).toContainText(
         'Please check your email'
       );
@@ -185,16 +185,16 @@ test.describe('Authentication Flow', () => {
       await page.goto('/auth/register');
 
       // Try to submit empty form
-      await page.click('[data-testid="register-button"]')
+      await page.click('[data-testid="register-button"]');
 
       // Should show validation errors
       await expect(page.locator('[data-testid="first-name-error"]')).toContainText(
         'First name is required'
-      )
+      );
       await expect(page.locator('[data-testid="email-error"]')).toContainText('Email is required');
 
       // Test password mismatch
-      await page.fill('[data-testid="password-input"]', 'password123')
+      await page.fill('[data-testid="password-input"]', 'password123');
       await page.fill('[data-testid="confirm-password-input"]', 'different');
       await expect(page.locator('[data-testid="password-mismatch-error"]')).toContainText(
         'Passwords do not match'
@@ -211,13 +211,13 @@ test.describe('Authentication Flow', () => {
       await page.goto('/dashboard');
 
       // Verify user is logged in
-      await expect(page.locator('[data-testid="user-menu"]')).toBeVisible()
+      await expect(page.locator('[data-testid="user-menu"]')).toBeVisible();
 
       // Refresh page
-      await page.reload()
+      await page.reload();
 
       // Should still be logged in
-      await expect(page.locator('[data-testid="user-menu"]')).toBeVisible()
+      await expect(page.locator('[data-testid="user-menu"]')).toBeVisible();
       await expect(page).toHaveURL(/.*dashboard/);
     });
 
@@ -236,7 +236,7 @@ test.describe('Authentication Flow', () => {
           status: 401,
           contentType: 'application/json',
           body: JSON.stringify({ error: 'Session expired' }),
-        })
+        });
       });
 
       await page.reload();
@@ -252,14 +252,14 @@ test.describe('Authentication Flow', () => {
 
     test('should handle different user roles correctly', async ({ page }) => {
       // Test admin access
-      await login(page, 'admin@example.com', 'adminpass')
+      await login(page, 'admin@example.com', 'adminpass');
       await page.goto('/admin');
       await expect(page.locator('[data-testid="admin-panel"]')).toBeVisible();
 
       await logout(page);
 
       // Test regular user access restriction
-      await login(page, 'user@example.com', 'userpass')
+      await login(page, 'user@example.com', 'userpass');
       await page.goto('/admin');
       await expect(page.locator('[data-testid="access-denied"]')).toBeVisible();
     });
@@ -278,12 +278,12 @@ test.describe('Authentication Flow', () => {
       }
 
       // Should show rate limit message
-      await expect(page.locator('[data-testid="rate-limit-error"]')).toBeVisible()
+      await expect(page.locator('[data-testid="rate-limit-error"]')).toBeVisible();
     });
 
     test('should handle CSRF protection', async ({ page }) => {
       // This would test CSRF token validation
-      await page.goto('/auth/login')
+      await page.goto('/auth/login');
 
       // Attempt login without proper CSRF token (would be handled by the backend)
       const response = await page.request.post('/api/auth/login', {
@@ -291,10 +291,10 @@ test.describe('Authentication Flow', () => {
           email: 'test@example.com',
           password: 'password123',
         },
-      })
+      });
 
       // Should return error for missing CSRF token
-      expect(response.status()).toBe(403)
+      expect(response.status()).toBe(403);
     });
   });
 });

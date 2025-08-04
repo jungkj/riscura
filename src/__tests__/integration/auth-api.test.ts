@@ -4,10 +4,10 @@ import { getSession } from 'next-auth/react';
 // Mock NextAuth
 jest.mock('next-auth/react', () => ({
   getSession: jest.fn(),
-}))
+}));
 
 // Mock fetch globally
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 
 describe('Authentication Integration Tests', () => {
   let apiClient: RCSAApiClient;
@@ -20,7 +20,7 @@ describe('Authentication Integration Tests', () => {
     mockGetSession = getSession as jest.MockedFunction<typeof getSession>;
 
     // Reset mocks
-    mockFetch.mockReset()
+    mockFetch.mockReset();
     mockGetSession.mockReset();
   });
 
@@ -34,17 +34,17 @@ describe('Authentication Integration Tests', () => {
           organizationId: 'org-456',
         } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      }
+      };
       mockGetSession.mockResolvedValue(mockSession);
 
       // Mock successful API response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
-      } as Response)
+      } as Response);
 
       // Make API call
-      await apiClient.getRisks()
+      await apiClient.getRisks();
 
       // Verify fetch was called with correct headers
       expect(mockFetch).toHaveBeenCalledWith(
@@ -57,7 +57,7 @@ describe('Authentication Integration Tests', () => {
           }),
           credentials: 'include',
         })
-      )
+      );
     });
 
     it('should handle session without organization gracefully', async () => {
@@ -68,17 +68,17 @@ describe('Authentication Integration Tests', () => {
           email: 'test@riscura.com',
         } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      }
+      };
       mockGetSession.mockResolvedValue(mockSession);
 
       // Mock successful API response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
-      } as Response)
+      } as Response);
 
       // Make API call
-      await apiClient.getRisks()
+      await apiClient.getRisks();
 
       // Verify fetch was called without organization header
       expect(mockFetch).toHaveBeenCalledWith(
@@ -90,26 +90,26 @@ describe('Authentication Integration Tests', () => {
           }),
           credentials: 'include',
         })
-      )
+      );
 
       // Verify organization-id header is not present
-      const callArgs = mockFetch.mock.calls[0]
+      const callArgs = mockFetch.mock.calls[0];
       const headers = callArgs[1]?.headers as Record<string, string>;
       expect(headers['organization-id']).toBeUndefined();
     });
 
     it('should handle session fetch errors', async () => {
       // Mock session error
-      mockGetSession.mockRejectedValue(new Error('Session fetch failed'))
+      mockGetSession.mockRejectedValue(new Error('Session fetch failed'));
 
       // Mock successful API response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
-      } as Response)
+      } as Response);
 
       // Make API call
-      await apiClient.getRisks()
+      await apiClient.getRisks();
 
       // Verify fetch was called with basic headers only
       expect(mockFetch).toHaveBeenCalledWith(
@@ -120,7 +120,7 @@ describe('Authentication Integration Tests', () => {
           }),
           credentials: 'include',
         })
-      )
+      );
     });
   });
 
@@ -130,7 +130,7 @@ describe('Authentication Integration Tests', () => {
       mockGetSession.mockResolvedValue({
         user: { id: 'user-123', email: 'test@riscura.com' } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      })
+      });
 
       // Mock 401 response
       mockFetch.mockResolvedValue({
@@ -138,10 +138,10 @@ describe('Authentication Integration Tests', () => {
         status: 401,
         statusText: 'Unauthorized',
         json: () => Promise.resolve({ message: 'Authentication required' }),
-      } as Response)
+      } as Response);
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks()
+      const _result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Authentication required');
@@ -152,7 +152,7 @@ describe('Authentication Integration Tests', () => {
       mockGetSession.mockResolvedValue({
         user: { id: 'user-123', email: 'test@riscura.com' } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      })
+      });
 
       // Mock 403 response
       mockFetch.mockResolvedValue({
@@ -160,10 +160,10 @@ describe('Authentication Integration Tests', () => {
         status: 403,
         statusText: 'Forbidden',
         json: () => Promise.resolve({ message: 'Insufficient permissions' }),
-      } as Response)
+      } as Response);
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks()
+      const _result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Insufficient permissions');
@@ -174,13 +174,13 @@ describe('Authentication Integration Tests', () => {
       mockGetSession.mockResolvedValue({
         user: { id: 'user-123', email: 'test@riscura.com' } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      })
+      });
 
       // Mock network error
-      mockFetch.mockRejectedValue(new Error('Network error'))
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
       // Make API call and verify error handling
-      const _result = await apiClient.getRisks()
+      const _result = await apiClient.getRisks();
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('Network error');
@@ -193,16 +193,16 @@ describe('Authentication Integration Tests', () => {
       mockGetSession.mockResolvedValue({
         user: { id: 'user-123', email: 'test@riscura.com' } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      })
+      });
 
       // Mock successful API response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: {} }),
-      } as Response)
+      } as Response);
 
       // Test various API methods
-      await apiClient.getRisk('risk-123')
+      await apiClient.getRisk('risk-123');
       await apiClient.getControls();
       await apiClient.healthCheck();
 
@@ -212,7 +212,7 @@ describe('Authentication Integration Tests', () => {
           expect.objectContaining({
             credentials: 'include',
           })
-        )
+        );
       });
     });
 
@@ -221,26 +221,26 @@ describe('Authentication Integration Tests', () => {
       mockGetSession.mockResolvedValue({
         user: { id: 'user-123', email: 'test@riscura.com' } as any,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      })
+      });
 
       // Mock successful API response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
-      } as Response)
+      } as Response);
 
       // Make multiple API calls
-      await apiClient.getRisks()
+      await apiClient.getRisks();
       await apiClient.getControls();
 
       // Extract request IDs from headers
       const requestIds = mockFetch.mock.calls.map((call) => {
-        const headers = call[1]?.headers as Record<string, string>
+        const headers = call[1]?.headers as Record<string, string>;
         return headers['x-request-id'];
       });
 
       // Verify all request IDs are unique and properly formatted
-      expect(requestIds).toHaveLength(2)
+      expect(requestIds).toHaveLength(2);
       expect(requestIds[0]).not.toBe(requestIds[1]);
       requestIds.forEach((id) => {
         expect(id).toMatch(/^req_\d+_[a-z0-9]+$/);
@@ -257,7 +257,7 @@ describe('Authentication Integration Tests', () => {
           email: 'test@riscura.com',
           organizationId: 'org-456',
         } as any,
-      })
+      });
     });
 
     it('should authenticate POST requests (create operations)', async () => {
@@ -269,7 +269,7 @@ describe('Authentication Integration Tests', () => {
             success: true,
             data: { id: 'risk-123', title: 'Test Risk' },
           }),
-      } as Response)
+      } as Response);
 
       const riskData = {
         title: 'Test Risk',
@@ -277,7 +277,7 @@ describe('Authentication Integration Tests', () => {
         category: 'OPERATIONAL' as any,
         likelihood: 3,
         impact: 4,
-      }
+      };
 
       await apiClient.createRisk(riskData);
 
@@ -293,7 +293,7 @@ describe('Authentication Integration Tests', () => {
           credentials: 'include',
           body: JSON.stringify(riskData),
         })
-      )
+      );
     });
 
     it('should authenticate PATCH requests (update operations)', async () => {
@@ -305,9 +305,9 @@ describe('Authentication Integration Tests', () => {
             success: true,
             data: { id: 'risk-123', title: 'Updated Risk' },
           }),
-      } as Response)
+      } as Response);
 
-      const updates = { title: 'Updated Risk' }
+      const updates = { title: 'Updated Risk' };
       await apiClient.updateRisk('risk-123', updates);
 
       // Verify PATCH request includes authentication
@@ -322,7 +322,7 @@ describe('Authentication Integration Tests', () => {
           credentials: 'include',
           body: JSON.stringify(updates),
         })
-      )
+      );
     });
 
     it('should authenticate DELETE requests', async () => {
@@ -330,7 +330,7 @@ describe('Authentication Integration Tests', () => {
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true }),
-      } as Response)
+      } as Response);
 
       await apiClient.deleteRisk('risk-123');
 
@@ -345,7 +345,7 @@ describe('Authentication Integration Tests', () => {
           }),
           credentials: 'include',
         })
-      )
+      );
     });
   });
 
@@ -358,13 +358,13 @@ describe('Authentication Integration Tests', () => {
           email: 'test@riscura.com',
           organizationId: 'org-456',
         } as any,
-      })
+      });
 
       // Mock successful response
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true, data: [] }),
-      } as Response)
+      } as Response);
 
       // Make request with query parameters
       await apiClient.getRisks({
@@ -372,11 +372,11 @@ describe('Authentication Integration Tests', () => {
         limit: 10,
         category: ['OPERATIONAL', 'FINANCIAL'] as any,
         status: 'IDENTIFIED' as any,
-      })
+      });
 
       // Verify URL includes query parameters
       const expectedUrl =
-        '/api/risks?page=1&limit=10&category=OPERATIONAL&category=FINANCIAL&status=IDENTIFIED'
+        '/api/risks?page=1&limit=10&category=OPERATIONAL&category=FINANCIAL&status=IDENTIFIED';
       expect(mockFetch).toHaveBeenCalledWith(
         expectedUrl,
         expect.objectContaining({

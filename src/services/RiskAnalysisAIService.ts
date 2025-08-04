@@ -2,7 +2,7 @@
 
 // Enhanced risk analysis interfaces
 export interface RiskFramework {
-  id: string
+  id: string;
   name: string;
   description: string;
   categories: string[];
@@ -13,7 +13,7 @@ export interface RiskFramework {
 
 export interface AssessmentCriteria {
   dimension: 'likelihood' | 'impact' | 'velocity' | 'volatility';
-  scale: { min: number; max: number; unit: string }
+  scale: { min: number; max: number; unit: string };
   descriptions: Record<number, string>;
   weights?: Record<string, number>; // category-specific weights
 }
@@ -47,7 +47,7 @@ export interface ProbabilityDistribution {
     mode?: number; // for triangular
     alpha?: number; // for beta
     beta?: number; // for beta
-  }
+  };
 }
 
 export interface ScenarioParameters {
@@ -84,7 +84,7 @@ export interface DistributionData {
     kurtosis: number;
     mode: number;
     median: number;
-  }
+  };
 }
 
 export interface RiskCorrelationAnalysis {
@@ -269,7 +269,7 @@ export interface Milestone {
 export interface MonitoringRequirement {
   metric: string;
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-  threshold: { warning: number; critical: number }
+  threshold: { warning: number; critical: number };
   owner: string;
   reportingTo: string[];
   escalationProcedure: string;
@@ -442,7 +442,7 @@ const RISK_FRAMEWORKS: Record<string, RiskFramework> = {
     scoringMethod: 'quantitative',
     version: 'SP 800-30 Rev. 1',
   },
-}
+};
 
 export class RiskAnalysisAIService {
   private frameworks: Map<string, RiskFramework> = new Map();
@@ -462,7 +462,8 @@ export class RiskAnalysisAIService {
   /**
    * Comprehensive risk assessment using specified framework
    */
-  async assessRisk(_risk: Risk,
+  async assessRisk(
+    _risk: Risk,
     framework: 'coso' | 'iso31000' | 'nist' = 'coso',
     options: {
       includeQuantitative?: boolean;
@@ -505,11 +506,11 @@ export class RiskAnalysisAIService {
         reviewers: [],
         approvers: [],
       },
-    }
+    };
 
     // Perform quantitative analysis if requested
     if (options.includeQuantitative) {
-      report.quantitativeAnalysis = await this.performQuantitativeAnalysis(risk, selectedFramework)
+      report.quantitativeAnalysis = await this.performQuantitativeAnalysis(risk, selectedFramework);
     }
 
     // Generate findings
@@ -517,24 +518,24 @@ export class RiskAnalysisAIService {
       risk,
       selectedFramework,
       report.qualitativeAnalysis
-    )
+    );
 
     // Generate recommendations
     report.recommendations = await this.generateRiskRecommendations(risk, report, {
       riskTolerance: 'medium',
-    })
+    });
 
     // Create action plan
-    report.actionPlan = await this.generateActionPlan(report.recommendations)
+    report.actionPlan = await this.generateActionPlan(report.recommendations);
 
     // Create monitoring plan
-    report.monitoringPlan = await this.generateMonitoringPlan(risk, report.recommendations)
+    report.monitoringPlan = await this.generateMonitoringPlan(risk, report.recommendations);
 
     // Generate executive summary
-    report.executiveSummary = await this.generateExecutiveSummary(risk, report)
+    report.executiveSummary = await this.generateExecutiveSummary(risk, report);
 
     // Cache the assessment
-    this.assessmentCache.set(risk.id, report)
+    this.assessmentCache.set(risk.id, report);
 
     return report;
   }
@@ -542,12 +543,13 @@ export class RiskAnalysisAIService {
   /**
    * Monte Carlo simulation for quantitative risk assessment
    */
-  async performMonteCarloSimulation(_risk: Risk,
+  async performMonteCarloSimulation(
+    _risk: Risk,
     parameters: QuantitativeParameters,
     iterations: number = 10000
   ): Promise<QuantitativeResults> {
     // Generate random samples based on distributions
-    const likelihoodSamples = this.generateSamples(parameters.likelihoodDistribution, iterations)
+    const likelihoodSamples = this.generateSamples(parameters.likelihoodDistribution, iterations);
     const impactSamples = this.generateSamples(parameters.impactDistribution, iterations);
 
     // Apply correlations if provided
@@ -555,13 +557,13 @@ export class RiskAnalysisAIService {
       likelihoodSamples,
       impactSamples,
       parameters.correlationMatrix
-    )
+    );
 
     // Calculate risk values for each iteration
-    const riskValues = correlatedSamples.map((sample, i) => sample.likelihood * sample.impact)
+    const riskValues = correlatedSamples.map((sample, i) => sample.likelihood * sample.impact);
 
     // Calculate statistics
-    const sorted = riskValues.sort((a, b) => a - b)
+    const sorted = riskValues.sort((a, b) => a - b);
     const mean = riskValues.reduce((sum, val) => sum + val, 0) / iterations;
     const variance =
       riskValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (iterations - 1);
@@ -572,23 +574,23 @@ export class RiskAnalysisAIService {
       level,
       lower: this.percentile(sorted, (100 - level) / 2),
       upper: this.percentile(sorted, 100 - (100 - level) / 2),
-    }))
+    }));
 
     // Calculate Value at Risk
     const valueAtRisk = [95, 99, 99.9].map((confidence) => ({
       confidence,
       value: this.percentile(sorted, confidence),
-    }))
+    }));
 
     // Calculate probability of exceedance
-    const thresholds = [mean, mean + stddev, mean + 2 * stddev]
+    const thresholds = [mean, mean + stddev, mean + 2 * stddev];
     const probabilityOfExceedance = thresholds.map((threshold) => ({
       threshold,
       probability: riskValues.filter((val) => val > threshold).length / iterations,
     }));
 
     // Generate distribution data
-    const bins = this.createHistogram(sorted, 50)
+    const bins = this.createHistogram(sorted, 50);
     const percentiles = {
       '5': this.percentile(sorted, 5),
       '10': this.percentile(sorted, 10),
@@ -597,7 +599,7 @@ export class RiskAnalysisAIService {
       '75': this.percentile(sorted, 75),
       '90': this.percentile(sorted, 90),
       '95': this.percentile(sorted, 95),
-    }
+    };
 
     return {
       expectedValue: mean,
@@ -616,13 +618,14 @@ export class RiskAnalysisAIService {
           median: this.percentile(sorted, 50),
         },
       },
-    }
+    };
   }
 
   /**
    * Analyze risk correlations and dependencies
    */
-  async analyzeRiskCorrelations(_risks: Risk[],
+  async analyzeRiskCorrelations(
+    _risks: Risk[],
     options: {
       includeHistorical?: boolean;
       timeWindow?: number; // months
@@ -638,19 +641,19 @@ export class RiskAnalysisAIService {
     }
 
     // Analyze pairwise correlations
-    const riskPairs = await this.analyzePairwiseCorrelations(risks, options)
+    const riskPairs = await this.analyzePairwiseCorrelations(risks, options);
 
     // Calculate network metrics
-    const networkMetrics = await this.calculateNetworkMetrics(risks, riskPairs)
+    const networkMetrics = await this.calculateNetworkMetrics(risks, riskPairs);
 
     // Identify risk clusters
-    const clusters = await this.identifyRiskClusters(risks, riskPairs)
+    const clusters = await this.identifyRiskClusters(risks, riskPairs);
 
     // Analyze dependencies
-    const dependencies = await this.analyzeDependencies(risks, riskPairs)
+    const dependencies = await this.analyzeDependencies(risks, riskPairs);
 
     // Calculate systemic risk indicators
-    const systemicRisk = await this.calculateSystemicRisk(risks, riskPairs, networkMetrics)
+    const systemicRisk = await this.calculateSystemicRisk(risks, riskPairs, networkMetrics);
 
     const analysis: RiskCorrelationAnalysis = {
       riskPairs,
@@ -658,7 +661,7 @@ export class RiskAnalysisAIService {
       clusters,
       dependencies,
       systemicRisk,
-    }
+    };
 
     this.correlationCache.set(cacheKey, analysis);
     return analysis;
@@ -667,7 +670,8 @@ export class RiskAnalysisAIService {
   /**
    * Generate comprehensive risk recommendations
    */
-  async generateRiskRecommendations(_risk: Risk,
+  async generateRiskRecommendations(
+    _risk: Risk,
     assessment: RiskAssessmentReport,
     options: {
       priorityFocus?: 'cost' | 'time' | 'impact' | 'feasibility';
@@ -679,7 +683,7 @@ export class RiskAnalysisAIService {
     const recommendations: RiskRecommendation[] = [];
 
     // Analyze current risk score and target
-    const currentScore = risk.riskScore
+    const currentScore = risk.riskScore;
     const targetScore = this.calculateTargetRiskScore(risk, options.riskTolerance || 'medium');
 
     // Generate mitigation recommendations
@@ -691,20 +695,20 @@ export class RiskAnalysisAIService {
           currentScore - targetScore,
           options
         ))
-      )
+      );
     }
 
     // Generate transfer recommendations
     recommendations.push(
       ...(await this.generateTransferRecommendations(risk, assessment, options))
-    )
+    );
 
     // Generate avoidance recommendations if risk is too high
     if (currentScore >= 20) {
       // Critical risk threshold
       recommendations.push(
         ...(await this.generateAvoidanceRecommendations(risk, assessment, options))
-      )
+      );
     }
 
     // Generate acceptance recommendations for low risks
@@ -712,17 +716,18 @@ export class RiskAnalysisAIService {
       // Low risk threshold
       recommendations.push(
         ...(await this.generateAcceptanceRecommendations(risk, assessment, options))
-      )
+      );
     }
 
     // Sort by priority and feasibility
-    return this.prioritizeRecommendations(recommendations, options)
+    return this.prioritizeRecommendations(recommendations, options);
   }
 
   /**
    * Generate automated risk scoring using AI
    */
-  async generateAutomatedRiskScore(_risk: Risk,
+  async generateAutomatedRiskScore(
+    _risk: Risk,
     framework: 'coso' | 'iso31000' | 'nist',
     context: {
       industry?: string;
@@ -745,22 +750,22 @@ export class RiskAnalysisAIService {
     }
 
     // Analyze risk description using NLP
-    const textAnalysis = await this.analyzeRiskText(risk.description, risk.category)
+    const textAnalysis = await this.analyzeRiskText(risk.description, risk.category);
 
     // Consider industry benchmarks
-    const industryFactors = await this.getIndustryRiskFactors(risk.category, context.industry)
+    const industryFactors = await this.getIndustryRiskFactors(risk.category, context.industry);
 
     // Analyze control effectiveness
-    const controlEffectiveness = await this.analyzeControlEffectiveness(risk, context.controls)
+    const controlEffectiveness = await this.analyzeControlEffectiveness(risk, context.controls);
 
     // Calculate likelihood
-    const likelihood = await this.calculateLikelihood(risk, textAnalysis, industryFactors, context)
+    const likelihood = await this.calculateLikelihood(risk, textAnalysis, industryFactors, context);
 
     // Calculate impact
-    const impact = await this.calculateImpact(risk, textAnalysis, industryFactors, context)
+    const impact = await this.calculateImpact(risk, textAnalysis, industryFactors, context);
 
     // Apply framework-specific scoring
-    const score = this.applyFrameworkScoring(likelihood, impact, selectedFramework)
+    const score = this.applyFrameworkScoring(likelihood, impact, selectedFramework);
 
     // Calculate confidence based on data quality
     const confidence = this.calculateScoringConfidence(
@@ -768,7 +773,7 @@ export class RiskAnalysisAIService {
       industryFactors,
       controlEffectiveness,
       context
-    )
+    );
 
     return {
       score,
@@ -781,12 +786,12 @@ export class RiskAnalysisAIService {
         ...controlEffectiveness.factors,
       ],
       methodology: `AI-powered scoring using ${selectedFramework.name}`,
-    }
+    };
   }
 
   // Private helper methods for quantitative analysis
   private generateSamples(distribution: ProbabilityDistribution, count: number): number[] {
-    const samples: number[] = []
+    const samples: number[] = [];
 
     for (let i = 0; i < count; i++) {
       const random = Math.random();
@@ -866,7 +871,7 @@ export class RiskAnalysisAIService {
 
   private betaSample(alpha: number, beta: number, random: number): number {
     // Simplified beta distribution sampling
-    const x = Math.pow(random, 1 / alpha)
+    const x = Math.pow(random, 1 / alpha);
     const y = Math.pow(1 - random, 1 / beta);
     return x / (x + y);
   }
@@ -877,7 +882,7 @@ export class RiskAnalysisAIService {
     correlationMatrix?: Record<string, number>
   ): Array<{ likelihood: number; impact: number }> {
     // Simple correlation application - in production, use Cholesky decomposition
-    const correlation = correlationMatrix?.['likelihood_impact'] || 0
+    const correlation = correlationMatrix?.['likelihood_impact'] || 0;
 
     return likelihood.map((l, i) => ({
       likelihood: l,
@@ -901,7 +906,8 @@ export class RiskAnalysisAIService {
     return sorted[lower] * (1 - weight) + sorted[upper] * weight;
   }
 
-  private createHistogram(_data: number[],
+  private createHistogram(
+    _data: number[],
     bins: number
   ): Array<{ value: number; frequency: number; cumulative: number }> {
     const min = Math.min(...data);
@@ -946,7 +952,7 @@ export class RiskAnalysisAIService {
   }
 
   private calculateMode(sorted: number[]): number {
-    const frequency: Record<number, number> = {}
+    const frequency: Record<number, number> = {};
     sorted.forEach((val) => {
       const rounded = Math.round(val * 100) / 100;
       frequency[rounded] = (frequency[rounded] || 0) + 1;
@@ -966,7 +972,8 @@ export class RiskAnalysisAIService {
   }
 
   // Placeholder implementations for complex analysis methods
-  private async performQualitativeAnalysis(_risk: Risk,
+  private async performQualitativeAnalysis(
+    _risk: Risk,
     framework: RiskFramework,
     controls?: Control[]
   ): Promise<QualitativeAnalysis> {
@@ -983,10 +990,11 @@ export class RiskAnalysisAIService {
         competitivePosition: 'Strong',
         strategicObjectives: [],
       },
-    }
+    };
   }
 
-  private async performQuantitativeAnalysis(_risk: Risk,
+  private async performQuantitativeAnalysis(
+    _risk: Risk,
     framework: RiskFramework
   ): Promise<QuantitativeRiskAssessment> {
     const parameters: QuantitativeParameters = {
@@ -1008,7 +1016,7 @@ export class RiskAnalysisAIService {
       },
       timeHorizon: 12,
       iterations: 10000,
-    }
+    };
 
     const results = await this.performMonteCarloSimulation(risk, parameters);
 
@@ -1020,10 +1028,11 @@ export class RiskAnalysisAIService {
       confidence: 0.85,
       validatedAt: new Date(),
       validatedBy: 'ARIA AI Assistant',
-    }
+    };
   }
 
-  private async generateFindings(_risk: Risk,
+  private async generateFindings(
+    _risk: Risk,
     framework: RiskFramework,
     qualitativeAnalysis: QualitativeAnalysis
   ): Promise<AssessmentFinding[]> {
@@ -1039,43 +1048,48 @@ export class RiskAnalysisAIService {
         source: 'AI Analysis',
         confidence: 0.75,
       },
-    ]
+    ];
   }
 
-  private async generateRecommendations(_risk: Risk,
+  private async generateRecommendations(
+    _risk: Risk,
     findings: AssessmentFinding[],
     framework: RiskFramework
   ): Promise<RiskRecommendation[]> {
     // Generate recommendations based on findings
-    return []
+    return [];
   }
 
   private async generateActionPlan(recommendations: RiskRecommendation[]): Promise<ActionItem[]> {
     // Convert recommendations to actionable items
-    return []
+    return [];
   }
 
-  private async generateMonitoringPlan(_risk: Risk,
+  private async generateMonitoringPlan(
+    _risk: Risk,
     recommendations: RiskRecommendation[]
   ): Promise<MonitoringRequirement[]> {
     // Create monitoring requirements
-    return []
+    return [];
   }
 
-  private async generateExecutiveSummary(_risk: Risk,
+  private async generateExecutiveSummary(
+    _risk: Risk,
     report: RiskAssessmentReport
   ): Promise<string> {
     return `Executive Summary for ${risk.title}: Risk assessment completed using ${report.framework} framework. ${report.findings.length} findings identified with ${report.recommendations.length} recommendations for improvement.`;
   }
 
   // Additional helper methods would be implemented here...
-  private async analyzePairwiseCorrelations(_risks: Risk[],
+  private async analyzePairwiseCorrelations(
+    _risks: Risk[],
     options: CorrelationAnalysisOptions
   ): Promise<RiskCorrelationPair[]> {
-    return []
+    return [];
   }
 
-  private async calculateNetworkMetrics(_risks: Risk[],
+  private async calculateNetworkMetrics(
+    _risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<NetworkMetrics> {
     return {
@@ -1084,22 +1098,25 @@ export class RiskAnalysisAIService {
       averagePathLength: 0,
       centralityMeasures: {},
       criticalPaths: [],
-    }
+    };
   }
 
-  private async identifyRiskClusters(_risks: Risk[],
+  private async identifyRiskClusters(
+    _risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<RiskCluster[]> {
     return [];
   }
 
-  private async analyzeDependencies(_risks: Risk[],
+  private async analyzeDependencies(
+    _risks: Risk[],
     pairs: RiskCorrelationPair[]
   ): Promise<RiskDependency[]> {
     return [];
   }
 
-  private async calculateSystemicRisk(_risks: Risk[],
+  private async calculateSystemicRisk(
+    _risks: Risk[],
     pairs: RiskCorrelationPair[],
     metrics: NetworkMetrics
   ): Promise<SystemicRiskIndicators> {
@@ -1109,15 +1126,16 @@ export class RiskAnalysisAIService {
       systemicImportance: {},
       vulnerabilityIndex: 0,
       resilience: 0,
-    }
+    };
   }
 
   private calculateTargetRiskScore(_risk: Risk, tolerance: 'low' | 'medium' | 'high'): number {
-    const toleranceMultipliers = { low: 0.5, medium: 0.7, high: 0.9 }
+    const toleranceMultipliers = { low: 0.5, medium: 0.7, high: 0.9 };
     return risk.riskScore * toleranceMultipliers[tolerance];
   }
 
-  private async generateMitigationRecommendations(_risk: Risk,
+  private async generateMitigationRecommendations(
+    _risk: Risk,
     assessment: RiskAssessmentReport,
     scoreReduction: number,
     options: RecommendationOptions
@@ -1125,21 +1143,24 @@ export class RiskAnalysisAIService {
     return [];
   }
 
-  private async generateTransferRecommendations(_risk: Risk,
+  private async generateTransferRecommendations(
+    _risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
     return [];
   }
 
-  private async generateAvoidanceRecommendations(_risk: Risk,
+  private async generateAvoidanceRecommendations(
+    _risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
     return [];
   }
 
-  private async generateAcceptanceRecommendations(_risk: Risk,
+  private async generateAcceptanceRecommendations(
+    _risk: Risk,
     assessment: RiskAssessmentReport,
     options: RecommendationOptions
   ): Promise<RiskRecommendation[]> {
@@ -1152,7 +1173,7 @@ export class RiskAnalysisAIService {
   ): RiskRecommendation[] {
     return recommendations.sort((a, b) => {
       // Priority-based sorting logic
-      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
+      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
   }
@@ -1167,7 +1188,7 @@ export class RiskAnalysisAIService {
       sentiment: 0,
       keywords: [],
       complexity: 0,
-    }
+    };
   }
 
   private async getIndustryRiskFactors(
@@ -1177,34 +1198,36 @@ export class RiskAnalysisAIService {
     return {
       factors: [],
       benchmark: 0,
-    }
+    };
   }
 
-  private async analyzeControlEffectiveness(_risk: Risk,
+  private async analyzeControlEffectiveness(
+    _risk: Risk,
     controls?: Control[]
   ): Promise<ControlEffectivenessResult> {
     return {
       factors: [],
       effectiveness: 0,
-    }
+    };
   }
 
-  private async calculateLikelihood(_risk: Risk,
+  private async calculateLikelihood(
+    _risk: Risk,
     textAnalysis: TextAnalysisResult,
     industryFactors: IndustryFactorsResult,
     context: ContextData
   ): Promise<number> {
     // Base likelihood from existing risk data
-    const likelihood = risk.likelihood || 1
+    const likelihood = risk.likelihood || 1;
 
     // Text analysis factors (0.3 weight)
     const textScore = Math.min(
       5,
       Math.max(1, 1 + textAnalysis.complexity * 2 + (textAnalysis.sentiment < 0 ? 2 : 0))
-    )
+    );
 
     // Industry benchmark factors (0.4 weight)
-    const industryScore = Math.min(5, Math.max(1, industryFactors.benchmark))
+    const industryScore = Math.min(5, Math.max(1, industryFactors.benchmark));
 
     // Historical data factors (0.2 weight)
     let historicalScore = 3; // default medium
@@ -1221,7 +1244,7 @@ export class RiskAnalysisAIService {
 
     // Organization size factor (0.1 weight)
     const sizeMultiplier =
-      context.organizationSize === 'large' ? 1.2 : context.organizationSize === 'small' ? 0.8 : 1.0
+      context.organizationSize === 'large' ? 1.2 : context.organizationSize === 'small' ? 0.8 : 1.0;
 
     // Calculate weighted likelihood
     const weightedLikelihood =
@@ -1230,18 +1253,19 @@ export class RiskAnalysisAIService {
         industryScore * 0.4 +
         historicalScore * 0.2 +
         3 * 0.1) * // base organizational factor
-      sizeMultiplier
+      sizeMultiplier;
 
     return Math.min(5, Math.max(1, Math.round(weightedLikelihood)));
   }
 
-  private async calculateImpact(_risk: Risk,
+  private async calculateImpact(
+    _risk: Risk,
     textAnalysis: TextAnalysisResult,
     industryFactors: IndustryFactorsResult,
     context: ContextData
   ): Promise<number> {
     // Base impact from existing risk data
-    const impact = risk.impact || 1
+    const impact = risk.impact || 1;
 
     // Category-based impact multipliers
     const categoryMultipliers = {
@@ -1250,7 +1274,7 @@ export class RiskAnalysisAIService {
       STRATEGIC: 1.2,
       COMPLIANCE: 1.4,
       TECHNOLOGY: 1.1,
-    }
+    };
 
     const categoryMultiplier =
       categoryMultipliers[risk.category as keyof typeof categoryMultipliers] || 1.0;
@@ -1263,7 +1287,7 @@ export class RiskAnalysisAIService {
       'significant',
       'catastrophic',
       'material',
-    ]
+    ];
     const keywordMatches = textAnalysis.keywords.filter((k) =>
       impactKeywords.some((ik) => k.toLowerCase().includes(ik.toLowerCase()))
     ).length;
@@ -1277,16 +1301,16 @@ export class RiskAnalysisAIService {
     const industryImpactScore = Math.min(
       5,
       Math.max(1, industryFactors.benchmark * categoryMultiplier)
-    )
+    );
 
     // Organization size impact
     const sizeImpactMultiplier =
-      context.organizationSize === 'large' ? 1.3 : context.organizationSize === 'small' ? 0.7 : 1.0
+      context.organizationSize === 'large' ? 1.3 : context.organizationSize === 'small' ? 0.7 : 1.0;
 
     // Calculate weighted impact
     const weightedImpact =
       (textImpactScore * 0.4 + industryImpactScore * 0.4 + impact * 0.2) * // some weight to existing assessment
-      sizeImpactMultiplier
+      sizeImpactMultiplier;
 
     return Math.min(5, Math.max(1, Math.round(weightedImpact)));
   }
@@ -1299,11 +1323,11 @@ export class RiskAnalysisAIService {
     switch (framework.scoringMethod) {
       case 'matrix':
         // Traditional risk matrix (likelihood × impact)
-        return likelihood * impact
+        return likelihood * impact;
 
       case 'quantitative':
         // Weighted quantitative approach
-        const likelihoodWeight = 0.6
+        const likelihoodWeight = 0.6;
         const impactWeight = 0.4;
         return Math.round((likelihood * likelihoodWeight + impact * impactWeight) * 5);
 
@@ -1329,13 +1353,14 @@ export class RiskAnalysisAIService {
     context: ContextData
   ): number {
     // Confidence calculation based on data quality
-    return 0.85
+    return 0.85;
   }
 
   /**
    * Calculate inherent vs residual risk scores
    */
-  async calculateInherentVsResidualRisk(_risk: Risk,
+  async calculateInherentVsResidualRisk(
+    _risk: Risk,
     controls?: Control[]
   ): Promise<{
     inherentRisk: number;
@@ -1344,7 +1369,7 @@ export class RiskAnalysisAIService {
     riskReduction: number;
   }> {
     // Inherent risk is the risk without any controls
-    const inherentRisk = risk.likelihood * risk.impact
+    const inherentRisk = risk.likelihood * risk.impact;
 
     if (!controls || controls.length === 0) {
       return {
@@ -1352,11 +1377,11 @@ export class RiskAnalysisAIService {
         residualRisk: inherentRisk,
         controlEffectiveness: 0,
         riskReduction: 0,
-      }
+      };
     }
 
     // Calculate overall control effectiveness
-    let totalEffectiveness = 0
+    let totalEffectiveness = 0;
     let weightedEffectiveness = 0;
 
     for (const control of controls) {
@@ -1369,7 +1394,7 @@ export class RiskAnalysisAIService {
         // Convert string effectiveness to number (0-100 scale)
         switch (control.effectiveness) {
           case 'high':
-            effectiveness = 80
+            effectiveness = 80;
             break;
           case 'medium':
             effectiveness = 50;
@@ -1398,7 +1423,7 @@ export class RiskAnalysisAIService {
       residualRisk: Math.round(residualRisk),
       controlEffectiveness: Math.round(overallEffectiveness),
       riskReduction: Math.round(((inherentRisk - residualRisk) / inherentRisk) * 100),
-    }
+    };
   }
 
   /**
@@ -1411,7 +1436,7 @@ export class RiskAnalysisAIService {
       CORRECTIVE: 0.5,
       DIRECTIVE: 0.6,
       COMPENSATING: 0.4,
-    }
+    };
     return weights[controlType as keyof typeof weights] || 0.5;
   }
 
@@ -1463,7 +1488,7 @@ export class RiskAnalysisAIService {
       withinTolerance,
       exceedsBy: Math.max(0, riskScore - tolerance),
       recommendedAction,
-    }
+    };
   }
 }
 

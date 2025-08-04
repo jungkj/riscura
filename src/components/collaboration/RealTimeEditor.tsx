@@ -7,7 +7,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Simplified version for testing
 interface RealTimeEditorProps {
-  content: string
+  content: string;
   onChange: (_content: string) => void;
   currentUser: any;
   className?: string;

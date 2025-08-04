@@ -22,7 +22,7 @@ export const DaisyTabs = ({ children, className, ...props }: TabsProps) => {
       {children}
     </div>
   );
-}
+};
 
 export const DaisyTabsList = ({ children, className, ...props }: TabsListProps) => {
   return (
@@ -30,7 +30,7 @@ export const DaisyTabsList = ({ children, className, ...props }: TabsListProps) 
       {children}
     </div>
   );
-}
+};
 
 export const DaisyTabsTrigger = ({ children, className, value, ...props }: TabsTriggerProps) => {
   return (
@@ -38,7 +38,7 @@ export const DaisyTabsTrigger = ({ children, className, value, ...props }: TabsT
       {children}
     </button>
   );
-}
+};
 
 export const DaisyTabsContent = ({ children, className, value, ...props }: TabsContentProps) => {
   return (
@@ -46,4 +46,4 @@ export const DaisyTabsContent = ({ children, className, value, ...props }: TabsC
       {children}
     </div>
   );
-}
+};

@@ -1,5 +1,5 @@
 // Global Styles and Design System
-'use client'
+'use client';
 
 import React from 'react';
 import { cn } from '@/lib/utils';
@@ -126,7 +126,7 @@ export const designTokens = {
     slow: '350ms ease',
     bounce: '250ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   },
-}
+};
 
 // Animation Keyframes
 export const animations = {
@@ -187,7 +187,7 @@ export const animations = {
       opacity: 0,
     },
   },
-}
+};
 
 // CSS-in-JS Style Generator
 export const generateStyles = () => {
@@ -571,30 +571,30 @@ export const generateStyles = () => {
   `;
 
   return styles;
-}
+};
 
 // Global Styles Component
 export const GlobalStyles: React.FC = () => {
   React.useEffect(() => {
     // Inject styles into document head
-    const styleElement = document.createElement('style')
+    const styleElement = document.createElement('style');
     styleElement.textContent = generateStyles();
     document.head.appendChild(styleElement);
 
     // Cleanup function
     return () => {
       if (document.head.contains(styleElement)) {
-        document.head.removeChild(styleElement)
+        document.head.removeChild(styleElement);
       }
-    }
+    };
   }, []);
 
   return null;
-}
+};
 
 // Utility Components
 interface ContainerProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   className?: string;
 }
@@ -606,14 +606,14 @@ export const Container: React.FC<ContainerProps> = ({ children, size = 'lg', cla
     lg: 'max-w-6xl',
     xl: 'max-w-7xl',
     full: 'max-w-full',
-  }
+  };
 
   return (
     <div className={cn('mx-auto px-4 sm:px-6 lg:px-8', sizeClasses[size], className)}>
       {children}
     </div>
   );
-}
+};
 
 interface StackProps {
   children: React.ReactNode;
@@ -641,7 +641,7 @@ export const Stack: React.FC<StackProps> = ({
     center: 'items-center',
     end: 'items-end',
     stretch: 'items-stretch',
-  }
+  };
 
   const justifyClasses = {
     start: 'justify-start',
@@ -650,7 +650,7 @@ export const Stack: React.FC<StackProps> = ({
     between: 'justify-between',
     around: 'justify-around',
     evenly: 'justify-evenly',
-  }
+  };
 
   return (
     <div
@@ -666,11 +666,11 @@ export const Stack: React.FC<StackProps> = ({
       {children}
     </div>
   );
-}
+};
 
 interface GridProps {
   children: React.ReactNode;
-  columns?: number | { sm?: number; md?: number; lg?: number; xl?: number }
+  columns?: number | { sm?: number; md?: number; lg?: number; xl?: number };
   gap?: keyof typeof designTokens.spacing;
   className?: string;
 }
@@ -688,13 +688,13 @@ export const Grid: React.FC<GridProps> = ({ children, columns = 1, gap = 'md', c
     if (columns.xl) classes.push(`xl:grid-cols-${columns.xl}`);
 
     return classes.join(' ');
-  }
+  };
 
   const gapValue = designTokens.spacing[gap];
 
   return (
     <div className={cn('grid', getColumnClass(), `gap-[${gapValue}]`, className)}>{children}</div>
   );
-}
+};
 
 // All exports are handled as named exports above

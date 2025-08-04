@@ -8,7 +8,7 @@ import { RotateCcw } from 'lucide-react';
 
 // Auto-save types and interfaces
 interface AutoSaveConfig {
-  enabled: boolean
+  enabled: boolean;
   interval: number; // milliseconds
   debounceDelay: number; // milliseconds
   maxRetries: number;
@@ -60,7 +60,7 @@ const defaultConfig: AutoSaveConfig = {
   debounceDelay: 2000, // 2 seconds
   maxRetries: 3,
   retryDelay: 5000, // 5 seconds
-}
+};
 
 export function AutoSaveForm<T = any>({
   initialData,
@@ -70,7 +70,7 @@ export function AutoSaveForm<T = any>({
   children,
   className = '',
 }: AutoSaveFormProps<T>) {
-  const finalConfig = { ...defaultConfig, ...config }
+  const finalConfig = { ...defaultConfig, ...config };
 
   const [data, setData] = useState<T>(initialData);
   const [autoSaveStatus, setAutoSaveStatus] = useState<AutoSaveStatus>({
@@ -89,10 +89,10 @@ export function AutoSaveForm<T = any>({
   const updateData = useCallback(
     (updates: Partial<T>) => {
       setData((prevData) => {
-        const newData = { ...prevData, ...updates }
+        const newData = { ...prevData, ...updates };
 
         // Check if data actually changed
-        const hasChanges = JSON.stringify(newData) !== JSON.stringify(lastSavedDataRef.current)
+        const hasChanges = JSON.stringify(newData) !== JSON.stringify(lastSavedDataRef.current);
 
         setAutoSaveStatus((prev) => ({
           ...prev,
@@ -114,7 +114,7 @@ export function AutoSaveForm<T = any>({
   // Set individual field value
   const setFieldValue = useCallback(
     (field: keyof T, value: any) => {
-      updateData({ [field]: value } as Partial<T>)
+      updateData({ [field]: value } as Partial<T>);
     },
     [updateData]
   );
@@ -122,7 +122,7 @@ export function AutoSaveForm<T = any>({
   // Perform auto-save
   const performSave = useCallback(
     async (isManual = false): Promise<void> => {
-      if (saveInProgressRef.current) return
+      if (saveInProgressRef.current) return;
 
       const currentData = data;
       const hasChanges = JSON.stringify(currentData) !== JSON.stringify(lastSavedDataRef.current);
@@ -148,11 +148,11 @@ export function AutoSaveForm<T = any>({
 
           // Update data with server response if provided
           if (result.data && JSON.stringify(result.data) !== JSON.stringify(currentData)) {
-            setData(result.data)
+            setData(result.data);
           }
         } else if (result.conflict && result.serverVersion) {
           // Handle conflict
-          const conflictFields = findConflictFields(currentData, result.serverVersion)
+          const conflictFields = findConflictFields(currentData, result.serverVersion);
           setConflictResolution({
             serverVersion: result.serverVersion,
             localVersion: currentData,
@@ -174,7 +174,7 @@ export function AutoSaveForm<T = any>({
             status: 'error',
             error: errorMessage,
             retryCount: currentRetryCount + 1,
-          }))
+          }));
 
           retryTimeoutRef.current = setTimeout(() => {
             performSave(false);
@@ -196,7 +196,7 @@ export function AutoSaveForm<T = any>({
 
   // Find conflicting fields between local and server versions
   const findConflictFields = (local: T, server: T): string[] => {
-    const conflicts: string[] = []
+    const conflicts: string[] = [];
     const localStr = JSON.stringify(local);
     const serverStr = JSON.stringify(server);
 
@@ -204,19 +204,19 @@ export function AutoSaveForm<T = any>({
       // Simple implementation - in real app, you'd do field-by-field comparison
       Object.keys(local as any).forEach((key) => {
         if (JSON.stringify((local as any)[key]) !== JSON.stringify((server as any)[key])) {
-          conflicts.push(key)
+          conflicts.push(key);
         }
       });
     }
 
     return conflicts;
-  }
+  };
 
   // Handle conflict resolution
   const handleConflictResolution = useCallback(
     (_resolution: 'server' | 'local' | 'merge', mergedData?: T) => {
       if (resolution === 'server' && conflictResolution) {
-        setData(conflictResolution.serverVersion)
+        setData(conflictResolution.serverVersion);
         lastSavedDataRef.current = conflictResolution.serverVersion;
       } else if (resolution === 'merge' && mergedData) {
         setData(mergedData);
@@ -233,12 +233,12 @@ export function AutoSaveForm<T = any>({
 
   // Manual save function
   const manualSave = useCallback(async () => {
-    await performSave(true)
+    await performSave(true);
   }, [performSave]);
 
   // Reset form to initial state
   const resetForm = useCallback(() => {
-    setData(initialData)
+    setData(initialData);
     lastSavedDataRef.current = initialData;
     setAutoSaveStatus({
       status: 'idle',
@@ -249,23 +249,23 @@ export function AutoSaveForm<T = any>({
 
   // Set up debounced auto-save on data changes
   useEffect(() => {
-    if (!finalConfig.enabled || !autoSaveStatus.hasUnsavedChanges) return
+    if (!finalConfig.enabled || !autoSaveStatus.hasUnsavedChanges) return;
 
     // Clear existing timeout
     if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current)
+      clearTimeout(debounceTimeoutRef.current);
     }
 
     // Set new debounced save
     debounceTimeoutRef.current = setTimeout(() => {
-      performSave(false)
+      performSave(false);
     }, finalConfig.debounceDelay);
 
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
-    }
+    };
   }, [
     data,
     finalConfig.enabled,
@@ -276,7 +276,7 @@ export function AutoSaveForm<T = any>({
 
   // Set up periodic auto-save
   useEffect(() => {
-    if (!finalConfig.enabled) return
+    if (!finalConfig.enabled) return;
 
     intervalRef.current = setInterval(() => {
       if (autoSaveStatus.hasUnsavedChanges && autoSaveStatus.status !== 'saving') {
@@ -288,7 +288,7 @@ export function AutoSaveForm<T = any>({
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-    }
+    };
   }, [
     finalConfig.enabled,
     finalConfig.interval,
@@ -300,20 +300,20 @@ export function AutoSaveForm<T = any>({
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current)
+      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
-    }
+    };
   }, []);
 
   // Warn before leaving with unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (autoSaveStatus.hasUnsavedChanges) {
-        e.preventDefault()
+        e.preventDefault();
         e.returnValue = '';
       }
-    }
+    };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -446,7 +446,7 @@ export function AutoSaveForm<T = any>({
                   const merged = {
                     ...conflictResolution.serverVersion,
                     ...conflictResolution.localVersion,
-                  }
+                  };
                   conflictResolution.onResolve('merge', merged);
                 }}
                 className="flex-1 px-4 py-2 text-sm font-medium text-green-700 bg-green-100 border border-green-300 rounded-md hover:bg-green-200 transition-colors"
@@ -476,7 +476,7 @@ export function AutoSaveForm<T = any>({
 export function withAutoSave<T = any>(
   WrappedComponent: React.ComponentType<any>,
   saveFunction: (_data: T) => Promise<{
-    success: boolean
+    success: boolean;
     data?: T;
     error?: string;
     conflict?: boolean;
@@ -514,7 +514,7 @@ export function withAutoSave<T = any>(
         )}
       </AutoSaveForm>
     );
-  }
+  };
 }
 
 export default AutoSaveForm;

@@ -37,7 +37,7 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
 
   // Filter and sort data
   const processedData = useMemo(() => {
-    let filtered = data
+    let filtered = data;
 
     // Search filter
     if (searchTerm && searchable) {
@@ -45,13 +45,13 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
-      )
+      );
     }
 
     // Sort
     if (sortConfig && sortable) {
       filtered = [...filtered].sort((a, b) => {
-        const aValue = a[sortConfig.key]
+        const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
 
         if (aValue < bValue) {
@@ -76,9 +76,9 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
           return {
             key,
             direction: current.direction === 'asc' ? 'desc' : 'asc',
-          }
+          };
         }
-        return { key, direction: 'asc' }
+        return { key, direction: 'asc' };
       });
     },
     [sortable]
@@ -173,11 +173,11 @@ export const VirtualizedDataTable = <T extends Record<string, any>>({
       </div>
     </div>
   );
-}
+};
 
 // Performance optimized list item component
 export const MemoizedListItem = React.memo<{
-  item: any
+  item: any;
   columns: any[];
   onClick?: (item: any) => void;
 }>(({ item, columns, onClick }) => (

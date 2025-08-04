@@ -19,11 +19,11 @@ const DATABASE_CONFIG = {
     query: parseInt(process.env.DATABASE_QUERY_TIMEOUT || '30000'),
     transaction: parseInt(process.env.DATABASE_TRANSACTION_TIMEOUT || '60000'),
   },
-}
+};
 
 // Global connection instance
 declare global {
-  var __prisma: PrismaClient | undefined
+  var __prisma: PrismaClient | undefined;
 }
 
 // Prisma client options for production
@@ -35,11 +35,11 @@ const prismaOptions: Prisma.PrismaClientOptions = {
       url: env.DATABASE_URL,
     },
   },
-}
+};
 
 // Connection pool status interface
 export interface ConnectionPoolStatus {
-  isHealthy: boolean
+  isHealthy: boolean;
   activeConnections: number;
   idleConnections: number;
   totalConnections: number;
@@ -53,7 +53,7 @@ export interface ConnectionPoolStatus {
 
 // Database connection class
 class DatabaseConnection {
-  private client: PrismaClient
+  private client: PrismaClient;
   private connectionStartTime: Date;
   private queryTimes: number[] = [];
   private maxQueryTimes = 100;
@@ -76,7 +76,7 @@ class DatabaseConnection {
   private startHealthChecks() {
     this.healthCheckInterval = setInterval(async () => {
       try {
-        await this.healthCheck()
+        await this.healthCheck();
       } catch (error) {
         // console.error('Health check failed:', error)
       }
@@ -160,7 +160,7 @@ class DatabaseConnection {
           ? this.queryTimes.reduce((a, b) => a + b, 0) / this.queryTimes.length
           : 0;
 
-      const _stats = dbStats[0] || {}
+      const _stats = dbStats[0] || {};
 
       const status: ConnectionPoolStatus = {
         isHealthy: true,
@@ -172,7 +172,7 @@ class DatabaseConnection {
         avgQueryTime,
         uptime: Date.now() - this.connectionStartTime.getTime(),
         lastHealthCheck: new Date(),
-      }
+      };
 
       this.isConnected = true;
       return status;
@@ -189,7 +189,7 @@ class DatabaseConnection {
         uptime: Date.now() - this.connectionStartTime.getTime(),
         lastHealthCheck: new Date(),
         errors: [error instanceof Error ? error.message : String(error)],
-      }
+      };
     }
   }
 
@@ -271,27 +271,27 @@ class DatabaseConnection {
 }
 
 // Create singleton instance
-const databaseConnection = new DatabaseConnection()
+const databaseConnection = new DatabaseConnection();
 
 // Initialize connection on startup
-let initializationPromise: Promise<PrismaClient> | null = null
+let initializationPromise: Promise<PrismaClient> | null = null;
 
 export const initializeDatabase = async (): Promise<PrismaClient> => {
   if (!initializationPromise) {
     initializationPromise = databaseConnection.connect();
   }
   return initializationPromise;
-}
+};
 
 // Export the database client
-export const db = global.__prisma || databaseConnection.getClient()
+export const db = global.__prisma || databaseConnection.getClient();
 
 if (env.NODE_ENV !== 'production') {
   global.__prisma = db;
 }
 
 // Export connection utilities
-export { databaseConnection, DATABASE_CONFIG }
+export { databaseConnection, DATABASE_CONFIG };
 
 // Graceful shutdown handler
 if (typeof process !== 'undefined') {

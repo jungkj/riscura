@@ -8,7 +8,7 @@ interface AnalyticsParams {
 
 // GET /api/analytics/[type] - Get specific analytics data
 export async function GET(req: NextRequest, { params }: { params: Promise<AnalyticsParams> }) {
-  const authReq = req as AuthenticatedRequest
+  const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -21,12 +21,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Analyt
     const { searchParams } = new URL(req.url);
 
     // Forward the request to the main analytics endpoint with type parameter
-    const url = new URL('/api/analytics', req.url)
+    const url = new URL('/api/analytics', req.url);
     url.searchParams.set('type', type);
 
     // Copy all other search params
     for (const [key, value] of searchParams.entries()) {
-      url.searchParams.set(key, value)
+      url.searchParams.set(key, value);
     }
 
     const response = await fetch(url.toString(), {

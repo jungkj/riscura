@@ -7,39 +7,39 @@ export interface AIConfig {
     requestsPerMinute: number;
     tokensPerHour: number;
     maxConcurrentRequests: number;
-  }
+  };
   fallback: {
     enabled: boolean;
     responses: Record<string, string>;
-  }
+  };
   security: {
     enableAuditLogging: boolean;
     sanitizeRequests: boolean;
     encryptResponses: boolean;
-  }
+  };
   performance: {
     enableCaching: boolean;
     cacheExpiryMinutes: number;
     enableStreaming: boolean;
     backgroundProcessing: boolean;
-  }
+  };
   agents: {
     riskAnalyzer: {
       model: string;
       systemPrompt: string;
       tools: string[];
-    }
+    };
     controlAdvisor: {
       model: string;
       systemPrompt: string;
       tools: string[];
-    }
+    };
     complianceExpert: {
       model: string;
       systemPrompt: string;
       tools: string[];
-    }
-  }
+    };
+  };
 }
 
 // Production configuration
@@ -164,7 +164,7 @@ Always ensure recommendations are current, practical, and aligned with business 
       tools: ['regulation_database', 'compliance_mapper', 'policy_generator'],
     },
   },
-}
+};
 
 // Development configuration with mock endpoints
 export const developmentAIConfig: AIConfig = {
@@ -182,12 +182,12 @@ export const developmentAIConfig: AIConfig = {
       development_mode: 'Running in development mode with mock AI responses.',
     },
   },
-}
+};
 
 // Configuration selector based on environment
 export const getAIConfig = (): AIConfig => {
-  return process.env.NODE_ENV === 'development' ? developmentAIConfig : aiConfig
-}
+  return process.env.NODE_ENV === 'development' ? developmentAIConfig : aiConfig;
+};
 
 // Validation utilities
 export const validateAIConfig = (_config: AIConfig): { isValid: boolean; errors: string[] } => {
@@ -212,7 +212,7 @@ export const validateAIConfig = (_config: AIConfig): { isValid: boolean; errors:
   return {
     isValid: errors.length === 0,
     errors,
-  }
-}
+  };
+};
 
 export default aiConfig;

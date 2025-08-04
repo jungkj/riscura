@@ -50,7 +50,7 @@ export const EnhancedHeading: React.FC<HeadingProps> = ({
   children,
   ...props
 }) => {
-  const Component = level
+  const Component = level;
   const baseClasses = getHeadingClasses(level);
 
   const gradientClasses = gradient
@@ -62,7 +62,7 @@ export const EnhancedHeading: React.FC<HeadingProps> = ({
       {children}
     </Component>
   );
-}
+};
 
 // Enhanced Body Text Component
 export const EnhancedBodyText: React.FC<BodyTextProps> = ({
@@ -71,14 +71,14 @@ export const EnhancedBodyText: React.FC<BodyTextProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = getBodyClasses(variant)
+  const baseClasses = getBodyClasses(variant);
 
   return (
     <p className={cn(baseClasses, className)} {...props}>
       {children}
     </p>
   );
-}
+};
 
 // Enhanced Caption Component
 export const EnhancedCaption: React.FC<CaptionProps> = ({
@@ -87,14 +87,14 @@ export const EnhancedCaption: React.FC<CaptionProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = getCaptionClasses(variant)
+  const baseClasses = getCaptionClasses(variant);
 
   return (
     <span className={cn(baseClasses, className)} {...props}>
       {children}
     </span>
   );
-}
+};
 
 // Enhanced Section Component with proper hierarchy
 export const EnhancedSection: React.FC<SectionProps> = ({
@@ -107,7 +107,7 @@ export const EnhancedSection: React.FC<SectionProps> = ({
   children,
   ...props
 }) => {
-  const spacingClasses = spacing.sections[spacingVariant]
+  const spacingClasses = spacing.sections[spacingVariant];
   const separatorClasses = separator ? separators.section[separator] : '';
   const backgroundClasses = background ? backgrounds.sections[background] : '';
 
@@ -142,7 +142,7 @@ export const EnhancedSection: React.FC<SectionProps> = ({
       {children}
     </motion.section>
   );
-}
+};
 
 // Enhanced Content Group for better organization
 export const EnhancedContentGroup: React.FC<ContentGroupProps> = ({
@@ -151,19 +151,19 @@ export const EnhancedContentGroup: React.FC<ContentGroupProps> = ({
   children,
   ...props
 }) => {
-  const spacingClasses = spacing.content[spacingVariant]
+  const spacingClasses = spacing.content[spacingVariant];
 
   return (
     <div className={cn(spacingClasses, className)} {...props}>
       {children}
     </div>
   );
-}
+};
 
 // Enhanced Stats Display Component
 interface StatsDisplayProps {
   stats: Array<{
-    label: string
+    label: string;
     value: string | number;
     description?: string;
     color?: 'default' | 'success' | 'warning' | 'danger' | 'info';
@@ -189,7 +189,7 @@ export const EnhancedStatsDisplay: React.FC<StatsDisplayProps> = ({
     warning: 'text-amber-600',
     danger: 'text-red-600',
     info: 'text-blue-600',
-  }
+  };
 
   return (
     <div className={cn(layoutClasses, className)}>
@@ -236,11 +236,11 @@ export const EnhancedStatsDisplay: React.FC<StatsDisplayProps> = ({
       ))}
     </div>
   );
-}
+};
 
 // Enhanced Page Header Component
 interface PageHeaderProps {
-  title: string
+  title: string;
   subtitle?: string;
   breadcrumbs?: Array<{ label: string; href?: string }>;
   actions?: React.ReactNode;
@@ -302,4 +302,4 @@ export const EnhancedPageHeader: React.FC<PageHeaderProps> = ({
       </div>
     </header>
   );
-}
+};

@@ -2,10 +2,10 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 
 // Load environment variables
-config({ path: resolve(process.cwd(), '.env') })
+config({ path: resolve(process.cwd(), '.env') });
 
 // Import after env vars are loaded
-const { storageService } = await import('@/lib/storage/supabase-storage')
+const { storageService } = await import('@/lib/storage/supabase-storage');
 
 async function initializeStorage() {
   // console.log('🗄️  Initializing Supabase Storage buckets...\n')

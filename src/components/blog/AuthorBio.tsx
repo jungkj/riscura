@@ -8,7 +8,7 @@ interface AuthorBioProps {
     avatar: string;
     bio: string;
     linkedin?: string;
-  }
+  };
 }
 
 export default function AuthorBio({ author }: AuthorBioProps) {

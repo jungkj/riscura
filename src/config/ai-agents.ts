@@ -3,7 +3,7 @@
 
 // Agent Configuration Interface
 export interface AgentConfig {
-  id: AgentType
+  id: AgentType;
   name: string;
   title: string;
   description: string;
@@ -52,7 +52,7 @@ export interface ConfidenceThresholds {
 
 // Context Injection Utilities
 export interface RiskContext {
-  risk?: Risk
+  risk?: Risk;
   relatedRisks?: Risk[];
   controls?: Control[];
   organizationContext?: {
@@ -60,12 +60,12 @@ export interface RiskContext {
     size?: string;
     riskAppetite?: string;
     frameworks?: string[];
-  }
+  };
   assessmentContext?: {
     methodology?: string;
     timeframe?: string;
     stakeholders?: string[];
-  }
+  };
 }
 
 // Risk Management Frameworks and Methodologies
@@ -116,7 +116,7 @@ export const RISK_FRAMEWORKS = {
     ],
     focus: 'IT Governance and Management',
   },
-}
+};
 
 export const RISK_METHODOLOGIES = {
   QUANTITATIVE: {
@@ -142,7 +142,7 @@ export const RISK_METHODOLOGIES = {
     benefits: ['Balance of rigor and practicality', 'Scalable', 'Flexible'],
     limitations: ['Moderate complexity', 'Calibration needs', 'Interpretation challenges'],
   },
-}
+};
 
 // Agent Configurations
 export const AI_AGENTS: Record<AgentType, AgentConfig> = {
@@ -1278,11 +1278,11 @@ Provide communication templates, timing recommendations, and effectiveness measu
       'Let me provide some general guidance on this topic, and I recommend following up with specialized experts for detailed implementation planning.',
     ],
   },
-}
+};
 
 // Context Injection Functions
 export function injectRiskContext(template: string, context: RiskContext): string {
-  let processedTemplate = template
+  let processedTemplate = template;
 
   if (context.risk) {
     processedTemplate = processedTemplate
@@ -1311,12 +1311,13 @@ export function injectRiskContext(template: string, context: RiskContext): strin
   }
 
   // Clean up any remaining placeholders
-  processedTemplate = processedTemplate.replace(/{[^}]+}/g, 'Not specified')
+  processedTemplate = processedTemplate.replace(/{[^}]+}/g, 'Not specified');
 
   return processedTemplate;
 }
 
-export function calculateConfidenceScore(_agentType: AgentType,
+export function calculateConfidenceScore(
+  _agentType: AgentType,
   contextCompleteness: number,
   complexity: number
 ): number {
@@ -1324,17 +1325,18 @@ export function calculateConfidenceScore(_agentType: AgentType,
   const baseConfidence = agent.confidenceThresholds.high;
 
   // Adjust based on context completeness (0-1)
-  const contextAdjustment = contextCompleteness * 0.2
+  const contextAdjustment = contextCompleteness * 0.2;
 
   // Adjust based on complexity (0-1, where 1 is most complex)
-  const complexityAdjustment = (1 - complexity) * 0.15
+  const complexityAdjustment = (1 - complexity) * 0.15;
 
   const adjustedConfidence = baseConfidence + contextAdjustment + complexityAdjustment;
 
   return Math.min(Math.max(adjustedConfidence, agent.confidenceThresholds.minimum), 1.0);
 }
 
-export function formatAgentResponse(_agentType: AgentType,
+export function formatAgentResponse(
+  _agentType: AgentType,
   content: string,
   confidence: number
 ): {
@@ -1345,7 +1347,7 @@ export function formatAgentResponse(_agentType: AgentType,
     agentType: AgentType;
     responseFormat: ResponseFormat;
     timestamp: Date;
-  }
+  };
 } {
   const agent = AI_AGENTS[agentType];
 
@@ -1359,7 +1361,7 @@ export function formatAgentResponse(_agentType: AgentType,
   }
 
   // Add confidence disclaimer for low confidence responses
-  let formattedContent = content
+  let formattedContent = content;
   if (confidenceLevel === 'low') {
     formattedContent +=
       '\n\n⚠️ **Note**: This response has lower confidence due to limited context or complexity. Please validate recommendations with domain experts.';
@@ -1374,8 +1376,8 @@ export function formatAgentResponse(_agentType: AgentType,
       responseFormat: agent.responseFormat,
       timestamp: new Date(),
     },
-  }
+  };
 }
 
 // Export default
-export default AI_AGENTS
+export default AI_AGENTS;

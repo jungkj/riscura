@@ -23,7 +23,7 @@ export const GET = withApiMiddleware(
       include: {
         plan: true,
       },
-    })
+    });
 
     if (!subscription) {
       // Return default free plan if no subscription exists
@@ -48,7 +48,7 @@ export const GET = withApiMiddleware(
             aiQueries: 50,
           },
         },
-      }
+      };
 
       return createAPIResponse(freePlan);
     }
@@ -71,13 +71,13 @@ export const POST = withApiMiddleware(
 
     // Check if user has permission to manage billing
     if (!user.permissions.includes('*') && !user.permissions.includes('billing:write')) {
-      throw new ForbiddenError('Insufficient permissions')
+      throw new ForbiddenError('Insufficient permissions');
     }
 
     // Validate the plan exists
     const plan = await db.client.subscriptionPlan.findUnique({
       where: { id: planId },
-    })
+    });
 
     if (!plan || !plan.isActive) {
       throw new ValidationError('Invalid or inactive plan');
@@ -89,7 +89,7 @@ export const POST = withApiMiddleware(
         organizationId: user.organizationId,
         status: { in: ['active', 'trialing'] },
       },
-    })
+    });
 
     if (existingSubscription) {
       throw new ConflictError('Organization already has an active subscription');
@@ -100,7 +100,7 @@ export const POST = withApiMiddleware(
       user.organizationId,
       planId,
       options
-    )
+    );
 
     return createAPIResponse(subscription, { statusCode: 201 });
   },
@@ -120,7 +120,7 @@ export const PUT = withApiMiddleware(
 
     // Check permissions
     if (!user.permissions.includes('*') && !user.permissions.includes('billing:write')) {
-      throw new ForbiddenError('Insufficient permissions')
+      throw new ForbiddenError('Insufficient permissions');
     }
 
     // Verify subscription belongs to user's organization
@@ -129,7 +129,7 @@ export const PUT = withApiMiddleware(
         id: subscriptionId,
         organizationId: user.organizationId,
       },
-    })
+    });
 
     if (!subscription) {
       throw createNotFoundError('Subscription');
@@ -178,7 +178,7 @@ export const DELETE = withApiMiddleware(
 
     // Check permissions
     if (!user.permissions.includes('*') && !user.permissions.includes('billing:write')) {
-      throw new ForbiddenError('Insufficient permissions')
+      throw new ForbiddenError('Insufficient permissions');
     }
 
     // Verify subscription belongs to user's organization
@@ -187,7 +187,7 @@ export const DELETE = withApiMiddleware(
         id: subscriptionId,
         organizationId: user.organizationId,
       },
-    })
+    });
 
     if (!subscription) {
       throw createNotFoundError('Subscription');
@@ -197,7 +197,7 @@ export const DELETE = withApiMiddleware(
     const canceledSubscription = await billingManager.cancelSubscription(
       subscriptionId,
       immediately
-    )
+    );
 
     return createAPIResponse({
       ...canceledSubscription,

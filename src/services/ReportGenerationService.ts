@@ -62,7 +62,7 @@ export interface GeneratedReport {
     charts: number;
     tables: number;
     fileSize: number;
-  }
+  };
   downloadUrl?: string;
 }
 
@@ -77,7 +77,7 @@ export interface ReportGenerationOptions {
     branding?: any;
     footer?: string;
     watermark?: string;
-  }
+  };
 }
 
 export class ReportGenerationService {
@@ -138,7 +138,7 @@ export class ReportGenerationService {
           required: true,
         },
       ],
-    }
+    };
 
     // Detailed Technical Template
     const technicalTemplate: ReportTemplate = {
@@ -281,7 +281,7 @@ export class ReportGenerationService {
           required: false,
         },
       ],
-    }
+    };
 
     // Regulatory Compliance Template
     const regulatoryTemplate: ReportTemplate = {
@@ -332,7 +332,7 @@ export class ReportGenerationService {
           required: true,
         },
       ],
-    }
+    };
 
     this.templates.set('executive-summary', executiveTemplate);
     this.templates.set('technical-detailed', technicalTemplate);
@@ -346,7 +346,7 @@ export class ReportGenerationService {
     generatedBy: string
   ): Promise<GeneratedReport> {
     // Select template
-    const templateId = options.templateId || this.selectDefaultTemplate(options.audience)
+    const templateId = options.templateId || this.selectDefaultTemplate(options.audience);
     const template = this.templates.get(templateId);
 
     if (!template) {
@@ -354,7 +354,7 @@ export class ReportGenerationService {
     }
 
     // Generate report content
-    const reportContent = await this.generateReportContent(template, results, options)
+    const reportContent = await this.generateReportContent(template, results, options);
 
     // Create report metadata
     const metadata = {
@@ -363,7 +363,7 @@ export class ReportGenerationService {
       charts: this.countCharts(template),
       tables: this.countTables(template),
       fileSize: this.estimateFileSize(reportContent),
-    }
+    };
 
     const report: GeneratedReport = {
       id: `report_${assessmentId}_${Date.now()}`,
@@ -375,7 +375,7 @@ export class ReportGenerationService {
       format: options.format || template.format,
       content: reportContent,
       metadata,
-    }
+    };
 
     return report;
   }
@@ -390,7 +390,7 @@ export class ReportGenerationService {
     // Filter sections based on options
     const sectionsToInclude = template.sections.filter((section) => {
       if (options.includeSections && !options.includeSections.includes(section.id)) {
-        return false
+        return false;
       }
       if (options.excludeSections && options.excludeSections.includes(section.id)) {
         return false;
@@ -400,7 +400,7 @@ export class ReportGenerationService {
 
     // Generate each section
     for (const section of sectionsToInclude.sort((a, b) => a.order - b.order)) {
-      content += await this.generateSection(section, results, template.format)
+      content += await this.generateSection(section, results, template.format);
     }
 
     content += this.generateReportFooter(template, options);
@@ -416,12 +416,12 @@ export class ReportGenerationService {
     let sectionContent = '';
 
     // Add section header
-    sectionContent += this.formatSectionHeader(section.title, format)
+    sectionContent += this.formatSectionHeader(section.title, format);
 
     // Generate section content based on type
     switch (section.type) {
       case 'summary':
-        sectionContent += this.generateSummaryContent(section, results, format)
+        sectionContent += this.generateSummaryContent(section, results, format);
         break;
       case 'analysis':
         sectionContent += this.generateAnalysisContent(section, results, format);
@@ -440,14 +440,14 @@ export class ReportGenerationService {
     // Add charts
     if (section.charts) {
       for (const chart of section.charts) {
-        sectionContent += this.generateChart(chart, results, format)
+        sectionContent += this.generateChart(chart, results, format);
       }
     }
 
     // Add tables
     if (section.tables) {
       for (const table of section.tables) {
-        sectionContent += this.generateTable(table, results, format)
+        sectionContent += this.generateTable(table, results, format);
       }
     }
 
@@ -491,7 +491,7 @@ export class ReportGenerationService {
     content = content.replace(
       '{{riskAnalysis}}',
       this.generateRiskAnalysisContent(results.riskAssessment)
-    )
+    );
     content = content.replace(
       '{{controlAnalysis}}',
       this.generateControlAnalysisContent(results.controlEffectiveness)
@@ -580,7 +580,7 @@ ${
 
 This assessment was conducted in accordance with applicable standards and provides 
 a comprehensive evaluation of the organization's control environment.
-    `.trim()
+    `.trim();
   }
 
   private generateManagementAssertion(_results: AssessmentResults): string {
@@ -706,13 +706,13 @@ ${
     const findings = [];
 
     // Risk findings
-    const criticalRisks = results.riskAssessment.risksByLevel.CRITICAL || 0
+    const criticalRisks = results.riskAssessment.risksByLevel.CRITICAL || 0;
     if (criticalRisks > 0) {
       findings.push(`${criticalRisks} critical risk(s) identified requiring immediate attention`);
     }
 
     // Control findings
-    const lowEffectivenessControls = results.controlEffectiveness.controlsByEffectiveness.low || 0
+    const lowEffectivenessControls = results.controlEffectiveness.controlsByEffectiveness.low || 0;
     if (lowEffectivenessControls > 0) {
       findings.push(
         `${lowEffectivenessControls} control(s) with low effectiveness requiring improvement`
@@ -723,14 +723,14 @@ ${
     if (results.complianceAssessment.materialWeaknesses.length > 0) {
       findings.push(
         `${results.complianceAssessment.materialWeaknesses.length} material weakness(es) in compliance framework`
-      )
+      );
     }
 
     // Positive findings
     if (results.riskAssessment.inherentVsResidual.overallRiskReduction > 50) {
       findings.push(
         `Strong risk mitigation with ${results.riskAssessment.inherentVsResidual.overallRiskReduction}% overall risk reduction`
-      )
+      );
     }
 
     return findings.length > 0
@@ -950,7 +950,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   private formatContent(_content: string, format: string): string {
     switch (format) {
       case 'html':
-        return `<div class="content">${content.replace(/\n/g, '<br>')}</div>\n`
+        return `<div class="content">${content.replace(/\n/g, '<br>')}</div>\n`;
       case 'pdf':
       case 'docx':
         return content + '\n\n';
@@ -1060,12 +1060,12 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
     let text = `\n${table.title}\n${'-'.repeat(table.title.length)}\n`;
 
     // Add headers
-    text += table.headers.join(' | ') + '\n'
+    text += table.headers.join(' | ') + '\n';
     text += table.headers.map(() => '---').join(' | ') + '\n';
 
     // Add rows (limit to first 10 for readability)
     table.rows.slice(0, 10).forEach((row) => {
-      text += row.join(' | ') + '\n'
+      text += row.join(' | ') + '\n';
     });
 
     if (table.rows.length > 10) {
@@ -1079,7 +1079,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
   private selectDefaultTemplate(audience?: string): string {
     switch (audience) {
       case 'executive':
-        return 'executive-summary'
+        return 'executive-summary';
       case 'technical':
         return 'technical-detailed';
       case 'regulatory':
@@ -1097,7 +1097,7 @@ ${this.generateComplianceFindings(results.complianceAssessment)}
 
   private estimatePageCount(_content: string): number {
     // Rough estimation: 500 words per page
-    const wordCount = content.split(/\s+/).length
+    const wordCount = content.split(/\s+/).length;
     return Math.ceil(wordCount / 500);
   }
 
@@ -1141,7 +1141,7 @@ The results provide insights into areas requiring immediate attention and recomm
 
   // Public methods for template management
   getAvailableTemplates(): ReportTemplate[] {
-    return Array.from(this.templates.values())
+    return Array.from(this.templates.values());
   }
 
   getTemplate(templateId: string): ReportTemplate | undefined {

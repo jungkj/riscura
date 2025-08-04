@@ -21,7 +21,7 @@ export const DaisyProgress = ({
     success: 'progress-success',
     warning: 'progress-warning',
     error: 'progress-error',
-  }
+  };
 
   return (
     <progress
@@ -31,4 +31,4 @@ export const DaisyProgress = ({
       {...props}
     />
   );
-}
+};
