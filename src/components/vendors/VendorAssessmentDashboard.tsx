@@ -198,15 +198,14 @@ export function VendorAssessmentDashboard() {
           <h1 className="text-2xl font-bold text-[#191919]">Vendor Risk Assessment</h1>
           <p className="text-[#A8A8A8]">AI-powered vendor security assessments</p>
         </div>
-        <DaisyBadge className="bg-[#199BEC] text-white" >
-  Powered by Probo AI
-</DaisyBadge>
+        <DaisyBadge className="bg-[#199BEC] text-white">
+          Powered by Probo AI
         </DaisyBadge>
       </div>
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="assess">New Assessment</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="assess">New Assessment</DaisyTabsTrigger>
           <DaisyTabsTrigger value="results">Results</DaisyTabsTrigger>
           <DaisyTabsTrigger value="history">History</DaisyTabsTrigger>
           <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabsTrigger>

@@ -175,10 +175,9 @@ export function SOC2Assessment() {
     };
 
   return (
-    <DaisyBadge className={cn('text-xs', colors[status])} >
-  {status.replace('_', ' ')}
-</DaisyBadge>
-      </DaisyBadge>
+    <DaisyBadge className={cn('text-xs', colors[status])}>
+      {status.replace('_', ' ')}
+    </DaisyBadge>
     );
   };
 

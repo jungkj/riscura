@@ -244,7 +244,7 @@ export default function ProboIntegrationPage() {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <DaisyTabs value={activeTab} onValueChange={handleTabChange} />
+        <DaisyTabs value={activeTab} onValueChange={handleTabChange}>
                      {/* Enhanced Tab Navigation */}
            <motion.div
              initial={isLoaded ? { opacity: 0, y: 20 } : false}
@@ -276,7 +276,7 @@ export default function ProboIntegrationPage() {
           </motion.div>
 
           <AnimatePresence>
-            <DaisyTabsContent value="overview" className="space-y-8" />
+            <DaisyTabsContent value="overview" className="space-y-8">
               <motion.div
                 key="overview"
                 variants={containerVariants}
@@ -460,8 +460,8 @@ export default function ProboIntegrationPage() {
               </motion.div>
             </DaisyTabsContent>
 
-                         <DaisyTabsContent value="dashboard" />
-               <motion.div
+            <DaisyTabsContent value="dashboard">
+              <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
                  exit={{ opacity: 0, y: -20 }}
@@ -470,8 +470,8 @@ export default function ProboIntegrationPage() {
               </motion.div>
             </DaisyTabsContent>
 
-                         <DaisyTabsContent value="vendor-assessment" />
-               <motion.div
+            <DaisyTabsContent value="vendor-assessment">
+              <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
                  exit={{ opacity: 0, y: -20 }}
@@ -480,8 +480,8 @@ export default function ProboIntegrationPage() {
               </motion.div>
             </DaisyTabsContent>
 
-                         <DaisyTabsContent value="soc2" />
-               <motion.div
+            <DaisyTabsContent value="soc2">
+              <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
                  exit={{ opacity: 0, y: -20 }}
@@ -490,8 +490,8 @@ export default function ProboIntegrationPage() {
               </motion.div>
             </DaisyTabsContent>
 
-                         <DaisyTabsContent value="controls" />
-               <motion.div
+            <DaisyTabsContent value="controls">
+              <motion.div
                  initial={isLoaded ? { opacity: 0, y: 20 } : false}
                  animate={isLoaded ? { opacity: 1, y: 0 } : false}
                  exit={{ opacity: 0, y: -20 }}

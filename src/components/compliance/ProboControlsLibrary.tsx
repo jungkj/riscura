@@ -205,22 +205,20 @@ export function ProboControlsLibrary() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <DaisyBadge className="bg-[#199BEC] text-white" >
-  <Shield className="h-3 w-3 mr-1" />
-</DaisyBadge>
+          <DaisyBadge className="bg-[#199BEC] text-white">
+            <Shield className="h-3 w-3 mr-1" />
             {mitigations.length} Controls
           </DaisyBadge>
-          <DaisyButton variant="outline" className="border-[#D8C3A5]" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton variant="outline" className="border-[#D8C3A5]">
+            <Download className="h-4 w-4 mr-2" />
             Export
           </DaisyButton>
         </div>
       </div>
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-3" />
-          <DaisyTabsTrigger value="browse">Browse Library</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-3">
+          <DaisyTabsTrigger value="browse">Browse Library</DaisyTabsTrigger>
           <DaisyTabsTrigger value="categories">Categories</DaisyTabsTrigger>
           <DaisyTabsTrigger value="import">Import Controls</DaisyTabsTrigger>
         </DaisyTabsList>

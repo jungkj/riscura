@@ -216,14 +216,12 @@ export function ProboIntegrationDashboard() {
           <p className="text-[#A8A8A8]">Powered by Probo AI integration</p>
         </div>
         <div className="flex items-center space-x-2">
-          <DaisyBadge className="bg-[#199BEC] text-white" >
-  <Zap className="h-3 w-3 mr-1" />
-</DaisyBadge>
+          <DaisyBadge className="bg-[#199BEC] text-white">
+            <Zap className="h-3 w-3 mr-1" />
             Live Data
           </DaisyBadge>
-          <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+          <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+            <Download className="h-4 w-4 mr-2" />
             Export Report
           </DaisyButton>
         </div>
