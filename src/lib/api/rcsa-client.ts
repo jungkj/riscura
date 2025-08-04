@@ -1,4 +1,4 @@
-// import {
+import {
   Risk,
   Control,
   ControlRiskMapping,
@@ -35,7 +35,7 @@ export class RCSAApiClient {
     this.baseUrl = baseUrl;
     this.headers = {
       'Content-Type': 'application/json',
-    }
+    };
   }
 
   /**
@@ -46,15 +46,15 @@ export class RCSAApiClient {
       const session = await getSession();
       const headers: HeadersInit = {
         ...this.headers,
-      }
+      };
 
       // Add organization context if available
       if (session?.user?.organizationId) {
-        headers['organization-id'] = session.user.organizationId
+        headers['organization-id'] = session.user.organizationId;
       }
 
       // Add request tracking
-      headers['x-request-id'] = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      headers['x-request-id'] = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       return headers;
     } catch (error) {
@@ -66,7 +66,7 @@ export class RCSAApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     try {
       // Get authenticated headers with session
-      const authenticatedHeaders = await this.getAuthenticatedHeaders()
+      const authenticatedHeaders = await this.getAuthenticatedHeaders();
 
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         headers: {
@@ -98,7 +98,7 @@ export class RCSAApiClient {
       return {
         success: true,
         data,
-      }
+      };
     } catch (error) {
       // console.error(`API Error [${endpoint}]:`, error)
       return {
@@ -108,7 +108,7 @@ export class RCSAApiClient {
           message: error instanceof Error ? error.message : 'Unknown error occurred',
           details: error,
         },
-      }
+      };
     }
   }
 
@@ -133,7 +133,7 @@ export class RCSAApiClient {
   // ============================================================================
 
   async getRisks(params: RiskQueryParams = {}): Promise<ApiResponse<PaginatedResponse<Risk>>> {
-    const queryString = this.buildQueryString(params)
+    const queryString = this.buildQueryString(params);
     const endpoint = `/risks${queryString ? `?${queryString}` : ''}`;
 
     return this.request<PaginatedResponse<Risk>>(endpoint);
@@ -177,7 +177,7 @@ export class RCSAApiClient {
   async getControls(
     params: ControlQueryParams = {}
   ): Promise<ApiResponse<PaginatedResponse<Control>>> {
-    const queryString = this.buildQueryString(params)
+    const queryString = this.buildQueryString(params);
     const endpoint = `/controls${queryString ? `?${queryString}` : ''}`;
 
     return this.request<PaginatedResponse<Control>>(endpoint);
@@ -222,7 +222,7 @@ export class RCSAApiClient {
     riskId?: string,
     controlId?: string
   ): Promise<ApiResponse<ControlRiskMapping[]>> {
-    const params: Record<string, string> = {}
+    const params: Record<string, string> = {};
     if (riskId) params.riskId = riskId;
     if (controlId) params.controlId = controlId;
 
@@ -285,7 +285,7 @@ export class RCSAApiClient {
     controlId?: string,
     assessmentId?: string
   ): Promise<ApiResponse<AssessmentEvidence[]>> {
-    const params: Record<string, string> = {}
+    const params: Record<string, string> = {};
     if (controlId) params.controlId = controlId;
     if (assessmentId) params.assessmentId = assessmentId;
 
@@ -326,7 +326,7 @@ export class RCSAApiClient {
     controlId?: string,
     assessmentId?: string
   ): Promise<ApiResponse<AssessmentFinding[]>> {
-    const params: Record<string, string> = {}
+    const params: Record<string, string> = {};
     if (controlId) params.controlId = controlId;
     if (assessmentId) params.assessmentId = assessmentId;
 
@@ -376,7 +376,7 @@ export class RCSAApiClient {
         nextTestDate: testDate.toISOString(),
         assignee,
       }),
-    })
+    });
   }
 
   async completeControlTest(
@@ -405,7 +405,7 @@ export class RCSAApiClient {
   // ============================================================================
 
   async getRCSAAnalytics(dateFrom?: string, dateTo?: string): Promise<ApiResponse<RCSAAnalytics>> {
-    const params: Record<string, string> = {}
+    const params: Record<string, string> = {};
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
 
@@ -421,7 +421,8 @@ export class RCSAApiClient {
     return this.request('/analytics/risk-coverage');
   }
 
-  async getEffectivenessTrends(_period: 'daily' | 'weekly' | 'monthly' = 'weekly'
+  async getEffectivenessTrends(
+    _period: 'daily' | 'weekly' | 'monthly' = 'weekly'
   ): Promise<ApiResponse<{ date: string; effectiveness: number }[]>> {
     return this.request(`/analytics/effectiveness-trends?period=${period}`);
   }
@@ -434,7 +435,7 @@ export class RCSAApiClient {
     return this.request<Risk[]>('/risks/bulk-create', {
       method: 'POST',
       body: JSON.stringify({ risks }),
-    })
+    });
   }
 
   async bulkCreateControls(controls: CreateControlRequest[]): Promise<ApiResponse<Control[]>> {
@@ -495,7 +496,7 @@ export class RCSAApiClient {
   async getTestScripts(
     params?: TestScriptQueryParams
   ): Promise<ApiResponse<PaginatedResponse<TestScript>>> {
-    const queryParams = params ? new URLSearchParams(params as any).toString() : ''
+    const queryParams = params ? new URLSearchParams(params as any).toString() : '';
     return this.request<PaginatedResponse<TestScript>>(
       `/test-scripts${queryParams ? `?${queryParams}` : ''}`
     );
@@ -530,7 +531,7 @@ export class RCSAApiClient {
 
   // Test Script Control associations
   async getTestScriptControls(testScriptId: string): Promise<ApiResponse<TestScriptControl[]>> {
-    return this.request<TestScriptControl[]>(`/test-scripts/${testScriptId}/controls`)
+    return this.request<TestScriptControl[]>(`/test-scripts/${testScriptId}/controls`);
   }
 
   async associateTestScriptControls(
@@ -562,16 +563,17 @@ export class RCSAApiClient {
     return this.request<TestExecution>(`/test-scripts/${testScriptId}/execute`, {
       method: 'POST',
       body: JSON.stringify(data),
-    })
+    });
   }
 
   // AI generation
-  async generateTestScript(_data: GenerateTestScriptRequest
+  async generateTestScript(
+    _data: GenerateTestScriptRequest
   ): Promise<ApiResponse<GenerateTestScriptResponse>> {
     return this.request<GenerateTestScriptResponse>('/test-scripts/generate', {
       method: 'POST',
       body: JSON.stringify(data),
-    })
+    });
   }
 
   // ============================================================================
@@ -584,7 +586,7 @@ export class RCSAApiClient {
 }
 
 // Create singleton instance
-export const rcsaApiClient = new RCSAApiClient()
+export const rcsaApiClient = new RCSAApiClient();
 
 // Helper functions for common operations
 export const rcsaHelpers = {
@@ -592,7 +594,7 @@ export const rcsaHelpers = {
    * Calculate risk score based on likelihood and impact
    */
   calculateRiskScore: (likelihood: number, impact: number): number => {
-    return likelihood * impact
+    return likelihood * impact;
   },
 
   /**
@@ -660,6 +662,6 @@ export const rcsaHelpers = {
     const categoryPrefix = category.substring(0, 3).toUpperCase();
     return `${categoryPrefix}-${sequence.toString().padStart(4, '0')}`;
   },
-}
+};
 
 export default rcsaApiClient;

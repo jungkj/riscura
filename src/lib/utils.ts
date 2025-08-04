@@ -159,15 +159,16 @@ export function generateId(prefix?: string): string {
 }
 
 // Debounce utility
-export function debounce<T extends (...args: unknown[]) => unknown>(;
-  func: T,;
-  wait: number;
+export function debounce<T extends (...args: unknown[]) => unknown>(
+  func: T,
+  wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
-  }
+  };
+}
 }
 
 // Local storage utilities (for development/testing only)

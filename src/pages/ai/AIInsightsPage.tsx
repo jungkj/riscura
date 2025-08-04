@@ -94,8 +94,7 @@ export default function AIInsightsPage() {
           id: '3',
           type: 'anomaly',
           title: 'Unusual Risk Pattern Detected',
-          // description: // Fixed expression expected error
-            'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
+          description: 'Anomalous clustering of operational risks in the finance department suggests potential process breakdown or training gap.',
           confidence: 78,
           impact: 'medium',
           category: 'Operational',

@@ -122,9 +122,9 @@ async function authHandler(req: NextRequest, context: any) {
   } catch (error) {
     // console.error('[NextAuth] Error in auth handler:', error)
     // console.error(
-      '[NextAuth] Error stack:',
-      error instanceof Error ? error.stack : 'No stack trace'
-    )
+    //   '[NextAuth] Error stack:',
+    //   error instanceof Error ? error.stack : 'No stack trace'
+    // );
 
     // Log environment variables (without exposing secrets)
     // console.log('[NextAuth] Environment check:', {

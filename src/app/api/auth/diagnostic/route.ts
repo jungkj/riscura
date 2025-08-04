@@ -15,10 +15,10 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       timestamp: new Date().toISOString(),
       duration: `${duration}ms`,
       serverUrl: request.nextUrl.origin,
-    }
+    };
 
     // Test NextAuth initialization
-    let nextAuthStatus = { working: false, error: null as string | null }
+    let nextAuthStatus = { working: false, error: null as string | null };
     try {
       const { authOptions } = await import('@/lib/auth/auth-options-fixed');
       nextAuthStatus.working = true;
@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Test fallback auth
-    let fallbackAuthStatus = { working: false, error: null as string | null }
+    let fallbackAuthStatus = { working: false, error: null as string | null };
     try {
       const { createFallbackAuth } = await import('@/lib/auth/fallback-auth');
       const fallbackOptions = createFallbackAuth();
@@ -53,7 +53,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         fallbackAuth: fallbackAuthStatus,
       },
       recommendations: generateRecommendations(diagnostic),
-    }
+    };
 
     // console.log('[Auth Diagnostic] Completed in', duration, 'ms')
     // console.log('[Auth Diagnostic] Status:', response.status)
@@ -87,7 +87,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
   }
 }
 
-const generateRecommendations = (diagnostic: any): string[] {
+const generateRecommendations = (diagnostic: any): string[] => {
   const recommendations: string[] = [];
 
   if (!diagnostic.nextAuth.valid) {
@@ -121,4 +121,4 @@ const generateRecommendations = (diagnostic: any): string[] {
   }
 
   return recommendations;
-}
+};
