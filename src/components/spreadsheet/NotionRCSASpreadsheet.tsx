@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-// import {
+import {
   ChevronDown,
   ChevronRight,
   Plus,
@@ -62,10 +62,10 @@ const colors = {
     amber: 'text-amber-600 dark:text-amber-400',
     red: 'text-red-600 dark:text-red-400',
   },
-}
+};
 
 // Entity types
-type EntityType = 'risk' | 'control' | 'testScript'
+type EntityType = 'risk' | 'control' | 'testScript';
 
 interface EntityRow {
   id: string;
@@ -79,7 +79,7 @@ interface EntityRow {
 
 // Column definitions
 interface Column {
-  id: string
+  id: string;
   label: string;
   width: number;
   minWidth: number;
@@ -107,7 +107,7 @@ export const NotionRCSASpreadsheet = () => {
 
   // Fetch test scripts
   useEffect(() => {
-    fetchTestScripts()
+    fetchTestScripts();
   }, []);
 
   const fetchTestScripts = async () => {
@@ -121,11 +121,11 @@ export const NotionRCSASpreadsheet = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   // Build hierarchical data structure
   const rows = useMemo(() => {
-    const rowsMap = new Map<string, EntityRow>()
+    const rowsMap = new Map<string, EntityRow>();
     const topLevelRows: EntityRow[] = [];
 
     // Add risks as top-level
@@ -137,7 +137,7 @@ export const NotionRCSASpreadsheet = () => {
         children: [],
         isExpanded: expandedRows.has(`risk-${risk.id}`),
         level: 0,
-      }
+      };
       rowsMap.set(riskRow.id, riskRow);
       topLevelRows.push(riskRow);
     });
@@ -152,13 +152,13 @@ export const NotionRCSASpreadsheet = () => {
         isExpanded: expandedRows.has(`control-${control.id}`),
         level: 1,
         parentId: control.risks?.[0]?.riskId ? `risk-${control.risks[0].riskId}` : undefined,
-      }
+      };
 
       if (controlRow.parentId && rowsMap.has(controlRow.parentId)) {
         rowsMap.get(controlRow.parentId)!.children!.push(controlRow);
       } else {
         // Orphaned controls
-        controlRow.level = 0
+        controlRow.level = 0;
         topLevelRows.push(controlRow);
       }
       rowsMap.set(controlRow.id, controlRow);
@@ -173,7 +173,7 @@ export const NotionRCSASpreadsheet = () => {
           data: testScript,
           level: 2,
           parentId: `control-${controlTestScript.controlId}`,
-        }
+        };
 
         if (rowsMap.has(testScriptRow.parentId!)) {
           const parent = rowsMap.get(testScriptRow.parentId!)!;
@@ -186,7 +186,7 @@ export const NotionRCSASpreadsheet = () => {
 
     // Filter based on search
     if (debouncedSearchQuery) {
-      return filterRows(topLevelRows, debouncedSearchQuery.toLowerCase())
+      return filterRows(topLevelRows, debouncedSearchQuery.toLowerCase());
     }
 
     return topLevelRows;
@@ -194,14 +194,14 @@ export const NotionRCSASpreadsheet = () => {
 
   // Flatten rows for virtual scrolling
   const flattenedRows = useMemo(() => {
-    const flattened: EntityRow[] = []
+    const flattened: EntityRow[] = [];
 
     const addRow = (row: EntityRow) => {
       flattened.push(row);
       if (row.isExpanded && row.children) {
         row.children.forEach(addRow);
       }
-    }
+    };
 
     rows.forEach(addRow);
     return flattened;
@@ -213,7 +213,7 @@ export const NotionRCSASpreadsheet = () => {
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 52,
     overscan: 10,
-  })
+  });
 
   // Filter rows based on search
   const filterRows = (rows: EntityRow[], query: string): EntityRow[] => {
@@ -221,7 +221,7 @@ export const NotionRCSASpreadsheet = () => {
       const matchesQuery =
         (row.type === 'risk' && (row.data as Risk).title.toLowerCase().includes(query)) ||
         (row.type === 'control' && (row.data as Control).title.toLowerCase().includes(query)) ||
-        (row.type === 'testScript' && (row.data as TestScript).title.toLowerCase().includes(query))
+        (row.type === 'testScript' && (row.data as TestScript).title.toLowerCase().includes(query));
 
       const filteredChildren = row.children ? filterRows(row.children, query) : [];
 
@@ -235,7 +235,7 @@ export const NotionRCSASpreadsheet = () => {
 
       return filtered;
     }, [] as EntityRow[]);
-  }
+  };
 
   // Column definitions
   const columns: Column[] = [
@@ -281,7 +281,7 @@ export const NotionRCSASpreadsheet = () => {
       minWidth: 120,
       render: (row) => {
         if (row.type === 'risk') {
-          const risk = row.data as Risk
+          const risk = row.data as Risk;
 
           return (
             <div
@@ -442,7 +442,7 @@ export const NotionRCSASpreadsheet = () => {
   // Event handlers
   const toggleExpand = (rowId: string) => {
     setExpandedRows((prev) => {
-      const newSet = new Set(prev)
+      const newSet = new Set(prev);
       if (newSet.has(rowId)) {
         newSet.delete(rowId);
       } else {
@@ -450,12 +450,12 @@ export const NotionRCSASpreadsheet = () => {
       }
       return newSet;
     });
-  }
+  };
 
   const handleGenerateControl = (row: EntityRow) => {
     setCurrentEntity(row);
     setShowAIGenerator(true);
-  }
+  };
 
   const handleGenerateTestScript = async (row: EntityRow) => {
     const control = row.data as Control;
@@ -472,7 +472,7 @@ export const NotionRCSASpreadsheet = () => {
         const createResponse = await rcsaApiClient.createTestScript({
           ...response.data.testScript,
           controlIds: [control.id],
-        })
+        });
 
         if (createResponse.success) {
           await fetchTestScripts();
@@ -482,7 +482,7 @@ export const NotionRCSASpreadsheet = () => {
     } catch (error) {
       toast.error('Failed to generate test script');
     }
-  }
+  };
 
   const handleView = (row: EntityRow) => {
     if (row.type === 'risk') {
@@ -492,23 +492,23 @@ export const NotionRCSASpreadsheet = () => {
     } else if (row.type === 'testScript') {
       router.push(`/test-scripts/${(row.data as TestScript).id}`);
     }
-  }
+  };
 
   const handleEdit = (row: EntityRow) => {
     // Open edit modal or navigate to edit page
-    handleView(row)
-  }
+    handleView(row);
+  };
 
   const handleMore = (row: EntityRow) => {
     // Show context menu with more options
     // console.log('More options for:', row)
-  }
+  };
 
   const handleControlGenerated = async (control: any) => {
     await refreshData();
     setShowAIGenerator(false);
     toast.success('Control generated successfully');
-  }
+  };
 
   return (
     <div className={cn('flex flex-col h-full', colors.background)}>
@@ -644,4 +644,4 @@ export const NotionRCSASpreadsheet = () => {
       </AnimatePresence>
     </div>
   );
-}
+};

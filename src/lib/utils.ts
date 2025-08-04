@@ -22,8 +22,7 @@ export const formatDateTime = (date: string | Date) => {
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date(date));
-};
-export const formatRelativeTime = (date: string | Date) => {
+}export const formatRelativeTime = (date: string | Date) => {
   const now = new Date();
   const targetDate = new Date(date);
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
@@ -33,21 +32,16 @@ export const formatRelativeTime = (date: string | Date) => {
   if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
 ;
   return formatDate(date);
-}
-;
+};
 // Risk calculation utilities
 export const calculateRiskScore = (likelihood: number, impact: number): number => {
   return likelihood * impact;
-}
-;
-export const getRiskLevel = (score: number): 'low' | 'medium' | 'high' | 'critical' => {
+}export const getRiskLevel = (score: number): 'low' | 'medium' | 'high' | 'critical' => {
   if (score <= 6) return 'low';
   if (score <= 12) return 'medium';
   if (score <= 20) return 'high';
   return 'critical';
-}
-;
-export const getRiskLevelColor = (level: string): string => {
+}export const getRiskLevelColor = (level: string): string => {
   switch (level) {
     case 'low':;
       return 'text-green-600 bg-green-50 border-green-200';
@@ -60,8 +54,7 @@ export const getRiskLevelColor = (level: string): string => {
     // default: // Fixed expression expected error
       return 'text-gray-600 bg-gray-50 border-gray-200';
   }
-}
-;
+};
 // Permission utilities
 export const hasPermission = (userPermissions: string[], requiredPermission: string): boolean => {
   if (userPermissions.includes('*')) return true;
@@ -86,19 +79,14 @@ export const hasAllPermissions = (
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + '...';
-}
-;
-export const capitalizeFirst = (str: string): string => {
+}export const capitalizeFirst = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-;
-export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
+}export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
   return new Intl.NumberFormat('en-US', {
-    style: 'currency',;
-    currency: currency,;
+    style: 'currency',
+    currency: currency,
   }).format(amount);
-}
-;
+};
 // File utilities
 export const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes';
@@ -108,12 +96,9 @@ export const formatFileSize = (bytes: number): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 ;
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-;
-export const getFileExtension = (filename: string): string => {
+}export const getFileExtension = (filename: string): string => {
   return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
-}
-;
+};
 // Array utilities
 export const groupBy = <T, K extends string | number | symbol>(;
   array: T[],;
@@ -128,9 +113,7 @@ export const groupBy = <T, K extends string | number | symbol>(;
     },;
     {} as Record<K, T[]>;
   );
-}
-;
-export const sortBy = <T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] => {
+}export const sortBy = <T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] => {
   return [...array].sort((a, b) => {
     const aVal = a[key];
     const bVal = b[key];
@@ -139,23 +122,19 @@ export const sortBy = <T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 
     if (aVal > bVal) return direction === 'asc' ? 1 : -1;
     return 0;
   });
-}
-;
+};
 // Validation utilities
 export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}
-;
-export const isValidUrl = (url: string): boolean => {
+}export const isValidUrl = (url: string): boolean => {
   try {
     new URL(url);
     return true;
   } catch {
     return false;
   }
-}
-;
+};
 // ID generation
 export function generateId(prefix?: string): string {
   const timestamp = Date.now().toString(36);
@@ -207,8 +186,7 @@ export const storage = {
       // Silently fail
     }
   },;
-}
-;
+};
 export function formatPercentage(_value: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'percent',;
@@ -341,8 +319,7 @@ export function retry<T>(;
           setTimeout(attempt, delay * attempts);
         }
       }
-    }
-;
+    };
     attempt();
   });
 }
