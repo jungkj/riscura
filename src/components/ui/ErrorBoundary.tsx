@@ -32,7 +32,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    
+
     this.state = {
       hasError: false,
       error: null,
@@ -41,18 +41,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       isReporting: false,
       reportSent: false,
       showDetails: false,
-      retryCount: 0
+      retryCount: 0,
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     return {
       hasError: true,
       error,
       errorId,
-      showDetails: false
+      showDetails: false,
     };
   }
 
@@ -84,7 +84,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   componentWillUnmount() {
     // Clear any pending timeouts
-    this.retryTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.retryTimeouts.forEach((timeout) => clearTimeout(timeout));
   }
 
   private trackError = (error: Error, errorInfo: ErrorInfo) => {
@@ -94,7 +94,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         (window as any).gtag('event', 'exception', {
           description: error.message,
           fatal: this.props.level === 'critical',
-          error_id: this.state.errorId
+          error_id: this.state.errorId,
         });
       }
 
@@ -128,7 +128,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         timestamp: new Date().toISOString(),
         url: window.location.href,
         level: this.props.level || 'component',
-        retryCount: this.state.retryCount
+        retryCount: this.state.retryCount,
       };
 
       const response = await fetch('/api/errors/report', {
@@ -138,7 +138,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         },
         body: JSON.stringify(errorReport),
         // Add timeout to prevent hanging requests
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
       });
 
       if (response.ok) {
@@ -150,7 +150,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       }
     } catch (reportError) {
       // Silently handle reporting errors to prevent error cascades
-      console.warn('Error reporting failed:', reportError instanceof Error ? reportError.message : 'Unknown error');
+      console.warn(
+        'Error reporting failed:',
+        reportError instanceof Error ? reportError.message : 'Unknown error'
+      );
       this.setState({ isReporting: false });
     }
   };
@@ -165,14 +168,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     // Exponential backoff for retries
     const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
-    
+
     const timeout = setTimeout(() => {
       this.setState({
         hasError: false,
         error: null,
         errorInfo: null,
         retryCount: retryCount + 1,
-        showDetails: false
+        showDetails: false,
       });
     }, delay);
 
@@ -207,7 +210,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     if (error.message.includes('Permission denied')) {
-      return 'You don\'t have permission to access this resource.';
+      return "You don't have permission to access this resource.";
     }
 
     if (level === 'critical') {
@@ -222,14 +225,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { error } = this.state;
 
     if (level === 'critical') return 'critical';
-    
-    if (error?.message.includes('ChunkLoadError') || 
-        error?.message.includes('Network Error')) {
+
+    if (error?.message.includes('ChunkLoadError') || error?.message.includes('Network Error')) {
       return 'high';
     }
 
-    if (error?.message.includes('Permission denied') || 
-        error?.message.includes('Unauthorized')) {
+    if (error?.message.includes('Permission denied') || error?.message.includes('Unauthorized')) {
       return 'medium';
     }
 
@@ -238,11 +239,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private getSeverityColor = (severity: string): string => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'outline';
+      case 'critical':
+        return 'destructive';
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'secondary';
+      case 'low':
+        return 'outline';
+      default:
+        return 'outline';
     }
   };
 
@@ -260,7 +266,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="retry"
           onClick={this.handleRetry}
           variant="primary"
-          className="min-w-[120px]" >
+          className="min-w-[120px]"
+        >
           <RefreshCw className="w-4 h-4 mr-2" />
           Try Again {retryCount > 0 && `(${retryCount}/${maxRetries})`}
         </DaisyButton>
@@ -274,7 +281,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="reload"
           onClick={this.handleReload}
           variant="outline"
-          className="min-w-[120px]" >
+          className="min-w-[120px]"
+        >
           <RefreshCw className="w-4 h-4 mr-2" />
           Reload Page
         </DaisyButton>
@@ -288,7 +296,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           key="home"
           onClick={this.handleGoHome}
           variant="outline"
-          className="min-w-[120px]" >
+          className="min-w-[120px]"
+        >
           <Home className="w-4 h-4 mr-2" />
           Go to Dashboard
         </DaisyButton>
@@ -314,42 +323,34 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <DaisyCard className="w-full max-w-2xl" >
-  <DaisyCardBody className="text-center" />
-</DaisyCard>
+        <DaisyCard className="w-full max-w-2xl">
+          <DaisyCardBody className="text-center">
             <div className="flex justify-center mb-4">
               <div className="p-3 rounded-full bg-destructive/10">
                 <DaisyAlertTriangle className="w-8 h-8 text-destructive" />
               </div>
             </div>
-            
+
             <div className="flex items-center justify-center gap-2 mb-2">
               <DaisyCardTitle className="text-xl">Something went wrong</DaisyCardTitle>
-              <DaisyBadge variant={this.getSeverityColor(severity) as any} >
-                {severity}
-              </DaisyBadge>
+              <DaisyBadge variant={this.getSeverityColor(severity) as any}>{severity}</DaisyBadge>
             </div>
-            
-            <DaisyCardDescription className="text-base" >
-  {errorMessage}
-</DaisyCardDescription>
-            </p>
-          
 
-          <DaisyCardBody className="space-y-6" >
-  {/* Error ID for support */}
-</DaisyCardBody>
+            <DaisyCardDescription className="text-base">{errorMessage}</DaisyCardDescription>
+          </DaisyCardBody>
+
+          <DaisyCardBody className="space-y-6">
+            {/* Error ID for support */}
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                Error ID: <code className="text-xs bg-muted px-2 py-1 rounded">{this.state.errorId}</code>
+                Error ID:{' '}
+                <code className="text-xs bg-muted px-2 py-1 rounded">{this.state.errorId}</code>
               </p>
             </div>
 
             {/* Recovery Actions */}
             {recoveryActions.length > 0 && (
-              <div className="flex flex-wrap gap-3 justify-center">
-                {recoveryActions}
-              </div>
+              <div className="flex flex-wrap gap-3 justify-center">{recoveryActions}</div>
             )}
 
             {/* Report Error Button */}
@@ -360,9 +361,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     onClick={this.reportError}
                     disabled={this.state.isReporting}
                     variant="outline"
-                    size="sm" >
-  <Bug className="w-4 h-4 mr-2" />
-</DaisyButton>
+                    size="sm"
+                  >
+                    <Bug className="w-4 h-4 mr-2" />
                     {this.state.isReporting ? 'Sending Report...' : 'Report This Error'}
                   </DaisyButton>
                 ) : (
@@ -387,7 +388,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                     <ChevronDown className="w-4 h-4 ml-1" />
                   )}
                 </CollapsibleTrigger>
-                
+
                 <CollapsibleContent className="mt-4">
                   <div className="bg-muted p-4 rounded-lg space-y-3">
                     {this.state.error && (
@@ -398,7 +399,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         </pre>
                       </div>
                     )}
-                    
+
                     {this.state.error?.stack && (
                       <div>
                         <h4 className="font-medium text-sm mb-2">Stack Trace:</h4>
@@ -407,7 +408,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                         </pre>
                       </div>
                     )}
-                    
+
                     {this.state.errorInfo?.componentStack && (
                       <div>
                         <h4 className="font-medium text-sm mb-2">Component Stack:</h4>
@@ -423,9 +424,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
             {/* Help Text */}
             <div className="text-center text-sm text-muted-foreground">
-              <p>
-                If this problem persists, please contact support with the error ID above.
-              </p>
+              <p>If this problem persists, please contact support with the error ID above.</p>
             </div>
           </DaisyCardBody>
         </DaisyCard>
@@ -456,26 +455,27 @@ export const PageErrorBoundary: React.FC<{ children: ReactNode }> = ({ children 
   </ErrorBoundary>
 );
 
-export const ComponentErrorBoundary: React.FC<{ 
+export const ComponentErrorBoundary: React.FC<{
   children: ReactNode;
   fallback?: ReactNode;
 }> = ({ children, fallback }) => (
-  <ErrorBoundary 
-    level="component" 
-    showReportButton={false} 
+  <ErrorBoundary
+    level="component"
+    showReportButton={false}
     maxRetries={3}
-    fallback={fallback || (
-      <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
-        <div className="flex items-center gap-2 text-destructive">
-          <DaisyAlertTriangle className="w-4 h-4" >
-  <span className="text-sm font-medium">
-</DaisyAlertTriangle>Component Error</span>
+    fallback={
+      fallback || (
+        <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
+          <div className="flex items-center gap-2 text-destructive">
+            <DaisyAlertTriangle className="w-4 h-4" />
+            <span className="text-sm font-medium">Component Error</span>
+          </div>
+          <p className="text-sm text-muted-foreground mt-1">
+            This component failed to load. Please refresh the page.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground mt-1">
-          This component failed to load. Please refresh the page.
-        </p>
-      </div>
-    )}
+      )
+    }
   >
     {children}
   </ErrorBoundary>
@@ -487,4 +487,4 @@ export const CriticalErrorBoundary: React.FC<{ children: ReactNode }> = ({ child
   </ErrorBoundary>
 );
 
-export default ErrorBoundary; 
+export default ErrorBoundary;

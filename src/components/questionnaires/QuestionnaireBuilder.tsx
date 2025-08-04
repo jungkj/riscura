@@ -381,9 +381,9 @@ export function QuestionnaireBuilder({
       <div className="p-4 border-b border-notion-border">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-notion-text-primary">Edit Question</h3>
-          <DaisyButton variant="ghost" size="sm" onClick={() => setShowQuestionEditor(false)} />
+          <DaisyButton variant="ghost" size="sm" onClick={() => setShowQuestionEditor(false)}>
             <X className="w-4 h-4" />
-          </DaisyCalendar>
+          </DaisyButton>
         </div>
       </div>
 
@@ -402,15 +402,16 @@ export function QuestionnaireBuilder({
 
         {/* Question Type */}
         <div className="space-y-2">
-          <DaisyLabel htmlFor="question-type">Question Type</DaisyTextarea>
+          <DaisyLabel htmlFor="question-type">Question Type</DaisyLabel>
           <DaisySelect 
             value={questionForm.type} 
             onValueChange={(value) => setQuestionForm(prev => ({ ...prev, type: value as QuestionType }))}
           >
-            <DaisySelectTrigger />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="text">Text Input</DaisySelectContent>
+            <DaisySelectTrigger>
+              <DaisySelectValue />
+            </DaisySelectTrigger>
+            <DaisySelectContent>
+              <DaisySelectItem value="text">Text Input</DaisySelectItem>
               <DaisySelectItem value="textarea">Long Text</DaisySelectItem>
               <DaisySelectItem value="number">Number</DaisySelectItem>
               <DaisySelectItem value="single_choice">Single Choice</DaisySelectItem>
@@ -437,7 +438,7 @@ export function QuestionnaireBuilder({
 
         {/* Required Toggle */}
         <div className="flex items-center justify-between">
-          <DaisyLabel htmlFor="question-required">Required Question</DaisyTextarea>
+          <DaisyLabel htmlFor="question-required">Required Question</DaisyLabel>
           <DaisySwitch
             id="question-required"
             checked={questionForm.required}
@@ -448,7 +449,7 @@ export function QuestionnaireBuilder({
         {/* Question-specific Configuration */}
         {questionForm.type === 'single_choice' || questionForm.type === 'multiple_choice' ? (
           <div className="space-y-2">
-            <DaisyLabel>Answer Options</DaisySwitch>
+            <DaisyLabel>Answer Options</DaisyLabel>
             <div className="space-y-2">
               {(questionForm.config.options || []).map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
@@ -476,7 +477,7 @@ export function QuestionnaireBuilder({
                     }}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </DaisyInput>
+                  </DaisyButton>
                 </div>
               ))}
               <DaisyButton
@@ -529,7 +530,7 @@ export function QuestionnaireBuilder({
                 />
               </div>
               <div>
-                <DaisyLabel>Max Value</DaisyInput>
+                <DaisyLabel>Max Value</DaisyLabel>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.max || 10}
@@ -549,7 +550,7 @@ export function QuestionnaireBuilder({
                 />
               </div>
               <div>
-                <DaisyLabel>Step</DaisyInput>
+                <DaisyLabel>Step</DaisyLabel>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.step || 1}
@@ -574,9 +575,8 @@ export function QuestionnaireBuilder({
 
         {/* Save Button */}
         <div className="pt-4 border-t border-notion-border">
-          <DaisyButton onClick={saveQuestionForm} className="w-full" >
-  <Save className="w-4 h-4 mr-2" />
-</DaisyInput>
+          <DaisyButton onClick={saveQuestionForm} className="w-full">
+            <Save className="w-4 h-4 mr-2" />
             Save Question
           </DaisyButton>
         </div>

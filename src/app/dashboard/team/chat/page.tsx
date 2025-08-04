@@ -571,7 +571,8 @@ const TeamChatPage: React.FC = () => {
         maxWidth="full"
         className="h-screen"
       >
-        <div className="grid grid-cols-12 gap-6 h-full">
+        <>  
+          <div className="grid grid-cols-12 gap-6 h-full">
           {/* Channel Sidebar */}
           <div className="col-span-3 space-y-4">
             {/* Search */}
@@ -728,7 +729,6 @@ const TeamChatPage: React.FC = () => {
                   </div>
                 </div>
               </DaisyCardBody>
-
               <DaisyCardBody className="flex-1 overflow-hidden p-0">
                 <DaisyScrollArea className="h-full p-4">
                   <div className="space-y-4">
@@ -941,6 +941,7 @@ const TeamChatPage: React.FC = () => {
           </div>
         </div>
 
+        <>
         {/* Create Channel Dialog */}
         <DaisyDialog open={isCreateChannelOpen} onOpenChange={setIsCreateChannelOpen}>
           <DaisyDialogContent>
@@ -1005,6 +1006,7 @@ const TeamChatPage: React.FC = () => {
             </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
+        </>
       </MainContentArea>
     </ProtectedWrapper>
   );

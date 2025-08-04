@@ -2,17 +2,17 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { 
-  CheckCircle, 
-  AlertCircle, 
-  XCircle, 
-  Info, 
-  X, 
+import {
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  Info,
+  X,
   AlertTriangle,
   MessageSquare,
   Star,
   Send,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
@@ -21,15 +21,15 @@ import { Badge } from './badge';
 import { Textarea } from './textarea';
 import { Input } from './input';
 import { Label } from './label';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
-  DialogHeader, 
-  DialogTitle 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from './dialog';
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -78,10 +78,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       id,
       duration: toast.persistent ? undefined : (toast.duration ?? 5000),
       dismissible: true,
-      ...toast
+      ...toast,
     };
 
-    setToasts(prev => [...prev, newToast]);
+    setToasts((prev) => [...prev, newToast]);
 
     // Auto-remove toast after duration
     if (newToast.duration && !newToast.persistent) {
@@ -94,7 +94,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   const clearToasts = useCallback(() => {
@@ -102,9 +102,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const updateToast = useCallback((id: string, updates: Partial<Toast>) => {
-    setToasts(prev => prev.map(toast => 
-      toast.id === id ? { ...toast, ...updates } : toast
-    ));
+    setToasts((prev) => prev.map((toast) => (toast.id === id ? { ...toast, ...updates } : toast)));
   }, []);
 
   return (
@@ -126,21 +124,21 @@ export const useToast = () => {
 
   // Convenience methods
   const toast = {
-    success: (message: string, options?: Partial<Toast>) => 
+    success: (message: string, options?: Partial<Toast>) =>
       addToast({ type: 'success', message, ...options }),
-    
-    error: (message: string, options?: Partial<Toast>) => 
+
+    error: (message: string, options?: Partial<Toast>) =>
       addToast({ type: 'error', message, ...options }),
-    
-    warning: (message: string, options?: Partial<Toast>) => 
+
+    warning: (message: string, options?: Partial<Toast>) =>
       addToast({ type: 'warning', message, ...options }),
-    
-    info: (message: string, options?: Partial<Toast>) => 
+
+    info: (message: string, options?: Partial<Toast>) =>
       addToast({ type: 'info', message, ...options }),
-    
-    loading: (message: string, options?: Partial<Toast>) => 
+
+    loading: (message: string, options?: Partial<Toast>) =>
       addToast({ type: 'loading', message, persistent: true, dismissible: false, ...options }),
-    
+
     promise: async <T,>(
       promise: Promise<T>,
       messages: {
@@ -153,7 +151,7 @@ export const useToast = () => {
         type: 'loading',
         message: messages.loading,
         persistent: true,
-        dismissible: false
+        dismissible: false,
       });
 
       try {
@@ -161,22 +159,19 @@ export const useToast = () => {
         removeToast(loadingId);
         addToast({
           type: 'success',
-          message: typeof messages.success === 'function' 
-            ? messages.success(result) 
-            : messages.success
+          message:
+            typeof messages.success === 'function' ? messages.success(result) : messages.success,
         });
         return result;
       } catch (error) {
         removeToast(loadingId);
         addToast({
           type: 'error',
-          message: typeof messages.error === 'function' 
-            ? messages.error(error) 
-            : messages.error
+          message: typeof messages.error === 'function' ? messages.error(error) : messages.error,
         });
         throw error;
       }
-    }
+    },
   };
 
   return { ...context, toast };
@@ -193,9 +188,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       case 'error':
         return <XCircle className="w-5 h-5 text-red-500" />;
       case 'warning':
-        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-500" >
-  ;
-</DaisyAlertTriangle>
+        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-500">;</DaisyAlertTriangle>;
       case 'info':
         return <Info className="w-5 h-5 text-blue-500" />;
       case 'loading':
@@ -227,19 +220,18 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       )}
     >
       {getIcon()}
-      
+
       <div className="flex-1 min-w-0">
-        {toast.title && (
-          <p className="font-medium text-sm mb-1">{toast.title}</p>
-        )}
+        {toast.title && <p className="font-medium text-sm mb-1">{toast.title}</p>}
         <p className="text-sm text-muted-foreground">{toast.message}</p>
-        
+
         {toast.action && (
           <DaisyButton
             variant="link"
             size="sm"
             className="h-auto p-0 mt-2 text-xs"
-            onClick={toast.action.onClick} >
+            onClick={toast.action.onClick}
+          >
             {toast.action.label}
           </DaisyButton>
         )}
@@ -250,7 +242,8 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
           variant="ghost"
           size="sm"
           className="h-auto p-1 hover:bg-transparent"
-          onClick={() => removeToast(toast.id)} >
+          onClick={() => removeToast(toast.id)}
+        >
           <X className="w-4 h-4" />
         </DaisyButton>
       )}
@@ -266,7 +259,7 @@ const ToastContainer: React.FC = () => {
 
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm w-full">
-      {toasts.map(toast => (
+      {toasts.map((toast) => (
         <ToastComponent key={toast.id} toast={toast} />
       ))}
     </div>
@@ -296,7 +289,7 @@ export const useConfirmation = () => {
       confirmText: 'Continue',
       cancelText: 'Cancel',
       variant: 'default',
-      ...opts
+      ...opts,
     });
     setIsOpen(true);
 
@@ -321,30 +314,32 @@ export const useConfirmation = () => {
     setIsOpen(false);
   }, [resolver]);
 
-  const ConfirmationDialog = useCallback(() => (
-    <DaisyAlertDialog open={isOpen} onOpenChange={setIsOpen} >
-  <DaisyAlertDialogContent />
-</DaisyAlertDialog>
-        <DaisyAlertDialogHeader >
-  <DaisyAlertDialogTitle>
-</DaisyAlertDialogHeader>{options.title}</AlertDialogTitle>
-          <DaisyAlertDialogDescription>{options.description}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <DaisyAlertDialogFooter >
-  <DaisyAlertDialogCancel onClick={handleCancel} />
-</DaisyAlertDialogDescription>
-            {options.cancelText}
-          </AlertDialogCancel>
-          <DaisyAlertDialogAction
-            onClick={handleConfirm}
-            className={options.variant === 'destructive' ? 'bg-destructive hover:bg-destructive/90' : ''} >
-  {options.confirmText}
-</DaisyAlertDialogAction>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  ), [isOpen, options, handleConfirm, handleCancel]);
+  const ConfirmationDialog = useCallback(
+    () => (
+      <DaisyAlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <DaisyAlertDialogContent>
+          <DaisyAlertDialogHeader>
+            <DaisyAlertDialogTitle>{options.title}</DaisyAlertDialogTitle>
+            <DaisyAlertDialogDescription>{options.description}</DaisyAlertDialogDescription>
+          </DaisyAlertDialogHeader>
+          <DaisyAlertDialogFooter>
+            <DaisyAlertDialogCancel onClick={handleCancel}>
+              {options.cancelText}
+            </DaisyAlertDialogCancel>
+            <DaisyAlertDialogAction
+              onClick={handleConfirm}
+              className={
+                options.variant === 'destructive' ? 'bg-destructive hover:bg-destructive/90' : ''
+              }
+            >
+              {options.confirmText}
+            </DaisyAlertDialogAction>
+          </DaisyAlertDialogFooter>
+        </DaisyAlertDialogContent>
+      </DaisyAlertDialog>
+    ),
+    [isOpen, options, handleConfirm, handleCancel]
+  );
 
   return { confirm, ConfirmationDialog };
 };
@@ -371,28 +366,28 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
   onClose,
   onSubmit,
   title = 'Send Feedback',
-  description = 'Help us improve by sharing your thoughts'
+  description = 'Help us improve by sharing your thoughts',
 }) => {
   const [formData, setFormData] = useState<FeedbackData>({
     type: 'improvement',
     rating: 5,
     message: '',
     email: '',
-    page: typeof window !== 'undefined' ? window.location.pathname : ''
+    page: typeof window !== 'undefined' ? window.location.pathname : '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.message.trim()) {
       toast.error('Please provide your feedback message');
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       await onSubmit(formData);
       toast.success('Thank you for your feedback!');
@@ -402,7 +397,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
         rating: 5,
         message: '',
         email: '',
-        page: typeof window !== 'undefined' ? window.location.pathname : ''
+        page: typeof window !== 'undefined' ? window.location.pathname : '',
       });
     } catch (error) {
       toast.error('Failed to send feedback. Please try again.');
@@ -418,15 +413,13 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
           <button
             key={star}
             type="button"
-            onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
+            onClick={() => setFormData((prev) => ({ ...prev, rating: star }))}
             className="p-1 hover:scale-110 transition-transform"
           >
             <Star
               className={cn(
                 'w-5 h-5',
-                star <= (formData.rating || 0)
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-gray-300'
+                star <= (formData.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
               )}
             />
           </button>
@@ -436,13 +429,11 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
   };
 
   return (
-    <DaisyDialog open={isOpen} onOpenChange={onClose} />
-      <DaisyDialogContent className="sm:max-w-md" >
-  <DaisyDialogHeader />
-</DaisyDialog>
-          <DaisyDialogTitle className="flex items-center gap-2" >
-  <MessageSquare className="w-5 h-5" />
-</DaisyDialogTitle>
+    <DaisyDialog open={isOpen} onOpenChange={onClose}>
+      <DaisyDialogContent className="sm:max-w-md">
+        <DaisyDialogHeader>
+          <DaisyDialogTitle className="flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
             {title}
           </DaisyDialogTitle>
           <DaisyDialogDescription>{description}</DaisyDialogDescription>
@@ -457,12 +448,12 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 { value: 'bug', label: 'Bug Report' },
                 { value: 'feature', label: 'Feature Request' },
                 { value: 'improvement', label: 'Improvement' },
-                { value: 'other', label: 'Other' }
+                { value: 'other', label: 'Other' },
               ].map(({ value, label }) => (
                 <button
                   key={value}
                   type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, type: value as any }))}
+                  onClick={() => setFormData((prev) => ({ ...prev, type: value as any }))}
                   className={cn(
                     'px-3 py-1 text-sm rounded-full border transition-colors',
                     formData.type === value
@@ -489,7 +480,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               id="message"
               placeholder="Please describe your feedback in detail..."
               value={formData.message}
-              onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
               rows={4}
               required
             />
@@ -497,27 +488,25 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
           {/* Email */}
           <div className="space-y-2">
-            <DaisyLabel htmlFor="email">Email (optional)</DaisyTextarea>
+            <DaisyLabel htmlFor="email">Email (optional)</DaisyLabel>
             <DaisyInput
               id="email"
               type="email"
               placeholder="your@email.com"
               value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
             />
             <p className="text-xs text-muted-foreground">
               We'll only use this to follow up on your feedback
             </p>
           </div>
 
-          <DaisyDialogFooter />
-            <DaisyButton type="button" variant="outline" onClick={onClose} >
-  Cancel
-</DaisyInput>
+          <DaisyDialogFooter>
+            <DaisyButton type="button" variant="outline" onClick={onClose}>
+              Cancel
             </DaisyButton>
-            <DaisyButton type="submit" disabled={isSubmitting} >
-  {isSubmitting ? (
-</DaisyButton>
+            <DaisyButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Sending...
@@ -560,8 +549,8 @@ export const useFeedback = () => {
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
         screenResolution: `${screen.width}x${screen.height}`,
-        url: window.location.href
-      })
+        url: window.location.href,
+      }),
     });
 
     if (!response.ok) {
@@ -575,12 +564,8 @@ export const useFeedback = () => {
     closeFeedback,
     submitFeedback,
     FeedbackForm: () => (
-      <FeedbackForm
-        isOpen={isOpen}
-        onClose={closeFeedback}
-        onSubmit={submitFeedback}
-      />
-    )
+      <FeedbackForm isOpen={isOpen} onClose={closeFeedback} onSubmit={submitFeedback} />
+    ),
   };
 };
 
@@ -603,7 +588,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   action,
   dismissible = true,
   onDismiss,
-  className
+  className,
 }) => {
   const getIcon = () => {
     switch (type) {
@@ -612,9 +597,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       case 'error':
         return <XCircle className="w-5 h-5 text-red-600" />;
       case 'warning':
-        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-600" >
-  ;
-</DaisyAlertTriangle>
+        return <DaisyAlertTriangle className="w-5 h-5 text-yellow-600">;</DaisyAlertTriangle>;
       case 'info':
         return <Info className="w-5 h-5 text-blue-600" />;
     }
@@ -634,13 +617,15 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   };
 
   return (
-    <div className={cn(
-      'flex items-center gap-3 p-4 border rounded-lg',
-      getBackgroundClass(),
-      className
-    )}>
+    <div
+      className={cn(
+        'flex items-center gap-3 p-4 border rounded-lg',
+        getBackgroundClass(),
+        className
+      )}
+    >
       {getIcon()}
-      
+
       <div className="flex-1">
         <p className="text-sm font-medium">{message}</p>
       </div>
@@ -651,9 +636,9 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
             variant="link"
             size="sm"
             className="h-auto p-0 text-current hover:text-current/80"
-            onClick={action.onClick} >
-  {action.label}
-</DaisyButton>
+            onClick={action.onClick}
+          >
+            {action.label}
           </DaisyButton>
         )}
 
@@ -662,9 +647,9 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
             variant="ghost"
             size="sm"
             className="h-auto p-1 hover:bg-current/10 text-current"
-            onClick={onDismiss} >
-  <X className="w-4 h-4" />
-</DaisyButton>
+            onClick={onDismiss}
+          >
+            <X className="w-4 h-4" />
           </DaisyButton>
         )}
       </div>
@@ -672,4 +657,4 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   );
 };
 
-// All components and hooks are exported as named exports above 
+// All components and hooks are exported as named exports above

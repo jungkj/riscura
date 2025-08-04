@@ -477,18 +477,17 @@ export default function ReportingPage() {
                     Filter
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end" />
-                  <DaisyDropdownMenuLabel>Filter by Type</DaisyDropdownMenuContent>
+                <DaisyDropdownMenuContent align="end">
+                  <DaisyDropdownMenuLabel>Filter by Type</DaisyDropdownMenuLabel>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem>All Reports</DaisyDropdownMenuSeparator>
+                  <DaisyDropdownMenuItem>All Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Monthly Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Quarterly Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Custom Reports</DaisyDropdownMenuItem>
                 </DaisyDropdownMenuContent>
               </DaisyDropdownMenu>
-              <DaisyButton size="sm" >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyButton>
+              <DaisyButton size="sm">
+                <Plus className="h-4 w-4 mr-2" />
                 New Report
               </DaisyButton>
             </div>

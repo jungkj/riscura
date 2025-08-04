@@ -68,7 +68,8 @@
       "Bash(npx tsx:*)",
       "Bash(npx swc:*)",
       "Bash(gtimeout:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(od:*)"
     ],
     "deny": []
   }
