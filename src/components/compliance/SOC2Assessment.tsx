@@ -144,9 +144,7 @@ export function SOC2Assessment() {
       case 'PASSED':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'FAILED':
-        return <DaisyAlertCircle className="h-4 w-4 text-red-500" >
-  ;
-</DaisyAlertCircle>
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
       case 'IN_PROGRESS':
       case 'UNDER_REVIEW':
         return <Clock className="h-4 w-4 text-yellow-500" />;
@@ -217,36 +215,29 @@ export function SOC2Assessment() {
 
   if (!framework) {
     return (
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
-</DaisyCard>
-          <DaisyCardTitle className="text-[#191919] font-inter" >
-  SOC 2 Compliance Assessment
-</DaisyCardTitle>
+      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+        <DaisyCardBody>
+          <DaisyCardTitle className="text-[#191919] font-inter">
+            SOC 2 Compliance Assessment
           </DaisyCardTitle>
-          <DaisyCardDescription >
-  Import SOC 2 framework to begin compliance assessment
-</DaisyCardDescription>
-          </p>
+          <DaisyCardDescription>
+            Import SOC 2 framework to begin compliance assessment
+          </DaisyCardDescription>
+        </DaisyCardBody>
         
-        <DaisyCardBody >
-  <DaisyAlert >
-  </DaisyCardBody>
-</DaisyAlert>
+        <DaisyCardBody>
+          <DaisyAlert>
             <Shield className="h-4 w-4" />
-            <DaisyAlertDescription >
-  No SOC 2 framework found. Import the framework to begin your compliance assessment.
-                </DaisyAlertDescription>
-</DaisyAlert>
-                </DaisyAlertDescription>
-              </DaisyAlert>
+            <DaisyAlertDescription>
+              No SOC 2 framework found. Import the framework to begin your compliance assessment.
+            </DaisyAlertDescription>
+          </DaisyAlert>
           <div className="mt-4">
             <DaisyButton 
               onClick={importSOC2Framework}
               disabled={importing}
-              className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
-  {importing ? (
-</DaisyButton>
+              className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+              {importing ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Importing Framework...
@@ -268,10 +259,8 @@ export function SOC2Assessment() {
     <div className="space-y-6">
       {/* Progress Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+          <DaisyCardBody className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Total Controls</p>
@@ -282,10 +271,8 @@ export function SOC2Assessment() {
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+          <DaisyCardBody className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Assessed</p>
@@ -296,10 +283,8 @@ export function SOC2Assessment() {
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+          <DaisyCardBody className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Passed</p>
@@ -310,53 +295,47 @@ export function SOC2Assessment() {
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+        <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+          <DaisyCardBody className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#A8A8A8]">Failed</p>
                 <p className="text-2xl font-bold text-red-600">{progress.failedControls}</p>
               </div>
-              <DaisyAlertCircle className="h-8 w-8 text-red-500" >
-  </div>
-</DaisyAlertCircle>
+              <AlertCircle className="h-8 w-8 text-red-500" />
+            </div>
           </DaisyCardBody>
         </DaisyCard>
       </div>
 
       {/* Progress Bar */}
-      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="p-6" >
-  </DaisyCard>
-</DaisyCardBody>
+      <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+        <DaisyCardBody className="p-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-[#191919]">Assessment Progress</h3>
             <span className="text-sm text-[#A8A8A8]">{Math.round(progress.percentage)}% Complete</span>
           </div>
-          <DaisyProgress value={progress.percentage} className="h-3" /></DaisyProgress>
+          <DaisyProgress value={progress.percentage} className="h-3" />
+        </DaisyCardBody>
       </DaisyCard>
 
       {/* Main Content Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab}>
+        <DaisyTabsList className="grid w-full grid-cols-4">
+          <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
           <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="evidence">Evidence</DaisyTabsTrigger>
           <DaisyTabsTrigger value="reports">Reports</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="overview" className="space-y-4" />
+        <DaisyTabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
-</DaisyTabsContent>
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]">
+              <DaisyCardBody>
                 <DaisyCardTitle className="text-[#191919] font-inter">Framework Information</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody >
-  <div className="space-y-2">
-</DaisyCardBody>
+              </DaisyCardBody>
+              <DaisyCardBody>
+                <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-[#A8A8A8]">Framework:</span>
                     <span className="text-[#191919] font-medium">{framework.name}</span>

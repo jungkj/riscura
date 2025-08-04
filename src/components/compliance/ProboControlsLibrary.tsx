@@ -65,9 +65,7 @@ const getImportanceColor = (importance: string) => {
 const getImportanceIcon = (importance: string) => {
   switch (importance) {
     case 'MANDATORY':
-      return <DaisyAlertTriangle className="h-3 w-3" >
-  ;
-</DaisyAlertTriangle>
+      return <AlertTriangle className="h-3 w-3" />;
     case 'PREFERRED':
       return <Star className="h-3 w-3" />;
     case 'ADVANCED':
@@ -223,12 +221,10 @@ export function ProboControlsLibrary() {
           <DaisyTabsTrigger value="import">Import Controls</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="browse" className="space-y-6" />
+        <DaisyTabsContent value="browse" className="space-y-6">
           {/* Search and Filters */}
-          <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardBody className="p-6" >
-  </DaisyTabsContent>
-</DaisyCardBody>
+          <DaisyCard className="bg-white border-[#D8C3A5]">
+            <DaisyCardBody className="p-6">
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
@@ -242,23 +238,25 @@ export function ProboControlsLibrary() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
-                    <DaisySelectTrigger className="w-48" />
-                      <DaisySelectValue placeholder="All Categories" /></DaisyInput>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="all">All Categories</DaisySelectContent>
+                  <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <DaisySelectTrigger className="w-48">
+                      <DaisySelectValue placeholder="All Categories" />
+                    </DaisySelectTrigger>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="all">All Categories</DaisySelectItem>
                       {categories.map(category => (
-                        <DaisySelectItem key={category} value={category} />
+                        <DaisySelectItem key={category} value={category}>
                           {category}
                         </DaisySelectItem>
                       ))}
                     </DaisySelectContent>
                   </DaisySelect>
-                  <DaisySelect value={selectedImportance} onValueChange={setSelectedImportance} />
-                    <DaisySelectTrigger className="w-40" />
-                      <DaisySelectValue placeholder="All Levels" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="all">All Levels</DaisySelectContent>
+                  <DaisySelect value={selectedImportance} onValueChange={setSelectedImportance}>
+                    <DaisySelectTrigger className="w-40">
+                      <DaisySelectValue placeholder="All Levels" />
+                    </DaisySelectTrigger>
+                    <DaisySelectContent>
+                      <DaisySelectItem value="all">All Levels</DaisySelectItem>
                       <DaisySelectItem value="MANDATORY">Mandatory</DaisySelectItem>
                       <DaisySelectItem value="PREFERRED">Preferred</DaisySelectItem>
                       <DaisySelectItem value="ADVANCED">Advanced</DaisySelectItem>
@@ -270,39 +268,35 @@ export function ProboControlsLibrary() {
           </DaisyCard>
 
           {/* Controls List */}
-          <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardBody />
-</DaisyCard>
+          <DaisyCard className="bg-white border-[#D8C3A5]">
+            <DaisyCardBody>
               <div className="flex items-center justify-between">
-                <DaisyCardTitle className="text-[#191919]" >
-  Security Controls ({filteredMitigations.length})
-</DaisyCardTitle>
+                <DaisyCardTitle className="text-[#191919]">
+                  Security Controls ({filteredMitigations.length})
                 </DaisyCardTitle>
                 <div className="flex items-center space-x-2">
                   <DaisyButton
                     variant="outline"
                     size="sm"
                     onClick={handleSelectAll}
-                    className="border-[#D8C3A5]" >
-  {selectedMitigations.size === filteredMitigations.length ? 'Deselect All' : 'Select All'}
-</DaisyButton>
+                    className="border-[#D8C3A5]">
+                    {selectedMitigations.size === filteredMitigations.length ? 'Deselect All' : 'Select All'}
                   </DaisyButton>
                   {selectedMitigations.size > 0 && (
                     <DaisyButton
                       onClick={handleImportSelected}
                       className="bg-[#199BEC] hover:bg-[#199BEC]/90"
-                      size="sm" >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyButton>
+                      size="sm">
+                      <Plus className="h-4 w-4 mr-2" />
                       Import Selected ({selectedMitigations.size})
                     </DaisyButton>
                   )}
                 </div>
               </div>
             
-            <DaisyCardBody >
-  <DaisyScrollArea className="h-[600px]" />
-</DaisyCardBody>
+            </DaisyCardBody>
+            <DaisyCardBody>
+              <DaisyScrollArea className="h-[600px]">
                 <div className="space-y-4">
                   {filteredMitigations.map((mitigation) => (
                     <div
@@ -326,23 +320,20 @@ export function ProboControlsLibrary() {
                               <h4 className="font-medium text-[#191919]">{mitigation.name}</h4>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <DaisyBadge className={getImportanceColor(mitigation.importance)} >
-  {getImportanceIcon(mitigation.importance)}
-</DaisyCheckbox>
+                              <DaisyBadge className={getImportanceColor(mitigation.importance)}>
+                                {getImportanceIcon(mitigation.importance)}
                                 <span className="ml-1">{mitigation.importance}</span>
                               </DaisyBadge>
                             </div>
                           </div>
                           
                           <div className="flex items-center space-x-2">
-                            <DaisyBadge variant="outline" className="text-xs" >
-  {mitigation.category}
-</DaisyBadge>
+                            <DaisyBadge variant="outline" className="text-xs">
+                              {mitigation.category}
                             </DaisyBadge>
                             {mitigation.standards && (
-                              <DaisyBadge variant="outline" className="text-xs" >
-  {mitigation.standards.split(';').slice(0, 2).join(', ')}
-</DaisyBadge>
+                              <DaisyBadge variant="outline" className="text-xs">
+                                {mitigation.standards.split(';').slice(0, 2).join(', ')}
                                 {mitigation.standards.split(';').length > 2 && '...'}
                               </DaisyBadge>
                             )}
@@ -361,20 +352,19 @@ export function ProboControlsLibrary() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="categories" className="space-y-6" />
+        <DaisyTabsContent value="categories" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(getCategoryStats()).map(([category, stats]) => (
-              <DaisyCard key={category} className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow" >
-  <DaisyCardBody className="pb-3" />
-</DaisyTabsContent>
+              <DaisyCard key={category} className="bg-white border-[#D8C3A5] hover:shadow-lg transition-shadow">
+                <DaisyCardBody className="pb-3">
                   <div className="flex items-center space-x-2">
                     {getCategoryIcon(category)}
                     <DaisyCardTitle className="text-sm font-medium text-[#191919]">{category}</DaisyCardTitle>
                   </div>
                 
-                <DaisyCardBody >
-  <div className="space-y-2">
-</DaisyCardBody>
+                </DaisyCardBody>
+                <DaisyCardBody>
+                  <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#A8A8A8]">Total Controls</span>
                       <DaisyBadge variant="outline">{stats.total}</DaisyBadge>
@@ -400,34 +390,28 @@ export function ProboControlsLibrary() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="import" className="space-y-6" />
-          <DaisyAlert >
-  <CheckCircle className="h-4 w-4" />
-</DaisyTabsContent>
-            <DaisyAlertDescription >
-  Import selected security controls into your organization's control framework. 
-                </DaisyAlertDescription>
-</DaisyAlert>
+        <DaisyTabsContent value="import" className="space-y-6">
+          <DaisyAlert>
+            <CheckCircle className="h-4 w-4" />
+            <DaisyAlertDescription>
+              Import selected security controls into your organization's control framework. 
               This will add them to your compliance dashboard and enable tracking.
-                </DaisyAlertDescription>
-              </DaisyAlert>
+            </DaisyAlertDescription>
+          </DaisyAlert>
 
           {selectedMitigations.size > 0 ? (
-            <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardBody />
-</DaisyCard>
-                <DaisyCardTitle className="text-[#191919]" >
-  Selected Controls ({selectedMitigations.size})
-</DaisyCardTitle>
+            <DaisyCard className="bg-white border-[#D8C3A5]">
+              <DaisyCardBody>
+                <DaisyCardTitle className="text-[#191919]">
+                  Selected Controls ({selectedMitigations.size})
                 </DaisyCardTitle>
-                <DaisyCardDescription >
-  Review the controls you've selected for import
-</DaisyCardDescription>
-                </p>
+                <DaisyCardDescription>
+                  Review the controls you've selected for import
+                </DaisyCardDescription>
+              </DaisyCardBody>
               
-              <DaisyCardBody >
-  <div className="space-y-3">
-</DaisyCardBody>
+              <DaisyCardBody>
+                <div className="space-y-3">
                   {Array.from(selectedMitigations).map(id => {
                     const mitigation = mitigations.find(m => m.id === id);
                     if (!mitigation) return null;
@@ -441,9 +425,8 @@ export function ProboControlsLibrary() {
                             <p className="text-sm text-[#A8A8A8]">{mitigation.category}</p>
                           </div>
                         </div>
-                        <DaisyBadge className={getImportanceColor(mitigation.importance)} >
-  {mitigation.importance}
-</DaisyBadge>
+                        <DaisyBadge className={getImportanceColor(mitigation.importance)}>
+                          {mitigation.importance}
                         </DaisyBadge>
                       </div>
                     );
@@ -453,19 +436,16 @@ export function ProboControlsLibrary() {
                 <div className="flex justify-end">
                   <DaisyButton
                     onClick={handleImportSelected}
-                    className="bg-[#199BEC] hover:bg-[#199BEC]/90" >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisySeparator>
+                    className="bg-[#199BEC] hover:bg-[#199BEC]/90">
+                    <Plus className="h-4 w-4 mr-2" />
                     Import {selectedMitigations.size} Controls
                   </DaisyButton>
                 </div>
               </DaisyCardBody>
             </DaisyCard>
           ) : (
-            <DaisyCard className="bg-white border-[#D8C3A5]" >
-  <DaisyCardBody className="p-12 text-center" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard className="bg-white border-[#D8C3A5]">
+              <DaisyCardBody className="p-12 text-center">
                 <Shield className="h-12 w-12 text-[#A8A8A8] mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-[#191919] mb-2">No Controls Selected</h3>
                 <p className="text-[#A8A8A8] mb-4">
@@ -474,7 +454,7 @@ export function ProboControlsLibrary() {
                 <DaisyButton
                   onClick={() => setActiveTab('browse')}
                   variant="outline"
-                  className="border-[#D8C3A5]" />
+                  className="border-[#D8C3A5]">
                   Browse Controls
                 </DaisyButton>
               </DaisyCardBody>

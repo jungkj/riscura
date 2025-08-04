@@ -357,16 +357,15 @@ export default function ReportingPage() {
                     'Generate Report'
                   )}
                 </DaisyButton>
-              </CardFooter>
+              </DaisyCardFooter>
             </DaisyCard>
             
-            <DaisyCard className="lg:col-span-1" >
-  <DaisyCardBody />
-</DaisyCard>
+            <DaisyCard className="lg:col-span-1">
+              <DaisyCardBody>
                 <DaisyCardTitle>Report Settings</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody className="space-y-4" >
-  <div className="space-y-2">
+              </DaisyCardBody>
+              <DaisyCardBody className="space-y-4">
+                <div className="space-y-2">
 </DaisyCardBody>
                   <DaisyLabel>Report Title</DaisyLabel>
                   <input
@@ -534,7 +533,7 @@ export default function ReportingPage() {
                       Download
                     </DaisyButton>
                   </div>
-                </CardFooter>
+                </DaisyCardFooter>
               </DaisyCard>
             ))}
           </div>
