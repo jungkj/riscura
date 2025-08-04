@@ -100,23 +100,20 @@ export default function OnboardingPage() {
   };
 
   return (
-    <DaisyCard className="w-full" >
-  <DaisyCardBody className="space-y-1" />
-</DaisyCard>
-        <DaisyCardTitle className="text-2xl font-bold" >
-  {step === 1 ? 'Welcome to Riscura' : 'Complete Your Profile'}
-</DaisyCardTitle>
-        </DaisyCardTitle>
-        <DaisyCardDescription >
-  {step === 1 
-</DaisyCardDescription>
+    <Card className="w-full">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold">
+          {step === 1 ? 'Welcome to Riscura' : 'Complete Your Profile'}
+        </CardTitle>
+        <CardDescription>
+          {step === 1 
             ? 'Let\'s set up your organization'
             : 'Tell us about your role and requirements'}
-        </p>
+        </CardDescription>
+      </CardHeader>
       
-      <DaisyCardBody >
-  <Form {...form}>
-</DaisyCardBody>
+      <CardContent>
+        <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {step === 1 ? (
               <>
@@ -127,7 +124,8 @@ export default function OnboardingPage() {
                     <FormItem>
                       <FormLabel>Organization Name</FormLabel>
                       <FormControl>
-                        <DaisyInput placeholder="Acme Corp" {...field} /></DaisyInput>
+                        <DaisyInput placeholder="Acme Corp" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -138,23 +136,25 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Industry</FormLabel>
-                      <DaisySelect 
+                      <Select 
                         onValueChange={field.onChange} 
-                        defaultValue={field.value} />
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <DaisySelectTrigger />
-                            <DaisySelectValue placeholder="Select industry" /></DaisySelect>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select industry" />
+                          </SelectTrigger>
                         </FormControl>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="financial">Financial Services</DaisySelectContent>
-                          <DaisySelectItem value="healthcare">Healthcare</DaisySelectItem>
-                          <DaisySelectItem value="technology">Technology</DaisySelectItem>
-                          <DaisySelectItem value="manufacturing">Manufacturing</DaisySelectItem>
-                          <DaisySelectItem value="retail">Retail</DaisySelectItem>
-                          <DaisySelectItem value="energy">Energy</DaisySelectItem>
-                          <DaisySelectItem value="other">Other</DaisySelectItem>
-                        </DaisySelectContent>
-                      </DaisySelect>
+                        <SelectContent>
+                          <SelectItem value="financial">Financial Services</SelectItem>
+                          <SelectItem value="healthcare">Healthcare</SelectItem>
+                          <SelectItem value="technology">Technology</SelectItem>
+                          <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                          <SelectItem value="retail">Retail</SelectItem>
+                          <SelectItem value="energy">Energy</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -165,21 +165,23 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Company Size</FormLabel>
-                      <DaisySelect 
+                      <Select 
                         onValueChange={field.onChange} 
-                        defaultValue={field.value} />
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <DaisySelectTrigger />
-                            <DaisySelectValue placeholder="Select company size" /></DaisySelect>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select company size" />
+                          </SelectTrigger>
                         </FormControl>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="1-50">1-50 employees</DaisySelectContent>
-                          <DaisySelectItem value="51-200">51-200 employees</DaisySelectItem>
-                          <DaisySelectItem value="201-500">201-500 employees</DaisySelectItem>
-                          <DaisySelectItem value="501-1000">501-1000 employees</DaisySelectItem>
-                          <DaisySelectItem value="1001+">1001+ employees</DaisySelectItem>
-                        </DaisySelectContent>
-                      </DaisySelect>
+                        <SelectContent>
+                          <SelectItem value="1-50">1-50 employees</SelectItem>
+                          <SelectItem value="51-200">51-200 employees</SelectItem>
+                          <SelectItem value="201-500">201-500 employees</SelectItem>
+                          <SelectItem value="501-1000">501-1000 employees</SelectItem>
+                          <SelectItem value="1001+">1001+ employees</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -187,9 +189,9 @@ export default function OnboardingPage() {
                 <DaisyButton 
                   type="button" 
                   onClick={nextStep} 
-                  className="w-full" >
-  Continue
-</DaisyButton>
+                  className="w-full"
+                >
+                  Continue
                 </DaisyButton>
               </>
             ) : (
@@ -204,39 +206,44 @@ export default function OnboardingPage() {
                         Select the role that best describes your position
                       </FormDescription>
                       <FormControl>
-                        <DaisyRadioGroup
+                        <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="space-y-1" />
+                          className="space-y-1"
+                        >
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <DaisyRadioGroupItem value="risk_manager" /></DaisyRadioGroup>
+                              <RadioGroupItem value="risk_manager" />
+                            </FormControl>
                             <FormLabel className="font-normal">
                               Risk Manager
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <DaisyRadioGroupItem value="admin" /></DaisyRadioGroupItem>
+                              <RadioGroupItem value="admin" />
+                            </FormControl>
                             <FormLabel className="font-normal">
                               Administrator
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <DaisyRadioGroupItem value="auditor" /></DaisyRadioGroupItem>
+                              <RadioGroupItem value="auditor" />
+                            </FormControl>
                             <FormLabel className="font-normal">
                               Auditor
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <DaisyRadioGroupItem value="user" /></DaisyRadioGroupItem>
+                              <RadioGroupItem value="user" />
+                            </FormControl>
                             <FormLabel className="font-normal">
                               Regular User
                             </FormLabel>
                           </FormItem>
-                        </DaisyRadioGroup>
+                        </RadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -248,16 +255,16 @@ export default function OnboardingPage() {
                     type="button" 
                     variant="outline" 
                     onClick={prevStep}
-                    className="flex-1" >
-  Back
-</DaisyButton>
+                    className="flex-1"
+                  >
+                    Back
                   </DaisyButton>
                   <DaisyButton 
                     type="submit" 
                     className="flex-1"
-                    disabled={isLoading} >
-  {isLoading ? (
-</DaisyButton>
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Setting up...
@@ -271,13 +278,12 @@ export default function OnboardingPage() {
             )}
           </form>
         </Form>
-      </DaisyCardBody>
-      <DaisyCardFooter className="flex justify-center" >
-  <p className="text-xs text-muted-foreground">
-</DaisyCardFooter>
+      </CardContent>
+      <CardFooter className="flex justify-center">
+        <p className="text-xs text-muted-foreground">
           Step {step} of 2
         </p>
       </CardFooter>
-    </DaisyCard>
+    </Card>
   );
 }

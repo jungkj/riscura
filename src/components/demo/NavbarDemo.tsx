@@ -84,19 +84,19 @@ export default function NavbarDemo() {
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Key Features:</h2>
                 <ul className="text-left space-y-3 text-gray-700">
                   <li className="flex items-center">
-                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                     Shrinks to 40% width when scrolled past 100px
                   </li>
                   <li className="flex items-center">
-                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                     Smooth spring animations with backdrop blur
                   </li>
                   <li className="flex items-center">
-                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                     Responsive mobile navigation with hamburger menu
                   </li>
                   <li className="flex items-center">
-                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                    <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                     Integrated with our #199BEC accent color system
                   </li>
                 </ul>

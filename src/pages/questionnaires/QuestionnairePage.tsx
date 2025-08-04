@@ -404,10 +404,7 @@ export default function QuestionnairePage() {
     const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: 'Unknown' };
 
   return (
-    <DaisyBadge variant="outline" className={config.color} >
-  {config.label}
-</DaisyBadge>
-      </DaisyBadge>
+    <DaisyBadge variant="outline" className={config.color} >{config.label}</DaisyBadge>
     );
   };
 
@@ -423,13 +420,11 @@ export default function QuestionnairePage() {
 
   if (error) {
     return (
-      <DaisyCard className="bg-white border border-gray-100 shadow-sm" >
-  <DaisyCardBody className="p-6" >
-  </DaisyCard>
-</DaisyCardBody>
+      <DaisyCard className="bg-white border border-gray-100 shadow-sm">
+        <DaisyCardBody className="p-6">
           <div className="text-center text-red-600">
             <p>Error loading questionnaires: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]" />
+            <DaisyButton onClick={() => window.location.reload()} className="mt-2 bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a]">
               Retry
             </DaisyButton>
           </div>
@@ -458,9 +453,8 @@ export default function QuestionnairePage() {
             Create and manage dynamic questionnaires with AI assistance
           </p>
         </div>
-        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium" >
-  <Plus className="mr-2 h-4 w-4" />
-</DaisyButton>
+        <DaisyButton onClick={handleCreateNew} className="bg-gradient-to-r from-[#191919] to-[#191919] text-white hover:from-[#2a2a2a] hover:to-[#2a2a2a] border-0 shadow-md hover:shadow-lg transition-all duration-300 font-inter font-medium">
+          <Plus className="mr-2 h-4 w-4" />
           Create Questionnaire
         </DaisyButton>
       </div>
@@ -473,20 +467,21 @@ export default function QuestionnairePage() {
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Total Questionnaires</DaisyCardTitle>
             <FileText className="h-4 w-4 text-gray-400" />
           
-          <DaisyCardBody >
-  <div className="text-2xl font-bold text-gray-900">
-</DaisyCardBody>{stats.total}</div>
+          <DaisyCardBody>
+            <div className="text-2xl font-bold text-gray-900">
+              {stats.total}
+            </div>
             <p className="text-xs text-gray-600">
               Across all statuses
             </p>
           </DaisyCardBody>
         </DaisyCard>
 
-        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg" >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
-</DaisyCard>
+        <DaisyCard className="bg-white border border-gray-100 hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-lg">
+          <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium text-gray-600">Active</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
+          </DaisyCardBody>
           
           <DaisyCardBody >
   <div className="text-2xl font-bold text-green-600">

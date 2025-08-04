@@ -13,20 +13,22 @@ const nextConfig = {
     scrollRestoration: true,
     // Optimize bundling for Vercel deployment
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', '@tabler/icons-react'],
+    // Force Babel compilation to bypass SWC JSX parsing bugs in Next.js 15.3.4
+    forceSwcTransforms: false,
   },
   
   // External packages for server components
   serverExternalPackages: ['prisma', '@prisma/client'],
   
-  // Turbopack configuration (stable in Next.js 15)
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
+  // Note: Turbopack not available in Next.js 15.0.0
+  // turbopack: {
+  //   rules: {
+  //     '*.svg': {
+  //       loaders: ['@svgr/webpack'],
+  //       as: '*.js',
+  //     },
+  //   },
+  // },
 
   // Compiler optimizations
   compiler: {
@@ -218,12 +220,15 @@ const nextConfig = {
   // Trailing slash
   trailingSlash: false,
 
-  // TypeScript configuration - optimized for Next.js 15.3.4
+  // TypeScript configuration - optimized for Next.js 15.0.0
   typescript: {
     // Temporarily ignore build errors while fixing JSX issues
     ignoreBuildErrors: true,
     tsconfigPath: './tsconfig.json',
   },
+
+  // Force Babel over SWC to resolve JSX parsing issues in Next.js 15.3.4
+  // This is automatically enabled by the presence of .babelrc
 
 
   // Logging configuration

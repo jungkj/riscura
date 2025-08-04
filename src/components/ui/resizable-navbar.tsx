@@ -2,10 +2,8 @@
 import { cn } from '@/lib/utils';
 import { Menu, X, Shield } from 'lucide-react';
 import Image from 'next/image';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { ModernButton } from './modern-button';
 
 interface NavbarProps {

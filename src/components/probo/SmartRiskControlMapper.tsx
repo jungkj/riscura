@@ -6,7 +6,13 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisySelect, DaisySelectTrigger, DaisySelectValue, DaisySelectContent, DaisySelectItem } from '@/components/ui/DaisySelect';
+import {
+  DaisySelect,
+  DaisySelectTrigger,
+  DaisySelectValue,
+  DaisySelectContent,
+  DaisySelectItem,
+} from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
@@ -35,14 +41,10 @@ import {
   Settings,
   Lightbulb,
   Link,
-  Unlink
+  Unlink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ProboControl,
-  RiskControlMapping,
-  ProboAIAnalysis
-} from '@/types/probo-integration.types';
+import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types';
 import { ProboIntegrationService } from '@/services/ProboIntegrationService';
 
 interface Risk {
@@ -69,7 +71,7 @@ export default function SmartRiskControlMapper({
   controls,
   existingMappings,
   onMappingsUpdate,
-  className = ''
+  className = '',
 }: SmartRiskControlMapperProps) {
   const [mappings, setMappings] = useState<RiskControlMapping[]>(existingMappings);
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
@@ -86,45 +88,46 @@ export default function SmartRiskControlMapper({
 
   // Filter risks based on search and filters
   const filteredRisks = useMemo(() => {
-    return risks.filter(risk => {
-      const matchesSearch = risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          risk.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return risks.filter((risk) => {
+      const matchesSearch =
+        risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        risk.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesSeverity = filterSeverity === 'all' || risk.severity === filterSeverity;
       const matchesCategory = filterCategory === 'all' || risk.category === filterCategory;
-      
+
       return matchesSearch && matchesSeverity && matchesCategory;
     });
   }, [risks, searchTerm, filterSeverity, filterCategory]);
 
   // Get unique categories
   const riskCategories = useMemo(() => {
-    return Array.from(new Set(risks.map(risk => risk.category)));
+    return Array.from(new Set(risks.map((risk) => risk.category)));
   }, [risks]);
 
   // Get mappings for a specific risk
   const getRiskMappings = (riskId: string) => {
-    return mappings.filter(mapping => mapping.riskId === riskId);
+    return mappings.filter((mapping) => mapping.riskId === riskId);
   };
 
   // Get controls mapped to a specific risk
   const getMappedControls = (riskId: string) => {
     const riskMappings = getRiskMappings(riskId);
-    return controls.filter(control => 
-      riskMappings.some(mapping => mapping.controlId === control.id)
+    return controls.filter((control) =>
+      riskMappings.some((mapping) => mapping.controlId === control.id)
     );
   };
 
   // Get unmapped controls for a risk
   const getUnmappedControls = (riskId: string) => {
-    const mappedControlIds = getMappedControls(riskId).map(c => c.id);
-    return controls.filter(control => !mappedControlIds.includes(control.id));
+    const mappedControlIds = getMappedControls(riskId).map((c) => c.id);
+    return controls.filter((control) => !mappedControlIds.includes(control.id));
   };
 
   // Calculate risk coverage
   const calculateRiskCoverage = (riskId: string) => {
     const riskMappings = getRiskMappings(riskId);
     if (riskMappings.length === 0) return 0;
-    
+
     const totalCoverage = riskMappings.reduce((sum, mapping) => sum + mapping.coverage, 0);
     return Math.min(100, totalCoverage);
   };
@@ -146,18 +149,18 @@ export default function SmartRiskControlMapper({
   // Simulate AI analysis
   const analyzeRiskForControlSuggestions = async (risk: Risk): Promise<any[]> => {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Generate smart suggestions based on risk characteristics
     const suggestions = controls
-      .filter(control => !getMappedControls(risk.id).some(mc => mc.id === control.id))
-      .map(control => ({
+      .filter((control) => !getMappedControls(risk.id).some((mc) => mc.id === control.id))
+      .map((control) => ({
         control,
         relevanceScore: calculateRelevanceScore(risk, control),
         reasoning: generateReasoningText(risk, control),
         suggestedMappingType: suggestMappingType(risk, control),
         estimatedEffectiveness: estimateEffectiveness(risk, control),
-        implementationPriority: calculatePriority(risk, control)
+        implementationPriority: calculatePriority(risk, control),
       }))
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, 5); // Top 5 suggestions
@@ -168,68 +171,88 @@ export default function SmartRiskControlMapper({
   // Calculate relevance score between risk and control
   const calculateRelevanceScore = (risk: Risk, control: ProboControl): number => {
     let score = 0;
-    
+
     // Category matching
-    if (control.category.name.toLowerCase().includes(risk.category.toLowerCase()) ||
-        risk.category.toLowerCase().includes(control.category.name.toLowerCase())) {
+    if (
+      control.category.name.toLowerCase().includes(risk.category.toLowerCase()) ||
+      risk.category.toLowerCase().includes(control.category.name.toLowerCase())
+    ) {
       score += 30;
     }
-    
+
     // Severity/Priority alignment
-    if ((risk.severity === 'Critical' && control.priority === 'Critical') ||
-        (risk.severity === 'High' && ['Critical', 'High'].includes(control.priority))) {
+    if (
+      (risk.severity === 'Critical' && control.priority === 'Critical') ||
+      (risk.severity === 'High' && ['Critical', 'High'].includes(control.priority))
+    ) {
       score += 25;
     }
-    
+
     // Risk mitigation score
     score += control.riskMitigationScore * 2;
-    
+
     // AI confidence
     score += control.aiConfidence * 20;
-    
+
     // Keywords matching
     const riskKeywords = (risk.title + ' ' + risk.description).toLowerCase();
     const controlKeywords = (control.title + ' ' + control.description).toLowerCase();
-    const commonWords = ['access', 'data', 'security', 'authentication', 'encryption', 'monitoring'];
-    
-    commonWords.forEach(word => {
+    const commonWords = [
+      'access',
+      'data',
+      'security',
+      'authentication',
+      'encryption',
+      'monitoring',
+    ];
+
+    commonWords.forEach((word) => {
       if (riskKeywords.includes(word) && controlKeywords.includes(word)) {
         score += 5;
       }
     });
-    
+
     return Math.min(100, score);
   };
 
   // Generate reasoning text
   const generateReasoningText = (risk: Risk, control: ProboControl): string => {
     const reasons = [];
-    
+
     if (control.category.name.toLowerCase().includes(risk.category.toLowerCase())) {
       reasons.push(`Directly addresses ${risk.category.toLowerCase()} risks`);
     }
-    
+
     if (control.riskMitigationScore >= 8) {
       reasons.push('High risk mitigation potential');
     }
-    
+
     if (control.automationPotential === 'Full') {
       reasons.push('Can be fully automated');
     }
-    
+
     if (control.priority === risk.severity) {
       reasons.push('Priority level matches risk severity');
     }
-    
+
     return reasons.length > 0 ? reasons.join(', ') : 'General security enhancement';
   };
 
   // Suggest mapping type
-  const suggestMappingType = (risk: Risk, control: ProboControl): 'Preventive' | 'Detective' | 'Corrective' | 'Compensating' => {
-    if (control.category.name.includes('Access') || control.category.name.includes('Authentication')) {
+  const suggestMappingType = (
+    risk: Risk,
+    control: ProboControl
+  ): 'Preventive' | 'Detective' | 'Corrective' | 'Compensating' => {
+    if (
+      control.category.name.includes('Access') ||
+      control.category.name.includes('Authentication')
+    ) {
       return 'Preventive';
     }
-    if (control.category.name.includes('Monitoring') || control.category.name.includes('Detection')) {
+    if (
+      control.category.name.includes('Monitoring') ||
+      control.category.name.includes('Detection')
+    ) {
       return 'Detective';
     }
     if (control.category.name.includes('Response') || control.category.name.includes('Recovery')) {
@@ -249,32 +272,37 @@ export default function SmartRiskControlMapper({
   // Calculate implementation priority
   const calculatePriority = (risk: Risk, control: ProboControl): number => {
     let priority = 0;
-    
+
     // Risk severity weight
     const severityWeight = {
-      'Critical': 4,
-      'High': 3,
-      'Medium': 2,
-      'Low': 1
+      Critical: 4,
+      High: 3,
+      Medium: 2,
+      Low: 1,
     };
     priority += severityWeight[risk.severity] * 25;
-    
+
     // Control effectiveness
     priority += control.riskMitigationScore * 5;
-    
+
     // Implementation complexity (inverse)
     const complexityWeight = {
-      'Simple': 3,
-      'Moderate': 2,
-      'Complex': 1
+      Simple: 3,
+      Moderate: 2,
+      Complex: 1,
     };
     priority += complexityWeight[control.implementationComplexity] * 10;
-    
+
     return Math.min(100, priority);
   };
 
   // Create a new mapping
-  const createMapping = (riskId: string, controlId: string, mappingType: string, effectiveness: string) => {
+  const createMapping = (
+    riskId: string,
+    controlId: string,
+    mappingType: string,
+    effectiveness: string
+  ) => {
     const newMapping: RiskControlMapping = {
       id: `mapping_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       riskId,
@@ -285,7 +313,7 @@ export default function SmartRiskControlMapper({
       aiGenerated: true,
       aiConfidence: 0.85,
       rationale: 'AI-suggested mapping based on risk-control analysis',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     const updatedMappings = [...mappings, newMapping];
@@ -295,7 +323,7 @@ export default function SmartRiskControlMapper({
 
   // Remove a mapping
   const removeMapping = (mappingId: string) => {
-    const updatedMappings = mappings.filter(m => m.id !== mappingId);
+    const updatedMappings = mappings.filter((m) => m.id !== mappingId);
     setMappings(updatedMappings);
     onMappingsUpdate?.(updatedMappings);
   };
@@ -303,7 +331,7 @@ export default function SmartRiskControlMapper({
   // Apply AI suggestion
   const applyAISuggestion = (suggestion: any) => {
     if (!selectedRisk) return;
-    
+
     createMapping(
       selectedRisk.id,
       suggestion.control.id,
@@ -314,20 +342,29 @@ export default function SmartRiskControlMapper({
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'Critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'High': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'High':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Low':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getEffectivenessColor = (effectiveness: string) => {
     switch (effectiveness) {
-      case 'High': return 'bg-green-100 text-green-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'Low': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'High':
+        return 'bg-green-100 text-green-800';
+      case 'Medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Low':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -382,9 +419,13 @@ export default function SmartRiskControlMapper({
               <div>
                 <p className="text-xs text-gray-500">Avg Coverage</p>
                 <p className="font-medium">
-                  {risks.length > 0 
-                    ? Math.round(risks.reduce((sum, risk) => sum + calculateRiskCoverage(risk.id), 0) / risks.length)
-                    : 0}%
+                  {risks.length > 0
+                    ? Math.round(
+                        risks.reduce((sum, risk) => sum + calculateRiskCoverage(risk.id), 0) /
+                          risks.length
+                      )
+                    : 0}
+                  %
                 </p>
               </div>
             </div>
@@ -491,13 +532,15 @@ export default function SmartRiskControlMapper({
               const coverage = calculateRiskCoverage(risk.id);
               const mappedControlsCount = getMappedControls(risk.id).length;
               const isSelected = selectedRisk?.id === risk.id;
-              
+
               return (
                 <motion.div
                   key={risk.id}
                   whileHover={{ scale: 1.02 }}
                   className={`p-3 border rounded-lg cursor-pointer transition-all ${
-                    isSelected ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'
+                    isSelected
+                      ? 'border-purple-500 bg-purple-50'
+                      : 'border-gray-200 hover:border-gray-300'
                   }`}
                   onClick={() => {
                     setSelectedRisk(risk);
@@ -511,11 +554,9 @@ export default function SmartRiskControlMapper({
                         {risk.severity}
                       </DaisyBadge>
                     </div>
-                    
-                    <p className="text-xs text-gray-600 line-clamp-2">
-                      {risk.description}
-                    </p>
-                    
+
+                    <p className="text-xs text-gray-600 line-clamp-2">{risk.description}</p>
+
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <Shield className="h-3 w-3 text-gray-500" />
@@ -526,7 +567,7 @@ export default function SmartRiskControlMapper({
                         <span className="text-xs font-medium">{coverage}%</span>
                       </div>
                     </div>
-                    
+
                     <DaisyProgress value={coverage} className="h-1" />
                   </div>
                 </motion.div>
@@ -540,7 +581,9 @@ export default function SmartRiskControlMapper({
           <DaisyCardBody>
             <DaisyCardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5" />
-              {selectedRisk ? `AI Suggestions for: ${selectedRisk.title}` : 'Select a Risk to View AI Suggestions'}
+              {selectedRisk
+                ? `AI Suggestions for: ${selectedRisk.title}`
+                : 'Select a Risk to View AI Suggestions'}
             </DaisyCardTitle>
           </DaisyCardBody>
           <DaisyCardBody>
@@ -571,10 +614,15 @@ export default function SmartRiskControlMapper({
                     </h4>
                     <div className="space-y-2">
                       {getMappedControls(selectedRisk.id).map((control) => {
-                        const mapping = mappings.find(m => m.riskId === selectedRisk.id && m.controlId === control.id);
-                        
+                        const mapping = mappings.find(
+                          (m) => m.riskId === selectedRisk.id && m.controlId === control.id
+                        );
+
                         return (
-                          <div key={control.id} className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                          <div
+                            key={control.id}
+                            className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg"
+                          >
                             <div className="flex items-center space-x-3">
                               <Shield className="h-4 w-4 text-green-600" />
                               <div>
@@ -583,7 +631,9 @@ export default function SmartRiskControlMapper({
                                   <DaisyBadge variant="outline" className="text-xs">
                                     {mapping?.mappingType}
                                   </DaisyBadge>
-                                  <DaisyBadge className={`text-xs ${getEffectivenessColor(mapping?.effectiveness || 'Medium')}`}>
+                                  <DaisyBadge
+                                    className={`text-xs ${getEffectivenessColor(mapping?.effectiveness || 'Medium')}`}
+                                  >
                                     {mapping?.effectiveness}
                                   </DaisyBadge>
                                   <span className="text-xs text-gray-500">
@@ -613,12 +663,13 @@ export default function SmartRiskControlMapper({
                     <Sparkles className="h-4 w-4 text-purple-600" />
                     AI-Suggested Controls ({aiSuggestions.length})
                   </h4>
-                  
+
                   {aiSuggestions.length === 0 ? (
                     <DaisyAlert>
                       <Lightbulb className="h-4 w-4" />
                       <DaisyAlertDescription>
-                        No additional control suggestions found. All relevant controls may already be mapped.
+                        No additional control suggestions found. All relevant controls may already
+                        be mapped.
                       </DaisyAlertDescription>
                     </DaisyAlert>
                   ) : (
@@ -639,11 +690,11 @@ export default function SmartRiskControlMapper({
                                   {suggestion.relevanceScore}% match
                                 </DaisyBadge>
                               </div>
-                              
+
                               <p className="text-sm text-gray-600 mb-3">
                                 {suggestion.control.description}
                               </p>
-                              
+
                               <div className="grid grid-cols-2 gap-4 mb-3">
                                 <div>
                                   <p className="text-xs text-gray-500">Suggested Type</p>
@@ -653,12 +704,14 @@ export default function SmartRiskControlMapper({
                                 </div>
                                 <div>
                                   <p className="text-xs text-gray-500">Effectiveness</p>
-                                  <DaisyBadge className={`text-xs ${getEffectivenessColor(suggestion.estimatedEffectiveness)}`}>
+                                  <DaisyBadge
+                                    className={`text-xs ${getEffectivenessColor(suggestion.estimatedEffectiveness)}`}
+                                  >
                                     {suggestion.estimatedEffectiveness}
                                   </DaisyBadge>
                                 </div>
                               </div>
-                              
+
                               <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
                                 <div className="flex items-center space-x-1">
                                   <Clock className="h-3 w-3" />
@@ -673,12 +726,12 @@ export default function SmartRiskControlMapper({
                                   <span>Priority: {suggestion.implementationPriority}/100</span>
                                 </div>
                               </div>
-                              
+
                               <p className="text-xs text-gray-600 italic">
                                 <strong>AI Reasoning:</strong> {suggestion.reasoning}
                               </p>
                             </div>
-                            
+
                             <DaisyButton
                               size="sm"
                               onClick={() => applyAISuggestion(suggestion)}
@@ -700,4 +753,4 @@ export default function SmartRiskControlMapper({
       </div>
     </div>
   );
-} 
+}

@@ -9,14 +9,16 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Activity, Plus, Download, Filter } from 'lucide-react';
 
 export default function RiskHeatMapPage() {
-
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Risk Heat Map</h1>
-          <p className="text-gray-600">Visualize and analyze your organization's risk landscape through our interactive heat map interface.</p>
+          <p className="text-gray-600">
+            Visualize and analyze your organization's risk landscape through our interactive heat
+            map interface.
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <DaisyButton variant="outline" className="text-sm">
@@ -43,12 +45,12 @@ export default function RiskHeatMapPage() {
           </DaisyCardTitle>
         </DaisyCardBody>
         <DaisyCardBody>
-          <Suspense 
-            fallback={
+          <Suspense
+            fallback={(
               <div className="flex items-center justify-center p-12">
                 <LoadingSpinner />
               </div>
-            }
+            )}
           >
             <RiskHeatMap />
           </Suspense>

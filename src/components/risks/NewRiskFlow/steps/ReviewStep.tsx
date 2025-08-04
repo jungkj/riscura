@@ -2,7 +2,15 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Save, Calendar, User2, Shield, TrendingUp, AlertTriangle } from 'lucide-react';
+import {
+  ChevronLeft,
+  Save,
+  Calendar,
+  User2,
+  Shield,
+  TrendingUp,
+  AlertTriangle,
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRiskFlow } from '../RiskFlowContext';
 import { format } from 'date-fns';
@@ -14,7 +22,7 @@ interface ReviewStepProps {
   onSuccess: () => void;
 }
 
-export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
+export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
   const { riskData, setIsSubmitting } = useRiskFlow();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -49,12 +57,14 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
           status: riskData.status,
           treatmentStrategy: riskData.treatmentStrategy,
           controlMeasures: riskData.controlMeasures,
-          dateIdentified: riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
-            ? riskData.dateIdentified.toISOString() 
-            : new Date().toISOString(),
-          nextReview: riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) 
-            ? riskData.nextReview.toISOString() 
-            : undefined,
+          dateIdentified:
+            riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime())
+              ? riskData.dateIdentified.toISOString()
+              : new Date().toISOString(),
+          nextReview:
+            riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime())
+              ? riskData.nextReview.toISOString()
+              : undefined,
           frameworkIds: riskData.frameworkIds,
           tags: riskData.tags,
         }),
@@ -77,7 +87,8 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
       onSuccess();
     } catch (error) {
       console.error('Error creating risk:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create risk. Please try again.';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to create risk. Please try again.';
       toast.error(errorMessage);
     } finally {
       setIsCreating(false);
@@ -111,19 +122,26 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
             <div className="space-y-1">
               <h4 className="text-xl font-semibold">{riskData.title}</h4>
               <div className="flex items-center gap-3 text-sm">
-                <span className={cn("px-2 py-0.5 rounded-md font-medium", riskLevel.color)}>
+                <span className={cn('px-2 py-0.5 rounded-md font-medium', riskLevel.color)}>
                   {riskLevel.icon} {riskLevel.level} Risk
                 </span>
                 <span className="text-muted-foreground">Score: {riskScore}</span>
               </div>
             </div>
-            <div className={cn("px-3 py-1 rounded-full text-xs font-medium", 
-              riskData.category === 'STRATEGIC' ? 'bg-purple-100 text-purple-700' :
-              riskData.category === 'OPERATIONAL' ? 'bg-blue-100 text-blue-700' :
-              riskData.category === 'FINANCIAL' ? 'bg-green-100 text-green-700' :
-              riskData.category === 'COMPLIANCE' ? 'bg-orange-100 text-orange-700' :
-              'bg-gray-100 text-gray-700'
-            )}>
+            <div
+              className={cn(
+                'px-3 py-1 rounded-full text-xs font-medium',
+                riskData.category === 'STRATEGIC'
+                  ? 'bg-purple-100 text-purple-700'
+                  : riskData.category === 'OPERATIONAL'
+                    ? 'bg-blue-100 text-blue-700'
+                    : riskData.category === 'FINANCIAL'
+                      ? 'bg-green-100 text-green-700'
+                      : riskData.category === 'COMPLIANCE'
+                        ? 'bg-orange-100 text-orange-700'
+                        : 'bg-gray-100 text-gray-700'
+              )}
+            >
               {riskData.category}
             </div>
           </div>
@@ -176,9 +194,13 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
           <div className="flex items-center gap-4 pt-2 border-t text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              <span>Identified: {riskData.dateIdentified instanceof Date && !isNaN(riskData.dateIdentified.getTime()) 
-                ? format(riskData.dateIdentified, 'MMM dd, yyyy') 
-                : 'Today'}</span>
+              <span>
+                Identified:{' '}
+                {riskData.dateIdentified instanceof Date &&
+                !isNaN(riskData.dateIdentified.getTime())
+                  ? format(riskData.dateIdentified, 'MMM dd, yyyy')
+                  : 'Today'}
+              </span>
             </div>
             {riskData.nextReview instanceof Date && !isNaN(riskData.nextReview.getTime()) && (
               <div className="flex items-center gap-1">
@@ -200,9 +222,9 @@ export function ReviewStep({ onBack, onSuccess }: ReviewStepProps) {
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back
         </DaisyButton>
-        <DaisyButton 
-          onClick={handleCreate} 
-          size="lg" 
+        <DaisyButton
+          onClick={handleCreate}
+          size="lg"
           className="min-w-[140px]"
           disabled={isCreating}
         >

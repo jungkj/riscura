@@ -66,10 +66,8 @@ const HeroProcessCard = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Main Process Card */}
-      <DaisyCard className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full" >
-  <DaisyCardBody className="p-0" >
-  </DaisyCard>
-</DaisyCardBody>
+      <DaisyCard className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl overflow-hidden w-full">
+        <DaisyCardBody className="p-0">
           {/* Header with Browser Chrome */}
           <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -206,9 +204,9 @@ const HeroProcessCard = () => {
                             <div className="text-xs text-gray-900 font-medium mb-2">{result.name}</div>
                             <DaisyBadge 
                               variant={result.level === 'high' ? 'destructive' : result.level === 'medium' ? 'secondary' : 'default'}
-                              className="text-xs mb-1" >
-  {result.level}
-</DaisyBadge>
+                              className="text-xs mb-1"
+                            >
+                              {result.level}
                             </DaisyBadge>
                             <div className="text-xs font-mono text-gray-600 mt-1">{result.score}</div>
                           </motion.div>

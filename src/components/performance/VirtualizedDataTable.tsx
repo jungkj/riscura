@@ -19,7 +19,7 @@ interface VirtualizedDataTableProps<T> {
   className?: string;
 }
 
-export function VirtualizedDataTable<T extends Record<string, any>>({
+export const VirtualizedDataTable = <T extends Record<string, any>>({
   data,
   columns,
   height = 400,
@@ -28,7 +28,7 @@ export function VirtualizedDataTable<T extends Record<string, any>>({
   searchable = true,
   sortable = true,
   className = '',
-}: VirtualizedDataTableProps<T>) {
+}: VirtualizedDataTableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{
     key: keyof T;

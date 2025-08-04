@@ -49,7 +49,7 @@ interface RiskFlowContextType {
 
 const RiskFlowContext = createContext<RiskFlowContextType | undefined>(undefined);
 
-export function RiskFlowProvider({ children }: { children: ReactNode }) {
+export const RiskFlowProvider = ({ children }: { children: ReactNode }) => {
   const [currentStep, setCurrentStep] = useState<RiskFlowStep>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
 

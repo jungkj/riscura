@@ -254,7 +254,8 @@ export const IntegrationPartners: React.FC = () => {
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out forwards;
         }
-      `}</style>
+      `}
+      </style>
     </section>
   );
 };

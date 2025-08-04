@@ -389,16 +389,16 @@ export default function TeamDelegatePage() {
         ]}
         maxWidth="2xl"
       >
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6" />
-          <DaisyTabsList />
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <DaisyTabsList>
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabsTrigger>
             <DaisyTabsTrigger value="tasks">Task Management</DaisyTabsTrigger>
             <DaisyTabsTrigger value="team">Team Members</DaisyTabsTrigger>
             <DaisyTabsTrigger value="workload">Workload Analysis</DaisyTabsTrigger>
           </DaisyTabsList>
         </DaisyTabs>
 
-        <DaisyTabsContent value="overview" className="space-y-6" />
+        <DaisyTabsContent value="overview" className="space-y-6">
           {/* Team Performance Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {sampleTeamMembers.map((member) => {
@@ -406,13 +406,12 @@ export default function TeamDelegatePage() {
               const statusConfig = getStatusConfig(member.status);
               
               return (
-                <DaisyCard key={member.id} >
-  <DaisyCardBody className="pb-3" />
-</DaisyTabsContent>
+                <DaisyCard key={member.id}>
+                  <DaisyCardBody className="pb-3">
                     <div className="flex items-center space-x-3">
-                      <DaisyAvatar className="h-10 w-10" />
+                      <DaisyAvatar className="h-10 w-10">
                         <DaisyAvatarImage src={member.avatar} />
-                        <DaisyAvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</DaisyAvatar>
+                        <DaisyAvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
                       </DaisyAvatar>
                       <div className="flex-1">
                         <div className="font-medium text-sm">{member.name}</div>
@@ -420,19 +419,17 @@ export default function TeamDelegatePage() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <DaisyBadge variant="outline" className={cn("text-xs", roleConfig.color)} >
-  {roleConfig.label}
-</DaisyBadge>
+                      <DaisyBadge variant="outline" className={cn("text-xs", roleConfig.color)}>
+                        {roleConfig.label}
                       </DaisyBadge>
-                      <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)} >
-  {statusConfig.label}
-</DaisyBadge>
+                      <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                        {statusConfig.label}
                       </DaisyBadge>
                     </div>
+                  </DaisyCardBody>
                   
-                  <DaisyCardBody >
-  <div className="space-y-3">
-</DaisyCardBody>
+                  <DaisyCardBody>
+                    <div className="space-y-3">
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Workload</span>
@@ -459,15 +456,13 @@ export default function TeamDelegatePage() {
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {member.expertise.slice(0, 2).map((skill) => (
-                          <DaisyBadge key={skill} variant="outline" className="text-xs" >
-  {skill}
-</DaisyProgress>
+                          <DaisyBadge key={skill} variant="outline" className="text-xs">
+                            {skill}
                           </DaisyBadge>
                         ))}
                         {member.expertise.length > 2 && (
-                          <DaisyBadge variant="outline" className="text-xs" >
-  +{member.expertise.length - 2}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
+                            +{member.expertise.length - 2}
                           </DaisyBadge>
                         )}
                       </div>
@@ -479,15 +474,14 @@ export default function TeamDelegatePage() {
           </div>
 
           {/* Recent Activity */}
-          <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
+          <DaisyCard>
+            <DaisyCardBody>
               <DaisyCardTitle>Recent Delegation Activity</DaisyCardTitle>
-              <DaisyCardDescription>Latest task assignments and updates</p>
+              <DaisyCardDescription>Latest task assignments and updates</DaisyCardDescription>
+            </DaisyCardBody>
             
-            <DaisyCardBody >
-  <div className="space-y-4">
-</DaisyCardDescription>
+            <DaisyCardBody>
+              <div className="space-y-4">
                 {sampleTasks.slice(0, 3).map((task) => {
                   const member = sampleTeamMembers.find(m => m.id === task.assignee);
                   const priorityConfig = getPriorityConfig(task.priority);
@@ -496,10 +490,10 @@ export default function TeamDelegatePage() {
 
                   return (
                     <div key={task.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                      <DaisyAvatar className="h-8 w-8" />
-                        <DaisyAvatarFallback className="text-xs" />
+                      <DaisyAvatar className="h-8 w-8">
+                        <DaisyAvatarFallback className="text-xs">
                           {member?.name.split(' ').map(n => n[0]).join('')}
-                        </DaisyAvatar>
+                        </DaisyAvatarFallback>
                       </DaisyAvatar>
                       <div className="flex-1">
                         <div className="font-medium text-sm">{task.title}</div>
@@ -508,13 +502,11 @@ export default function TeamDelegatePage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
-  {priorityConfig.label}
-</DaisyBadge>
+                        <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
+                          {priorityConfig.label}
                         </DaisyBadge>
-                        <DaisyBadge variant={statusConfig.variant} className="text-xs" >
-  <StatusIcon className="h-3 w-3 mr-1" />
-</DaisyBadge>
+                        <DaisyBadge variant={statusConfig.variant} className="text-xs">
+                          <StatusIcon className="h-3 w-3 mr-1" />
                           {statusConfig.label}
                         </DaisyBadge>
                       </div>
@@ -526,7 +518,7 @@ export default function TeamDelegatePage() {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="tasks" className="space-y-6" />
+        <DaisyTabsContent value="tasks" className="space-y-6">
           {/* Task Filters */}
           <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-lg">
             <div className="relative flex-1 min-w-64">
@@ -539,11 +531,12 @@ export default function TeamDelegatePage() {
               />
             </div>
             
-            <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Status" /></DaisyTabsContent>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Status</DaisySelectContent>
+            <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue placeholder="Status" />
+              </DaisySelectTrigger>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Status</DaisySelectItem>
                 <DaisySelectItem value="pending">Pending</DaisySelectItem>
                 <DaisySelectItem value="in_progress">In Progress</DaisySelectItem>
                 <DaisySelectItem value="review">In Review</DaisySelectItem>
@@ -552,11 +545,12 @@ export default function TeamDelegatePage() {
               </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Priority" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Priorities</DaisySelectContent>
+            <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue placeholder="Priority" />
+              </DaisySelectTrigger>
+              <DaisySelectContent>
+                <DaisySelectItem value="all">All Priorities</DaisySelectItem>
                 <DaisySelectItem value="critical">Critical</DaisySelectItem>
                 <DaisySelectItem value="high">High</DaisySelectItem>
                 <DaisySelectItem value="medium">Medium</DaisySelectItem>
@@ -582,61 +576,54 @@ export default function TeamDelegatePage() {
                 <DaisyCard key={task.id} className={cn(
                   "border-l-4",
                   isOverdue ? "border-red-500" : priorityConfig.bg.replace('bg-', 'border-')
-                )} >
-  <DaisyCardBody />
-</DaisyCard>
+                )}>
+                  <DaisyCardBody>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {task.id}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
+                            {task.id}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className="text-xs" >
-  {task.type.replace('_', ' ').toUpperCase()}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className="text-xs">
+                            {task.type.replace('_', ' ').toUpperCase()}
                           </DaisyBadge>
-                          <DaisyBadge variant={statusConfig.variant} className="text-xs" >
-  <StatusIcon className="h-3 w-3 mr-1" />
-</DaisyBadge>
+                          <DaisyBadge variant={statusConfig.variant} className="text-xs">
+                            <StatusIcon className="h-3 w-3 mr-1" />
                             {statusConfig.label}
                           </DaisyBadge>
-                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)} >
-  {priorityConfig.label}
-</DaisyBadge>
+                          <DaisyBadge variant="outline" className={cn("text-xs", priorityConfig.color)}>
+                            {priorityConfig.label}
                           </DaisyBadge>
                           {task.framework && (
-                            <DaisyBadge variant="outline" className="text-xs" >
-  {task.framework}
-</DaisyBadge>
+                            <DaisyBadge variant="outline" className="text-xs">
+                              {task.framework}
                             </DaisyBadge>
                           )}
                         </div>
                         <DaisyCardTitle className="text-base">{task.title}</DaisyCardTitle>
-                        <DaisyCardDescription className="mt-1" >
-  {task.description}
-</DaisyCardDescription>
-                        </p>
+                        <DaisyCardDescription className="mt-1">
+                          {task.description}
+                        </DaisyCardDescription>
                       </div>
                       <div className="text-right ml-4">
                         <div className="text-lg font-bold">{task.progress}%</div>
                         <div className="text-xs text-gray-500">Progress</div>
                       </div>
                     </div>
+                  </DaisyCardBody>
                   
-                  <DaisyCardBody >
-  <div className="space-y-4">
-</DaisyCardBody>
+                  <DaisyCardBody>
+                    <div className="space-y-4">
                       {/* Progress Bar */}
                       <DaisyProgress value={task.progress} className="h-2" />
                       
                       {/* Task Details */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div className="flex items-center space-x-2">
-                          <DaisyAvatar className="h-6 w-6" />
-                            <DaisyAvatarFallback className="text-xs" />
+                          <DaisyAvatar className="h-6 w-6">
+                            <DaisyAvatarFallback className="text-xs">
                               {member?.name.split(' ').map(n => n[0]).join('')}
-                            </DaisyProgress>
+                            </DaisyAvatarFallback>
                           </DaisyAvatar>
                           <div>
                             <div className="font-medium">{member?.name}</div>
@@ -660,9 +647,8 @@ export default function TeamDelegatePage() {
                       {/* Tags */}
                       <div className="flex flex-wrap gap-1">
                         {task.tags.map((tag) => (
-                          <DaisyBadge key={tag} variant="outline" className="text-xs" >
-  {tag}
-</DaisyBadge>
+                          <DaisyBadge key={tag} variant="outline" className="text-xs">
+                            {tag}
                           </DaisyBadge>
                         ))}
                       </div>
@@ -683,21 +669,24 @@ export default function TeamDelegatePage() {
                           <DaisyButton
                             variant="outline"
                             size="sm"
-                            onClick={() => handleTaskAction('view', task.id)} />
+                            onClick={() => handleTaskAction('view', task.id)}
+                          >
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </DaisyButton>
                           <DaisyButton
                             variant="outline"
                             size="sm"
-                            onClick={() => handleTaskAction('edit', task.id)} />
+                            onClick={() => handleTaskAction('edit', task.id)}
+                          >
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </DaisyButton>
                           <DaisyButton
                             variant="outline"
                             size="sm"
-                            onClick={() => handleTaskAction('comment', task.id)} />
+                            onClick={() => handleTaskAction('comment', task.id)}
+                          >
                             <MessageSquare className="h-4 w-4 mr-1" />
                             Comment
                           </DaisyButton>
@@ -711,37 +700,33 @@ export default function TeamDelegatePage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="team" className="space-y-6" />
+        <DaisyTabsContent value="team" className="space-y-6">
           <div className="grid gap-6">
             {sampleTeamMembers.map((member) => {
               const roleConfig = getRoleConfig(member.role);
               const statusConfig = getStatusConfig(member.status);
               
               return (
-                <DaisyCard key={member.id} >
-  <DaisyCardBody />
-</DaisyTabsContent>
+                <DaisyCard key={member.id}>
+                  <DaisyCardBody>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-4">
-                        <DaisyAvatar className="h-12 w-12" />
+                        <DaisyAvatar className="h-12 w-12">
                           <DaisyAvatarImage src={member.avatar} />
-                          <DaisyAvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</DaisyAvatar>
+                          <DaisyAvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
                         </DaisyAvatar>
                         <div>
                           <DaisyCardTitle className="text-lg">{member.name}</DaisyCardTitle>
-                          <DaisyCardDescription>{member.email}</p>
+                          <DaisyCardDescription>{member.email}</DaisyCardDescription>
                           <div className="flex items-center space-x-2 mt-2">
-                            <DaisyBadge variant="outline" className={cn("text-xs", roleConfig.color)} >
-  {roleConfig.label}
-</DaisyCardDescription>
+                            <DaisyBadge variant="outline" className={cn("text-xs", roleConfig.color)}>
+                              {roleConfig.label}
                             </DaisyBadge>
-                            <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)} >
-  {statusConfig.label}
-</DaisyBadge>
+                            <DaisyBadge variant="outline" className={cn("text-xs", statusConfig.color)}>
+                              {statusConfig.label}
                             </DaisyBadge>
-                            <DaisyBadge variant="outline" className="text-xs" >
-  {member.department}
-</DaisyBadge>
+                            <DaisyBadge variant="outline" className="text-xs">
+                              {member.department}
                             </DaisyBadge>
                           </div>
                         </div>
@@ -751,10 +736,10 @@ export default function TeamDelegatePage() {
                         <div className="text-sm text-gray-500">Workload</div>
                       </div>
                     </div>
+                  </DaisyCardBody>
                   
-                  <DaisyCardBody >
-  <div className="space-y-4">
-</DaisyCardBody>
+                  <DaisyCardBody>
+                    <div className="space-y-4">
                       <DaisyProgress value={member.workload} className="h-3" />
                       
                       <div className="grid grid-cols-3 gap-4 text-sm">
@@ -773,12 +758,11 @@ export default function TeamDelegatePage() {
                       </div>
 
                       <div>
-                        <DaisyLabel className="text-sm font-medium">Expertise</DaisyProgress>
+                        <DaisyLabel className="text-sm font-medium">Expertise</DaisyLabel>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {member.expertise.map((skill) => (
-                            <DaisyBadge key={skill} variant="outline" className="text-xs" >
-  {skill}
-</DaisyBadge>
+                            <DaisyBadge key={skill} variant="outline" className="text-xs">
+                              {skill}
                             </DaisyBadge>
                           ))}
                         </div>
@@ -788,18 +772,17 @@ export default function TeamDelegatePage() {
                         <DaisyButton
                           variant="outline"
                           size="sm"
-                          onClick={() => setSelectedMember(member.id)} />
+                          onClick={() => setSelectedMember(member.id)}
+                        >
                           <Send className="h-4 w-4 mr-1" />
                           Assign Task
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <MessageSquare className="h-4 w-4 mr-1" />
-</DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
+                          <MessageSquare className="h-4 w-4 mr-1" />
                           Message
                         </DaisyButton>
-                        <DaisyButton variant="outline" size="sm" >
-  <TrendingUp className="h-4 w-4 mr-1" />
-</DaisyButton>
+                        <DaisyButton variant="outline" size="sm">
+                          <TrendingUp className="h-4 w-4 mr-1" />
                           Performance
                         </DaisyButton>
                       </div>
@@ -811,7 +794,7 @@ export default function TeamDelegatePage() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="workload" />
+        <DaisyTabsContent value="workload">
           <div className="text-center py-12">
             <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -820,23 +803,20 @@ export default function TeamDelegatePage() {
             <p className="text-gray-600 mb-4">
               Detailed workload analytics and capacity planning tools
             </p>
-            <DaisyButton >
-  <TrendingUp className="h-4 w-4 mr-2" />
-</DaisyTabsContent>
+            <DaisyButton>
+              <TrendingUp className="h-4 w-4 mr-2" />
               View Analytics
             </DaisyButton>
           </div>
         </DaisyTabsContent>
 
         {/* Create Task Modal */}
-        <DaisyDialog open={isCreateTaskModalOpen} onOpenChange={setIsCreateTaskModalOpen} />
-          <DaisyDialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" >
-  <DaisyDialogHeader />
-</DaisyDialog>
+        <DaisyDialog open={isCreateTaskModalOpen} onOpenChange={setIsCreateTaskModalOpen}>
+          <DaisyDialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DaisyDialogHeader>
               <DaisyDialogTitle>Create New Task</DaisyDialogTitle>
-              <DaisyDialogDescription >
-  Assign a new task to a team member with detailed specifications
-</DaisyDialogDescription>
+              <DaisyDialogDescription>
+                Assign a new task to a team member with detailed specifications
               </DaisyDialogDescription>
             </DaisyDialogHeader>
 
@@ -854,7 +834,7 @@ export default function TeamDelegatePage() {
                 </div>
 
                 <div>
-                  <DaisyLabel htmlFor="description">Description</DaisyInput>
+                  <DaisyLabel htmlFor="description">Description</DaisyLabel>
                   <DaisyTextarea
                     id="description"
                     placeholder="Describe the task requirements and objectives..."
@@ -866,12 +846,13 @@ export default function TeamDelegatePage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <DaisyLabel htmlFor="type">Task Type</DaisyTextarea>
+                    <DaisyLabel htmlFor="type">Task Type</DaisyLabel>
                     <DaisySelect value={newTask.type} onValueChange={(value: any) => setNewTask(prev => ({ ...prev, type: value }))}>
-                      <DaisySelectTrigger />
-                        <DaisySelectValue /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectContent>
+                      <DaisySelectTrigger>
+                        <DaisySelectValue />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
                         <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
                         <DaisySelectItem value="compliance_review">Compliance Review</DaisySelectItem>
                         <DaisySelectItem value="audit_preparation">Audit Preparation</DaisySelectItem>
@@ -883,10 +864,11 @@ export default function TeamDelegatePage() {
                   <div>
                     <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
                     <DaisySelect value={newTask.priority} onValueChange={(value: any) => setNewTask(prev => ({ ...prev, priority: value }))}>
-                      <DaisySelectTrigger />
-                        <DaisySelectValue /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="critical">Critical</DaisySelectContent>
+                      <DaisySelectTrigger>
+                        <DaisySelectValue />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="critical">Critical</DaisySelectItem>
                         <DaisySelectItem value="high">High</DaisySelectItem>
                         <DaisySelectItem value="medium">Medium</DaisySelectItem>
                         <DaisySelectItem value="low">Low</DaisySelectItem>
@@ -902,16 +884,16 @@ export default function TeamDelegatePage() {
                   <div>
                     <DaisyLabel htmlFor="assignee">Assign To *</DaisyLabel>
                     <DaisySelect value={newTask.assignee} onValueChange={(value) => setNewTask(prev => ({ ...prev, assignee: value }))}>
-                      <DaisySelectTrigger />
-                        <DaisySelectValue placeholder="Select team member" /></DaisySelect>
-                      <DaisySelectContent />
+                      <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select team member" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
                         {sampleTeamMembers.map((member) => (
-                          <DaisySelectItem key={member.id} value={member.id} />
+                          <DaisySelectItem key={member.id} value={member.id}>
                             <div className="flex items-center space-x-2">
                               <span>{member.name}</span>
-                              <DaisyBadge variant="outline" className="text-xs" >
-  {member.workload}% workload
-</DaisySelectContent>
+                              <DaisyBadge variant="outline" className="text-xs">
+                                {member.workload}% workload
                               </DaisyBadge>
                             </div>
                           </DaisySelectItem>
@@ -933,7 +915,7 @@ export default function TeamDelegatePage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <DaisyLabel htmlFor="estimatedHours">Estimated Hours</DaisyInput>
+                    <DaisyLabel htmlFor="estimatedHours">Estimated Hours</DaisyLabel>
                     <DaisyInput
                       id="estimatedHours"
                       type="number"
@@ -944,12 +926,13 @@ export default function TeamDelegatePage() {
                   </div>
 
                   <div>
-                    <DaisyLabel htmlFor="framework">Framework (Optional)</DaisyInput>
+                    <DaisyLabel htmlFor="framework">Framework (Optional)</DaisyLabel>
                     <DaisySelect value={newTask.framework} onValueChange={(value) => setNewTask(prev => ({ ...prev, framework: value }))}>
-                      <DaisySelectTrigger />
-                        <DaisySelectValue placeholder="Select framework" /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="">None</DaisySelectContent>
+                      <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select framework" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="">None</DaisySelectItem>
                         <DaisySelectItem value="SOC 2">SOC 2</DaisySelectItem>
                         <DaisySelectItem value="ISO 27001">ISO 27001</DaisySelectItem>
                         <DaisySelectItem value="GDPR">GDPR</DaisySelectItem>
@@ -966,9 +949,8 @@ export default function TeamDelegatePage() {
                 <DaisyLabel>Tags</DaisyLabel>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {newTask.tags.map((tag) => (
-                    <DaisyBadge key={tag} variant="secondary" className="flex items-center gap-1" >
-  {tag}
-</DaisyBadge>
+                    <DaisyBadge key={tag} variant="secondary" className="flex items-center gap-1">
+                      {tag}
                       <X 
                         className="h-3 w-3 cursor-pointer" 
                         onClick={() => removeTag(tag)}
@@ -999,7 +981,7 @@ export default function TeamDelegatePage() {
                     }}
                   >
                     <Plus className="h-4 w-4" />
-                  </DaisyInput>
+                  </DaisyButton>
                 </div>
               </div>
 
@@ -1007,12 +989,12 @@ export default function TeamDelegatePage() {
               <div className="flex justify-end space-x-3 pt-4 border-t">
                 <DaisyButton
                   variant="outline"
-                  onClick={() => setIsCreateTaskModalOpen(false)} />
+                  onClick={() => setIsCreateTaskModalOpen(false)}
+                >
                   Cancel
                 </DaisyButton>
-                <DaisyButton onClick={handleCreateNewTask} >
-  <Send className="h-4 w-4 mr-2" />
-</DaisyButton>
+                <DaisyButton onClick={handleCreateNewTask}>
+                  <Send className="h-4 w-4 mr-2" />
                   Create Task
                 </DaisyButton>
               </div>

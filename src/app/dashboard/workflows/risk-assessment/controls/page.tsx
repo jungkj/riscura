@@ -111,9 +111,7 @@ export default function ReviewRiskControlsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'implemented': return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'partial': return <DaisyAlertTriangle className="h-4 w-4 text-yellow-600" >
-  ;
-</DaisyAlertTriangle>
+      case 'partial': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
       case 'not-implemented': return <XCircle className="h-4 w-4 text-red-600" />;
       case 'under-review': return <Clock className="h-4 w-4 text-blue-600" />;
       default: return null;
@@ -137,7 +135,8 @@ export default function ReviewRiskControlsPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4" />
+              className="mb-4"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -147,9 +146,8 @@ export default function ReviewRiskControlsPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Review Risk Controls</h1>
                 <p className="text-gray-600 mt-1">Evaluate effectiveness of current risk controls</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm" >
-  <Clock className="h-4 w-4 mr-1" />
-</DaisyBadge>
+              <DaisyBadge variant="outline" className="text-sm">
+                <Clock className="h-4 w-4 mr-1" />
                 20-30 min
               </DaisyBadge>
             </div>
@@ -157,10 +155,8 @@ export default function ReviewRiskControlsPage() {
 
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total Controls</p>
@@ -171,10 +167,8 @@ export default function ReviewRiskControlsPage() {
               </DaisyCardBody>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Implemented</p>
@@ -185,25 +179,20 @@ export default function ReviewRiskControlsPage() {
               </DaisyCardBody>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Partial</p>
                     <p className="text-2xl font-bold text-yellow-600">{stats.partial}</p>
                   </div>
-                  <DaisyAlertTriangle className="h-8 w-8 text-yellow-400" >
-  </div>
-</DaisyAlertTriangle>
+                  <AlertTriangle className="h-8 w-8 text-yellow-400" />
+                </div>
               </DaisyCardBody>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Not Implemented</p>
@@ -214,10 +203,8 @@ export default function ReviewRiskControlsPage() {
               </DaisyCardBody>
             </DaisyCard>
 
-            <DaisyCard >
-  <DaisyCardBody className="p-4" >
-  </DaisyCard>
-</DaisyCardBody>
+            <DaisyCard>
+              <DaisyCardBody className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Avg. Effectiveness</p>
@@ -230,20 +217,18 @@ export default function ReviewRiskControlsPage() {
           </div>
 
           {/* Main Content */}
-          <DaisyTabs defaultValue="controls" className="space-y-4" />
-            <DaisyTabsList />
-              <DaisyTabsTrigger value="controls">All Controls</DaisyTabs>
+          <DaisyTabs defaultValue="controls" className="space-y-4">
+            <DaisyTabsList>
+              <DaisyTabsTrigger value="controls">All Controls</DaisyTabsTrigger>
               <DaisyTabsTrigger value="effectiveness">Effectiveness Analysis</DaisyTabsTrigger>
               <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
             </DaisyTabsList>
 
             {/* Controls Tab */}
-            <DaisyTabsContent value="controls" />
+            <DaisyTabsContent value="controls">
               {/* Filters */}
-              <DaisyCard className="mb-4" >
-  <DaisyCardBody className="p-4" >
-  </DaisyTabsContent>
-</DaisyCardBody>
+              <DaisyCard className="mb-4">
+                <DaisyCardBody className="p-4">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <Filter className="h-4 w-4 text-gray-500" />
@@ -274,9 +259,8 @@ export default function ReviewRiskControlsPage() {
                     </select>
 
                     <div className="ml-auto">
-                      <DaisyButton size="sm" >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyButton>
+                      <DaisyButton size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
                         Add Control
                       </DaisyButton>
                     </div>
@@ -286,18 +270,14 @@ export default function ReviewRiskControlsPage() {
 
               {/* Controls List */}
               {loading ? (
-                <DaisyCard >
-  <DaisyCardBody className="p-12 text-center" >
-  </DaisyCard>
-</DaisyCardBody>
+                <DaisyCard>
+                  <DaisyCardBody className="p-12 text-center">
                     <p className="text-gray-500">Loading controls...</p>
                   </DaisyCardBody>
                 </DaisyCard>
               ) : filteredControls.length === 0 ? (
-                <DaisyCard >
-  <DaisyCardBody className="p-12 text-center" >
-  </DaisyCard>
-</DaisyCardBody>
+                <DaisyCard>
+                  <DaisyCardBody className="p-12 text-center">
                     <Shield className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No controls found</h3>
                     <p className="text-gray-600">
@@ -310,10 +290,8 @@ export default function ReviewRiskControlsPage() {
               ) : (
                 <div className="grid gap-4">
                   {filteredControls.map((control) => (
-                    <DaisyCard key={control.id} className="hover:shadow-md transition-shadow" >
-  <DaisyCardBody className="p-6" >
-  </DaisyCard>
-</DaisyCardBody>
+                    <DaisyCard key={control.id} className="hover:shadow-md transition-shadow">
+                      <DaisyCardBody className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
@@ -321,13 +299,11 @@ export default function ReviewRiskControlsPage() {
                               <h3 className="text-lg font-semibold text-gray-900">
                                 {control.title}
                               </h3>
-                              <DaisyBadge className={getStatusColor(control.status)} >
-  {control.status.replace('-', ' ').toUpperCase()}
-</DaisyBadge>
+                              <DaisyBadge className={getStatusColor(control.status)}>
+                                {control.status.replace('-', ' ').toUpperCase()}
                               </DaisyBadge>
-                              <DaisyBadge variant="outline" >
-  {control.framework}
-</DaisyBadge>
+                              <DaisyBadge variant="outline">
+                                {control.framework}
                               </DaisyBadge>
                             </div>
                             
@@ -359,9 +335,8 @@ export default function ReviewRiskControlsPage() {
                             </div>
                           </div>
                           
-                          <DaisyButton variant="outline" size="sm" className="ml-4" >
-  Review
-</DaisyProgress>
+                          <DaisyButton variant="outline" size="sm" className="ml-4">
+                            Review
                           </DaisyButton>
                         </div>
                       </DaisyCardBody>
@@ -372,15 +347,13 @@ export default function ReviewRiskControlsPage() {
             </DaisyTabsContent>
 
             {/* Effectiveness Analysis Tab */}
-            <DaisyTabsContent value="effectiveness" />
-              <DaisyCard >
-  <DaisyCardBody />
-</DaisyTabsContent>
+            <DaisyTabsContent value="effectiveness">
+              <DaisyCard>
+                <DaisyCardBody>
                   <DaisyCardTitle>Control Effectiveness Overview</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody >
-  <div className="space-y-6">
-</DaisyCardBody>
+                </DaisyCardBody>
+                <DaisyCardBody>
+                  <div className="space-y-6">
                     <div>
                       <h4 className="text-sm font-medium text-gray-700 mb-3">Effectiveness by Category</h4>
                       <div className="space-y-3">
@@ -413,9 +386,8 @@ export default function ReviewRiskControlsPage() {
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
-                          <DaisyAlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" >
-  <p className="text-sm text-gray-600">
-</DaisyProgress>
+                          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                          <p className="text-sm text-gray-600">
                             {stats.partial} controls require additional work for full implementation
                           </p>
                         </div>
@@ -433,15 +405,13 @@ export default function ReviewRiskControlsPage() {
             </DaisyTabsContent>
 
             {/* Recommendations Tab */}
-            <DaisyTabsContent value="recommendations" />
-              <DaisyCard >
-  <DaisyCardBody />
-</DaisyTabsContent>
+            <DaisyTabsContent value="recommendations">
+              <DaisyCard>
+                <DaisyCardBody>
                   <DaisyCardTitle>Control Improvement Recommendations</DaisyCardTitle>
-        </DaisyCardBody>
-        <DaisyCardBody >
-  <div className="space-y-4">
-</DaisyCardBody>
+                </DaisyCardBody>
+                <DaisyCardBody>
+                  <div className="space-y-4">
                     <div className="p-4 bg-red-50 rounded-lg">
                       <h4 className="font-medium text-red-900 mb-2">Critical Priority</h4>
                       <ul className="space-y-2 text-sm text-red-800">
@@ -468,14 +438,12 @@ export default function ReviewRiskControlsPage() {
                     </div>
 
                     <div className="flex justify-end gap-3 mt-6">
-                      <DaisyButton variant="outline" >
-  <FileText className="h-4 w-4 mr-2" />
-</DaisyButton>
+                      <DaisyButton variant="outline">
+                        <FileText className="h-4 w-4 mr-2" />
                         Export Report
                       </DaisyButton>
-                      <DaisyButton >
-  <BarChart3 className="h-4 w-4 mr-2" />
-</DaisyButton>
+                      <DaisyButton>
+                        <BarChart3 className="h-4 w-4 mr-2" />
                         Create Action Plan
                       </DaisyButton>
                     </div>

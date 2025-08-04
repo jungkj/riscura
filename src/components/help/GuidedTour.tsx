@@ -48,7 +48,7 @@ export default function GuidedTour({
   onSkip,
   showProgress = true,
   allowSkip = true,
-  customSteps
+  customSteps,
 }: GuidedTourProps) {
   // Simplified component to fix JSX syntax errors
   return (
@@ -57,17 +57,19 @@ export default function GuidedTour({
       <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="bg-white border-2 border-blue-200 shadow-2xl rounded-xl p-6 max-w-md">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Guided Tour</h2>
-          <p className="text-gray-600 mb-6">Tour functionality is temporarily simplified for build stability.</p>
+          <p className="text-gray-600 mb-6">
+            Tour functionality is temporarily simplified for build stability.
+          </p>
           <div className="flex gap-2">
             {allowSkip && (
-              <button 
+              <button
                 onClick={onSkip}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
               >
                 Skip
               </button>
             )}
-            <button 
+            <button
               onClick={onComplete}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
@@ -81,18 +83,20 @@ export default function GuidedTour({
 }
 
 // Tour launcher component
-export function TourLauncher({ 
+export const TourLauncher = ({
   tours = ['platform-overview', 'risk-assessment-workflow'],
-  className = ''
-}: { 
+  className = '',
+}: {
   tours?: string[];
   className?: string;
-}) {
+}) => {
   return (
     <div className={className}>
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4">Guided Tours</h3>
-        <p className="text-gray-600 mb-4">Interactive tours are temporarily simplified for build stability.</p>
+        <p className="text-gray-600 mb-4">
+          Interactive tours are temporarily simplified for build stability.
+        </p>
         <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Start Tour
         </button>

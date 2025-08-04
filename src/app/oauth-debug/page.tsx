@@ -64,14 +64,12 @@ export default function OAuthDebugPage() {
 
   return (
     <div className="container mx-auto p-8 max-w-4xl">
-      <DaisyCard className="mb-6" >
-  <DaisyCardBody />
-</DaisyCard>
+      <DaisyCard className="mb-6">
+        <DaisyCardBody>
           <DaisyCardTitle>OAuth Debug Information</DaisyCardTitle>
         </DaisyCardBody>
-        <DaisyCardBody >
-  {error && (
-</DaisyCardBody>
+        <DaisyCardBody>
+          {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-800">
               {error}
             </div>

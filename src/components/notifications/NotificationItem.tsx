@@ -62,7 +62,7 @@ const typeIcons: Record<string, any> = {
   ACTION_REQUIRED: AlertCircle,
 };
 
-export function NotificationItem({ notification, onRead, onDismiss }: NotificationItemProps) {
+export const NotificationItem = ({ notification, onRead, onDismiss }: NotificationItemProps) => {
   const CategoryIcon = categoryIcons[notification.category] || Info;
   const TypeIcon = typeIcons[notification.type] || Info;
   const typeColor = typeColors[notification.type] || 'text-gray-600 bg-gray-50';

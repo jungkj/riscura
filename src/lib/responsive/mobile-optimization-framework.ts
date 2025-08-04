@@ -201,13 +201,13 @@ export interface MobileOptimizedProps {
   safeArea?: boolean;
 }
 
-export function MobileOptimized({
+export const MobileOptimized = ({
   children,
   className = '',
   enableTouch = true,
   enableGestures = false,
   safeArea = true,
-}: MobileOptimizedProps) {
+}: MobileOptimizedProps) => {
   const device = useDeviceInfo();
 
   const optimizedClassName = [
@@ -243,7 +243,7 @@ export interface TouchOptimizedButtonProps extends React.ButtonHTMLAttributes<HT
   haptic?: boolean;
 }
 
-export function TouchOptimizedButton({
+export const TouchOptimizedButton = ({
   children,
   className = '',
   size = 'md',
@@ -251,7 +251,7 @@ export function TouchOptimizedButton({
   haptic = true,
   onClick,
   ...props
-}: TouchOptimizedButtonProps) {
+}: TouchOptimizedButtonProps) => {
   const device = useDeviceInfo();
 
   const handleClick = useCallback(
@@ -408,7 +408,7 @@ export interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement
   quality?: number;
 }
 
-export function LazyImage({
+export const LazyImage = ({
   src,
   alt,
   placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+',
@@ -416,7 +416,7 @@ export function LazyImage({
   quality = 75,
   className = '',
   ...props
-}: LazyImageProps) {
+}: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -486,13 +486,13 @@ export interface MobileFormFieldProps {
   className?: string;
 }
 
-export function MobileFormField({
+export const MobileFormField = ({
   label,
   error,
   required,
   children,
   className = '',
-}: MobileFormFieldProps) {
+}: MobileFormFieldProps) => {
   const device = useDeviceInfo();
 
   const fieldClassName = ['space-y-2', device.type === 'mobile' ? 'mb-6' : 'mb-4', className].join(

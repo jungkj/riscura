@@ -18,8 +18,18 @@ const categories: { value: RiskCategory; label: string; color: string; emoji: st
   { value: 'FINANCIAL', label: 'Financial', color: 'text-green-600 bg-green-50', emoji: '💰' },
   { value: 'COMPLIANCE', label: 'Compliance', color: 'text-orange-600 bg-orange-50', emoji: '📋' },
   { value: 'REPUTATIONAL', label: 'Reputational', color: 'text-red-600 bg-red-50', emoji: '🌟' },
-  { value: 'TECHNOLOGICAL', label: 'Technological', color: 'text-indigo-600 bg-indigo-50', emoji: '💻' },
-  { value: 'ENVIRONMENTAL', label: 'Environmental', color: 'text-teal-600 bg-teal-50', emoji: '🌍' },
+  {
+    value: 'TECHNOLOGICAL',
+    label: 'Technological',
+    color: 'text-indigo-600 bg-indigo-50',
+    emoji: '💻',
+  },
+  {
+    value: 'ENVIRONMENTAL',
+    label: 'Environmental',
+    color: 'text-teal-600 bg-teal-50',
+    emoji: '🌍',
+  },
   { value: 'SOCIAL', label: 'Social', color: 'text-pink-600 bg-pink-50', emoji: '👥' },
 ];
 
@@ -27,14 +37,14 @@ interface BasicInfoStepProps {
   onNext: () => void;
 }
 
-export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
+export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
   const { riskData, updateRiskData } = useRiskFlow();
   const [aiSuggesting, setAiSuggesting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!riskData.title.trim()) {
       newErrors.title = 'Risk title is required';
     }
@@ -44,7 +54,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     if (!riskData.category) {
       newErrors.category = 'Please select a category';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,19 +67,23 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
 
   const generateAISuggestion = async () => {
     if (!riskData.title) return;
-    
+
     setAiSuggesting(true);
     // Simulate AI suggestion (in real app, this would call an API)
     setTimeout(() => {
       const suggestions: Record<string, string> = {
-        'Data breach': 'Potential unauthorized access to sensitive customer data through vulnerabilities in our systems, which could result in regulatory fines, legal action, and loss of customer trust.',
-        'Supply chain': 'Disruption in critical supply chain operations due to vendor dependencies, geopolitical factors, or natural disasters, potentially impacting product delivery and customer satisfaction.',
-        'Cybersecurity': 'Risk of sophisticated cyber attacks targeting our infrastructure, including ransomware, phishing, or DDoS attacks that could compromise business continuity.',
+        'Data breach':
+          'Potential unauthorized access to sensitive customer data through vulnerabilities in our systems, which could result in regulatory fines, legal action, and loss of customer trust.',
+        'Supply chain':
+          'Disruption in critical supply chain operations due to vendor dependencies, geopolitical factors, or natural disasters, potentially impacting product delivery and customer satisfaction.',
+        Cybersecurity:
+          'Risk of sophisticated cyber attacks targeting our infrastructure, including ransomware, phishing, or DDoS attacks that could compromise business continuity.',
       };
-      
-      const suggestion = suggestions[riskData.title] || 
+
+      const suggestion =
+        suggestions[riskData.title] ||
         `Risk of ${riskData.title.toLowerCase()} impacting business operations and objectives. This could lead to operational inefficiencies, financial losses, or strategic misalignment.`;
-      
+
       updateRiskData({ description: suggestion });
       setAiSuggesting(false);
     }, 1000);
@@ -91,7 +105,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             updateRiskData({ title: e.target.value });
             if (errors.title) setErrors({ ...errors, title: '' });
           }}
-          className={cn("mt-1", errors.title && "border-red-500")}
+          className={cn('mt-1', errors.title && 'border-red-500')}
         />
         {errors.title && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
@@ -129,7 +143,7 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             if (errors.description) setErrors({ ...errors, description: '' });
           }}
           rows={4}
-          className={cn("resize-none", errors.description && "border-red-500")}
+          className={cn('resize-none', errors.description && 'border-red-500')}
         />
         {errors.description && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
@@ -152,14 +166,14 @@ export function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             if (errors.category) setErrors({ ...errors, category: '' });
           }}
         >
-          <DaisySelectTrigger className={cn("mt-1", errors.category && "border-red-500")}>
+          <DaisySelectTrigger className={cn('mt-1', errors.category && 'border-red-500')}>
             <DaisySelectValue placeholder="Select a category" />
           </DaisySelectTrigger>
           <DaisySelectContent>
             {categories.map((cat) => (
               <DaisySelectItem key={cat.value} value={cat.value}>
                 <div className="flex items-center gap-2">
-                  <span className={cn("px-2 py-0.5 rounded-md text-xs font-medium", cat.color)}>
+                  <span className={cn('px-2 py-0.5 rounded-md text-xs font-medium', cat.color)}>
                     {cat.emoji} {cat.label}
                   </span>
                 </div>

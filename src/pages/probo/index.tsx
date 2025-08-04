@@ -223,22 +223,19 @@ export default function ProboIntegrationPage() {
                  animate={isLoaded ? { scale: 1 } : false}
                  transition={isLoaded ? { delay: 0.2 } : undefined}
                >
-                <DaisyBadge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1" >
-  <CheckCircle className="h-3 w-3 mr-1" />
-</DaisyBadge>
+                <DaisyBadge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1">
+                  <CheckCircle className="h-3 w-3 mr-1" />
                   Fully Integrated
                 </DaisyBadge>
               </motion.div>
             </div>
             <div className="flex items-center space-x-3">
-              <DaisyButton variant="outline" className="border-[#D8C3A5] hover:bg-[#199BEC]/5" >
-  <ExternalLink className="h-4 w-4 mr-2" />
-</DaisyButton>
+              <DaisyButton variant="outline" className="border-[#D8C3A5] hover:bg-[#199BEC]/5">
+                <ExternalLink className="h-4 w-4 mr-2" />
                 Documentation
               </DaisyButton>
-              <DaisyButton className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg" >
-  <Rocket className="h-4 w-4 mr-2" />
-</DaisyButton>
+              <DaisyButton className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg">
+                <Rocket className="h-4 w-4 mr-2" />
                 Get Started
               </DaisyButton>
             </div>
@@ -254,24 +251,24 @@ export default function ProboIntegrationPage() {
              animate={isLoaded ? { opacity: 1, y: 0 } : false}
              transition={isLoaded ? { delay: 0.3 } : undefined}
            >
-            <DaisyTabsList className="grid w-full grid-cols-5 mb-8 bg-white/50 backdrop-blur-sm border border-[#D8C3A5]/30 p-1 rounded-xl" />
-              <DaisyTabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md" />
+            <DaisyTabsList className="grid w-full grid-cols-5 mb-8 bg-white/50 backdrop-blur-sm border border-[#D8C3A5]/30 p-1 rounded-xl">
+              <DaisyTabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Globe className="h-4 w-4 mr-2" />
                 Overview
-              </DaisyTabs>
-              <DaisyTabsTrigger value="dashboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md" />
+              </DaisyTabsTrigger>
+              <DaisyTabsTrigger value="dashboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="vendor-assessment" className="data-[state=active]:bg-white data-[state=active]:shadow-md" />
+              <DaisyTabsTrigger value="vendor-assessment" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Building className="h-4 w-4 mr-2" />
                 Vendors
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="soc2" className="data-[state=active]:bg-white data-[state=active]:shadow-md" />
+              <DaisyTabsTrigger value="soc2" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Shield className="h-4 w-4 mr-2" />
                 SOC 2
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="controls" className="data-[state=active]:bg-white data-[state=active]:shadow-md" />
+              <DaisyTabsTrigger value="controls" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
                 <Database className="h-4 w-4 mr-2" />
                 Controls
               </DaisyTabsTrigger>
@@ -306,15 +303,15 @@ export default function ProboIntegrationPage() {
                     <DaisyButton 
                       size="lg" 
                       className="bg-gradient-to-r from-[#199BEC] to-cyan-500 hover:from-[#199BEC]/90 hover:to-cyan-500/90 shadow-lg px-8"
-                      onClick={() => handleTabChange('dashboard')} />
+                      onClick={() => handleTabChange('dashboard')}>
                       <Play className="h-5 w-5 mr-2" />
                       Start Tour
-                    </DaisyTabsContent>
+                    </DaisyButton>
                     <DaisyButton 
                       size="lg" 
                       variant="outline" 
                       className="border-[#D8C3A5] hover:bg-[#199BEC]/5 px-8"
-                      onClick={() => handleTabChange('vendor-assessment')} />
+                      onClick={() => handleTabChange('vendor-assessment')}>
                       Try Demo
                       <ChevronRight className="h-4 w-4 ml-2" />
                     </DaisyButton>
@@ -343,10 +340,7 @@ export default function ProboIntegrationPage() {
                             <h4 className="font-semibold text-[#191919] mb-2">{action.title}</h4>
                             <p className="text-sm text-[#A8A8A8] mb-3">{action.description}</p>
                             <div className="flex items-center justify-between">
-                              <DaisyBadge variant="outline" className="text-xs" >
-  {action.time}
-</DaisyBadge>
-                              </DaisyBadge>
+                              <DaisyBadge variant="outline" className="text-xs" >{action.time}</DaisyBadge>
                               <ChevronRight className="h-4 w-4 text-[#A8A8A8] group-hover:text-[#199BEC] transition-colors" />
                             </div>
                           </DaisyCardBody>
@@ -377,10 +371,7 @@ export default function ProboIntegrationPage() {
                                 <div className="flex-1">
                                   <DaisyCardTitle className="text-[#191919] text-xl mb-1">{feature.title}</DaisyCardTitle>
                                   <div className="flex items-center space-x-2">
-                                    <DaisyBadge variant="outline" className="text-xs" >
-  {feature.stats}
-</DaisyBadge>
-                                    </DaisyBadge>
+                                    <DaisyBadge variant="outline" className="text-xs" >{feature.stats}</DaisyBadge>
                                     <span className="text-xs text-[#A8A8A8]">{feature.progress}% complete</span>
                                   </div>
                                 </div>
@@ -447,10 +438,7 @@ export default function ProboIntegrationPage() {
                                   After: <span className="text-green-600 font-medium">{metric.after}</span>
                                 </div>
                               </div>
-                              <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-cyan-500 text-white font-medium" >
-  {metric.improvement}
-</DaisyBadge>
-                              </DaisyBadge>
+                              <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-cyan-500 text-white font-medium" >{metric.improvement}</DaisyBadge>
                             </div>
                           </motion.div>
                         ))}

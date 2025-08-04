@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import ProtectedWrapper from '@/components/auth/ProtectedWrapper';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -162,7 +162,7 @@ const formatTimestamp = (timestamp: string) => {
   }
 };
 
-export default function TeamChatPage() {
+const TeamChatPage: React.FC = () => {
   const { data: session } = useSession();
   const { toast } = useToast();
   const [channels, setChannels] = useState<ChatChannel[]>([]);
@@ -523,7 +523,7 @@ export default function TeamChatPage() {
   const onlineMembers = activeChannelData?.members.filter(m => m.user.id !== (session?.user as any)?.id) || [];
 
   return (
-    <ProtectedRoute>
+    <ProtectedWrapper>
       <MainContentArea
         title="Team Chat"
         subtitle="Real-time communication and collaboration"
@@ -729,13 +729,10 @@ export default function TeamChatPage() {
                 </div>
               </DaisyCardBody>
 
-              {/* Messages */}
               <DaisyCardBody className="flex-1 overflow-hidden p-0">
                 <DaisyScrollArea className="h-full p-4">
                   <div className="space-y-4">
                     {channelMessages.map((message) => {
-                      // const StatusIcon = getMessageStatusIcon(message.status);
-                      
                       return (
                         <div key={message.id} className="group">
                           <div className="flex items-start space-x-3">
@@ -1009,6 +1006,8 @@ export default function TeamChatPage() {
           </DaisyDialogContent>
         </DaisyDialog>
       </MainContentArea>
-    </ProtectedRoute>
+    </ProtectedWrapper>
   );
-} 
+};
+
+export default TeamChatPage;

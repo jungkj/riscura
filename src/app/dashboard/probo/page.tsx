@@ -6,15 +6,20 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { 
-  Shield, 
-  Target, 
-  Search, 
-  CheckCircle2, 
-  ArrowLeft, 
-  Building2, 
+import {
+  Shield,
+  Target,
+  Search,
+  CheckCircle2,
+  ArrowLeft,
+  Building2,
   Activity,
   Globe,
   Lock,
@@ -25,10 +30,10 @@ import {
   Zap,
   Brain,
   BarChart3,
-  ShieldCheck
+  ShieldCheck,
 } from 'lucide-react';
 
-function ProboPageContent() {
+const ProboPageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(searchParams?.get('tab') || 'overview');
@@ -48,11 +53,11 @@ function ProboPageContent() {
     securityControls: 0,
     complianceScore: 0,
     lastMonthChange: 0,
-    lastQuarterChange: 0
+    lastQuarterChange: 0,
   });
   const [soc2Score, setSoc2Score] = useState({
     overallScore: 0,
-    categories: []
+    categories: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -66,7 +71,7 @@ function ProboPageContent() {
           const vendorData = await vendorRes.json();
           if (vendorData.success && vendorData.data) {
             setVendorAssessmentData(vendorData.data);
-            setStats(prev => ({ ...prev, vendorAssessments: vendorData.data.length }));
+            setStats((prev) => ({ ...prev, vendorAssessments: vendorData.data.length }));
           }
         } else {
           console.error('Failed to fetch assessments:', vendorRes.status);
@@ -79,7 +84,7 @@ function ProboPageContent() {
           const controlsData = await controlsRes.json();
           if (controlsData.success && controlsData.data) {
             setControlsData(controlsData.data);
-            setStats(prev => ({ ...prev, securityControls: controlsData.data.length }));
+            setStats((prev) => ({ ...prev, securityControls: controlsData.data.length }));
           }
         } else {
           console.error('Failed to fetch controls:', controlsRes.status);
@@ -92,22 +97,23 @@ function ProboPageContent() {
           const complianceData = await complianceRes.json();
           if (complianceData.success && complianceData.data) {
             // Calculate average compliance score
-            const scores = complianceData.data.map(a => a.complianceScore || 0);
-            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-            setStats(prev => ({ ...prev, complianceScore: avgScore }));
-            
+            const scores = complianceData.data.map((a) => a.complianceScore || 0);
+            const avgScore =
+              scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            setStats((prev) => ({ ...prev, complianceScore: avgScore }));
+
             // Set SOC2 data if available
-            const soc2Assessment = complianceData.data.find(a => a.framework === 'SOC2');
+            const soc2Assessment = complianceData.data.find((a) => a.framework === 'SOC2');
             if (soc2Assessment) {
               setSoc2Score({
                 overallScore: soc2Assessment.complianceScore || 0,
-                categories: soc2Assessment.categories || []
+                categories: soc2Assessment.categories || [],
               });
             }
           }
         } else {
           console.error('Failed to fetch compliance assessments:', complianceRes.status);
-          setStats(prev => ({ ...prev, complianceScore: 0 }));
+          setStats((prev) => ({ ...prev, complianceScore: 0 }));
         }
       } catch (error) {
         console.error('Failed to fetch Probo data:', error);
@@ -121,10 +127,11 @@ function ProboPageContent() {
 
   // Removed hard-coded data - now fetched above
 
-  const filteredControls = controlsData.filter(control =>
-    control.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    control.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    control.framework.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredControls = controlsData.filter(
+    (control) =>
+      control.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      control.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      control.framework.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -179,37 +186,61 @@ function ProboPageContent() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <DaisyCard className="hover:shadow-md transition-shadow">
                   <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <DaisyCardTitle className="text-sm font-medium">Vendor Assessments</DaisyCardTitle>
+                    <DaisyCardTitle className="text-sm font-medium">
+                      Vendor Assessments
+                    </DaisyCardTitle>
                     <Building2 className="h-4 w-4 text-muted-foreground" />
                   </DaisyCardBody>
                   <DaisyCardBody>
-                    <div className="text-2xl font-bold">{loading ? '...' : stats.vendorAssessments}</div>
+                    <div className="text-2xl font-bold">
+                      {loading ? '...' : stats.vendorAssessments}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      {loading ? 'Loading...' : stats.vendorAssessments === 0 ? 'No assessments yet' : 'Total assessments'}
+                      {loading
+                        ? 'Loading...'
+                        : stats.vendorAssessments === 0
+                          ? 'No assessments yet'
+                          : 'Total assessments'}
                     </p>
                   </DaisyCardBody>
                 </DaisyCard>
                 <DaisyCard className="hover:shadow-md transition-shadow">
                   <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <DaisyCardTitle className="text-sm font-medium">Security Controls</DaisyCardTitle>
+                    <DaisyCardTitle className="text-sm font-medium">
+                      Security Controls
+                    </DaisyCardTitle>
                     <Shield className="h-4 w-4 text-muted-foreground" />
                   </DaisyCardBody>
                   <DaisyCardBody>
-                    <div className="text-2xl font-bold">{loading ? '...' : stats.securityControls}</div>
+                    <div className="text-2xl font-bold">
+                      {loading ? '...' : stats.securityControls}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      {loading ? 'Loading...' : stats.securityControls === 0 ? 'No controls added' : 'Active controls'}
+                      {loading
+                        ? 'Loading...'
+                        : stats.securityControls === 0
+                          ? 'No controls added'
+                          : 'Active controls'}
                     </p>
                   </DaisyCardBody>
                 </DaisyCard>
                 <DaisyCard className="hover:shadow-md transition-shadow">
                   <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <DaisyCardTitle className="text-sm font-medium">Compliance Score</DaisyCardTitle>
+                    <DaisyCardTitle className="text-sm font-medium">
+                      Compliance Score
+                    </DaisyCardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </DaisyCardBody>
                   <DaisyCardBody>
-                    <div className="text-2xl font-bold">{loading ? '...' : `${stats.complianceScore}%`}</div>
+                    <div className="text-2xl font-bold">
+                      {loading ? '...' : `${stats.complianceScore}%`}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      {loading ? 'Loading...' : stats.complianceScore === 0 ? 'Not assessed' : 'Average compliance'}
+                      {loading
+                        ? 'Loading...'
+                        : stats.complianceScore === 0
+                          ? 'Not assessed'
+                          : 'Average compliance'}
                     </p>
                   </DaisyCardBody>
                 </DaisyCard>
@@ -221,24 +252,24 @@ function ProboPageContent() {
                     <DaisyCardTitle>Quick Start Actions</DaisyCardTitle>
                   </DaisyCardBody>
                   <DaisyCardBody className="space-y-3">
-                    <DaisyButton 
-                      className="w-full justify-start" 
+                    <DaisyButton
+                      className="w-full justify-start"
                       variant="outline"
                       onClick={() => setActiveTab('vendor-assessment')}
                     >
                       <Shield className="h-4 w-4 mr-2" />
                       Start Vendor Assessment
                     </DaisyButton>
-                    <DaisyButton 
-                      className="w-full justify-start" 
+                    <DaisyButton
+                      className="w-full justify-start"
                       variant="outline"
                       onClick={() => setActiveTab('controls-library')}
                     >
                       <Target className="h-4 w-4 mr-2" />
                       Browse Controls Library
                     </DaisyButton>
-                    <DaisyButton 
-                      className="w-full justify-start" 
+                    <DaisyButton
+                      className="w-full justify-start"
                       variant="outline"
                       onClick={() => setActiveTab('soc2-assessment')}
                     >
@@ -259,7 +290,9 @@ function ProboPageContent() {
                       </div>
                       <div>
                         <p className="font-medium">AI-Powered Risk Analysis</p>
-                        <p className="text-sm text-gray-600">Intelligent threat detection & assessment</p>
+                        <p className="text-sm text-gray-600">
+                          Intelligent threat detection & assessment
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -308,8 +341,12 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardBody className="p-12 text-center">
                     <Building2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendor assessments yet</h3>
-                    <p className="text-gray-600 mb-4">Start your first vendor security assessment to track third-party risks</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No vendor assessments yet
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Start your first vendor security assessment to track third-party risks
+                    </p>
                     <DaisyButton className="bg-blue-600 hover:bg-blue-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Start First Assessment
@@ -334,11 +371,13 @@ function ProboPageContent() {
                           <div className="flex items-center gap-4">
                             <div className="text-center">
                               <p className="text-sm text-gray-600">Risk Score</p>
-                              <DaisyBadge 
+                              <DaisyBadge
                                 className={
-                                  vendor.riskScore === 'Low' ? 'bg-green-100 text-green-800' :
-                                  vendor.riskScore === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
+                                  vendor.riskScore === 'Low'
+                                    ? 'bg-green-100 text-green-800'
+                                    : vendor.riskScore === 'Medium'
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : 'bg-red-100 text-red-800'
                                 }
                               >
                                 {vendor.riskScore}
@@ -352,11 +391,13 @@ function ProboPageContent() {
                               <p className="text-sm text-gray-600">Controls</p>
                               <p className="font-bold text-lg">{vendor.controls}</p>
                             </div>
-                            <DaisyBadge 
+                            <DaisyBadge
                               className={
-                                vendor.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                                vendor.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                                'bg-gray-100 text-gray-800'
+                                vendor.status === 'Completed'
+                                  ? 'bg-green-100 text-green-800'
+                                  : vendor.status === 'In Progress'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : 'bg-gray-100 text-gray-800'
                               }
                             >
                               {vendor.status}
@@ -404,8 +445,12 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardBody className="p-12 text-center">
                     <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No security controls yet</h3>
-                    <p className="text-gray-600 mb-4">Add your first control to start building your security framework</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No security controls yet
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Add your first control to start building your security framework
+                    </p>
                     <DaisyButton className="bg-green-600 hover:bg-green-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Add First Control
@@ -431,11 +476,13 @@ function ProboPageContent() {
                               <DaisyBadge variant="outline" className="font-mono text-xs">
                                 {control.id}
                               </DaisyBadge>
-                              <DaisyBadge 
+                              <DaisyBadge
                                 className={
-                                  control.implementation === 'Implemented' ? 'bg-green-100 text-green-800' :
-                                  control.implementation === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-gray-100 text-gray-800'
+                                  control.implementation === 'Implemented'
+                                    ? 'bg-green-100 text-green-800'
+                                    : control.implementation === 'In Progress'
+                                      ? 'bg-blue-100 text-blue-800'
+                                      : 'bg-gray-100 text-gray-800'
                                 }
                               >
                                 {control.implementation}
@@ -457,9 +504,7 @@ function ProboPageContent() {
                               <Eye className="h-4 w-4 mr-1" />
                               View Details
                             </DaisyButton>
-                            <DaisyButton size="sm">
-                              Implement
-                            </DaisyButton>
+                            <DaisyButton size="sm">Implement</DaisyButton>
                           </div>
                         </div>
                       </DaisyCardBody>
@@ -492,8 +537,12 @@ function ProboPageContent() {
                 <DaisyCard>
                   <DaisyCardBody className="p-12 text-center">
                     <CheckCircle2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No SOC 2 assessment yet</h3>
-                    <p className="text-gray-600 mb-4">Start your SOC 2 compliance journey by setting up your framework</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      No SOC 2 assessment yet
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Start your SOC 2 compliance journey by setting up your framework
+                    </p>
                     <DaisyButton className="bg-purple-600 hover:bg-purple-700">
                       <Plus className="h-4 w-4 mr-2" />
                       Set Up SOC 2 Framework
@@ -518,13 +567,18 @@ function ProboPageContent() {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {soc2Score.categories.map((category) => (
-                          <DaisyCard key={category.name} className="border-2 hover:shadow-md transition-shadow">
+                          <DaisyCard
+                            key={category.name}
+                            className="border-2 hover:shadow-md transition-shadow"
+                          >
                             <DaisyCardBody className="p-4">
                               <div className="flex items-center justify-between mb-3">
                                 <h3 className="font-semibold">{category.name}</h3>
-                                <DaisyBadge 
+                                <DaisyBadge
                                   className={
-                                    category.status === 'Compliant' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                    category.status === 'Compliant'
+                                      ? 'bg-green-100 text-green-800'
+                                      : 'bg-yellow-100 text-yellow-800'
                                   }
                                 >
                                   {category.status}
@@ -557,10 +611,11 @@ function ProboPageContent() {
 }
 
 export default function ProboPage() {
-
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+    <Suspense
+      fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}
+    >
       <ProboPageContent />
     </Suspense>
   );
-} 
+}

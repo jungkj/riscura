@@ -11,7 +11,7 @@ interface PerformanceContextType {
 
 const PerformanceContext = createContext<PerformanceContextType | undefined>(undefined);
 
-export function PerformanceProvider({ children }: { children: React.ReactNode }) {
+export const PerformanceProvider = ({ children }: { children: React.ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(true); // Set to true to avoid initialization
   const [metrics, setMetrics] = useState({});
 

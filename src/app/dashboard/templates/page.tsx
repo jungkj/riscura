@@ -13,7 +13,7 @@ import {
   CheckCircle,
   FileText,
   ArrowLeft,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -40,10 +40,10 @@ const templates: Template[] = [
       'Risk scoring formulas',
       'Sample data included',
       'Instructions sheet',
-      'Ready for import'
+      'Ready for import',
     ],
     color: 'text-blue-600',
-    badge: 'Most Popular'
+    badge: 'Most Popular',
   },
   {
     id: 'controls',
@@ -56,10 +56,10 @@ const templates: Template[] = [
       'Testing schedule',
       'Evidence management',
       'Effectiveness ratings',
-      'Risk linkage'
+      'Risk linkage',
     ],
     color: 'text-green-600',
-    badge: 'Essential'
+    badge: 'Essential',
   },
   {
     id: 'vendor',
@@ -72,11 +72,11 @@ const templates: Template[] = [
       'Compliance tracking',
       'Contract management',
       'Security certifications',
-      'Assessment scheduling'
+      'Assessment scheduling',
     ],
     color: 'text-purple-600',
-    badge: 'Advanced'
-  }
+    badge: 'Advanced',
+  },
 ];
 
 export default function TemplatesPage() {
@@ -85,17 +85,17 @@ export default function TemplatesPage() {
 
   const handleDownload = async (templateType: string) => {
     setDownloading(templateType);
-    
+
     try {
       const response = await fetch(`/api/templates/${templateType}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to download template');
       }
-      
+
       // Get the blob from the response
       const blob = await response.blob();
-      
+
       // Create a download link
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -105,17 +105,17 @@ export default function TemplatesPage() {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
+
       toast({
-        title: "Template Downloaded",
-        description: "Your Excel template has been downloaded successfully.",
+        title: 'Template Downloaded',
+        description: 'Your Excel template has been downloaded successfully.',
       });
     } catch (error) {
       console.error('Download error:', error);
       toast({
-        title: "Download Failed",
-        description: "Unable to download the template. Please try again.",
-        variant: "destructive",
+        title: 'Download Failed',
+        description: 'Unable to download the template. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setDownloading(null);
@@ -126,16 +126,11 @@ export default function TemplatesPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <DaisyButton
-          variant="ghost"
-          size="sm"
-          onClick={() => router.back()}
-          className="mb-4"
-        >
+        <DaisyButton variant="ghost" size="sm" onClick={() => router.back()} className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </DaisyButton>
-        
+
         <div className="flex items-center gap-3 mb-2">
           <FileSpreadsheet className="h-8 w-8 text-green-600" />
           <h1 className="text-3xl font-bold text-[#191919]">Excel Templates</h1>
@@ -150,7 +145,7 @@ export default function TemplatesPage() {
         {templates.map((template) => {
           const Icon = template.icon;
           return (
-            <DaisyCard 
+            <DaisyCard
               key={template.id}
               className="border-gray-200 hover:shadow-lg transition-all duration-300"
             >
@@ -179,7 +174,7 @@ export default function TemplatesPage() {
                       ))}
                     </ul>
                   </div>
-                  
+
                   <DaisyButton
                     className="w-full"
                     onClick={() => handleDownload(template.type)}
@@ -225,7 +220,7 @@ export default function TemplatesPage() {
                 Choose the template that matches your needs and download it to your computer.
               </p>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
@@ -237,7 +232,7 @@ export default function TemplatesPage() {
                 Open in Excel and replace the sample data with your organization's information.
               </p>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
@@ -246,14 +241,17 @@ export default function TemplatesPage() {
                 <h3 className="font-semibold">Import to Riscura</h3>
               </div>
               <p className="text-sm text-gray-600">
-                Return to the dashboard and use "Import Excel RCSA" to upload your completed template.
+                Return to the dashboard and use "Import Excel RCSA" to upload your completed
+                template.
               </p>
             </div>
           </div>
-          
+
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <p className="text-sm text-blue-900">
-              <strong>Pro Tip:</strong> Start with the sample data to understand the format, then gradually replace it with your own information. The templates include validation rules to help ensure data quality.
+              <strong>Pro Tip:</strong> Start with the sample data to understand the format, then
+              gradually replace it with your own information. The templates include validation rules
+              to help ensure data quality.
             </p>
           </div>
         </DaisyCardBody>

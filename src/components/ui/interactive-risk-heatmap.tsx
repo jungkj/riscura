@@ -462,7 +462,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                 <div className="flex-1 min-w-0">
                   {/* Header Row - Likelihood */}
                   <div className="grid grid-cols-6 gap-2 mb-3">
-                    <div className="h-4"></div>
+                    <div className="h-4" />
                     {compactLikelihoodLabels.map((likelihood) => (
                       <div key={likelihood} className="flex justify-center">
                         <div className="text-center text-sm font-bold text-gray-800 px-1 py-1 w-full">
@@ -530,7 +530,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
               </div>
               <div className="flex items-center justify-center space-x-6">
                 <div className="flex items-center space-x-1">
-                  <div className="w-3 h-3 bg-green-400 rounded border border-green-500"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded border border-green-500" />
                   <span className="text-xs font-medium text-gray-700">Low</span>
                   <DaisyBadge
                     variant="secondary"
@@ -542,7 +542,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <div className="w-3 h-3 bg-orange-400 rounded border border-orange-500"></div>
+                  <div className="w-3 h-3 bg-orange-400 rounded border border-orange-500" />
                   <span className="text-xs font-medium text-gray-700">Medium</span>
                   <DaisyBadge
                     variant="secondary"
@@ -554,7 +554,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <div className="w-3 h-3 bg-red-300 rounded border border-red-400"></div>
+                  <div className="w-3 h-3 bg-red-300 rounded border border-red-400" />
                   <span className="text-xs font-medium text-gray-700">High</span>
                   <DaisyBadge
                     variant="secondary"
@@ -566,7 +566,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
                   </DaisyBadge>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <div className="w-3 h-3 bg-red-500 rounded border border-red-600"></div>
+                  <div className="w-3 h-3 bg-red-500 rounded border border-red-600" />
                   <span className="text-xs font-medium text-gray-700">Critical</span>
                   <DaisyBadge variant="error" className="text-xs px-1 py-0 h-4">
                     {heatMapData

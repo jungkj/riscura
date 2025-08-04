@@ -13,7 +13,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, User, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
-function RegisterForm() {
+const RegisterForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { register, isLoading, error: authError, clearError } = useAuth();
@@ -346,11 +346,11 @@ function RegisterForm() {
 export default function RegisterPage() {
   return (
     <Suspense
-      fallback={
+      fallback={(
         <div className="min-h-screen flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
         </div>
-      }
+      )}
     >
       <RegisterForm />
     </Suspense>

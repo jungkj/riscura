@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-export function AuthDebugger() {
+export const AuthDebugger = () => {
   const auth = useAuth();
   const [mounted, setMounted] = useState(false);
 

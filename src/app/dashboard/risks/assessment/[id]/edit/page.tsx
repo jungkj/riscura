@@ -9,16 +9,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
-  ArrowLeft,
-  Save,
-  X,
-  Plus,
-  Trash2,
-  Calendar,
-  Users,
-  Target
-} from 'lucide-react';
+import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react';
 
 export default function EditAssessmentPage() {
   const router = useRouter();
@@ -28,7 +19,8 @@ export default function EditAssessmentPage() {
   // Mock form state
   const [formData, setFormData] = useState({
     title: 'Annual Security Assessment',
-    description: 'Comprehensive annual security risk assessment covering all critical business processes, systems, and third-party integrations.',
+    description:
+      'Comprehensive annual security risk assessment covering all critical business processes, systems, and third-party integrations.',
     status: 'In Progress',
     priority: 'High',
     assignee: 'Security Team',
@@ -37,40 +29,40 @@ export default function EditAssessmentPage() {
       'Identify and assess security vulnerabilities',
       'Evaluate current security controls effectiveness',
       'Recommend improvements and remediation actions',
-      'Ensure compliance with security frameworks'
-    ]
+      'Ensure compliance with security frameworks',
+    ],
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleObjectiveChange = (index: number, value: string) => {
     const newObjectives = [...formData.objectives];
     newObjectives[index] = value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: newObjectives
+      objectives: newObjectives,
     }));
   };
 
   const addObjective = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: [...prev.objectives, '']
+      objectives: [...prev.objectives, ''],
     }));
   };
 
   const removeObjective = (index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: newObjectives
+      objectives: newObjectives,
     }));
   };
 
@@ -78,7 +70,7 @@ export default function EditAssessmentPage() {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log('Saving assessment:', formData);
       router.push(`/dashboard/risks/assessment/${assessmentId}`);
     } catch (error) {
@@ -97,11 +89,7 @@ export default function EditAssessmentPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <DaisyButton
-            variant="outline"
-            onClick={handleCancel}
-            className="flex items-center gap-2"
-          >
+          <DaisyButton variant="outline" onClick={handleCancel} className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
             Cancel
           </DaisyButton>
@@ -132,92 +120,92 @@ export default function EditAssessmentPage() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <DaisyLabel htmlFor="title">Assessment Title</DaisyLabel>
-                <DaisyInput
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => handleInputChange('title', e.target.value)}
-                  placeholder="Enter assessment title"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <DaisyLabel htmlFor="description">Description</DaisyLabel>
-                <DaisyTextarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange('description', e.target.value)}
-                  placeholder="Describe the assessment scope and purpose"
-                  rows={4}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <DaisyLabel htmlFor="status">Status</DaisyLabel>
-                  <DaisySelect
-                    value={formData.status}
-                    onValueChange={(value) => handleInputChange('status', value)}
-                  >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select status" />
-                    </DaisySelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="Pending">Pending</DaisySelectItem>
-                      <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
-                      <DaisySelectItem value="Completed">Completed</DaisySelectItem>
-                      <DaisySelectItem value="On Hold">On Hold</DaisySelectItem>
-                    </DaisySelectContent>
-                  </DaisySelect>
-                </div>
-
-                <div className="space-y-2">
-                  <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
-                  <DaisySelect
-                    value={formData.priority}
-                    onValueChange={(value) => handleInputChange('priority', value)}
-                  >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select priority" />
-                    </DaisySelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="Low">Low</DaisySelectItem>
-                      <DaisySelectItem value="Medium">Medium</DaisySelectItem>
-                      <DaisySelectItem value="High">High</DaisySelectItem>
-                      <DaisySelectItem value="Critical">Critical</DaisySelectItem>
-                    </DaisySelectContent>
-                  </DaisySelect>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <DaisyLabel htmlFor="assignee">Assignee</DaisyLabel>
-                  <DaisySelect
-                    value={formData.assignee}
-                    onValueChange={(value) => handleInputChange('assignee', value)}
-                  >
-                    <DaisySelectTrigger>
-                      <DaisySelectValue placeholder="Select assignee" />
-                    </DaisySelectTrigger>
-                    <DaisySelectContent>
-                      <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
-                      <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
-                      <DaisySelectItem value="Compliance Team">Compliance Team</DaisySelectItem>
-                      <DaisySelectItem value="IT Team">IT Team</DaisySelectItem>
-                    </DaisySelectContent>
-                  </DaisySelect>
-                </div>
-
-                <div className="space-y-2">
-                  <DaisyLabel htmlFor="dueDate">Due Date</DaisyLabel>
                   <DaisyInput
-                    id="dueDate"
-                    type="date"
-                    value={formData.dueDate}
-                    onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    placeholder="Enter assessment title"
                   />
                 </div>
-              </div>
+
+                <div className="space-y-2">
+                  <DaisyLabel htmlFor="description">Description</DaisyLabel>
+                  <DaisyTextarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    placeholder="Describe the assessment scope and purpose"
+                    rows={4}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <DaisyLabel htmlFor="status">Status</DaisyLabel>
+                    <DaisySelect
+                      value={formData.status}
+                      onValueChange={(value) => handleInputChange('status', value)}
+                    >
+                      <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select status" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="Pending">Pending</DaisySelectItem>
+                        <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
+                        <DaisySelectItem value="Completed">Completed</DaisySelectItem>
+                        <DaisySelectItem value="On Hold">On Hold</DaisySelectItem>
+                      </DaisySelectContent>
+                    </DaisySelect>
+                  </div>
+
+                  <div className="space-y-2">
+                    <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
+                    <DaisySelect
+                      value={formData.priority}
+                      onValueChange={(value) => handleInputChange('priority', value)}
+                    >
+                      <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select priority" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="Low">Low</DaisySelectItem>
+                        <DaisySelectItem value="Medium">Medium</DaisySelectItem>
+                        <DaisySelectItem value="High">High</DaisySelectItem>
+                        <DaisySelectItem value="Critical">Critical</DaisySelectItem>
+                      </DaisySelectContent>
+                    </DaisySelect>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <DaisyLabel htmlFor="assignee">Assignee</DaisyLabel>
+                    <DaisySelect
+                      value={formData.assignee}
+                      onValueChange={(value) => handleInputChange('assignee', value)}
+                    >
+                      <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select assignee" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
+                        <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
+                        <DaisySelectItem value="Compliance Team">Compliance Team</DaisySelectItem>
+                        <DaisySelectItem value="IT Team">IT Team</DaisySelectItem>
+                      </DaisySelectContent>
+                    </DaisySelect>
+                  </div>
+
+                  <div className="space-y-2">
+                    <DaisyLabel htmlFor="dueDate">Due Date</DaisyLabel>
+                    <DaisyInput
+                      id="dueDate"
+                      type="date"
+                      value={formData.dueDate}
+                      onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
             </DaisyCardBody>
           </DaisyCard>
@@ -268,23 +256,30 @@ export default function EditAssessmentPage() {
             <DaisyCardBody className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Current Status</span>
-                <DaisyBadge className={
-                  formData.status === 'Completed' ? 'bg-green-100 text-green-800 border-green-200' :
-                  formData.status === 'In Progress' ? 'bg-blue-100 text-blue-800 border-blue-200' :
-                  formData.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                  'bg-gray-100 text-gray-800 border-gray-200'
-                }
+                <DaisyBadge
+                  className={
+                    formData.status === 'Completed'
+                      ? 'bg-green-100 text-green-800 border-green-200'
+                      : formData.status === 'In Progress'
+                        ? 'bg-blue-100 text-blue-800 border-blue-200'
+                        : formData.status === 'Pending'
+                          ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                          : 'bg-gray-100 text-gray-800 border-gray-200'
+                  }
                 >
                   {formData.status}
                 </DaisyBadge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Priority</span>
-                <DaisyBadge className={
-                  formData.priority === 'High' || formData.priority === 'Critical' ? 'bg-red-100 text-red-800 border-red-200' :
-                  formData.priority === 'Medium' ? 'bg-orange-100 text-orange-800 border-orange-200' :
-                  'bg-green-100 text-green-800 border-green-200'
-                }
+                <DaisyBadge
+                  className={
+                    formData.priority === 'High' || formData.priority === 'Critical'
+                      ? 'bg-red-100 text-red-800 border-red-200'
+                      : formData.priority === 'Medium'
+                        ? 'bg-orange-100 text-orange-800 border-orange-200'
+                        : 'bg-green-100 text-green-800 border-green-200'
+                  }
                 >
                   {formData.priority}
                 </DaisyBadge>
@@ -329,7 +324,7 @@ export default function EditAssessmentPage() {
                 <div className="text-2xl font-bold text-gray-900">65%</div>
                 <p className="text-sm text-gray-600">Completion Progress</p>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%' }}></div>
+                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%' }} />
                 </div>
               </div>
             </DaisyCardBody>
@@ -338,4 +333,4 @@ export default function EditAssessmentPage() {
       </div>
     </div>
   );
-} 
+}

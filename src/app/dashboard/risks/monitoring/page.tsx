@@ -5,20 +5,25 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Shield, 
-  TrendingUp, 
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Shield,
+  TrendingUp,
   TrendingDown,
   Eye,
   RefreshCw,
   Download,
   Filter,
-  Search
+  Search,
 } from 'lucide-react';
 
 interface RiskMetric {
@@ -57,7 +62,7 @@ export default function RiskMonitoringPage() {
       value: 23,
       change: 2,
       trend: 'up',
-      status: 'warning'
+      status: 'warning',
     },
     {
       id: 'critical-risks',
@@ -65,7 +70,7 @@ export default function RiskMonitoringPage() {
       value: 4,
       change: -1,
       trend: 'down',
-      status: 'good'
+      status: 'good',
     },
     {
       id: 'risk-score',
@@ -73,7 +78,7 @@ export default function RiskMonitoringPage() {
       value: 7.2,
       change: 0.3,
       trend: 'up',
-      status: 'warning'
+      status: 'warning',
     },
     {
       id: 'mitigation-rate',
@@ -81,8 +86,8 @@ export default function RiskMonitoringPage() {
       value: 78,
       change: 5,
       trend: 'up',
-      status: 'good'
-    }
+      status: 'good',
+    },
   ];
 
   const alerts: MonitoringAlert[] = [
@@ -92,7 +97,7 @@ export default function RiskMonitoringPage() {
       description: 'Payment system vulnerability risk score increased to 9.2',
       severity: 'critical',
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      status: 'active'
+      status: 'active',
     },
     {
       id: '2',
@@ -100,7 +105,7 @@ export default function RiskMonitoringPage() {
       description: 'Third-party vendor security assessment revealed new risks',
       severity: 'medium',
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      status: 'acknowledged'
+      status: 'acknowledged',
     },
     {
       id: '3',
@@ -108,8 +113,8 @@ export default function RiskMonitoringPage() {
       description: 'Access control monitoring shows decreased effectiveness',
       severity: 'high',
       timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-      status: 'active'
-    }
+      status: 'active',
+    },
   ];
 
   const handleRefresh = () => {
@@ -120,20 +125,29 @@ export default function RiskMonitoringPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+      case 'good':
+        return 'text-green-600';
+      case 'warning':
+        return 'text-yellow-600';
+      case 'critical':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'high':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -188,11 +202,17 @@ export default function RiskMonitoringPage() {
                 ) : (
                   <div className="h-4 w-4 mr-1" />
                 )}
-                <span className={`text-sm ${
-                  metric.trend === 'up' ? 'text-green-600' : 
-                  metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
-                }`}>
-                  {metric.change > 0 ? '+' : ''}{metric.change}
+                <span
+                  className={`text-sm ${
+                    metric.trend === 'up'
+                      ? 'text-green-600'
+                      : metric.trend === 'down'
+                        ? 'text-red-600'
+                        : 'text-gray-600'
+                  }`}
+                >
+                  {metric.change > 0 ? '+' : ''}
+                  {metric.change}
                 </span>
                 <span className="text-sm text-gray-500 ml-1">from last week</span>
               </div>
@@ -225,19 +245,19 @@ export default function RiskMonitoringPage() {
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
                   <DaisyProgress value={17} className="h-2" />
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">High</span>
                     <span className="text-sm text-gray-600">7 risks</span>
                   </div>
                   <DaisyProgress value={30} className="h-2" />
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Medium</span>
                     <span className="text-sm text-gray-600">8 risks</span>
                   </div>
                   <DaisyProgress value={35} className="h-2" />
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Low</span>
                     <span className="text-sm text-gray-600">4 risks</span>
@@ -256,21 +276,23 @@ export default function RiskMonitoringPage() {
                 </DaisyCardTitle>
                 <div className="space-y-4 mt-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">Critical risk identified</p>
                       <p className="text-xs text-gray-500">Payment system vulnerability - 2h ago</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">Risk mitigated</p>
-                      <p className="text-xs text-gray-500">Data encryption control implemented - 4h ago</p>
+                      <p className="text-xs text-gray-500">
+                        Data encryption control implemented - 4h ago
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">Risk assessment updated</p>
                       <p className="text-xs text-gray-500">Third-party vendor review - 6h ago</p>
@@ -295,14 +317,14 @@ export default function RiskMonitoringPage() {
                         <DaisyBadge className={getSeverityColor(alert.severity)}>
                           {alert.severity}
                         </DaisyBadge>
-                        <DaisyBadge variant={alert.status === 'active' ? 'destructive' : 'secondary'}>
+                        <DaisyBadge
+                          variant={alert.status === 'active' ? 'destructive' : 'secondary'}
+                        >
                           {alert.status}
                         </DaisyBadge>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
-                      <p className="text-xs text-gray-500">
-                        {alert.timestamp.toLocaleString()}
-                      </p>
+                      <p className="text-xs text-gray-500">{alert.timestamp.toLocaleString()}</p>
                     </div>
                     <div className="flex gap-2">
                       <DaisyButton variant="outline" size="sm">

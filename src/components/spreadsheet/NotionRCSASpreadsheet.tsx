@@ -88,7 +88,7 @@ interface Column {
   filterable?: boolean;
 }
 
-export function NotionRCSASpreadsheet() {
+export const NotionRCSASpreadsheet = () => {
   const router = useRouter();
   const { risks, controls, refreshData } = useRCSA();
   const [testScripts, setTestScripts] = useState<TestScript[]>([]);

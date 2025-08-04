@@ -5,8 +5,18 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import {
+  DaisyTooltip,
+  DaisyTooltipContent,
+  DaisyTooltipTrigger,
+  DaisyTooltipWrapper,
+} from '@/components/ui/DaisyTooltip';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -61,7 +71,7 @@ import {
   RotateCcw,
   TrendingDown,
   Video,
-  Minus
+  Minus,
 } from 'lucide-react';
 
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
@@ -117,14 +127,14 @@ export default function QuickActionsPage() {
     pendingActions: 0,
     activeWorkflows: 0,
     completionRate: 0,
-    timeSaved: 0
+    timeSaved: 0,
   });
 
   // Load user preferences
   useEffect(() => {
     const savedFavorites = localStorage.getItem('riscura-favorite-actions');
     const savedRecent = localStorage.getItem('riscura-recent-actions');
-    
+
     if (savedFavorites) {
       setFavorites(JSON.parse(savedFavorites));
     }
@@ -161,7 +171,7 @@ export default function QuickActionsPage() {
       change: stats.pendingActions > 0 ? 'Needs attention' : 'All clear',
       trend: stats.pendingActions > 0 ? 'up' : 'neutral',
       icon: Clock,
-      color: '#F57C00'
+      color: '#F57C00',
     },
     {
       label: 'Active Workflows',
@@ -169,7 +179,7 @@ export default function QuickActionsPage() {
       change: stats.activeWorkflows > 0 ? 'In progress' : 'None active',
       trend: 'neutral',
       icon: Workflow,
-      color: '#1976D2'
+      color: '#1976D2',
     },
     {
       label: 'Completion Rate',
@@ -177,7 +187,7 @@ export default function QuickActionsPage() {
       change: stats.completionRate > 0 ? 'This month' : 'No data yet',
       trend: stats.completionRate > 80 ? 'up' : stats.completionRate > 0 ? 'down' : 'neutral',
       icon: Target,
-      color: '#2E7D32'
+      color: '#2E7D32',
     },
     {
       label: 'Time Saved',
@@ -185,8 +195,8 @@ export default function QuickActionsPage() {
       change: 'This week',
       trend: stats.timeSaved > 0 ? 'up' : 'neutral',
       icon: Zap,
-      color: '#512DA8'
-    }
+      color: '#512DA8',
+    },
   ];
 
   // Workflow-based action categories
@@ -209,7 +219,7 @@ export default function QuickActionsPage() {
           estimatedTime: '15-20 min',
           difficulty: 'beginner',
           tags: ['risk', 'assessment', 'new'],
-          isNew: true
+          isNew: true,
         },
         {
           id: 'update-assessment',
@@ -219,7 +229,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/risk-assessment/update',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['risk', 'update', 'review']
+          tags: ['risk', 'update', 'review'],
         },
         {
           id: 'review-controls',
@@ -230,7 +240,7 @@ export default function QuickActionsPage() {
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
           prerequisites: ['Risk assessment completed'],
-          tags: ['controls', 'review', 'effectiveness']
+          tags: ['controls', 'review', 'effectiveness'],
         },
         {
           id: 'risk-report',
@@ -240,9 +250,9 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/risk-assessment/report',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['report', 'documentation', 'export']
-        }
-      ]
+          tags: ['report', 'documentation', 'export'],
+        },
+      ],
     },
     {
       id: 'compliance-management',
@@ -261,7 +271,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/framework',
           estimatedTime: '25-35 min',
           difficulty: 'intermediate',
-          tags: ['compliance', 'framework', 'assessment']
+          tags: ['compliance', 'framework', 'assessment'],
         },
         {
           id: 'gap-analysis',
@@ -272,7 +282,7 @@ export default function QuickActionsPage() {
           estimatedTime: '30-45 min',
           difficulty: 'advanced',
           prerequisites: ['Framework assessment completed'],
-          tags: ['gap-analysis', 'compliance', 'review']
+          tags: ['gap-analysis', 'compliance', 'review'],
         },
         {
           id: 'audit-prep',
@@ -282,7 +292,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/audit-prep',
           estimatedTime: '45-60 min',
           difficulty: 'advanced',
-          tags: ['audit', 'preparation', 'documentation']
+          tags: ['audit', 'preparation', 'documentation'],
         },
         {
           id: 'evidence-collection',
@@ -292,9 +302,9 @@ export default function QuickActionsPage() {
           href: '/dashboard/workflows/compliance-review/evidence',
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
-          tags: ['evidence', 'collection', 'organization']
-        }
-      ]
+          tags: ['evidence', 'collection', 'organization'],
+        },
+      ],
     },
     {
       id: 'monitoring-reporting',
@@ -313,7 +323,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/analytics',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['dashboard', 'metrics', 'analysis']
+          tags: ['dashboard', 'metrics', 'analysis'],
         },
         {
           id: 'trend-analysis',
@@ -323,7 +333,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/analytics/trends',
           estimatedTime: '15-25 min',
           difficulty: 'intermediate',
-          tags: ['trends', 'analysis', 'patterns']
+          tags: ['trends', 'analysis', 'patterns'],
         },
         {
           id: 'custom-report',
@@ -333,7 +343,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/reporting/custom',
           estimatedTime: '20-30 min',
           difficulty: 'intermediate',
-          tags: ['reporting', 'custom', 'stakeholders']
+          tags: ['reporting', 'custom', 'stakeholders'],
         },
         {
           id: 'schedule-reports',
@@ -343,9 +353,9 @@ export default function QuickActionsPage() {
           href: '/dashboard/reporting/schedule',
           estimatedTime: '10-15 min',
           difficulty: 'beginner',
-          tags: ['automation', 'scheduling', 'notifications']
-        }
-      ]
+          tags: ['automation', 'scheduling', 'notifications'],
+        },
+      ],
     },
     {
       id: 'ai-insights',
@@ -365,7 +375,7 @@ export default function QuickActionsPage() {
           estimatedTime: '5-10 min',
           difficulty: 'beginner',
           tags: ['ai', 'insights', 'recommendations'],
-          isNew: true
+          isNew: true,
         },
         {
           id: 'risk-prediction',
@@ -375,7 +385,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/aria/predictions',
           estimatedTime: '15-20 min',
           difficulty: 'advanced',
-          tags: ['prediction', 'ai', 'modeling']
+          tags: ['prediction', 'ai', 'modeling'],
         },
         {
           id: 'smart-recommendations',
@@ -385,9 +395,9 @@ export default function QuickActionsPage() {
           href: '/dashboard/aria/recommendations',
           estimatedTime: '10-15 min',
           difficulty: 'intermediate',
-          tags: ['recommendations', 'ai', 'controls']
-        }
-      ]
+          tags: ['recommendations', 'ai', 'controls'],
+        },
+      ],
     },
     {
       id: 'data-management',
@@ -406,7 +416,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/import',
           estimatedTime: '15-25 min',
           difficulty: 'intermediate',
-          tags: ['import', 'data', 'upload']
+          tags: ['import', 'data', 'upload'],
         },
         {
           id: 'export-data',
@@ -416,7 +426,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/export',
           estimatedTime: '5-10 min',
           difficulty: 'beginner',
-          tags: ['export', 'data', 'reports']
+          tags: ['export', 'data', 'reports'],
         },
         {
           id: 'data-validation',
@@ -426,7 +436,7 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/validation',
           estimatedTime: '10-20 min',
           difficulty: 'intermediate',
-          tags: ['validation', 'quality', 'cleaning']
+          tags: ['validation', 'quality', 'cleaning'],
         },
         {
           id: 'backup-restore',
@@ -436,27 +446,30 @@ export default function QuickActionsPage() {
           href: '/dashboard/data/backup',
           estimatedTime: '5-15 min',
           difficulty: 'advanced',
-          tags: ['backup', 'restore', 'management']
-        }
-      ]
-    }
+          tags: ['backup', 'restore', 'management'],
+        },
+      ],
+    },
   ];
 
   // Filter actions based on search and category
-  const filteredCategories = workflowCategories.map(category => ({
-    ...category,
-    actions: category.actions.filter(action => {
-      const matchesSearch = searchQuery === '' || 
-        action.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        action.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        action.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      
-      const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
-      const matchesFavorites = !showFavoritesOnly || favorites.includes(action.id);
-      
-      return matchesSearch && matchesCategory && matchesFavorites;
-    })
-  })).filter(category => category.actions.length > 0);
+  const filteredCategories = workflowCategories
+    .map((category) => ({
+      ...category,
+      actions: category.actions.filter((action) => {
+        const matchesSearch =
+          searchQuery === '' ||
+          action.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          action.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          action.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
+        const matchesFavorites = !showFavoritesOnly || favorites.includes(action.id);
+
+        return matchesSearch && matchesCategory && matchesFavorites;
+      }),
+    }))
+    .filter((category) => category.actions.length > 0);
 
   // Handle action click
   const handleActionClick = (action: WorkflowAction) => {
@@ -464,11 +477,11 @@ export default function QuickActionsPage() {
       setShowTour(true);
       return;
     }
-    
+
     // Handle other actions
     if (action.href.startsWith('#')) {
       toast({
-        title: "Feature Coming Soon",
+        title: 'Feature Coming Soon',
         description: `${action.title} is currently under development.`,
       });
     } else {
@@ -480,7 +493,7 @@ export default function QuickActionsPage() {
     setShowTour(false);
     localStorage.setItem('hasSeenQuickActionsTour', 'true');
     toast({
-      title: "Tour Complete!",
+      title: 'Tour Complete!',
       description: "You're ready to start using quick actions effectively.",
     });
   };
@@ -497,12 +510,12 @@ export default function QuickActionsPage() {
   // Toggle favorite
   const toggleFavorite = (actionId: string) => {
     const updatedFavorites = favorites.includes(actionId)
-      ? favorites.filter(id => id !== actionId)
+      ? favorites.filter((id) => id !== actionId)
       : [...favorites, actionId];
-    
+
     setFavorites(updatedFavorites);
     localStorage.setItem('riscura-favorite-actions', JSON.stringify(updatedFavorites));
-    
+
     toast({
       title: favorites.includes(actionId) ? 'Removed from favorites' : 'Added to favorites',
       description: 'Your preferences have been saved.',
@@ -512,20 +525,28 @@ export default function QuickActionsPage() {
   // Get difficulty badge color
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-700';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-700';
-      case 'advanced': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'beginner':
+        return 'bg-green-100 text-green-700';
+      case 'intermediate':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'advanced':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   // Get completion status color
   const getCompletionStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600';
-      case 'in-progress': return 'text-blue-600';
-      case 'not-started': return 'text-gray-600';
-      default: return 'text-gray-600';
+      case 'completed':
+        return 'text-green-600';
+      case 'in-progress':
+        return 'text-blue-600';
+      case 'not-started':
+        return 'text-gray-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
@@ -553,11 +574,11 @@ export default function QuickActionsPage() {
                 Streamlined workflows to help you complete tasks efficiently and effectively.
               </p>
             </div>
-            
+
             {/* Header Actions */}
             <div className="flex items-center gap-4">
               <HighContrastToggle variant="badge" size="sm" showLabel={false} />
-              
+
               <DaisyTooltipWrapper>
                 <DaisyTooltip>
                   <DaisyTooltipTrigger asChild>
@@ -576,7 +597,6 @@ export default function QuickActionsPage() {
                   </DaisyTooltipContent>
                 </DaisyTooltip>
               </DaisyTooltipWrapper>
-              
             </div>
           </div>
         </div>
@@ -605,7 +625,7 @@ export default function QuickActionsPage() {
                         {loading ? 'Loading...' : stat.change}
                       </p>
                     </div>
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: stat.color + '20' }}
                     >
@@ -638,7 +658,7 @@ export default function QuickActionsPage() {
               {/* Filters */}
               <div className="flex items-center gap-4">
                 <DaisyButton
-                  variant={showFavoritesOnly ? "primary" : "secondary"}
+                  variant={showFavoritesOnly ? 'primary' : 'secondary'}
                   size="sm"
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
                   className="flex items-center gap-2"
@@ -653,7 +673,7 @@ export default function QuickActionsPage() {
                   className="px-3 py-2 border border-gray-200 rounded-lg text-sm font-inter focus:border-interactive-primary focus:ring-interactive-primary/20"
                 >
                   <option value="all">All Categories</option>
-                  {workflowCategories.map(category => (
+                  {workflowCategories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.title}
                     </option>
@@ -679,7 +699,7 @@ export default function QuickActionsPage() {
                   <DaisyCardBody className="pb-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div 
+                        <div
                           className="w-12 h-12 rounded-lg flex items-center justify-center"
                           style={{ backgroundColor: category.color + '20' }}
                         >
@@ -697,11 +717,18 @@ export default function QuickActionsPage() {
                       <div className="text-right">
                         <div className="flex items-center gap-2 mb-2">
                           <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-contrast-low">{category.estimatedTotalTime}</span>
+                          <span className="text-sm text-contrast-low">
+                            {category.estimatedTotalTime}
+                          </span>
                         </div>
                         <StatusIndicator
-                          status={category.completionStatus === 'completed' ? 'success' : 
-                                 category.completionStatus === 'in-progress' ? 'in-progress' : 'neutral'}
+                          status={
+                            category.completionStatus === 'completed'
+                              ? 'success'
+                              : category.completionStatus === 'in-progress'
+                                ? 'in-progress'
+                                : 'neutral'
+                          }
                           label={category.completionStatus.replace('-', ' ')}
                           size="sm"
                         />
@@ -715,22 +742,27 @@ export default function QuickActionsPage() {
                           key={action.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: (categoryIndex * 0.1) + (actionIndex * 0.05) }}
+                          transition={{ delay: categoryIndex * 0.1 + actionIndex * 0.05 }}
                           className="group"
                         >
                           <DaisyCard className="h-full bg-gray-50 border-gray-200 hover:shadow-md hover:border-interactive-primary/30 transition-all duration-200 cursor-pointer">
                             <DaisyCardBody className="p-4 h-full flex flex-col">
                               {/* Action Header */}
                               <div className="flex items-start justify-between mb-3">
-                                <div 
+                                <div
                                   className="w-10 h-10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"
                                   style={{ backgroundColor: category.color + '20' }}
                                 >
-                                  <action.icon className="w-5 h-5" style={{ color: category.color }} />
+                                  <action.icon
+                                    className="w-5 h-5"
+                                    style={{ color: category.color }}
+                                  />
                                 </div>
                                 <div className="flex items-center gap-1">
                                   {action.isNew && (
-                                    <DaisyBadge className="bg-blue-100 text-blue-700 text-xs">New</DaisyBadge>
+                                    <DaisyBadge className="bg-blue-100 text-blue-700 text-xs">
+                                      New
+                                    </DaisyBadge>
                                   )}
                                   <DaisyTooltipWrapper>
                                     <DaisyTooltip>
@@ -744,21 +776,24 @@ export default function QuickActionsPage() {
                                           }}
                                           className="w-8 h-8 p-0"
                                         >
-                                          <Star 
+                                          <Star
                                             className={`w-4 h-4 ${
-                                              favorites.includes(action.id) 
-                                                ? 'fill-yellow-400 text-yellow-400' 
+                                              favorites.includes(action.id)
+                                                ? 'fill-yellow-400 text-yellow-400'
                                                 : 'text-gray-400'
-                                            }`} 
+                                            }`}
                                           />
                                         </DaisyButton>
                                       </DaisyTooltipTrigger>
                                       <DaisyTooltipContent>
-                                        <p>{favorites.includes(action.id) ? 'Remove from favorites' : 'Add to favorites'}</p>
+                                        <p>
+                                          {favorites.includes(action.id)
+                                            ? 'Remove from favorites'
+                                            : 'Add to favorites'}
+                                        </p>
                                       </DaisyTooltipContent>
                                     </DaisyTooltip>
                                   </DaisyTooltipWrapper>
-                                  
                                 </div>
                               </div>
 
@@ -776,9 +811,13 @@ export default function QuickActionsPage() {
                                   <div className="flex items-center justify-between text-xs">
                                     <div className="flex items-center gap-1">
                                       <Clock className="w-3 h-3 text-gray-400" />
-                                      <span className="text-contrast-low">{action.estimatedTime}</span>
+                                      <span className="text-contrast-low">
+                                        {action.estimatedTime}
+                                      </span>
                                     </div>
-                                    <DaisyBadge className={`text-xs ${getDifficultyColor(action.difficulty)}`}>
+                                    <DaisyBadge
+                                      className={`text-xs ${getDifficultyColor(action.difficulty)}`}
+                                    >
                                       {action.difficulty}
                                     </DaisyBadge>
                                   </div>
@@ -787,7 +826,8 @@ export default function QuickActionsPage() {
 
                                   {action.prerequisites && (
                                     <div className="text-xs text-orange-600 bg-orange-50 p-2 rounded">
-                                      <strong>Prerequisites:</strong> {action.prerequisites.join(', ')}
+                                      <strong>Prerequisites:</strong>{' '}
+                                      {action.prerequisites.join(', ')}
                                     </div>
                                   )}
                                 </div>
@@ -796,7 +836,7 @@ export default function QuickActionsPage() {
                               {/* Action Footer */}
                               <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
                                 <div className="flex flex-wrap gap-1">
-                                  {action.tags.slice(0, 2).map(tag => (
+                                  {action.tags.slice(0, 2).map((tag) => (
                                     <DaisyBadge key={tag} variant="secondary" className="text-xs">
                                       {tag}
                                     </DaisyBadge>
@@ -858,7 +898,8 @@ export default function QuickActionsPage() {
                   Need Help Getting Started?
                 </h3>
                 <p className="text-contrast-low font-inter mb-4">
-                  Take our guided tour to learn how to use workflows effectively, or browse our help documentation for detailed instructions.
+                  Take our guided tour to learn how to use workflows effectively, or browse our help
+                  documentation for detailed instructions.
                 </p>
                 <div className="flex items-center gap-3">
                   <DaisyButton
@@ -886,12 +927,7 @@ export default function QuickActionsPage() {
         </DaisyCard>
       </main>
 
-      {showTour && (
-        <GuidedTour
-          onComplete={handleTourComplete}
-          onSkip={handleTourSkip}
-        />
-      )}
+      {showTour && <GuidedTour onComplete={handleTourComplete} onSkip={handleTourSkip} />}
     </div>
   );
-} 
+}

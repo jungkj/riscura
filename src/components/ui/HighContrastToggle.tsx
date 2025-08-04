@@ -3,13 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { 
-  Contrast, 
-  Eye, 
-  EyeOff,
-  Palette,
-  Settings
-} from 'lucide-react';
+import { Contrast, Eye, EyeOff, Palette, Settings } from 'lucide-react';
 
 interface HighContrastToggleProps {
   className?: string;
@@ -24,7 +18,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
   showLabel = true,
   variant = 'button',
   size = 'md',
-  onToggle
+  onToggle,
 }) => {
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -35,12 +29,12 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
     // Check for saved preference
     const saved = localStorage.getItem('riscura-high-contrast');
     const preferredHighContrast = saved === 'true';
-    
+
     // Check for system preference
     const systemPreference = window.matchMedia('(prefers-contrast: high)').matches;
-    
+
     const shouldUseHighContrast = preferredHighContrast || systemPreference;
-    
+
     if (shouldUseHighContrast) {
       setIsHighContrast(true);
       document.documentElement.classList.add('high-contrast');
@@ -71,23 +65,23 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
   const toggleHighContrast = () => {
     const newValue = !isHighContrast;
     setIsHighContrast(newValue);
-    
+
     // Save preference
     localStorage.setItem('riscura-high-contrast', newValue.toString());
-    
+
     // Apply to document
     if (newValue) {
       document.documentElement.classList.add('high-contrast');
     } else {
       document.documentElement.classList.remove('high-contrast');
     }
-    
+
     // Announce change to screen readers
     const announcement = document.getElementById('accessibility-announcements');
     if (announcement) {
       announcement.textContent = `High contrast mode ${newValue ? 'enabled' : 'disabled'}`;
     }
-    
+
     onToggle?.(newValue);
   };
 
@@ -122,7 +116,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
     return (
       <div className={`flex items-center gap-3 ${className}`}>
         {showLabel && (
-          <label 
+          <label
             htmlFor="high-contrast-toggle"
             className="text-sm font-medium text-contrast-medium cursor-pointer"
           >
@@ -139,10 +133,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
             relative inline-flex h-6 w-11 items-center rounded-full transition-colors
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
             focus-visible:ring-interactive-focus
-            ${isHighContrast 
-              ? 'bg-interactive-primary' 
-              : 'bg-gray-300'
-            }
+            ${isHighContrast ? 'bg-interactive-primary' : 'bg-gray-300'}
           `}
         >
           <span
@@ -164,9 +155,10 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       <DaisyBadge
         className={`
           cursor-pointer transition-colors
-          ${isHighContrast 
-            ? 'bg-interactive-primary text-white hover:bg-interactive-primaryHover' 
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          ${
+            isHighContrast
+              ? 'bg-interactive-primary text-white hover:bg-interactive-primaryHover'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }
           ${className}
         `}
@@ -182,11 +174,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
         }}
       >
         <Contrast className={`${getIconSize()} mr-1`} aria-hidden="true" />
-        {showLabel && (
-          <span>
-            {isHighContrast ? 'High Contrast On' : 'High Contrast Off'}
-          </span>
-        )}
+        {showLabel && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast Off'}</span>}
       </DaisyBadge>
     );
   }
@@ -194,7 +182,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
   // Default button variant
   return (
     <DaisyButton
-      variant={isHighContrast ? "default" : "secondary"}
+      variant={isHighContrast ? 'default' : 'secondary'}
       size={size === 'md' ? 'default' : size}
       onClick={toggleHighContrast}
       className={`
@@ -207,11 +195,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       aria-pressed={isHighContrast}
     >
       <Contrast className={`${getIconSize()} ${showLabel ? 'mr-2' : ''}`} aria-hidden="true" />
-      {showLabel && (
-        <span>
-          {isHighContrast ? 'High Contrast On' : 'High Contrast'}
-        </span>
-      )}
+      {showLabel && <span>{isHighContrast ? 'High Contrast On' : 'High Contrast'}</span>}
       <span className="sr-only">
         High contrast mode is {isHighContrast ? 'enabled' : 'disabled'}
       </span>
@@ -230,22 +214,22 @@ export const AccessibilityPanel: React.FC<{
 
   useEffect(() => {
     setIsClient(true);
-    
+
     // Check for saved preferences
     const savedMotion = localStorage.getItem('riscura-reduced-motion') === 'true';
     const savedFontSize = localStorage.getItem('riscura-font-size') || 'medium';
-    
+
     // Check for system preferences
     const systemReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+
     setReducedMotion(savedMotion || systemReducedMotion);
     setFontSize(savedFontSize);
-    
+
     // Apply preferences
     if (savedMotion || systemReducedMotion) {
       document.documentElement.classList.add('reduced-motion');
     }
-    
+
     document.documentElement.setAttribute('data-font-size', savedFontSize);
   }, []);
 
@@ -253,7 +237,7 @@ export const AccessibilityPanel: React.FC<{
     const newValue = !reducedMotion;
     setReducedMotion(newValue);
     localStorage.setItem('riscura-reduced-motion', newValue.toString());
-    
+
     if (newValue) {
       document.documentElement.classList.add('reduced-motion');
     } else {
@@ -270,7 +254,7 @@ export const AccessibilityPanel: React.FC<{
   if (!isClient) return null;
 
   return (
-    <div 
+    <div
       className={`
         bg-white border border-gray-200 rounded-lg shadow-lg p-6 space-y-6
         focus-trap
@@ -282,16 +266,10 @@ export const AccessibilityPanel: React.FC<{
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 
-            id="accessibility-panel-title"
-            className="text-lg font-semibold text-contrast-medium"
-          >
+          <h2 id="accessibility-panel-title" className="text-lg font-semibold text-contrast-medium">
             Accessibility Settings
           </h2>
-          <p 
-            id="accessibility-panel-description"
-            className="text-sm text-contrast-low mt-1"
-          >
+          <p id="accessibility-panel-description" className="text-sm text-contrast-low mt-1">
             Customize your viewing experience
           </p>
         </div>
@@ -300,7 +278,8 @@ export const AccessibilityPanel: React.FC<{
             variant="ghost"
             size="sm"
             onClick={onClose}
-            aria-label="Close accessibility settings">
+            aria-label="Close accessibility settings"
+          >
             ×
           </DaisyButton>
         )}
@@ -310,9 +289,7 @@ export const AccessibilityPanel: React.FC<{
         {/* High Contrast Toggle */}
         <div className="flex items-center justify-between">
           <div>
-            <label className="text-sm font-medium text-contrast-medium">
-              High Contrast Mode
-            </label>
+            <label className="text-sm font-medium text-contrast-medium">High Contrast Mode</label>
             <p className="text-xs text-contrast-low">
               Increases color contrast for better visibility
             </p>
@@ -323,12 +300,8 @@ export const AccessibilityPanel: React.FC<{
         {/* Reduced Motion Toggle */}
         <div className="flex items-center justify-between">
           <div>
-            <label className="text-sm font-medium text-contrast-medium">
-              Reduce Motion
-            </label>
-            <p className="text-xs text-contrast-low">
-              Minimizes animations and transitions
-            </p>
+            <label className="text-sm font-medium text-contrast-medium">Reduce Motion</label>
+            <p className="text-xs text-contrast-low">Minimizes animations and transitions</p>
           </div>
           <button
             role="switch"
@@ -339,10 +312,7 @@ export const AccessibilityPanel: React.FC<{
               relative inline-flex h-6 w-11 items-center rounded-full transition-colors
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
               focus-visible:ring-interactive-focus
-              ${reducedMotion 
-                ? 'bg-interactive-primary' 
-                : 'bg-gray-300'
-              }
+              ${reducedMotion ? 'bg-interactive-primary' : 'bg-gray-300'}
             `}
           >
             <span
@@ -356,25 +326,24 @@ export const AccessibilityPanel: React.FC<{
 
         {/* Font Size Options */}
         <div>
-          <label className="text-sm font-medium text-contrast-medium block mb-2">
-            Font Size
-          </label>
+          <label className="text-sm font-medium text-contrast-medium block mb-2">Font Size</label>
           <div className="flex gap-2">
             {[
               { value: 'small', label: 'Small' },
               { value: 'medium', label: 'Medium' },
               { value: 'large', label: 'Large' },
-              { value: 'extra-large', label: 'Extra Large' }
-                         ].map((option) => (
-               <DaisyButton
-                 key={option.value}
-                 variant={fontSize === option.value ? "default" : "secondary"}
-                 size="sm"
-                 onClick={() => changeFontSize(option.value)}
-                 aria-pressed={fontSize === option.value}>
-                 {option.label}
-               </DaisyButton>
-             ))}
+              { value: 'extra-large', label: 'Extra Large' },
+            ].map((option) => (
+              <DaisyButton
+                key={option.value}
+                variant={fontSize === option.value ? 'default' : 'secondary'}
+                size="sm"
+                onClick={() => changeFontSize(option.value)}
+                aria-pressed={fontSize === option.value}
+              >
+                {option.label}
+              </DaisyButton>
+            ))}
           </div>
         </div>
       </div>
@@ -400,4 +369,4 @@ export const AccessibilityAnnouncements: React.FC = () => {
   );
 };
 
-export default HighContrastToggle; 
+export default HighContrastToggle;

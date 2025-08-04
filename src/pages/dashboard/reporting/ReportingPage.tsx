@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function ReportingPage() {
+const ReportingPage = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Reporting</h1>

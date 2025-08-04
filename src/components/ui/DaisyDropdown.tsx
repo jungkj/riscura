@@ -86,7 +86,7 @@ export const DaisyDropdownMenuItem = ({
 };
 
 export const DaisyDropdownMenuSeparator = ({ className, ...props }: DropdownMenuSeparatorProps) => {
-  return <li className={cn('divider m-0', className)} {...props}></li>;
+  return <li className={cn('divider m-0', className)} {...props} />;
 };
 
 // Label component

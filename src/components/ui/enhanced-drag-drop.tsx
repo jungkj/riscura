@@ -83,9 +83,9 @@ export const EnhancedDraggable: React.FC<EnhancedDraggableProps> = ({
           onPointerDown={(e) => dragControls.start(e)}
         >
           <div className="w-4 h-4 flex flex-col justify-center items-center gap-0.5">
-            <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
+            <div className="w-1 h-1 bg-slate-400 rounded-full" />
+            <div className="w-1 h-1 bg-slate-400 rounded-full" />
+            <div className="w-1 h-1 bg-slate-400 rounded-full" />
           </div>
         </div>
       )}

@@ -66,8 +66,7 @@ export default function AIFeaturesSection() {
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* AI Badge */}
           <DaisyBadge className="bg-gradient-to-r from-[#199BEC] to-purple-600 text-white px-6 py-2 mb-8 text-sm rounded-full" >
-  <Sparkles className="w-4 h-4 mr-2" />
-</DaisyBadge>
+            <Sparkles className="w-4 h-4 mr-2" />
             Powered by Artificial Intelligence
           </DaisyBadge>
           
@@ -100,8 +99,7 @@ export default function AIFeaturesSection() {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <DaisyCardBody className="p-8" >
-  <div className="w-16 h-16 bg-gradient-to-br from-[#199BEC] to-purple-600 rounded-2xl flex items-center justify-center mb-6">
-</DaisyCard>
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#199BEC] to-purple-600 rounded-2xl flex items-center justify-center mb-6">
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
@@ -122,13 +120,11 @@ export default function AIFeaturesSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <DaisyButton size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4" >
-  Start free trial
-</DaisyButton>
+              Start free trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </DaisyButton>
             <DaisyButton size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4" >
-  Schedule demo
-</DaisyButton>
+              Schedule demo
             </DaisyButton>
           </div>
         </div>

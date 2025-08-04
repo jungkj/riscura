@@ -1,18 +1,23 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
-import { DaisyButton } from '@/components/ui/DaisyButton'
-import { DaisyBadge } from '@/components/ui/DaisyBadge'
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs'
-import { DaisyProgress } from '@/components/ui/DaisyProgress'
-import { DaisyAlert } from '@/components/ui/DaisyAlert'
-import { 
-  Activity, 
-  AlertTriangle, 
-  Shield, 
-  FileText, 
-  Users, 
+import React, { useState, useEffect } from 'react';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
+import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import {
+  Activity,
+  AlertTriangle,
+  Shield,
+  FileText,
+  Users,
   TrendingUp,
   TrendingDown,
   Clock,
@@ -20,87 +25,78 @@ import {
   XCircle,
   Wifi,
   WifiOff,
-  RefreshCw
-} from 'lucide-react'
-import { useRealTimeData } from '@/hooks/useRealTimeData'
-import { cn } from '@/lib/utils'
-import { formatDistanceToNow } from 'date-fns'
+  RefreshCw,
+} from 'lucide-react';
+import { useRealTimeData } from '@/hooks/useRealTimeData';
+import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
 
 interface RealTimeDashboardProps {
-  organizationId: string
-  userId: string
-  className?: string
+  organizationId: string;
+  userId: string;
+  className?: string;
 }
 
-export default function RealTimeDashboard({ 
-  organizationId, 
-  userId, 
-  className 
+export default function RealTimeDashboard({
+  organizationId,
+  userId,
+  className,
 }: RealTimeDashboardProps) {
   const [metrics, setMetrics] = useState<{
-    risks: any
-    controls: any
+    risks: any;
+    controls: any;
   }>({
     risks: null,
-    controls: null
-  })
-  
-  const [isOnline, setIsOnline] = useState(true)
-  
+    controls: null,
+  });
+
+  const [isOnline, setIsOnline] = useState(true);
+
   // Use real-time data hook
-  const {
-    risks,
-    controls,
-    documents,
-    activities,
-    users,
-    isLoading,
-    error,
-    lastUpdated,
-    actions
-  } = useRealTimeData({
-    organizationId,
-    autoSubscribe: true,
-    enableLogs: true
-  })
-  
+  const { risks, controls, documents, activities, users, isLoading, error, lastUpdated, actions } =
+    useRealTimeData({
+      organizationId,
+      autoSubscribe: true,
+      enableLogs: true,
+    });
+
   // Monitor online status
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-    
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-    
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
     return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
-  
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   // Load metrics
   useEffect(() => {
     const loadMetrics = async () => {
       try {
         const [riskMetrics, controlMetrics] = await Promise.all([
           actions.getRiskMetrics(),
-          actions.getControlMetrics()
-        ])
-        
+          actions.getControlMetrics(),
+        ]);
+
         setMetrics({
           risks: riskMetrics,
-          controls: controlMetrics
-        })
+          controls: controlMetrics,
+        });
       } catch (error) {
-        console.error('Error loading metrics:', error)
+        console.error('Error loading metrics:', error);
       }
-    }
-    
+    };
+
     if (!isLoading && risks.length >= 0) {
-      loadMetrics()
+      loadMetrics();
     }
-  }, [actions, isLoading, risks.length])
-  
+  }, [actions, isLoading, risks.length]);
+
   // Connection status indicator
   const ConnectionStatus = () => (
     <div className="flex items-center gap-2 text-sm">
@@ -121,43 +117,45 @@ export default function RealTimeDashboard({
         </span>
       )}
     </div>
-  )
-  
+  );
+
   // Risk level badge
   const RiskLevelBadge = ({ level }: { level: string | null }) => {
     const colors = {
       CRITICAL: 'bg-red-500 text-white',
       HIGH: 'bg-orange-500 text-white',
       MEDIUM: 'bg-yellow-500 text-black',
-      LOW: 'bg-green-500 text-white'
+      LOW: 'bg-green-500 text-white',
     };
 
-  return (
-    <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
-      {level || 'Unassessed'}
-    </DaisyBadge>
-    )
-  }
-  
+    return (
+      <DaisyBadge className={cn(colors[level as keyof typeof colors] || 'bg-gray-500 text-white')}>
+        {level || 'Unassessed'}
+      </DaisyBadge>
+    );
+  };
+
   // Control effectiveness badge
   const EffectivenessBadge = ({ effectiveness }: { effectiveness: string | null }) => {
     const colors = {
       FULLY_EFFECTIVE: 'bg-green-500 text-white',
       LARGELY_EFFECTIVE: 'bg-blue-500 text-white',
       PARTIALLY_EFFECTIVE: 'bg-yellow-500 text-black',
-      NOT_EFFECTIVE: 'bg-red-500 text-white'
+      NOT_EFFECTIVE: 'bg-red-500 text-white',
     };
 
-  return (
-      <DaisyBadge className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}>
+    return (
+      <DaisyBadge
+        className={cn(colors[effectiveness as keyof typeof colors] || 'bg-gray-500 text-white')}
+      >
         {effectiveness?.replace(/_/g, ' ') || 'Not Assessed'}
       </DaisyBadge>
-    )
-  }
-  
+    );
+  };
+
   if (isLoading) {
     return (
-      <div className={cn("space-y-6", className)}>
+      <div className={cn('space-y-6', className)}>
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">Real-Time Dashboard</h2>
           <div className="flex items-center gap-2">
@@ -169,39 +167,32 @@ export default function RealTimeDashboard({
           {[...Array(4)].map((_, i) => (
             <DaisyCard key={i} className="animate-pulse">
               <DaisyCardBody className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4" />
+                <div className="h-8 bg-gray-200 rounded w-1/2" />
               </DaisyCardBody>
             </DaisyCard>
           ))}
         </div>
       </div>
-    )
+    );
   }
-  
+
   if (error) {
     return (
-      <div className={cn("space-y-6", className)}>
+      <div className={cn('space-y-6', className)}>
         <DaisyAlert variant="error">
           <XCircle className="h-4 w-4" />
-          <DaisyAlertDescription>
-            Error loading dashboard data: {error}
-          </DaisyAlertDescription>
-          <DaisyButton 
-            variant="outline" 
-            size="sm" 
-            onClick={actions.refreshData}
-            className="ml-2"
-          >
+          <DaisyAlertDescription>Error loading dashboard data: {error}</DaisyAlertDescription>
+          <DaisyButton variant="outline" size="sm" onClick={actions.refreshData} className="ml-2">
             Retry
           </DaisyButton>
         </DaisyAlert>
       </div>
-    )
-  };
+    );
+  }
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -210,18 +201,18 @@ export default function RealTimeDashboard({
         </div>
         <div className="flex items-center gap-4">
           <ConnectionStatus />
-          <DaisyButton 
-            variant="outline" 
-            size="sm" 
+          <DaisyButton
+            variant="outline"
+            size="sm"
             onClick={actions.refreshData}
             disabled={isLoading}
           >
-            <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
+            <RefreshCw className={cn('h-4 w-4 mr-2', isLoading && 'animate-spin')} />
             Refresh
           </DaisyButton>
         </div>
       </div>
-      
+
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <DaisyCard>
@@ -243,7 +234,7 @@ export default function RealTimeDashboard({
             )}
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard>
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Active Controls</DaisyCardTitle>
@@ -254,15 +245,12 @@ export default function RealTimeDashboard({
             {metrics.controls && (
               <div className="text-xs text-muted-foreground mt-2">
                 {metrics.controls.effectivenessRate.toFixed(1)}% Effective
-                <DaisyProgress 
-                  value={metrics.controls.effectivenessRate} 
-                  className="mt-1 h-2" 
-                />
+                <DaisyProgress value={metrics.controls.effectivenessRate} className="mt-1 h-2" />
               </div>
             )}
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard>
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Documents</DaisyCardTitle>
@@ -270,12 +258,10 @@ export default function RealTimeDashboard({
           </DaisyCardBody>
           <DaisyCardBody>
             <div className="text-2xl font-bold">{documents.length}</div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Files and policies
-            </p>
+            <p className="text-xs text-muted-foreground mt-2">Files and policies</p>
           </DaisyCardBody>
         </DaisyCard>
-        
+
         <DaisyCard>
           <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2">
             <DaisyCardTitle className="text-sm font-medium">Team Members</DaisyCardTitle>
@@ -283,13 +269,11 @@ export default function RealTimeDashboard({
           </DaisyCardBody>
           <DaisyCardBody>
             <div className="text-2xl font-bold">{users.length}</div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Active users
-            </p>
+            <p className="text-xs text-muted-foreground mt-2">Active users</p>
           </DaisyCardBody>
         </DaisyCard>
       </div>
-      
+
       {/* Detailed Tabs */}
       <DaisyTabs defaultValue="risks" className="space-y-4">
         <DaisyTabsList>
@@ -297,7 +281,7 @@ export default function RealTimeDashboard({
           <DaisyTabsTrigger value="controls">Recent Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="activities">Live Activity</DaisyTabsTrigger>
         </DaisyTabsList>
-        
+
         <DaisyTabsContent value="risks" className="space-y-4">
           <DaisyCard>
             <DaisyCardBody>
@@ -314,7 +298,10 @@ export default function RealTimeDashboard({
               ) : (
                 <div className="space-y-4">
                   {risks.slice(0, 5).map((risk) => (
-                    <div key={risk.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={risk.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="space-y-1">
                         <h4 className="font-medium">{risk.title}</h4>
                         <p className="text-sm text-muted-foreground line-clamp-2">
@@ -339,7 +326,7 @@ export default function RealTimeDashboard({
             </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
-        
+
         <DaisyTabsContent value="controls" className="space-y-4">
           <DaisyCard>
             <DaisyCardBody>
@@ -356,7 +343,10 @@ export default function RealTimeDashboard({
               ) : (
                 <div className="space-y-4">
                   {controls.slice(0, 5).map((control) => (
-                    <div key={control.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={control.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="space-y-1">
                         <h4 className="font-medium">{control.title}</h4>
                         <p className="text-sm text-muted-foreground line-clamp-2">
@@ -381,7 +371,7 @@ export default function RealTimeDashboard({
             </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
-        
+
         <DaisyTabsContent value="activities" className="space-y-4">
           <DaisyCard>
             <DaisyCardBody>
@@ -411,7 +401,9 @@ export default function RealTimeDashboard({
                             </>
                           )}
                           <span>•</span>
-                          <span>{formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}</span>
+                          <span>
+                            {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -423,5 +415,5 @@ export default function RealTimeDashboard({
         </DaisyTabsContent>
       </DaisyTabs>
     </div>
-  )
-} 
+  );
+}

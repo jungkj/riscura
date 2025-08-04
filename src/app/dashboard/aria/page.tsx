@@ -25,7 +25,7 @@ interface Message {
   timestamp: Date;
 }
 
-function ARIAChat() {
+const ARIAChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',

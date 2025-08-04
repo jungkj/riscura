@@ -20,18 +20,15 @@ export function RealTimeEditor({
 }: RealTimeEditorProps) {
   return (
     <div className={`relative ${className}`}>
-      <DaisyCard >
-  <DaisyCardBody />
-</DaisyCard>
-          <DaisyCardTitle className="flex items-center" >
-  <Edit3 className="w-5 h-5 mr-2" />
-</DaisyCardTitle>
+      <DaisyCard>
+        <DaisyCardBody>
+          <DaisyCardTitle className="flex items-center">
+            <Edit3 className="w-5 h-5 mr-2" />
             Real-time Editor
           </DaisyCardTitle>
         </DaisyCardBody>
-        <DaisyCardBody >
-  <div className="text-center py-8 text-gray-500">
-</DaisyCardBody>
+        <DaisyCardBody>
+          <div className="text-center py-8 text-gray-500">
             <p>Real-time editor temporarily simplified for build testing</p>
           </div>
         </DaisyCardBody>

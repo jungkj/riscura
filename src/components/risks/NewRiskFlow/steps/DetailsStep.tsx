@@ -27,26 +27,38 @@ const statuses: { value: RiskStatus; label: string; icon: string }[] = [
 ];
 
 const strategies: { value: TreatmentStrategy; label: string; description: string }[] = [
-  { value: 'ACCEPT', label: 'Accept', description: 'Accept the risk and its potential consequences' },
-  { value: 'MITIGATE', label: 'Mitigate', description: 'Implement controls to reduce likelihood or impact' },
-  { value: 'TRANSFER', label: 'Transfer', description: 'Share or transfer the risk (e.g., insurance)' },
+  {
+    value: 'ACCEPT',
+    label: 'Accept',
+    description: 'Accept the risk and its potential consequences',
+  },
+  {
+    value: 'MITIGATE',
+    label: 'Mitigate',
+    description: 'Implement controls to reduce likelihood or impact',
+  },
+  {
+    value: 'TRANSFER',
+    label: 'Transfer',
+    description: 'Share or transfer the risk (e.g., insurance)',
+  },
   { value: 'AVOID', label: 'Avoid', description: 'Eliminate the risk by avoiding the activity' },
 ];
 
-export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
+export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
   const { riskData, updateRiskData } = useRiskFlow();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!riskData.owner.trim()) {
       newErrors.owner = 'Risk owner is required';
     }
     if (!riskData.treatmentStrategy) {
       newErrors.treatmentStrategy = 'Please select a treatment strategy';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -78,7 +90,7 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
               updateRiskData({ owner: e.target.value });
               if (errors.owner) setErrors({ ...errors, owner: '' });
             }}
-            className={cn("mt-1", errors.owner && "border-red-500")}
+            className={cn('mt-1', errors.owner && 'border-red-500')}
           />
           {errors.owner && (
             <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
@@ -129,10 +141,10 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
             >
               <label
                 className={cn(
-                  "flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all",
+                  'flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all',
                   riskData.treatmentStrategy === strategy.value
-                    ? "border-primary bg-primary/5"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? 'border-primary bg-primary/5'
+                    : 'border-gray-200 hover:border-gray-300'
                 )}
               >
                 <input
@@ -207,7 +219,9 @@ export function DetailsStep({ onNext, onBack }: DetailsStepProps) {
             id="nextReview"
             type="date"
             value={riskData.nextReview ? format(riskData.nextReview, 'yyyy-MM-dd') : ''}
-            onChange={(e) => updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefined })}
+            onChange={(e) =>
+              updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefined })
+            }
             className="mt-1"
           />
         </div>

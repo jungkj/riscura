@@ -11,7 +11,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
-function LoginForm() {
+const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, isLoading, error: authError, clearError } = useAuth();
@@ -205,7 +205,7 @@ function LoginForm() {
             {/* Demo Credentials Section */}
             {process.env.NODE_ENV === 'development' && (
               <>
-                <div className="divider"></div>
+                <div className="divider" />
                 <div className="alert alert-info">
                   <CheckCircle className="h-4 w-4" />
                   <div>
@@ -242,11 +242,11 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense
-      fallback={
+      fallback={(
         <div className="min-h-screen flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <span className="loading loading-spinner loading-lg text-primary" />
         </div>
-      }
+      )}
     >
       <LoginForm />
     </Suspense>

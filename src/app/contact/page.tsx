@@ -223,23 +223,23 @@ export default function ContactPage() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Enterprise Features</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-center">
-                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                       Custom integrations & APIs
                     </li>
                     <li className="flex items-center">
-                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                       Dedicated customer success manager
                     </li>
                     <li className="flex items-center">
-                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                       SSO & advanced security
                     </li>
                     <li className="flex items-center">
-                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                       SLA guarantees & priority support
                     </li>
                     <li className="flex items-center">
-                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-[#199BEC] rounded-full mr-3" />
                       White-label options available
                     </li>
                   </ul>

@@ -327,7 +327,7 @@ export const ExecutiveDashboard: React.FC = () => {
             subtitle="Security & Availability"
             hover
             className="shadow-notion-sm"
-            footer={
+            footer={(
               <div className="flex items-center justify-between">
                 <span className="text-caption text-text-tertiary">Last audit: Dec 2023</span>
                 <div className="flex items-center space-x-enterprise-1">
@@ -337,7 +337,7 @@ export const ExecutiveDashboard: React.FC = () => {
                   </span>
                 </div>
               </div>
-            }
+            )}
           >
             <div className="space-y-enterprise-4">
               <div className="flex items-center justify-between">
@@ -361,7 +361,7 @@ export const ExecutiveDashboard: React.FC = () => {
             subtitle="Information Security"
             hover
             className="shadow-notion-sm"
-            footer={
+            footer={(
               <div className="flex items-center justify-between">
                 <span className="text-caption text-text-tertiary">Certification: Valid</span>
                 <div className="flex items-center space-x-enterprise-1">
@@ -371,7 +371,7 @@ export const ExecutiveDashboard: React.FC = () => {
                   </span>
                 </div>
               </div>
-            }
+            )}
           >
             <div className="space-y-enterprise-4">
               <div className="flex items-center justify-between">
@@ -395,7 +395,7 @@ export const ExecutiveDashboard: React.FC = () => {
             subtitle="Data Protection"
             hover
             className="shadow-notion-sm"
-            footer={
+            footer={(
               <div className="flex items-center justify-between">
                 <span className="text-caption text-text-tertiary">Last review: Jan 2024</span>
                 <div className="flex items-center space-x-enterprise-1">
@@ -405,7 +405,7 @@ export const ExecutiveDashboard: React.FC = () => {
                   </span>
                 </div>
               </div>
-            }
+            )}
           >
             <div className="space-y-enterprise-4">
               <div className="flex items-center justify-between">

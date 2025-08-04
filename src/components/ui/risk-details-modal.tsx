@@ -75,7 +75,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
   const getRiskLevelIcon = (level: string) => {
     switch (level) {
       case 'critical':
-        return <DaisyAlertTriangle className="w-4 h-4">;</DaisyAlertTriangle>;
+        return <AlertTriangle className="w-4 h-4" />;
       case 'high':
         return <TrendingUp className="w-4 h-4" />;
       case 'medium':
@@ -197,7 +197,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                             <div
                               className="bg-red-500 h-2 rounded-full"
                               style={{ width: `${(risk.impact / 5) * 100}%` }}
-                            ></div>
+                            />
                           </div>
                           <span className="text-xs text-gray-600">{risk.impact}/5</span>
                         </div>
@@ -210,7 +210,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
                             <div
                               className="bg-orange-500 h-2 rounded-full"
                               style={{ width: `${(risk.likelihood / 5) * 100}%` }}
-                            ></div>
+                            />
                           </div>
                           <span className="text-xs text-gray-600">{risk.likelihood}/5</span>
                         </div>

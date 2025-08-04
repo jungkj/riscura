@@ -8,7 +8,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -147,7 +147,8 @@ export default function NewRiskAssessmentPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4" />
+              className="mb-4"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -157,9 +158,8 @@ export default function NewRiskAssessmentPage() {
                 <h1 className="text-3xl font-bold text-gray-900">New Risk Assessment</h1>
                 <p className="text-gray-600 mt-1">Document and assess a new organizational risk</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm" >
-  <Shield className="h-4 w-4 mr-1" />
-</DaisyBadge>
+              <DaisyBadge variant="outline" className="text-sm">
+                <Shield className="h-4 w-4 mr-1" />
                 15-20 min
               </DaisyBadge>
             </div>
@@ -204,10 +204,8 @@ export default function NewRiskAssessmentPage() {
           </div>
 
           {/* Form Content */}
-          <DaisyCard >
-  <DaisyCardBody className="p-6" >
-  </DaisyCard>
-</DaisyCardBody>
+          <DaisyCard>
+            <DaisyCardBody className="p-6">
               {/* Step 1: Basic Information */}
               {currentStep === 1 && (
                 <div className="space-y-6">
@@ -223,7 +221,7 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <DaisyLabel htmlFor="description">Risk Description *</DaisyInput>
+                    <DaisyLabel htmlFor="description">Risk Description *</DaisyLabel>
                     <DaisyTextarea
                       id="description"
                       value={formData.description}
@@ -235,14 +233,15 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <DaisyLabel htmlFor="category">Risk Category *</DaisyTextarea>
+                    <DaisyLabel htmlFor="category">Risk Category *</DaisyLabel>
                     <DaisySelect
                       value={formData.category}
-                      onValueChange={(value) => handleInputChange('category', value)} />
-                      <DaisySelectTrigger className="mt-1" />
-                        <DaisySelectValue placeholder="Select risk category" /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="operational">Operational</DaisySelectContent>
+                      onValueChange={(value) => handleInputChange('category', value)}>
+                      <DaisySelectTrigger className="mt-1">
+                        <DaisySelectValue placeholder="Select risk category" />
+                      </DaisySelectTrigger>
+                      <DaisySelectContent>
+                        <DaisySelectItem value="operational">Operational</DaisySelectItem>
                         <DaisySelectItem value="financial">Financial</DaisySelectItem>
                         <DaisySelectItem value="compliance">Compliance</DaisySelectItem>
                         <DaisySelectItem value="strategic">Strategic</DaisySelectItem>
@@ -269,7 +268,7 @@ export default function NewRiskAssessmentPage() {
               {currentStep === 2 && (
                 <div className="space-y-6">
                   <div>
-                    <DaisyLabel htmlFor="likelihood">Likelihood *</DaisyInput>
+                    <DaisyLabel htmlFor="likelihood">Likelihood *</DaisyLabel>
                     <DaisySelect
                       value={formData.likelihood}
                       onValueChange={(value) => handleInputChange('likelihood', value)} />
@@ -333,7 +332,7 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <DaisyLabel htmlFor="detectionMethod">Detection Method</DaisyInput>
+                    <DaisyLabel htmlFor="detectionMethod">Detection Method</DaisyLabel>
                     <DaisyTextarea
                       id="detectionMethod"
                       value={formData.detectionMethod}
@@ -350,7 +349,7 @@ export default function NewRiskAssessmentPage() {
               {currentStep === 3 && (
                 <div className="space-y-6">
                   <div>
-                    <DaisyLabel htmlFor="existingControls">Existing Controls *</DaisyTextarea>
+                    <DaisyLabel htmlFor="existingControls">Existing Controls *</DaisyLabel>
                     <DaisyTextarea
                       id="existingControls"
                       value={formData.existingControls}
@@ -362,7 +361,7 @@ export default function NewRiskAssessmentPage() {
                   </div>
 
                   <div>
-                    <DaisyLabel htmlFor="proposedMitigation">Proposed Mitigation Strategy *</DaisyTextarea>
+                    <DaisyLabel htmlFor="proposedMitigation">Proposed Mitigation Strategy *</DaisyLabel>
                     <DaisyTextarea
                       id="proposedMitigation"
                       value={formData.proposedMitigation}
@@ -406,7 +405,7 @@ export default function NewRiskAssessmentPage() {
                             `}
                           >
                             {calculateRiskScore(formData.likelihood, formData.impact).toUpperCase()}
-                          </DaisyTextarea>
+                          </DaisyBadge>
                         </div>
                         <div><span className="font-medium">Owner:</span> {formData.owner}</div>
                       </div>
@@ -434,27 +433,27 @@ export default function NewRiskAssessmentPage() {
                 <DaisyButton
                   variant="outline"
                   onClick={handlePrevious}
-                  disabled={currentStep === 1} >
-  <ArrowLeft className="h-4 w-4 mr-2" />
-</DaisyButton>
+                  disabled={currentStep === 1}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Previous
                 </DaisyButton>
 
                 {currentStep < steps.length ? (
                   <DaisyButton
                     onClick={handleNext}
-                    disabled={!isStepValid(currentStep)} >
-  Next
-</DaisyButton>
+                    disabled={!isStepValid(currentStep)}
+                  >
+                    Next
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </DaisyButton>
                 ) : (
                   <DaisyButton
                     onClick={handleSubmit}
                     disabled={loading || !isStepValid(3)}
-                    className="bg-green-600 hover:bg-green-700" >
-  {loading ? (
-</DaisyButton>
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    {loading ? (
                       <>Processing...</>
                     ) : (
                       <>

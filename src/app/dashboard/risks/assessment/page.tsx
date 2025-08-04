@@ -7,10 +7,10 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyC
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import { 
-  FileCheck, 
-  AlertTriangle, 
-  TrendingUp, 
+import {
+  FileCheck,
+  AlertTriangle,
+  TrendingUp,
   Calendar,
   Users,
   Target,
@@ -18,7 +18,7 @@ import {
   Filter,
   Download,
   Eye,
-  Edit
+  Edit,
 } from 'lucide-react';
 
 export default function RiskAssessmentPage() {
@@ -35,7 +35,7 @@ export default function RiskAssessmentPage() {
       dueDate: '2025-02-15',
       assignee: 'Security Team',
       priority: 'High',
-      riskCount: 12
+      riskCount: 12,
     },
     {
       id: 2,
@@ -45,7 +45,7 @@ export default function RiskAssessmentPage() {
       dueDate: '2025-01-30',
       assignee: 'Compliance Team',
       priority: 'Medium',
-      riskCount: 8
+      riskCount: 8,
     },
     {
       id: 3,
@@ -55,25 +55,33 @@ export default function RiskAssessmentPage() {
       dueDate: '2025-03-01',
       assignee: 'Risk Team',
       priority: 'High',
-      riskCount: 15
-    }
+      riskCount: 15,
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'In Progress': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Completed':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Pending':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-100 text-red-800 border-red-200';
-      case 'Medium': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'High':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'Medium':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Low':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -109,7 +117,9 @@ export default function RiskAssessmentPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Risk Assessments</h1>
-          <p className="text-gray-600">Manage and track your organization's risk assessment processes and outcomes.</p>
+          <p className="text-gray-600">
+            Manage and track your organization's risk assessment processes and outcomes.
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <DaisyButton variant="outline" className="text-sm" onClick={handleFilterAssessments}>
@@ -189,14 +199,15 @@ export default function RiskAssessmentPage() {
         <DaisyCardBody className="space-y-4">
           <Suspense fallback={<LoadingSpinner />}>
             {assessments.map((assessment) => (
-              <DaisyCard key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow">
+              <DaisyCard
+                key={assessment.id}
+                className="border-gray-200 hover:shadow-md transition-shadow"
+              >
                 <DaisyCardBody className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-3">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {assessment.title}
-                        </h3>
+                        <h3 className="text-lg font-semibold text-gray-900">{assessment.title}</h3>
                         <DaisyBadge className={getStatusColor(assessment.status)}>
                           {assessment.status}
                         </DaisyBadge>
@@ -204,7 +215,7 @@ export default function RiskAssessmentPage() {
                           {assessment.priority}
                         </DaisyBadge>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <Calendar className="w-4 h-4" />
@@ -230,19 +241,21 @@ export default function RiskAssessmentPage() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center space-x-2 ml-4">
-                      <DaisyButton 
-                        variant="outline" 
+                      <DaisyButton
+                        variant="outline"
                         size="sm"
-                        onClick={() => handleViewDetails(assessment.id)}>
+                        onClick={() => handleViewDetails(assessment.id)}
+                      >
                         <Eye className="h-4 w-4 mr-2" />
                         View Details
                       </DaisyButton>
-                      <DaisyButton 
-                        variant="outline" 
+                      <DaisyButton
+                        variant="outline"
                         size="sm"
-                        onClick={() => handleEditAssessment(assessment.id)}>
+                        onClick={() => handleEditAssessment(assessment.id)}
+                      >
                         <Edit className="h-4 w-4 mr-2" />
                         Edit
                       </DaisyButton>

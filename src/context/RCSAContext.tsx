@@ -272,7 +272,7 @@ export function useRCSA(): RCSAContextType {
 // PROVIDER COMPONENT
 // ============================================================================
 
-export function RCSAProvider({ children }: { children: React.ReactNode }) {
+export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(rcsaReducer, initialState);
 
   // ============================================================================

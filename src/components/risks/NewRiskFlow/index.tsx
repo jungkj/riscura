@@ -26,18 +26,18 @@ const steps: Array<{ id: RiskFlowStep; label: string; icon: string }> = [
   { id: 'review', label: 'Review', icon: '✅' },
 ];
 
-function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'open'>) {
+const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'open'>) => {
   const { currentStep, setCurrentStep, isSubmitting } = useRiskFlow();
-  
+
   const handleNext = () => {
-    const currentIndex = steps.findIndex(s => s.id === currentStep);
+    const currentIndex = steps.findIndex((s) => s.id === currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1].id);
     }
   };
 
   const handleBack = () => {
-    const currentIndex = steps.findIndex(s => s.id === currentStep);
+    const currentIndex = steps.findIndex((s) => s.id === currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1].id);
     }
@@ -59,12 +59,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
             Follow the steps to identify and assess a new risk
           </p>
         </div>
-        <DaisyButton
-          variant="ghost"
-          size="sm"
-          onClick={handleClose}
-          disabled={isSubmitting}
-        >
+        <DaisyButton variant="ghost" size="sm" onClick={handleClose} disabled={isSubmitting}>
           <X className="h-4 w-4" />
         </DaisyButton>
       </div>
@@ -88,7 +83,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
               <BasicInfoStep onNext={handleNext} />
             </motion.div>
           )}
-          
+
           {currentStep === 'matrix' && (
             <motion.div
               key="matrix"
@@ -100,7 +95,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
               <RiskMatrixStep onNext={handleNext} onBack={handleBack} />
             </motion.div>
           )}
-          
+
           {currentStep === 'details' && (
             <motion.div
               key="details"
@@ -112,7 +107,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
               <DetailsStep onNext={handleNext} onBack={handleBack} />
             </motion.div>
           )}
-          
+
           {currentStep === 'review' && (
             <motion.div
               key="review"
@@ -121,8 +116,8 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
               exit={{ opacity: 0, x: -20 }}
               className="p-6"
             >
-              <ReviewStep 
-                onBack={handleBack} 
+              <ReviewStep
+                onBack={handleBack}
                 onSuccess={() => {
                   onSuccess?.();
                   onOpenChange(false);
@@ -136,7 +131,7 @@ function RiskFlowContent({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
   );
 }
 
-export function NewRiskFlow({ open, onOpenChange, onSuccess }: NewRiskFlowProps) {
+export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps) => {
   return (
     <DaisyDialog open={open} onOpenChange={onOpenChange}>
       <DaisyDialogContent className="max-w-4xl h-[90vh] p-0">

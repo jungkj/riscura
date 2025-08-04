@@ -58,7 +58,7 @@ const workflowSteps: WorkflowStep[] = [
   },
 ];
 
-export function WorkflowProgress({ activeStep, onStepClick, className }: WorkflowProgressProps) {
+export const WorkflowProgress = ({ activeStep, onStepClick, className }: WorkflowProgressProps) => {
   const activeIndex = workflowSteps.findIndex((step) => step.id === activeStep);
 
   return (

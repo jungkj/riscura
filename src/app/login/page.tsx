@@ -3,7 +3,7 @@
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-function LoginRedirectContent() {
+const LoginRedirectContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -24,11 +24,11 @@ function LoginRedirectContent() {
 export default function LoginRedirect() {
   return (
     <Suspense
-      fallback={
+      fallback={(
         <div className="min-h-screen flex items-center justify-center">
           <p>Loading...</p>
         </div>
-      }
+      )}
     >
       <LoginRedirectContent />
     </Suspense>

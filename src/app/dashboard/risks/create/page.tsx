@@ -9,14 +9,14 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { NewRiskFlow } from '@/components/risks/NewRiskFlow';
 import { CreateRiskModal } from '@/components/risks/CreateRiskModal';
-import { 
-  Sparkles, 
-  Zap, 
-  MousePointerClick, 
-  Layers, 
+import {
+  Sparkles,
+  Zap,
+  MousePointerClick,
+  Layers,
   ArrowRight,
   ChevronRight,
-  Rocket
+  Rocket,
 } from 'lucide-react';
 
 export default function CreateRiskPage() {
@@ -73,7 +73,7 @@ export default function CreateRiskPage() {
               <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-bl-lg">
                 NEW
               </div>
-              
+
               <DaisyCardBody>
                 <DaisyCardTitle className="flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-blue-600" />
@@ -82,33 +82,33 @@ export default function CreateRiskPage() {
                 <p className="text-muted-foreground">
                   Modern, visual approach to risk creation with drag-and-drop
                 </p>
-              
-              
+
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
-                  {features.map((feature, index) => (
-                    <motion.div
-                      key={feature.title}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                      className="flex items-start gap-2"
-                    >
-                      <div className={`p-1.5 rounded-md ${feature.color}`}>
-                        <feature.icon className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{feature.title}</p>
-                        <p className="text-xs text-muted-foreground">{feature.description}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-                
-                  <DaisyButton 
+                    {features.map((feature, index) => (
+                      <motion.div
+                        key={feature.title}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 + index * 0.1 }}
+                        className="flex items-start gap-2"
+                      >
+                        <div className={`p-1.5 rounded-md ${feature.color}`}>
+                          <feature.icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{feature.title}</p>
+                          <p className="text-xs text-muted-foreground">{feature.description}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <DaisyButton
                     onClick={() => setShowNewFlow(true)}
                     className="w-full group"
-                    size="lg">
+                    size="lg"
+                  >
                     Try New Experience
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </DaisyButton>
@@ -132,33 +132,33 @@ export default function CreateRiskPage() {
                 <p className="text-muted-foreground">
                   Traditional tabbed form with comprehensive options
                 </p>
-              
-              
+
                 <div className="space-y-4">
                   <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    <span>Complete control over all risk attributes</span>
+                    <div className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      <span>Complete control over all risk attributes</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      <span>Multi-tab interface for detailed input</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      <span>Familiar form-based workflow</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      <span>Batch input capabilities</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    <span>Multi-tab interface for detailed input</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    <span>Familiar form-based workflow</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    <span>Batch input capabilities</span>
-                  </div>
-                </div>
-                
-                  <DaisyButton 
+
+                  <DaisyButton
                     onClick={() => setShowOldFlow(true)}
                     className="w-full"
                     variant="outline"
-                    size="lg">
+                    size="lg"
+                  >
                     Use Classic Form
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </DaisyButton>
@@ -200,7 +200,7 @@ export default function CreateRiskPage() {
             router.push('/dashboard/risks');
           }}
         />
-        
+
         <CreateRiskModal
           open={showOldFlow}
           onOpenChange={setShowOldFlow}

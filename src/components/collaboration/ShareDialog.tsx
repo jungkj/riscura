@@ -33,10 +33,10 @@ export function ShareDialog({
           </div>
           
           <div className="flex justify-end space-x-2 mt-6">
-            <DaisyButton variant="outline" onClick={() => onOpenChange(false)} />
+            <DaisyButton variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </DaisyButton>
-            <DaisyButton onClick={() => onOpenChange(false)} />
+            <DaisyButton onClick={() => onOpenChange(false)}>
               Share
             </DaisyButton>
           </div>

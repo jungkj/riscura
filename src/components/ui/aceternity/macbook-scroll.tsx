@@ -97,7 +97,7 @@ export const MacbookScroll = ({
         <Trackpad />
         <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
         {showGradient && (
-          <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
+          <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
         )}
         {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
       </div>
@@ -239,7 +239,7 @@ export const Trackpad = () => {
       style={{
         boxShadow: '0px 0px 1px 1px #00000020 inset',
       }}
-    ></div>
+    />
   );
 };
 
@@ -564,7 +564,7 @@ export const Keypad = () => {
             <span className="block">command</span>
           </div>
         </KBtn>
-        <KBtn className="w-[8.2rem]"></KBtn>
+        <KBtn className="w-[8.2rem]" />
         <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-start pl-1">
             <IconCommand className="h-[6px] w-[6px]" />
@@ -651,7 +651,7 @@ export const SpeakerGrid = () => {
         backgroundImage: 'radial-gradient(circle, #08080A 0.5px, transparent 0.5px)',
         backgroundSize: '3px 3px',
       }}
-    ></div>
+    />
   );
 };
 

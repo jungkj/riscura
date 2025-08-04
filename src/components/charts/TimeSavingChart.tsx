@@ -145,13 +145,13 @@ export const TimeSavingChart = ({ animated = false }: TimeSavingChartProps) => {
             {/* Legend */}
             <div className="flex justify-center space-x-8 mt-6">
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 rounded-full bg-[#199BEC]"></div>
+                <div className="w-4 h-4 rounded-full bg-[#199BEC]" />
                 <span className="text-sm text-[#191919] font-semibold font-inter">
                   Riscura AI Platform
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 rounded-full bg-[#A8A8A8]"></div>
+                <div className="w-4 h-4 rounded-full bg-[#A8A8A8]" />
                 <span className="text-sm text-[#A8A8A8] font-medium font-inter">
                   Excel-based RCSA
                 </span>

@@ -33,9 +33,8 @@ export default function VantaInspiredHero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
         <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Announcement Badge */}
-          <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-6 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors" >
-  <Sparkles className="w-4 h-4 mr-2" />
-</DaisyBadge>
+          <DaisyBadge className="bg-[#199BEC] text-white px-6 py-2 mb-6 text-sm rounded-full hover:bg-[#0f7dc7] transition-colors">
+            <Sparkles className="w-4 h-4 mr-2" />
             Introducing Riscura AI: Powering the future of risk management
           </DaisyBadge>
           
@@ -60,16 +59,17 @@ export default function VantaInspiredHero() {
             <DaisyButton 
               size="lg" 
               className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-              onClick={() => router.push('/register')} />
+              onClick={() => router.push('/register')}
+            >
               Request a demo
               <ArrowRight className="w-5 h-5 ml-2" />
             </DaisyButton>
             <DaisyButton 
               variant="outline" 
               size="lg" 
-              className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200" >
-  <Play className="w-5 h-5 mr-2" />
-</DaisyButton>
+              className="border-gray-300 text-gray-700 hover:border-[#199BEC] hover:text-[#199BEC] px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200"
+            >
+              <Play className="w-5 h-5 mr-2" />
               Watch demo
             </DaisyButton>
           </div>

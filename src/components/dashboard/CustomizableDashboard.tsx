@@ -164,7 +164,7 @@ const sampleWidgets: DashboardWidget[] = [
 ];
 
 // Widget Components (simplified for demonstration)
-function RiskOverviewWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const RiskOverviewWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
@@ -190,7 +190,7 @@ function RiskOverviewWidget({ config, onConfigChange, size, isEditing }: WidgetP
   );
 }
 
-function ComplianceStatusWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="space-y-3">
@@ -216,26 +216,26 @@ function ComplianceStatusWidget({ config, onConfigChange, size, isEditing }: Wid
   );
 }
 
-function RecentActivitiesWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const RecentActivitiesWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="space-y-3">
         <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2" />
           <div className="flex-1">
             <div className="text-sm font-medium">Risk assessment completed</div>
             <div className="text-xs text-gray-500">2 hours ago</div>
           </div>
         </div>
         <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+          <div className="w-2 h-2 bg-green-500 rounded-full mt-2" />
           <div className="flex-1">
             <div className="text-sm font-medium">Control updated</div>
             <div className="text-xs text-gray-500">4 hours ago</div>
           </div>
         </div>
         <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+          <div className="w-2 h-2 bg-orange-500 rounded-full mt-2" />
           <div className="flex-1">
             <div className="text-sm font-medium">Compliance review due</div>
             <div className="text-xs text-gray-500">1 day ago</div>
@@ -246,7 +246,7 @@ function RecentActivitiesWidget({ config, onConfigChange, size, isEditing }: Wid
   );
 }
 
-function AIInsightsWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="space-y-3">
@@ -268,7 +268,7 @@ function AIInsightsWidget({ config, onConfigChange, size, isEditing }: WidgetPro
   );
 }
 
-function QuickActionsWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-2 gap-2">
@@ -294,7 +294,7 @@ function QuickActionsWidget({ config, onConfigChange, size, isEditing }: WidgetP
   );
 }
 
-function MetricsChartWidget({ config, onConfigChange, size, isEditing }: WidgetProps) {
+const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
     <div className="p-4">
       <div className="h-32 bg-gray-100 rounded flex items-center justify-center">

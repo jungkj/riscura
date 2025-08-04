@@ -52,7 +52,14 @@
       "Bash(npm run verify:quick:*)",
       "Bash(npm run clean:*)",
       "Bash(npm run lint:*)",
-      "Bash(NEXT_TELEMETRY_DISABLED=1 npx next build)"
+      "Bash(NEXT_TELEMETRY_DISABLED=1 npx next build)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx @babel/parser:*)",
+      "Bash(cat:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm outdated:*)"
     ],
     "deny": []
   }

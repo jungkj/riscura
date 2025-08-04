@@ -15,7 +15,7 @@ interface StepIndicatorProps {
   currentStep: string;
 }
 
-export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
+export const StepIndicator = ({ steps, currentStep }: StepIndicatorProps) => {
   const currentIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (

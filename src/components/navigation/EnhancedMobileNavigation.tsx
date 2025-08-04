@@ -177,7 +177,7 @@ const NAVIGATION_GROUPS: NavigationGroup[] = [
 // ENHANCED MOBILE NAVIGATION COMPONENT
 // ============================================================================
 
-export function EnhancedMobileNavigation({ className, onNavigate }: MobileNavigationProps) {
+export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());

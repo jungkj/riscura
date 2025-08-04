@@ -9,7 +9,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { 
+import {
   ArrowLeft,
   Save,
   X,
@@ -19,7 +19,7 @@ import {
   Users,
   Target,
   FileCheck,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 
 export default function NewAssessmentPage() {
@@ -37,22 +37,22 @@ export default function NewAssessmentPage() {
     assessmentType: '',
     framework: '',
     includeThirdParty: false,
-    includeCompliance: false
+    includeCompliance: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [field]: ''
+        [field]: '',
       }));
     }
   };
@@ -60,24 +60,24 @@ export default function NewAssessmentPage() {
   const handleObjectiveChange = (index: number, value: string) => {
     const newObjectives = [...formData.objectives];
     newObjectives[index] = value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: newObjectives
+      objectives: newObjectives,
     }));
   };
 
   const addObjective = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: [...prev.objectives, '']
+      objectives: [...prev.objectives, ''],
     }));
   };
 
   const removeObjective = (index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      objectives: newObjectives
+      objectives: newObjectives,
     }));
   };
 
@@ -99,7 +99,7 @@ export default function NewAssessmentPage() {
     if (!formData.assessmentType) {
       newErrors.assessmentType = 'Assessment type is required';
     }
-    if (formData.objectives.every(obj => !obj.trim())) {
+    if (formData.objectives.every((obj) => !obj.trim())) {
       newErrors.objectives = 'At least one objective is required';
     }
 
@@ -115,9 +115,9 @@ export default function NewAssessmentPage() {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       console.log('Creating new assessment:', formData);
-      
+
       // Generate a mock ID and redirect to the new assessment
       const newAssessmentId = Math.floor(Math.random() * 1000) + 1;
       router.push(`/dashboard/risks/assessment/${newAssessmentId}`);
@@ -137,17 +137,15 @@ export default function NewAssessmentPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <DaisyButton
-            variant="outline"
-            onClick={handleCancel}
-            className="flex items-center gap-2"
-          >
+          <DaisyButton variant="outline" onClick={handleCancel} className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
             Back
           </DaisyButton>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">New Risk Assessment</h1>
-            <p className="text-gray-600">Create a comprehensive risk assessment for your organization</p>
+            <p className="text-gray-600">
+              Create a comprehensive risk assessment for your organization
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -218,11 +216,19 @@ export default function NewAssessmentPage() {
                     </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="security">Security Assessment</DaisySelectItem>
-                      <DaisySelectItem value="operational">Operational Risk Assessment</DaisySelectItem>
+                      <DaisySelectItem value="operational">
+                        Operational Risk Assessment
+                      </DaisySelectItem>
                       <DaisySelectItem value="compliance">Compliance Assessment</DaisySelectItem>
-                      <DaisySelectItem value="third-party">Third-Party Risk Assessment</DaisySelectItem>
-                      <DaisySelectItem value="business-continuity">Business Continuity Assessment</DaisySelectItem>
-                      <DaisySelectItem value="comprehensive">Comprehensive Risk Assessment</DaisySelectItem>
+                      <DaisySelectItem value="third-party">
+                        Third-Party Risk Assessment
+                      </DaisySelectItem>
+                      <DaisySelectItem value="business-continuity">
+                        Business Continuity Assessment
+                      </DaisySelectItem>
+                      <DaisySelectItem value="comprehensive">
+                        Comprehensive Risk Assessment
+                      </DaisySelectItem>
                     </DaisySelectContent>
                   </DaisySelect>
                   {errors.assessmentType && (
@@ -325,7 +331,9 @@ export default function NewAssessmentPage() {
                     <DaisyCheckbox
                       id="includeThirdParty"
                       checked={formData.includeThirdParty}
-                      onCheckedChange={(checked) => handleInputChange('includeThirdParty', checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange('includeThirdParty', checked as boolean)
+                      }
                     />
                     <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal">
                       Include third-party vendor assessment
@@ -335,7 +343,9 @@ export default function NewAssessmentPage() {
                     <DaisyCheckbox
                       id="includeCompliance"
                       checked={formData.includeCompliance}
-                      onCheckedChange={(checked) => handleInputChange('includeCompliance', checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange('includeCompliance', checked as boolean)
+                      }
                     />
                     <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal">
                       Include compliance requirements evaluation
@@ -446,4 +456,4 @@ export default function NewAssessmentPage() {
       </div>
     </div>
   );
-} 
+}

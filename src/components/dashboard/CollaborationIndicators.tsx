@@ -21,7 +21,7 @@ interface CollaborationIndicatorsProps {
   users: User[];
 }
 
-export function CollaborationIndicators({ users }: CollaborationIndicatorsProps) {
+export const CollaborationIndicators = ({ users }: CollaborationIndicatorsProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'online':

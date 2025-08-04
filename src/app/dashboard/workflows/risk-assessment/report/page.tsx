@@ -6,7 +6,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup';
@@ -170,7 +170,8 @@ export default function GenerateRiskReportPage() {
             <DaisyButton
               variant="ghost"
               onClick={() => router.push('/dashboard/quick-actions')}
-              className="mb-4" />
+              className="mb-4"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Quick Actions
             </DaisyButton>
@@ -180,9 +181,8 @@ export default function GenerateRiskReportPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Generate Risk Report</h1>
                 <p className="text-gray-600 mt-1">Create comprehensive risk assessment reports</p>
               </div>
-              <DaisyBadge variant="outline" className="text-sm" >
-  <Clock className="h-4 w-4 mr-1" />
-</DaisyBadge>
+              <DaisyBadge variant="outline" className="text-sm">
+                <Clock className="h-4 w-4 mr-1" />
                 10-15 min
               </DaisyBadge>
             </div>

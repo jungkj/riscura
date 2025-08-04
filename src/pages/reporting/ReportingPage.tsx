@@ -171,23 +171,21 @@ export default function ReportingPage() {
         </DaisyButton>
       </div>
       
-      <DaisyTabs defaultValue="builder" className="space-y-6" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="builder">Report Builder</DaisyTabs>
+      <DaisyTabs defaultValue="builder" className="space-y-6">
+        <DaisyTabsList>
+          <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
           <DaisyTabsTrigger value="library">Report Library</DaisyTabsTrigger>
           <DaisyTabsTrigger value="scheduled">Scheduled Reports</DaisyTabsTrigger>
         </DaisyTabsList>
         
-        <DaisyTabsContent value="builder" className="space-y-6" />
+        <DaisyTabsContent value="builder" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <DaisyCard className="lg:col-span-3" >
-  <DaisyCardBody />
-</DaisyTabsContent>
+            <DaisyCard className="lg:col-span-3">
+              <DaisyCardBody>
                 <DaisyCardTitle>Report Preview</DaisyCardTitle>
-                <DaisyCardDescription >
-  Preview of your report based on current selections
-</DaisyCardDescription>
-                </p>
+                <DaisyCardDescription>
+                  Preview of your report based on current selections
+                </DaisyCardDescription>
               
               <DaisyCardBody className="space-y-6" >
   {/* Risk by Category Chart */}
@@ -506,9 +504,7 @@ export default function ReportingPage() {
 </DaisyCard>
                   <div className="flex justify-between items-start">
                     <DaisyCardTitle>{report.name}</DaisyCardTitle>
-                    <DaisyBadge variant="outline" >
-  {report.type === 'monthly' ? 'Monthly' : 
-</DaisyBadge>
+                    <DaisyBadge variant="outline" >{report.type === 'monthly' ? 'Monthly' :</DaisyBadge>
                        report.type === 'quarterly' ? 'Quarterly' : 'Custom'}
                     </DaisyBadge>
                   </div>

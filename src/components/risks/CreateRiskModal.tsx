@@ -2,15 +2,32 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import {
+  DaisyDialog,
+  DaisyDialogContent,
+  DaisyDialogDescription,
+  DaisyDialogHeader,
+  DaisyDialogTitle,
+} from '@/components/ui/DaisyDialog';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import { DaisySelect, DaisySelectContent, DaisySelectItem, DaisySelectTrigger, DaisySelectValue } from '@/components/ui/DaisySelect';
+import {
+  DaisySelect,
+  DaisySelectContent,
+  DaisySelectItem,
+  DaisySelectTrigger,
+  DaisySelectValue,
+} from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import {
+  DaisyTabs,
+  DaisyTabsContent,
+  DaisyTabsList,
+  DaisyTabsTrigger,
+} from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -172,16 +189,15 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
       };
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       onRiskCreated(newRisk);
       toast.success('Risk created successfully!');
-      
+
       // Reset form
       setFormData(initialFormData);
       setActiveTab('basic');
       onOpenChange(false);
-
     } catch (error) {
       console.error('Error creating risk:', error);
       toast.error('Failed to create risk. Please try again.');
@@ -191,10 +207,10 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
   };
 
   const handleFrameworkToggle = (framework: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       framework: prev.framework.includes(framework)
-        ? prev.framework.filter(f => f !== framework)
+        ? prev.framework.filter((f) => f !== framework)
         : [...prev.framework, framework],
     }));
   };
@@ -231,7 +247,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="title"
                   placeholder="Enter risk title"
                   value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                   className={errors.title ? 'border-red-500' : ''}
                 />
                 {errors.title && <p className="text-sm text-red-600">{errors.title}</p>}
@@ -241,7 +257,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <DaisyLabel htmlFor="category">Category *</DaisyLabel>
                 <DaisySelect
                   value={formData.category}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                 >
                   <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
                     <DaisySelectValue placeholder="Select category" />
@@ -264,7 +280,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 id="description"
                 placeholder="Describe the risk in detail"
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 className={errors.description ? 'border-red-500' : ''}
                 rows={4}
               />
@@ -278,7 +294,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="owner"
                   placeholder="Enter risk owner name"
                   value={formData.owner}
-                  onChange={(e) => setFormData(prev => ({ ...prev, owner: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, owner: e.target.value }))}
                   className={errors.owner ? 'border-red-500' : ''}
                 />
                 {errors.owner && <p className="text-sm text-red-600">{errors.owner}</p>}
@@ -288,7 +304,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <DaisyLabel htmlFor="dueDate">Due Date *</DaisyLabel>
                 <DatePicker
                   value={formData.dueDate}
-                  onChange={(date) => setFormData(prev => ({ ...prev, dueDate: date }))}
+                  onChange={(date) => setFormData((prev) => ({ ...prev, dueDate: date }))}
                   placeholder="Select due date"
                   className={errors.dueDate ? 'border-red-500' : ''}
                 />
@@ -307,14 +323,16 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <p className="text-sm text-gray-500 mt-1">
                   Evaluate the likelihood and impact of this risk
                 </p>
-                
+
                 <div className="space-y-6 mt-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <DaisyLabel>Likelihood: {formData.likelihood}</DaisyLabel>
                       <DaisySlider
                         value={[formData.likelihood]}
-                        onValueChange={([value]) => setFormData(prev => ({ ...prev, likelihood: value }))}
+                        onValueChange={([value]) =>
+                          setFormData((prev) => ({ ...prev, likelihood: value }))
+                        }
                         max={5}
                         min={1}
                         step={1}
@@ -330,7 +348,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                       <DaisyLabel>Impact: {formData.impact}</DaisyLabel>
                       <DaisySlider
                         value={[formData.impact]}
-                        onValueChange={([value]) => setFormData(prev => ({ ...prev, impact: value }))}
+                        onValueChange={([value]) =>
+                          setFormData((prev) => ({ ...prev, impact: value }))
+                        }
                         max={5}
                         min={1}
                         step={1}
@@ -359,7 +379,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     <DaisyLabel>Risk Treatment Strategy</DaisyLabel>
                     <DaisySelect
                       value={formData.treatment}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, treatment: value }))}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({ ...prev, treatment: value }))
+                      }
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
@@ -391,7 +413,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <p className="text-sm text-gray-500 mt-1">
                   Select applicable compliance frameworks for this risk
                 </p>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
                   {complianceFrameworks.map((framework) => (
                     <div key={framework} className="flex items-center space-x-2">
@@ -416,7 +438,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 <DaisyLabel htmlFor="businessUnit">Business Unit</DaisyLabel>
                 <DaisySelect
                   value={formData.businessUnit}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, businessUnit: value }))}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, businessUnit: value }))
+                  }
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select business unit" />
@@ -437,7 +461,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
-                  onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, department: e.target.value }))}
                 />
               </div>
             </div>
@@ -452,10 +476,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
           >
             Cancel
           </DaisyButton>
-          <DaisyButton
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
+          <DaisyButton onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

@@ -273,7 +273,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
 
                         {/* Cell comment indicator */}
                         {cell?.comments && cell.comments.length > 0 && (
-                          <div className="absolute top-0 right-0 w-2 h-2 bg-orange-400 rounded-full transform translate-x-1 -translate-y-1"></div>
+                          <div className="absolute top-0 right-0 w-2 h-2 bg-orange-400 rounded-full transform translate-x-1 -translate-y-1" />
                         )}
                       </div>
                     );
@@ -291,7 +291,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
               height: 40,
             }}
           >
-            <div className="w-12 h-10 border-r bg-gray-50"></div>
+            <div className="w-12 h-10 border-r bg-gray-50" />
             <div className="flex-1 h-10 flex items-center px-3">
               <button
                 onClick={() => onRowInsert(rows.length)}
