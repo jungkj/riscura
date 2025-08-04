@@ -461,9 +461,10 @@ const BillingDashboard: React.FC = () => {
           <DaisyAlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" >
   <p>
 </DaisyAlertTriangle>Failed to load billing information</p>
-          <DaisyButton onClick={loadBillingData} className="mt-2" >
-  Retry
-</DaisyButton>
+          <DaisyButton onClick={loadBillingData} className="mt-2">
+          Retry
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       </div>
@@ -509,7 +510,7 @@ const BillingDashboard: React.FC = () => {
 
       {/* Current Subscription */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <CreditCard className="h-5 w-5" />
@@ -552,18 +553,20 @@ const BillingDashboard: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <DaisyButton variant="outline" size="sm" >
-  Change Plan
-</DaisyButton>
+              <DaisyButton variant="outline" size="sm">
+          Change Plan
+
+        </DaisyButton>
               </DaisyButton>
               {!billingData.subscription.cancelAtPeriodEnd && (
                 <DaisyButton 
                   variant="outline" 
                   size="sm" 
                   onClick={handleCancelSubscription}
-                  className="text-red-600 hover:text-red-700" >
-  Cancel Subscription
-</DaisyButton>
+                  className="text-red-600 hover:text-red-700">
+          Cancel Subscription
+
+        </DaisyButton>
                 </DaisyButton>
               )}
             </div>
@@ -573,7 +576,7 @@ const BillingDashboard: React.FC = () => {
 
       {/* Usage Overview */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5" />
@@ -605,9 +608,7 @@ const BillingDashboard: React.FC = () => {
                   {!isUnlimited && (
                     <DaisyProgress 
                       value={percentage} 
-                      className="h-2"
-                    />
-                  )}
+                      className="h-2" />)}
                   {!isUnlimited && percentage >= 90 && (
                     <p className="text-xs text-red-600">
                       Approaching limit
@@ -621,19 +622,19 @@ const BillingDashboard: React.FC = () => {
       </DaisyCard>
 
       {/* Tabs */}
-      <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4" />
-        <DaisyTabsList className="grid w-full grid-cols-3" />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4" >
+          <DaisyTabsList className="grid w-full grid-cols-3" >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="invoices">Invoices</DaisyTabsTrigger>
           <DaisyTabsTrigger value="plans">Plans</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="overview" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <DaisyTabsContent value="overview" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Upcoming Invoice */}
             {billingData.upcomingInvoice && (
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyCalendar className="h-5 w-5" />
@@ -670,7 +671,7 @@ const BillingDashboard: React.FC = () => {
 
             {/* Payment Methods */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <CreditCard className="h-5 w-5" />
@@ -701,9 +702,10 @@ const BillingDashboard: React.FC = () => {
                       )}
                     </div>
                   ))}
-                  <DaisyButton variant="outline" size="sm" className="w-full" >
-  Add Payment Method
-</DaisyButton>
+                  <DaisyButton variant="outline" size="sm" className="w-full">
+          Add Payment Method
+
+        </DaisyButton>
                   </DaisyButton>
                 </div>
               </DaisyCardBody>
@@ -711,9 +713,9 @@ const BillingDashboard: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="invoices" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="invoices" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <FileText className="h-5 w-5" />
@@ -764,8 +766,8 @@ const BillingDashboard: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="plans" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <DaisyTabsContent value="plans" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {availablePlans.map((plan) => (
               <DaisyCard 
                 key={plan.id} 
@@ -777,7 +779,7 @@ const BillingDashboard: React.FC = () => {
                   </div>
                 )}
                 <DaisyCardBody >
-  <DaisyCardTitle className="flex items-center justify-between" />
+  <DaisyCardTitle className="flex items-center justify-between" >
 </DaisyCardBody>
                     {plan.name}
                     {billingData.subscription.plan === plan.name.toUpperCase() && (
@@ -811,9 +813,11 @@ const BillingDashboard: React.FC = () => {
                     className="w-full mt-6"
                     variant={billingData.subscription.plan === plan.name.toUpperCase() ? 'outline' : 'primary'}
                     disabled={billingData.subscription.plan === plan.name.toUpperCase()}
-                    onClick={() => handlePlanUpgrade(plan.id)} />
+                    onClick={() =>
+          handlePlanUpgrade(plan.id)} />
                     {billingData.subscription.plan === plan.name.toUpperCase() ? 'Current Plan' : 'Upgrade'}
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </DaisyCardBody>
               </DaisyCard>
             ))}

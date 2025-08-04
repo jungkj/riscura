@@ -16,8 +16,8 @@ const ScrollArea = React.forwardRef<
       {children}
     </ScrollAreaPrimitive.Viewport>
     <ScrollBar />
-    <DaisyScrollAreaPrimitive.Corner />
-  </ScrollAreaPrimitive.Root>
+    <DaisyScrollAreaPrimitive.Corner >
+    </ScrollAreaPrimitive.Root>
 ));
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
@@ -38,8 +38,8 @@ const ScrollBar = React.forwardRef<
     )}
     {...props}
   >
-    <DaisyScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
-  </ScrollAreaPrimitive.ScrollAreaScrollbar>
+    <DaisyScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" >
+    </ScrollAreaPrimitive.ScrollAreaScrollbar>
 ));
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 

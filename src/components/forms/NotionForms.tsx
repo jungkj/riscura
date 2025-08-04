@@ -105,8 +105,7 @@ const FloatingLabelInput: React.FC<{
             className={cn(getInputClasses(), "min-h-24 resize-y")}
             placeholder={field.placeholder}
             rows={4}
-            required={field.required}
-          />
+            required={field.required} />
         ) : (
           <input
             type={field.type === 'password' ? (showPassword ? 'text' : 'password') : field.type}
@@ -118,8 +117,7 @@ const FloatingLabelInput: React.FC<{
             disabled={field.disabled}
             className={getInputClasses()}
             placeholder={field.placeholder}
-            required={field.required}
-          />
+            required={field.required} />
         )}
         
         <label htmlFor={field.id} className={getLabelClasses()}>
@@ -181,19 +179,20 @@ const NotionSelect: React.FC<{
         {field.required && <span className="text-semantic-error ml-1">*</span>}
       </label>
       
-      <DaisySelect value={value} onValueChange={onChange} disabled={field.disabled} />
-        <DaisySelectTrigger className={cn(
+      <DaisySelect value={value} onValueChange={onChange} disabled={field.disabled} >
+          <DaisySelectTrigger className={cn(
           "w-full h-12 px-enterprise-3 border rounded-lg bg-white transition-all duration-200",
           error 
             ? "border-semantic-error focus:border-semantic-error" 
             : "border-border hover:border-border-hover focus:border-interactive-primary focus:shadow-notion-sm",
           field.disabled && "bg-surface-secondary cursor-not-allowed opacity-60"
-        )} />
-          <DaisySelectValue placeholder={field.placeholder || `Select ${field.label.toLowerCase()}`} /></DaisySelect>
-        <DaisySelectContent className="max-h-64" />
-          {field.options?.map((option) => (
-            <DaisySelectItem key={option.value} value={option.value} />
-              <div className="flex flex-col">
+        )}>
+            <DaisySelectValue placeholder={field.placeholder || `Select ${field.label.toLowerCase()}`} />
+</DaisySelect>
+        <DaisySelectContent className="max-h-64" >
+            {field.options?.map((option) => (
+            <DaisySelectItem key={option.value} value={option.value} >
+                <div className="flex flex-col">
                 <span className="text-body-sm font-medium">{option.label}</span>
                 {option.description && (
                   <span className="text-caption text-text-secondary">{option.description}</span>
@@ -262,8 +261,7 @@ const NotionToggle: React.FC<{
             className={cn(
               "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
               value ? "translate-x-5" : "translate-x-0"
-            )}
-          />
+            )} />
         </button>
       </div>
 
@@ -348,8 +346,7 @@ const NotionFileUpload: React.FC<{
           multiple
           className="hidden"
           onChange={handleFileSelect}
-          disabled={field.disabled}
-        />
+          disabled={field.disabled} />
       </div>
 
       {/* File List */}
@@ -413,8 +410,7 @@ const FormSection: React.FC<{
             field={field}
             value={fieldValue}
             onChange={(value) => onChange(field.id, value)}
-            error={fieldError}
-          />
+            error={fieldError} />
         );
       case 'toggle':
         return (
@@ -423,8 +419,7 @@ const FormSection: React.FC<{
             field={field}
             value={fieldValue || false}
             onChange={(value) => onChange(field.id, value)}
-            error={fieldError}
-          />
+            error={fieldError} />
         );
       case 'file':
         return (
@@ -433,8 +428,7 @@ const FormSection: React.FC<{
             field={field}
             value={fieldValue || []}
             onChange={(files) => onChange(field.id, files)}
-            error={fieldError}
-          />
+            error={fieldError} />
         );
       default:
         return (
@@ -444,8 +438,7 @@ const FormSection: React.FC<{
             value={fieldValue}
             onChange={(value) => onChange(field.id, value)}
             error={fieldError}
-            autoSaved={autoSaved}
-          />
+            autoSaved={autoSaved} />
         );
     }
   };
@@ -565,8 +558,7 @@ export const NotionForm: React.FC<{
       </div>
 
       <DaisySeparator />
-
-      {/* Form Sections */}
+{/* Form Sections */}
       <div className="space-y-enterprise-8">
         {sections.map((section, index) => (
           <React.Fragment key={section.id}>
@@ -575,9 +567,9 @@ export const NotionForm: React.FC<{
               values={values}
               errors={errors}
               onChange={handleFieldChange}
-              autoSavedFields={autoSavedFields}
-            />
-            {index < sections.length - 1 && <DaisySeparator />}
+              autoSavedFields={autoSavedFields} />
+            {index < sections.length - 1 && <DaisySeparator />
+}
           </React.Fragment>
         ))}
       </div>
@@ -606,9 +598,10 @@ export const NotionForm: React.FC<{
               Save Draft
             </DaisyButton>
           )}
-          <DaisyButton type="submit" disabled={loading} >
-  {loading ? 'Submitting...' : 'Submit'}
-</DaisyButton>
+          <DaisyButton type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit'}
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       </div>

@@ -495,19 +495,19 @@ export default function CustomDashboardBuilder({
                 </DaisyButton>
               </div>
               
-              <DaisyTabs defaultValue={categories[0]} className="w-full" />
-                <DaisyTabsList className="grid w-full grid-cols-2" />
-                  {categories.slice(0, 2).map(category => (
-                    <DaisyTabsTrigger key={category} value={category} className="text-xs" />
-                      {category}
+              <DaisyTabs defaultValue={categories[0]} className="w-full" >
+                  <DaisyTabsList className="grid w-full grid-cols-2" >
+                    {categories.slice(0, 2).map(category => (
+                    <DaisyTabsTrigger key={category} value={category} className="text-xs" >
+                        {category}
                     </DaisyTabs>
                   ))}
                 </DaisyTabsList>
                 
                 {categories.map(category => (
-                  <DaisyTabsContent key={category} value={category} className="mt-4" />
-                    <DaisyScrollArea className="h-96" />
-                      <div className="space-y-3">
+                  <DaisyTabsContent key={category} value={category} className="mt-4" >
+                      <DaisyScrollArea className="h-96" >
+                        <div className="space-y-3">
                         {widgetLibrary
                           .filter(widget => widget.category === category)
                           .map(widget => (
@@ -532,9 +532,9 @@ export default function CustomDashboardBuilder({
                   <LayoutIcon className="w-5 h-5 text-blue-600" />
                   <DaisyInput
                     value={currentLayout.name}
-                    onChange={(e) => setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
-                    className="font-semibold border-none p-0 h-auto focus-visible:ring-0"
-                  />
+                    onChange={(e) = />
+setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
+                    className="font-semibold border-none p-0 h-auto focus-visible:ring-0" />
                 </div>
                 
                 <DaisyBadge variant={isEditMode ? 'default' : 'secondary'} >
@@ -627,9 +627,9 @@ export default function CustomDashboardBuilder({
         </div>
         
         {/* Settings Dialog */}
-        <DaisyDialog open={showSettings} onOpenChange={setShowSettings} />
-          <DaisyDialogContent className="max-w-md" >
-  <DaisyDialogHeader />
+        <DaisyDialog open={showSettings} onOpenChange={setShowSettings} >
+            <DaisyDialogContent className="max-w-md" >
+  <DaisyDialogHeader>
 </DaisyDialog>
               <DaisyDialogTitle>Dashboard Settings</DaisyDialogTitle>
             </DaisyDialogHeader>
@@ -639,24 +639,23 @@ export default function CustomDashboardBuilder({
                 <label className="text-sm font-medium">Dashboard Name</label>
                 <DaisyInput
                   value={currentLayout.name}
-                  onChange={(e) => setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
-                  className="mt-1"
-                />
+                  onChange={(e) = />
+setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
+                  className="mt-1" />
               </div>
               
               <div>
                 <label className="text-sm font-medium">Description</label>
                 <DaisyInput
                   value={currentLayout.description || ''}
-                  onChange={(e) => setCurrentLayout(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) = />
+setCurrentLayout(prev => ({ ...prev, description: e.target.value }))}
                   className="mt-1"
-                  placeholder="Optional description..."
-                />
+                  placeholder="Optional description..." />
               </div>
               
               <DaisySeparator />
-              
-              <div className="space-y-2">
+<div className="space-y-2">
                 <h4 className="text-sm font-medium">Dashboard Info</h4>
                 <div className="text-xs text-gray-600 space-y-1">
                   <p>Widgets: {currentLayout.widgets.length}</p>
@@ -670,9 +669,11 @@ export default function CustomDashboardBuilder({
                 <DaisyButton variant="outline" onClick={() => setShowSettings(false)} />
                   Cancel
                 </DaisyInput>
-                <DaisyButton onClick={() => setShowSettings(false)} />
+                <DaisyButton onClick={() =>
+          setShowSettings(false)} />
                   Save Changes
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </div>
           </DaisyDialogContent>

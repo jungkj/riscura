@@ -79,9 +79,9 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <DaisyAvatar className="w-6 h-6" />
-        <DaisyAvatarImage src={user.avatar} alt={user.name} />
-        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatar>
+      <DaisyAvatar className="w-6 h-6" >
+          <DaisyAvatarImage src={user.avatar} alt={user.name} >
+          <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatar>
       </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
@@ -171,22 +171,22 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         return (
           <div className="flex items-center space-x-enterprise-1 text-body-sm">
             <DaisyCalendar className="h-3 w-3 text-text-tertiary" />
-            <span className="text-text-primary">
+<span className="text-text-primary">
               {value ? new Date(value).toLocaleDateString() : '—'}
             </span>
           </div>
         );
       case 'actions':
         return (
-          <DaisyDropdownMenu />
-            <DaisyDropdownMenuTrigger asChild />
-              <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+          <DaisyDropdownMenu >
+              <DaisyDropdownMenuTrigger asChild >
+                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
   <MoreVertical className="h-3 w-3" />
 </DaisyCalendar>
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent align="end" />
-              <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
+            <DaisyDropdownMenuContent align="end" >
+                <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
                 <Eye className="h-3 w-3 mr-enterprise-1" />
                 View Details
               </DaisyDropdownMenuContent>
@@ -233,9 +233,9 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisyInput
               placeholder="Search data..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-80 text-body-sm bg-surface-secondary border-0 focus:ring-1 focus:ring-interactive-primary"
-            />
+              onChange={(e) = />
+setSearchQuery(e.target.value)}
+              className="pl-10 w-80 text-body-sm bg-surface-secondary border-0 focus:ring-1 focus:ring-interactive-primary" />
           </div>
           
           {selectedRows.size > 0 && bulkActions.length > 0 && (
@@ -283,7 +283,8 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <tr>
               <th className="w-12 p-enterprise-3 text-left">
                 <DaisyCheckbox
-                  checked={selectedRows.size === filteredData.length && filteredData.length > 0}
+                  checked={selectedRows.size === filteredData.length && filteredData.length />
+0}
                   onCheckedChange={(checked) => {
                     if (checked) {
                       const allIndices = filteredData.map((_, index) => index);
@@ -293,8 +294,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                       setSelectedRows(new Set());
                       onRowSelect?.([]);
                     }
-                  }}
-                />
+                  }} />
               </th>
               
               {columns.map((column) => (
@@ -352,7 +352,8 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                   <td className="w-12 p-enterprise-3">
                     <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
-                      onCheckedChange={(checked) => {
+                      onCheckedChange={(checked) = />
+{
                         const newSelection = new Set(selectedRows);
                         if (checked) {
                           newSelection.add(rowIndex);
@@ -364,8 +365,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                         const selectedData = Array.from(newSelection).map(index => filteredData[index]);
                         onRowSelect?.(selectedData);
                       }}
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                      onClick={(e) => e.stopPropagation()} />
                   </td>
                   
                   {columns.map((column) => (

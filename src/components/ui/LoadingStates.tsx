@@ -41,8 +41,7 @@ export const EnhancedLoadingSpinner: React.FC<EnhancedLoadingSpinnerProps> = ({
         sizeClasses[size],
         variantClasses[variant],
         className
-      )}
-    />
+      )} />
   );
 };
 
@@ -79,8 +78,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
         className={cn(
           'h-4',
           i === lines - 1 ? 'w-3/4' : 'w-full' // Last line shorter
-        )}
-      />
+        )} />
     ))}
   </div>
 );
@@ -104,8 +102,7 @@ export const SkeletonButton: React.FC<{ variant?: 'default' | 'wide' }> = ({
     className={cn(
       'h-10 rounded-md',
       variant === 'wide' ? 'w-full' : 'w-24'
-    )}
-  />
+    )} />
 );
 
 // Complex Loading States
@@ -139,9 +136,9 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
 </DaisyCardBody>
         {actions && (
           <div className="flex gap-2 pt-2">
-            <DaisySkeletonButton />
-            <DaisySkeletonButton />
-          </div>
+            <DaisySkeletonButton >
+              <DaisySkeletonButton >
+            </div>
         )}
       </DaisySkeletonButton>
     )}
@@ -180,8 +177,7 @@ export const LoadingTable: React.FC<LoadingTableProps> = ({
                 'h-4 flex-1',
                 colIndex === 0 ? 'w-1/4' : '', // First column narrower
                 colIndex === columns - 1 ? 'w-20' : '' // Last column for actions
-              )}
-            />
+              )} />
           ))}
         </div>
       ))}
@@ -217,8 +213,7 @@ export const LoadingChart: React.FC<{
                   <EnhancedSkeleton 
                     key={i} 
                     className="w-full"
-                    style={{ height: `${20 + Math.random() * 60}%` }}
-                  />
+                    style={{ height: `${20 + Math.random() * 60}%` }} />
                 ))}
               </div>
             ) : (
@@ -234,8 +229,7 @@ export const LoadingChart: React.FC<{
                         style={{ 
                           left: `${i * 20}%`, 
                           top: `${-4 + Math.random() * 8}px` 
-                        }}
-                      />
+                        }} />
                     ))}
                   </div>
                 </div>
@@ -265,9 +259,9 @@ export const LoadingDashboard: React.FC = () => (
         <EnhancedSkeleton className="h-4 w-64" />
       </div>
       <div className="flex gap-2">
-        <DaisySkeletonButton />
-        <DaisySkeletonButton />
-      </div>
+        <DaisySkeletonButton >
+          <DaisySkeletonButton >
+        </div>
     </div>
     
     {/* Stats Cards */}
@@ -330,8 +324,8 @@ export const LoadingList: React.FC<LoadingListProps> = ({
         </div>
         {showActions && (
           <div className="flex gap-2">
-            <DaisySkeletonButton variant="default" />
-          </div>
+            <DaisySkeletonButton variant="default" >
+            </div>
         )}
       </div>
     ))}
@@ -348,9 +342,9 @@ export const LoadingForm: React.FC<{ fields?: number }> = ({ fields = 4 }) => (
       </div>
     ))}
     <div className="flex justify-end gap-2 pt-4">
-      <DaisySkeletonButton />
-      <DaisySkeletonButton />
-    </div>
+      <DaisySkeletonButton >
+        <DaisySkeletonButton >
+      </div>
   </div>
 );
 
@@ -379,9 +373,8 @@ export const LoadingProgress: React.FC<LoadingProgressProps> = ({
     )}
     <DaisyProgress 
       value={indeterminate ? undefined : progress} 
-      className={indeterminate ? 'animate-pulse' : ''}
-    />
-  </div>
+      className={indeterminate ? 'animate-pulse' : ''} />
+</div>
 );
 
 // Network Status Loading

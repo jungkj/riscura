@@ -135,7 +135,7 @@ class DaisyUIAuditor {
 
   private checkSelfClosingContainerComponents(file: string, line: string, lineNumber: number) {
     CONTAINER_COMPONENTS.forEach((component) => {
-      const selfClosingRegex = new RegExp(`<${component}[^>]*\\/>`, 'g');
+      const selfClosingRegex = new RegExp(`<${component}[^>]*\\ />`, 'g');
       if (selfClosingRegex.test(line)) {
         this.addIssue({
           file,
@@ -151,7 +151,7 @@ class DaisyUIAuditor {
 
   private checkMissingRequiredProps(file: string, line: string, lineNumber: number) {
     Object.entries(REQUIRED_PROPS).forEach(([component, props]) => {
-      if (line.includes(`<${component}`) && !line.includes('/>')) {
+      if (line.includes(`<${component}`) && !line.includes(' />')) {
         props.forEach((prop) => {
           if (!line.includes(prop) && !line.includes(`${prop}=`)) {
             this.addIssue({

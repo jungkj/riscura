@@ -161,40 +161,40 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
         )}
       </div>
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-6" />
-          <DaisyTabsTrigger value="analysis" className="flex items-center gap-2" />
-            <Brain className="w-4 h-4" />
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="grid w-full grid-cols-6" >
+            <DaisyTabsTrigger value="analysis" className="flex items-center gap-2" >
+              <Brain className="w-4 h-4" />
             Analysis
           </DaisyTabs>
-          <DaisyTabsTrigger value="monitoring" className="flex items-center gap-2" />
-            <Eye className="w-4 h-4" />
+          <DaisyTabsTrigger value="monitoring" className="flex items-center gap-2" >
+              <Eye className="w-4 h-4" />
             Monitoring
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="compliance" className="flex items-center gap-2" />
-            <Shield className="w-4 h-4" />
+          <DaisyTabsTrigger value="compliance" className="flex items-center gap-2" >
+              <Shield className="w-4 h-4" />
             Compliance
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="insights" className="flex items-center gap-2" />
-            <BarChart3 className="w-4 h-4" />
+          <DaisyTabsTrigger value="insights" className="flex items-center gap-2" >
+              <BarChart3 className="w-4 h-4" />
             Insights
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="tenants" className="flex items-center gap-2" />
-            <Network className="w-4 h-4" />
+          <DaisyTabsTrigger value="tenants" className="flex items-center gap-2" >
+              <Network className="w-4 h-4" />
             Tenants
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="settings" className="flex items-center gap-2" />
-            <Settings className="w-4 h-4" />
+          <DaisyTabsTrigger value="settings" className="flex items-center gap-2" >
+              <Settings className="w-4 h-4" />
             Settings
           </DaisyTabsTrigger>
         </DaisyTabsList>
 
         {/* AI Analysis Tab */}
-        <DaisyTabsContent value="analysis" />
-          <div className="space-y-6">
+        <DaisyTabsContent value="analysis" >
+            <div className="space-y-6">
             {/* Query Input */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="w-5 h-5" />
@@ -211,18 +211,19 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                       id="query"
                       placeholder="Describe your risk management question, compliance concern, or analysis request..."
                       value={queryText}
-                      onChange={(e) => setQueryText(e.target.value)}
-                      rows={3}
-                    />
+                      onChange={(e) = />
+setQueryText(e.target.value)}
+                      rows={3} />
                   </div>
                   <div className="space-y-4">
                     <div>
                       <DaisyLabel htmlFor="analysis-type">Analysis Type</DaisyTextarea>
-                      <DaisySelect value={selectedAnalysisType} onValueChange={handleAnalysisTypeChange} />
-                        <DaisySelectTrigger />
-                          <DaisySelectValue /></DaisySelect>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="risk_analysis">Risk Analysis</DaisySelectContent>
+                      <DaisySelect value={selectedAnalysisType} onValueChange={handleAnalysisTypeChange} >
+                          <DaisySelectTrigger>
+                            <DaisySelectValue />
+</DaisySelect>
+                        <DaisySelectContent >
+                            <DaisySelectItem value="risk_analysis">Risk Analysis</DaisySelectItem>
                           <DaisySelectItem value="compliance_check">Compliance Check</DaisySelectItem>
                           <DaisySelectItem value="control_recommendation">Control Recommendations</DaisySelectItem>
                           <DaisySelectItem value="proactive_monitoring">Proactive Monitoring</DaisySelectItem>
@@ -233,9 +234,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                     <DaisyButton 
                       onClick={processAIQuery} 
                       disabled={loading || !queryText.trim()}
-                      className="w-full" >
-  {loading ? (
-</DaisyButton>
+                      className="w-full">
+          {loading ? (
+
+        </DaisyButton>
                         <>
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                           Processing...
@@ -256,7 +258,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
             <div className="space-y-4">
               {responses.map((response) => (
                 <DaisyCard key={response.requestId} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="flex items-center gap-2" >
@@ -327,9 +329,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
         </DaisyTabsContent>
 
         {/* Service Health Tab */}
-        <DaisyTabsContent value="monitoring" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="monitoring" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="w-5 h-5" />
@@ -370,9 +372,10 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                         {serviceHealth.status.toUpperCase()}
                       </span>
                     </span>
-                    <DaisyButton variant="outline" onClick={loadServiceHealth} >
-  Refresh Status
-</DaisyButton>
+                    <DaisyButton variant="outline" onClick={loadServiceHealth}>
+          Refresh Status
+
+        </DaisyButton>
                     </DaisyButton>
                   </div>
                 </div>
@@ -387,9 +390,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
         </DaisyTabsContent>
 
         {/* Other tabs with placeholder content */}
-        <DaisyTabsContent value="compliance" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="compliance" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Compliance Monitoring</DaisyCardTitle>
         </DaisyCardBody>
@@ -400,9 +403,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="insights" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="insights" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>AI Insights & Analytics</DaisyCardTitle>
         </DaisyCardBody>
@@ -413,9 +416,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="tenants" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="tenants" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Multi-Tenant Management</DaisyCardTitle>
         </DaisyCardBody>
@@ -426,9 +429,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="settings" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="settings" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>AI Configuration Settings</DaisyCardTitle>
         </DaisyCardBody>

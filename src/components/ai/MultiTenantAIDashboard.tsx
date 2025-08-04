@@ -254,17 +254,19 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
             <DaisyButton 
               variant="ghost" 
               size="sm" 
-              onClick={() => setError(null)}
+              onClick={() =>
+          setError(null)}
               className="ml-auto" />
               ×
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       )}
 
       {/* Tenant Selector */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Building2 className="w-5 h-5" />
@@ -302,41 +304,41 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       </DaisyCard>
 
       {selectedTenant && (
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-          <DaisyTabsList className="grid w-full grid-cols-7" />
-            <DaisyTabsTrigger value="overview" className="flex items-center gap-2" />
-              <BarChart3 className="w-4 h-4" />
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+            <DaisyTabsList className="grid w-full grid-cols-7" >
+              <DaisyTabsTrigger value="overview" className="flex items-center gap-2" >
+                <BarChart3 className="w-4 h-4" />
               Overview
             </DaisyTabs>
-            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2" />
-              <Activity className="w-4 h-4" />
+            <DaisyTabsTrigger value="analytics" className="flex items-center gap-2" >
+                <Activity className="w-4 h-4" />
               Analytics
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="billing" className="flex items-center gap-2" />
-              <CreditCard className="w-4 h-4" />
+            <DaisyTabsTrigger value="billing" className="flex items-center gap-2" >
+                <CreditCard className="w-4 h-4" />
               Billing
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="isolation" className="flex items-center gap-2" />
-              <Shield className="w-4 h-4" />
+            <DaisyTabsTrigger value="isolation" className="flex items-center gap-2" >
+                <Shield className="w-4 h-4" />
               Isolation
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="branding" className="flex items-center gap-2" />
-              <Palette className="w-4 h-4" />
+            <DaisyTabsTrigger value="branding" className="flex items-center gap-2" >
+                <Palette className="w-4 h-4" />
               Branding
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="users" className="flex items-center gap-2" />
-              <Users className="w-4 h-4" />
+            <DaisyTabsTrigger value="users" className="flex items-center gap-2" >
+                <Users className="w-4 h-4" />
               Users
             </DaisyTabsTrigger>
-            <DaisyTabsTrigger value="settings" className="flex items-center gap-2" />
-              <Settings className="w-4 h-4" />
+            <DaisyTabsTrigger value="settings" className="flex items-center gap-2" >
+                <Settings className="w-4 h-4" />
               Settings
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Overview Tab */}
-          <DaisyTabsContent value="overview" />
-            <div className="space-y-6">
+          <DaisyTabsContent value="overview" >
+              <div className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <DaisyCard >
@@ -426,7 +428,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
 
               {/* Tenant Information */}
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle>Tenant Information</DaisyCardTitle>
         </DaisyCardBody>
@@ -479,10 +481,10 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
           </DaisyTabsContent>
 
           {/* Analytics Tab */}
-          <DaisyTabsContent value="analytics" />
-            <div className="space-y-6">
+          <DaisyTabsContent value="analytics" >
+              <div className="space-y-6">
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle>Usage Analytics</DaisyCardTitle>
         </DaisyCardBody>
@@ -494,14 +496,13 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="timestamp" />
                         <YAxis />
-                        <DaisyTooltip />
-                        <Area 
+                        <DaisyTooltip>
+                          <Area 
                           type="monotone" 
                           dataKey="value" 
                           stroke="#3b82f6" 
                           fill="#3b82f6" 
-                          fillOpacity={0.2} 
-                        />
+                          fillOpacity={0.2} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -510,7 +511,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <DaisyCardTitle>Model Usage</DaisyCardTitle>
         </DaisyCardBody>
@@ -527,9 +528,8 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                       </div>
                       <DaisyProgress 
                         value={85} 
-                        className="w-full" 
-                      />
-                      <div className="text-xs text-gray-500">
+                        className="w-full" />
+<div className="text-xs text-gray-500">
                         Success Rate: {analytics?.usage.modelUsage.successRate || 95}%
                       </div>
                     </div>
@@ -537,7 +537,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
                 </DaisyCard>
 
                 <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <DaisyCardTitle>Performance Metrics</DaisyCardTitle>
         </DaisyCardBody>
@@ -568,9 +568,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
           </DaisyTabsContent>
 
           {/* Additional tabs would continue here... */}
-          <DaisyTabsContent value="billing" />
-            <DaisyCard >
-  <DaisyCardBody />
+          <DaisyTabsContent value="billing" >
+              <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Billing Information</DaisyCardTitle>
         </DaisyCardBody>
@@ -581,9 +581,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="isolation" />
-            <DaisyCard >
-  <DaisyCardBody />
+          <DaisyTabsContent value="isolation" >
+              <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Tenant Isolation</DaisyCardTitle>
         </DaisyCardBody>
@@ -594,9 +594,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="branding" />
-            <DaisyCard >
-  <DaisyCardBody />
+          <DaisyTabsContent value="branding" >
+              <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Branding & Customization</DaisyCardTitle>
         </DaisyCardBody>
@@ -607,9 +607,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="users" />
-            <DaisyCard >
-  <DaisyCardBody />
+          <DaisyTabsContent value="users" >
+              <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>User Management</DaisyCardTitle>
         </DaisyCardBody>
@@ -620,9 +620,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="settings" />
-            <DaisyCard >
-  <DaisyCardBody />
+          <DaisyTabsContent value="settings" >
+              <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Tenant Settings</DaisyCardTitle>
         </DaisyCardBody>

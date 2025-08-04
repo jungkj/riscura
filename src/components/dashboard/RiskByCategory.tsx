@@ -43,7 +43,7 @@ export const RiskByCategory: React.FC = () => {
 
   return (
     <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTooltipProps>
         <DaisyCardTitle>Risk by Category</DaisyCardTitle>
         </DaisyCardBody>

@@ -417,27 +417,27 @@ export default function RiskAssessmentWizard({
                   <DaisyInput
                     id="name"
                     value={config.name}
-                    onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Q4 2024 Risk Assessment"
-                  />
+                    onChange={(e) = />
+setConfig(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Q4 2024 Risk Assessment" />
                 </div>
                 <div>
                   <DaisyLabel htmlFor="scope">Scope</DaisyInput>
                   <DaisyInput
                     id="scope"
                     value={config.scope}
-                    onChange={(e) => setConfig(prev => ({ ...prev, scope: e.target.value }))}
-                    placeholder="Enterprise-wide, Department-specific, etc."
-                  />
+                    onChange={(e) = />
+setConfig(prev => ({ ...prev, scope: e.target.value }))}
+                    placeholder="Enterprise-wide, Department-specific, etc." />
                 </div>
                 <div>
                   <DaisyLabel htmlFor="department">Department</DaisyInput>
                   <DaisyInput
                     id="department"
                     value={config.department}
-                    onChange={(e) => setConfig(prev => ({ ...prev, department: e.target.value }))}
-                    placeholder="IT, Finance, Operations, etc."
-                  />
+                    onChange={(e) = />
+setConfig(prev => ({ ...prev, department: e.target.value }))}
+                    placeholder="IT, Finance, Operations, etc." />
                 </div>
               </div>
               <div className="space-y-4">
@@ -446,10 +446,10 @@ export default function RiskAssessmentWizard({
                   <DaisyTextarea
                     id="description"
                     value={config.description}
-                    onChange={(e) => setConfig(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) = />
+setConfig(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Describe the purpose and objectives of this assessment..."
-                    rows={3}
-                  />
+                    rows={3} />
                 </div>
                 <div>
                   <DaisyLabel htmlFor="assessmentType">Assessment Type</DaisyTextarea>
@@ -457,10 +457,11 @@ export default function RiskAssessmentWizard({
                     value={config.assessmentType}
                     onValueChange={(value: any) => setConfig(prev => ({ ...prev, assessmentType: value }))}
                   >
-                    <DaisySelectTrigger />
-                      <DaisySelectValue /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="self">Self Assessment</DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="self">Self Assessment</DaisySelectItem>
                       <DaisySelectItem value="third-party">Third Party Assessment</DaisySelectItem>
                       <DaisySelectItem value="regulatory">Regulatory Assessment</DaisySelectItem>
                     </DaisySelectContent>
@@ -472,24 +473,23 @@ export default function RiskAssessmentWizard({
                     id="dueDate"
                     type="date"
                     value={config.dueDate}
-                    onChange={(e) => setConfig(prev => ({ ...prev, dueDate: e.target.value }))}
-                  />
+                    onChange={(e) = />
+setConfig(prev => ({ ...prev, dueDate: e.target.value }))} />
                 </div>
               </div>
             </div>
 
             <DaisySeparator />
-
-            <div className="space-y-4">
+<div className="space-y-4">
               <div>
                 <DaisyLabel>Stakeholders</DaisyInput>
                 <div className="flex gap-2 mt-2">
                   <DaisyInput
                     value={newStakeholder}
-                    onChange={(e) => setNewStakeholder(e.target.value)}
+                    onChange={(e) = />
+setNewStakeholder(e.target.value)}
                     placeholder="Add stakeholder email"
-                    onKeyPress={(e) => e.key === 'Enter' && addStakeholder()}
-                  />
+                    onKeyPress={(e) => e.key === 'Enter' && addStakeholder()} />
                   <DaisyButton onClick={addStakeholder} size="sm" >
   <Plus className="h-4 w-4" />
 </DaisyInput>
@@ -516,8 +516,8 @@ export default function RiskAssessmentWizard({
                       <DaisyCheckbox
                         id={`risk-${category}`}
                         checked={config.riskCategories.includes(category)}
-                        onCheckedChange={() => toggleRiskCategory(category)}
-                      />
+                        onCheckedChange={() = />
+toggleRiskCategory(category)} />
                       <DaisyLabel htmlFor={`risk-${category}`} className="text-sm">
                         {category}
                       </DaisyCheckbox>
@@ -534,8 +534,8 @@ export default function RiskAssessmentWizard({
                       <DaisyCheckbox
                         id={`framework-${framework}`}
                         checked={config.complianceFrameworks.includes(framework)}
-                        onCheckedChange={() => toggleComplianceFramework(framework)}
-                      />
+                        onCheckedChange={() = />
+toggleComplianceFramework(framework)} />
                       <DaisyLabel htmlFor={`framework-${framework}`} className="text-sm">
                         {framework}
                       </DaisyCheckbox>
@@ -612,8 +612,7 @@ export default function RiskAssessmentWizard({
                           </DaisyBadge>
                         </div>
                         {fileObj.status === 'processing' && (
-                          <DaisyProgress value={fileObj.progress} className="mt-2" />
-                        )}
+                          <DaisyProgress value={fileObj.progress} className="mt-2" />)}
                         {fileObj.error && (
                           <p className="text-sm text-red-600 mt-1">{fileObj.error}</p>
                         )}
@@ -662,9 +661,10 @@ export default function RiskAssessmentWizard({
                   onClick={processFiles}
                   disabled={files.length === 0 || isProcessing}
                   size="lg"
-                  className="mt-4" >
-  {isProcessing ? (
-</DaisyButton>
+                  className="mt-4">
+          {isProcessing ? (
+
+        </DaisyButton>
                     <>
                       <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                       Analyzing Files...
@@ -740,7 +740,7 @@ export default function RiskAssessmentWizard({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle>Assessment Details</DaisyCardTitle>
         </DaisyCardBody>
@@ -755,7 +755,7 @@ export default function RiskAssessmentWizard({
               </DaisyCard>
 
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle>Analysis Results</DaisyCardTitle>
         </DaisyCardBody>
@@ -832,7 +832,7 @@ export default function RiskAssessmentWizard({
 
       {/* Step Content */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   {(() => {
@@ -877,9 +877,10 @@ export default function RiskAssessmentWizard({
               (currentStep === 0 && !config.name) ||
               (currentStep === 1 && files.length === 0) ||
               (currentStep === 2 && !analysisResults)
-            } >
-  Next
-</DaisyButton>
+            }>
+          Next
+
+        </DaisyButton>
             <ArrowRight className="h-4 w-4 ml-2" />
           </DaisyButton>
         ) : null}

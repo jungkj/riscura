@@ -403,10 +403,9 @@ export default function SpreadsheetsPage() {
                       id="name"
                       placeholder="Enter spreadsheet name"
                       value={newSpreadsheet.name}
-                      onChange={(e) =>
-                        setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
-                      }
-                    />
+                      onChange={(e) = />
+setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
+                      } />
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel htmlFor="description">Description</DaisyLabel>
@@ -414,10 +413,9 @@ export default function SpreadsheetsPage() {
                       id="description"
                       placeholder="Enter a brief description"
                       value={newSpreadsheet.description}
-                      onChange={(e) =>
-                        setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
-                      }
-                    />
+                      onChange={(e) = />
+setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
+                      } />
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel htmlFor="templateType">Template Type</DaisyLabel>
@@ -429,7 +427,6 @@ export default function SpreadsheetsPage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select a template type" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {templateTypes.map((template) => (
                           <DaisySelectItem key={template.value} value={template.value}>
@@ -444,12 +441,15 @@ export default function SpreadsheetsPage() {
                   </div>
                 </div>
                 <DaisyDialogFooter>
-                  <DaisyButton variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                  <DaisyButton variant="outline" onClick={() =>
+          setIsCreateDialogOpen(false)}>
                     Cancel
-                  </DaisyButton>
+                  
+        </DaisyButton>
                   <DaisyButton onClick={handleCreateSpreadsheet} disabled={!newSpreadsheet.name}>
-                    Create Spreadsheet
-                  </DaisyButton>
+          Create Spreadsheet
+                  
+        </DaisyButton>
                 </DaisyDialogFooter>
               </DaisyDialogContent>
             </DaisyDialog>
@@ -462,16 +462,15 @@ export default function SpreadsheetsPage() {
               <DaisyInput
                 placeholder="Search spreadsheets..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+                onChange={(e) = />
+setSearchTerm(e.target.value)}
+                className="pl-10" />
             </div>
             <div className="flex items-center gap-2">
               <DaisySelect value={filterType} onValueChange={setFilterType}>
                 <DaisySelectTrigger className="w-48">
                   <Filter className="h-4 w-4 mr-2" />
                   <DaisySelectValue placeholder="Filter by type" />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Types</DaisySelectItem>
                   {templateTypes.map((template) => (

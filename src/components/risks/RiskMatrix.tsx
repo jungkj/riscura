@@ -137,10 +137,10 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   // Risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <DaisyTooltipProvider />
-      <DaisyTooltip />
-        <DaisyTooltipTrigger asChild />
-          <div
+    <DaisyTooltipProvider>
+        <DaisyTooltip>
+          <DaisyTooltipTrigger asChild>
+            <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
             onClick={() => onRiskClick?.(risk)}
@@ -155,8 +155,8 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
             <div className="text-xs opacity-75">{risk.owner}</div>
           </div>
         </DaisyTooltipProvider>
-        <DaisyTooltipContent />
-          <div className="max-w-xs">
+        <DaisyTooltipContent>
+            <div className="max-w-xs">
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-muted-foreground mt-1">{risk.description}</div>
             <div className="flex items-center gap-2 mt-2">
@@ -196,7 +196,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div>
@@ -205,16 +205,16 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
               Drag risks to reposition them based on likelihood and impact
             </p>
           </div>
-          <DaisyDialog />
-            <DaisyDialogTrigger asChild />
-              <DaisyButton variant="outline" size="sm" >
+          <DaisyDialog >
+              <DaisyDialogTrigger asChild >
+                <DaisyButton variant="outline" size="sm" >
   <Maximize2 className="h-4 w-4 mr-2" />
 </DaisyDialog>
                 Full View
               </DaisyButton>
             </DaisyDialogTrigger>
             <DaisyDialogContent className="max-w-6xl" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialogContent>
                 <DaisyDialogTitle>Risk Matrix - Full View</DaisyDialogTitle>
                 <DaisyDialogDescription >
@@ -294,8 +294,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
                             <RiskItem
                               key={risk.id}
                               risk={risk}
-                              isSelected={selectedRisks.includes(risk.id)}
-                            />
+                              isSelected={selectedRisks.includes(risk.id)} />
                           ))}
                         </div>
                         

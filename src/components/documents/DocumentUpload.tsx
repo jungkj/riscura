@@ -24,7 +24,7 @@ export function DocumentUpload({
   return (
     <DaisyCard className={`w-full max-w-4xl mx-auto ${className}`}>
       <DaisyCardBody >
-  <DaisyCardTitle className="flex items-center gap-2" />
+  <DaisyCardTitle className="flex items-center gap-2" >
 </DaisyCard>
           <Upload className="h-5 w-5" />
           Document Upload

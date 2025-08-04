@@ -14,8 +14,8 @@ const AccordionItem = React.forwardRef<
     ref={ref}
     className={cn('border-b', className)}
     {...props}
-  />
-));
+  >
+  ));
 AccordionItem.displayName = 'AccordionItem';
 
 const AccordionTrigger = React.forwardRef<

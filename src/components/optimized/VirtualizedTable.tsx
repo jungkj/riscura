@@ -210,8 +210,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
             type="checkbox"
             checked={selectedRows.has(index)}
             onChange={(e) => onRowSelect?.(index, e.target.checked)}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-          />
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
         ),
         align: 'center' as const,
       });
@@ -397,8 +396,7 @@ const VirtualizedTable = <T extends Record<string, any>>({
             type="checkbox"
             checked={selectedRows.size === processedData.length && processedData.length > 0}
             onChange={(e) => onSelectAll?.(e.target.checked)}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-          />
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
         </div>
       )}
 
@@ -428,15 +426,13 @@ const VirtualizedTable = <T extends Record<string, any>>({
                 placeholder="Filter..."
                 className="ml-2 px-1 py-0.5 text-xs border rounded"
                 onChange={(e) => debouncedFilter(column.key, e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-              />
+                onClick={(e) => e.stopPropagation()} />
             )}
 
             {enableColumnResize && (
               <div
                 className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500"
-                onMouseDown={(e) => handleMouseDown(e, column.key)}
-              />
+                onMouseDown={(e) => handleMouseDown(e, column.key)} />
             )}
           </div>
         );
@@ -448,8 +444,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
   if (loading) {
     return (
       <div className={cn('border rounded-lg', className)} style={{ height }}>
-        <DaisyTableHeader />
-        <div className="flex items-center justify-center h-full">
+        <DaisyTableHeader >
+          <div className="flex items-center justify-center h-full">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
           <span className="ml-2">Loading...</span>
         </div>
@@ -461,8 +457,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
   if (processedData.length === 0) {
     return (
       <div className={cn('border rounded-lg', className)} style={{ height }}>
-        <DaisyTableHeader />
-        <div className="flex items-center justify-center h-full text-gray-500">
+        <DaisyTableHeader >
+          <div className="flex items-center justify-center h-full text-gray-500">
           No data available
         </div>
       </div>
@@ -480,9 +476,8 @@ const VirtualizedTable = <T extends Record<string, any>>({
 
   return (
     <div ref={containerRef} className={cn('border rounded-lg overflow-hidden', className)}>
-      <DaisyTableHeader />
-
-      <div style={{ height: height - headerHeight }}>
+      <DaisyTableHeader >
+        <div style={{ height: height - headerHeight }}>
         <AutoSizer>
           {({ height: autoHeight, width: autoWidth }) => {
             if (virtualizationType === 'grid') {

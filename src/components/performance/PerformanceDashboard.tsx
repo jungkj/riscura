@@ -399,9 +399,10 @@ const PerformanceDashboard: React.FC = () => {
           <DaisyButton
             variant="outline"
             size="sm"
-            onClick={isMonitoring ? stopMonitoring : startMonitoring} >
-  {isMonitoring ? (
-</DaisyButton>
+            onClick={isMonitoring ? stopMonitoring : startMonitoring}>
+          {isMonitoring ? (
+
+        </DaisyButton>
               <>
                 <Activity className="h-4 w-4 mr-2 text-green-500" />
                 Monitoring
@@ -418,7 +419,7 @@ const PerformanceDashboard: React.FC = () => {
 
       {/* Performance Score */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5" />
@@ -434,7 +435,7 @@ const PerformanceDashboard: React.FC = () => {
             </div>
             <div className="flex-1">
               <DaisyProgress value={performanceScore} className="h-2" />
-              <p className="text-sm text-gray-600 mt-1">
+<p className="text-sm text-gray-600 mt-1">
                 {performanceScore >= 90 ? 'Excellent' : 
                  performanceScore >= 70 ? 'Good' : 
                  performanceScore >= 50 ? 'Needs Improvement' : 'Poor'}
@@ -447,7 +448,7 @@ const PerformanceDashboard: React.FC = () => {
       {/* Alerts */}
       {alerts.length > 0 && (
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between" />
+  <DaisyCardBody className="flex flex-row items-center justify-between" >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5 text-yellow-500" >
@@ -455,9 +456,10 @@ const PerformanceDashboard: React.FC = () => {
 </DaisyAlert>
               Performance Alerts ({alerts.length})
             </DaisyCardTitle>
-            <DaisyButton variant="outline" size="sm" onClick={clearAlerts} >
-  Clear All
-</DaisyButton>
+            <DaisyButton variant="outline" size="sm" onClick={clearAlerts}>
+          Clear All
+
+        </DaisyButton>
             </DaisyButton>
           
           <DaisyCardBody >
@@ -482,19 +484,19 @@ const PerformanceDashboard: React.FC = () => {
       )}
 
       {/* Main Metrics */}
-      <DaisyTabs defaultValue="vitals" className="space-y-4" />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="vitals">Core Web Vitals</DaisyTabs>
+      <DaisyTabs defaultValue="vitals" className="space-y-4" >
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+            <DaisyTabsTrigger value="vitals">Core Web Vitals</DaisyTabs>
           <DaisyTabsTrigger value="performance">Performance</DaisyTabsTrigger>
           <DaisyTabsTrigger value="resources">Resources</DaisyTabsTrigger>
           <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="vitals" className="space-y-4" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <DaisyTabsContent value="vitals" className="space-y-4" >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* LCP */}
             <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyTabsContent>
                 <DaisyCardTitle className="text-sm font-medium">Largest Contentful Paint</DaisyCardTitle>
         </DaisyCardBody>
@@ -512,7 +514,7 @@ const PerformanceDashboard: React.FC = () => {
 
             {/* FID */}
             <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">First Input Delay</DaisyCardTitle>
         </DaisyCardBody>
@@ -530,7 +532,7 @@ const PerformanceDashboard: React.FC = () => {
 
             {/* CLS */}
             <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Cumulative Layout Shift</DaisyCardTitle>
         </DaisyCardBody>
@@ -548,10 +550,10 @@ const PerformanceDashboard: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="performance" className="space-y-4" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <DaisyTabsContent value="performance" className="space-y-4" >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyTabsContent>
                 <DaisyCardTitle className="text-sm font-medium">Page Load Time</DaisyCardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
@@ -563,7 +565,7 @@ const PerformanceDashboard: React.FC = () => {
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Memory Usage</DaisyCardTitle>
                 <Database className="h-4 w-4 text-muted-foreground" />
@@ -571,11 +573,10 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardBody>{formatMetric(metrics.memoryUsage, '%')}</div>
-                <DaisyProgress value={metrics.memoryUsage} className="mt-2" /></DaisyProgress>
-            </DaisyCard>
+                <DaisyProgress value={metrics.memoryUsage} className="mt-2" / / /> </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">CPU Usage</DaisyCardTitle>
                 <Server className="h-4 w-4 text-muted-foreground" />
@@ -583,11 +584,10 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardBody>{formatMetric(metrics.cpuUsage, '%')}</div>
-                <DaisyProgress value={metrics.cpuUsage} className="mt-2" /></DaisyProgress>
-            </DaisyCard>
+                <DaisyProgress value={metrics.cpuUsage} className="mt-2" / / /> </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
                 <DaisyCardTitle className="text-sm font-medium">Connection</DaisyCardTitle>
                 <Wifi className="h-4 w-4 text-muted-foreground" />
@@ -603,9 +603,9 @@ const PerformanceDashboard: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="resources" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="resources" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Resource Loading Performance</DaisyCardTitle>
               <DaisyCardDescription >
@@ -620,17 +620,17 @@ const PerformanceDashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
                   <YAxis />
-                  <DaisyTooltip />
-                  <Bar dataKey="duration" fill="#8884d8" />
+                  <DaisyTooltip>
+                    <Bar dataKey="duration" fill="#8884d8" />
                 </BarChart>
               </ResponsiveContainer>
             </DaisyTooltip>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="trends" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="trends" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Performance Trends</DaisyCardTitle>
               <DaisyCardDescription >

@@ -312,7 +312,7 @@ export default function AIInsightsCard({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex items-center space-x-2">
             <Brain className="w-5 h-5 text-purple-600" />
@@ -337,7 +337,7 @@ export default function AIInsightsCard({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -363,18 +363,18 @@ export default function AIInsightsCard({
       
 
       <DaisyCardBody className="p-0" >
-  <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
+  <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" >
 </DaisyCardBody>
-          <DaisyTabsList className="grid w-full grid-cols-5 mx-4 mb-4" />
-            <DaisyTabsTrigger value="all" className="text-xs">All</DaisyTabsList>
+          <DaisyTabsList className="grid w-full grid-cols-5 mx-4 mb-4" >
+              <DaisyTabsTrigger value="all" className="text-xs">All</DaisyTabsList>
             <DaisyTabsTrigger value="high-priority" className="text-xs">Priority</DaisyTabsTrigger>
             <DaisyTabsTrigger value="risks" className="text-xs">Risks</DaisyTabsTrigger>
             <DaisyTabsTrigger value="recommendations" className="text-xs">Controls</DaisyTabsTrigger>
             <DaisyTabsTrigger value="compliance" className="text-xs">Compliance</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value={activeTab} className="mt-0" />
-            <div className="max-h-96 overflow-y-auto px-4">
+          <DaisyTabsContent value={activeTab} className="mt-0" >
+              <div className="max-h-96 overflow-y-auto px-4">
               {filteredInsights.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -414,8 +414,7 @@ export default function AIInsightsCard({
                             <Bookmark
                               className={`w-3 h-3 ${
                                 bookmarkedInsights.has(insight.id) ? 'fill-current text-yellow-500' : ''
-                              }`}
-                            />
+                              }`} />
                           </DaisyButton>
                           
                           <DaisyButton
@@ -445,9 +444,8 @@ export default function AIInsightsCard({
                           </div>
                           <DaisyProgress
                             value={insight.confidence * 100}
-                            className="w-16 h-1"
-                          />
-                        </div>
+                            className="w-16 h-1" />
+</div>
                         
                         <div className="text-xs text-gray-500">
                           {insight.timestamp.toLocaleTimeString()}
@@ -498,10 +496,12 @@ export default function AIInsightsCard({
                 <DaisyButton
                   variant="ghost"
                   size="sm"
-                  onClick={() => setSelectedInsight(null)}
+                  onClick={() =>
+          setSelectedInsight(null)}
                   className="p-2" />
                   ×
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
               
               <div className="space-y-4">
@@ -517,9 +517,8 @@ export default function AIInsightsCard({
                     <span className="text-sm text-gray-600">Confidence:</span>
                     <DaisyProgress
                       value={selectedInsight.confidence * 100}
-                      className="w-24 h-2"
-                    />
-                    <span className="text-sm font-medium">
+                      className="w-24 h-2" />
+<span className="text-sm font-medium">
                       {Math.round(selectedInsight.confidence * 100)}%
                     </span>
                   </div>

@@ -272,7 +272,8 @@ export default function ReportLibrary({
   ;
 </DaisyAlertCircle>
       case 'SCHEDULED':
-        return <DaisyCalendar className="h-4 w-4 text-orange-600" />;
+        return <DaisyCalendar className="h-4 w-4 text-orange-600" />
+;
       default:
         return <Info className="h-4 w-4 text-gray-600" />;
     }
@@ -323,7 +324,7 @@ export default function ReportLibrary({
 
       {/* Filters */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Filter className="h-5 w-5" />
@@ -342,20 +343,21 @@ export default function ReportLibrary({
                 <DaisyInput
                   placeholder="Search reports..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-8"
-                />
+                  onChange={(e) = />
+setSearchTerm(e.target.value)}
+                  className="pl-8" />
               </div>
             </div>
 
             {/* Type Filter */}
             <div className="space-y-2">
               <DaisyLabel>Type</DaisyInput>
-              <DaisySelect value={typeFilter} onValueChange={setTypeFilter} />
-                <DaisySelectTrigger />
-                  <DaisySelectValue /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="all">All Types</DaisySelectContent>
+              <DaisySelect value={typeFilter} onValueChange={setTypeFilter} >
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="all">All Types</DaisySelectItem>
                   <DaisySelectItem value="RISK_ASSESSMENT">Risk Assessment</DaisySelectItem>
                   <DaisySelectItem value="COMPLIANCE_STATUS">Compliance Status</DaisySelectItem>
                   <DaisySelectItem value="CONTROL_EFFECTIVENESS">Control Effectiveness</DaisySelectItem>
@@ -368,11 +370,12 @@ export default function ReportLibrary({
             {/* Status Filter */}
             <div className="space-y-2">
               <DaisyLabel>Status</DaisyLabel>
-              <DaisySelect value={statusFilter} onValueChange={setStatusFilter} />
-                <DaisySelectTrigger />
-                  <DaisySelectValue /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="all">All Statuses</DaisySelectContent>
+              <DaisySelect value={statusFilter} onValueChange={setStatusFilter} >
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="all">All Statuses</DaisySelectItem>
                   <DaisySelectItem value="COMPLETED">Completed</DaisySelectItem>
                   <DaisySelectItem value="GENERATING">Generating</DaisySelectItem>
                   <DaisySelectItem value="FAILED">Failed</DaisySelectItem>
@@ -384,11 +387,12 @@ export default function ReportLibrary({
             {/* Date Filter */}
             <div className="space-y-2">
               <DaisyLabel>Date Range</DaisyLabel>
-              <DaisySelect value={dateFilter} onValueChange={setDateFilter} />
-                <DaisySelectTrigger />
-                  <DaisySelectValue /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="all">All Time</DaisySelectContent>
+              <DaisySelect value={dateFilter} onValueChange={setDateFilter} >
+                  <DaisySelectTrigger>
+                    <DaisySelectValue />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="all">All Time</DaisySelectItem>
                   <DaisySelectItem value="today">Today</DaisySelectItem>
                   <DaisySelectItem value="week">Last Week</DaisySelectItem>
                   <DaisySelectItem value="month">Last Month</DaisySelectItem>
@@ -426,14 +430,14 @@ export default function ReportLibrary({
   <DaisyCardBody className="p-0" >
   </DaisyCard>
 </DaisyCardBody>
-          <DaisyTable />
-            <DaisyTableHeader />
-              <DaisyTableRow />
-                <DaisyTableHead className="w-12" />
-                  <DaisyCheckbox
-                    checked={selectedReports.length === filteredReports.length && filteredReports.length > 0}
-                    onCheckedChange={handleSelectAll}
-                  />
+          <DaisyTable >
+              <DaisyTableHeader >
+                <DaisyTableRow >
+                  <DaisyTableHead className="w-12" >
+                    <DaisyCheckbox
+                    checked={selectedReports.length === filteredReports.length && filteredReports.length />
+0}
+                    onCheckedChange={handleSelectAll} />
                 </DaisyTable>
                 <DaisyTableHead>Report Name</DaisyTableHead>
                 <DaisyTableHead>Type</DaisyTableHead>
@@ -445,20 +449,20 @@ export default function ReportLibrary({
                 <DaisyTableHead className="w-32">Actions</DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody />
-              {isLoading ? (
-                <DaisyTableRow />
-                  <DaisyTableCell colSpan={9} className="text-center py-8" />
-                    <div className="flex items-center justify-center gap-2">
+            <DaisyTableBody >
+                {isLoading ? (
+                <DaisyTableRow >
+                    <DaisyTableCell colSpan={9} className="text-center py-8" >
+                      <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin" />
                       Loading reports...
                     </div>
                   </DaisyTableBody>
                 </DaisyTableRow>
               ) : filteredReports.length === 0 ? (
-                <DaisyTableRow />
-                  <DaisyTableCell colSpan={9} className="text-center py-8" />
-                    <div className="flex flex-col items-center gap-2">
+                <DaisyTableRow >
+                    <DaisyTableCell colSpan={9} className="text-center py-8" >
+                      <div className="flex flex-col items-center gap-2">
                       <FileText className="h-8 w-8 text-muted-foreground" />
                       <p className="text-muted-foreground">No reports found</p>
                     </div>
@@ -466,20 +470,20 @@ export default function ReportLibrary({
                 </DaisyTableRow>
               ) : (
                 filteredReports.map((report) => (
-                  <DaisyTableRow key={report.id} />
-                    <DaisyTableCell />
-                      <DaisyCheckbox
+                  <DaisyTableRow key={report.id} >
+                      <DaisyTableCell >
+                        <DaisyCheckbox
                         checked={selectedReports.includes(report.id)}
-                        onCheckedChange={(checked) => handleSelectReport(report.id, checked as boolean)}
-                      />
+                        onCheckedChange={(checked) = />
+handleSelectReport(report.id, checked as boolean)} />
                     </DaisyTableRow>
-                    <DaisyTableCell />
-                      <div className="flex flex-col">
+                    <DaisyTableCell >
+                        <div className="flex flex-col">
                         <span className="font-medium">{report.name}</span>
                         {report.isScheduled && (
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
                             <DaisyCalendar className="h-3 w-3" />
-                            Scheduled: {report.schedule?.frequency}
+Scheduled: {report.schedule?.frequency}
                             {report.schedule?.nextRun && (
                               <span>
                                 • Next: {format(new Date(report.schedule.nextRun), 'MMM dd, HH:mm')}
@@ -489,34 +493,34 @@ export default function ReportLibrary({
                         )}
                       </div>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="outline">{report.type.replace('_', ' ')}</DaisyTableCell>
+                    <DaisyTableCell >
+                        <DaisyBadge variant="outline">{report.type.replace('_', ' ')}</DaisyTableCell>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="secondary" className="uppercase" >
+                    <DaisyTableCell >
+                        <DaisyBadge variant="secondary" className="uppercase" >
   {report.format}
-</DaisyTableCell>
-                      </DaisyBadge>
+</DaisyBadge>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      {getStatusBadge(report.status)}
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      {report.fileSize > 0 ? formatFileSize(report.fileSize) : '-'}
+                    <DaisyTableCell >
+                        {getStatusBadge(report.status)}
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex items-center gap-2">
+                    <DaisyTableCell >
+                        {report.fileSize > 0 ? formatFileSize(report.fileSize) : '-'}
+                    </DaisyTableCell>
+                    <DaisyTableCell >
+                        <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{report.createdBy.name}</span>
                       </div>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <span className="text-sm">
+                    <DaisyTableCell >
+                        <span className="text-sm">
                         {format(new Date(report.generatedAt), 'MMM dd, yyyy HH:mm')}
                       </span>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex items-center gap-1">
+                    <DaisyTableCell >
+                        <div className="flex items-center gap-1">
                         <DaisyButton
                           variant="ghost"
                           size="sm"
@@ -531,15 +535,15 @@ export default function ReportLibrary({
                           disabled={report.status !== 'COMPLETED'} />
                           <Share className="h-4 w-4" />
                         </DaisyButton>
-                        <DaisyDialog />
-                          <DaisyDialogTrigger asChild />
-                            <DaisyButton variant="ghost" size="sm" >
+                        <DaisyDialog >
+                            <DaisyDialogTrigger asChild >
+                              <DaisyButton variant="ghost" size="sm" >
   <MoreHorizontal className="h-4 w-4" />
 </DaisyDialog>
                             </DaisyButton>
                           </DaisyDialogTrigger>
                           <DaisyDialogContent >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialogContent>
                               <DaisyDialogTitle>Report Details</DaisyDialogTitle>
                               <DaisyDialogDescription >
@@ -629,25 +633,29 @@ export default function ReportLibrary({
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(currentPage - 1)}
+              onClick={() =>
+          setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1} />
               Previous
-            </DaisyButton>
+            
+        </DaisyButton>
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(currentPage + 1)}
+              onClick={() =>
+          setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages} />
               Next
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       )}
 
       {/* Delete Confirmation Dialog */}
-      <DaisyDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen} />
-        <DaisyDialogContent >
-  <DaisyDialogHeader />
+      <DaisyDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen} >
+          <DaisyDialogContent >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Delete Reports</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -657,12 +665,15 @@ export default function ReportLibrary({
             </DaisyDialogDescription>
           </DaisyDialogHeader>
           <div className="flex justify-end gap-2">
-            <DaisyButton variant="outline" onClick={() => setIsDeleteDialogOpen(false)} />
+            <DaisyButton variant="outline" onClick={() =>
+          setIsDeleteDialogOpen(false)} />
               Cancel
-            </DaisyButton>
-                            <DaisyButton variant="danger" onClick={handleDelete} >
-  Delete
-</DaisyButton>
+            
+        </DaisyButton>
+                            <DaisyButton variant="danger" onClick={handleDelete}>
+          Delete
+
+        </DaisyButton>
             </DaisyButton>
           </div>
         </DaisyDialogContent>

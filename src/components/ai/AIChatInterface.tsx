@@ -280,9 +280,11 @@ const ChatMessageComponent: React.FC<{
                   "h-6 px-enterprise-2",
                   action.type === 'primary' && "bg-purple-600 hover:bg-purple-700"
                 )}
-                onClick={() => onAction(action.action)} />
+                onClick={() =>
+          onAction(action.action)} />
                 {action.label}
-              </DaisyButton>
+              
+        </DaisyButton>
             ))}
           </div>
         )}
@@ -447,9 +449,9 @@ export const AIChatInterface: React.FC<{
   };
 
   return (
-    <DaisyDialog open={isOpen} onOpenChange={onClose} />
-      <DaisyDialogContent className="max-w-2xl h-[80vh] flex flex-col p-0" >
-  <DaisyDialogHeader className="px-enterprise-4 py-enterprise-3 border-b border-border" />
+    <DaisyDialog open={isOpen} onOpenChange={onClose} >
+        <DaisyDialogContent className="max-w-2xl h-[80vh] flex flex-col p-0" >
+  <DaisyDialogHeader className="px-enterprise-4 py-enterprise-3 border-b border-border">
 </DaisyDialog>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-enterprise-2">
@@ -469,14 +471,13 @@ export const AIChatInterface: React.FC<{
         </DaisyDialogHeader>
 
         {/* Chat Messages */}
-        <DaisyScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3" />
-          <div className="space-y-enterprise-4">
+        <DaisyScrollArea ref={scrollAreaRef} className="flex-1 px-enterprise-4 py-enterprise-3" >
+            <div className="space-y-enterprise-4">
             {messages.map((message) => (
               <ChatMessageComponent
                 key={message.id}
                 message={message}
-                onAction={handleAction}
-              />
+                onAction={handleAction} />
             ))}
           </div>
         </DaisyScrollArea>
@@ -514,12 +515,12 @@ export const AIChatInterface: React.FC<{
               <DaisyInput
                 ref={inputRef}
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) = />
+setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me about risks, controls, compliance, or trends..."
                 className="pr-enterprise-10"
-                disabled={isTyping}
-              />
+                disabled={isTyping} />
               {inputValue && (
                 <DaisyButton
                   size="sm"

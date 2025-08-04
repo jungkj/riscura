@@ -11,8 +11,8 @@ const Avatar = React.forwardRef<
     ref={ref}
     className={cn('relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full', className)}
     {...props}
-  />
-));
+  >
+  ));
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 const AvatarImage = React.forwardRef<
@@ -23,8 +23,8 @@ const AvatarImage = React.forwardRef<
     ref={ref}
     className={cn('aspect-square h-full w-full', className)}
     {...props}
-  />
-));
+  >
+  ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
 const AvatarFallback = React.forwardRef<
@@ -38,8 +38,8 @@ const AvatarFallback = React.forwardRef<
       className
     )}
     {...props}
-  />
-));
+  >
+  ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
 export { Avatar, AvatarImage, AvatarFallback };

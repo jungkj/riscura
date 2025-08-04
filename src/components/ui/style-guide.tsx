@@ -71,8 +71,7 @@ const ColorPalette: React.FC = () => {
             >
               <div 
                 className="w-full h-16 rounded-md mb-3 border"
-                style={{ backgroundColor: value }}
-              />
+                style={{ backgroundColor: value }} />
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-medium text-sm font-inter capitalize">
@@ -106,8 +105,7 @@ const ColorPalette: React.FC = () => {
             >
               <div 
                 className="w-full h-12 rounded-md mb-3 border"
-                style={{ backgroundColor: value }}
-              />
+                style={{ backgroundColor: value }} />
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-medium text-sm font-inter capitalize">
@@ -264,8 +262,7 @@ const SpacingGrid: React.FC = () => {
               <div className="flex items-center gap-2">
                 <div 
                   className="bg-[#199BEC] h-4"
-                  style={{ width: value }}
-                />
+                  style={{ width: value }} />
                 <span className="text-sm text-gray-600 font-inter">
                   {value === '0px' ? 'None' : `${parseInt(value) / 8}× base unit`}
                 </span>
@@ -317,25 +314,43 @@ const ComponentVariations: React.FC = () => {
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Primary Buttons</h4>
             <div className="space-y-2">
-              <DaisyButton size="sm">Small Primary</DaisyButton>
-              <DaisyButton>Default Primary</DaisyButton>
-              <DaisyButton size="lg">Large Primary</DaisyButton>
+              <DaisyButton size="sm">
+          Small Primary
+        </DaisyButton>
+              <DaisyButton>
+          Default Primary
+        </DaisyButton>
+              <DaisyButton size="lg">
+          Large Primary
+        </DaisyButton>
             </div>
           </div>
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Secondary Buttons</h4>
             <div className="space-y-2">
-              <DaisyButton variant="secondary" size="sm">Small Secondary</DaisyButton>
-              <DaisyButton variant="secondary">Default Secondary</DaisyButton>
-              <DaisyButton variant="secondary" size="lg">Large Secondary</DaisyButton>
+              <DaisyButton variant="secondary" size="sm">
+          Small Secondary
+        </DaisyButton>
+              <DaisyButton variant="secondary">
+          Default Secondary
+        </DaisyButton>
+              <DaisyButton variant="secondary" size="lg">
+          Large Secondary
+        </DaisyButton>
             </div>
           </div>
           <div className="space-y-3">
             <h4 className="font-medium text-sm text-gray-700">Other Variants</h4>
             <div className="space-y-2">
-              <DaisyButton variant="ghost">Ghost Button</DaisyButton>
-              <DaisyButton variant="link">Link Button</DaisyButton>
-                              <DaisyButton variant="danger">Danger</DaisyButton>
+              <DaisyButton variant="ghost">
+          Ghost Button
+        </DaisyButton>
+              <DaisyButton variant="link">
+          Link Button
+        </DaisyButton>
+                              <DaisyButton variant="danger">
+          Danger
+        </DaisyButton>
             </div>
           </div>
         </div>
@@ -349,8 +364,12 @@ const ComponentVariations: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-medium text-[#191919] font-inter">Interactive States</h4>
             <div className="space-y-3 p-4 border rounded-lg">
-              <DaisyButton className="w-full">Hover me for state change</DaisyButton>
-              <DaisyButton className="w-full" disabled>Disabled State</DaisyButton>
+              <DaisyButton className="w-full">
+          Hover me for state change
+        </DaisyButton>
+              <DaisyButton className="w-full" disabled>
+          Disabled State
+        </DaisyButton>
               <DaisyButton 
                 className="w-full" 
                 onClick={() => {
@@ -378,18 +397,16 @@ const ComponentVariations: React.FC = () => {
                 <DaisyInput 
                   id="example-input" 
                   placeholder="Placeholder text" 
-                  className="mt-1"
-                />
-              </div>
+                  className="mt-1" />
+</div>
               <div>
                 <DaisyLabel htmlFor="disabled-input">Disabled Input</DaisyInput>
                 <DaisyInput 
                   id="disabled-input" 
                   disabled 
                   value="Disabled value" 
-                  className="mt-1"
-                />
-              </div>
+                  className="mt-1" />
+</div>
             </div>
           </div>
         </div>
@@ -534,8 +551,8 @@ const ResponsivePreview: React.FC = () => {
             <p className="text-sm text-gray-600 font-inter">&lt; 768px</p>
           </div>
           <div className="p-4 border rounded-lg">
-            <DaisyTablet className="h-6 w-6 text-[#199BEC] mb-2" />
-            <h4 className="font-medium text-[#191919] font-inter">Tablet</h4>
+            <DaisyTablet className="h-6 w-6 text-[#199BEC] mb-2" >
+              <h4 className="font-medium text-[#191919] font-inter">Tablet</h4>
             <p className="text-sm text-gray-600 font-inter">768px - 1024px</p>
           </div>
           <div className="p-4 border rounded-lg">
@@ -587,8 +604,12 @@ const ResponsivePreview: React.FC = () => {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <DaisyButton size="sm">Action</DaisyButton>
-                  <DaisyButton variant="secondary" size="sm">Cancel</DaisyButton>
+                  <DaisyButton size="sm">
+          Action
+        </DaisyButton>
+                  <DaisyButton variant="secondary" size="sm">
+          Cancel
+        </DaisyButton>
                 </div>
               </div>
             </div>
@@ -625,33 +646,33 @@ export const StyleGuide: React.FC = () => {
         </div>
       </div>
 
-      <DaisyTabs defaultValue="colors" className="w-full" />
-        <DaisyTabsList className="grid w-full grid-cols-5" />
-          <DaisyTabsTrigger value="colors" className="flex items-center gap-2" />
-            <Palette className="h-4 w-4" />
+      <DaisyTabs defaultValue="colors" className="w-full" >
+          <DaisyTabsList className="grid w-full grid-cols-5" >
+            <DaisyTabsTrigger value="colors" className="flex items-center gap-2" >
+              <Palette className="h-4 w-4" />
             Colors
           </DaisyTabs>
-          <DaisyTabsTrigger value="typography" className="flex items-center gap-2" />
-            <Type className="h-4 w-4" />
+          <DaisyTabsTrigger value="typography" className="flex items-center gap-2" >
+              <Type className="h-4 w-4" />
             Typography
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="spacing" className="flex items-center gap-2" />
-            <Grid3X3 className="h-4 w-4" />
+          <DaisyTabsTrigger value="spacing" className="flex items-center gap-2" >
+              <Grid3X3 className="h-4 w-4" />
             Spacing
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="components" className="flex items-center gap-2" />
-            <MousePointer className="h-4 w-4" />
+          <DaisyTabsTrigger value="components" className="flex items-center gap-2" >
+              <MousePointer className="h-4 w-4" />
             Components
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="icons" className="flex items-center gap-2" />
-            <Star className="h-4 w-4" />
+          <DaisyTabsTrigger value="icons" className="flex items-center gap-2" >
+              <Star className="h-4 w-4" />
             Icons
           </DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="colors" className="mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="colors" className="mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Palette className="h-5 w-5" />
@@ -670,9 +691,9 @@ export const StyleGuide: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="typography" className="mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="typography" className="mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Type className="h-5 w-5" />
@@ -691,9 +712,9 @@ export const StyleGuide: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="spacing" className="mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="spacing" className="mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Grid3X3 className="h-5 w-5" />
@@ -712,9 +733,9 @@ export const StyleGuide: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="components" className="mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="components" className="mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <MousePointer className="h-5 w-5" />
@@ -733,9 +754,9 @@ export const StyleGuide: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="icons" className="mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="icons" className="mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Star className="h-5 w-5" />
@@ -756,7 +777,7 @@ export const StyleGuide: React.FC = () => {
       </DaisyTabs>
 
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Eye className="h-5 w-5" />

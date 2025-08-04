@@ -37,7 +37,7 @@ export function RiskControlWidget({ className }: RiskControlWidgetProps) {
   return (
     <DaisyCard className={`bg-[#FAFAFA] border-[#D8C3A5] ${className}`}>
       <DaisyCardBody >
-  <DaisyCardTitle className="flex items-center gap-2" />
+  <DaisyCardTitle className="flex items-center gap-2" >
 </DaisyCard>
           <Shield className="w-5 h-5 text-[#199BEC]" />
           Risk Control Widget

@@ -235,9 +235,9 @@ export default function VantaInspiredDashboard() {
               <DaisyInput
                 placeholder="Search risks, controls, or frameworks..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]" />
             </div>
 
             {/* Action Buttons */}
@@ -360,9 +360,12 @@ export default function VantaInspiredDashboard() {
               </p>
               <div className="flex justify-center space-x-4">
                 <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-                  Generate Risk Report
-                </DaisyButton>
-                <DaisyButton variant="outline">Compliance Summary</DaisyButton>
+          Generate Risk Report
+                
+        </DaisyButton>
+                <DaisyButton variant="outline">
+          Compliance Summary
+        </DaisyButton>
               </div>
             </div>
           </DaisyTabsContent>

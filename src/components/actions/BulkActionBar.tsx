@@ -140,7 +140,7 @@ interface ProgressModalProps {
   onClose: () => void;
 }
 
-const ProgressModal: React.FC<DaisyProgressModalProps> = ({
+const ProgressModal: React.FC<DaisyProgressModalProps />= ({
   isOpen,
   progress,
   action,
@@ -180,8 +180,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps> = ({
               className={`h-2 rounded-full transition-all duration-300 ${
                 isComplete ? 'bg-green-500' : 'bg-blue-500'
               }`}
-              style={{ width: `${progressPercentage}%` }}
-            />
+              style={{ width: `${progressPercentage}%` }} />
           </div>
         </div>
 
@@ -392,8 +391,7 @@ export function BulkActionBar<T = any>({
                       if (input) input.indeterminate = isPartiallySelected;
                     }}
                     onChange={() => {}} // Controlled by button click
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
                 </button>
                 <span className="text-sm text-gray-700">
                   {isAllSelected ? 'Deselect All' : 'Select All'}
@@ -456,16 +454,14 @@ export function BulkActionBar<T = any>({
         itemCount={selectedCount}
         itemName={itemName}
         onConfirm={() => confirmationModal.action && performBulkAction(confirmationModal.action)}
-        onCancel={() => setConfirmationModal({ isOpen: false, action: null })}
-      />
+        onCancel={() => setConfirmationModal({ isOpen: false, action: null })} />
 
       {/* Progress Modal */}
       <DaisyProgressModal
         isOpen={progressModal.isOpen}
         progress={progressModal.progress!}
         action={progressModal.action!}
-        onClose={() => setProgressModal({ isOpen: false, progress: null, action: null })}
-      />
+        onClose={() = />setProgressModal({ isOpen: false, progress: null, action: null })} />
     </>
   );
 }

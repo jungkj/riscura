@@ -437,8 +437,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
               width={40}
               height={40}
               className="object-contain"
-              priority
-            />
+              priority />
           </div>
           <DaisyButton
             variant="ghost"
@@ -492,8 +491,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             <DaisyTooltip>
               <DaisyTooltipTrigger asChild>
                 <DaisyAvatar className="w-8 h-8 mx-auto cursor-pointer">
-                  <DaisyAvatarImage src={user?.avatar} />
-                  <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
+                  <DaisyAvatarImage src={user?.avatar} >
+                    <DaisyAvatarFallback className="text-xs bg-[#199BEC] text-white">
                     {user?.firstName?.[0]}
                     {user?.lastName?.[0]}
                   </DaisyAvatarFallback>
@@ -524,8 +523,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             height={40}
             className="object-contain"
             style={{ width: 'auto', height: 'auto', maxWidth: '120px', maxHeight: '40px' }}
-            priority
-          />
+            priority />
         </div>
         <DaisyButton
           variant="ghost"
@@ -546,18 +544,20 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
             ref={searchInputRef}
             placeholder="Search features..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2 text-sm bg-white/50 border-gray-200/60 focus:ring-2 focus:ring-[#199BEC]/20 focus:border-[#199BEC]/50 rounded-xl"
-          />
+            onChange={(e) = />
+setSearchQuery(e.target.value)}
+            className="pl-10 pr-4 py-2 text-sm bg-white/50 border-gray-200/60 focus:ring-2 focus:ring-[#199BEC]/20 focus:border-[#199BEC]/50 rounded-xl" />
           {searchQuery && (
             <DaisyButton
               variant="ghost"
               size="sm"
-              onClick={() => setSearchQuery('')}
+              onClick={() =>
+          setSearchQuery('')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-[#191919]"
             >
               ×
-            </DaisyButton>
+            
+        </DaisyButton>
           )}
         </div>
         <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
@@ -652,8 +652,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                               isItemActive(item.href)
                                 ? 'text-white'
                                 : 'text-gray-600 group-hover:text-[#199BEC]'
-                            )}
-                          />
+                            )} />
                           <span className="flex-1 truncate font-inter">{item.title}</span>
 
                           {/* Badges and Actions */}
@@ -689,8 +688,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                             isFavorite(item.id)
                               ? 'text-[#199BEC] fill-[#199BEC]'
                               : 'text-gray-400 hover:text-[#199BEC]'
-                          )}
-                        />
+                          )} />
                       </DaisyButton>
                     </div>
                   ))}
@@ -705,8 +703,8 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       <div className="p-4 border-t border-gray-200" data-tour="user-profile">
         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#199BEC]/10 transition-colors cursor-pointer group">
           <DaisyAvatar className="w-8 h-8">
-            <DaisyAvatarImage src={user?.avatar} />
-            <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm">
+            <DaisyAvatarImage src={user?.avatar} >
+              <DaisyAvatarFallback className="bg-[#199BEC] text-white text-sm">
               {user?.firstName?.[0]}
               {user?.lastName?.[0]}
             </DaisyAvatarFallback>

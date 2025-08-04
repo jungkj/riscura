@@ -424,9 +424,9 @@ const ProboPageContent = () => {
                     <DaisyInput
                       placeholder="Search controls..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 w-64"
-                    />
+                      onChange={(e) = />
+setSearchQuery(e.target.value)}
+                      className="pl-10 w-64" />
                   </div>
                   <DaisyButton className="bg-green-600 hover:bg-green-700">
                     <Plus className="h-4 w-4 mr-2" />
@@ -504,7 +504,9 @@ const ProboPageContent = () => {
                               <Eye className="h-4 w-4 mr-1" />
                               View Details
                             </DaisyButton>
-                            <DaisyButton size="sm">Implement</DaisyButton>
+                            <DaisyButton size="sm">
+          Implement
+        </DaisyButton>
                           </div>
                         </div>
                       </DaisyCardBody>

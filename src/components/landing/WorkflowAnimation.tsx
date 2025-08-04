@@ -91,8 +91,7 @@ const WorkflowAnimation = () => {
         repeat: Infinity,
         repeatDelay: 1
       }}
-      className="absolute w-2 h-2 bg-purple-400 rounded-full"
-    />
+      className="absolute w-2 h-2 bg-purple-400 rounded-full" />
   );
 
   const ResultCard = ({ title, risk, delay = 0 }: { title: string; risk: 'high' | 'medium' | 'low'; delay?: number }) => (
@@ -172,8 +171,7 @@ const WorkflowAnimation = () => {
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                          className="absolute inset-0 border-2 border-white/30 rounded-full"
-                        />
+                          className="absolute inset-0 border-2 border-white/30 rounded-full" />
                       )}
                     </div>
                     
@@ -210,7 +208,6 @@ const WorkflowAnimation = () => {
         {/* Interactive Demo Area */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-            
             {/* Step 1: Upload Zone */}
             <div className="text-center">
               <h4 className="font-semibold text-gray-900 mb-4">1. Upload Documents</h4>
@@ -316,8 +313,7 @@ const WorkflowAnimation = () => {
                 className={`
                   w-3 h-3 rounded-full transition-all duration-500
                   ${currentStep === index ? 'bg-[#199BEC] scale-125' : 'bg-gray-300'}
-                `}
-              />
+                `} />
             ))}
           </div>
         </div>

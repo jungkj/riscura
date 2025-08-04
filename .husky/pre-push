@@ -24,8 +24,8 @@ else
   echo "⚠️ NOTE: JSX validation is disabled for this deployment push"
   echo "⚠️ TODO: Fix JSX errors after successful deployment"
   
-  # Just run a basic build check
-  echo "Running basic build check..."
+  # Just run a basic type check
+  echo "Running basic type check..."
   npm run type-check:quick || true
 fi
 

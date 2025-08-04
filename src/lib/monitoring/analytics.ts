@@ -182,7 +182,7 @@ class BusinessAnalytics {
 
     // Track performance metrics
     if (duration > 10000) {
-      // > 10 seconds
+      // 10 seconds
       Sentry.addBreadcrumb({
         category: 'feature-performance',
         message: `Slow feature usage: ${feature}`,

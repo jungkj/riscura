@@ -104,8 +104,7 @@ export const SharePointIntegration: React.FC = () => {
                   onChange={(e) => setSiteUrl(e.target.value)}
                   placeholder="https://yourcompany.sharepoint.com/sites/yoursite"
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={isConnecting}
-                />
+                  disabled={isConnecting} />
                 <p className="text-xs text-gray-500 mt-1">
                   Enter the full URL of your SharePoint site
                 </p>
@@ -114,9 +113,10 @@ export const SharePointIntegration: React.FC = () => {
                 <DaisyButton
                   onClick={handleConnect}
                   disabled={!siteUrl.trim() || isConnecting}
-                  size="sm" >
-  {isConnecting ? (
-</DaisyButton>
+                  size="sm">
+          {isConnecting ? (
+
+        </DaisyButton>
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Connecting...
@@ -129,7 +129,8 @@ export const SharePointIntegration: React.FC = () => {
                   )}
                 </DaisyButton>
                 <DaisyButton
-                  onClick={() => {
+                  onClick={() =>
+          {
                     setShowConnectForm(false);
                     setSiteUrl('');
                   }}
@@ -138,7 +139,8 @@ export const SharePointIntegration: React.FC = () => {
                   disabled={isConnecting}
                 >
                   Cancel
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </div>
           </div>

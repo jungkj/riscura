@@ -531,8 +531,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                 dataKey="overallScore" 
                 stroke="#3b82f6" 
                 strokeWidth={3}
-                name="Overall Score"
-              />
+                name="Overall Score" />
               {frameworks.map(framework => (
                 <Line
                   key={framework.id}
@@ -540,8 +539,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                   dataKey={framework.id}
                   stroke={frameworkColors[framework.id as keyof typeof frameworkColors] || '#6b7280'}
                   strokeWidth={2}
-                  name={framework.shortName}
-                />
+                  name={framework.shortName} />
               ))}
             </LineChart>
           </ResponsiveContainer>
@@ -616,10 +614,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <DaisySelect value={chartType} onValueChange={(value: any) => setChartType(value)} />
-            <DaisySelectTrigger />
-              <DaisySelectValue placeholder="Chart Type" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="progress">Progress Overview</DaisySelectContent>
+            <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Chart Type" />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="progress">Progress Overview</DaisySelectItem>
               <DaisySelectItem value="trend">Trend Analysis</DaisySelectItem>
               <DaisySelectItem value="comparison">Target Comparison</DaisySelectItem>
               <DaisySelectItem value="radial">Radial Progress</DaisySelectItem>
@@ -627,10 +626,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           </DaisySelect>
           
           <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
-            <DaisySelectTrigger />
-              <DaisySelectValue placeholder="Time Range" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="30d">Last 30 Days</DaisySelectContent>
+            <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Time Range" />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="30d">Last 30 Days</DaisySelectItem>
               <DaisySelectItem value="90d">Last 90 Days</DaisySelectItem>
               <DaisySelectItem value="6m">Last 6 Months</DaisySelectItem>
               <DaisySelectItem value="1y">Last Year</DaisySelectItem>
@@ -641,25 +641,24 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
             <DaisySwitch 
               id="prediction" 
               checked={showPrediction} 
-              onCheckedChange={setShowPrediction}
-            />
-            <DaisyLabel htmlFor="prediction" className="text-sm">Show Prediction</DaisySwitch>
+              onCheckedChange={setShowPrediction} />
+<DaisyLabel htmlFor="prediction" className="text-sm">Show Prediction</DaisySwitch>
           </div>
         </div>
       
 
       <DaisyCardBody >
-  <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
+  <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" >
 </DaisyCardBody>
-          <DaisyTabsList className="grid w-full grid-cols-4" />
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+              <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
             <DaisyTabsTrigger value="frameworks">Frameworks</DaisyTabsTrigger>
             <DaisyTabsTrigger value="gaps">Gaps Analysis</DaisyTabsTrigger>
             <DaisyTabsTrigger value="roadmap">Roadmap</DaisyTabsTrigger>
           </DaisyTabsList>
           
-          <DaisyTabsContent value="overview" className="space-y-6" />
-            {/* Summary Statistics */}
+          <DaisyTabsContent value="overview" className="space-y-6" >
+              {/* Summary Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -747,8 +746,8 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
             </div>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="frameworks" className="space-y-4" />
-            <div className="grid gap-4">
+          <DaisyTabsContent value="frameworks" className="space-y-4" >
+              <div className="grid gap-4">
               {frameworks.map(framework => (
                 <DaisyCard 
                   key={framework.id} 
@@ -785,8 +784,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
                             <span>{framework.overallScore}%</span>
                           </div>
                           <DaisyProgress value={framework.overallScore} className="h-2" />
-                          
-                          <div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
+<div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
                             <div>
                               <span className="font-medium text-green-600">
                                 {framework.implementedControls}
@@ -822,8 +820,8 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
             </div>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="gaps" className="space-y-4" />
-            <div className="grid gap-4">
+          <DaisyTabsContent value="gaps" className="space-y-4" >
+              <div className="grid gap-4">
               <DaisyCard >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
@@ -868,8 +866,8 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
             </div>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="roadmap" className="space-y-4" />
-            <div className="grid gap-4">
+          <DaisyTabsContent value="roadmap" className="space-y-4" >
+              <div className="grid gap-4">
               <DaisyCard >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>

@@ -265,7 +265,6 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="report-type" className="mt-1">
                         <DaisySelectValue />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="comprehensive">
                           Comprehensive Risk Assessment
@@ -288,7 +287,6 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="time-range" className="mt-1">
                         <DaisySelectValue />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="last-month">Last Month</DaisySelectItem>
                         <DaisySelectItem value="last-quarter">Last Quarter</DaisySelectItem>
@@ -309,20 +307,20 @@ export default function GenerateRiskReportPage() {
                       className="mt-2"
                     >
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="pdf" id="pdf" />
-                        <DaisyLabel htmlFor="pdf" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="pdf" id="pdf" >
+                          <DaisyLabel htmlFor="pdf" className="cursor-pointer">
                           PDF Document
                         </DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="excel" id="excel" />
-                        <DaisyLabel htmlFor="excel" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="excel" id="excel" >
+                          <DaisyLabel htmlFor="excel" className="cursor-pointer">
                           Excel Spreadsheet
                         </DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="word" id="word" />
-                        <DaisyLabel htmlFor="word" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="word" id="word" >
+                          <DaisyLabel htmlFor="word" className="cursor-pointer">
                           Word Document
                         </DaisyLabel>
                       </div>
@@ -343,10 +341,9 @@ export default function GenerateRiskReportPage() {
                         <DaisyCheckbox
                           id={key}
                           checked={value}
-                          onCheckedChange={() =>
-                            handleSectionToggle(key as keyof typeof reportConfig.sections)
-                          }
-                        />
+                          onCheckedChange={() = />
+handleSectionToggle(key as keyof typeof reportConfig.sections)
+                          } />
                         <DaisyLabel htmlFor={key} className="cursor-pointer">
                           {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                         </DaisyLabel>

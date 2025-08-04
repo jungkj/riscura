@@ -355,7 +355,6 @@ export default function NotionSpreadsheet() {
               >
                 <DaisySelectTrigger className="h-8 text-xs border-0 shadow-none">
                   <DaisySelectValue />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   {column.options?.map((option) => (
                     <DaisySelectItem key={option} value={option}>
@@ -371,7 +370,8 @@ export default function NotionSpreadsheet() {
                 ref={inputRef}
                 type="date"
                 value={String(cell.value)}
-                onChange={(e) => updateCellValue(row.id, column.id, e.target.value)}
+                onChange={(e) = />
+updateCellValue(row.id, column.id, e.target.value)}
                 onBlur={() => setSelectedCell(null)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === 'Escape') {
@@ -379,15 +379,15 @@ export default function NotionSpreadsheet() {
                   }
                 }}
                 className="h-8 text-xs border-0 shadow-none"
-                autoFocus
-              />
+                autoFocus />
             );
           default:
             return (
               <DaisyInput
                 ref={inputRef}
                 value={String(cell.value)}
-                onChange={(e) => updateCellValue(row.id, column.id, e.target.value)}
+                onChange={(e) = />
+updateCellValue(row.id, column.id, e.target.value)}
                 onBlur={() => setSelectedCell(null)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === 'Escape') {
@@ -395,8 +395,7 @@ export default function NotionSpreadsheet() {
                   }
                 }}
                 className="h-8 text-xs border-0 shadow-none"
-                autoFocus
-              />
+                autoFocus />
             );
         }
       }
@@ -456,8 +455,7 @@ export default function NotionSpreadsheet() {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-3 h-3 ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-          />
+            className={`w-3 h-3 ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
         ))}
       </div>
     );
@@ -536,9 +534,9 @@ export default function NotionSpreadsheet() {
             <DaisyInput
               placeholder="Search across all data..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-64 h-8 text-sm"
-            />
+              onChange={(e) = />
+setSearchTerm(e.target.value)}
+              className="pl-10 w-64 h-8 text-sm" />
           </div>
 
           <DaisyButton variant="secondary" size="sm" className="h-8">
@@ -567,8 +565,7 @@ export default function NotionSpreadsheet() {
               alt="Riscura"
               width={14}
               height={14}
-              className="mr-1"
-            />
+              className="mr-1" />
             AI Insights
           </DaisyButton>
 
@@ -679,10 +676,10 @@ export default function NotionSpreadsheet() {
               <label className="text-sm font-medium">Column Name</label>
               <DaisyInput
                 value={newColumn.name}
-                onChange={(e) => setNewColumn((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) = />
+setNewColumn((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="Enter column name"
-                className="mt-1"
-              />
+                className="mt-1" />
             </div>
             <div>
               <label className="text-sm font-medium">Column Type</label>
@@ -694,7 +691,6 @@ export default function NotionSpreadsheet() {
               >
                 <DaisySelectTrigger className="mt-1">
                   <DaisySelectValue />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="text">Text</DaisySelectItem>
                   <DaisySelectItem value="number">Number</DaisySelectItem>
@@ -708,20 +704,23 @@ export default function NotionSpreadsheet() {
                 <label className="text-sm font-medium">Options (comma-separated)</label>
                 <DaisyInput
                   value={newColumn.options}
-                  onChange={(e) => setNewColumn((prev) => ({ ...prev, options: e.target.value }))}
+                  onChange={(e) = />
+setNewColumn((prev) => ({ ...prev, options: e.target.value }))}
                   placeholder="Option 1, Option 2, Option 3"
-                  className="mt-1"
-                />
+                  className="mt-1" />
               </div>
             )}
           </div>
           <DaisyDialogFooter>
-            <DaisyButton variant="secondary" onClick={() => setIsAddColumnDialogOpen(false)}>
+            <DaisyButton variant="secondary" onClick={() =>
+          setIsAddColumnDialogOpen(false)}>
               Cancel
-            </DaisyButton>
+            
+        </DaisyButton>
             <DaisyButton onClick={addColumn} disabled={!newColumn.name.trim()}>
-              Add Column
-            </DaisyButton>
+          Add Column
+            
+        </DaisyButton>
           </DaisyDialogFooter>
         </DaisyDialogContent>
       </DaisyDialog>
@@ -794,9 +793,11 @@ export default function NotionSpreadsheet() {
           </div>
 
           <DaisyDialogFooter>
-            <DaisyButton variant="secondary" onClick={() => setIsAIInsightsOpen(false)}>
+            <DaisyButton variant="secondary" onClick={() =>
+          setIsAIInsightsOpen(false)}>
               Close
-            </DaisyButton>
+            
+        </DaisyButton>
             <DaisyButton onClick={generateAIInsights} disabled={isGeneratingInsights}>
               <Sparkles className="w-4 h-4 mr-2" />
               Refresh Insights

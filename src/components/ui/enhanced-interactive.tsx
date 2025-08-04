@@ -190,7 +190,6 @@ export const EnhancedDraggableCard: React.FC<EnhancedDraggableCardProps> = ({
     >
       {/* Drag Handle Indicator */}
       <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-slate-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-
       {children}
     </motion.div>
   );

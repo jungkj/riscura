@@ -296,7 +296,7 @@ export default function FileUploadDropzone({
   return (
     <DaisyCard className={`w-full ${className}`}>
       <DaisyCardBody >
-  <DaisyCardTitle className="flex items-center gap-2" />
+  <DaisyCardTitle className="flex items-center gap-2" >
 </DaisyCard>
           <Upload className="w-5 h-5" />
           File Upload
@@ -330,23 +330,26 @@ export default function FileUploadDropzone({
             type="button" 
             variant="outline" 
             className="mt-4"
-            onClick={() => fileInputRef.current?.click()} />
+            onClick={() =>
+          fileInputRef.current?.click()} />
             Browse Files
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
 
         {/* Upload Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <DaisyLabel htmlFor="category">Category</DaisyLabel>
-            <DaisySelect value={category} onValueChange={setCategory} />
-              <DaisySelectTrigger />
-                <DaisySelectValue placeholder="Select category" /></DaisySelect>
-              <DaisySelectContent />
-                {CATEGORY_OPTIONS.map(option => (
-                  <DaisySelectItem key={option.value} value={option.value} />
-                    {option.label}
-                  </DaisySelectContent>
+            <DaisySelect value={category} onValueChange={setCategory} >
+                <DaisySelectTrigger>
+                  <DaisySelectValue placeholder="Select category" />
+</DaisySelect>
+              <DaisySelectContent >
+                  {CATEGORY_OPTIONS.map(option => (
+                  <DaisySelectItem key={option.value} value={option.value} >
+                      {option.label}
+                  </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
@@ -357,9 +360,9 @@ export default function FileUploadDropzone({
             <DaisyInput
               id="tags"
               value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder="compliance, SOC2, audit..."
-            />
+              onChange={(e) = />
+setTags(e.target.value)}
+              placeholder="compliance, SOC2, audit..." />
           </div>
         </div>
 
@@ -368,10 +371,10 @@ export default function FileUploadDropzone({
           <DaisyTextarea
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) = />
+setDescription(e.target.value)}
             placeholder="Optional description for the uploaded files..."
-            rows={3}
-          />
+            rows={3} />
         </div>
 
         {/* File List */}
@@ -404,8 +407,7 @@ export default function FileUploadDropzone({
                         <img 
                           src={fileItem.preview} 
                           alt={fileItem.file.name}
-                          className="w-10 h-10 object-cover rounded"
-                        />
+                          className="w-10 h-10 object-cover rounded" />
                       ) : (
                         <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded">
                           <FileIcon className="w-5 h-5 text-gray-600" />
@@ -424,8 +426,7 @@ export default function FileUploadDropzone({
                       
                       {/* Progress Bar */}
                       {fileItem.status === 'uploading' && (
-                        <DaisyProgress value={fileItem.progress} className="mt-1" />
-                      )}
+                        <DaisyProgress value={fileItem.progress} className="mt-1" />)}
                       
                       {/* Error Message */}
                       {fileItem.error && (
@@ -454,10 +455,12 @@ export default function FileUploadDropzone({
                         <DaisyButton
                           size="sm"
                           variant="ghost"
-                          onClick={() => retryUpload(fileItem.id)}
+                          onClick={() =>
+          retryUpload(fileItem.id)}
                           disabled={uploading} />
                           Retry
-                        </DaisyButton>
+                        
+        </DaisyButton>
                       )}
                       
                       <DaisyButton
@@ -481,9 +484,10 @@ export default function FileUploadDropzone({
             <DaisyButton 
               variant="outline" 
               onClick={clearFiles}
-              disabled={uploading} >
-  Clear All
-</DaisyButton>
+              disabled={uploading}>
+          Clear All
+
+        </DaisyButton>
             </DaisyButton>
             <DaisyButton 
               onClick={uploadFiles}

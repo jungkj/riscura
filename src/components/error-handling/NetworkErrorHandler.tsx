@@ -370,7 +370,7 @@ const NetworkStatusIndicator: React.FC<{
 
   return (
     <DaisyCard className="w-full max-w-sm" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <DaisyCardTitle className="flex items-center gap-2 text-sm" >
   {getStatusIcon()}
@@ -436,9 +436,10 @@ const OfflineBanner: React.FC<{
           size="sm"
           onClick={onRetry}
           disabled={isRetrying}
-          className="bg-white text-red-600 hover:bg-gray-100" >
-  {isRetrying ? (
-</DaisyButton>
+          className="bg-white text-red-600 hover:bg-gray-100">
+          {isRetrying ? (
+
+        </DaisyButton>
             <>
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
               Retrying...
@@ -488,8 +489,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
         <OfflineBanner
           onRetry={handleRetry}
           isRetrying={isRetrying}
-          failedRequestsCount={failedRequests.length}
-        />
+          failedRequestsCount={failedRequests.length} />
       )}
 
       {/* Detailed Status Display */}
@@ -499,8 +499,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
             status={networkStatus}
             quality={connectionQuality}
             lastChecked={lastChecked}
-            compact={!showDetailedStatus}
-          />
+            compact={!showDetailedStatus} />
         </div>
       )}
 
@@ -513,7 +512,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       {isRetrying && failedRequests.length > 0 && (
         <div className="fixed bottom-4 right-4 z-40">
           <DaisyCard className="w-80" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2 text-sm" >
   <RefreshCw className="w-4 h-4 animate-spin" />
@@ -523,10 +522,9 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
         </DaisyCardBody>
         <DaisyCardBody >
   <DaisyProgress 
-                value={(failedRequests.filter(r =>
+                value={(failedRequests.filter(r = />
 </DaisyCardBody> r.retryCount > 0).length / failedRequests.length) * 100} 
-                className="h-2"
-              />
+                className="h-2" />
               <p className="text-xs text-muted-foreground mt-2">
                 {failedRequests.length} request{failedRequests.length > 1 ? 's' : ''} in queue
               </p>

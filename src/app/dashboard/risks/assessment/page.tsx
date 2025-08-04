@@ -237,8 +237,8 @@ export default function RiskAssessmentPage() {
                             <span>Progress</span>
                             <span>{assessment.progress}%</span>
                           </div>
-                          <DaisyProgress value={assessment.progress} className="h-2" />
-                        </div>
+                          <DaisyProgress value={assessment.progress} className="h-2" / />
+</div>
                       )}
                     </div>
 

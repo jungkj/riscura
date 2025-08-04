@@ -78,8 +78,7 @@ const EnhancedProgressBar: React.FC<{
       className={cn("h-full rounded-full shadow-sm", color)}
       initial={animated ? { width: 0 } : { width: `${percentage}%` }}
       animate={{ width: `${percentage}%` }}
-      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-    />
+      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} />
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60" />
   </div>
 );
@@ -118,7 +117,7 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
       )} >
-  <DaisyCardBody className="pb-4" />
+  <DaisyCardBody className="pb-4" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -141,15 +140,15 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
             </div>
 
             {showActions && (
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0" >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="ghost" size="sm" className="h-8 w-8 p-0" >
   <MoreHorizontal className="h-4 w-4" />
 </DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end" />
-                  <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuContent>
+                <DaisyDropdownMenuContent align="end" >
+                    <DaisyDropdownMenuItem>View Details</DaisyDropdownMenuContent>
                   <DaisyDropdownMenuItem>Export Data</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Configure</DaisyDropdownMenuItem>
                 </DaisyDropdownMenuContent>
@@ -184,8 +183,7 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
                       <motion.div
                         className={cn("w-3 h-3 rounded-full shadow-sm", item.color)}
                         whileHover={{ scale: 1.2 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      />
+                        transition={{ type: "spring", stiffness: 300 }} />
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-slate-700 capitalize">
                           {item.label}
@@ -212,8 +210,7 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
                       <EnhancedProgressBar 
                         percentage={item.percentage}
                         color={item.color}
-                        animated={true}
-                      />
+                        animated={true} />
                       
                       <div className="text-right min-w-[2rem]">
                         <motion.span 

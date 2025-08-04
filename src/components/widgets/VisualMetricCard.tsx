@@ -110,8 +110,7 @@ const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: numbe
         
         <polygon
           points={`0,100 ${points} 100,100`}
-          fill={`url(#gradient-${color})`}
-        />
+          fill={`url(#gradient-${color})`} />
         
         {/* Line */}
         <polyline
@@ -119,8 +118,7 @@ const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: numbe
           fill="none"
           stroke={color}
           strokeWidth="2"
-          vectorEffect="non-scaling-stroke"
-        />
+          vectorEffect="non-scaling-stroke" />
         
         {/* Data points */}
         {data.map((d, i) => {
@@ -133,8 +131,7 @@ const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: numbe
               cy={y}
               r="1.5"
               fill={color}
-              vectorEffect="non-scaling-stroke"
-            />
+              vectorEffect="non-scaling-stroke" />
           );
         })}
       </svg>
@@ -169,8 +166,7 @@ const ProgressRing: React.FC<{
           r={radius}
           stroke="#e5e7eb"
           strokeWidth="4"
-          fill="none"
-        />
+          fill="none" />
         
         {/* Progress circle */}
         <motion.circle
@@ -184,8 +180,7 @@ const ProgressRing: React.FC<{
           strokeDasharray={strokeDasharray}
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        />
+          transition={{ duration: 1, ease: "easeOut" }} />
       </svg>
       
       {/* Center text */}
@@ -277,8 +272,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                   >
                     <IconComponent 
                       className="w-5 h-5" 
-                      style={{ color: cardColor }}
-                    />
+                      style={{ color: cardColor }} />
                   </div>
                 )}
                 <div>
@@ -356,8 +350,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                         animate={{ 
                           width: `${Math.min((Number(value) / target) * 100, 100)}%` 
                         }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                      />
+                        transition={{ duration: 1, ease: "easeOut" }} />
                     </div>
                   </div>
                 )}
@@ -371,9 +364,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                     value={Number(value)}
                     target={target}
                     color={cardColor}
-                    size={60}
-                  />
-                )}
+                    size={60} / />)}
 
                 {/* Sparkline */}
                 {sparklineData && sparklineData.length > 1 && (
@@ -381,8 +372,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                     <Sparkline 
                       data={sparklineData} 
                       color={cardColor}
-                      height={40}
-                    />
+                      height={40} />
                   </div>
                 )}
               </div>

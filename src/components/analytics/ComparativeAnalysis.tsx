@@ -345,9 +345,8 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                   <div className="flex items-center justify-end space-x-2">
                     <DaisyProgress 
                       value={(metric.current / metric.target) * 100} 
-                      className="w-16 h-2" 
-                    />
-                    <span className="text-xs text-gray-500">
+                      className="w-16 h-2" />
+<span className="text-xs text-gray-500">
                       {Math.round((metric.current / metric.target) * 100)}%
                     </span>
                   </div>
@@ -365,7 +364,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {comparisonData.map((metric) => (
         <DaisyCard key={metric.id} >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyProgress>
             <DaisyCardTitle className="text-sm">{metric.name}</DaisyCardTitle>
         </DaisyCardBody>
@@ -404,7 +403,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                     <span>{Math.round((metric.current / metric.target) * 100)}%</span>
                   </div>
                   <DaisyProgress value={(metric.current / metric.target) * 100} className="h-2" />
-                </div>
+</div>
               )}
             </div>
           </DaisyProgress>
@@ -460,7 +459,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       {/* Key insights */}
       <div className="space-y-4">
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-sm flex items-center" >
   <Brain className="w-4 h-4 mr-2" />
@@ -516,7 +515,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-sm flex items-center" >
   <Target className="w-4 h-4 mr-2" />
@@ -533,7 +532,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                   <span>{Math.round((metric.current / metric.target!) * 100)}%</span>
                 </div>
                 <DaisyProgress value={(metric.current / metric.target!) * 100} className="h-2" />
-              </div>
+</div>
             ))}
           </DaisyProgress>
         </DaisyCard>
@@ -545,7 +544,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
     <div className={`space-y-6 ${className}`}>
       {/* Configuration Panel */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center justify-between" >
   <div className="flex items-center space-x-2">
@@ -590,8 +589,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                         } else {
                           setSelectedMetrics(selectedMetrics.filter(id => id !== metric.id));
                         }
-                      }}
-                    />
+                      }} />
                     <span>{metric.name}</span>
                   </label>
                 ))}
@@ -615,8 +613,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                         } else {
                           setSelectedPeriods(selectedPeriods.filter(id => id !== period.id));
                         }
-                      }}
-                    />
+                      }} />
                     <span>{period.name}</span>
                   </label>
                 ))}
@@ -640,8 +637,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                         } else {
                           setSelectedDimensions(selectedDimensions.filter(id => id !== dimension.id));
                         }
-                      }}
-                    />
+                      }} />
                     <span>{dimension.name}</span>
                   </label>
                 ))}
@@ -668,8 +664,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                         name="visualization"
                         value={option.id}
                         checked={visualizationType === option.id}
-                        onChange={(e) => setVisualizationType(e.target.value as any)}
-                      />
+                        onChange={(e) => setVisualizationType(e.target.value as any)} />
                       <Icon className="w-4 h-4" />
                       <span>{option.name}</span>
                     </label>
@@ -682,16 +677,14 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
                   <input
                     type="checkbox"
                     checked={showPercentageChange}
-                    onChange={(e) => setShowPercentageChange(e.target.checked)}
-                  />
+                    onChange={(e) => setShowPercentageChange(e.target.checked)} />
                   <span>Show % change</span>
                 </label>
                 <label className="flex items-center space-x-2 text-sm">
                   <input
                     type="checkbox"
                     checked={highlightSignificant}
-                    onChange={(e) => setHighlightSignificant(e.target.checked)}
-                  />
+                    onChange={(e) => setHighlightSignificant(e.target.checked)} />
                   <span>Highlight significant changes</span>
                 </label>
               </div>
@@ -702,7 +695,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
 
       {/* Analysis Results */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center justify-between" >
   <span>

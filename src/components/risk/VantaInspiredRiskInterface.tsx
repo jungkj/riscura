@@ -304,17 +304,18 @@ const VantaInspiredRiskInterface = () => {
               <DaisyInput
                 placeholder="Search risks..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]" />
             </div>
             
             {/* Filters */}
-            <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Severity" /></DaisyInput>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Severity</DaisySelectContent>
+            <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity} >
+                <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue placeholder="Severity" />
+</DaisyInput>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Severity</DaisySelectItem>
                 <DaisySelectItem value="Critical">Critical</DaisySelectItem>
                 <DaisySelectItem value="High">High</DaisySelectItem>
                 <DaisySelectItem value="Medium">Medium</DaisySelectItem>
@@ -322,11 +323,12 @@ const VantaInspiredRiskInterface = () => {
               </DaisySelectContent>
             </DaisySelect>
 
-            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Status" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Status</DaisySelectContent>
+            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} >
+                <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Status</DaisySelectItem>
                 <DaisySelectItem value="Active">Active</DaisySelectItem>
                 <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
                 <DaisySelectItem value="Mitigated">Mitigated</DaisySelectItem>
@@ -411,38 +413,38 @@ const VantaInspiredRiskInterface = () => {
 
       {/* Main Content */}
       <div className="p-6">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
-          {/* Tab Navigation */}
-          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg" />
-            <DaisyTabsTrigger 
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" >
+            {/* Tab Navigation */}
+          <DaisyTabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-gray-100 p-1 rounded-lg" >
+              <DaisyTabsTrigger 
               value="register" 
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
-              <List className="w-4 h-4 mr-2" />
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" >
+                <List className="w-4 h-4 mr-2" />
               Risk Register
             </DaisyTabs>
             <DaisyTabsTrigger 
               value="heatmap"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
-              <BarChart3 className="w-4 h-4 mr-2" />
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" >
+                <BarChart3 className="w-4 h-4 mr-2" />
               Risk Heatmap
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="library"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
-              <BookOpen className="w-4 h-4 mr-2" />
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" >
+                <BookOpen className="w-4 h-4 mr-2" />
               Risk Library
             </DaisyTabsTrigger>
             <DaisyTabsTrigger 
               value="analytics"
-              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" />
-              <BarChart3 className="w-4 h-4 mr-2" />
+              className="data-[state=active]:bg-white data-[state=active]:text-[#199BEC] data-[state=active]:shadow-sm" >
+                <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
             </DaisyTabsTrigger>
           </DaisyTabsList>
 
           {/* Tab Content */}
-          <DaisyTabsContent value="register" className="space-y-6" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <DaisyTabsContent value="register" className="space-y-6" >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredRisks.map((risk, index) => (
                 <RiskCard
                   key={risk.id}
@@ -451,8 +453,7 @@ const VantaInspiredRiskInterface = () => {
                   onEdit={handleRiskEdit}
                   onArchive={handleRiskArchive}
                   className={`transition-all duration-300 transform opacity-0 translate-y-4 animate-in`}
-                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
-                />
+                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }} />
               ))}
             </div>
 
@@ -467,8 +468,8 @@ const VantaInspiredRiskInterface = () => {
             )}
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="heatmap" className="space-y-6" />
-            <div className="text-center py-12">
+          <DaisyTabsContent value="heatmap" className="space-y-6" >
+              <div className="text-center py-12">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Heatmap</h3>
               <p className="text-gray-600 max-w-md mx-auto">
@@ -477,8 +478,8 @@ const VantaInspiredRiskInterface = () => {
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="library" className="space-y-6" />
-            <div className="text-center py-12">
+          <DaisyTabsContent value="library" className="space-y-6" >
+              <div className="text-center py-12">
               <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Library</h3>
               <p className="text-gray-600 max-w-md mx-auto">
@@ -487,8 +488,8 @@ const VantaInspiredRiskInterface = () => {
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="analytics" className="space-y-6" />
-            <div className="text-center py-12">
+          <DaisyTabsContent value="analytics" className="space-y-6" >
+              <div className="text-center py-12">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Risk Analytics</h3>
               <p className="text-gray-600 max-w-md mx-auto">
@@ -503,7 +504,7 @@ const VantaInspiredRiskInterface = () => {
       {selectedRisk && (
         <DaisyDialog open={!!selectedRisk} onOpenChange={() => setSelectedRisk(null)} />
           <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialog>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">

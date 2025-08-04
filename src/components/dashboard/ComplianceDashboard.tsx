@@ -120,8 +120,7 @@ export default function ComplianceDashboard() {
           status="success"
           trend="up"
           trendPercentage={100}
-          subtitle="SOC 2, GDPR"
-        />
+          subtitle="SOC 2, GDPR" />
         
         <VisualMetricCard
           title="In Progress"
@@ -132,8 +131,7 @@ export default function ComplianceDashboard() {
           status="warning"
           trend="down"
           trendPercentage={-50}
-          subtitle="ISO 27001"
-        />
+          subtitle="ISO 27001" />
         
         <VisualMetricCard
           title="Need Review"
@@ -144,8 +142,7 @@ export default function ComplianceDashboard() {
           status="error"
           trend="up"
           trendPercentage={100}
-          subtitle="HIPAA"
-        />
+          subtitle="HIPAA" />
         
         <VisualMetricCard
           title="Probo Controls"
@@ -157,13 +154,12 @@ export default function ComplianceDashboard() {
           trend="up"
           trendPercentage={100}
           subtitle="Available Controls"
-          onClick={() => router.push('/probo?tab=controls-library')}
-        />
+          onClick={() => router.push('/probo?tab=controls-library')} />
       </div>
 
       {/* Probo Integration Banner */}
       <DaisyCard className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 border-[#199BEC]/20" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -198,13 +194,12 @@ export default function ComplianceDashboard() {
             } else {
               router.push('/probo?tab=controls-library');
             }
-          }}
-        />
+          }} />
       </div>
 
       {/* Traffic Light System for Quick Status Overview */}
       <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="h-5 w-5 text-[#199BEC]" />
@@ -238,9 +233,8 @@ export default function ComplianceDashboard() {
                 <div className="space-y-2">
                   <DaisyProgress 
                     value={framework.score} 
-                    className="h-2"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500">
+                    className="h-2" />
+<div className="flex justify-between text-xs text-gray-500">
                     <span>Last: {framework.lastAssessed}</span>
                     <span>Due: {framework.nextDue}</span>
                   </div>
@@ -268,7 +262,7 @@ export default function ComplianceDashboard() {
 
       {/* Detailed Framework Progress */}
       <DaisyCard className="bg-[#FAFAFA] border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyCalendar className="h-5 w-5 text-[#199BEC]" />
@@ -289,7 +283,7 @@ export default function ComplianceDashboard() {
                   <span className="text-sm text-gray-600">{framework.score}%</span>
                 </div>
                 <DaisyProgress value={framework.score} className="h-2" />
-                <div className="flex justify-between text-xs text-gray-500">
+<div className="flex justify-between text-xs text-gray-500">
                   <span>Last assessed: {framework.lastAssessed}</span>
                   <span>Next due: {framework.nextDue}</span>
                 </div>

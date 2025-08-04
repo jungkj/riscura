@@ -350,8 +350,8 @@ export default function ComplianceGapsPage() {
                           <span>Compliance</span>
                           <span className="font-medium">{framework.compliancePercentage}%</span>
                         </div>
-                        <DaisyProgress value={framework.compliancePercentage} className="h-2" />
-                        <div className="grid grid-cols-2 gap-2 text-xs">
+                        <DaisyProgress value={framework.compliancePercentage} className="h-2" / />
+<div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <div className="font-medium text-green-600">
                               {framework.implementedRequirements}
@@ -500,8 +500,8 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                       <div className="space-y-4 mt-4">
-                        <DaisyProgress value={framework.compliancePercentage} className="h-3" />
-                        <div className="grid grid-cols-3 gap-4 text-sm">
+                        <DaisyProgress value={framework.compliancePercentage} className="h-3" / />
+<div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
                             <div className="font-medium text-gray-900">
                               {framework.totalRequirements}

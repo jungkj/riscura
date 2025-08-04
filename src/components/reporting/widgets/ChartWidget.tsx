@@ -115,8 +115,8 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <DaisyTooltip />
-            {showLegend && <Legend />}
+            <DaisyTooltip>
+              {showLegend && <Legend />}
             <Bar dataKey="value" fill="#8884d8" />
             <Bar dataKey="risk" fill="#82ca9d" />
           </BarChart>
@@ -128,8 +128,8 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <DaisyTooltip />
-            {showLegend && <Legend />}
+            <DaisyTooltip>
+              {showLegend && <Legend />}
             <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
             <Line type="monotone" dataKey="risk" stroke="#82ca9d" strokeWidth={2} />
           </LineChart>
@@ -141,8 +141,8 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="name" />
             <YAxis />
-            <DaisyTooltip />
-            {showLegend && <Legend />}
+            <DaisyTooltip>
+              {showLegend && <Legend />}
             <Area type="monotone" dataKey="value" stackId="1" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="risk" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
           </AreaChart>
@@ -164,8 +164,8 @@ export function ChartWidget({
                 <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <DaisyTooltip />
-            {showLegend && <Legend />}
+            <DaisyTooltip>
+              {showLegend && <Legend />}
           </PieChart>
         );
 
@@ -175,8 +175,8 @@ export function ChartWidget({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <XAxis dataKey="value" type="number" />
             <YAxis dataKey="risk" type="number" />
-            <DaisyTooltip cursor={{ strokeDasharray: '3 3' }} />
-            {showLegend && <Legend />}
+            <DaisyTooltip cursor={{ strokeDasharray: '3 3' }}>
+              {showLegend && <Legend />}
             <Scatter name="Data Points" data={data} fill="#8884d8" />
           </ScatterChart>
         );

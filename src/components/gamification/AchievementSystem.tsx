@@ -336,9 +336,10 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600" >
-  ×
-</DaisyButton>
+              className="text-gray-400 hover:text-gray-600">
+          ×
+
+        </DaisyButton>
             </DaisyButton>
           </div>
         </DaisyCardBody>
@@ -486,13 +487,12 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       {showNotification && (
         <AchievementNotification
           achievement={showNotification}
-          onClose={() => setShowNotification(null)}
-        />
+          onClose={() => setShowNotification(null)} />
       )}
 
       {/* Progress overview */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Trophy className="w-5 h-5" />
@@ -511,9 +511,8 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               <div className="mt-2">
                 <DaisyProgress 
                   value={(userProgress.totalPoints % 100)} 
-                  className="h-2" 
-                />
-                <p className="text-xs text-gray-500 mt-1">
+                  className="h-2" />
+<p className="text-xs text-gray-500 mt-1">
                   {pointsToNextLevel(userProgress.totalPoints)} points to next level
                 </p>
               </div>
@@ -565,8 +564,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
               <input
                 type="checkbox"
                 checked={showCompleted}
-                onChange={(e) => setShowCompleted(e.target.checked)}
-              />
+                onChange={(e) => setShowCompleted(e.target.checked)} />
               <span>Show completed</span>
             </label>
           </div>
@@ -646,8 +644,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                             </div>
                             
                             <DaisyProgress value={progressPercentage} className="h-1" />
-                            
-                            <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500">
                                 {achievement.points} points
                               </span>
@@ -671,28 +668,38 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
       {/* Quick actions for testing */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Quick Actions (Demo)</DaisyCardTitle>
         </DaisyCardBody>
         <DaisyCardBody >
   <div className="flex flex-wrap gap-2">
 </DaisyCardBody>
-            <DaisyButton size="sm" onClick={() => trackAction('create_risk')} />
+            <DaisyButton size="sm" onClick={() =>
+          trackAction('create_risk')} />
               Create Risk
-            </DaisyButton>
-            <DaisyButton size="sm" onClick={() => trackAction('add_control')} />
+            
+        </DaisyButton>
+            <DaisyButton size="sm" onClick={() =>
+          trackAction('add_control')} />
               Add Control
-            </DaisyButton>
-            <DaisyButton size="sm" onClick={() => trackAction('generate_report')} />
+            
+        </DaisyButton>
+            <DaisyButton size="sm" onClick={() =>
+          trackAction('generate_report')} />
               Generate Report
-            </DaisyButton>
-            <DaisyButton size="sm" onClick={() => trackAction('ai_query')} />
+            
+        </DaisyButton>
+            <DaisyButton size="sm" onClick={() =>
+          trackAction('ai_query')} />
               Ask AI
-            </DaisyButton>
-            <DaisyButton size="sm" onClick={() => trackAction('dashboard')} />
+            
+        </DaisyButton>
+            <DaisyButton size="sm" onClick={() =>
+          trackAction('dashboard')} />
               Explore Dashboard
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </DaisyCardBody>
       </DaisyCard>

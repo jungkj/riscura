@@ -313,10 +313,10 @@ export default function TouchOptimizedTable({
                 {selectable && (
                   <DaisyCheckbox
                     checked={isSelected}
-                    onCheckedChange={(checked) => handleRowSelect(row.id, checked as boolean)}
+                    onCheckedChange={(checked) = />
+handleRowSelect(row.id, checked as boolean)}
                     onClick={(e) => e.stopPropagation()}
-                    aria-label={`Select ${row[columns[0]?.key]}`}
-                  />
+                    aria-label={`Select ${row[columns[0]?.key]}`} />
                 )}
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-900 truncate">
@@ -360,9 +360,9 @@ export default function TouchOptimizedTable({
             </div>
             
             {/* Action menu */}
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton
                   variant="ghost"
                   size="sm"
                   className="ml-2 h-8 w-8 p-0"
@@ -371,8 +371,8 @@ export default function TouchOptimizedTable({
                   <MoreVertical className="w-4 h-4" />
                 </DaisyCheckbox>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" className="w-48" />
-                <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()} />
+              <DaisyDropdownMenuContent align="end" className="w-48" >
+                  <DaisyDropdownMenuItem onClick={(e) => e.stopPropagation()} />
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
                 </DaisyDropdownMenuContent>
@@ -381,7 +381,7 @@ export default function TouchOptimizedTable({
                   Edit
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuSeparator />
-                <DaisyDropdownMenuItem 
+<DaisyDropdownMenuItem 
                   className="text-red-600"
                   onClick={(e) => e.stopPropagation()} />
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -398,13 +398,15 @@ export default function TouchOptimizedTable({
                 variant="ghost"
                 size="sm"
                 className="text-xs text-gray-500"
-                onClick={(e) => {
+                onClick={(e) =>
+          {
                   e.stopPropagation();
                   setExpandedRow(isExpanded ? null : row.id);
                 }}
               >
                 {isExpanded ? 'Show Less' : 'Show More'}
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           )}
         </DaisyCardBody>
@@ -425,10 +427,10 @@ export default function TouchOptimizedTable({
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
                 className="pl-10"
-                aria-label="Search table data"
-              />
+                aria-label="Search table data" />
             </div>
           )}
           
@@ -461,8 +463,8 @@ export default function TouchOptimizedTable({
                         type="text"
                         placeholder={`Filter by ${column.label.toLowerCase()}...`}
                         value={filters[column.key] || ''}
-                        onChange={(e) => handleFilterChange(column.key, e.target.value)}
-                      />
+                        onChange={(e) = />
+handleFilterChange(column.key, e.target.value)} />
                     </div>
                   ))}
                   
@@ -471,9 +473,11 @@ export default function TouchOptimizedTable({
   Clear All
 </DaisyInput>
                     </DaisyButton>
-                    <DaisyButton onClick={() => setIsFilterOpen(false)} className="flex-1" />
+                    <DaisyButton onClick={() =>
+          setIsFilterOpen(false)} className="flex-1" />
                       Apply
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   </div>
                 </div>
               </SheetContent>
@@ -509,10 +513,12 @@ export default function TouchOptimizedTable({
             <DaisyButton
               variant="ghost"
               size="sm"
-              onClick={() => setSelectedRows(new Set())}
+              onClick={() =>
+          setSelectedRows(new Set())}
               className="text-blue-700 hover:text-blue-800" />
               Clear Selection
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         )}
         
@@ -525,8 +531,7 @@ export default function TouchOptimizedTable({
 </DaisyBadge>
                 <X 
                   className="w-3 h-3 cursor-pointer" 
-                  onClick={() => setSearchQuery('')}
-                />
+                  onClick={() => setSearchQuery('')} />
               </DaisyBadge>
             )}
             {Object.entries(filters).map(([key, value]) => 
@@ -536,8 +541,7 @@ export default function TouchOptimizedTable({
 </DaisyBadge>
                   <X 
                     className="w-3 h-3 cursor-pointer" 
-                    onClick={() => handleFilterChange(key, '')}
-                  />
+                    onClick={() => handleFilterChange(key, '')} />
                 </DaisyBadge>
               )
             )}
@@ -577,9 +581,10 @@ export default function TouchOptimizedTable({
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
-                className="mt-2" >
-  Clear Filters
-</DaisyButton>
+                className="mt-2">
+          Clear Filters
+
+        </DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -589,10 +594,10 @@ export default function TouchOptimizedTable({
             {selectable && (
               <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3">
                 <DaisyCheckbox
-                  checked={selectedRows.size === paginatedData.length && paginatedData.length > 0}
+                  checked={selectedRows.size === paginatedData.length && paginatedData.length />
+0}
                   onCheckedChange={handleSelectAll}
-                  aria-label="Select all visible rows"
-                />
+                  aria-label="Select all visible rows" />
                 <span className="text-sm text-gray-600 ml-3">
                   Select all {paginatedData.length} items
                 </span>

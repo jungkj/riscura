@@ -300,8 +300,7 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
           className={`
             ${thumbClass} inline-block rounded-full bg-white shadow transform transition-transform duration-200
             ${checked ? translateClass : 'translate-x-1'}
-          `}
-        />
+          `} />
       </button>
 
       {(label || description) && (
@@ -368,7 +367,7 @@ interface ProgressiveLoaderProps {
   threshold?: number;
 }
 
-export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps> = ({
+export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps />= ({
   isLoading,
   hasMore,
   onLoadMore,

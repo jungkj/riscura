@@ -271,8 +271,7 @@ export default function EnhancedDocumentViewer({
                 maxWidth: '100%',
                 maxHeight: '600px',
               }}
-              className="border rounded-lg shadow-sm"
-            />
+              className="border rounded-lg shadow-sm" />
           </div>
         </div>
       );
@@ -284,16 +283,15 @@ export default function EnhancedDocumentViewer({
           <iframe
             src={`${document.previewUrl || document.downloadUrl}#toolbar=1`}
             className="w-full h-full border rounded-lg"
-            title={document.name}
-          />
+            title={document.name} />
         </div>
       );
     }
 
     if (document.type.startsWith('text/') && document.extractedText) {
       return (
-        <DaisyScrollArea className="h-96 w-full border rounded-lg p-4" />
-          <pre className="text-sm whitespace-pre-wrap font-mono">
+        <DaisyScrollArea className="h-96 w-full border rounded-lg p-4" >
+            <pre className="text-sm whitespace-pre-wrap font-mono">
             {document.extractedText}
           </pre>
         </DaisyScrollArea>
@@ -332,13 +330,12 @@ export default function EnhancedDocumentViewer({
       </div>
 
       <DaisySeparator />
-
-      <div>
+<div>
         <DaisyLabel className="text-sm font-medium text-gray-500">Uploaded By</DaisySeparator>
         <div className="flex items-center mt-2">
-          <DaisyAvatar className="w-8 h-8 mr-2" />
-            <DaisyAvatarFallback />
-              {document?.uploader.firstName[0]}{document?.uploader.lastName[0]}
+          <DaisyAvatar className="w-8 h-8 mr-2" >
+              <DaisyAvatarFallback >
+                {document?.uploader.firstName[0]}{document?.uploader.lastName[0]}
             </DaisyAvatar>
           </DaisyAvatar>
           <div>
@@ -353,7 +350,7 @@ export default function EnhancedDocumentViewer({
       {document?.aiAnalysis?.warnings && document.aiAnalysis.warnings.length > 0 && (
         <>
           <DaisySeparator />
-          <div>
+<div>
             <DaisyLabel className="text-sm font-medium text-gray-500">Warnings</DaisySeparator>
             <div className="mt-2 space-y-1">
               {document.aiAnalysis.warnings.map((warning, index) => (
@@ -406,9 +403,9 @@ export default function EnhancedDocumentViewer({
         <DaisyTextarea
           placeholder="Add a comment..."
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="min-h-[80px]"
-        />
+          onChange={(e) = />
+setComment(e.target.value)}
+          className="min-h-[80px]" />
         <DaisyButton onClick={handleAddComment} disabled={!comment.trim()} >
   Add Comment
 </DaisyTextarea>
@@ -416,8 +413,7 @@ export default function EnhancedDocumentViewer({
       </div>
 
       <DaisySeparator />
-
-      <div className="space-y-4">
+<div className="space-y-4">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <DaisyCard key={comment.id} >
@@ -425,9 +421,9 @@ export default function EnhancedDocumentViewer({
   </DaisySeparator>
 </DaisyCardBody>
                 <div className="flex items-start space-x-3">
-                  <DaisyAvatar className="w-8 h-8" />
-                    <DaisyAvatarFallback />
-                      {comment.author.name.split(' ').map((n: string) => n[0]).join('')}
+                  <DaisyAvatar className="w-8 h-8" >
+                      <DaisyAvatarFallback >
+                        {comment.author.name.split(' ').map((n: string) => n[0]).join('')}
                     </DaisyAvatar>
                   </DaisyAvatar>
                   <div className="flex-1">
@@ -463,9 +459,10 @@ export default function EnhancedDocumentViewer({
       <div className="flex flex-col items-center justify-center h-96 text-red-500">
         <FileText className="w-16 h-16 mb-4" />
         <p>{error || 'Document not found'}</p>
-        <DaisyButton onClick={onClose} variant="outline" className="mt-4" >
-  Close
-</DaisyButton>
+        <DaisyButton onClick={onClose} variant="outline" className="mt-4">
+          Close
+
+        </DaisyButton>
         </DaisyButton>
       </div>
     );
@@ -521,40 +518,40 @@ export default function EnhancedDocumentViewer({
 
         {/* Content */}
         <div className="p-6">
-          <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-            <DaisyTabsList className="grid w-full grid-cols-4" />
-              <DaisyTabsTrigger value="preview" />
-                <Eye className="w-4 h-4 mr-2" />
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+              <DaisyTabsList className="grid w-full grid-cols-4" >
+                <DaisyTabsTrigger value="preview" >
+                  <Eye className="w-4 h-4 mr-2" />
                 Preview
               </DaisyTabs>
-              <DaisyTabsTrigger value="metadata" />
-                <FileText className="w-4 h-4 mr-2" />
+              <DaisyTabsTrigger value="metadata" >
+                  <FileText className="w-4 h-4 mr-2" />
                 Details
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="versions" />
-                <History className="w-4 h-4 mr-2" />
+              <DaisyTabsTrigger value="versions" >
+                  <History className="w-4 h-4 mr-2" />
                 Versions
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="comments" />
-                <MessageSquare className="w-4 h-4 mr-2" />
+              <DaisyTabsTrigger value="comments" >
+                  <MessageSquare className="w-4 h-4 mr-2" />
                 Comments
               </DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="preview" className="mt-6" />
-              {renderPreview()}
+            <DaisyTabsContent value="preview" className="mt-6" >
+                {renderPreview()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="metadata" className="mt-6" />
-              {renderMetadata()}
+            <DaisyTabsContent value="metadata" className="mt-6" >
+                {renderMetadata()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="versions" className="mt-6" />
-              {renderVersionHistory()}
+            <DaisyTabsContent value="versions" className="mt-6" >
+                {renderVersionHistory()}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="comments" className="mt-6" />
-              {renderComments()}
+            <DaisyTabsContent value="comments" className="mt-6" >
+                {renderComments()}
             </DaisyTabsContent>
           </DaisyTabs>
         </div>
@@ -583,8 +580,7 @@ export default function EnhancedDocumentViewer({
                 className="max-w-full max-h-full object-contain"
                 style={{
                   transform: `rotate(${rotation}deg)`,
-                }}
-              />
+                }} />
             </div>
           </motion.div>
         )}

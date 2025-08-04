@@ -326,8 +326,8 @@ export default function ImportDataPage() {
                         <p className="text-sm font-medium">Import Progress</p>
                         <p className="text-sm text-gray-500">{Math.round(importProgress)}%</p>
                       </div>
-                      <DaisyProgress value={importProgress} className="h-2" />
-                    </div>
+                      <DaisyProgress value={importProgress} className="h-2" / />
+</div>
                   )}
                 </div>
               </DaisyCard>
@@ -368,11 +368,13 @@ export default function ImportDataPage() {
                     <DaisyButton
                       variant="outline"
                       className="w-full"
-                      onClick={() => setFiles([])}
+                      onClick={() =>
+          setFiles([])}
                       disabled={importing}
                     >
                       Clear All Files
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   </div>
                 </div>
               </DaisyCard>

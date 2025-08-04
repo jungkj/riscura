@@ -95,8 +95,8 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
   };
 
   return (
-    <DaisyTooltipProvider />
-      <motion.div
+    <DaisyTooltipProvider>
+        <motion.div
         className={getPositionClasses()}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ 
@@ -124,9 +124,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                 )}
               </div>
               <div className="flex items-center space-x-1">
-                <DaisyTooltip />
-                  <DaisyTooltipTrigger asChild />
-                    <DaisyButton
+                <DaisyTooltip>
+                    <DaisyTooltipTrigger asChild>
+                      <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
@@ -137,13 +137,13 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                       }
                     </DaisyTooltip>
                   </DaisyTooltipTrigger>
-                  <DaisyTooltipContent />
-                    {isExpanded ? 'Minimize' : 'Expand'}
+                  <DaisyTooltipContent>
+                      {isExpanded ? 'Minimize' : 'Expand'}
                   </DaisyTooltipContent>
                 </DaisyTooltip>
-                <DaisyTooltip />
-                  <DaisyTooltipTrigger asChild />
-                    <DaisyButton
+                <DaisyTooltip>
+                    <DaisyTooltipTrigger asChild>
+                      <DaisyButton
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
@@ -151,8 +151,8 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                       <EyeOff className="h-3 w-3" />
                     </DaisyTooltip>
                   </DaisyTooltipTrigger>
-                  <DaisyTooltipContent />
-                    Hide tracker
+                  <DaisyTooltipContent>
+                      Hide tracker
                   </DaisyTooltipContent>
                 </DaisyTooltip>
               </div>
@@ -191,9 +191,8 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                     </div>
                     <DaisyProgress 
                       value={Math.min(dailyPercentage, 100)} 
-                      className="h-1"
-                    />
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                      className="h-1" />
+<div className="flex justify-between text-xs text-muted-foreground">
                       <span>{tokenUsageMetrics.dailyTokens.toLocaleString()}</span>
                       <span>{tokenUsageMetrics.dailyLimit.toLocaleString()}</span>
                     </div>
@@ -281,9 +280,10 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
                       variant="outline"
                       size="sm"
                       className="w-full text-xs"
-                      onClick={onViewDetails} >
-  View Detailed Analytics
-</DaisyButton>
+                      onClick={onViewDetails}>
+          View Detailed Analytics
+
+        </DaisyButton>
                     </DaisyButton>
                   )}
                 </motion.div>

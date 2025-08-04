@@ -234,9 +234,9 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
   };
 
   return (
-    <DaisyDialog open={open} onOpenChange={onOpenChange} />
-      <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
-  <DaisyDialogHeader />
+    <DaisyDialog open={open} onOpenChange={onOpenChange} >
+        <DaisyDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" >
+  <DaisyDialogHeader>
 </DaisyDialog>
           <DaisyDialogTitle className="flex items-center space-x-2" >
   <Settings className="h-5 w-5 text-blue-600" />
@@ -249,17 +249,17 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
-          <DaisyTabsList className="grid w-full grid-cols-5" />
-            <DaisyTabsTrigger value="alerts">Alerts</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" >
+            <DaisyTabsList className="grid w-full grid-cols-5" >
+              <DaisyTabsTrigger value="alerts">Alerts</DaisyTabs>
             <DaisyTabsTrigger value="monitoring">Monitoring</DaisyTabsTrigger>
             <DaisyTabsTrigger value="access">Access Control</DaisyTabsTrigger>
             <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
             <DaisyTabsTrigger value="integrations">Integrations</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value="alerts" className="space-y-6" />
-            <DaisyCard >
+          <DaisyTabsContent value="alerts" className="space-y-6" >
+              <DaisyCard >
   <DaisyCardBody >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -275,60 +275,60 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <DaisyLabel className="flex items-center space-x-2" />
-                        <Mail className="h-4 w-4" />
+                      <DaisyLabel className="flex items-center space-x-2" >
+                          <Mail className="h-4 w-4" />
                         <span>Email Alerts</span>
                       </DaisyLabel>
                       <p className="text-sm text-gray-500">Receive alerts via email</p>
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enableEmailAlerts}
-                      onCheckedChange={(checked) => updateSettings('alertSettings.enableEmailAlerts', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('alertSettings.enableEmailAlerts', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <DaisyLabel className="flex items-center space-x-2" />
-                        <Smartphone className="h-4 w-4" />
+                      <DaisyLabel className="flex items-center space-x-2" >
+                          <Smartphone className="h-4 w-4" />
                         <span>SMS Alerts</span>
                       </DaisySwitch>
                       <p className="text-sm text-gray-500">Receive alerts via SMS</p>
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enableSMSAlerts}
-                      onCheckedChange={(checked) => updateSettings('alertSettings.enableSMSAlerts', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('alertSettings.enableSMSAlerts', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <DaisyLabel className="flex items-center space-x-2" />
-                        <Bell className="h-4 w-4" />
+                      <DaisyLabel className="flex items-center space-x-2" >
+                          <Bell className="h-4 w-4" />
                         <span>Push Notifications</span>
                       </DaisySwitch>
                       <p className="text-sm text-gray-500">Browser notifications</p>
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enablePushNotifications}
-                      onCheckedChange={(checked) => updateSettings('alertSettings.enablePushNotifications', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('alertSettings.enablePushNotifications', checked)} />
                   </div>
                 </div>
 
                 <DaisySeparator />
-
-                <div className="space-y-4">
+<div className="space-y-4">
                   <DaisyLabel>Alert Threshold</DaisySwitch>
                   <DaisySelect
                     value={settings.alertSettings.alertThreshold}
                     onValueChange={(value) => updateSettings('alertSettings.alertThreshold', value)} />
-                    <DaisySelectTrigger />
-                      <DaisySelectValue /></DaisySelect>
-                    <DaisySelectContent />
-                      {alertThresholds.map((threshold) => (
-                        <DaisySelectItem key={threshold.value} value={threshold.value} />
-                          <div>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue />
+</DaisySelect>
+                    <DaisySelectContent >
+                        {alertThresholds.map((threshold) => (
+                        <DaisySelectItem key={threshold.value} value={threshold.value} >
+                            <div>
                             <div className="font-medium">{threshold.label}</div>
                             <div className="text-sm text-gray-500">{threshold.description}</div>
                           </div>
@@ -343,8 +343,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyLabel>Quiet Hours</DaisyLabel>
                     <DaisySwitch
                       checked={settings.alertSettings.quietHours.enabled}
-                      onCheckedChange={(checked) => updateSettings('alertSettings.quietHours.enabled', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('alertSettings.quietHours.enabled', checked)} />
                   </div>
                   
                   {settings.alertSettings.quietHours.enabled && (
@@ -354,16 +354,16 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                         <DaisyInput
                           type="time"
                           value={settings.alertSettings.quietHours.startTime}
-                          onChange={(e) => updateSettings('alertSettings.quietHours.startTime', e.target.value)}
-                        />
+                          onChange={(e) = />
+updateSettings('alertSettings.quietHours.startTime', e.target.value)} />
                       </div>
                       <div className="space-y-2">
                         <DaisyLabel>End Time</DaisyInput>
                         <DaisyInput
                           type="time"
                           value={settings.alertSettings.quietHours.endTime}
-                          onChange={(e) => updateSettings('alertSettings.quietHours.endTime', e.target.value)}
-                        />
+                          onChange={(e) = />
+updateSettings('alertSettings.quietHours.endTime', e.target.value)} />
                       </div>
                     </div>
                   )}
@@ -372,8 +372,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="monitoring" className="space-y-6" />
-            <DaisyCard >
+          <DaisyTabsContent value="monitoring" className="space-y-6" >
+              <DaisyCard >
   <DaisyCardBody >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -394,8 +394,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableRealTimeMonitoring}
-                      onCheckedChange={(checked) => updateSettings('monitoring.enableRealTimeMonitoring', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('monitoring.enableRealTimeMonitoring', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -405,8 +405,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableAnomalyDetection}
-                      onCheckedChange={(checked) => updateSettings('monitoring.enableAnomalyDetection', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('monitoring.enableAnomalyDetection', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -416,14 +416,13 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableBehaviorAnalysis}
-                      onCheckedChange={(checked) => updateSettings('monitoring.enableBehaviorAnalysis', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('monitoring.enableBehaviorAnalysis', checked)} />
                   </div>
                 </div>
 
                 <DaisySeparator />
-
-                <div className="space-y-4">
+<div className="space-y-4">
                   <DaisyLabel>Monitoring Interval: {settings.monitoring.monitoringInterval} minutes</DaisySwitch>
                   <DaisySlider
                     value={[settings.monitoring.monitoringInterval]}
@@ -431,8 +430,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     max={60}
                     min={1}
                     step={1}
-                    className="w-full"
-                  />
+                    className="w-full" />
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>1 min</span>
                     <span>60 min</span>
@@ -447,8 +445,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     max={365}
                     min={30}
                     step={1}
-                    className="w-full"
-                  />
+                    className="w-full" />
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>30 days</span>
                     <span>365 days</span>
@@ -463,11 +460,11 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                         <DaisyCheckbox
                           id={category.id}
                           checked={settings.monitoring.enabledCategories.includes(category.id)}
-                          onCheckedChange={() => handleCategoryToggle(category.id)}
-                        />
+                          onCheckedChange={() = />
+handleCategoryToggle(category.id)} />
                         <div>
-                          <DaisyLabel htmlFor={category.id} className="text-sm font-medium" />
-                            {category.label}
+                          <DaisyLabel htmlFor={category.id} className="text-sm font-medium" >
+                              {category.label}
                           </DaisyCheckbox>
                           <p className="text-xs text-gray-500">{category.description}</p>
                         </div>
@@ -479,8 +476,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="access" className="space-y-6" />
-            <DaisyCard >
+          <DaisyTabsContent value="access" className="space-y-6" >
+              <DaisyCard >
   <DaisyCardBody >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -501,8 +498,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.accessControl.enforceStrongPasswords}
-                      onCheckedChange={(checked) => updateSettings('accessControl.enforceStrongPasswords', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('accessControl.enforceStrongPasswords', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -512,23 +509,22 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.accessControl.requireMFA}
-                      onCheckedChange={(checked) => updateSettings('accessControl.requireMFA', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('accessControl.requireMFA', checked)} />
                   </div>
                 </div>
 
                 <DaisySeparator />
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <DaisyLabel>Session Timeout (minutes)</DaisySwitch>
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.sessionTimeout}
-                      onChange={(e) => updateSettings('accessControl.sessionTimeout', parseInt(e.target.value))}
+                      onChange={(e) = />
+updateSettings('accessControl.sessionTimeout', parseInt(e.target.value))}
                       min="5"
-                      max="480"
-                    />
+                      max="480" />
                   </div>
 
                   <div className="space-y-2">
@@ -536,10 +532,10 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.maxFailedAttempts}
-                      onChange={(e) => updateSettings('accessControl.maxFailedAttempts', parseInt(e.target.value))}
+                      onChange={(e) = />
+updateSettings('accessControl.maxFailedAttempts', parseInt(e.target.value))}
                       min="3"
-                      max="10"
-                    />
+                      max="10" />
                   </div>
 
                   <div className="space-y-2">
@@ -547,10 +543,10 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.lockoutDuration}
-                      onChange={(e) => updateSettings('accessControl.lockoutDuration', parseInt(e.target.value))}
+                      onChange={(e) = />
+updateSettings('accessControl.lockoutDuration', parseInt(e.target.value))}
                       min="5"
-                      max="60"
-                    />
+                      max="60" />
                   </div>
                 </div>
 
@@ -559,17 +555,17 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                   <DaisyTextarea
                     placeholder="Enter IP ranges (one per line)&#10;192.168.1.0/24&#10;10.0.0.0/8"
                     value={settings.accessControl.allowedIPRanges.join('\n')}
-                    onChange={(e) => updateSettings('accessControl.allowedIPRanges', e.target.value.split('\n').filter(ip => ip.trim()))}
-                    rows={4}
-                  />
+                    onChange={(e) = />
+updateSettings('accessControl.allowedIPRanges', e.target.value.split('\n').filter(ip => ip.trim()))}
+                    rows={4} />
                   <p className="text-sm text-gray-500">Leave empty to allow all IP addresses</p>
                 </div>
               </DaisyTextarea>
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="compliance" className="space-y-6" />
-            <DaisyCard >
+          <DaisyTabsContent value="compliance" className="space-y-6" >
+              <DaisyCard >
   <DaisyCardBody >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -589,8 +585,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                   </div>
                   <DaisySwitch
                     checked={settings.compliance.enableComplianceMonitoring}
-                    onCheckedChange={(checked) => updateSettings('compliance.enableComplianceMonitoring', checked)}
-                  />
+                    onCheckedChange={(checked) = />
+updateSettings('compliance.enableComplianceMonitoring', checked)} />
                 </div>
 
                 <div className="space-y-4">
@@ -601,10 +597,10 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                         <DaisyCheckbox
                           id={framework}
                           checked={settings.compliance.frameworks.includes(framework)}
-                          onCheckedChange={() => handleFrameworkToggle(framework)}
-                        />
-                        <DaisyLabel htmlFor={framework} className="text-sm" />
-                          {framework}
+                          onCheckedChange={() = />
+handleFrameworkToggle(framework)} />
+                        <DaisyLabel htmlFor={framework} className="text-sm" >
+                            {framework}
                         </DaisyCheckbox>
                       </div>
                     ))}
@@ -619,8 +615,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.compliance.autoReporting}
-                      onCheckedChange={(checked) => updateSettings('compliance.autoReporting', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('compliance.autoReporting', checked)} />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -630,8 +626,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.compliance.enableAuditLogging}
-                      onCheckedChange={(checked) => updateSettings('compliance.enableAuditLogging', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('compliance.enableAuditLogging', checked)} />
                   </div>
                 </div>
 
@@ -641,10 +637,11 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     <DaisySelect
                       value={settings.compliance.reportingFrequency}
                       onValueChange={(value) => updateSettings('compliance.reportingFrequency', value)} />
-                      <DaisySelectTrigger />
-                        <DaisySelectValue /></DaisySelect>
-                      <DaisySelectContent />
-                        <DaisySelectItem value="daily">Daily</DaisySelectContent>
+                      <DaisySelectTrigger>
+                          <DaisySelectValue />
+</DaisySelect>
+                      <DaisySelectContent >
+                          <DaisySelectItem value="daily">Daily</DaisySelectItem>
                         <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
                         <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
                       </DaisySelectContent>
@@ -655,8 +652,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
             </DaisyCard>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="integrations" className="space-y-6" />
-            <DaisyCard >
+          <DaisyTabsContent value="integrations" className="space-y-6" >
+              <DaisyCard >
   <DaisyCardBody >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -677,8 +674,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.integrations.enableSIEMIntegration}
-                      onCheckedChange={(checked) => updateSettings('integrations.enableSIEMIntegration', checked)}
-                    />
+                      onCheckedChange={(checked) = />
+updateSettings('integrations.enableSIEMIntegration', checked)} />
                   </div>
 
                   {settings.integrations.enableSIEMIntegration && (
@@ -687,23 +684,22 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                       <DaisyInput
                         placeholder="https://siem.company.com/api/events"
                         value={settings.integrations.siemEndpoint}
-                        onChange={(e) => updateSettings('integrations.siemEndpoint', e.target.value)}
-                      />
+                        onChange={(e) = />
+updateSettings('integrations.siemEndpoint', e.target.value)} />
                     </div>
                   )}
                 </div>
 
                 <DaisySeparator />
-
-                <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <DaisyLabel>API Logging</DaisyInput>
                     <p className="text-sm text-gray-500">Log all API requests and responses</p>
                   </div>
                   <DaisySwitch
                     checked={settings.integrations.enableAPILogging}
-                    onCheckedChange={(checked) => updateSettings('integrations.enableAPILogging', checked)}
-                  />
+                    onCheckedChange={(checked) = />
+updateSettings('integrations.enableAPILogging', checked)} />
                 </div>
 
                 <div className="space-y-2">
@@ -711,8 +707,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                   <DaisyInput
                     placeholder="https://your-system.com/webhook"
                     value={settings.integrations.webhookUrl}
-                    onChange={(e) => updateSettings('integrations.webhookUrl', e.target.value)}
-                  />
+                    onChange={(e) = />
+updateSettings('integrations.webhookUrl', e.target.value)} />
                   <p className="text-sm text-gray-500">Receive security events via webhook</p>
                 </div>
 
@@ -723,8 +719,8 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                   </div>
                   <DaisySwitch
                     checked={settings.integrations.enableThirdPartyScanning}
-                    onCheckedChange={(checked) => updateSettings('integrations.enableThirdPartyScanning', checked)}
-                  />
+                    onCheckedChange={(checked) = />
+updateSettings('integrations.enableThirdPartyScanning', checked)} />
                 </div>
               </DaisySwitch>
             </DaisyCard>
@@ -747,23 +743,27 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
           <DaisyButton
             variant="outline"
             onClick={handleResetSettings}
-            disabled={isSubmitting} >
-  Reset to Defaults
-</DaisyButton>
+            disabled={isSubmitting}>
+          Reset to Defaults
+
+        </DaisyButton>
           </DaisyButton>
           
           <div className="flex space-x-2">
             <DaisyButton
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() =>
+          onOpenChange(false)}
               disabled={isSubmitting} />
               Cancel
-            </DaisyButton>
+            
+        </DaisyButton>
             <DaisyButton
               onClick={handleSaveSettings}
-              disabled={isSubmitting || !hasChanges} >
-  {isSubmitting ? (
-</DaisyButton>
+              disabled={isSubmitting || !hasChanges}>
+          {isSubmitting ? (
+
+        </DaisyButton>
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   Saving...

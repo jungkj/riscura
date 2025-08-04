@@ -13,7 +13,7 @@ export function InteractiveRiskLandscape({ risks, controls }: InteractiveRiskLan
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
   Interactive Risk Landscape

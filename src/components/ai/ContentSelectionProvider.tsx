@@ -197,8 +197,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
       {isToolbarVisible && currentSelection && toolbarPosition && (
         <AIActionToolbar
           context={currentSelection}
-          onActionComplete={(result) => console.log('Action completed:', result)}
-        />
+          onActionComplete={(result) => console.log('Action completed:', result)} />
       )}
       
       {/* Analysis Results Panel */}
@@ -210,8 +209,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
           onApprove={approveResult}
           onReject={rejectResult}
           onFeedback={provideFeedback}
-          onRetry={retryResult}
-        />
+          onRetry={retryResult} />
       )}
       
       {/* Batch Processing Manager */}
@@ -223,8 +221,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
           onProcessBatch={processBatch}
           onUpdateItem={updateBatchItem}
           onRemoveItem={removeBatchItem}
-          onClearAll={clearBatch}
-        />
+          onClearAll={clearBatch} />
       )}
     </ContentSelectionContext.Provider>
   );
@@ -267,8 +264,8 @@ export const EnhancedSelectableContent: React.FC<EnhancedSelectableContentProps>
       metadata={metadata}
       disabled={disabled}
       showQualityScore={showQualityScore}
-      highlightColor={highlightColor} />
-      {children}
+      highlightColor={highlightColor} >
+        {children}
     </SelectableContent>
   );
 };

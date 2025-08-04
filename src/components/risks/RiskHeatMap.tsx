@@ -115,9 +115,7 @@ const RiskBubble: React.FC<{
           width: `${baseSize}px`,
           height: `${baseSize}px`,
           opacity: opacity,
-        }}
-      />
-
+        }} />
       <div className="absolute inset-0 flex items-center justify-center">
         <span className="text-white font-medium text-xs">{risk.id.split('-')[1]}</span>
       </div>
@@ -144,8 +142,7 @@ const HeatMapGrid: React.FC = () => {
         <div
           key={`v-${line}`}
           className="absolute top-0 bottom-0 border-l border-gray-300/40"
-          style={{ left: `${line * 20}%` }}
-        />
+          style={{ left: `${line * 20}%` }} />
       ))}
 
       {/* Horizontal grid lines for impact (1-5) - align with y-axis label borders */}
@@ -154,8 +151,7 @@ const HeatMapGrid: React.FC = () => {
         <div
           key={`h-${line}`}
           className="absolute left-0 right-0 border-b border-gray-300/40"
-          style={{ bottom: `${line * 20}%` }}
-        />
+          style={{ bottom: `${line * 20}%` }} />
       ))}
     </div>
   );
@@ -263,8 +259,8 @@ export const RiskHeatMap: React.FC = () => {
               max={200}
               step={25}
               className="w-full"
-            />
-          </div>
+            >
+            </div>
         </ContentCard>
 
         <ContentCard title="Group By" className="p-4">
@@ -431,9 +427,11 @@ export const RiskHeatMap: React.FC = () => {
                 Risk
               </span>
             </div>
-            <DaisyButton variant="outline" size="sm" onClick={() => setSelectedRisk(null)}>
+            <DaisyButton variant="outline" size="sm" onClick={() =>
+          setSelectedRisk(null)}>
               Close
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </ContentCard>
       )}

@@ -203,8 +203,7 @@ export default function DocumentViewer({
             style={{
               transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
               transition: 'transform 0.2s ease',
-            }}
-          />
+            }} />
         </div>
       );
     }
@@ -215,8 +214,7 @@ export default function DocumentViewer({
           <iframe
             src={previewUrl}
             className="w-full h-full border-0"
-            title={documentData.originalName}
-          />
+            title={documentData.originalName} />
         </div>
       );
     };
@@ -333,17 +331,16 @@ export default function DocumentViewer({
           )}
 
           <DaisySeparator />
-
-          {/* Document Details */}
-          <DaisyTabs defaultValue="details" className="w-full" />
-            <DaisyTabsList className="grid w-full grid-cols-3" />
-              <DaisyTabsTrigger value="details">Details</DaisySeparator>
+{/* Document Details */}
+          <DaisyTabs defaultValue="details" className="w-full" >
+              <DaisyTabsList className="grid w-full grid-cols-3" >
+                <DaisyTabsTrigger value="details">Details</DaisySeparator>
               <DaisyTabsTrigger value="versions">Versions</DaisyTabsTrigger>
               <DaisyTabsTrigger value="activity">Activity</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="details" className="space-y-3 mt-4" />
-              <div className="grid grid-cols-2 gap-4 text-sm">
+            <DaisyTabsContent value="details" className="space-y-3 mt-4" >
+                <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
                   <div>
@@ -401,8 +398,8 @@ export default function DocumentViewer({
               )}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="versions" className="space-y-3 mt-4" />
-              {document.versions && document.versions.length > 0 ? (
+            <DaisyTabsContent value="versions" className="space-y-3 mt-4" >
+                {document.versions && document.versions.length > 0 ? (
                 <div className="space-y-2">
                   {document.versions.map((version) => (
                     <div 
@@ -435,8 +432,8 @@ export default function DocumentViewer({
               )}
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="activity" className="space-y-3 mt-4" />
-              <div className="space-y-2">
+            <DaisyTabsContent value="activity" className="space-y-3 mt-4" >
+                <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span>Document uploaded</span>
@@ -469,9 +466,9 @@ export default function DocumentViewer({
       </DaisyCard>
 
       {/* Preview Dialog */}
-      <DaisyDialog open={previewOpen} onOpenChange={setPreviewOpen} />
-        <DaisyDialogContent className="max-w-4xl max-h-[90vh] p-0" >
-  <DaisyDialogHeader className="p-4 pb-2" />
+      <DaisyDialog open={previewOpen} onOpenChange={setPreviewOpen} >
+          <DaisyDialogContent className="max-w-4xl max-h-[90vh] p-0" >
+  <DaisyDialogHeader className="p-4 pb-2">
 </DaisyDialog>
             <div className="flex items-center justify-between">
               <DaisyDialogTitle className="truncate">{document.originalName}</DaisyDialogTitle>

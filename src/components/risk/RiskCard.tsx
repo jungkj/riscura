@@ -186,8 +186,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                         key={level}
                         className={`w-2 h-2 rounded-full ${
                           level <= risk.likelihood ? 'bg-[#199BEC]' : 'bg-gray-200'
-                        }`}
-                      />
+                        }`} />
                     ))}
                   </div>
                 </div>
@@ -199,8 +198,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                         key={level}
                         className={`w-2 h-2 rounded-full ${
                           level <= risk.impact ? 'bg-[#199BEC]' : 'bg-gray-200'
-                        }`}
-                      />
+                        }`} />
                     ))}
                   </div>
                 </div>
@@ -212,7 +210,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                   <span className="text-sm font-medium">{risk.progress}%</span>
                 </div>
                 <DaisyProgress value={risk.progress} className="h-2" />
-                <div className="flex justify-between items-center text-xs text-gray-600">
+<div className="flex justify-between items-center text-xs text-gray-600">
                   <span>Actions</span>
                   <span>{risk.completedActions}/{Array.isArray(risk.mitigationActions) ? risk.mitigationActions.length : risk.mitigationActions}</span>
                 </div>
@@ -227,7 +225,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                 </div>
                 <div className="flex items-center space-x-1">
                   <DaisyCalendar className="w-4 h-4" />
-                  <span className={`text-xs ${getDueDateColor(risk.dueDate)}`}>
+<span className={`text-xs ${getDueDateColor(risk.dueDate)}`}>
                     {formatDate(risk.dueDate)}
                   </span>
                 </div>
@@ -239,9 +237,9 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
           </div>
 
           <div className={`ml-4 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton 
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton 
                   variant="ghost" 
                   size="sm"
                   className="h-8 w-8 p-0"
@@ -249,8 +247,8 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
                   <MoreHorizontal className="w-4 h-4" />
                 </DaisyProgress>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" className="w-48" />
-                <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(risk); }}>
+              <DaisyDropdownMenuContent align="end" className="w-48" >
+                  <DaisyDropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(risk); }}>
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
                 </DaisyDropdownMenuContent>

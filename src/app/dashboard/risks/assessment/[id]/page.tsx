@@ -242,8 +242,8 @@ export default function AssessmentDetailPage() {
                 <h3 className="text-lg font-semibold">Assessment Progress</h3>
                 <span className="text-sm text-gray-600">{assessment.progress}% Complete</span>
               </div>
-              <DaisyProgress value={assessment.progress} className="h-3" />
-            </div>
+              <DaisyProgress value={assessment.progress} className="h-3" / />
+</div>
           </DaisyCardBody>
         </DaisyCard>
       )}
@@ -399,8 +399,7 @@ export default function AssessmentDetailPage() {
                 riskSeverity={risk.severity as 'Critical' | 'High' | 'Medium' | 'Low'}
                 onControlsGenerated={(controls, mappings) => {
                   console.log('Generated controls for risk:', risk.id, controls, mappings);
-                }}
-              />
+                }} />
             ))}
 
             {/* Smart Risk-Control Mapper */}
@@ -419,8 +418,7 @@ export default function AssessmentDetailPage() {
               existingMappings={[]} // Would be populated from existing mappings
               onMappingsUpdate={(mappings) => {
                 console.log('Updated mappings:', mappings);
-              }}
-            />
+              }} />
           </div>
         </DaisyTabsContent>
 

@@ -436,8 +436,8 @@ export default function TeamDelegatePage() {
                   <DaisyCardBody className="pb-3">
                     <div className="flex items-center space-x-3">
                       <DaisyAvatar className="h-10 w-10">
-                        <DaisyAvatarImage src={member.avatar} />
-                        <DaisyAvatarFallback>
+                        <DaisyAvatarImage src={member.avatar} >
+                          <DaisyAvatarFallback>
                           {member.name
                             .split(' ')
                             .map((n) => n[0])
@@ -470,13 +470,12 @@ export default function TeamDelegatePage() {
                           value={member.workload}
                           className={cn(
                             'h-2',
-                            member.workload > 80
+                            member.workload />80
                               ? 'text-red-500'
                               : member.workload > 60
                                 ? 'text-yellow-500'
                                 : 'text-green-500'
-                          )}
-                        />
+                          )} />
                       </div>
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div>
@@ -569,15 +568,14 @@ export default function TeamDelegatePage() {
               <DaisyInput
                 placeholder="Search tasks..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-10" />
             </div>
 
             <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
-              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</DaisySelectItem>
                 <DaisySelectItem value="pending">Pending</DaisySelectItem>
@@ -591,7 +589,6 @@ export default function TeamDelegatePage() {
             <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
-              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</DaisySelectItem>
                 <DaisySelectItem value="critical">Critical</DaisySelectItem>
@@ -664,9 +661,7 @@ export default function TeamDelegatePage() {
                   <DaisyCardBody>
                     <div className="space-y-4">
                       {/* Progress Bar */}
-                      <DaisyProgress value={task.progress} className="h-2" />
-
-                      {/* Task Details */}
+                      <DaisyProgress value={task.progress} className="h-2" />{/* Task Details */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div className="flex items-center space-x-2">
                           <DaisyAvatar className="h-6 w-6">
@@ -764,8 +759,8 @@ export default function TeamDelegatePage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-4">
                         <DaisyAvatar className="h-12 w-12">
-                          <DaisyAvatarImage src={member.avatar} />
-                          <DaisyAvatarFallback>
+                          <DaisyAvatarImage src={member.avatar} >
+                            <DaisyAvatarFallback>
                             {member.name
                               .split(' ')
                               .map((n) => n[0])
@@ -804,8 +799,7 @@ export default function TeamDelegatePage() {
                   <DaisyCardBody>
                     <div className="space-y-4">
                       <DaisyProgress value={member.workload} className="h-3" />
-
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+<div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <div className="font-medium text-green-600">{member.completedTasks}</div>
                           <div className="text-gray-500">Completed Tasks</div>
@@ -890,8 +884,8 @@ export default function TeamDelegatePage() {
                     id="title"
                     placeholder="Enter task title..."
                     value={newTask.title}
-                    onChange={(e) => setNewTask((prev) => ({ ...prev, title: e.target.value }))}
-                  />
+                    onChange={(e) = />
+setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
                 </div>
 
                 <div>
@@ -900,11 +894,10 @@ export default function TeamDelegatePage() {
                     id="description"
                     placeholder="Describe the task requirements and objectives..."
                     value={newTask.description}
-                    onChange={(e) =>
-                      setNewTask((prev) => ({ ...prev, description: e.target.value }))
+                    onChange={(e) = />
+setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     }
-                    rows={3}
-                  />
+                    rows={3} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -918,7 +911,6 @@ export default function TeamDelegatePage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
                         <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
@@ -943,7 +935,6 @@ export default function TeamDelegatePage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="critical">Critical</DaisySelectItem>
                         <DaisySelectItem value="high">High</DaisySelectItem>
@@ -968,7 +959,6 @@ export default function TeamDelegatePage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select team member" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {sampleTeamMembers.map((member) => (
                           <DaisySelectItem key={member.id} value={member.id}>
@@ -990,8 +980,8 @@ export default function TeamDelegatePage() {
                       id="dueDate"
                       type="date"
                       value={newTask.dueDate}
-                      onChange={(e) => setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))}
-                    />
+                      onChange={(e) = />
+setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
                   </div>
                 </div>
 
@@ -1003,10 +993,9 @@ export default function TeamDelegatePage() {
                       type="number"
                       placeholder="8"
                       value={newTask.estimatedHours}
-                      onChange={(e) =>
-                        setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
-                      }
-                    />
+                      onChange={(e) = />
+setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
+                      } />
                   </div>
 
                   <div>
@@ -1019,7 +1008,6 @@ export default function TeamDelegatePage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select framework" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="">None</DaisySelectItem>
                         <DaisySelectItem value="SOC 2">SOC 2</DaisySelectItem>
@@ -1047,14 +1035,14 @@ export default function TeamDelegatePage() {
                 <div className="flex gap-2">
                   <DaisyInput
                     placeholder="Add tag..."
-                    onKeyDown={(e) => {
+                    onKeyDown={(e) = />
+{
                       if (e.key === 'Enter') {
                         e.preventDefault();
                         addTag(e.currentTarget.value);
                         e.currentTarget.value = '';
                       }
-                    }}
-                  />
+                    }} />
                   <DaisyButton
                     type="button"
                     variant="outline"
@@ -1075,9 +1063,11 @@ export default function TeamDelegatePage() {
 
               {/* Action Buttons */}
               <div className="flex justify-end space-x-3 pt-4 border-t">
-                <DaisyButton variant="outline" onClick={() => setIsCreateTaskModalOpen(false)}>
+                <DaisyButton variant="outline" onClick={() =>
+          setIsCreateTaskModalOpen(false)}>
                   Cancel
-                </DaisyButton>
+                
+        </DaisyButton>
                 <DaisyButton onClick={handleCreateNewTask}>
                   <Send className="h-4 w-4 mr-2" />
                   Create Task

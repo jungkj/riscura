@@ -574,8 +574,7 @@ function DashboardPage() {
           onComplete={handleTourComplete}
           onSkip={handleTourSkip}
           showProgress={true}
-          allowSkip={true}
-        />
+          allowSkip={true} />
       )}
 
       {/* Header */}
@@ -618,8 +617,7 @@ function DashboardPage() {
           }}
           onDemoStarted={() => {
             // Demo mode will be handled later
-          }}
-        />
+          }} />
       )}
 
       {/* Main Dashboard Grid - Enhanced Layout with Better Balance */}
@@ -634,7 +632,7 @@ function DashboardPage() {
               onClick={() => handleStatsCardClick('totalRisks')}>
               <DaisyCardBody className="p-4">
                 <div className="flex items-center">
-                  <div className="p-2 bg-blue-50 rounded-lg">  
+                  <div className="p-2 bg-blue-50 rounded-lg">
                     <Shield className="h-5 w-5 text-blue-600" />
                   </div>
                   <div className="ml-3">
@@ -696,7 +694,7 @@ function DashboardPage() {
 
           {/* Quick Actions - Simplified Card */}
           <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5 text-[#199BEC]" />
@@ -715,8 +713,7 @@ function DashboardPage() {
                     icon={action.icon}
                     color={action.color}
                     badge={action.badge}
-                    onClick={() => handleQuickAction(action.href, action.id)}
-                  />
+                    onClick={() => handleQuickAction(action.href, action.id)} />
                 ))}
               </div>
             </DaisyCardBody>
@@ -725,7 +722,7 @@ function DashboardPage() {
           {/* Recently Imported Section */}
           {recentImports.length > 0 && (
             <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <FileSpreadsheet className="h-5 w-5 text-green-600" />
@@ -760,15 +757,19 @@ function DashboardPage() {
                         <DaisyButton
                           variant="ghost"
                           size="sm"
-                          onClick={() => router.push('/dashboard/risks')} />
+                          onClick={() =>
+          router.push('/dashboard/risks')} />
                           View
-                        </DaisyButton>
+                        
+        </DaisyButton>
                         <DaisyButton
                           variant="ghost"
                           size="sm"
-                          onClick={() => router.push('/dashboard/import')} />
+                          onClick={() =>
+          router.push('/dashboard/import')} />
                           Re-import
-                        </DaisyButton>
+                        
+        </DaisyButton>
                       </div>
                     </div>
                   ))}
@@ -805,7 +806,7 @@ function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 md:gap-8">
         {/* AI Insights */}
         <DaisyCard data-tour="ai-insights" className="bg-white border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center justify-between" >
   <div className="flex items-center gap-2">
@@ -814,8 +815,7 @@ function DashboardPage() {
                   src="/images/logo/riscura.png" 
                   alt="Riscura" 
                   width={20} 
-                  height={20}
-                />
+                  height={20} />
                 <span className="text-[#191919] font-bold">AI Insights</span>
               </div>
               <DaisyBadge variant="secondary" className="bg-purple-100 text-purple-800 font-semibold text-xs" >
@@ -842,9 +842,10 @@ function DashboardPage() {
                       </div>
                       <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
                       {insight.action && (
-                        <DaisyButton variant="secondary" size="sm" >
-  {insight.action}
-</DaisyButton>
+                        <DaisyButton variant="secondary" size="sm">
+          {insight.action}
+
+        </DaisyButton>
                           <ArrowRight className="h-3 w-3 ml-1" />
                         </DaisyButton>
                       )}
@@ -861,7 +862,7 @@ function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Team Status */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Users className="h-5 w-5 text-blue-600" />
@@ -893,7 +894,7 @@ function DashboardPage() {
 
         {/* Quick Team Actions */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Briefcase className="h-5 w-5 text-purple-600" />
@@ -954,7 +955,7 @@ function DashboardPage() {
 
         {/* Small Team Insights */}
         <DaisyCard className="bg-white border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -974,19 +975,17 @@ function DashboardPage() {
                 <span className="text-sm font-bold text-green-600">85%</span>
               </div>
               <DaisyProgress value={85} className="h-2" />
-              
-              <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Team Collaboration</span>
                 <span className="text-sm font-bold text-blue-600">92%</span>
               </div>
               <DaisyProgress value={92} className="h-2" />
-              
-              <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700">Response Time</span>
                 <span className="text-sm font-bold text-purple-600">2.1 hrs</span>
               </div>
               <DaisyProgress value={78} className="h-2" />
-            </div>
+</div>
             
             <div className="pt-3 border-t border-gray-100">
               <div className="flex items-center gap-2 text-xs text-green-600">
@@ -1004,8 +1003,7 @@ function DashboardPage() {
       <DashboardStatsModal
         isOpen={!!selectedStatsModal}
         onClose={() => setSelectedStatsModal(null)}
-        data={selectedStatsModal}
-      />
+        data={selectedStatsModal} />
     </div>
   );
 }

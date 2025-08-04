@@ -74,8 +74,8 @@ const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      <DaisySelectScrollUpButton />
-      <SelectPrimitive.Viewport
+      <DaisySelectScrollUpButton >
+        <SelectPrimitive.Viewport
         className={cn(
           'p-1',
           position === 'popper' &&
@@ -84,8 +84,8 @@ const SelectContent = React.forwardRef<
       >
         {children}
       </SelectPrimitive.Viewport>
-      <DaisySelectScrollDownButton />
-    </SelectPrimitive.Content>
+      <DaisySelectScrollDownButton >
+      </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
@@ -97,8 +97,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn('px-2 py-1.5 text-sm font-semibold', className)}
-    {...props}
-  />
+    {...props} />
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
@@ -131,8 +130,7 @@ const SelectSeparator = React.forwardRef<
   <SelectPrimitive.Separator
     ref={ref}
     className={cn('-mx-1 my-1 h-px bg-muted', className)}
-    {...props}
-  />
+    {...props} />
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 

@@ -538,7 +538,7 @@ export class SSOService {
         AssertionConsumerServiceURL="${params.acsUrl}"
         ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">
         <saml:Issuer>${params.entityId}</saml:Issuer>
-        <samlp:NameIDPolicy Format="${params.nameIdFormat}" AllowCreate="true"/>
+        <samlp:NameIDPolicy Format="${params.nameIdFormat}" AllowCreate="true" />
       </samlp:AuthnRequest>
     `;
 

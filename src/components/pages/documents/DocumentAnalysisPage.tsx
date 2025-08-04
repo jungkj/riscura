@@ -251,19 +251,18 @@ function DocumentAnalysisPage() {
                 handleFilesUploaded(files);
               }}
               organizationId="demo-org"
-              userId="demo-user"
-            />
+              userId="demo-user" />
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="history" className="space-y-6" />
-          <motion.div
+        <DaisyTabsContent value="history" className="space-y-6" >
+            <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Clock className="h-5 w-5" />
@@ -305,14 +304,14 @@ function DocumentAnalysisPage() {
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="trends" className="space-y-6" />
-          <motion.div
+        <DaisyTabsContent value="trends" className="space-y-6" >
+            <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <BarChart3 className="h-5 w-5" />
@@ -346,9 +345,8 @@ function DocumentAnalysisPage() {
                         </div>
                         <DaisyProgress 
                           value={Math.abs(trend.percentage)} 
-                          className="w-20" 
-                        />
-                      </div>
+                          className="w-20" />
+</div>
                     </div>
                   ))}
                 </div>
@@ -357,14 +355,14 @@ function DocumentAnalysisPage() {
           </motion.div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="insights" className="space-y-6" />
-          <motion.div
+        <DaisyTabsContent value="insights" className="space-y-6" >
+            <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5" />

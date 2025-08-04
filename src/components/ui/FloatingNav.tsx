@@ -153,7 +153,6 @@ export const FloatingNav = ({
 
             {/* Separator */}
             <div className="hidden sm:block h-5 w-px bg-gray-300" />
-
             {navItems.map((navItem: any, idx: number) => (
               <Link
                 key={`link-${idx}`}

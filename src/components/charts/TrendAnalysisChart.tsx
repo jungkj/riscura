@@ -370,8 +370,7 @@ export default function TrendAnalysisChart({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(date) => format(new Date(date), 'MMM dd')}
-            />
+              tickFormatter={(date) => format(new Date(date), 'MMM dd')} />
             <YAxis tickFormatter={config.format} />
             <DaisyTooltip content={<CustomTooltip />} />
             <Area
@@ -380,8 +379,7 @@ export default function TrendAnalysisChart({
               stroke={config.color}
               fill={config.color}
               fillOpacity={0.3}
-              strokeWidth={2}
-            />
+              strokeWidth={2} />
             {showMovingAverage && (
               <Area
                 type="monotone"
@@ -389,8 +387,7 @@ export default function TrendAnalysisChart({
                 stroke="#6b7280"
                 fill="none"
                 strokeWidth={1}
-                strokeDasharray="5 5"
-              />
+                strokeDasharray="5 5" />
             )}
             {showForecast && (
               <Area
@@ -400,8 +397,7 @@ export default function TrendAnalysisChart({
                 fill={config.color}
                 fillOpacity={0.1}
                 strokeWidth={1}
-                strokeDasharray="3 3"
-              />
+                strokeDasharray="3 3" />
             )}
           </AreaChart>
         );
@@ -412,8 +408,7 @@ export default function TrendAnalysisChart({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(date) => format(new Date(date), 'MMM dd')}
-            />
+              tickFormatter={(date) => format(new Date(date), 'MMM dd')} />
             <YAxis tickFormatter={config.format} />
             <DaisyTooltip content={<CustomTooltip />} />
             <Bar dataKey={selectedMetric} fill={config.color} />
@@ -426,8 +421,7 @@ export default function TrendAnalysisChart({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(date) => format(new Date(date), 'MMM dd')}
-            />
+              tickFormatter={(date) => format(new Date(date), 'MMM dd')} />
             <YAxis tickFormatter={config.format} />
             <DaisyTooltip content={<CustomTooltip />} />
             <Bar dataKey={selectedMetric} fill={config.color} fillOpacity={0.6} />
@@ -437,8 +431,7 @@ export default function TrendAnalysisChart({
                 dataKey="movingAverage"
                 stroke="#6b7280"
                 strokeWidth={2}
-                dot={false}
-              />
+                dot={false} />
             )}
           </ComposedChart>
         );
@@ -449,8 +442,7 @@ export default function TrendAnalysisChart({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(date) => format(new Date(date), 'MMM dd')}
-            />
+              tickFormatter={(date) => format(new Date(date), 'MMM dd')} />
             <YAxis tickFormatter={config.format} />
             <DaisyTooltip content={<CustomTooltip />} />
             <Line
@@ -459,8 +451,7 @@ export default function TrendAnalysisChart({
               stroke={config.color}
               strokeWidth={2}
               dot={{ fill: config.color, strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6 }}
-            />
+              activeDot={{ r: 6 }} />
             {showMovingAverage && (
               <Line
                 type="monotone"
@@ -468,15 +459,13 @@ export default function TrendAnalysisChart({
                 stroke="#6b7280"
                 strokeWidth={1}
                 strokeDasharray="5 5"
-                dot={false}
-              />
+                dot={false} />
             )}
             {showTrendLine && trendStats && (
               <ReferenceLine 
                 stroke="#ef4444" 
                 strokeDasharray="2 2" 
-                strokeWidth={1}
-              />
+                strokeWidth={1} />
             )}
           </LineChart>
         );
@@ -529,22 +518,24 @@ export default function TrendAnalysisChart({
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
             <DaisySelect value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)} />
-              <DaisySelectTrigger className="w-48" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                {Object.entries(metricConfigs).map(([key, config]) => (
-                  <DaisySelectItem key={key} value={key} />
-                    {config.label}
-                  </DaisySelectContent>
+              <DaisySelectTrigger className="w-48">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  {Object.entries(metricConfigs).map(([key, config]) => (
+                  <DaisySelectItem key={key} value={key} >
+                      {config.label}
+                  </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
             
             <DaisySelect value={timeRange} onValueChange={(value: any) => setTimeRange(value)} />
-              <DaisySelectTrigger className="w-24" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="7d">7 days</DaisySelectContent>
+              <DaisySelectTrigger className="w-24">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="7d">7 days</DaisySelectItem>
                 <DaisySelectItem value="30d">30 days</DaisySelectItem>
                 <DaisySelectItem value="90d">90 days</DaisySelectItem>
                 <DaisySelectItem value="1y">1 year</DaisySelectItem>
@@ -584,34 +575,32 @@ export default function TrendAnalysisChart({
               <DaisySwitch
                 id="moving-average"
                 checked={showMovingAverage}
-                onCheckedChange={setShowMovingAverage}
-              />
-              <DaisyLabel htmlFor="moving-average" className="text-sm">7-day MA</DaisySwitch>
+                onCheckedChange={setShowMovingAverage} />
+<DaisyLabel htmlFor="moving-average" className="text-sm">7-day MA</DaisySwitch>
             </div>
             
             <div className="flex items-center space-x-2">
               <DaisySwitch
                 id="forecast"
                 checked={localShowForecast}
-                onCheckedChange={setShowForecast}
-              />
-              <DaisyLabel htmlFor="forecast" className="text-sm">Forecast</DaisySwitch>
+                onCheckedChange={setShowForecast} />
+<DaisyLabel htmlFor="forecast" className="text-sm">Forecast</DaisySwitch>
             </div>
           </div>
         </div>
       
 
       <DaisyCardBody >
-  <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} />
+  <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} >
 </DaisyCardBody>
-          <DaisyTabsList className="grid w-full grid-cols-3" />
-            <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
+          <DaisyTabsList className="grid w-full grid-cols-3" >
+              <DaisyTabsTrigger value="overview">Overview</DaisyTabsList>
             <DaisyTabsTrigger value="detailed">Detailed View</DaisyTabsTrigger>
             <DaisyTabsTrigger value="insights">Insights</DaisyTabsTrigger>
           </DaisyTabsList>
           
-          <DaisyTabsContent value="overview" className="space-y-4" />
-            {/* Key Metrics */}
+          <DaisyTabsContent value="overview" className="space-y-4" >
+              {/* Key Metrics */}
             {trendStats && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div className="p-3 bg-gray-50 rounded-lg">
@@ -650,14 +639,13 @@ export default function TrendAnalysisChart({
             </ResponsiveContainer>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="detailed" className="space-y-4" />
-            <ResponsiveContainer width="100%" height={height + 100}>
+          <DaisyTabsContent value="detailed" className="space-y-4" >
+              <ResponsiveContainer width="100%" height={height + 100}>
               <LineChart data={combinedData} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="date" 
-                  tickFormatter={(date) => format(new Date(date), 'MMM dd')}
-                />
+                  tickFormatter={(date) => format(new Date(date), 'MMM dd')} />
                 <YAxis tickFormatter={metricConfigs[selectedMetric].format} />
                 <DaisyTooltip content={<CustomTooltip />} />
                 <Line
@@ -665,8 +653,7 @@ export default function TrendAnalysisChart({
                   dataKey={selectedMetric}
                   stroke={metricConfigs[selectedMetric].color}
                   strokeWidth={2}
-                  dot={{ fill: metricConfigs[selectedMetric].color, strokeWidth: 2, r: 3 }}
-                />
+                  dot={{ fill: metricConfigs[selectedMetric].color, strokeWidth: 2, r: 3 }} />
                 {showMovingAverage && (
                   <Line
                     type="monotone"
@@ -674,16 +661,15 @@ export default function TrendAnalysisChart({
                     stroke="#6b7280"
                     strokeWidth={1}
                     strokeDasharray="5 5"
-                    dot={false}
-                  />
+                    dot={false} />
                 )}
                 <Brush dataKey="date" height={30} />
               </LineChart>
             </ResponsiveContainer>
           </DaisyTabsContent>
           
-          <DaisyTabsContent value="insights" className="space-y-4" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <DaisyTabsContent value="insights" className="space-y-4" >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <DaisyCard >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>

@@ -263,16 +263,16 @@ export default function DocumentSearch({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <DaisyTabs defaultValue="search" className="w-full" />
-        <DaisyTabsList className="grid w-full grid-cols-2" />
-          <DaisyTabsTrigger value="search">Search Filters</DaisyTabs>
+      <DaisyTabs defaultValue="search" className="w-full" >
+          <DaisyTabsList className="grid w-full grid-cols-2" >
+            <DaisyTabsTrigger value="search">Search Filters</DaisyTabs>
           <DaisyTabsTrigger value="saved">Saved Searches</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="search" className="space-y-6 mt-6" />
-          {/* Basic Search */}
+        <DaisyTabsContent value="search" className="space-y-6 mt-6" >
+            {/* Basic Search */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Basic Search</DaisyCardTitle>
         </DaisyCardBody>
@@ -284,8 +284,8 @@ export default function DocumentSearch({
                   id="search-query"
                   placeholder="Enter keywords, file names, or phrases..."
                   value={filters.query}
-                  onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
-                />
+                  onChange={(e) = />
+setFilters(prev => ({ ...prev, query: e.target.value }))} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -295,13 +295,14 @@ export default function DocumentSearch({
                     value={filters.category} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
                   >
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select category" /></DaisySelect>
-                    <DaisySelectContent />
-                      {CATEGORY_OPTIONS.map(option => (
-                        <DaisySelectItem key={option.value} value={option.value} />
-                          {option.label}
-                        </DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select category" />
+</DaisySelect>
+                    <DaisySelectContent >
+                        {CATEGORY_OPTIONS.map(option => (
+                        <DaisySelectItem key={option.value} value={option.value} >
+                            {option.label}
+                        </DaisySelectItem>
                       ))}
                     </DaisySelectContent>
                   </DaisySelect>
@@ -313,13 +314,14 @@ export default function DocumentSearch({
                     value={filters.fileType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, fileType: value }))}
                   >
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select file type" /></DaisySelect>
-                    <DaisySelectContent />
-                      {FILE_TYPE_OPTIONS.map(option => (
-                        <DaisySelectItem key={option.value} value={option.value} />
-                          {option.label}
-                        </DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select file type" />
+</DaisySelect>
+                    <DaisySelectContent >
+                        {FILE_TYPE_OPTIONS.map(option => (
+                        <DaisySelectItem key={option.value} value={option.value} >
+                            {option.label}
+                        </DaisySelectItem>
                       ))}
                     </DaisySelectContent>
                   </DaisySelect>
@@ -330,7 +332,7 @@ export default function DocumentSearch({
 
           {/* Advanced Filters */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="text-lg">Advanced Filters</DaisyCardTitle>
         </DaisyCardBody>
@@ -343,9 +345,9 @@ export default function DocumentSearch({
                   <DaisyInput
                     placeholder="Add tag..."
                     value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addTag()}
-                  />
+                    onChange={(e) = />
+setTagInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addTag()} />
                   <DaisyButton onClick={addTag} size="sm" >
   <Plus className="w-4 h-4" />
 </DaisyInput>
@@ -359,8 +361,7 @@ export default function DocumentSearch({
 </DaisyBadge>
                         <X 
                           className="w-3 h-3 ml-1" 
-                          onClick={() => removeTag(tag)}
-                        />
+                          onClick={() => removeTag(tag)} />
                       </DaisyBadge>
                     ))}
                   </div>
@@ -376,15 +377,17 @@ export default function DocumentSearch({
                       key={index}
                       variant="outline"
                       size="sm"
-                      onClick={() => setDateRange(range.value())} />
+                      onClick={() =>
+          setDateRange(range.value())} />
                       {range.label}
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <DaisyPopover />
-                    <DaisyPopoverTrigger asChild />
-                      <DaisyButton variant="outline" className="justify-start text-left font-normal" >
+                  <DaisyPopover >
+                      <DaisyPopoverTrigger asChild >
+                        <DaisyButton variant="outline" className="justify-start text-left font-normal" >
   {filters.dateRange.from ? (
 </DaisyPopover>
                           format(filters.dateRange.from, 'PPP')
@@ -393,18 +396,18 @@ export default function DocumentSearch({
                         )}
                       </DaisyButton>
                     </DaisyPopoverTrigger>
-                    <DaisyPopoverContent className="w-auto p-0" />
-                      <DaisyCalendar
+                    <DaisyPopoverContent className="w-auto p-0" >
+                        <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.from}
-                        onSelect={(date) => setDateRange({ ...filters.dateRange, from: date })}
-                        initialFocus
-                      />
+                        onSelect={(date) = />
+setDateRange({ ...filters.dateRange, from: date })}
+                        initialFocus />
                     </DaisyPopoverContent>
                   </DaisyPopover>
-                  <DaisyPopover />
-                    <DaisyPopoverTrigger asChild />
-                      <DaisyButton variant="outline" className="justify-start text-left font-normal" >
+                  <DaisyPopover >
+                      <DaisyPopoverTrigger asChild >
+                        <DaisyButton variant="outline" className="justify-start text-left font-normal" >
   {filters.dateRange.to ? (
 </DaisyPopover>
                           format(filters.dateRange.to, 'PPP')
@@ -413,13 +416,13 @@ export default function DocumentSearch({
                         )}
                       </DaisyButton>
                     </DaisyPopoverTrigger>
-                    <DaisyPopoverContent className="w-auto p-0" />
-                      <DaisyCalendar
+                    <DaisyPopoverContent className="w-auto p-0" >
+                        <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.to}
-                        onSelect={(date) => setDateRange({ ...filters.dateRange, to: date })}
-                        initialFocus
-                      />
+                        onSelect={(date) = />
+setDateRange({ ...filters.dateRange, to: date })}
+                        initialFocus />
                     </DaisyPopoverContent>
                   </DaisyPopover>
                 </div>
@@ -438,8 +441,7 @@ export default function DocumentSearch({
                     max={100}
                     min={0}
                     step={1}
-                    className="w-full"
-                  />
+                    className="w-full" />
                   <div className="flex justify-between text-sm text-gray-500 mt-1">
                     <span>{filters.sizeRange.min} MB</span>
                     <span>{filters.sizeRange.max} MB</span>
@@ -455,10 +457,11 @@ export default function DocumentSearch({
                     value={filters.linkedEntityType} 
                     onValueChange={(value) => setFilters(prev => ({ ...prev, linkedEntityType: value }))}
                   >
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select entity type" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="">All Types</DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select entity type" />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="">All Types</DaisySelectItem>
                       <DaisySelectItem value="RISK">Risk</DaisySelectItem>
                       <DaisySelectItem value="CONTROL">Control</DaisySelectItem>
                       <DaisySelectItem value="ASSESSMENT">Assessment</DaisySelectItem>
@@ -472,8 +475,8 @@ export default function DocumentSearch({
                   <DaisyInput
                     placeholder="Enter entity ID..."
                     value={filters.linkedEntityId}
-                    onChange={(e) => setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))}
-                  />
+                    onChange={(e) = />
+setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))} />
                 </div>
               </div>
             </DaisyInput>
@@ -481,9 +484,10 @@ export default function DocumentSearch({
 
           {/* Search Actions */}
           <div className="flex items-center justify-between">
-            <DaisyButton variant="outline" onClick={clearFilters} >
-  Clear Filters
-</DaisyButton>
+            <DaisyButton variant="outline" onClick={clearFilters}>
+          Clear Filters
+
+        </DaisyButton>
             </DaisyButton>
             
             <div className="flex items-center gap-2">
@@ -495,9 +499,10 @@ export default function DocumentSearch({
                 Save Search
               </DaisyButton>
               
-              <DaisyButton onClick={handleSearch} disabled={searching} >
-  {searching ? (
-</DaisyButton>
+              <DaisyButton onClick={handleSearch} disabled={searching}>
+          {searching ? (
+
+        </DaisyButton>
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     Searching...
@@ -515,7 +520,7 @@ export default function DocumentSearch({
           {/* Save Search Dialog */}
           {showSaveSearch && (
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle className="text-lg">Save Search</DaisyCardTitle>
         </DaisyCardBody>
@@ -527,23 +532,25 @@ export default function DocumentSearch({
                     id="search-name"
                     placeholder="Enter a name for this search..."
                     value={saveSearchName}
-                    onChange={(e) => setSaveSearchName(e.target.value)}
-                  />
+                    onChange={(e) = />
+setSaveSearchName(e.target.value)} />
                 </div>
                 <div className="flex items-center gap-2">
                   <DaisyButton onClick={handleSaveSearch}>Save</DaisyInput>
-                  <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)} />
+                  <DaisyButton variant="outline" onClick={() =>
+          setShowSaveSearch(false)} />
                     Cancel
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </div>
               </DaisyCardBody>
             </DaisyCard>
           )}
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="saved" className="space-y-4 mt-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="saved" className="space-y-4 mt-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="text-lg">Saved Searches</DaisyCardTitle>
         </DaisyCardBody>
@@ -570,9 +577,10 @@ export default function DocumentSearch({
                           Used {search.useCount} time{search.useCount !== 1 ? 's' : ''}
                         </p>
                       </div>
-                      <DaisyButton size="sm" variant="ghost" >
-  Load
-</DaisyButton>
+                      <DaisyButton size="sm" variant="ghost">
+          Load
+
+        </DaisyButton>
                       </DaisyButton>
                     </div>
                   ))}
@@ -586,7 +594,7 @@ export default function DocumentSearch({
       {/* Search Facets */}
       {Object.keys(searchFacets).length > 0 && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-lg">Refine Results</DaisyCardTitle>
         </DaisyCardBody>

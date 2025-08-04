@@ -270,7 +270,7 @@ export default function InteractiveRiskHeatmap({
           {/* Grid background */}
           <defs>
             <pattern id="grid" width="80" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 80 0 L 0 0 0 60" fill="none" stroke="#e5e7eb" strokeWidth="1"/>
+              <path d="M 80 0 L 0 0 0 60" fill="none" stroke="#e5e7eb" strokeWidth="1" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
@@ -301,8 +301,7 @@ export default function InteractiveRiskHeatmap({
                   stroke={selectedCell?.x === cell.x && selectedCell?.y === cell.y ? '#2563eb' : '#e5e7eb'}
                   strokeWidth={selectedCell?.x === cell.x && selectedCell?.y === cell.y ? 3 : 1}
                   className="cursor-pointer hover:stroke-blue-500 hover:stroke-2 transition-all"
-                  onClick={() => handleCellClick(cell)}
-                />
+                  onClick={() => handleCellClick(cell)} />
                 
                 {/* Risk count */}
                 <text
@@ -371,15 +370,13 @@ export default function InteractiveRiskHeatmap({
             dataKey="x" 
             domain={[0.5, 5.5]}
             ticks={[1, 2, 3, 4, 5]}
-            label={{ value: 'Likelihood', position: 'insideBottom', offset: -5 }}
-          />
+            label={{ value: 'Likelihood', position: 'insideBottom', offset: -5 }} />
           <YAxis 
             type="number" 
             dataKey="y" 
             domain={[0.5, 5.5]}
             ticks={[1, 2, 3, 4, 5]}
-            label={{ value: 'Impact', angle: -90, position: 'insideLeft' }}
-          />
+            label={{ value: 'Impact', angle: -90, position: 'insideLeft' }} />
           <Scatter
             data={scatterData}
             onClick={(data) => handleRiskSelect(data.risk)}
@@ -388,8 +385,7 @@ export default function InteractiveRiskHeatmap({
               <Cell 
                 key={`cell-${index}`} 
                 fill={entry.fill}
-                className="cursor-pointer hover:opacity-80"
-              />
+                className="cursor-pointer hover:opacity-80" />
             ))}
           </Scatter>
           {showTooltip && <CustomTooltip />}
@@ -464,27 +460,29 @@ export default function InteractiveRiskHeatmap({
         <div className="flex items-center space-x-4 mt-3">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-gray-500" />
-            <DaisySelect value={filterCategory} onValueChange={setFilterCategory} />
-              <DaisySelectTrigger className="w-40" />
-                <DaisySelectValue placeholder="Category" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Categories</DaisySelectContent>
+            <DaisySelect value={filterCategory} onValueChange={setFilterCategory} >
+                <DaisySelectTrigger className="w-40">
+                  <DaisySelectValue placeholder="Category" />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Categories</DaisySelectItem>
                 {categories.map(category => (
-                  <DaisySelectItem key={category} value={category} />
-                    {category}
+                  <DaisySelectItem key={category} value={category} >
+                      {category}
                   </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue placeholder="Status" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Status</DaisySelectContent>
+            <DaisySelect value={filterStatus} onValueChange={setFilterStatus} >
+                <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Status</DaisySelectItem>
                 {statuses.map(status => (
-                  <DaisySelectItem key={status} value={status} />
-                    {status}
+                  <DaisySelectItem key={status} value={status} >
+                      {status}
                   </DaisySelectItem>
                 ))}
               </DaisySelectContent>
@@ -496,15 +494,19 @@ export default function InteractiveRiskHeatmap({
             <DaisyButton
               variant={viewMode === 'heatmap' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setViewMode('heatmap')} />
+              onClick={() =>
+          setViewMode('heatmap')} />
               Heatmap
-            </DaisyButton>
+            
+        </DaisyButton>
             <DaisyButton
               variant={viewMode === 'scatter' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setViewMode('scatter')} />
+              onClick={() =>
+          setViewMode('scatter')} />
               Scatter
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       
@@ -523,8 +525,7 @@ export default function InteractiveRiskHeatmap({
               <div key={score} className="flex items-center space-x-1">
                 <div 
                   className="w-4 h-4 rounded" 
-                  style={{ backgroundColor: color }}
-                />
+                  style={{ backgroundColor: color }} />
                 <span className="text-xs">
                   {score === '1' ? 'Low' : 
                    score === '2' ? 'Low-Med' :
@@ -546,9 +547,11 @@ export default function InteractiveRiskHeatmap({
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={() => setSelectedCell(null)} />
+                onClick={() =>
+          setSelectedCell(null)} />
                 ×
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-32 overflow-y-auto">

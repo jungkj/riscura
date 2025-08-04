@@ -53,8 +53,7 @@ const AlertDialogContent = React.forwardRef<
         'sm:max-w-md md:max-w-lg',
         className
       )}
-      {...props}
-    /></DaisyAlertDialogPrimitive>
+      {...props} /></DaisyAlertDialogPrimitive>
 ));
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
@@ -68,8 +67,7 @@ const AlertDialogHeader = ({
       'pb-4 border-b border-[#D8C3A5]/20',
       className
     )}
-    {...props}
-  />
+    {...props} />
 );
 AlertDialogHeader.displayName = 'AlertDialogHeader';
 
@@ -83,8 +81,7 @@ const AlertDialogFooter = ({
       'pt-6 mt-6 border-t border-[#D8C3A5]/20',
       className
     )}
-    {...props}
-  />
+    {...props} />
 );
 AlertDialogFooter.displayName = 'AlertDialogFooter';
 

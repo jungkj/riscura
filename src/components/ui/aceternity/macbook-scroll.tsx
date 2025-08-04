@@ -185,7 +185,6 @@ export const Lid = ({
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
         <div className="absolute inset-0 rounded-lg bg-[#050505]" />
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
-
         <div
           style={{
             boxShadow: '0px 2px 0px 2px #171717 inset',

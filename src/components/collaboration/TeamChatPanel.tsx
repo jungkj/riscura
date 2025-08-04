@@ -105,8 +105,8 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
       </div>
       
       {/* Messages */}
-      <DaisyScrollArea className="flex-1 p-4" />
-        <div className="space-y-4">
+      <DaisyScrollArea className="flex-1 p-4" >
+          <div className="space-y-4">
           {messages.map((message) => (
             <div 
               key={message.id} 
@@ -115,9 +115,9 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
                 message.isCurrentUser && "flex-row-reverse"
               )}
             >
-              <DaisyAvatar className="h-8 w-8 flex-shrink-0" />
-                <DaisyAvatarImage src={message.user.avatar} />
-                <DaisyAvatarFallback>{message.user.initials}</DaisyScrollArea>
+              <DaisyAvatar className="h-8 w-8 flex-shrink-0" >
+                  <DaisyAvatarImage src={message.user.avatar} >
+                  <DaisyAvatarFallback>{message.user.initials}</DaisyScrollArea>
               </DaisyAvatar>
               
               <div className={cn(
@@ -146,11 +146,11 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
         <div className="flex items-center gap-2">
           <DaisyInput
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) = />
+setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
-            className="flex-1"
-          />
+            className="flex-1" />
           <DaisyButton shape="square" size="md" onClick={handleSendMessage} disabled={!newMessage.trim()} >
   <Send className="h-4 w-4" />
 </DaisyInput>

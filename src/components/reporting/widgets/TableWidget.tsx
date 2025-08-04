@@ -206,16 +206,20 @@ export function TableWidget({
                     variant="ghost"
                     size="sm"
                     disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(currentPage - 1)} />
+                    onClick={() =>
+          setCurrentPage(currentPage - 1)} />
                     Previous
-                  </DaisyButton>
+                  
+        </DaisyButton>
                   <DaisyButton
                     variant="ghost"
                     size="sm"
                     disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(currentPage + 1)} />
+                    onClick={() =>
+          setCurrentPage(currentPage + 1)} />
                     Next
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </div>
               </div>
             )}

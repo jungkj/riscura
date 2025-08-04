@@ -412,7 +412,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
               return (
                 <DaisyCard key={vizId} className="hover:shadow-lg transition-shadow" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <DaisyCardTitle className="text-lg">{viz.title}</DaisyCardTitle>
         </DaisyCardBody>
@@ -530,7 +530,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
               <span>{Math.round(storyProgress)}% complete</span>
             </div>
             <DaisyProgress value={storyProgress} className="h-2 bg-blue-500" />
-          </div>
+</div>
         </div>
       </div>
 
@@ -550,9 +550,10 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={togglePlayback} >
-  {isPlaying ? 
-</DaisyButton><Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              onClick={togglePlayback}>
+          {isPlaying ? 
+
+        </DaisyButton><Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </DaisyButton>
             
             <DaisyButton
@@ -618,7 +619,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
       {/* Story Generation Panel */}
       <DaisyCard className="max-w-6xl mx-auto m-6" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <Wand2 className="w-5 h-5 mr-2" />
@@ -640,9 +641,10 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <span>• Multi-audience optimization</span>
               </div>
             </div>
-            <DaisyButton onClick={generateStory} disabled={isGenerating} >
-  {isGenerating ? (
-</DaisyButton>
+            <DaisyButton onClick={generateStory} disabled={isGenerating}>
+          {isGenerating ? (
+
+        </DaisyButton>
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                   Generating...
@@ -663,14 +665,14 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
                 <span>Step 2 of 5</span>
               </div>
               <DaisyProgress value={40} className="h-2" />
-            </div>
+</div>
           )}
         </DaisyProgress>
       </DaisyCard>
 
       {/* Story Summary */}
       <DaisyCard className="max-w-6xl mx-auto m-6" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <BookOpen className="w-5 h-5 mr-2" />

@@ -327,8 +327,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <DaisyCardBody className="text-center">
             <div className="flex justify-center mb-4">
               <div className="p-3 rounded-full bg-destructive/10">
-                <DaisyAlertTriangle className="w-8 h-8 text-destructive" />
-              </div>
+                <DaisyAlertTriangle className="w-8 h-8 text-destructive" >
+                </div>
             </div>
 
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -467,8 +467,8 @@ export const ComponentErrorBoundary: React.FC<{
       fallback || (
         <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
           <div className="flex items-center gap-2 text-destructive">
-            <DaisyAlertTriangle className="w-4 h-4" />
-            <span className="text-sm font-medium">Component Error</span>
+            <DaisyAlertTriangle className="w-4 h-4" >
+              <span className="text-sm font-medium">Component Error</span>
           </div>
           <p className="text-sm text-muted-foreground mt-1">
             This component failed to load. Please refresh the page.

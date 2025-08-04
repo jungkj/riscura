@@ -143,9 +143,10 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
               onClick={handleCancel}
               variant="outline"
               size="sm"
-              disabled={cancelling} >
-  {cancelling ? (
-</DaisyButton>
+              disabled={cancelling}>
+          {cancelling ? (
+
+        </DaisyButton>
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <X className="h-4 w-4" />
@@ -159,7 +160,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         {(job.status === 'QUEUED' || job.status === 'PROCESSING') && (
           <div className="space-y-2">
             <DaisyProgress value={job.progress} className="h-2" />
-            <p className="text-sm text-gray-600">
+<p className="text-sm text-gray-600">
               {job.progressMessage || 'Processing...'}
             </p>
           </div>

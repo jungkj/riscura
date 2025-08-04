@@ -143,9 +143,10 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
                 </DaisyButton>
               )}
               {onDismiss && (
-                <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
-  Dismiss
-</DaisyButton>
+                <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
+          Dismiss
+
+        </DaisyButton>
                 </DaisyButton>
               )}
             </div>
@@ -290,9 +291,10 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
               <span>Basic responses and manual processes are still available</span>
             </div>
             {onDismiss && (
-              <DaisyButton size="sm" variant="ghost" onClick={onDismiss} >
-  Understood
-</DaisyButton>
+              <DaisyButton size="sm" variant="ghost" onClick={onDismiss}>
+          Understood
+
+        </DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -343,7 +345,7 @@ export const RetryCountdown: React.FC<RetryCountdownProps> = ({
         <span className="font-mono">{secondsLeft}s</span>
       </div>
       <DaisyProgress value={progress} className="h-2" />
-    </div>
+</div>
   );
 };
 
@@ -375,7 +377,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
 
   return (
     <DaisyCard >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyProgress>
         <DaisyCardTitle className="text-sm flex items-center justify-between" >
   <span>

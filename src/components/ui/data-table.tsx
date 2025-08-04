@@ -188,8 +188,8 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   return (
     <div className="flex items-center space-x-enterprise-2">
       <DaisyAvatar className="w-6 h-6">
-        <DaisyAvatarImage src={user.avatar} alt={user.name} />
-        <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
+        <DaisyAvatarImage src={user.avatar} alt={user.name} >
+          <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
       </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
@@ -523,12 +523,12 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisyInput
               placeholder="Search across all columns..."
               value={searchQuery}
-              onChange={(e) => {
+              onChange={(e) = />
+{
                 setSearchQuery(e.target.value);
                 onSearch?.(e.target.value);
               }}
-              className="pl-10 w-80 text-body-sm"
-            />
+              className="pl-10 w-80 text-body-sm" />
           </div>
 
           {/* Bulk Actions */}
@@ -647,11 +647,13 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
           <DaisyButton
             variant="ghost"
             size="sm"
-            onClick={() => setFilters([])}
+            onClick={() =>
+          setFilters([])}
             className="text-caption text-text-tertiary hover:text-destructive"
           >
             Clear all
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
       )}
 
@@ -664,10 +666,10 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
               {/* Select All Checkbox */}
               <th className="w-12 p-enterprise-3 text-left">
                 <DaisyCheckbox
-                  checked={selectedRows.size === filteredData.length && filteredData.length > 0}
+                  checked={selectedRows.size === filteredData.length && filteredData.length />
+0}
                   onCheckedChange={handleSelectAll}
-                  aria-label="Select all rows"
-                />
+                  aria-label="Select all rows" />
               </th>
 
               {visibleColumns.map((column) => (
@@ -795,10 +797,10 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                   <td className="w-12 p-enterprise-3">
                     <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
-                      onCheckedChange={(checked) => handleRowSelect(rowIndex, checked as boolean)}
+                      onCheckedChange={(checked) = />
+handleRowSelect(rowIndex, checked as boolean)}
                       onClick={(e) => e.stopPropagation()}
-                      aria-label={`Select row ${rowIndex + 1}`}
-                    />
+                      aria-label={`Select row ${rowIndex + 1}`} />
                   </td>
 
                   {visibleColumns.map((column) => (
@@ -868,12 +870,14 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisyButton
               variant="outline"
               size="sm"
-              onClick={() => onPageChange?.(currentPage + 1)}
+              onClick={() =>
+          onPageChange?.(currentPage + 1)}
               disabled={currentPage >= Math.ceil(totalCount / pageSize)}
               className="text-button"
             >
               Next
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       )}

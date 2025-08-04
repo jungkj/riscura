@@ -739,7 +739,7 @@ export class DataExportService {
 
     const processValue = (value: any, key: string, indent: string): string => {
       if (value === null || value === undefined) {
-        return `${indent}<${key}/>\n`;
+        return `${indent}<${key} />\n`;
       }
 
       if (Array.isArray(value)) {

@@ -91,8 +91,8 @@ const FormLabel = React.forwardRef<
       className={cn(error && 'text-error', className)}
       htmlFor={formItemId}
       {...props}
-    />
-  );
+    >
+    );
 });
 FormLabel.displayName = 'FormLabel';
 
@@ -108,8 +108,7 @@ const FormControl = React.forwardRef<
       id={formItemId}
       aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
-      {...props}
-    />
+      {...props} />
   );
 });
 FormControl.displayName = 'FormControl';
@@ -125,8 +124,7 @@ const FormDescription = React.forwardRef<
       ref={ref}
       id={formDescriptionId}
       className={cn('label-text-alt text-base-content/70 mt-1', className)}
-      {...props}
-    />
+      {...props} />
   );
 });
 FormDescription.displayName = 'FormDescription';

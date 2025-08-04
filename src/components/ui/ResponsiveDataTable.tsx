@@ -190,10 +190,10 @@ const defaultCellRenderers = {
   ),
   user: (value: any) => (
     <div className="flex items-center space-x-2">
-      <DaisyAvatar className="h-6 w-6" />
-        <DaisyAvatarImage src={value?.avatar} />
-        <DaisyAvatarFallback className="text-xs" />
-          {value?.name?.split(' ').map((n: string) => n[0]).join('') || '?'}
+      <DaisyAvatar className="h-6 w-6" >
+          <DaisyAvatarImage src={value?.avatar} >
+          <DaisyAvatarFallback className="text-xs" >
+            {value?.name?.split(' ').map((n: string) => n[0]).join('') || '?'}
         </DaisyAvatar>
       </DaisyAvatar>
       <span className="truncate">{value?.name || value}</span>
@@ -206,7 +206,7 @@ const defaultCellRenderers = {
         <span>{value?.value || value}%</span>
       </div>
       <DaisyProgress value={value?.value || value} className="h-1" />
-    </div>
+</div>
   ),
   actions: (value: any, item: any) => (
     <TouchActionMenu
@@ -230,8 +230,7 @@ const defaultCellRenderers = {
           onClick: () => console.log('Delete', item),
           variant: 'destructive' as const,
         },
-      ]}
-    />
+      ]} />
   ),
 };
 
@@ -278,8 +277,8 @@ const MobileCardLayout: React.FC<{
                     {selectable && (
                       <DaisyCheckbox
                         checked={isSelected}
-                        onCheckedChange={(checked) => onRowSelect?.(item, checked as boolean)}
-                      />
+                        onCheckedChange={(checked) = />
+onRowSelect?.(item, checked as boolean)} />
                     )}
                     <div className="font-medium text-body-sm">
                       {priorityColumns[0] && formatCellValue(
@@ -308,8 +307,7 @@ const MobileCardLayout: React.FC<{
                         icon: <Share2 className="h-4 w-4" />,
                         onClick: () => console.log('Share', item),
                       },
-                    ]}
-                  />
+                    ]} />
                 </div>
 
                 {/* Main content */}
@@ -395,7 +393,7 @@ const TabletListLayout: React.FC<{
             {selectable && (
               <div className="col-span-1">
                 <DaisyCheckbox />
-              </div>
+</div>
             )}
             {visibleColumns.map((column, index) => (
               <div
@@ -450,11 +448,11 @@ const TabletListLayout: React.FC<{
                   <div className="col-span-1">
                     <DaisyCheckbox
                       checked={isSelected}
-                      onCheckedChange={(checked) => {
+                      onCheckedChange={(checked) = />
+{
                         onRowSelect?.(item, checked as boolean);
                       }}
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                      onClick={(e) => e.stopPropagation()} />
                   </div>
                 )}
                 
@@ -495,8 +493,7 @@ const TabletListLayout: React.FC<{
                         icon: <Edit className="h-4 w-4" />,
                         onClick: () => console.log('Edit', item),
                       },
-                    ]}
-                  />
+                    ]} />
                 </div>
               </div>
             );
@@ -553,12 +550,12 @@ const DesktopTableLayout: React.FC<{
                 <th className="w-12 px-enterprise-4 py-enterprise-3">
                   <DaisyCheckbox
                     checked={allSelected}
-                    ref={(el) => {
+                    ref={(el) = />
+{
                       if (el) el.indeterminate = someSelected;
                     }}
                     onCheckedChange={onSelectAll}
-                    aria-label="Select all rows"
-                  />
+                    aria-label="Select all rows" />
                 </th>
               )}
               {columns.map((column) => (
@@ -620,10 +617,10 @@ const DesktopTableLayout: React.FC<{
                     <td className="px-enterprise-4 py-enterprise-3">
                       <DaisyCheckbox
                         checked={isSelected}
-                        onCheckedChange={(checked) => onRowSelect?.(item, checked as boolean)}
+                        onCheckedChange={(checked) = />
+onRowSelect?.(item, checked as boolean)}
                         onClick={(e) => e.stopPropagation()}
-                        aria-label={`Select row ${index + 1}`}
-                      />
+                        aria-label={`Select row ${index + 1}`} />
                     </td>
                   )}
                   {columns.map((column) => {
@@ -677,8 +674,7 @@ const DesktopTableLayout: React.FC<{
                             onClick: () => console.log('Delete', item),
                             variant: 'destructive' as const,
                           },
-                        ]}
-                      />
+                        ]} />
                     </div>
                   </td>
                 </tr>
@@ -836,9 +832,9 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
                   <DaisyInput
                     placeholder="Search..."
                     value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className="pl-10 w-full sm:w-64"
-                  />
+                    onChange={(e) = />
+handleSearch(e.target.value)}
+                    className="pl-10 w-full sm:w-64" />
                 </div>
               )}
 
@@ -901,8 +897,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
           selectedItems={selectedItems}
           onRowClick={onRowClick}
           onRowSelect={handleRowSelect}
-          selectable={selectable}
-        />
+          selectable={selectable} />
       )}
 
       {device.type === 'tablet' && (
@@ -916,8 +911,8 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
           onRowSelect={handleRowSelect}
           onSort={handleSort}
           selectable={selectable}
-        />
-      )}
+        >
+        )}
 
       {device.type === 'desktop' && (
         <DesktopTableLayout
@@ -931,8 +926,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
           onSelectAll={handleSelectAll}
           onSort={handleSort}
           selectable={selectable}
-          variant={variant}
-        />
+          variant={variant} />
       )}
 
       {/* Pagination */}

@@ -156,15 +156,19 @@ export function BusinessImpactAnalyzer() {
           <DaisyButton
             variant={selectedView === 'roi' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setSelectedView('roi')} />
+            onClick={() =>
+          setSelectedView('roi')} />
             ROI Analysis
-          </DaisyButton>
+          
+        </DaisyButton>
           <DaisyButton
             variant={selectedView === 'metrics' ? 'primary' : 'outline'}
             size="sm"
-            onClick={() => setSelectedView('metrics')} />
+            onClick={() =>
+          setSelectedView('metrics')} />
             Key Metrics
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
       </div>
 
@@ -207,7 +211,7 @@ export function BusinessImpactAnalyzer() {
         <div className="space-y-6">
           {/* ROI Summary */}
           <DaisyCard className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center space-x-3" >
   <div className="p-2 bg-green-600 rounded-lg">
@@ -239,7 +243,7 @@ export function BusinessImpactAnalyzer() {
 
           {/* ROI Breakdown */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle>ROI Breakdown by Initiative</DaisyCardTitle>
         </DaisyCardBody>
@@ -281,7 +285,7 @@ export function BusinessImpactAnalyzer() {
                   
                   <div className="mt-3">
                     <DaisyProgress value={(metric.savings / (metric.savings + metric.investment)) * 100} className="h-2" />
-                  </div>
+</div>
                 </div>
               ))}
             </DaisyProgress>
@@ -292,7 +296,7 @@ export function BusinessImpactAnalyzer() {
       {/* Key Metrics View */}
       {selectedView === 'metrics' && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle>Financial Impact Dashboard</DaisyCardTitle>
         </DaisyCardBody>

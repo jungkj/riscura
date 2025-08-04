@@ -330,8 +330,7 @@ export default function AnalyticsTrendsPage() {
                             : metric.trend === 'down'
                               ? 'text-red-600'
                               : 'text-gray-600'
-                        )}
-                      />
+                        )} />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
                   </DaisyCardBody>
@@ -365,9 +364,8 @@ export default function AnalyticsTrendsPage() {
                           </div>
                           <DaisyProgress
                             value={(metric.currentValue / metric.target) * 100}
-                            className="h-2"
-                          />
-                        </div>
+                            className="h-2" / />
+</div>
                       )}
 
                       <div className="text-xs text-gray-500">{metric.description}</div>
@@ -500,9 +498,8 @@ export default function AnalyticsTrendsPage() {
                   </DaisyCardBody>
                   <DaisyCardBody>
                     <div className="space-y-4">
-                      <DaisyProgress value={insight.confidence} className="h-2" />
-
-                      <div className="p-3 bg-blue-50 rounded-lg">
+                      <DaisyProgress value={insight.confidence} className="h-2" / />
+<div className="p-3 bg-blue-50 rounded-lg">
                         <h4 className="font-medium text-sm text-blue-900 mb-1">
                           Recommended Action
                         </h4>

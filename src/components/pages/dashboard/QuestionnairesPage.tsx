@@ -645,8 +645,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto"
-          />
+            className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto" />
           <div className="space-y-2">
             <h2 className="text-xl font-semibold text-foreground">
               Loading Intelligent Questionnaires
@@ -725,18 +724,19 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
                   <DaisyInput
                     placeholder="Search questionnaires..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="max-w-md"
-                  />
+                    onChange={(e) = />
+setSearchQuery(e.target.value)}
+                    className="max-w-md" />
                 </div>
                 
                 <DaisySelect value={selectedCategory} onValueChange={(value) => 
                   setSelectedCategory(value as QuestionnaireCategory | 'all')
                 } />
-                  <DaisySelectTrigger className="w-48" />
-                    <DaisySelectValue placeholder="Category" /></DaisyInput>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="all">All Categories</DaisySelectContent>
+                  <DaisySelectTrigger className="w-48">
+                      <DaisySelectValue placeholder="Category" />
+</DaisyInput>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="all">All Categories</DaisySelectItem>
                     <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
                     <DaisySelectItem value="compliance_audit">Compliance Audit</DaisySelectItem>
                     <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
@@ -748,10 +748,11 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
                 <DaisySelect value={selectedStatus} onValueChange={(value) =>
                   setSelectedStatus(value as QuestionnaireStatus | 'all')
                 } />
-                  <DaisySelectTrigger className="w-48" />
-                    <DaisySelectValue placeholder="Status" /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="all">All Status</DaisySelectContent>
+                  <DaisySelectTrigger className="w-48">
+                      <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="all">All Status</DaisySelectItem>
                     <DaisySelectItem value="draft">Draft</DaisySelectItem>
                     <DaisySelectItem value="review">Under Review</DaisySelectItem>
                     <DaisySelectItem value="published">Published</DaisySelectItem>
@@ -785,14 +786,13 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
             <WorkflowProgress 
               activeStep={activeView}
               onStepClick={handleWorkflowStepClick}
-              className="bg-white dark:bg-notion-bg-secondary rounded-lg border border-notion-border shadow-sm"
-            />
+              className="bg-white dark:bg-notion-bg-secondary rounded-lg border border-notion-border shadow-sm" />
           </motion.div>
 
           {/* Main Content Tabs */}
-          <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6" />
-            <DaisyTabsList className="grid w-full grid-cols-7" />
-              <DaisyTabsTrigger value="list">Questionnaires</DaisyTabs>
+          <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6" >
+              <DaisyTabsList className="grid w-full grid-cols-7" >
+                <DaisyTabsTrigger value="list">Questionnaires</DaisyTabs>
               <DaisyTabsTrigger value="enhanced-search">Advanced Search</DaisyTabsTrigger>
               <DaisyTabsTrigger value="builder">Builder</DaisyTabsTrigger>
               <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
@@ -801,24 +801,23 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
               <DaisyTabsTrigger value="collaboration">Collaboration</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="list" className="space-y-6" />
-              <QuestionnaireList
+            <DaisyTabsContent value="list" className="space-y-6" >
+                <QuestionnaireList
                 questionnaires={filteredQuestionnaires}
                 onEdit={handleEditQuestionnaire}
                 onDuplicate={handleDuplicateQuestionnaire}
                 onDelete={handleDeleteQuestionnaire}
                 onPublish={handlePublishQuestionnaire}
                 viewMode={questionnaireViewMode}
-                onViewModeChange={setQuestionnaireViewMode}
-              />
+                onViewModeChange={setQuestionnaireViewMode} />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="enhanced-search" className="space-y-6" />
-              <EnhancedQuestionnaireList />
+            <DaisyTabsContent value="enhanced-search" className="space-y-6" >
+                <EnhancedQuestionnaireList />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="builder" className="space-y-6" />
-              <EnhancedQuestionnaireBuilder
+            <DaisyTabsContent value="builder" className="space-y-6" >
+                <EnhancedQuestionnaireBuilder
                 questionnaire={selectedQuestionnaire}
                 onSave={(questionnaire) => {
                   if (selectedQuestionnaire) {
@@ -833,24 +832,23 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
                 onCancel={() => {
                   setActiveView('list');
                   setSelectedQuestionnaire(null);
-                }}
-              />
+                }} />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="analytics" className="space-y-6" />
-              <AnalyticsDashboard />
+            <DaisyTabsContent value="analytics" className="space-y-6" >
+                <AnalyticsDashboard />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="templates" className="space-y-6" />
-              <TemplateLibrary />
+            <DaisyTabsContent value="templates" className="space-y-6" >
+                <TemplateLibrary />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="workflow" className="space-y-6" />
-              <WorkflowManagement />
+            <DaisyTabsContent value="workflow" className="space-y-6" >
+                <WorkflowManagement />
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="collaboration" className="space-y-6" />
-              <CollaborativeQuestionnairePage mode="collaborate" />
+            <DaisyTabsContent value="collaboration" className="space-y-6" >
+                <CollaborativeQuestionnairePage mode="collaborate" />
             </DaisyTabsContent>
           </DaisyTabs>
         </main>
@@ -871,8 +869,7 @@ function QuestionnairesPage({ view = 'list' }: QuestionnairesPageProps) {
                   // Handle applying AI suggestions
                   console.log('Applying suggestion:', suggestion);
                   // Could navigate to builder or update questionnaire
-                }}
-              />
+                }} />
             </motion.aside>
           )}
         </AnimatePresence>

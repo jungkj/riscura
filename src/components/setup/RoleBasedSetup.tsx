@@ -120,9 +120,9 @@ const OrganizationSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpda
         <DaisyInput
           id="orgName"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Enter your organization name"
-        />
+          onChange={(e) = />
+setFormData({ ...formData, name: e.target.value })}
+          placeholder="Enter your organization name" />
       </div>
 
       <div>
@@ -209,8 +209,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 notifications: { ...preferences.notifications, email: e.target.checked }
-              })}
-            />
+              })} />
             <span>Email notifications</span>
           </label>
           <label className="flex items-center space-x-2">
@@ -220,8 +219,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 notifications: { ...preferences.notifications, inApp: e.target.checked }
-              })}
-            />
+              })} />
             <span>In-app notifications</span>
           </label>
         </div>
@@ -237,8 +235,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 dashboard: { ...preferences.dashboard, autoRefresh: e.target.checked }
-              })}
-            />
+              })} />
             <span>Auto-refresh data</span>
           </label>
           <label className="flex items-center space-x-2">
@@ -248,8 +245,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 dashboard: { ...preferences.dashboard, showTutorials: e.target.checked }
-              })}
-            />
+              })} />
             <span>Show helpful tutorials</span>
           </label>
         </div>
@@ -265,8 +261,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 ai: { ...preferences.ai, enableInsights: e.target.checked }
-              })}
-            />
+              })} />
             <span>Enable AI insights</span>
           </label>
           <label className="flex items-center space-x-2">
@@ -276,8 +271,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (data: any) => void }> = ({ onUpdat
               onChange={(e) => setPreferences({
                 ...preferences,
                 ai: { ...preferences.ai, autoSuggestions: e.target.checked }
-              })}
-            />
+              })} />
             <span>Auto-suggestions</span>
           </label>
         </div>
@@ -445,8 +439,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             <p className="text-gray-600 mb-4">
               We're customizing Riscura based on your preferences.
             </p>
-            <DaisyProgress value={100} className="h-2" /></DaisyProgress>
-        </DaisyCard>
+            <DaisyProgress value={100} className="h-2" / / /> </DaisyCard>
       </div>
     );
   };
@@ -454,7 +447,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div>
@@ -464,9 +457,10 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               </p>
             </div>
             {onSkip && (
-              <DaisyButton variant="ghost" onClick={onSkip} >
-  Skip Setup
-</DaisyButton>
+              <DaisyButton variant="ghost" onClick={onSkip}>
+          Skip Setup
+
+        </DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -477,7 +471,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
               <span>{Math.round(progress)}% complete</span>
             </div>
             <DaisyProgress value={progress} className="h-2" />
-          </div>
+</div>
         
 
         <DaisyCardBody className="p-6" >
@@ -496,9 +490,10 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
 
             <DaisyButton
               onClick={nextStep}
-              disabled={currentStep === 0 && !selectedRole} >
-  {currentStep === steps.length - 1 ? 'Complete Setup' : 'Next'}
-</DaisyButton>
+              disabled={currentStep === 0 && !selectedRole}>
+          {currentStep === steps.length - 1 ? 'Complete Setup' : 'Next'}
+
+        </DaisyButton>
               <ChevronRight className="w-4 h-4 ml-2" />
             </DaisyButton>
           </div>

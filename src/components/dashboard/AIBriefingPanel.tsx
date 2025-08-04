@@ -228,7 +228,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       className="font-inter"
     >
       <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5] shadow-lg" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -253,9 +253,9 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
                 Live
               </DaisyBadge>
               
-              <DaisyTooltip />
-                <DaisyTooltipTrigger asChild />
-                  <DaisyButton
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={handlePlayBriefing}
@@ -264,14 +264,14 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
 </DaisyTooltip><Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </DaisyButton>
                 </DaisyTooltipTrigger>
-                <DaisyTooltipContent />
-                  {isPlaying ? 'Pause Audio Briefing' : 'Play Audio Briefing'}
+                <DaisyTooltipContent>
+                    {isPlaying ? 'Pause Audio Briefing' : 'Play Audio Briefing'}
                 </DaisyTooltipContent>
               </DaisyTooltip>
 
-              <DaisyTooltip />
-                <DaisyTooltipTrigger asChild />
-                  <DaisyButton
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={handleRefreshBriefing}
@@ -312,8 +312,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
                     <div
                       key={i}
                       className="w-1 h-4 bg-blue-400 rounded animate-pulse"
-                      style={{ animationDelay: `${i * 0.2}s` }}
-                    />
+                      style={{ animationDelay: `${i * 0.2}s` }} />
                   ))}
                 </div>
               </div>
@@ -371,18 +370,17 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
         </div>
 
         <DaisySeparator className="my-4" />
-
-        {/* Tabbed Content */}
-        <DaisyTabs value={currentTab} onValueChange={setCurrentTab} className="w-full" />
-          <DaisyTabsList className="grid w-full grid-cols-4" />
-            <DaisyTabsTrigger value="summary">Summary</DaisySeparator>
+{/* Tabbed Content */}
+        <DaisyTabs value={currentTab} onValueChange={setCurrentTab} className="w-full" >
+            <DaisyTabsList className="grid w-full grid-cols-4" >
+              <DaisyTabsTrigger value="summary">Summary</DaisySeparator>
             <DaisyTabsTrigger value="insights">Insights</DaisyTabsTrigger>
             <DaisyTabsTrigger value="actions">Actions</DaisyTabsTrigger>
             <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value="summary" className="mt-4 space-y-4" />
-            <div className="bg-[#F5F1E9] border border-[#D8C3A5] rounded-lg p-4">
+          <DaisyTabsContent value="summary" className="mt-4 space-y-4" >
+              <div className="bg-[#F5F1E9] border border-[#D8C3A5] rounded-lg p-4">
               <div className="flex items-start space-x-3">
                 <BookOpen className="w-5 h-5 text-[#191919] mt-1" />
                 <div className="flex-1">
@@ -414,8 +412,8 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
             </div>
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="insights" className="mt-4 space-y-3" />
-            {briefingInsights.map((insight, index) => (
+          <DaisyTabsContent value="insights" className="mt-4 space-y-3" >
+              {briefingInsights.map((insight, index) => (
               <motion.div
                 key={insight.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -433,8 +431,8 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
                         </h4>
                         <DaisyBadge variant="outline" className="text-xs border-[#D8C3A5] text-[#191919] font-inter" >
   {insight.confidence}% confidence
-</DaisyTabsContent>
-                        </DaisyBadge>
+</DaisyBadge>
+          </DaisyTabsContent>
                       </div>
                       <p className="text-sm text-[#A8A8A8] mb-2 font-inter">
                         {insight.description}
@@ -469,8 +467,8 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
             ))}
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="actions" className="mt-4 space-y-3" />
-            {briefingInsights
+          <DaisyTabsContent value="actions" className="mt-4 space-y-3" >
+              {briefingInsights
               .filter(insight => insight.actionable)
               .sort((a, b) => {
                 const urgencyOrder = { immediate: 4, 'this-week': 3, 'this-month': 2, 'long-term': 1 };
@@ -508,8 +506,8 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
               ))}
           </DaisyTabsContent>
 
-          <DaisyTabsContent value="trends" className="mt-4" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <DaisyTabsContent value="trends" className="mt-4" >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-3">
                 <h4 className="font-medium text-[#191919] font-inter">Positive Trends</h4>
                 {[
@@ -524,8 +522,8 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
                     </div>
                     <DaisyBadge className="bg-green-100 text-green-800 text-xs font-inter" >
   {trend.change}
-</DaisyTabsContent>
-                    </DaisyBadge>
+</DaisyBadge>
+          </DaisyTabsContent>
                   </div>
                 ))}
               </div>
@@ -590,7 +588,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
                           <span className="font-medium text-[#191919] font-inter">{metric.value}%</span>
                         </div>
                         <DaisyProgress value={metric.value} className="h-1" />
-                      </div>
+</div>
                     ))}
                   </div>
                 </div>

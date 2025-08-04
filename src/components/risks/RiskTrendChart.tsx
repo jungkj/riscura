@@ -171,11 +171,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            />
+              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
             <YAxis />
-            <DaisyTooltip content={customTooltip} />
-            <Legend />
+            <DaisyTooltip content={customTooltip}>
+              <Legend />
             <Area type="monotone" dataKey="critical" stackId="1" stroke="#dc2626" fill="#fecaca" />
             <Area type="monotone" dataKey="high" stackId="1" stroke="#ea580c" fill="#fed7aa" />
             <Area type="monotone" dataKey="medium" stackId="1" stroke="#d97706" fill="#fef3c7" />
@@ -189,11 +188,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            />
+              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
             <YAxis />
-            <DaisyTooltip content={customTooltip} />
-            <Legend />
+            <DaisyTooltip content={customTooltip}>
+              <Legend />
             <Bar dataKey="critical" stackId="a" fill="#dc2626" />
             <Bar dataKey="high" stackId="a" fill="#ea580c" />
             <Bar dataKey="medium" stackId="a" fill="#d97706" />
@@ -207,12 +205,11 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            />
+              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
             <YAxis yAxisId="left" />
             <YAxis yAxisId="right" orientation="right" />
-            <DaisyTooltip content={customTooltip} />
-            <Legend />
+            <DaisyTooltip content={customTooltip}>
+              <Legend />
             <Bar yAxisId="left" dataKey="new" fill="#3b82f6" name="New Risks" />
             <Bar yAxisId="left" dataKey="resolved" fill="#10b981" name="Resolved Risks" />
             <Line yAxisId="right" type="monotone" dataKey="avgScore" stroke="#f59e0b" strokeWidth={3} name="Avg Score" />
@@ -225,11 +222,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="date" 
-              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            />
+              tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
             <YAxis />
-            <DaisyTooltip content={customTooltip} />
-            <Legend />
+            <DaisyTooltip content={customTooltip}>
+              <Legend />
             <Line type="monotone" dataKey="critical" stroke="#dc2626" strokeWidth={2} dot={{ r: 4 }} />
             <Line type="monotone" dataKey="high" stroke="#ea580c" strokeWidth={2} dot={{ r: 4 }} />
             <Line type="monotone" dataKey="medium" stroke="#d97706" strokeWidth={2} dot={{ r: 4 }} />
@@ -241,7 +237,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTooltip>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -252,10 +248,11 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
           
           <div className="flex items-center gap-2">
             <DaisySelect value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as typeof selectedTimeRange)} />
-              <DaisySelectTrigger className="w-24" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="7d">7 days</DaisySelectContent>
+              <DaisySelectTrigger className="w-24">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="7d">7 days</DaisySelectItem>
                 <DaisySelectItem value="30d">30 days</DaisySelectItem>
                 <DaisySelectItem value="90d">90 days</DaisySelectItem>
                 <DaisySelectItem value="1y">1 year</DaisySelectItem>
@@ -263,10 +260,11 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
             </DaisySelect>
             
             <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="line">Line Chart</DaisySelectContent>
+              <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="line">Line Chart</DaisySelectItem>
                 <DaisySelectItem value="area">Area Chart</DaisySelectItem>
                 <DaisySelectItem value="bar">Bar Chart</DaisySelectItem>
                 <DaisySelectItem value="composed">Composed</DaisySelectItem>

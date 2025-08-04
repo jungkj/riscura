@@ -284,11 +284,12 @@ const FilterBar: React.FC<{
         {/* Date Range Preset */}
         <div className="flex items-center space-x-enterprise-2">
           <DaisyCalendar className="h-4 w-4 text-text-tertiary" />
-          <DaisySelect defaultValue="last-30-days" />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue /></DaisyCalendar>
-            <DaisySelectContent />
-              <DaisySelectItem value="today">Today</DaisySelectContent>
+<DaisySelect defaultValue="last-30-days" >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue />
+</DaisyCalendar>
+            <DaisySelectContent >
+                <DaisySelectItem value="today">Today</DaisySelectItem>
               <DaisySelectItem value="yesterday">Yesterday</DaisySelectItem>
               <DaisySelectItem value="last-7-days">Last 7 days</DaisySelectItem>
               <DaisySelectItem value="last-30-days">Last 30 days</DaisySelectItem>
@@ -300,8 +301,7 @@ const FilterBar: React.FC<{
         </div>
 
         <DaisySeparator orientation="vertical" className="h-6" />
-
-        {/* Dynamic Filters */}
+{/* Dynamic Filters */}
         {filters.map((filter) => (
           <div key={filter.id} className="flex items-center space-x-enterprise-2">
             <span className="text-body-sm text-text-secondary font-medium">
@@ -309,12 +309,13 @@ const FilterBar: React.FC<{
             </span>
             {filter.type === 'select' && (
               <DaisySelect onValueChange={(value) => onFilterChange(filter.id, value)} />
-                <DaisySelectTrigger className="w-40" />
-                  <DaisySelectValue placeholder={filter.placeholder} /></DaisySeparator>
-                <DaisySelectContent />
-                  {filter.options?.map((option) => (
-                    <DaisySelectItem key={option.value} value={option.value} />
-                      <div className="flex items-center justify-between w-full">
+                <DaisySelectTrigger className="w-40">
+                    <DaisySelectValue placeholder={filter.placeholder} />
+</DaisySeparator>
+                <DaisySelectContent >
+                    {filter.options?.map((option) => (
+                    <DaisySelectItem key={option.value} value={option.value} >
+                        <div className="flex items-center justify-between w-full">
                         <span>{option.label}</span>
                         {option.count && (
                           <DaisyBadge variant="secondary" className="ml-enterprise-2 text-caption" >
@@ -335,8 +336,7 @@ const FilterBar: React.FC<{
                   type="text"
                   placeholder={filter.placeholder}
                   className="pl-8 pr-enterprise-3 py-enterprise-2 border border-border rounded-lg text-body-sm w-64"
-                  onChange={(e) => onFilterChange(filter.id, e.target.value)}
-                />
+                  onChange={(e) => onFilterChange(filter.id, e.target.value)} />
               </div>
             )}
           </div>
@@ -420,8 +420,7 @@ const ChartPlaceholder: React.FC<{ chart: ChartConfig }> = ({ chart }) => {
                     style={{
                       width: `${(item.value / 100) * 100}%`,
                       backgroundColor: item.color,
-                    }}
-                  />
+                    }} />
                 </div>
                 <span className="text-caption text-text-tertiary">
                   Target: {item.target}%
@@ -543,9 +542,10 @@ const DataTable: React.FC<{
                 <span className="text-body-sm text-text-secondary">
                   {config.selection.selectedRows.length} selected
                 </span>
-                <DaisyButton variant="outline" size="sm" >
-  Bulk Actions
-</DaisyButton>
+                <DaisyButton variant="outline" size="sm">
+          Bulk Actions
+
+        </DaisyButton>
                 </DaisyButton>
               </div>
             )}
@@ -571,8 +571,7 @@ const DataTable: React.FC<{
                         className="rounded border-border"
                         onChange={(e) => {
                           // Handle select all
-                        }}
-                      />
+                        }} />
                     </th>
                   )}
                   {config.columns.map((column) => (
@@ -609,8 +608,7 @@ const DataTable: React.FC<{
                           type="checkbox"
                           className="rounded border-border"
                           checked={config.selection?.selectedRows?.includes(row.id)}
-                          onChange={(e) => onRowSelect(row.id, e.target.checked)}
-                        />
+                          onChange={(e) => onRowSelect(row.id, e.target.checked)} />
                       </td>
                     )}
                     {config.columns.map((column) => (
@@ -642,9 +640,11 @@ const DataTable: React.FC<{
                 variant="outline"
                 size="sm"
                 disabled={config.pagination.page === 1}
-                onClick={() => onPageChange(config.pagination!.page - 1)} />
+                onClick={() =>
+          onPageChange(config.pagination!.page - 1)} />
                 Previous
-              </DaisyButton>
+              
+        </DaisyButton>
               
               <div className="flex items-center space-x-enterprise-1">
                 {[1, 2, 3, 4, 5].map((page) => (
@@ -653,19 +653,23 @@ const DataTable: React.FC<{
                     variant={config.pagination!.page === page ? 'default' : 'outline'}
                     size="sm"
                     className="w-8 h-8 p-0"
-                    onClick={() => onPageChange(page)} />
+                    onClick={() =>
+          onPageChange(page)} />
                     {page}
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 ))}
               </div>
               
               <DaisyButton
                 variant="outline"
                 size="sm"
-                disabled={config.pagination.page * config.pagination.pageSize >= config.pagination.total}
+                disabled={config.pagination.page * config.pagination.pageSize>
+          = config.pagination.total}
                 onClick={() => onPageChange(config.pagination!.page + 1)} />
                 Next
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </div>
         )}
@@ -764,21 +768,20 @@ export const AdvancedReportsInterface: React.FC = () => {
         filters={sampleFilters}
         onFilterChange={handleFilterChange}
         onExport={handleExport}
-        onRefresh={handleRefresh}
-      />
+        onRefresh={handleRefresh} />
 
       {/* Content Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="mb-enterprise-6" />
-          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="mb-enterprise-6" >
+            <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
           <DaisyTabsTrigger value="risk">Risk Analysis</DaisyTabsTrigger>
           <DaisyTabsTrigger value="audit">Audit Reports</DaisyTabsTrigger>
           <DaisyTabsTrigger value="custom">Custom Reports</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="dashboard" className="space-y-enterprise-6" />
-          {/* Charts Grid */}
+        <DaisyTabsContent value="dashboard" className="space-y-enterprise-6" >
+            {/* Charts Grid */}
           <ContentSection 
             title="Key Metrics Overview"
             subtitle="Real-time analytics and performance indicators"
@@ -800,13 +803,12 @@ export const AdvancedReportsInterface: React.FC = () => {
               onSort={handleSort}
               onRowSelect={handleRowSelect}
               onRowAction={handleRowAction}
-              onPageChange={handlePageChange}
-            />
+              onPageChange={handlePageChange} />
           </ContentSection>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="compliance" className="space-y-enterprise-6" />
-          <div className="text-center py-enterprise-12">
+        <DaisyTabsContent value="compliance" className="space-y-enterprise-6" >
+            <div className="text-center py-enterprise-12">
             <CheckCircle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
               Compliance Reports
@@ -817,8 +819,8 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="risk" className="space-y-enterprise-6" />
-          <div className="text-center py-enterprise-12">
+        <DaisyTabsContent value="risk" className="space-y-enterprise-6" >
+            <div className="text-center py-enterprise-12">
             <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" >
   <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
 </DaisyTabsContent>
@@ -830,8 +832,8 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="audit" className="space-y-enterprise-6" />
-          <div className="text-center py-enterprise-12">
+        <DaisyTabsContent value="audit" className="space-y-enterprise-6" >
+            <div className="text-center py-enterprise-12">
             <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
               Audit Reports
@@ -842,8 +844,8 @@ export const AdvancedReportsInterface: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="custom" className="space-y-enterprise-6" />
-          <div className="text-center py-enterprise-12">
+        <DaisyTabsContent value="custom" className="space-y-enterprise-6" >
+            <div className="text-center py-enterprise-12">
             <FileText className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
             <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
               Custom Reports

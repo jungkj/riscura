@@ -86,8 +86,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
                       style={{
                         width: `${(item.value / maxValue) * 100}%`,
                         backgroundColor: item.color || chartColors[index % chartColors.length],
-                      }}
-                    />
+                      }} />
                   </div>
                   {showValues && (
                     <div className="w-16 text-sm text-gray-600 font-inter font-medium text-right">
@@ -106,8 +105,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
                 <div key={item.label} className="flex items-center gap-2">
                   <div
                     className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: item.color || chartColors[index % chartColors.length] }}
-                  />
+                    style={{ backgroundColor: item.color || chartColors[index % chartColors.length] }} />
                   <span className="text-xs text-gray-600 font-inter">
                     {item.label}: {item.value.toLocaleString()}
                   </span>
@@ -210,8 +208,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
                   key={slice.label}
                   d={slice.path}
                   fill={slice.color}
-                  className="hover:opacity-80 transition-opacity cursor-pointer"
-                />
+                  className="hover:opacity-80 transition-opacity cursor-pointer" />
               ))}
               
               {/* Center Circle */}
@@ -220,8 +217,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
                 cy={center}
                 r={innerRadius}
                 fill="white"
-                className="drop-shadow-sm"
-              />
+                className="drop-shadow-sm" />
               
               {/* Center Text */}
               <text
@@ -251,8 +247,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
                   <div className="flex items-center gap-3">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: slice.color }}
-                    />
+                      style={{ backgroundColor: slice.color }} />
                     <span className="text-sm text-gray-700 font-inter font-medium">
                       {slice.label}
                     </span>
@@ -369,7 +364,7 @@ export interface ProgressRingProps {
   className?: string;
 }
 
-export const ProgressRing: React.FC<DaisyProgressRingProps> = ({
+export const ProgressRing: React.FC<DaisyProgressRingProps / />= ({
   value,
   max = 100,
   size = 120,
@@ -399,8 +394,7 @@ export const ProgressRing: React.FC<DaisyProgressRingProps> = ({
               r={radius}
               stroke={backgroundColor}
               strokeWidth={strokeWidth}
-              fill="transparent"
-            />
+              fill="transparent" />
             {/* Progress circle */}
             <circle
               cx={size / 2}
@@ -412,8 +406,7 @@ export const ProgressRing: React.FC<DaisyProgressRingProps> = ({
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
-              className="transition-all duration-500 ease-out"
-            />
+              className="transition-all duration-500 ease-out" />
           </svg>
           {/* Center text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -495,8 +488,7 @@ export const SimpleTrendLine: React.FC<TrendLineProps> = ({
           strokeWidth="2"
           fill="none"
           strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+          strokeLinejoin="round" />
         
         {/* Data points */}
         {showDots && points.map((point, index) => (
@@ -506,8 +498,7 @@ export const SimpleTrendLine: React.FC<TrendLineProps> = ({
             cy={point.y}
             r="3"
             fill={color}
-            className="hover:r-4 transition-all cursor-pointer"
-          />
+            className="hover:r-4 transition-all cursor-pointer" />
         ))}
       </svg>
     </div>

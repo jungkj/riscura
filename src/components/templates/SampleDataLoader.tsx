@@ -355,7 +355,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
             Setting up your workspace with realistic examples...
           </p>
           <DaisyProgress value={loadingProgress} className="h-3 mb-2" />
-          <p className="text-sm text-gray-500">{loadingProgress}% complete</p>
+<p className="text-sm text-gray-500">{loadingProgress}% complete</p>
         </DaisyProgress>
       </DaisyCard>
     );
@@ -364,7 +364,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Database className="w-5 h-5" />
@@ -400,7 +400,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                           <CategoryIcon className="w-4 h-4" />
                         </div>
                         <DaisyCheckbox checked={isSelected} />
-                      </div>
+</div>
                       <DaisyBadge variant="secondary" className="text-xs" >
   {template.items} items
 </DaisyCheckbox>
@@ -417,13 +417,15 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
                           variant="ghost"
                           size="sm"
                           className="h-auto p-0 text-blue-600 hover:text-blue-700"
-                          onClick={(e) => {
+                          onClick={(e) =>
+          {
                             e.stopPropagation();
                             setShowPreview(showPreview === template.id ? null : template.id);
                           }}
                         >
                           Preview
-                        </DaisyButton>
+                        
+        </DaisyButton>
                       </div>
 
                       {showPreview === template.id && (

@@ -181,8 +181,7 @@ function TextInputField({ field, value, onChange, onBlur, error, touched }: {
         )}
         style={{
           fontSize: device.type === 'mobile' ? '16px' : '14px', // Prevents zoom on iOS
-        }}
-      />
+        }} />
 
       {/* Password Toggle */}
       {field.type === 'password' && (
@@ -248,8 +247,7 @@ function TextareaField({ field, value, onChange, onBlur, error, touched }: {
       )}
       style={{
         fontSize: device.type === 'mobile' ? '16px' : '14px',
-      }}
-    />
+      }} />
   );
 }
 
@@ -281,8 +279,7 @@ function SelectField({ field, value, onChange, onBlur, error, touched }: {
                 }
               }}
               disabled={option.disabled || field.disabled}
-              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-            />
+              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
             <span className="text-base text-gray-900">{option.label}</span>
           </label>
         ))}
@@ -340,8 +337,7 @@ function CheckboxField({ field, value, onChange, onBlur }: {
         onBlur={onBlur}
         required={field.required}
         disabled={field.disabled}
-        className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5"
-      />
+        className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5" />
       <div>
         <span className="text-base text-gray-900">{field.label}</span>
         {field.description && (
@@ -589,8 +585,7 @@ function FileField({ field, value, onChange, onBlur, error, touched }: {
         multiple={field.multiple}
         onChange={(e) => handleFileSelect(e.target.files)}
         onBlur={onBlur}
-        className="hidden"
-      />
+        className="hidden" />
     </div>
   );
 }
@@ -919,14 +914,16 @@ export function EnhancedMobileForm({
 
     switch (field.type) {
       case 'textarea':
-        fieldComponent = <DaisyTextareaField {...commonProps} />;
+        fieldComponent = <DaisyTextareaField {...commonProps} />
+;
         break;
       case 'select':
       case 'multiselect':
         fieldComponent = <DaisySelectField {...commonProps} />;
         break;
       case 'checkbox':
-        return <DaisyCheckboxField {...commonProps} />;
+        return <DaisyCheckboxField {...commonProps} />
+;
       case 'toggle':
         return <ToggleField {...commonProps} />;
       case 'file':
@@ -988,8 +985,7 @@ export function EnhancedMobileForm({
                 className="bg-blue-600 h-2 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercentage}%` }}
-                transition={{ duration: 0.3 }}
-              />
+                transition={{ duration: 0.3 }} />
             </div>
           </div>
         )}
@@ -1151,8 +1147,7 @@ export function EnhancedMobileForm({
                   'w-3 h-3 rounded-full p-0',
                   index === currentSection ? 'bg-blue-600' : 'bg-gray-300'
                 )}
-                aria-label={`Go to section ${index + 1}`}
-              />
+                aria-label={`Go to section ${index + 1}`} />
             ))}
           </div>
         )}

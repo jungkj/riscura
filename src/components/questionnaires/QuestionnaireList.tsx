@@ -97,7 +97,7 @@ export function QuestionnaireList({
       className="h-full"
     >
       <DaisyCard className="h-full border-notion-border bg-white dark:bg-notion-bg-secondary hover:shadow-lg transition-all duration-200" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-3">
@@ -114,49 +114,49 @@ export function QuestionnaireList({
               </div>
             </div>
             
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton variant="ghost" size="sm" >
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton variant="ghost" size="sm" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" />
-                <DaisyDropdownMenuItem onClick={() => onEdit(questionnaire)} />
+              <DaisyDropdownMenuContent align="end" >
+                  <DaisyDropdownMenuItem onClick={() => onEdit(questionnaire)} />
                   <Edit className="w-4 h-4 mr-2" />
                   Edit
                 </DaisyDropdownMenuContent>
-                <DaisyDropdownMenuItem />
-                  <Eye className="w-4 h-4 mr-2" />
+                <DaisyDropdownMenuItem >
+                    <Eye className="w-4 h-4 mr-2" />
                   Preview
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuItem onClick={() => onDuplicate(questionnaire)} />
                   <Copy className="w-4 h-4 mr-2" />
                   Duplicate
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem />
-                  <Share className="w-4 h-4 mr-2" />
+                <DaisyDropdownMenuItem >
+                    <Share className="w-4 h-4 mr-2" />
                   Share
                 </DaisyDropdownMenuItem>
                 <DaisyDropdownMenuSeparator />
-                {questionnaire.status === 'draft' && (
+{questionnaire.status === 'draft' && (
                   <DaisyDropdownMenuItem onClick={() => onPublish(questionnaire.id)} />
                     <Play className="w-4 h-4 mr-2" />
                     Publish
                   </DaisyDropdownMenuSeparator>
                 )}
                 {questionnaire.status === 'active' && (
-                  <DaisyDropdownMenuItem />
-                    <Pause className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Pause className="w-4 h-4 mr-2" />
                     Pause
                   </DaisyDropdownMenuItem>
                 )}
-                <DaisyDropdownMenuItem />
-                  <Archive className="w-4 h-4 mr-2" />
+                <DaisyDropdownMenuItem >
+                    <Archive className="w-4 h-4 mr-2" />
                   Archive
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuSeparator />
-                <DaisyDropdownMenuItem 
+                <DaisyDropdownMenuSeparator / />
+<DaisyDropdownMenuItem 
                   onClick={() => onDelete(questionnaire.id)}
                   className="text-red-600 dark:text-red-400" />
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -180,9 +180,9 @@ export function QuestionnaireList({
             </DaisyBadge>
 
             {questionnaire.aiSettings.enabled && (
-              <DaisyTooltip />
-                <DaisyTooltipTrigger />
-                  <DaisyBadge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800" >
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger>
+                    <DaisyBadge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800" >
   <Brain className="w-3 h-3 mr-1" />
 </DaisyTooltip>
                     AI
@@ -233,30 +233,29 @@ export function QuestionnaireList({
             </div>
             <DaisyProgress 
               value={questionnaire.analytics.overview.completionRate} 
-              className="h-2"
-            />
-          </div>
+              className="h-2" />
+</div>
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-2 border-t border-notion-border">
             <div className="flex items-center space-x-2 text-xs text-notion-text-secondary">
               <DaisyCalendar className="w-3 h-3" />
-              <span>Updated {formatDate(questionnaire.updatedAt)}</span>
+<span>Updated {formatDate(questionnaire.updatedAt)}</span>
             </div>
             
             <div className="flex items-center space-x-1">
-              <DaisyTooltip />
-                <DaisyTooltipTrigger />
-                  <DaisyButton variant="ghost" size="sm" onClick={() => onEdit(questionnaire)} />
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger>
+                    <DaisyButton variant="ghost" size="sm" onClick={() => onEdit(questionnaire)} />
                     <Edit className="w-3 h-3" />
                   </DaisyProgress>
                 </DaisyTooltipTrigger>
                 <DaisyTooltipContent>Edit questionnaire</DaisyTooltipContent>
               </DaisyTooltip>
               
-              <DaisyTooltip />
-                <DaisyTooltipTrigger />
-                  <DaisyButton variant="ghost" size="sm" >
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger>
+                    <DaisyButton variant="ghost" size="sm" >
   <BarChart3 className="w-3 h-3" />
 </DaisyTooltip>
                   </DaisyButton>
@@ -362,22 +361,22 @@ export function QuestionnaireList({
             <div className="flex items-center space-x-4 flex-shrink-0">
               <div className="hidden lg:flex items-center space-x-2 text-xs text-notion-text-secondary">
                 <DaisyCalendar className="w-3 h-3" />
-                <span>Updated {formatDate(questionnaire.updatedAt)}</span>
+<span>Updated {formatDate(questionnaire.updatedAt)}</span>
               </div>
               
               <div className="flex items-center space-x-1">
-                <DaisyTooltip />
-                  <DaisyTooltipTrigger />
-                    <DaisyButton variant="ghost" size="sm" onClick={() => onEdit(questionnaire)} />
+                <DaisyTooltip>
+                    <DaisyTooltipTrigger>
+                      <DaisyButton variant="ghost" size="sm" onClick={() => onEdit(questionnaire)} />
                       <Edit className="w-4 h-4" />
                     </DaisyCalendar>
                   </DaisyTooltipTrigger>
                   <DaisyTooltipContent>Edit questionnaire</DaisyTooltipContent>
                 </DaisyTooltip>
                 
-                <DaisyTooltip />
-                  <DaisyTooltipTrigger />
-                    <DaisyButton variant="ghost" size="sm" >
+                <DaisyTooltip>
+                    <DaisyTooltipTrigger>
+                      <DaisyButton variant="ghost" size="sm" >
   <BarChart3 className="w-4 h-4" />
 </DaisyTooltip>
                     </DaisyButton>
@@ -385,45 +384,45 @@ export function QuestionnaireList({
                   <DaisyTooltipContent>View analytics</DaisyTooltipContent>
                 </DaisyTooltip>
                 
-                <DaisyDropdownMenu />
-                  <DaisyDropdownMenuTrigger asChild />
-                    <DaisyButton variant="ghost" size="sm" >
+                <DaisyDropdownMenu >
+                    <DaisyDropdownMenuTrigger asChild >
+                      <DaisyButton variant="ghost" size="sm" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
                     </DaisyButton>
                   </DaisyDropdownMenuTrigger>
-                  <DaisyDropdownMenuContent align="end" />
-                    <DaisyDropdownMenuItem />
-                      <Eye className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuContent align="end" >
+                      <DaisyDropdownMenuItem >
+                        <Eye className="w-4 h-4 mr-2" />
                       Preview
                     </DaisyDropdownMenuContent>
                     <DaisyDropdownMenuItem onClick={() => onDuplicate(questionnaire)} />
                       <Copy className="w-4 h-4 mr-2" />
                       Duplicate
                     </DaisyDropdownMenuItem>
-                    <DaisyDropdownMenuItem />
-                      <Share className="w-4 h-4 mr-2" />
+                    <DaisyDropdownMenuItem >
+                        <Share className="w-4 h-4 mr-2" />
                       Share
                     </DaisyDropdownMenuItem>
                     <DaisyDropdownMenuSeparator />
-                    {questionnaire.status === 'draft' && (
+{questionnaire.status === 'draft' && (
                       <DaisyDropdownMenuItem onClick={() => onPublish(questionnaire.id)} />
                         <Play className="w-4 h-4 mr-2" />
                         Publish
                       </DaisyDropdownMenuSeparator>
                     )}
                     {questionnaire.status === 'active' && (
-                      <DaisyDropdownMenuItem />
-                        <Pause className="w-4 h-4 mr-2" />
+                      <DaisyDropdownMenuItem >
+                          <Pause className="w-4 h-4 mr-2" />
                         Pause
                       </DaisyDropdownMenuItem>
                     )}
-                    <DaisyDropdownMenuItem />
-                      <Archive className="w-4 h-4 mr-2" />
+                    <DaisyDropdownMenuItem >
+                        <Archive className="w-4 h-4 mr-2" />
                       Archive
                     </DaisyDropdownMenuItem>
-                    <DaisyDropdownMenuSeparator />
-                    <DaisyDropdownMenuItem 
+                    <DaisyDropdownMenuSeparator / />
+<DaisyDropdownMenuItem 
                       onClick={() => onDelete(questionnaire.id)}
                       className="text-red-600 dark:text-red-400" />
                       <Trash2 className="w-4 h-4 mr-2" />
@@ -512,8 +511,7 @@ export function QuestionnaireList({
             {questionnaires.map((questionnaire) => (
               <QuestionnaireCard 
                 key={questionnaire.id} 
-                questionnaire={questionnaire} 
-              />
+                questionnaire={questionnaire} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -526,8 +524,7 @@ export function QuestionnaireList({
             {questionnaires.map((questionnaire) => (
               <QuestionnaireListItem 
                 key={questionnaire.id} 
-                questionnaire={questionnaire} 
-              />
+                questionnaire={questionnaire} />
             ))}
           </AnimatePresence>
         </motion.div>

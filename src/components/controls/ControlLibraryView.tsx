@@ -225,7 +225,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   return (
       <div className="flex items-center space-x-2">
         <DaisyProgress value={config.value} className="w-16" />
-        <DaisyBadge variant="outline" className={`${config.color} ${config.bgColor}`}>
+<DaisyBadge variant="outline" className={`${config.color} ${config.bgColor}`}>
           {String(effectiveness).toUpperCase()}
         </DaisyProgress>
       </div>
@@ -275,9 +275,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
 </DaisyCardBody>
           <div className="text-center text-red-600">
             <p>Error loading controls: {error}</p>
-            <DaisyButton onClick={() => window.location.reload()} className="mt-2" />
+            <DaisyButton onClick={() =>
+          window.location.reload()} className="mt-2" />
               Retry
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </DaisyCardBody>
       </DaisyCard>
@@ -303,7 +305,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Total Controls</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
@@ -318,7 +320,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">High Effectiveness</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-green-600" />
@@ -335,7 +337,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Overdue Tests</DaisyCardTitle>
             <DaisyAlertTriangle className="h-4 w-4 text-red-600" >
@@ -352,7 +354,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         </DaisyCard>
         
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Avg Effectiveness</DaisyCardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -371,7 +373,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
 
       {/* Search and Filters */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
@@ -380,9 +382,9 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               <DaisyInput
                 placeholder="Search controls..."
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-10"
-              />
+                onChange={(e) = />
+setSearchInput(e.target.value)}
+                className="pl-10" />
             </div>
 
             {/* Filter Toggle */}
@@ -408,10 +410,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 value={filters.type || ''}
                 onValueChange={(value) => setFilters({ type: value as Control['type'] })}
               >
-                <DaisySelectTrigger />
-                  <DaisySelectValue placeholder="Control Type" /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="">All Types</DaisySelectContent>
+                <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Control Type" />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="">All Types</DaisySelectItem>
                   <DaisySelectItem value="preventive">Preventive</DaisySelectItem>
                   <DaisySelectItem value="detective">Detective</DaisySelectItem>
                   <DaisySelectItem value="corrective">Corrective</DaisySelectItem>
@@ -422,10 +425,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 value={filters.effectiveness ? String(filters.effectiveness) : ''}
                 onValueChange={(value) => setFilters({ effectiveness: value as Control['effectiveness'] })}
               >
-                <DaisySelectTrigger />
-                  <DaisySelectValue placeholder="Effectiveness" /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="">All Effectiveness</DaisySelectContent>
+                <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Effectiveness" />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="">All Effectiveness</DaisySelectItem>
                   <DaisySelectItem value="high">High</DaisySelectItem>
                   <DaisySelectItem value="medium">Medium</DaisySelectItem>
                   <DaisySelectItem value="low">Low</DaisySelectItem>
@@ -436,10 +440,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 value={filters.status || ''}
                 onValueChange={(value) => setFilters({ status: value as Control['status'] })}
               >
-                <DaisySelectTrigger />
-                  <DaisySelectValue placeholder="Status" /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="">All Statuses</DaisySelectContent>
+                <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="">All Statuses</DaisySelectItem>
                   <DaisySelectItem value="active">Active</DaisySelectItem>
                   <DaisySelectItem value="planned">Planned</DaisySelectItem>
                   <DaisySelectItem value="inactive">Inactive</DaisySelectItem>
@@ -477,9 +482,10 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
 </DaisyButton>
                   Delete
                 </DaisyButton>
-                <DaisyButton variant="outline" size="sm" onClick={clearSelection} >
-  Clear Selection
-</DaisyButton>
+                <DaisyButton variant="outline" size="sm" onClick={clearSelection}>
+          Clear Selection
+
+        </DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -492,17 +498,17 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   <DaisyCardBody className="p-0" >
   </DaisyCard>
 </DaisyCardBody>
-          <DaisyTable />
-            <DaisyTableHeader />
-              <DaisyTableRow />
-                <DaisyTableHead className="w-12" />
-                  <DaisyCheckbox
-                    checked={selectedControls.length === filteredControls.length && filteredControls.length > 0}
-                    onCheckedChange={handleSelectAll}
-                  />
+          <DaisyTable >
+              <DaisyTableHeader >
+                <DaisyTableRow >
+                  <DaisyTableHead className="w-12" >
+                    <DaisyCheckbox
+                    checked={selectedControls.length === filteredControls.length && filteredControls.length />
+0}
+                    onCheckedChange={handleSelectAll} />
                 </DaisyTable>
-                <DaisyTableHead />
-                  <DaisyButton
+                <DaisyTableHead >
+                    <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('title')}
                     className="h-auto p-0 font-semibold" />
@@ -514,8 +520,8 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                   </DaisyTableHead>
                 </DaisyTableHead>
                 <DaisyTableHead>Type</DaisyTableHead>
-                <DaisyTableHead />
-                  <DaisyButton
+                <DaisyTableHead >
+                    <DaisyButton
                     variant="ghost"
                     onClick={() => handleSort('effectiveness')}
                     className="h-auto p-0 font-semibold" />
@@ -533,38 +539,38 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 <DaisyTableHead className="w-12"></DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody />
-              {paginatedControls.map((control) => (
-                <DaisyTableRow key={control.id} className="hover:bg-muted/50" />
-                  <DaisyTableCell />
-                    <DaisyCheckbox
+            <DaisyTableBody >
+                {paginatedControls.map((control) => (
+                <DaisyTableRow key={control.id} className="hover:bg-muted/50" >
+                    <DaisyTableCell >
+                      <DaisyCheckbox
                       checked={selectedControls.includes(control.id)}
-                      onCheckedChange={() => handleSelectControl(control.id)}
-                    />
+                      onCheckedChange={() = />
+handleSelectControl(control.id)} />
                   </DaisyTableBody>
-                  <DaisyTableCell />
-                    <div>
+                  <DaisyTableCell >
+                      <div>
                       <div className="font-medium">{control.title}</div>
                       <div className="text-sm text-muted-foreground truncate max-w-xs">
                         {control.description}
                       </div>
                     </div>
                   </DaisyTableCell>
-                  <DaisyTableCell />
-                    <ControlTypeBadge type={control.type} />
+                  <DaisyTableCell >
+                      <ControlTypeBadge type={control.type} />
                   </DaisyTableCell>
-                  <DaisyTableCell />
-                    <EffectivenessIndicator effectiveness={control.effectiveness} />
+                  <DaisyTableCell >
+                      <EffectivenessIndicator effectiveness={control.effectiveness} />
                   </DaisyTableCell>
-                  <DaisyTableCell />
-                    <ControlStatusIndicator control={control} />
+                  <DaisyTableCell >
+                      <ControlStatusIndicator control={control} />
                   </DaisyTableCell>
                   <DaisyTableCell>{control.owner}</DaisyTableCell>
-                  <DaisyTableCell />
-                    {control.lastTestDate ? formatDate(control.lastTestDate) : 'Never'}
+                  <DaisyTableCell >
+                      {control.lastTestDate ? formatDate(control.lastTestDate) : 'Never'}
                   </DaisyTableCell>
-                  <DaisyTableCell />
-                    {control.nextTestDate ? (
+                  <DaisyTableCell >
+                      {control.nextTestDate ? (
                       <div className={`text-sm ${new Date(control.nextTestDate) < new Date() ? 'text-red-600' : ''}`}>
                         {formatDate(control.nextTestDate)}
                       </div>
@@ -572,16 +578,16 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                       'Not scheduled'
                     )}
                   </DaisyTableCell>
-                  <DaisyTableCell />
-                    <DaisyDropdownMenu />
-                      <DaisyDropdownMenuTrigger asChild />
-                        <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
+                  <DaisyTableCell >
+                      <DaisyDropdownMenu >
+                        <DaisyDropdownMenuTrigger asChild >
+                          <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
   <MoreHorizontal className="h-4 w-4" />
 </DaisyTableCell>
                         </DaisyButton>
                       </DaisyDropdownMenuTrigger>
-                      <DaisyDropdownMenuContent align="end" />
-                        <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuContent>
+                      <DaisyDropdownMenuContent align="end" >
+                          <DaisyDropdownMenuLabel>Actions</DaisyDropdownMenuContent>
                         <DaisyDropdownMenuItem
                           onClick={() => setSelectedControl(control)} />
                           <Eye className="mr-2 h-4 w-4" />
@@ -597,10 +603,10 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                           onClick={() => onTestControl ? onTestControl(control) : router.push(`/controls/${control.id}/test`)}
                         >
                           <DaisyCalendar className="mr-2 h-4 w-4" />
-                          Schedule Test
+Schedule Test
                         </DaisyDropdownMenuItem>
                         <DaisyDropdownMenuSeparator />
-                        <DaisyDropdownMenuItem
+<DaisyDropdownMenuItem
                           onClick={() => deleteControl(control.id)}
                           className="text-red-600" />
                           <Trash2 className="mr-2 h-4 w-4" />
@@ -626,29 +632,35 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() =>
+          setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1} />
                   Previous
-                </DaisyButton>
+                
+        </DaisyButton>
                 <div className="flex items-center space-x-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <DaisyButton
                       key={page}
                       variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() =>
+          setCurrentPage(page)}
                       className="w-8 h-8 p-0" />
                       {page}
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   ))}
                 </div>
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() =>
+          setCurrentPage(currentPage + 1)}
                   disabled={currentPage === totalPages} />
                   Next
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </div>
           )}
@@ -683,7 +695,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       {/* Control Detail Dialog */}
       <DaisyDialog open={!!selectedControl} onOpenChange={() => setSelectedControl(null)} />
         <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>{selectedControl?.title}</DaisyDialogTitle>
             <DaisyDialogDescription >

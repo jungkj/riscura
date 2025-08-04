@@ -248,8 +248,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
                 risk.progress >= 80 ? "bg-semantic-success" :
                 risk.progress >= 50 ? "bg-semantic-warning" : "bg-semantic-error"
               )}
-              style={{ width: `${risk.progress}%` }}
-            />
+              style={{ width: `${risk.progress}%` }} />
           </div>
         </div>
       )}
@@ -277,7 +276,7 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (action: string, risk: Risk) =>
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />
-            <span className={cn(
+<span className={cn(
               "text-caption",
               isOverdue ? "text-semantic-error font-medium" : "text-text-secondary"
             )}>
@@ -391,31 +390,33 @@ const RiskRegister: React.FC = () => {
             <DaisyInput
               placeholder="Search risks..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-enterprise-8 w-64"
-            />
+              onChange={(e) = />
+setSearchQuery(e.target.value)}
+              className="pl-enterprise-8 w-64" />
           </div>
 
           {/* Filters */}
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Category" /></DaisyInput>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Categories</DaisySelectContent>
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Category" />
+</DaisyInput>
+            <DaisySelectContent >
+                <DaisySelectItem value="all">All Categories</DaisySelectItem>
               {categories.map(category => (
                 <DaisySelectItem key={category} value={category}>{category}</DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Status" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Status</DaisySelectContent>
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="all">All Status</DaisySelectItem>
               {statuses.map(status => (
-                <DaisySelectItem key={status} value={status} />
-                  {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                <DaisySelectItem key={status} value={status} >
+                    {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </DaisySelectItem>
               ))}
             </DaisySelectContent>
@@ -457,8 +458,7 @@ const RiskRegister: React.FC = () => {
             <RiskCard
               key={risk.id}
               risk={risk}
-              onAction={handleRiskAction}
-            />
+              onAction={handleRiskAction} />
           ))}
         </div>
       ) : (
@@ -481,9 +481,10 @@ const RiskRegister: React.FC = () => {
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <DaisyButton variant="outline" >
-  Clear Filters
-</DaisyButton>
+          <DaisyButton variant="outline">
+          Clear Filters
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       )}
@@ -628,13 +629,13 @@ export const RiskManagementDashboard: React.FC = () => {
     >
       {/* Tabs */}
       <div className="flex items-center justify-between mb-enterprise-6">
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-          <DaisyTabsList />
-            <DaisyTabsTrigger value="register">Risk Register</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+            <DaisyTabsList >
+              <DaisyTabsTrigger value="register">Risk Register</DaisyTabs>
             <DaisyTabsTrigger value="assessment">Assessment</DaisyTabsTrigger>
             <DaisyTabsTrigger value="heatmap">Heat Map</DaisyTabsTrigger>
-            <DaisyTabsTrigger value="controls" />
-              <Shield className="h-4 w-4 mr-2" />
+            <DaisyTabsTrigger value="controls" >
+                <Shield className="h-4 w-4 mr-2" />
               Probo Controls
             </DaisyTabsTrigger>
             <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
@@ -643,23 +644,22 @@ export const RiskManagementDashboard: React.FC = () => {
         
         {/* Risk Creation Flow Toggle */}
         <div className="flex items-center space-x-2">
-          <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium" />
-            New Interactive Flow
+          <DaisyLabel htmlFor="flow-toggle" className="text-sm font-medium" >
+              New Interactive Flow
           </DaisyLabel>
           <DaisySwitch
             id="flow-toggle"
             checked={useNewFlow}
-            onCheckedChange={setUseNewFlow}
-          />
-        </div>
+            onCheckedChange={setUseNewFlow} />
+</div>
       </div>
 
-      <DaisyTabsContent value="register" />
-        <RiskRegister />
+      <DaisyTabsContent value="register" >
+          <RiskRegister />
       </DaisySwitch>
 
-      <DaisyTabsContent value="assessment" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="assessment" >
+          <div className="text-center py-enterprise-12">
           <Target className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Risk Assessment
@@ -670,8 +670,8 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="heatmap" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="heatmap" >
+          <div className="text-center py-enterprise-12">
           <Map className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Risk Heat Map
@@ -682,10 +682,10 @@ export const RiskManagementDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="controls" className="space-y-6" />
-        {/* Probo Integration Header */}
+      <DaisyTabsContent value="controls" className="space-y-6" >
+          {/* Probo Integration Header */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -743,7 +743,7 @@ export const RiskManagementDashboard: React.FC = () => {
               
               return (
                 <DaisyCard key={risk.id} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -781,7 +781,7 @@ export const RiskManagementDashboard: React.FC = () => {
                           <span>{coveragePercentage}%</span>
                         </div>
                         <DaisyProgress value={coveragePercentage} className="h-2" />
-                      </div>
+</div>
 
                       {/* Recommendations */}
                       {mapping?.recommendations && mapping.recommendations.length > 0 && (
@@ -820,8 +820,8 @@ export const RiskManagementDashboard: React.FC = () => {
         )}
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="analytics" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="analytics" >
+          <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Risk Analytics
@@ -840,14 +840,12 @@ export const RiskManagementDashboard: React.FC = () => {
           onSuccess={() => {
             handleRiskCreated({});
             setIsCreateRiskModalOpen(false);
-          }}
-        />
+          }} />
       ) : (
         <CreateRiskModal
           open={isCreateRiskModalOpen}
           onOpenChange={setIsCreateRiskModalOpen}
-          onRiskCreated={handleRiskCreated}
-        />
+          onRiskCreated={handleRiskCreated} />
       )}
     </MainContentArea>
   );

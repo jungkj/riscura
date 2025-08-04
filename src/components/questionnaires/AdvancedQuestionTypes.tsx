@@ -165,8 +165,7 @@ export function MatrixQuestionComponent({
                         checked={responses[row.id] === column.id}
                         onChange={(e) => handleResponse(row.id, column.id, e.target.checked)}
                         disabled={readonly}
-                        className="w-4 h-4"
-                      />
+                        className="w-4 h-4" />
                     ) : config.style === 'checkbox' ? (
                       <input
                         type="checkbox"
@@ -176,29 +175,31 @@ export function MatrixQuestionComponent({
                         }
                         onChange={(e) => handleResponse(row.id, column.id, e.target.checked)}
                         disabled={readonly}
-                        className="w-4 h-4"
-                      />
+                        className="w-4 h-4" />
                     ) : config.style === 'scale' ? (
                       <DaisyButton
                         variant={responses[row.id] === column.id ? "primary" : "outline"}
                         size="sm"
-                        onClick={() => handleResponse(row.id, column.id, true)}
+                        onClick={() =>
+          handleResponse(row.id, column.id, true)}
                         disabled={readonly}
                         className="w-8 h-8 p-0" />
                         {column.value}
-                      </DaisyButton>
+                      
+        </DaisyButton>
                     ) : (
                       <DaisySelect
                         value={responses[row.id] || ''}
                         onValueChange={(value) => handleResponse(row.id, value, true)}
                         disabled={readonly} />
-                        <DaisySelectTrigger className="w-full" />
-                          <DaisySelectValue placeholder="Select..." /></DaisySelect>
-                        <DaisySelectContent />
-                          {displayColumns.map((col) => (
-                            <DaisySelectItem key={col.id} value={col.id} />
-                              {col.text}
-                            </DaisySelectContent>
+                        <DaisySelectTrigger className="w-full">
+                            <DaisySelectValue placeholder="Select..." />
+</DaisySelect>
+                        <DaisySelectContent >
+                            {displayColumns.map((col) => (
+                            <DaisySelectItem key={col.id} value={col.id} >
+                                {col.text}
+                            </DaisySelectItem>
                           ))}
                         </DaisySelectContent>
                       </DaisySelect>
@@ -490,8 +491,7 @@ export function ImageQuestionComponent({
             <img
               src={image.url}
               alt={image.alt}
-              className="w-full h-48 object-cover"
-            />
+              className="w-full h-48 object-cover" />
             
             {/* Hotspots */}
             {config.selectionType === 'hotspot' && hotspots
@@ -532,15 +532,15 @@ export function ImageQuestionComponent({
             <DaisyInput
               type="file"
               accept="image/*"
-              onChange={(e) => {
+              onChange={(e) = />
+{
                 const file = e.target.files?.[0];
                 if (file) handleImageUpload(file);
               }}
               className="hidden"
-              id="image-upload"
-            />
-            <DaisyLabel htmlFor="image-upload" className="cursor-pointer" />
-              <DaisyButton variant="outline" size="sm" asChild >
+              id="image-upload" />
+            <DaisyLabel htmlFor="image-upload" className="cursor-pointer" >
+                <DaisyButton variant="outline" size="sm" asChild >
   <span>
 </DaisyInput>Choose File</span>
               </DaisyButton>
@@ -663,8 +663,7 @@ export function SignatureQuestionComponent({
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}
-          onMouseLeave={stopDrawing}
-        />
+          onMouseLeave={stopDrawing} />
         
         <div className="flex items-center justify-between mt-4">
           <div className="text-sm text-gray-600">
@@ -780,10 +779,10 @@ export function LocationQuestionComponent({
           <DaisyInput
             placeholder="Search for a location..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) = />
+setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
-            disabled={readonly}
-          />
+            disabled={readonly} />
           <DaisyButton onClick={searchLocation} disabled={isSearching || readonly} >
   {isSearching ? 'Searching...' : 'Search'}
 </DaisyInput>
@@ -823,11 +822,12 @@ export function LocationQuestionComponent({
 
         {/* Mock satellite view toggle */}
         <div className="p-2 border-t bg-gray-50 flex justify-between items-center">
-          <DaisySelect value={config.mapType} disabled />
-            <DaisySelectTrigger className="w-32" />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="roadmap">Roadmap</DaisySelectContent>
+          <DaisySelect value={config.mapType} disabled >
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="roadmap">Roadmap</DaisySelectItem>
               <DaisySelectItem value="satellite">Satellite</DaisySelectItem>
               <DaisySelectItem value="terrain">Terrain</DaisySelectItem>
               <DaisySelectItem value="hybrid">Hybrid</DaisySelectItem>
@@ -942,7 +942,7 @@ export function CustomHTMLQuestionComponent({
 
       {showCode && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-sm">HTML Content</DaisyCardTitle>
         </DaisyCardBody>
@@ -951,8 +951,7 @@ export function CustomHTMLQuestionComponent({
               value={config.htmlContent}
               readOnly
               rows={8}
-              className="font-mono text-sm"
-            />
+              className="font-mono text-sm" />
 </DaisyCardBody></DaisyTextarea>
         </DaisyCard>
       )}
@@ -962,13 +961,12 @@ export function CustomHTMLQuestionComponent({
           ref={iframeRef}
           srcDoc={generateIFrameContent()}
           className="w-full h-64 border-0"
-          sandbox={config.sandbox ? "allow-same-origin" : "allow-same-origin allow-scripts"}
-        />
+          sandbox={config.sandbox ? "allow-same-origin" : "allow-same-origin allow-scripts"} />
       </div>
 
       {config.allowUserInput && config.inputFields && config.inputFields.length > 0 && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-sm">Additional Input</DaisyCardTitle>
         </DaisyCardBody>
@@ -976,25 +974,25 @@ export function CustomHTMLQuestionComponent({
   {config.inputFields.map((field) => (
 </DaisyCardBody>
               <div key={field.name}>
-                <DaisyLabel htmlFor={field.name} />
-                  {field.name}
+                <DaisyLabel htmlFor={field.name} >
+                    {field.name}
                   {field.required && <span className="text-red-500 ml-1">*</span>}
                 </DaisyLabel>
                 {field.type === 'textarea' ? (
                   <DaisyTextarea
                     id={field.name}
                     value={inputValues[field.name] || ''}
-                    onChange={(e) => handleInputChange(field.name, e.target.value)}
-                    disabled={readonly}
-                  />
+                    onChange={(e) = />
+handleInputChange(field.name, e.target.value)}
+                    disabled={readonly} />
                 ) : (
                   <DaisyInput
                     id={field.name}
                     type={field.type}
                     value={inputValues[field.name] || ''}
-                    onChange={(e) => handleInputChange(field.name, e.target.value)}
-                    disabled={readonly}
-                  />
+                    onChange={(e) = />
+handleInputChange(field.name, e.target.value)}
+                    disabled={readonly} />
                 )}
               </div>
             ))}

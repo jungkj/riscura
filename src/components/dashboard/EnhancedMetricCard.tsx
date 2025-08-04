@@ -130,8 +130,7 @@ const MiniSparkline: React.FC<{ data: SparklineData }> = ({ data }) => {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          className={cn('transition-colors duration-200', trendColor)}
-        />
+          className={cn('transition-colors duration-200', trendColor)} />
       </svg>
     </div>
   );
@@ -197,7 +196,6 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
       >
         {/* Accent border */}
         <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
-        
         <DaisyCardBody className={cn("relative", spacingClasses.padding.lg)} >
   {isLoading ? (
 </DaisyCard>
@@ -285,9 +283,8 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
                   >
                     <DaisyProgress 
                       value={(progress.value / progress.max) * 100} 
-                      className="h-2 bg-slate-200"
-                    />
-                    <div className="flex justify-between text-xs text-slate-500">
+                      className="h-2 bg-slate-200" />
+<div className="flex justify-between text-xs text-slate-500">
                       <span>{progress.value}</span>
                       <span>{progress.max}</span>
                     </div>

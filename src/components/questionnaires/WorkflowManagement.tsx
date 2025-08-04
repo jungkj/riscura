@@ -302,17 +302,17 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
       </div>
 
       {/* Main Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" >
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="active">Active Workflows</DaisyTabsTrigger>
           <DaisyTabsTrigger value="templates">Templates</DaisyTabsTrigger>
           <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
         </DaisyTabsList>
 
         {/* Overview Tab */}
-        <DaisyTabsContent value="overview" className="space-y-6" />
-          {/* Summary Cards */}
+        <DaisyTabsContent value="overview" className="space-y-6" >
+            {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -421,7 +421,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
 
           {/* Recent Activity */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle>Recent Workflow Activity</DaisyCardTitle>
         </DaisyCardBody>
@@ -465,8 +465,8 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
         </DaisyTabsContent>
 
         {/* Active Workflows Tab */}
-        <DaisyTabsContent value="active" className="space-y-6" />
-          {/* Filters */}
+        <DaisyTabsContent value="active" className="space-y-6" >
+            {/* Filters */}
           <DaisyCard >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
@@ -478,27 +478,29 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                     <DaisyInput
                       placeholder="Search workflows..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
+                      onChange={(e) = />
+setSearchQuery(e.target.value)}
+                      className="pl-10" />
                   </div>
                 </div>
-                <DaisySelect value={statusFilter} onValueChange={setStatusFilter} />
-                  <DaisySelectTrigger className="w-48" />
-                    <DaisySelectValue placeholder="Filter by status" /></DaisyInput>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="all">All Status</DaisySelectContent>
+                <DaisySelect value={statusFilter} onValueChange={setStatusFilter} >
+                    <DaisySelectTrigger className="w-48">
+                      <DaisySelectValue placeholder="Filter by status" />
+</DaisyInput>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="all">All Status</DaisySelectItem>
                     <DaisySelectItem value="active">Active</DaisySelectItem>
                     <DaisySelectItem value="completed">Completed</DaisySelectItem>
                     <DaisySelectItem value="overdue">Overdue</DaisySelectItem>
                     <DaisySelectItem value="cancelled">Cancelled</DaisySelectItem>
                   </DaisySelectContent>
                 </DaisySelect>
-                <DaisySelect value={priorityFilter} onValueChange={setPriorityFilter} />
-                  <DaisySelectTrigger className="w-48" />
-                    <DaisySelectValue placeholder="Filter by priority" /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="all">All Priorities</DaisySelectContent>
+                <DaisySelect value={priorityFilter} onValueChange={setPriorityFilter} >
+                    <DaisySelectTrigger className="w-48">
+                      <DaisySelectValue placeholder="Filter by priority" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="all">All Priorities</DaisySelectItem>
                     <DaisySelectItem value="urgent">Urgent</DaisySelectItem>
                     <DaisySelectItem value="high">High</DaisySelectItem>
                     <DaisySelectItem value="medium">Medium</DaisySelectItem>
@@ -523,16 +525,15 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                   onSelect={() => setSelectedInstance(instance)}
                   getStatusColor={getStatusColor}
                   getPriorityColor={getPriorityColor}
-                  getStepIcon={getStepIcon}
-                />
+                  getStepIcon={getStepIcon} />
               </motion.div>
             ))}
           </div>
         </DaisyTabsContent>
 
         {/* Templates Tab */}
-        <DaisyTabsContent value="templates" className="space-y-6" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DaisyTabsContent value="templates" className="space-y-6" >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {mockWorkflowTemplates.map((template, index) => (
               <motion.div
                 key={template.id}
@@ -543,17 +544,16 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                 <WorkflowTemplateCard
                   template={template}
                   onSelect={() => setSelectedWorkflow(template)}
-                  getStatusColor={getStatusColor}
-                />
+                  getStatusColor={getStatusColor} />
               </motion.div>
             ))}
           </div>
         </DaisyTabsContent>
 
         {/* Settings Tab */}
-        <DaisyTabsContent value="settings" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="settings" className="space-y-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Notification Settings</DaisyCardTitle>
         </DaisyCardBody>
@@ -566,27 +566,27 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                     <p className="text-sm text-notion-text-secondary">Send email alerts for workflow events</p>
                   </div>
                   <DaisySwitch defaultChecked />
-                </div>
+</div>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-notion-text-primary">Overdue Reminders</p>
                     <p className="text-sm text-notion-text-secondary">Daily reminders for overdue approvals</p>
                   </div>
                   <DaisySwitch defaultChecked />
-                </div>
+</div>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-notion-text-primary">Assignment Notifications</p>
                     <p className="text-sm text-notion-text-secondary">Notify users when assigned to workflow steps</p>
                   </div>
                   <DaisySwitch defaultChecked />
-                </div>
+</div>
               </div>
             </DaisySwitch>
           </DaisyCard>
 
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle>Workflow Defaults</DaisyCardTitle>
         </DaisyCardBody>
@@ -594,11 +594,12 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
   <div>
 </DaisyCardBody>
                 <label className="text-sm font-medium text-notion-text-primary">Default Approval Timeout</label>
-                <DaisySelect defaultValue="72" />
-                  <DaisySelectTrigger className="mt-1" />
-                    <DaisySelectValue /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="24">24 hours</DaisySelectContent>
+                <DaisySelect defaultValue="72" >
+                    <DaisySelectTrigger className="mt-1">
+                      <DaisySelectValue />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="24">24 hours</DaisySelectItem>
                     <DaisySelectItem value="48">48 hours</DaisySelectItem>
                     <DaisySelectItem value="72">72 hours</DaisySelectItem>
                     <DaisySelectItem value="168">1 week</DaisySelectItem>
@@ -607,11 +608,12 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               </div>
               <div>
                 <label className="text-sm font-medium text-notion-text-primary">Auto-escalation</label>
-                <DaisySelect defaultValue="enabled" />
-                  <DaisySelectTrigger className="mt-1" />
-                    <DaisySelectValue /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="enabled">Enabled</DaisySelectContent>
+                <DaisySelect defaultValue="enabled" >
+                    <DaisySelectTrigger className="mt-1">
+                      <DaisySelectValue />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="enabled">Enabled</DaisySelectItem>
                     <DaisySelectItem value="disabled">Disabled</DaisySelectItem>
                   </DaisySelectContent>
                 </DaisySelect>
@@ -630,8 +632,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
               instance={selectedInstance}
               getStatusColor={getStatusColor}
               getPriorityColor={getPriorityColor}
-              getStepIcon={getStepIcon}
-            />
+              getStepIcon={getStepIcon} />
           )}
         </DaisyDialogContent>
       </DaisyDialog>
@@ -692,7 +693,7 @@ function WorkflowInstanceCard({
 
         <div className="mb-4">
           <DaisyProgress value={instance.progress} className="h-2" />
-        </div>
+</div>
 
         <div className="flex items-center justify-between text-sm text-notion-text-secondary">
           <span>Started {new Date(instance.startedAt).toLocaleDateString()}</span>
@@ -825,7 +826,7 @@ function WorkflowInstanceDetail({
                         {step.deadline && (
                           <span className="flex items-center">
                             <DaisyCalendar className="w-3 h-3 mr-1" />
-                            Due {new Date(step.deadline).toLocaleDateString()}
+Due {new Date(step.deadline).toLocaleDateString()}
                           </span>
                         )}
                       </div>

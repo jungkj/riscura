@@ -116,8 +116,7 @@ export const Tooltip: React.FC<DaisyTooltipProps> = ({
             className={cn(
               'absolute w-0 h-0 border-4',
               arrowClasses[side]
-            )}
-          />
+            )} />
         </div>
       )}
     </div>
@@ -307,7 +306,6 @@ const TourOverlay: React.FC = () => {
     <>
       {/* Backdrop */}
       <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
-      
       {/* Highlight */}
       {highlightElement && (
         <div
@@ -320,8 +318,7 @@ const TourOverlay: React.FC = () => {
             border: '2px solid #3b82f6',
             borderRadius: '6px',
             boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.2)'
-          }}
-        />
+          }} />
       )}
       
       <TourStepCard step={currentStep} />
@@ -384,8 +381,7 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-primary h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
+            style={{ width: `${progress}%` }} />
         </div>
         
         <DaisyCardTitle className="text-lg">{step.title}</DaisyCardTitle>
@@ -410,10 +406,10 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
               <DaisyButton
                 variant="ghost"
                 size="sm"
-                onClick={skipStep}
-              >
-                Skip
-              </DaisyButton>
+                onClick={skipStep}>
+          Skip
+              
+        </DaisyButton>
             )}
           </div>
           
@@ -486,8 +482,8 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
       </DaisyDialogTrigger>
       
       <DaisyDialogContent className="max-w-4xl max-h-[80vh]" >
-  <DaisyDialogHeader />
-        <DaisyDialogHeader>
+  <DaisyDialogHeader >
+          <DaisyDialogHeader>
           <DaisyDialogTitle className="flex items-center gap-2">
             <BookOpen className="w-5 h-5" />
             Help Center
@@ -504,9 +500,9 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
             <DaisyInput
               placeholder="Search help articles and tutorials..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+              onChange={(e) = />
+setSearchTerm(e.target.value)}
+              className="pl-10" />
           </div>
           
           <DaisyTabs defaultValue="articles" className="w-full">
@@ -523,9 +519,11 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
                     key={category}
                     variant={selectedCategory === category ? 'primary' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}>
+                    onClick={() =>
+          setSelectedCategory(category)}>
                     {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 ))}
               </div>
               
@@ -659,7 +657,6 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
             </DaisyDialogContent>
           </DaisyDialog>
         )}
-      </DaisyDialog>
   );
 };
 
@@ -677,15 +674,15 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
 }) => {
   if (helpText) {
     return (
-      <DaisyPopover />
-        <DaisyPopoverTrigger asChild />
-          <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)} >
+      <DaisyPopover >
+          <DaisyPopoverTrigger asChild >
+            <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)} >
   <HelpCircle className="w-4 h-4" />
 </DaisyPopover>
           </DaisyButton>
         </DaisyPopoverTrigger>
-        <DaisyPopoverContent className="w-80" />
-          <div className="space-y-2">
+        <DaisyPopoverContent className="w-80" >
+            <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4 text-blue-500" />
               <span className="font-medium text-sm">Help</span>
@@ -698,8 +695,8 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
   };
 
   return (
-    <DaisyTooltip content={tooltip} />
-      <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)} >
+    <DaisyTooltip content={tooltip}>
+        <DaisyButton variant="ghost" size="sm" className={cn("h-6 w-6 p-0", className)} >
   <HelpCircle className="w-4 h-4" />
 </DaisyTooltip>
       </DaisyButton>

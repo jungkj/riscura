@@ -14,7 +14,7 @@ export function ExecutiveSummary({ data, risks, viewMode }: ExecutiveSummaryProp
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
   Executive Summary

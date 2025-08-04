@@ -257,8 +257,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                   r={config.radius}
                   stroke="#e5e7eb"
                   strokeWidth={config.strokeWidth}
-                  fill="none"
-                />
+                  fill="none" />
                 
                 {/* Progress circle */}
                 <motion.circle
@@ -274,8 +273,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                   animate={{ 
                     strokeDashoffset: circumference - (overallScore / 100) * circumference 
                   }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                />
+                  transition={{ duration: 1.5, ease: "easeOut" }} />
               </svg>
               
               {/* Center content */}
@@ -322,8 +320,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                           r={30}
                           stroke="#e5e7eb"
                           strokeWidth={6}
-                          fill="none"
-                        />
+                          fill="none" />
                         
                         {/* Progress circle */}
                         <motion.circle
@@ -339,8 +336,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                           animate={{ 
                             strokeDashoffset: 2 * Math.PI * 30 - (framework.score / 100) * 2 * Math.PI * 30 
                           }}
-                          transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }}
-                        />
+                          transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }} />
                       </svg>
                       
                       {/* Center score */}
@@ -360,8 +356,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                       <div className="flex items-center justify-center gap-1">
                         <StatusIcon 
                           className="w-3 h-3" 
-                          style={{ color: statusConfig[framework.status].color }}
-                        />
+                          style={{ color: statusConfig[framework.status].color }} />
                         <DaisyBadge 
                           variant="secondary"
                           className="text-xs"
@@ -414,9 +409,11 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                       <DaisyButton
                         variant="ghost"
                         size="sm"
-                        onClick={() => setSelectedFramework(null)} />
+                        onClick={() =>
+          setSelectedFramework(null)} />
                         ×
-                      </DaisyButton>
+                      
+        </DaisyButton>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -456,9 +453,8 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
                       </div>
                       <DaisyProgress 
                         value={(framework.implementedControls / framework.totalControls) * 100}
-                        className="h-2"
-                      />
-                    </div>
+                        className="h-2" />
+</div>
                   </div>
                 );
               })()}

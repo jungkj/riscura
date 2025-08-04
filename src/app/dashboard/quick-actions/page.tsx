@@ -649,9 +649,9 @@ export default function QuickActionsPage() {
                   <DaisyInput
                     placeholder="Search workflows, actions, or tags..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter"
-                  />
+                    onChange={(e) = />
+setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter" />
                 </div>
               </div>
 
@@ -730,8 +730,7 @@ export default function QuickActionsPage() {
                                 : 'neutral'
                           }
                           label={category.completionStatus.replace('-', ' ')}
-                          size="sm"
-                        />
+                          size="sm" />
                       </div>
                     </div>
                   </DaisyCardBody>
@@ -755,8 +754,7 @@ export default function QuickActionsPage() {
                                 >
                                   <action.icon
                                     className="w-5 h-5"
-                                    style={{ color: category.color }}
-                                  />
+                                    style={{ color: category.color }} />
                                 </div>
                                 <div className="flex items-center gap-1">
                                   {action.isNew && (
@@ -781,8 +779,7 @@ export default function QuickActionsPage() {
                                               favorites.includes(action.id)
                                                 ? 'fill-yellow-400 text-yellow-400'
                                                 : 'text-gray-400'
-                                            }`}
-                                          />
+                                            }`} />
                                         </DaisyButton>
                                       </DaisyTooltipTrigger>
                                       <DaisyTooltipContent>
@@ -875,14 +872,16 @@ export default function QuickActionsPage() {
             </p>
             <DaisyButton
               variant="secondary"
-              onClick={() => {
+              onClick={() =>
+          {
                 setSearchQuery('');
                 setSelectedCategory('all');
                 setShowFavoritesOnly(false);
               }}
             >
               Clear Filters
-            </DaisyButton>
+            
+        </DaisyButton>
           </motion.div>
         )}
 

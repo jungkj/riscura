@@ -234,7 +234,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
   if (loading && !metrics) {
     return (
       <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5 text-blue-600 animate-pulse" />
@@ -296,8 +296,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              <DaisyProgress value={metrics.complianceScore} className="mt-2" /></DaisyProgress>
-          </DaisyCard>
+              <DaisyProgress value={metrics.complianceScore} className="mt-2" / / /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -310,8 +309,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <BarChart3 className="h-8 w-8 text-orange-600" />
               </div>
-              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" /></DaisyProgress>
-          </DaisyCard>
+              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" / / /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -324,8 +322,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <Eye className="h-8 w-8 text-blue-600" />
               </div>
-              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" /></DaisyProgress>
-          </DaisyCard>
+              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" / / /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -346,9 +343,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </div>
       )}
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-5" />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="grid w-full grid-cols-5" >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="audit-logs">Audit Logs</DaisyTabsTrigger>
           <DaisyTabsTrigger value="security-events">Security Events</DaisyTabsTrigger>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
@@ -356,11 +353,11 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsList>
 
         {/* Overview Tab */}
-        <DaisyTabsContent value="overview" className="space-y-6" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="overview" className="space-y-6" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Threat Level Distribution */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5 text-orange-600" >
@@ -404,7 +401,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
 
             {/* Security Trends */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -431,22 +428,20 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <DaisyTooltip />
-                      <Legend />
+                      <DaisyTooltip>
+                        <Legend />
                       <Line 
                         type="monotone" 
                         dataKey="riskScore" 
                         stroke="#ef4444" 
                         strokeWidth={2}
-                        name="Risk Score"
-                      />
+                        name="Risk Score" />
                       <Line 
                         type="monotone" 
                         dataKey="complianceScore" 
                         stroke="#22c55e" 
                         strokeWidth={2}
-                        name="Compliance Score"
-                      />
+                        name="Compliance Score" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -456,7 +451,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
 
           {/* Recent Security Events */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="h-5 w-5 text-blue-600" />
@@ -501,8 +496,8 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsContent>
 
         {/* Audit Logs Tab */}
-        <DaisyTabsContent value="audit-logs" className="space-y-4" />
-          {/* Filters */}
+        <DaisyTabsContent value="audit-logs" className="space-y-4" >
+            {/* Filters */}
           <DaisyCard >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
@@ -517,8 +512,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                   placeholder="User ID"
                   value={filterUserId}
                   onChange={(e) => setFilterUserId(e.target.value)}
-                  className="text-sm border rounded px-2 py-1"
-                />
+                  className="text-sm border rounded px-2 py-1" />
                 <select
                   value={filterThreatLevel}
                   onChange={(e) => setFilterThreatLevel(e.target.value)}
@@ -533,20 +527,22 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 <DaisyButton 
                   variant="outline" 
                   size="sm"
-                  onClick={() => {
+                  onClick={() =>
+          {
                     setFilterUserId('');
                     setFilterThreatLevel('');
                   }}
                 >
                   Clear
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </DaisyCardBody>
           </DaisyCard>
 
           {/* Audit Logs Table */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2" >
   <FileText className="h-5 w-5 text-gray-600" />
@@ -610,9 +606,9 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsContent>
 
         {/* Security Events Tab */}
-        <DaisyTabsContent value="security-events" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="security-events" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5 text-yellow-600" />
@@ -668,11 +664,11 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsContent>
 
         {/* Compliance Tab */}
-        <DaisyTabsContent value="compliance" className="space-y-4" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <DaisyTabsContent value="compliance" className="space-y-4" >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {['SOC2', 'ISO27001', 'GDPR'].map((standard) => (
               <DaisyCard key={standard} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5 text-green-600" />
@@ -688,8 +684,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                       <span className="font-bold text-green-600">95%</span>
                     </div>
                     <DaisyProgress value={95} className="h-2" />
-                    
-                    <div className="space-y-2 text-sm">
+<div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="h-4 w-4 text-green-600" />
                         <span>Access Controls: Compliant</span>
@@ -712,10 +707,10 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyTabsContent>
 
         {/* Analytics Tab */}
-        <DaisyTabsContent value="analytics" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="analytics" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>PII Detection Over Time</DaisyCardTitle>
         </DaisyCardBody>
@@ -727,15 +722,14 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <DaisyTooltip />
-                      <Area 
+                      <DaisyTooltip>
+                        <Area 
                         type="monotone" 
                         dataKey="piiDetections" 
                         stroke="#3b82f6" 
                         fill="#3b82f6"
                         fillOpacity={0.3}
-                        name="PII Detections"
-                      />
+                        name="PII Detections" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -743,7 +737,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Security Incidents</DaisyCardTitle>
         </DaisyCardBody>
@@ -755,12 +749,11 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <DaisyTooltip />
-                      <Bar 
+                      <DaisyTooltip>
+                        <Bar 
                         dataKey="incidents" 
                         fill="#ef4444"
-                        name="Incidents"
-                      />
+                        name="Incidents" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

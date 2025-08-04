@@ -109,9 +109,10 @@ const SuggestionCard: React.FC<{
               variant="ghost"
               onClick={handleApply}
               disabled={isApplying}
-              className="text-xs px-2" >
-  {isApplying ? 'Applying...' : suggestion.quickAction.label}
-</DaisyButton>
+              className="text-xs px-2">
+          {isApplying ? 'Applying...' : suggestion.quickAction.label}
+
+        </DaisyButton>
             </DaisyButton>
           )}
 
@@ -138,7 +139,7 @@ const SuggestionCard: React.FC<{
       transition={{ duration: 0.2 }}
     >
       <DaisyCard className="group hover:shadow-md transition-all" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
@@ -168,9 +169,8 @@ const SuggestionCard: React.FC<{
                 <div className="flex items-center gap-1">
                   <DaisyProgress 
                     value={suggestion.relevanceScore * 100} 
-                    className="h-1 w-12"
-                  />
-                  <span className="text-xs font-medium">
+                    className="h-1 w-12" />
+<span className="text-xs font-medium">
                     {Math.round(suggestion.relevanceScore * 100)}%
                   </span>
                 </div>
@@ -191,7 +191,7 @@ const SuggestionCard: React.FC<{
         
 
         <DaisyCardBody >
-  <DaisyCardDescription className="mb-4" />
+  <DaisyCardDescription className="mb-4" >
 </DaisyCardBody>
             {suggestion.description}
           </p>
@@ -207,9 +207,10 @@ const SuggestionCard: React.FC<{
                 onClick={handleApply}
                 disabled={isApplying}
                 size="sm"
-                className="group" >
-  {isApplying ? (
-</DaisyButton>
+                className="group">
+          {isApplying ? (
+
+        </DaisyButton>
                   'Applying...'
                 ) : (
                   <>
@@ -267,16 +268,16 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
               suggestion={suggestion}
               onApply={() => handleApply(suggestion)}
               onDismiss={() => handleDismiss(suggestion.id)}
-              compact
-            />
+              compact />
           ))}
         </AnimatePresence>
         
         {visibleSuggestions.length > 5 && (
           <div className="text-center">
-            <DaisyButton variant="ghost" size="sm" className="text-xs" >
-  +{visibleSuggestions.length - 5} more suggestions
-</DaisyButton>
+            <DaisyButton variant="ghost" size="sm" className="text-xs">
+          +{visibleSuggestions.length - 5} more suggestions
+
+        </DaisyButton>
             </DaisyButton>
           </div>
         )}
@@ -303,8 +304,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
                   key={suggestion.id}
                   suggestion={suggestion}
                   onApply={() => handleApply(suggestion)}
-                  onDismiss={onDismiss ? () => handleDismiss(suggestion.id) : undefined}
-                />
+                  onDismiss={onDismiss ? () => handleDismiss(suggestion.id) : undefined} />
               ))}
             </AnimatePresence>
           </div>
@@ -313,7 +313,8 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
 
       {otherSuggestions.length > 0 && (
         <div>
-          {urgentSuggestions.length > 0 && <DaisySeparator />}
+          {urgentSuggestions.length > 0 && <DaisySeparator />
+}
           
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="h-4 w-4 text-blue-500" />
@@ -329,8 +330,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
                   key={suggestion.id}
                   suggestion={suggestion}
                   onApply={() => handleApply(suggestion)}
-                  onDismiss={onDismiss ? () => handleDismiss(suggestion.id) : undefined}
-                />
+                  onDismiss={onDismiss ? () => handleDismiss(suggestion.id) : undefined} />
               ))}
             </AnimatePresence>
           </div>

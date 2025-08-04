@@ -346,10 +346,10 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   // Enhanced risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
-    <DaisyTooltipProvider />
-      <DaisyTooltip />
-        <DaisyTooltipTrigger asChild />
-          <div
+    <DaisyTooltipProvider>
+        <DaisyTooltip>
+          <DaisyTooltipTrigger asChild>
+            <div
             draggable
             onDragStart={(e) => handleDragStart(e, risk)}
             onClick={() => onRiskClick?.(risk)}
@@ -377,8 +377,8 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
             </div>
           </div>
         </DaisyTooltipTrigger>
-        <DaisyTooltipContent side="top" className="max-w-xs" />
-          <div>
+        <DaisyTooltipContent side="top" className="max-w-xs">
+            <div>
             <div className="font-medium">{risk.title}</div>
             <div className="text-sm text-slate-600 mt-1 line-clamp-2">{risk.description}</div>
             <div className="flex items-center gap-2 mt-2">
@@ -432,25 +432,25 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           </div>
 
           {enableExport && (
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton variant="outline" size="sm" disabled={isExporting} >
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton variant="outline" size="sm" disabled={isExporting} >
   <Download className="h-4 w-4 mr-2" />
 </DaisyDropdownMenu>
                   Export
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" />
-                <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuContent>
+              <DaisyDropdownMenuContent align="end" >
+                  <DaisyDropdownMenuLabel>Export Options</DaisyDropdownMenuContent>
                 <DaisyDropdownMenuSeparator />
-                <DaisyDropdownMenuItem onClick={exportToPNG} />
-                  Export as PNG
+<DaisyDropdownMenuItem onClick={exportToPNG} >
+                    Export as PNG
                 </DaisyDropdownMenuSeparator>
-                <DaisyDropdownMenuItem onClick={exportToPDF} />
-                  Export as PDF
+                <DaisyDropdownMenuItem onClick={exportToPDF} >
+                    Export as PDF
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuItem onClick={exportToSVG} />
-                  Export as SVG
+                <DaisyDropdownMenuItem onClick={exportToSVG} >
+                    Export as SVG
                 </DaisyDropdownMenuItem>
               </DaisyDropdownMenuContent>
             </DaisyDropdownMenu>
@@ -460,7 +460,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
       {/* Enhanced Matrix */}
       <DaisyCard className={className} >
-  <DaisyCardBody className="pb-4" />
+  <DaisyCardBody className="pb-4" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <DaisyCardTitle className="flex items-center gap-2" >
@@ -616,7 +616,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       {/* Cell Detail Dialog */}
       <DaisyDialog open={!!selectedCell} onOpenChange={() => setSelectedCell(null)} />
         <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle >
   Cell Details - Likelihood: {selectedCell?.likelihood}, Impact: {selectedCell?.impact}

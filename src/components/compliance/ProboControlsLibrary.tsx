@@ -241,16 +241,15 @@ export function ProboControlsLibrary() {
                     <DaisyInput
                       placeholder="Search controls by name, description, or category..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
+                      onChange={(e) = />
+setSearchQuery(e.target.value)}
+                      className="pl-10" />
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory}>
                     <DaisySelectTrigger className="w-48">
                       <DaisySelectValue placeholder="All Categories" />
-                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Categories</DaisySelectItem>
                       {categories.map((category) => (
@@ -263,7 +262,6 @@ export function ProboControlsLibrary() {
                   <DaisySelect value={selectedImportance} onValueChange={setSelectedImportance}>
                     <DaisySelectTrigger className="w-40">
                       <DaisySelectValue placeholder="All Levels" />
-                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Levels</DaisySelectItem>
                       <DaisySelectItem value="MANDATORY">Mandatory</DaisySelectItem>
@@ -288,12 +286,12 @@ export function ProboControlsLibrary() {
                     variant="outline"
                     size="sm"
                     onClick={handleSelectAll}
-                    className="border-[#D8C3A5]"
-                  >
-                    {selectedMitigations.size === filteredMitigations.length
+                    className="border-[#D8C3A5]">
+          {selectedMitigations.size === filteredMitigations.length
                       ? 'Deselect All'
                       : 'Select All'}
-                  </DaisyButton>
+                  
+        </DaisyButton>
                   {selectedMitigations.size > 0 && (
                     <DaisyButton
                       onClick={handleImportSelected}
@@ -322,9 +320,9 @@ export function ProboControlsLibrary() {
                       <div className="flex items-start space-x-3">
                         <DaisyCheckbox
                           checked={selectedMitigations.has(mitigation.id)}
-                          onCheckedChange={() => handleMitigationToggle(mitigation.id)}
-                          className="mt-1"
-                        />
+                          onCheckedChange={() = />
+handleMitigationToggle(mitigation.id)}
+                          className="mt-1" />
                         <div className="flex-1 space-y-3">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center space-x-2">
@@ -452,7 +450,7 @@ export function ProboControlsLibrary() {
                   })}
                 </div>
                 <DaisySeparator className="my-4" />
-                <div className="flex justify-end">
+<div className="flex justify-end">
                   <DaisyButton
                     onClick={handleImportSelected}
                     className="bg-[#199BEC] hover:bg-[#199BEC]/90"
@@ -472,12 +470,14 @@ export function ProboControlsLibrary() {
                   Go to the Browse Library tab to select security controls for import.
                 </p>
                 <DaisyButton
-                  onClick={() => setActiveTab('browse')}
+                  onClick={() =>
+          setActiveTab('browse')}
                   variant="outline"
                   className="border-[#D8C3A5]"
                 >
                   Browse Controls
-                </DaisyButton>
+                
+        </DaisyButton>
               </DaisyCardBody>
             </DaisyCard>
           )}

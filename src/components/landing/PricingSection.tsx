@@ -242,10 +242,12 @@ export default function PricingSection({ onStartTrial, onUpgrade }: PricingSecti
           </p>
           <DaisyButton 
             variant="secondary"
-            onClick={() => router.push('/contact')}
+            onClick={() =>
+          router.push('/contact')}
             className="px-8 py-3" />
             Contact Sales
-          </DaisyButton>
+          
+        </DaisyButton>
         </motion.div>
 
         {/* Trust Elements */}

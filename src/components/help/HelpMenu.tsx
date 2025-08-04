@@ -171,8 +171,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
           onComplete={handleTourComplete}
           onSkip={handleTourSkip}
           showProgress={true}
-          allowSkip={true}
-        />
+          allowSkip={true} />
       )}
 
       {/* Header */}
@@ -186,7 +185,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
 
       {/* Quick Tours */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Lightbulb className="w-5 h-5 text-yellow-500" />
@@ -230,9 +229,10 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
                     )}
                   </div>
                 </div>
-                <DaisyButton variant="outline" size="sm" >
-  Start Tour
-</DaisyButton>
+                <DaisyButton variant="outline" size="sm">
+          Start Tour
+
+        </DaisyButton>
                 </DaisyButton>
               </div>
             ))}
@@ -242,7 +242,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
 
       {/* Other Resources */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <BookOpen className="w-5 h-5 text-green-600" />
@@ -296,7 +296,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
 
       {/* Quick Actions */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Settings className="w-5 h-5 text-purple-600" />

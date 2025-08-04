@@ -216,8 +216,7 @@ const KPICard: React.FC<{
             <div className="w-full bg-surface-secondary rounded-full h-2">
               <div 
                 className="bg-interactive-primary h-2 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min((Number(metric.value) / metric.target) * 100, 100)}%` }}
-              />
+                style={{ width: `${Math.min((Number(metric.value) / metric.target) * 100, 100)}%` }} />
             </div>
           </div>
         )}
@@ -414,8 +413,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
                 key={metric.id}
                 metric={metric}
                 onClick={() => onWidgetClick?.(widget)}
-                realTime={widget.realTime && realTimeEnabled}
-              />
+                realTime={widget.realTime && realTimeEnabled} />
             ))}
           </div>
         );
@@ -451,7 +449,8 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       case 'progress-rings':
         return (
           <ChartContainer title={widget.title} {...commonProps}>
-            <DaisyProgressRingsPlaceholder data={widget.data} /></DaisyProgressRingsPlaceholder>
+            <DaisyProgressRingsPlaceholder data={widget.data} / / />
+</DaisyProgressRingsPlaceholder>
         );
 
       default:
@@ -478,11 +477,12 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
 
         <div className="flex items-center space-x-enterprise-3">
           {/* Time Range Selector */}
-          <DaisySelect value={timeRange} onValueChange={setTimeRange} />
-            <DaisySelectTrigger className="w-32" />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="1d">Last 24h</DaisySelectContent>
+          <DaisySelect value={timeRange} onValueChange={setTimeRange} >
+              <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="1d">Last 24h</DaisySelectItem>
               <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
               <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
               <DaisySelectItem value="90d">Last 90 days</DaisySelectItem>

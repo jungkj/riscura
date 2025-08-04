@@ -217,7 +217,7 @@ const ComplianceDashboard: React.FC = () => {
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Overall Compliance Score</DaisyCardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
@@ -226,14 +226,14 @@ const ComplianceDashboard: React.FC = () => {
   <div className="text-2xl font-bold">
 </DaisyCardBody>{overallComplianceScore}%</div>
             <DaisyProgress value={overallComplianceScore} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
+<p className="text-xs text-muted-foreground mt-2">
               Across {frameworks.length} frameworks
             </p>
           </DaisyProgress>
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Critical Gaps</DaisyCardTitle>
             <DaisyAlertTriangle className="h-4 w-4 text-red-500" >
@@ -248,7 +248,7 @@ const ComplianceDashboard: React.FC = () => {
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">Active Frameworks</DaisyCardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
@@ -263,7 +263,7 @@ const ComplianceDashboard: React.FC = () => {
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-sm font-medium">AI Insights</DaisyCardTitle>
             <Brain className="h-4 w-4 text-purple-500" />
@@ -279,19 +279,19 @@ const ComplianceDashboard: React.FC = () => {
       </div>
 
       {/* Main Content Tabs */}
-      <DaisyTabs defaultValue="overview" className="space-y-4" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs defaultValue="overview" className="space-y-4" >
+          <DaisyTabsList >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="frameworks">Frameworks</DaisyTabsTrigger>
           <DaisyTabsTrigger value="gaps">Gaps & Issues</DaisyTabsTrigger>
           <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="overview" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="overview" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Compliance Coverage Chart */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Framework Coverage</DaisyCardTitle>
                 <DaisyCardDescription>Coverage and maturity across frameworks</p>
@@ -303,8 +303,8 @@ const ComplianceDashboard: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <DaisyTooltip />
-                    <Bar dataKey="coverage" fill="#3B82F6" name="Coverage %" />
+                    <DaisyTooltip>
+                      <Bar dataKey="coverage" fill="#3B82F6" name="Coverage %" />
                     <Bar dataKey="maturity" fill="#10B981" name="Maturity %" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -313,7 +313,7 @@ const ComplianceDashboard: React.FC = () => {
 
             {/* Gap Distribution */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Gap Distribution</DaisyCardTitle>
                 <DaisyCardDescription>Gaps by category</p>
@@ -343,11 +343,11 @@ const ComplianceDashboard: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="frameworks" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <DaisyTabsContent value="frameworks" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {frameworks.map((framework) => (
               <DaisyCard key={framework.id} className="hover:shadow-lg transition-shadow" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <div className="flex justify-between items-start">
                     <div>
@@ -372,14 +372,14 @@ const ComplianceDashboard: React.FC = () => {
                         <span>{framework.coverage}%</span>
                       </div>
                       <DaisyProgress value={framework.coverage} className="mt-1" />
-                    </div>
+</div>
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Maturity</span>
                         <span>{framework.maturityScore}%</span>
                       </div>
                       <DaisyProgress value={framework.maturityScore} className="mt-1" />
-                    </div>
+</div>
                     <div className="flex justify-between text-sm">
                       <span>Open Gaps</span>
                       <span className="font-medium text-red-600">{framework.gaps}</span>
@@ -395,9 +395,9 @@ const ComplianceDashboard: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="gaps" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="gaps" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Compliance Gaps</DaisyCardTitle>
               <DaisyCardDescription>Issues requiring attention</p>
@@ -437,8 +437,8 @@ const ComplianceDashboard: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="insights" className="space-y-4" />
-          <div className="space-y-4">
+        <DaisyTabsContent value="insights" className="space-y-4" >
+            <div className="space-y-4">
             {insights.map((insight) => (
               <DaisyAlert key={insight.id} className={insight.severity === 'critical' ? 'border-red-200' : 'border-blue-200'} >
   <Brain className="h-4 w-4" />

@@ -123,9 +123,9 @@ export default function EditAssessmentPage() {
                   <DaisyInput
                     id="title"
                     value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Enter assessment title"
-                  />
+                    onChange={(e) = />
+handleInputChange('title', e.target.value)}
+                    placeholder="Enter assessment title" />
                 </div>
 
                 <div className="space-y-2">
@@ -133,10 +133,10 @@ export default function EditAssessmentPage() {
                   <DaisyTextarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    onChange={(e) = />
+handleInputChange('description', e.target.value)}
                     placeholder="Describe the assessment scope and purpose"
-                    rows={4}
-                  />
+                    rows={4} />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -148,7 +148,6 @@ export default function EditAssessmentPage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select status" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Pending">Pending</DaisySelectItem>
                         <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
@@ -166,7 +165,6 @@ export default function EditAssessmentPage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select priority" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Low">Low</DaisySelectItem>
                         <DaisySelectItem value="Medium">Medium</DaisySelectItem>
@@ -186,7 +184,6 @@ export default function EditAssessmentPage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select assignee" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
                         <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
@@ -202,8 +199,8 @@ export default function EditAssessmentPage() {
                       id="dueDate"
                       type="date"
                       value={formData.dueDate}
-                      onChange={(e) => handleInputChange('dueDate', e.target.value)}
-                    />
+                      onChange={(e) = />
+handleInputChange('dueDate', e.target.value)} />
                   </div>
                 </div>
               </div>
@@ -227,10 +224,10 @@ export default function EditAssessmentPage() {
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) = />
+handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter objective"
-                    className="flex-1"
-                  />
+                    className="flex-1" />
                   {formData.objectives.length > 1 && (
                     <DaisyButton
                       onClick={() => removeObjective(index)}

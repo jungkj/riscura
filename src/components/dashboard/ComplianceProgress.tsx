@@ -56,8 +56,7 @@ function ProgressRing({ progress, size = 80, strokeWidth = 8, color = '#199BEC' 
           stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="transparent"
-          className="text-gray-200"
-        />
+          className="text-gray-200" />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -68,8 +67,7 @@ function ProgressRing({ progress, size = 80, strokeWidth = 8, color = '#199BEC' 
           strokeDasharray={strokeDasharray}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-        />
+          className="transition-all duration-1000 ease-out" />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <span className="text-lg font-bold text-gray-900">{progress}%</span>
@@ -231,8 +229,7 @@ export default function ComplianceProgress() {
                   progress={framework.progress} 
                   size={80} 
                   strokeWidth={6}
-                  color={framework.color}
-                />
+                  color={framework.color} />
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
@@ -254,7 +251,7 @@ export default function ComplianceProgress() {
       {/* Detailed View */}
       {selectedFramework && (
         <DaisyCard className="transition-all duration-500" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <div className="flex items-center justify-between">
               <div>
@@ -269,9 +266,11 @@ export default function ComplianceProgress() {
               <DaisyButton 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setSelectedFramework(null)} />
+                onClick={() =>
+          setSelectedFramework(null)} />
                 ×
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </DaisyCardBody>
           <DaisyCardBody >
@@ -291,7 +290,7 @@ export default function ComplianceProgress() {
                         <span className="text-sm font-medium">{framework.progress}%</span>
                       </div>
                       <DaisyProgress value={framework.progress} className="h-2" />
-                      <div className="flex justify-between">
+<div className="flex justify-between">
                         <span className="text-sm text-gray-600">Completed Controls</span>
                         <span className="text-sm font-medium">
                           {framework.completedControls} of {framework.totalControls}

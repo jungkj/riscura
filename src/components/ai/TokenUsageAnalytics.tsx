@@ -59,7 +59,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
 
   return (
     <DaisyCard >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
         <DaisyCardTitle className="text-sm font-medium">{title}</DaisyCardTitle>
         <div className={`rounded-full p-2 ${colorClasses[color]}`}>
@@ -118,10 +118,9 @@ const QuotaBar: React.FC<QuotaBarProps> = ({ label, used, limit, period, cost })
       </div>
       <div className="relative">
         <DaisyProgress value={Math.min(percentage, 100)} className="h-2" />
-        <div 
+<div 
           className={`absolute top-0 left-0 h-2 rounded-full transition-all ${getProgressColor()}`}
-          style={{ width: `${Math.min(percentage, 100)}%` }}
-        />
+          style={{ width: `${Math.min(percentage, 100)}%` }} />
       </div>
       <div className="flex justify-between text-xs text-muted-foreground">
         <span>{percentage.toFixed(1)}% used</span>
@@ -214,9 +213,11 @@ export const TokenUsageAnalytics: React.FC = () => {
                 <DaisyButton 
                   size="sm" 
                   variant="ghost" 
-                  onClick={() => acknowledgeAlert(alert.id)} />
+                  onClick={() =>
+          acknowledgeAlert(alert.id)} />
                   Dismiss
-                </DaisyButton>
+                
+        </DaisyButton>
                 </DaisyAlertDescription>
               </DaisyAlert>
           ))}
@@ -225,7 +226,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
       {/* Current Tier and Upgrade Options */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Settings className="h-5 w-5" />
@@ -266,9 +267,11 @@ export const TokenUsageAnalytics: React.FC = () => {
                   <DaisyButton 
                     size="sm" 
                     className="w-full mt-3"
-                    onClick={() => handleUpgradeTier(tierKey)} />
+                    onClick={() =>
+          handleUpgradeTier(tierKey)} />
                     Upgrade
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 )}
               </div>
             ))}
@@ -277,14 +280,14 @@ export const TokenUsageAnalytics: React.FC = () => {
       </DaisyCard>
 
       <DaisyTabs value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as typeof selectedPeriod)} />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="daily">Today</DaisyTabs>
+        <DaisyTabsList >
+            <DaisyTabsTrigger value="daily">Today</DaisyTabs>
           <DaisyTabsTrigger value="weekly">This Week</DaisyTabsTrigger>
           <DaisyTabsTrigger value="monthly">This Month</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value={selectedPeriod} className="space-y-6" />
-          {/* Key Metrics */}
+        <DaisyTabsContent value={selectedPeriod} className="space-y-6" >
+            {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <UsageCard
               title="Session Usage"
@@ -293,8 +296,7 @@ export const TokenUsageAnalytics: React.FC = () => {
               icon={<Zap className="h-4 w-4" />}
               color="blue"
               trend="up"
-              trendValue={`$${realTimeUsageStats.sessionCost.toFixed(4)}`}
-            />
+              trendValue={`$${realTimeUsageStats.sessionCost.toFixed(4)}`} />
             <UsageCard
               title="Today's Usage"
               value={realTimeUsageStats.todayTokens.toLocaleString()}
@@ -302,15 +304,13 @@ export const TokenUsageAnalytics: React.FC = () => {
               icon={<BarChart3 className="h-4 w-4" />}
               color="green"
               trend="up"
-              trendValue={`${realTimeUsageStats.todayConversations} conversations`}
-            />
+              trendValue={`${realTimeUsageStats.todayConversations} conversations`} />
             <UsageCard
               title="Session Duration"
               value={Math.round(realTimeUsageStats.sessionDuration / 60000)}
               subtitle="minutes active"
               icon={<Clock className="h-4 w-4" />}
-              color="orange"
-            />
+              color="orange" />
             <UsageCard
               title="Cost Today"
               value={`$${realTimeUsageStats.todayCost.toFixed(4)}`}
@@ -318,13 +318,12 @@ export const TokenUsageAnalytics: React.FC = () => {
               icon={<DollarSign className="h-4 w-4" />}
               color="purple"
               trend="up"
-              trendValue={`Est. $${realTimeUsageStats.costProjections.daily.toFixed(2)}/day`}
-            />
+              trendValue={`Est. $${realTimeUsageStats.costProjections.daily.toFixed(2)}/day`} />
           </div>
 
           {/* Quota Status */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <Eye className="h-5 w-5" />
@@ -342,29 +341,26 @@ export const TokenUsageAnalytics: React.FC = () => {
                 used={tokenUsageMetrics.dailyTokens}
                 limit={tokenUsageMetrics.dailyLimit}
                 period="Resets daily"
-                cost={tokenUsageMetrics.dailyCost}
-              />
+                cost={tokenUsageMetrics.dailyCost} />
 </DaisyCardBody>
               <QuotaBar
                 label="Weekly Quota"
                 used={tokenUsageMetrics.weeklyTokens}
                 limit={tokenUsageMetrics.weeklyLimit}
                 period="Resets weekly"
-                cost={tokenUsageMetrics.weeklyCost}
-              />
+                cost={tokenUsageMetrics.weeklyCost} />
               <QuotaBar
                 label="Monthly Quota"
                 used={tokenUsageMetrics.monthlyTokens}
                 limit={tokenUsageMetrics.monthlyLimit}
                 period="Resets monthly"
-                cost={tokenUsageMetrics.monthlyCost}
-              />
+                cost={tokenUsageMetrics.monthlyCost} />
             </DaisyCardBody>
           </DaisyCard>
 
           {/* Agent Usage Breakdown */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <Users className="h-5 w-5" />
@@ -390,7 +386,7 @@ export const TokenUsageAnalytics: React.FC = () => {
                         </span>
                       </div>
                       <DaisyProgress value={agent.percentage} className="h-2" />
-                    </div>
+</div>
                   </div>
                 ))}
               </div>
@@ -399,7 +395,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
           {/* Cost Projections */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center space-x-2" >
   <DaisyCalendar className="h-5 w-5" />
@@ -438,7 +434,7 @@ export const TokenUsageAnalytics: React.FC = () => {
 
           {/* Recent Conversations */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle>Recent High-Usage Conversations</DaisyCardTitle>
               <DaisyCardDescription >

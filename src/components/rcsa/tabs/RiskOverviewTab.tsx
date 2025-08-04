@@ -96,7 +96,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       <div className="lg:col-span-2 space-y-6">
         {/* Risk Description */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <DaisyAlertTriangle className="h-5 w-5" >
@@ -138,7 +138,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 <p className="text-sm text-muted-foreground mb-1">Created</p>
                 <div className="flex items-center gap-1">
                   <DaisyCalendar className="h-3 w-3" />
-                  <span className="text-sm">{formatDate(risk.createdAt)}</span>
+<span className="text-sm">{formatDate(risk.createdAt)}</span>
                 </div>
               </div>
             </div>
@@ -156,16 +156,15 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                 </div>
                 <DaisyProgress 
                   value={risk.aiConfidence * 100} 
-                  className="mt-2 h-2"
-                />
-              </div>
+                  className="mt-2 h-2" />
+</div>
             )}
           </DaisyCalendar>
         </DaisyCard>
 
         {/* Related Controls */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <div className="flex items-center justify-between">
               <DaisyCardTitle className="flex items-center gap-2" >
@@ -187,9 +186,10 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               <div className="text-center py-8">
                 <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No controls mapped to this risk yet.</p>
-                <DaisyButton variant="outline" className="mt-4" >
-  Map Controls
-</DaisyButton>
+                <DaisyButton variant="outline" className="mt-4">
+          Map Controls
+
+        </DaisyButton>
                 </DaisyButton>
               </div>
             ) : (
@@ -227,9 +227,8 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
                         </div>
                         <DaisyProgress 
                           value={control.effectiveness * 100} 
-                          className="w-16 h-2 mt-1"
-                        />
-                      </div>
+                          className="w-16 h-2 mt-1" />
+</div>
                       <ExternalLink className="h-4 w-4 text-muted-foreground" />
                     </div>
                   </div>
@@ -244,7 +243,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       <div className="space-y-6">
         {/* Risk Score Card */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Target className="h-5 w-5" />
@@ -265,25 +264,24 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
             </div>
             
             <DaisySeparator className="my-4" />
-            
-            <div className="grid grid-cols-2 gap-4">
+<div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-foreground">{risk.likelihood}</div>
                 <div className="text-xs text-muted-foreground">Likelihood</div>
                 <DaisyProgress value={(risk.likelihood / 5) * 100} className="mt-1 h-1" />
-              </div>
+</div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-foreground">{risk.impact}</div>
                 <div className="text-xs text-muted-foreground">Impact</div>
                 <DaisyProgress value={(risk.impact / 5) * 100} className="mt-1 h-1" />
-              </div>
+</div>
             </div>
           </DaisySeparator>
         </DaisyCard>
 
         {/* Control Effectiveness Summary */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5" />
@@ -299,11 +297,10 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
               </div>
               <div className="text-sm text-muted-foreground">Average Effectiveness</div>
               <DaisyProgress value={averageEffectiveness * 100} className="mt-2" />
-            </div>
+</div>
 
             <DaisySeparator className="my-4" />
-
-            <div className="space-y-2">
+<div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Total Controls</span>
                 <span className="font-medium">{relatedControls.length}</span>
@@ -326,7 +323,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 
         {/* Timeline Card */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2" >
   <Clock className="h-5 w-5" />
@@ -367,7 +364,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
 
         {/* Quick Actions */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle>Quick Actions</DaisyCardTitle>
         </DaisyCardBody>

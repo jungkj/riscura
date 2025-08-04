@@ -100,10 +100,10 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
   };
 
   return (
-    <DaisyDialog open={isOpen} onOpenChange={onClose} />
-      <DaisyDialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#FFFFFF' }}>
+    <DaisyDialog open={isOpen} onOpenChange={onClose} >
+        <DaisyDialogContent className="max-w-4xl max-h-[85vh]" style={{ backgroundColor: '#FFFFFF' }}>
         <DaisyDialogHeader >
-  <DaisyDialogTitle className="flex items-center space-x-3 text-[#191919]" />
+  <DaisyDialogTitle className="flex items-center space-x-3 text-[#191919]">
 </DaisyDialog>
             {getIcon()}
             <span className="font-bold">{data.title}</span>
@@ -120,11 +120,11 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
           </DaisyDialogDescription>
         </DaisyDialogHeader>
 
-        <DaisyScrollArea className="max-h-[60vh] pr-4" />
-          <div className="space-y-6">
+        <DaisyScrollArea className="max-h-[60vh] pr-4" >
+            <div className="space-y-6">
             {/* Overview Section */}
             <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyScrollArea>
                 <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <Eye className="w-5 h-5 mr-2" />
@@ -143,7 +143,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             {/* Breakdown Section */}
             {data.details.breakdown && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <TrendingUp className="w-5 h-5 mr-2" />
@@ -172,9 +172,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                           <DaisyProgress 
                             value={item.percentage} 
                             className="h-2"
-                            style={{ backgroundColor: item.color }}
-                          />
-                        )}
+                            style={{ backgroundColor: item.color }} />)}
                       </div>
                     ))}
                   </div>
@@ -185,7 +183,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             {/* Recent Items */}
             {data.details.recentItems && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <Activity className="w-5 h-5 mr-2" />
@@ -226,7 +224,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             {/* Insights */}
             {data.details.insights && (
               <DaisyCard className="border-2 border-[#D8C3A5] bg-[#FAFAFA]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle className="text-[#191919] font-bold flex items-center" >
   <FileText className="w-5 h-5 mr-2" />

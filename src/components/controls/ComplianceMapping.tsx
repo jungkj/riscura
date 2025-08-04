@@ -284,7 +284,7 @@ const FrameworkOverviewCard: React.FC<{
           <span className="text-caption font-medium text-text-primary">{framework.complianceScore}%</span>
         </div>
         <DaisyProgress value={framework.complianceScore} className="h-2" />
-      </div>
+</div>
 
       {/* Statistics */}
       <div className="grid grid-cols-2 gap-enterprise-3 mb-enterprise-3">
@@ -463,8 +463,7 @@ const CategoryDetail: React.FC<{
               <RequirementDetail
                 key={requirement.id}
                 requirement={requirement}
-                onControlMap={onControlMap}
-              />
+                onControlMap={onControlMap} />
             ))}
           </div>
         </CollapsibleContent>
@@ -527,8 +526,7 @@ const GapAnalysisView: React.FC<{ framework: ComplianceFramework }> = ({ framewo
                   <RequirementDetail
                     key={requirement.id}
                     requirement={requirement}
-                    onControlMap={() => {}}
-                  />
+                    onControlMap={() => {}} />
                 ))}
               </div>
             </div>
@@ -576,8 +574,7 @@ export const ComplianceMapping: React.FC = () => {
               <FrameworkOverviewCard
                 key={framework.id}
                 framework={framework}
-                onSelect={setSelectedFramework}
-              />
+                onSelect={setSelectedFramework} />
             ))}
           </div>
         </div>
@@ -588,9 +585,11 @@ export const ComplianceMapping: React.FC = () => {
             <DaisyButton 
               variant="ghost" 
               size="sm" 
-              onClick={() => setSelectedFramework(null)} />
+              onClick={() =>
+          setSelectedFramework(null)} />
               ← Back to Frameworks
-            </DaisyButton>
+            
+        </DaisyButton>
             <span className="text-text-tertiary">/</span>
             <span className="text-body-sm font-medium text-text-primary">
               {selectedFramework.name}
@@ -599,14 +598,14 @@ export const ComplianceMapping: React.FC = () => {
 
           {/* Tabs */}
           <DaisyTabs value={activeView} onValueChange={(value: any) => setActiveView(value)} />
-            <DaisyTabsList />
-              <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+            <DaisyTabsList >
+                <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
               <DaisyTabsTrigger value="mapping">Control Mapping</DaisyTabsTrigger>
               <DaisyTabsTrigger value="gaps">Gap Analysis</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="overview" className="mt-enterprise-4" />
-              <div className="space-y-enterprise-4">
+            <DaisyTabsContent value="overview" className="mt-enterprise-4" >
+                <div className="space-y-enterprise-4">
                 {/* Framework Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-enterprise-4">
                   <ContentCard title="Compliance Score" className="text-center">
@@ -645,7 +644,7 @@ export const ComplianceMapping: React.FC = () => {
                         </div>
                       </div>
                       <DaisyProgress value={category.complianceScore} className="h-2 mb-enterprise-2" />
-                      <p className="text-caption text-text-secondary">
+<p className="text-caption text-text-secondary">
                         {category.description}
                       </p>
                     </div>
@@ -654,20 +653,19 @@ export const ComplianceMapping: React.FC = () => {
               </div>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="mapping" className="mt-enterprise-4" />
-              <div className="space-y-enterprise-4">
+            <DaisyTabsContent value="mapping" className="mt-enterprise-4" >
+                <div className="space-y-enterprise-4">
                 {selectedFramework.categories.map((category) => (
                   <CategoryDetail
                     key={category.id}
                     category={category}
-                    onControlMap={handleControlMapping}
-                  />
+                    onControlMap={handleControlMapping} />
                 ))}
               </div>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="gaps" className="mt-enterprise-4" />
-              <GapAnalysisView framework={selectedFramework} />
+            <DaisyTabsContent value="gaps" className="mt-enterprise-4" >
+                <GapAnalysisView framework={selectedFramework} />
             </DaisyTabsContent>
           </DaisyTabs>
         </div>

@@ -103,11 +103,11 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
     <div className="space-y-4">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="flex items-start space-x-3">
-            <DaisySkeleton className="h-10 w-10 rounded-full" />
-            <div className="space-y-2 flex-1">
-              <DaisySkeleton className="h-4 w-3/4" />
-              <DaisySkeleton className="h-3 w-full" />
-            </div>
+            <DaisySkeleton className="h-10 w-10 rounded-full" >
+              <div className="space-y-2 flex-1">
+              <DaisySkeleton className="h-4 w-3/4" >
+                <DaisySkeleton className="h-3 w-full" >
+              </div>
           </div>
         ))}
       </div>
@@ -115,16 +115,14 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
   };
 
   return (
-    <DaisyScrollArea className="h-[350px] pr-3" />
-      <div className="relative">
+    <DaisyScrollArea className="h-[350px] pr-3" >
+        <div className="relative">
         {/* Vertical timeline line */}
         <div className="absolute left-4 top-0 bottom-0 w-[1px] bg-border ml-[0.625rem]" />
-        
         {activities.map((activity) => (
           <div key={activity.id} className="flex mb-6 relative">
             {/* Timeline dot */}
             <div className="absolute left-4 mt-1.5 h-3 w-3 rounded-full border-2 border-background bg-primary ml-[0.4rem]" />
-            
             {/* Activity content */}
             <div className="ml-10 flex-1">
               <div className="flex items-center justify-between mb-1">
@@ -135,9 +133,9 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
               <p className="text-xs text-muted-foreground mb-2">{activity.description}</p>
               
               <div className="flex items-center">
-                <DaisyAvatar className="h-6 w-6 mr-2" />
-                  <DaisyAvatarImage src={activity.user.avatar} />
-                  <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisySkeleton>
+                <DaisyAvatar className="h-6 w-6 mr-2" >
+                    <DaisyAvatarImage src={activity.user.avatar} >
+                    <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisySkeleton>
                 </DaisyAvatar>
                 
                 <span className="text-xs">{activity.user.name}</span>

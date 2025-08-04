@@ -137,9 +137,9 @@ export default function UpdateRiskAssessmentPage() {
                 <DaisyInput
                   placeholder="Search risks by title, category, or owner..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+                  onChange={(e) = />
+setSearchQuery(e.target.value)}
+                  className="pl-10" />
               </div>
             </DaisyCardBody>
           </DaisyCard>
@@ -165,10 +165,12 @@ export default function UpdateRiskAssessmentPage() {
                 </p>
                 {!searchQuery && (
                   <DaisyButton
-                    onClick={() => router.push('/dashboard/workflows/risk-assessment/new')}
+                    onClick={() =>
+          router.push('/dashboard/workflows/risk-assessment/new')}
                   >
                     Create New Risk
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 )}
               </DaisyCardBody>
             </DaisyCard>

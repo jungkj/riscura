@@ -119,8 +119,7 @@ const ListItemComponent: React.FC<{
           isHovered && priorityStyle.glow
         )}
         whileHover={{ height: 48, width: 6 }}
-        transition={{ type: "spring", stiffness: 300 }}
-      />
+        transition={{ type: "spring", stiffness: 300 }} />
 
       {/* Content */}
       <div className="flex-1 min-w-0">
@@ -187,8 +186,7 @@ const ListItemComponent: React.FC<{
         className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent rounded-lg pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
-      />
+        transition={{ duration: 0.2 }} />
     </motion.div>
   );
 };
@@ -222,7 +220,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
         "hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300",
         "backdrop-blur-sm border border-slate-200/60"
       )} >
-  <DaisyCardBody className="pb-4" />
+  <DaisyCardBody className="pb-4" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -249,9 +247,10 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={onViewAll}
-                className="text-slate-600 hover:text-slate-800" >
-  View All
-</DaisyButton>
+                className="text-slate-600 hover:text-slate-800">
+          View All
+
+        </DaisyButton>
                 <ChevronRight className="h-4 w-4 ml-1" />
               </DaisyButton>
             )}
@@ -272,8 +271,7 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                     key={item.id}
                     item={item}
                     index={index}
-                    onClick={onItemClick}
-                  />
+                    onClick={onItemClick} />
                 ))}
               </AnimatePresence>
 
@@ -288,9 +286,10 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={onViewAll}
-                    className="w-full text-slate-600 hover:text-slate-800 border-slate-200" >
-  View {items.length - maxItems} more items
-</DaisyButton>
+                    className="w-full text-slate-600 hover:text-slate-800 border-slate-200">
+          View {items.length - maxItems} more items
+
+        </DaisyButton>
                     <ChevronRight className="h-4 w-4 ml-2" />
                   </DaisyButton>
                 </motion.div>

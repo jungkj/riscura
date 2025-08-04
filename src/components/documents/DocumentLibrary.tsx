@@ -271,14 +271,14 @@ export default function DocumentLibrary({
 
   const renderDocumentCard = (document: Document) => (
     <DaisyCard key={document.id} className="group hover:shadow-md transition-shadow" >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-2">
             <DaisyCheckbox
               checked={selectedDocuments.includes(document.id)}
-              onCheckedChange={() => toggleDocumentSelection(document.id)}
-            />
+              onCheckedChange={() = />
+toggleDocumentSelection(document.id)} />
             <div className="flex-1 min-w-0">
               <DaisyCardTitle 
                 className="text-sm font-medium truncate cursor-pointer hover:text-blue-600"
@@ -298,15 +298,15 @@ export default function DocumentLibrary({
             </div>
           </div>
           
-          <DaisyDropdownMenu />
-            <DaisyDropdownMenuTrigger asChild />
-              <DaisyButton size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100" >
+          <DaisyDropdownMenu >
+              <DaisyDropdownMenuTrigger asChild >
+                <DaisyButton size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent align="end" />
-              <DaisyDropdownMenuItem onClick={() => handleDocumentView(document)} />
+            <DaisyDropdownMenuContent align="end" >
+                <DaisyDropdownMenuItem onClick={() => handleDocumentView(document)} />
                 <Eye className="w-4 h-4 mr-2" />
                 View
               </DaisyDropdownMenuContent>
@@ -376,8 +376,8 @@ export default function DocumentLibrary({
     <div key={document.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50">
       <DaisyCheckbox
         checked={selectedDocuments.includes(document.id)}
-        onCheckedChange={() => toggleDocumentSelection(document.id)}
-      />
+        onCheckedChange={() = />
+toggleDocumentSelection(document.id)} />
       
       <div className="flex-shrink-0">
         <FileText className="w-8 h-8 text-gray-400" />
@@ -413,15 +413,15 @@ export default function DocumentLibrary({
         >
           <Download className="w-4 h-4" />
         </DaisyButton>
-        <DaisyDropdownMenu />
-          <DaisyDropdownMenuTrigger asChild />
-            <DaisyButton size="sm" variant="ghost" >
+        <DaisyDropdownMenu >
+            <DaisyDropdownMenuTrigger asChild >
+              <DaisyButton size="sm" variant="ghost" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
-          <DaisyDropdownMenuContent align="end" />
-            {allowEdit && (
+          <DaisyDropdownMenuContent align="end" >
+              {allowEdit && (
               <DaisyDropdownMenuItem onClick={() => handleDocumentEdit(document)} />
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
@@ -479,45 +479,48 @@ export default function DocumentLibrary({
             <DaisyInput
               placeholder="Search documents..."
               value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="pl-10"
-            />
+              onChange={(e) = />
+handleSearch(e.target.value)}
+              className="pl-10" />
           </div>
           
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
-            <DaisySelectTrigger className="w-48" />
-              <DaisySelectValue placeholder="Category" /></DaisyInput>
-            <DaisySelectContent />
-              {CATEGORY_OPTIONS.map(option => (
-                <DaisySelectItem key={option.value} value={option.value} />
-                  {option.label}
-                </DaisySelectContent>
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} >
+              <DaisySelectTrigger className="w-48">
+                <DaisySelectValue placeholder="Category" />
+</DaisyInput>
+            <DaisySelectContent >
+                {CATEGORY_OPTIONS.map(option => (
+                <DaisySelectItem key={option.value} value={option.value} >
+                    {option.label}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedFileType} onValueChange={setSelectedFileType} />
-            <DaisySelectTrigger className="w-48" />
-              <DaisySelectValue placeholder="File Type" /></DaisySelect>
-            <DaisySelectContent />
-              {FILE_TYPE_OPTIONS.map(option => (
-                <DaisySelectItem key={option.value} value={option.value} />
-                  {option.label}
-                </DaisySelectContent>
+          <DaisySelect value={selectedFileType} onValueChange={setSelectedFileType} >
+              <DaisySelectTrigger className="w-48">
+                <DaisySelectValue placeholder="File Type" />
+</DaisySelect>
+            <DaisySelectContent >
+                {FILE_TYPE_OPTIONS.map(option => (
+                <DaisySelectItem key={option.value} value={option.value} >
+                    {option.label}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
         </div>
 
         <div className="flex items-center gap-2">
-          <DaisySelect value={sortBy} onValueChange={setSortBy} />
-            <DaisySelectTrigger className="w-48" />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              {SORT_OPTIONS.map(option => (
-                <DaisySelectItem key={option.value} value={option.value} />
-                  {option.label}
-                </DaisySelectContent>
+          <DaisySelect value={sortBy} onValueChange={setSortBy} >
+              <DaisySelectTrigger className="w-48">
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                {SORT_OPTIONS.map(option => (
+                <DaisySelectItem key={option.value} value={option.value} >
+                    {option.label}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
@@ -560,9 +563,10 @@ export default function DocumentLibrary({
                 Delete
               </DaisyButton>
             )}
-            <DaisyButton size="sm" variant="ghost" onClick={clearSelection} >
-  Clear
-</DaisyButton>
+            <DaisyButton size="sm" variant="ghost" onClick={clearSelection}>
+          Clear
+
+        </DaisyButton>
             </DaisyButton>
           </div>
         </div>
@@ -620,10 +624,12 @@ export default function DocumentLibrary({
               variant="outline"
               size="sm"
               disabled={pagination.page === 1}
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+              onClick={() =>
+          setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
             >
               Previous
-            </DaisyButton>
+            
+        </DaisyButton>
             <span className="text-sm">
               Page {pagination.page} of {pagination.pages}
             </span>
@@ -631,18 +637,20 @@ export default function DocumentLibrary({
               variant="outline"
               size="sm"
               disabled={pagination.page === pagination.pages}
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+              onClick={() =>
+          setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
             >
               Next
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       )}
 
       {/* Upload Dialog */}
-      <DaisyDialog open={showUpload} onOpenChange={setShowUpload} />
-        <DaisyDialogContent className="max-w-4xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showUpload} onOpenChange={setShowUpload} >
+          <DaisyDialogContent className="max-w-4xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Upload Documents</DaisyDialogTitle>
           </DaisyDialogHeader>
@@ -650,15 +658,14 @@ export default function DocumentLibrary({
             onUploadComplete={handleUploadComplete}
             category={defaultCategory}
             linkedEntityType={linkedEntityType}
-            linkedEntityId={linkedEntityId}
-          />
+            linkedEntityId={linkedEntityId} />
         </DaisyDialogContent>
       </DaisyDialog>
 
       {/* Advanced Search Dialog */}
-      <DaisyDialog open={showSearch} onOpenChange={setShowSearch} />
-        <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showSearch} onOpenChange={setShowSearch} >
+          <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Advanced Search</DaisyDialogTitle>
           </DaisyDialogHeader>
@@ -677,8 +684,7 @@ export default function DocumentLibrary({
               document={viewingDocument}
               onEdit={allowEdit ? handleDocumentEdit : undefined}
               onDelete={allowDelete ? handleDocumentDelete : undefined}
-              onShare={handleDocumentShare}
-            />
+              onShare={handleDocumentShare} />
 </DaisyDialog>
           </DaisyDialogContent>
         </DaisyDialog>

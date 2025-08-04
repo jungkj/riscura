@@ -96,8 +96,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
                 className={cn(
                   "w-3 h-3",
                   i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                )}
-              />
+                )} />
             ))}
             <span className="text-xs text-gray-500 ml-1">({rating})</span>
           </div>
@@ -156,13 +155,14 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
               onSave(value);
             }}
           >
-            <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              {column.dropdownOptions?.map((option) => (
-                <DaisySelectItem key={option} value={option} />
-                  {option}
-                </DaisySelectContent>
+            <DaisySelectTrigger className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500">
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                {column.dropdownOptions?.map((option) => (
+                <DaisySelectItem key={option} value={option} >
+                    {option}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
@@ -186,8 +186,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
                   className={cn(
                     "w-4 h-4 hover:text-yellow-400 transition-colors",
                     i < parseInt(localValue) ? "text-yellow-400 fill-current" : "text-gray-300"
-                  )}
-                />
+                  )} />
               </button>
             ))}
           </div>
@@ -218,11 +217,11 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
             ref={inputRef}
             type="number"
             value={localValue}
-            onChange={(e) => handleInputChange(e.target.value)}
+            onChange={(e) = />
+handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}
-            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500"
-          />
+            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
         );
 
       case 'DATE':
@@ -231,11 +230,11 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
             ref={inputRef}
             type="date"
             value={localValue}
-            onChange={(e) => handleInputChange(e.target.value)}
+            onChange={(e) = />
+handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}
-            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500"
-          />
+            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
         );
 
       default:
@@ -247,12 +246,12 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
             <DaisyTextarea
               ref={textareaRef}
               value={localValue}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={(e) = />
+handleInputChange(e.target.value)}
               onBlur={() => onSave(localValue)}
               onKeyDown={handleKeyDown}
               className="min-h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500 resize-none"
-              rows={1}
-            />
+              rows={1} />
           );
         };
 
@@ -260,11 +259,11 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
           <DaisyInput
             ref={inputRef}
             value={localValue}
-            onChange={(e) => handleInputChange(e.target.value)}
+            onChange={(e) = />
+handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}
-            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500"
-          />
+            className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
         );
     }
   };

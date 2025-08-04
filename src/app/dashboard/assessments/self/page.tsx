@@ -219,8 +219,8 @@ export default function SelfAssessmentPage() {
                                 {assessment.score}%
                               </span>
                             </div>
-                            <DaisyProgress value={assessment.score} className="h-2" />
-                            <p className="text-xs text-[#6B5B47]">
+                            <DaisyProgress value={assessment.score} className="h-2" / />
+<p className="text-xs text-[#6B5B47]">
                               Completed on {assessment.completedDate}
                             </p>
                           </div>
@@ -233,14 +233,14 @@ export default function SelfAssessmentPage() {
                             assessment.status === 'Completed'
                               ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                               : 'bg-[#8B7355] hover:bg-[#6B5B47] text-white'
-                          }`}
-                        >
-                          {assessment.status === 'Completed'
+                          }`}>
+          {assessment.status === 'Completed'
                             ? 'Retake'
                             : assessment.status === 'In Progress'
                               ? 'Continue'
                               : 'Start'}
-                        </DaisyButton>
+                        
+        </DaisyButton>
                       </div>
                     </div>
                   </DaisyCardBody>

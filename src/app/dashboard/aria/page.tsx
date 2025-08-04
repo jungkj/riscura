@@ -243,16 +243,13 @@ const ARIAChat = () => {
                       <div className="flex items-center gap-1">
                         <div
                           className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
-                          style={{ animationDelay: '0ms' }}
-                        />
+                          style={{ animationDelay: '0ms' }} />
                         <div
                           className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
-                          style={{ animationDelay: '150ms' }}
-                        />
+                          style={{ animationDelay: '150ms' }} />
                         <div
                           className="w-2 h-2 bg-[#199BEC] rounded-full animate-bounce"
-                          style={{ animationDelay: '300ms' }}
-                        />
+                          style={{ animationDelay: '300ms' }} />
                       </div>
                       <span className="text-sm font-medium text-gray-600 font-inter">
                         ARIA is thinking...
@@ -277,10 +274,12 @@ const ARIAChat = () => {
                         variant="ghost"
                         size="sm"
                         className="text-left justify-start text-sm h-auto py-3 px-4"
-                        onClick={() => setInput(question)}
+                        onClick={() =>
+          setInput(question)}
                       >
                         {question}
-                      </DaisyButton>
+                      
+        </DaisyButton>
                     ))}
                   </div>
                 </div>
@@ -293,11 +292,11 @@ const ARIAChat = () => {
                 <DaisyInput
                   placeholder="Ask ARIA about risks, controls, or compliance..."
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) = />
+setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   disabled={isLoading}
-                  className="flex-1 text-sm"
-                />
+                  className="flex-1 text-sm" />
                 <DaisyButton
                   onClick={handleSend}
                   disabled={isLoading || !input.trim()}

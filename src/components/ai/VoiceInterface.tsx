@@ -298,7 +298,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="text-lg font-semibold flex items-center space-x-2" >
@@ -329,9 +329,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
             onClick={toggleListening}
             disabled={!isEnabled}
             variant={isListening ? 'destructive' : 'default'}
-            className="flex-1" >
-  {isListening ? (
-</DaisyButton>
+            className="flex-1">
+          {isListening ? (
+
+        </DaisyButton>
               <>
                 <CommunicationIcons.MicrophoneOff className="h-4 w-4 mr-2" />
                 Stop Listening
@@ -399,24 +400,24 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                 <span className="text-sm">Continuous listening</span>
                 <DaisySwitch
                   checked={settings.continuous}
-                  onCheckedChange={(checked) => updateSetting('continuous', checked)}
-                />
+                  onCheckedChange={(checked) = />
+updateSetting('continuous', checked)} />
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-sm">Show interim results</span>
                 <DaisySwitch
                   checked={settings.interimResults}
-                  onCheckedChange={(checked) => updateSetting('interimResults', checked)}
-                />
+                  onCheckedChange={(checked) = />
+updateSetting('interimResults', checked)} />
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-sm">Auto-send on confidence</span>
                 <DaisySwitch
                   checked={settings.autoSend}
-                  onCheckedChange={(checked) => updateSetting('autoSend', checked)}
-                />
+                  onCheckedChange={(checked) = />
+updateSetting('autoSend', checked)} />
               </div>
 
               <div className="space-y-2">
@@ -430,8 +431,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   min={0.1}
                   max={1.0}
                   step={0.1}
-                  className="w-full"
-                />
+                  className="w-full" />
               </div>
             </div>
 
@@ -467,8 +467,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   min={0.1}
                   max={2.0}
                   step={0.1}
-                  className="w-full"
-                />
+                  className="w-full" />
               </div>
 
               <div className="space-y-2">
@@ -482,8 +481,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   min={0.1}
                   max={2.0}
                   step={0.1}
-                  className="w-full"
-                />
+                  className="w-full" />
               </div>
 
               <div className="space-y-2">
@@ -497,8 +495,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   min={0.0}
                   max={1.0}
                   step={0.1}
-                  className="w-full"
-                />
+                  className="w-full" />
               </div>
 
               {/* Test speech */}

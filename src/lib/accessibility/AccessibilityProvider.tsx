@@ -425,7 +425,6 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
       {/* Screen Reader Announcements */}
       <div ref={announcementRef} className="sr-only" aria-live="polite" aria-atomic="true" />
-
       {/* Content */}
       <div
         className={cn(

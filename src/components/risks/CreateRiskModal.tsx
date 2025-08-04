@@ -247,9 +247,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="title"
                   placeholder="Enter risk title"
                   value={formData.title}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-                  className={errors.title ? 'border-red-500' : ''}
-                />
+                  onChange={(e) = />
+setFormData((prev) => ({ ...prev, title: e.target.value }))}
+                  className={errors.title ? 'border-red-500' : ''} />
                 {errors.title && <p className="text-sm text-red-600">{errors.title}</p>}
               </div>
 
@@ -261,7 +261,6 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 >
                   <DaisySelectTrigger className={errors.category ? 'border-red-500' : ''}>
                     <DaisySelectValue placeholder="Select category" />
-                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {riskCategories.map((category) => (
                       <DaisySelectItem key={category} value={category}>
@@ -280,10 +279,10 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 id="description"
                 placeholder="Describe the risk in detail"
                 value={formData.description}
-                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                onChange={(e) = />
+setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 className={errors.description ? 'border-red-500' : ''}
-                rows={4}
-              />
+                rows={4} />
               {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
             </div>
 
@@ -294,9 +293,9 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="owner"
                   placeholder="Enter risk owner name"
                   value={formData.owner}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, owner: e.target.value }))}
-                  className={errors.owner ? 'border-red-500' : ''}
-                />
+                  onChange={(e) = />
+setFormData((prev) => ({ ...prev, owner: e.target.value }))}
+                  className={errors.owner ? 'border-red-500' : ''} />
                 {errors.owner && <p className="text-sm text-red-600">{errors.owner}</p>}
               </div>
 
@@ -306,8 +305,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   value={formData.dueDate}
                   onChange={(date) => setFormData((prev) => ({ ...prev, dueDate: date }))}
                   placeholder="Select due date"
-                  className={errors.dueDate ? 'border-red-500' : ''}
-                />
+                  className={errors.dueDate ? 'border-red-500' : ''} />
                 {errors.dueDate && <p className="text-sm text-red-600">{errors.dueDate}</p>}
               </div>
             </div>
@@ -336,8 +334,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                         max={5}
                         min={1}
                         step={1}
-                        className="w-full"
-                      />
+                        className="w-full" />
                       <div className="flex justify-between text-sm text-gray-500">
                         <span>Very Low</span>
                         <span>Very High</span>
@@ -354,8 +351,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                         max={5}
                         min={1}
                         step={1}
-                        className="w-full"
-                      />
+                        className="w-full" />
                       <div className="flex justify-between text-sm text-gray-500">
                         <span>Minimal</span>
                         <span>Catastrophic</span>
@@ -364,8 +360,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   </div>
 
                   <DaisySeparator />
-
-                  <div className="text-center">
+<div className="text-center">
                     <div className="inline-flex items-center space-x-4">
                       <div className="text-sm text-gray-600">Risk Score:</div>
                       <div className="text-2xl font-bold">{currentRiskScore}</div>
@@ -385,7 +380,6 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {treatmentOptions.map((option) => (
                           <DaisySelectItem key={option.value} value={option.value}>
@@ -420,8 +414,8 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                       <DaisyCheckbox
                         id={framework}
                         checked={formData.framework.includes(framework)}
-                        onCheckedChange={() => handleFrameworkToggle(framework)}
-                      />
+                        onCheckedChange={() = />
+handleFrameworkToggle(framework)} />
                       <DaisyLabel htmlFor={framework} className="text-sm">
                         {framework}
                       </DaisyLabel>
@@ -444,7 +438,6 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue placeholder="Select business unit" />
-                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     {businessUnits.map((unit) => (
                       <DaisySelectItem key={unit} value={unit}>
@@ -461,8 +454,8 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, department: e.target.value }))}
-                />
+                  onChange={(e) = />
+setFormData((prev) => ({ ...prev, department: e.target.value }))} />
               </div>
             </div>
           </DaisyTabsContent>
@@ -471,11 +464,13 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
         <div className="flex justify-end space-x-2 pt-4 border-t">
           <DaisyButton
             variant="outline"
-            onClick={() => onOpenChange(false)}
+            onClick={() =>
+          onOpenChange(false)}
             disabled={isSubmitting}
           >
             Cancel
-          </DaisyButton>
+          
+        </DaisyButton>
           <DaisyButton onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? (
               <>

@@ -207,7 +207,7 @@ interface ProgressiveDisclosureProps {
   className?: string;
 }
 
-export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = ({
+export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />= ({
   userExperience,
   onFeatureUnlock,
   onFeatureHide,
@@ -326,7 +326,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
     <div className={`space-y-6 ${className}`}>
       {/* Progress overview */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyProgressiveDisclosureProps>
           <DaisyCardTitle className="flex items-center space-x-2" >
   <Sparkles className="w-5 h-5" />
@@ -347,8 +347,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               </span>
             </div>
             <DaisyProgress value={progressPercentage} className="h-3" />
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               {categories.slice(1).map(category => {
                 const categoryFeatures = features.filter(f => f.category === category.id);
                 const unlockedInCategory = categoryFeatures.filter(f => f.isUnlocked).length;
@@ -380,9 +379,11 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                 key={category.id}
                 variant={selectedCategory === category.id ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedCategory(category.id)} />
+                onClick={() =>
+          setSelectedCategory(category.id)} />
                 {category.name}
-              </DaisyButton>
+              
+        </DaisyButton>
             ))}
           </div>
           
@@ -391,8 +392,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
               <input
                 type="checkbox"
                 checked={showHidden}
-                onChange={(e) => setShowHidden(e.target.checked)}
-              />
+                onChange={(e) => setShowHidden(e.target.checked)} />
               <span>Show locked features</span>
             </label>
           </div>
@@ -473,7 +473,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                                   <span className="text-gray-500">{Math.round(unlockProgress)}%</span>
                                 </div>
                                 <DaisyProgress value={unlockProgress} className="h-1" />
-                                <p className="text-xs text-gray-500">
+<p className="text-xs text-gray-500">
                                   {feature.unlockCriteria.description}
                                 </p>
                               </div>
@@ -503,9 +503,10 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                                 <DaisyButton
                                   variant="ghost"
                                   size="sm"
-                                  className="text-blue-600 hover:text-blue-700 h-auto p-0" >
-  Explore 
-</DaisyButton><ChevronRight className="w-3 h-3 ml-1" />
+                                  className="text-blue-600 hover:text-blue-700 h-auto p-0">
+          Explore 
+
+        </DaisyButton><ChevronRight className="w-3 h-3 ml-1" />
                                 </DaisyButton>
                               )}
                             </div>
@@ -549,7 +550,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps> = 
                   </p>
                   <div className="flex items-center space-x-2">
                     <DaisyProgress value={progress} className="h-2 flex-1" />
-                    <span className="text-xs text-blue-600 font-medium">
+<span className="text-xs text-blue-600 font-medium">
                       {Math.round(progress)}%
                     </span>
                   </div>

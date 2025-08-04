@@ -163,7 +163,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
 
     return (
       <DaisyCard className="mb-4 transition-all duration-200" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <DaisyCardTitle className="text-sm flex items-center gap-2" >
@@ -222,8 +222,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               <div className="flex-1 bg-muted rounded-full h-2">
                 <div 
                   className="bg-primary h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${result.result.confidence * 100}%` }}
-                />
+                  style={{ width: `${result.result.confidence * 100}%` }} />
               </div>
               <span className="text-xs font-medium">
                 {Math.round(result.result.confidence * 100)}%
@@ -274,9 +273,11 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               {result.result.type === 'replacement' && (
                 <div className="flex items-center gap-2">
                   {onReject && (
-                    <DaisyButton variant="outline" size="sm" onClick={() => onReject(result.id)} />
+                    <DaisyButton variant="outline" size="sm" onClick={() =>
+          onReject(result.id)} />
                       Reject
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   )}
                   {onApprove && (
                     <DaisyButton size="sm" onClick={() => onApprove(result.id)} />
@@ -303,8 +304,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-            onClick={onClose}
-          />
+            onClick={onClose} />
 
           {/* Panel */}
           <motion.div
@@ -367,32 +367,32 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
                   </p>
                 </div>
               ) : (
-                <DaisyTabs defaultValue="all" className="h-full flex flex-col" />
-                  <DaisyTabsList className="grid grid-cols-3 m-4 mb-0" />
-                    <DaisyTabsTrigger value="all">All ({results.length})</DaisyTabs>
-                    <DaisyTabsTrigger value="pending" />
-                      Pending ({results.filter(r => r.status === 'pending').length})
+                <DaisyTabs defaultValue="all" className="h-full flex flex-col" >
+                    <DaisyTabsList className="grid grid-cols-3 m-4 mb-0" >
+                      <DaisyTabsTrigger value="all">All ({results.length})</DaisyTabs>
+                    <DaisyTabsTrigger value="pending" >
+                        Pending ({results.filter(r => r.status === 'pending').length})
                     </DaisyTabsTrigger>
-                    <DaisyTabsTrigger value="completed" />
-                      Completed ({results.filter(r => r.status === 'completed').length})
+                    <DaisyTabsTrigger value="completed" >
+                        Completed ({results.filter(r => r.status === 'completed').length})
                     </DaisyTabsTrigger>
                   </DaisyTabsList>
 
-                  <DaisyScrollArea className="flex-1 px-4" />
-                    <DaisyTabsContent value="all" className="mt-4" />
-                      {results.map(result => (
+                  <DaisyScrollArea className="flex-1 px-4" >
+                      <DaisyTabsContent value="all" className="mt-4" >
+                        {results.map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}
                     </DaisyScrollArea>
 
-                    <DaisyTabsContent value="pending" className="mt-4" />
-                      {results.filter(r => r.status === 'pending').map(result => (
+                    <DaisyTabsContent value="pending" className="mt-4" >
+                        {results.filter(r => r.status === 'pending').map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}
                     </DaisyTabsContent>
 
-                    <DaisyTabsContent value="completed" className="mt-4" />
-                      {results.filter(r => r.status === 'completed').map(result => (
+                    <DaisyTabsContent value="completed" className="mt-4" >
+                        {results.filter(r => r.status === 'completed').map(result => (
                         <ResultCard key={result.id} result={result} />
                       ))}
                     </DaisyTabsContent>
@@ -410,8 +410,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
               onMouseDown={(e) => {
                 e.preventDefault();
                 setIsDragging(true);
-              }}
-            />
+              }} />
           </motion.div>
         </>
       )}

@@ -48,13 +48,11 @@ export const Spinner: React.FC<SpinnerProps> = ({
           cy="12"
           r="10"
           stroke="currentColor"
-          strokeWidth="4"
-        />
+          strokeWidth="4" />
         <path
           className="opacity-75"
           fill="currentColor"
-          d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        />
+          d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
       </svg>
     </div>
   );
@@ -93,8 +91,7 @@ export const Skeleton: React.FC<DaisySkeletonProps> = ({
       className={`bg-gray-200 animate-pulse ${rounded ? 'rounded-full' : 'rounded'} ${className}`}
       style={style}
       role="status"
-      aria-label="Loading content"
-    />
+      aria-label="Loading content" />
   );
 };
 
@@ -105,8 +102,8 @@ export const SkeletonText: React.FC<{
 }> = ({ lines = 3, className = '' }) => (
   <div className={`space-y-2 ${className}`}>
     {Array.from({ length: lines }).map((_, index) => (
-      <DaisySkeleton key={index} height={16} width={index === lines - 1 ? '75%' : '100%'} />
-    ))}
+      <DaisySkeleton key={index} height={16} width={index === lines - 1 ? '75%' : '100%'} >
+      ))}
   </div>
 );
 
@@ -122,23 +119,23 @@ export const SkeletonCard: React.FC<{
     <div className="space-y-4">
       {showAvatar && (
         <div className="flex items-center space-x-3">
-          <DaisySkeleton width={40} height={40} rounded />
-          <div className="space-y-2 flex-1">
-            <DaisySkeleton height={16} width="40%" />
-            <DaisySkeleton height={14} width="60%" />
-          </div>
+          <DaisySkeleton width={40} height={40} rounded >
+            <div className="space-y-2 flex-1">
+            <DaisySkeleton height={16} width="40%" >
+              <DaisySkeleton height={14} width="60%" >
+            </div>
         </div>
       )}
 
       <div className="space-y-2">
-        <DaisySkeleton height={20} width="80%" />
-        <DaisySkeletonText lines={2} />
-      </div>
+        <DaisySkeleton height={20} width="80%" >
+          <DaisySkeletonText lines={2} >
+        </div>
 
       <div className="flex space-x-2">
-        <DaisySkeleton height={32} width={80} />
-        <DaisySkeleton height={32} width={100} />
-      </div>
+        <DaisySkeleton height={32} width={80} >
+          <DaisySkeleton height={32} width={100} >
+        </div>
     </div>
   </div>
 );
@@ -154,8 +151,8 @@ export const SkeletonTable: React.FC<{
     <div className="bg-gray-50 p-4 border-b border-gray-200">
       <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
         {Array.from({ length: columns }).map((_, index) => (
-          <DaisySkeleton key={index} height={16} width="60%" />
-        ))}
+          <DaisySkeleton key={index} height={16} width="60%" >
+          ))}
       </div>
     </div>
 
@@ -165,8 +162,8 @@ export const SkeletonTable: React.FC<{
         <div key={rowIndex} className="p-4">
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <DaisySkeleton key={colIndex} height={16} width="80%" />
-            ))}
+              <DaisySkeleton key={colIndex} height={16} width="80%" >
+              ))}
           </div>
         </div>
       ))}
@@ -211,7 +208,7 @@ interface ProgressBarProps {
   className?: string;
 }
 
-export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
+export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
   progress,
   size = 'md',
   color = 'primary',
@@ -250,8 +247,7 @@ export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
           aria-valuenow={clampedProgress}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={label || `${Math.round(clampedProgress)}% complete`}
-        />
+          aria-label={label || `${Math.round(clampedProgress)}% complete`} />
       </div>
     </div>
   );
@@ -284,8 +280,7 @@ export const DotsLoading: React.FC<{
           style={{
             animationDelay: `${index * 0.2}s`,
             animationDuration: '1s',
-          }}
-        />
+          }} />
       ))}
     </div>
   );
@@ -377,34 +372,34 @@ export const LoadingStates = {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, index) => (
-          <DaisySkeletonCard key={index} />
-        ))}
+          <DaisySkeletonCard key={index} >
+          ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DaisySkeletonCard showImage />
-        <DaisySkeletonCard showImage />
-      </div>
+        <DaisySkeletonCard showImage >
+          <DaisySkeletonCard showImage >
+        </div>
     </div>
   ),
 
   // Table loading
   Table: ({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) => (
-    <DaisySkeletonTable rows={rows} columns={columns} />
-  ),
+    <DaisySkeletonTable rows={rows} columns={columns} >
+    ),
 
   // Form loading
   Form: () => (
     <div className="space-y-6">
       {Array.from({ length: 5 }).map((_, index) => (
         <div key={index} className="space-y-2">
-          <DaisySkeleton height={16} width="25%" />
-          <DaisySkeleton height={40} />
-        </div>
+          <DaisySkeleton height={16} width="25%" >
+            <DaisySkeleton height={40} >
+          </div>
       ))}
       <div className="flex space-x-3">
-        <DaisySkeleton height={40} width={100} />
-        <DaisySkeleton height={40} width={80} />
-      </div>
+        <DaisySkeleton height={40} width={100} >
+          <DaisySkeleton height={40} width={80} >
+        </div>
     </div>
   ),
 
@@ -416,13 +411,13 @@ export const LoadingStates = {
           key={index}
           className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg"
         >
-          <DaisySkeleton width={40} height={40} rounded />
-          <div className="flex-1 space-y-2">
-            <DaisySkeleton height={16} width="60%" />
-            <DaisySkeleton height={14} width="40%" />
+          <DaisySkeleton width={40} height={40} rounded >
+            <div className="flex-1 space-y-2">
+            <DaisySkeleton height={16} width="60%" >
+              <DaisySkeleton height={14} width="40%" >
+            </div>
+          <DaisySkeleton height={32} width={80} >
           </div>
-          <DaisySkeleton height={32} width={80} />
-        </div>
       ))}
     </div>
   ),
@@ -431,14 +426,14 @@ export const LoadingStates = {
   Chart: () => (
     <div className="p-6 border border-gray-200 rounded-lg">
       <div className="space-y-4">
-        <DaisySkeleton height={20} width="40%" />
-        <DaisySkeleton height={300} />
-        <div className="flex justify-center space-x-4">
+        <DaisySkeleton height={20} width="40%" >
+          <DaisySkeleton height={300} >
+          <div className="flex justify-center space-x-4">
           {Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="flex items-center space-x-2">
-              <DaisySkeleton width={12} height={12} />
-              <DaisySkeleton height={14} width={60} />
-            </div>
+              <DaisySkeleton width={12} height={12} >
+                <DaisySkeleton height={14} width={60} >
+              </div>
           ))}
         </div>
       </div>

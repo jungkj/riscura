@@ -129,8 +129,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             r={radius}
             fill="transparent"
             stroke="#e5e7eb"
-            strokeWidth={strokeWidth}
-          />
+            strokeWidth={strokeWidth} />
           {data.map((item, index) => {
             const strokeDasharray = `${(item.percentage / 100) * circumference} ${circumference}`;
             const strokeDashoffset = -cumulativePercentage * circumference / 100;
@@ -147,8 +146,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
                 strokeWidth={strokeWidth}
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}
-                className="transition-all duration-300 hover:opacity-80"
-              />
+                className="transition-all duration-300 hover:opacity-80" />
             );
           })}
         </svg>
@@ -180,8 +178,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
                   backgroundColor: item.color,
                   width: `${(item.value / maxValue) * 100}%`,
                   minWidth: '4px'
-                }}
-              />
+                }} />
               <div className="absolute right-2 top-0 h-6 flex items-center text-xs font-medium text-white">
                 {item.value}
               </div>
@@ -209,7 +206,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -220,10 +217,11 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
           
           <div className="flex items-center gap-2">
             <DaisySelect value={selectedDistribution} onValueChange={(value) => setSelectedDistribution(value as typeof selectedDistribution)} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="level">By Level</DaisySelectContent>
+              <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="level">By Level</DaisySelectItem>
                 <DaisySelectItem value="category">By Category</DaisySelectItem>
                 <DaisySelectItem value="owner">By Owner</DaisySelectItem>
                 <DaisySelectItem value="status">By Status</DaisySelectItem>
@@ -231,10 +229,11 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
             </DaisySelect>
             
             <DaisySelect value={selectedChartType} onValueChange={(value) => setSelectedChartType(value as typeof selectedChartType)} />
-              <DaisySelectTrigger className="w-24" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="donut">Donut</DaisySelectContent>
+              <DaisySelectTrigger className="w-24">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="donut">Donut</DaisySelectItem>
                 <DaisySelectItem value="bar">Bar</DaisySelectItem>
               </DaisySelectContent>
             </DaisySelect>
@@ -265,8 +264,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
                   <div className="flex items-center gap-3">
                     <div 
                       className="w-4 h-4 rounded"
-                      style={{ backgroundColor: item.color }}
-                    />
+                      style={{ backgroundColor: item.color }} />
                     <span className="text-sm font-medium text-slate-700">
                       {item.name}
                     </span>

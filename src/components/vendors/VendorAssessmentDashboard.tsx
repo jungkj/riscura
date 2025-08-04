@@ -246,10 +246,10 @@ export function VendorAssessmentDashboard() {
                     <DaisyInput
                       placeholder="https://example.com"
                       value={vendorUrl}
-                      onChange={(e) => setVendorUrl(e.target.value)}
+                      onChange={(e) = />
+setVendorUrl(e.target.value)}
                       className="pl-10 border-[#D8C3A5] focus:border-[#199BEC]"
-                      onKeyPress={(e) => e.key === 'Enter' && handleAssessVendor()}
-                    />
+                      onKeyPress={(e) => e.key === 'Enter' && handleAssessVendor()} />
                   </div>
                   <DaisyButton
                     onClick={handleAssessVendor}
@@ -352,7 +352,7 @@ export function VendorAssessmentDashboard() {
                     <div className="space-y-3">
                       <div className="flex items-center text-sm">
                         <DaisyCalendar className="h-4 w-4 mr-2 text-[#A8A8A8]" />
-                        <span className="text-[#A8A8A8]">Assessed:</span>
+<span className="text-[#A8A8A8]">Assessed:</span>
                         <span className="ml-2 text-[#191919]">
                           {new Date(assessment.assessmentDate).toLocaleDateString()}
                         </span>
@@ -416,7 +416,7 @@ export function VendorAssessmentDashboard() {
                         <span className="text-xs text-[#A8A8A8]">/ 100</span>
                       </div>
                       <DaisyProgress value={category.score} className="h-2 mt-2" />
-                    </DaisyCardBody>
+</DaisyCardBody>
                   </DaisyCard>
                 ))}
               </div>
@@ -482,8 +482,9 @@ export function VendorAssessmentDashboard() {
                   Export Report
                 </DaisyButton>
                 <DaisyButton className="bg-[#199BEC] hover:bg-[#199BEC]/90">
-                  Schedule Review
-                </DaisyButton>
+          Schedule Review
+                
+        </DaisyButton>
               </div>
             </div>
           ) : (
@@ -534,8 +535,9 @@ export function VendorAssessmentDashboard() {
                             {new Date(assessment.assessmentDate).toLocaleDateString()}
                           </span>
                           <DaisyButton size="sm" variant="outline">
-                            View
-                          </DaisyButton>
+          View
+                          
+        </DaisyButton>
                         </div>
                       </div>
                     </div>

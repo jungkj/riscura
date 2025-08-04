@@ -168,7 +168,6 @@ export const WorkflowProgress = ({ activeStep, onStepClick, className }: Workflo
                   >
                     {/* Background Line */}
                     <div className="w-4 sm:w-8 h-0.5 bg-gray-200 rounded-full" />
-
                     {/* Progress Line */}
                     <motion.div
                       className={cn(

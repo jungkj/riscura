@@ -9,15 +9,15 @@ console.log('🔍 Running optimized TypeScript checks for Next.js 15.3.4...\n');
 function runCommand(command, args = [], options = {}) {
   return new Promise((resolve, reject) => {
     console.log(`📋 Running: ${command} ${args.join(' ')}`);
-    
+
     const child = spawn(command, args, {
       stdio: 'inherit',
       shell: true,
       env: {
         ...process.env,
-        NODE_OPTIONS: '--max-old-space-size=4096',
+        NODE_OPTIONS: '--max-old-space-size=8192 --optimize-for-size',
       },
-      ...options
+      ...options,
     });
 
     child.on('close', (code) => {
@@ -42,14 +42,20 @@ async function main() {
   let hasErrors = false;
 
   try {
-    // 1. Quick TypeScript syntax check (no emit, skip lib check)
-    console.log('🔧 Step 1: TypeScript Syntax Check (Fast)');
+    // 1. Incremental TypeScript check with memory optimization
+    console.log('🔧 Step 1: Incremental TypeScript Check');
     console.log('─'.repeat(50));
     try {
-      await runCommand('npx', ['tsc', '--noEmit', '--skipLibCheck', '--incremental']);
+      await runCommand('npx', [
+        'tsc',
+        '--noEmit',
+        '--skipLibCheck',
+        '--incremental',
+        '--assumeChangesOnlyAffectDirectDependencies',
+        '--disableSourceOfProjectReferenceRedirect',
+      ]);
     } catch (error) {
       console.log('⚠️  TypeScript syntax issues found (continuing...)\n');
-      // Don't fail the build for syntax issues when ignoreBuildErrors is true
     }
 
     // 2. Next.js build check (production-like)
@@ -59,11 +65,12 @@ async function main() {
       await runCommand('npx', ['next', 'build', '--no-lint'], {
         env: {
           ...process.env,
-          NODE_OPTIONS: '--max-old-space-size=6144',
+          NODE_OPTIONS: '--max-old-space-size=8192 --optimize-for-size',
           NODE_ENV: 'production',
           CI: 'true',
           SKIP_ENV_VALIDATION: '1',
-        }
+          NEXT_TELEMETRY_DISABLED: '1',
+        },
       });
     } catch (error) {
       hasErrors = true;
@@ -82,11 +89,11 @@ async function main() {
     // Summary
     const endTime = Date.now();
     const duration = ((endTime - startTime) / 1000).toFixed(2);
-    
+
     console.log('📊 SUMMARY');
     console.log('═'.repeat(50));
     console.log(`⏱️  Total time: ${duration}s`);
-    
+
     if (hasErrors) {
       console.log('❌ Critical build errors found!');
       console.log('🔧 Please fix build-blocking errors before deploying.\n');
@@ -96,7 +103,6 @@ async function main() {
       console.log('🚀 Ready for Vercel deployment.\n');
       process.exit(0);
     }
-
   } catch (error) {
     console.error('💥 Type checking script failed:', error.message);
     process.exit(1);

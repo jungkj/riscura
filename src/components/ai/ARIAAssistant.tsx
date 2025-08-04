@@ -403,7 +403,7 @@ How can I assist you today?`,
 
   return (
     <DaisyCard className="h-[600px] flex flex-col" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -426,9 +426,10 @@ How can I assist you today?`,
                   size="sm"
                   onClick={isSpeaking ? stopSpeaking : undefined}
                   disabled={!isSpeaking}
-                  className="p-2" >
-  {isSpeaking ? (
-</DaisyButton>
+                  className="p-2">
+          {isSpeaking ? (
+
+        </DaisyButton>
                     <VolumeX className="w-4 h-4 text-red-500" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
@@ -463,8 +464,8 @@ How can I assist you today?`,
       <DaisyCardBody className="flex-1 flex flex-col p-0" >
   {/* Messages Area */}
 </DaisyCardBody>
-        <DaisyScrollArea className="flex-1 px-4" />
-          <div className="space-y-4 pb-4">
+        <DaisyScrollArea className="flex-1 px-4" >
+            <div className="space-y-4 pb-4">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -513,10 +514,12 @@ How can I assist you today?`,
                               key={index}
                               variant="outline"
                               size="sm"
-                              onClick={() => handleAction(action.action, action.parameters)}
+                              onClick={() =>
+          handleAction(action.action, action.parameters)}
                               className="text-xs" />
                               {action.label}
-                            </DaisyButton>
+                            
+        </DaisyButton>
                           ))}
                         </div>
                       )}
@@ -530,10 +533,12 @@ How can I assist you today?`,
                               key={index}
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleFollowUpQuestion(question)}
+                              onClick={() =>
+          handleFollowUpQuestion(question)}
                               className="text-xs h-auto p-2 justify-start text-left whitespace-normal" />
                               {question}
-                            </DaisyButton>
+                            
+        </DaisyButton>
                           ))}
                         </div>
                       )}
@@ -603,19 +608,18 @@ How can I assist you today?`,
         </DaisyScrollArea>
 
         <DaisySeparator />
-
-        {/* Input Area */}
+{/* Input Area */}
         <div className="p-4">
           <form onSubmit={handleSubmit} className="flex space-x-2">
             <div className="flex-1 relative">
               <DaisyInput
                 ref={inputRef}
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
+                onChange={(e) = />
+setInputMessage(e.target.value)}
                 placeholder="Ask ARIA about risks, controls, compliance..."
                 disabled={isLoading}
-                className="pr-12"
-              />
+                className="pr-12" />
               
               {voiceEnabled && (
                 <DaisyButton

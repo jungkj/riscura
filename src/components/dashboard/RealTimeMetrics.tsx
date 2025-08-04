@@ -240,17 +240,17 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                     {metric.icon}
                     <span className="text-sm text-[#6B5B47]">{metric.label}</span>
                   </div>
-                  <DaisyTooltip />
-                    <DaisyTooltipTrigger />
-                      <div className="flex items-center space-x-1">
+                  <DaisyTooltip>
+                      <DaisyTooltipTrigger>
+                        <div className="flex items-center space-x-1">
                         {getTrendIcon(metric.value, metric.previousValue)}
                         <span className={`text-xs ${getStatusColor(metric.value, metric.threshold)}`}>
                           {getTrendPercentage(metric.value, metric.previousValue)}
                         </span>
                       </div>
                     </DaisyTooltip>
-                    <DaisyTooltipContent />
-                      <p>{metric.description}</p>
+                    <DaisyTooltipContent>
+                        <p>{metric.description}</p>
                     </DaisyTooltipContent>
                   </DaisyTooltip>
                 </div>
@@ -269,9 +269,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
                 {metric.target && (
                   <DaisyProgress
                     value={getProgressValue(metric.value, metric.target)}
-                    className="mt-2 h-1"
-                  />
-                )}
+                    className="mt-2 h-1" />)}
               </DaisyProgress>
             </DaisyCard>
           </motion.div>

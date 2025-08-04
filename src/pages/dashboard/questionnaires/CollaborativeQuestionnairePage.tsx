@@ -239,7 +239,6 @@ export default function CollaborativeQuestionnairePage({
               </DaisyButton>
 
               <DaisySeparator orientation="vertical" className="h-6" />
-
               <div className="flex items-center space-x-3">
                 <div>
                   <h1 className="text-lg font-semibold text-gray-900">{questionnaire.title}</h1>
@@ -284,7 +283,6 @@ export default function CollaborativeQuestionnairePage({
               </div>
 
               <DaisySeparator orientation="vertical" className="h-6" />
-
               {/* Action buttons */}
               <div className="flex items-center space-x-2">
                 <DaisyButton variant="ghost" size="sm" onClick={handleStar}>
@@ -311,7 +309,6 @@ export default function CollaborativeQuestionnairePage({
               </div>
 
               <DaisySeparator orientation="vertical" className="h-6" />
-
               {/* Mode switcher */}
               <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <DaisyButton

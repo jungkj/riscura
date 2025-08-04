@@ -129,7 +129,7 @@ class PerformanceMonitor {
 
           // Track slow resources
           if (resourceEntry.duration > 1000) {
-            // > 1 second
+            // 1 second
             Sentry.addBreadcrumb({
               category: 'slow-resource',
               message: `Slow resource: ${resourceEntry.name}`,
@@ -258,7 +258,7 @@ class PerformanceMonitor {
 
     // Alert on slow APIs
     if (responseTime > 2000) {
-      // > 2 seconds
+      // 2 seconds
       Sentry.captureMessage('Slow API call detected', {
         level: 'warning',
         tags: {

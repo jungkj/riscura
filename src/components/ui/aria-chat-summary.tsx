@@ -21,7 +21,7 @@ export const ARIAChatSummary = () => {
       {/* Main Features */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <MessageSquare className="h-5 w-5 text-[#199BEC]" />
@@ -55,7 +55,7 @@ export const ARIAChatSummary = () => {
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <Sparkles className="h-5 w-5 text-[#199BEC]" />
@@ -88,7 +88,7 @@ export const ARIAChatSummary = () => {
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <CheckCircle className="h-5 w-5 text-green-600" />
@@ -121,7 +121,7 @@ export const ARIAChatSummary = () => {
         </DaisyCard>
 
         <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <Bot className="h-5 w-5 text-[#199BEC]" />
@@ -156,7 +156,7 @@ export const ARIAChatSummary = () => {
 
       {/* Design Principles */}
       <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Design System Integration</DaisyCardTitle>
         </DaisyCardBody>
@@ -189,7 +189,7 @@ export const ARIAChatSummary = () => {
 
       {/* Status Indicators */}
       <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Status Indicators & Animations</DaisyCardTitle>
         </DaisyCardBody>
@@ -233,7 +233,7 @@ export const ARIAChatSummary = () => {
 
       {/* Implementation Results */}
       <DaisyCard className="border border-green-200 bg-green-50" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-green-800 font-inter">✅ Implementation Complete</DaisyCardTitle>
         </DaisyCardBody>

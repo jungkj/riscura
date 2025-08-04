@@ -102,15 +102,15 @@ export const SharePointFileBrowser: React.FC<Props> = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Search for Excel files..."
-            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
         <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
-          variant="outline" >
-  Search
-</DaisyButton>
+          variant="outline">
+          Search
+
+        </DaisyButton>
         </DaisyButton>
         <DaisyButton
           onClick={refresh}
@@ -126,7 +126,8 @@ export const SharePointFileBrowser: React.FC<Props> = ({
         <div className="flex items-center text-sm text-gray-600">
           <span>Search results for: "{searchQuery}"</span>
           <DaisyButton
-            onClick={() => {
+            onClick={() =>
+          {
               setSearchQuery('');
               setIsSearching(false);
               listFiles();
@@ -136,7 +137,8 @@ export const SharePointFileBrowser: React.FC<Props> = ({
             className="ml-2"
           >
             Clear search
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
       )}
 

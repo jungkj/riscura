@@ -194,9 +194,9 @@ export default function HelpPage() {
                 <DaisyInput
                   placeholder="Search help articles and FAQs..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+                  onChange={(e) = />
+setSearchQuery(e.target.value)}
+                  className="pl-10" />
               </div>
             </div>
           </DaisyCard>
@@ -217,19 +217,23 @@ export default function HelpPage() {
                 <DaisyButton
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedCategory('all')}
+                  onClick={() =>
+          setSelectedCategory('all')}
                 >
                   All Categories
-                </DaisyButton>
+                
+        </DaisyButton>
                 {categories.map((category) => (
                   <DaisyButton
                     key={category}
                     variant={selectedCategory === category ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() =>
+          setSelectedCategory(category)}
                   >
                     {category}
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 ))}
               </div>
 

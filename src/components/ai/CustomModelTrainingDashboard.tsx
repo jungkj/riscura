@@ -404,7 +404,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
   if (loading && !metrics) {
     return (
       <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-blue-600 animate-pulse" />
@@ -530,9 +530,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </div>
       )}
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-6" />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="grid w-full grid-cols-6" >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="training">Training Jobs</DaisyTabsTrigger>
           <DaisyTabsTrigger value="knowledge">Knowledge Bases</DaisyTabsTrigger>
           <DaisyTabsTrigger value="experiments">A/B Testing</DaisyTabsTrigger>
@@ -541,11 +541,11 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsList>
 
         {/* Overview Tab */}
-        <DaisyTabsContent value="overview" className="space-y-6" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="overview" className="space-y-6" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Training Status Distribution */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-blue-600" />
@@ -586,7 +586,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
 
             {/* Model Performance Overview */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -606,22 +606,20 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <DaisyTooltip />
-                      <Legend />
+                      <DaisyTooltip>
+                        <Legend />
                       <Line 
                         type="monotone" 
                         dataKey="accuracy" 
                         stroke="#10b981" 
                         strokeWidth={2}
-                        name="Accuracy (%)"
-                      />
+                        name="Accuracy (%)" />
                       <Line 
                         type="monotone" 
                         dataKey="latency" 
                         stroke="#3b82f6" 
                         strokeWidth={2}
-                        name="Latency (ms)"
-                      />
+                        name="Latency (ms)" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -631,7 +629,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
 
           {/* Recent Models */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-purple-600" />
@@ -671,9 +669,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsContent>
 
         {/* Training Jobs Tab */}
-        <DaisyTabsContent value="training" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="training" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Play className="h-5 w-5 text-blue-600" />
@@ -721,7 +719,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         </div>
                         {/* @ts-ignore */}
                         <DaisyProgress value={job.progress?.progressPercentage || 0} />
-                        <div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
+<div className="grid grid-cols-3 gap-4 text-xs text-gray-500">
                           <div>
                             {/* @ts-ignore */}
                             <span>Epoch:</span> {job.progress?.currentEpoch || 0}/{job.progress?.totalEpochs || 0}
@@ -780,9 +778,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsContent>
 
         {/* Knowledge Bases Tab */}
-        <DaisyTabsContent value="knowledge" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="knowledge" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <BookOpen className="h-5 w-5 text-purple-600" />
@@ -836,9 +834,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsContent>
 
         {/* A/B Testing Tab */}
-        <DaisyTabsContent value="experiments" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="experiments" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <TestTube className="h-5 w-5 text-orange-600" />
@@ -907,9 +905,9 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsContent>
 
         {/* Deployments Tab */}
-        <DaisyTabsContent value="deployments" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="deployments" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Rocket className="h-5 w-5 text-green-600" />
@@ -969,10 +967,10 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyTabsContent>
 
         {/* Performance Tab */}
-        <DaisyTabsContent value="performance" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="performance" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Performance Metrics</DaisyCardTitle>
         </DaisyCardBody>
@@ -989,8 +987,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <DaisyTooltip />
-                      <Legend />
+                      <DaisyTooltip>
+                        <Legend />
                       <Area 
                         type="monotone" 
                         dataKey="accuracy" 
@@ -998,8 +996,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         stroke="#10b981" 
                         fill="#10b981"
                         fillOpacity={0.3}
-                        name="Accuracy (%)"
-                      />
+                        name="Accuracy (%)" />
                       <Area 
                         type="monotone" 
                         dataKey="throughput" 
@@ -1007,8 +1004,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
                         stroke="#3b82f6" 
                         fill="#3b82f6"
                         fillOpacity={0.3}
-                        name="Throughput (10x RPS)"
-                      />
+                        name="Throughput (10x RPS)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -1016,7 +1012,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Business Impact</DaisyCardTitle>
         </DaisyCardBody>

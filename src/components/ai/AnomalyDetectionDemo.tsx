@@ -445,9 +445,10 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         <div className="flex items-center gap-2">
           <DaisyButton
             onClick={isMonitoring ? stopMonitoring : startAnomalyDetection}
-            className={isMonitoring ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'} >
-  {isMonitoring ? (
-</DaisyButton>
+            className={isMonitoring ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'}>
+          {isMonitoring ? (
+
+        </DaisyButton>
               <>
                 <Shield className="h-4 w-4 mr-2" />
                 Stop Monitoring
@@ -529,32 +530,32 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       </div>
 
       {/* Main Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-4" />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="dashboard" className="flex items-center gap-2" />
-            <BarChart3 className="h-4 w-4" />
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-4" >
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+            <DaisyTabsTrigger value="dashboard" className="flex items-center gap-2" >
+              <BarChart3 className="h-4 w-4" />
             Dashboard
           </DaisyTabs>
-          <DaisyTabsTrigger value="alerts" className="flex items-center gap-2" />
-            <Bell className="h-4 w-4" />
+          <DaisyTabsTrigger value="alerts" className="flex items-center gap-2" >
+              <Bell className="h-4 w-4" />
             Alerts ({activeAlerts.length})
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="monitoring" className="flex items-center gap-2" />
-            <Activity className="h-4 w-4" />
+          <DaisyTabsTrigger value="monitoring" className="flex items-center gap-2" >
+              <Activity className="h-4 w-4" />
             Real-time
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="analysis" className="flex items-center gap-2" />
-            <Brain className="h-4 w-4" />
+          <DaisyTabsTrigger value="analysis" className="flex items-center gap-2" >
+              <Brain className="h-4 w-4" />
             Analysis
           </DaisyTabsTrigger>
         </DaisyTabsList>
 
         {/* Dashboard Tab */}
-        <DaisyTabsContent value="dashboard" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="dashboard" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Anomaly Detection Overview */}
             <DaisyCard className="lg:col-span-2" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -574,24 +575,22 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
                       <YAxis />
-                      <DaisyTooltip />
-                      <Legend />
+                      <DaisyTooltip>
+                        <Legend />
                       <Area
                         type="monotone"
                         dataKey="value"
                         stroke="#8884d8"
                         fill="#8884d8"
                         fillOpacity={0.3}
-                        name="Risk Score"
-                      />
+                        name="Risk Score" />
                       <Line
                         type="monotone"
                         dataKey="anomaly"
                         stroke="#ff7c7c"
                         strokeWidth={3}
                         dot={{ fill: '#ff7c7c', strokeWidth: 2, r: 4 }}
-                        name="Detected Anomalies"
-                      />
+                        name="Detected Anomalies" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -600,7 +599,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
 
             {/* Current Metrics */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Real-time Metrics</DaisyCardTitle>
                 <DaisyCardDescription>Current anomaly scores for key metrics</p>
@@ -623,9 +622,8 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <div className="flex items-center gap-2">
                         <DaisyProgress 
                           value={metric.anomalyScore * 100} 
-                          className="flex-1 h-2"
-                        />
-                        <span className="text-xs text-gray-500 w-12">
+                          className="flex-1 h-2" />
+<span className="text-xs text-gray-500 w-12">
                           {(metric.anomalyScore * 100).toFixed(0)}%
                         </span>
                       </div>
@@ -642,7 +640,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
 
             {/* Detection Methods */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Detection Methods</DaisyCardTitle>
                 <DaisyCardDescription>Active anomaly detection algorithms</p>
@@ -677,13 +675,14 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         </DaisyTabsContent>
 
         {/* Alerts Tab */}
-        <DaisyTabsContent value="alerts" className="space-y-4" />
-          <div className="flex items-center gap-4 mb-4">
-            <DaisySelect value={selectedAlertType} onValueChange={setSelectedAlertType} />
-              <DaisySelectTrigger className="w-48" />
-                <DaisySelectValue placeholder="Filter by Type" /></DaisyTabsContent>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Types</DaisySelectContent>
+        <DaisyTabsContent value="alerts" className="space-y-4" >
+            <div className="flex items-center gap-4 mb-4">
+            <DaisySelect value={selectedAlertType} onValueChange={setSelectedAlertType} >
+                <DaisySelectTrigger className="w-48">
+                  <DaisySelectValue placeholder="Filter by Type" />
+</DaisyTabsContent>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Types</DaisySelectItem>
                 <DaisySelectItem value="statistical">Statistical</DaisySelectItem>
                 <DaisySelectItem value="pattern">Pattern</DaisySelectItem>
                 <DaisySelectItem value="behavior">Behavior</DaisySelectItem>
@@ -691,11 +690,12 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
               </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={selectedSeverity} onValueChange={setSelectedSeverity} />
-              <DaisySelectTrigger className="w-48" />
-                <DaisySelectValue placeholder="Filter by Severity" /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Severities</DaisySelectContent>
+            <DaisySelect value={selectedSeverity} onValueChange={setSelectedSeverity} >
+                <DaisySelectTrigger className="w-48">
+                  <DaisySelectValue placeholder="Filter by Severity" />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Severities</DaisySelectItem>
                 <DaisySelectItem value="critical">Critical</DaisySelectItem>
                 <DaisySelectItem value="high">High</DaisySelectItem>
                 <DaisySelectItem value="medium">Medium</DaisySelectItem>
@@ -708,7 +708,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
             {filteredAlerts.length > 0 ? (
               filteredAlerts.map((alert) => (
                 <DaisyCard key={alert.id} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                     <div className="flex items-center justify-between">
                       <DaisyCardTitle className="flex items-center gap-2" >
@@ -823,10 +823,10 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         </DaisyTabsContent>
 
         {/* Real-time Monitoring Tab */}
-        <DaisyTabsContent value="monitoring" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="monitoring" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard className="lg:col-span-2" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Activity className="h-5 w-5 text-blue-600" />
@@ -846,8 +846,8 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
-                      <DaisyTooltip />
-                      <Legend />
+                      <DaisyTooltip>
+                        <Legend />
                       <Bar dataKey="value" fill="#8884d8" name="Current Value" />
                       <Bar dataKey="anomalyScore" fill="#ff7c7c" name="Anomaly Score %" />
                       <ReferenceLine y={80} stroke="red" strokeDasharray="2 2" />
@@ -858,7 +858,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Monitoring Configuration</DaisyCardTitle>
         </DaisyCardBody>
@@ -877,8 +877,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       }
                     }))}
                     className="w-full p-2 border rounded"
-                    step="0.1"
-                  />
+                    step="0.1" />
                 </div>
                 
                 <div className="space-y-2">
@@ -894,8 +893,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       }
                     }))}
                     className="w-full p-2 border rounded"
-                    step="0.1"
-                  />
+                    step="0.1" />
                 </div>
                 
                 <div className="space-y-2">
@@ -911,7 +909,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>System Status</DaisyCardTitle>
         </DaisyCardBody>
@@ -944,10 +942,10 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         </DaisyTabsContent>
 
         {/* Analysis Tab */}
-        <DaisyTabsContent value="analysis" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="analysis" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Detection Accuracy</DaisyCardTitle>
                 <DaisyCardDescription>Performance metrics for anomaly detection</p>
@@ -961,7 +959,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm">87.3%</span>
                     </div>
                     <DaisyProgress value={87.3} className="h-2" />
-                  </div>
+</div>
                   
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -969,7 +967,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm">8.1%</span>
                     </div>
                     <DaisyProgress value={8.1} className="h-2" />
-                  </div>
+</div>
                   
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -977,7 +975,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm">91.5%</span>
                     </div>
                     <DaisyProgress value={91.5} className="h-2" />
-                  </div>
+</div>
                   
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -985,13 +983,13 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
                       <span className="text-sm">85.2%</span>
                     </div>
                     <DaisyProgress value={85.2} className="h-2" />
-                  </div>
+</div>
                 </div>
               </DaisyProgress>
             </DaisyCard>
 
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle>Pattern Analysis</DaisyCardTitle>
                 <DaisyCardDescription>Identified anomaly patterns and trends</p>

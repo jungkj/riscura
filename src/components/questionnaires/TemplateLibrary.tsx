@@ -195,16 +195,17 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
             <DaisyInput
               placeholder="Search templates..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-64"
-            />
+              onChange={(e) = />
+setSearchQuery(e.target.value)}
+              className="pl-10 w-64" />
           </div>
 
           <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)} />
-            <DaisySelectTrigger className="w-32" />
-              <DaisySelectValue /></DaisyInput>
-            <DaisySelectContent />
-              <DaisySelectItem value="popular">Popular</DaisySelectContent>
+            <DaisySelectTrigger className="w-32">
+                <DaisySelectValue />
+</DaisyInput>
+            <DaisySelectContent >
+                <DaisySelectItem value="popular">Popular</DaisySelectItem>
               <DaisySelectItem value="recent">Recent</DaisySelectItem>
               <DaisySelectItem value="rating">Rating</DaisySelectItem>
               <DaisySelectItem value="title">Title</DaisySelectItem>
@@ -217,7 +218,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
         {/* Sidebar - Categories */}
         <div className="lg:w-64 space-y-4">
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="text-lg">Categories</DaisyCardTitle>
         </DaisyCardBody>
@@ -252,7 +253,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
 
           {/* Featured Templates */}
           <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="text-lg flex items-center" >
   <Star className="w-4 h-4 mr-2 text-yellow-500" />
@@ -313,7 +314,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
                   transition={{ delay: index * 0.05 }}
                 >
                   <DaisyCard className="h-full hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
                       <div className="flex items-start justify-between mb-2">
                         <div className="w-10 h-10 bg-notion-bg-tertiary rounded-lg flex items-center justify-center">
@@ -404,16 +405,15 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
       </div>
 
       {/* Template Preview Dialog */}
-      <DaisyDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} />
-        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
+      <DaisyDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} >
+          <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
   {selectedTemplate && (
 </DaisyDialog>
             <TemplatePreview
               template={selectedTemplate}
               onClone={() => handleCloneTemplate(selectedTemplate)}
               getDifficultyColor={getDifficultyColor}
-              getCategoryIcon={getCategoryIcon}
-            />
+              getCategoryIcon={getCategoryIcon} />
           )}
         </DaisyDialogContent>
       </DaisyDialog>

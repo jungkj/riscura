@@ -245,25 +245,22 @@ export default function RiskMonitoringPage() {
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
                   <DaisyProgress value={17} className="h-2" />
-
-                  <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                     <span className="text-sm font-medium">High</span>
                     <span className="text-sm text-gray-600">7 risks</span>
                   </div>
                   <DaisyProgress value={30} className="h-2" />
-
-                  <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Medium</span>
                     <span className="text-sm text-gray-600">8 risks</span>
                   </div>
-                  <DaisyProgress value={35} className="h-2" />
-
-                  <div className="flex items-center justify-between">
+                  <DaisyProgress value={35} className="h-2" / />
+<div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Low</span>
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
-                  <DaisyProgress value={17} className="h-2" />
-                </div>
+                  <DaisyProgress value={17} className="h-2" / />
+</div>
               </DaisyCardBody>
             </DaisyCard>
 
@@ -332,8 +329,9 @@ export default function RiskMonitoringPage() {
                       </DaisyButton>
                       {alert.status === 'active' && (
                         <DaisyButton variant="outline" size="sm">
-                          Acknowledge
-                        </DaisyButton>
+          Acknowledge
+                        
+        </DaisyButton>
                       )}
                     </div>
                   </div>

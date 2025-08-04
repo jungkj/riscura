@@ -272,9 +272,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     const [open, setOpen] = useState(false);
 
     return (
-      <DaisyPopover open={open} onOpenChange={setOpen} />
-        <DaisyPopoverTrigger asChild />
-          <DaisyButton
+      <DaisyPopover open={open} onOpenChange={setOpen} >
+          <DaisyPopoverTrigger asChild >
+            <DaisyButton
             className="w-full justify-between text-left font-normal"
             size="sm" >
   {value.length > 0 ? (
@@ -286,8 +286,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </DaisyButton>
         </DaisyPopoverTrigger>
-        <DaisyPopoverContent className="w-full p-0" align="start" />
-          <Command>
+        <DaisyPopoverContent className="w-full p-0" align="start" >
+            <Command>
             <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
             <CommandList>
               <CommandEmpty>No options found.</CommandEmpty>
@@ -304,9 +304,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   >
                     <DaisyCheckbox
                       checked={value.includes(option)}
-                      className="mr-2"
-                    />
-                    {option}
+                      className="mr-2" />
+{option}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -319,7 +318,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -360,8 +359,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 </DaisyBadge>
                 <X 
                   className="h-3 w-3 cursor-pointer" 
-                  onClick={() => updateFilters({ search: '' })}
-                />
+                  onClick={() => updateFilters({ search: '' })} />
               </DaisyBadge>
             )}
             {filters.categories.map(category => (
@@ -372,8 +370,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   className="h-3 w-3 cursor-pointer"
                   onClick={() => updateFilters({ 
                     categories: filters.categories.filter(c => c !== category) 
-                  })}
-                />
+                  })} />
               </DaisyBadge>
             ))}
             {filters.levels.map(level => (
@@ -384,8 +381,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   className="h-3 w-3 cursor-pointer"
                   onClick={() => updateFilters({ 
                     levels: filters.levels.filter(l => l !== level) 
-                  })}
-                />
+                  })} />
               </DaisyBadge>
             ))}
           </div>
@@ -403,9 +399,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <DaisyInput
                 placeholder="Search risks by title or description..."
                 value={filters.search}
-                onChange={(e) => updateFilters({ search: e.target.value })}
-                className="pl-10"
-              />
+                onChange={(e) = />
+updateFilters({ search: e.target.value })}
+                className="pl-10" />
             </div>
           </div>
 
@@ -442,8 +438,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 options={filterOptions.categories}
                 value={filters.categories}
                 onChange={(categories) => updateFilters({ categories })}
-                placeholder="Select categories"
-              />
+                placeholder="Select categories" />
             </div>
 
             <div className="space-y-2">
@@ -452,8 +447,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 options={filterOptions.owners}
                 value={filters.owners}
                 onChange={(owners) => updateFilters({ owners })}
-                placeholder="Select owners"
-              />
+                placeholder="Select owners" />
             </div>
 
             <div className="space-y-2">
@@ -462,8 +456,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 options={filterOptions.levels}
                 value={filters.levels}
                 onChange={(levels) => updateFilters({ levels })}
-                placeholder="Select levels"
-              />
+                placeholder="Select levels" />
             </div>
 
             <div className="space-y-2">
@@ -472,8 +465,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 options={filterOptions.statuses}
                 value={filters.statuses}
                 onChange={(statuses) => updateFilters({ statuses })}
-                placeholder="Select statuses"
-              />
+                placeholder="Select statuses" />
             </div>
           </div>
 
@@ -487,22 +479,22 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   min="0"
                   max="25"
                   value={filters.scoreRange[0]}
-                  onChange={(e) => updateFilters({
+                  onChange={(e) = />
+updateFilters({
                     scoreRange: [parseInt(e.target.value) || 0, filters.scoreRange[1]]
                   })}
-                  className="w-20"
-                />
+                  className="w-20" />
                 <span>to</span>
                 <DaisyInput
                   type="number"
                   min="0"
                   max="25"
                   value={filters.scoreRange[1]}
-                  onChange={(e) => updateFilters({
+                  onChange={(e) = />
+updateFilters({
                     scoreRange: [filters.scoreRange[0], parseInt(e.target.value) || 25]
                   })}
-                  className="w-20"
-                />
+                  className="w-20" />
               </div>
             </div>
 
@@ -515,11 +507,12 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     impactRange: [parseInt(value), filters.impactRange[1]]
                   })}
                 >
-                  <DaisySelectTrigger className="w-20" />
-                    <DaisySelectValue /></DaisySelect>
-                  <DaisySelectContent />
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectContent>
+                  <DaisySelectTrigger className="w-20">
+                      <DaisySelectValue />
+</DaisySelect>
+                  <DaisySelectContent >
+                      {[1, 2, 3, 4, 5].map(num => (
+                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectItem>
                     ))}
                   </DaisySelectContent>
                 </DaisySelect>
@@ -530,11 +523,12 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     impactRange: [filters.impactRange[0], parseInt(value)]
                   })}
                 >
-                  <DaisySelectTrigger className="w-20" />
-                    <DaisySelectValue /></DaisySelect>
-                  <DaisySelectContent />
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectContent>
+                  <DaisySelectTrigger className="w-20">
+                      <DaisySelectValue />
+</DaisySelect>
+                  <DaisySelectContent >
+                      {[1, 2, 3, 4, 5].map(num => (
+                      <DaisySelectItem key={num} value={num.toString()}>{num}</DaisySelectItem>
                     ))}
                   </DaisySelectContent>
                 </DaisySelect>

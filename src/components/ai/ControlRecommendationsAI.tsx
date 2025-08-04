@@ -122,7 +122,7 @@ const RecommendationCard: React.FC<{
 
   return (
     <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ const RecommendationCard: React.FC<{
             <Brain className="h-4 w-4 text-blue-600" />
             <span className="text-sm font-medium">AI Confidence</span>
             <DaisyProgress value={recommendation.aiConfidence * 100} className="flex-1" />
-            <span className="text-sm">{(recommendation.aiConfidence * 100).toFixed(0)}%</span>
+<span className="text-sm">{(recommendation.aiConfidence * 100).toFixed(0)}%</span>
           </div>
 
           {/* Framework Badge */}
@@ -190,13 +190,15 @@ const RecommendationCard: React.FC<{
 
           {/* Actions */}
           <div className="flex justify-end gap-2">
-            <DaisyButton variant="outline" size="sm" onClick={onViewDetails} >
-  View Details
-</DaisyButton>
+            <DaisyButton variant="outline" size="sm" onClick={onViewDetails}>
+          View Details
+
+        </DaisyButton>
             </DaisyButton>
-            <DaisyButton size="sm" onClick={onAccept} >
-  Accept Recommendation
-</DaisyButton>
+            <DaisyButton size="sm" onClick={onAccept}>
+          Accept Recommendation
+
+        </DaisyButton>
             </DaisyButton>
           </div>
         </div>
@@ -213,7 +215,7 @@ const GapAnalysisView: React.FC<{
     <div className="space-y-6">
       {/* Current Controls */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Current Control Coverage</DaisyCardTitle>
           <DaisyCardDescription>Existing controls for this risk</p>
@@ -245,7 +247,7 @@ const GapAnalysisView: React.FC<{
 
       {/* Identified Gaps */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Control Gaps</DaisyCardTitle>
           <DaisyCardDescription>Areas requiring attention</p>
@@ -279,7 +281,7 @@ const GapAnalysisView: React.FC<{
 
       {/* Recommendations */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Recommended Controls</DaisyCardTitle>
           <DaisyCardDescription>AI-suggested controls to address gaps</p>
@@ -292,8 +294,7 @@ const GapAnalysisView: React.FC<{
                 key={recommendation.id}
                 recommendation={recommendation}
                 onAccept={() => onRecommendationAccepted(recommendation)}
-                onViewDetails={() => console.log('View details:', recommendation.id)}
-              />
+                onViewDetails={() => console.log('View details:', recommendation.id)} />
             ))}
           </div>
         </DaisyCardBody>
@@ -311,7 +312,7 @@ const CostBenefitView: React.FC<{
       {/* Key Financial Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
             <DaisyCardDescription>Total Investment</p>
           
@@ -327,7 +328,7 @@ const CostBenefitView: React.FC<{
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
             <DaisyCardDescription>Expected ROI</p>
           
@@ -343,7 +344,7 @@ const CostBenefitView: React.FC<{
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
             <DaisyCardDescription>Payback Period</p>
           
@@ -359,7 +360,7 @@ const CostBenefitView: React.FC<{
         </DaisyCard>
 
         <DaisyCard >
-  <DaisyCardBody className="pb-2" />
+  <DaisyCardBody className="pb-2" >
 </DaisyCard>
             <DaisyCardDescription>Net Present Value</p>
           
@@ -377,7 +378,7 @@ const CostBenefitView: React.FC<{
 
       {/* Cost Breakdown */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Cost Breakdown</DaisyCardTitle>
           <DaisyCardDescription>Detailed cost analysis</p>
@@ -405,7 +406,7 @@ const CostBenefitView: React.FC<{
                   <span className="text-sm font-medium">${analysis.implementation.external.toLocaleString()}</span>
                 </div>
                 <DaisySeparator />
-                <div className="flex justify-between font-medium">
+<div className="flex justify-between font-medium">
                   <span className="text-sm">Total</span>
                   <span className="text-sm">${analysis.implementation.total.toLocaleString()}</span>
                 </div>
@@ -432,7 +433,7 @@ const CostBenefitView: React.FC<{
                   <span className="text-sm font-medium">${analysis.operational.external.toLocaleString()}</span>
                 </div>
                 <DaisySeparator />
-                <div className="flex justify-between font-medium">
+<div className="flex justify-between font-medium">
                   <span className="text-sm">Total</span>
                   <span className="text-sm">${analysis.operational.total.toLocaleString()}</span>
                 </div>
@@ -444,7 +445,7 @@ const CostBenefitView: React.FC<{
 
       {/* Benefits Analysis */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Expected Benefits</DaisyCardTitle>
           <DaisyCardDescription>Quantified value proposition</p>
@@ -471,7 +472,7 @@ const CostBenefitView: React.FC<{
                   <span className="text-sm font-medium">${analysis.benefits.avoidedCosts.toLocaleString()}</span>
                 </div>
                 <DaisySeparator />
-                <div className="flex justify-between font-medium">
+<div className="flex justify-between font-medium">
                   <span className="text-sm">Total Annual Benefits</span>
                   <span className="text-sm">${analysis.benefits.total.toLocaleString()}</span>
                 </div>
@@ -495,7 +496,7 @@ const CostBenefitView: React.FC<{
 
       {/* Sensitivity Analysis */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Sensitivity Analysis</DaisyCardTitle>
           <DaisyCardDescription>Impact of key variables on ROI</p>
@@ -539,7 +540,7 @@ const ImplementationPlanView: React.FC<{
     <div className="space-y-6">
       {/* Timeline Overview */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Implementation Timeline</DaisyCardTitle>
           <DaisyCardDescription>{plan.timeline} days total • {plan.phases.length} phases</p>
@@ -568,7 +569,7 @@ const ImplementationPlanView: React.FC<{
 
       {/* Resource Requirements */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Resource Requirements</DaisyCardTitle>
           <DaisyCardDescription>Personnel and technology needs</p>
@@ -623,7 +624,7 @@ const ImplementationPlanView: React.FC<{
 
       {/* Milestones */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle>Key Milestones</DaisyCardTitle>
           <DaisyCardDescription>Critical checkpoints and deliverables</p>
@@ -634,7 +635,7 @@ const ImplementationPlanView: React.FC<{
             {plan.milestones.map((milestone, index) => (
               <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
                 <DaisyCalendar className="h-5 w-5 text-muted-foreground mt-0.5" />
-                <div className="flex-1">
+<div className="flex-1">
                   <h4 className="font-medium">{milestone.name}</h4>
                   <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
                   <div className="text-xs text-muted-foreground">
@@ -743,7 +744,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
   return (
     <div className={`space-y-6 ${className}`}>
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-50 rounded-lg">
@@ -760,27 +761,27 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
         
       </DaisyCard>
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-5" />
-          <DaisyTabsTrigger value="configuration">Configuration</DaisyTabs>
-          <DaisyTabsTrigger value="recommendations" disabled={!recommendations.length} />
-            Recommendations
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="grid w-full grid-cols-5" >
+            <DaisyTabsTrigger value="configuration">Configuration</DaisyTabs>
+          <DaisyTabsTrigger value="recommendations" disabled={!recommendations.length} >
+              Recommendations
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="gaps" disabled={!gapAnalyses.length} />
-            Gap Analysis
+          <DaisyTabsTrigger value="gaps" disabled={!gapAnalyses.length} >
+              Gap Analysis
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="cost-benefit" disabled={!selectedRecommendation} />
-            Cost-Benefit
+          <DaisyTabsTrigger value="cost-benefit" disabled={!selectedRecommendation} >
+              Cost-Benefit
           </DaisyTabsTrigger>
-          <DaisyTabsTrigger value="implementation" disabled={!implementationPlan} />
-            Implementation
+          <DaisyTabsTrigger value="implementation" disabled={!implementationPlan} >
+              Implementation
           </DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="configuration" />
-          <div className="space-y-6">
+        <DaisyTabsContent value="configuration" >
+            <div className="space-y-6">
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle>Analysis Configuration</DaisyCardTitle>
                 <DaisyCardDescription>Configure parameters for control recommendations</p>
@@ -791,12 +792,10 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                 <FrameworkSelector
                   frameworks={availableFrameworks}
                   selected={selectedFrameworks}
-                  onSelectionChange={setSelectedFrameworks}
-                />
+                  onSelectionChange={setSelectedFrameworks} />
 
                 <DaisySeparator />
-
-                {/* Organization Profile */}
+{/* Organization Profile */}
                 <div className="space-y-4">
                   <DaisyLabel className="text-sm font-medium">Organization Profile</DaisySeparator>
                   
@@ -804,10 +803,11 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                     <div className="space-y-2">
                       <DaisyLabel htmlFor="org-size">Organization Size</DaisyLabel>
                       <DaisySelect value={organizationSize} onValueChange={(value: 'small' | 'medium' | 'large' | 'enterprise') => setOrganizationSize(value)} />
-                        <DaisySelectTrigger id="org-size" />
-                          <DaisySelectValue /></DaisySelect>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="small">Small (&lt; 100 employees)</DaisySelectContent>
+                        <DaisySelectTrigger id="org-size">
+                            <DaisySelectValue />
+</DaisySelect>
+                        <DaisySelectContent >
+                            <DaisySelectItem value="small">Small (&lt; 100 employees)</DaisySelectItem>
                           <DaisySelectItem value="medium">Medium (100-1000 employees)</DaisySelectItem>
                           <DaisySelectItem value="large">Large (1000-10000 employees)</DaisySelectItem>
                           <DaisySelectItem value="enterprise">Enterprise (&gt; 10000 employees)</DaisySelectItem>
@@ -818,10 +818,11 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                     <div className="space-y-2">
                       <DaisyLabel htmlFor="risk-tolerance">Risk Tolerance</DaisyLabel>
                       <DaisySelect value={riskTolerance} onValueChange={(value: 'low' | 'medium' | 'high') => setRiskTolerance(value)} />
-                        <DaisySelectTrigger id="risk-tolerance" />
-                          <DaisySelectValue /></DaisySelect>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="low">Low - Conservative approach</DaisySelectContent>
+                        <DaisySelectTrigger id="risk-tolerance">
+                            <DaisySelectValue />
+</DaisySelect>
+                        <DaisySelectContent >
+                            <DaisySelectItem value="low">Low - Conservative approach</DaisySelectItem>
                           <DaisySelectItem value="medium">Medium - Balanced approach</DaisySelectItem>
                           <DaisySelectItem value="high">High - Risk-taking approach</DaisySelectItem>
                         </DaisySelectContent>
@@ -831,8 +832,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                 </div>
 
                 <DaisySeparator />
-
-                {/* Budget and Timeline */}
+{/* Budget and Timeline */}
                 <div className="space-y-4">
                   <DaisyLabel className="text-sm font-medium">Investment Parameters</DaisySeparator>
                   
@@ -851,8 +851,8 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                         step={10000}
                         value={budget}
                         onValueChange={setBudget}
-                      />
-                    </div>
+                      >
+                      </div>
 
                     <div>
                       <div className="flex items-center justify-between mb-2">
@@ -868,21 +868,21 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                         step={1}
                         value={timeline}
                         onValueChange={setTimeline}
-                      />
-                    </div>
+                      >
+                      </div>
                   </div>
                 </div>
 
                 <DaisySeparator />
-
-                {/* Priority Focus */}
+{/* Priority Focus */}
                 <div className="space-y-2">
                   <DaisyLabel htmlFor="priority-focus">Priority Focus</DaisySlider>
                   <DaisySelect value={priorityFocus} onValueChange={(value: 'cost' | 'time' | 'effectiveness' | 'compliance') => setPriorityFocus(value)} />
-                    <DaisySelectTrigger id="priority-focus" />
-                      <DaisySelectValue /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="cost">Cost - Minimize investment</DaisySelectContent>
+                    <DaisySelectTrigger id="priority-focus">
+                        <DaisySelectValue />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="cost">Cost - Minimize investment</DaisySelectItem>
                       <DaisySelectItem value="time">Time - Fastest implementation</DaisySelectItem>
                       <DaisySelectItem value="effectiveness">Effectiveness - Maximum risk reduction</DaisySelectItem>
                       <DaisySelectItem value="compliance">Compliance - Regulatory alignment</DaisySelectItem>
@@ -891,8 +891,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                 </div>
 
                 <DaisySeparator />
-
-                <div className="flex justify-end gap-2">
+<div className="flex justify-end gap-2">
                   <DaisyButton
                     onClick={handleGenerateRecommendations}
                     disabled={isAnalyzing || selectedFrameworks.length === 0}
@@ -916,10 +915,10 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="recommendations" />
-          <div className="space-y-6">
+        <DaisyTabsContent value="recommendations" >
+            <div className="space-y-6">
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <div className="flex items-center justify-between">
                   <div>
@@ -958,8 +957,7 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
                       onViewDetails={() => {
                         setSelectedRecommendation(recommendation);
                         setActiveTab('cost-benefit');
-                      }}
-                    />
+                      }} />
                   ))}
                   {recommendations.length === 0 && (
                     <div className="text-center py-8 text-muted-foreground">
@@ -974,29 +972,27 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="gaps" />
-          <div className="space-y-6">
+        <DaisyTabsContent value="gaps" >
+            <div className="space-y-6">
             {gapAnalyses.map(analysis => (
               <GapAnalysisView
                 key={analysis.riskId}
                 analysis={analysis}
-                onRecommendationAccepted={handleAcceptRecommendation}
-              />
+                onRecommendationAccepted={handleAcceptRecommendation} />
             ))}
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="cost-benefit" />
-          {selectedRecommendation && (
+        <DaisyTabsContent value="cost-benefit" >
+            {selectedRecommendation && (
             <CostBenefitView
               analysis={selectedRecommendation.costBenefitAnalysis}
-              recommendation={selectedRecommendation}
-            />
+              recommendation={selectedRecommendation} />
           )}
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="implementation" />
-          {implementationPlan && (
+        <DaisyTabsContent value="implementation" >
+            {implementationPlan && (
             <ImplementationPlanView plan={implementationPlan} />
           )}
         </DaisyTabsContent>

@@ -165,9 +165,11 @@ export default function VantaInspiredLanding() {
               <button className="text-gray-700 hover:text-[#199BEC] font-medium">Login</button>
               <DaisyButton 
                 className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white px-6"
-                onClick={() => router.push('/register')} />
+                onClick={() =>
+          router.push('/register')} />
                 Request a demo
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </div>
         </div>
@@ -269,9 +271,10 @@ export default function VantaInspiredLanding() {
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="text-2xl font-bold text-[#199BEC]">{feature.stats}</div>
                 </div>
-                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white" >
-  Request a demo
-</DaisyButton>
+                <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
+          Request a demo
+
+        </DaisyButton>
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </DaisyButton>
               </div>
@@ -308,16 +311,17 @@ export default function VantaInspiredLanding() {
           <div className="grid lg:grid-cols-3 gap-8">
             {aiFeatures.map((feature, index) => (
               <DaisyCard key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle className="text-xl">{feature.title}</DaisyCardTitle>
         </DaisyCardBody>
         <DaisyCardBody >
   <p className="text-purple-100 mb-4">
 </DaisyCardBody>{feature.description}</p>
-                  <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10" >
-  {feature.action}
-</DaisyButton>
+                  <DaisyButton variant="outline" className="border-white/30 text-white hover:bg-white/10">
+          {feature.action}
+
+        </DaisyButton>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </DaisyButton>
                 </DaisyCardBody>

@@ -329,7 +329,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
     <div className={`w-full max-w-4xl mx-auto space-y-6 ${className}`}>
       {/* File Upload Area */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <FileUp className="h-5 w-5 text-blue-600" />
@@ -403,9 +403,10 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                       <DaisyButton
                         onClick={uploadFile}
                         disabled={uploading}
-                        className="bg-blue-600 hover:bg-blue-700" >
-  {uploading ? (
-</DaisyButton>
+                        className="bg-blue-600 hover:bg-blue-700">
+          {uploading ? (
+
+        </DaisyButton>
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                             Analyzing...
@@ -436,7 +437,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     className="space-y-2"
                   >
                     <DaisyProgress value={uploadProgress} className="h-2" />
-                    <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
+<p className="text-sm text-gray-600 dark:text-gray-300 text-center">
                       Processing document and extracting risks & controls...
                     </p>
                   </motion.div>
@@ -474,7 +475,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
           >
             {/* Summary Card */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <div className="flex items-center justify-between">
                   <DaisyCardTitle className="flex items-center gap-2" >
@@ -535,11 +536,11 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
             </DaisyCard>
 
             {/* Extracted Content */}
-            <DaisyAccordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']} />
-              {/* Risks Section */}
-              <DaisyAccordionItem value="risks" className="border rounded-lg" />
-                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline" />
-                  <div className="flex items-center gap-3">
+            <DaisyAccordion type="multiple" className="space-y-4" defaultValue={['risks', 'controls']} >
+                {/* Risks Section */}
+              <DaisyAccordionItem value="risks" className="border rounded-lg" >
+                  <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline" >
+                    <div className="flex items-center gap-3">
                     <DaisyAlertTriangle className="h-5 w-5 text-red-600" >
   <span className="text-lg font-semibold">
 </DaisyAccordion>
@@ -551,8 +552,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     </DaisyBadge>
                   </div>
                 </DaisyAccordionTrigger>
-                <DaisyAccordionContent className="px-6 pb-6" />
-                  <div className="space-y-4">
+                <DaisyAccordionContent className="px-6 pb-6" >
+                    <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         Review and approve risks identified in your policy document
@@ -599,9 +600,9 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                               {risk.editing ? (
                                 <DaisyTextarea
                                   value={risk.text}
-                                  onChange={(e) => updateRiskText(risk.id, e.target.value)}
-                                  className="min-h-[80px]"
-                                />
+                                  onChange={(e) = />
+updateRiskText(risk.id, e.target.value)}
+                                  className="min-h-[80px]" />
                               ) : (
                                 <p className="text-gray-900 dark:text-gray-100 leading-relaxed">
                                   {risk.text}
@@ -641,9 +642,9 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
               </DaisyAccordionItem>
 
               {/* Controls Section */}
-              <DaisyAccordionItem value="controls" className="border rounded-lg" />
-                <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline" />
-                  <div className="flex items-center gap-3">
+              <DaisyAccordionItem value="controls" className="border rounded-lg" >
+                  <DaisyAccordionTrigger className="px-6 py-4 hover:no-underline" >
+                    <div className="flex items-center gap-3">
                     <Shield className="h-5 w-5 text-blue-600" />
                     <span className="text-lg font-semibold">
                       Security Controls ({analysisResult.data.controls.length})
@@ -654,8 +655,8 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                     </DaisyBadge>
                   </div>
                 </DaisyAccordionTrigger>
-                <DaisyAccordionContent className="px-6 pb-6" />
-                  <div className="space-y-4">
+                <DaisyAccordionContent className="px-6 pb-6" >
+                    <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         Review and approve security controls found in your policy
@@ -702,9 +703,9 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                               {control.editing ? (
                                 <DaisyTextarea
                                   value={control.text}
-                                  onChange={(e) => updateControlText(control.id, e.target.value)}
-                                  className="min-h-[80px]"
-                                />
+                                  onChange={(e) = />
+updateControlText(control.id, e.target.value)}
+                                  className="min-h-[80px]" />
                               ) : (
                                 <p className="text-gray-900 dark:text-gray-100 leading-relaxed">
                                   {control.text}

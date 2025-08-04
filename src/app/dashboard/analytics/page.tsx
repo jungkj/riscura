@@ -183,7 +183,6 @@ export default function AnalyticsPage() {
               <DaisySelect value={timeRange} onValueChange={setTimeRange}>
                 <DaisySelectTrigger className="w-40">
                   <DaisySelectValue />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
                   <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
@@ -211,8 +210,7 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.risks > 0 ? 'up' : 'down'}
             icon={AlertTriangle}
             color="red"
-            loading={loading}
-          />
+            loading={loading} />
           <MetricCard
             title="Active Controls"
             value={analyticsData?.totals?.controls || 0}
@@ -220,8 +218,7 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.controls > 0 ? 'up' : 'down'}
             icon={Shield}
             color="green"
-            loading={loading}
-          />
+            loading={loading} />
           <MetricCard
             title="Documents"
             value={analyticsData?.totals?.documents || 0}
@@ -229,8 +226,7 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.documents > 0 ? 'up' : 'down'}
             icon={FileText}
             color="blue"
-            loading={loading}
-          />
+            loading={loading} />
           <MetricCard
             title="Questionnaires"
             value={analyticsData?.totals?.questionnaires || 0}
@@ -238,8 +234,7 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.questionnaires > 0 ? 'up' : 'down'}
             icon={CheckCircle}
             color="purple"
-            loading={loading}
-          />
+            loading={loading} />
         </div>
 
         {/* Simplified Analytics Content */}

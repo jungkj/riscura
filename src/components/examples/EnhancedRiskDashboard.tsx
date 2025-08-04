@@ -149,14 +149,12 @@ const AccessibilityPanel: React.FC = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-          />
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       </button>
 
@@ -173,8 +171,7 @@ const AccessibilityPanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.highContrast}
                 onChange={(e) => updateSettings({ highContrast: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span>High Contrast Mode</span>
             </label>
 
@@ -183,8 +180,7 @@ const AccessibilityPanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.reducedMotion}
                 onChange={(e) => updateSettings({ reducedMotion: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span>Reduce Motion</span>
             </label>
 
@@ -193,8 +189,7 @@ const AccessibilityPanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.screenReaderMode}
                 onChange={(e) => updateSettings({ screenReaderMode: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span>Screen Reader Mode</span>
             </label>
 
@@ -261,8 +256,7 @@ const PerformancePanel: React.FC = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M13 10V3L4 14h7v7l9-11h-7z"
-          />
+            d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </button>
 
@@ -301,8 +295,7 @@ const PerformancePanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.enableVirtualScrolling}
                 onChange={(e) => updateSettings({ enableVirtualScrolling: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span className="text-sm">Virtual Scrolling</span>
             </label>
 
@@ -311,8 +304,7 @@ const PerformancePanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.enableImageOptimization}
                 onChange={(e) => updateSettings({ enableImageOptimization: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span className="text-sm">Image Optimization</span>
             </label>
 
@@ -321,8 +313,7 @@ const PerformancePanel: React.FC = () => {
                 type="checkbox"
                 checked={settings.enableOfflineMode}
                 onChange={(e) => updateSettings({ enableOfflineMode: e.target.checked })}
-                className="rounded border-gray-300 text-primary focus:ring-primary"
-              />
+                className="rounded border-gray-300 text-primary focus:ring-primary" />
               <span className="text-sm">Offline Mode</span>
             </label>
           </div>
@@ -389,9 +380,8 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
           <DaisyProgressBar
             progress={(metric.value / metric.target) * 100}
             color={metric.color}
-            className="h-2"
-          />
-        </div>
+            className="h-2" />
+</div>
       </div>
     </FadeIn>
   );
@@ -441,8 +431,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
             width={60}
             height={40}
             className="rounded flex-shrink-0"
-            placeholder={<DaisySkeletonLoader variant="rectangular" width={60} height={40} />}
-          />
+            placeholder={<DaisySkeletonLoader variant="rectangular" width={60} height={40} />} />
         )}
 
         <div className="flex-1 min-w-0">
@@ -475,8 +464,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
               <DaisyProgressBar
                 progress={risk.progress}
                 className="w-16 h-1"
-                color={risk.progress > 75 ? 'success' : risk.progress > 50 ? 'warning' : 'error'}
-              />
+                color={risk.progress />75 ? 'success' : risk.progress > 50 ? 'warning' : 'error'} />
               <span className="text-xs text-text-secondary">{risk.progress}%</span>
             </div>
           </div>
@@ -603,8 +591,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"
-                />
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
               <span className="text-warning font-medium">Offline Mode - Using cached data</span>
             </div>
@@ -632,8 +619,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by title or description..."
                 className="w-full px-3 py-2 border border-surface-tertiary rounded focus:ring-2 focus:ring-primary focus:border-primary"
-                aria-describedby="search-help"
-              />
+                aria-describedby="search-help" />
               <div id="search-help" className="text-xs text-text-secondary mt-1">
                 Press Escape to clear search
               </div>
@@ -676,8 +662,8 @@ const EnhancedRiskDashboard: React.FC = () => {
             {isLoading ? (
               <div className="p-6 space-y-4">
                 {Array.from({ length: 5 }).map((_, index) => (
-                  <DaisySkeletonLoader key={index} variant="card" height={120} />
-                ))}
+                  <DaisySkeletonLoader key={index} variant="card" height={120} >
+                  ))}
               </div>
             ) : filteredRisks.length === 0 ? (
               <div className="p-12 text-center">
@@ -691,8 +677,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <h3 className="text-lg font-medium text-text-primary mb-2">No risks found</h3>
                 <p className="text-text-secondary">Try adjusting your search criteria</p>
@@ -707,8 +692,7 @@ const EnhancedRiskDashboard: React.FC = () => {
                     <RiskItem risk={risk} index={index} />
                   </div>
                 )}
-                className="p-0"
-              />
+                className="p-0" />
             ) : (
               <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
                 <StaggeredList staggerDelay={50}>

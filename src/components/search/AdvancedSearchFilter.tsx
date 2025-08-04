@@ -517,9 +517,9 @@ export function AdvancedSearchFilter({
           <DaisyInput
             placeholder="Search items..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
+            onChange={(e) = />
+setSearchQuery(e.target.value)}
+            className="pl-10" />
           {searchQuery && (
             <DaisyButton
               variant="ghost"
@@ -535,21 +535,21 @@ export function AdvancedSearchFilter({
           variant="outline"
           onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
           className={showAdvancedSearch ? 'bg-blue-50 border-blue-200' : ''} />
-          <DaisySlidersHorizontal className="w-4 h-4 mr-2" />
-          Filters
+          <DaisySlidersHorizontal className="w-4 h-4 mr-2" >
+            Filters
         </DaisyButton>
 
         {/* Saved Searches Dropdown */}
-        <DaisyDropdownMenu />
-          <DaisyDropdownMenuTrigger asChild />
-            <DaisyButton variant="outline" >
+        <DaisyDropdownMenu >
+            <DaisyDropdownMenuTrigger asChild >
+              <DaisyButton variant="outline" >
   <BookmarkPlus className="w-4 h-4 mr-2" />
 </DaisyDropdownMenu>
               Saved
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
-          <DaisyDropdownMenuContent className="w-64" />
-            {savedSearches.map(search => (
+          <DaisyDropdownMenuContent className="w-64" >
+              {savedSearches.map(search => (
               <DaisyDropdownMenuItem key={search.id} onSelect={() => loadSavedSearch(search)} />
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center justify-between">
@@ -563,7 +563,7 @@ export function AdvancedSearchFilter({
               </DaisyDropdownMenuContent>
             ))}
             <DaisyDropdownMenuSeparator />
-            <DaisyDropdownMenuItem onSelect={() => setShowSaveSearch(true)} />
+<DaisyDropdownMenuItem onSelect={() => setShowSaveSearch(true)} />
               <Plus className="w-4 h-4 mr-2" />
               Save Current Search
             </DaisyDropdownMenuSeparator>
@@ -571,24 +571,24 @@ export function AdvancedSearchFilter({
         </DaisyDropdownMenu>
 
         {/* Quick Actions */}
-        <DaisyDropdownMenu />
-          <DaisyDropdownMenuTrigger asChild />
-            <DaisyButton variant="outline" >
+        <DaisyDropdownMenu >
+            <DaisyDropdownMenuTrigger asChild >
+              <DaisyButton variant="outline" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
             </DaisyButton>
           </DaisyDropdownMenuTrigger>
-          <DaisyDropdownMenuContent />
-            <DaisyDropdownMenuItem onClick={() => setShowTagManagement(true)} />
+          <DaisyDropdownMenuContent >
+              <DaisyDropdownMenuItem onClick={() => setShowTagManagement(true)} />
               <Tag className="w-4 h-4 mr-2" />
               Manage Tags
             </DaisyDropdownMenuContent>
-            <DaisyDropdownMenuItem onClick={clearAllFilters} />
-              <RefreshCw className="w-4 h-4 mr-2" />
+            <DaisyDropdownMenuItem onClick={clearAllFilters} >
+                <RefreshCw className="w-4 h-4 mr-2" />
               Clear All Filters
             </DaisyDropdownMenuItem>
             <DaisyDropdownMenuSeparator />
-            <DaisyDropdownMenuItem onClick={() => handleBulkExport(filteredItems.map(item => item.id))} />
+<DaisyDropdownMenuItem onClick={() => handleBulkExport(filteredItems.map(item => item.id))} />
               <Download className="w-4 h-4 mr-2" />
               Export All Results
             </DaisyDropdownMenuSeparator>
@@ -629,7 +629,7 @@ export function AdvancedSearchFilter({
             transition={{ duration: 0.2 }}
           >
             <DaisyCard >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
                 <DaisyCardTitle className="text-lg">Advanced Search & Filters</DaisyCardTitle>
         </DaisyCardBody>
@@ -638,22 +638,24 @@ export function AdvancedSearchFilter({
 </DaisyCardBody>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <DaisySelect value={newFilter.field} onValueChange={(value) => setNewFilter({...newFilter, field: value})}>
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select field" /></DaisySelect>
-                    <DaisySelectContent />
-                      {searchableFields.map(field => (
-                        <DaisySelectItem key={field.key} value={field.key} />
-                          {field.label}
-                        </DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select field" />
+</DaisySelect>
+                    <DaisySelectContent >
+                        {searchableFields.map(field => (
+                        <DaisySelectItem key={field.key} value={field.key} >
+                            {field.label}
+                        </DaisySelectItem>
                       ))}
                     </DaisySelectContent>
                   </DaisySelect>
 
                   <DaisySelect value={newFilter.operator} onValueChange={(value) => setNewFilter({...newFilter, operator: value as any})}>
-                    <DaisySelectTrigger />
-                      <DaisySelectValue /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="contains">Contains</DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="contains">Contains</DaisySelectItem>
                       <DaisySelectItem value="equals">Equals</DaisySelectItem>
                       <DaisySelectItem value="starts_with">Starts with</DaisySelectItem>
                       <DaisySelectItem value="ends_with">Ends with</DaisySelectItem>
@@ -665,8 +667,8 @@ export function AdvancedSearchFilter({
                   <DaisyInput
                     placeholder="Value"
                     value={newFilter.value || ''}
-                    onChange={(e) => setNewFilter({...newFilter, value: e.target.value})}
-                  />
+                    onChange={(e) = />
+setNewFilter({...newFilter, value: e.target.value})} />
 
                   <DaisyButton onClick={addFilter} disabled={!newFilter.field || !newFilter.value} >
   <Plus className="w-4 h-4 mr-2" />
@@ -693,9 +695,10 @@ export function AdvancedSearchFilter({
                           </DaisyButton>
                         </DaisyBadge>
                       ))}
-                      <DaisyButton variant="ghost" size="sm" onClick={clearAllFilters} >
-  Clear All
-</DaisyButton>
+                      <DaisyButton variant="ghost" size="sm" onClick={clearAllFilters}>
+          Clear All
+
+        </DaisyButton>
                       </DaisyButton>
                     </div>
                   </div>
@@ -746,14 +749,14 @@ export function AdvancedSearchFilter({
             <div className="flex items-center space-x-2">
               <DaisyCheckbox
                 checked={selectedItems.length === filteredItems.length}
-                onCheckedChange={(checked) => {
+                onCheckedChange={(checked) = />
+{
                   if (checked) {
                     selectAllVisible();
                   } else {
                     clearSelection();
                   }
-                }}
-              />
+                }} />
               <span className="text-sm text-gray-600">Select all visible</span>
             </div>
           )}
@@ -761,16 +764,16 @@ export function AdvancedSearchFilter({
 
         {/* Bulk Actions */}
         {selectedItems.length > 0 && (
-          <DaisyDropdownMenu />
-            <DaisyDropdownMenuTrigger asChild />
-              <DaisyButton variant="outline" size="sm" >
+          <DaisyDropdownMenu >
+              <DaisyDropdownMenuTrigger asChild >
+                <DaisyButton variant="outline" size="sm" >
   Bulk Actions ({selectedItems.length})
 </DaisyCheckbox>
                 <MoreVertical className="w-4 h-4 ml-2" />
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent />
-              {bulkOperations.map(operation => (
+            <DaisyDropdownMenuContent >
+                {bulkOperations.map(operation => (
                 <DaisyDropdownMenuItem
                   key={operation.id}
                   onClick={() => operation.action(selectedItems)}
@@ -785,9 +788,9 @@ export function AdvancedSearchFilter({
       </div>
 
       {/* Save Search Dialog */}
-      <DaisyDialog open={showSaveSearch} onOpenChange={setShowSaveSearch} />
-        <DaisyDialogContent >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showSaveSearch} onOpenChange={setShowSaveSearch} >
+          <DaisyDialogContent >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Save Current Search</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -802,9 +805,9 @@ export function AdvancedSearchFilter({
               <DaisyInput
                 id="search-name"
                 value={newSearchName}
-                onChange={(e) => setNewSearchName(e.target.value)}
-                placeholder="Enter search name"
-              />
+                onChange={(e) = />
+setNewSearchName(e.target.value)}
+                placeholder="Enter search name" />
             </div>
             
             <div>
@@ -812,24 +815,23 @@ export function AdvancedSearchFilter({
               <DaisyTextarea
                 id="search-description"
                 value={newSearchDescription}
-                onChange={(e) => setNewSearchDescription(e.target.value)}
+                onChange={(e) = />
+setNewSearchDescription(e.target.value)}
                 placeholder="Describe this search"
-                rows={2}
-              />
+                rows={2} />
             </div>
             
             <div className="flex items-center space-x-2">
               <DaisySwitch
                 id="search-public"
                 checked={newSearchIsPublic}
-                onCheckedChange={setNewSearchIsPublic}
-              />
-              <DaisyLabel htmlFor="search-public">Make this search public</DaisyTextarea>
+                onCheckedChange={setNewSearchIsPublic} />
+<DaisyLabel htmlFor="search-public">Make this search public</DaisyTextarea>
             </div>
           </div>
           
-          <DaisyDialogFooter />
-            <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)} />
+          <DaisyDialogFooter >
+              <DaisyButton variant="outline" onClick={() => setShowSaveSearch(false)} />
               Cancel
             </DaisyDialogFooter>
             <DaisyButton onClick={saveCurrentSearch} disabled={!newSearchName.trim()} >
@@ -842,9 +844,9 @@ export function AdvancedSearchFilter({
       </DaisyDialog>
 
       {/* Tag Management Dialog */}
-      <DaisyDialog open={showTagManagement} onOpenChange={setShowTagManagement} />
-        <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showTagManagement} onOpenChange={setShowTagManagement} >
+          <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Manage Tags</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -859,15 +861,15 @@ export function AdvancedSearchFilter({
               <DaisyInput
                 placeholder="Tag name"
                 value={newTagName}
-                onChange={(e) => setNewTagName(e.target.value)}
-                className="flex-1"
-              />
+                onChange={(e) = />
+setNewTagName(e.target.value)}
+                className="flex-1" />
               <DaisyInput
                 type="color"
                 value={newTagColor}
-                onChange={(e) => setNewTagColor(e.target.value)}
-                className="w-16"
-              />
+                onChange={(e) = />
+setNewTagColor(e.target.value)}
+                className="w-16" />
               <DaisyButton onClick={addTag} disabled={!newTagName.trim()} >
   <Plus className="w-4 h-4 mr-2" />
 </DaisyInput>
@@ -882,8 +884,7 @@ export function AdvancedSearchFilter({
                   <div className="flex items-center space-x-2">
                     <div
                       className="w-4 h-4 rounded"
-                      style={{ backgroundColor: tag.color }}
-                    />
+                      style={{ backgroundColor: tag.color }} />
                     <span className="font-medium">{tag.name}</span>
                     <DaisyBadge variant="secondary" className="text-xs" >
   {tag.count} items
@@ -910,8 +911,8 @@ export function AdvancedSearchFilter({
             </div>
           </div>
           
-          <DaisyDialogFooter />
-            <DaisyButton onClick={() => setShowTagManagement(false)} />
+          <DaisyDialogFooter >
+              <DaisyButton onClick={() => setShowTagManagement(false)} />
               Done
             </DaisyDialogFooter>
           </DaisyDialogFooter>

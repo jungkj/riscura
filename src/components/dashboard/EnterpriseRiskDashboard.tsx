@@ -224,9 +224,8 @@ export function EnterpriseRiskDashboard() {
                 </div>
                 <DaisyProgress 
                   value={(metric.value / metric.target) * 100} 
-                  className="h-2"
-                />
-              </div>
+                  className="h-2" />
+</div>
             </DaisyProgress>
           </DaisyCard>
         ))}
@@ -234,7 +233,7 @@ export function EnterpriseRiskDashboard() {
 
       {/* AI-Powered Insights */}
       <DaisyCard className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center space-x-3" >
   <div className="p-2 bg-blue-600 rounded-lg">
@@ -289,7 +288,7 @@ export function EnterpriseRiskDashboard() {
                     Confidence Score
                   </div>
                   <DaisyProgress value={insight.confidence} className="w-20 h-2" />
-                </div>
+</div>
                 {insight.action && (
                   <DaisyButton size="sm" variant="outline" className="text-xs" >
   {insight.action}

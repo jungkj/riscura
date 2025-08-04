@@ -258,8 +258,7 @@ export const DataTablesDemo = () => {
               change={metric.change}
               trend={metric.trend}
               icon={metric.icon}
-              color={metric.color}
-            />
+              color={metric.color} />
           ))}
         </div>
       </section>
@@ -275,10 +274,9 @@ export const DataTablesDemo = () => {
             title="Risk Distribution"
             subtitle="Breakdown of risks by severity level"
             data={sampleChartData}
-            height={200}
-          />
+            height={200} />
           <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <DaisyCardTitle className="text-[#191919] font-inter">Chart Features</DaisyCardTitle>
         </DaisyCardBody>
@@ -314,8 +312,8 @@ export const DataTablesDemo = () => {
       {/* Enhanced Data Table */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <DaisyTable className="h-5 w-5 text-[#199BEC]" />
-          <h2 className="text-xl font-bold text-[#191919] font-inter">Enhanced Data Table</h2>
+          <DaisyTable className="h-5 w-5 text-[#199BEC]" >
+            <h2 className="text-xl font-bold text-[#191919] font-inter">Enhanced Data Table</h2>
         </div>
         <EnhancedDataTable
           title="Risk Management Tasks"
@@ -329,8 +327,7 @@ export const DataTablesDemo = () => {
           exportable={true}
           selectable={true}
           pagination={true}
-          pageSize={5}
-        />
+          pageSize={5} />
       </section>
 
       {/* Enhanced List */}
@@ -349,10 +346,9 @@ export const DataTablesDemo = () => {
             showStatus={true}
             showAssignee={true}
             showDate={true}
-            showProgress={true}
-          />
+            showProgress={true} />
           <DaisyCard className="border border-gray-200" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTable>
               <DaisyCardTitle className="text-[#191919] font-inter">List Features</DaisyCardTitle>
         </DaisyCardBody>

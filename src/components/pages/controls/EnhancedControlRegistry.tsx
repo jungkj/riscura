@@ -324,9 +324,9 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                   <DaisyInput
                     placeholder="Search controls by title, description, framework, or objective..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 notion-input"
-                  />
+                    onChange={(e) = />
+setSearchQuery(e.target.value)}
+                    className="pl-10 notion-input" />
                 </div>
               </div>
               
@@ -334,7 +334,6 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                 <DaisySelect value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
                   <DaisySelectTrigger className="w-48">
                     <DaisySelectValue />
-                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     <DaisySelectItem value="effectivenessScore">Effectiveness Score</DaisySelectItem>
                     <DaisySelectItem value="maturityLevel">Maturity Level</DaisySelectItem>
@@ -344,12 +343,14 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                 </DaisySelect>
                 
                 <DaisyButton
-                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  onClick={() =>
+          setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   variant="outline"
                   size="sm"
                   className="notion-button-outline">
                   {sortOrder === 'asc' ? '↑' : '↓'}
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </div>
           </DaisyCardBody>
@@ -408,7 +409,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                 <DaisyCardBody>
                   <div className="text-2xl font-bold text-green-600">{Math.round(stats.avgEffectiveness)}%</div>
                   <DaisyProgress value={stats.avgEffectiveness} className="w-full mt-2" />
-                </DaisyCardBody>
+</DaisyCardBody>
               </DaisyCard>
 
               <DaisyCard className="notion-card">
@@ -458,8 +459,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                         <div className="w-24 h-2 bg-secondary rounded-full overflow-hidden">
                           <div 
                             className="h-full bg-primary transition-all duration-300"
-                            style={{ width: `${(count / stats.total) * 100}%` }}
-                          />
+                            style={{ width: `${(count / stats.total) * 100}%` }} />
                         </div>
                         <span className="text-sm font-medium w-8 text-right">{count}</span>
                       </div>
@@ -471,8 +471,8 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
           </DaisyTabsContent>
 
           {/* Controls Tab */}
-          <DaisyTabsContent value="controls" className="space-y-6" />
-            <DaisyCard className="notion-card" >
+          <DaisyTabsContent value="controls" className="space-y-6" >
+              <DaisyCard className="notion-card" >
   <DaisyCardBody className="p-0" >
   </DaisyTabsContent>
 </DaisyCardBody>
@@ -490,14 +490,14 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                         <div className="flex items-start gap-4">
                           <DaisyCheckbox
                             checked={selectedControls.includes(control.id)}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={(checked) = />
+{
                               setSelectedControls(prev => 
                                 checked 
                                   ? [...prev, control.id]
                                   : prev.filter(id => id !== control.id)
                               );
-                            }}
-                          />
+                            }} />
                           
                           <div className="flex-1 space-y-2">
                             <div className="flex items-start justify-between">
@@ -537,7 +537,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <DaisyCalendar className="w-4 h-4" />
-                                  {control.frequency}
+{control.frequency}
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <Network className="w-4 h-4" />
@@ -551,31 +551,31 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                                   <div className="text-xs text-muted-foreground">Effectiveness</div>
                                 </div>
                                 
-                                <DaisyDropdownMenu />
-                                  <DaisyDropdownMenuTrigger asChild />
-                                    <DaisyButton variant="ghost" size="sm" >
+                                <DaisyDropdownMenu >
+                                    <DaisyDropdownMenuTrigger asChild >
+                                      <DaisyButton variant="ghost" size="sm" >
   <MoreHorizontal className="w-4 h-4" />
 </DaisyCalendar>
                                     </DaisyButton>
                                   </DaisyDropdownMenuTrigger>
-                                  <DaisyDropdownMenuContent align="end" />
-                                    <DaisyDropdownMenuItem onClick={() => {
+                                  <DaisyDropdownMenuContent align="end" >
+                                      <DaisyDropdownMenuItem onClick={() => {
                                       setSelectedControl(control);
                                       setShowControlDetail(true);
                                     }}>
                                       <Eye className="w-4 h-4 mr-2" />
                                       View Details
                                     </DaisyDropdownMenuContent>
-                                    <DaisyDropdownMenuItem />
-                                      <Edit className="w-4 h-4 mr-2" />
+                                    <DaisyDropdownMenuItem >
+                                        <Edit className="w-4 h-4 mr-2" />
                                       Edit Control
                                     </DaisyDropdownMenuItem>
                                     <DaisyDropdownMenuItem onClick={() => handleAIAnalysis(control)} />
                                       <Brain className="w-4 h-4 mr-2" />
                                       AI Assessment
                                     </DaisyDropdownMenuItem>
-                                    <DaisyDropdownMenuItem />
-                                      <TestTube className="w-4 h-4 mr-2" />
+                                    <DaisyDropdownMenuItem >
+                                        <TestTube className="w-4 h-4 mr-2" />
                                       Schedule Test
                                     </DaisyDropdownMenuItem>
                                   </DaisyDropdownMenuContent>

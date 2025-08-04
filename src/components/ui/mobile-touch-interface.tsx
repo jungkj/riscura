@@ -365,7 +365,6 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
           className="absolute top-0 left-0 h-full bg-blue-500 rounded-full"
           style={{ width: `${percentage}%` }}
         />
-
         {/* Thumb */}
         <motion.div
           className={cn(

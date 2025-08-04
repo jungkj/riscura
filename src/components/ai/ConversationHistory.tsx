@@ -348,7 +348,7 @@ export default function ConversationHistory({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <div className="flex items-center space-x-2">
             <History className="w-5 h-5 text-blue-600" />
@@ -373,7 +373,7 @@ export default function ConversationHistory({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -430,28 +430,30 @@ export default function ConversationHistory({
               <DaisyInput
                 placeholder="Search conversations..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-10" />
             </div>
             
-            <DaisySelect value={selectedFilter} onValueChange={setSelectedFilter} />
-              <DaisySelectTrigger className="w-32" />
-                <Filter className="w-4 h-4 mr-2" />
-                <DaisySelectValue /></DaisyInput>
-              <DaisySelectContent />
-                <DaisySelectItem value="all">All Time</DaisySelectContent>
+            <DaisySelect value={selectedFilter} onValueChange={setSelectedFilter} >
+                <DaisySelectTrigger className="w-32">
+                  <Filter className="w-4 h-4 mr-2" />
+                <DaisySelectValue />
+</DaisyInput>
+              <DaisySelectContent >
+                  <DaisySelectItem value="all">All Time</DaisySelectItem>
                 <DaisySelectItem value="today">Today</DaisySelectItem>
                 <DaisySelectItem value="week">This Week</DaisySelectItem>
                 <DaisySelectItem value="month">This Month</DaisySelectItem>
               </DaisySelectContent>
             </DaisySelect>
             
-            <DaisySelect value={sortBy} onValueChange={setSortBy} />
-              <DaisySelectTrigger className="w-32" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="updated">Last Updated</DaisySelectContent>
+            <DaisySelect value={sortBy} onValueChange={setSortBy} >
+                <DaisySelectTrigger className="w-32">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="updated">Last Updated</DaisySelectItem>
                 <DaisySelectItem value="created">Date Created</DaisySelectItem>
                 <DaisySelectItem value="title">Title</DaisySelectItem>
                 <DaisySelectItem value="messages">Message Count</DaisySelectItem>
@@ -461,15 +463,15 @@ export default function ConversationHistory({
         </div>
 
         {/* Tabs */}
-        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" />
-          <DaisyTabsList className="grid w-full grid-cols-3 mx-4 mb-4" />
-            <DaisyTabsTrigger value="recent">Recent</DaisyTabs>
+        <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="w-full" >
+            <DaisyTabsList className="grid w-full grid-cols-3 mx-4 mb-4" >
+              <DaisyTabsTrigger value="recent">Recent</DaisyTabs>
             <DaisyTabsTrigger value="starred">Starred</DaisyTabsTrigger>
             <DaisyTabsTrigger value="archived">Archived</DaisyTabsTrigger>
           </DaisyTabsList>
 
-          <DaisyTabsContent value={activeTab} className="mt-0" />
-            <div className="max-h-96 overflow-y-auto">
+          <DaisyTabsContent value={activeTab} className="mt-0" >
+              <div className="max-h-96 overflow-y-auto">
               {filteredConversations.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -505,8 +507,7 @@ export default function ConversationHistory({
                                 }
                                 setSelectedConversations(newSet);
                               }}
-                              className="mt-1"
-                            />
+                              className="mt-1" />
                             
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
@@ -549,8 +550,8 @@ export default function ConversationHistory({
                                   {conversation.tags.slice(0, 3).map((tag) => (
                                     <DaisyBadge key={tag} variant="outline" className="text-xs" >
   {tag}
-</DaisyTabsContent>
-                                    </DaisyBadge>
+</DaisyBadge>
+          </DaisyTabsContent>
                                   ))}
                                   {conversation.tags.length > 3 && (
                                     <DaisyBadge variant="outline" className="text-xs" >
@@ -572,8 +573,7 @@ export default function ConversationHistory({
                               <Star 
                                 className={`w-3 h-3 ${
                                   conversation.isStarred ? 'text-yellow-500 fill-current' : ''
-                                }`} 
-                              />
+                                }`} />
                             </DaisyButton>
                             
                             <DaisyButton

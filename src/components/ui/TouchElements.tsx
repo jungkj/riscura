@@ -249,7 +249,8 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
         className
       )}
       onClick={handleClick}
-      onTouchStart={() => setIsPressed(true)}
+      onTouchStart={() =>
+          setIsPressed(true)}
       onTouchEnd={() => setIsPressed(false)}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
@@ -257,7 +258,8 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       {...longPressProps}
     >
       {children}
-    </DaisyButton>
+    
+        </DaisyButton>
   );
 };
 
@@ -506,8 +508,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
           {/* Fill */}
           <div
             className="h-full bg-blue-600 rounded-full transition-all duration-150"
-            style={{ width: `${percentage}%` }}
-          />
+            style={{ width: `${percentage}%` }} />
         </div>
         
         {/* Thumb */}
@@ -516,8 +517,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
             "absolute top-1/2 w-8 h-8 bg-white border-2 border-blue-600 rounded-full transform -translate-y-1/2 shadow-md transition-all duration-150",
             isDragging && "scale-125 shadow-lg"
           )}
-          style={{ left: `calc(${percentage}% - 16px + 12px)` }}
-        />
+          style={{ left: `calc(${percentage}% - 16px + 12px)` }} />
       </div>
     </div>
   );
@@ -602,8 +602,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
             {isRefreshing ? 'Refreshing...' : canRefresh ? 'Release to refresh' : 'Pull to refresh'}
           </span>
           {pullDistance > 0 && !isRefreshing && (
-            <DaisyProgress value={refreshProgress} className="w-16 h-1" />
-          )}
+            <DaisyProgress value={refreshProgress} className="w-16 h-1" />)}
         </div>
       </div>
 
@@ -656,8 +655,7 @@ export const TouchActionMenu: React.FC<{
           {/* Backdrop */}
           <div
             className="fixed inset-0 z-40 bg-black bg-opacity-25"
-            onClick={() => setIsOpen(false)}
-          />
+            onClick={() => setIsOpen(false)} />
           
           {/* Menu */}
           <DaisyCard className="absolute right-0 top-full mt-2 z-50 min-w-48 shadow-lg" >

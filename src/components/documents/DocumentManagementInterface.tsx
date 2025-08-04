@@ -256,35 +256,35 @@ export default function DocumentManagementInterface({
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   checked={selectedDocuments.includes(document.id)}
-                  onCheckedChange={(checked) => {
+                  onCheckedChange={(checked) = />
+{
                     if (checked) {
                       setSelectedDocuments(prev => [...prev, document.id]);
                     } else {
                       setSelectedDocuments(prev => prev.filter(id => id !== document.id));
                     }
                   }}
-                  onClick={(e) => e.stopPropagation()}
-                />
+                  onClick={(e) => e.stopPropagation()} />
                 {getFileIcon(document.type)}
               </div>
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
                   <DaisyButton variant="ghost" size="sm" >
   <MoreHorizontal className="w-4 h-4" />
 </DaisyCheckbox>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
                   </DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem />
-                    <Download className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Download className="w-4 h-4 mr-2" />
                     Download
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem />
-                    <Share2 className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Share2 className="w-4 h-4 mr-2" />
                     Share
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
@@ -304,8 +304,7 @@ export default function DocumentManagementInterface({
                 <img
                   src={document.aiAnalysis.thumbnailUrl}
                   alt={document.name}
-                  className="w-full h-32 object-cover rounded-md"
-                />
+                  className="w-full h-32 object-cover rounded-md" />
               </div>
             )}
             <h3 className="font-medium text-sm mb-2 line-clamp-2">{document.name}</h3>
@@ -315,9 +314,9 @@ export default function DocumentManagementInterface({
               </DaisyBadge>
               <p className="text-xs text-gray-500">{formatFileSize(document.size)}</p>
               <div className="flex items-center space-x-1">
-                <DaisyAvatar className="w-4 h-4" />
-                  <DaisyAvatarFallback className="text-xs" />
-                    {document.uploader.firstName[0]}{document.uploader.lastName[0]}
+                <DaisyAvatar className="w-4 h-4" >
+                    <DaisyAvatarFallback className="text-xs" >
+                      {document.uploader.firstName[0]}{document.uploader.lastName[0]}
                   </DaisyAvatar>
                 </DaisyAvatar>
                 <p className="text-xs text-gray-500 truncate">
@@ -349,15 +348,15 @@ export default function DocumentManagementInterface({
 </DaisyCard>
               <DaisyCheckbox
                 checked={selectedDocuments.includes(document.id)}
-                onCheckedChange={(checked) => {
+                onCheckedChange={(checked) = />
+{
                   if (checked) {
                     setSelectedDocuments(prev => [...prev, document.id]);
                   } else {
                     setSelectedDocuments(prev => prev.filter(id => id !== document.id));
                   }
                 }}
-                onClick={(e) => e.stopPropagation()}
-              />
+                onClick={(e) => e.stopPropagation()} />
               {getFileIcon(document.type)}
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium truncate">{document.name}</h3>
@@ -370,24 +369,24 @@ export default function DocumentManagementInterface({
               <DaisyBadge className={`${getFileTypeColor(document.type)}`}>
                 {document.type.split('/')[1]?.toUpperCase() || 'FILE'}
               </DaisyCheckbox>
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()} />
                   <DaisyButton variant="ghost" size="sm" >
   <MoreHorizontal className="w-4 h-4" />
 </DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => setSelectedDocument(document.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
                   </DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem />
-                    <Download className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Download className="w-4 h-4 mr-2" />
                     Download
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuItem />
-                    <Share2 className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Share2 className="w-4 h-4 mr-2" />
                     Share
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
@@ -435,16 +434,17 @@ export default function DocumentManagementInterface({
             <DaisyInput
               placeholder="Search documents..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+              onChange={(e) = />
+setSearchQuery(e.target.value)}
+              className="pl-10" />
           </div>
         </div>
-        <DaisySelect value={filterType} onValueChange={setFilterType} />
-          <DaisySelectTrigger className="w-48" />
-            <DaisySelectValue placeholder="Filter by type" /></DaisyInput>
-          <DaisySelectContent />
-            <DaisySelectItem value="all">All Types</DaisySelectContent>
+        <DaisySelect value={filterType} onValueChange={setFilterType} >
+            <DaisySelectTrigger className="w-48">
+              <DaisySelectValue placeholder="Filter by type" />
+</DaisyInput>
+          <DaisySelectContent >
+              <DaisySelectItem value="all">All Types</DaisySelectItem>
             <DaisySelectItem value="application/pdf">PDF</DaisySelectItem>
             <DaisySelectItem value="image">Images</DaisySelectItem>
             <DaisySelectItem value="application/msword">Word Documents</DaisySelectItem>
@@ -456,10 +456,11 @@ export default function DocumentManagementInterface({
           setSortBy(field);
           setSortOrder(order as 'asc' | 'desc');
         }}>
-          <DaisySelectTrigger className="w-48" />
-            <DaisySelectValue placeholder="Sort by" /></DaisySelect>
-          <DaisySelectContent />
-            <DaisySelectItem value="uploadedAt-desc">Newest First</DaisySelectContent>
+          <DaisySelectTrigger className="w-48">
+              <DaisySelectValue placeholder="Sort by" />
+</DaisySelect>
+          <DaisySelectContent >
+              <DaisySelectItem value="uploadedAt-desc">Newest First</DaisySelectItem>
             <DaisySelectItem value="uploadedAt-asc">Oldest First</DaisySelectItem>
             <DaisySelectItem value="name-asc">Name A-Z</DaisySelectItem>
             <DaisySelectItem value="name-desc">Name Z-A</DaisySelectItem>
@@ -512,9 +513,11 @@ export default function DocumentManagementInterface({
             <DaisyButton 
               variant="outline" 
               size="sm" 
-              onClick={() => setSelectedDocuments([])} />
+              onClick={() =>
+          setSelectedDocuments([])} />
               Clear Selection
-            </DaisyButton>
+            
+        </DaisyButton>
           </div>
         </div>
       )}
@@ -551,20 +554,24 @@ export default function DocumentManagementInterface({
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  onClick={() =>
+          setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1} />
                   Previous
-                </DaisyButton>
+                
+        </DaisyButton>
                 <span className="text-sm">
                   Page {currentPage} of {totalPages}
                 </span>
                 <DaisyButton
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  onClick={() =>
+          setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages} />
                   Next
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </div>
           )}
@@ -589,17 +596,18 @@ export default function DocumentManagementInterface({
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold">Upload Documents</h3>
-                  <DaisyButton variant="outline" onClick={() => setShowUpload(false)} />
+                  <DaisyButton variant="outline" onClick={() =>
+          setShowUpload(false)} />
                     ✕
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </div>
                 <FileUploadDropzone
                   onUploadComplete={handleUploadComplete}
                   onUploadError={(error) => toast.error(error)}
                   category={category}
                   linkedEntityType={linkedEntityType}
-                  linkedEntityId={linkedEntityId}
-                />
+                  linkedEntityId={linkedEntityId} />
               </div>
             </motion.div>
           </motion.div>
@@ -624,8 +632,7 @@ export default function DocumentManagementInterface({
               <EnhancedDocumentViewer
                 documentId={selectedDocument}
                 onClose={() => setSelectedDocument(null)}
-                onDelete={handleDocumentDelete}
-              />
+                onDelete={handleDocumentDelete} />
             </motion.div>
           </motion.div>
         )}

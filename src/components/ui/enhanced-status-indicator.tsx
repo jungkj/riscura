@@ -189,8 +189,7 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
       <div className="flex items-center gap-2">
         <div
           className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: riskColor.color || riskColor[500] }}
-        />
+          style={{ backgroundColor: riskColor.color || riskColor[500] }} />
         <span className={`font-medium ${sizeClasses[size]}`} style={{ color: riskColor.text }}>
           {getRiskLevelText()}
         </span>
@@ -207,8 +206,7 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
             style={{ backgroundColor: riskColor.color || riskColor[500] }}
             initial={{ width: 0 }}
             animate={{ width: `${Math.min(getRiskValue() * 4, 100)}%` }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          />
+            transition={{ duration: 0.6, delay: 0.2 }} />
         </div>
       </div>
 
@@ -247,7 +245,7 @@ interface ProgressRingProps {
   className?: string;
 }
 
-export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
+export const EnhancedProgressRing: React.FC<DaisyProgressRingProps / />= ({
   progress,
   size = 60,
   strokeWidth = 6,
@@ -274,8 +272,7 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
           strokeWidth={strokeWidth}
           r={normalizedRadius}
           cx={size / 2}
-          cy={size / 2}
-        />
+          cy={size / 2} />
         {/* Progress circle */}
         <motion.circle
           stroke={progressColor}
@@ -289,8 +286,7 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps> = ({
           cy={size / 2}
           initial={animated ? { strokeDashoffset: circumference } : {}}
           animate={animated ? { strokeDashoffset } : {}}
-          transition={animated ? { duration: 1, ease: 'easeInOut' } : {}}
-        />
+          transition={animated ? { duration: 1, ease: 'easeInOut' } : {}} />
       </svg>
       {showPercentage && (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -353,8 +349,7 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
             whileTap: { scale: 0.9 },
             transition: { duration: 0.2 },
           }
-        : {})}
-    />
+        : {})} />
   );
 };
 

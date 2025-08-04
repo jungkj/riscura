@@ -1276,7 +1276,7 @@ export class ProactiveMonitoringService {
 
     // Analyze recent activities for efficiency patterns
     const recentActivities = context.workContext.recent_activities
-      .filter((activity) => activity.duration && activity.duration > 3600000) // > 1 hour
+      .filter((activity) => activity.duration && activity.duration > 3600000) // 1 hour
       .slice(0, 5);
 
     if (recentActivities.length > 2) {
@@ -1285,7 +1285,7 @@ export class ProactiveMonitoringService {
         recentActivities.length;
 
       if (averageDuration > 7200000) {
-        // > 2 hours average
+        // 2 hours average
         insights.push({
           id: generateId('insight'),
           type: 'workflow_bottleneck',

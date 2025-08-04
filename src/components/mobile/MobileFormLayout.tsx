@@ -354,20 +354,20 @@ export default function MobileFormLayout({
     <DaisyTextarea
               {...fieldProps}
               placeholder={field.placeholder}
-              rows={field.rows || 3}
-            />
-          );
+              rows={field.rows || 3} />
+);
           
         case 'select':
           return (
             <DaisySelect value={value} onValueChange={(val) => handleFieldChange(field.id, val)} />
-              <DaisySelectTrigger className={error ? 'border-red-500' : ''} />
-                <DaisySelectValue placeholder={field.placeholder} /></DaisyTextarea>
-              <DaisySelectContent />
-                {field.options?.map(option => (
-                  <DaisySelectItem key={option.value} value={option.value} />
-                    {option.label}
-                  </DaisySelectContent>
+              <DaisySelectTrigger className={error ? 'border-red-500' : ''}>
+                  <DaisySelectValue placeholder={field.placeholder} />
+</DaisyTextarea>
+              <DaisySelectContent >
+                  {field.options?.map(option => (
+                  <DaisySelectItem key={option.value} value={option.value} >
+                      {option.label}
+                  </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
@@ -379,12 +379,12 @@ export default function MobileFormLayout({
               <DaisyCheckbox
                 id={field.id}
                 checked={value}
-                onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
+                onCheckedChange={(checked) = />
+handleFieldChange(field.id, checked)}
                 disabled={field.disabled}
-                aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined}
-              />
-              <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
-                {field.label}
+                aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined} />
+              <DaisyLabel htmlFor={field.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >
+                  {field.label}
                 {isRequired && <span className="text-red-500 ml-1">*</span>}
               </DaisyCheckbox>
             </div>
@@ -395,8 +395,8 @@ export default function MobileFormLayout({
             <DaisyRadioGroup value={value} onValueChange={(val) => handleFieldChange(field.id, val)} />
               {field.options?.map(option => (
                 <div key={option.value} className="flex items-center space-x-2">
-                  <DaisyRadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
-                  <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyRadioGroup>
+                  <DaisyRadioGroupItem value={option.value} id={`${field.id}-${option.value}`} >
+                    <DaisyLabel htmlFor={`${field.id}-${option.value}`}>{option.label}</DaisyRadioGroup>
                 </div>
               ))}
             </DaisyRadioGroup>
@@ -408,9 +408,9 @@ export default function MobileFormLayout({
               <DaisySwitch
                 id={field.id}
                 checked={value}
-                onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
-                disabled={field.disabled}
-              />
+                onCheckedChange={(checked) = />
+handleFieldChange(field.id, checked)}
+                disabled={field.disabled} />
               <DaisyLabel htmlFor={field.id}>{field.label}</DaisySwitch>
             </div>
           );
@@ -423,16 +423,16 @@ export default function MobileFormLayout({
                 {...fieldProps}
                 accept={field.accept}
                 multiple={field.multiple}
-                onChange={(e) => {
+                onChange={(e) = />
+{
                   const files = e.target.files;
                   handleFieldChange(field.id, field.multiple ? Array.from(files || []) : files?.[0] || null);
                 }}
-                className="hidden"
-              />
+                className="hidden" />
               <DaisyLabel
                 htmlFor={field.id}
-                className="flex items-center justify-center px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors" />
-                <div className="text-center">
+                className="flex items-center justify-center px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors" >
+                  <div className="text-center">
                   <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                   <p className="text-sm text-gray-600">
                     {field.placeholder || 'Tap to upload file'}
@@ -461,9 +461,8 @@ export default function MobileFormLayout({
               <DaisyInput
                 {...fieldProps}
                 type={showPassword[field.id] ? 'text' : 'password'}
-                placeholder={field.placeholder}
-              />
-              <DaisyButton
+                placeholder={field.placeholder} />
+<DaisyButton
                 type="button"
                 variant="ghost"
                 size="sm"
@@ -491,9 +490,8 @@ export default function MobileFormLayout({
                 {...fieldProps}
                 type={field.type}
                 placeholder={field.placeholder}
-                className={`${field.icon ? 'pl-10' : ''} ${fieldProps.className}`}
-              />
-            </div>
+                className={`${field.icon ? 'pl-10' : ''} ${fieldProps.className}`} />
+</div>
           );
       }
     };
@@ -501,8 +499,8 @@ export default function MobileFormLayout({
     return (
       <div key={field.id} className="space-y-2">
         {field.type !== 'checkbox' && field.type !== 'switch' && (
-          <DaisyLabel htmlFor={field.id} className="text-sm font-medium" />
-            {field.label}
+          <DaisyLabel htmlFor={field.id} className="text-sm font-medium" >
+              {field.label}
             {isRequired && <span className="text-red-500 ml-1">*</span>}
           </DaisyInput>
         )}
@@ -571,8 +569,7 @@ export default function MobileFormLayout({
           </div>
           
           {showProgress && (
-            <DaisyProgress value={progress} className="mt-2 h-1" />
-          )}
+            <DaisyProgress value={progress} className="mt-2 h-1" />)}
         </div>
       )}
       
@@ -610,9 +607,10 @@ export default function MobileFormLayout({
 </DaisyBadge>
                       </DaisyBadge>
                       {section.collapsible && (
-                        <DaisyButton variant="ghost" size="sm" className="p-1" >
-  {isExpanded ? (
-</DaisyButton>
+                        <DaisyButton variant="ghost" size="sm" className="p-1">
+          {isExpanded ? (
+
+        </DaisyButton>
                             <ChevronUp className="w-4 h-4" />
                           ) : (
                             <ChevronDown className="w-4 h-4" />
@@ -645,9 +643,10 @@ export default function MobileFormLayout({
                 variant="outline"
                 onClick={onCancel}
                 disabled={isSubmitting}
-                className="flex-1" >
-  {cancelLabel}
-</DaisyButton>
+                className="flex-1">
+          {cancelLabel}
+
+        </DaisyButton>
               </DaisyButton>
             )}
             
@@ -655,9 +654,10 @@ export default function MobileFormLayout({
               type="submit"
               onClick={handleSubmit}
               disabled={isSubmitting || loading}
-              className="flex-1" >
-  {isSubmitting ? (
-</DaisyButton>
+              className="flex-1">
+          {isSubmitting ? (
+
+        </DaisyButton>
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   Saving...

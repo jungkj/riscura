@@ -443,9 +443,9 @@ export default function ReportScheduler({
           <DaisyInput
             id="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Weekly Risk Report"
-          />
+            onChange={(e) = />
+setFormData({ ...formData, name: e.target.value })}
+            placeholder="e.g., Weekly Risk Report" />
         </div>
         <div className="space-y-2">
           <DaisyLabel htmlFor="reportType">Report Type</DaisyInput>
@@ -453,13 +453,14 @@ export default function ReportScheduler({
             value={formData.reportType}
             onValueChange={(value) => setFormData({ ...formData, reportType: value })}
           >
-            <DaisySelectTrigger />
-              <DaisySelectValue placeholder="Select report type" /></DaisySelect>
-            <DaisySelectContent />
-              {reportTypes.map((type) => (
-                <DaisySelectItem key={type.value} value={type.value} />
-                  {type.label}
-                </DaisySelectContent>
+            <DaisySelectTrigger>
+                <DaisySelectValue placeholder="Select report type" />
+</DaisySelect>
+            <DaisySelectContent >
+                {reportTypes.map((type) => (
+                <DaisySelectItem key={type.value} value={type.value} >
+                    {type.label}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
@@ -471,9 +472,9 @@ export default function ReportScheduler({
         <DaisyInput
           id="description"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          placeholder="Brief description of this scheduled report"
-        />
+          onChange={(e) = />
+setFormData({ ...formData, description: e.target.value })}
+          placeholder="Brief description of this scheduled report" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -483,10 +484,11 @@ export default function ReportScheduler({
             value={formData.frequency}
             onValueChange={(value) => setFormData({ ...formData, frequency: value as any })}
           >
-            <DaisySelectTrigger />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="daily">Daily</DaisySelectContent>
+            <DaisySelectTrigger>
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="daily">Daily</DaisySelectItem>
               <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
               <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
               <DaisySelectItem value="quarterly">Quarterly</DaisySelectItem>
@@ -501,13 +503,14 @@ export default function ReportScheduler({
               value={formData.dayOfWeek?.toString()}
               onValueChange={(value) => setFormData({ ...formData, dayOfWeek: parseInt(value) })}
             >
-              <DaisySelectTrigger />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                {daysOfWeek.map((day) => (
-                  <DaisySelectItem key={day.value} value={day.value.toString()} />
-                    {day.label}
-                  </DaisySelectContent>
+              <DaisySelectTrigger>
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  {daysOfWeek.map((day) => (
+                  <DaisySelectItem key={day.value} value={day.value.toString()} >
+                      {day.label}
+                  </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>
@@ -522,9 +525,9 @@ export default function ReportScheduler({
               min="1"
               max="31"
               value={formData.dayOfMonth}
-              onChange={(e) => setFormData({ ...formData, dayOfMonth: parseInt(e.target.value) })}
-              placeholder="1-31"
-            />
+              onChange={(e) = />
+setFormData({ ...formData, dayOfMonth: parseInt(e.target.value) })}
+              placeholder="1-31" />
           </div>
         )}
       </div>
@@ -535,8 +538,8 @@ export default function ReportScheduler({
           <DaisyInput
             type="time"
             value={formData.time}
-            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-          />
+            onChange={(e) = />
+setFormData({ ...formData, time: e.target.value })} />
         </div>
         <div className="space-y-2">
           <DaisyLabel>Timezone</DaisyInput>
@@ -544,13 +547,14 @@ export default function ReportScheduler({
             value={formData.timezone}
             onValueChange={(value) => setFormData({ ...formData, timezone: value })}
           >
-            <DaisySelectTrigger />
-              <DaisySelectValue /></DaisySelect>
-            <DaisySelectContent />
-              {timezones.map((tz) => (
-                <DaisySelectItem key={tz.value} value={tz.value} />
-                  {tz.label}
-                </DaisySelectContent>
+            <DaisySelectTrigger>
+                <DaisySelectValue />
+</DaisySelect>
+            <DaisySelectContent >
+                {timezones.map((tz) => (
+                <DaisySelectItem key={tz.value} value={tz.value} >
+                    {tz.label}
+                </DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
@@ -565,14 +569,14 @@ export default function ReportScheduler({
               <DaisyCheckbox
                 id={format}
                 checked={formData.format?.includes(format)}
-                onCheckedChange={(checked) => {
+                onCheckedChange={(checked) = />
+{
                   if (checked) {
                     setFormData({ ...formData, format: [...(formData.format || []), format] });
                   } else {
                     setFormData({ ...formData, format: formData.format?.filter(f => f !== format) });
                   }
-                }}
-              />
+                }} />
               <DaisyLabel htmlFor={format} className="capitalize">{format}</DaisyCheckbox>
             </div>
           ))}
@@ -583,15 +587,16 @@ export default function ReportScheduler({
         <DaisySwitch
           id="enabled"
           checked={formData.enabled}
-          onCheckedChange={(checked) => setFormData({ ...formData, enabled: checked })}
-        />
+          onCheckedChange={(checked) = />
+setFormData({ ...formData, enabled: checked })} />
         <DaisyLabel htmlFor="enabled">Enable this schedule</DaisySwitch>
       </div>
 
       <div className="flex justify-end gap-2">
         <DaisyButton
           variant="outline"
-          onClick={() => {
+          onClick={() =>
+          {
             if (isEdit) {
               setIsEditDialogOpen(false);
             } else {
@@ -601,10 +606,12 @@ export default function ReportScheduler({
           }}
         >
           Cancel
+        
         </DaisyButton>
-        <DaisyButton onClick={isEdit ? handleUpdate : handleCreate} >
-  {isEdit ? 'Update Schedule' : 'Create Schedule'}
-</DaisyButton>
+        <DaisyButton onClick={isEdit ? handleUpdate : handleCreate}>
+          {isEdit ? 'Update Schedule' : 'Create Schedule'}
+
+        </DaisyButton>
         </DaisyButton>
       </div>
     </div>
@@ -638,10 +645,10 @@ export default function ReportScheduler({
   <DaisyCardBody className="p-0" >
   </DaisyCard>
 </DaisyCardBody>
-          <DaisyTable />
-            <DaisyTableHeader />
-              <DaisyTableRow />
-                <DaisyTableHead>Name</DaisyTable>
+          <DaisyTable >
+              <DaisyTableHeader >
+                <DaisyTableRow >
+                  <DaisyTableHead>Name</DaisyTable>
                 <DaisyTableHead>Type</DaisyTableHead>
                 <DaisyTableHead>Frequency</DaisyTableHead>
                 <DaisyTableHead>Next Run</DaisyTableHead>
@@ -651,44 +658,44 @@ export default function ReportScheduler({
                 <DaisyTableHead className="w-32">Actions</DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody />
-              {isLoading ? (
-                <DaisyTableRow />
-                  <DaisyTableCell colSpan={8} className="text-center py-8" />
-                    <div className="flex items-center justify-center gap-2">
+            <DaisyTableBody >
+                {isLoading ? (
+                <DaisyTableRow >
+                    <DaisyTableCell colSpan={8} className="text-center py-8" >
+                      <div className="flex items-center justify-center gap-2">
                       <RefreshCw className="h-4 w-4 animate-spin" />
                       Loading schedules...
                     </div>
                   </DaisyTableBody>
                 </DaisyTableRow>
               ) : schedules.length === 0 ? (
-                <DaisyTableRow />
-                  <DaisyTableCell colSpan={8} className="text-center py-8" />
-                    <div className="flex flex-col items-center gap-2">
+                <DaisyTableRow >
+                    <DaisyTableCell colSpan={8} className="text-center py-8" >
+                      <div className="flex flex-col items-center gap-2">
                       <DaisyCalendar className="h-8 w-8 text-muted-foreground" />
-                      <p className="text-muted-foreground">No scheduled reports found</p>
+<p className="text-muted-foreground">No scheduled reports found</p>
                     </div>
                   </DaisyTableRow>
                 </DaisyTableRow>
               ) : (
                 schedules.map((schedule) => (
-                  <DaisyTableRow key={schedule.id} />
-                    <DaisyTableCell />
-                      <div className="flex flex-col">
+                  <DaisyTableRow key={schedule.id} >
+                      <DaisyTableCell >
+                        <div className="flex flex-col">
                         <span className="font-medium">{schedule.name}</span>
                         {schedule.description && (
                           <span className="text-xs text-muted-foreground">{schedule.description}</span>
                         )}
                       </div>
                     </DaisyTableRow>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="outline">{schedule.reportType.replace('_', ' ')}</DaisyTableCell>
+                    <DaisyTableCell >
+                        <DaisyBadge variant="outline">{schedule.reportType.replace('_', ' ')}</DaisyTableCell>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      {getFrequencyBadge(schedule.frequency)}
+                    <DaisyTableCell >
+                        {getFrequencyBadge(schedule.frequency)}
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      {schedule.nextRun ? (
+                    <DaisyTableCell >
+                        {schedule.nextRun ? (
                         <div className="flex flex-col">
                           <span className="text-sm">{format(new Date(schedule.nextRun), 'MMM dd, yyyy')}</span>
                           <span className="text-xs text-muted-foreground">{format(new Date(schedule.nextRun), 'HH:mm zzz')}</span>
@@ -697,30 +704,30 @@ export default function ReportScheduler({
                         <span className="text-muted-foreground">-</span>
                       )}
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex items-center gap-2">
+                    <DaisyTableCell >
+                        <div className="flex items-center gap-2">
                         {getStatusIcon(schedule)}
                         <span className="text-sm">
                           {schedule.enabled ? 'Active' : 'Paused'}
                         </span>
                       </div>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex items-center gap-1">
+                    <DaisyTableCell >
+                        <div className="flex items-center gap-1">
                         <Mail className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{schedule.recipients.length}</span>
                       </div>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex flex-col text-xs">
+                    <DaisyTableCell >
+                        <div className="flex flex-col text-xs">
                         <span>Runs: {schedule.runCount}</span>
                         {schedule.failureCount > 0 && (
                           <span className="text-red-600">Failures: {schedule.failureCount}</span>
                         )}
                       </div>
                     </DaisyTableCell>
-                    <DaisyTableCell />
-                      <div className="flex items-center gap-1">
+                    <DaisyTableCell >
+                        <div className="flex items-center gap-1">
                         <DaisyButton
                           variant="ghost"
                           size="sm"
@@ -757,9 +764,9 @@ export default function ReportScheduler({
       </DaisyCard>
 
       {/* Create Schedule Dialog */}
-      <DaisyDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
-        <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} >
+          <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Create New Schedule</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -772,9 +779,9 @@ export default function ReportScheduler({
       </DaisyDialog>
 
       {/* Edit Schedule Dialog */}
-      <DaisyDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} />
-        <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} >
+          <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Edit Schedule</DaisyDialogTitle>
             <DaisyDialogDescription >

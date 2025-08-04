@@ -422,7 +422,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         onClick={() => setSelectedComponent(component.id)}
       >
         <DaisyCardBody className="pb-2" >
-  <DaisyCardTitle className="flex items-center justify-between text-sm" />
+  <DaisyCardTitle className="flex items-center justify-between text-sm" >
 </DaisyCard>
             <div className="flex items-center space-x-2">
               <Icon className="w-4 h-4" />
@@ -615,10 +615,10 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             <div className="flex items-center space-x-4">
               <DaisyInput
                 value={reportTitle}
-                onChange={(e) => setReportTitle(e.target.value)}
+                onChange={(e) = />
+setReportTitle(e.target.value)}
                 className="font-semibold text-lg border-none p-0 h-auto focus:ring-0"
-                placeholder="Report Title"
-              />
+                placeholder="Report Title" />
               <DaisyBadge variant="secondary" className="text-xs" >
   {components.length} components
 </DaisyInput>

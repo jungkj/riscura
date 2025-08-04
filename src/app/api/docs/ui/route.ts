@@ -281,8 +281,7 @@ async function handleGet(req: NextRequest) {
               type="text" 
               placeholder="Enter your org ID"
               style="padding: 0.5rem; border-radius: 4px; border: none; font-size: 0.9rem; width: 200px;"
-              value="\${localStorage.getItem('organizationId') || ''}"
-            />
+              value="\${localStorage.getItem('organizationId') || ''}" />
             <button 
               onclick="setOrganizationId()"
               style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;"

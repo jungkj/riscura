@@ -183,7 +183,7 @@ export default function EnterpriseDataTable<T extends TableData>({
 
   return (
     <DaisyCard className={className} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <div>
@@ -195,17 +195,17 @@ export default function EnterpriseDataTable<T extends TableData>({
           
           <div className="flex items-center space-x-2">
             {enableExport && (
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="outline" size="sm" >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="outline" size="sm" >
   <Download className="h-4 w-4 mr-2" />
 </DaisyDropdownMenu>
                     Export
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
                     Export as CSV
                   </DaisyDropdownMenuContent>
                   <DaisyDropdownMenuItem onClick={() => handleExport('json')} />
@@ -230,9 +230,9 @@ export default function EnterpriseDataTable<T extends TableData>({
               <DaisyInput
                 placeholder="Search all columns..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
-              />
+                onChange={(e) = />
+setSearchTerm(e.target.value)}
+                className="max-w-sm" />
             </div>
           )}
           
@@ -244,10 +244,12 @@ export default function EnterpriseDataTable<T extends TableData>({
                   key={action.id}
                   variant={action.variant || 'outline'}
                   size="sm"
-                  onClick={() => handleBulkAction(action)} />
+                  onClick={() =>
+          handleBulkAction(action)} />
                   {action.icon}
                   {action.label}
-                </DaisyButton>
+                
+        </DaisyButton>
               ))}
             </div>
           )}
@@ -257,26 +259,26 @@ export default function EnterpriseDataTable<T extends TableData>({
       <DaisyCardBody className="p-0" >
   <div className="border rounded-lg">
 </DaisyCardBody>
-          <DaisyTable />
-            <DaisyTableHeader />
-              <DaisyTableRow />
-                {enableSelection && (
-                  <DaisyTableHead className="w-12" />
-                    <DaisyCheckbox
+          <DaisyTable >
+              <DaisyTableHeader >
+                <DaisyTableRow >
+                  {enableSelection && (
+                  <DaisyTableHead className="w-12" >
+                      <DaisyCheckbox
                       checked={isAllSelected}
-                      ref={(el) => {
+                      ref={(el) = />
+{
                         if (el && el instanceof HTMLInputElement) {
                           el.indeterminate = isIndeterminate;
                         }
                       }}
                       onCheckedChange={handleSelectAll}
-                      aria-label="Select all"
-                    />
+                      aria-label="Select all" />
                   </DaisyTable>
                 )}
                 {columns.map((column) => (
-                  <DaisyTableHead key={column.key as string} />
-                    {column.sortable !== false ? (
+                  <DaisyTableHead key={column.key as string} >
+                      {column.sortable !== false ? (
                       <DaisyButton
                         variant="ghost"
                         onClick={() => handleSort(column.key)}
@@ -299,20 +301,20 @@ export default function EnterpriseDataTable<T extends TableData>({
                 <DaisyTableHead className="w-20">Actions</DaisyTableHead>
               </DaisyTableRow>
             </DaisyTableHeader>
-            <DaisyTableBody />
-              {paginatedData.length > 0 ? (
+            <DaisyTableBody >
+                {paginatedData.length > 0 ? (
                 paginatedData.map((row) => (
                   <DaisyTableRow
                     key={row.id}
                     className={`hover:bg-gray-50 ${selectedRows.has(row.id) ? 'bg-blue-50' : ''}`}
                   >
                     {enableSelection && (
-                      <DaisyTableCell />
-                        <DaisyCheckbox
+                      <DaisyTableCell >
+                          <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
-                          onCheckedChange={(checked) => handleRowSelection(row.id, checked as boolean)}
-                          aria-label="Select row"
-                        />
+                          onCheckedChange={(checked) = />
+handleRowSelection(row.id, checked as boolean)}
+                          aria-label="Select row" />
                       </DaisyTableBody>
                     )}
                     {columns.map((column) => (
@@ -326,16 +328,16 @@ export default function EnterpriseDataTable<T extends TableData>({
                         }
                       </DaisyTableCell>
                     ))}
-                    <DaisyTableCell />
-                      <DaisyDropdownMenu />
-                        <DaisyDropdownMenuTrigger asChild />
-                          <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
+                    <DaisyTableCell >
+                        <DaisyDropdownMenu >
+                          <DaisyDropdownMenuTrigger asChild >
+                            <DaisyButton variant="ghost" className="h-8 w-8 p-0" >
   <MoreHorizontal className="h-4 w-4" />
 </DaisyTableCell>
                           </DaisyButton>
                         </DaisyDropdownMenuTrigger>
-                        <DaisyDropdownMenuContent align="end" />
-                          <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
+                        <DaisyDropdownMenuContent align="end" >
+                            <DaisyDropdownMenuItem onClick={() => onRowClick?.(row)} />
                             <Eye className="mr-2 h-4 w-4" />
                             View
                           </DaisyDropdownMenuContent>
@@ -363,9 +365,9 @@ export default function EnterpriseDataTable<T extends TableData>({
                   </DaisyTableRow>
                 ))
               ) : (
-                <DaisyTableRow />
-                  <DaisyTableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center" />
-                    No results found.
+                <DaisyTableRow >
+                    <DaisyTableCell colSpan={columns.length + (enableSelection ? 2 : 1)} className="h-24 text-center" >
+                      No results found.
                   </DaisyTableRow>
                 </DaisyTableRow>
               )}
@@ -385,10 +387,12 @@ export default function EnterpriseDataTable<T extends TableData>({
               <DaisyButton
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() =>
+          setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1} />
                 Previous
-              </DaisyButton>
+              
+        </DaisyButton>
               
               <div className="flex items-center space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -408,10 +412,12 @@ export default function EnterpriseDataTable<T extends TableData>({
                       key={page}
                       variant={currentPage === page ? 'primary' : 'outline'}
                       size="sm"
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() =>
+          setCurrentPage(page)}
                       className="w-8 h-8 p-0" />
                       {page}
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   );
                 })}
               </div>
@@ -419,10 +425,12 @@ export default function EnterpriseDataTable<T extends TableData>({
               <DaisyButton
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() =>
+          setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages} />
                 Next
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </div>
         )}
@@ -538,7 +546,6 @@ export function RiskDataTableExample() {
       onRowClick={(row) => console.log('Row clicked:', row)}
       onRowEdit={(row) => console.log('Edit row:', row)}
       onRowDelete={(row) => console.log('Delete row:', row)}
-      onExport={(data, format) => console.log('Export:', data.length, 'rows as', format)}
-    />
+      onExport={(data, format) => console.log('Export:', data.length, 'rows as', format)} />
   );
 } 

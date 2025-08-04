@@ -305,18 +305,18 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
               </DaisyAlert>
       )}
 
-      <DaisyTabs defaultValue="configuration" className="w-full" />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="configuration">Configuration</DaisyTabs>
+      <DaisyTabs defaultValue="configuration" className="w-full" >
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+            <DaisyTabsTrigger value="configuration">Configuration</DaisyTabs>
           <DaisyTabsTrigger value="filters">Filters</DaisyTabsTrigger>
           <DaisyTabsTrigger value="delivery">Delivery</DaisyTabsTrigger>
           <DaisyTabsTrigger value="preview">Preview</DaisyTabsTrigger>
         </DaisyTabsList>
 
         {/* Configuration Tab */}
-        <DaisyTabsContent value="configuration" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="configuration" className="space-y-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <FileText className="h-5 w-5" />
@@ -329,13 +329,14 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
 </DaisyCardBody>
               <div className="space-y-2">
                 <DaisyLabel htmlFor="template">Report Template</DaisyLabel>
-                <DaisySelect onValueChange={handleTemplateSelect} />
-                  <DaisySelectTrigger />
-                    <DaisySelectValue placeholder="Select a report template" /></DaisySelect>
-                  <DaisySelectContent />
-                    {templates.map(template => (
-                      <DaisySelectItem key={template.id} value={template.id} />
-                        <div className="flex flex-col">
+                <DaisySelect onValueChange={handleTemplateSelect} >
+                    <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select a report template" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      {templates.map(template => (
+                      <DaisySelectItem key={template.id} value={template.id} >
+                          <div className="flex flex-col">
                           <span className="font-medium">{template.name}</span>
                           <span className="text-sm text-muted-foreground">{template.description}</span>
                         </div>
@@ -351,9 +352,9 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisyInput
                   id="reportName"
                   value={config.name}
-                  onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter report name"
-                />
+                  onChange={(e) = />
+setConfig(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter report name" />
               </div>
 
               {/* Output Formats */}
@@ -365,8 +366,8 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                       <DaisyCheckbox
                         id={format}
                         checked={config.format.includes(format)}
-                        onCheckedChange={(checked) => handleFormatChange(format, checked as boolean)}
-                      />
+                        onCheckedChange={(checked) = />
+handleFormatChange(format, checked as boolean)} />
                       <DaisyLabel htmlFor={format} className="capitalize">{format}</DaisyCheckbox>
                     </div>
                   ))}
@@ -383,10 +384,10 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                         <DaisyCheckbox
                           id={param}
                           checked={config.parameters[param] || false}
-                          onCheckedChange={(checked) => handleParameterChange(param, checked)}
-                        />
-                        <DaisyLabel htmlFor={param} className="capitalize" />
-                          {param.replace(/([A-Z])/g, ' $1').trim()}
+                          onCheckedChange={(checked) = />
+handleParameterChange(param, checked)} />
+                        <DaisyLabel htmlFor={param} className="capitalize" >
+                            {param.replace(/([A-Z])/g, ' $1').trim()}
                         </DaisyCheckbox>
                       </div>
                     ))}
@@ -398,9 +399,9 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         </DaisyTabsContent>
 
         {/* Filters Tab */}
-        <DaisyTabsContent value="filters" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="filters" className="space-y-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Settings className="h-5 w-5" />
@@ -415,18 +416,18 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisyLabel>Date Range</DaisyLabel>
                 {/* <DatePickerWithRange
                   date={config.filters.dateRange}
-                  onDateChange={(range) => handleFilterChange('dateRange', range)}
-                /> */}
+                  onDateChange={(range) => handleFilterChange('dateRange', range)} /> */}
               </div>
 
               {/* Categories */}
               <div className="space-y-2">
                 <DaisyLabel>Categories</DaisyLabel>
                 <DaisySelect onValueChange={(value) => handleFilterChange('categories', [value])} />
-                  <DaisySelectTrigger />
-                    <DaisySelectValue placeholder="Select categories" /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="security">Security</DaisySelectContent>
+                  <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select categories" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="security">Security</DaisySelectItem>
                     <DaisySelectItem value="operational">Operational</DaisySelectItem>
                     <DaisySelectItem value="financial">Financial</DaisySelectItem>
                     <DaisySelectItem value="regulatory">Regulatory</DaisySelectItem>
@@ -439,10 +440,11 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
               <div className="space-y-2">
                 <DaisyLabel>Status</DaisyLabel>
                 <DaisySelect onValueChange={(value) => handleFilterChange('status', [value])} />
-                  <DaisySelectTrigger />
-                    <DaisySelectValue placeholder="Select status" /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="active">Active</DaisySelectContent>
+                  <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select status" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="active">Active</DaisySelectItem>
                     <DaisySelectItem value="mitigated">Mitigated</DaisySelectItem>
                     <DaisySelectItem value="closed">Closed</DaisySelectItem>
                     <DaisySelectItem value="monitoring">Monitoring</DaisySelectItem>
@@ -454,10 +456,11 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
               <div className="space-y-2">
                 <DaisyLabel>Priority</DaisyLabel>
                 <DaisySelect onValueChange={(value) => handleFilterChange('priority', [value])} />
-                  <DaisySelectTrigger />
-                    <DaisySelectValue placeholder="Select priority" /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="critical">Critical</DaisySelectContent>
+                  <DaisySelectTrigger>
+                      <DaisySelectValue placeholder="Select priority" />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="critical">Critical</DaisySelectItem>
                     <DaisySelectItem value="high">High</DaisySelectItem>
                     <DaisySelectItem value="medium">Medium</DaisySelectItem>
                     <DaisySelectItem value="low">Low</DaisySelectItem>
@@ -469,9 +472,9 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         </DaisyTabsContent>
 
         {/* Delivery Tab */}
-        <DaisyTabsContent value="delivery" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="delivery" className="space-y-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Mail className="h-5 w-5" />
@@ -487,10 +490,10 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <div className="flex gap-2">
                   <DaisyInput
                     value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
+                    onChange={(e) = />
+setEmailInput(e.target.value)}
                     placeholder="Enter email address"
-                    onKeyPress={(e) => e.key === 'Enter' && addRecipient()}
-                  />
+                    onKeyPress={(e) => e.key === 'Enter' && addRecipient()} />
                   <DaisyButton onClick={addRecipient} variant="outline" >
   Add
 </DaisyInput>
@@ -513,11 +516,11 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                   <DaisyCheckbox
                     id="scheduled"
                     checked={config.isScheduled}
-                    onCheckedChange={(checked) => setConfig(prev => ({ ...prev, isScheduled: checked as boolean }))}
-                  />
-                  <DaisyLabel htmlFor="scheduled" className="flex items-center gap-2" />
-                    <DaisyCalendar className="h-4 w-4" />
-                    Schedule this report
+                    onCheckedChange={(checked) = />
+setConfig(prev => ({ ...prev, isScheduled: checked as boolean }))} />
+                  <DaisyLabel htmlFor="scheduled" className="flex items-center gap-2" >
+                      <DaisyCalendar className="h-4 w-4" />
+Schedule this report
                   </DaisyCheckbox>
                 </div>
 
@@ -534,10 +537,11 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                             }))
                           }
                         >
-                          <DaisySelectTrigger />
-                            <DaisySelectValue placeholder="Select frequency" /></DaisySelect>
-                          <DaisySelectContent />
-                            <DaisySelectItem value="daily">Daily</DaisySelectContent>
+                          <DaisySelectTrigger>
+                              <DaisySelectValue placeholder="Select frequency" />
+</DaisySelect>
+                          <DaisySelectContent >
+                              <DaisySelectItem value="daily">Daily</DaisySelectItem>
                             <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
                             <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
                             <DaisySelectItem value="quarterly">Quarterly</DaisySelectItem>
@@ -549,13 +553,12 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                         <DaisyLabel>Time</DaisyLabel>
                         <DaisyInput
                           type="time"
-                          onChange={(e) => 
-                            setConfig(prev => ({
+                          onChange={(e) = />
+setConfig(prev => ({
                               ...prev,
                               schedule: { ...prev.schedule, time: e.target.value, frequency: prev.schedule?.frequency || 'daily', timezone: prev.schedule?.timezone || 'UTC', enabled: prev.schedule?.enabled || false }
                             }))
-                          }
-                        />
+                          } />
                       </div>
                     </div>
 
@@ -572,10 +575,11 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                           }))
                         }
                       >
-                        <DaisySelectTrigger />
-                          <DaisySelectValue placeholder="Select timezone" /></DaisySelect>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="UTC">UTC</DaisySelectContent>
+                        <DaisySelectTrigger>
+                            <DaisySelectValue placeholder="Select timezone" />
+</DaisySelect>
+                        <DaisySelectContent >
+                            <DaisySelectItem value="UTC">UTC</DaisySelectItem>
                           <DaisySelectItem value="America/New_York">Eastern Time</DaisySelectItem>
                           <DaisySelectItem value="America/Chicago">Central Time</DaisySelectItem>
                           <DaisySelectItem value="America/Denver">Mountain Time</DaisySelectItem>
@@ -591,9 +595,9 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         </DaisyTabsContent>
 
         {/* Preview Tab */}
-        <DaisyTabsContent value="preview" className="space-y-6" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="preview" className="space-y-6" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Eye className="h-5 w-5" />
@@ -653,9 +657,10 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         <DaisyButton 
           onClick={handleGenerate} 
           disabled={isGenerating}
-          className="flex-1" >
-  {isGenerating ? (
-</DaisyButton>
+          className="flex-1">
+          {isGenerating ? (
+
+        </DaisyButton>
             <>
               <Clock className="h-4 w-4 mr-2 animate-spin" />
               Generating...

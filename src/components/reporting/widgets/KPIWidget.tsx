@@ -236,8 +236,7 @@ export function KPIWidget({
                       data.value >= data.target ? 'bg-green-600' : 
                       data.value >= data.target * 0.8 ? 'bg-yellow-600' : 'bg-red-600'
                     }`}
-                    style={{ width: `${Math.min((data.value / data.target) * 100, 100)}%` }}
-                  />
+                    style={{ width: `${Math.min((data.value / data.target) * 100, 100)}%` }} />
                 </div>
               </div>
             )}

@@ -408,8 +408,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                   {/* Resize Handle */}
                   <div
                     className="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-200 transition-colors"
-                    onMouseDown={(e) => handleMouseDown(e, column.id, columnWidths[column.id])}
-                  />
+                    onMouseDown={(e) => handleMouseDown(e, column.id, columnWidths[column.id])} />
                 </th>
               ))}
             </tr>
@@ -464,20 +463,22 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                                 handleCellSave(value);
                               }}
                             >
-                              <DaisySelectTrigger className="h-8 border-0 focus:ring-2 focus:ring-blue-500" />
-                                <DaisySelectValue /></DaisySelect>
-                              <DaisySelectContent />
-                                {column.dropdownOptions?.map((option) => (
-                                  <DaisySelectItem key={option} value={option} />
-                                    {option}
-                                  </DaisySelectContent>
+                              <DaisySelectTrigger className="h-8 border-0 focus:ring-2 focus:ring-blue-500">
+                                  <DaisySelectValue />
+</DaisySelect>
+                              <DaisySelectContent >
+                                  {column.dropdownOptions?.map((option) => (
+                                  <DaisySelectItem key={option} value={option} >
+                                      {option}
+                                  </DaisySelectItem>
                                 ))}
                               </DaisySelectContent>
                             </DaisySelect>
                           ) : (
                             <DaisyTextarea
                               value={editingCell.value}
-                              onChange={(e) => setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
+                              onChange={(e) = />
+setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
                               onBlur={() => handleCellSave(editingCell.value)}
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -490,8 +491,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                               }}
                               className="min-h-[32px] max-h-[160px] border-0 focus:ring-2 focus:ring-blue-500 resize-none"
                               style={{ height: Math.min(calculateRowHeight(row) - 16, 160) }}
-                              autoFocus
-                            />
+                              autoFocus />
                           )}
                         </div>
                       ) : (
@@ -560,7 +560,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       {/* Cell Detail Modal */}
       <DaisyDialog open={!!cellModal} onOpenChange={() => setCellModal(null)} />
         <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle className="flex items-center space-x-2" >
   <div className="text-gray-500">
@@ -580,13 +580,13 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                 </label>
                 <DaisyTextarea
                   value={cellModal.cell.displayValue}
-                  onChange={(e) => {
+                  onChange={(e) = />
+{
                     const updatedCell = { ...cellModal.cell, displayValue: e.target.value, value: e.target.value };
                     setCellModal({ ...cellModal, cell: updatedCell });
                   }}
                   className="min-h-[100px]"
-                  placeholder="Enter value..."
-                />
+                  placeholder="Enter value..." />
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t">
@@ -617,11 +617,14 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <DaisyButton variant="outline" onClick={() => setCellModal(null)} />
+                  <DaisyButton variant="outline" onClick={() =>
+          setCellModal(null)} />
                     Cancel
-                  </DaisyButton>
+                  
+        </DaisyButton>
                   <DaisyButton
-                    onClick={() => {
+                    onClick={() =>
+          {
                       if (cellModal) {
                         onCellEdit(cellModal.rowId, cellModal.column.id, cellModal.cell.value);
                         setCellModal(null);
@@ -629,7 +632,8 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                     }}
                   >
                     Save Changes
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </div>
               </div>
             </div>
@@ -640,7 +644,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       {/* AI Insight Modal */}
       <DaisyDialog open={!!aiInsightCell} onOpenChange={() => setAiInsightCell(null)} />
         <DaisyDialogContent className="max-w-xl" >
-  <DaisyDialogHeader />
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle className="flex items-center gap-2" >
   <Sparkles className="w-5 h-5 text-purple-600" />
@@ -664,12 +668,14 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
               </div>
             )}
             <div className="flex justify-end">
-              <DaisyButton onClick={() => {
+              <DaisyButton onClick={() =>
+          {
                 setAiInsightCell(null);
                 setAiInsight('');
               }}>
                 Close
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </div>
         </DaisyDialogContent>

@@ -436,20 +436,20 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       transition={{ duration: 0.2 }}
     >
       <DaisyCard className="h-full hover:shadow-md transition-shadow duration-200" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-2">
               <DaisyCheckbox
                 checked={selectedItems.includes(questionnaire.id)}
-                onCheckedChange={() => {
+                onCheckedChange={() = />
+{
                   setSelectedItems(prev =>
                     prev.includes(questionnaire.id)
                       ? prev.filter(id => id !== questionnaire.id)
                       : [...prev, questionnaire.id]
                   );
-                }}
-              />
+                }} />
               {getCategoryIcon(questionnaire.category)}
               <DaisyCardTitle className="text-lg font-semibold line-clamp-2" >
   {questionnaire.title}
@@ -465,15 +465,15 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
               </DaisyButton>
               
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="ghost" size="sm" >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="ghost" size="sm" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
                     <Eye className="w-4 h-4 mr-2" />
                     View
                   </DaisyDropdownMenuContent>
@@ -486,16 +486,16 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                     Duplicate
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem />
-                    <Share2 className="w-4 h-4 mr-2" />
+<DaisyDropdownMenuItem >
+                      <Share2 className="w-4 h-4 mr-2" />
                     Share
                   </DaisyDropdownMenuSeparator>
-                  <DaisyDropdownMenuItem />
-                    <Download className="w-4 h-4 mr-2" />
+                  <DaisyDropdownMenuItem >
+                      <Download className="w-4 h-4 mr-2" />
                     Export
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem 
+                  <DaisyDropdownMenuSeparator / />
+<DaisyDropdownMenuItem 
                     onClick={() => handleDelete(questionnaire.id)}
                     className="text-red-600" />
                     <Trash2 className="w-4 h-4 mr-2" />
@@ -579,7 +579,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             </div>
             <div className="flex items-center space-x-2">
               <DaisyCalendar className="w-3 h-3" />
-              <span>{questionnaire.lastModified.toLocaleDateString()}</span>
+<span>{questionnaire.lastModified.toLocaleDateString()}</span>
             </div>
           </div>
 
@@ -610,14 +610,14 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       <div className="flex items-center space-x-4 p-4 hover:bg-gray-50">
         <DaisyCheckbox
           checked={selectedItems.includes(questionnaire.id)}
-          onCheckedChange={() => {
+          onCheckedChange={() = />
+{
             setSelectedItems(prev =>
               prev.includes(questionnaire.id)
                 ? prev.filter(id => id !== questionnaire.id)
                 : [...prev, questionnaire.id]
             );
-          }}
-        />
+          }} />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-3">
@@ -655,15 +655,15 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             <Star className={`w-4 h-4 ${questionnaire.isStarred ? 'fill-current' : ''}`} />
           </DaisyButton>
           
-          <DaisyDropdownMenu />
-            <DaisyDropdownMenuTrigger asChild />
-              <DaisyButton variant="ghost" size="sm" >
+          <DaisyDropdownMenu >
+              <DaisyDropdownMenuTrigger asChild >
+                <DaisyButton variant="ghost" size="sm" >
   <MoreVertical className="w-4 h-4" />
 </DaisyDropdownMenu>
               </DaisyButton>
             </DaisyDropdownMenuTrigger>
-            <DaisyDropdownMenuContent />
-              <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
+            <DaisyDropdownMenuContent >
+                <DaisyDropdownMenuItem onClick={() => handleView(questionnaire.id)} />
                 <Eye className="w-4 h-4 mr-2" />
                 View
               </DaisyDropdownMenuContent>
@@ -676,7 +676,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                 Duplicate
               </DaisyDropdownMenuItem>
               <DaisyDropdownMenuSeparator />
-              <DaisyDropdownMenuItem 
+<DaisyDropdownMenuItem 
                 onClick={() => handleDelete(questionnaire.id)}
                 className="text-red-600" />
                 <Trash2 className="w-4 h-4 mr-2" />
@@ -698,8 +698,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
         onSelectionChange={handleSelectionChange}
         searchableFields={searchableFields}
         availableTags={tags}
-        onTagsChange={handleTagsChange}
-      />
+        onTagsChange={handleTagsChange} />
 
       {/* View Controls */}
       <div className="flex items-center justify-between">
@@ -707,10 +706,11 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
           <div className="flex items-center space-x-2">
             <DaisyLabel className="text-sm font-medium">Sort by:</DaisyLabel>
             <DaisySelect value={sortField} onValueChange={(value) => setSortField(value as keyof EnhancedQuestionnaire)} />
-              <DaisySelectTrigger className="w-40" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                <DaisySelectItem value="lastModified">Last Modified</DaisySelectContent>
+              <DaisySelectTrigger className="w-40">
+                  <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  <DaisySelectItem value="lastModified">Last Modified</DaisySelectItem>
                 <DaisySelectItem value="title">Title</DaisySelectItem>
                 <DaisySelectItem value="createdAt">Created Date</DaisySelectItem>
                 <DaisySelectItem value="responseCount">Response Count</DaisySelectItem>

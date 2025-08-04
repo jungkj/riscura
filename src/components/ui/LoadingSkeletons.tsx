@@ -67,8 +67,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
     return (
       <BaseSkeleton 
         variant={variant}
-        className={cn(heightClasses[lineHeight], 'w-full', className)}
-      />
+        className={cn(heightClasses[lineHeight], 'w-full', className)} />
     );
   };
 
@@ -81,8 +80,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
           className={cn(
             heightClasses[lineHeight],
             index === lines - 1 ? `w-[${lastLineWidth}]` : 'w-full'
-          )}
-        />
+          )} />
       ))}
     </div>
   );
@@ -114,8 +112,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
 </DaisyCardSkeletonProps>
         <BaseSkeleton 
           variant={variant}
-          className="h-48 w-full rounded-t-lg rounded-b-none"
-        />
+          className="h-48 w-full rounded-t-lg rounded-b-none" />
       )}
       
       <DaisyCardBody className={cn(!hasImage && 'rounded-t-lg')} >
@@ -132,8 +129,7 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
   <TextSkeleton 
           lines={textLines} 
           variant={variant}
-          lineHeight="md"
-        />
+          lineHeight="md" />
 </DaisyCardBody>
         
         {hasActions && (
@@ -209,8 +205,7 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
                     className={cn(
                       'h-4',
                       colIndex === 0 ? 'w-32' : 'w-20'
-                    )}
-                  />
+                    )} />
                 </div>
               ))}
               {hasActions && (
@@ -251,7 +246,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: statsCards }).map((_, index) => (
           <DaisyCard key={index} >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyTableSkeletonProps>
               <BaseSkeleton variant={variant} className="h-4 w-24" />
               <BaseSkeleton variant={variant} className="h-4 w-4" />
@@ -270,7 +265,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
         {/* Chart Section */}
         {hasChart && (
           <DaisyCard className="col-span-4" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <BaseSkeleton variant={variant} className="h-6 w-48" />
               <BaseSkeleton variant={variant} className="h-4 w-32" />
@@ -285,7 +280,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
         {/* Activity Feed */}
         {hasActivity && (
           <DaisyCard className="col-span-3" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
               <BaseSkeleton variant={variant} className="h-6 w-32" />
             
@@ -310,7 +305,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       {/* Table Section */}
       {hasTable && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <div className="flex items-center justify-between">
               <BaseSkeleton variant={variant} className="h-6 w-40" />
@@ -323,8 +318,7 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
               rows={8}
               columns={5}
               hasActions={true}
-              showCheckboxes={true}
-            />
+              showCheckboxes={true} />
 </DaisyCardBody></DaisyTableSkeleton>
         </DaisyCard>
       )}
@@ -507,8 +501,7 @@ export const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
                   className={cn(
                     'w-6',
                     `h-${Math.floor(Math.random() * 60) + 20}`
-                  )}
-                />
+                  )} />
               ))}
             </div>
           )}
@@ -560,7 +553,7 @@ export const PageSkeletons = {
       <div className="space-y-6">
         <BaseSkeleton className="h-8 w-64" />
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <BaseSkeleton className="h-6 w-48" />
             <BaseSkeleton className="h-4 w-96" />

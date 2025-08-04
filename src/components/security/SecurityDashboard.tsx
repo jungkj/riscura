@@ -437,8 +437,7 @@ const ComplianceFrameworksPanel: React.FC = () => {
                   )}
                   style={{
                     width: `${(framework.controls.implemented / framework.controls.total) * 100}%`
-                  }}
-                />
+                  }} />
               </div>
             </div>
 
@@ -472,7 +471,7 @@ const ComplianceFrameworksPanel: React.FC = () => {
 
             {/* Assessment Dates */}
             <DaisySeparator className="my-enterprise-3" />
-            <div className="flex items-center justify-between text-caption text-text-secondary">
+<div className="flex items-center justify-between text-caption text-text-secondary">
               <span>Last: {framework.lastAssessment.toLocaleDateString()}</span>
               <span>Next: {framework.nextAssessment.toLocaleDateString()}</span>
             </div>
@@ -521,8 +520,7 @@ const SecurityControlsMonitoring: React.FC = () => {
                   className="h-2 rounded-full bg-interactive-primary transition-all duration-300"
                   style={{
                     width: `${(category.implemented / category.total) * 100}%`
-                  }}
-                />
+                  }} />
               </div>
               <div className="w-16 bg-surface-secondary rounded-full h-2">
                 <div
@@ -534,8 +532,7 @@ const SecurityControlsMonitoring: React.FC = () => {
                   )}
                   style={{
                     width: `${category.effectiveness}%`
-                  }}
-                />
+                  }} />
               </div>
             </div>
           </div>
@@ -625,9 +622,9 @@ export const SecurityDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="overview">Overview</DaisySeparator>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" >
+          <DaisyTabsList >
+            <DaisyTabsTrigger value="overview">Overview</DaisySeparator>
           <DaisyTabsTrigger value="threats">Threat Monitoring</DaisyTabsTrigger>
           <DaisyTabsTrigger value="compliance">Compliance</DaisyTabsTrigger>
           <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
@@ -635,8 +632,8 @@ export const SecurityDashboard: React.FC = () => {
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="overview" className="space-y-enterprise-6" />
-        {/* Security Metrics */}
+      <DaisyTabsContent value="overview" className="space-y-enterprise-6" >
+          {/* Security Metrics */}
         <ContentSection 
           title="Security Metrics"
           subtitle="Real-time security posture and key performance indicators"
@@ -656,8 +653,8 @@ export const SecurityDashboard: React.FC = () => {
         </ContentSection>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="threats" className="space-y-enterprise-6" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="threats" className="space-y-enterprise-6" >
+          <div className="text-center py-enterprise-12">
           <DaisyAlertTriangle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" >
   <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
 </DaisyTabsContent>
@@ -669,8 +666,8 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="compliance" className="space-y-enterprise-6" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="compliance" className="space-y-enterprise-6" >
+          <div className="text-center py-enterprise-12">
           <CheckCircle className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Compliance Management
@@ -681,8 +678,8 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="controls" className="space-y-enterprise-6" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="controls" className="space-y-enterprise-6" >
+          <div className="text-center py-enterprise-12">
           <Shield className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Security Controls
@@ -693,8 +690,8 @@ export const SecurityDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="audit" className="space-y-enterprise-6" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="audit" className="space-y-enterprise-6" >
+          <div className="text-center py-enterprise-12">
           <Activity className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Audit Trail
@@ -709,8 +706,7 @@ export const SecurityDashboard: React.FC = () => {
       <SecuritySettingsModal
         open={isSettingsModalOpen}
         onOpenChange={setIsSettingsModalOpen}
-        onSettingsUpdated={handleSettingsUpdated}
-      />
+        onSettingsUpdated={handleSettingsUpdated} />
     </MainContentArea>
   );
 };

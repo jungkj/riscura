@@ -289,9 +289,10 @@ const InteractiveDemo = () => {
 
                 {/* Action Buttons */}
                 <div className="flex justify-center space-x-4">
-                  <DaisyButton variant="outline" onClick={handleReset} >
-  Try Again
-</DaisyButton>
+                  <DaisyButton variant="outline" onClick={handleReset}>
+          Try Again
+
+        </DaisyButton>
                   </DaisyButton>
                   <DaisyButton className="bg-blue-600 hover:bg-blue-700" >
   <Download className="w-4 h-4 mr-2" />

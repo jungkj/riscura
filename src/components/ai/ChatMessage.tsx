@@ -117,9 +117,11 @@ const SuggestionCard: React.FC<{
         <DaisyButton 
           size="sm" 
           variant="outline" 
-          onClick={() => onApply(suggestion)}
+          onClick={() =>
+          onApply(suggestion)}
           className="ml-2" />
           Apply
+        
         </DaisyButton>
       </div>
     </DaisyCard>
@@ -225,8 +227,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const messageMaxWidth = isAI ? '85%' : '75%';
 
   return (
-    <DaisyTooltipProvider />
-      <motion.div
+    <DaisyTooltipProvider>
+        <motion.div
         ref={messageRef}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -273,12 +275,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               </>
             )}
             <DaisySeparator orientation="vertical" className="h-3" />
-            <DaisyTooltip />
-              <DaisyTooltipTrigger />
-                <span>{formatDistanceToNow(message.timestamp, { addSuffix: true })}</span>
+<DaisyTooltip>
+                <DaisyTooltipTrigger>
+                  <span>{formatDistanceToNow(message.timestamp, { addSuffix: true })}</span>
               </DaisySeparator>
-              <DaisyTooltipContent />
-                {message.timestamp.toLocaleString()}
+              <DaisyTooltipContent>
+                  {message.timestamp.toLocaleString()}
               </DaisyTooltipContent>
             </DaisyTooltip>
             {getStatusIcon()}
@@ -299,9 +301,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               className="prose prose-sm max-w-none dark:prose-invert"
               dangerouslySetInnerHTML={{ 
                 __html: formatMessageContent(message.content) 
-              }}
-            />
-
+              }} />
             {/* Token Usage (for AI messages) */}
             {isAI && message.usage && (
               <div className="mt-3 pt-3 border-t border-border text-xs text-muted-foreground">
@@ -314,9 +314,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 
             {/* Message Actions */}
             <div className="absolute -bottom-2 right-2 flex gap-1">
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton 
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton 
                     variant="secondary" 
                     size="sm" 
                     className="h-6 w-6 p-0 bg-background border shadow-sm" >
@@ -324,21 +324,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 </DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end" />
-                  <DaisyDropdownMenuItem onClick={handleCopy} />
-                    <Copy className="h-4 w-4 mr-2" />
+                <DaisyDropdownMenuContent align="end" >
+                    <DaisyDropdownMenuItem onClick={handleCopy} >
+                      <Copy className="h-4 w-4 mr-2" />
                     Copy
                   </DaisyDropdownMenuContent>
                   
                   {isAI && onRegenerate && (
-                    <DaisyDropdownMenuItem onClick={onRegenerate} />
-                      <RotateCcw className="h-4 w-4 mr-2" />
+                    <DaisyDropdownMenuItem onClick={onRegenerate} >
+                        <RotateCcw className="h-4 w-4 mr-2" />
                       Regenerate
                     </DaisyDropdownMenuItem>
                   )}
                   
-                  <DaisyDropdownMenuItem onClick={handleSpeak} />
-                    {isSpeaking ? (
+                  <DaisyDropdownMenuItem onClick={handleSpeak} >
+                      {isSpeaking ? (
                       <>
                         <VolumeX className="h-4 w-4 mr-2" />
                         Stop
@@ -354,7 +354,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   {isAI && onFeedback && (
                     <>
                       <DaisyDropdownMenuSeparator />
-                      <DaisyDropdownMenuItem onClick={() => handleFeedback('positive')} />
+<DaisyDropdownMenuItem onClick={() => handleFeedback('positive')} />
                         <ThumbsUp className="h-4 w-4 mr-2" />
                         Good response
                       </DaisyDropdownMenuSeparator>
@@ -384,8 +384,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   onDownload={() => {
                     // Implementation for download
                     console.log('Download:', attachment.title);
-                  }}
-                />
+                  }} />
               ))}
             </div>
           )}
@@ -398,8 +397,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 <SuggestionCard
                   key={suggestion.id}
                   suggestion={suggestion}
-                  onApply={onApplySuggestion}
-                />
+                  onApply={onApplySuggestion} />
               ))}
             </div>
           )}

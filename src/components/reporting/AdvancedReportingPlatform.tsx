@@ -151,8 +151,10 @@ const ReportTemplatesGrid: React.FC = () => {
         <DaisyButton
           variant={selectedCategory === 'all' ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setSelectedCategory('all')} />
+          onClick={() =>
+          setSelectedCategory('all')} />
           All Reports
+        
         </DaisyButton>
         <DaisyButton
           variant={selectedCategory === 'regulatory' ? 'default' : 'outline'}
@@ -430,25 +432,25 @@ export const AdvancedReportingPlatform: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="templates">Report Templates</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" >
+          <DaisyTabsList >
+            <DaisyTabsTrigger value="templates">Report Templates</DaisyTabs>
           <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
           <DaisyTabsTrigger value="insights">AI Insights</DaisyTabsTrigger>
           <DaisyTabsTrigger value="distribution">Distribution</DaisyTabsTrigger>
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="templates" className="space-y-enterprise-6" />
-        <ReportTemplatesGrid />
+      <DaisyTabsContent value="templates" className="space-y-enterprise-6" >
+          <ReportTemplatesGrid />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="builder" className="space-y-enterprise-6" />
-        <ReportBuilderInterface />
+      <DaisyTabsContent value="builder" className="space-y-enterprise-6" >
+          <ReportBuilderInterface />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="insights" className="space-y-enterprise-6" />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-6">
+      <DaisyTabsContent value="insights" className="space-y-enterprise-6" >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-6">
           <AutomatedInsightsPanel />
           <ContentCard title="Predictive Analytics" className="shadow-notion-sm">
             <div className="text-center py-enterprise-8">
@@ -461,16 +463,17 @@ export const AdvancedReportingPlatform: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="distribution" className="space-y-enterprise-6" />
-        <ContentCard title="Scheduling & Distribution" className="shadow-notion-sm">
+      <DaisyTabsContent value="distribution" className="space-y-enterprise-6" >
+          <ContentCard title="Scheduling & Distribution" className="shadow-notion-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-enterprise-6">
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Schedule</h4>
-              <DaisySelect />
-                <DaisySelectTrigger />
-                  <DaisySelectValue placeholder="Select frequency" /></DaisyTabsContent>
-                <DaisySelectContent />
-                  <DaisySelectItem value="daily">Daily</DaisySelectContent>
+              <DaisySelect >
+                  <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Select frequency" />
+</DaisyTabsContent>
+                <DaisySelectContent >
+                    <DaisySelectItem value="daily">Daily</DaisySelectItem>
                   <DaisySelectItem value="weekly">Weekly</DaisySelectItem>
                   <DaisySelectItem value="monthly">Monthly</DaisySelectItem>
                   <DaisySelectItem value="quarterly">Quarterly</DaisySelectItem>
@@ -479,11 +482,12 @@ export const AdvancedReportingPlatform: React.FC = () => {
             </div>
             <div className="space-y-enterprise-3">
               <h4 className="text-body-sm font-semibold text-text-primary">Distribution</h4>
-              <DaisySelect />
-                <DaisySelectTrigger />
-                  <DaisySelectValue placeholder="Select delivery method" /></DaisySelect>
-                <DaisySelectContent />
-                  <DaisySelectItem value="email">Email</DaisySelectContent>
+              <DaisySelect >
+                  <DaisySelectTrigger>
+                    <DaisySelectValue placeholder="Select delivery method" />
+</DaisySelect>
+                <DaisySelectContent >
+                    <DaisySelectItem value="email">Email</DaisySelectItem>
                   <DaisySelectItem value="slack">Slack</DaisySelectItem>
                   <DaisySelectItem value="portal">Portal Only</DaisySelectItem>
                 </DaisySelectContent>

@@ -171,8 +171,7 @@ const ImageErrorFallback = memo(({
         className={className}
         onError={() => {
           // If fallback also fails, show error state
-        }}
-      />
+        }} />
     );
   };
 
@@ -185,9 +184,10 @@ const ImageErrorFallback = memo(({
         <DaisyAlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" >
   <p className="text-sm text-gray-500 mb-2">
 </DaisyAlertCircle>Failed to load image</p>
-        <DaisyButton onClick={retry} variant="outline" size="sm" >
-  Retry
-</DaisyButton>
+        <DaisyButton onClick={retry} variant="outline" size="sm">
+          Retry
+
+        </DaisyButton>
         </DaisyButton>
       </div>
     </div>
@@ -427,18 +427,16 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
             src={blurDataURL}
             alt=""
             className="absolute inset-0 w-full h-full object-cover filter blur-sm scale-110"
-            aria-hidden="true"
-          />
+            aria-hidden="true" />
         ) : (
-          <DaisySkeleton className="w-full h-full" />
-        )}
+          <DaisySkeleton className="w-full h-full" >
+          )}
         
         {isLoading && loadProgress > 0 && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
             <div 
               className="h-full bg-blue-500 transition-all duration-300"
-              style={{ width: `${loadProgress}%` }}
-            />
+              style={{ width: `${loadProgress}%` }} />
           </div>
         )}
       </div>
@@ -457,8 +455,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
             retry={retryLoad}
             fallbackSrc={fallbackSrc}
             alt={alt}
-            className={className}
-          />
+            className={className} />
         )}
       </div>
     );
@@ -503,8 +500,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
         onLoad={handleLoad}
         onError={handleError}
         onLoadStart={handleLoadStart}
-        onClick={enableZoom ? () => setIsZoomed(!isZoomed) : undefined}
-      />
+        onClick={enableZoom ? () => setIsZoomed(!isZoomed) : undefined} />
 
       {/* Watermark */}
       {watermark && (
@@ -562,8 +558,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
             alt={alt}
             fill
             className="object-contain"
-            quality={100}
-          />
+            quality={100} />
         </div>
       )}
     </div>

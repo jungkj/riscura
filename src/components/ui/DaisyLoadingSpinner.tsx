@@ -31,10 +31,10 @@ export const LoadingSpinner = DaisyLoadingSpinner;
 
 export const PageLoadingSpinner: React.FC<{ text?: string }> = ({ text = 'Loading...' }) => (
   <div className="flex items-center justify-center min-h-[400px]">
-    <DaisyLoadingSpinner size="lg" text={text} />
-  </div>
+    <DaisyLoadingSpinner size="lg" text={text} >
+    </div>
 );
 
 export const InlineLoadingSpinner: React.FC<{ text?: string }> = ({ text }) => (
-  <DaisyLoadingSpinner size="sm" text={text} className="py-2" />
-);
+  <DaisyLoadingSpinner size="sm" text={text} className="py-2" >
+  );

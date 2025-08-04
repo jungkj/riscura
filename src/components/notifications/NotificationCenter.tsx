@@ -161,9 +161,9 @@ export function NotificationCenter() {
 
   return (
     <>
-      <DaisyDropdownMenu />
-        <DaisyDropdownMenuTrigger asChild />
-          <DaisyButton variant="ghost" shape="square" size="md" className="relative" >
+      <DaisyDropdownMenu >
+          <DaisyDropdownMenuTrigger asChild >
+            <DaisyButton variant="ghost" shape="square" size="md" className="relative" >
   <Bell className="h-5 w-5" />
 </DaisyDropdownMenu>
             {unreadCount > 0 && (
@@ -176,8 +176,8 @@ export function NotificationCenter() {
             )}
           </DaisyButton>
         </DaisyDropdownMenuTrigger>
-        <DaisyDropdownMenuContent align="end" className="w-[400px]" />
-          <div className="flex items-center justify-between p-4 border-b">
+        <DaisyDropdownMenuContent align="end" className="w-[400px]" >
+            <div className="flex items-center justify-between p-4 border-b">
             <h3 className="font-semibold">Notifications</h3>
             <div className="flex items-center gap-2">
               <DaisyButton
@@ -197,16 +197,16 @@ export function NotificationCenter() {
           </div>
 
           <DaisyTabs value={filter} onValueChange={(v) => setFilter(v as 'all' | 'unread')} />
-            <DaisyTabsList className="grid w-full grid-cols-2" />
-              <DaisyTabsTrigger value="all">All</DaisyTabs>
-              <DaisyTabsTrigger value="unread" />
-                Unread {unreadCount > 0 && `(${unreadCount})`}
+            <DaisyTabsList className="grid w-full grid-cols-2" >
+                <DaisyTabsTrigger value="all">All</DaisyTabs>
+              <DaisyTabsTrigger value="unread" >
+                  Unread {unreadCount > 0 && `(${unreadCount})`}
               </DaisyTabsTrigger>
             </DaisyTabsList>
             
-            <DaisyTabsContent value={filter} className="mt-0" />
-              <DaisyScrollArea className="h-[400px]" />
-                {loading ? (
+            <DaisyTabsContent value={filter} className="mt-0" >
+                <DaisyScrollArea className="h-[400px]" >
+                  {loading ? (
                   <div className="p-8 text-center text-muted-foreground">
                     Loading notifications...
                   </div>
@@ -222,8 +222,7 @@ export function NotificationCenter() {
                         key={notification.id}
                         notification={notification}
                         onRead={() => markAsRead(notification.id)}
-                        onDismiss={() => dismissNotification(notification.id)}
-                      />
+                        onDismiss={() => dismissNotification(notification.id)} />
                     ))}
                   </div>
                 )}
@@ -232,8 +231,8 @@ export function NotificationCenter() {
           </DaisyTabs>
 
           <DaisyDropdownMenuSeparator />
-          <DaisyDropdownMenuItem asChild />
-            <a
+<DaisyDropdownMenuItem asChild >
+              <a
               href="/notifications"
               className="w-full text-center py-2 text-sm text-muted-foreground hover:text-foreground"
             >
@@ -250,8 +249,7 @@ export function NotificationCenter() {
           isSubscribed={isSubscribed}
           onSubscribe={subscribe}
           onUnsubscribe={unsubscribe}
-          pushSupported={isSupported}
-        />
+          pushSupported={isSupported} />
       )}
     </>
   );

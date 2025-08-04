@@ -329,7 +329,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   return (
     <>
       <DaisyCard className={className} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center" >
   <Target className="w-5 h-5 mr-2 text-blue-600" />
@@ -429,8 +429,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
         onClose={() => setSelectedCell(null)}
         risks={selectedCell?.risks || []}
         impact={selectedCell?.impact || ''}
-        likelihood={selectedCell?.likelihood || ''}
-      />
+        likelihood={selectedCell?.likelihood || ''} />
     </>
   );
 }; 

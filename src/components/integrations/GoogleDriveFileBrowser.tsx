@@ -95,9 +95,10 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
           </p>
           <DaisyButton
             onClick={connect}
-            className="mx-auto" >
-  Connect Google Drive
-</DaisyButton>
+            className="mx-auto">
+          Connect Google Drive
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       </DaisyCard>
@@ -128,15 +129,15 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Search for Excel files..."
-            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
         <DaisyButton
           onClick={handleSearch}
           disabled={isLoading}
-          variant="outline" >
-  Search
-</DaisyButton>
+          variant="outline">
+          Search
+
+        </DaisyButton>
         </DaisyButton>
         <DaisyButton
           onClick={refresh}

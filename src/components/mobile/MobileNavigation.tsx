@@ -408,8 +408,7 @@ export default function MobileNavigation({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     autoFocus
-                    aria-label="Search navigation items"
-                  />
+                    aria-label="Search navigation items" />
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -427,8 +426,8 @@ export default function MobileNavigation({
             )}
             
             {/* Navigation Items */}
-            <DaisyScrollArea className="flex-1" />
-              <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
+            <DaisyScrollArea className="flex-1" >
+                <nav className="p-4 space-y-2" role="navigation" aria-label="Main navigation">
                 {filteredItems.map(item => renderNavigationItem(item))}
               </nav>
             </DaisyScrollArea>
@@ -452,8 +451,7 @@ export default function MobileNavigation({
               </DaisyButton>
               
               <DaisySeparator />
-              
-              <DaisyButton
+<DaisyButton
                 variant="ghost"
                 className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                 onClick={() => {

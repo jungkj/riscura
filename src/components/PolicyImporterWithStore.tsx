@@ -184,7 +184,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Upload Section */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Upload className="h-5 w-5" />
@@ -335,14 +335,14 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
   <DaisyCardBody className="pt-6" >
   </DaisyCard>
 </DaisyCardBody>
-                <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']} />
-                  {/* Risks Section */}
-                  <DaisyAccordionItem value="risks" />
-                    <DaisyAccordionTrigger className="text-lg font-semibold" />
-                      Identified Risks ({policyExtraction?.risks.length})
+                <DaisyAccordion type="multiple" defaultValue={['risks', 'controls']} >
+                    {/* Risks Section */}
+                  <DaisyAccordionItem value="risks" >
+                      <DaisyAccordionTrigger className="text-lg font-semibold" >
+                        Identified Risks ({policyExtraction?.risks.length})
                     </DaisyAccordion>
-                    <DaisyAccordionContent />
-                      <div className="space-y-4">
+                    <DaisyAccordionContent >
+                        <div className="space-y-4">
                         {policyExtraction?.risks.map((risk) => {
                           const itemId = `risk-${risk.id}`;
                           const isEditing = editingItems.has(itemId);
@@ -375,11 +375,10 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                     <div className="space-y-2">
                                       <DaisyTextarea
                                         value={editedTexts[itemId] || risk.text}
-                                        onChange={(e) => 
-                                          setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
+                                        onChange={(e) = />
+setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
                                         }
-                                        className="min-h-[100px]"
-                                      />
+                                        className="min-h-[100px]" />
                                       <div className="flex gap-2">
                                         <DaisyButton size="sm" onClick={() => saveEdit(itemId)} />
                                           <Save className="h-3 w-3 mr-1" />
@@ -423,12 +422,12 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                   </DaisyAccordionItem>
 
                   {/* Controls Section */}
-                  <DaisyAccordionItem value="controls" />
-                    <DaisyAccordionTrigger className="text-lg font-semibold" />
-                      Identified Controls ({policyExtraction?.controls.length})
+                  <DaisyAccordionItem value="controls" >
+                      <DaisyAccordionTrigger className="text-lg font-semibold" >
+                        Identified Controls ({policyExtraction?.controls.length})
                     </DaisyAccordionItem>
-                    <DaisyAccordionContent />
-                      <div className="space-y-4">
+                    <DaisyAccordionContent >
+                        <div className="space-y-4">
                         {policyExtraction?.controls.map((control) => {
                           const itemId = `control-${control.id}`;
                           const isEditing = editingItems.has(itemId);
@@ -461,11 +460,10 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                     <div className="space-y-2">
                                       <DaisyTextarea
                                         value={editedTexts[itemId] || control.text}
-                                        onChange={(e) => 
-                                          setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
+                                        onChange={(e) = />
+setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
                                         }
-                                        className="min-h-[100px]"
-                                      />
+                                        className="min-h-[100px]" />
                                       <div className="flex gap-2">
                                         <DaisyButton size="sm" onClick={() => saveEdit(itemId)} />
                                           <Save className="h-3 w-3 mr-1" />

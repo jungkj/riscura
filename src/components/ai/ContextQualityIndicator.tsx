@@ -58,10 +58,10 @@ const QualityMetric: React.FC<{
   };
 
   return (
-    <DaisyTooltipProvider />
-      <DaisyTooltip />
-        <DaisyTooltipTrigger asChild />
-          <div className="space-y-2">
+    <DaisyTooltipProvider>
+        <DaisyTooltip>
+          <DaisyTooltipTrigger asChild>
+            <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className={`p-1.5 rounded-md ${getQualityColor()}`}>
                 {icon}
@@ -76,14 +76,13 @@ const QualityMetric: React.FC<{
                   className="h-1.5 mt-1"
                   style={{
                     '--progress-background': getProgressColor()
-                  } as React.CSSProperties}
-                />
-              </div>
+                  } as React.CSSProperties} />
+</div>
             </div>
           </div>
         </DaisyTooltipProvider>
-        <DaisyTooltipContent />
-          <p className="max-w-xs">{description}</p>
+        <DaisyTooltipContent>
+            <p className="max-w-xs">{description}</p>
         </DaisyTooltipContent>
       </DaisyTooltip>
     
@@ -118,10 +117,10 @@ const ContextModeSelector: React.FC<{
   return (
     <div className="flex gap-1 p-1 bg-muted rounded-lg">
       {modes.map((mode) => (
-        <DaisyTooltipProvider key={mode.value} />
-          <DaisyTooltip />
-            <DaisyTooltipTrigger asChild />
-              <DaisyButton
+        <DaisyTooltipProvider key={mode.value}>
+            <DaisyTooltip>
+              <DaisyTooltipTrigger asChild>
+                <DaisyButton
                 variant={currentMode === mode.value ? 'primary' : 'ghost'}
                 size="sm"
                 onClick={() => onModeChange(mode.value)}
@@ -130,8 +129,8 @@ const ContextModeSelector: React.FC<{
                 <span className="ml-1">{mode.label}</span>
               </DaisyTooltipProvider>
             </DaisyTooltipTrigger>
-            <DaisyTooltipContent />
-              <p>{mode.description}</p>
+            <DaisyTooltipContent>
+                <p>{mode.description}</p>
             </DaisyTooltipContent>
           </DaisyTooltip>
         
@@ -186,7 +185,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
         
         <div className="flex-1">
           <DaisyProgress value={overallQuality * 100} className="h-1" />
-        </div>
+</div>
 
         <DaisyBadge variant="outline" className="text-xs" >
   {contextMode}
@@ -215,7 +214,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
       className={className}
     >
       <DaisyCard >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -253,24 +252,21 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               value={contextQuality.relevance}
               icon={<TrendingUp className="h-3 w-3" />}
               description="How relevant the current context is to your work and queries"
-              threshold={{ good: 0.6, warning: 0.3 }}
-            />
+              threshold={{ good: 0.6, warning: 0.3 }} />
 
             <QualityMetric
               label="Completeness"
               value={contextQuality.completeness}
               icon={<Database className="h-3 w-3" />}
               description="How complete the context information is for making informed decisions"
-              threshold={{ good: 0.7, warning: 0.4 }}
-            />
+              threshold={{ good: 0.7, warning: 0.4 }} />
 
             <QualityMetric
               label="Freshness"
               value={contextQuality.freshness}
               icon={<Clock className="h-3 w-3" />}
               description="How recent and up-to-date the context information is"
-              threshold={{ good: 0.8, warning: 0.5 }}
-            />
+              threshold={{ good: 0.8, warning: 0.5 }} />
           </div>
 
           {/* Context Mode Selector */}
@@ -282,8 +278,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
               </div>
               <ContextModeSelector
                 currentMode={contextMode}
-                onModeChange={onChangeMode}
-              />
+                onModeChange={onChangeMode} />
               <p className="text-xs text-muted-foreground">
                 Higher modes provide more context but may increase response time
               </p>

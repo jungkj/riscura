@@ -119,16 +119,16 @@ export function DashboardGrid({
         className={`${isExpanded ? 'col-span-full row-span-2' : ''}`}
       >
         <DaisyCard className="h-full bg-[#FAFAFA] border-[#D8C3A5] hover:shadow-lg transition-shadow font-inter" >
-  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" />
+  <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
 </DaisyCard>
             <DaisyCardTitle className="text-base font-semibold text-[#191919] font-inter" >
   {widget.title}
 </DaisyCardTitle>
             </DaisyCardTitle>
             <div className="flex items-center space-x-1">
-              <DaisyTooltip />
-                <DaisyTooltipTrigger asChild />
-                  <DaisyButton
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => handleWidgetRefresh(widget.id)}
@@ -140,9 +140,9 @@ export function DashboardGrid({
                 <DaisyTooltipContent>Refresh Widget</DaisyTooltipContent>
               </DaisyTooltip>
 
-              <DaisyTooltip />
-                <DaisyTooltipTrigger asChild />
-                  <DaisyButton
+              <DaisyTooltip>
+                  <DaisyTooltipTrigger asChild>
+                    <DaisyButton
                     variant="ghost"
                     size="sm"
                     onClick={() => setExpandedWidget(isExpanded ? null : widget.id)}
@@ -153,9 +153,9 @@ export function DashboardGrid({
                 <DaisyTooltipContent>{isExpanded ? 'Minimize' : 'Expand'}</DaisyTooltipContent>
               </DaisyTooltip>
 
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton 
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton 
                     variant="ghost" 
                     size="sm"
                     className="bg-transparent text-[#A8A8A8] hover:text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
@@ -163,13 +163,13 @@ export function DashboardGrid({
 </DaisyDropdownMenu>
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]" />
-                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
-                    <Download className="w-3 h-3 mr-2" />
+                <DaisyDropdownMenuContent align="end" className="bg-[#FAFAFA] border-[#D8C3A5]" >
+                    <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
+                      <Download className="w-3 h-3 mr-2" />
                     Export Data
                   </DaisyDropdownMenuContent>
-                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" />
-                    <Settings className="w-3 h-3 mr-2" />
+                  <DaisyDropdownMenuItem className="text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
+                      <Settings className="w-3 h-3 mr-2" />
                     Configure
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem 
@@ -226,9 +226,10 @@ export function DashboardGrid({
         </div>
 
         <div className="flex items-center space-x-2">
-          <DaisyButton variant="outline" size="sm" onClick={onLayoutReset} className="border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]/20 font-inter" >
-  Reset Layout
-</DaisyButton>
+          <DaisyButton variant="outline" size="sm" onClick={onLayoutReset} className="border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]/20 font-inter">
+          Reset Layout
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       </div>
@@ -508,7 +509,7 @@ function PredictiveWidget({ expanded }: { expanded: boolean }) {
             </div>
             <div className="space-y-1">
               <DaisyProgress value={prediction.predicted} className="h-2" />
-              <div className="flex justify-between text-xs text-[#A8A8A8] font-inter">
+<div className="flex justify-between text-xs text-[#A8A8A8] font-inter">
                 <span>Confidence: {prediction.confidence}%</span>
                 <span>30-day forecast</span>
               </div>

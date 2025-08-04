@@ -35,7 +35,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
       {/* Key Features */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <Layout className="h-5 w-5 text-[#199BEC]" />
@@ -119,7 +119,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Mobile */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <Smartphone className="h-5 w-5 text-[#199BEC]" />
@@ -185,7 +185,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
         {/* Tablet */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <DaisyTablet className="h-5 w-5 text-[#199BEC]" />
@@ -251,7 +251,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
         {/* Desktop */}
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center gap-2 text-[#191919] font-inter" >
   <Monitor className="h-5 w-5 text-[#199BEC]" />
@@ -318,7 +318,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
       {/* Component Adaptations */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Component Responsive Adaptations</DaisyCardTitle>
         </DaisyCardBody>
@@ -382,7 +382,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
       {/* Technical Implementation */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Technical Implementation Details</DaisyCardTitle>
         </DaisyCardBody>
@@ -418,7 +418,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
       {/* User Experience Features */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-[#191919] font-inter">Enhanced User Experience Features</DaisyCardTitle>
         </DaisyCardBody>
@@ -469,7 +469,7 @@ export const ResponsiveDesignSummary: React.FC = () => {
 
       {/* Implementation Status */}
       <DaisyCard className="border-green-200 bg-green-50" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="text-green-800 font-inter flex items-center gap-2" >
   <CheckCircle className="h-5 w-5" />

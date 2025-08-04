@@ -581,9 +581,9 @@ const TeamChatPage: React.FC = () => {
               <DaisyInput
                 placeholder="Search channels..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-10" />
             </div>
 
             {/* Channels */}
@@ -737,8 +737,8 @@ const TeamChatPage: React.FC = () => {
                         <div key={message.id} className="group">
                           <div className="flex items-start space-x-3">
                             <DaisyAvatar className="h-8 w-8">
-                              <DaisyAvatarImage src={message.user.avatar} />
-                              <DaisyAvatarFallback className="text-xs">
+                              <DaisyAvatarImage src={message.user.avatar} >
+                                <DaisyAvatarFallback className="text-xs">
                                 {`${message.user.firstName} ${message.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </DaisyAvatarFallback>
                             </DaisyAvatar>
@@ -789,10 +789,12 @@ const TeamChatPage: React.FC = () => {
                                       variant="outline"
                                       size="sm"
                                       className="h-6 px-2 text-xs"
-                                      onClick={() => handleReaction(message.id, reaction.emoji)}
+                                      onClick={() =>
+          handleReaction(message.id, reaction.emoji)}
                                     >
                                       {reaction.emoji} {(reaction as any).count || 1}
-                                    </DaisyButton>
+                                    
+        </DaisyButton>
                                   ))}
                                 </div>
                               )}
@@ -839,10 +841,10 @@ const TeamChatPage: React.FC = () => {
                     <DaisyTextarea
                       placeholder={`Message ${activeChannelData?.name}...`}
                       value={messageInput}
-                      onChange={(e) => setMessageInput(e.target.value)}
+                      onChange={(e) = />
+setMessageInput(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="min-h-[60px] resize-none"
-                    />
+                      className="min-h-[60px] resize-none" />
                   </div>
                   <DaisyButton
                     onClick={handleSendMessage}
@@ -857,8 +859,7 @@ const TeamChatPage: React.FC = () => {
                   type="file"
                   className="hidden"
                   onChange={handleFileSelected}
-                  multiple
-                />
+                  multiple />
               </DaisyCardBody>
             </DaisyCard>
           </div>
@@ -887,8 +888,8 @@ const TeamChatPage: React.FC = () => {
                         >
                           <div className="relative">
                             <DaisyAvatar className="h-8 w-8">
-                              <DaisyAvatarImage src={member.user.avatar} />
-                              <DaisyAvatarFallback className="text-xs">
+                              <DaisyAvatarImage src={member.user.avatar} >
+                                <DaisyAvatarFallback className="text-xs">
                                 {`${member.user.firstName} ${member.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </DaisyAvatarFallback>
                             </DaisyAvatar>
@@ -958,8 +959,8 @@ const TeamChatPage: React.FC = () => {
                   id="channel-name"
                   placeholder="e.g., project-alpha"
                   value={newChannelData.name}
-                  onChange={(e) => setNewChannelData(prev => ({ ...prev, name: e.target.value }))}
-                />
+                  onChange={(e) = />
+setNewChannelData(prev => ({ ...prev, name: e.target.value }))} />
               </div>
               <div className="space-y-2">
                 <DaisyLabel htmlFor="channel-description">Description (optional)</DaisyLabel>
@@ -967,8 +968,8 @@ const TeamChatPage: React.FC = () => {
                   id="channel-description"
                   placeholder="What's this channel about?"
                   value={newChannelData.description}
-                  onChange={(e) => setNewChannelData(prev => ({ ...prev, description: e.target.value }))}
-                />
+                  onChange={(e) = />
+setNewChannelData(prev => ({ ...prev, description: e.target.value }))} />
               </div>
               <div className="space-y-2">
                 <DaisyLabel htmlFor="channel-type">Channel Type</DaisyLabel>
@@ -978,7 +979,6 @@ const TeamChatPage: React.FC = () => {
                 >
                   <DaisySelectTrigger>
                     <DaisySelectValue />
-                  </DaisySelectTrigger>
                   <DaisySelectContent>
                     <DaisySelectItem value={ChannelType.PUBLIC}>
                       <div className="flex items-center">
@@ -997,12 +997,15 @@ const TeamChatPage: React.FC = () => {
               </div>
             </div>
             <DaisyDialogFooter>
-              <DaisyButton variant="outline" onClick={() => setIsCreateChannelOpen(false)}>
+              <DaisyButton variant="outline" onClick={() =>
+          setIsCreateChannelOpen(false)}>
                 Cancel
-              </DaisyButton>
+              
+        </DaisyButton>
               <DaisyButton onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
-                Create Channel
-              </DaisyButton>
+          Create Channel
+              
+        </DaisyButton>
             </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>

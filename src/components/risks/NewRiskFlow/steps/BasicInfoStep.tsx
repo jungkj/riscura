@@ -101,12 +101,12 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
           id="title"
           placeholder="e.g., Data breach risk, Supply chain disruption"
           value={riskData.title}
-          onChange={(e) => {
+          onChange={(e) = />
+{
             updateRiskData({ title: e.target.value });
             if (errors.title) setErrors({ ...errors, title: '' });
           }}
-          className={cn('mt-1', errors.title && 'border-red-500')}
-        />
+          className={cn('mt-1', errors.title && 'border-red-500')} />
         {errors.title && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
             <AlertCircle className="w-3 h-3" />
@@ -138,13 +138,13 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
           id="description"
           placeholder="Describe the risk, its potential causes, and possible consequences..."
           value={riskData.description}
-          onChange={(e) => {
+          onChange={(e) = />
+{
             updateRiskData({ description: e.target.value });
             if (errors.description) setErrors({ ...errors, description: '' });
           }}
           rows={4}
-          className={cn('resize-none', errors.description && 'border-red-500')}
-        />
+          className={cn('resize-none', errors.description && 'border-red-500')} />
         {errors.description && (
           <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
             <AlertCircle className="w-3 h-3" />
@@ -168,7 +168,6 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
         >
           <DaisySelectTrigger className={cn('mt-1', errors.category && 'border-red-500')}>
             <DaisySelectValue placeholder="Select a category" />
-          </DaisySelectTrigger>
           <DaisySelectContent>
             {categories.map((cat) => (
               <DaisySelectItem key={cat.value} value={cat.value}>
@@ -197,6 +196,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
       >
         <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
           Next
+        
         </DaisyButton>
       </motion.div>
     </div>

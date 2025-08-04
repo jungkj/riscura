@@ -140,7 +140,8 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       id: 'schedule-audit',
       title: 'Schedule Audit',
       description: 'Plan compliance audit',
-      icon: <DaisyCalendar className="w-5 h-5" />,
+      icon: <DaisyCalendar className="w-5 h-5" />
+,
       color: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700',
       href: '/dashboard/workflows/audit',
       roles: ['executive', 'auditor']
@@ -247,7 +248,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >

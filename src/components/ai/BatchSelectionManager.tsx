@@ -121,7 +121,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       case 'error': return <DaisyAlertCircle className="h-4 w-4 text-red-600" >
   ;
 </DaisyAlertCircle>
-      case 'processing': return <DaisyProgressIcon className="h-4 w-4 text-blue-600 animate-spin" />;
+      case 'processing': return <DaisyProgressIcon className="h-4 w-4 text-blue-600 animate-spin" / />;
       case 'skipped': return <Square className="h-4 w-4 text-gray-400" />;
       default: return <Square className="h-4 w-4 text-gray-400" />;
     }
@@ -263,8 +263,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-            onClick={onClose}
-          />
+            onClick={onClose} />
 
           {/* Panel */}
           <motion.div
@@ -295,9 +294,10 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 </DaisyProgressIcon>
                   Export
                 </DaisyButton>
-                <DaisyButton variant="outline" onClick={onClose} >
-  Close
-</DaisyButton>
+                <DaisyButton variant="outline" onClick={onClose}>
+          Close
+
+        </DaisyButton>
                 </DaisyButton>
               </div>
             </div>
@@ -337,13 +337,15 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
               {/* Selection Controls */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <DaisyButton variant="outline" size="sm" onClick={selectAll} >
-  Select All
-</DaisyButton>
+                  <DaisyButton variant="outline" size="sm" onClick={selectAll}>
+          Select All
+
+        </DaisyButton>
                   </DaisyButton>
-                  <DaisyButton variant="outline" size="sm" onClick={clearSelection} >
-  Clear
-</DaisyButton>
+                  <DaisyButton variant="outline" size="sm" onClick={clearSelection}>
+          Clear
+
+        </DaisyButton>
                   </DaisyButton>
                   <DaisyButton variant="outline" size="sm" onClick={onClearAll} >
   <Trash2 className="h-4 w-4 mr-2" />
@@ -354,10 +356,11 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                 
                 <div className="flex items-center gap-2">
                   <DaisySelect value={selectedAction} onValueChange={(value: AIAction) => setSelectedAction(value)} />
-                    <DaisySelectTrigger className="w-40" />
-                      <DaisySelectValue /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="explain">Explain</DaisySelectContent>
+                    <DaisySelectTrigger className="w-40">
+                        <DaisySelectValue />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="explain">Explain</DaisySelectItem>
                       <DaisySelectItem value="improve">Improve</DaisySelectItem>
                       <DaisySelectItem value="regenerate">Regenerate</DaisySelectItem>
                       <DaisySelectItem value="alternatives">Alternatives</DaisySelectItem>
@@ -378,9 +381,10 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                     </DaisyButton>
                   ) : (
                     <>
-                      <DaisyButton onClick={togglePause} variant="outline" >
-  {isPaused ? 
-</DaisyButton><Play className="h-4 w-4 mr-2" /> : <Pause className="h-4 w-4 mr-2" />}
+                      <DaisyButton onClick={togglePause} variant="outline">
+          {isPaused ? 
+
+        </DaisyButton><Play className="h-4 w-4 mr-2" /> : <Pause className="h-4 w-4 mr-2" />}
                         {isPaused ? 'Resume' : 'Pause'}
                       </DaisyButton>
                       <DaisyButton onClick={stopProcessing} variant="danger" >
@@ -398,7 +402,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                       {processingQueue.completedItems} / {processingQueue.totalItems}
                     </div>
                     <DaisyProgress value={processingProgress} className="w-32" />
-                  </div>
+</div>
                 )}
               </div>
             </div>
@@ -414,8 +418,8 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
                   </p>
                 </div>
               ) : (
-                <DaisyScrollArea className="h-full p-4" />
-                  <div className="space-y-3">
+                <DaisyScrollArea className="h-full p-4" >
+                    <div className="space-y-3">
                     {selections.map((item: BatchSelectionItem) => (
                       <DaisyCard 
                         key={item.id}

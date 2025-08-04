@@ -320,7 +320,7 @@ export default function DragDropImport({
     <div className="space-y-6">
       {/* Import Mode Selection */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Zap className="h-5 w-5 text-blue-600" />
@@ -383,7 +383,7 @@ export default function DragDropImport({
       {/* Processing Options */}
       {selectedMode.aiEnabled && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="text-lg">Processing Options</DaisyCardTitle>
         </DaisyCardBody>
@@ -394,60 +394,55 @@ export default function DragDropImport({
                 <DaisyCheckbox
                   id="aiAnalysis"
                   checked={options.aiAnalysis}
-                  onCheckedChange={(checked) => 
-                    setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
-                  }
-                />
-                <DaisyLabel htmlFor="aiAnalysis" className="text-sm" />
-                  AI Analysis
+                  onCheckedChange={(checked) = />
+setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
+                  } />
+                <DaisyLabel htmlFor="aiAnalysis" className="text-sm" >
+                    AI Analysis
                 </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="autoMap"
                   checked={options.autoMap}
-                  onCheckedChange={(checked) => 
-                    setOptions(prev => ({ ...prev, autoMap: !!checked }))
-                  }
-                />
-                <DaisyLabel htmlFor="autoMap" className="text-sm" />
-                  Auto-map Fields
+                  onCheckedChange={(checked) = />
+setOptions(prev => ({ ...prev, autoMap: !!checked }))
+                  } />
+                <DaisyLabel htmlFor="autoMap" className="text-sm" >
+                    Auto-map Fields
                 </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="validateData"
                   checked={options.validateData}
-                  onCheckedChange={(checked) => 
-                    setOptions(prev => ({ ...prev, validateData: !!checked }))
-                  }
-                />
-                <DaisyLabel htmlFor="validateData" className="text-sm" />
-                  Validate Data
+                  onCheckedChange={(checked) = />
+setOptions(prev => ({ ...prev, validateData: !!checked }))
+                  } />
+                <DaisyLabel htmlFor="validateData" className="text-sm" >
+                    Validate Data
                 </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="createMissing"
                   checked={options.createMissing}
-                  onCheckedChange={(checked) => 
-                    setOptions(prev => ({ ...prev, createMissing: !!checked }))
-                  }
-                />
-                <DaisyLabel htmlFor="createMissing" className="text-sm" />
-                  Create Missing Items
+                  onCheckedChange={(checked) = />
+setOptions(prev => ({ ...prev, createMissing: !!checked }))
+                  } />
+                <DaisyLabel htmlFor="createMissing" className="text-sm" >
+                    Create Missing Items
                 </DaisyCheckbox>
               </div>
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   id="previewMode"
                   checked={options.previewMode}
-                  onCheckedChange={(checked) => 
-                    setOptions(prev => ({ ...prev, previewMode: !!checked }))
-                  }
-                />
-                <DaisyLabel htmlFor="previewMode" className="text-sm" />
-                  Preview Mode
+                  onCheckedChange={(checked) = />
+setOptions(prev => ({ ...prev, previewMode: !!checked }))
+                  } />
+                <DaisyLabel htmlFor="previewMode" className="text-sm" >
+                    Preview Mode
                 </DaisyCheckbox>
               </div>
             </div>
@@ -506,7 +501,7 @@ export default function DragDropImport({
       {/* Selected Files */}
       {files.length > 0 && (
         <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
             <DaisyCardTitle className="flex items-center justify-between" >
   <span>
@@ -515,9 +510,10 @@ export default function DragDropImport({
                 variant="outline"
                 size="sm"
                 onClick={resetImport}
-                disabled={isProcessing} >
-  Clear All
-</DaisyButton>
+                disabled={isProcessing}>
+          Clear All
+
+        </DaisyButton>
               </DaisyButton>
             </DaisyCardTitle>
         </DaisyCardBody>
@@ -542,8 +538,7 @@ export default function DragDropImport({
                         {formatFileSize(fileObj.file.size)}
                       </p>
                       {fileObj.status === 'processing' && (
-                        <DaisyProgress value={fileObj.progress} className="mt-2" />
-                      )}
+                        <DaisyProgress value={fileObj.progress} className="mt-2" />)}
                       {fileObj.error && (
                         <p className="text-sm text-red-600 mt-1">{fileObj.error}</p>
                       )}
@@ -592,9 +587,10 @@ export default function DragDropImport({
           <DaisyButton
             onClick={processFiles}
             disabled={isProcessing}
-            className="flex-1" >
-  {isProcessing ? (
-</DaisyButton>
+            className="flex-1">
+          {isProcessing ? (
+
+        </DaisyButton>
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Processing...
@@ -610,9 +606,9 @@ export default function DragDropImport({
       )}
 
       {/* Results Dialog */}
-      <DaisyDialog open={showResults} onOpenChange={setShowResults} />
-        <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showResults} onOpenChange={setShowResults} >
+          <DaisyDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Import Results</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -623,7 +619,7 @@ export default function DragDropImport({
           <div className="space-y-4">
             {processingResults.map((result, idx) => (
               <DaisyCard key={idx} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <DaisyCardTitle className="text-lg" >
   {result.filename || `File ${idx + 1}`}
@@ -656,8 +652,8 @@ export default function DragDropImport({
               </DaisyCard>
             ))}
           </div>
-          <DaisyDialogFooter />
-            <DaisyButton onClick={() => setShowResults(false)} />
+          <DaisyDialogFooter >
+              <DaisyButton onClick={() => setShowResults(false)} />
               Close
             </DaisyDialogFooter>
           </DaisyDialogFooter>

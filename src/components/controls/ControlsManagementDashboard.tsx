@@ -342,9 +342,8 @@ const ControlCard: React.FC<{
         </div>
         <DaisyProgress 
           value={control.effectivenessScore} 
-          className="h-2"
-        />
-      </div>
+          className="h-2" />
+</div>
 
       {/* Metadata */}
       <div className="space-y-enterprise-2">
@@ -369,7 +368,7 @@ const ControlCard: React.FC<{
               "h-3 w-3",
               isOverdue ? "text-semantic-error" : "text-text-tertiary"
             )} />
-            <span className={cn(
+<span className={cn(
               "text-caption",
               isOverdue ? "text-semantic-error font-medium" : "text-text-secondary"
             )}>
@@ -488,42 +487,45 @@ const ControlLibrary: React.FC = () => {
             <DaisyInput
               placeholder="Search controls..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-enterprise-8 w-64"
-            />
+              onChange={(e) = />
+setSearchQuery(e.target.value)}
+              className="pl-enterprise-8 w-64" />
           </div>
 
           {/* Filters */}
-          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Category" /></DaisyInput>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Categories</DaisySelectContent>
+          <DaisySelect value={selectedCategory} onValueChange={setSelectedCategory} >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Category" />
+</DaisyInput>
+            <DaisySelectContent >
+                <DaisySelectItem value="all">All Categories</DaisySelectItem>
               {categories.map(category => (
                 <DaisySelectItem key={category} value={category}>{category}</DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Framework" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Frameworks</DaisySelectContent>
+          <DaisySelect value={selectedFramework} onValueChange={setSelectedFramework} >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Framework" />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="all">All Frameworks</DaisySelectItem>
               {frameworks.map(framework => (
                 <DaisySelectItem key={framework} value={framework}>{framework}</DaisySelectItem>
               ))}
             </DaisySelectContent>
           </DaisySelect>
 
-          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} />
-            <DaisySelectTrigger className="w-40" />
-              <DaisySelectValue placeholder="Status" /></DaisySelect>
-            <DaisySelectContent />
-              <DaisySelectItem value="all">All Status</DaisySelectContent>
+          <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus} >
+              <DaisySelectTrigger className="w-40">
+                <DaisySelectValue placeholder="Status" />
+</DaisySelect>
+            <DaisySelectContent >
+                <DaisySelectItem value="all">All Status</DaisySelectItem>
               {statuses.map(status => (
-                <DaisySelectItem key={status} value={status} />
-                  {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                <DaisySelectItem key={status} value={status} >
+                    {status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </DaisySelectItem>
               ))}
             </DaisySelectContent>
@@ -544,8 +546,7 @@ const ControlLibrary: React.FC = () => {
           <ControlCard
             key={control.id}
             control={control}
-            onAction={handleControlAction}
-          />
+            onAction={handleControlAction} />
         ))}
       </div>
 
@@ -559,9 +560,10 @@ const ControlLibrary: React.FC = () => {
           <p className="text-body-base text-text-secondary mb-enterprise-4">
             Try adjusting your filters or search terms.
           </p>
-          <DaisyButton variant="outline" >
-  Clear Filters
-</DaisyButton>
+          <DaisyButton variant="outline">
+          Clear Filters
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       )}
@@ -684,11 +686,11 @@ export const ControlsManagementDashboard: React.FC = () => {
       maxWidth="2xl"
     >
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="library">Control Library</DaisyTabs>
-          <DaisyTabsTrigger value="probo" />
-            <Shield className="h-4 w-4 mr-2" />
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" >
+          <DaisyTabsList >
+            <DaisyTabsTrigger value="library">Control Library</DaisyTabs>
+          <DaisyTabsTrigger value="probo" >
+              <Shield className="h-4 w-4 mr-2" />
             Probo Controls
           </DaisyTabsTrigger>
           <DaisyTabsTrigger value="testing">Testing</DaisyTabsTrigger>
@@ -697,12 +699,12 @@ export const ControlsManagementDashboard: React.FC = () => {
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="library" />
-        <ControlLibrary />
+      <DaisyTabsContent value="library" >
+          <ControlLibrary />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="probo" className="space-y-6" />
-        <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
+      <DaisyTabsContent value="probo" className="space-y-6" >
+          <div className="bg-gradient-to-r from-[#199BEC]/5 to-[#199BEC]/10 rounded-lg p-6 border border-[#199BEC]/20">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-[#199BEC] rounded-lg">
@@ -764,8 +766,8 @@ export const ControlsManagementDashboard: React.FC = () => {
                         }
                         className="text-xs" >
   {control.importance}
-</DaisyTabsContent>
-                      </DaisyBadge>
+</DaisyBadge>
+          </DaisyTabsContent>
                       <DaisyBadge variant="outline" className="text-xs" >
   {control.category}
 </DaisyBadge>
@@ -791,13 +793,15 @@ export const ControlsManagementDashboard: React.FC = () => {
                     <span>{control.measureCount || 0} measures</span>
                   </div>
                   <div className="flex space-x-2">
-                    <DaisyButton variant="outline" size="sm" >
-  Implement
-</DaisyButton>
+                    <DaisyButton variant="outline" size="sm">
+          Implement
+
+        </DaisyButton>
                     </DaisyButton>
-                    <DaisyButton variant="ghost" size="sm" >
-  View Details
-</DaisyButton>
+                    <DaisyButton variant="ghost" size="sm">
+          View Details
+
+        </DaisyButton>
                     </DaisyButton>
                   </div>
                 </div>
@@ -807,16 +811,16 @@ export const ControlsManagementDashboard: React.FC = () => {
         )}
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="testing" />
-        <ControlTestingWorkflow />
+      <DaisyTabsContent value="testing" >
+          <ControlTestingWorkflow />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="compliance" />
-        <ComplianceMapping />
+      <DaisyTabsContent value="compliance" >
+          <ComplianceMapping />
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="analytics" />
-        <div className="text-center py-enterprise-12">
+      <DaisyTabsContent value="analytics" >
+          <div className="text-center py-enterprise-12">
           <BarChart3 className="h-12 w-12 text-text-tertiary mx-auto mb-enterprise-4" />
           <h3 className="text-heading-base font-semibold text-text-primary mb-enterprise-2">
             Control Analytics
@@ -831,8 +835,7 @@ export const ControlsManagementDashboard: React.FC = () => {
       <CreateControlModal
         open={isCreateControlModalOpen}
         onOpenChange={setIsCreateControlModalOpen}
-        onControlCreated={handleControlCreated}
-      />
+        onControlCreated={handleControlCreated} />
     </MainContentArea>
   );
 };

@@ -150,9 +150,8 @@ export default function EmptyStateWizard({
         </div>
         <div className="space-y-3">
           <DaisyProgress 
-            value={(onboardingSteps.filter(s => s.completed).length / 3) * 100} 
-            className="h-2"
-          />
+            value={(onboardingSteps.filter(s = />s.completed).length / 3) * 100} 
+            className="h-2" />
           <div className="flex justify-between">
             {onboardingSteps.map((step, index) => (
               <div key={step.id} className="flex items-center gap-2">
@@ -260,9 +259,10 @@ export default function EmptyStateWizard({
 
             <div className="space-y-2">
               <p className="text-sm text-gray-500">Estimated time: 5 minutes</p>
-              <DaisyButton variant="outline" className="w-full group" >
-  Get Started
-</DaisyButton>
+              <DaisyButton variant="outline" className="w-full group">
+          Get Started
+
+        </DaisyButton>
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </DaisyButton>
             </div>
@@ -301,9 +301,10 @@ export default function EmptyStateWizard({
                 <Users className="w-4 h-4" />
                 <span>Live demo environment</span>
               </div>
-              <DaisyButton variant="outline" className="w-full group" >
-  Start Tour
-</DaisyButton>
+              <DaisyButton variant="outline" className="w-full group">
+          Start Tour
+
+        </DaisyButton>
                 <Play className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
               </DaisyButton>
             </div>

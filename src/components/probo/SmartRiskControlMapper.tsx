@@ -445,17 +445,21 @@ export default function SmartRiskControlMapper({
               <DaisyButton
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() =>
+          setViewMode('grid')}
               >
                 Grid
-              </DaisyButton>
+              
+        </DaisyButton>
               <DaisyButton
                 variant={viewMode === 'matrix' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setViewMode('matrix')}
+                onClick={() =>
+          setViewMode('matrix')}
               >
                 Matrix
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </DaisyCardTitle>
         </DaisyCardBody>
@@ -466,15 +470,14 @@ export default function SmartRiskControlMapper({
               <DaisyInput
                 placeholder="Search by title or description..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+                onChange={(e) = />
+setSearchTerm(e.target.value)} />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Severity</label>
               <DaisySelect value={filterSeverity} onValueChange={setFilterSeverity}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Severities</DaisySelectItem>
                   <DaisySelectItem value="Critical">Critical</DaisySelectItem>
@@ -489,7 +492,6 @@ export default function SmartRiskControlMapper({
               <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
                 <DaisySelectTrigger>
                   <DaisySelectValue />
-                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Categories</DaisySelectItem>
                   {riskCategories.map((category) => (
@@ -569,7 +571,7 @@ export default function SmartRiskControlMapper({
                     </div>
 
                     <DaisyProgress value={coverage} className="h-1" />
-                  </div>
+</div>
                 </motion.div>
               );
             })}
@@ -654,7 +656,7 @@ export default function SmartRiskControlMapper({
                       })}
                     </div>
                     <DaisySeparator className="my-4" />
-                  </div>
+</div>
                 )}
 
                 {/* AI Suggestions */}

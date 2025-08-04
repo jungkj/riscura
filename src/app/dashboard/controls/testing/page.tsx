@@ -209,8 +209,8 @@ export default function ControlsTestingPage() {
                               {test.effectiveness}%
                             </span>
                           </div>
-                          <DaisyProgress value={test.effectiveness} className="h-2" />
-                        </div>
+                          <DaisyProgress value={test.effectiveness} className="h-2" / />
+</div>
                       </div>
 
                       <div className="ml-4 space-y-2">
@@ -225,10 +225,10 @@ export default function ControlsTestingPage() {
                         <DaisyButton
                           variant="outline"
                           size="sm"
-                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full"
-                        >
-                          View Details
-                        </DaisyButton>
+                          className="border-[#E5E1D8] text-[#6B5B47] hover:bg-[#F5F1E9] w-full">
+          View Details
+                        
+        </DaisyButton>
                       </div>
                     </div>
                   </div>

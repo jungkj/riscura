@@ -195,7 +195,7 @@ describe('NotionRCSASpreadsheet', () => {
       data: {
         testScript: {
           title: 'Generated Test',
-          description: 'AI generated test',
+          description: 'Automated test case',
           steps: [] as string[],
           expectedResults: 'Control validated',
           testType: 'MANUAL',

@@ -182,9 +182,9 @@ const UserAvatar: React.FC<{
 
   return (
     <div className="flex items-center gap-2">
-      <DaisyAvatar className={sizeClasses[size]} />
-        <DaisyAvatarFallback className="bg-[#199BEC]/10 text-[#199BEC] text-xs font-medium" />
-          {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+      <DaisyAvatar className={sizeClasses[size]} >
+          <DaisyAvatarFallback className="bg-[#199BEC]/10 text-[#199BEC] text-xs font-medium" >
+            {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
         </DaisyAvatar>
       </DaisyAvatar>
       {showDetails && (
@@ -272,8 +272,7 @@ const ProgressIndicator: React.FC<{
         <div className="flex-1 bg-gray-200 rounded-full h-2">
           <div
             className={cn("h-2 rounded-full transition-all duration-300", getProgressColor(progress))}
-            style={{ width: `${progress}%` }}
-          />
+            style={{ width: `${progress}%` }} />
         </div>
         <span className="text-xs text-gray-600 font-medium font-inter min-w-[2rem]">
           {progress}%
@@ -302,7 +301,7 @@ const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, 
         isUpcoming ? 'text-yellow-500' : 
         'text-gray-400'
       )} />
-      <div className="flex flex-col">
+<div className="flex flex-col">
         {label && device.type !== 'mobile' && (
           <span className="text-xs text-gray-500 font-inter">{label}</span>
         )}
@@ -353,9 +352,9 @@ const ActionsMenu: React.FC<{
   const device = useDevice();
   
   return (
-    <DaisyDropdownMenu />
-      <DaisyDropdownMenuTrigger asChild />
-        <DaisyButton 
+    <DaisyDropdownMenu >
+        <DaisyDropdownMenuTrigger asChild >
+          <DaisyButton 
           variant="ghost" 
           size="sm" 
           className={cn(
@@ -366,8 +365,8 @@ const ActionsMenu: React.FC<{
 </DaisyDropdownMenu>
         </DaisyButton>
       </DaisyDropdownMenuTrigger>
-      <DaisyDropdownMenuContent align="end" className="w-48" />
-        <DaisyDropdownMenuItem onClick={() => onAction('view', item)} />
+      <DaisyDropdownMenuContent align="end" className="w-48" >
+          <DaisyDropdownMenuItem onClick={() => onAction('view', item)} />
           <Eye className="h-4 w-4 mr-2" />
           View Details
         </DaisyDropdownMenuContent>
@@ -380,7 +379,7 @@ const ActionsMenu: React.FC<{
           Duplicate
         </DaisyDropdownMenuItem>
         <DaisyDropdownMenuSeparator />
-        <DaisyDropdownMenuItem onClick={() => onAction('archive', item)} />
+<DaisyDropdownMenuItem onClick={() => onAction('archive', item)} />
           <Archive className="h-4 w-4 mr-2" />
           Archive
         </DaisyDropdownMenuSeparator>
@@ -507,7 +506,7 @@ const DefaultListItem: React.FC<{
         {item.progress !== undefined && (
           <div>
             <DaisyProgressIndicator progress={item.progress} metadata={item.metadata} />
-          </div>
+</div>
         )}
 
         {/* Due Date */}
@@ -602,7 +601,7 @@ const DetailedListItem: React.FC<{
               Progress
             </h4>
             <DaisyProgressIndicator progress={item.progress} metadata={item.metadata} />
-          </div>
+</div>
         )}
 
         {/* Important Dates */}
@@ -785,8 +784,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
             key={item.id}
             item={item}
             onItemAction={onItemAction}
-            onItemSelect={onItemSelect}
-          />
+            onItemSelect={onItemSelect} />
         );
       case 'detailed':
         return (
@@ -794,8 +792,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
             key={item.id}
             item={item}
             onItemAction={onItemAction}
-            onItemSelect={onItemSelect}
-          />
+            onItemSelect={onItemSelect} />
         );
       default:
         return (
@@ -803,8 +800,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
             key={item.id}
             item={item}
             onItemAction={onItemAction}
-            onItemSelect={onItemSelect}
-          />
+            onItemSelect={onItemSelect} />
         );
     }
   };
@@ -840,9 +836,9 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
               <DaisyInput
                 placeholder="Search items..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')}
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')} />
             </div>
           )}
 
@@ -850,28 +846,30 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             {filterable && (
               <>
-                <DaisySelect value={statusFilter} onValueChange={setStatusFilter} />
-                  <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')} />
-                    <Filter className="h-4 w-4" />
-                    <DaisySelectValue /></DaisyProgressIndicator>
-                  <DaisySelectContent />
-                    {statusOptions.map(option => (
-                      <DaisySelectItem key={option.value} value={option.value} />
-                        {option.label}
-                      </DaisySelectContent>
+                <DaisySelect value={statusFilter} onValueChange={setStatusFilter} >
+                    <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
+                      <Filter className="h-4 w-4" />
+                    <DaisySelectValue />
+</DaisyProgressIndicator>
+                  <DaisySelectContent >
+                      {statusOptions.map(option => (
+                      <DaisySelectItem key={option.value} value={option.value} >
+                          {option.label}
+                      </DaisySelectItem>
                     ))}
                   </DaisySelectContent>
                 </DaisySelect>
 
-                <DaisySelect value={priorityFilter} onValueChange={setPriorityFilter} />
-                  <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')} />
-                    <Star className="h-4 w-4" />
-                    <DaisySelectValue /></DaisySelect>
-                  <DaisySelectContent />
-                    {priorityOptions.map(option => (
-                      <DaisySelectItem key={option.value} value={option.value} />
-                        {option.label}
-                      </DaisySelectContent>
+                <DaisySelect value={priorityFilter} onValueChange={setPriorityFilter} >
+                    <DaisySelectTrigger className={cn("gap-2", device.type === 'mobile' ? 'w-full' : 'w-36')}>
+                      <Star className="h-4 w-4" />
+                    <DaisySelectValue />
+</DaisySelect>
+                  <DaisySelectContent >
+                      {priorityOptions.map(option => (
+                      <DaisySelectItem key={option.value} value={option.value} >
+                          {option.label}
+                      </DaisySelectItem>
                     ))}
                   </DaisySelectContent>
                 </DaisySelect>
@@ -915,15 +913,16 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
         {/* Sort Controls */}
         {sortable && device.type !== 'mobile' && (
           <div className="flex items-center gap-2">
-            <DaisySelect value={sortBy} onValueChange={setSortBy} />
-              <DaisySelectTrigger className="w-32 gap-2" />
-                <ArrowUpDown className="h-4 w-4" />
-                <DaisySelectValue /></DaisySelect>
-              <DaisySelectContent />
-                {sortOptions.map(option => (
-                  <DaisySelectItem key={option.value} value={option.value} />
-                    {option.label}
-                  </DaisySelectContent>
+            <DaisySelect value={sortBy} onValueChange={setSortBy} >
+                <DaisySelectTrigger className="w-32 gap-2">
+                  <ArrowUpDown className="h-4 w-4" />
+                <DaisySelectValue />
+</DaisySelect>
+              <DaisySelectContent >
+                  {sortOptions.map(option => (
+                  <DaisySelectItem key={option.value} value={option.value} >
+                      {option.label}
+                  </DaisySelectItem>
                 ))}
               </DaisySelectContent>
             </DaisySelect>

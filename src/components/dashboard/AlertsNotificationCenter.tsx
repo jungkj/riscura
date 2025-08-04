@@ -26,7 +26,7 @@ export function AlertsNotificationCenter() {
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <DaisyCardTitle className="text-lg font-semibold text-[#191919] font-inter" >
   Alerts & Notifications

@@ -440,9 +440,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       <div
         ref={overlayRef}
         className="fixed inset-0 bg-black bg-opacity-50 z-1000"
-        style={{ zIndex: 1000 }}
-      />
-
+        style={{ zIndex: 1000 }} />
       {/* Tooltip */}
       <div
         ref={tooltipRef}
@@ -499,7 +497,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                   <span>{Math.round(progress)}%</span>
                 </div>
                 <DaisyProgress value={progress} className="h-2" />
-              </div>
+</div>
             )}
 
             {/* Controls */}
@@ -533,15 +531,17 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
               <div className="flex items-center space-x-2">
                 {tourConfig.allowSkip && (
-                  <DaisyButton variant="ghost" size="sm" onClick={skipTour} >
-  Skip Tour
-</DaisyButton>
+                  <DaisyButton variant="ghost" size="sm" onClick={skipTour}>
+          Skip Tour
+
+        </DaisyButton>
                   </DaisyButton>
                 )}
                 
-                <DaisyButton onClick={nextStep} size="sm" >
-  {currentStep === filteredSteps.length - 1 ? (
-</DaisyButton>
+                <DaisyButton onClick={nextStep} size="sm">
+          {currentStep === filteredSteps.length - 1 ? (
+
+        </DaisyButton>
                     <>
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Complete

@@ -230,10 +230,10 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
             variant="link"
             size="sm"
             className="h-auto p-0 mt-2 text-xs"
-            onClick={toast.action.onClick}
-          >
-            {toast.action.label}
-          </DaisyButton>
+            onClick={toast.action.onClick}>
+          {toast.action.label}
+          
+        </DaisyButton>
         )}
       </div>
 
@@ -420,8 +420,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               className={cn(
                 'w-5 h-5',
                 star <= (formData.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-              )}
-            />
+              )} />
           </button>
         ))}
       </div>
@@ -480,10 +479,10 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               id="message"
               placeholder="Please describe your feedback in detail..."
               value={formData.message}
-              onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
+              onChange={(e) = />
+setFormData((prev) => ({ ...prev, message: e.target.value }))}
               rows={4}
-              required
-            />
+              required />
           </div>
 
           {/* Email */}
@@ -494,8 +493,8 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               type="email"
               placeholder="your@email.com"
               value={formData.email}
-              onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-            />
+              onChange={(e) = />
+setFormData((prev) => ({ ...prev, email: e.target.value }))} />
             <p className="text-xs text-muted-foreground">
               We'll only use this to follow up on your feedback
             </p>
@@ -503,8 +502,9 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
           <DaisyDialogFooter>
             <DaisyButton type="button" variant="outline" onClick={onClose}>
-              Cancel
-            </DaisyButton>
+          Cancel
+            
+        </DaisyButton>
             <DaisyButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
@@ -636,10 +636,10 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
             variant="link"
             size="sm"
             className="h-auto p-0 text-current hover:text-current/80"
-            onClick={action.onClick}
-          >
-            {action.label}
-          </DaisyButton>
+            onClick={action.onClick}>
+          {action.label}
+          
+        </DaisyButton>
         )}
 
         {dismissible && (

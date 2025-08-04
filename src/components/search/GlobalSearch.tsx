@@ -485,10 +485,10 @@ export default function GlobalSearch({
                 <DaisyInput
                   ref={searchInputRef}
                   value={query}
-                  onChange={(e) => handleQueryChange(e.target.value)}
+                  onChange={(e) = />
+handleQueryChange(e.target.value)}
                   placeholder={placeholder}
-                  className="pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 bg-transparent"
-                />
+                  className="pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 bg-transparent" />
                 {query && (
                   <DaisyButton
                     variant="ghost"
@@ -722,15 +722,19 @@ export default function GlobalSearch({
                   <DaisyButton
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleQueryChange('')} />
+                    onClick={() =>
+          handleQueryChange('')} />
                     Clear Search
-                  </DaisyButton>
+                  
+        </DaisyButton>
                   <DaisyButton
                     variant="secondary"
                     size="sm"
-                    onClick={() => setShowAdvanced(true)} />
+                    onClick={() =>
+          setShowAdvanced(true)} />
                     Advanced Search
-                  </DaisyButton>
+                  
+        </DaisyButton>
                 </div>
               </div>
             )}

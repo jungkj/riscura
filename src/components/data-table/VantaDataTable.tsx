@@ -158,8 +158,7 @@ const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
       <div className="flex-1 bg-surface-secondary rounded-full h-2">
         <div
           className={cn("h-2 rounded-full transition-all duration-300", getProgressColor(value))}
-          style={{ width: `${value}%` }}
-        />
+          style={{ width: `${value}%` }} />
       </div>
       <span className="text-caption text-text-secondary font-medium min-w-8">
         {value}%
@@ -179,7 +178,7 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
         isUpcoming ? 'text-semantic-warning' : 
         'text-text-tertiary'
       )} />
-      <span className={cn("text-caption",
+<span className={cn("text-caption",
         isOverdue ? 'text-semantic-error font-medium' : 
         isUpcoming ? 'text-semantic-warning' : 
         'text-text-secondary'
@@ -192,15 +191,15 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
 
 const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => void }> = ({ row, onAction }) => {
   return (
-    <DaisyDropdownMenu />
-      <DaisyDropdownMenuTrigger asChild />
-        <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+    <DaisyDropdownMenu >
+        <DaisyDropdownMenuTrigger asChild >
+          <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
   <MoreHorizontal className="h-3 w-3" />
 </DaisyCalendar>
         </DaisyButton>
       </DaisyDropdownMenuTrigger>
-      <DaisyDropdownMenuContent align="end" className="w-40" />
-        <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
+      <DaisyDropdownMenuContent align="end" className="w-40" >
+          <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
           <Eye className="h-3 w-3 mr-enterprise-2" />
           View Details
         </DaisyDropdownMenuContent>
@@ -213,7 +212,7 @@ const ActionsCell: React.FC<{ row: any, onAction: (action: string, row: any) => 
           Duplicate
         </DaisyDropdownMenuItem>
         <DaisyDropdownMenuSeparator />
-        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
+<DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
           <Archive className="h-3 w-3 mr-enterprise-2" />
           Archive
         </DaisyDropdownMenuSeparator>
@@ -239,9 +238,9 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <DaisyPopover />
-      <DaisyPopoverTrigger asChild />
-        <DaisyButton variant="outline" size="sm" className="relative" >
+    <DaisyPopover >
+        <DaisyPopoverTrigger asChild >
+          <DaisyButton variant="outline" size="sm" className="relative" >
   <Filter className="h-3 w-3 mr-enterprise-1" />
 </DaisyPopover>
           Filters
@@ -250,8 +249,8 @@ const AdvancedFilters: React.FC<{
           )}
         </DaisyButton>
       </DaisyPopoverTrigger>
-      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start" />
-        <div className="space-y-enterprise-4">
+      <DaisyPopoverContent className="w-80 p-enterprise-4" align="start" >
+          <div className="space-y-enterprise-4">
           <div className="flex items-center justify-between">
             <h4 className="text-body-sm font-semibold text-text-primary">Advanced Filters</h4>
             {hasActiveFilters && (
@@ -280,13 +279,14 @@ const AdvancedFilters: React.FC<{
                     onFiltersChange(newFilters);
                   }}
                 >
-                  <DaisySelectTrigger className="h-8" />
-                    <DaisySelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} /></DaisySelect>
-                  <DaisySelectContent />
-                    <DaisySelectItem value="">All</DaisySelectContent>
+                  <DaisySelectTrigger className="h-8">
+                      <DaisySelectValue placeholder={`Filter by ${column.title.toLowerCase()}`} />
+</DaisySelect>
+                  <DaisySelectContent >
+                      <DaisySelectItem value="">All</DaisySelectItem>
                     {column.filterOptions.map((option) => (
-                      <DaisySelectItem key={option.value} value={option.value} />
-                        {option.label}
+                      <DaisySelectItem key={option.value} value={option.value} >
+                          {option.label}
                       </DaisySelectItem>
                     ))}
                   </DaisySelectContent>
@@ -295,7 +295,8 @@ const AdvancedFilters: React.FC<{
                 <DaisyInput
                   placeholder={`Filter by ${column.title.toLowerCase()}`}
                   value={filters[column.key] as string || ''}
-                  onChange={(e) => {
+                  onChange={(e) = />
+{
                     const newFilters = { ...filters };
                     if (e.target.value) {
                       newFilters[column.key] = e.target.value;
@@ -304,8 +305,7 @@ const AdvancedFilters: React.FC<{
                     }
                     onFiltersChange(newFilters);
                   }}
-                  className="h-8"
-                />
+                  className="h-8" />
               )}
             </div>
           ))}
@@ -429,7 +429,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       case 'user':
         return <UserAvatarCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} />;
+        return <DaisyProgressCell value={value} / />;
       case 'date':
         return <DateCell value={new Date(value)} />;
       case 'actions':
@@ -463,9 +463,9 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
               <DaisyInput
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-enterprise-8 w-64"
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className="pl-enterprise-8 w-64" />
             </div>
           )}
 
@@ -475,8 +475,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
               columns={columns}
               filters={filters}
               onFiltersChange={setFilters}
-              onClearFilters={() => setFilters({})}
-            />
+              onClearFilters={() => setFilters({})} />
           )}
 
           {/* Active Filter Indicators */}
@@ -508,16 +507,16 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
   {selectedRows.length} selected
 </DaisyBadge>
               </DaisyBadge>
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="outline" size="sm" >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="outline" size="sm" >
   Bulk Actions
 </DaisyDropdownMenu>
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find(row => row.id === id)!))} />
                     <Download className="h-3 w-3 mr-enterprise-2" />
                     Export Selected
                   </DaisyDropdownMenuContent>
@@ -526,7 +525,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                     Archive Selected
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem 
+<DaisyDropdownMenuItem 
                     onClick={() => onBulkAction?.('delete', selectedRows.map(id => data.find(row => row.id === id)!))}
                     className="text-semantic-error focus:text-semantic-error" />
                     <Trash2 className="h-3 w-3 mr-enterprise-2" />
@@ -570,9 +569,9 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                 {selectable && (
                   <th className="w-12 px-enterprise-3 py-enterprise-3">
                     <DaisyCheckbox
-                      checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
-                      onCheckedChange={handleSelectAll}
-                    />
+                      checked={selectedRows.length === paginatedData.length && paginatedData.length />
+0}
+                      onCheckedChange={handleSelectAll} />
                   </th>
                 )}
                 {columns.map((column) => (
@@ -626,8 +625,8 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                       <td className="px-enterprise-3 py-enterprise-3">
                         <DaisyCheckbox
                           checked={selectedRows.includes(row.id)}
-                          onCheckedChange={(checked) => handleSelectRow(row.id, !!checked)}
-                        />
+                          onCheckedChange={(checked) = />
+handleSelectRow(row.id, !!checked)} />
                       </td>
                     )}
                     {columns.map((column) => (
@@ -673,10 +672,12 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
                       key={pageNum}
                       variant={currentPage === pageNum ? 'primary' : 'outline'}
                       size="sm"
-                      onClick={() => setCurrentPage(pageNum)}
+                      onClick={() =>
+          setCurrentPage(pageNum)}
                       className="w-8 h-8 p-0" />
                       {pageNum}
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   );
                 })}
               </div>
@@ -684,10 +685,12 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
               <DaisyButton
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() =>
+          setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages} />
                 Next
-              </DaisyButton>
+              
+        </DaisyButton>
             </div>
           </div>
         )}

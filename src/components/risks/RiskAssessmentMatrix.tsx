@@ -540,7 +540,7 @@ const RiskAssessmentMatrix: React.FC = () => {
 
       {/* Risk Score Summary */}
       <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Calculator className="h-5 w-5" />
@@ -581,17 +581,17 @@ const RiskAssessmentMatrix: React.FC = () => {
       </DaisyCard>
 
       {/* Assessment Form */}
-      <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4" />
-        <DaisyTabsList className="grid w-full grid-cols-4" />
-          <DaisyTabsTrigger value="basic">Basic Info</DaisyTabs>
+      <DaisyTabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4" >
+          <DaisyTabsList className="grid w-full grid-cols-4" >
+            <DaisyTabsTrigger value="basic">Basic Info</DaisyTabs>
           <DaisyTabsTrigger value="factors">Risk Factors</DaisyTabsTrigger>
           <DaisyTabsTrigger value="controls">Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="analysis">AI Analysis</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="basic" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="basic" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle>Basic Risk Information</DaisyCardTitle>
               <DaisyCardDescription >
@@ -607,9 +607,9 @@ const RiskAssessmentMatrix: React.FC = () => {
                   <DaisyInput
                     id="title"
                     value={assessment.title}
-                    onChange={(e) => setAssessment(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Enter a descriptive title for this risk"
-                  />
+                    onChange={(e) = />
+setAssessment(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="Enter a descriptive title for this risk" />
                 </div>
                 
                 <div className="space-y-2">
@@ -618,10 +618,11 @@ const RiskAssessmentMatrix: React.FC = () => {
                     value={assessment.category}
                     onValueChange={(value) => setAssessment(prev => ({ ...prev, category: value }))}
                   >
-                    <DaisySelectTrigger />
-                      <DaisySelectValue placeholder="Select category" /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="OPERATIONAL">Operational</DaisySelectContent>
+                    <DaisySelectTrigger>
+                        <DaisySelectValue placeholder="Select category" />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="OPERATIONAL">Operational</DaisySelectItem>
                       <DaisySelectItem value="FINANCIAL">Financial</DaisySelectItem>
                       <DaisySelectItem value="STRATEGIC">Strategic</DaisySelectItem>
                       <DaisySelectItem value="COMPLIANCE">Compliance</DaisySelectItem>
@@ -636,10 +637,10 @@ const RiskAssessmentMatrix: React.FC = () => {
                 <DaisyTextarea
                   id="description"
                   value={assessment.description}
-                  onChange={(e) => setAssessment(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) = />
+setAssessment(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Provide a detailed description of the risk..."
-                  rows={4}
-                />
+                  rows={4} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -648,9 +649,9 @@ const RiskAssessmentMatrix: React.FC = () => {
                   <DaisyInput
                     id="assessor"
                     value={assessment.assessor}
-                    onChange={(e) => setAssessment(prev => ({ ...prev, assessor: e.target.value }))}
-                    placeholder="Risk assessor name"
-                  />
+                    onChange={(e) = />
+setAssessment(prev => ({ ...prev, assessor: e.target.value }))}
+                    placeholder="Risk assessor name" />
                 </div>
                 
                 <div className="space-y-2">
@@ -659,8 +660,8 @@ const RiskAssessmentMatrix: React.FC = () => {
                     id="assessmentDate"
                     type="date"
                     value={assessment.assessmentDate}
-                    onChange={(e) => setAssessment(prev => ({ ...prev, assessmentDate: e.target.value }))}
-                  />
+                    onChange={(e) = />
+setAssessment(prev => ({ ...prev, assessmentDate: e.target.value }))} />
                 </div>
                 
                 <div className="space-y-2">
@@ -669,8 +670,8 @@ const RiskAssessmentMatrix: React.FC = () => {
                     id="nextReviewDate"
                     type="date"
                     value={assessment.nextReviewDate}
-                    onChange={(e) => setAssessment(prev => ({ ...prev, nextReviewDate: e.target.value }))}
-                  />
+                    onChange={(e) = />
+setAssessment(prev => ({ ...prev, nextReviewDate: e.target.value }))} />
                 </div>
               </div>
 
@@ -679,20 +680,20 @@ const RiskAssessmentMatrix: React.FC = () => {
                 <DaisyTextarea
                   id="comments"
                   value={assessment.comments || ''}
-                  onChange={(e) => setAssessment(prev => ({ ...prev, comments: e.target.value }))}
+                  onChange={(e) = />
+setAssessment(prev => ({ ...prev, comments: e.target.value }))}
                   placeholder="Any additional comments or notes..."
-                  rows={3}
-                />
+                  rows={3} />
               </div>
             </DaisyTextarea>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="factors" className="space-y-4" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DaisyTabsContent value="factors" className="space-y-4" >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Likelihood Factors */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <TrendingUp className="h-5 w-5" />
@@ -721,10 +722,11 @@ const RiskAssessmentMatrix: React.FC = () => {
                           <DaisySelect
                             value={factor.value.toString()}
                             onValueChange={(value) => updateFactor(factor.id, 'value', parseInt(value))} />
-                            <DaisySelectTrigger />
-                              <DaisySelectValue /></DaisySelect>
-                            <DaisySelectContent />
-                              <DaisySelectItem value="1">1 - Very Low</DaisySelectContent>
+                            <DaisySelectTrigger>
+                                <DaisySelectValue />
+</DaisySelect>
+                            <DaisySelectContent >
+                                <DaisySelectItem value="1">1 - Very Low</DaisySelectItem>
                               <DaisySelectItem value="2">2 - Low</DaisySelectItem>
                               <DaisySelectItem value="3">3 - Medium</DaisySelectItem>
                               <DaisySelectItem value="4">4 - High</DaisySelectItem>
@@ -737,10 +739,10 @@ const RiskAssessmentMatrix: React.FC = () => {
                           <DaisyLabel>Justification</DaisyLabel>
                           <DaisyTextarea
                             value={factor.justification || ''}
-                            onChange={(e) => updateFactor(factor.id, 'justification', e.target.value)}
+                            onChange={(e) = />
+updateFactor(factor.id, 'justification', e.target.value)}
                             placeholder="Explain your scoring rationale..."
-                            rows={2}
-                          />
+                            rows={2} />
                         </div>
                       </div>
                     ))}
@@ -751,7 +753,7 @@ const RiskAssessmentMatrix: React.FC = () => {
 
             {/* Impact Factors */}
             <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                 <DaisyCardTitle className="flex items-center gap-2" >
   <Target className="h-5 w-5" />
@@ -780,10 +782,11 @@ const RiskAssessmentMatrix: React.FC = () => {
                           <DaisySelect
                             value={factor.value.toString()}
                             onValueChange={(value) => updateFactor(factor.id, 'value', parseInt(value))} />
-                            <DaisySelectTrigger />
-                              <DaisySelectValue /></DaisySelect>
-                            <DaisySelectContent />
-                              <DaisySelectItem value="1">1 - Minimal</DaisySelectContent>
+                            <DaisySelectTrigger>
+                                <DaisySelectValue />
+</DaisySelect>
+                            <DaisySelectContent >
+                                <DaisySelectItem value="1">1 - Minimal</DaisySelectItem>
                               <DaisySelectItem value="2">2 - Minor</DaisySelectItem>
                               <DaisySelectItem value="3">3 - Moderate</DaisySelectItem>
                               <DaisySelectItem value="4">4 - Major</DaisySelectItem>
@@ -796,10 +799,10 @@ const RiskAssessmentMatrix: React.FC = () => {
                           <DaisyLabel>Justification</DaisyLabel>
                           <DaisyTextarea
                             value={factor.justification || ''}
-                            onChange={(e) => updateFactor(factor.id, 'justification', e.target.value)}
+                            onChange={(e) = />
+updateFactor(factor.id, 'justification', e.target.value)}
                             placeholder="Explain your scoring rationale..."
-                            rows={2}
-                          />
+                            rows={2} />
                         </div>
                       </div>
                     ))}
@@ -810,9 +813,9 @@ const RiskAssessmentMatrix: React.FC = () => {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="controls" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="controls" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Shield className="h-5 w-5" />
@@ -830,10 +833,10 @@ const RiskAssessmentMatrix: React.FC = () => {
                 <div key={index} className="flex items-center gap-2">
                   <DaisyInput
                     value={control}
-                    onChange={(e) => updateMitigatingControl(index, e.target.value)}
+                    onChange={(e) = />
+updateMitigatingControl(index, e.target.value)}
                     placeholder="Describe the mitigating control..."
-                    className="flex-1"
-                  />
+                    className="flex-1" />
                   <DaisyButton
                     variant="outline"
                     size="sm"
@@ -852,9 +855,9 @@ const RiskAssessmentMatrix: React.FC = () => {
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="analysis" className="space-y-4" />
-          <DaisyCard >
-  <DaisyCardBody />
+        <DaisyTabsContent value="analysis" className="space-y-4" >
+            <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="flex items-center gap-2" >
   <Info className="h-5 w-5" />
@@ -919,9 +922,9 @@ const RiskAssessmentMatrix: React.FC = () => {
       </DaisyTabs>
 
       {/* Risk Matrix Dialog */}
-      <DaisyDialog open={showMatrix} onOpenChange={setShowMatrix} />
-        <DaisyDialogContent className="max-w-4xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showMatrix} onOpenChange={setShowMatrix} >
+          <DaisyDialogContent className="max-w-4xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Risk Assessment Matrix</DaisyDialogTitle>
             <DaisyDialogDescription >
@@ -933,7 +936,7 @@ const RiskAssessmentMatrix: React.FC = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-6 gap-1">
               {/* Header row */}
-              <div className="p-2 text-center font-medium">Impact →<br/>Likelihood ↓</div>
+              <div className="p-2 text-center font-medium">Impact →<br />Likelihood ↓</div>
               {[1, 2, 3, 4, 5].map(impact => (
                 <div key={impact} className="p-2 text-center font-medium bg-gray-100">
                   {impact}

@@ -56,8 +56,8 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
           key={index}
           height={16}
           width={index === lines - 1 ? '75%' : '100%'}
-        />
-      ))}
+        >
+        ))}
     </div>
   );
 };
@@ -66,14 +66,14 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
   return (
     <div className={cn("p-4 border border-gray-200 rounded-lg space-y-3", className)}>
       <div className="flex items-center space-x-3">
-        <DaisySkeleton width={40} height={40} className="rounded-full" />
-        <div className="space-y-2 flex-1">
-          <DaisySkeleton height={16} width="60%" />
-          <DaisySkeleton height={14} width="40%" />
-        </div>
+        <DaisySkeleton width={40} height={40} className="rounded-full" >
+          <div className="space-y-2 flex-1">
+          <DaisySkeleton height={16} width="60%" >
+            <DaisySkeleton height={14} width="40%" >
+          </div>
       </div>
-      <DaisySkeletonText lines={2} />
-    </div>
+      <DaisySkeletonText lines={2} >
+      </div>
   );
 };
 
@@ -91,16 +91,16 @@ export const SkeletonTable: React.FC<{
       {/* Header */}
       <div className="flex space-x-3">
         {Array.from({ length: columns }).map((_, index) => (
-          <DaisySkeleton key={`header-${index}`} height={20} className="flex-1" />
-        ))}
+          <DaisySkeleton key={`header-${index}`} height={20} className="flex-1" >
+          ))}
       </div>
       
       {/* Rows */}
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={`row-${rowIndex}`} className="flex space-x-3">
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <DaisySkeleton key={`cell-${rowIndex}-${colIndex}`} height={16} className="flex-1" />
-          ))}
+            <DaisySkeleton key={`cell-${rowIndex}-${colIndex}`} height={16} className="flex-1" >
+            ))}
         </div>
       ))}
     </div>
@@ -157,7 +157,7 @@ interface ProgressBarProps {
   className?: string;
 }
 
-export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
+export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
   value,
   max = 100,
   label,
@@ -190,8 +190,7 @@ export const ProgressBar: React.FC<DaisyProgressBarProps> = ({
           aria-valuenow={value}
           aria-valuemin={0}
           aria-valuemax={max}
-          aria-label={label || 'Progress indicator'}
-        />
+          aria-label={label || 'Progress indicator'} />
       </div>
     </div>
   );
@@ -230,8 +229,7 @@ export const CircularProgress: React.FC<{
           stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="none"
-          className="text-gray-200"
-        />
+          className="text-gray-200" />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -242,8 +240,7 @@ export const CircularProgress: React.FC<{
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           className="text-[#199BEC] transition-all duration-300 ease-in-out"
-          strokeLinecap="round"
-        />
+          strokeLinecap="round" />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <span className="text-xs font-medium text-gray-700">
@@ -380,9 +377,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           </p>
         </div>
         {action && (
-          <DaisyButton onClick={action.onClick} >
-  {action.label}
-</DaisyButton>
+          <DaisyButton onClick={action.onClick}>
+          {action.label}
+
+        </DaisyButton>
           </DaisyButton>
         )}
       </div>
@@ -405,8 +403,7 @@ export const SearchEmptyState: React.FC<{
       action={onClearSearch ? {
         label: 'Clear search',
         onClick: onClearSearch
-      } : undefined}
-    />
+      } : undefined} />
   );
 };
 
@@ -425,8 +422,7 @@ export const DataEmptyState: React.FC<{
       action={onCreateNew ? {
         label: `Create ${entityName.slice(0, -1)}`,
         onClick: onCreateNew
-      } : undefined}
-    />
+      } : undefined} />
   );
 };
 
@@ -460,9 +456,10 @@ export const SuccessState: React.FC<{
           </p>
         </div>
         {action && (
-          <DaisyButton onClick={action.onClick} >
-  {action.label}
-</DaisyButton>
+          <DaisyButton onClick={action.onClick}>
+          {action.label}
+
+        </DaisyButton>
           </DaisyButton>
         )}
       </div>

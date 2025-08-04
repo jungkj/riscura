@@ -322,7 +322,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
   if (loading) {
     return (
       <DaisyCard className={cn("w-full", className)} >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
           <DaisyCardTitle className="flex items-center gap-2" >
   <Brain className="h-5 w-5 text-indigo-600 animate-pulse" />
@@ -351,7 +351,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
 
   return (
     <DaisyCard className={cardClass} >
-  <DaisyCardBody className="pb-3" />
+  <DaisyCardBody className="pb-3" >
 </DaisyCard>
         <div className="flex items-center justify-between">
           <DaisyCardTitle className="flex items-center gap-2" >
@@ -400,18 +400,18 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       
 
       <DaisyCardBody className="space-y-4" >
-  <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
+  <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
 </DaisyCardBody>
           <div className="flex items-center justify-between">
-            <DaisyTabsList className="grid grid-cols-3 w-auto" />
-              <DaisyTabsTrigger value="forecast" className="text-xs" />
-                Forecast
+            <DaisyTabsList className="grid grid-cols-3 w-auto" >
+                <DaisyTabsTrigger value="forecast" className="text-xs" >
+                  Forecast
               </DaisyTabsList>
-              <DaisyTabsTrigger value="factors" className="text-xs" />
-                Factors
+              <DaisyTabsTrigger value="factors" className="text-xs" >
+                  Factors
               </DaisyTabsTrigger>
-              <DaisyTabsTrigger value="confidence" className="text-xs" />
-                Confidence
+              <DaisyTabsTrigger value="confidence" className="text-xs" >
+                  Confidence
               </DaisyTabsTrigger>
             </DaisyTabsList>
             
@@ -432,8 +432,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                     type="checkbox"
                     checked={showAnomalies}
                     onChange={(e) => setShowAnomalies(e.target.checked)}
-                    className="w-3 h-3"
-                  />
+                    className="w-3 h-3" />
                   Anomalies
                 </label>
               </div>
@@ -441,16 +440,15 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </div>
 
           {/* Forecast Tab */}
-          <DaisyTabsContent value="forecast" className="mt-4" />
-            <div className="h-80">
+          <DaisyTabsContent value="forecast" className="mt-4" >
+              <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="date" 
                     tick={{ fontSize: 10 }}
-                    interval="preserveStartEnd"
-                  />
+                    interval="preserveStartEnd" />
                   <YAxis tick={{ fontSize: 10 }} />
                   <DaisyTooltip content={<CustomTooltip />} />
                   <Legend />
@@ -463,8 +461,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       stroke="none"
                       fill="#e0e7ff"
                       fillOpacity={0.3}
-                      name="Confidence Interval"
-                    />
+                      name="Confidence Interval" />
                   )}
                   
                   {showConfidenceInterval && (
@@ -473,8 +470,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       dataKey="lowerBound" 
                       stroke="none"
                       fill="#ffffff"
-                      fillOpacity={1}
-                    />
+                      fillOpacity={1} />
                   )}
                   
                   {/* Actual data */}
@@ -485,8 +481,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                     strokeWidth={2}
                     dot={{ fill: '#3b82f6', strokeWidth: 2, r: 3 }}
                     name="Actual"
-                    connectNulls={false}
-                  />
+                    connectNulls={false} />
                   
                   {/* Predicted data */}
                   <Line
@@ -497,8 +492,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                     strokeDasharray="5 5"
                     dot={{ fill: '#ef4444', strokeWidth: 2, r: 3 }}
                     name="Predicted"
-                    connectNulls={false}
-                  />
+                    connectNulls={false} />
                   
                   {/* Anomalies */}
                   {showAnomalies && (
@@ -506,8 +500,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       dataKey="anomaly"
                       fill="#f59e0b"
                       shape="star"
-                      name="Anomalies"
-                    />
+                      name="Anomalies" />
                   )}
                   
                   {/* Reference line for current value */}
@@ -516,8 +509,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       y={prediction.currentValue} 
                       stroke="#64748b" 
                       strokeDasharray="2 2"
-                      label="Current"
-                    />
+                      label="Current" />
                   )}
                 </ComposedChart>
               </ResponsiveContainer>
@@ -525,8 +517,8 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </DaisyTabsContent>
 
           {/* Factors Tab */}
-          <DaisyTabsContent value="factors" className="mt-4" />
-            {prediction && showFactors && (
+          <DaisyTabsContent value="factors" className="mt-4" >
+              {prediction && showFactors && (
               <div className="space-y-3">
                 <h4 className="font-medium text-sm">Prediction Factors</h4>
                 {prediction.factors.map((factor, index) => (
@@ -541,8 +533,8 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                             factor.direction === 'positive' ? 'text-green-600' : 'text-red-600'
                           )} >
   {factor.direction === 'positive' ? '+' : '-'}{(factor.impact * 100).toFixed(0)}%
-</DaisyTabsContent>
-                        </DaisyBadge>
+</DaisyBadge>
+          </DaisyTabsContent>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
                         <div 
@@ -550,8 +542,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                             "h-1.5 rounded-full",
                             factor.direction === 'positive' ? 'bg-green-500' : 'bg-red-500'
                           )}
-                          style={{ width: `${factor.impact * 100}%` }}
-                        />
+                          style={{ width: `${factor.impact * 100}%` }} />
                       </div>
                     </div>
                     <div className="ml-4 text-right">
@@ -565,8 +556,8 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           </DaisyTabsContent>
 
           {/* Confidence Tab */}
-          <DaisyTabsContent value="confidence" className="mt-4" />
-            <div className="space-y-4">
+          <DaisyTabsContent value="confidence" className="mt-4" >
+              <div className="space-y-4">
               <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData.filter(d => d.confidence)}>
@@ -575,8 +566,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                     <YAxis 
                       domain={[0, 100]} 
                       tick={{ fontSize: 10 }}
-                      label={{ value: 'Confidence %', angle: -90, position: 'insideLeft' }}
-                    />
+                      label={{ value: 'Confidence %', angle: -90, position: 'insideLeft' }} />
                     <DaisyTooltip content={<CustomTooltip />} />
                     <Area
                       type="monotone"
@@ -584,8 +574,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
                       stroke="#8b5cf6"
                       fill="#8b5cf6"
                       fillOpacity={0.3}
-                      name="Confidence"
-                    />
+                      name="Confidence" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

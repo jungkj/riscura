@@ -272,10 +272,8 @@ const MentionInput: React.FC<{
         onChange={handleInputChange}
         placeholder={placeholder}
         autoFocus={autoFocus}
-        className="min-h-[80px] resize-none"
-      />
-
-      {showMentions && (
+        className="min-h-[80px] resize-none" />
+{showMentions && (
         <DaisyCard className="absolute z-50 w-64 mt-1 shadow-lg" >
   <DaisyCardBody className="p-2" >
   </DaisyTextarea>
@@ -290,10 +288,10 @@ const MentionInput: React.FC<{
                   className="flex items-center space-x-2 p-2 rounded hover:bg-surface-secondary cursor-pointer"
                   onClick={() => insertMention(user)}
                 >
-                  <DaisyAvatar className="h-6 w-6" />
-                    <DaisyAvatarImage src={user.avatar} />
-                    <DaisyAvatarFallback className="text-caption" />
-                      {user.name.split(' ').map(n => n[0]).join('')}
+                  <DaisyAvatar className="h-6 w-6" >
+                      <DaisyAvatarImage src={user.avatar} >
+                      <DaisyAvatarFallback className="text-caption" >
+                        {user.name.split(' ').map(n => n[0]).join('')}
                     </DaisyAvatar>
                   </DaisyAvatar>
                   <div className="flex-1 min-w-0">
@@ -391,10 +389,10 @@ const CommentComponent: React.FC<{
         {/* Header */}
         <div className="flex items-start justify-between mb-enterprise-3">
           <div className="flex items-center space-x-enterprise-3">
-            <DaisyAvatar className="h-8 w-8" />
-              <DaisyAvatarImage src={comment.author.avatar} />
-              <DaisyAvatarFallback className="text-caption" />
-                {comment.author.name.split(' ').map(n => n[0]).join('')}
+            <DaisyAvatar className="h-8 w-8" >
+                <DaisyAvatarImage src={comment.author.avatar} >
+                <DaisyAvatarFallback className="text-caption" >
+                  {comment.author.name.split(' ').map(n => n[0]).join('')}
               </DaisyAvatar>
             </DaisyAvatar>
             <div>
@@ -429,15 +427,15 @@ const CommentComponent: React.FC<{
               <EyeOff className="h-3 w-3 text-text-tertiary" />
             )}
             
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
   <MoreHorizontal className="h-3 w-3" />
 </DaisyDropdownMenu>
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent align="end" />
-                <DaisyDropdownMenuItem onClick={() => onEdit(comment.id)} />
+              <DaisyDropdownMenuContent align="end" >
+                  <DaisyDropdownMenuItem onClick={() => onEdit(comment.id)} />
                   <Edit className="h-3 w-3 mr-enterprise-2" />
                   Edit
                 </DaisyDropdownMenuContent>
@@ -518,9 +516,9 @@ const CommentComponent: React.FC<{
             Reply
           </DaisyButton>
 
-          <DaisyPopover open={showReactions} onOpenChange={setShowReactions} />
-            <DaisyPopoverTrigger asChild />
-              <DaisyButton
+          <DaisyPopover open={showReactions} onOpenChange={setShowReactions} >
+              <DaisyPopoverTrigger asChild >
+                <DaisyButton
                 variant="ghost"
                 size="sm"
                 className="h-6 px-0 text-text-secondary hover:text-text-primary" >
@@ -529,8 +527,8 @@ const CommentComponent: React.FC<{
                 React
               </DaisyButton>
             </DaisyPopoverTrigger>
-            <DaisyPopoverContent className="w-auto p-2" />
-              <div className="flex space-x-1">
+            <DaisyPopoverContent className="w-auto p-2" >
+                <div className="flex space-x-1">
                 {commonReactions.map((emoji) => (
                   <DaisyButton
                     key={emoji}
@@ -579,8 +577,7 @@ const CommentComponent: React.FC<{
               onReact={onReact}
               onResolve={onResolve}
               onPin={onPin}
-              level={level + 1}
-            />
+              level={level + 1} />
           ))}
         </div>
       )}
@@ -728,8 +725,8 @@ export const CommentSystem: React.FC<{
     return (
       <div className="w-80 max-h-96 flex flex-col">
         <div className="flex-1 overflow-hidden">
-          <DaisyScrollArea className="h-full" />
-            <div className="p-enterprise-4 space-y-enterprise-4">
+          <DaisyScrollArea className="h-full" >
+              <div className="p-enterprise-4 space-y-enterprise-4">
               {filteredComments.map((comment) => (
                 <CommentComponent
                   key={comment.id}
@@ -740,8 +737,7 @@ export const CommentSystem: React.FC<{
                   onDelete={handleDelete}
                   onReact={handleReact}
                   onResolve={handleResolve}
-                  onPin={handlePin}
-                />
+                  onPin={handlePin} />
               ))}
               {filteredComments.length === 0 && (
                 <div className="text-center py-enterprise-6 text-text-secondary">
@@ -758,8 +754,7 @@ export const CommentSystem: React.FC<{
             value={newComment}
             onChange={(value) => setNewComment(value)}
             placeholder="Add a comment..."
-            users={sampleUsers}
-          />
+            users={sampleUsers} />
           <div className="flex items-center justify-between mt-enterprise-2">
             <div className="text-caption text-text-secondary">
               {replyingTo && 'Replying to comment'}
@@ -801,17 +796,17 @@ export const CommentSystem: React.FC<{
           </div>
           
           <div className="flex items-center space-x-enterprise-2">
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton variant="outline" size="sm" >
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton variant="outline" size="sm" >
   <Filter className="h-3 w-3 mr-enterprise-2" />
 </DaisyDropdownMenu>
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent />
-                <DaisyDropdownMenuItem onClick={() => setFilterBy('all')} />
+              <DaisyDropdownMenuContent >
+                  <DaisyDropdownMenuItem onClick={() => setFilterBy('all')} />
                   All Comments
                 </DaisyDropdownMenuContent>
                 <DaisyDropdownMenuItem onClick={() => setFilterBy('mentions')} />
@@ -844,10 +839,10 @@ export const CommentSystem: React.FC<{
   </DaisyCard>
 </DaisyCardBody>
           <div className="flex items-start space-x-enterprise-3">
-            <DaisyAvatar className="h-8 w-8" />
-              <DaisyAvatarImage src={sampleUsers[0].avatar} />
-              <DaisyAvatarFallback className="text-caption" />
-                {sampleUsers[0].name.split(' ').map(n => n[0]).join('')}
+            <DaisyAvatar className="h-8 w-8" >
+                <DaisyAvatarImage src={sampleUsers[0].avatar} >
+                <DaisyAvatarFallback className="text-caption" >
+                  {sampleUsers[0].name.split(' ').map(n => n[0]).join('')}
               </DaisyAvatar>
             </DaisyAvatar>
             <div className="flex-1 space-y-enterprise-3">
@@ -856,8 +851,7 @@ export const CommentSystem: React.FC<{
                 onChange={(value) => setNewComment(value)}
                 placeholder={replyingTo ? "Write a reply..." : "Start a discussion..."}
                 users={sampleUsers}
-                autoFocus={!!replyingTo}
-              />
+                autoFocus={!!replyingTo} />
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-enterprise-2">
                   {replyingTo && (
@@ -872,16 +866,19 @@ export const CommentSystem: React.FC<{
                     <DaisyButton
                       variant="outline"
                       size="sm"
-                      onClick={() => setReplyingTo(null)} />
+                      onClick={() =>
+          setReplyingTo(null)} />
                       Cancel
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   )}
                   <DaisyButton
                     size="sm"
                     onClick={handleAddComment}
-                    disabled={!newComment.trim()} >
-  {replyingTo ? 'Reply' : 'Comment'}
-</DaisyButton>
+                    disabled={!newComment.trim()}>
+          {replyingTo ? 'Reply' : 'Comment'}
+
+        </DaisyButton>
                   </DaisyButton>
                 </div>
               </div>
@@ -902,8 +899,7 @@ export const CommentSystem: React.FC<{
             onDelete={handleDelete}
             onReact={handleReact}
             onResolve={handleResolve}
-            onPin={handlePin}
-          />
+            onPin={handlePin} />
         ))}
         
         {filteredComments.length === 0 && (

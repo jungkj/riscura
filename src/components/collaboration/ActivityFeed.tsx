@@ -525,10 +525,10 @@ const ActivityItem: React.FC<{
         <div className="flex items-start space-x-enterprise-3">
           {/* Avatar & Icon */}
           <div className="relative">
-            <DaisyAvatar className="h-8 w-8" />
-              <DaisyAvatarImage src={activity.actor.avatar} />
-              <DaisyAvatarFallback className="text-caption" />
-                {activity.actor.name === 'System' ? 'SYS' : 
+            <DaisyAvatar className="h-8 w-8" >
+                <DaisyAvatarImage src={activity.actor.avatar} >
+                <DaisyAvatarFallback className="text-caption" >
+                  {activity.actor.name === 'System' ? 'SYS' : 
                  activity.actor.name.split(' ').map(n => n[0]).join('')}
               </DaisyAvatar>
             </DaisyAvatar>
@@ -587,15 +587,15 @@ const ActivityItem: React.FC<{
                   </DaisyButton>
                 )}
                 
-                <DaisyDropdownMenu />
-                  <DaisyDropdownMenuTrigger asChild />
-                    <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
+                <DaisyDropdownMenu >
+                    <DaisyDropdownMenuTrigger asChild >
+                      <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
   <MoreHorizontal className="h-3 w-3" />
 </DaisyDropdownMenu>
                     </DaisyButton>
                   </DaisyDropdownMenuTrigger>
-                  <DaisyDropdownMenuContent align="end" />
-                    <DaisyDropdownMenuItem onClick={() => onViewDetails?.(activity)} />
+                  <DaisyDropdownMenuContent align="end" >
+                      <DaisyDropdownMenuItem onClick={() => onViewDetails?.(activity)} />
                       <Eye className="h-3 w-3 mr-enterprise-2" />
                       View Details
                     </DaisyDropdownMenuContent>
@@ -831,22 +831,22 @@ export const ActivityFeed: React.FC<{
             <DaisyInput
               placeholder="Search activities..."
               value={filters.search || ''}
-              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              className="w-48"
-            />
+              onChange={(e) = />
+setFilters(prev => ({ ...prev, search: e.target.value }))}
+              className="w-48" />
 
             {/* Filters */}
-            <DaisyDropdownMenu />
-              <DaisyDropdownMenuTrigger asChild />
-                <DaisyButton variant="outline" size="sm" >
+            <DaisyDropdownMenu >
+                <DaisyDropdownMenuTrigger asChild >
+                  <DaisyButton variant="outline" size="sm" >
   <Filter className="h-3 w-3 mr-enterprise-2" />
 </DaisyInput>
                   Filter
                   <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                 </DaisyButton>
               </DaisyDropdownMenuTrigger>
-              <DaisyDropdownMenuContent />
-                <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}>
+              <DaisyDropdownMenuContent >
+                  <DaisyDropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}>
                   <Bell className="h-3 w-3 mr-enterprise-2" />
                   {filters.unreadOnly ? 'Show All' : 'Unread Only'}
                 </DaisyDropdownMenuContent>
@@ -877,17 +877,17 @@ export const ActivityFeed: React.FC<{
 
             {/* Export */}
             {showExport && (
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="outline" size="sm" >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="outline" size="sm" >
   <Download className="h-3 w-3 mr-enterprise-2" />
 </DaisyDropdownMenu>
                     Export
                     <ChevronDown className="h-3 w-3 ml-enterprise-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => handleExport('csv')} />
                     Export as CSV
                   </DaisyDropdownMenuContent>
                   <DaisyDropdownMenuItem onClick={() => handleExport('json')} />
@@ -905,9 +905,10 @@ export const ActivityFeed: React.FC<{
               <DaisyButton
                 variant="outline"
                 size="sm"
-                onClick={handleMarkAllAsRead} >
-  Mark All Read
-</DaisyButton>
+                onClick={handleMarkAllAsRead}>
+          Mark All Read
+
+        </DaisyButton>
               </DaisyButton>
             )}
           </div>
@@ -926,8 +927,7 @@ export const ActivityFeed: React.FC<{
               activity={activity}
               isCompact={isCompact}
               onMarkAsRead={handleMarkAsRead}
-              onViewDetails={handleViewDetails}
-            />
+              onViewDetails={handleViewDetails} />
           ))
         ) : (
           <div className="text-center py-enterprise-8 text-text-secondary">
@@ -941,17 +941,18 @@ export const ActivityFeed: React.FC<{
       {/* Load More */}
       {!isCompact && filteredActivities.length > (maxItems || 20) && (
         <div className="text-center">
-          <DaisyButton variant="outline" >
-  Load More Activities
-</DaisyButton>
+          <DaisyButton variant="outline">
+          Load More Activities
+
+        </DaisyButton>
           </DaisyButton>
         </div>
       )}
 
       {/* Activity Details Dialog */}
-      <DaisyDialog open={showActivityDialog} onOpenChange={setShowActivityDialog} />
-        <DaisyDialogContent className="max-w-2xl" >
-  <DaisyDialogHeader />
+      <DaisyDialog open={showActivityDialog} onOpenChange={setShowActivityDialog} >
+          <DaisyDialogContent className="max-w-2xl" >
+  <DaisyDialogHeader>
 </DaisyDialog>
             <DaisyDialogTitle>Activity Details</DaisyDialogTitle>
           </DaisyDialogHeader>
@@ -961,14 +962,12 @@ export const ActivityFeed: React.FC<{
               <ActivityItem
                 activity={selectedActivity}
                 showDetails={true}
-                onMarkAsRead={handleMarkAsRead}
-              />
+                onMarkAsRead={handleMarkAsRead} />
 
               {/* Additional Details */}
               <div className="space-y-enterprise-3">
                 <DaisySeparator />
-                
-                <div className="grid grid-cols-2 gap-enterprise-4 text-body-sm">
+<div className="grid grid-cols-2 gap-enterprise-4 text-body-sm">
                   <div>
                     <label className="font-medium">Activity ID</label>
                     <p className="text-text-secondary font-mono">{selectedActivity.id}</p>

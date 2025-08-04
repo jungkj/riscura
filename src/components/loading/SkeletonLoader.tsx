@@ -33,8 +33,7 @@ const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
       style={{
         width: typeof width === 'number' ? `${width}px` : width,
         height: typeof height === 'number' ? `${height}px` : height,
-      }}
-    />
+      }} />
   );
 };
 
@@ -58,8 +57,7 @@ const TextSkeleton: React.FC<TextSkeletonProps> = ({
         <BaseSkeleton
           key={index}
           height={lineHeight}
-          width={index === lines - 1 ? lastLineWidth : '100%'}
-        />
+          width={index === lines - 1 ? lastLineWidth : '100%'} />
       ))}
     </div>
   );
@@ -217,8 +215,7 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
                 key={index}
                 width="100%"
                 height={`${Math.random() * 60 + 40}%`}
-                rounded="sm"
-              />
+                rounded="sm" />
             ))}
           </div>
         );
@@ -240,15 +237,13 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
                 stroke="url(#skeleton-gradient)"
                 strokeWidth="3"
                 fill="none"
-                className="animate-pulse"
-              />
+                className="animate-pulse" />
               {type === 'area' && (
                 <path
                   d="M0,150 Q100,100 200,120 T400,80 L400,200 L0,200 Z"
                   fill="url(#skeleton-gradient)"
                   opacity="0.3"
-                  className="animate-pulse"
-                />
+                  className="animate-pulse" />
               )}
             </svg>
           </div>
@@ -381,8 +376,8 @@ const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({ className = '' })
       </div>
 
       {/* Data Table */}
-      <DaisyTableSkeleton rows={8} columns={5} />
-    </div>
+      <DaisyTableSkeleton rows={8} columns={5} >
+      </div>
   );
 };
 
@@ -393,7 +388,7 @@ interface ProgressiveSkeletonProps {
   className?: string;
 }
 
-const ProgressiveSkeleton: React.FC<DaisyProgressiveSkeletonProps> = ({
+const ProgressiveSkeleton: React.FC<DaisyProgressiveSkeletonProps />= ({
   itemCount = 3,
   itemHeight = '80px',
   className = '',

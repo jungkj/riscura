@@ -90,7 +90,8 @@ export function QuestionnaireBuilder({
       case 'multiple_choice': return <List className="w-4 h-4" />;
       case 'scale': return <Gauge className="w-4 h-4" />;
       case 'boolean': return <ToggleLeft className="w-4 h-4" />;
-      case 'date': return <DaisyCalendar className="w-4 h-4" />;
+      case 'date': return <DaisyCalendar className="w-4 h-4" />
+;
       case 'file_upload': return <Upload className="w-4 h-4" />;
       default: return <Type className="w-4 h-4" />;
     }
@@ -394,10 +395,10 @@ export function QuestionnaireBuilder({
           <DaisyTextarea
             id="question-text"
             value={questionForm.text}
-            onChange={(e) => setQuestionForm(prev => ({ ...prev, text: e.target.value }))}
+            onChange={(e) = />
+setQuestionForm(prev => ({ ...prev, text: e.target.value }))}
             placeholder="Enter your question..."
-            rows={3}
-          />
+            rows={3} />
         </div>
 
         {/* Question Type */}
@@ -409,7 +410,6 @@ export function QuestionnaireBuilder({
           >
             <DaisySelectTrigger>
               <DaisySelectValue />
-            </DaisySelectTrigger>
             <DaisySelectContent>
               <DaisySelectItem value="text">Text Input</DaisySelectItem>
               <DaisySelectItem value="textarea">Long Text</DaisySelectItem>
@@ -430,10 +430,10 @@ export function QuestionnaireBuilder({
           <DaisyTextarea
             id="question-description"
             value={questionForm.description}
-            onChange={(e) => setQuestionForm(prev => ({ ...prev, description: e.target.value }))}
+            onChange={(e) = />
+setQuestionForm(prev => ({ ...prev, description: e.target.value }))}
             placeholder="Provide additional context or instructions..."
-            rows={2}
-          />
+            rows={2} />
         </div>
 
         {/* Required Toggle */}
@@ -442,8 +442,8 @@ export function QuestionnaireBuilder({
           <DaisySwitch
             id="question-required"
             checked={questionForm.required}
-            onCheckedChange={(checked) => setQuestionForm(prev => ({ ...prev, required: checked }))}
-          />
+            onCheckedChange={(checked) = />
+setQuestionForm(prev => ({ ...prev, required: checked }))} />
         </div>
 
         {/* Question-specific Configuration */}
@@ -455,7 +455,8 @@ export function QuestionnaireBuilder({
                 <div key={index} className="flex items-center space-x-2">
                   <DaisyInput
                     value={option.text}
-                    onChange={(e) => {
+                    onChange={(e) = />
+{
                       const newOptions = [...(questionForm.config.options || [])];
                       newOptions[index] = { ...option, text: e.target.value };
                       setQuestionForm(prev => ({
@@ -463,8 +464,7 @@ export function QuestionnaireBuilder({
                         config: { ...prev.config, options: newOptions }
                       }));
                     }}
-                    placeholder={`Option ${index + 1}`}
-                  />
+                    placeholder={`Option ${index + 1}`} />
                   <DaisyButton
                     variant="ghost"
                     size="sm"
@@ -514,7 +514,8 @@ export function QuestionnaireBuilder({
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.min || 1}
-                  onChange={(e) => setQuestionForm(prev => ({
+                  onChange={(e) = />
+setQuestionForm(prev => ({
                     ...prev,
                     config: {
                       ...prev.config,
@@ -526,15 +527,15 @@ export function QuestionnaireBuilder({
                         showLabels: prev.config.scale?.showLabels || false
                       }
                     }
-                  }))}
-                />
+                  }))} />
               </div>
               <div>
                 <DaisyLabel>Max Value</DaisyLabel>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.max || 10}
-                  onChange={(e) => setQuestionForm(prev => ({
+                  onChange={(e) = />
+setQuestionForm(prev => ({
                     ...prev,
                     config: {
                       ...prev.config,
@@ -546,15 +547,15 @@ export function QuestionnaireBuilder({
                         showLabels: prev.config.scale?.showLabels || false
                       }
                     }
-                  }))}
-                />
+                  }))} />
               </div>
               <div>
                 <DaisyLabel>Step</DaisyLabel>
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.step || 1}
-                  onChange={(e) => setQuestionForm(prev => ({
+                  onChange={(e) = />
+setQuestionForm(prev => ({
                     ...prev,
                     config: {
                       ...prev.config,
@@ -566,8 +567,7 @@ export function QuestionnaireBuilder({
                         showLabels: prev.config.scale?.showLabels || false
                       }
                     }
-                  }))}
-                />
+                  }))} />
               </div>
             </div>
           </div>
@@ -594,26 +594,24 @@ export function QuestionnaireBuilder({
               {questionnaire ? 'Edit Questionnaire' : 'Create Questionnaire'}
             </h1>
             {aiEnabled && (
-              <DaisyBadge className="bg-secondary/20 text-foreground border-border" >
-  <Brain className="w-3 h-3 mr-1" />
-</DaisyBadge>
+              <DaisyBadge className="bg-secondary/20 text-foreground border-border">
+                <Brain className="w-3 h-3 mr-1" />
                 AI Enhanced
               </DaisyBadge>
             )}
           </div>
 
           <div className="flex items-center space-x-2">
-            <DaisyButton variant="ghost" onClick={() => setIsPreviewMode(!isPreviewMode)} />
+            <DaisyButton variant="ghost" onClick={() => setIsPreviewMode(!isPreviewMode)}>
               <Eye className="w-4 h-4 mr-2" />
               {isPreviewMode ? 'Edit' : 'Preview'}
             </DaisyButton>
-            <DaisyButton variant="outline" onClick={onCancel} >
-  Cancel
-</DaisyButton>
-            </DaisyButton>
-            <DaisyButton onClick={handleSave} >
-  <Save className="w-4 h-4 mr-2" />
-</DaisyButton>
+            <DaisyButton variant="outline" onClick={onCancel}>
+          Cancel
+            
+        </DaisyButton>
+            <DaisyButton onClick={handleSave}>
+              <Save className="w-4 h-4 mr-2" />
               Save
             </DaisyButton>
           </div>
@@ -623,18 +621,18 @@ export function QuestionnaireBuilder({
       <div className="flex">
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" />
-            <DaisyTabsList />
-              <DaisyTabsTrigger value="builder">Builder</DaisyTabs>
+          <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6" >
+              <DaisyTabsList >
+                <DaisyTabsTrigger value="builder">Builder</DaisyTabs>
               <DaisyTabsTrigger value="settings">Settings</DaisyTabsTrigger>
               <DaisyTabsTrigger value="ai">AI Configuration</DaisyTabsTrigger>
               <DaisyTabsTrigger value="preview">Preview</DaisyTabsTrigger>
             </DaisyTabsList>
 
-            <DaisyTabsContent value="builder" className="space-y-6" />
-              {/* Questionnaire Header */}
+            <DaisyTabsContent value="builder" className="space-y-6" >
+                {/* Questionnaire Header */}
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Details</DaisyCardTitle>
         </DaisyCardBody>
@@ -646,17 +644,18 @@ export function QuestionnaireBuilder({
                       <DaisyInput
                         id="title"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Enter questionnaire title..."
-                      />
+                        onChange={(e) = />
+setTitle(e.target.value)}
+                        placeholder="Enter questionnaire title..." />
                     </div>
                     <div>
                       <DaisyLabel htmlFor="category">Category</DaisyInput>
                       <DaisySelect value={category} onValueChange={(value) => setCategory(value as QuestionnaireCategory)} />
-                        <DaisySelectTrigger />
-                          <DaisySelectValue /></DaisySelect>
-                        <DaisySelectContent />
-                          <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectContent>
+                        <DaisySelectTrigger>
+                            <DaisySelectValue />
+</DaisySelect>
+                        <DaisySelectContent >
+                            <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
                           <DaisySelectItem value="compliance_audit">Compliance Audit</DaisySelectItem>
                           <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
                           <DaisySelectItem value="vendor_assessment">Vendor Assessment</DaisySelectItem>
@@ -670,25 +669,24 @@ export function QuestionnaireBuilder({
                     <DaisyTextarea
                       id="description"
                       value={description}
-                      onChange={(e) => setDescription(e.target.value)}
+                      onChange={(e) = />
+setDescription(e.target.value)}
                       placeholder="Describe the purpose and scope of this questionnaire..."
-                      rows={3}
-                    />
+                      rows={3} />
                   </div>
                   <div className="flex items-center justify-between">
                     <DaisyLabel htmlFor="ai-enabled">Enable AI Features</DaisyTextarea>
                     <DaisySwitch
                       id="ai-enabled"
                       checked={aiEnabled}
-                      onCheckedChange={setAiEnabled}
-                    />
-                  </div>
+                      onCheckedChange={setAiEnabled} />
+</div>
                 </DaisySwitch>
               </DaisyCard>
 
               {/* Sections */}
               <DaisyCard >
-  <DaisyCardBody />
+  <DaisyCardBody >
 </DaisyCard>
                   <div className="flex items-center justify-between">
                     <DaisyCardTitle>Sections & Questions</DaisyCardTitle>
@@ -728,10 +726,10 @@ export function QuestionnaireBuilder({
                               <div className="flex-1">
                                 <DaisyInput
                                   value={section.title}
-                                  onChange={(e) => updateSection(section.id, { title: e.target.value })}
+                                  onChange={(e) = />
+updateSection(section.id, { title: e.target.value })}
                                   className="font-medium"
-                                  placeholder="Section title..."
-                                />
+                                  placeholder="Section title..." />
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -753,11 +751,11 @@ export function QuestionnaireBuilder({
                           {/* Section Description */}
                           <DaisyTextarea
                             value={section.description || ''}
-                            onChange={(e) => updateSection(section.id, { description: e.target.value })}
+                            onChange={(e) = />
+updateSection(section.id, { description: e.target.value })}
                             placeholder="Section description (optional)..."
                             className="mb-4"
-                            rows={2}
-                          />
+                            rows={2} />
 
                           {/* Questions */}
                           <div className="space-y-2">
@@ -847,9 +845,9 @@ export function QuestionnaireBuilder({
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="settings" />
-              <DaisyCard >
-  <DaisyCardBody />
+            <DaisyTabsContent value="settings" >
+                <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle>Questionnaire Settings</DaisyCardTitle>
         </DaisyCardBody>
@@ -875,9 +873,9 @@ export function QuestionnaireBuilder({
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="ai" />
-              <DaisyCard >
-  <DaisyCardBody />
+            <DaisyTabsContent value="ai" >
+                <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle>AI Configuration</DaisyCardTitle>
         </DaisyCardBody>
@@ -903,9 +901,9 @@ export function QuestionnaireBuilder({
               </DaisyCard>
             </DaisyTabsContent>
 
-            <DaisyTabsContent value="preview" />
-              <DaisyCard >
-  <DaisyCardBody />
+            <DaisyTabsContent value="preview" >
+                <DaisyCard >
+  <DaisyCardBody >
 </DaisyTabsContent>
                   <DaisyCardTitle>Preview</DaisyCardTitle>
         </DaisyCardBody>

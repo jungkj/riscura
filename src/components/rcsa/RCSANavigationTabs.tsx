@@ -277,11 +277,13 @@ export function RCSANavigationTabs({
              key={tab.value}
              variant={currentTab === tab.value ? 'primary' : 'outline'}
              size="sm"
-             onClick={() => handleTabChange(tab.value)}
+             onClick={() =>
+          handleTabChange(tab.value)}
              disabled={tab.disabled}
              className="h-auto py-2 px-3" />
             {getTabContent(tab)}
-          </DaisyButton>
+          
+        </DaisyButton>
         ))}
         {children}
       </div>
@@ -290,12 +292,12 @@ export function RCSANavigationTabs({
 
   return (
     <div className={cn("border-b border-border mb-6", className)}>
-      <DaisyTabs value={currentTab} onValueChange={handleTabChange} />
-        <DaisyTabsList className={cn(
+      <DaisyTabs value={currentTab} onValueChange={handleTabChange} >
+          <DaisyTabsList className={cn(
           "h-auto p-0 bg-transparent w-full justify-start",
           variant === 'compact' && "space-x-1"
-        )} />
-          {tabs.map((tab) => (
+        )} >
+            {tabs.map((tab) => (
             <DaisyTabsTrigger
               key={tab.value}
               value={tab.value}
@@ -305,8 +307,8 @@ export function RCSANavigationTabs({
                 variant === 'compact' ? "px-3 py-2" : "px-4 py-3",
                 tab.disabled && "opacity-50 cursor-not-allowed"
               )}
-              title={showDescriptions ? tab.description : undefined} />
-              {getTabContent(tab)}
+              title={showDescriptions ? tab.description : undefined} >
+                {getTabContent(tab)}
             </DaisyTabs>
           ))}
         </DaisyTabsList>
@@ -408,9 +410,10 @@ export function RCSAQuickNavigation({
           <DaisyButton
             variant="ghost"
             size="sm"
-            className="h-auto py-1 px-2 text-xs text-muted-foreground" >
-  +{entities.length - 5} more
-</DaisyButton>
+            className="h-auto py-1 px-2 text-xs text-muted-foreground">
+          +{entities.length - 5} more
+
+        </DaisyButton>
           </DaisyButton>
         )}
       </div>

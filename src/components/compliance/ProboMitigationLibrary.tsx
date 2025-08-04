@@ -192,15 +192,15 @@ export function ProboMitigationLibrary() {
         </DaisyBadge>
       </div>
 
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} />
-        <DaisyTabsList className="grid w-full grid-cols-3" />
-          <DaisyTabsTrigger value="browse">Browse Library</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} >
+          <DaisyTabsList className="grid w-full grid-cols-3" >
+            <DaisyTabsTrigger value="browse">Browse Library</DaisyTabs>
           <DaisyTabsTrigger value="import">Import Controls</DaisyTabsTrigger>
           <DaisyTabsTrigger value="imported">My Controls</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="browse" className="space-y-4" />
-          {/* Search and Filters */}
+        <DaisyTabsContent value="browse" className="space-y-4" >
+            {/* Search and Filters */}
           <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
   <DaisyCardBody className="p-4" >
   </DaisyTabsContent>
@@ -211,9 +211,9 @@ export function ProboMitigationLibrary() {
                   <DaisyInput
                     placeholder="Search controls by name, description, or standards..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-[#D8C3A5] focus:border-[#199BEC]"
-                  />
+                    onChange={(e) = />
+setSearchQuery(e.target.value)}
+                    className="pl-10 border-[#D8C3A5] focus:border-[#199BEC]" />
                 </div>
                 <select
                   value={selectedCategory}
@@ -249,12 +249,15 @@ export function ProboMitigationLibrary() {
                 </DaisyAlertDescription>
 </DaisyAlert>{selectedMitigations.length} controls selected</span>
                 <div className="flex items-center space-x-2">
-                  <DaisyButton size="sm" variant="outline" onClick={() => setSelectedMitigations([])} />
+                  <DaisyButton size="sm" variant="outline" onClick={() =>
+          setSelectedMitigations([])} />
                     Clear Selection
-                  </DaisyButton>
-                  <DaisyButton size="sm" onClick={importSelectedMitigations} disabled={importing} >
-  {importing ? 'Importing...' : 'Import Selected'}
-</DaisyButton>
+                  
+        </DaisyButton>
+                  <DaisyButton size="sm" onClick={importSelectedMitigations} disabled={importing}>
+          {importing ? 'Importing...' : 'Import Selected'}
+
+        </DaisyButton>
                   </DaisyButton>
                 </div>
                 </DaisyAlertDescription>
@@ -276,9 +279,9 @@ export function ProboMitigationLibrary() {
                     <div className="flex items-start space-x-3">
                       <DaisyCheckbox
                         checked={selectedMitigations.includes(mitigation.id)}
-                        onCheckedChange={() => toggleMitigationSelection(mitigation.id)}
-                        className="mt-1"
-                      />
+                        onCheckedChange={() = />
+toggleMitigationSelection(mitigation.id)}
+                        className="mt-1" />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1">
@@ -310,9 +313,10 @@ export function ProboMitigationLibrary() {
                               <span>Frequency: {mitigation.frequency}</span>
                             )}
                           </div>
-                          <DaisyButton size="sm" variant="outline" className="text-xs" >
-  View Details
-</DaisyButton>
+                          <DaisyButton size="sm" variant="outline" className="text-xs">
+          View Details
+
+        </DaisyButton>
                           </DaisyButton>
                         </div>
                       </div>
@@ -324,9 +328,9 @@ export function ProboMitigationLibrary() {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="import" className="space-y-4" />
-          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
+        <DaisyTabsContent value="import" className="space-y-4" >
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter flex items-center" >
   <Upload className="h-5 w-5 mr-2" />
@@ -355,9 +359,10 @@ export function ProboMitigationLibrary() {
                 <DaisyButton 
                   onClick={importSelectedMitigations}
                   disabled={importing || selectedMitigations.length === 0}
-                  className="bg-[#199BEC] hover:bg-[#199BEC]/90 w-full" >
-  {importing ? (
-</DaisyButton>
+                  className="bg-[#199BEC] hover:bg-[#199BEC]/90 w-full">
+          {importing ? (
+
+        </DaisyButton>
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       Importing Controls...
@@ -372,7 +377,8 @@ export function ProboMitigationLibrary() {
 
                 <DaisyButton 
                   variant="outline" 
-                  onClick={() => {
+                  onClick={() =>
+          {
                     setSelectedMitigations([]);
                     importSelectedMitigations();
                   }}
@@ -380,15 +386,16 @@ export function ProboMitigationLibrary() {
                   className="w-full"
                 >
                   Import All Controls ({mitigations.length})
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </DaisyCardBody>
           </DaisyCard>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="imported" className="space-y-4" />
-          <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
-  <DaisyCardBody />
+        <DaisyTabsContent value="imported" className="space-y-4" >
+            <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >
+  <DaisyCardBody >
 </DaisyTabsContent>
               <DaisyCardTitle className="text-[#191919] font-inter">Imported Controls</DaisyCardTitle>
               <DaisyCardDescription >
@@ -404,9 +411,11 @@ export function ProboMitigationLibrary() {
                 <p className="text-[#A8A8A8] text-sm">Start by importing controls from the library</p>
                 <DaisyButton 
                   className="mt-4 bg-[#199BEC] hover:bg-[#199BEC]/90"
-                  onClick={() => setActiveTab('browse')} />
+                  onClick={() =>
+          setActiveTab('browse')} />
                   Browse Library
-                </DaisyButton>
+                
+        </DaisyButton>
               </div>
             </DaisyCardBody>
           </DaisyCard>

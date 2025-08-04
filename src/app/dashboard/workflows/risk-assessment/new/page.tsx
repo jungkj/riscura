@@ -207,8 +207,7 @@ export default function NewRiskAssessmentPage() {
                     <div
                       className={`flex-1 h-0.5 mx-4 transition-colors ${
                         currentStep > step.id ? 'bg-green-600' : 'bg-gray-300'
-                      }`}
-                    />
+                      }`} />
                   )}
                 </div>
               ))}
@@ -226,10 +225,10 @@ export default function NewRiskAssessmentPage() {
                     <DaisyInput
                       id="title"
                       value={formData.title}
-                      onChange={(e) => handleInputChange('title', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('title', e.target.value)}
                       placeholder="Enter a descriptive title for this risk"
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
 
                   <div>
@@ -237,11 +236,11 @@ export default function NewRiskAssessmentPage() {
                     <DaisyTextarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) => handleInputChange('description', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('description', e.target.value)}
                       placeholder="Provide a detailed description of the risk"
                       rows={4}
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
 
                   <div>
@@ -252,7 +251,6 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select risk category" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="operational">Operational</DaisySelectItem>
                         <DaisySelectItem value="financial">Financial</DaisySelectItem>
@@ -269,10 +267,10 @@ export default function NewRiskAssessmentPage() {
                     <DaisyInput
                       id="department"
                       value={formData.department}
-                      onChange={(e) => handleInputChange('department', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('department', e.target.value)}
                       placeholder="Enter the affected department"
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
                 </div>
               )}
@@ -288,7 +286,6 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select likelihood level" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="low">Low - Unlikely to occur</DaisySelectItem>
                         <DaisySelectItem value="medium">
@@ -310,7 +307,6 @@ export default function NewRiskAssessmentPage() {
                     >
                       <DaisySelectTrigger className="mt-1">
                         <DaisySelectValue placeholder="Select impact level" />
-                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="low">Low - Minimal impact</DaisySelectItem>
                         <DaisySelectItem value="medium">Medium - Moderate impact</DaisySelectItem>
@@ -346,10 +342,10 @@ export default function NewRiskAssessmentPage() {
                     <DaisyInput
                       id="owner"
                       value={formData.owner}
-                      onChange={(e) => handleInputChange('owner', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('owner', e.target.value)}
                       placeholder="Enter the name of the risk owner"
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
 
                   <div>
@@ -357,11 +353,11 @@ export default function NewRiskAssessmentPage() {
                     <DaisyTextarea
                       id="detectionMethod"
                       value={formData.detectionMethod}
-                      onChange={(e) => handleInputChange('detectionMethod', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('detectionMethod', e.target.value)}
                       placeholder="How was this risk identified?"
                       rows={3}
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
                 </div>
               )}
@@ -374,11 +370,11 @@ export default function NewRiskAssessmentPage() {
                     <DaisyTextarea
                       id="existingControls"
                       value={formData.existingControls}
-                      onChange={(e) => handleInputChange('existingControls', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('existingControls', e.target.value)}
                       placeholder="Describe current controls in place to manage this risk"
                       rows={4}
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
 
                   <div>
@@ -388,11 +384,11 @@ export default function NewRiskAssessmentPage() {
                     <DaisyTextarea
                       id="proposedMitigation"
                       value={formData.proposedMitigation}
-                      onChange={(e) => handleInputChange('proposedMitigation', e.target.value)}
+                      onChange={(e) = />
+handleInputChange('proposedMitigation', e.target.value)}
                       placeholder="Describe proposed actions to mitigate this risk"
                       rows={4}
-                      className="mt-1"
-                    />
+                      className="mt-1" />
                   </div>
                 </div>
               )}

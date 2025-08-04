@@ -209,8 +209,8 @@ export default function ReportingPage() {
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <DaisyTooltip />
-                        <Legend />
+                        <DaisyTooltip>
+                          <Legend />
                       </RechartsPie>
                     </ResponsiveContainer>
                   </div>
@@ -233,8 +233,8 @@ export default function ReportingPage() {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month" />
                         <YAxis />
-                        <DaisyTooltip />
-                        <Legend />
+                        <DaisyTooltip>
+                          <Legend />
                         <Bar dataKey="high" stackId="a" fill="#ef4444" name="High Risk" />
                         <Bar dataKey="medium" stackId="a" fill="#eab308" name="Medium Risk" />
                         <Bar dataKey="low" stackId="a" fill="#22c55e" name="Low Risk" />
@@ -264,8 +264,8 @@ export default function ReportingPage() {
                               <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                           </Pie>
-                          <DaisyTooltip />
-                          <Legend />
+                          <DaisyTooltip>
+                            <Legend />
                         </RechartsPie>
                       </ResponsiveContainer>
                     </div>
@@ -324,15 +324,14 @@ export default function ReportingPage() {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month" />
                         <YAxis domain={[80, 100]} />
-                        <DaisyTooltip />
-                        <Legend />
+                        <DaisyTooltip>
+                          <Legend />
                         <Line
                           type="monotone"
                           dataKey="score"
                           stroke="#3b82f6"
                           activeDot={{ r: 8 }}
-                          name="Compliance Score"
-                        />
+                          name="Compliance Score" />
                       </RechartsLine>
                     </ResponsiveContainer>
                   </div>
@@ -371,8 +370,7 @@ export default function ReportingPage() {
                     type="text"
                     placeholder="Enter report title"
                     className="w-full px-3 py-2 border rounded-md"
-                    defaultValue="Quarterly Risk Assessment"
-                  />
+                    defaultValue="Quarterly Risk Assessment" />
                 </div>
                 
                 <div className="space-y-2">
@@ -380,7 +378,6 @@ export default function ReportingPage() {
                   <DaisySelect defaultValue="executive">
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select type" />
-                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="executive">Executive Summary</DaisySelectItem>
                       <DaisySelectItem value="detailed">Detailed Analysis</DaisySelectItem>
@@ -396,7 +393,6 @@ export default function ReportingPage() {
                     onValueChange={setReportPeriod}>
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select period" />
-                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="monthly">Last Month</DaisySelectItem>
                       <DaisySelectItem value="quarterly">Last Quarter</DaisySelectItem>
@@ -437,7 +433,6 @@ export default function ReportingPage() {
                   <DaisySelect defaultValue="all">
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select categories" />
-                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="all">All Categories</DaisySelectItem>
                       <DaisySelectItem value="operational">Operational</DaisySelectItem>
@@ -480,7 +475,7 @@ export default function ReportingPage() {
                 <DaisyDropdownMenuContent align="end">
                   <DaisyDropdownMenuLabel>Filter by Type</DaisyDropdownMenuLabel>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem>All Reports</DaisyDropdownMenuItem>
+<DaisyDropdownMenuItem>All Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Monthly Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Quarterly Reports</DaisyDropdownMenuItem>
                   <DaisyDropdownMenuItem>Custom Reports</DaisyDropdownMenuItem>
@@ -495,22 +490,20 @@ export default function ReportingPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {savedReports.map((report) => (
-              <DaisyCard key={report.id} >
-  <DaisyCardBody className="pb-2" />
-</DaisyCard>
+              <DaisyCard key={report.id}>
+                <DaisyCardBody className="pb-2">
                   <div className="flex justify-between items-start">
                     <DaisyCardTitle>{report.name}</DaisyCardTitle>
-                    <DaisyBadge variant="outline" >{report.type === 'monthly' ? 'Monthly' :</DaisyBadge>
+                    <DaisyBadge variant="outline">
+                      {report.type === 'monthly' ? 'Monthly' : 
                        report.type === 'quarterly' ? 'Quarterly' : 'Custom'}
                     </DaisyBadge>
                   </div>
-                  <DaisyCardDescription>{report.description}</p>
-                
-                <DaisyCardBody className="pb-2" >
-  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-</DaisyCardDescription>
+                  <DaisyCardDescription>{report.description}</DaisyCardDescription>
+                  
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground mt-2">
                     <DaisyCalendar className="h-4 w-4" />
-                    <span>
+<span>
                       Created on {new Date(report.createdAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -518,18 +511,15 @@ export default function ReportingPage() {
                     <FileText className="h-4 w-4" />
                     <span>By {report.createdBy}</span>
                   </div>
-                </DaisyCalendar>
-                <DaisyCardFooter >
-  <div className="flex gap-2 w-full">
-</DaisyCardFooter>
-                    <DaisyButton variant="outline" className="flex-1" >
-  <FileText className="h-4 w-4 mr-2" />
-</DaisyButton>
+                </DaisyCardBody>
+                <DaisyCardFooter>
+                  <div className="flex gap-2 w-full">
+                    <DaisyButton variant="outline" className="flex-1">
+                      <FileText className="h-4 w-4 mr-2" />
                       View
                     </DaisyButton>
-                    <DaisyButton variant="outline" className="flex-1" >
-  <Download className="h-4 w-4 mr-2" />
-</DaisyButton>
+                    <DaisyButton variant="outline" className="flex-1">
+                      <Download className="h-4 w-4 mr-2" />
                       Download
                     </DaisyButton>
                   </div>
@@ -539,24 +529,21 @@ export default function ReportingPage() {
           </div>
         </DaisyTabsContent>
         
-        <DaisyTabsContent value="scheduled" className="space-y-6" />
+        <DaisyTabsContent value="scheduled" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Scheduled Reports</h2>
-            <DaisyButton size="sm" >
-  <Plus className="h-4 w-4 mr-2" />
-</DaisyTabsContent>
+            <DaisyButton size="sm">
+              <Plus className="h-4 w-4 mr-2" />
               Schedule Report
             </DaisyButton>
           </div>
           
-          <DaisyCard >
-  <DaisyCardBody className="p-0" >
-  </DaisyCard>
-</DaisyCardBody>
-              <DaisyTable />
-                <DaisyTableHeader />
-                  <DaisyTableRow />
-                    <DaisyTableHead>Report Name</DaisyTable>
+          <DaisyCard>
+            <DaisyCardBody className="p-0">
+              <DaisyTable>
+                <DaisyTableHeader>
+                  <DaisyTableRow>
+                    <DaisyTableHead>Report Name</DaisyTableHead>
                     <DaisyTableHead>Frequency</DaisyTableHead>
                     <DaisyTableHead>Recipients</DaisyTableHead>
                     <DaisyTableHead>Next Run</DaisyTableHead>
@@ -564,18 +551,18 @@ export default function ReportingPage() {
                     <DaisyTableHead className="text-right">Actions</DaisyTableHead>
                   </DaisyTableRow>
                 </DaisyTableHeader>
-                <DaisyTableBody />
-                  <DaisyTableRow />
-                    <DaisyTableCell />
+                <DaisyTableBody>
+                  <DaisyTableRow>
+                    <DaisyTableCell>
                       <div className="font-medium">Monthly Risk Report</div>
                       <div className="text-sm text-muted-foreground">
                         Summary of all risks and controls
                       </div>
-                    </DaisyTableBody>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="outline">Monthly</DaisyTableCell>
                     </DaisyTableCell>
-                    <DaisyTableCell />
+                    <DaisyTableCell>
+                      <DaisyBadge variant="outline">Monthly</DaisyBadge>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex -space-x-2">
                         <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] text-white">JS</div>
                         <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-[10px] text-white">RL</div>
@@ -583,20 +570,19 @@ export default function ReportingPage() {
                       </div>
                     </DaisyTableCell>
                     <DaisyTableCell>May 1, 2025</DaisyTableCell>
-                    <DaisyTableCell />
-                      <DaisyBadge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">Active</DaisyTableCell>
+                    <DaisyTableCell>
+                      <DaisyBadge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">Active</DaisyBadge>
                     </DaisyTableCell>
-                    <DaisyTableCell className="text-right" />
-                      <DaisyDropdownMenu />
-                        <DaisyDropdownMenuTrigger asChild />
-                          <DaisyButton variant="ghost" size="sm" >
-  <span className="sr-only">
-</DaisyTableCell>Open menu</span>
+                    <DaisyTableCell className="text-right">
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton variant="ghost" size="sm">
+                            <span className="sr-only">Open menu</span>
                             <Filter className="h-4 w-4" />
                           </DaisyButton>
                         </DaisyDropdownMenuTrigger>
-                        <DaisyDropdownMenuContent align="end" />
-                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuContent>
+                        <DaisyDropdownMenuContent align="end">
+                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Run Now</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Pause Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem className="text-red-600">Delete</DaisyDropdownMenuItem>
@@ -605,17 +591,17 @@ export default function ReportingPage() {
                     </DaisyTableCell>
                   </DaisyTableRow>
                   
-                  <DaisyTableRow />
-                    <DaisyTableCell />
+                  <DaisyTableRow>
+                    <DaisyTableCell>
                       <div className="font-medium">Quarterly Compliance Status</div>
                       <div className="text-sm text-muted-foreground">
                         Regulatory compliance overview
                       </div>
-                    </DaisyTableRow>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="outline">Quarterly</DaisyTableCell>
                     </DaisyTableCell>
-                    <DaisyTableCell />
+                    <DaisyTableCell>
+                      <DaisyBadge variant="outline">Quarterly</DaisyBadge>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex -space-x-2">
                         <div className="w-6 h-6 rounded-full bg-[#191919] flex items-center justify-center text-[10px] text-white">MG</div>
                         <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-[10px] text-white">DL</div>
@@ -623,20 +609,19 @@ export default function ReportingPage() {
                       </div>
                     </DaisyTableCell>
                     <DaisyTableCell>July 1, 2025</DaisyTableCell>
-                    <DaisyTableCell />
-                      <DaisyBadge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">Active</DaisyTableCell>
+                    <DaisyTableCell>
+                      <DaisyBadge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">Active</DaisyBadge>
                     </DaisyTableCell>
-                    <DaisyTableCell className="text-right" />
-                      <DaisyDropdownMenu />
-                        <DaisyDropdownMenuTrigger asChild />
-                          <DaisyButton variant="ghost" size="sm" >
-  <span className="sr-only">
-</DaisyTableCell>Open menu</span>
+                    <DaisyTableCell className="text-right">
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton variant="ghost" size="sm">
+                            <span className="sr-only">Open menu</span>
                             <Filter className="h-4 w-4" />
                           </DaisyButton>
                         </DaisyDropdownMenuTrigger>
-                        <DaisyDropdownMenuContent align="end" />
-                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuContent>
+                        <DaisyDropdownMenuContent align="end">
+                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Run Now</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Pause Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem className="text-red-600">Delete</DaisyDropdownMenuItem>
@@ -645,37 +630,36 @@ export default function ReportingPage() {
                     </DaisyTableCell>
                   </DaisyTableRow>
                   
-                  <DaisyTableRow />
-                    <DaisyTableCell />
+                  <DaisyTableRow>
+                    <DaisyTableCell>
                       <div className="font-medium">Executive Dashboard</div>
                       <div className="text-sm text-muted-foreground">
                         High-level overview for leadership
                       </div>
-                    </DaisyTableRow>
-                    <DaisyTableCell />
-                      <DaisyBadge variant="outline">Weekly</DaisyTableCell>
                     </DaisyTableCell>
-                    <DaisyTableCell />
+                    <DaisyTableCell>
+                      <DaisyBadge variant="outline">Weekly</DaisyBadge>
+                    </DaisyTableCell>
+                    <DaisyTableCell>
                       <div className="flex -space-x-2">
                         <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-[10px] text-white">RL</div>
                         <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-[10px] text-white">+5</div>
                       </div>
                     </DaisyTableCell>
                     <DaisyTableCell>Apr 25, 2025</DaisyTableCell>
-                    <DaisyTableCell />
-                      <DaisyBadge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">Paused</DaisyTableCell>
+                    <DaisyTableCell>
+                      <DaisyBadge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">Paused</DaisyBadge>
                     </DaisyTableCell>
-                    <DaisyTableCell className="text-right" />
-                      <DaisyDropdownMenu />
-                        <DaisyDropdownMenuTrigger asChild />
-                          <DaisyButton variant="ghost" size="sm" >
-  <span className="sr-only">
-</DaisyTableCell>Open menu</span>
+                    <DaisyTableCell className="text-right">
+                      <DaisyDropdownMenu>
+                        <DaisyDropdownMenuTrigger asChild>
+                          <DaisyButton variant="ghost" size="sm">
+                            <span className="sr-only">Open menu</span>
                             <Filter className="h-4 w-4" />
                           </DaisyButton>
                         </DaisyDropdownMenuTrigger>
-                        <DaisyDropdownMenuContent align="end" />
-                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuContent>
+                        <DaisyDropdownMenuContent align="end">
+                          <DaisyDropdownMenuItem>Edit Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Run Now</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem>Resume Schedule</DaisyDropdownMenuItem>
                           <DaisyDropdownMenuItem className="text-red-600">Delete</DaisyDropdownMenuItem>

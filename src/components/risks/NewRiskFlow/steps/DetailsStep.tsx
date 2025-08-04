@@ -86,12 +86,12 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
             id="owner"
             placeholder="e.g., John Smith, IT Department"
             value={riskData.owner}
-            onChange={(e) => {
+            onChange={(e) = />
+{
               updateRiskData({ owner: e.target.value });
               if (errors.owner) setErrors({ ...errors, owner: '' });
             }}
-            className={cn('mt-1', errors.owner && 'border-red-500')}
-          />
+            className={cn('mt-1', errors.owner && 'border-red-500')} />
           {errors.owner && (
             <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" />
@@ -108,7 +108,6 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
           >
             <DaisySelectTrigger className="mt-1">
               <DaisySelectValue />
-            </DaisySelectTrigger>
             <DaisySelectContent>
               {statuses.map((status) => (
                 <DaisySelectItem key={status.value} value={status.value}>
@@ -156,8 +155,7 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
                     updateRiskData({ treatmentStrategy: e.target.value as TreatmentStrategy });
                     if (errors.treatmentStrategy) setErrors({ ...errors, treatmentStrategy: '' });
                   }}
-                  className="mt-1"
-                />
+                  className="mt-1" />
                 <div className="flex-1">
                   <p className="font-medium">{strategy.label}</p>
                   <p className="text-sm text-muted-foreground">{strategy.description}</p>
@@ -184,10 +182,10 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
           id="controls"
           placeholder="Describe any control measures or mitigation actions..."
           value={riskData.controlMeasures}
-          onChange={(e) => updateRiskData({ controlMeasures: e.target.value })}
+          onChange={(e) = />
+updateRiskData({ controlMeasures: e.target.value })}
           rows={3}
-          className="mt-1 resize-none"
-        />
+          className="mt-1 resize-none" />
       </motion.div>
 
       <motion.div
@@ -205,9 +203,9 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
             id="dateIdentified"
             type="date"
             value={riskData.dateIdentified ? format(riskData.dateIdentified, 'yyyy-MM-dd') : ''}
-            onChange={(e) => updateRiskData({ dateIdentified: new Date(e.target.value) })}
-            className="mt-1"
-          />
+            onChange={(e) = />
+updateRiskData({ dateIdentified: new Date(e.target.value) })}
+            className="mt-1" />
         </div>
 
         <div>
@@ -219,11 +217,10 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
             id="nextReview"
             type="date"
             value={riskData.nextReview ? format(riskData.nextReview, 'yyyy-MM-dd') : ''}
-            onChange={(e) =>
-              updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefined })
+            onChange={(e) = />
+updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefined })
             }
-            className="mt-1"
-          />
+            className="mt-1" />
         </div>
       </motion.div>
 
@@ -239,6 +236,7 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
         </DaisyButton>
         <DaisyButton onClick={handleNext} size="lg" className="min-w-[120px]">
           Next
+        
         </DaisyButton>
       </motion.div>
     </div>

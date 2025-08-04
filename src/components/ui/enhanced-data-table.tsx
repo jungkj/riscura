@@ -156,8 +156,7 @@ const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
       <div className="flex-1 bg-gray-200 rounded-full h-2">
         <div
           className={cn("h-2 rounded-full transition-all duration-300", getProgressColor(value))}
-          style={{ width: `${value}%` }}
-        />
+          style={{ width: `${value}%` }} />
       </div>
       <span className="text-xs text-gray-600 font-medium font-inter min-w-[2rem]">
         {value}%
@@ -179,7 +178,7 @@ const DateCell: React.FC<{ value: Date | string }> = ({ value }) => {
         isUpcoming ? 'text-yellow-500' : 
         'text-gray-400'
       )} />
-      <span className={cn("text-sm font-inter",
+<span className={cn("text-sm font-inter",
         isOverdue ? 'text-red-600 font-medium' : 
         isUpcoming ? 'text-yellow-600' : 
         'text-gray-600',
@@ -214,9 +213,9 @@ const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => 
   const device = useDevice();
   
   return (
-    <DaisyDropdownMenu />
-      <DaisyDropdownMenuTrigger asChild />
-        <DaisyButton 
+    <DaisyDropdownMenu >
+        <DaisyDropdownMenuTrigger asChild >
+          <DaisyButton 
           variant="ghost" 
           size="sm" 
           className={cn(
@@ -227,8 +226,8 @@ const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => 
 </DaisyCalendar>
         </DaisyButton>
       </DaisyDropdownMenuTrigger>
-      <DaisyDropdownMenuContent align="end" className="w-48" />
-        <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
+      <DaisyDropdownMenuContent align="end" className="w-48" >
+          <DaisyDropdownMenuItem onClick={() => onAction('view', row)} />
           <Eye className="h-4 w-4 mr-2" />
           View Details
         </DaisyDropdownMenuContent>
@@ -241,7 +240,7 @@ const ActionsCell: React.FC<{ row: any; onAction: (action: string, row: any) => 
           Copy
         </DaisyDropdownMenuItem>
         <DaisyDropdownMenuSeparator />
-        <DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
+<DaisyDropdownMenuItem onClick={() => onAction('archive', row)} />
           <Archive className="h-4 w-4 mr-2" />
           Archive
         </DaisyDropdownMenuSeparator>
@@ -278,7 +277,7 @@ const MobileCardView: React.FC<{
       case 'risk':
         return <RiskLevelCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} />;
+        return <DaisyProgressCell value={value} / />;
       case 'date':
         return <DateCell value={value} />;
       case 'number':
@@ -302,9 +301,9 @@ const MobileCardView: React.FC<{
               {selectable && (
                 <DaisyCheckbox
                   checked={selectedRows.includes(row.id)}
-                  onCheckedChange={(checked) => onSelectRow(row.id, !!checked)}
-                  className="mt-1"
-                />
+                  onCheckedChange={(checked) = />
+onSelectRow(row.id, !!checked)}
+                  className="mt-1" />
               )}
               <div className="flex-1">
                 {/* Find the title column */}
@@ -358,9 +357,9 @@ const AdvancedFilters: React.FC<{
   const hasActiveFilters = Object.keys(filters).length > 0;
 
   return (
-    <DaisyPopover />
-      <DaisyPopoverTrigger asChild />
-        <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} className="gap-2" >
+    <DaisyPopover >
+        <DaisyPopoverTrigger asChild >
+          <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} className="gap-2" >
   <Filter className="h-4 w-4" />
 </DaisyProgressCell>
           {device.type !== 'mobile' && 'Filters'}
@@ -372,8 +371,8 @@ const AdvancedFilters: React.FC<{
           )}
         </DaisyButton>
       </DaisyPopoverTrigger>
-      <DaisyPopoverContent className="w-80 p-4" />
-        <div className="space-y-4">
+      <DaisyPopoverContent className="w-80 p-4" >
+          <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold text-sm text-[#191919] font-inter">Advanced Filters</h4>
             {hasActiveFilters && (
@@ -407,13 +406,14 @@ const AdvancedFilters: React.FC<{
                       onFiltersChange(newFilters);
                     }}
                   >
-                    <DaisySelectTrigger className="h-8" />
-                      <DaisySelectValue placeholder="Select..." /></DaisySelect>
-                    <DaisySelectContent />
-                      <DaisySelectItem value="">All</DaisySelectContent>
+                    <DaisySelectTrigger className="h-8">
+                        <DaisySelectValue placeholder="Select..." />
+</DaisySelect>
+                    <DaisySelectContent >
+                        <DaisySelectItem value="">All</DaisySelectItem>
                       {column.filterOptions.map((option) => (
-                        <DaisySelectItem key={option.value} value={option.value} />
-                          {option.label}
+                        <DaisySelectItem key={option.value} value={option.value} >
+                            {option.label}
                         </DaisySelectItem>
                       ))}
                     </DaisySelectContent>
@@ -422,7 +422,8 @@ const AdvancedFilters: React.FC<{
                   <DaisyInput
                     placeholder={`Filter by ${column.title.toLowerCase()}...`}
                     value={String(filters[column.key] || '')}
-                    onChange={(e) => {
+                    onChange={(e) = />
+{
                       const newFilters = { ...filters };
                       if (e.target.value) {
                         newFilters[column.key] = e.target.value;
@@ -431,8 +432,7 @@ const AdvancedFilters: React.FC<{
                       }
                       onFiltersChange(newFilters);
                     }}
-                    className="h-8 text-sm"
-                  />
+                    className="h-8 text-sm" />
                 )}
               </div>
             ))}
@@ -561,7 +561,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       case 'risk':
         return <RiskLevelCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} />;
+        return <DaisyProgressCell value={value} / />;
       case 'date':
         return <DateCell value={value} />;
       case 'number':
@@ -604,9 +604,9 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
               <DaisyInput
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')}
-              />
+                onChange={(e) = />
+setSearchQuery(e.target.value)}
+                className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')} />
             </div>
           )}
 
@@ -617,8 +617,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                 columns={visibleColumns}
                 filters={filters}
                 onFiltersChange={setFilters}
-                onClearFilters={() => setFilters({})}
-              />
+                onClearFilters={() => setFilters({})} />
             )}
 
             {/* Active Filter Indicators */}
@@ -654,16 +653,16 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
   {selectedRows.length} selected
 </DaisyBadge>
               </DaisyBadge>
-              <DaisyDropdownMenu />
-                <DaisyDropdownMenuTrigger asChild />
-                  <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} >
+              <DaisyDropdownMenu >
+                  <DaisyDropdownMenuTrigger asChild >
+                    <DaisyButton variant="tertiary" size={device.type === 'mobile' ? 'default' : 'sm'} >
   Actions
 </DaisyDropdownMenu>
                     <ChevronDown className="h-3 w-3 ml-1" />
                   </DaisyButton>
                 </DaisyDropdownMenuTrigger>
-                <DaisyDropdownMenuContent />
-                  <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find((row: any) => row.id === id)!))} />
+                <DaisyDropdownMenuContent >
+                    <DaisyDropdownMenuItem onClick={() => onBulkAction?.('export', selectedRows.map(id => data.find((row: any) => row.id === id)!))} />
                     <Download className="h-4 w-4 mr-2" />
                     Export Selected
                   </DaisyDropdownMenuContent>
@@ -672,7 +671,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                     Archive Selected
                   </DaisyDropdownMenuItem>
                   <DaisyDropdownMenuSeparator />
-                  <DaisyDropdownMenuItem 
+<DaisyDropdownMenuItem 
                     onClick={() => onBulkAction?.('delete', selectedRows.map(id => data.find((row: any) => row.id === id)!))}
                     className="text-red-600 focus:text-red-600" />
                     <Trash2 className="h-4 w-4 mr-2" />
@@ -733,23 +732,22 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
               onRowAction={onRowAction}
               selectedRows={selectedRows}
               onSelectRow={handleSelectRow}
-              selectable={selectable}
-            />
+              selectable={selectable} />
           )}
         </>
       ) : (
         // Desktop Table View
         <div className="border border-gray-200 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
-            <DaisyTable />
-              <DaisyTableHeader />
-                <DaisyTableRow />
-                  {selectable && (
-                    <DaisyTableHead className="w-12" />
-                      <DaisyCheckbox
-                        checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
-                        onCheckedChange={handleSelectAll}
-                      />
+            <DaisyTable >
+                <DaisyTableHeader >
+                  <DaisyTableRow >
+                    {selectable && (
+                    <DaisyTableHead className="w-12" >
+                        <DaisyCheckbox
+                        checked={selectedRows.length === paginatedData.length && paginatedData.length />
+0}
+                        onCheckedChange={handleSelectAll} />
                     </DaisyTable>
                   )}
                   {visibleColumns.map((column) => (
@@ -774,20 +772,20 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                 </DaisyTableRow>
               </DaisyTableHeader>
 
-              <DaisyTableBody />
-                {loading ? (
-                  <DaisyTableRow />
-                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" />
-                      <div className="text-center">
+              <DaisyTableBody >
+                  {loading ? (
+                  <DaisyTableRow >
+                      <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" >
+                        <div className="text-center">
                         <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#199BEC]" />
                         <p className="text-sm text-gray-500 mt-2 font-inter">Loading...</p>
                       </div>
                     </DaisyTableBody>
                   </DaisyTableRow>
                 ) : paginatedData.length === 0 ? (
-                  <DaisyTableRow />
-                    <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" />
-                      <div className="text-center">
+                  <DaisyTableRow >
+                      <DaisyTableCell colSpan={visibleColumns.length + (selectable ? 1 : 0)} className="py-12" >
+                        <div className="text-center">
                         <div className="p-4 rounded-full bg-gray-100 inline-block mb-3">
                           <Sparkles className="h-6 w-6 text-gray-400" />
                         </div>
@@ -799,13 +797,13 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                   paginatedData.map((row: any, index) => (
                     <DaisyTableRow
                       key={row.id || index}
-                      className="hover:bg-gray-50 transition-colors" />
-                      {selectable && (
-                        <DaisyTableCell />
-                          <DaisyCheckbox
+                      className="hover:bg-gray-50 transition-colors" >
+                        {selectable && (
+                        <DaisyTableCell >
+                            <DaisyCheckbox
                             checked={selectedRows.includes(row.id)}
-                            onCheckedChange={(checked) => handleSelectRow(row.id, !!checked)}
-                          />
+                            onCheckedChange={(checked) = />
+handleSelectRow(row.id, !!checked)} />
                         </DaisyTableRow>
                       )}
                       {visibleColumns.map((column) => (
@@ -814,8 +812,8 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                           className={cn(
                             column.align === 'center' && "text-center",
                             column.align === 'right' && "text-right"
-                          )} />
-                          {renderCell(column, row[column.key], row)}
+                          )} >
+                            {renderCell(column, row[column.key], row)}
                         </DaisyTableCell>
                       ))}
                     </DaisyTableRow>
@@ -856,10 +854,12 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
                       key={pageNum}
                       variant={currentPage === pageNum ? 'default' : 'tertiary'}
                       size="sm"
-                      onClick={() => setCurrentPage(pageNum)}
+                      onClick={() =>
+          setCurrentPage(pageNum)}
                       className="w-8 h-8 p-0" />
                       {pageNum}
-                    </DaisyButton>
+                    
+        </DaisyButton>
                   );
                 })}
               </div>

@@ -303,14 +303,14 @@ const PredictionCard: React.FC<{
             <span className="text-caption font-medium text-purple-600">{prediction.confidence}%</span>
           </div>
           <DaisyProgress value={prediction.confidence} className="h-2" />
-        </div>
+</div>
         <div>
           <div className="flex items-center justify-between mb-enterprise-1">
             <span className="text-caption text-text-secondary">Likelihood</span>
             <span className="text-caption font-medium text-text-primary">{prediction.likelihood}%</span>
           </div>
           <DaisyProgress value={prediction.likelihood} className="h-2" />
-        </div>
+</div>
       </div>
 
       {/* Timeline & Data Sources */}
@@ -346,9 +346,11 @@ const PredictionCard: React.FC<{
             variant="ghost" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('dismiss', prediction)} />
+            onClick={() =>
+          onAction('dismiss', prediction)} />
             Dismiss
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
         <span className="text-caption text-text-tertiary">
           Updated {prediction.lastUpdated.toLocaleDateString()}
@@ -421,7 +423,7 @@ const RecommendationPanel: React.FC<{
           </span>
         </div>
         <DaisyProgress value={progressPercentage} className="h-2" />
-      </div>
+</div>
 
       {/* Actions List */}
       <div className="space-y-enterprise-2 mb-enterprise-3">
@@ -461,16 +463,20 @@ const RecommendationPanel: React.FC<{
             variant="outline" 
             size="sm" 
             className="h-6 px-enterprise-2"
-            onClick={() => onAction('view', recommendation)} />
+            onClick={() =>
+          onAction('view', recommendation)} />
             Details
-          </DaisyButton>
+          
+        </DaisyButton>
         </div>
         <DaisyButton 
           variant="ghost" 
           size="sm" 
           className="h-6 px-enterprise-2"
-          onClick={() => onAction('dismiss', recommendation)} />
+          onClick={() =>
+          onAction('dismiss', recommendation)} />
           Dismiss
+        
         </DaisyButton>
       </div>
     </div>
@@ -623,25 +629,24 @@ export const AIPoweredDashboard: React.FC = () => {
       )}
 
       {/* Tabs */}
-      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" />
-        <DaisyTabsList />
-          <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
+      <DaisyTabs value={activeTab} onValueChange={setActiveTab} className="mb-enterprise-6" >
+          <DaisyTabsList >
+            <DaisyTabsTrigger value="overview">Overview</DaisyTabs>
           <DaisyTabsTrigger value="predictions">Predictions</DaisyTabsTrigger>
           <DaisyTabsTrigger value="recommendations">Recommendations</DaisyTabsTrigger>
           <DaisyTabsTrigger value="trends">Trends</DaisyTabsTrigger>
         </DaisyTabsList>
       </DaisyTabs>
 
-      <DaisyTabsContent value="overview" />
-        <div className="space-y-enterprise-6">
+      <DaisyTabsContent value="overview" >
+          <div className="space-y-enterprise-6">
           {/* Critical Alerts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
             {samplePredictions.slice(0, 2).map((prediction) => (
               <PredictionCard
                 key={prediction.id}
                 prediction={prediction}
-                onAction={handlePredictionAction}
-              />
+                onAction={handlePredictionAction} />
             ))}
           </div>
 
@@ -655,8 +660,7 @@ export const AIPoweredDashboard: React.FC = () => {
                 <RecommendationPanel
                   key={recommendation.id}
                   recommendation={recommendation}
-                  onAction={handleRecommendationAction}
-                />
+                  onAction={handleRecommendationAction} />
               ))}
             </div>
           </div>
@@ -675,36 +679,34 @@ export const AIPoweredDashboard: React.FC = () => {
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="predictions" />
-        <div className="space-y-enterprise-4">
+      <DaisyTabsContent value="predictions" >
+          <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-enterprise-4">
             {samplePredictions.map((prediction) => (
               <PredictionCard
                 key={prediction.id}
                 prediction={prediction}
-                onAction={handlePredictionAction}
-              />
+                onAction={handlePredictionAction} />
             ))}
           </div>
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="recommendations" />
-        <div className="space-y-enterprise-4">
+      <DaisyTabsContent value="recommendations" >
+          <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 gap-enterprise-4">
             {sampleRecommendations.map((recommendation) => (
               <RecommendationPanel
                 key={recommendation.id}
                 recommendation={recommendation}
-                onAction={handleRecommendationAction}
-              />
+                onAction={handleRecommendationAction} />
             ))}
           </div>
         </div>
       </DaisyTabsContent>
 
-      <DaisyTabsContent value="trends" />
-        <div className="space-y-enterprise-4">
+      <DaisyTabsContent value="trends" >
+          <div className="space-y-enterprise-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-enterprise-4">
             {sampleTrendData.map((trend) => (
               <TrendChart key={trend.id} trend={trend} />

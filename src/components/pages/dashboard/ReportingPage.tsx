@@ -688,7 +688,7 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
                 <p className="text-3xl font-bold text-purple-900">{analytics.scheduledReports}</p>
               </div>
               <DaisyCalendar className="h-8 w-8 text-purple-600" />
-            </div>
+</div>
           </DaisyCalendar>
         </DaisyCard>
 
@@ -736,17 +736,17 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
       </div>
 
       {/* Main Content Tabs */}
-      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6" />
-        <DaisyTabsList className="grid w-full grid-cols-5" />
-          <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
+      <DaisyTabs value={activeView} onValueChange={setActiveView} className="space-y-6" >
+          <DaisyTabsList className="grid w-full grid-cols-5" >
+            <DaisyTabsTrigger value="dashboard">Dashboard</DaisyTabs>
           <DaisyTabsTrigger value="library">Report Library</DaisyTabsTrigger>
           <DaisyTabsTrigger value="builder">Report Builder</DaisyTabsTrigger>
           <DaisyTabsTrigger value="scheduled">Scheduled Reports</DaisyTabsTrigger>
           <DaisyTabsTrigger value="analytics">Analytics</DaisyTabsTrigger>
         </DaisyTabsList>
 
-        <DaisyTabsContent value="dashboard" className="space-y-6" />
-          <div className="text-center py-12">
+        <DaisyTabsContent value="dashboard" className="space-y-6" >
+            <div className="text-center py-12">
             <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Interactive Dashboard Coming Soon
@@ -757,8 +757,8 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="library" className="space-y-6" />
-          <div className="text-center py-12">
+        <DaisyTabsContent value="library" className="space-y-6" >
+            <div className="text-center py-12">
             <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Report Library Coming Soon
@@ -769,8 +769,8 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="builder" className="space-y-6" />
-          <div className="text-center py-12">
+        <DaisyTabsContent value="builder" className="space-y-6" >
+            <div className="text-center py-12">
             <Plus className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Advanced Report Builder Coming Soon
@@ -781,10 +781,10 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="scheduled" className="space-y-6" />
-          <div className="text-center py-12">
+        <DaisyTabsContent value="scheduled" className="space-y-6" >
+            <div className="text-center py-12">
             <DaisyCalendar className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
+<h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Scheduled Reports Coming Soon
             </h3>
             <p className="text-notion-text-secondary">
@@ -793,8 +793,8 @@ function ReportingPage({ view = 'dashboard' }: ReportingPageProps) {
           </div>
         </DaisyTabsContent>
 
-        <DaisyTabsContent value="analytics" className="space-y-6" />
-          <div className="text-center py-12">
+        <DaisyTabsContent value="analytics" className="space-y-6" >
+            <div className="text-center py-12">
             <TrendingUp className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
               Advanced Analytics Coming Soon

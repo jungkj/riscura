@@ -251,9 +251,9 @@ const OwnerCell: React.FC<{ owner: RiskData['owner'] }> = ({ owner }) => {
   
   return (
     <div className="flex items-center space-x-enterprise-2">
-      <DaisyAvatar className="w-6 h-6" />
-        <DaisyAvatarFallback className="text-xs bg-interactive-primary text-white" />
-          {initials}
+      <DaisyAvatar className="w-6 h-6" >
+          <DaisyAvatarFallback className="text-xs bg-interactive-primary text-white" >
+            {initials}
         </DaisyAvatar>
       </DaisyAvatar>
       <div className="min-w-0">
@@ -446,8 +446,7 @@ export const RiskRegisterTable: React.FC = () => {
         onRowClick={handleRowClick}
         onRowSelect={handleRowSelect}
         bulkActions={bulkActions}
-        className="shadow-notion-md"
-      />
+        className="shadow-notion-md" />
     </div>
   );
 };
