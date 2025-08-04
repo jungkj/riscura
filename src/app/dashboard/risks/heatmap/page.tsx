@@ -8,7 +8,6 @@ import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Activity, Plus, Download, Filter } from 'lucide-react';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-import { Filter } from 'lucide-react';
 
 export default function RiskHeatMapPage() {
   return (

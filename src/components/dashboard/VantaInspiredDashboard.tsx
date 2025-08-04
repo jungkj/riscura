@@ -13,7 +13,7 @@ import {
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
-// import {
+import {
   Shield,
   CheckCircle,
   AlertTriangle,
@@ -42,7 +42,7 @@ import {
   AlertCircle,
   XCircle,
   CheckCircle2,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // import MetricCards from './MetricCards'
 // import RiskHeatMap from '../risks/RiskHeatMap'

@@ -34,10 +34,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
     if (!isAuthenticated || !user) {
       // console.log('[ProtectedRoute] Not authenticated, redirecting:', {
-        isAuthenticated,
-        hasUser: !!user,
-        pathname,
-      })
+      //   isAuthenticated,
+      //   hasUser: !!user,
+      //   pathname,
+      // })
       const redirectUrl = `${fallbackPath}?from=${encodeURIComponent(pathname || '')}`;
       router.push(redirectUrl);
       return;
@@ -45,7 +45,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
     // Check role requirements
     if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
-      router.push('/unauthorized')
+      router.push('/unauthorized');
       return;
     }
 
@@ -53,7 +53,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     if (requiredPermissions.length > 0) {
       const hasRequiredPermissions = requireAll
         ? requiredPermissions.every((permission) => hasPermission(user.permissions, permission))
-        : hasAnyPermission(user.permissions, requiredPermissions)
+        : hasAnyPermission(user.permissions, requiredPermissions);
 
       if (!hasRequiredPermissions) {
         router.push('/unauthorized');
@@ -79,24 +79,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
-    )
+    );
   }
 
   // If not authenticated or doesn't have permissions, don't render children
   if (!isAuthenticated || !user) {
-    return null
+    return null;
   }
 
   // Check role requirements
   if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
-    return null
+    return null;
   }
 
   // Check permission requirements
   if (requiredPermissions.length > 0) {
     const hasRequiredPermissions = requireAll
       ? requiredPermissions.every((permission) => hasPermission(user.permissions, permission))
-      : hasAnyPermission(user.permissions, requiredPermissions)
+      : hasAnyPermission(user.permissions, requiredPermissions);
 
     if (!hasRequiredPermissions) {
       return null;
@@ -104,7 +104,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   return <>{children}</>;
-}
+};
 
 // Higher-order component for easier usage
 export const withProtectedRoute = <P extends object>(
@@ -115,16 +115,16 @@ export const withProtectedRoute = <P extends object>(
     <ProtectedRoute {...options}>
       <Component {...props} />
     </ProtectedRoute>
-  )
+  );
 
   WrappedComponent.displayName = `withProtectedRoute(${Component.displayName || Component.name})`;
   return WrappedComponent;
-}
+};
 
 // Specific role-based route components
 export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredRoles={['admin']}>{children}</ProtectedRoute>
-)
+);
 
 export const RiskManagerRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredRoles={['admin', 'risk_manager']}>{children}</ProtectedRoute>
@@ -137,7 +137,7 @@ export const AuditorRoute: React.FC<{ children: React.ReactNode }> = ({ children
 // Permission-based route components
 export const ReadRisksRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredPermissions={['read_risks']}>{children}</ProtectedRoute>
-)
+);
 
 export const WriteRisksRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredPermissions={['write_risks']}>{children}</ProtectedRoute>
