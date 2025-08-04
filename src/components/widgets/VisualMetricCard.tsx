@@ -2,19 +2,18 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-import { 
-import { DaisyCardBody } from '@/components/ui/daisy-components';
-  TrendingUp, 
-  TrendingDown, 
-  Minus, 
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import {
+  TrendingUp,
+  TrendingDown,
+  Minus,
   AlertTriangle,
   CheckCircle,
   Clock,
   Eye,
-  MoreHorizontal
+  MoreHorizontal,
 } from 'lucide-react';
 
 interface SparklineData {
@@ -46,51 +45,53 @@ const statusConfig = {
     color: '#10b981',
     bgColor: '#d1fae5',
     icon: CheckCircle,
-    label: 'Good'
+    label: 'Good',
   },
   warning: {
     color: '#f59e0b',
     bgColor: '#fef3c7',
     icon: AlertTriangle,
-    label: 'Warning'
+    label: 'Warning',
   },
   error: {
     color: '#ef4444',
     bgColor: '#fee2e2',
     icon: AlertTriangle,
-    label: 'Critical'
+    label: 'Critical',
   },
   info: {
     color: '#3b82f6',
     bgColor: '#dbeafe',
     icon: Clock,
-    label: 'Info'
+    label: 'Info',
   },
   neutral: {
     color: '#6b7280',
     bgColor: '#f3f4f6',
     icon: Minus,
-    label: 'Neutral'
-  }
-}
+    label: 'Neutral',
+  },
+};
 
-const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: number }> = ({ 
-  data, 
-  color, 
-  height = 40 
+const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: number }> = ({
+  data,
+  color,
+  height = 40,
 }) => {
   if (!data || data.length < 2) return null;
 
-  const values = data.map(d => d.value);
+  const values = data.map((d) => d.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
 
-  const points = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * 100;
-    const y = ((max - d.value) / range) * 100;
-    return `${x},${y}`;
-  }).join(' ');
+  const points = data
+    .map((d, i) => {
+      const x = (i / (data.length - 1)) * 100;
+      const y = ((max - d.value) / range) * 100;
+      return `${x},${y}`;
+    })
+    .join(' ');
 
   return (
     <div className="relative" style={{ height }}>
@@ -108,49 +109,37 @@ const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: numbe
             <stop offset="100%" stopColor={color} stopOpacity="0.05" />
           </linearGradient>
         </defs>
-        
-        <polygon
-          points={`0,100 ${points} 100,100`}
-          fill={`url(#gradient-${color})`} />
-        
+
+        <polygon points={`0,100 ${points} 100,100`} fill={`url(#gradient-${color})`} />
+
         {/* Line */}
         <polyline
           points={points}
           fill="none"
           stroke={color}
           strokeWidth="2"
-          vectorEffect="non-scaling-stroke" />
-        
+          vectorEffect="non-scaling-stroke"
+        />
+
         {/* Data points */}
         {data.map((d, i) => {
           const x = (i / (data.length - 1)) * 100;
           const y = ((max - d.value) / range) * 100;
           return (
-            <circle
-              key={i}
-              cx={x}
-              cy={y}
-              r="1.5"
-              fill={color}
-              vectorEffect="non-scaling-stroke" />
+            <circle key={i} cx={x} cy={y} r="1.5" fill={color} vectorEffect="non-scaling-stroke" />
           );
         })}
       </svg>
     </div>
   );
-}
+};
 
-const ProgressRing: React.FC<{ 
-  value: number; 
-  target: number; 
-  color: string; 
-  size?: number 
-}> = ({ 
-  value, 
-  target, 
-  color, 
-  size = 60 
-}) => {
+const ProgressRing: React.FC<{
+  value: number;
+  target: number;
+  color: string;
+  size?: number;
+}> = ({ value, target, color, size = 60 }) => {
   const percentage = Math.min((value / target) * 100, 100);
   const radius = (size - 8) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -167,8 +156,9 @@ const ProgressRing: React.FC<{
           r={radius}
           stroke="#e5e7eb"
           strokeWidth="4"
-          fill="none" />
-        
+          fill="none"
+        />
+
         {/* Progress circle */}
         <motion.circle
           cx={size / 2}
@@ -181,9 +171,10 @@ const ProgressRing: React.FC<{
           strokeDasharray={strokeDasharray}
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset }}
-          transition={{ duration: 1, ease: "easeOut" }} />
+          transition={{ duration: 1, ease: 'easeOut' }}
+        />
       </svg>
-      
+
       {/* Center text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <span className="text-xs font-bold" style={{ color }}>
@@ -192,7 +183,7 @@ const ProgressRing: React.FC<{
       </div>
     </div>
   );
-}
+};
 
 export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
   title,
@@ -210,7 +201,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
   showProgress = false,
   interactive = true,
   onClick,
-  className
+  className,
 }) => {
   const statusInfo = statusConfig[status];
   const cardColor = color || statusInfo.color;
@@ -225,7 +216,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       default:
         return <Minus className="w-4 h-4 text-gray-400" />;
     }
-  }
+  };
 
   const getTrendColor = () => {
     switch (trend) {
@@ -236,16 +227,16 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       default:
         return 'text-gray-500';
     }
-  }
+  };
 
-  const formatValue = (_val: string | number) => {
+  const formatValue = (val: string | number) => {
     if (typeof val === 'number') {
       if (val >= 1000000) return `${(val / 1000000).toFixed(1)}M`;
       if (val >= 1000) return `${(val / 1000).toFixed(1)}K`;
       return val.toString();
     }
     return val;
-  }
+  };
 
   return (
     <motion.div
@@ -254,53 +245,44 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       transition={{ duration: 0.3 }}
       className={className}
     >
-      <DaisyCard 
+      <DaisyCard
         className={`bg-white border-gray-200 transition-all duration-200 ${
           interactive ? 'hover:shadow-lg hover:border-gray-300 cursor-pointer' : ''
         }`}
         onClick={onClick}
       >
-        <DaisyCardBody className="p-6" >
-  <div className="space-y-4">
-</DaisyCard>
+        <DaisyCardBody className="p-6">
+          <div className="space-y-4">
             {/* Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 {Boolean(IconComponent) && (
-                  <div 
-                    className="p-2 rounded-lg"
-                    style={{ backgroundColor: cardColor + '20' }}
-                  >
-                    <IconComponent 
-                      className="w-5 h-5" 
-                      style={{ color: cardColor }} />
+                  <div className="p-2 rounded-lg" style={{ backgroundColor: cardColor + '20' }}>
+                    <IconComponent className="w-5 h-5" style={{ color: cardColor }} />
                   </div>
                 )}
                 <div>
                   <h3 className="font-semibold text-[#191919] text-sm">{title}</h3>
-                  {Boolean(subtitle) && (
-                    <p className="text-xs text-gray-600 mt-1">{subtitle}</p>
-                  )}
+                  {Boolean(subtitle) && <p className="text-xs text-gray-600 mt-1">{subtitle}</p>}
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
-                <DaisyBadge 
+                <DaisyBadge
                   variant="secondary"
                   className="text-xs"
-                  style={{ 
+                  style={{
                     backgroundColor: statusInfo.bgColor,
-                    color: statusInfo.color
+                    color: statusInfo.color,
                   }}
                 >
                   <StatusIcon className="w-3 h-3 mr-1" />
                   {statusInfo.label}
                 </DaisyBadge>
-                
+
                 {Boolean(interactive) && (
-                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0" >
-  <MoreHorizontal className="w-3 h-3" />
-</DaisyButton>
+                  <DaisyButton variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <MoreHorizontal className="w-3 h-3" />
                   </DaisyButton>
                 )}
               </div>
@@ -311,12 +293,8 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               <div className="flex-1">
                 {/* Value */}
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-[#191919]">
-                    {formatValue(value)}
-                  </span>
-                  {Boolean(unit) && (
-                    <span className="text-sm text-gray-600">{unit}</span>
-                  )}
+                  <span className="text-3xl font-bold text-[#191919]">{formatValue(value)}</span>
+                  {Boolean(unit) && <span className="text-sm text-gray-600">{unit}</span>}
                 </div>
 
                 {/* Trend */}
@@ -325,13 +303,12 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                     {getTrendIcon()}
                     {trendPercentage !== undefined && (
                       <span className={`text-sm font-medium ${getTrendColor()}`}>
-                        {trendPercentage > 0 ? '+' : ''}{trendPercentage.toFixed(1)}%
+                        {trendPercentage > 0 ? '+' : ''}
+                        {trendPercentage.toFixed(1)}%
                       </span>
                     )}
                     {Boolean(previousValue) && (
-                      <span className="text-xs text-gray-500">
-                        vs {formatValue(previousValue)}
-                      </span>
+                      <span className="text-xs text-gray-500">vs {formatValue(previousValue)}</span>
                     )}
                   </div>
                 )}
@@ -341,17 +318,20 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
                   <div className="mt-3">
                     <div className="flex justify-between text-xs text-gray-600 mb-1">
                       <span>Progress to target</span>
-                      <span>{formatValue(target)} {unit}</span>
+                      <span>
+                        {formatValue(target)} {unit}
+                      </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <motion.div
                         className="h-2 rounded-full"
                         style={{ backgroundColor: cardColor }}
                         initial={{ width: 0 }}
-                        animate={{ 
-                          width: `${Math.min((Number(value) / target) * 100, 100)}%` 
+                        animate={{
+                          width: `${Math.min((Number(value) / target) * 100, 100)}%`,
                         }}
-                        transition={{ duration: 1, ease: "easeOut" }} />
+                        transition={{ duration: 1, ease: 'easeOut' }}
+                      />
                     </div>
                   </div>
                 )}
@@ -361,19 +341,13 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
               <div className="flex items-center gap-4">
                 {/* Progress Ring */}
                 {Boolean(target) && !showProgress && (
-                  <DaisyProgressRing
-                    value={Number(value)}
-                    target={target}
-                    color={cardColor}
-                    size={60} / />)}
+                  <ProgressRing value={Number(value)} target={target} color={cardColor} size={60} />
+                )}
 
                 {/* Sparkline */}
                 {Boolean(sparklineData) && sparklineData.length > 1 && (
                   <div className="w-24">
-                    <Sparkline 
-                      data={sparklineData} 
-                      color={cardColor}
-                      height={40} />
+                    <Sparkline data={sparklineData} color={cardColor} height={40} />
                   </div>
                 )}
               </div>
@@ -382,15 +356,12 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
             {/* Footer Actions */}
             {Boolean(interactive) && (
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <DaisyButton variant="ghost" size="sm" className="text-xs" >
-  <Eye className="w-3 h-3 mr-1" />
-</DaisyProgressRing>
+                <DaisyButton variant="ghost" size="sm" className="text-xs">
+                  <Eye className="w-3 h-3 mr-1" />
                   View Details
                 </DaisyButton>
-                
-                <span className="text-xs text-gray-500">
-                  Updated 2 min ago
-                </span>
+
+                <span className="text-xs text-gray-500">Updated 2 min ago</span>
               </div>
             )}
           </div>
@@ -398,4 +369,4 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       </DaisyCard>
     </motion.div>
   );
-} 
+};
