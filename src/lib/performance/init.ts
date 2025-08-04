@@ -108,7 +108,7 @@ async function initializeWebVitals() {
 /**
  * Initialize basic memory management
  */
-const initializeMemoryManagement = () {
+const initializeMemoryManagement = () => {
   if (typeof window === 'undefined') return;
 
   // Basic memory monitoring

@@ -26,7 +26,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   Eye,
   Edit3,
   Trash2,
-} from 'lucide-react'
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaApiClient } from '@/lib/api/rcsa-client';

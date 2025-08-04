@@ -2,25 +2,24 @@ import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { prisma } from '@/lib/db';
 // import {
-  AIResponse,
-  TokenUsage,;
-  AIRequest,;
-  AgentType,;
-  ConversationMessage,;
-  MessageAttachment,;
+//   AIResponse,
+//   TokenUsage,
+//   AIRequest,
+//   AgentType,
+//   ConversationMessage,
+//   MessageAttachment,
 } from '@/types/ai.types';
 import type {
-  RiskAnalysis as ImportedRiskAnalysis,;
-  ControlRecommendation as ImportedControlRecommendation,;
+  RiskAnalysis as ImportedRiskAnalysis,
+  ControlRecommendation as ImportedControlRecommendation,
 } from '@/types/ai.types';
 // import { Risk } from '@/types'
 import { generateId } from '@/lib/utils';
 // import {
-  RISCURA_MASTER_PROMPT,
-  AGENT_MODIFIERS,;
-  buildContextualPrompt,;
-} from '@/config/master-prompt';
-;
+//   RISCURA_MASTER_PROMPT,
+//   AGENT_MODIFIERS,
+//   buildContextualPrompt,
+// } from '@/config/master-prompt';
 // Enhanced interfaces for proper typing
 interface ContentGenerationRequest {
   type: string;

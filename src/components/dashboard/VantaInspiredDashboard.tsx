@@ -107,7 +107,7 @@ export default function VantaInspiredDashboard() {
       dueDate: '2024-01-10',
       progress: 100,
     },
-  ]
+  ];
 
   const complianceFrameworks: ComplianceFramework[] = [
     {
@@ -152,7 +152,7 @@ export default function VantaInspiredDashboard() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -173,7 +173,7 @@ export default function VantaInspiredDashboard() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -190,12 +190,12 @@ export default function VantaInspiredDashboard() {
       default:
         return <Clock className="w-4 h-4" />;
     }
-  }
+  };
 
   useEffect(() => {
     // Simulate real-time updates
     const interval = setInterval(() => {
-      setLastUpdated(new Date())
+      setLastUpdated(new Date());
     }, 30000);
 
     return () => clearInterval(interval);
@@ -212,7 +212,7 @@ export default function VantaInspiredDashboard() {
     if (diffInHours < 24) return `${diffInHours}h ago`;
 
     return date.toLocaleDateString();
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -235,9 +235,9 @@ export default function VantaInspiredDashboard() {
               <DaisyInput
                 placeholder="Search risks, controls, or frameworks..."
                 value={searchQuery}
-                onChange={(e) = />
-setSearchQuery(e.target.value)}
-                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]" />
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]"
+              />
             </div>
 
             {/* Action Buttons */}
@@ -360,12 +360,9 @@ setSearchQuery(e.target.value)}
               </p>
               <div className="flex justify-center space-x-4">
                 <DaisyButton className="bg-[#199BEC] hover:bg-[#0f7dc7] text-white">
-          Generate Risk Report
-                
-        </DaisyButton>
-                <DaisyButton variant="outline">
-          Compliance Summary
-        </DaisyButton>
+                  Generate Risk Report
+                </DaisyButton>
+                <DaisyButton variant="outline">Compliance Summary</DaisyButton>
               </div>
             </div>
           </DaisyTabsContent>

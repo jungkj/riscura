@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { User as UserType } from '@/types';
-// import {
+import {
   LayoutDashboard,
   Shield,
   CheckCircle,
@@ -61,7 +61,7 @@ import { User as UserType } from '@/types';
   FileBarChart,
   Compass,
   Grid3X3,
-} from 'lucide-react'
+} from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
