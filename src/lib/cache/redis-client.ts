@@ -1,5 +1,5 @@
 // Enhanced Redis Client for Performance Optimization
-import Redis, { RedisOptions } from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis'
 import { logger } from '../monitoring/logger';
 
 export interface CacheConfig {
@@ -71,16 +71,16 @@ const getRedisConfig = (): RedisOptions => {
 
     // Retry strategy
     retryStrategy: (times: number) => {
-      const delay = Math.min(times * 50, 2000);
+      const delay = Math.min(times * 50, 2000)
       return delay;
     },
 
     // Reconnect strategy
     reconnectOnError: (err: Error) => {
-      const targetError = 'READONLY';
+      const targetError = 'READONLY'
       return err.message.includes(targetError);
     },
-  };
+  }
 
   // Production-specific settings
   if (process.env.NODE_ENV === 'production') {
@@ -89,15 +89,15 @@ const getRedisConfig = (): RedisOptions => {
       // Use Redis Cluster in production if available
       enableOfflineQueue: false,
       maxMemoryPolicy: 'allkeys-lru',
-    };
+    }
   }
 
   return baseConfig;
-};
+}
 
 // Create Redis client instance
 class RedisClient {
-  private static instance: RedisClient;
+  private static instance: RedisClient
   private client: Redis;
   private isConnected: boolean = false;
 
@@ -168,7 +168,7 @@ class RedisClient {
   public async get(key: string): Promise<string | null> {
     try {
       if (!this.isReady()) {
-        logger.warn('Redis not ready, skipping cache get');
+        logger.warn('Redis not ready, skipping cache get')
         return null;
       }
       return await this.client.get(key);
@@ -269,7 +269,7 @@ class RedisClient {
   // Hash operations
   public async hget(key: string, field: string): Promise<string | null> {
     try {
-      if (!this.isReady()) return null;
+      if (!this.isReady()) return null
       return await this.client.hget(key, field);
     } catch (error) {
       logger.error(`Redis HGET error for ${key}.${field}:`, error);
@@ -290,18 +290,18 @@ class RedisClient {
 
   public async hgetall(key: string): Promise<Record<string, string>> {
     try {
-      if (!this.isReady()) return {};
+      if (!this.isReady()) return {}
       return await this.client.hgetall(key);
     } catch (error) {
       logger.error(`Redis HGETALL error for key ${key}:`, error);
-      return {};
+      return {}
     }
   }
 
   // List operations
   public async lpush(key: string, ...values: string[]): Promise<number> {
     try {
-      if (!this.isReady()) return 0;
+      if (!this.isReady()) return 0
       return await this.client.lpush(key, ...values);
     } catch (error) {
       logger.error(`Redis LPUSH error for key ${key}:`, error);
@@ -322,7 +322,7 @@ class RedisClient {
   // Set operations
   public async sadd(key: string, ...members: string[]): Promise<number> {
     try {
-      if (!this.isReady()) return 0;
+      if (!this.isReady()) return 0
       return await this.client.sadd(key, ...members);
     } catch (error) {
       logger.error(`Redis SADD error for key ${key}:`, error);
@@ -343,7 +343,7 @@ class RedisClient {
   // Cache invalidation patterns
   public async invalidatePattern(_pattern: string): Promise<number> {
     try {
-      if (!this.isReady()) return 0;
+      if (!this.isReady()) return 0
       const keys = await this.client.keys(pattern);
       if (keys.length === 0) return 0;
       return await this.client.del(...keys);
@@ -356,7 +356,7 @@ class RedisClient {
   // Health check
   public async ping(): Promise<boolean> {
     try {
-      const _result = await this.client.ping();
+      const _result = await this.client.ping()
       return result === 'PONG';
     } catch (error) {
       logger.error('Redis ping error:', error);
@@ -367,7 +367,7 @@ class RedisClient {
   // Get cache statistics
   public async getStats(): Promise<Record<string, any>> {
     try {
-      if (!this.isReady()) return {};
+      if (!this.isReady()) return {}
       const info = await this.client.info();
       const dbsize = await this.client.dbsize();
 
@@ -376,21 +376,21 @@ class RedisClient {
         status: this.client.status,
         dbsize,
         info: this.parseRedisInfo(info),
-      };
+      }
     } catch (error) {
       logger.error('Redis stats error:', error);
-      return { connected: false, error: error.message };
+      return { connected: false, error: error.message }
     }
   }
 
   private parseRedisInfo(info: string): Record<string, any> {
-    const result: Record<string, any> = {};
+    const result: Record<string, any> = {}
     const sections = info.split('\r\n\r\n');
 
     sections.forEach((section) => {
       const lines = section.split('\r\n');
       const sectionName = lines[0].replace('# ', '');
-      result[sectionName] = {};
+      result[sectionName] = {}
 
       lines.slice(1).forEach((line) => {
         if (line.includes(':')) {
@@ -405,24 +405,24 @@ class RedisClient {
 }
 
 // Export singleton instance
-export const redisClient = RedisClient.getInstance();
+export const redisClient = RedisClient.getInstance()
 
 // Export types
-export type { RedisOptions };
-export { Redis };
+export type { RedisOptions }
+export { Redis }
 
 // Utility functions
 export const createCacheKey = (...parts: (string | number)[]): string => {
-  return parts.join(':');
-};
+  return parts.join(':')
+}
 
 export const hashKey = (key: string): string => {
   // Simple hash function for consistent key generation
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < key.length; i++) {
     const char = key.charCodeAt(i);
     hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
   return Math.abs(hash).toString(36);
-};
+}

@@ -10,13 +10,13 @@ export class DatabaseOptimizer {
     params: any[] = [],
     options: QueryOptions = {}
   ): Promise<T> {
-    const startTime = Date.now();
+    const startTime = Date.now()
     const cacheKey = this.generateCacheKey(query, params);
 
     try {
       // Check cache first
       if (options.useCache !== false) {
-        const _cached = await cacheService.getCachedQuery<T>(query, params);
+        const _cached = await cacheService.getCachedQuery<T>(query, params)
         if (cached !== null) {
           this.recordMetrics(query, Date.now() - startTime, true);
           return cached;
@@ -24,11 +24,11 @@ export class DatabaseOptimizer {
       }
 
       // Execute query
-      const _result = await this.executeQuery<T>(query, params);
+      const _result = await this.executeQuery<T>(query, params)
 
       // Cache result if enabled
       if (options.useCache !== false && options.cacheTTL) {
-        await cacheService.cacheQuery(query, params, result, options.cacheTTL);
+        await cacheService.cacheQuery(query, params, result, options.cacheTTL)
       }
 
       this.recordMetrics(query, Date.now() - startTime, false);
@@ -41,7 +41,7 @@ export class DatabaseOptimizer {
 
   // Batch operations for efficiency
   async batchInsert<T>(tableName: string, records: T[], batchSize = 1000): Promise<void> {
-    const batches = this.chunkArray(records, batchSize);
+    const batches = this.chunkArray(records, batchSize)
 
     for (const batch of batches) {
       await db.client.$transaction(async (tx) => {
@@ -72,7 +72,7 @@ export class DatabaseOptimizer {
   async optimizeConnectionPool(): Promise<void> {
     // Configure connection pool settings
     await db.client.$executeRaw`
-      SET SESSION innodb_buffer_pool_size = 2147483648;
+      SET SESSION innodb_buffer_pool_size = 2147483648
       SET SESSION max_connections = 200;
       SET SESSION wait_timeout = 28800;
       SET SESSION interactive_timeout = 28800;
@@ -90,7 +90,7 @@ export class DatabaseOptimizer {
         idx_tup_read,
         idx_tup_fetch
       FROM pg_stat_user_indexes
-      ORDER BY idx_scan DESC;
+      ORDER BY idx_scan DESC
     `;
 
     return await this.executeQuery<IndexAnalysis[]>(query, []);
@@ -129,7 +129,7 @@ export class DatabaseOptimizer {
         await this.executeQuery(`DROP INDEX IF EXISTS ${index.indexname};`, []);
         droppedCount++;
       } catch (error) {
-        // console.error(`Failed to drop index ${index.indexname}:`, error);
+        // console.error(`Failed to drop index ${index.indexname}:`, error)
       }
     }
 
@@ -138,7 +138,7 @@ export class DatabaseOptimizer {
 
   // Query plan analysis
   async analyzeQueryPlan(_query: string, params: any[] = []): Promise<QueryPlan> {
-    const explainQuery = `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`;
+    const explainQuery = `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${query}`
     const _result = await this.executeQuery<any[]>(explainQuery, params);
 
     return {
@@ -146,7 +146,7 @@ export class DatabaseOptimizer {
       executionTime: this.extractExecutionTime(result[0]),
       cost: this.extractCost(result[0]),
       recommendations: this.generateRecommendations(result[0]),
-    };
+    }
   }
 
   // Table statistics and maintenance
@@ -177,7 +177,7 @@ export class DatabaseOptimizer {
         rows
       FROM pg_stat_statements
       ORDER BY mean_time DESC
-      LIMIT $1;
+      LIMIT $1
     `;
 
     return await this.executeQuery<SlowQuery[]>(query, [limit]);
@@ -220,7 +220,7 @@ export class DatabaseOptimizer {
         this.getDatabaseSize(),
         this.getConnectionStats(),
         cacheService.getCacheStats(),
-      ]);
+      ])
 
     const recommendations = this.generatePerformanceRecommendations({
       slowQueries,
@@ -243,7 +243,7 @@ export class DatabaseOptimizer {
         connectionStats,
         cacheStats,
       }),
-    };
+    }
   }
 
   // Automated optimization
@@ -252,28 +252,28 @@ export class DatabaseOptimizer {
       timestamp: new Date(),
       optimizations: [],
       errors: [],
-    };
+    }
 
     try {
       // Update statistics
-      await this.updateTableStatistics();
+      await this.updateTableStatistics()
       results.optimizations.push('Updated table statistics');
 
       // Vacuum if needed
-      const lastVacuum = await this.getLastVacuumTime();
+      const lastVacuum = await this.getLastVacuumTime()
       if (Date.now() - lastVacuum.getTime() > 24 * 60 * 60 * 1000) {
         await this.vacuumTables();
         results.optimizations.push('Performed vacuum');
       }
 
       // Drop unused indexes
-      const droppedIndexes = await this.dropUnusedIndexes();
+      const droppedIndexes = await this.dropUnusedIndexes()
       if (droppedIndexes > 0) {
         results.optimizations.push(`Dropped ${droppedIndexes} unused indexes`);
       }
 
       // Optimize connection pool
-      await this.optimizeConnectionPool();
+      await this.optimizeConnectionPool()
       results.optimizations.push('Optimized connection pool');
     } catch (error) {
       results.errors.push(error instanceof Error ? error.message : 'Unknown error');
@@ -285,7 +285,7 @@ export class DatabaseOptimizer {
   // Private helper methods
   private async executeQuery<T>(_query: string, params: any[]): Promise<T> {
     // Use Prisma's raw query execution
-    return (await db.client.$queryRaw<T>`${query}`) as T;
+    return (await db.client.$queryRaw<T>`${query}`) as T
   }
 
   private generateCacheKey(_query: string, params: any[]): string {
@@ -303,7 +303,7 @@ export class DatabaseOptimizer {
       averageDuration: 0,
       cacheHits: 0,
       errors: 0,
-    };
+    }
 
     existing.totalExecutions++;
     if (fromCache) {
@@ -376,16 +376,16 @@ export class DatabaseOptimizer {
     let score = 100;
 
     // Deduct for slow queries
-    score -= data.slowQueries.length * 5;
+    score -= data.slowQueries.length * 5
 
     // Deduct for poor cache hit rate
     if (data.cacheStats.hitRate < 80) {
-      score -= 80 - data.cacheStats.hitRate;
+      score -= 80 - data.cacheStats.hitRate
     }
 
     // Deduct for high connection usage
     if (data.connectionStats.active_connections > 80) {
-      score -= (data.connectionStats.active_connections - 80) * 0.5;
+      score -= (data.connectionStats.active_connections - 80) * 0.5
     }
 
     return Math.max(0, Math.min(100, score));
@@ -408,7 +408,7 @@ export class DatabaseOptimizer {
   // Health check
   async healthCheck(): Promise<DatabaseHealthCheck> {
     try {
-      const start = Date.now();
+      const start = Date.now()
       await this.executeQuery('SELECT 1 as health_check;', []);
       const latency = Date.now() - start;
 
@@ -421,7 +421,7 @@ export class DatabaseOptimizer {
         connectionStats,
         message: healthy ? 'Database is healthy' : 'Database performance issues detected',
         timestamp: new Date(),
-      };
+      }
     } catch (error) {
       return {
         healthy: false,
@@ -434,14 +434,14 @@ export class DatabaseOptimizer {
         },
         message: error instanceof Error ? error.message : 'Database error',
         timestamp: new Date(),
-      };
+      }
     }
   }
 }
 
 // Types
 export interface QueryOptions {
-  useCache?: boolean;
+  useCache?: boolean
   cacheTTL?: number;
   timeout?: number;
 }
@@ -525,4 +525,4 @@ export interface DatabaseHealthCheck {
 }
 
 // Global database optimizer instance
-export const databaseOptimizer = new DatabaseOptimizer();
+export const databaseOptimizer = new DatabaseOptimizer()

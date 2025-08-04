@@ -25,7 +25,7 @@ export class AuditService {
     medium: 1.5,
     high: 2,
     critical: 3,
-  };
+  }
 
   constructor(_config: AuditConfiguration) {
     this.config = config;
@@ -36,7 +36,7 @@ export class AuditService {
   // Core Audit Logging
   async logEvent(event: Partial<SecurityAuditEvent>): Promise<void> {
     if (!this.config.enabled) {
-      return;
+      return
     }
 
     const auditEvent: SecurityAuditEvent = {
@@ -59,27 +59,27 @@ export class AuditService {
       risk_score: event.risk_score,
       correlationId: event.correlationId || uuidv4(),
       tags: event.tags || [],
-    };
+    }
 
     // Add integrity signature
-    await this.addIntegritySignature(auditEvent);
+    await this.addIntegritySignature(auditEvent)
 
     // Calculate risk score if not provided
     if (!auditEvent.risk_score) {
-      auditEvent.risk_score = this.calculateRiskScore(auditEvent);
+      auditEvent.risk_score = this.calculateRiskScore(auditEvent)
     }
 
     // Check if this event type should be logged
     if (!this.shouldLogEvent(auditEvent)) {
-      return;
+      return
     }
 
     // Add to queue for processing
-    this.eventQueue.push(auditEvent);
+    this.eventQueue.push(auditEvent)
 
     // Process real-time alerts
     if (this.config.realTimeAlerting) {
-      await this.processRealTimeAlert(auditEvent);
+      await this.processRealTimeAlert(auditEvent)
     }
   }
 
@@ -102,7 +102,7 @@ export class AuditService {
         sessionDuration: data.sessionDuration,
       },
       tags: ['authentication', data.method, data.action],
-    });
+    })
   }
 
   async logAuthorization(_data: AuthorizationAuditData): Promise<void> {
@@ -247,7 +247,7 @@ export class AuditService {
   private async startEventProcessor(): Promise<void> {
     setInterval(async () => {
       if (this.processingQueue || this.eventQueue.length === 0) {
-        return;
+        return
       }
 
       this.processingQueue = true;
@@ -257,9 +257,9 @@ export class AuditService {
       try {
         await this.processEventBatch(eventsToProcess);
       } catch (error) {
-        // console.error('Failed to process audit events:', error);
+        // console.error('Failed to process audit events:', error)
         // Re-queue failed events
-        this.eventQueue.unshift(...eventsToProcess);
+        this.eventQueue.unshift(...eventsToProcess)
       } finally {
         this.processingQueue = false;
       }
@@ -268,17 +268,17 @@ export class AuditService {
 
   private async processEventBatch(events: SecurityAuditEvent[]): Promise<void> {
     // Store in database
-    await this.storeEvents(events);
+    await this.storeEvents(events)
 
     // Send to SIEM
     if (this.config.siemIntegration.enabled) {
-      await this.sendToSIEM(events);
+      await this.sendToSIEM(events)
     }
 
     // Send to other destinations
     for (const destination of this.config.destinations) {
       if (destination.enabled) {
-        await this.sendToDestination(events, destination);
+        await this.sendToDestination(events, destination)
       }
     }
   }
@@ -293,7 +293,7 @@ export class AuditService {
         })),
       });
     } catch (error) {
-      // console.error('Failed to store audit events:', error);
+      // console.error('Failed to store audit events:', error)
       throw error;
     }
   }
@@ -301,7 +301,7 @@ export class AuditService {
   // SIEM Integration
   private initializeSIEMClients(): void {
     if (!this.config.siemIntegration.enabled) {
-      return;
+      return
     }
 
     const siemConfig = this.config.siemIntegration;
@@ -330,7 +330,7 @@ export class AuditService {
   private async sendToSIEM(events: SecurityAuditEvent[]): Promise<void> {
     const siemClient = this.siemClients.get(this.config.siemIntegration.provider);
     if (!siemClient) {
-      // console.warn('SIEM client not configured');
+      // console.warn('SIEM client not configured')
       return;
     }
 
@@ -341,20 +341,20 @@ export class AuditService {
         this.config.siemIntegration.filters.some(
           (filter) => event.eventType.includes(filter) || event.category.includes(filter)
         )
-    );
+    )
 
     if (filteredEvents.length === 0) {
       return;
     }
 
     // Send in batches
-    const batchSize = this.config.siemIntegration.batchSize;
+    const batchSize = this.config.siemIntegration.batchSize
     for (let i = 0; i < filteredEvents.length; i += batchSize) {
       const batch = filteredEvents.slice(i, i + batchSize);
       try {
         await siemClient.sendEvents(batch);
       } catch (error) {
-        // console.error('Failed to send events to SIEM:', error);
+        // console.error('Failed to send events to SIEM:', error)
       }
     }
   }
@@ -375,10 +375,10 @@ export class AuditService {
           await this.sendToWebhook(events, destination);
           break;
         default:
-          // console.warn(`Unknown destination type: ${destination.type}`);
+          // console.warn(`Unknown destination type: ${destination.type}`)
       }
     } catch (error) {
-      // console.error(`Failed to send to destination ${destination.type}:`, error);
+      // console.error(`Failed to send to destination ${destination.type}:`, error)
     }
   }
 
@@ -387,7 +387,7 @@ export class AuditService {
     events: SecurityAuditEvent[],
     destination: AuditDestination
   ): Promise<void> {
-    const fs = await import('fs/promises');
+    const fs = await import('fs/promises')
     const path = destination.configuration.path || '/var/log/riscura/audit.log';
 
     for (const event of events) {
@@ -402,8 +402,8 @@ export class AuditService {
   ): Promise<void> {
     // Simplified syslog implementation
     for (const event of events) {
-      const message = this.formatEvent(event, destination.format);
-      // console.log(`SYSLOG: ${message}`);
+      const message = this.formatEvent(event, destination.format)
+      // console.log(`SYSLOG: ${message}`)
     }
   }
 
@@ -412,7 +412,7 @@ export class AuditService {
     destination: AuditDestination
   ): Promise<void> {
     const url = destination.configuration.url;
-    const headers = destination.configuration.headers || {};
+    const headers = destination.configuration.headers || {}
 
     try {
       await fetch(url, {
@@ -428,7 +428,7 @@ export class AuditService {
         }),
       });
     } catch (error) {
-      // console.error('Failed to send to webhook:', error);
+      // console.error('Failed to send to webhook:', error)
     }
   }
 
@@ -436,7 +436,7 @@ export class AuditService {
   private formatEvent(event: SecurityAuditEvent, format: string): any {
     switch (format) {
       case 'json':
-        return JSON.stringify(event);
+        return JSON.stringify(event)
       case 'cef':
         return this.formatCEF(event);
       case 'leef':
@@ -476,7 +476,7 @@ export class AuditService {
       medium: 6,
       high: 8,
       critical: 10,
-    };
+    }
     return mapping[severity] || 5;
   }
 
@@ -484,17 +484,17 @@ export class AuditService {
   private async processRealTimeAlert(event: SecurityAuditEvent): Promise<void> {
     // Check for high-risk events
     if (event.severity === 'critical' || event.risk_score! > 8) {
-      await this.sendCriticalAlert(event);
+      await this.sendCriticalAlert(event)
     }
 
     // Check for suspicious patterns
     if (await this.detectSuspiciousPattern(event)) {
-      await this.sendPatternAlert(event);
+      await this.sendPatternAlert(event)
     }
 
     // Check for compliance violations
     if (this.isComplianceViolation(event)) {
-      await this.sendComplianceAlert(event);
+      await this.sendComplianceAlert(event)
     }
   }
 
@@ -546,7 +546,7 @@ export class AuditService {
 
   // Risk Scoring
   private calculateRiskScore(event: SecurityAuditEvent): number {
-    let score = 1;
+    let score = 1
 
     // Base score by category
     const categoryScores: Record<string, number> = {
@@ -557,7 +557,7 @@ export class AuditService {
       system_access: 2,
       configuration_change: 8,
       security_event: 9,
-    };
+    }
 
     score += categoryScores[event.category] || 1;
 
@@ -568,28 +568,28 @@ export class AuditService {
       medium: 1.5,
       high: 2,
       critical: 3,
-    };
+    }
 
     score *= severityMultipliers[event.severity] || 1;
 
     // Failure events are riskier
     if (event.outcome === 'failure') {
-      score *= 1.5;
+      score *= 1.5
     }
 
     // Administrative actions
     if (event.tags.includes('admin') || event.tags.includes('privileged')) {
-      score *= 1.3;
+      score *= 1.3
     }
 
     // External access
     if (event.source.ip && !this.isInternalIP(event.source.ip)) {
-      score *= 1.2;
+      score *= 1.2
     }
 
     // Off-hours access
     if (this.isOffHours(event.timestamp)) {
-      score *= 1.1;
+      score *= 1.1
     }
 
     return Math.min(Math.round(score * 10) / 10, 10); // Cap at 10
@@ -602,7 +602,7 @@ export class AuditService {
       ip.startsWith('10.') ||
       ip.startsWith('172.16.') ||
       ip === '127.0.0.1'
-    );
+    )
   }
 
   private isOffHours(timestamp: Date): boolean {
@@ -612,7 +612,7 @@ export class AuditService {
 
   // Pattern Detection
   private async detectSuspiciousPattern(event: SecurityAuditEvent): Promise<boolean> {
-    if (!event.userId) return false;
+    if (!event.userId) return false
 
     // Check for multiple failed login attempts
     if (event.category === 'authentication' && event.outcome === 'failure') {
@@ -666,7 +666,7 @@ export class AuditService {
 
     // Sum up record counts from details
     return events.reduce((total, event) => {
-      const details = typeof event.details === 'string' ? JSON.parse(event.details) : event.details;
+      const details = typeof event.details === 'string' ? JSON.parse(event.details) : event.details
       return total + (details.recordCount || 1);
     }, 0);
   }
@@ -679,17 +679,17 @@ export class AuditService {
       event.tags.includes('sensitive') &&
       !event.tags.includes('authorized')
     ) {
-      return true;
+      return true
     }
 
     // Check for configuration changes without approval
     if (event.category === 'configuration_change' && !event.details.approvedBy) {
-      return true;
+      return true
     }
 
     // Check for privileged access outside business hours
     if (event.tags.includes('privileged') && this.isOffHours(event.timestamp)) {
-      return true;
+      return true
     }
 
     return false;
@@ -698,7 +698,7 @@ export class AuditService {
   // Utility Methods
   private shouldLogEvent(event: SecurityAuditEvent): boolean {
     // Check if event type is configured to be logged
-    const eventTypeConfig = this.config.eventTypes.find((et) => et.category === event.category);
+    const eventTypeConfig = this.config.eventTypes.find((et) => et.category === event.category)
 
     if (!eventTypeConfig) {
       return false;
@@ -721,7 +721,7 @@ export class AuditService {
   // Integrity Protection
   private async addIntegritySignature(event: SecurityAuditEvent): Promise<void> {
     if (!this.config.integrityProtection) {
-      return;
+      return
     }
 
     const eventString = JSON.stringify({
@@ -740,7 +740,7 @@ export class AuditService {
     event.details = {
       ...event.details,
       _integrity: signature,
-    };
+    }
   }
 
   async verifyEventIntegrity(event: SecurityAuditEvent): Promise<boolean> {
@@ -766,7 +766,7 @@ export class AuditService {
 
   // Querying and Search
   async searchEvents(_query: AuditSearchQuery): Promise<AuditSearchResult> {
-    const where: any = {};
+    const where: any = {}
 
     if (query.userId) where.userId = query.userId;
     if (query.category) where.category = query.category;
@@ -774,7 +774,7 @@ export class AuditService {
     if (query.resource) where.resource = query.resource;
     if (query.outcome) where.outcome = query.outcome;
     if (query.startDate || query.endDate) {
-      where.timestamp = {};
+      where.timestamp = {}
       if (query.startDate) where.timestamp.gte = query.startDate;
       if (query.endDate) where.timestamp.lte = query.endDate;
     }
@@ -798,7 +798,7 @@ export class AuditService {
       total,
       offset: query.offset || 0,
       limit: query.limit || 100,
-    };
+    }
   }
 
   // Metrics and Analytics
@@ -808,7 +808,7 @@ export class AuditService {
         gte: period.start,
         lte: period.end,
       },
-    };
+    }
 
     const [totalEvents, categoryCounts, severityCounts, outcomeCounts, riskScoreAvg] =
       await Promise.all([
@@ -843,14 +843,14 @@ export class AuditService {
       severityCounts: Object.fromEntries(severityCounts.map((s) => [s.severity, s._count])),
       outcomeCounts: Object.fromEntries(outcomeCounts.map((o) => [o.outcome, o._count])),
       averageRiskScore: riskScoreAvg._avg.risk_score || 0,
-    };
+    }
   }
 
   // Analyze entity access patterns
   private analyzeEntityAccessPatterns(groupedData: SecurityAuditEvent[]): Record<string, any> {
     return groupedData.reduce((patterns: Record<string, any>, event: any) => {
       if (event.entityType && event.entityId) {
-        const key = `${event.entityType}:${event.entityId}`;
+        const key = `${event.entityType}:${event.entityId}`
         if (!patterns[key]) {
           patterns[key] = {
             entityType: event.entityType,
@@ -860,7 +860,7 @@ export class AuditService {
             actions: new Set(),
             lastAccessed: event.timestamp,
             riskScore: 0,
-          };
+          }
         }
 
         patterns[key].accessCount++;
@@ -877,7 +877,7 @@ export class AuditService {
 
   // Convert Sets to arrays and calculate risk scores
   private calculateEntityRiskScore(_pattern: any): number {
-    const accessCount = pattern.accessCount;
+    const accessCount = pattern.accessCount
     const uniqueUsers = pattern.uniqueUsers.size;
     const actions = pattern.actions.size;
     const lastAccessed = new Date(pattern.lastAccessed);
@@ -887,7 +887,7 @@ export class AuditService {
     let score = 1;
 
     // Base score by access count
-    score += accessCount * 0.5;
+    score += accessCount * 0.5
 
     // Severity multiplier
     const severityMultipliers: Record<string, number> = {
@@ -896,15 +896,15 @@ export class AuditService {
       medium: 1.5,
       high: 2,
       critical: 3,
-    };
+    }
 
     // Use severity from pattern if available, default to 'low'
-    const severity = pattern.severity || 'low';
+    const severity = pattern.severity || 'low'
     score *= severityMultipliers[severity] || 1;
 
     // Age multiplier
     if (age > 24) {
-      score *= 0.5;
+      score *= 0.5
     }
 
     // External access check removed - pattern.entityId is not a valid IP address property
@@ -925,7 +925,7 @@ export class AuditService {
           timeDistribution: {},
           riskScore: 0,
           anomalies: [],
-        };
+        }
       }
 
       const userPattern = patterns[event.userId];
@@ -934,12 +934,12 @@ export class AuditService {
 
       // Track action types
       if (!userPattern.actions[event.action]) {
-        userPattern.actions[event.action] = 0;
+        userPattern.actions[event.action] = 0
       }
       userPattern.actions[event.action]++;
 
       // Track time distribution
-      const hour = new Date(event.timestamp).getHours();
+      const hour = new Date(event.timestamp).getHours()
       if (!userPattern.timeDistribution[hour]) {
         userPattern.timeDistribution[hour] = 0;
       }
@@ -951,7 +951,7 @@ export class AuditService {
 
   // Convert Sets to arrays and calculate user risk scores
   private calculateUserRiskScore(_pattern: any): number {
-    const totalActions = pattern.totalActions;
+    const totalActions = pattern.totalActions
     const uniqueEntities = pattern.uniqueEntities.size;
     const actions = Object.keys(pattern.actions).length;
     const timeDistribution = Object.values(pattern.timeDistribution).reduce(
@@ -962,7 +962,7 @@ export class AuditService {
     let score = 1;
 
     // Base score by action count
-    score += actions * 0.5;
+    score += actions * 0.5
 
     // Severity multiplier
     const severityMultipliers: Record<string, number> = {
@@ -971,7 +971,7 @@ export class AuditService {
       medium: 1.5,
       high: 2,
       critical: 3,
-    };
+    }
 
     score *= severityMultipliers[pattern.severity] || 1;
 
@@ -983,18 +983,18 @@ export class AuditService {
 
   // Detect user anomalies
   private detectUserAnomalies(_pattern: any, groupedData: SecurityAuditEvent[]): string[] {
-    const anomalies: string[] = [];
+    const anomalies: string[] = []
 
     // Implement anomaly detection logic based on user behavior patterns
     // This is a placeholder and should be replaced with actual implementation
 
-    return anomalies;
+    return anomalies
   }
 }
 
 // SIEM Client Implementations
 abstract class SIEMClient {
-  protected config: SIEMIntegration;
+  protected config: SIEMIntegration
 
   constructor(_config: SIEMIntegration) {
     this.config = config;
@@ -1115,7 +1115,7 @@ class CustomSIEMClient extends SIEMClient {
 
 // Types
 export interface AuthenticationAuditData {
-  action: 'login' | 'logout' | 'mfa_challenge' | 'password_change' | 'session_expired';
+  action: 'login' | 'logout' | 'mfa_challenge' | 'password_change' | 'session_expired'
   userId?: string;
   success: boolean;
   method: 'password' | 'sso' | 'oauth' | 'api_key' | 'certificate';
@@ -1129,7 +1129,7 @@ export interface AuthenticationAuditData {
     userAgent?: string;
     location?: GeoLocation;
     device?: DeviceInfo;
-  };
+  }
 }
 
 export interface AuthorizationAuditData {
@@ -1145,7 +1145,7 @@ export interface AuthorizationAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface DataAccessAuditData {
@@ -1163,7 +1163,7 @@ export interface DataAccessAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface DataModificationAuditData {
@@ -1181,7 +1181,7 @@ export interface DataModificationAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface SystemAccessAuditData {
@@ -1197,7 +1197,7 @@ export interface SystemAccessAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface ConfigurationChangeAuditData {
@@ -1215,7 +1215,7 @@ export interface ConfigurationChangeAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface SecurityEventAuditData {
@@ -1233,7 +1233,7 @@ export interface SecurityEventAuditData {
   source: {
     ip: string;
     userAgent?: string;
-  };
+  }
 }
 
 export interface AuditSearchQuery {
@@ -1258,7 +1258,7 @@ export interface AuditSearchResult {
 }
 
 export interface AuditMetrics {
-  period: { start: Date; end: Date };
+  period: { start: Date; end: Date }
   totalEvents: number;
   categoryCounts: Record<string, number>;
   severityCounts: Record<string, number>;
@@ -1268,8 +1268,8 @@ export interface AuditMetrics {
 
 // Factory function
 export const createAuditService = (_config: AuditConfiguration): AuditService => {
-  return new AuditService(config);
-};
+  return new AuditService(config)
+}
 
 // Default audit configuration
 export const createDefaultAuditConfig = (): AuditConfiguration => ({
@@ -1334,4 +1334,4 @@ export const createDefaultAuditConfig = (): AuditConfiguration => ({
     flushInterval: 60,
     filters: [],
   },
-});
+})

@@ -58,7 +58,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     memoryUsage: 0,
     rowsProcessed: 0,
     cacheHitRate: 0,
-  };
+  }
 
   constructor(
     private data: T[],
@@ -90,7 +90,7 @@ export class DataTablePerformanceOptimizer<T = any> {
 
     // console.log(
       `Built indexes for ${indexFields.length} fields in ${performance.now() - startTime}ms`
-    );
+    )
   }
 
   /**
@@ -102,7 +102,7 @@ export class DataTablePerformanceOptimizer<T = any> {
 
     // Check cache first
     if (this.filterCache.has(cacheKey)) {
-      this.metrics.cacheHitRate++;
+      this.metrics.cacheHitRate++
       this.metrics.filterTime = performance.now() - startTime;
       return this.filterCache.get(cacheKey)!;
     }
@@ -110,17 +110,17 @@ export class DataTablePerformanceOptimizer<T = any> {
     let filteredData = this.data;
 
     // Apply filters in order of selectivity (most selective first)
-    const sortedFilters = this.sortFiltersBySelectivity(filters);
+    const sortedFilters = this.sortFiltersBySelectivity(filters)
 
     for (const filter of sortedFilters) {
       filteredData = this.applyFilter(filteredData, filter);
 
       // Early exit if no data remains
-      if (filteredData.length === 0) break;
+      if (filteredData.length === 0) break
     }
 
     // Cache result
-    this.filterCache.set(cacheKey, filteredData);
+    this.filterCache.set(cacheKey, filteredData)
     this.metrics.filterTime = performance.now() - startTime;
     this.metrics.rowsProcessed = filteredData.length;
 
@@ -136,7 +136,7 @@ export class DataTablePerformanceOptimizer<T = any> {
 
     // Check cache first
     if (this.sortCache.has(cacheKey)) {
-      this.metrics.cacheHitRate++;
+      this.metrics.cacheHitRate++
       this.metrics.sortTime = performance.now() - startTime;
       return this.sortCache.get(cacheKey)!;
     }
@@ -155,7 +155,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     });
 
     // Cache result
-    this.sortCache.set(cacheKey, sortedData);
+    this.sortCache.set(cacheKey, sortedData)
     this.metrics.sortTime = performance.now() - startTime;
 
     return sortedData;
@@ -184,7 +184,7 @@ export class DataTablePerformanceOptimizer<T = any> {
       items,
       totalHeight,
       offsetY,
-    };
+    }
   }
 
   /**
@@ -200,7 +200,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     let completed = 0;
 
     // Process batches with controlled concurrency
-    const semaphore = new Semaphore(this.bulkConfig.maxConcurrent);
+    const semaphore = new Semaphore(this.bulkConfig.maxConcurrent)
 
     const batchPromises = batches.map(async (batch, index) => {
       await semaphore.acquire();
@@ -240,7 +240,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     if (config.format === 'csv') {
       // Yield headers
       if (config.includeHeaders) {
-        yield columns.map((col) => this.escapeCsvValue(col.header)).join(',') + '\n';
+        yield columns.map((col) => this.escapeCsvValue(col.header)).join(',') + '\n'
       }
 
       // Stream data in chunks
@@ -263,7 +263,7 @@ export class DataTablePerformanceOptimizer<T = any> {
       }
     } else if (config.format === 'excel') {
       // For Excel, we'd use a library like exceljs with streaming
-      yield* this.streamExcelExport(data, columns, config);
+      yield* this.streamExcelExport(data, columns, config)
     }
 
     this.metrics.exportTime = performance.now() - startTime;
@@ -296,13 +296,13 @@ export class DataTablePerformanceOptimizer<T = any> {
       operations: ('sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct')[];
     }[]
   ): Record<string, Record<string, any>> {
-    const results: Record<string, Record<string, any>> = {};
+    const results: Record<string, Record<string, any>> = {}
 
     aggregations.forEach(({ field, operations }) => {
       const values = data.map((item) => this.getNestedValue(item, field)).filter((v) => v != null);
       const numericValues = values.filter((v) => typeof v === 'number');
 
-      results[field] = {};
+      results[field] = {}
 
       operations.forEach((op) => {
         switch (op) {
@@ -336,13 +336,13 @@ export class DataTablePerformanceOptimizer<T = any> {
 
   // Helper methods
   private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+    return path.split('.').reduce((current, key) => current?.[key], obj)
   }
 
   private applyFilter(_data: T[], filter: FilterState): T[] {
     // Use index if available
     if (filter.operator === 'equals' && this.indexedFields.has(filter.field)) {
-      const index = this.indexedFields.get(filter.field)!;
+      const index = this.indexedFields.get(filter.field)!
       return index.get(filter.value) || [];
     }
 
@@ -391,7 +391,7 @@ export class DataTablePerformanceOptimizer<T = any> {
     // In a real implementation, we'd analyze field cardinality
     // For now, prioritize equality filters and indexed fields
     return filters.sort((a, b) => {
-      const aSelectivity = this.getFilterSelectivity(a);
+      const aSelectivity = this.getFilterSelectivity(a)
       const bSelectivity = this.getFilterSelectivity(b);
       return bSelectivity - aSelectivity;
     });
@@ -463,7 +463,7 @@ export class DataTablePerformanceOptimizer<T = any> {
   ): AsyncGenerator<string, void, unknown> {
     // Placeholder for Excel streaming implementation
     // Would use libraries like exceljs or xlsx-stream-reader
-    yield 'Excel streaming not implemented yet';
+    yield 'Excel streaming not implemented yet'
   }
 
   /**
@@ -479,7 +479,7 @@ export class DataTablePerformanceOptimizer<T = any> {
    * Get performance metrics
    */
   getMetrics(): PerformanceMetrics {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   /**
@@ -553,7 +553,7 @@ export const useDataTableOptimizer = <T>(_data: T[],
   useEffect(() => {
     return () => {
       optimizer.clearCaches();
-    };
+    }
   }, [optimizer]);
 
   const filterData = useCallback(
@@ -615,5 +615,5 @@ export const useDataTableOptimizer = <T>(_data: T[],
     getMetrics: () => optimizer.getMetrics(),
     clearCaches: () => optimizer.clearCaches(),
     optimizeMemory: () => optimizer.optimizeMemory(),
-  };
-};
+  }
+}

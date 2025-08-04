@@ -11,7 +11,7 @@ import * as Sentry from '@sentry/nextjs';
 
 // Dashboard metrics aggregation
 interface DashboardMetrics {
-  timestamp: number;
+  timestamp: number
   performance: {
     webVitals: {
       lcp: number | null;
@@ -19,7 +19,7 @@ interface DashboardMetrics {
       cls: number | null;
       fcp: number | null;
       ttfb: number | null;
-    };
+    }
     apiMetrics: {
       averageResponseTime: number;
       errorRate: number;
@@ -28,13 +28,13 @@ interface DashboardMetrics {
         endpoint: string;
         responseTime: number;
       }>;
-    };
+    }
     systemMetrics: {
       memoryUsage: number;
       cpuUsage: number;
       activeConnections: number;
-    };
-  };
+    }
+  }
   business: {
     kpis: {
       dailyActiveUsers: number;
@@ -43,13 +43,13 @@ interface DashboardMetrics {
       documentsProcessed: number;
       reportsGenerated: number;
       documentProcessingSuccessRate: number;
-    };
+    }
     trends: {
       userGrowthRate: number;
       featureAdoptionRate: number;
       customerSatisfactionScore: number;
-    };
-  };
+    }
+  }
   alerts: {
     active: number;
     critical: number;
@@ -60,13 +60,13 @@ interface DashboardMetrics {
       severity: string;
       timestamp: number;
     }>;
-  };
+  }
   health: {
     overall: 'healthy' | 'degraded' | 'unhealthy';
     database: 'healthy' | 'degraded' | 'unhealthy';
     redis: 'healthy' | 'degraded' | 'unhealthy';
     externalServices: 'healthy' | 'degraded' | 'unhealthy';
-  };
+  }
 }
 
 export async function GET(_request: NextRequest) {
@@ -76,12 +76,12 @@ export async function GET(_request: NextRequest) {
     const includeHistorical = searchParams.get('historical') === 'true';
 
     // Collect current metrics
-    const performanceData = getPerformanceMonitor().getPerformanceSnapshot();
+    const performanceData = getPerformanceMonitor().getPerformanceSnapshot()
     const businessKpis = getAnalytics().getKPIs();
     const activeAlerts = getAlertingSystem().getActiveAlerts();
 
     // Get system health
-    const health = await getSystemHealth();
+    const health = await getSystemHealth()
 
     // Aggregate dashboard metrics
     const dashboardMetrics: DashboardMetrics = {
@@ -124,10 +124,10 @@ export async function GET(_request: NextRequest) {
           })),
       },
       health,
-    };
+    }
 
     // Include historical data if requested
-    let historicalData: any = null;
+    let historicalData: any = null
     if (includeHistorical) {
       historicalData = await getHistoricalMetrics(timeRange);
     }
@@ -141,17 +141,17 @@ export async function GET(_request: NextRequest) {
         lastUpdated: Date.now(),
         refreshInterval: 30000, // 30 seconds
       },
-    };
+    }
 
     // Add caching headers
-    const headers = new Headers();
+    const headers = new Headers()
     headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     headers.set('Pragma', 'no-cache');
     headers.set('Expires', '0');
 
     return NextResponse.json(response, { headers });
   } catch (error) {
-    // console.error('Dashboard API error:', error);
+    // console.error('Dashboard API error:', error)
 
     Sentry.captureException(error, {
       tags: {
@@ -182,7 +182,7 @@ async function getApiMetrics(_timeRange: string) {
   try {
     // This would typically query your metrics database/service
     // For now, return mock data based on performance monitoring
-    const performanceData = getPerformanceMonitor().getPerformanceSnapshot();
+    const performanceData = getPerformanceMonitor().getPerformanceSnapshot()
 
     const apiMetrics = Object.entries(performanceData.apiMetrics).map(([endpoint, metrics]) => ({
       endpoint,
@@ -211,15 +211,15 @@ async function getApiMetrics(_timeRange: string) {
           endpoint: metric.endpoint,
           responseTime: Math.round(metric.responseTime),
         })),
-    };
+    }
   } catch (error) {
-    // console.error('Error getting API metrics:', error);
+    // console.error('Error getting API metrics:', error)
     return {
       averageResponseTime: 0,
       errorRate: 0,
       requestsPerMinute: 0,
       slowestEndpoints: [],
-    };
+    }
   }
 }
 
@@ -229,28 +229,28 @@ async function getApiMetrics(_timeRange: string) {
 async function getSystemMetrics() {
   try {
     // Get memory usage
-    const memoryUsage = process.memoryUsage();
+    const memoryUsage = process.memoryUsage()
     const memoryUsagePercentage = (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
 
     // Get CPU usage (simplified)
-    const cpuUsage = process.cpuUsage();
+    const cpuUsage = process.cpuUsage()
     const cpuUsagePercentage = (cpuUsage.user + cpuUsage.system) / 1000000; // Convert to percentage
 
     // Active connections (mock data - would be from actual monitoring)
-    const activeConnections = Math.floor(Math.random() * 100) + 50;
+    const activeConnections = Math.floor(Math.random() * 100) + 50
 
     return {
       memoryUsage: Math.round(memoryUsagePercentage),
       cpuUsage: Math.round(cpuUsagePercentage),
       activeConnections,
-    };
+    }
   } catch (error) {
-    // console.error('Error getting system metrics:', error);
+    // console.error('Error getting system metrics:', error)
     return {
       memoryUsage: 0,
       cpuUsage: 0,
       activeConnections: 0,
-    };
+    }
   }
 }
 
@@ -265,14 +265,14 @@ async function getBusinessTrends(_timeRange: string) {
       userGrowthRate: 15.2, // 15.2% growth
       featureAdoptionRate: 68.5, // 68.5% adoption
       customerSatisfactionScore: 4.2, // 4.2/5 rating
-    };
+    }
   } catch (error) {
-    // console.error('Error getting business trends:', error);
+    // console.error('Error getting business trends:', error)
     return {
       userGrowthRate: 0,
       featureAdoptionRate: 0,
       customerSatisfactionScore: 0,
-    };
+    }
   }
 }
 
@@ -290,11 +290,11 @@ async function getSystemHealth() {
     database: 'healthy',
     redis: 'healthy',
     externalServices: 'healthy',
-  };
+  }
 
   try {
     // Check database health
-    const dbResponse = await fetch('http://localhost:3000/api/health/database');
+    const dbResponse = await fetch('http://localhost:3000/api/health/database')
     health.database = dbResponse.ok ? 'healthy' : 'unhealthy';
   } catch {
     health.database = 'unhealthy';
@@ -302,7 +302,7 @@ async function getSystemHealth() {
 
   try {
     // Check Redis health
-    const redisResponse = await fetch('http://localhost:3000/api/health/redis');
+    const redisResponse = await fetch('http://localhost:3000/api/health/redis')
     health.redis = redisResponse.ok ? 'healthy' : 'unhealthy';
   } catch {
     health.redis = 'unhealthy';
@@ -310,14 +310,14 @@ async function getSystemHealth() {
 
   try {
     // Check external services (OpenAI, etc.)
-    const servicesResponse = await fetch('http://localhost:3000/api/health/external');
+    const servicesResponse = await fetch('http://localhost:3000/api/health/external')
     health.externalServices = servicesResponse.ok ? 'healthy' : 'degraded';
   } catch {
     health.externalServices = 'degraded';
   }
 
   // Determine overall health
-  const unhealthyServices = Object.values(health).filter((status) => status === 'unhealthy').length;
+  const unhealthyServices = Object.values(health).filter((status) => status === 'unhealthy').length
   const degradedServices = Object.values(health).filter((status) => status === 'degraded').length;
 
   if (unhealthyServices > 0) {
@@ -336,7 +336,7 @@ async function getRequestsPerMinute(_timeRange: string): Promise<number> {
   try {
     // This would typically query your access logs or metrics service
     // For now, return a mock value
-    return Math.floor(Math.random() * 1000) + 500;
+    return Math.floor(Math.random() * 1000) + 500
   } catch {
     return 0;
   }
@@ -380,11 +380,11 @@ async function getHistoricalMetrics(_timeRange: string) {
           value: Math.floor(Math.random() * 5) + 1,
         })),
       },
-    };
+    }
 
     return historical;
   } catch (error) {
-    // console.error('Error getting historical metrics:', error);
+    // console.error('Error getting historical metrics:', error)
     return null;
   }
 }

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
-// import { formatDate } from '@/lib/utils';
+import { DaisyCardTitle, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTable, DaisyTableHeader, DaisyTableBody, DaisyTableRow, DaisyTableHead, DaisyTableCell, DaisyCalendar } from '@/components/ui/daisy-components';
+// import { formatDate } from '@/lib/utils'
 
 // UI Components
 import {
@@ -12,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/components/ui/table'
 import {
   Select,
   SelectContent,
@@ -33,7 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import {
   Dialog,
@@ -64,7 +65,7 @@ import {
   FileText,
   Calendar,
   TrendingUp,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ControlLibraryViewProps {
   onCreateControl?: () => void;
@@ -104,7 +105,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   // Debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters({ search: searchInput });
+      setFilters({ search: searchInput })
     }, 300);
     
     return () => clearTimeout(timeoutId);
@@ -114,7 +115,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   const _stats = getControlStats();
 
   // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredControls.length / itemsPerPage);
   const paginatedControls = filteredControls.slice(
@@ -125,11 +126,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
   // Selection handlers
   const handleSelectAll = () => {
     if (selectedControls.length === filteredControls.length) {
-      clearSelection();
+      clearSelection()
     } else {
       selectAllControls();
     }
-  };
+  }
 
   const handleSelectControl = (controlId: string) => {
     if (selectedControls.includes(controlId)) {
@@ -137,28 +138,28 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
     } else {
       setSelectedControls([...selectedControls, controlId]);
     }
-  };
+  }
 
   // Sorting handler
   const handleSort = (field: string) => {
     if (sortBy === field) {
-      setSorting(field, sortDirection === 'asc' ? 'desc' : 'asc');
+      setSorting(field, sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
       setSorting(field, 'asc');
     }
-  };
+  }
 
   // Bulk actions
   const handleBulkDelete = async () => {
     if (selectedControls.length > 0) {
       try {
-        await deleteControls(selectedControls);
+        await deleteControls(selectedControls)
         clearSelection();
       } catch (error) {
-        // console.error('Failed to delete controls:', error);
+        // console.error('Failed to delete controls:', error)
       }
     }
-  };
+  }
 
   const handleBulkExport = () => {
     const selectedControlData = filteredControls.filter(control => selectedControls.includes(control.id));
@@ -181,7 +182,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
     a.download = 'controls-export.csv';
     a.click();
     window.URL.revokeObjectURL(url);
-  };
+  }
 
   // Control type badge component
   const ControlTypeBadge: React.FC<{ type: Control['type'] }> = ({ type }) => {
@@ -189,7 +190,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       preventive: { color: 'bg-blue-100 text-blue-800', icon: Shield },
       detective: { color: 'bg-yellow-100 text-yellow-800', icon: Eye },
       corrective: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-    };
+    }
     
     const config = typeConfig[type];
     const Icon = config.icon;
@@ -201,7 +202,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         {type}
       </DaisyBadge>
     );
-  };
+  }
 
   // Effectiveness indicator component
   const EffectivenessIndicator: React.FC<{ effectiveness: Control['effectiveness'] }> = ({ effectiveness }) => {
@@ -209,7 +210,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       high: { value: 85, color: 'text-green-600', bgColor: 'bg-green-50' },
       medium: { value: 65, color: 'text-yellow-600', bgColor: 'bg-yellow-50' },
       low: { value: 35, color: 'text-red-600', bgColor: 'bg-red-50' },
-    };
+    }
 
     let config;
     if (typeof effectiveness === 'string' && effectiveness in effectivenessConfig) {
@@ -220,7 +221,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
       else config = effectivenessConfig.low;
     } else {
       config = effectivenessConfig.low;
-    };
+    }
 
   return (
       <div className="flex items-center space-x-2">
@@ -230,11 +231,11 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         </DaisyProgress>
       </div>
     );
-  };
+  }
 
   // Control status indicator
   const ControlStatusIndicator: React.FC<{ control: Control }> = ({ control }) => {
-    const isOverdue = control.nextTestDate && new Date(control.nextTestDate) < new Date();
+    const isOverdue = control.nextTestDate && new Date(control.nextTestDate) < new Date()
     
     if (isOverdue) {
       return (
@@ -253,7 +254,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
           <span className="text-xs">Active</span>
         </div>
       );
-    };
+    }
 
   return (
       <div className="flex items-center space-x-1 text-gray-600">
@@ -261,7 +262,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         <span className="text-xs">{control.status}</span>
       </div>
     );
-  };
+  }
 
   if (loading) {
     return <LoadingSpinner text="Loading controls..." />;
@@ -284,7 +285,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -769,4 +770,4 @@ Schedule Test
       </DaisyDialog>
     </div>
   );
-}; 
+} 

@@ -30,7 +30,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
   // List files in a folder
   const listFiles = useCallback(async (folderId?: string) => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       setError(null);
       setAuthRequired(false);
       setLastFolderId(folderId);
@@ -51,7 +51,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
         setFiles([]);
       }
     } catch (err) {
-      // console.error('Error listing Google Drive files:', err);
+      // console.error('Error listing Google Drive files:', err)
       setError('Failed to load files from Google Drive');
       setFiles([]);
     } finally {
@@ -63,7 +63,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
   const searchFiles = useCallback(
     async (_query: string) => {
       if (!query.trim()) {
-        listFiles(lastFolderId);
+        listFiles(lastFolderId)
         return;
       }
 
@@ -88,7 +88,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
           setFiles([]);
         }
       } catch (err) {
-        // console.error('Error searching Google Drive files:', err);
+        // console.error('Error searching Google Drive files:', err)
         setError('Failed to search files in Google Drive');
         setFiles([]);
       } finally {
@@ -100,7 +100,7 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
 
   // Refresh current view
   const refresh = useCallback(async () => {
-    await listFiles(lastFolderId);
+    await listFiles(lastFolderId)
   }, [listFiles, lastFolderId]);
 
   return {
@@ -111,5 +111,5 @@ export const useGoogleDriveFiles = (): UseGoogleDriveFilesReturn => {
     listFiles,
     searchFiles,
     refresh,
-  };
-};
+  }
+}

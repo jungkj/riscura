@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   // Only show in development or with secret key
-  const secretKey = process.env.DEBUG_SECRET_KEY || 'default-debug-key';
+  const secretKey = process.env.DEBUG_SECRET_KEY || 'default-debug-key'
   const isDev = process.env.NODE_ENV === 'development';
 
   if (!isDev && process.env.DEBUG_SECRET_KEY !== secretKey) {

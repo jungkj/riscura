@@ -1,17 +1,18 @@
 // Comprehensive Loading States and Skeletons
-'use client';
+'use client'
 
 import React from 'react';
 import { Loader2, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from './progress';
-// import { Card, CardContent, CardHeader } from './card';
+// import { Card, CardContent, CardHeader } from './card'
 import { Badge } from './badge';
+import { DaisyCard, DaisyCardBody, DaisyBadge, DaisyProgress } from '@/components/ui/daisy-components';
 // Using unique component names to avoid conflicts with skeleton.tsx and loading-spinner.tsx
 
 // Enhanced Loading Spinner (unique from the simple one in loading-spinner.tsx)
 interface EnhancedLoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string;
   variant?: 'default' | 'secondary' | 'destructive';
 }
@@ -26,13 +27,13 @@ export const EnhancedLoadingSpinner: React.FC<EnhancedLoadingSpinnerProps> = ({
     md: 'w-6 h-6',
     lg: 'w-8 h-8',
     xl: 'w-12 h-12'
-  };
+  }
 
   const variantClasses = {
     default: 'text-primary',
     secondary: 'text-muted-foreground',
     destructive: 'text-destructive'
-  };
+  }
 
   return (
     <Loader2 
@@ -43,11 +44,11 @@ export const EnhancedLoadingSpinner: React.FC<EnhancedLoadingSpinnerProps> = ({
         className
       )} />
   );
-};
+}
 
 // Enhanced Skeleton Components (unique from the simple one in skeleton.tsx)
 interface EnhancedSkeletonProps {
-  className?: string;
+  className?: string
   children?: React.ReactNode;
   style?: React.CSSProperties;
 }
@@ -64,7 +65,7 @@ export const EnhancedSkeleton: React.FC<EnhancedSkeletonProps> = ({ className, c
       {children}
     </div>
   );
-};
+}
 
 // Skeleton Variants (using EnhancedSkeleton component)
 export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
@@ -90,10 +91,10 @@ export const SkeletonAvatar: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({
     sm: 'w-8 h-8',
     md: 'w-10 h-10',
     lg: 'w-12 h-12'
-  };
+  }
 
   return <EnhancedSkeleton className={cn('rounded-full', sizeClasses[size])} />;
-};
+}
 
 export const SkeletonButton: React.FC<{ variant?: 'default' | 'wide' }> = ({ 
   variant = 'default' 
@@ -107,7 +108,7 @@ export const SkeletonButton: React.FC<{ variant?: 'default' | 'wide' }> = ({
 
 // Complex Loading States
 interface LoadingCardProps {
-  title?: boolean;
+  title?: boolean
   description?: boolean;
   content?: boolean;
   actions?: boolean;
@@ -146,7 +147,7 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
 
 // Table Loading Skeleton
 interface LoadingTableProps {
-  rows?: number;
+  rows?: number
   columns?: number;
   showHeader?: boolean;
   className?: string;
@@ -186,7 +187,7 @@ export const LoadingTable: React.FC<LoadingTableProps> = ({
 
 // Chart Loading Skeleton
 export const LoadingChart: React.FC<{ 
-  type?: 'line' | 'bar' | 'pie' | 'area';
+  type?: 'line' | 'bar' | 'pie' | 'area'
   className?: string;
 }> = ({ type = 'line', className }) => (
   <div className={cn('w-full h-64 p-4', className)}>
@@ -295,11 +296,11 @@ export const LoadingDashboard: React.FC = () => (
     {/* Data Table */}
     <LoadingTable />
   </div>
-);
+)
 
 // List Loading Skeleton
 interface LoadingListProps {
-  items?: number;
+  items?: number
   showAvatar?: boolean;
   showActions?: boolean;
   className?: string;
@@ -345,11 +346,11 @@ export const LoadingForm: React.FC<{ fields?: number }> = ({ fields = 4 }) => (
         <DaisySkeletonButton >
       </div>
   </div>
-);
+)
 
 // Progress Loading
 interface LoadingProgressProps {
-  label?: string;
+  label?: string
   progress?: number;
   indeterminate?: boolean;
   className?: string;
@@ -378,7 +379,7 @@ export const LoadingProgress: React.FC<LoadingProgressProps> = ({
 
 // Network Status Loading
 interface NetworkLoadingProps {
-  status?: 'online' | 'offline' | 'reconnecting';
+  status?: 'online' | 'offline' | 'reconnecting'
   message?: string;
 }
 
@@ -395,7 +396,7 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
       case 'reconnecting':
         return <RefreshCw className="w-4 h-4 animate-spin text-yellow-500" />;
     }
-  };
+  }
 
   const getStatusText = () => {
     switch (status) {
@@ -406,7 +407,7 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
       case 'reconnecting':
         return 'Reconnecting...';
     }
-  };
+  }
 
   const getVariant = () => {
     switch (status) {
@@ -417,7 +418,7 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
       case 'reconnecting':
         return 'secondary';
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -428,11 +429,11 @@ export const NetworkLoading: React.FC<NetworkLoadingProps> = ({
       </DaisyBadge>
     </div>
   );
-};
+}
 
 // Overlay Loading States
 interface LoadingOverlayProps {
-  isLoading: boolean;
+  isLoading: boolean
   children: React.ReactNode;
   message?: string;
   blur?: boolean;
@@ -467,7 +468,7 @@ export const PageLoadingFallback: React.FC = () => (
       <LoadingDashboard />
     </div>
   </div>
-);
+)
 
 export const ComponentLoadingFallback: React.FC<{ height?: string }> = ({ 
   height = 'h-32' 
@@ -479,7 +480,7 @@ export const ComponentLoadingFallback: React.FC<{ height?: string }> = ({
 
 // Lazy Loading States
 interface LazyLoadingProps {
-  isVisible: boolean;
+  isVisible: boolean
   children: React.ReactNode;
   fallback?: React.ReactNode;
   height?: string;
@@ -496,11 +497,11 @@ export const LazyLoading: React.FC<LazyLoadingProps> = ({
   }
 
   return <>{children}</>;
-};
+}
 
 // Infinite Scroll Loading
 export const InfiniteScrollLoading: React.FC<{ 
-  hasMore: boolean;
+  hasMore: boolean
   isLoading: boolean;
   error?: string;
   onRetry?: () => void;
@@ -538,7 +539,7 @@ export const InfiniteScrollLoading: React.FC<{
   }
 
   return null;
-};
+}
 
 // All components are already exported individually above
 // Removed duplicate export block to fix TypeScript errors 

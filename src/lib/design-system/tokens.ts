@@ -47,7 +47,7 @@ export const spacing = {
     cardGap: '16px',
     listItemGap: '8px',
   },
-} as const;
+} as const
 
 // Typography System
 export const typography = {
@@ -186,7 +186,7 @@ export const typography = {
     lineHeight: '1.4',
     fontFamily: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
   },
-} as const;
+} as const
 
 // Color System - Semantic and accessible colors
 export const colors = {
@@ -334,7 +334,7 @@ export const colors = {
     notStarted: '#9E9E9E',
     deactivated: '#757575',
   },
-} as const;
+} as const
 
 // Elevation System - Box shadows and z-index
 export const elevation = {
@@ -377,7 +377,7 @@ export const elevation = {
     toast: 1700,
     tooltip: 1800,
   },
-} as const;
+} as const
 
 // Border Radius System
 export const borderRadius = {
@@ -401,7 +401,7 @@ export const borderRadius = {
     modal: '12px',
     tooltip: '6px',
   },
-} as const;
+} as const
 
 // Animation System
 export const animation = {
@@ -486,7 +486,7 @@ export const animation = {
       '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
     },
   },
-} as const;
+} as const
 
 // Breakpoints for responsive design
 export const breakpoints = {
@@ -496,7 +496,7 @@ export const breakpoints = {
   lg: '1024px',
   xl: '1280px',
   '2xl': '1536px',
-} as const;
+} as const
 
 // Component sizing
 export const sizing = {
@@ -546,7 +546,7 @@ export const sizing = {
     xl: '1280px',
     '2xl': '1536px',
   },
-} as const;
+} as const
 
 // Design tokens object combining all systems
 export const designTokens = {
@@ -558,10 +558,10 @@ export const designTokens = {
   animation,
   breakpoints,
   sizing,
-} as const;
+} as const
 
 // Type definitions for TypeScript
-export type SpacingToken = keyof typeof spacing;
+export type SpacingToken = keyof typeof spacing
 export type ColorToken = keyof typeof colors;
 export type TypographyToken = keyof typeof typography;
 export type ElevationToken = keyof typeof elevation;
@@ -572,13 +572,13 @@ export type SizingToken = keyof typeof sizing;
 
 // Helper functions for accessing tokens
 export const getSpacing = (token: string): string => {
-  const keys = token.split('.');
+  const keys = token.split('.')
   let value: any = spacing;
   for (const key of keys) {
     value = value[key];
   }
   return value || '0px';
-};
+}
 
 export const getColor = (token: string): string => {
   const keys = token.split('.');
@@ -587,7 +587,7 @@ export const getColor = (token: string): string => {
     value = value[key];
   }
   return value || '#000000';
-};
+}
 
 export const getTypography = (token: string): any => {
   const keys = token.split('.');
@@ -595,8 +595,8 @@ export const getTypography = (token: string): any => {
   for (const key of keys) {
     value = value[key];
   }
-  return value || {};
-};
+  return value || {}
+}
 
 export const getShadow = (token: string): string => {
   const keys = token.split('.');
@@ -605,6 +605,6 @@ export const getShadow = (token: string): string => {
     value = value[key];
   }
   return value || 'none';
-};
+}
 
 export default designTokens;

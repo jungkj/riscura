@@ -62,7 +62,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
     contentId,
     sectionType,
     metadata,
-  };
+  }
 
   const { currentSelection, isSelecting, hasSelection, clearSelection } = useTextSelection(
     containerRef,
@@ -76,7 +76,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
 
   // Calculate quality score (mock implementation)
   const calculateQualityScore = useCallback(() => {
-    if (!containerRef.current || !showQualityScore) return;
+    if (!containerRef.current || !showQualityScore) return
 
     const text = containerRef.current.textContent || '';
     const wordCount = text.split(/\s+/).length;
@@ -84,20 +84,20 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
     const avgWordsPerSentence = wordCount / Math.max(sentenceCount, 1);
 
     // Simple scoring algorithm (in production, this would use AI)
-    let score = 0.5;
+    let score = 0.5
 
     // Prefer moderate sentence length
-    if (avgWordsPerSentence >= 8 && avgWordsPerSentence <= 20) score += 0.2;
+    if (avgWordsPerSentence >= 8 && avgWordsPerSentence <= 20) score += 0.2
 
     // Prefer adequate length
-    if (wordCount >= 20 && wordCount <= 200) score += 0.2;
+    if (wordCount >= 20 && wordCount <= 200) score += 0.2
 
     // Check for specific keywords based on content type
     const keywords = {
       risk: ['risk', 'likelihood', 'impact', 'mitigation', 'control'],
       control: ['control', 'procedure', 'monitor', 'test', 'evidence'],
       'test-script': ['test', 'verify', 'validate', 'document', 'result'],
-    };
+    }
 
     const contentKeywords = keywords[contentType as keyof typeof keywords] || [];
     const keywordCount = contentKeywords.filter((keyword) =>
@@ -112,11 +112,11 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
   // Handle selection changes
   useEffect(() => {
     if (currentSelection) {
-      onSelection?.(currentSelection);
+      onSelection?.(currentSelection)
 
       if (aiActionsEnabled) {
         // Position toolbar near the selection
-        const rect = currentSelection.boundingRect;
+        const rect = currentSelection.boundingRect
         const containerRect = containerRef.current?.getBoundingClientRect();
 
         if (containerRect) {
@@ -137,13 +137,13 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
 
   // Calculate quality score when content changes
   useEffect(() => {
-    calculateQualityScore();
+    calculateQualityScore()
   }, [calculateQualityScore, children]);
 
   // Handle AI actions
   const handleAIAction = useCallback(
     async (_action: AIAction) => {
-      if (!currentSelection || !onAIAction) return;
+      if (!currentSelection || !onAIAction) return
 
       setIsProcessing(true);
       setShowToolbar(false);
@@ -157,13 +157,13 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
           selection: currentSelection,
           color: getActionColor(action),
           temporary: true,
-        };
+        }
 
         setHighlights((prev) => [...prev, highlight]);
 
         // Remove temporary highlight after animation
         setTimeout(() => {
-          setHighlights((prev) => prev.filter((h) => h.id !== highlight.id));
+          setHighlights((prev) => prev.filter((h) => h.id !== highlight.id))
         }, 2000);
       } finally {
         setIsProcessing(false);
@@ -184,13 +184,13 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       'find-related': 'bg-indigo-100 dark:bg-indigo-900/30',
       'analyze-risk': 'bg-orange-100 dark:bg-orange-900/30',
       'suggest-controls': 'bg-teal-100 dark:bg-teal-900/30',
-    };
+    }
     return colors[action] || highlightColor;
-  };
+  }
 
   // Get available actions based on content type
   const getAvailableActions = (): AIAction[] => {
-    const baseActions: AIAction[] = ['explain', 'improve', 'alternatives'];
+    const baseActions: AIAction[] = ['explain', 'improve', 'alternatives']
 
     switch (contentType) {
       case 'risk':
@@ -202,13 +202,13 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       default:
         return baseActions;
     }
-  };
+  }
 
   // Handle clicks outside to clear selection
   const handleContainerClick = useCallback((event: React.MouseEvent) => {
     // Don't clear selection if clicking on toolbar
     if (event.target instanceof Element && event.target.closest('[data-toolbar]')) {
-      return;
+      return
     }
   }, []);
 
@@ -296,7 +296,7 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
             selectedData={currentSelection ? [currentSelection] : []}
             onActionComplete={async (result) => {
               // Handle action completion
-              // console.log('AI Action completed:', result);
+              // console.log('AI Action completed:', result)
             }}
           />
         )}
@@ -318,4 +318,4 @@ export const SelectableContent: React.FC<DaisySelectableContentProps> = ({
       )}
     </div>
   );
-};
+}

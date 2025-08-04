@@ -11,7 +11,7 @@ export function SubscriptionBanner() {
   if (loading || !subscription) return null;
 
   // Don't show banner for active paid subscriptions
-  if (subscription.isActive && !isTrialing) return null;
+  if (subscription.isActive && !isTrialing) return null
 
   return (
     <div className="mb-6">

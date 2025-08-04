@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Wifi, 
   WifiOff, 
   RefreshCw, 
@@ -15,7 +16,7 @@ import {
   Signal
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { useToast } from '@/components/ui/UserFeedback';
@@ -23,12 +24,12 @@ import { cn } from '@/lib/utils';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 
 // Network status types
-export type NetworkStatus = 'online' | 'offline' | 'slow' | 'checking';
+export type NetworkStatus = 'online' | 'offline' | 'slow' | 'checking'
 export type ConnectionQuality = 'excellent' | 'good' | 'poor' | 'unknown';
 
 // Request retry configuration
 interface RetryConfig {
-  maxRetries: number;
+  maxRetries: number
   initialDelay: number;
   maxDelay: number;
   backoffFactor: number;
@@ -37,7 +38,7 @@ interface RetryConfig {
 
 // Failed request queue item
 interface FailedRequest {
-  id: string;
+  id: string
   url: string;
   method: string;
   data?: any;
@@ -50,7 +51,7 @@ interface FailedRequest {
 
 // Network error handler props
 interface NetworkErrorHandlerProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   retryConfig?: Partial<RetryConfig>;
   showBanner?: boolean;
   showDetailedStatus?: boolean;
@@ -65,11 +66,11 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxDelay: 30000,
   backoffFactor: 2,
   retryableStatuses: [408, 429, 500, 502, 503, 504]
-};
+}
 
 // Network monitoring hook
 const useNetworkMonitor = () {
-  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>('checking');
+  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>('checking')
   const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality>('unknown');
   const [lastChecked, setLastChecked] = useState<Date>(new Date());
   const checkIntervalRef = useRef<NodeJS.Timeout>();
@@ -78,7 +79,7 @@ const useNetworkMonitor = () {
   // Check network connectivity
   const checkConnectivity = useCallback(async (): Promise<boolean> => {
     try {
-      const controller = new AbortController();
+      const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const response = await fetch('/api/health/network', {
@@ -97,7 +98,7 @@ const useNetworkMonitor = () {
   // Measure connection quality
   const measureConnectionQuality = useCallback(async (): Promise<ConnectionQuality> => {
     try {
-      const startTime = performance.now();
+      const startTime = performance.now()
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -121,7 +122,7 @@ const useNetworkMonitor = () {
 
   // Monitor network status
   const monitorNetwork = useCallback(async () => {
-    setNetworkStatus('checking');
+    setNetworkStatus('checking')
     
     const isOnline = await checkConnectivity();
     setLastChecked(new Date());
@@ -139,21 +140,21 @@ const useNetworkMonitor = () {
   // Initialize monitoring
   useEffect(() => {
     // Initial check
-    monitorNetwork();
+    monitorNetwork()
 
     // Set up periodic checks
     checkIntervalRef.current = setInterval(monitorNetwork, 30000); // Check every 30 seconds
 
     // Listen to navigator online/offline events
     const handleOnline = () => {
-      setNetworkStatus('checking');
+      setNetworkStatus('checking')
       monitorNetwork();
-    };
+    }
 
     const handleOffline = () => {
       setNetworkStatus('offline');
       setConnectionQuality('unknown');
-    };
+    }
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -167,7 +168,7 @@ const useNetworkMonitor = () {
       }
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-    };
+    }
   }, [monitorNetwork]);
 
   return {
@@ -175,18 +176,18 @@ const useNetworkMonitor = () {
     connectionQuality,
     lastChecked,
     refreshStatus: monitorNetwork
-  };
+  }
 }
 
 // Request interceptor with retry logic
 const useRequestInterceptor = (retryConfig: RetryConfig) {
-  const [failedRequests, setFailedRequests] = useState<FailedRequest[]>([]);
+  const [failedRequests, setFailedRequests] = useState<FailedRequest[]>([])
   const [isRetrying, setIsRetrying] = useState(false);
   const retryTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Calculate retry delay with exponential backoff
   const calculateRetryDelay = useCallback((retryCount: number): number => {
-    const delay = retryConfig.initialDelay * Math.pow(retryConfig.backoffFactor, retryCount);
+    const delay = retryConfig.initialDelay * Math.pow(retryConfig.backoffFactor, retryCount)
     return Math.min(delay, retryConfig.maxDelay);
   }, [retryConfig]);
 
@@ -198,7 +199,7 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
     headers?: Record<string, string>
   ): Promise<any> => {
     return new Promise((resolve, reject) => {
-      const requestId = `${method}_${url}_${Date.now()}`;
+      const requestId = `${method}_${url}_${Date.now()}`
       const failedRequest: FailedRequest = {
         id: requestId,
         url,
@@ -209,7 +210,7 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
         timestamp: Date.now(),
         resolve,
         reject
-      };
+      }
 
       setFailedRequests(prev => [...prev, failedRequest]);
     });
@@ -217,7 +218,7 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
 
   // Retry failed requests
   const retryFailedRequests = useCallback(async () => {
-    if (failedRequests.length === 0 || isRetrying) return;
+    if (failedRequests.length === 0 || isRetrying) return
 
     setIsRetrying(true);
 
@@ -250,7 +251,7 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
             
             // Schedule retry
             setTimeout(() => {
-              updatedRequests.push(request);
+              updatedRequests.push(request)
             }, delay);
           } else {
             request.reject(new Error(`Request failed after ${retryConfig.maxRetries} retries`));
@@ -277,14 +278,14 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
 
     // Schedule next retry if there are still failed requests
     if (updatedRequests.length > 0) {
-      retryTimeoutRef.current = setTimeout(retryFailedRequests, 5000);
+      retryTimeoutRef.current = setTimeout(retryFailedRequests, 5000)
     }
   }, [failedRequests, isRetrying, retryConfig, calculateRetryDelay]);
 
   // Auto-retry when network comes back online
   useEffect(() => {
     if (failedRequests.length > 0 && !isRetrying) {
-      retryFailedRequests();
+      retryFailedRequests()
     }
   }, [failedRequests, isRetrying, retryFailedRequests]);
 
@@ -292,9 +293,9 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
   useEffect(() => {
     return () => {
       if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
+        clearTimeout(retryTimeoutRef.current)
       }
-    };
+    }
   }, []);
 
   return {
@@ -303,12 +304,12 @@ const useRequestInterceptor = (retryConfig: RetryConfig) {
     queueFailedRequest,
     retryFailedRequests: () => retryFailedRequests(),
     clearFailedRequests: () => setFailedRequests([])
-  };
+  }
 }
 
 // Status indicator component
 const NetworkStatusIndicator: React.FC<{
-  status: NetworkStatus;
+  status: NetworkStatus
   quality: ConnectionQuality;
   lastChecked: Date;
   compact?: boolean;
@@ -328,7 +329,7 @@ const NetworkStatusIndicator: React.FC<{
   ;
 </DaisyAlertTriangle>
     }
-  };
+  }
 
   const getStatusText = () => {
     switch (status) {
@@ -343,7 +344,7 @@ const NetworkStatusIndicator: React.FC<{
       default:
         return 'Unknown';
     }
-  };
+  }
 
   const getQualityColor = () => {
     switch (quality) {
@@ -356,7 +357,7 @@ const NetworkStatusIndicator: React.FC<{
       default:
         return 'bg-gray-500';
     }
-  };
+  }
 
   if (compact) {
 
@@ -366,7 +367,7 @@ const NetworkStatusIndicator: React.FC<{
         <span className="text-sm font-medium">{getStatusText()}</span>
       </div>
     );
-  };
+  }
 
   return (
     <DaisyCard className="w-full max-w-sm" >
@@ -405,11 +406,11 @@ const NetworkStatusIndicator: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Offline banner component
 const OfflineBanner: React.FC<{
-  onRetry: () => void;
+  onRetry: () => void
   isRetrying: boolean;
   failedRequestsCount: number;
 }> = ({ onRetry, isRetrying, failedRequestsCount }) => {
@@ -454,7 +455,7 @@ const OfflineBanner: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Main network error handler component
 export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
@@ -465,18 +466,18 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
   onNetworkChange,
   className
 }) => {
-  const finalRetryConfig = { ...DEFAULT_RETRY_CONFIG, ...retryConfig };
+  const finalRetryConfig = { ...DEFAULT_RETRY_CONFIG, ...retryConfig }
   const { networkStatus, connectionQuality, lastChecked, refreshStatus } = useNetworkMonitor();
   const { failedRequests, isRetrying, retryFailedRequests, clearFailedRequests } = useRequestInterceptor(finalRetryConfig);
 
   // Notify parent of network changes
   useEffect(() => {
-    onNetworkChange?.(networkStatus, connectionQuality);
+    onNetworkChange?.(networkStatus, connectionQuality)
   }, [networkStatus, connectionQuality, onNetworkChange]);
 
   // Handle manual retry
   const handleRetry = useCallback(async () => {
-    await refreshStatus();
+    await refreshStatus()
     if (networkStatus === 'online') {
       await retryFailedRequests();
     }
@@ -534,11 +535,11 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Hook for components to integrate with network error handling
 export const useNetworkErrorHandler = () => {
-  const { networkStatus, connectionQuality, lastChecked, refreshStatus } = useNetworkMonitor();
+  const { networkStatus, connectionQuality, lastChecked, refreshStatus } = useNetworkMonitor()
   
   return {
     networkStatus,
@@ -548,8 +549,8 @@ export const useNetworkErrorHandler = () => {
     isOnline: networkStatus === 'online',
     isOffline: networkStatus === 'offline',
     hasSlowConnection: networkStatus === 'slow' || connectionQuality === 'poor'
-  };
-};
+  }
+}
 
 // Higher-order component for wrapping components with network error handling
 export const withNetworkErrorHandler = <P extends object>(
@@ -560,10 +561,10 @@ export const withNetworkErrorHandler = <P extends object>(
     <NetworkErrorHandler {...options}>
       <Component {...props} />
     </NetworkErrorHandler>
-  );
+  )
 
   WrappedComponent.displayName = `withNetworkErrorHandler(${Component.displayName || Component.name})`;
   return WrappedComponent;
-};
+}
 
 export default NetworkErrorHandler; 

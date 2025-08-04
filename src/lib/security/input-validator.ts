@@ -1,5 +1,5 @@
 // Advanced Input Validation and Sanitization System
-import DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify'
 import { z } from 'zod';
 
 export interface ValidationRule {
@@ -65,7 +65,7 @@ class InputValidator {
     totalSanitizations: 0,
     threatsBlocked: 0,
     bytesSanitized: 0,
-  };
+  }
 
   constructor() {
     this.setupDefaultRules();
@@ -81,7 +81,7 @@ class InputValidator {
       message: 'Script tags are not allowed',
       severity: 'critical',
       enabled: true,
-    });
+    })
 
     this.addValidationRule({
       id: 'xss-javascript-protocol',
@@ -118,7 +118,7 @@ class InputValidator {
       message: 'SQL injection attempt detected (UNION)',
       severity: 'critical',
       enabled: true,
-    });
+    })
 
     this.addValidationRule({
       id: 'sql-injection-comment',
@@ -147,7 +147,7 @@ class InputValidator {
       message: 'Path traversal attempt detected',
       severity: 'high',
       enabled: true,
-    });
+    })
 
     // Command Injection Detection
     this.addValidationRule({
@@ -167,7 +167,7 @@ class InputValidator {
       message: 'Invalid email format',
       severity: 'medium',
       enabled: true,
-    });
+    })
 
     // Phone Number Validation
     this.addValidationRule({
@@ -177,7 +177,7 @@ class InputValidator {
       message: 'Invalid phone number format',
       severity: 'low',
       enabled: true,
-    });
+    })
 
     // URL Validation
     this.addValidationRule({
@@ -188,7 +188,7 @@ class InputValidator {
       message: 'Invalid URL format',
       severity: 'medium',
       enabled: true,
-    });
+    })
   }
 
   private setupContentFilters(): void {
@@ -200,7 +200,7 @@ class InputValidator {
       category: 'profanity',
       severity: 'low',
       replacement: '***',
-    });
+    })
 
     // PII Detection
     this.addContentFilterRule({
@@ -209,7 +209,7 @@ class InputValidator {
       action: 'flag',
       category: 'pii',
       severity: 'high',
-    });
+    })
 
     this.addContentFilterRule({
       id: 'credit-card-detection',
@@ -226,7 +226,7 @@ class InputValidator {
       action: 'flag',
       category: 'spam',
       severity: 'medium',
-    });
+    })
 
     // Malicious Content
     this.addContentFilterRule({
@@ -235,7 +235,7 @@ class InputValidator {
       action: 'flag',
       category: 'malicious',
       severity: 'medium',
-    });
+    })
   }
 
   // Main validation function
@@ -244,7 +244,7 @@ class InputValidator {
     schema?: z.ZodSchema,
     config?: Partial<SanitizationConfig>
   ): ValidationResult {
-    this.sanitizationStats.totalValidations++;
+    this.sanitizationStats.totalValidations++
 
     const result: ValidationResult = {
       isValid: true,
@@ -253,12 +253,12 @@ class InputValidator {
       warnings: [],
       threatLevel: 'safe',
       bytesSanitized: 0,
-    };
+    }
 
     try {
       // Schema validation first
       if (schema) {
-        const schemaResult = schema.safeParse(input);
+        const schemaResult = schema.safeParse(input)
         if (!schemaResult.success) {
           result.isValid = false;
           schemaResult.error.errors.forEach((error) => {
@@ -275,7 +275,7 @@ class InputValidator {
 
       // Process based on input type
       if (typeof input === 'string') {
-        const stringResult = this.validateString(input, config);
+        const stringResult = this.validateString(input, config)
         this.mergeResults(result, stringResult);
       } else if (typeof input === 'object' && input !== null) {
         const objectResult = this.validateObject(input, config);
@@ -286,11 +286,11 @@ class InputValidator {
       }
 
       // Determine overall threat level
-      result.threatLevel = this.determineThreatLevel(result.errors);
+      result.threatLevel = this.determineThreatLevel(result.errors)
 
       // Update statistics
       if (result.bytesSanitized > 0) {
-        this.sanitizationStats.totalSanitizations++;
+        this.sanitizationStats.totalSanitizations++
         this.sanitizationStats.bytesSanitized += result.bytesSanitized;
       }
 
@@ -298,7 +298,7 @@ class InputValidator {
         this.sanitizationStats.threatsBlocked++;
       }
     } catch (error) {
-      // console.error('Validation error:', error);
+      // console.error('Validation error:', error)
       result.isValid = false;
       result.errors.push({
         field: 'root',
@@ -321,14 +321,14 @@ class InputValidator {
       warnings: [],
       threatLevel: 'safe',
       bytesSanitized: 0,
-    };
+    }
 
     const originalLength = input.length;
     let sanitizedValue = input;
 
     // Apply validation rules
     for (const rule of this.validationRules.values()) {
-      if (!rule.enabled) continue;
+      if (!rule.enabled) continue
 
       if (rule.pattern.test(input)) {
         result.errors.push({
@@ -350,7 +350,7 @@ class InputValidator {
       if (filter.pattern.test(sanitizedValue)) {
         switch (filter.action) {
           case 'block':
-            result.isValid = false;
+            result.isValid = false
             result.errors.push({
               field: 'string',
               rule: filter.id,
@@ -379,7 +379,7 @@ class InputValidator {
 
     // HTML sanitization
     if (this.containsHTML(sanitizedValue)) {
-      const sanitizedHTML = this.sanitizeHTML(sanitizedValue, config);
+      const sanitizedHTML = this.sanitizeHTML(sanitizedValue, config)
       sanitizedValue = sanitizedHTML;
 
       result.warnings.push({
@@ -390,7 +390,7 @@ class InputValidator {
     }
 
     // Length validation
-    const maxLength = config?.maxLength || 10000;
+    const maxLength = config?.maxLength || 10000
     if (sanitizedValue.length > maxLength) {
       sanitizedValue = sanitizedValue.substring(0, maxLength);
       result.warnings.push({
@@ -402,7 +402,7 @@ class InputValidator {
 
     // Normalize whitespace
     if (config?.normalizeWhitespace !== false) {
-      const normalized = sanitizedValue.replace(/\s+/g, ' ').trim();
+      const normalized = sanitizedValue.replace(/\s+/g, ' ').trim()
       if (normalized !== sanitizedValue) {
         sanitizedValue = normalized;
         result.warnings.push({
@@ -431,11 +431,11 @@ class InputValidator {
       warnings: [],
       threatLevel: 'safe',
       bytesSanitized: 0,
-    };
+    }
 
     for (const [key, value] of Object.entries(input)) {
       // Validate key
-      const keyResult = this.validateString(key, config);
+      const keyResult = this.validateString(key, config)
       if (!keyResult.isValid) {
         result.isValid = false;
         keyResult.errors.forEach((error) => {
@@ -448,7 +448,7 @@ class InputValidator {
       }
 
       // Validate value
-      const valueResult = this.validate(value, undefined, config);
+      const valueResult = this.validate(value, undefined, config)
       result.sanitizedValue[keyResult.sanitizedValue] = valueResult.sanitizedValue;
 
       if (!valueResult.isValid) {
@@ -460,7 +460,7 @@ class InputValidator {
         result.errors.push({
           ...error,
           field: `${key}.${error.field}`,
-        });
+        })
       });
 
       valueResult.warnings.forEach((warning) => {
@@ -485,7 +485,7 @@ class InputValidator {
       warnings: [],
       threatLevel: 'safe',
       bytesSanitized: 0,
-    };
+    }
 
     input.forEach((item, index) => {
       const itemResult = this.validate(item, undefined, config);
@@ -500,7 +500,7 @@ class InputValidator {
         result.errors.push({
           ...error,
           field: `[${index}].${error.field}`,
-        });
+        })
       });
 
       itemResult.warnings.forEach((warning) => {
@@ -532,9 +532,9 @@ class InputValidator {
       normalizeWhitespace: true,
       enableContentFiltering: true,
       customRules: [],
-    };
+    }
 
-    const mergedConfig = { ...defaultConfig, ...config };
+    const mergedConfig = { ...defaultConfig, ...config }
 
     try {
       // Configure DOMPurify
@@ -542,7 +542,7 @@ class InputValidator {
         ALLOWED_TAGS: mergedConfig.allowedTags,
         ALLOWED_ATTR: Object.values(mergedConfig.allowedAttributes).flat(),
         ALLOWED_URI_REGEXP: new RegExp(`^(?:(?:${mergedConfig.allowedSchemes.join('|')}):)`),
-      };
+      }
 
       if (mergedConfig.stripComments) {
         purifyConfig.REMOVE_COMMENTS = true;
@@ -559,15 +559,15 @@ class InputValidator {
       const sanitized = DOMPurify.sanitize(input, purifyConfig);
       return typeof sanitized === 'string' ? sanitized : sanitized.toString();
     } catch (error) {
-      // console.error('HTML sanitization error:', error);
+      // console.error('HTML sanitization error:', error)
       // Fallback: strip all HTML tags
-      return input.replace(/<[^>]*>/g, '');
+      return input.replace(/<[^>]*>/g, '')
     }
   }
 
   // Helper methods
   private containsHTML(input: string): boolean {
-    return /<[^>]*>/g.test(input);
+    return /<[^>]*>/g.test(input)
   }
 
   private mergeResults(_target: ValidationResult, source: ValidationResult): void {
@@ -596,7 +596,7 @@ class InputValidator {
 
   // Management methods
   public addValidationRule(rule: ValidationRule): void {
-    this.validationRules.set(rule.id, rule);
+    this.validationRules.set(rule.id, rule)
   }
 
   public removeValidationRule(ruleId: string): void {
@@ -620,7 +620,7 @@ class InputValidator {
   }
 
   public getStatistics() {
-    return { ...this.sanitizationStats };
+    return { ...this.sanitizationStats }
   }
 
   public clearStatistics(): void {
@@ -629,7 +629,7 @@ class InputValidator {
       totalSanitizations: 0,
       threatsBlocked: 0,
       bytesSanitized: 0,
-    };
+    }
   }
 }
 
@@ -656,14 +656,14 @@ export const commonSchemas = {
   id: z.string().uuid(),
   positiveInteger: z.number().int().positive(),
   date: z.string().datetime(),
-};
+}
 
 // Create singleton instance
-export const inputValidator = new InputValidator();
+export const inputValidator = new InputValidator()
 
 // Convenience functions
 export function validateEmail(email: string): ValidationResult {
-  return inputValidator.validate(email, commonSchemas.email);
+  return inputValidator.validate(email, commonSchemas.email)
 }
 
 export function validatePassword(password: string): ValidationResult {
@@ -680,4 +680,4 @@ export function sanitizeHTML(html: string, config?: Partial<SanitizationConfig>)
 }
 
 // Export class for custom instances
-export { InputValidator };
+export { InputValidator }

@@ -1,20 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
 // import { 
   Shield, AlertTriangle, CheckCircle, Clock, Brain, 
   FileText, Users, Settings, TrendingUp, Target 
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ComplianceFramework {
   id: string;
@@ -100,7 +101,7 @@ const ComplianceDashboard: React.FC = () => {
       gaps: 15,
       status: 'in-progress',
     },
-  ];
+  ]
 
   const mockGaps: ComplianceGap[] = [
     { id: '1', title: 'Access Control Testing', priority: 'critical', framework: 'SOX', category: 'IT Controls', dueDate: '2024-03-15' },
@@ -133,7 +134,7 @@ const ComplianceDashboard: React.FC = () => {
   useEffect(() => {
     // Simulate API calls
     setTimeout(() => {
-      setFrameworks(mockFrameworks);
+      setFrameworks(mockFrameworks)
       setGaps(mockGaps);
       setInsights(mockInsights);
       setLoading(false);
@@ -154,7 +155,7 @@ const ComplianceDashboard: React.FC = () => {
       case 'non-compliant': return 'bg-red-500';
       default: return 'bg-gray-500';
     }
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -163,7 +164,7 @@ const ComplianceDashboard: React.FC = () => {
       case 'medium': return 'bg-yellow-500';
       default: return 'bg-gray-500';
     }
-  };
+  }
 
   const frameworkChartData = frameworks.map(f => ({
     name: f.name.split(' ')[0],
@@ -190,7 +191,7 @@ const ComplianceDashboard: React.FC = () => {
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -463,6 +464,6 @@ const ComplianceDashboard: React.FC = () => {
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default ComplianceDashboard; 

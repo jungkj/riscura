@@ -1,4 +1,4 @@
-// import { Document, Risk, Control, RiskCategory } from '@/types';
+// import { Document, Risk, Control, RiskCategory } from '@/types'
 import { generateId } from './utils';
 import { toast } from 'sonner';
 
@@ -88,7 +88,7 @@ const riskKeywords = {
     'digital',
     'it',
   ],
-};
+}
 
 // Mock risk templates based on categories
 const riskTemplates = {
@@ -192,7 +192,7 @@ const riskTemplates = {
       impact: 5,
     },
   ],
-};
+}
 
 // Mock control templates
 const controlTemplates = [
@@ -256,11 +256,11 @@ const controlTemplates = [
     type: 'corrective' as const,
     effectiveness: 'high' as const,
   },
-];
+]
 
 // Simulate text extraction from different file types
 const simulateTextExtraction = (document: Document): string => {
-  const fileType = document.type;
+  const fileType = document.type
 
   // Mock extracted text based on file type
   if (fileType.includes('pdf')) {
@@ -277,7 +277,7 @@ const simulateTextExtraction = (document: Document): string => {
       
       Staff training and awareness programs are essential for maintaining
       a strong risk management culture throughout the organization.
-    `;
+    `
   }
 
   if (fileType.includes('word') || fileType.includes('document')) {
@@ -318,15 +318,15 @@ const simulateTextExtraction = (document: Document): string => {
     risk management, and compliance requirements. Key areas of focus include
     process improvement, quality control, regulatory compliance, and
     technology security measures.
-  `;
-};
+  `
+}
 
 // Analyze text content and identify relevant risks
 const analyzeTextContent = (
   text: string
 ): {
   identifiedRisks: Array<{
-    text: string;
+    text: string
     confidence: number;
     category: RiskCategory;
   }>;
@@ -351,7 +351,7 @@ const analyzeTextContent = (
 
   // Analyze text for risk keywords and generate relevant risks
   Object.entries(riskKeywords).forEach(([category, keywords]) => {
-    const matchedKeywords = keywords.filter((keyword) => lowerText.includes(keyword));
+    const matchedKeywords = keywords.filter((keyword) => lowerText.includes(keyword))
 
     if (matchedKeywords.length > 0) {
       const categoryTemplates = riskTemplates[category as RiskCategory];
@@ -359,7 +359,7 @@ const analyzeTextContent = (
         categoryTemplates[Math.floor(Math.random() * categoryTemplates.length)];
 
       // Calculate confidence based on keyword matches
-      const confidence = Math.min(0.95, 0.6 + matchedKeywords.length * 0.1);
+      const confidence = Math.min(0.95, 0.6 + matchedKeywords.length * 0.1)
 
       identifiedRisks.push({
         text: selectedTemplate.description,
@@ -370,7 +370,7 @@ const analyzeTextContent = (
   });
 
   // Generate suggested controls based on identified risks
-  const numControls = Math.min(identifiedRisks.length + 1, 3);
+  const numControls = Math.min(identifiedRisks.length + 1, 3)
   for (let i = 0; i < numControls; i++) {
     const template = controlTemplates[Math.floor(Math.random() * controlTemplates.length)];
     const confidence = 0.7 + Math.random() * 0.2; // 70-90% confidence
@@ -392,30 +392,30 @@ const analyzeTextContent = (
       .join(', ')}.
     The analysis suggests implementing ${suggestedControls.length} control measures
     to mitigate the identified risks.
-  `.trim();
+  `.trim()
 
   return {
     identifiedRisks,
     suggestedControls,
     documentSummary,
-  };
-};
+  }
+}
 
 // Main AI analysis function
 export const mockAIAnalysis = async (document: Document): Promise<AIAnalysisResponse> => {
-  const jobId = generateId('ai-job');
+  const jobId = generateId('ai-job')
   const startTime = Date.now();
 
   // Simulate realistic processing delay (2-5 seconds)
-  const processingDelay = 2000 + Math.random() * 3000;
+  const processingDelay = 2000 + Math.random() * 3000
   await new Promise((resolve) => setTimeout(resolve, processingDelay));
 
   try {
     // Simulate text extraction
-    const extractedText = simulateTextExtraction(document);
+    const extractedText = simulateTextExtraction(document)
 
     // Analyze content
-    const analysis = analyzeTextContent(extractedText);
+    const analysis = analyzeTextContent(extractedText)
 
     const processingTime = Date.now() - startTime;
 
@@ -424,20 +424,20 @@ export const mockAIAnalysis = async (document: Document): Promise<AIAnalysisResp
       status: 'completed',
       results: analysis,
       processingTime,
-    };
+    }
   } catch {
     return {
       jobId,
       status: 'failed',
       processingTime: Date.now() - startTime,
-    };
+    }
   }
-};
+}
 
 // Function to convert AI analysis results to Risk objects
 export const convertAIRisksToRiskObjects = (
   aiRisks: Array<{
-    text: string;
+    text: string
     confidence: number;
     category: RiskCategory;
   }>,
@@ -465,12 +465,12 @@ export const convertAIRisksToRiskObjects = (
       aiConfidence: aiRisk.confidence,
     })
   );
-};
+}
 
 // Function to convert AI controls to Control objects
 export const convertAIControlsToControlObjects = (
   aiControls: Array<{
-    title: string;
+    title: string
     description: string;
     confidence: number;
   }>,
@@ -494,29 +494,29 @@ export const convertAIControlsToControlObjects = (
       status: 'PLANNED' as const,
     })
   );
-};
+}
 
 // Batch analysis for multiple documents
 export const batchAIAnalysis = async (documents: Document[]): Promise<AIAnalysisResponse[]> => {
-  const results: AIAnalysisResponse[] = [];
+  const results: AIAnalysisResponse[] = []
 
   // Process documents sequentially to simulate realistic processing
   for (const document of documents) {
-    const _result = await mockAIAnalysis(document);
+    const _result = await mockAIAnalysis(document)
     results.push(result);
   }
 
   return results;
-};
+}
 
 // Real AI Integration Service - replacing mock AI functionality
 
 // AI API Configuration
-const AI_API_BASE = '/api/ai';
+const AI_API_BASE = '/api/ai'
 
 // Generic AI API request function
 async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${AI_API_BASE}${endpoint}`;
+  const url = `${AI_API_BASE}${endpoint}`
 
   const defaultOptions: RequestInit = {
     headers: {
@@ -524,7 +524,7 @@ async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promis
       ...options.headers,
     },
     ...options,
-  };
+  }
 
   try {
     const response = await fetch(url, defaultOptions);
@@ -537,7 +537,7 @@ async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promis
     const data = await response.json();
     return data.data || data;
   } catch (error) {
-    // console.error(`AI API request failed for ${endpoint}:`, error);
+    // console.error(`AI API request failed for ${endpoint}:`, error)
     toast.error(`AI service error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     throw error;
   }
@@ -548,7 +548,7 @@ async function aiRequest<T>(endpoint: string, options: RequestInit = {}): Promis
 // ============================================================================
 
 export interface AIAgent {
-  id: string;
+  id: string
   name: string;
   description: string;
   type:
@@ -578,7 +578,7 @@ export interface AIAnalysisRequest {
     depth?: 'QUICK' | 'DETAILED' | 'COMPREHENSIVE';
     format?: 'TEXT' | 'STRUCTURED' | 'REPORT';
     includeRecommendations?: boolean;
-  };
+  }
 }
 
 export interface AIAnalysisResponse {
@@ -603,7 +603,7 @@ export interface AIAnalysisResponse {
     tokensUsed: number;
     model: string;
     timestamp: string;
-  };
+  }
 }
 
 export interface ChatMessage {
@@ -615,7 +615,7 @@ export interface ChatMessage {
     type?: string;
     confidence?: number;
     sources?: string[];
-  };
+  }
 }
 
 export interface ChatSession {
@@ -635,7 +635,7 @@ export interface ChatSession {
 export const aiRiskAnalysis = {
   // Analyze risk scenario
   async analyzeRisk(riskData: {
-    title: string;
+    title: string
     description: string;
     category?: string;
     context?: any;
@@ -660,7 +660,7 @@ export const aiRiskAnalysis = {
     context?: any
   ): Promise<{
     questions: Array<{
-      id: string;
+      id: string
       question: string;
       type: 'TEXT' | 'MULTIPLE_CHOICE' | 'SCALE' | 'YES_NO';
       options?: string[];
@@ -679,7 +679,7 @@ export const aiRiskAnalysis = {
 
   // Assess risk likelihood and impact
   async assessRiskScoring(riskData: any): Promise<{
-    likelihood: number;
+    likelihood: number
     impact: number;
     riskScore: number;
     justification: string;
@@ -701,7 +701,7 @@ export const aiRiskAnalysis = {
     organizationRisks: any[]
   ): Promise<{
     dependencies: Array<{
-      riskId: string;
+      riskId: string
       relationship: 'CAUSES' | 'AMPLIFIES' | 'MITIGATES' | 'CORRELATES';
       strength: number;
       explanation: string;
@@ -720,7 +720,7 @@ export const aiRiskAnalysis = {
       }),
     });
   },
-};
+}
 
 // ============================================================================
 // AI CONTROL ANALYSIS SERVICE
@@ -729,7 +729,7 @@ export const aiRiskAnalysis = {
 export const aiControlAnalysis = {
   // Analyze control effectiveness
   async analyzeControlEffectiveness(controlData: {
-    id: string;
+    id: string
     title: string;
     description: string;
     type: string;
@@ -756,7 +756,7 @@ export const aiControlAnalysis = {
     performanceData: any
   ): Promise<{
     improvements: Array<{
-      area: string;
+      area: string
       current: string;
       recommended: string;
       rationale: string;
@@ -783,7 +783,7 @@ export const aiControlAnalysis = {
   // Generate control testing procedures
   async generateTestingProcedures(controlData: any): Promise<{
     procedures: Array<{
-      step: number;
+      step: number
       description: string;
       expectedOutcome: string;
       evidenceRequired: string[];
@@ -798,7 +798,7 @@ export const aiControlAnalysis = {
       body: JSON.stringify(controlData),
     });
   },
-};
+}
 
 // ============================================================================
 // AI COMPLIANCE ANALYSIS SERVICE
@@ -821,7 +821,7 @@ export const aiComplianceAnalysis = {
           includeRecommendations: true,
         },
       }),
-    });
+    })
   },
 
   // Map controls to compliance requirements
@@ -829,7 +829,7 @@ export const aiComplianceAnalysis = {
     controls: any[]
   ): Promise<{
     mappings: Array<{
-      requirementId: string;
+      requirementId: string
       requirementText: string;
       mappedControls: Array<{
         controlId: string;
@@ -846,7 +846,7 @@ export const aiComplianceAnalysis = {
       partiallyCovered: number;
       notCovered: number;
       overallComplianceScore: number;
-    };
+    }
   }> {
     return aiRequest('/analysis/compliance-mapping', {
       method: 'POST',
@@ -856,7 +856,7 @@ export const aiComplianceAnalysis = {
       }),
     });
   },
-};
+}
 
 // ============================================================================
 // AI DOCUMENT ANALYSIS SERVICE
@@ -882,12 +882,12 @@ export const aiDocumentAnalysis = {
           includeRecommendations: true,
         },
       }),
-    });
+    })
   },
 
   // Extract key information from documents
   async extractDocumentMetadata(documentContent: string): Promise<{
-    title: string;
+    title: string
     summary: string;
     keyPoints: string[];
     entities: Array<{
@@ -914,7 +914,7 @@ export const aiDocumentAnalysis = {
       }),
     });
   },
-};
+}
 
 // ============================================================================
 // AI CHAT SERVICE
@@ -929,7 +929,7 @@ export const aiChatService = {
         agentId,
         context: initialContext,
       }),
-    });
+    })
   },
 
   // Send message to chat session
@@ -938,7 +938,7 @@ export const aiChatService = {
     message: string,
     context?: any
   ): Promise<{
-    response: ChatMessage;
+    response: ChatMessage
     session: ChatSession;
   }> {
     return aiRequest('/chat/message', {
@@ -953,16 +953,16 @@ export const aiChatService = {
 
   // Get chat sessions
   async getChatSessions(limit: number = 20): Promise<ChatSession[]> {
-    return aiRequest<ChatSession[]>(`/chat/sessions?limit=${limit}`);
+    return aiRequest<ChatSession[]>(`/chat/sessions?limit=${limit}`)
   },
 
   // Delete chat session
   async deleteChatSession(sessionId: string): Promise<{ success: boolean }> {
     return aiRequest(`/chat/sessions/${sessionId}`, {
       method: 'DELETE',
-    });
+    })
   },
-};
+}
 
 // ============================================================================
 // AI INSIGHT GENERATION SERVICE
@@ -972,7 +972,7 @@ export const aiInsightService = {
   // Generate dashboard insights
   async generateDashboardInsights(dashboardData: any): Promise<{
     insights: Array<{
-      type: 'TREND' | 'ANOMALY' | 'OPPORTUNITY' | 'RISK' | 'ACHIEVEMENT';
+      type: 'TREND' | 'ANOMALY' | 'OPPORTUNITY' | 'RISK' | 'ACHIEVEMENT'
       title: string;
       description: string;
       severity: 'INFO' | 'WARNING' | 'CRITICAL';
@@ -1000,7 +1000,7 @@ export const aiInsightService = {
     predictionPeriod: string
   ): Promise<{
     predictions: Array<{
-      metric: string;
+      metric: string
       currentValue: number;
       predictedValue: number;
       confidence: number;
@@ -1023,7 +1023,7 @@ export const aiInsightService = {
       }),
     });
   },
-};
+}
 
 // ============================================================================
 // AI AGENT MANAGEMENT
@@ -1032,12 +1032,12 @@ export const aiInsightService = {
 export const aiAgentService = {
   // Get available AI agents
   async getAvailableAgents(): Promise<AIAgent[]> {
-    return aiRequest<AIAgent[]>('/agents');
+    return aiRequest<AIAgent[]>('/agents')
   },
 
   // Get specific agent
   async getAgent(agentId: string): Promise<AIAgent> {
-    return aiRequest<AIAgent>(`/agents/${agentId}`);
+    return aiRequest<AIAgent>(`/agents/${agentId}`)
   },
 
   // Update agent configuration
@@ -1045,9 +1045,9 @@ export const aiAgentService = {
     return aiRequest<AIAgent>(`/agents/${agentId}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
-    });
+    })
   },
-};
+}
 
 // ============================================================================
 // AI USAGE TRACKING
@@ -1056,7 +1056,7 @@ export const aiAgentService = {
 export const aiUsageService = {
   // Get usage statistics
   async getUsageStats(_period: string = '30d'): Promise<{
-    totalRequests: number;
+    totalRequests: number
     totalTokens: number;
     totalCost: number;
     breakdown: Array<{
@@ -1078,18 +1078,18 @@ export const aiUsageService = {
   // Get current usage limits
   async getUsageLimits(): Promise<{
     monthly: {
-      requests: { used: number; limit: number };
-      tokens: { used: number; limit: number };
-      cost: { used: number; limit: number };
-    };
+      requests: { used: number; limit: number }
+      tokens: { used: number; limit: number }
+      cost: { used: number; limit: number }
+    }
     daily: {
-      requests: { used: number; limit: number };
-      tokens: { used: number; limit: number };
-    };
+      requests: { used: number; limit: number }
+      tokens: { used: number; limit: number }
+    }
   }> {
     return aiRequest('/usage/limits');
   },
-};
+}
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -1097,7 +1097,7 @@ export const aiUsageService = {
 
 // Check if AI features are enabled
 export function isAIEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES === 'true'
 }
 
 // Handle AI API errors gracefully
@@ -1105,13 +1105,13 @@ export function handleAIError(__error: unknown,
   fallbackMessage: string = 'AI service temporarily unavailable'
 ): string {
   if (!isAIEnabled()) {
-    return 'AI features are currently disabled';
+    return 'AI features are currently disabled'
   }
 
   if (error instanceof Error) {
     // Don't expose internal AI errors to users
     if (error.message.includes('API key') || error.message.includes('quota')) {
-      return 'AI service temporarily unavailable due to usage limits';
+      return 'AI service temporarily unavailable due to usage limits'
     }
     return error.message;
   }
@@ -1122,7 +1122,7 @@ export function handleAIError(__error: unknown,
 // Format AI response for display
 export function formatAIResponse(_response: any): string {
   if (typeof response === 'string') {
-    return response;
+    return response
   }
 
   if (response?.analysis) {
@@ -1138,7 +1138,7 @@ export function formatAIResponse(_response: any): string {
 
 // Calculate confidence score display
 export function formatConfidenceScore(confidence: number): string {
-  if (confidence >= 0.9) return 'Very High';
+  if (confidence >= 0.9) return 'Very High'
   if (confidence >= 0.7) return 'High';
   if (confidence >= 0.5) return 'Medium';
   if (confidence >= 0.3) return 'Low';
@@ -1169,7 +1169,7 @@ export const aiService = {
   handleError: handleAIError,
   formatResponse: formatAIResponse,
   formatConfidence: formatConfidenceScore,
-};
+}
 
 // Default export
-export default aiService;
+export default aiService

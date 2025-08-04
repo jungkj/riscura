@@ -1,6 +1,6 @@
 // Advanced Rate Limiting System for API Protection
-import { NextRequest } from 'next/server';
-// import { redisClient } from '../cache/redis-client';
+import { NextRequest } from 'next/server'
+// import { redisClient } from '../cache/redis-client'
 
 export interface RateLimitConfig {
   windowMs: number;
@@ -65,7 +65,7 @@ class RateLimiter {
     topEndpoints: [],
     threatDetections: 0,
     bytesSaved: 0,
-  };
+  }
   private threatDetections: ThreatDetection[] = [];
   private ipRequestHistory: Map<string, number[]> = new Map();
 
@@ -96,7 +96,7 @@ class RateLimiter {
         burstMultiplier: 2,
         gracePeriodMs: 5000,
       },
-    });
+    })
 
     // Authentication endpoints - stricter limits
     this.addRule({
@@ -120,7 +120,7 @@ class RateLimiter {
         burstMultiplier: 1,
         gracePeriodMs: 0,
       },
-    });
+    })
 
     // Password reset - very strict
     this.addRule({
@@ -144,7 +144,7 @@ class RateLimiter {
         burstMultiplier: 1,
         gracePeriodMs: 0,
       },
-    });
+    })
 
     // File upload endpoints
     this.addRule({
@@ -168,7 +168,7 @@ class RateLimiter {
         burstMultiplier: 1.5,
         gracePeriodMs: 2000,
       },
-    });
+    })
 
     // Search endpoints
     this.addRule({
@@ -192,22 +192,22 @@ class RateLimiter {
         burstMultiplier: 1.2,
         gracePeriodMs: 1000,
       },
-    });
+    })
   }
 
   // Add or update rate limit rule
   public addRule(rule: RateLimitRule): void {
-    this.rules.set(rule.id, rule);
+    this.rules.set(rule.id, rule)
   }
 
   // Remove rate limit rule
   public removeRule(ruleId: string): void {
-    this.rules.delete(ruleId);
+    this.rules.delete(ruleId)
   }
 
   // Get applicable rule for request
   private getApplicableRule(req: NextRequest): RateLimitRule | null {
-    const pathname = new URL(req.url).pathname;
+    const pathname = new URL(req.url).pathname
     const sortedRules = Array.from(this.rules.values())
       .filter((rule) => rule.enabled)
       .sort((a, b) => b.priority - a.priority);
@@ -229,7 +229,7 @@ class RateLimiter {
 
   // Main rate limiting function
   public async checkRateLimit(req: NextRequest): Promise<RateLimitResult> {
-    this.metrics.totalRequests++;
+    this.metrics.totalRequests++
 
     const rule = this.getApplicableRule(req);
     if (!rule) {
@@ -238,7 +238,7 @@ class RateLimiter {
         allowed: true,
         remaining: Infinity,
         resetTime: Date.now(),
-      };
+      }
     }
 
     const clientIP = this.getClientIP(req);
@@ -246,14 +246,14 @@ class RateLimiter {
 
     // Check IP whitelist/blacklist
     if (rule.config.blacklistedIPs.includes(clientIP)) {
-      this.metrics.blockedRequests++;
+      this.metrics.blockedRequests++
       return {
         allowed: false,
         remaining: 0,
         resetTime: Date.now() + rule.config.windowMs,
         reason: 'IP blacklisted',
         threatLevel: 'high',
-      };
+      }
     }
 
     if (rule.config.whitelistedIPs.includes(clientIP)) {
@@ -262,15 +262,15 @@ class RateLimiter {
         allowed: true,
         remaining: Infinity,
         resetTime: Date.now(),
-      };
+      }
     }
 
     // Perform rate limiting based on algorithm
-    const _result = await this.performRateLimit(key, rule.config);
+    const _result = await this.performRateLimit(key, rule.config)
 
     // Update metrics
     if (result.allowed) {
-      this.metrics.allowedRequests++;
+      this.metrics.allowedRequests++
     } else {
       this.metrics.blockedRequests++;
       this.updateBlockedIPMetrics(clientIP);
@@ -278,11 +278,11 @@ class RateLimiter {
 
     // Threat detection
     if (rule.config.enableThreatDetection) {
-      await this.detectThreats(req, rule, result);
+      await this.detectThreats(req, rule, result)
     }
 
     // Track request history for analysis
-    this.trackRequestHistory(clientIP);
+    this.trackRequestHistory(clientIP)
 
     return result;
   }
@@ -291,7 +291,7 @@ class RateLimiter {
   private async performRateLimit(key: string, config: RateLimitConfig): Promise<RateLimitResult> {
     switch (config.algorithm) {
       case 'fixed-window':
-        return this.fixedWindowRateLimit(key, config);
+        return this.fixedWindowRateLimit(key, config)
       case 'sliding-window':
         return this.slidingWindowRateLimit(key, config);
       case 'token-bucket':
@@ -308,7 +308,7 @@ class RateLimiter {
     key: string,
     config: RateLimitConfig
   ): Promise<RateLimitResult> {
-    const window = Math.floor(Date.now() / config.windowMs);
+    const window = Math.floor(Date.now() / config.windowMs)
     const redisKey = `rate_limit:fixed:${key}:${window}`;
 
     try {
@@ -322,25 +322,25 @@ class RateLimiter {
           remaining: 0,
           resetTime,
           retryAfter: Math.ceil((resetTime - Date.now()) / 1000),
-        };
+        }
       }
 
       // Increment counter
-      await redisClient.set(redisKey, current + 1, Math.ceil(config.windowMs / 1000));
+      await redisClient.set(redisKey, current + 1, Math.ceil(config.windowMs / 1000))
 
       return {
         allowed: true,
         remaining,
         resetTime,
-      };
+      }
     } catch (error) {
-      // console.error('Fixed window rate limit error:', error);
+      // console.error('Fixed window rate limit error:', error)
       // Fail open for Redis errors
       return {
         allowed: true,
         remaining: config.maxRequests,
         resetTime: Date.now() + config.windowMs,
-      };
+      }
     }
   }
 
@@ -349,25 +349,25 @@ class RateLimiter {
     key: string,
     config: RateLimitConfig
   ): Promise<RateLimitResult> {
-    const now = Date.now();
+    const now = Date.now()
     const window = now - config.windowMs;
     const redisKey = `rate_limit:sliding:${key}`;
 
     try {
       // Use Redis sorted set for sliding window
-      const pipeline = redisClient.client.pipeline();
+      const pipeline = redisClient.client.pipeline()
 
       // Remove old entries
-      pipeline.zremrangebyscore(redisKey, 0, window);
+      pipeline.zremrangebyscore(redisKey, 0, window)
 
       // Count current requests
-      pipeline.zcard(redisKey);
+      pipeline.zcard(redisKey)
 
       // Add current request
-      pipeline.zadd(redisKey, now, `${now}-${Math.random()}`);
+      pipeline.zadd(redisKey, now, `${now}-${Math.random()}`)
 
       // Set expiration
-      pipeline.expire(redisKey, Math.ceil(config.windowMs / 1000));
+      pipeline.expire(redisKey, Math.ceil(config.windowMs / 1000))
 
       const results = await pipeline.exec();
       const currentCount = (results?.[1]?.[1] as number) || 0;
@@ -377,28 +377,28 @@ class RateLimiter {
 
       if (currentCount >= config.maxRequests) {
         // Remove the request we just added
-        await redisClient.client.zrem(redisKey, `${now}-${Math.random()}`);
+        await redisClient.client.zrem(redisKey, `${now}-${Math.random()}`)
 
         return {
           allowed: false,
           remaining: 0,
           resetTime,
           retryAfter: Math.ceil(config.windowMs / 1000),
-        };
+        }
       }
 
       return {
         allowed: true,
         remaining,
         resetTime,
-      };
+      }
     } catch (error) {
-      // console.error('Sliding window rate limit error:', error);
+      // console.error('Sliding window rate limit error:', error)
       return {
         allowed: true,
         remaining: config.maxRequests,
         resetTime: now + config.windowMs,
-      };
+      }
     }
   }
 
@@ -407,7 +407,7 @@ class RateLimiter {
     key: string,
     config: RateLimitConfig
   ): Promise<RateLimitResult> {
-    const now = Date.now();
+    const now = Date.now()
     const redisKey = `rate_limit:token:${key}`;
     const refillRate = config.maxRequests / (config.windowMs / 1000); // tokens per second
 
@@ -418,10 +418,10 @@ class RateLimiter {
       }>(redisKey)) || {
         tokens: config.maxRequests,
         lastRefill: now,
-      };
+      }
 
       // Calculate tokens to add based on time elapsed
-      const timePassed = (now - bucketData.lastRefill) / 1000;
+      const timePassed = (now - bucketData.lastRefill) / 1000
       const tokensToAdd = timePassed * refillRate;
       const currentTokens = Math.min(config.maxRequests, bucketData.tokens + tokensToAdd);
 
@@ -432,14 +432,14 @@ class RateLimiter {
           remaining: 0,
           resetTime: now + timeToRefill * 1000,
           retryAfter: Math.ceil(timeToRefill),
-        };
+        }
       }
 
       // Consume token
       const newBucketData = {
         tokens: currentTokens - 1,
         lastRefill: now,
-      };
+      }
 
       await redisClient.set(redisKey, newBucketData, Math.ceil(config.windowMs / 1000));
 
@@ -447,14 +447,14 @@ class RateLimiter {
         allowed: true,
         remaining: Math.floor(newBucketData.tokens),
         resetTime: now + ((config.maxRequests - newBucketData.tokens) / refillRate) * 1000,
-      };
+      }
     } catch (error) {
-      // console.error('Token bucket rate limit error:', error);
+      // console.error('Token bucket rate limit error:', error)
       return {
         allowed: true,
         remaining: config.maxRequests,
         resetTime: now + config.windowMs,
-      };
+      }
     }
   }
 
@@ -463,7 +463,7 @@ class RateLimiter {
     key: string,
     config: RateLimitConfig
   ): Promise<RateLimitResult> {
-    const now = Date.now();
+    const now = Date.now()
     const redisKey = `rate_limit:leaky:${key}`;
     const leakRate = config.maxRequests / (config.windowMs / 1000); // requests per second
 
@@ -474,10 +474,10 @@ class RateLimiter {
       }>(redisKey)) || {
         volume: 0,
         lastLeak: now,
-      };
+      }
 
       // Calculate leaked volume based on time elapsed
-      const timePassed = (now - bucketData.lastLeak) / 1000;
+      const timePassed = (now - bucketData.lastLeak) / 1000
       const volumeLeaked = timePassed * leakRate;
       const currentVolume = Math.max(0, bucketData.volume - volumeLeaked);
 
@@ -488,14 +488,14 @@ class RateLimiter {
           remaining: 0,
           resetTime: now + timeToLeak * 1000,
           retryAfter: Math.ceil(timeToLeak),
-        };
+        }
       }
 
       // Add request to bucket
       const newBucketData = {
         volume: currentVolume + 1,
         lastLeak: now,
-      };
+      }
 
       await redisClient.set(redisKey, newBucketData, Math.ceil(config.windowMs / 1000));
 
@@ -503,14 +503,14 @@ class RateLimiter {
         allowed: true,
         remaining: Math.floor(config.maxRequests - newBucketData.volume),
         resetTime: now + (newBucketData.volume / leakRate) * 1000,
-      };
+      }
     } catch (error) {
-      // console.error('Leaky bucket rate limit error:', error);
+      // console.error('Leaky bucket rate limit error:', error)
       return {
         allowed: true,
         remaining: config.maxRequests,
         resetTime: now + config.windowMs,
-      };
+      }
     }
   }
 
@@ -520,7 +520,7 @@ class RateLimiter {
     rule: RateLimitRule,
     result: RateLimitResult
   ): Promise<void> {
-    const clientIP = this.getClientIP(req);
+    const clientIP = this.getClientIP(req)
     const endpoint = new URL(req.url).pathname;
     const now = Date.now();
 
@@ -536,7 +536,7 @@ class RateLimiter {
           retryAfter: result.retryAfter,
           remaining: result.remaining,
         },
-      });
+      })
     }
 
     // Detect brute force on auth endpoints
@@ -558,7 +558,7 @@ class RateLimiter {
     }
 
     // Detect scraping patterns
-    const requestHistory = this.ipRequestHistory.get(clientIP) || [];
+    const requestHistory = this.ipRequestHistory.get(clientIP) || []
     if (requestHistory.length > 100) {
       const variance = this.calculateRequestVariance(requestHistory);
       if (variance < 100) {
@@ -573,14 +573,14 @@ class RateLimiter {
             requestCount: requestHistory.length,
             variance,
           },
-        });
+        })
       }
     }
   }
 
   // Helper methods
   private getClientIP(req: NextRequest): string {
-    const forwarded = req.headers.get('x-forwarded-for');
+    const forwarded = req.headers.get('x-forwarded-for')
     const realIP = req.headers.get('x-real-ip');
     const cfConnectingIP = req.headers.get('cf-connecting-ip');
 
@@ -597,7 +597,7 @@ class RateLimiter {
 
     // Keep only last 1000 requests
     if (history.length > 1000) {
-      history.shift();
+      history.shift()
     }
 
     this.ipRequestHistory.set(ip, history);
@@ -630,12 +630,12 @@ class RateLimiter {
 
     // Keep only last 1000 threat detections
     if (this.threatDetections.length > 1000) {
-      this.threatDetections.shift();
+      this.threatDetections.shift()
     }
 
     // Log high severity threats
     if (threat.severity === 'high' || threat.severity === 'critical') {
-      // console.warn('High severity threat detected:', threat);
+      // console.warn('High severity threat detected:', threat)
     }
   }
 
@@ -648,13 +648,13 @@ class RateLimiter {
     }
 
     // Sort and keep top 10
-    this.metrics.topBlockedIPs.sort((a, b) => b.count - a.count);
+    this.metrics.topBlockedIPs.sort((a, b) => b.count - a.count)
     this.metrics.topBlockedIPs = this.metrics.topBlockedIPs.slice(0, 10);
   }
 
   // Public methods for management
   public getMetrics(): RateLimitMetrics {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   public getThreatDetections(): ThreatDetection[] {
@@ -674,7 +674,7 @@ class RateLimiter {
       topEndpoints: [],
       threatDetections: 0,
       bytesSaved: 0,
-    };
+    }
     this.threatDetections = [];
     this.ipRequestHistory.clear();
   }
@@ -695,7 +695,7 @@ class RateLimiter {
 }
 
 // Create singleton instance
-export const rateLimiter = new RateLimiter();
+export const rateLimiter = new RateLimiter()
 
 // Export class for custom instances
-export { RateLimiter };
+export { RateLimiter }

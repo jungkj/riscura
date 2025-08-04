@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk } from '@/types';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk } from '@/types'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import {
+import { DaisyCardTitle, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyPopover } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -54,7 +55,7 @@ interface FilterState {
   dateRange: {
     from: Date | null;
     to: Date | null;
-  };
+  }
   impactRange: [number, number];
   likelihoodRange: [number, number];
 }
@@ -82,7 +83,7 @@ const defaultFilters: FilterState = {
   dateRange: { from: null, to: null },
   impactRange: [1, 5],
   likelihoodRange: [1, 5],
-};
+}
 
 export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   className = '',
@@ -123,7 +124,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     owners: [...new Set(risks.map(r => r.owner).filter(Boolean))],
     statuses: [...new Set(risks.map(r => r.status).filter(Boolean))],
     levels: ['low', 'medium', 'high', 'critical'],
-  }), [risks]);
+  }), [risks])
 
   // Apply filters to get filtered risks
   const filteredRisks = useMemo(() => {
@@ -131,29 +132,29 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       // Search filter
       if (filters.search && !risk.title.toLowerCase().includes(filters.search.toLowerCase()) &&
           !risk.description.toLowerCase().includes(filters.search.toLowerCase())) {
-        return false;
+        return false
       }
 
       // Category filter
       if (filters.categories.length > 0 && !filters.categories.includes(risk.category || '')) {
-        return false;
+        return false
       }
 
       // Owner filter
       if (filters.owners.length > 0 && !filters.owners.includes(risk.owner || '')) {
-        return false;
+        return false
       }
 
       // Status filter
       if (filters.statuses.length > 0 && !filters.statuses.includes(risk.status || '')) {
-        return false;
+        return false
       }
 
       // Level filter
       if (filters.levels.length > 0) {
         const level = risk.riskScore >= 20 ? 'critical' :
                      risk.riskScore >= 15 ? 'high' :
-                     risk.riskScore >= 8 ? 'medium' : 'low';
+                     risk.riskScore >= 8 ? 'medium' : 'low'
         if (!filters.levels.includes(level)) {
           return false;
         }
@@ -161,22 +162,22 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
       // Score range filter
       if (risk.riskScore < filters.scoreRange[0] || risk.riskScore > filters.scoreRange[1]) {
-        return false;
+        return false
       }
 
       // Impact range filter
       if (risk.impact < filters.impactRange[0] || risk.impact > filters.impactRange[1]) {
-        return false;
+        return false
       }
 
       // Likelihood range filter
       if (risk.likelihood < filters.likelihoodRange[0] || risk.likelihood > filters.likelihoodRange[1]) {
-        return false;
+        return false
       }
 
       // Date range filter
       if (filters.dateRange.from || filters.dateRange.to) {
-        const riskDate = new Date(risk.createdAt);
+        const riskDate = new Date(risk.createdAt)
         if (filters.dateRange.from && riskDate < filters.dateRange.from) {
           return false;
         }
@@ -191,11 +192,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   // Update filters and history
   const updateFilters = useCallback((newFilters: Partial<FilterState>) => {
-    const updatedFilters = { ...filters, ...newFilters };
+    const updatedFilters = { ...filters, ...newFilters }
     setFilters(updatedFilters);
     
     // Add to history
-    const newHistory = filterHistory.slice(0, currentHistoryIndex + 1);
+    const newHistory = filterHistory.slice(0, currentHistoryIndex + 1)
     newHistory.push(updatedFilters);
     setFilterHistory(newHistory);
     setCurrentHistoryIndex(newHistory.length - 1);
@@ -205,11 +206,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   // Clear all filters
   const clearAllFilters = useCallback(() => {
-    updateFilters(defaultFilters);
+    updateFilters(defaultFilters)
   }, [updateFilters]);
 
   // Undo/Redo functionality
-  const canUndo = currentHistoryIndex > 0;
+  const canUndo = currentHistoryIndex > 0
   const canRedo = currentHistoryIndex < filterHistory.length - 1;
 
   const handleUndo = useCallback(() => {
@@ -232,7 +233,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   // Preset management
   const applyPreset = useCallback((preset: FilterPreset) => {
-    updateFilters(preset.filters);
+    updateFilters(preset.filters)
   }, [updateFilters]);
 
   const saveCurrentAsPreset = useCallback(() => {
@@ -242,14 +243,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         id: Date.now().toString(),
         name,
         filters: { ...filters },
-      };
+      }
       setSavedPresets(prev => [...prev, newPreset]);
     }
   }, [filters]);
 
   // Active filter count
   const activeFilterCount = useMemo(() => {
-    let count = 0;
+    let count = 0
     if (filters.search) count++;
     if (filters.categories.length > 0) count++;
     if (filters.owners.length > 0) count++;
@@ -264,7 +265,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
   // Multi-select component
   const MultiSelect: React.FC<{
-    options: string[];
+    options: string[]
     value: string[];
     onChange: (_value: string[]) => void;
     placeholder: string;
@@ -314,7 +315,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         </DaisyPopoverContent>
       </DaisyPopover>
     );
-  };
+  }
 
   return (
     <DaisyCard className={className} >
@@ -551,4 +552,4 @@ updateFilters({
       )}
     </DaisyCard>
   );
-}; 
+} 

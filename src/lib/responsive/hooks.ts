@@ -8,7 +8,7 @@ export const breakpoints = {
   lg: 1024,
   xl: 1280,
   '2xl': 1536,
-} as const;
+} as const
 
 export type Breakpoint = keyof typeof breakpoints;
 
@@ -34,7 +34,7 @@ export const useDevice = (): DeviceInfo => {
         isTouchDevice: false,
         orientation: 'landscape',
         pixelRatio: 1,
-      };
+      }
     }
 
     const width = window.innerWidth;
@@ -48,7 +48,7 @@ export const useDevice = (): DeviceInfo => {
       isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       orientation: width > height ? 'landscape' : 'portrait',
       pixelRatio: window.devicePixelRatio || 1,
-    };
+    }
   });
 
   useEffect(() => {
@@ -65,12 +65,12 @@ export const useDevice = (): DeviceInfo => {
         orientation: width > height ? 'landscape' : 'portrait',
         pixelRatio: window.devicePixelRatio || 1,
       });
-    };
+    }
 
     const handleOrientationChange = () => {
       // Small delay to get accurate dimensions after orientation change
-      setTimeout(handleResize, 100);
-    };
+      setTimeout(handleResize, 100)
+    }
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', handleOrientationChange);
@@ -78,29 +78,29 @@ export const useDevice = (): DeviceInfo => {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleOrientationChange);
-    };
+    }
   }, []);
 
   return device;
-};
+}
 
 // Get current breakpoint based on width
 const getBreakpoint = (width: number): Breakpoint => {
-  if (width >= breakpoints['2xl']) return '2xl';
+  if (width >= breakpoints['2xl']) return '2xl'
   if (width >= breakpoints.xl) return 'xl';
   if (width >= breakpoints.lg) return 'lg';
   if (width >= breakpoints.md) return 'md';
   if (width >= breakpoints.sm) return 'sm';
   return 'xs';
-};
+}
 
 // Responsive value hook - returns different values based on breakpoint
 export const useResponsiveValue = <T>(values: Partial<Record<Breakpoint, T>>): T | undefined => {
-  const device = useDevice();
+  const device = useDevice()
   const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
 
   // Find the first defined value at or below current breakpoint
-  const currentBreakpointIndex = breakpointOrder.indexOf(device.breakpoint);
+  const currentBreakpointIndex = breakpointOrder.indexOf(device.breakpoint)
 
   for (let i = currentBreakpointIndex; i < breakpointOrder.length; i++) {
     const bp = breakpointOrder[i];
@@ -110,12 +110,12 @@ export const useResponsiveValue = <T>(values: Partial<Record<Breakpoint, T>>): T
   }
 
   // Fallback to first available value
-  return Object.values(values)[0];
-};
+  return Object.values(values)[0]
+}
 
 // Media query hook
 export const useMediaQuery = (_query: string): boolean => {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -130,18 +130,18 @@ export const useMediaQuery = (_query: string): boolean => {
   }, [query]);
 
   return matches;
-};
+}
 
 // Sidebar state management hook
 export const useSidebarState = () => {
-  const device = useDevice();
+  const device = useDevice()
   const [isOpen, setIsOpen] = useState(() => device.type === 'desktop');
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Auto-manage sidebar based on device type
   useEffect(() => {
     if (device.type === 'mobile') {
-      setIsOpen(false);
+      setIsOpen(false)
       setIsCollapsed(false);
     } else if (device.type === 'tablet') {
       setIsOpen(true);
@@ -172,8 +172,8 @@ export const useSidebarState = () => {
     toggle,
     close,
     device,
-  };
-};
+  }
+}
 
 // Touch gesture detection hook
 export const useSwipeGesture = (
@@ -182,7 +182,7 @@ export const useSwipeGesture = (
   threshold = 50
 ) => {
   useEffect(() => {
-    const element = elementRef.current;
+    const element = elementRef.current
     if (!element) return;
 
     let startX = 0;
@@ -194,7 +194,7 @@ export const useSwipeGesture = (
       startX = touch.clientX;
       startY = touch.clientY;
       startTime = Date.now();
-    };
+    }
 
     const handleTouchEnd = (e: TouchEvent) => {
       const touch = e.changedTouches[0];
@@ -207,7 +207,7 @@ export const useSwipeGesture = (
       const deltaTime = endTime - startTime;
 
       // Must be a quick gesture (less than 300ms) and move enough distance
-      if (deltaTime > 300) return;
+      if (deltaTime > 300) return
 
       const absDeltaX = Math.abs(deltaX);
       const absDeltaY = Math.abs(deltaY);
@@ -217,7 +217,7 @@ export const useSwipeGesture = (
       } else if (absDeltaY > threshold && absDeltaY > absDeltaX) {
         onSwipe(deltaY > 0 ? 'down' : 'up');
       }
-    };
+    }
 
     element.addEventListener('touchstart', handleTouchStart, { passive: true });
     element.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -225,15 +225,15 @@ export const useSwipeGesture = (
     return () => {
       element.removeEventListener('touchstart', handleTouchStart);
       element.removeEventListener('touchend', handleTouchEnd);
-    };
+    }
   }, [elementRef, onSwipe, threshold]);
-};
+}
 
 // Keyboard shortcuts hook
 export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase();
+      const key = event.key.toLowerCase()
       const ctrl = event.ctrlKey || event.metaKey;
       const shift = event.shiftKey;
       const alt = event.altKey;
@@ -249,23 +249,23 @@ export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
         event.preventDefault();
         action();
       }
-    };
+    }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [shortcuts]);
-};
+}
 
 // Viewport dimensions hook
 export const useViewport = () => {
   const [viewport, setViewport] = useState(() => {
     if (typeof window === 'undefined') {
-      return { width: 1024, height: 768 };
+      return { width: 1024, height: 768 }
     }
     return {
       width: window.innerWidth,
       height: window.innerHeight,
-    };
+    }
   });
 
   useEffect(() => {
@@ -274,14 +274,14 @@ export const useViewport = () => {
         width: window.innerWidth,
         height: window.innerHeight,
       });
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return viewport;
-};
+}
 
 // Safe area insets hook (for devices with notches, etc.)
 export const useSafeAreaInsets = () => {
@@ -290,7 +290,7 @@ export const useSafeAreaInsets = () => {
     right: 0,
     bottom: 0,
     left: 0,
-  });
+  })
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -303,7 +303,7 @@ export const useSafeAreaInsets = () => {
         bottom: parseInt(style.getPropertyValue('--safe-area-inset-bottom') || '0'),
         left: parseInt(style.getPropertyValue('--safe-area-inset-left') || '0'),
       });
-    };
+    }
 
     updateInsets();
     window.addEventListener('resize', updateInsets);
@@ -311,4 +311,4 @@ export const useSafeAreaInsets = () => {
   }, []);
 
   return insets;
-};
+}

@@ -13,7 +13,7 @@ export async function GET(
 ) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { channelId } = await params;
+      const { channelId } = await params
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -28,7 +28,7 @@ export async function GET(
 
         return ApiResponseFormatter.success(messages);
       } catch (error) {
-        // console.error('Failed to fetch messages:', error);
+        // console.error('Failed to fetch messages:', error)
         return ApiResponseFormatter.error(
           'CHAT_ERROR',
           error instanceof Error ? error.message : 'Failed to fetch messages',
@@ -46,7 +46,7 @@ const sendMessageSchema = z.object({
   type: z.nativeEnum(ChatMessageType).optional(),
   attachments: z.array(z.any()).optional(),
   parentId: z.string().optional(),
-});
+})
 
 export async function POST(
   req: NextRequest,
@@ -82,7 +82,7 @@ export async function POST(
           });
         }
 
-        // console.error('Failed to send message:', error);
+        // console.error('Failed to send message:', error)
         return ApiResponseFormatter.error(
           'CHAT_ERROR',
           error instanceof Error ? error.message : 'Failed to send message',

@@ -6,18 +6,18 @@ export type {
   ModelPerformance,
   ABTestExperiment,
   ModelDeployment,
-} from '@/services/CustomModelTrainingService';
+} from '@/services/CustomModelTrainingService'
 
 // Import types for type guards
 import type {
   TrainingJob,
   KnowledgeBase,
   ModelDeployment,
-} from '@/services/CustomModelTrainingService';
+} from '@/services/CustomModelTrainingService'
 
 // Extended training system types
 export interface ModelTrainingPipeline {
-  id: string;
+  id: string
   name: string;
   organizationId: string;
   stages: PipelineStage[];
@@ -207,7 +207,7 @@ export interface ResourceRequirements {
 
 // Advanced training configurations
 export interface AdvancedTrainingConfig {
-  distributedTraining: DistributedTrainingConfig;
+  distributedTraining: DistributedTrainingConfig
   checkpointStrategy: CheckpointStrategy;
   optimizationStrategy: OptimizationStrategy;
   regularizationConfig: RegularizationConfig;
@@ -319,7 +319,7 @@ export interface LossWeightingStrategy {
 
 // Model evaluation and validation
 export interface EvaluationSuite {
-  id: string;
+  id: string
   name: string;
   description: string;
   evaluations: ModelEvaluation[];
@@ -484,7 +484,7 @@ export interface DistributionConfig {
 
 // Model lifecycle management
 export interface ModelLifecycle {
-  modelId: string;
+  modelId: string
   stages: LifecycleStage[];
   transitions: LifecycleTransition[];
   governance: GovernanceConfig;
@@ -674,7 +674,7 @@ export interface WorkflowNotification {
 
 // Integration and API types
 export interface ModelRegistry {
-  id: string;
+  id: string
   name: string;
   description: string;
   models: RegisteredModel[];
@@ -806,8 +806,8 @@ export interface ApiKeyAccess {
 export const isTrainingJob = (obj: unknown): obj is TrainingJob => {
   return (
     typeof obj === 'object' && obj !== null && 'id' in obj && 'status' in obj && 'config' in obj
-  );
-};
+  )
+}
 
 export const isKnowledgeBase = (obj: unknown): obj is KnowledgeBase => {
   return (
@@ -817,10 +817,10 @@ export const isKnowledgeBase = (obj: unknown): obj is KnowledgeBase => {
     'documents' in obj &&
     'embeddings' in obj
   );
-};
+}
 
 export const isModelDeployment = (obj: unknown): obj is ModelDeployment => {
   return (
     typeof obj === 'object' && obj !== null && 'id' in obj && 'modelId' in obj && 'status' in obj
   );
-};
+}

@@ -1,7 +1,9 @@
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Bot, MessageSquare, Sparkles, CheckCircle } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import { CheckCircle } from 'lucide-react';
 
 export const ARIAChatSummary = () => {
   return (
@@ -264,4 +266,4 @@ export const ARIAChatSummary = () => {
       </DaisyCard>
     </div>
   );
-}; 
+} 

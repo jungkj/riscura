@@ -51,7 +51,7 @@ const riskConfig = {
     minimalClassName: 'text-red-800',
     pulseColor: 'bg-red-500'
   }
-};
+}
 
 const sizeConfig = {
   sm: {
@@ -69,7 +69,7 @@ const sizeConfig = {
     icon: 'w-4 h-4',
     pulse: 'w-2.5 h-2.5'
   }
-};
+}
 
 export const RiskBadge: FC<RiskBadgeProps> = ({
   level,
@@ -94,7 +94,7 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
       default:
         return config.className;
     }
-  };
+  }
 
   return (
     <DaisyBadge 
@@ -127,12 +127,12 @@ export const RiskBadge: FC<RiskBadgeProps> = ({
       )}
     </DaisyBadge>
   );
-};
+}
 
 // Utility function to get risk level from score
 export const getRiskLevelFromScore = (score: number): RiskLevel => {
-  if (score >= 20) return 'critical';
+  if (score >= 20) return 'critical'
   if (score >= 15) return 'high';
   if (score >= 8) return 'medium';
   return 'low';
-}; 
+} 

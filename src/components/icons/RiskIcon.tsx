@@ -17,4 +17,4 @@ export const RiskIcon = (props: LucideProps) => {
       <path d="m2 12 8-8v5h12l-8 8v-5H2Z" />
     </svg>
   );
-};
+}

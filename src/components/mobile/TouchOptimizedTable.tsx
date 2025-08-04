@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -11,6 +11,7 @@ import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import {
+import { DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -111,23 +112,23 @@ export default function TouchOptimizedTable({
   // Pull to refresh gesture
   const pullToRefreshBind = useGesture({
     onDrag: ({ movement: [, my], velocity: [, vy], direction: [, dy], cancel }) => {
-      if (!pullToRefresh || !onRefresh) return;
+      if (!pullToRefresh || !onRefresh) return
       
       // Only trigger on downward swipe from top
       if (dy > 0 && my > 80 && vy > 0.5 && scrollRef.current?.scrollTop === 0) {
-        setIsRefreshing(true);
+        setIsRefreshing(true)
         onRefresh();
         cancel();
         
         // Reset refreshing state after animation
-        setTimeout(() => setIsRefreshing(false), 1000);
+        setTimeout(() => setIsRefreshing(false), 1000)
       }
     }
   });
   
   // Filter and sort data
   const processedData = useMemo(() => {
-    let _result = [...data];
+    let _result = [...data]
     
     // Apply search filter
     if (searchQuery) {
@@ -135,7 +136,7 @@ export default function TouchOptimizedTable({
         columns.some(column =>
           String(row[column.key] || '').toLowerCase().includes(searchQuery.toLowerCase())
         )
-      );
+      )
     }
     
     // Apply column filters
@@ -143,14 +144,14 @@ export default function TouchOptimizedTable({
       if (value) {
         result = result.filter(row =>
           String(row[key] || '').toLowerCase().includes(value.toLowerCase())
-        );
+        )
       }
     });
     
     // Apply sorting
     if (sortColumn) {
       result.sort((a, b) => {
-        const aVal = a[sortColumn];
+        const aVal = a[sortColumn]
         const bVal = b[sortColumn];
         
         let comparison = 0;
@@ -165,14 +166,14 @@ export default function TouchOptimizedTable({
   }, [data, searchQuery, filters, sortColumn, sortDirection, columns]);
   
   // Pagination
-  const totalPages = Math.ceil(processedData.length / pageSize);
+  const totalPages = Math.ceil(processedData.length / pageSize)
   const paginatedData = pagination
     ? processedData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
     : processedData;
   
   // Handle row selection
   const handleRowSelect = (rowId: string, checked: boolean) => {
-    const newSelected = new Set(selectedRows);
+    const newSelected = new Set(selectedRows)
     if (checked) {
       newSelected.add(rowId);
     } else {
@@ -184,12 +185,12 @@ export default function TouchOptimizedTable({
       const selectedData = data.filter(row => newSelected.has(row.id));
       onRowSelect(selectedData);
     }
-  };
+  }
   
   // Handle select all
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      const allIds = new Set(paginatedData.map(row => row.id));
+      const allIds = new Set(paginatedData.map(row => row.id))
       setSelectedRows(allIds);
       if (onRowSelect) {
         onRowSelect(paginatedData);
@@ -200,11 +201,11 @@ export default function TouchOptimizedTable({
         onRowSelect([]);
       }
     }
-  };
+  }
   
   // Handle sorting
   const handleSort = (column: string) => {
-    if (!sortable) return;
+    if (!sortable) return
     
     let newDirection: 'asc' | 'desc' = 'asc';
     if (sortColumn === column && sortDirection === 'asc') {
@@ -217,29 +218,29 @@ export default function TouchOptimizedTable({
     if (onSort) {
       onSort(column, newDirection);
     }
-  };
+  }
   
   // Handle filter change
   const handleFilterChange = (column: string, value: string) => {
-    const newFilters = { ...filters, [column]: value };
+    const newFilters = { ...filters, [column]: value }
     setFilters(newFilters);
     setCurrentPage(1); // Reset to first page
     
     if (onFilter) {
       onFilter(newFilters);
     }
-  };
+  }
   
   // Clear all filters
   const clearFilters = () => {
-    setFilters({});
+    setFilters({})
     setSearchQuery('');
     setCurrentPage(1);
     
     if (onFilter) {
       onFilter({});
     }
-  };
+  }
   
   // Render status badge
   const renderStatusBadge = (status: string) => {
@@ -251,10 +252,10 @@ export default function TouchOptimizedTable({
       high: { variant: 'destructive' as const, label: 'High' },
       medium: { variant: 'outline' as const, label: 'Medium' },
       low: { variant: 'secondary' as const, label: 'Low' }
-    };
+    }
     
     const config = statusConfig[status.toLowerCase() as keyof typeof statusConfig] || 
-                  { variant: 'secondary' as const, label: status };
+                  { variant: 'secondary' as const, label: status }
 
   return (
     <DaisyBadge variant={config.variant} className="text-xs" >
@@ -262,11 +263,11 @@ export default function TouchOptimizedTable({
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
   
   // Render cell content
   const renderCellContent = (column: TableColumn, row: TableRow) => {
-    const value = row[column.key];
+    const value = row[column.key]
     
     if (column.render) {
       return column.render(value, row);
@@ -283,11 +284,11 @@ export default function TouchOptimizedTable({
       default:
         return value || '-';
     }
-  };
+  }
   
   // Render mobile card view
   const renderMobileCard = (row: TableRow) => {
-    const isSelected = selectedRows.has(row.id);
+    const isSelected = selectedRows.has(row.id)
     const isExpanded = expandedRow === row.id;
     
     return (
@@ -412,7 +413,7 @@ handleRowSelect(row.id, checked as boolean)}
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
   
   return (
     <div className={`w-full ${className}`}>

@@ -1,15 +1,15 @@
 import { TimeWindow } from '@/types/proactive-monitoring.types';
-// import { Risk } from '@/types';
+// import { Risk } from '@/types'
 import { generateId } from '@/lib/utils';
 
 // Import AI and analysis services
-// import { AIService } from './AIService';
+// import { AIService } from './AIService'
 import { TrendAnalysisService } from './TrendAnalysisService';
-// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService'
 
 // Define missing interfaces locally
 export interface ConfidenceInterval {
-  lower: number;
+  lower: number
   upper: number;
 }
 
@@ -33,7 +33,7 @@ export interface IndustryFactor {
 
 // Core predictive modeling interfaces
 export interface TimeSeriesPoint {
-  timestamp: Date;
+  timestamp: Date
   value: number;
   metadata?: Record<string, unknown>;
 }
@@ -73,7 +73,7 @@ export interface ModelValidationMetrics {
 }
 
 export interface BacktestResult {
-  period: { start: Date; end: Date };
+  period: { start: Date; end: Date }
   predictions: number[];
   actuals: number[];
   accuracy: number;
@@ -143,14 +143,14 @@ export interface SimulationResults {
     standardDeviation: number;
     percentiles: Record<number, number>;
     confidenceIntervals: Record<number, ConfidenceInterval>;
-  };
+  }
   scenarios: SimulationScenario[];
   riskMetrics: {
     valueAtRisk: Record<number, number>;
     conditionalValueAtRisk: Record<number, number>;
     maxDrawdown: number;
     probabilityOfLoss: number;
-  };
+  }
   sensitivityAnalysis: SensitivityAnalysis[];
 }
 
@@ -196,7 +196,7 @@ export interface ExternalFactor {
     values: number[];
     timestamps: Date[];
     confidence: number[];
-  };
+  }
 }
 
 export interface RiskForecast {
@@ -264,7 +264,7 @@ export interface ForecastRecommendation {
     resources: string[];
     timeline: string;
     cost: number;
-  };
+  }
   successMetrics: string[];
 }
 
@@ -275,26 +275,26 @@ export interface ModelConfiguration {
     outlierTreatment: 'remove' | 'cap' | 'interpolate' | 'keep';
     smoothing: boolean;
     differencing: number;
-  };
+  }
   monteCarloConfig: {
     iterations: number;
     confidenceLevels: number[];
     correlationThreshold: number;
     convergenceThreshold: number;
     seedValue?: number;
-  };
+  }
   externalDataConfig: {
     sources: string[];
     lookbackPeriod: number;
     weightingMethod: 'equal' | 'decay' | 'importance' | 'correlation';
     updateThreshold: number;
-  };
+  }
   validationConfig: {
     backtestPeriods: number;
     crossValidationFolds: number;
     outOfSampleRatio: number;
     retrainingFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-  };
+  }
 }
 
 export class PredictiveRiskModelingService {
@@ -333,7 +333,7 @@ export class PredictiveRiskModelingService {
       outOfSampleRatio: 0.2,
       retrainingFrequency: 'monthly',
     },
-  };
+  }
 
   constructor(
     aiService?: AIService,
@@ -356,20 +356,20 @@ export class PredictiveRiskModelingService {
     config?: Partial<ModelConfiguration>
   ): Promise<RiskForecast> {
     try {
-      const effectiveConfig = { ...this.defaultConfig, ...config };
+      const effectiveConfig = { ...this.defaultConfig, ...config }
 
       // Prepare and validate data
-      const processedData = await this.preprocessTimeSeriesData(historicalData, effectiveConfig);
+      const processedData = await this.preprocessTimeSeriesData(historicalData, effectiveConfig)
 
       // Get external factors
-      const externalFactors = await this.getRelevantExternalFactors(risk);
+      const externalFactors = await this.getRelevantExternalFactors(risk)
 
       // Train and select best model
       const selectedModel = await this.selectBestModel(
         processedData,
         externalFactors,
         effectiveConfig
-      );
+      )
 
       // Generate predictions
       const predictions = await this.generateTimeSeriesPredictions(
@@ -377,7 +377,7 @@ export class PredictiveRiskModelingService {
         processedData,
         forecastHorizon,
         externalFactors
-      );
+      )
 
       // Run Monte Carlo simulation for scenarios
       const scenarios = await this.generateMonteCarloScenarios(
@@ -385,10 +385,10 @@ export class PredictiveRiskModelingService {
         processedData,
         externalFactors,
         effectiveConfig
-      );
+      )
 
       // Quantify uncertainty
-      const uncertainty = await this.quantifyUncertainty(selectedModel, predictions, scenarios);
+      const uncertainty = await this.quantifyUncertainty(selectedModel, predictions, scenarios)
 
       // Generate recommendations
       const recommendations = await this.generateForecastRecommendations(
@@ -396,7 +396,7 @@ export class PredictiveRiskModelingService {
         predictions,
         scenarios,
         uncertainty
-      );
+      )
 
       const forecast: RiskForecast = {
         id: generateId('risk-forecast'),
@@ -411,11 +411,11 @@ export class PredictiveRiskModelingService {
         confidence: this.calculateOverallConfidence(predictions, uncertainty),
         generatedAt: new Date(),
         validUntil: this.calculateValidityPeriod(forecastHorizon),
-      };
+      }
 
       return forecast;
     } catch (error) {
-      // console.error('Error generating risk forecast:', error);
+      // console.error('Error generating risk forecast:', error)
       throw new Error('Failed to generate risk forecast');
     }
   }
@@ -443,23 +443,23 @@ export class PredictiveRiskModelingService {
         confidenceLevels: [90, 95, 99],
         createdAt: new Date(),
         executionTime: 0,
-      };
+      }
 
       // Run simulation iterations
-      const results = await this.runSimulationIterations(simulation);
+      const results = await this.runSimulationIterations(simulation)
 
       // Analyze results
-      simulation.results = await this.analyzeSimulationResults(results, simulation);
+      simulation.results = await this.analyzeSimulationResults(results, simulation)
       simulation.scenarios = await this.generateScenariosFromSimulation(results, simulation);
 
       simulation.executionTime = Date.now() - startTime;
 
       // Cache simulation
-      this.simulations.set(simulation.id, simulation);
+      this.simulations.set(simulation.id, simulation)
 
       return simulation;
     } catch (error) {
-      // console.error('Error executing Monte Carlo simulation:', error);
+      // console.error('Error executing Monte Carlo simulation:', error)
       throw new Error('Failed to execute Monte Carlo simulation');
     }
   }
@@ -473,22 +473,22 @@ export class PredictiveRiskModelingService {
     config?: Partial<ModelConfiguration>
   ): Promise<PredictiveModel> {
     try {
-      const effectiveConfig = { ...this.defaultConfig, ...config };
+      const effectiveConfig = { ...this.defaultConfig, ...config }
 
       // Prepare training data
       const { trainingData, validationData } = await this.splitTrainingData(
         data,
         effectiveConfig.validationConfig.outOfSampleRatio
-      );
+      )
 
       // Create feature matrix
-      const features = await this.createFeatureMatrix(trainingData, externalFactors);
+      const features = await this.createFeatureMatrix(trainingData, externalFactors)
 
       // Train model based on type
-      const model = await this.trainModel(modelType, features, trainingData);
+      const model = await this.trainModel(modelType, features, trainingData)
 
       // Validate model
-      const validationMetrics = await this.validateModel(model, validationData, features);
+      const validationMetrics = await this.validateModel(model, validationData, features)
 
       // Create model object
       const predictiveModel: PredictiveModel = {
@@ -503,14 +503,14 @@ export class PredictiveRiskModelingService {
         accuracy: validationMetrics.accuracy,
         confidence: this.calculateModelConfidence(validationMetrics),
         status: 'trained',
-      };
+      }
 
       // Cache model
-      this.models.set(predictiveModel.id, predictiveModel);
+      this.models.set(predictiveModel.id, predictiveModel)
 
       return predictiveModel;
     } catch (error) {
-      // console.error('Error training predictive model:', error);
+      // console.error('Error training predictive model:', error)
       throw new Error('Failed to train predictive model');
     }
   }
@@ -526,9 +526,9 @@ export class PredictiveRiskModelingService {
 
       await Promise.allSettled(updatePromises);
 
-      // console.log('External factors updated successfully');
+      // console.log('External factors updated successfully')
     } catch (error) {
-      // console.error('Error updating external factors:', error);
+      // console.error('Error updating external factors:', error)
       throw new Error('Failed to update external factors');
     }
   }
@@ -544,32 +544,32 @@ export class PredictiveRiskModelingService {
       }
 
       // Test current model performance
-      const currentPerformance = await this.testModelPerformance(model, newData);
+      const currentPerformance = await this.testModelPerformance(model, newData)
 
       // Check if retraining is needed
-      const performanceThreshold = 0.8;
+      const performanceThreshold = 0.8
       if (currentPerformance.accuracy < performanceThreshold) {
-        // console.log(`Model ${modelId} performance degraded, retraining...`);
+        // console.log(`Model ${modelId} performance degraded, retraining...`)
 
         // Combine old and new data
-        const combinedData = [...model.trainingData, ...newData];
+        const combinedData = [...model.trainingData, ...newData]
 
         // Retrain model
-        const retrainedModel = await this.trainPredictiveModel(combinedData, model.type);
+        const retrainedModel = await this.trainPredictiveModel(combinedData, model.type)
 
         // Update model
         this.models.set(modelId, {
           ...retrainedModel,
           id: modelId,
           version: this.incrementVersion(model.version),
-        });
+        })
 
         return true;
       }
 
       return false;
     } catch (error) {
-      // console.error('Error validating and retraining model:', error);
+      // console.error('Error validating and retraining model:', error)
       throw new Error('Failed to validate and retrain model');
     }
   }
@@ -586,7 +586,7 @@ export class PredictiveRiskModelingService {
 
       return model.validationMetrics;
     } catch (error) {
-      // console.error('Error getting model performance:', error);
+      // console.error('Error getting model performance:', error)
       throw new Error('Failed to get model performance');
     }
   }
@@ -596,26 +596,26 @@ export class PredictiveRiskModelingService {
   private async preprocessTimeSeriesData(_data: TimeSeriesPoint[],
     config: ModelConfiguration
   ): Promise<TimeSeriesPoint[]> {
-    let processedData = [...data];
+    let processedData = [...data]
 
     // Sort by timestamp
-    processedData.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    processedData.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
 
     // Handle outliers
     if (config.timeSeriesConfig.outlierTreatment !== 'keep') {
       processedData = await this.handleOutliers(
         processedData,
         config.timeSeriesConfig.outlierTreatment
-      );
+      )
     }
 
     // Apply smoothing if enabled
     if (config.timeSeriesConfig.smoothing) {
-      processedData = await this.applySmoothing(processedData);
+      processedData = await this.applySmoothing(processedData)
     }
 
     // Handle missing values
-    processedData = await this.interpolateMissingValues(processedData);
+    processedData = await this.interpolateMissingValues(processedData)
 
     return processedData;
   }
@@ -631,7 +631,7 @@ export class PredictiveRiskModelingService {
         );
         relevantFactors.push(...filteredFactors);
       } catch (error) {
-        // console.warn(`Failed to fetch data from source ${sourceId}:`, error);
+        // console.warn(`Failed to fetch data from source ${sourceId}:`, error)
       }
     }
 
@@ -654,7 +654,7 @@ export class PredictiveRiskModelingService {
     );
 
     // Select model with best validation performance
-    return models.reduce((best, current) => (current.accuracy > best.accuracy ? current : best));
+    return models.reduce((best, current) => (current.accuracy > best.accuracy ? current : best))
   }
 
   private async generateTimeSeriesPredictions(_model: PredictiveModel,
@@ -667,7 +667,7 @@ export class PredictiveRiskModelingService {
     const endDate = this.calculateEndDate(startDate, horizon);
 
     // Generate predictions for each time step
-    let currentDate = new Date(startDate);
+    let currentDate = new Date(startDate)
     while (currentDate <= endDate) {
       const prediction = await this.generateSinglePrediction(
         model,
@@ -690,13 +690,13 @@ export class PredictiveRiskModelingService {
     config: ModelConfiguration
   ): Promise<ForecastScenario[]> {
     // Create simulation variables from risk and external factors
-    const variables = await this.createSimulationVariables(risk, data, externalFactors);
+    const variables = await this.createSimulationVariables(risk, data, externalFactors)
 
     // Run Monte Carlo simulation
     const simulation = await this.executeMonteCarloSimulation(
       variables,
       config.monteCarloConfig.iterations
-    );
+    )
 
     // Convert simulation results to forecast scenarios
     return simulation.scenarios.map((scenario) => ({
@@ -709,7 +709,7 @@ export class PredictiveRiskModelingService {
       triggers: [`Scenario ${scenario.name} triggers`],
       mitigationStrategies: [`Mitigation for ${scenario.name}`],
       timeframe: '3-6 months',
-    }));
+    }))
   }
 
   private async quantifyUncertainty(_model: PredictiveModel,
@@ -755,7 +755,7 @@ export class PredictiveRiskModelingService {
         upper:
           predictions.reduce((sum, p) => sum + p.confidenceInterval.upper, 0) / predictions.length,
       },
-    };
+    }
   }
 
   private async generateForecastRecommendations(_risk: Risk,
@@ -766,7 +766,7 @@ export class PredictiveRiskModelingService {
     const recommendations: ForecastRecommendation[] = [];
 
     // Analyze trend direction
-    const trendDirection = this.analyzeTrendDirection(predictions);
+    const trendDirection = this.analyzeTrendDirection(predictions)
 
     if (trendDirection === 'increasing') {
       recommendations.push({
@@ -812,7 +812,7 @@ export class PredictiveRiskModelingService {
           cost: 25000,
         },
         successMetrics: ['Reduced uncertainty metrics', 'Improved model accuracy'],
-      });
+      })
     }
 
     return recommendations;
@@ -840,7 +840,7 @@ export class PredictiveRiskModelingService {
   private async calculateCorrelationMatrix(
     variables: SimulationVariable[]
   ): Promise<CorrelationMatrix> {
-    const n = variables.length;
+    const n = variables.length
     const matrix: number[][] = Array(n)
       .fill(null)
       .map(() => Array(n).fill(0));
@@ -869,7 +869,7 @@ export class PredictiveRiskModelingService {
       variables: variables.map((v) => v.name),
       matrix,
       significance,
-    };
+    }
   }
 
   private async calculatePearsonCorrelation(
@@ -879,7 +879,7 @@ export class PredictiveRiskModelingService {
     const n = Math.min(data1.length, data2.length);
 
     if (n < 2) {
-      return { coefficient: 0, significance: 0 };
+      return { coefficient: 0, significance: 0 }
     }
 
     const mean1 = data1.slice(0, n).reduce((sum, val) => sum + val, 0) / n;
@@ -901,16 +901,16 @@ export class PredictiveRiskModelingService {
     const denominator = Math.sqrt(sum1Sq * sum2Sq);
 
     if (denominator === 0) {
-      return { coefficient: 0, significance: 0 };
+      return { coefficient: 0, significance: 0 }
     }
 
     const coefficient = numerator / denominator;
 
     // Calculate t-statistic for significance
-    const tStat = coefficient * Math.sqrt((n - 2) / (1 - coefficient * coefficient));
+    const tStat = coefficient * Math.sqrt((n - 2) / (1 - coefficient * coefficient))
     const significance = Math.abs(tStat) > 2 ? 0.95 : 0.8; // Simplified significance calculation
 
-    return { coefficient, significance };
+    return { coefficient, significance }
   }
 
   private async runSimulationIterations(_simulation: MonteCarloSimulation): Promise<number[][]> {
@@ -923,7 +923,7 @@ export class PredictiveRiskModelingService {
       const samples = await this.generateCorrelatedSamples(
         simulation.variables,
         simulation.correlations
-      );
+      )
 
       // Calculate outcomes for this iteration
       for (let i = 0; i < simulation.variables.length; i++) {
@@ -931,7 +931,7 @@ export class PredictiveRiskModelingService {
         const sample = samples[i];
 
         // Apply variable-specific transformations
-        const transformedValue = await this.applyVariableTransformation(variable, sample);
+        const transformedValue = await this.applyVariableTransformation(variable, sample)
         iterationResults.push(transformedValue);
       }
 
@@ -951,10 +951,10 @@ export class PredictiveRiskModelingService {
     );
 
     // Apply Cholesky decomposition for correlation
-    const choleskyMatrix = this.choleskyDecomposition(correlations.matrix);
+    const choleskyMatrix = this.choleskyDecomposition(correlations.matrix)
 
     // Transform independent samples to correlated samples
-    const correlatedSamples: number[] = Array(n).fill(0);
+    const correlatedSamples: number[] = Array(n).fill(0)
 
     for (let i = 0; i < n; i++) {
       for (let j = 0; j <= i; j++) {
@@ -998,7 +998,7 @@ export class PredictiveRiskModelingService {
 
   private generateNormalSample(mean: number, stdDev: number): number {
     // Box-Muller transformation
-    const u1 = Math.random();
+    const u1 = Math.random()
     const u2 = Math.random();
 
     const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
@@ -1048,11 +1048,11 @@ export class PredictiveRiskModelingService {
     sample: number
   ): Promise<number> {
     // Apply any variable-specific transformations
-    let transformedValue = sample;
+    let transformedValue = sample
 
     // Ensure value is within reasonable bounds
     if (variable.distribution.min !== undefined && transformedValue < variable.distribution.min) {
-      transformedValue = variable.distribution.min;
+      transformedValue = variable.distribution.min
     }
 
     if (variable.distribution.max !== undefined && transformedValue > variable.distribution.max) {
@@ -1072,7 +1072,7 @@ export class PredictiveRiskModelingService {
     const _summaries = Array(numVariables)
       .fill(null)
       .map((_, varIndex) => {
-        const values = results.map((iteration) => iteration[varIndex]);
+        const values = results.map((iteration) => iteration[varIndex])
 
         return {
           mean: values.reduce((sum, val) => sum + val, 0) / numIterations,
@@ -1080,11 +1080,11 @@ export class PredictiveRiskModelingService {
           percentiles: this.calculatePercentiles(values, [5, 10, 25, 50, 75, 90, 95]),
           min: Math.min(...values),
           max: Math.max(...values),
-        };
+        }
       });
 
     // Calculate overall portfolio/combined metrics
-    const combinedValues = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0));
+    const combinedValues = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0))
 
     const overallMean = combinedValues.reduce((sum, val) => sum + val, 0) / numIterations;
     const overallStdDev = this.calculateStandardDeviation(combinedValues);
@@ -1095,13 +1095,13 @@ export class PredictiveRiskModelingService {
       conditionalValueAtRisk: this.calculateConditionalValueAtRisk(combinedValues, [90, 95, 99]),
       maxDrawdown: this.calculateMaxDrawdown(combinedValues),
       probabilityOfLoss: combinedValues.filter((val) => val < 0).length / numIterations,
-    };
+    }
 
     // Perform sensitivity analysis
     const sensitivityAnalysis = await this.performSensitivityAnalysis(
       results,
       simulation.variables
-    );
+    )
 
     return {
       summary: {
@@ -1114,7 +1114,7 @@ export class PredictiveRiskModelingService {
       scenarios: [], // Will be populated by generateScenariosFromSimulation
       riskMetrics,
       sensitivityAnalysis,
-    };
+    }
   }
 
   private calculateStandardDeviation(values: number[]): number {
@@ -1126,7 +1126,7 @@ export class PredictiveRiskModelingService {
 
   private calculatePercentiles(values: number[], percentiles: number[]): Record<number, number> {
     const sorted = [...values].sort((a, b) => a - b);
-    const result: Record<number, number> = {};
+    const result: Record<number, number> = {}
 
     for (const percentile of percentiles) {
       const index = Math.floor((percentile / 100) * (sorted.length - 1));
@@ -1140,7 +1140,7 @@ export class PredictiveRiskModelingService {
     values: number[],
     confidenceLevels: number[]
   ): Record<number, ConfidenceInterval> {
-    const result: Record<number, ConfidenceInterval> = {};
+    const result: Record<number, ConfidenceInterval> = {}
 
     for (const level of confidenceLevels) {
       const alpha = (100 - level) / 2;
@@ -1149,7 +1149,7 @@ export class PredictiveRiskModelingService {
       result[level] = {
         lower: percentiles[alpha],
         upper: percentiles[100 - alpha],
-      };
+      }
     }
 
     return result;
@@ -1159,7 +1159,7 @@ export class PredictiveRiskModelingService {
     values: number[],
     confidenceLevels: number[]
   ): Record<number, number> {
-    const result: Record<number, number> = {};
+    const result: Record<number, number> = {}
 
     for (const level of confidenceLevels) {
       const percentiles = this.calculatePercentiles(values, [100 - level]);
@@ -1173,7 +1173,7 @@ export class PredictiveRiskModelingService {
     values: number[],
     confidenceLevels: number[]
   ): Record<number, number> {
-    const result: Record<number, number> = {};
+    const result: Record<number, number> = {}
 
     for (const level of confidenceLevels) {
       const varThreshold = this.calculateValueAtRisk(values, [level])[level];
@@ -1213,7 +1213,7 @@ export class PredictiveRiskModelingService {
     const sensitivity: SensitivityAnalysis[] = [];
 
     // Calculate correlation between each variable and the outcome
-    const outcomes = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0));
+    const outcomes = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0))
 
     for (let i = 0; i < variables.length; i++) {
       const variableValues = results.map((iteration) => iteration[i]);
@@ -1229,7 +1229,7 @@ export class PredictiveRiskModelingService {
     }
 
     // Sort by importance
-    return sensitivity.sort((a, b) => b.importance - a.importance);
+    return sensitivity.sort((a, b) => b.importance - a.importance)
   }
 
   private async generateScenariosFromSimulation(_results: number[][],
@@ -1238,7 +1238,7 @@ export class PredictiveRiskModelingService {
     const scenarios: SimulationScenario[] = [];
 
     // Define scenario thresholds
-    const outcomes = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0));
+    const outcomes = results.map((iteration) => iteration.reduce((sum, val) => sum + val, 0))
     const percentiles = this.calculatePercentiles(outcomes, [10, 25, 75, 90]);
 
     // Best case scenario (90th percentile)
@@ -1258,7 +1258,7 @@ export class PredictiveRiskModelingService {
           impactDescription: 'Low risk with favorable outcomes',
         },
       ],
-    });
+    })
 
     // Worst case scenario (10th percentile)
     scenarios.push({
@@ -1277,7 +1277,7 @@ export class PredictiveRiskModelingService {
           impactDescription: 'High risk with adverse outcomes',
         },
       ],
-    });
+    })
 
     // Most likely scenario (median)
     scenarios.push({
@@ -1296,7 +1296,7 @@ export class PredictiveRiskModelingService {
           impactDescription: 'Moderate risk with expected outcomes',
         },
       ],
-    });
+    })
 
     return scenarios;
   }
@@ -1306,7 +1306,7 @@ export class PredictiveRiskModelingService {
     targetOutcome: number
   ): Record<string, number> {
     // Find the iteration closest to the target outcome
-    let closestIndex = 0;
+    let closestIndex = 0
     let closestDiff = Math.abs(outcomes[0] - targetOutcome);
 
     for (let i = 1; i < outcomes.length; i++) {
@@ -1318,7 +1318,7 @@ export class PredictiveRiskModelingService {
     }
 
     // Return the variable values for that iteration
-    const variables: Record<string, number> = {};
+    const variables: Record<string, number> = {}
     const closestIteration = results[closestIndex];
 
     closestIteration.forEach((value, index) => {
@@ -1336,11 +1336,11 @@ export class PredictiveRiskModelingService {
     externalFactors: ExternalFactor[]
   ): Promise<ForecastPrediction> {
     // Simplified prediction generation
-    const lastValue = data[data.length - 1]?.value || 0;
+    const lastValue = data[data.length - 1]?.value || 0
     const trend = await this.calculateSimpleTrend(data.slice(-10)); // Use last 10 points
 
     // Apply external factor adjustments
-    let adjustment = 0;
+    let adjustment = 0
     for (const factor of externalFactors) {
       adjustment += factor.impact * factor.value * 0.1; // Simplified adjustment
     }
@@ -1358,7 +1358,7 @@ export class PredictiveRiskModelingService {
       probability: confidence,
       factors: externalFactors.map((f) => f.name),
       methodology: model.type,
-    };
+    }
   }
 
   private async calculateSimpleTrend(_data: TimeSeriesPoint[]): Promise<number> {
@@ -1401,7 +1401,7 @@ export class PredictiveRiskModelingService {
     const variables: SimulationVariable[] = [];
 
     // Create variable for the risk itself
-    const riskValues = data.map((d) => d.value);
+    const riskValues = data.map((d) => d.value)
     variables.push({
       name: `Risk_${risk.id}`,
       distribution: {
@@ -1428,14 +1428,14 @@ export class PredictiveRiskModelingService {
         currentValue: factor.value,
         historicalData: factor.forecast.values,
         correlatedWith: [],
-      });
+      })
     }
 
     return variables;
   }
 
   private mapImpactToNumber(impact: 'low' | 'medium' | 'high' | 'critical'): number {
-    const mapping = { low: 1, medium: 2, high: 3, critical: 4 };
+    const mapping = { low: 1, medium: 2, high: 3, critical: 4 }
     return mapping[impact];
   }
 
@@ -1455,7 +1455,7 @@ export class PredictiveRiskModelingService {
 
   private async calculateDataUncertainty(_data: TimeSeriesPoint[]): Promise<number> {
     // Calculate uncertainty based on data quality factors
-    const completeness = data.length > 100 ? 1 : data.length / 100;
+    const completeness = data.length > 100 ? 1 : data.length / 100
     const consistency = await this.calculateDataConsistency(data);
 
     return 1 - completeness * consistency;
@@ -1465,7 +1465,7 @@ export class PredictiveRiskModelingService {
     if (data.length < 2) return 0.5;
 
     // Calculate coefficient of variation as a measure of consistency
-    const values = data.map((d) => d.value);
+    const values = data.map((d) => d.value)
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const stdDev = this.calculateStandardDeviation(values);
 
@@ -1475,7 +1475,7 @@ export class PredictiveRiskModelingService {
 
   private async calculateScenarioUncertainty(scenarios: ForecastScenario[]): Promise<number> {
     // Calculate uncertainty based on scenario variability
-    const probabilities = scenarios.map((s) => s.probability);
+    const probabilities = scenarios.map((s) => s.probability)
     const impacts = scenarios.map((s) => s.impact);
 
     const probVariation = this.calculateStandardDeviation(probabilities);
@@ -1501,10 +1501,10 @@ export class PredictiveRiskModelingService {
   private async updateDataSource(_source: ExternalDataSource): Promise<void> {
     try {
       // Simulate API call to update external data
-      source.lastUpdated = new Date();
-      // console.log(`Updated data source: ${source.name}`);
+      source.lastUpdated = new Date()
+      // console.log(`Updated data source: ${source.name}`)
     } catch (error) {
-      // console.error(`Failed to update data source ${source.name}:`, error);
+      // console.error(`Failed to update data source ${source.name}:`, error)
     }
   }
 
@@ -1555,7 +1555,7 @@ export class PredictiveRiskModelingService {
           relevanceScore: 0.6,
         },
       ],
-    });
+    })
 
     this.externalDataSources.set('market', {
       id: 'market',
@@ -1590,27 +1590,27 @@ export class PredictiveRiskModelingService {
     treatment: string
   ): Promise<TimeSeriesPoint[]> {
     // Implementation would handle outlier detection and treatment
-    return data;
+    return data
   }
 
   private async applySmoothing(_data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
     // Implementation would apply smoothing algorithms
-    return data;
+    return data
   }
 
   private async interpolateMissingValues(_data: TimeSeriesPoint[]): Promise<TimeSeriesPoint[]> {
     // Implementation would interpolate missing values
-    return data;
+    return data
   }
 
   private async fetchExternalData(_source: ExternalDataSource): Promise<ExternalFactor[]> {
     // Implementation would fetch data from external APIs
-    return [];
+    return []
   }
 
   private isFactorRelevantToRisk(_factor: ExternalFactor, risk: Risk): boolean {
     // Implementation would determine factor relevance
-    return factor.impact > 0.5;
+    return factor.impact > 0.5
   }
 
   private async trainModel(
@@ -1619,7 +1619,7 @@ export class PredictiveRiskModelingService {
     data: TimeSeriesPoint[]
   ): Promise<{ parameters: Record<string, unknown> }> {
     // Implementation would train different model types
-    return { parameters: { type } };
+    return { parameters: { type } }
   }
 
   private async validateModel(_model: { parameters: Record<string, unknown> },
@@ -1639,7 +1639,7 @@ export class PredictiveRiskModelingService {
       backtestResults: [],
       crossValidationScore: 0.87,
       predictionInterval: { lower: 0.8, upper: 0.95 },
-    };
+    }
   }
 
   private calculateModelConfidence(metrics: ModelValidationMetrics): number {
@@ -1653,22 +1653,22 @@ export class PredictiveRiskModelingService {
     return {
       trainingData: data.slice(0, splitIndex),
       validationData: data.slice(splitIndex),
-    };
+    }
   }
 
   private async createFeatureMatrix(_data: TimeSeriesPoint[],
     externalFactors: ExternalFactor[]
   ): Promise<number[][]> {
     // Implementation would create feature matrix for ML models
-    return data.map((point) => [point.value, point.timestamp.getTime()]);
+    return data.map((point) => [point.value, point.timestamp.getTime()])
   }
 
   private createTrendAnalysisServiceStub(): TrendAnalysisService {
     // Create a stub service with minimal required implementation
-    const stub = {} as TrendAnalysisService;
+    const stub = {} as TrendAnalysisService
     return stub;
   }
 }
 
 // Export singleton instance
-export const predictiveRiskModelingService = new PredictiveRiskModelingService();
+export const predictiveRiskModelingService = new PredictiveRiskModelingService()

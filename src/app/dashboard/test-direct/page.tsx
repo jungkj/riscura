@@ -13,7 +13,7 @@ export default function TestDirectDashboard() {
       isInitialized,
       hasUser: !!user,
       userEmail: user?.email,
-    });
+    })
   }, [isAuthenticated, isLoading, isInitialized, user]);
 
   return (

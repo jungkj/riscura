@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -31,11 +32,11 @@ import ExportService from '@/services/ExportService';
   MoreHorizontal,
   Target,
   Zap,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== TYPES ==========
 interface SecurityMetric {
-  id: string;
+  id: string
   label: string;
   value: string | number;
   trend?: 'up' | 'down' | 'stable';
@@ -67,7 +68,7 @@ interface ComplianceFramework {
     implemented: number;
     tested: number;
     exceptions: number;
-  };
+  }
   lastAssessment: Date;
   nextAssessment: Date;
   proboIntegrated?: boolean;
@@ -127,7 +128,7 @@ const securityMetrics: SecurityMetric[] = [
     status: 'warning',
     icon: Users,
   }
-];
+]
 
 const threatAlerts: ThreatAlert[] = [
   {
@@ -217,13 +218,13 @@ const complianceFrameworks: ComplianceFramework[] = [
 const SecurityMetricsOverview: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'text-semantic-success border-semantic-success/20 bg-semantic-success/5';
+      case 'excellent': return 'text-semantic-success border-semantic-success/20 bg-semantic-success/5'
       case 'good': return 'text-semantic-success border-semantic-success/20 bg-semantic-success/5';
       case 'warning': return 'text-semantic-warning border-semantic-warning/20 bg-semantic-warning/5';
       case 'critical': return 'text-semantic-error border-semantic-error/20 bg-semantic-error/5';
       default: return 'text-text-secondary border-border bg-surface-secondary';
     }
-  };
+  }
 
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
@@ -231,7 +232,7 @@ const SecurityMetricsOverview: React.FC = () => {
       case 'down': return <TrendingDown className="h-3 w-3 text-semantic-error" />;
       default: return null;
     }
-  };
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-enterprise-4">
@@ -274,7 +275,7 @@ const SecurityMetricsOverview: React.FC = () => {
       })}
     </div>
   );
-};
+}
 
 // ========== THREAT ALERTS ==========
 const ThreatAlertsPanel: React.FC = () => {
@@ -284,7 +285,7 @@ const ThreatAlertsPanel: React.FC = () => {
       'high': 'destructive',
       'medium': 'secondary',
       'low': 'outline',
-    };
+    }
 
     return (
       <DaisyBadge variant={variants[severity]} className="text-caption" >
@@ -292,14 +293,14 @@ const ThreatAlertsPanel: React.FC = () => {
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       'active': 'destructive',
       'investigating': 'secondary',
       'resolved': 'default',
-    };
+    }
 
     return (
       <DaisyBadge variant={variants[status]} className="text-caption" >
@@ -307,7 +308,7 @@ const ThreatAlertsPanel: React.FC = () => {
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   return (
     <ContentCard 
@@ -358,23 +359,23 @@ const ThreatAlertsPanel: React.FC = () => {
         ))}
       </div>
     </ContentCard>
-  );
-};
+  )
+}
 
 // ========== COMPLIANCE FRAMEWORKS ==========
 const ComplianceFrameworksPanel: React.FC = () => {
   const getComplianceColor = (_compliance: number) => {
-    if (compliance >= 95) return 'text-semantic-success';
+    if (compliance >= 95) return 'text-semantic-success'
     if (compliance >= 85) return 'text-semantic-warning';
     return 'text-semantic-error';
-  };
+  }
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       'compliant': 'default',
       'partial': 'secondary',
       'non-compliant': 'destructive',
-    };
+    }
 
     return (
       <DaisyBadge variant={variants[status]} className="text-caption" >
@@ -382,7 +383,7 @@ const ComplianceFrameworksPanel: React.FC = () => {
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   return (
     <ContentCard 
@@ -479,8 +480,8 @@ const ComplianceFrameworksPanel: React.FC = () => {
         ))}
       </div>
     </ContentCard>
-  );
-};
+  )
+}
 
 // ========== SECURITY CONTROLS MONITORING ==========
 const SecurityControlsMonitoring: React.FC = () => {
@@ -490,7 +491,7 @@ const SecurityControlsMonitoring: React.FC = () => {
     { id: 'network', label: 'Network Security', implemented: 28, total: 30, effectiveness: 92 },
     { id: 'endpoint', label: 'Endpoint Security', implemented: 22, total: 25, effectiveness: 88 },
     { id: 'incident', label: 'Incident Response', implemented: 18, total: 20, effectiveness: 90 },
-  ];
+  ]
 
   return (
     <ContentCard 
@@ -540,35 +541,35 @@ const SecurityControlsMonitoring: React.FC = () => {
       </div>
     </ContentCard>
   );
-};
+}
 
 // ========== MAIN SECURITY DASHBOARD ==========
 export const SecurityDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('overview')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   const handleOpenSettings = () => {
     setIsSettingsModalOpen(true);
-  };
+  }
 
   const handleGenerateReport = async () => {
     try {
       await ExportService.exportSecurityReport({ format: 'pdf' });
     } catch (error) {
-      // console.error('Report generation failed:', error);
+      // console.error('Report generation failed:', error)
     }
-  };
+  }
 
   const handleRefreshData = () => {
     // TODO: Implement data refresh logic
     // This would typically trigger a data refresh from the backend
     // For now, we'll just show a toast notification
-  };
+  }
 
   const handleSettingsUpdated = (_settings: any) => {
     // Settings have been updated successfully
     // The SecuritySettingsModal will handle the toast notification
-  };
+  }
 
   return (
     <MainContentArea
@@ -709,6 +710,6 @@ export const SecurityDashboard: React.FC = () => {
         onSettingsUpdated={handleSettingsUpdated} />
     </MainContentArea>
   );
-};
+}
 
 export default SecurityDashboard; 

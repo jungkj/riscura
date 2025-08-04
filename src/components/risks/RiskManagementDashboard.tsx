@@ -9,15 +9,16 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
-// import { CreateRiskModal } from './CreateRiskModal';
-// import { NewRiskFlow } from './NewRiskFlow';
+// import { CreateRiskModal } from './CreateRiskModal'
+// import { NewRiskFlow } from './NewRiskFlow'
 import ExportService from '@/services/ExportService';
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import {
   Plus,
   LayoutGrid,
@@ -40,11 +41,11 @@ import ExportService from '@/services/ExportService';
   Zap,
   ArrowRight,
   Link2,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 export interface Risk {
-  id: string;
+  id: string
   title: string;
   description: string;
   category: string;
@@ -56,7 +57,7 @@ export interface Risk {
   owner: {
     name: string;
     email: string;
-  };
+  }
   framework: string[];
   dueDate: Date;
   lastUpdated: Date;
@@ -130,7 +131,7 @@ const sampleRisks: Risk[] = [
     treatment: 'accept',
     progress: 80,
   },
-];
+]
 
 // Risk Level Configuration
 const getRiskLevelConfig = (level: string) => {
@@ -159,9 +160,9 @@ const getRiskLevelConfig = (level: string) => {
       border: 'border-semantic-success',
       icon: CheckCircle 
     },
-  };
+  }
   return configs[level as keyof typeof configs] || configs.medium;
-};
+}
 
 // Status Configuration
 const getStatusConfig = (status: string) => {
@@ -171,9 +172,9 @@ const getStatusConfig = (status: string) => {
     'mitigated': { variant: 'outline' as const, icon: Shield },
     'closed': { variant: 'secondary' as const, icon: CheckCircle },
     'monitoring': { variant: 'secondary' as const, icon: Eye },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.open;
-};
+}
 
 // Risk Card Component
 const RiskCard: React.FC<{ risk: Risk; onAction: (_action: string, risk: Risk) => void }> = ({ 
@@ -332,11 +333,11 @@ const RiskCard: React.FC<{ risk: Risk; onAction: (_action: string, risk: Risk) =
       </div>
     </div>
   );
-};
+}
 
 // Risk Register Component
 const RiskRegister: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
@@ -344,7 +345,7 @@ const RiskRegister: React.FC = () => {
   // Filter risks based on search and filters
   const filteredRisks = sampleRisks.filter(risk => {
     const matchesSearch = risk.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         risk.description.toLowerCase().includes(searchQuery.toLowerCase());
+                         risk.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || risk.category === selectedCategory;
     const matchesStatus = selectedStatus === 'all' || risk.status === selectedStatus;
     
@@ -355,26 +356,26 @@ const RiskRegister: React.FC = () => {
     switch (action) {
       case 'view':
         // Navigate to risk detail view
-        toast.success(`Viewing details for ${risk.title}`);
+        toast.success(`Viewing details for ${risk.title}`)
         break;
       case 'edit':
         // Open edit modal
-        toast.success(`Editing ${risk.title}`);
+        toast.success(`Editing ${risk.title}`)
         break;
       case 'delete':
         // Confirm and delete risk
         if (confirm(`Are you sure you want to delete "${risk.title}"?`)) {
-          toast.success(`Deleted ${risk.title}`);
+          toast.success(`Deleted ${risk.title}`)
         }
         break;
       case 'assign':
         // Assign to user
-        toast.success(`Assigning ${risk.title}`);
+        toast.success(`Assigning ${risk.title}`)
         break;
       default:
         toast(`Action "${action}" not yet implemented for ${risk.title}`);
     }
-  };
+  }
 
   const _categories = [...new Set(sampleRisks.map(r => r.category))];
   const statuses = [...new Set(sampleRisks.map(r => r.status))];
@@ -490,11 +491,11 @@ setSearchQuery(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 // Main Risk Management Dashboard
 export const RiskManagementDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('register');
+  const [activeTab, setActiveTab] = useState('register')
   const [proboMappings, setProboMappings] = useState<any[]>([]);
   const [isLoadingMappings, setIsLoadingMappings] = useState(false);
   const [isCreateRiskModalOpen, setIsCreateRiskModalOpen] = useState(false);
@@ -509,17 +510,17 @@ export const RiskManagementDashboard: React.FC = () => {
   // Load Probo control mappings
   useEffect(() => {
     const loadProboMappings = async () => {
-      setIsLoadingMappings(true);
+      setIsLoadingMappings(true)
       try {
         const proboService = EnhancedProboService.getInstance();
         const mappings = await proboService.mapControlsToRisks('org-1'); // Replace with actual org ID
         setProboMappings(mappings);
       } catch (error) {
-        // console.error('Failed to load Probo mappings:', error);
+        // console.error('Failed to load Probo mappings:', error)
       } finally {
         setIsLoadingMappings(false);
       }
-    };
+    }
 
     if (activeTab === 'controls') {
       loadProboMappings();
@@ -543,33 +544,33 @@ export const RiskManagementDashboard: React.FC = () => {
         // Controls imported successfully, result contains import details
       }
     } catch (error) {
-      // console.error('Failed to import Probo controls:', error);
+      // console.error('Failed to import Probo controls:', error)
       toast.error('Failed to import Probo controls');
     }
-  };
+  }
 
   const handleExportRisks = async (format: 'csv' | 'pdf' | 'json' = 'csv') => {
     try {
       await ExportService.exportRisks(sampleRisks, { format });
     } catch (error) {
-      // console.error('Export failed:', error);
+      // console.error('Export failed:', error)
     }
-  };
+  }
 
   const handleCreateRisk = () => {
     setIsCreateRiskModalOpen(true);
-  };
+  }
 
   const handleRiskCreated = (newRisk: any) => {
     // In a real app, you would refresh the data
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey(prev => prev + 1)
     toast.success('Risk created successfully!');
-  };
+  }
 
   const handleOpenSettings = () => {
     toast.success('Opening risk management settings...');
     // Navigate to settings page or open settings modal
-  };
+  }
 
   return (
     <MainContentArea
@@ -849,6 +850,6 @@ export const RiskManagementDashboard: React.FC = () => {
       )}
     </MainContentArea>
   );
-};
+}
 
 export default RiskManagementDashboard; 

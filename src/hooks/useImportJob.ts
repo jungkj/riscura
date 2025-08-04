@@ -14,7 +14,7 @@ interface ImportJob {
     id: string;
     name?: string;
     email?: string;
-  };
+  }
 }
 
 interface UseImportJobReturn {
@@ -33,7 +33,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
   // Fetch job status
   const fetchJobStatus = useCallback(async () => {
-    if (!jobId) return;
+    if (!jobId) return
 
     try {
       const response = await api.get(`/api/import/jobs/${jobId}`);
@@ -44,7 +44,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
           ...data.job,
           startedAt: new Date(data.job.startedAt),
           completedAt: data.job.completedAt ? new Date(data.job.completedAt) : undefined,
-        };
+        }
 
         setJob(jobData);
         setError(null);
@@ -52,7 +52,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
         // Stop polling if job is in terminal state
         if (['COMPLETED', 'FAILED', 'CANCELLED'].includes(jobData.status)) {
           if (intervalRef.current) {
-            clearInterval(intervalRef.current);
+            clearInterval(intervalRef.current)
             intervalRef.current = undefined;
           }
         }
@@ -62,12 +62,12 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
         // Stop polling on error
         if (intervalRef.current) {
-          clearInterval(intervalRef.current);
+          clearInterval(intervalRef.current)
           intervalRef.current = undefined;
         }
       }
     } catch (err) {
-      // console.error('Error fetching job status:', err);
+      // console.error('Error fetching job status:', err)
       setError('Failed to fetch import job status');
     } finally {
       setIsLoading(false);
@@ -76,7 +76,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
   // Cancel job
   const cancelJob = useCallback(async (): Promise<boolean> => {
-    if (!jobId) return false;
+    if (!jobId) return false
 
     try {
       setError(null);
@@ -86,11 +86,11 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
       if (data.message) {
         // Update local state
-        setJob((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
+        setJob((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null))
 
         // Stop polling
         if (intervalRef.current) {
-          clearInterval(intervalRef.current);
+          clearInterval(intervalRef.current)
           intervalRef.current = undefined;
         }
 
@@ -102,7 +102,7 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
       return false;
     } catch (err) {
-      // console.error('Error cancelling job:', err);
+      // console.error('Error cancelling job:', err)
       setError('Failed to cancel import job');
       return false;
     }
@@ -110,25 +110,25 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
 
   // Refresh job status
   const refresh = useCallback(async () => {
-    await fetchJobStatus();
+    await fetchJobStatus()
   }, [fetchJobStatus]);
 
   // Set up polling
   useEffect(() => {
-    if (!jobId) return;
+    if (!jobId) return
 
     // Initial fetch
-    fetchJobStatus();
+    fetchJobStatus()
 
     // Set up polling interval
-    intervalRef.current = setInterval(fetchJobStatus, pollInterval);
+    intervalRef.current = setInterval(fetchJobStatus, pollInterval)
 
     // Cleanup
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current)
       }
-    };
+    }
   }, [jobId, pollInterval, fetchJobStatus]);
 
   return {
@@ -137,12 +137,12 @@ export const useImportJob = (jobId: string, pollInterval: number = 2000): UseImp
     error,
     cancelJob,
     refresh,
-  };
-};
+  }
+}
 
 // Hook for managing multiple import jobs
 interface UseImportJobsReturn {
-  jobs: ImportJob[];
+  jobs: ImportJob[]
   isLoading: boolean;
   error: string | null;
   total: number;
@@ -169,7 +169,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
   // Create import job with configurable endpoint
   const createImportJob = useCallback(
     async (params: {
-      integrationId: string;
+      integrationId: string
       fileId: string;
       fileName: string;
       endpoint?: string; // Allow custom endpoint
@@ -178,7 +178,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
         setError(null);
 
         // Use custom endpoint or default to SharePoint
-        const importEndpoint = params.endpoint || '/api/sharepoint/import';
+        const importEndpoint = params.endpoint || '/api/sharepoint/import'
 
         const response = await api.post(importEndpoint, {
           integrationId: params.integrationId,
@@ -188,18 +188,18 @@ export const useImportJobs = (): UseImportJobsReturn => {
         const data = await response.json();
 
         if (data.jobId) {
-          return { success: true, jobId: data.jobId };
+          return { success: true, jobId: data.jobId }
         } else if (data.error) {
           setError(data.error);
-          return { success: false, error: data.error, jobId: data.jobId };
+          return { success: false, error: data.error, jobId: data.jobId }
         }
 
-        return { success: false, error: 'Unknown error occurred' };
+        return { success: false, error: 'Unknown error occurred' }
       } catch (err) {
-        // console.error('Error creating import job:', err);
+        // console.error('Error creating import job:', err)
         const errorMessage = 'Failed to create import job';
         setError(errorMessage);
-        return { success: false, error: errorMessage };
+        return { success: false, error: errorMessage }
       }
     },
     []
@@ -214,7 +214,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
       endpoint: string = '/api/sharepoint/import' // Make endpoint configurable
     ) => {
       try {
-        setIsLoading(true);
+        setIsLoading(true)
         setError(null);
 
         const params = new URLSearchParams({
@@ -243,7 +243,7 @@ export const useImportJobs = (): UseImportJobsReturn => {
           setJobs([]);
         }
       } catch (err) {
-        // console.error('Error fetching import jobs:', err);
+        // console.error('Error fetching import jobs:', err)
         setError('Failed to load import history');
         setJobs([]);
       } finally {
@@ -260,5 +260,5 @@ export const useImportJobs = (): UseImportJobsReturn => {
     total,
     createImportJob,
     fetchJobs,
-  };
-};
+  }
+}

@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { useToast } from '@/hooks/use-toast';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import {
   ArrowLeft,
   CheckCircle,
@@ -21,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
   Pause,
   RotateCcw,
   Clock,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface Framework {
   id: string;
@@ -167,7 +168,7 @@ export default function FrameworkComplianceCheckPage() {
 
   const getAllRequirements = (_framework: Framework) => {
     return framework.categories.flatMap((cat) => cat.requirements);
-  };
+  }
 
   const startAssessment = () => {
     if (!selectedFramework) {
@@ -182,18 +183,18 @@ export default function FrameworkComplianceCheckPage() {
     setAssessmentInProgress(true);
     setCurrentRequirementIndex(0);
     setTimeElapsed(0);
-  };
+  }
 
   const pauseAssessment = () => {
     setAssessmentInProgress(false);
-  };
+  }
 
   const resetAssessment = () => {
     setAssessmentInProgress(false);
     setCurrentRequirementIndex(0);
     setAssessmentResults({});
     setTimeElapsed(0);
-  };
+  }
 
   const markRequirement = (status: Requirement['status']) => {
     if (!selectedFramework) return;
@@ -210,9 +211,9 @@ export default function FrameworkComplianceCheckPage() {
       setCurrentRequirementIndex((prev) => prev + 1);
     } else {
       // Assessment complete
-      completeAssessment();
+      completeAssessment()
     }
-  };
+  }
 
   const completeAssessment = async () => {
     setAssessmentInProgress(false);
@@ -236,7 +237,7 @@ export default function FrameworkComplianceCheckPage() {
       });
 
       // Navigate to results
-      router.push('/dashboard/workflows/compliance-review/gaps');
+      router.push('/dashboard/workflows/compliance-review/gaps')
     } catch (error) {
       toast({
         title: 'Error',
@@ -244,19 +245,19 @@ export default function FrameworkComplianceCheckPage() {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  }
 
   const calculateProgress = () => {
     if (!selectedFramework) return 0;
     const requirements = getAllRequirements(selectedFramework);
     return Math.round((currentRequirementIndex / requirements.length) * 100);
-  };
+  }
 
   return (
     <ProtectedRoute>

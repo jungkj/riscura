@@ -11,13 +11,13 @@ import { designTokens } from '@/lib/design-system/tokens';
   TimeIcons,
   UserIcons,
   FileIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { LoadingStates, Spinner, InlineLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
 // Query types and interfaces
 interface QueryResult {
-  id: string;
+  id: string
   type: 'data' | 'insight' | 'recommendation' | 'summary';
   query: string;
   result: any;
@@ -138,12 +138,12 @@ const queryCategories = {
       popularity: 71,
     },
   ],
-};
+}
 
 // Mock query processing function
 const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult> => {
   // Simulate AI processing time
-  await new Promise((resolve) => setTimeout(resolve, 1500 + Math.random() * 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1500 + Math.random() * 1000))
 
   const lowerQuery = query.toLowerCase();
 
@@ -197,7 +197,7 @@ const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult>
           },
         },
       ],
-    };
+    }
   }
 
   if (lowerQuery.includes('compliance') && lowerQuery.includes('status')) {
@@ -226,7 +226,7 @@ const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult>
           data: { value: 84, label: 'Overall Compliance Score', trend: '+3%' },
         },
       ],
-    };
+    }
   }
 
   if (lowerQuery.includes('trend') || lowerQuery.includes('over time')) {
@@ -265,7 +265,7 @@ const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult>
           },
         },
       ],
-    };
+    }
   }
 
   // Default response for unrecognized queries
@@ -287,8 +287,8 @@ const processNaturalLanguageQuery = async (_query: string): Promise<QueryResult>
     executionTime: 0.3,
     dataSource: ['Query Suggestions'],
     visualizations: [],
-  };
-};
+  }
+}
 
 export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
   onQueryResult,
@@ -306,14 +306,14 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   // Get all suggestions flattened
-  const allSuggestions = Object.values(queryCategories).flat();
+  const allSuggestions = Object.values(queryCategories).flat()
   const filteredSuggestions = selectedCategory
     ? allSuggestions.filter((s) => s.category === selectedCategory)
     : allSuggestions.sort((a, b) => b.popularity - a.popularity).slice(0, 6);
 
   // Handle query submission
   const handleSubmitQuery = async (queryText?: string) => {
-    const queryToProcess = queryText || query.trim();
+    const queryToProcess = queryText || query.trim()
     if (!queryToProcess) return;
 
     setIsLoading(true);
@@ -332,46 +332,46 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
 
       setQuery('');
     } catch (error) {
-      // console.error('Query processing failed:', error);
+      // console.error('Query processing failed:', error)
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Handle suggestion click
   const handleSuggestionClick = (suggestion: QuerySuggestion) => {
-    setQuery(suggestion.text);
+    setQuery(suggestion.text)
     handleSubmitQuery(suggestion.text);
-  };
+  }
 
   // Handle input focus
   const handleInputFocus = () => {
-    setShowSuggestions(true);
-  };
+    setShowSuggestions(true)
+  }
 
   // Handle input blur (with delay to allow suggestion clicks)
   const handleInputBlur = () => {
-    setTimeout(() => setShowSuggestions(false), 200);
-  };
+    setTimeout(() => setShowSuggestions(false), 200)
+  }
 
   // Handle key press
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
+      e.preventDefault()
       handleSubmitQuery();
     }
     if (e.key === 'Escape') {
       setShowSuggestions(false);
     }
-  };
+  }
 
   // Click outside to close suggestions
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
+        setShowSuggestions(false)
       }
-    };
+    }
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -529,7 +529,7 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
@@ -688,6 +688,6 @@ export const NaturalLanguageQuery: React.FC<NaturalLanguageQueryProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default NaturalLanguageQuery;

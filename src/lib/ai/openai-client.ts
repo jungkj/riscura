@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 
 // OpenAI client configuration
 export interface OpenAIClientConfig {
-  apiKey: string;
+  apiKey: string
   baseURL?: string;
   organization?: string;
   timeout?: number;
@@ -47,7 +47,7 @@ export const MODEL_CONFIGS = {
     contextWindow: 16385,
     description: 'Cost-effective for simpler tasks',
   },
-} as const;
+} as const
 
 export type ModelName = keyof typeof MODEL_CONFIGS;
 
@@ -59,7 +59,7 @@ export function createOpenAIClient(_config: OpenAIClientConfig): OpenAI {
     organization: config.organization,
     timeout: config.timeout || 60000,
     maxRetries: config.maxRetries || 3,
-  });
+  })
 }
 
 // Utility functions for working with OpenAI
@@ -68,7 +68,7 @@ export const OpenAIUtils = {
    * Calculate cost for a completion
    */
   calculateCost(promptTokens: number, completionTokens: number, modelName: ModelName): number {
-    const config = MODEL_CONFIGS[modelName];
+    const config = MODEL_CONFIGS[modelName]
     const promptCost = (promptTokens / 1000) * config.inputCostPer1k;
     const completionCost = (completionTokens / 1000) * config.outputCostPer1k;
     return promptCost + completionCost;
@@ -79,7 +79,7 @@ export const OpenAIUtils = {
    */
   estimateTokens(text: string): number {
     // Rough approximation: 1 token ≈ 4 characters
-    return Math.ceil(text.length / 4);
+    return Math.ceil(text.length / 4)
   },
 
   /**
@@ -101,10 +101,10 @@ export const OpenAIUtils = {
     // Filter models that support streaming if required
     const availableModels = Object.entries(MODEL_CONFIGS).filter(
       ([_, config]) => !needsStreaming || config.supportsStreaming
-    );
+    )
 
     // Filter models that can handle the token requirement
-    const suitableModels = availableModels.filter(([_, config]) => config.maxTokens >= maxTokens);
+    const suitableModels = availableModels.filter(([_, config]) => config.maxTokens >= maxTokens)
 
     if (suitableModels.length === 0) {
       throw new Error(`No suitable model found for ${maxTokens} tokens`);
@@ -112,7 +112,7 @@ export const OpenAIUtils = {
 
     // Select based on complexity and cost sensitivity
     if (complexity === 'high') {
-      return 'gpt-4o';
+      return 'gpt-4o'
     } else if (complexity === 'medium') {
       return costSensitive ? 'gpt-4o-mini' : 'gpt-4o';
     } else {
@@ -139,11 +139,11 @@ export const OpenAIUtils = {
           role: msg.role,
           content: msg.content,
         }))
-      );
+      )
     }
 
     // Add current user message
-    messages.push({ role: 'user', content: userMessage });
+    messages.push({ role: 'user', content: userMessage })
 
     return messages;
   },
@@ -174,7 +174,7 @@ export const OpenAIUtils = {
       frequency_penalty: options.frequencyPenalty ?? 0,
       presence_penalty: options.presencePenalty ?? 0,
       stream: options.stream ?? false,
-    };
+    }
   },
 
   /**
@@ -200,11 +200,11 @@ export const OpenAIUtils = {
 
       // Capture usage information if available
       if (chunk.usage) {
-        usage = chunk.usage;
+        usage = chunk.usage
       }
     }
 
-    return { content: fullContent, usage };
+    return { content: fullContent, usage }
   },
 
   /**
@@ -225,7 +225,7 @@ export const OpenAIUtils = {
 
         // Don't retry on certain error types
         if (error instanceof Error) {
-          const errorMessage = error.message.toLowerCase();
+          const errorMessage = error.message.toLowerCase()
           if (
             errorMessage.includes('invalid') ||
             errorMessage.includes('unauthorized') ||
@@ -262,7 +262,7 @@ export const OpenAIUtils = {
       isGPT4: modelName.startsWith('gpt-4'),
       isGPT35: modelName.startsWith('gpt-3.5'),
       recommendedFor: this.getRecommendedUseCases(modelName),
-    };
+    }
   },
 
   /**
@@ -282,7 +282,7 @@ export const OpenAIUtils = {
         return ['General purpose'];
     }
   },
-};
+}
 
 // Error handling utilities
 export class OpenAIError extends Error {
@@ -292,7 +292,7 @@ export class OpenAIError extends Error {
     public status?: number,
     public type?: string
   ) {
-    super(message);
+    super(message)
     this.name = 'OpenAIError';
   }
 }
@@ -415,7 +415,7 @@ export class OpenAIClient {
     }
 
     // Reset counter every minute
-    const now = Date.now();
+    const now = Date.now()
     if (!this.rateLimitReset || now - this.rateLimitReset.getTime() > 60000) {
       this.requestCount = 0;
       this.rateLimitReset = new Date(now + 60000);
@@ -446,7 +446,7 @@ export class OpenAIClient {
       ],
       max_tokens: 1000,
       temperature: 0.3,
-    });
+    })
 
     return response.choices[0]?.message?.content || '';
   }
@@ -492,14 +492,14 @@ export class OpenAIClient {
 }
 
 // Create a singleton instance - won't throw if API key is missing
-let openaiClientInstance: OpenAIClient | null = null;
+let openaiClientInstance: OpenAIClient | null = null
 
 export const getOpenAIClient = (): OpenAIClient => {
   if (!openaiClientInstance) {
     openaiClientInstance = new OpenAIClient();
   }
   return openaiClientInstance;
-};
+}
 
 // For backward compatibility
-export const openaiClient = getOpenAIClient();
+export const openaiClient = getOpenAIClient()

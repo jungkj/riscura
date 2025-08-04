@@ -9,24 +9,24 @@ import { AIAction } from './SelectableContent';
 
 interface ContentSelectionContextValue {
   // Selection state
-  currentSelection: TextSelection | null;
+  currentSelection: TextSelection | null
   toolbarPosition: { x: number; y: number } | null;
   isToolbarVisible: boolean;
   
   // Actions
-  handleSelection: (selection: TextSelection) => void;
+  handleSelection: (selection: TextSelection) => void
   handleAIAction: (_action: AIAction, selection: TextSelection) => void;
   addToBatch: (selection: TextSelection, actions: AIAction[], priority?: 'low' | 'medium' | 'high' | 'urgent') => void;
   clearSelection: () => void;
   
   // Panel controls
-  showAnalysisPanel: () => void;
+  showAnalysisPanel: () => void
   hideAnalysisPanel: () => void;
   showBatchManager: () => void;
   hideBatchManager: () => void;
   
   // Analysis state
-  analysisResults: ReturnType<typeof useContentAnalysis>['analysisResults'];
+  analysisResults: ReturnType<typeof useContentAnalysis>['analysisResults']
   batchSelections: ReturnType<typeof useContentAnalysis>['batchSelections'];
   isProcessing: boolean;
   stats: ReturnType<typeof useContentAnalysis>['stats'];
@@ -88,10 +88,10 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
 
   // Handle text selection
   const handleSelection = useCallback((selection: TextSelection) => {
-    setCurrentSelection(selection);
+    setCurrentSelection(selection)
     
     // Calculate toolbar position based on selection bounds
-    const rect = selection.boundingRect;
+    const rect = selection.boundingRect
     setToolbarPosition({
       x: rect.left + rect.width / 2,
       y: rect.top - 10, // Position above selection
@@ -101,12 +101,12 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
     
     // Clear any existing hide timeout
     if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
+      clearTimeout(hideTimeoutRef.current)
     }
     
     // Auto-hide toolbar after 10 seconds of inactivity
     hideTimeoutRef.current = setTimeout(() => {
-      setIsToolbarVisible(false);
+      setIsToolbarVisible(false)
       setCurrentSelection(null);
       setToolbarPosition(null);
     }, 10000);
@@ -114,15 +114,15 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
 
   // Handle AI action
   const handleAIAction = useCallback(async (_action: AIAction, selection: TextSelection) => {
-    if (!enableAnalysis) return;
+    if (!enableAnalysis) return
     
     // Hide toolbar immediately
-    setIsToolbarVisible(false);
+    setIsToolbarVisible(false)
     
     try {
       await analyzeSelection(selection, action);
     } catch (error) {
-      // console.error('Failed to analyze selection:', error);
+      // console.error('Failed to analyze selection:', error)
     }
   }, [enableAnalysis, analyzeSelection]);
 
@@ -132,19 +132,19 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
     actions: AIAction[], 
     priority: 'low' | 'medium' | 'high' | 'urgent' = 'medium'
   ) => {
-    if (!enableBatching) return;
+    if (!enableBatching) return
     
     addToBatchAnalysis(selection, actions, priority);
     
     // Hide toolbar
-    setIsToolbarVisible(false);
+    setIsToolbarVisible(false)
     setCurrentSelection(null);
     setToolbarPosition(null);
   }, [enableBatching, addToBatchAnalysis]);
 
   // Clear current selection
   const clearSelection = useCallback(() => {
-    setCurrentSelection(null);
+    setCurrentSelection(null)
     setToolbarPosition(null);
     setIsToolbarVisible(false);
     
@@ -155,7 +155,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
 
   // Panel controls
   const showAnalysisPanel = useCallback(() => {
-    setIsAnalysisPanelOpen(true);
+    setIsAnalysisPanelOpen(true)
   }, [setIsAnalysisPanelOpen]);
 
   const hideAnalysisPanel = useCallback(() => {
@@ -187,7 +187,7 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
     batchSelections,
     isProcessing,
     stats,
-  };
+  }
 
   return (
     <ContentSelectionContext.Provider value={contextValue}>
@@ -225,11 +225,11 @@ export const ContentSelectionProvider: React.FC<ContentSelectionProviderProps> =
       )}
     </ContentSelectionContext.Provider>
   );
-};
+}
 
 // Enhanced SelectableContent component that uses the context
 interface EnhancedSelectableContentProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   contentType: 'risk' | 'control' | 'test-script' | 'document' | 'text';
   contentId: string;
   className?: string;
@@ -268,7 +268,7 @@ export const EnhancedSelectableContent: React.FC<EnhancedSelectableContentProps>
         {children}
     </SelectableContent>
   );
-};
+}
 
 // Quick action buttons for batch and analysis panels
 export const ContentSelectionControls: React.FC<{ className?: string }> = ({ className }) => {
@@ -277,11 +277,11 @@ export const ContentSelectionControls: React.FC<{ className?: string }> = ({ cla
     showBatchManager, 
     stats,
     isProcessing 
-  } = useContentSelection();
+  } = useContentSelection()
 
   if (!stats.totalResults && !stats.batchItems) {
     return null;
-  };
+  }
 
   return (
     <div className={`fixed bottom-4 right-4 flex gap-2 z-40 ${className}`}>
@@ -316,4 +316,4 @@ export const ContentSelectionControls: React.FC<{ className?: string }> = ({ cla
       )}
     </div>
   );
-}; 
+} 

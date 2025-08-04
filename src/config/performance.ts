@@ -135,7 +135,7 @@ export const performanceConfigSchema = z.object({
     newRelicLicenseKey: z.string().optional(),
     pingdomApiKey: z.string().optional(),
   }),
-});
+})
 
 export type PerformanceConfig = z.infer<typeof performanceConfigSchema>;
 
@@ -257,21 +257,21 @@ const loadPerformanceConfig = (): PerformanceConfig {
       newRelicLicenseKey: process.env.NEW_RELIC_LICENSE_KEY,
       pingdomApiKey: process.env.PINGDOM_API_KEY,
     },
-  };
+  }
 
   try {
     return performanceConfigSchema.parse(config);
   } catch (error) {
-    // console.error('Invalid performance configuration:', error);
+    // console.error('Invalid performance configuration:', error)
     throw new Error('Performance configuration validation failed');
   }
 }
 
 // Export singleton instance
-export const performanceConfig = loadPerformanceConfig();
+export const performanceConfig = loadPerformanceConfig()
 
 // Export individual config sections for convenience
-export const databaseConfig = performanceConfig.database;
+export const databaseConfig = performanceConfig.database
 export const redisConfig = performanceConfig.redis;
 export const memoryConfig = performanceConfig.memory;
 export const webVitalsConfig = performanceConfig.webVitals;

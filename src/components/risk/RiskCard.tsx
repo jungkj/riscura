@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardBody, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   MoreHorizontal,
   Calendar,
   User,
@@ -42,7 +43,7 @@ export interface RiskData {
   mitigationActions: string[] | number;
   completedActions: number;
   // Optional additional properties
-  controls?: string[];
+  controls?: string[]
   treatmentPlan?: string;
   linkedVendors?: string[];
   createdDate?: string;
@@ -69,7 +70,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
       case 'Low': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -81,14 +82,14 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
       case 'Closed': return 'bg-gray-50 text-gray-700 border-gray-200';
       default: return 'bg-gray-50 text-gray-700 border-gray-200';
     }
-  };
+  }
 
   const getRiskScoreColor = (score: number) => {
     if (score >= 16) return 'text-red-600 bg-red-50';
     if (score >= 12) return 'text-orange-600 bg-orange-50';
     if (score >= 6) return 'text-yellow-600 bg-yellow-50';
     return 'text-green-600 bg-green-50';
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -96,7 +97,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
       case 'down': return <TrendingDown className="w-4 h-4 text-green-500" />;
       default: return <div className="w-4 h-4 bg-gray-300 rounded-full" />;
     }
-  };
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -108,7 +109,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
     if (diffDays === 0) return 'Due today';
     if (diffDays === 1) return 'Due tomorrow';
     return `Due in ${diffDays} days`;
-  };
+  }
 
   const getDueDateColor = (dateString: string) => {
     const date = new Date(dateString);
@@ -120,7 +121,7 @@ export default function RiskCard({ risk, onView, onEdit, onArchive, className = 
     if (diffDays <= 3) return 'text-orange-600';
     if (diffDays <= 7) return 'text-yellow-600';
     return 'text-gray-600';
-  };
+  }
 
   return (
     <DaisyCard 

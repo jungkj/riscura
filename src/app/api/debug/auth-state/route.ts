@@ -9,17 +9,17 @@ export const GET = withApiMiddleware({
 
   // Only allow in development or with debug flag
   if (process.env.NODE_ENV === 'production' && !process.env.ENABLE_AUTH_DEBUG) {
-    return { error: 'Not available in production' };
+    return { error: 'Not available in production' }
   }
 
   // Additional security: check if user is authenticated or request comes from allowed IP
-  const allowedIPs = process.env.DEBUG_ALLOWED_IPS?.split(',') || ['127.0.0.1', '::1'];
+  const allowedIPs = process.env.DEBUG_ALLOWED_IPS?.split(',') || ['127.0.0.1', '::1']
   const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
   const isAllowedIP = allowedIPs.some((ip) => clientIP.includes(ip));
 
   // Check if user is authenticated or from allowed IP
   if (process.env.NODE_ENV === 'production' && !isAllowedIP && !context.user) {
-    return { error: 'Unauthorized access' };
+    return { error: 'Unauthorized access' }
   }
 
   const cookies = req.cookies.getAll();
@@ -36,7 +36,7 @@ export const GET = withApiMiddleware({
       oauthSessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
       isOauthValid = new Date(oauthSessionData.expires) > new Date();
     } catch (e) {
-      oauthSessionData = { error: 'Failed to parse session token' };
+      oauthSessionData = { error: 'Failed to parse session token' }
     }
   }
 
@@ -72,5 +72,5 @@ export const GET = withApiMiddleware({
       host: req.headers.get('host'),
     },
     timestamp: new Date().toISOString(),
-  };
+  }
 });

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 
 // Services
-// import { AIService } from '@/services/AIService';
+// import { AIService } from '@/services/AIService'
 
 interface ProcessingOptions {
   aiAnalysis: boolean;
@@ -66,7 +66,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       data: result,
     });
   } catch (error) {
-    // console.error('Import processing error:', error);
+    // console.error('Import processing error:', error)
     return NextResponse.json(
       {
         error: 'Processing failed',
@@ -85,7 +85,7 @@ async function processExcelRCSA(
   userId: string,
   options: ProcessingOptions
 ): Promise<any> {
-  const workbook = XLSX.read(buffer, { type: 'buffer' });
+  const workbook = XLSX.read(buffer, { type: 'buffer' })
 
   const _result = {
     risks: [] as any[],
@@ -97,20 +97,20 @@ async function processExcelRCSA(
       processedAt: new Date(),
       totalRecords: 0,
     },
-  };
+  }
 
   // Process each worksheet
   for (const sheetName of workbook.SheetNames) {
-    const worksheet = workbook.Sheets[sheetName];
+    const worksheet = workbook.Sheets[sheetName]
     const data = XLSX.utils.sheet_to_json(worksheet);
 
     if (data.length === 0) continue;
 
     // Auto-detect sheet type based on headers
-    const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase());
+    const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase())
     const sheetType = detectSheetType(headers);
 
-    // console.log(`Processing sheet "${sheetName}" as ${sheetType}`);
+    // console.log(`Processing sheet "${sheetName}" as ${sheetType}`)
 
     if (sheetType === 'risk' || sheetType === 'mixed') {
       const risks = await processRiskData(data, organizationId, userId, options);
@@ -142,7 +142,7 @@ async function processExcelRCSA(
       'Sheets processed': result.metadata.sheets.length,
     },
     data: result,
-  };
+  }
 }
 
 // Policy Document Processing with AI
@@ -154,11 +154,11 @@ async function processPolicyDocument(
   userId: string,
   options: ProcessingOptions
 ): Promise<any> {
-  let textContent = '';
+  let textContent = ''
 
   // Extract text based on file type
   if (fileType === 'application/pdf') {
-    textContent = await extractPDFText(buffer);
+    textContent = await extractPDFText(buffer)
   } else if (fileType.includes('word') || fileType.includes('document')) {
     textContent = await extractWordText(buffer);
   } else if (fileType === 'text/plain') {
@@ -174,11 +174,11 @@ async function processPolicyDocument(
     extractedControls: [] as any[],
     aiConfidence: 0,
     documentSummary: '',
-  };
+  }
 
   if (options.aiAnalysis) {
     // AI-powered risk and control extraction
-    const extractionResult = await extractRisksAndControls(textContent);
+    const extractionResult = await extractRisksAndControls(textContent)
     result.extractedRisks = extractionResult.risks;
     result.extractedControls = extractionResult.controls;
     result.aiConfidence = extractionResult.confidence;
@@ -196,7 +196,7 @@ async function processPolicyDocument(
       'Document length': `${Math.round(textContent.length / 1000)}k characters`,
     },
     data: result,
-  };
+  }
 }
 
 // Bulk Upload Processing
@@ -223,12 +223,12 @@ async function processBulkUpload(
       size: buffer.length,
       type: fileType,
     },
-  };
+  }
 }
 
 // Helper functions
 const detectSheetType = (headers: string[]): 'risk' | 'control' | 'mapping' | 'mixed' {
-  const riskKeywords = ['risk', 'threat', 'vulnerability', 'likelihood', 'impact', 'probability'];
+  const riskKeywords = ['risk', 'threat', 'vulnerability', 'likelihood', 'impact', 'probability']
   const controlKeywords = ['control', 'mitigation', 'safeguard', 'procedure', 'policy'];
   const mappingKeywords = ['mapping', 'relationship', 'link'];
 
@@ -271,19 +271,19 @@ async function processRiskData(_data: any[],
       organizationId,
       createdBy: userId,
       aiConfidence: 0.8,
-    };
+    }
 
     // Calculate risk score
-    risk.riskScore = risk.likelihood * risk.impact;
+    risk.riskScore = risk.likelihood * risk.impact
 
     // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && risk.description) {
       try {
         // TODO: Re-implement AI enhancement when AIService is available
-        // console.log('AI enhancement requested but not available');
+        // console.log('AI enhancement requested but not available')
         risk.aiConfidence = 0.5; // Default confidence
       } catch (error) {
-        // console.error('AI enhancement failed for risk:', error);
+        // console.error('AI enhancement failed for risk:', error)
       }
     }
 
@@ -312,16 +312,16 @@ async function processControlData(_data: any[],
       organizationId,
       createdBy: userId,
       aiConfidence: 0.8,
-    };
+    }
 
     // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && control.description) {
       try {
         // TODO: Re-implement AI enhancement when AIService is available
-        // console.log('AI enhancement requested but not available');
+        // console.log('AI enhancement requested but not available')
         control.aiConfidence = 0.5; // Default confidence
       } catch (error) {
-        // console.error('AI enhancement failed for control:', error);
+        // console.error('AI enhancement failed for control:', error)
       }
     }
 
@@ -348,7 +348,7 @@ const processMappingData = (_data: any[], organizationId: string): any[] {
 
 // AI-powered risk and control extraction from policy documents
 async function extractRisksAndControls(textContent: string): Promise<{
-  risks: any[];
+  risks: any[]
   controls: any[];
   confidence: number;
   summary: string;
@@ -387,7 +387,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
 
   try {
     // TODO: Re-implement AI document analysis when AIService is available
-    // console.log('AI document analysis requested but not available');
+    // console.log('AI document analysis requested but not available')
 
     // Return empty results for now
     return {
@@ -395,9 +395,9 @@ async function extractRisksAndControls(textContent: string): Promise<{
       controls: [],
       confidence: 0.0,
       summary: 'AI document analysis not available',
-    };
+    }
   } catch (error) {
-    // console.error('AI extraction failed:', error);
+    // console.error('AI extraction failed:', error)
   }
 
   // Fallback if AI fails
@@ -406,17 +406,17 @@ async function extractRisksAndControls(textContent: string): Promise<{
     controls: [],
     confidence: 0.0,
     summary: 'AI extraction failed, manual review required',
-  };
+  }
 }
 
 // Text extraction functions
 async function extractPDFText(buffer: Buffer): Promise<string> {
   try {
-    const pdfParse = await import('pdf-parse');
+    const pdfParse = await import('pdf-parse')
     const data = await pdfParse.default(buffer);
     return data.text;
   } catch (error) {
-    // console.error('PDF extraction failed:', error);
+    // console.error('PDF extraction failed:', error)
     return '';
   }
 }
@@ -427,14 +427,14 @@ async function extractWordText(buffer: Buffer): Promise<string> {
     const _result = await mammoth.extractRawText({ buffer });
     return result.value;
   } catch (error) {
-    // console.error('Word extraction failed:', error);
+    // console.error('Word extraction failed:', error)
     return '';
   }
 }
 
 // Mapping helper functions
 const mapRiskCategory = (category: string): string {
-  const cat = category.toLowerCase();
+  const cat = category.toLowerCase()
   if (cat.includes('operation') || cat.includes('process')) return 'operational';
   if (cat.includes('financial') || cat.includes('market')) return 'financial';
   if (cat.includes('strategic') || cat.includes('business')) return 'strategic';

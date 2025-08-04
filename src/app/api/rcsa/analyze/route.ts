@@ -22,16 +22,16 @@ export const POST = withApiMiddleware({
 
     if (type === 'file' && content) {
       // Parse base64 encoded Excel file
-      const buffer = Buffer.from(content, 'base64');
+      const buffer = Buffer.from(content, 'base64')
       parsedData = await parseRCSAExcel(buffer);
     } else if (type === 'text' && content) {
       // Parse pasted text data
-      parsedData = parseRCSAText(content);
+      parsedData = parseRCSAText(content)
     } else {
       return {
         success: false,
         error: 'Invalid input data',
-      };
+      }
     }
 
     if (parsedData.errors.length > 0) {
@@ -39,18 +39,18 @@ export const POST = withApiMiddleware({
         success: false,
         errors: parsedData.errors,
         warnings: parsedData.warnings,
-      };
+      }
     }
 
     if (parsedData.rows.length === 0) {
       return {
         success: false,
         error: 'No valid data found to analyze',
-      };
+      }
     }
 
     // Perform AI gap analysis
-    const analysis = await analyzeRCSAData(parsedData.rows);
+    const analysis = await analyzeRCSAData(parsedData.rows)
 
     // Store analysis in session or temporary storage for review
     // This would be implemented based on your session management approach
@@ -62,12 +62,12 @@ export const POST = withApiMiddleware({
         rowCount: parsedData.rows.length,
         warnings: parsedData.warnings,
       },
-    };
+    }
   } catch (error) {
-    // console.error('RCSA analysis error:', error);
+    // console.error('RCSA analysis error:', error)
     return {
       success: false,
       error: 'Failed to analyze RCSA data',
-    };
+    }
   }
 });

@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -61,7 +62,7 @@ import {
   Zap,
   Eye,
   Briefcase,
-} from 'lucide-react';
+} from 'lucide-react'
 import { motion } from 'framer-motion';
 
 // Enhanced metric card component
@@ -80,7 +81,7 @@ const MetricCard = ({
     orange: 'bg-orange-50 text-orange-600',
     red: 'bg-red-50 text-red-600',
     purple: 'bg-purple-50 text-purple-600',
-  };
+  }
 
   return (
     <motion.div
@@ -124,7 +125,7 @@ const MetricCard = ({
       </DaisyCard>
     </motion.div>
   );
-};
+}
 
 // Chart color palette
 const COLORS = {
@@ -136,7 +137,7 @@ const COLORS = {
   teal: '#00796b',
   amber: '#fbc02d',
   pink: '#e91e63',
-};
+}
 
 export default function AnalyticsPage() {
   const { toast } = useToast();
@@ -158,7 +159,7 @@ export default function AnalyticsPage() {
 
       setAnalyticsData(data.data);
     } catch (error) {
-      // console.error('Failed to fetch analytics:', error);
+      // console.error('Failed to fetch analytics:', error)
       toast({
         title: 'Error',
         description: 'Failed to load analytics data',
@@ -167,7 +168,7 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <ProtectedRoute>

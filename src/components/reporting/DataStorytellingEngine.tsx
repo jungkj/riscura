@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   BookOpen,
   Brain,
@@ -52,11 +53,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Video,
   Mic,
   Camera
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Story types and interfaces
 interface DataStory {
-  id: string;
+  id: string
   title: string;
   subtitle: string;
   narrative: StoryNarrative;
@@ -95,13 +96,13 @@ interface ChapterTransition {
 interface Annotation {
   id: string;
   type: 'callout' | 'highlight' | 'arrow' | 'circle';
-  position: { x: number; y: number };
+  position: { x: number; y: number }
   content: string;
   style: {
     color: string;
     size: 'small' | 'medium' | 'large';
     animation?: 'pulse' | 'bounce' | 'fade';
-  };
+  }
 }
 
 interface AIInsight {
@@ -127,7 +128,7 @@ interface StoryVisualization {
     theme: 'light' | 'dark' | 'corporate' | 'vibrant';
     animations: boolean;
     interactivity: boolean;
-  };
+  }
   narrative: string;
 }
 
@@ -155,7 +156,7 @@ interface StorySettings {
     highContrast: boolean;
     largeText: boolean;
     screenReader: boolean;
-  };
+  }
 }
 
 // Sample story data
@@ -284,11 +285,11 @@ const SAMPLE_STORY: DataStory = {
       screenReader: false
     }
   }
-};
+}
 
 // Main data storytelling component
 interface DataStorytellingEngineProps {
-  story?: DataStory;
+  story?: DataStory
   onGenerateStory?: (_config: any) => void;
   onSaveStory?: (story: DataStory) => void;
   onShareStory?: (story: DataStory) => void;
@@ -314,7 +315,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isPlaying) return;
+    if (!isPlaying) return
 
     const currentChapterData = story.chapters[currentChapter];
     const _duration = (currentChapterData.duration * 1000) / playbackSpeed;
@@ -334,63 +335,63 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
 
   // Generate new story
   const generateStory = async () => {
-    setIsGenerating(true);
+    setIsGenerating(true)
     // Simulate AI story generation
     setTimeout(() => {
-      setIsGenerating(false);
+      setIsGenerating(false)
       onGenerateStory?.({
         dataSource: 'current-quarter',
         audience: 'executive',
         focus: 'risk-trends'
       });
     }, 3000);
-  };
+  }
 
   // Navigation functions
   const nextChapter = () => {
     if (currentChapter < story.chapters.length - 1) {
-      setCurrentChapter(prev => prev + 1);
+      setCurrentChapter(prev => prev + 1)
       setStoryProgress(((currentChapter + 1) / story.chapters.length) * 100);
     }
-  };
+  }
 
   const previousChapter = () => {
     if (currentChapter > 0) {
       setCurrentChapter(prev => prev - 1);
       setStoryProgress(((currentChapter - 1) / story.chapters.length) * 100);
     }
-  };
+  }
 
   const togglePlayback = () => {
     setIsPlaying(!isPlaying);
-  };
+  }
 
   // Get insight icon
   const getInsightIcon = (_type: string) => {
     switch (type) {
-      case 'trend': return TrendingUp;
+      case 'trend': return TrendingUp
       case 'anomaly': return AlertTriangle;
       case 'correlation': return Activity;
       case 'prediction': return Brain;
       case 'recommendation': return Lightbulb;
       default: return Star;
     }
-  };
+  }
 
   // Get impact color
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'text-red-600 bg-red-50';
+      case 'critical': return 'text-red-600 bg-red-50'
       case 'high': return 'text-orange-600 bg-orange-50';
       case 'medium': return 'text-yellow-600 bg-yellow-50';
       case 'low': return 'text-green-600 bg-green-50';
       default: return 'text-gray-600 bg-gray-50';
     }
-  };
+  }
 
   // Render current chapter
   const renderCurrentChapter = () => {
-    const chapter = story.chapters[currentChapter];
+    const chapter = story.chapters[currentChapter]
     if (!chapter) return null;
 
     return (
@@ -499,7 +500,7 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
         ))}
       </div>
     );
-  };
+  }
 
   return (
     <div className={`${isFullscreen ? 'fixed inset-0 z-50 bg-white' : ''} ${className}`}>
@@ -716,6 +717,6 @@ export const DataStorytellingEngine: React.FC<DataStorytellingEngineProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 export default DataStorytellingEngine; 

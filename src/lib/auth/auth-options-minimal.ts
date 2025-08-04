@@ -1,5 +1,5 @@
 // Minimal NextAuth configuration for debugging
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google';
 
 // Simple configuration without database dependencies
@@ -36,7 +36,7 @@ export const authOptionsMinimal: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id
         token.email = user.email;
         token.name = user.name;
       }
@@ -61,4 +61,4 @@ export const authOptionsMinimal: NextAuthOptions = {
     signIn: '/auth/login',
     error: '/auth/error',
   },
-};
+}

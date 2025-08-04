@@ -40,7 +40,7 @@ export interface EmailResult {
   envelope: {
     from: string;
     to: string[];
-  };
+  }
 }
 
 export interface EmailProvider {
@@ -54,18 +54,18 @@ class MockEmailProvider implements EmailProvider {
       to: options.to,
       subject: options.subject,
       template: options.template,
-    });
+    })
 
     return {
       messageId: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       success: true,
-    };
+    }
   }
 }
 
 // SendGrid email provider (production)
 class SendGridProvider implements EmailProvider {
-  private apiKey: string;
+  private apiKey: string
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
@@ -73,7 +73,7 @@ class SendGridProvider implements EmailProvider {
 
   async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
     // TODO: Implement actual SendGrid integration
-    throw new Error('SendGrid integration not implemented yet');
+    throw new Error('SendGrid integration not implemented yet')
   }
 }
 
@@ -81,7 +81,7 @@ class SendGridProvider implements EmailProvider {
 class SESProvider implements EmailProvider {
   async sendEmail(_options: EmailOptions): Promise<{ messageId: string; success: boolean }> {
     // TODO: Implement actual AWS SES integration
-    throw new Error('AWS SES integration not implemented yet');
+    throw new Error('AWS SES integration not implemented yet')
   }
 }
 
@@ -159,7 +159,7 @@ const EMAIL_TEMPLATES: Record<string, EmailTemplate> = {
       <p><a href="{{reportUrl}}">View Full Report</a></p>
     `,
   },
-};
+}
 
 class EmailService {
   private transporter: nodemailer.Transporter | null = null;
@@ -181,11 +181,11 @@ class EmailService {
     // Choose provider based on environment
     if (env.NODE_ENV === 'production') {
       if (env.SENDGRID_API_KEY) {
-        this.provider = new SendGridProvider(env.SENDGRID_API_KEY);
+        this.provider = new SendGridProvider(env.SENDGRID_API_KEY)
       } else if (env.AWS_SES_REGION) {
         this.provider = new SESProvider();
       } else {
-        // console.warn('No email provider configured for production');
+        // console.warn('No email provider configured for production')
         this.provider = new MockEmailProvider();
       }
     } else {
@@ -195,7 +195,7 @@ class EmailService {
 
   private initializeTransporter() {
     if (!emailConfig.enabled) {
-      // console.warn('Email service is disabled. Check your SMTP configuration.');
+      // console.warn('Email service is disabled. Check your SMTP configuration.')
       return;
     }
 
@@ -218,9 +218,9 @@ class EmailService {
     // Verify connection
     this.transporter.verify((error, success) => {
       if (error) {
-        // console.error('Email service connection failed:', error);
+        // console.error('Email service connection failed:', error)
       } else {
-        // console.log('Email service connected successfully');
+        // console.log('Email service connected successfully')
       }
     });
   }
@@ -401,14 +401,14 @@ class EmailService {
 
   async send(_options: EmailOptions): Promise<EmailResult | null> {
     if (!emailConfig.enabled || !this.transporter) {
-      // console.warn('Email service is disabled. Email not sent:', options.subject);
+      // console.warn('Email service is disabled. Email not sent:', options.subject)
       return null;
     }
 
     try {
       // Process template if specified
       if (options.template && options.templateData) {
-        const processed = this.processTemplate(options.template, options.templateData);
+        const processed = this.processTemplate(options.template, options.templateData)
         if (processed) {
           options.subject = processed.subject;
           options.html = processed.html;
@@ -434,7 +434,7 @@ class EmailService {
         html: options.html,
         attachments: options.attachments,
         priority: options.priority || 'normal',
-      };
+      }
 
       const _result = await this.transporter.sendMail(mailOptions);
 
@@ -442,7 +442,7 @@ class EmailService {
         messageId: result.messageId,
         to: options.to,
         subject: options.subject,
-      });
+      })
 
       return {
         messageId: result.messageId,
@@ -450,9 +450,9 @@ class EmailService {
         rejected: result.rejected || [],
         pending: result.pending || [],
         envelope: result.envelope,
-      };
+      }
     } catch (error) {
-      // console.error('Failed to send email:', error);
+      // console.error('Failed to send email:', error)
       throw new Error(
         `Email sending failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
@@ -482,32 +482,32 @@ class EmailService {
   private processTemplate(templateName: string, data: Record<string, any>): EmailTemplate | null {
     const template = this.templates.get(templateName);
     if (!template) {
-      // console.error(`Email template not found: ${templateName}`);
+      // console.error(`Email template not found: ${templateName}`)
       return null;
     }
 
     // Simple template processing (replace {{variable}} with data)
     const processText = (text: string) => {
       return text.replace(/\{\{(\w+)(\|(\w+))?\}\}/g, (match, key, _, filter) => {
-        let value = data[key] || match;
+        let value = data[key] || match
 
         // Apply filters
         if (filter === 'upper') {
-          value = String(value).toUpperCase();
+          value = String(value).toUpperCase()
         } else if (filter === 'lower') {
           value = String(value).toLowerCase();
         }
 
         return String(value);
       });
-    };
+    }
 
     return {
       name: template.name,
       subject: processText(template.subject),
       html: processText(template.html),
       text: template.text ? processText(template.text) : undefined,
-    };
+    }
   }
 
   async queueEmail(_options: EmailOptions): Promise<string> {
@@ -521,7 +521,7 @@ class EmailService {
       scheduledAt,
     });
 
-    // console.log(`Email queued for delivery: ${id}`);
+    // console.log(`Email queued for delivery: ${id}`)
     return id;
   }
 
@@ -539,17 +539,17 @@ class EmailService {
           try {
             await this.send(item.email);
             // Remove from queue on success
-            this.queue = this.queue.filter((q) => q.id !== item.id);
+            this.queue = this.queue.filter((q) => q.id !== item.id)
           } catch (error) {
-            // console.error(`Failed to send queued email ${item.id}:`, error);
+            // console.error(`Failed to send queued email ${item.id}:`, error)
 
             item.retryCount++;
             if (item.retryCount >= 3) {
-              // console.error(`Email ${item.id} failed after 3 attempts, removing from queue`);
+              // console.error(`Email ${item.id} failed after 3 attempts, removing from queue`)
               this.queue = this.queue.filter((q) => q.id !== item.id);
             } else {
               // Retry in 5 minutes
-              item.scheduledAt = new Date(Date.now() + 5 * 60 * 1000);
+              item.scheduledAt = new Date(Date.now() + 5 * 60 * 1000)
             }
           }
         }
@@ -564,7 +564,7 @@ class EmailService {
       pending: this.queue.length,
       processing: this.isProcessing,
       configured: emailConfig.enabled,
-    };
+    }
   }
 
   addTemplate(template: EmailTemplate) {
@@ -586,7 +586,7 @@ class EmailService {
     try {
       // Process template if specified
       if (options.template && EMAIL_TEMPLATES[options.template]) {
-        const template = EMAIL_TEMPLATES[options.template];
+        const template = EMAIL_TEMPLATES[options.template]
         options.subject = this.processTemplate(template.subject, options.templateData || {});
         options.html = this.processTemplate(template.html, options.templateData || {});
         if (template.text) {
@@ -595,14 +595,14 @@ class EmailService {
       }
 
       // Send email
-      const _result = await this.provider.sendEmail(options);
+      const _result = await this.provider.sendEmail(options)
 
       // Log email in database
-      await this.logEmail(options, result);
+      await this.logEmail(options, result)
 
       return result;
     } catch (error) {
-      // console.error('Email send error:', error);
+      // console.error('Email send error:', error)
       throw new Error('Failed to send email');
     }
   }
@@ -620,7 +620,7 @@ class EmailService {
         const _result = await this.sendEmail(email);
         results.push(result);
       } catch (error) {
-        // console.error('Bulk email error:', error);
+        // console.error('Bulk email error:', error)
         results.push({ messageId: '', success: false });
       }
     }
@@ -753,11 +753,11 @@ class EmailService {
         },
       });
     } catch (error) {
-      // console.error('Email logging error:', error);
+      // console.error('Email logging error:', error)
       // Don't throw error, logging is optional
     }
   }
 }
 
 // Export singleton instance
-export const emailService = new EmailService();
+export const emailService = new EmailService()

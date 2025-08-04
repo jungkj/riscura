@@ -21,7 +21,7 @@ const CreateRiskSchema = z.object({
   impact: z.number().int().min(1).max(5),
   owner: z.string().optional(),
   tags: z.array(z.string()).max(10).optional(),
-});
+})
 
 const UpdateRiskSchema = CreateRiskSchema.partial();
 
@@ -42,7 +42,7 @@ async function handleGetRisks(
     // Build query filters
     const where: any = {
       organizationId: context.organization.id,
-    };
+    }
 
     if (status) {
       where.status = status;
@@ -65,7 +65,7 @@ async function handleGetRisks(
         },
       }),
       context.prisma.risk.count({ where }),
-    ]);
+    ])
 
     // Note: Access logging is automatically handled by the @withDataAudit decorator
 
@@ -78,11 +78,11 @@ async function handleGetRisks(
         total: totalCount,
         pages: Math.ceil(totalCount / limit),
       },
-    });
+    })
   } catch (error) {
-    // console.error('Risk list error:', error);
+    // console.error('Risk list error:', error)
     // Error logging is automatically handled by the audit middleware
-    throw error;
+    throw error
   }
 }
 
@@ -101,7 +101,7 @@ export const GET = withAPI(
     summary: 'List Risks',
     description: 'Retrieve paginated list of risks with access logging',
   }
-);
+)
 
 // ============================================================================
 // EXAMPLE: POST /api/risks - Create Risk with Change Logging
@@ -133,7 +133,7 @@ async function handleCreateRisk(
           select: { id: true, firstName: true, lastName: true },
         },
       },
-    });
+    })
 
     // Manual audit logging for complex change tracking
     await logDataChangeEvent(
@@ -154,7 +154,7 @@ async function handleCreateRisk(
         createdViaAPI: true,
         riskCategory: validatedData.category,
       }
-    );
+    )
 
     return NextResponse.json(
       {
@@ -164,7 +164,7 @@ async function handleCreateRisk(
       { status: 201 }
     );
   } catch (error) {
-    // console.error('Risk creation error:', error);
+    // console.error('Risk creation error:', error)
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -199,7 +199,7 @@ export const POST = withAPI(
     summary: 'Create Risk',
     description: 'Create new risk with comprehensive audit logging',
   }
-);
+)
 
 // ============================================================================
 // EXAMPLE: PUT /api/risks/[id] - Update Risk with Change Tracking
@@ -221,7 +221,7 @@ async function handleUpdateRisk(
         id: riskId,
         organizationId: context.organization.id,
       },
-    });
+    })
 
     if (!currentRisk) {
       return NextResponse.json(
@@ -237,7 +237,7 @@ async function handleUpdateRisk(
     }
 
     // Calculate new risk score if likelihood or impact changed
-    const updateData: any = { ...validatedData };
+    const updateData: any = { ...validatedData }
     if (validatedData.likelihood || validatedData.impact) {
       const likelihood = validatedData.likelihood || currentRisk.likelihood;
       const impact = validatedData.impact || currentRisk.impact;
@@ -256,14 +256,14 @@ async function handleUpdateRisk(
           select: { id: true, firstName: true, lastName: true },
         },
       },
-    });
+    })
 
     // Track detailed changes for audit
     const changedFields = Object.keys(validatedData).filter(
       (key) =>
         JSON.stringify(currentRisk[key as keyof typeof currentRisk]) !==
         JSON.stringify(validatedData[key as keyof typeof validatedData])
-    );
+    )
 
     if (changedFields.length > 0) {
       await logDataChangeEvent(
@@ -298,7 +298,7 @@ async function handleUpdateRisk(
       data: updatedRisk,
     });
   } catch (error) {
-    // console.error('Risk update error:', error);
+    // console.error('Risk update error:', error)
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -333,7 +333,7 @@ export const PUT = withAPI(
     summary: 'Update Risk',
     description: 'Update existing risk with detailed change tracking',
   }
-);
+)
 
 // ============================================================================
 // EXAMPLE: DELETE /api/risks/[id] - Delete Risk with Audit Trail
@@ -352,7 +352,7 @@ async function handleDeleteRisk(
         id: riskId,
         organizationId: context.organization.id,
       },
-    });
+    })
 
     if (!risk) {
       return NextResponse.json(
@@ -370,7 +370,7 @@ async function handleDeleteRisk(
     // Soft delete or hard delete based on business rules
     await context.prisma.risk.delete({
       where: { id: riskId },
-    });
+    })
 
     // Log the deletion with full risk data for compliance
     await logDataChangeEvent(
@@ -392,14 +392,14 @@ async function handleDeleteRisk(
         cascadeDeletes: true, // If related data is also deleted
         complianceRetention: true, // Mark for extended retention
       }
-    );
+    )
 
     return NextResponse.json({
       success: true,
       message: 'Risk deleted successfully',
     });
   } catch (error) {
-    // console.error('Risk deletion error:', error);
+    // console.error('Risk deletion error:', error)
     throw error;
   }
 }
@@ -419,7 +419,7 @@ export const DELETE = withAPI(
     summary: 'Delete Risk',
     description: 'Delete risk with comprehensive audit trail for compliance',
   }
-);
+)
 
 // ============================================================================
 // EXAMPLE: Authentication Endpoint with Audit Logging
@@ -427,14 +427,14 @@ export const DELETE = withAPI(
 
 async function handleLogin(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body = await req.json()
     const { email, password } = body;
 
     // Validate credentials (simplified)
     const user = await context.prisma.user.findUnique({
       where: { email },
       include: { organization: true },
-    });
+    })
 
     if (!user || !verifyPassword(password, user.passwordHash)) {
       // Log failed login attempt
@@ -448,7 +448,7 @@ async function handleLogin(req: NextRequest) {
           attemptedEmail: email,
           failureReason: 'INVALID_CREDENTIALS',
         }
-      );
+      )
 
       return NextResponse.json(
         {
@@ -463,13 +463,13 @@ async function handleLogin(req: NextRequest) {
     }
 
     // Generate session/token
-    const _token = generateAuthToken(user);
+    const _token = generateAuthToken(user)
 
     // Log successful login
     await logAuthEvent(context.prisma, 'LOGIN', user.id, user.organizationId, req, {
       loginMethod: 'PASSWORD',
       sessionDuration: '24h',
-    });
+    })
 
     return NextResponse.json({
       success: true,
@@ -484,7 +484,7 @@ async function handleLogin(req: NextRequest) {
       },
     });
   } catch (error) {
-    // console.error('Login error:', error);
+    // console.error('Login error:', error)
     throw error;
   }
 }
@@ -499,7 +499,7 @@ export const POST_LOGIN = withAPI(withAuthAudit('LOGIN')(handleLogin), {
   tags: ['Authentication'],
   summary: 'User Login',
   description: 'Authenticate user with comprehensive audit logging',
-});
+})
 
 // ============================================================================
 // UTILITY FUNCTIONS (would be in separate files in real implementation)
@@ -543,4 +543,4 @@ export default {
   PUT,
   DELETE,
   POST_LOGIN,
-};
+}

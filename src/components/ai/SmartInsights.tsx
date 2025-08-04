@@ -8,13 +8,13 @@ import { designTokens } from '@/lib/design-system/tokens';
   DataIcons,
   NavigationIcons,
   ActionIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
 // Insight types and interfaces
 interface Insight {
-  id: string;
+  id: string
   type: 'risk' | 'compliance' | 'control' | 'trend' | 'recommendation' | 'alert';
   title: string;
   description: string;
@@ -40,7 +40,7 @@ interface SmartInsightsProps {
     types?: string[];
     severity?: string[];
     categories?: string[];
-  };
+  }
   onInsightAction?: (insightId: string, actionId: string) => void;
   onInsightDismiss?: (insightId: string) => void;
   className?: string;
@@ -196,13 +196,13 @@ const generateMockInsights = (_context: string): Insight[] => {
       ],
       sources: ['System Monitoring', 'Customer Surveys', 'Performance Analytics'],
     },
-  ];
+  ]
 
   // Filter insights based on context
   return baseInsights.filter((insight) => {
     switch (context) {
       case 'risk-assessment':
-        return ['risk', 'trend', 'recommendation'].includes(insight.type);
+        return ['risk', 'trend', 'recommendation'].includes(insight.type)
       case 'compliance':
         return ['compliance', 'alert'].includes(insight.type);
       case 'audit':
@@ -213,7 +213,7 @@ const generateMockInsights = (_context: string): Insight[] => {
         return true;
     }
   });
-};
+}
 
 export const SmartInsights: React.FC<SmartInsightsProps> = ({
   context = 'general',
@@ -231,18 +231,18 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
   // Load insights
   useEffect(() => {
     const loadInsights = async () => {
-      setIsLoading(true);
+      setIsLoading(true)
       try {
         // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         const mockInsights = generateMockInsights(context);
         setInsights(mockInsights);
       } catch (error) {
-        // console.error('Failed to load insights:', error);
+        // console.error('Failed to load insights:', error)
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     loadInsights();
   }, [context]);
@@ -250,7 +250,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
   // Filter and sort insights
   const filteredInsights = insights
     .filter((insight) => {
-      if (!filters) return true;
+      if (!filters) return true
 
       if (filters.types && !filters.types.includes(insight.type)) return false;
       if (filters.severity && !filters.severity.includes(insight.severity)) return false;
@@ -261,7 +261,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
     .sort((a, b) => {
       switch (sortBy) {
         case 'severity':
-          const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+          const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
           return severityOrder[b.severity] - severityOrder[a.severity];
         case 'confidence':
           return b.confidence - a.confidence;
@@ -284,7 +284,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
       default:
         return 'text-gray-700 bg-gray-100 border-gray-200';
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -303,20 +303,20 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
       default:
         return DataIcons.BarChart3;
     }
-  };
+  }
 
   const handleInsightAction = (insightId: string, actionId: string) => {
     if (onInsightAction) {
       onInsightAction(insightId, actionId);
     }
-  };
+  }
 
   const handleInsightDismiss = (insightId: string) => {
     setInsights((prev) => prev.filter((insight) => insight.id !== insightId));
     if (onInsightDismiss) {
       onInsightDismiss(insightId);
     }
-  };
+  }
 
   if (isLoading) {
     return (
@@ -558,6 +558,6 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default SmartInsights;

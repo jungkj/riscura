@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,28 +11,29 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 // Components
-import { EnhancedQuestionnaireBuilder } from '@/components/questionnaires/EnhancedQuestionnaireBuilder';
+import { EnhancedQuestionnaireBuilder } from '@/components/questionnaires/EnhancedQuestionnaireBuilder'
 import { QuestionnaireList } from '@/components/questionnaires/QuestionnaireList';
 import { EnhancedQuestionnaireList } from '@/components/questionnaires/EnhancedQuestionnaireList';
 import CollaborativeQuestionnairePage from './CollaborativeQuestionnairePage';
 import { WorkflowProgress } from '@/components/questionnaires/WorkflowProgress';
-// import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards';
+// import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards'
 import { AnalyticsDashboard } from '@/components/questionnaires/AnalyticsDashboard';
 import { TemplateLibrary } from '@/components/questionnaires/TemplateLibrary';
 import { WorkflowManagement } from '@/components/questionnaires/WorkflowManagement';
 import { AIAssistantPanel } from '@/components/questionnaires/AIAssistantPanel';
 // TODO: Create these components
-// import { ResponseAnalytics } from '@/components/questionnaires/ResponseAnalytics';
-// import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel';
+// import { ResponseAnalytics } from '@/components/questionnaires/ResponseAnalytics'
+// import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel'
 
 // Icons
 // import {
   Plus, FileText, Brain, BarChart3, Users, 
   Filter, Search, Eye, Star, 
   Activity
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 import type { 
@@ -40,7 +41,7 @@ import type {
   QuestionnaireResponse, 
   QuestionnaireCategory,
   QuestionnaireStatus 
-} from '@/types/questionnaire.types';
+} from '@/types/questionnaire.types'
 
 interface QuestionnairesPageProps {
   view?: 'list' | 'enhanced-search' | 'builder' | 'analytics' | 'templates' | 'collaboration';
@@ -50,7 +51,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
   const router = useRouter();
   
   // State Management
-  const [activeView, setActiveView] = useState<string>(view);
+  const [activeView, setActiveView] = useState<string>(view)
   const [questionnaireViewMode, setQuestionnaireViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<QuestionnaireCategory | 'all'>('all');
@@ -61,7 +62,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
   const [showFilters, setShowFilters] = useState(false);
 
   // Data
-  const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
+  const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([])
   const [responses, setResponses] = useState<QuestionnaireResponse[]>([]);
   const [analytics, setAnalytics] = useState({
     totalQuestionnaires: 0,
@@ -74,7 +75,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
 
   // Initialize
   useEffect(() => {
-    initializeData();
+    initializeData()
   }, []);
 
   const initializeData = async () => {
@@ -483,14 +484,14 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
             analytics: ['analyst', 'manager']
           }
         }
-      ];
+      ]
 
       setQuestionnaires(demoQuestionnaires);
       
       // Calculate analytics
       const totalResponses = demoQuestionnaires.reduce(
         (sum, q) => sum + q.analytics.overview.totalResponses, 0
-      );
+      )
       const avgCompletion = demoQuestionnaires.reduce(
         (sum, q) => sum + q.analytics.overview.completionRate, 0
       ) / demoQuestionnaires.length;
@@ -517,7 +518,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         description: `${demoQuestionnaires.length} questionnaires ready with AI intelligence`,
       });
     } catch (error) {
-      // console.error('Failed to load questionnaires:', error);
+      // console.error('Failed to load questionnaires:', error)
       setIsLoading(false);
       toast({
         title: 'Loading Failed',
@@ -525,12 +526,12 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   // Filtering
   const filteredQuestionnaires = questionnaires.filter(q => {
     const matchesSearch = q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         q.description.toLowerCase().includes(searchQuery.toLowerCase());
+                         q.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || q.category === selectedCategory;
     const matchesStatus = selectedStatus === 'all' || q.status === selectedStatus;
     
@@ -539,23 +540,23 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
 
   // Actions
   const handleCreateQuestionnaire = () => {
-    setActiveView('builder');
+    setActiveView('builder')
     setSelectedQuestionnaire(null);
-  };
+  }
 
   const handleEditQuestionnaire = (_questionnaire: Questionnaire) => {
     setSelectedQuestionnaire(questionnaire);
     setActiveView('builder');
-  };
+  }
 
   const handleWorkflowStepClick = (step: string) => {
     setActiveView(step);
     
     // Clear selected questionnaire when switching away from builder
     if (step !== 'builder') {
-      setSelectedQuestionnaire(null);
+      setSelectedQuestionnaire(null)
     }
-  };
+  }
 
   const handleDuplicateQuestionnaire = async (_questionnaire: Questionnaire) => {
     try {
@@ -578,7 +579,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
             lastUpdated: new Date()
           }
         }
-      };
+      }
 
       setQuestionnaires(prev => [duplicate, ...prev]);
       
@@ -593,7 +594,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleDeleteQuestionnaire = async (id: string) => {
     try {
@@ -610,7 +611,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handlePublishQuestionnaire = async (id: string) => {
     try {
@@ -631,7 +632,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   if (isLoading) {
 
@@ -657,7 +658,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
         </motion.div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -867,7 +868,7 @@ setSearchQuery(e.target.value)}
                 selectedQuestionnaire={selectedQuestionnaire}
                 onApplySuggestion={(suggestion) => {
                   // Handle applying AI suggestions
-                  // console.log('Applying suggestion:', suggestion);
+                  // console.log('Applying suggestion:', suggestion)
                   // Could navigate to builder or update questionnaire
                 }} />
             </motion.aside>
@@ -875,7 +876,7 @@ setSearchQuery(e.target.value)}
         </AnimatePresence>
       </div>
     </div>
-  );
+  )
 }
 
 export default QuestionnairesPage; 

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -14,6 +14,7 @@ import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   Dialog,
   DialogContent,
   DialogDescription,
@@ -74,7 +75,7 @@ interface LocationQuestion {
   zoom: number;
   allowSearch?: boolean;
   restrictToRegion?: boolean;
-  region?: { lat: number; lng: number; radius: number };
+  region?: { lat: number; lng: number; radius: number }
   showAddress?: boolean;
   requireAccuracy?: boolean;
 }
@@ -95,7 +96,7 @@ export function MatrixQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: MatrixQuestion;
+  config: MatrixQuestion
   value?: any;
   onChange?: (_value: any) => void;
   readonly?: boolean;
@@ -105,14 +106,14 @@ export function MatrixQuestionComponent({
   const handleResponse = (rowId: string, columnId: string, checked: boolean) => {
     if (readonly) return;
 
-    const newResponses = { ...responses };
+    const newResponses = { ...responses }
     
     if (config.style === 'radio' || !config.allowMultiple) {
       // Single selection per row
-      newResponses[rowId] = checked ? columnId : null;
+      newResponses[rowId] = checked ? columnId : null
     } else {
       // Multiple selection per row
-      if (!newResponses[rowId]) newResponses[rowId] = [];
+      if (!newResponses[rowId]) newResponses[rowId] = []
       if (checked) {
         newResponses[rowId] = [...newResponses[rowId], columnId];
       } else {
@@ -122,7 +123,7 @@ export function MatrixQuestionComponent({
 
     setResponses(newResponses);
     onChange?.(newResponses);
-  };
+  }
 
   const displayRows = config.randomizeRows 
     ? [...config.rows].sort(() => Math.random() - 0.5)
@@ -222,7 +223,7 @@ export function RankingQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: RankingQuestion;
+  config: RankingQuestion
   value?: string[];
   onChange?: (_value: string[]) => void;
   readonly?: boolean;
@@ -238,7 +239,7 @@ export function RankingQuestionComponent({
     if (readonly) return;
     setRankedItems(newOrder);
     onChange?.(newOrder);
-  };
+  }
 
   const addToRanking = (itemId: string) => {
     if (readonly) return;
@@ -257,7 +258,7 @@ export function RankingQuestionComponent({
     setRankedItems(newRanked);
     setAvailableItems(newAvailable);
     onChange?.(newRanked);
-  };
+  }
 
   const removeFromRanking = (itemId: string) => {
     if (readonly) return;
@@ -267,7 +268,7 @@ export function RankingQuestionComponent({
     setRankedItems(newRanked);
     setAvailableItems(newAvailable);
     onChange?.(newRanked);
-  };
+  }
 
   const displayItems = config.randomizeItems 
     ? [...config.items].sort(() => Math.random() - 0.5)
@@ -386,7 +387,7 @@ export function ImageQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: ImageQuestion;
+  config: ImageQuestion
   value?: any;
   onChange?: (_value: any) => void;
   readonly?: boolean;
@@ -424,7 +425,7 @@ export function ImageQuestionComponent({
 
     setSelectedImages(newSelection);
     onChange?.(config.selectionType === 'single' ? newSelection[0] : newSelection);
-  };
+  }
 
   const handleImageClick = (imageId: string, event: React.MouseEvent<HTMLDivElement>) => {
     if (config.selectionType === 'hotspot' && !readonly) {
@@ -437,7 +438,7 @@ export function ImageQuestionComponent({
         x,
         y,
         label: `Point ${hotspots.length + 1}`
-      };
+      }
       
       const newHotspots = [...hotspots, newHotspot];
       setHotspots(newHotspots);
@@ -445,7 +446,7 @@ export function ImageQuestionComponent({
     } else {
       handleImageSelect(imageId);
     }
-  };
+  }
 
   const handleImageUpload = (_file: File) => {
     if (!config.allowUpload) return;
@@ -455,10 +456,10 @@ export function ImageQuestionComponent({
       id: `uploaded-${Date.now()}`,
       url,
       alt: file.name
-    };
+    }
     
     setUploadedImages(prev => [...prev, newImage]);
-  };
+  }
 
   const allImages = [...config.images, ...uploadedImages];
 
@@ -565,7 +566,7 @@ export function SignatureQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: SignatureQuestion;
+  config: SignatureQuestion
   value?: string;
   onChange?: (_value: string) => void;
   readonly?: boolean;
@@ -584,7 +585,7 @@ export function SignatureQuestionComponent({
         img.onload = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0);
-        };
+        }
         img.src = value;
       }
     }
@@ -594,7 +595,7 @@ export function SignatureQuestionComponent({
     if (readonly) return;
     setIsDrawing(true);
     draw(e);
-  };
+  }
 
   const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing || readonly) return;
@@ -617,7 +618,7 @@ export function SignatureQuestionComponent({
     ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(x, y);
-  };
+  }
 
   const stopDrawing = () => {
     if (!isDrawing) return;
@@ -630,7 +631,7 @@ export function SignatureQuestionComponent({
       setTimestamp(new Date());
       onChange?.(dataURL);
     }
-  };
+  }
 
   const clearSignature = () => {
     if (readonly) return;
@@ -649,7 +650,7 @@ export function SignatureQuestionComponent({
     setSignature('');
     setTimestamp(null);
     onChange?.('');
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -708,8 +709,8 @@ export function LocationQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: LocationQuestion;
-  value?: { lat: number; lng: number; address?: string };
+  config: LocationQuestion
+  value?: { lat: number; lng: number; address?: string }
   onChange?: (_value: { lat: number; lng: number; address?: string }) => void;
   readonly?: boolean;
 }) {
@@ -720,10 +721,10 @@ export function LocationQuestionComponent({
   const handleLocationSelect = (lat: number, lng: number, address?: string) => {
     if (readonly) return;
     
-    const location = { lat, lng, address };
+    const location = { lat, lng, address }
     setSelectedLocation(location);
     onChange?.(location);
-  };
+  }
 
   const searchLocation = async () => {
     if (!searchQuery.trim() || !config.allowSearch) return;
@@ -731,7 +732,7 @@ export function LocationQuestionComponent({
     setIsSearching(true);
     try {
       // Mock geocoding - in real app, use Google Maps Geocoding API
-      const mockLat = 40.7128 + (Math.random() - 0.5) * 0.1;
+      const mockLat = 40.7128 + (Math.random() - 0.5) * 0.1
       const mockLng = -74.0060 + (Math.random() - 0.5) * 0.1;
       
       handleLocationSelect(mockLat, mockLng, searchQuery);
@@ -749,7 +750,7 @@ export function LocationQuestionComponent({
     } finally {
       setIsSearching(false);
     }
-  };
+  }
 
   const getCurrentLocation = () => {
     if (readonly || !navigator.geolocation) return;
@@ -770,7 +771,7 @@ export function LocationQuestionComponent({
         });
       }
     );
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -868,7 +869,7 @@ export function CustomHTMLQuestionComponent({
   onChange, 
   readonly = false 
 }: {
-  config: CustomHTMLQuestion;
+  config: CustomHTMLQuestion
   value?: any;
   onChange?: (_value: any) => void;
   readonly?: boolean;
@@ -880,18 +881,18 @@ export function CustomHTMLQuestionComponent({
   const handleInputChange = (fieldName: string, fieldValue: any) => {
     if (readonly) return;
     
-    const newValues = { ...inputValues, [fieldName]: fieldValue };
+    const newValues = { ...inputValues, [fieldName]: fieldValue }
     setInputValues(newValues);
     onChange?.(newValues);
-  };
+  }
 
   const sanitizeHTML = (html: string) => {
     // Basic HTML sanitization - in production, use a proper sanitization library
     return html
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/on\w+="[^"]*"/g, '')
-      .replace(/javascript:/gi, '');
-  };
+      .replace(/javascript:/gi, '')
+  }
 
   const generateIFrameContent = () => {
     const sanitizedHTML = config.sandbox ? sanitizeHTML(config.htmlContent) : config.htmlContent;
@@ -917,7 +918,7 @@ export function CustomHTMLQuestionComponent({
         </body>
       </html>
     `;
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -1109,7 +1110,7 @@ export const ADVANCED_QUESTION_TYPES = {
       sandbox: true
     } as CustomHTMLQuestion
   }
-};
+}
 
 export type {
   MatrixQuestion,
@@ -1118,4 +1119,4 @@ export type {
   SignatureQuestion,
   LocationQuestion,
   CustomHTMLQuestion
-}; 
+} 

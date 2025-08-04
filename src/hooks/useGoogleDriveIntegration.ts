@@ -19,7 +19,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
   const checkConnection = useCallback(async () => {
     try {
       // Try to list files to check if authenticated
-      const response = await api.post('/api/google-drive/files', {});
+      const response = await api.post('/api/google-drive/files', {})
       const data = await response.json();
 
       setIsConnected(!data.error || data.code !== 'AUTH_REQUIRED');
@@ -31,7 +31,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
   // Connect to Google Drive
   const connect = useCallback(async () => {
     try {
-      setIsConnecting(true);
+      setIsConnecting(true)
       setError(null);
 
       const response = await api.get('/api/google-drive/auth');
@@ -39,12 +39,12 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
 
       if (data.authUrl) {
         // Redirect to Google OAuth
-        window.location.href = data.authUrl;
+        window.location.href = data.authUrl
       } else if (data.error) {
         setError(data.error);
       }
     } catch (err) {
-      // console.error('Error connecting to Google Drive:', err);
+      // console.error('Error connecting to Google Drive:', err)
       setError('Failed to connect to Google Drive');
     } finally {
       setIsConnecting(false);
@@ -54,7 +54,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
   // Disconnect from Google Drive
   const disconnect = useCallback(async (): Promise<boolean> => {
     try {
-      setError(null);
+      setError(null)
 
       const response = await api.delete('/api/google-drive/auth');
       const data = await response.json();
@@ -69,7 +69,7 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
 
       return false;
     } catch (err) {
-      // console.error('Error disconnecting from Google Drive:', err);
+      // console.error('Error disconnecting from Google Drive:', err)
       setError('Failed to disconnect from Google Drive');
       return false;
     }
@@ -82,5 +82,5 @@ export const useGoogleDriveIntegration = (): UseGoogleDriveIntegrationReturn => 
     connect,
     disconnect,
     checkConnection,
-  };
-};
+  }
+}

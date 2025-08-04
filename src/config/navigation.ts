@@ -17,7 +17,7 @@
   Folder,
   Calendar,
   type LucideIcon,
-} from 'lucide-react';
+} from 'lucide-react'
 
 export interface NavItem {
   id: string;
@@ -209,7 +209,7 @@ export const navigationSections: NavSection[] = [
       },
     ],
   },
-];
+]
 
 // Default favorites for new users
 export const defaultFavorites: QuickAccessItem[] = [
@@ -234,13 +234,13 @@ export const defaultFavorites: QuickAccessItem[] = [
     icon: Brain,
     type: 'favorite',
   },
-];
+]
 
 // Helper functions
 export const getBadgeVariant = (variant?: string) => {
   switch (variant) {
     case 'critical':
-      return 'destructive';
+      return 'destructive'
     case 'warning':
       return 'secondary';
     case 'success':
@@ -250,7 +250,7 @@ export const getBadgeVariant = (variant?: string) => {
     default:
       return 'secondary';
   }
-};
+}
 
 export const isItemActive = (href: string, pathname: string) => {
   if (!pathname) return false;
@@ -258,7 +258,7 @@ export const isItemActive = (href: string, pathname: string) => {
     return pathname === '/dashboard';
   }
   return pathname.startsWith(href);
-};
+}
 
 export const findNavItemById = (id: string): NavItem | undefined => {
   for (const section of navigationSections) {
@@ -266,7 +266,7 @@ export const findNavItemById = (id: string): NavItem | undefined => {
     if (item) return item;
   }
   return undefined;
-};
+}
 
 export const findNavItemByHref = (href: string): NavItem | undefined => {
   for (const section of navigationSections) {
@@ -274,11 +274,11 @@ export const findNavItemByHref = (href: string): NavItem | undefined => {
     if (item) return item;
   }
   return undefined;
-};
+}
 
 export const getAllNavItems = (): NavItem[] => {
   return navigationSections.flatMap((section) => section.items);
-};
+}
 
 export const searchNavItems = (_query: string): NavItem[] => {
   const lowercaseQuery = query.toLowerCase();
@@ -287,4 +287,4 @@ export const searchNavItems = (_query: string): NavItem[] => {
       item.title.toLowerCase().includes(lowercaseQuery) ||
       item.description?.toLowerCase().includes(lowercaseQuery)
   );
-};
+}

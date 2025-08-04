@@ -22,7 +22,7 @@ const subscribeSchema = z.object({
       browser: z.string().optional(),
     })
     .optional(),
-});
+})
 
 export const POST = withApiMiddleware(async (req: NextRequest) => {
   const user = (req as any).user;

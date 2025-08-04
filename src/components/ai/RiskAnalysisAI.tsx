@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
   TrendingUp,
   BarChart3,
   Settings,
@@ -14,7 +15,7 @@ import {
   Activity
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -24,14 +25,14 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
-// import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types'
 // import { 
   riskAnalysisAIService, 
   RiskAssessmentReport, 
   RiskCorrelationAnalysis,
   QuantitativeResults,
   RiskRecommendation
-} from '@/services/RiskAnalysisAIService';
+} from '@/services/RiskAnalysisAIService'
 
 interface RiskAnalysisAIProps {
   risks: Risk[];
@@ -68,7 +69,7 @@ const FrameworkCard: React.FC<{
       color: 'text-[#191919]',
       categories: ['Technical', 'Operational', 'Management']
     }
-  };
+  }
 
   const info = frameworkInfo[framework];
 
@@ -107,7 +108,7 @@ const FrameworkCard: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ results }) => {
   return (
@@ -197,7 +198,7 @@ const QuantitativeResultsView: React.FC<{ results: QuantitativeResults }> = ({ r
       </DaisyCard>
     </div>
   );
-};
+}
 
 const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> = ({ analysis }) => {
   return (
@@ -308,7 +309,7 @@ const CorrelationAnalysisView: React.FC<{ analysis: RiskCorrelationAnalysis }> =
       )}
     </div>
   );
-};
+}
 
 const RecommendationsView: React.FC<{
   recommendations: RiskRecommendation[];
@@ -322,7 +323,7 @@ const RecommendationsView: React.FC<{
       case 'low': return 'bg-green-500';
       default: return 'bg-muted';
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -334,7 +335,7 @@ const RecommendationsView: React.FC<{
       case 'acceptance': return <Clock className="h-4 w-4" />;
       default: return <Settings className="h-4 w-4" />;
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -407,7 +408,7 @@ const RecommendationsView: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
   risks,
@@ -451,22 +452,22 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
 
       setActiveTab('report');
     } catch (error) {
-      // console.error('Risk analysis failed:', error);
+      // console.error('Risk analysis failed:', error)
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }
 
   const handleApplyRecommendation = (_recommendation: RiskRecommendation) => {
     onRecommendationApplied?.(recommendation);
-  };
+  }
 
   const exportReport = async () => {
     if (!currentReport) return;
     
     // Implementation for report export
-    // console.log('Exporting report:', currentReport.id);
-  };
+    // console.log('Exporting report:', currentReport.id)
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -746,4 +747,4 @@ export const RiskAnalysisAI: React.FC<RiskAnalysisAIProps> = ({
       </DaisyTabs>
     </div>
   );
-}; 
+} 

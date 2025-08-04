@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -35,7 +36,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
   Database,
   Eye,
   Settings,
-} from 'lucide-react';
+} from 'lucide-react'
 import { ProboService, type ProboMitigation } from '@/services/ProboService';
 import { toast } from 'sonner';
 
@@ -50,9 +51,9 @@ const getCategoryIcon = (category: string) => {
     'Business continuity & third-party management': <Building className="h-4 w-4" />,
     'Data management & privacy': <Database className="h-4 w-4" />,
     'Governance, Risk & Compliance': <Settings className="h-4 w-4" />,
-  };
+  }
   return iconMap[category] || <Shield className="h-4 w-4" />;
-};
+}
 
 const getImportanceColor = (importance: string) => {
   switch (importance) {
@@ -65,7 +66,7 @@ const getImportanceColor = (importance: string) => {
     default:
       return 'bg-gray-100 text-gray-800 border-gray-200';
   }
-};
+}
 
 const getImportanceIcon = (importance: string) => {
   switch (importance) {
@@ -78,7 +79,7 @@ const getImportanceIcon = (importance: string) => {
     default:
       return <Info className="h-3 w-3" />;
   }
-};
+}
 
 export function ProboControlsLibrary() {
   const [mitigations, setMitigations] = useState<ProboMitigation[]>([]);
@@ -111,12 +112,12 @@ export function ProboControlsLibrary() {
       setMitigations(mitigationsData);
       setCategories(categoriesData);
     } catch (error) {
-      // console.error('Error loading mitigations:', error);
+      // console.error('Error loading mitigations:', error)
       toast.error('Failed to load security controls');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const filterMitigations = () => {
     let filtered = mitigations;
@@ -140,7 +141,7 @@ export function ProboControlsLibrary() {
     }
 
     setFilteredMitigations(filtered);
-  };
+  }
 
   const handleMitigationToggle = (mitigationId: string) => {
     const newSelected = new Set(selectedMitigations);
@@ -150,7 +151,7 @@ export function ProboControlsLibrary() {
       newSelected.add(mitigationId);
     }
     setSelectedMitigations(newSelected);
-  };
+  }
 
   const handleSelectAll = () => {
     if (selectedMitigations.size === filteredMitigations.length) {
@@ -158,7 +159,7 @@ export function ProboControlsLibrary() {
     } else {
       setSelectedMitigations(new Set(filteredMitigations.map((m) => m.id)));
     }
-  };
+  }
 
   const handleImportSelected = async () => {
     if (selectedMitigations.size === 0) {
@@ -170,26 +171,26 @@ export function ProboControlsLibrary() {
       toast.success(`Successfully imported ${selectedMitigations.size} security controls`);
       setSelectedMitigations(new Set());
     } catch (error) {
-      // console.error('Error importing controls:', error);
+      // console.error('Error importing controls:', error)
       toast.error('Failed to import controls');
     }
-  };
+  }
 
   const getCategoryStats = () => {
     const stats: {
-      [key: string]: { total: number; mandatory: number; preferred: number; advanced: number };
-    } = {};
+      [key: string]: { total: number; mandatory: number; preferred: number; advanced: number }
+    } = {}
 
     mitigations.forEach((m) => {
       if (!stats[m.category]) {
-        stats[m.category] = { total: 0, mandatory: 0, preferred: 0, advanced: 0 };
+        stats[m.category] = { total: 0, mandatory: 0, preferred: 0, advanced: 0 }
       }
       stats[m.category].total++;
       stats[m.category][m.importance.toLowerCase() as 'mandatory' | 'preferred' | 'advanced']++;
     });
 
     return stats;
-  };
+  }
 
   if (loading) {
     return (

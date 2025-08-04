@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Plus,
   Search,
   Filter,
@@ -16,7 +17,7 @@ import {
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import {
   DaisyDialog,
   DaisyDialogContent,
@@ -64,7 +65,7 @@ interface Spreadsheet {
     firstName: string;
     lastName: string;
     email: string;
-  };
+  }
   sheets: Array<{
     id: string;
     name: string;
@@ -77,12 +78,12 @@ interface Spreadsheet {
       firstName: string;
       lastName: string;
       email: string;
-    };
+    }
   }>;
   _count: {
     sheets: number;
     versions: number;
-  };
+  }
 }
 
 const templateTypes = [
@@ -142,7 +143,7 @@ export default function SpreadsheetsPage() {
   useEffect(() => {
     const fetchSpreadsheets = async () => {
       try {
-        const response = await fetch('/api/spreadsheets');
+        const response = await fetch('/api/spreadsheets')
         const data = await response.json();
 
         if (data.success) {
@@ -150,18 +151,18 @@ export default function SpreadsheetsPage() {
           setFilteredSpreadsheets(data.data);
         }
       } catch (error) {
-        // console.error('Failed to fetch spreadsheets:', error);
+        // console.error('Failed to fetch spreadsheets:', error)
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchSpreadsheets();
   }, []);
 
   // Filter and search spreadsheets
   useEffect(() => {
-    let filtered = spreadsheets;
+    let filtered = spreadsheets
 
     // Apply search filter
     if (searchTerm) {
@@ -169,12 +170,12 @@ export default function SpreadsheetsPage() {
         (s) =>
           s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           s.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      )
     }
 
     // Apply type filter
     if (filterType !== 'all') {
-      filtered = filtered.filter((s) => s.templateType === filterType);
+      filtered = filtered.filter((s) => s.templateType === filterType)
     }
 
     setFilteredSpreadsheets(filtered);
@@ -196,21 +197,21 @@ export default function SpreadsheetsPage() {
         setIsCreateDialogOpen(false);
         setNewSpreadsheet({ name: '', description: '', templateType: 'RCSA_ASSESSMENT' });
         // Refresh spreadsheets list
-        const refreshResponse = await fetch('/api/spreadsheets');
+        const refreshResponse = await fetch('/api/spreadsheets')
         const refreshData = await refreshResponse.json();
         if (refreshData.success) {
           setSpreadsheets(refreshData.data);
         }
       }
     } catch (error) {
-      // console.error('Failed to create spreadsheet:', error);
+      // console.error('Failed to create spreadsheet:', error)
     }
-  };
+  }
 
   const getTemplateTypeLabel = (_type: string) => {
     const template = templateTypes.find((t) => t.value === type);
     return template?.label || type;
-  };
+  }
 
   const getTemplateTypeBadgeColor = (_type: string) => {
     const colors: { [key: string]: string } = {
@@ -221,9 +222,9 @@ export default function SpreadsheetsPage() {
       VENDOR_ASSESSMENT: 'bg-orange-100 text-orange-800',
       AUDIT_FINDINGS: 'bg-yellow-100 text-yellow-800',
       CUSTOM: 'bg-gray-100 text-gray-800',
-    };
+    }
     return colors[type] || 'bg-gray-100 text-gray-800';
-  };
+  }
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -231,7 +232,7 @@ export default function SpreadsheetsPage() {
       month: 'short',
       day: 'numeric',
     });
-  };
+  }
 
   const SpreadsheetCard = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => {
     return (
@@ -297,7 +298,7 @@ export default function SpreadsheetsPage() {
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   const SpreadsheetListItem = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => {
     return (
@@ -352,7 +353,7 @@ export default function SpreadsheetsPage() {
         </DaisyDropdownMenu>
       </div>
     );
-  };
+  }
 
   if (loading) {
     return (

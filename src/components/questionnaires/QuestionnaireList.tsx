@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import { 
+import { DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
@@ -21,7 +22,7 @@ import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/compon
   Play, Pause, Users, Clock, Target, BarChart3, Brain,
   Shield, CheckCircle, AlertTriangle, Calendar, FileText,
   Grid3X3, List, TrendingUp
-} from 'lucide-react';
+} from 'lucide-react'
 
 import type { Questionnaire } from '@/types/questionnaire.types';
 
@@ -48,7 +49,7 @@ export function QuestionnaireList({
   const [internalView, setInternalView] = useState<'grid' | 'list'>(viewMode);
 
   // Use internal state if no external control provided
-  const currentView = onViewModeChange ? viewMode : internalView;
+  const currentView = onViewModeChange ? viewMode : internalView
   const setView = onViewModeChange || setInternalView;
 
   const getStatusColor = (status: string) => {
@@ -60,7 +61,7 @@ export function QuestionnaireList({
       case 'archived': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800';
       default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700';
     }
-  };
+  }
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -71,13 +72,13 @@ export function QuestionnaireList({
       case 'security_review': return <Shield className="w-4 h-4" />;
       default: return <FileText className="w-4 h-4" />;
     }
-  };
+  }
 
   const formatCategory = (category: string) => {
     return category.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
-  };
+  }
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -85,7 +86,7 @@ export function QuestionnaireList({
       day: 'numeric',
       year: 'numeric'
     }).format(date);
-  };
+  }
 
   const QuestionnaireCard = ({ questionnaire }: { questionnaire: Questionnaire }) => (
     <motion.div
@@ -460,7 +461,7 @@ export function QuestionnaireList({
         </DaisyButton>
       </motion.div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">

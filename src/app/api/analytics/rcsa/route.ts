@@ -61,7 +61,7 @@ export const GET = withApiMiddleware(
           where: { organizationId: user.organizationId },
           _count: { id: true },
         }),
-      ]);
+      ])
 
       // Calculate coverage metrics
       const risksWithControls = await db.client.risk.count({
@@ -71,7 +71,7 @@ export const GET = withApiMiddleware(
             some: {},
           },
         },
-      });
+      })
 
       const controlsWithRisks = await db.client.control.count({
         where: {
@@ -120,14 +120,14 @@ export const GET = withApiMiddleware(
           controlTrend: [] as any[],
           mappingTrend: [] as any[],
         },
-      };
+      }
 
       return NextResponse.json({
         success: true,
         data: analytics,
       });
     } catch (error) {
-      // console.error('Get RCSA analytics error:', error);
+      // console.error('Get RCSA analytics error:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to fetch RCSA analytics' },
         { status: 500 }

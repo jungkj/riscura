@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns'
 import { 
   Copy, 
   RotateCcw, 
@@ -19,10 +19,10 @@ import {
 } from 'lucide-react';
 
 import { ChatMessage as ChatMessageType, AISuggestion } from '@/hooks/useARIAChat';
-// import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types'
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown';
@@ -67,7 +67,7 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
       case 'file': return '📎';
       default: return '📎';
     }
-  };
+  }
 
   return (
     <div className="flex items-center gap-2 p-2 bg-accent/50 rounded-md border">
@@ -89,7 +89,7 @@ const MessageAttachment: React.FC<MessageAttachmentProps> = ({
       </div>
     </div>
   );
-};
+}
 
 const SuggestionCard: React.FC<{
   suggestion: AISuggestion;
@@ -103,7 +103,7 @@ const SuggestionCard: React.FC<{
       case 'explanation': return '❓';
       default: return '💡';
     }
-  };
+  }
 
   return (
     <DaisyCard className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800" >
@@ -126,24 +126,24 @@ const SuggestionCard: React.FC<{
       </div>
     </DaisyCard>
   );
-};
+}
 
 // Simple text formatter for basic markdown-like features
 const formatMessageContent = (_content: string) => {
   // Convert **bold** to <strong>
-  const boldFormatted = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  const boldFormatted = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
   
   // Convert *italic* to <em>
-  const italicFormatted = boldFormatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  const italicFormatted = boldFormatted.replace(/\*(.*?)\*/g, '<em>$1</em>')
   
   // Convert `code` to <code>
-  const codeFormatted = italicFormatted.replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-accent text-sm">$1</code>');
+  const codeFormatted = italicFormatted.replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-accent text-sm">$1</code>')
   
   // Convert line breaks
-  const lineBreakFormatted = codeFormatted.replace(/\n/g, '<br>');
+  const lineBreakFormatted = codeFormatted.replace(/\n/g, '<br>')
   
   return lineBreakFormatted;
-};
+}
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
   message,
@@ -163,7 +163,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   // Auto-scroll to latest message
   useEffect(() => {
     if (isLast && messageRef.current) {
-      messageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      messageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
     }
   }, [isLast, message.content]);
 
@@ -213,15 +213,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       control_advisor: '🛡️',
       compliance_expert: '📋',
       general_assistant: '🤖',
-    };
+    }
     return avatars[agentType];
-  };
+  }
 
   const getStatusIcon = () => {
     if (message.isError) return <XCircle className="h-4 w-4 text-destructive" />;
     if (message.isStreaming) return <Clock className="h-4 w-4 text-blue-500 animate-pulse" />;
     return <CheckCircle className="h-4 w-4 text-green-500" />;
-  };
+  }
 
   const messageAlignment = isAI ? 'flex-start' : 'flex-end';
   const messageMaxWidth = isAI ? '85%' : '75%';
@@ -383,7 +383,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   }}
                   onDownload={() => {
                     // Implementation for download
-                    // console.log('Download:', attachment.title);
+                    // console.log('Download:', attachment.title)
                   }} />
               ))}
             </div>
@@ -412,4 +412,4 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       </motion.div>
     
   );
-}; 
+} 

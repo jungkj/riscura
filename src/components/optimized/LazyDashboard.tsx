@@ -1,12 +1,12 @@
 'use client';
 
 // Progressive Loading Dashboard for Optimized Performance
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import { ErrorBoundary } from 'react-error-boundary';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -34,7 +34,7 @@ export interface DashboardLayout {
   name: string;
   widgets: Array<{
     widgetId: string;
-    position: { x: number; y: number; w: number; h: number };
+    position: { x: number; y: number; w: number; h: number }
     visible: boolean;
   }>;
 }
@@ -84,7 +84,7 @@ const WidgetSkeleton: React.FC<DaisySkeletonProps> = ({ size, className }) => {
     medium: 'h-48',
     large: 'h-64',
     full: 'h-96',
-  };
+  }
 
   return (
     <div className={cn('animate-pulse bg-gray-200 rounded-lg', sizeClasses[size], className)}>
@@ -104,7 +104,7 @@ const WidgetSkeleton: React.FC<DaisySkeletonProps> = ({ size, className }) => {
       </div>
     </div>
   );
-};
+}
 
 const DefaultErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
   <div className="flex flex-col items-center justify-center h-32 bg-red-50 border border-red-200 rounded-lg">
@@ -153,7 +153,7 @@ const LazyWidget: React.FC<{
         onStateChange({ loading: true, error: null });
 
         // Simulate loading delay for demonstration
-        await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 + 500));
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 + 500))
 
         onStateChange({
           loading: false,
@@ -166,14 +166,14 @@ const LazyWidget: React.FC<{
         onStateChange({ loading: false, error: err });
         onError(err);
       }
-    };
+    }
 
     loadWidget();
   }, [shouldLoad, state.loaded, onLoad, onError, onStateChange]);
 
   // Set up refresh interval
   useEffect(() => {
-    if (!widget.refreshInterval || !state.loaded) return;
+    if (!widget.refreshInterval || !state.loaded) return
 
     refreshTimeoutRef.current = setTimeout(() => {
       onStateChange({ loaded: false });
@@ -183,7 +183,7 @@ const LazyWidget: React.FC<{
       if (refreshTimeoutRef.current) {
         clearTimeout(refreshTimeoutRef.current);
       }
-    };
+    }
   }, [widget.refreshInterval, state.loaded, state.lastRefresh, onStateChange]);
 
   const sizeClasses = {
@@ -191,7 +191,7 @@ const LazyWidget: React.FC<{
     medium: 'col-span-2 row-span-1',
     large: 'col-span-2 row-span-2',
     full: 'col-span-4 row-span-2',
-  };
+  }
 
   const ErrorComponent = widget.errorComponent || DefaultErrorComponent;
   const LoadingComponent = widget.loadingComponent || (() => <WidgetSkeleton size={widget.size} />);
@@ -251,7 +251,7 @@ const LazyWidget: React.FC<{
   }
 
   return null;
-};
+}
 
 const LazyDashboard: React.FC<LazyDashboardProps> = ({
   widgets,
@@ -279,7 +279,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   useCSSTransforms = true,
 }) => {
   const [widgetStates, setWidgetStates] = useState<Record<string, WidgetState>>(() => {
-    const states: Record<string, WidgetState> = {};
+    const states: Record<string, WidgetState> = {}
     widgets.forEach((widget) => {
       states[widget.id] = {
         loading: false,
@@ -287,7 +287,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
         error: null,
         data: null,
         lastRefresh: 0,
-      };
+      }
     });
     return states;
   });
@@ -300,11 +300,11 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   const { ref: intersectionRef, isIntersecting: inView } = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '100px',
-  });
+  })
 
   // Sort widgets by priority
   const sortedWidgets = useMemo(() => {
-    const priorityOrder = { high: 0, medium: 1, low: 2 };
+    const priorityOrder = { high: 0, medium: 1, low: 2 }
     return [...widgets].sort((a, b) => {
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
@@ -312,7 +312,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
 
   // Chunk widgets for progressive loading
   const widgetChunks = useMemo(() => {
-    const chunks: DashboardWidget[][] = [];
+    const chunks: DashboardWidget[][] = []
     for (let i = 0; i < sortedWidgets.length; i += chunkSize) {
       chunks.push(sortedWidgets.slice(i, i + chunkSize));
     }
@@ -322,7 +322,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   // Progressive loading effect
   useEffect(() => {
     if (!enableProgressiveLoading) {
-      setLoadedChunks(new Set(widgetChunks.map((_, index) => index)));
+      setLoadedChunks(new Set(widgetChunks.map((_, index) => index)))
       return;
     }
 
@@ -331,7 +331,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
         await new Promise((resolve) => setTimeout(resolve, loadingDelay));
         setLoadedChunks((prev) => new Set([...prev, i]));
       }
-    };
+    }
 
     loadChunks();
   }, [widgetChunks, enableProgressiveLoading, loadingDelay]);
@@ -342,7 +342,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
       setWidgetStates((prev) => ({
         ...prev,
         [widgetId]: { ...prev[widgetId], ...newState },
-      }));
+      }))
     },
     []
   );
@@ -350,7 +350,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   // Handle widget load
   const handleWidgetLoad = useCallback(
     (widgetId: string) => {
-      setVisibleWidgets((prev) => new Set([...prev, widgetId]));
+      setVisibleWidgets((prev) => new Set([...prev, widgetId]))
       onWidgetLoad?.(widgetId);
     },
     [onWidgetLoad]
@@ -359,14 +359,14 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
   // Handle widget error
   const handleWidgetError = useCallback(
     (widgetId: string, error: Error) => {
-      onWidgetError?.(widgetId, error);
+      onWidgetError?.(widgetId, error)
     },
     [onWidgetError]
   );
 
   // Get widgets to render
   const widgetsToRender = useMemo(() => {
-    if (!enableProgressiveLoading) return sortedWidgets;
+    if (!enableProgressiveLoading) return sortedWidgets
 
     const widgetsToShow: DashboardWidget[] = [];
     loadedChunks.forEach((chunkIndex) => {
@@ -385,7 +385,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
           <WidgetSkeleton key={index} size={index % 4 === 0 ? 'large' : 'medium'} />
         ))}
       </div>
-    );
+    )
   }
 
   // Error state
@@ -397,7 +397,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
           <div className="text-gray-500 text-sm">{error.message}</div>
         </div>
       </div>
-    );
+    )
   }
 
   // Empty state
@@ -409,7 +409,7 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
           <div className="text-gray-400 text-sm">Add widgets to see your dashboard</div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -464,13 +464,13 @@ const LazyDashboard: React.FC<LazyDashboardProps> = ({
       </AnimatePresence>
     </div>
   );
-};
+}
 
 export default LazyDashboard;
 
 // Utility hook for dashboard state management
 export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
-  const [widgets, setWidgets] = useState(initialWidgets);
+  const [widgets, setWidgets] = useState(initialWidgets)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [loadedWidgets, setLoadedWidgets] = useState<Set<string>>(new Set());
@@ -509,7 +509,7 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
   }, []);
 
   const handleWidgetError = useCallback((widgetId: string, error: Error) => {
-    // console.error(`Widget ${widgetId} failed to load:`, error);
+    // console.error(`Widget ${widgetId} failed to load:`, error)
   }, []);
 
   return {
@@ -526,5 +526,5 @@ export const useLazyDashboard = (initialWidgets: DashboardWidget[]) => {
     refreshAll,
     handleWidgetLoad,
     handleWidgetError,
-  };
-};
+  }
+}

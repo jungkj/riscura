@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   ArrowLeft,
   Search,
   Edit2,
@@ -52,7 +53,7 @@ export default function UpdateRiskAssessmentPage() {
       const data = await response.json();
       setRisks(data.data || []);
     } catch (error) {
-      // console.error('Failed to fetch risks:', error);
+      // console.error('Failed to fetch risks:', error)
       toast({
         title: 'Error',
         description: 'Failed to load risks',
@@ -61,7 +62,7 @@ export default function UpdateRiskAssessmentPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const filteredRisks = risks.filter(
     (risk) =>
@@ -73,8 +74,8 @@ export default function UpdateRiskAssessmentPage() {
   const handleRiskSelect = (riskId: string) => {
     setSelectedRisk(riskId);
     // Navigate to the edit page for the specific risk
-    router.push(`/dashboard/risks/${riskId}/edit`);
-  };
+    router.push(`/dashboard/risks/${riskId}/edit`)
+  }
 
   const getRiskScoreColor = (score: string) => {
     switch (score.toLowerCase()) {
@@ -89,7 +90,7 @@ export default function UpdateRiskAssessmentPage() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -100,7 +101,7 @@ export default function UpdateRiskAssessmentPage() {
       default:
         return <Minus className="h-4 w-4 text-gray-600" />;
     }
-  };
+  }
 
   return (
     <ProtectedRoute>

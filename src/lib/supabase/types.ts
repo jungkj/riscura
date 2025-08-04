@@ -14,7 +14,7 @@ export interface Database {
           isActive: boolean;
           createdAt: string;
           updatedAt: string;
-        };
+        }
         Insert: {
           id?: string;
           name: string;
@@ -25,7 +25,7 @@ export interface Database {
           isActive?: boolean;
           createdAt?: string;
           updatedAt?: string;
-        };
+        }
         Update: {
           id?: string;
           name?: string;
@@ -36,8 +36,8 @@ export interface Database {
           isActive?: boolean;
           createdAt?: string;
           updatedAt?: string;
-        };
-      };
+        }
+      }
       users: {
         Row: {
           id: string;
@@ -59,7 +59,7 @@ export interface Database {
           organizationId: string;
           createdAt: string;
           updatedAt: string;
-        };
+        }
         Insert: {
           id?: string;
           email: string;
@@ -80,7 +80,7 @@ export interface Database {
           organizationId: string;
           createdAt?: string;
           updatedAt?: string;
-        };
+        }
         Update: {
           id?: string;
           email?: string;
@@ -101,8 +101,8 @@ export interface Database {
           organizationId?: string;
           createdAt?: string;
           updatedAt?: string;
-        };
-      };
+        }
+      }
       risks: {
         Row: {
           id: string;
@@ -129,7 +129,7 @@ export interface Database {
           createdAt: string;
           updatedAt: string;
           createdBy: string | null;
-        };
+        }
         Insert: {
           id?: string;
           title: string;
@@ -155,7 +155,7 @@ export interface Database {
           createdAt?: string;
           updatedAt?: string;
           createdBy?: string | null;
-        };
+        }
         Update: {
           id?: string;
           title?: string;
@@ -181,8 +181,8 @@ export interface Database {
           createdAt?: string;
           updatedAt?: string;
           createdBy?: string | null;
-        };
-      };
+        }
+      }
       controls: {
         Row: {
           id: string;
@@ -206,7 +206,7 @@ export interface Database {
           createdAt: string;
           updatedAt: string;
           createdBy: string | null;
-        };
+        }
         Insert: {
           id?: string;
           title: string;
@@ -229,7 +229,7 @@ export interface Database {
           createdAt?: string;
           updatedAt?: string;
           createdBy?: string | null;
-        };
+        }
         Update: {
           id?: string;
           title?: string;
@@ -252,8 +252,8 @@ export interface Database {
           createdAt?: string;
           updatedAt?: string;
           createdBy?: string | null;
-        };
-      };
+        }
+      }
       documents: {
         Row: {
           id: string;
@@ -269,7 +269,7 @@ export interface Database {
           organizationId: string;
           createdAt: string;
           updatedAt: string;
-        };
+        }
         Insert: {
           id?: string;
           title: string;
@@ -284,7 +284,7 @@ export interface Database {
           organizationId: string;
           createdAt?: string;
           updatedAt?: string;
-        };
+        }
         Update: {
           id?: string;
           title?: string;
@@ -299,8 +299,8 @@ export interface Database {
           organizationId?: string;
           createdAt?: string;
           updatedAt?: string;
-        };
-      };
+        }
+      }
       activities: {
         Row: {
           id: string;
@@ -312,7 +312,7 @@ export interface Database {
           userId: string;
           organizationId: string;
           createdAt: string;
-        };
+        }
         Insert: {
           id?: string;
           type: string;
@@ -323,7 +323,7 @@ export interface Database {
           userId: string;
           organizationId: string;
           createdAt?: string;
-        };
+        }
         Update: {
           id?: string;
           type?: string;
@@ -334,20 +334,20 @@ export interface Database {
           userId?: string;
           organizationId?: string;
           createdAt?: string;
-        };
-      };
-    };
+        }
+      }
+    }
     Views: {
       [_ in never]: never;
-    };
+    }
     Functions: {
       [_ in never]: never;
-    };
+    }
     Enums: {
       [_ in never]: never;
-    };
+    }
     CompositeTypes: {
       [_ in never]: never;
-    };
-  };
+    }
+  }
 }

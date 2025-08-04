@@ -30,32 +30,32 @@ export const POST = withApiMiddleware({
           equals: fileId,
         },
       },
-    });
+    })
 
     if (activeImport) {
       return {
         error: 'This file is already being imported',
         jobId: activeImport.id,
-      };
+      }
     }
 
     // Download the file from Google Drive
-    const fileService = getGoogleDriveFileService();
+    const fileService = getGoogleDriveFileService()
     const fileBuffer = await fileService.downloadFile(user.id, fileId);
 
     // Validate the Excel file
-    const validator = getExcelValidatorService();
+    const validator = getExcelValidatorService()
     const validationResult = await validator.validateRCSAFile(fileBuffer);
 
     if (!validationResult.isValid) {
       return {
         error: 'File validation failed',
         validationErrors: validationResult.errors,
-      };
+      }
     }
 
     // Create import job
-    const jobService = getImportJobService();
+    const jobService = getImportJobService()
     const jobId = await jobService.createImportJob({
       organizationId,
       userId: user.id,
@@ -79,19 +79,19 @@ export const POST = withApiMiddleware({
       message: 'Import job created successfully',
       status: 'QUEUED',
       metadata: validationResult.metadata,
-    };
+    }
   } catch (error) {
-    // console.error('Error creating Google Drive import job:', error);
+    // console.error('Error creating Google Drive import job:', error)
 
     if (error instanceof Error && error.message.includes('No valid Google Drive authentication')) {
       return {
         error: 'Not authenticated with Google Drive',
         code: 'AUTH_REQUIRED',
-      };
+      }
     }
 
     return {
       error: 'Failed to start import. Please try again.',
-    };
+    }
   }
 });

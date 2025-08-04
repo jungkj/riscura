@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   BarChart, 
   Bar, 
   XAxis, 
@@ -32,7 +33,7 @@ import {
   XCircle,
   Clock,
   AlertCircle
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface DashboardData {
   summary: {
@@ -44,7 +45,7 @@ interface DashboardData {
       low: number;
       breakdown: Array<{ level: string; count: number }>;
       byCategory: Array<{ category: string; count: number }>;
-    };
+    }
     controls: {
       total: number;
       operational: number;
@@ -54,14 +55,14 @@ interface DashboardData {
       breakdown: Array<{ status: string; count: number }>;
       byType: Array<{ type: string; count: number }>;
       averageEffectiveness: number;
-    };
+    }
     documents: number;
     questionnaires: number;
     compliance: {
       overall: number;
       frameworks: Record<string, number>;
-    };
-  };
+    }
+  }
   recentActivity: Array<{
     id: string;
     type: string;
@@ -100,7 +101,7 @@ const getRiskLevelColor = (level: string) => {
     case 'LOW': return 'secondary';
     default: return 'default';
   }
-};
+}
 
 const getControlStatusColor = (status: string) => {
   switch (status.toUpperCase()) {
@@ -110,7 +111,7 @@ const getControlStatusColor = (status: string) => {
     case 'PLANNED': return 'secondary';
     default: return 'secondary';
   }
-};
+}
 
 export function LiveDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -123,11 +124,11 @@ export function LiveDashboard() {
       setLoading(true);
       
       // Get the token from storage
-      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
       
       if (!token) {
         // If no token, silently skip fetching (user not authenticated yet)
-        setLoading(false);
+        setLoading(false)
         return;
       }
 
@@ -142,7 +143,7 @@ export function LiveDashboard() {
       if (!response.ok) {
         if (response.status === 401) {
           // Clear stored tokens if they're invalid
-          localStorage.removeItem('accessToken');
+          localStorage.removeItem('accessToken')
           sessionStorage.removeItem('accessToken');
           setLoading(false);
           return;
@@ -154,12 +155,12 @@ export function LiveDashboard() {
       setData(result.data);
       setError(null);
     } catch (err) {
-      // console.error('Error fetching dashboard data:', err);
+      // console.error('Error fetching dashboard data:', err)
       setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchDashboardData();
@@ -254,7 +255,7 @@ export function LiveDashboard() {
 
   if (!data) {
     return null;
-  };
+  }
 
   return (
     <div className="space-y-6">

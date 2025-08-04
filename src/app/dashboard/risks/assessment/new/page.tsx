@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 // import {
   ArrowLeft,
   Save,
@@ -20,7 +21,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
   Target,
   FileCheck,
   AlertCircle,
-} from 'lucide-react';
+} from 'lucide-react'
 
 export default function NewAssessmentPage() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function NewAssessmentPage() {
     framework: '',
     includeThirdParty: false,
     includeCompliance: false,
-  });
+  })
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -53,9 +54,9 @@ export default function NewAssessmentPage() {
       setErrors((prev) => ({
         ...prev,
         [field]: '',
-      }));
+      }))
     }
-  };
+  }
 
   const handleObjectiveChange = (_index: number, value: string) => {
     const newObjectives = [...formData.objectives];
@@ -64,14 +65,14 @@ export default function NewAssessmentPage() {
       ...prev,
       objectives: newObjectives,
     }));
-  };
+  }
 
   const addObjective = () => {
     setFormData((prev) => ({
       ...prev,
       objectives: [...prev.objectives, ''],
     }));
-  };
+  }
 
   const removeObjective = (_index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
@@ -79,10 +80,10 @@ export default function NewAssessmentPage() {
       ...prev,
       objectives: newObjectives,
     }));
-  };
+  }
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!formData.title.trim()) {
       newErrors.title = 'Assessment title is required';
@@ -105,7 +106,7 @@ export default function NewAssessmentPage() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const handleSave = async () => {
     if (!validateForm()) {
@@ -115,22 +116,22 @@ export default function NewAssessmentPage() {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // console.log('Creating new assessment:', formData);
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // console.log('Creating new assessment:', formData)
 
       // Generate a mock ID and redirect to the new assessment
-      const newAssessmentId = Math.floor(Math.random() * 1000) + 1;
+      const newAssessmentId = Math.floor(Math.random() * 1000) + 1
       router.push(`/dashboard/risks/assessment/${newAssessmentId}`);
     } catch (error) {
-      // console.error('Error creating assessment:', error);
+      // console.error('Error creating assessment:', error)
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const handleCancel = () => {
     router.push('/dashboard/risks/assessment');
-  };
+  }
 
   return (
     <div className="p-6 space-y-6">

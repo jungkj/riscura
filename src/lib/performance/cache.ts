@@ -1,9 +1,9 @@
 // Conditional Redis import for demo mode compatibility
-let Redis: any = null;
+let Redis: any = null
 try {
   Redis = require('ioredis').default || require('ioredis');
 } catch (error) {
-  // console.warn('Redis module not available, using in-memory cache');
+  // console.warn('Redis module not available, using in-memory cache')
 }
 
 import { v4 as uuidv4 } from 'uuid';
@@ -106,32 +106,32 @@ export class CacheService {
           lazyConnect: true,
           enableReadyCheck: true,
           showFriendlyErrorStack: true,
-        });
+        })
 
         this.setupEventHandlers();
         this.isRedisAvailable = true;
       } catch (error) {
-        // console.warn('Redis not available, falling back to in-memory cache:', error);
+        // console.warn('Redis not available, falling back to in-memory cache:', error)
         this.redis = null;
         this.isRedisAvailable = false;
       }
     } else {
-      // console.log('No Redis configuration found, using in-memory cache for demo mode');
+      // console.log('No Redis configuration found, using in-memory cache for demo mode')
       this.isRedisAvailable = false;
     }
   }
 
   private setupEventHandlers(): void {
     this.redis?.on('connect', () => {
-      // console.log('Redis cache connected');
+      // console.log('Redis cache connected')
     });
 
     this.redis?.on('error', (error) => {
-      // console.error('Redis cache error:', error);
+      // console.error('Redis cache error:', error)
     });
 
     this.redis?.on('close', () => {
-      // console.log('Redis cache connection closed');
+      // console.log('Redis cache connection closed')
     });
   }
 
@@ -139,15 +139,15 @@ export class CacheService {
   async get<T>(key: string): Promise<T | null> {
     try {
       if (this.isRedisAvailable && this.redis) {
-        const value = await this.redis.get(this.prefixKey(key));
+        const value = await this.redis.get(this.prefixKey(key))
         return value ? JSON.parse(value) : null;
       } else {
         // Use in-memory cache fallback
-        const value = this.memoryCache.get(this.prefixKey(key));
+        const value = this.memoryCache.get(this.prefixKey(key))
         return value || null;
       }
     } catch (error) {
-      // console.error('Cache get error:', error);
+      // console.error('Cache get error:', error)
       return null;
     }
   }
@@ -162,10 +162,10 @@ export class CacheService {
         return result === 'OK';
       } else {
         // Use in-memory cache fallback
-        return this.memoryCache.set(this.prefixKey(key), value, expiration);
+        return this.memoryCache.set(this.prefixKey(key), value, expiration)
       }
     } catch (error) {
-      // console.error('Cache set error:', error);
+      // console.error('Cache set error:', error)
       return false;
     }
   }
@@ -177,10 +177,10 @@ export class CacheService {
         return result > 0;
       } else {
         // Use in-memory cache fallback
-        return this.memoryCache.del(this.prefixKey(key));
+        return this.memoryCache.del(this.prefixKey(key))
       }
     } catch (error) {
-      // console.error('Cache delete error:', error);
+      // console.error('Cache delete error:', error)
       return false;
     }
   }
@@ -192,10 +192,10 @@ export class CacheService {
         return result > 0;
       } else {
         // Use in-memory cache fallback
-        return this.memoryCache.exists(this.prefixKey(key));
+        return this.memoryCache.exists(this.prefixKey(key))
       }
     } catch (error) {
-      // console.error('Cache exists error:', error);
+      // console.error('Cache exists error:', error)
       return false;
     }
   }
@@ -203,12 +203,12 @@ export class CacheService {
   // Advanced Cache Operations
   async mget<T>(keys: string[]): Promise<(T | null)[]> {
     try {
-      const prefixedKeys = keys.map((key) => this.prefixKey(key));
+      const prefixedKeys = keys.map((key) => this.prefixKey(key))
       const values = await this.redis?.mget(...prefixedKeys);
 
       return values.map((value) => (value ? JSON.parse(value) : null));
     } catch (error) {
-      // console.error('Cache mget error:', error);
+      // console.error('Cache mget error:', error)
       return keys.map(() => null);
     }
   }
@@ -226,14 +226,14 @@ export class CacheService {
       const results = await pipeline?.exec();
       return results?.every(([error, result]) => !error && result === 'OK') || false;
     } catch (error) {
-      // console.error('Cache mset error:', error);
+      // console.error('Cache mset error:', error)
       return false;
     }
   }
 
   // Cache with fallback
   async getOrSet<T>(key: string, fallback: () => Promise<T>, ttl?: number): Promise<T> {
-    const _cached = await this.get<T>(key);
+    const _cached = await this.get<T>(key)
 
     if (cached !== null) {
       return cached;
@@ -247,7 +247,7 @@ export class CacheService {
 
   // Cache patterns for common use cases
   async cacheUserData(_userId: string, data: any, ttl = 1800): Promise<boolean> {
-    return this.set(`user:${userId}`, data, ttl);
+    return this.set(`user:${userId}`, data, ttl)
   }
 
   async getUserData<T>(_userId: string): Promise<T | null> {
@@ -281,7 +281,7 @@ export class CacheService {
 
   // Session management
   async setSession(sessionId: string, sessionData: any, ttl = 86400): Promise<boolean> {
-    return this.set(`session:${sessionId}`, sessionData, ttl);
+    return this.set(`session:${sessionId}`, sessionData, ttl)
   }
 
   async getSession<T>(sessionId: string): Promise<T | null> {
@@ -297,7 +297,7 @@ export class CacheService {
       const _result = await this.redis?.expire(this.prefixKey(`session:${sessionId}`), ttl);
       return result === 1;
     } catch (error) {
-      // console.error('Session extend error:', error);
+      // console.error('Session extend error:', error)
       return false;
     }
   }
@@ -308,7 +308,7 @@ export class CacheService {
     limit: number,
     window: number
   ): Promise<RateLimitResult> {
-    const key = `rate_limit:${identifier}`;
+    const key = `rate_limit:${identifier}`
 
     try {
       const pipeline = this.redis?.pipeline();
@@ -326,27 +326,27 @@ export class CacheService {
         count,
         remaining,
         resetTime: new Date(Date.now() + window * 1000),
-      };
+      }
     } catch (error) {
-      // console.error('Rate limit check error:', error);
+      // console.error('Rate limit check error:', error)
       return {
         allowed: true,
         count: 0,
         remaining: limit,
         resetTime: new Date(),
-      };
+      }
     }
   }
 
   // Cache invalidation patterns
   async invalidatePattern(_pattern: string): Promise<number> {
     try {
-      const keys = await this.redis?.keys(this.prefixKey(pattern));
+      const keys = await this.redis?.keys(this.prefixKey(pattern))
       if (keys.length === 0) return 0;
 
       return await this.redis?.del(...keys);
     } catch (error) {
-      // console.error('Cache invalidation error:', error);
+      // console.error('Cache invalidation error:', error)
       return 0;
     }
   }
@@ -372,7 +372,7 @@ export class CacheService {
           await this.set(key, data, ttl);
         }
       } catch (error) {
-        // console.error(`Cache warming error for key ${key}:`, error);
+        // console.error(`Cache warming error for key ${key}:`, error)
       }
     });
 
@@ -382,7 +382,7 @@ export class CacheService {
   // Analytics and monitoring
   async getCacheStats(): Promise<CacheStats> {
     try {
-      const info = await this.redis?.info('memory');
+      const info = await this.redis?.info('memory')
       const _stats = await this.redis?.info('stats');
       const keyspace = await this.redis?.info('keyspace');
 
@@ -393,9 +393,9 @@ export class CacheService {
         evictedKeys: this.parseInfoValue(stats, 'evicted_keys'),
         expiredKeys: this.parseInfoValue(stats, 'expired_keys'),
         connectedClients: this.parseInfoValue(info, 'connected_clients'),
-      };
+      }
     } catch (error) {
-      // console.error('Cache stats error:', error);
+      // console.error('Cache stats error:', error)
       return {
         memoryUsed: '0B',
         totalKeys: 0,
@@ -403,25 +403,25 @@ export class CacheService {
         evictedKeys: 0,
         expiredKeys: 0,
         connectedClients: 0,
-      };
+      }
     }
   }
 
   // Cache health check
   async healthCheck(): Promise<CacheHealthCheck> {
     try {
-      const start = Date.now();
+      const start = Date.now()
       const testKey = `health:${uuidv4()}`;
       const testValue = 'health-check';
 
       // Test write
-      await this.set(testKey, testValue, 10);
+      await this.set(testKey, testValue, 10)
 
       // Test read
-      const retrieved = await this.get(testKey);
+      const retrieved = await this.get(testKey)
 
       // Test delete
-      await this.del(testKey);
+      await this.del(testKey)
 
       const latency = Date.now() - start;
       const healthy = retrieved === testValue;
@@ -431,20 +431,20 @@ export class CacheService {
         latency,
         message: healthy ? 'Cache is healthy' : 'Cache health check failed',
         timestamp: new Date(),
-      };
+      }
     } catch (error) {
       return {
         healthy: false,
         latency: -1,
         message: error instanceof Error ? error.message : 'Cache error',
         timestamp: new Date(),
-      };
+      }
     }
   }
 
   // Utility methods
   private prefixKey(key: string): string {
-    return `${this.keyPrefix}${key}`;
+    return `${this.keyPrefix}${key}`
   }
 
   private hashQuery(_query: string, params: any[]): string {
@@ -478,13 +478,13 @@ export class CacheService {
 
   // Cleanup
   async disconnect(): Promise<void> {
-    await this.redis?.quit();
+    await this.redis?.quit()
   }
 }
 
 // Types
 export interface RateLimitResult {
-  allowed: boolean;
+  allowed: boolean
   count: number;
   remaining: number;
   resetTime: Date;
@@ -509,7 +509,7 @@ export interface CacheHealthCheck {
 // Decorator for automatic caching
 export function Cacheable(ttl = 300, keyGenerator?: (args: any[]) => string) {
   return function (_target: any, propertyName: string, descriptor: PropertyDescriptor) {
-    const method = descriptor.value;
+    const method = descriptor.value
 
     descriptor.value = async function (...args: any[]) {
       const cacheKey = keyGenerator
@@ -525,9 +525,9 @@ export function Cacheable(ttl = 300, keyGenerator?: (args: any[]) => string) {
       await cacheService.set(cacheKey, result, ttl);
 
       return result;
-    };
-  };
+    }
+  }
 }
 
 // Global cache service instance
-export const cacheService = new CacheService();
+export const cacheService = new CacheService()

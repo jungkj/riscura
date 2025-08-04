@@ -1,40 +1,40 @@
 // Performance Utility Functions
-import { performanceMonitor } from './monitoring';
+import { performanceMonitor } from './monitoring'
 
 // Performance measurement utilities
 export const measurePerformance = {
   // Measure function execution time
   time: async <T>(name: string, fn: () => Promise<T> | T): Promise<T> => {
-    return performanceMonitor.timeFunction(name, fn);
+    return performanceMonitor.timeFunction(name, fn)
   },
 
   // Mark performance points
   mark: (name: string): void => {
-    performanceMonitor.mark(name);
+    performanceMonitor.mark(name)
   },
 
   // Measure between marks
   measure: (name: string, startMark: string, endMark?: string): number | null => {
-    return performanceMonitor.measure(name, startMark, endMark);
+    return performanceMonitor.measure(name, startMark, endMark)
   },
 
   // Get navigation timing
   getNavigationTiming: (): PerformanceNavigationTiming | null => {
-    if (typeof performance === 'undefined') return null;
+    if (typeof performance === 'undefined') return null
     const entries = performance.getEntriesByType('navigation');
     return entries[0] as PerformanceNavigationTiming;
   },
 
   // Get resource timing
   getResourceTiming: (url?: string): PerformanceResourceTiming[] => {
-    if (typeof performance === 'undefined') return [];
+    if (typeof performance === 'undefined') return []
     const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     return url ? entries.filter((entry) => entry.name.includes(url)) : entries;
   },
 
   // Calculate page load metrics
   getPageLoadMetrics: () => {
-    const navigation = measurePerformance.getNavigationTiming();
+    const navigation = measurePerformance.getNavigationTiming()
     if (!navigation) return null;
 
     return {
@@ -49,16 +49,16 @@ export const measurePerformance = {
       domInteractive: navigation.domInteractive - navigation.navigationStart,
       domComplete: navigation.domComplete - navigation.navigationStart,
       loadComplete: navigation.loadEventEnd - navigation.navigationStart,
-    };
+    }
   },
-};
+}
 
 // Memory management utilities
 export const memoryUtils = {
   // Get memory usage information
   getMemoryUsage: (): any => {
     if (typeof performance === 'undefined' || !(performance as any).memory) {
-      return null;
+      return null
     }
 
     const memory = (performance as any).memory;
@@ -67,28 +67,28 @@ export const memoryUtils = {
       total: memory.totalJSHeapSize,
       limit: memory.jsHeapSizeLimit,
       percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100,
-    };
+    }
   },
 
   // Monitor memory leaks
   detectMemoryLeaks: (_threshold: number = 80): boolean => {
-    const usage = memoryUtils.getMemoryUsage();
+    const usage = memoryUtils.getMemoryUsage()
     return usage ? usage.percentage > threshold : false;
   },
 
   // Force garbage collection (development only)
   forceGC: (): void => {
     if (process.env.NODE_ENV === 'development' && (window as any).gc) {
-      (window as any).gc();
+      (window as any).gc()
     }
   },
-};
+}
 
 // Bundle analysis utilities
 export const bundleUtils = {
   // Analyze bundle size
   analyzeBundleSize: async (): Promise<{
-    total: number;
+    total: number
     javascript: number;
     css: number;
     images: number;
@@ -102,7 +102,7 @@ export const bundleUtils = {
       css: 0,
       images: 0,
       fonts: 0,
-    };
+    }
 
     resources.forEach((resource) => {
       const size = resource.transferSize || 0;
@@ -139,16 +139,16 @@ export const bundleUtils = {
     const total = compressed + uncompressed;
     const ratio = total > 0 ? (compressed / total) * 100 : 0;
 
-    return { compressed, uncompressed, ratio };
+    return { compressed, uncompressed, ratio }
   },
-};
+}
 
 // Image optimization utilities
 export const imageUtils = {
   // Check if WebP is supported
   supportsWebP: (): Promise<boolean> => {
     return new Promise((resolve) => {
-      const webP = new Image();
+      const webP = new Image()
       webP.onload = webP.onerror = () => resolve(webP.height === 2);
       webP.src =
         'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
@@ -158,7 +158,7 @@ export const imageUtils = {
   // Check if AVIF is supported
   supportsAVIF: (): Promise<boolean> => {
     return new Promise((resolve) => {
-      const avif = new Image();
+      const avif = new Image()
       avif.onload = avif.onerror = () => resolve(avif.height === 2);
       avif.src =
         'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
@@ -170,7 +170,7 @@ export const imageUtils = {
     const [supportsAVIF, supportsWebP] = await Promise.all([
       imageUtils.supportsAVIF(),
       imageUtils.supportsWebP(),
-    ]);
+    ])
 
     if (supportsAVIF) return 'avif';
     if (supportsWebP) return 'webp';
@@ -179,15 +179,15 @@ export const imageUtils = {
 
   // Calculate image compression ratio
   calculateCompressionRatio: (originalSize: number, compressedSize: number): number => {
-    return ((originalSize - compressedSize) / originalSize) * 100;
+    return ((originalSize - compressedSize) / originalSize) * 100
   },
-};
+}
 
 // Network performance utilities
 export const networkUtils = {
   // Get connection information
   getConnectionInfo: (): any => {
-    if (typeof navigator === 'undefined') return null;
+    if (typeof navigator === 'undefined') return null
 
     const connection =
       (navigator as any).connection ||
@@ -201,7 +201,7 @@ export const networkUtils = {
       downlink: connection.downlink,
       rtt: connection.rtt,
       saveData: connection.saveData,
-    };
+    }
   },
 
   // Test network speed
@@ -213,7 +213,7 @@ export const networkUtils = {
       const response = await fetch('/api/ping', {
         method: 'HEAD',
         cache: 'no-cache',
-      });
+      })
 
       const endTime = performance.now();
       const latency = endTime - startTime;
@@ -221,26 +221,26 @@ export const networkUtils = {
       // Estimate download speed (very rough)
       const downloadSpeed = response.headers.get('content-length')
         ? parseInt(response.headers.get('content-length')!) / (latency / 1000)
-        : 0;
+        : 0
 
-      return { downloadSpeed, latency };
+      return { downloadSpeed, latency }
     } catch (error) {
-      return { downloadSpeed: 0, latency: 0 };
+      return { downloadSpeed: 0, latency: 0 }
     }
   },
 
   // Check if user prefers reduced data
   prefersReducedData: (): boolean => {
-    const connection = networkUtils.getConnectionInfo();
+    const connection = networkUtils.getConnectionInfo()
     return connection?.saveData || false;
   },
-};
+}
 
 // Virtualization utilities
 export const virtualizationUtils = {
   // Calculate optimal virtual list settings
   calculateVirtualSettings: (totalItems: number, containerHeight: number, itemHeight: number) => {
-    const visibleItems = Math.ceil(containerHeight / itemHeight);
+    const visibleItems = Math.ceil(containerHeight / itemHeight)
     const overscan = Math.min(10, Math.ceil(visibleItems * 0.5));
     const bufferSize = Math.min(50, Math.ceil(totalItems * 0.1));
 
@@ -249,12 +249,12 @@ export const virtualizationUtils = {
       overscan,
       bufferSize,
       totalHeight: totalItems * itemHeight,
-    };
+    }
   },
 
   // Implement data sampling for large datasets
   sampleData: <T>(_data: T[], maxItems: number, strategy: 'uniform' | 'random' = 'uniform'): T[] => {
-    if (data.length <= maxItems) return data;
+    if (data.length <= maxItems) return data
 
     if (strategy === 'random') {
       const sampled: T[] = [];
@@ -273,23 +273,23 @@ export const virtualizationUtils = {
       return sampled;
     } else {
       // Uniform sampling
-      const step = Math.ceil(data.length / maxItems);
+      const step = Math.ceil(data.length / maxItems)
       return data.filter((_, index) => index % step === 0);
     }
   },
-};
+}
 
 // Debouncing and throttling utilities
 export const optimizationUtils = {
   // Debounce function
   debounce: <T extends (...args: any[]) => any>(func: T, wait: number, immediate?: boolean): T => {
-    let timeout: NodeJS.Timeout | null = null;
+    let timeout: NodeJS.Timeout | null = null
 
     return ((...args: any[]) => {
       const later = () => {
         timeout = null;
         if (!immediate) func(...args);
-      };
+      }
 
       const callNow = immediate && !timeout;
 
@@ -302,7 +302,7 @@ export const optimizationUtils = {
 
   // Throttle function
   throttle: <T extends (...args: any[]) => any>(func: T, limit: number): T => {
-    let inThrottle: boolean;
+    let inThrottle: boolean
 
     return ((...args: any[]) => {
       if (!inThrottle) {
@@ -316,7 +316,7 @@ export const optimizationUtils = {
   // Request idle callback wrapper
   requestIdleCallback: (callback: () => void, timeout: number = 5000): void => {
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      window.requestIdleCallback(callback, { timeout });
+      window.requestIdleCallback(callback, { timeout })
     } else {
       setTimeout(callback, 1);
     }
@@ -325,23 +325,23 @@ export const optimizationUtils = {
   // Batch DOM updates
   batchDOMUpdates: (updates: (() => void)[]): void => {
     optimizationUtils.requestIdleCallback(() => {
-      updates.forEach((update) => update());
+      updates.forEach((update) => update())
     });
   },
-};
+}
 
 // Performance scoring utilities
 export const scoringUtils = {
   // Calculate Lighthouse-style performance score
   calculatePerformanceScore: (metrics: {
-    fcp: number;
+    fcp: number
     lcp: number;
     fid: number;
     cls: number;
     ttfb: number;
   }): number => {
     // Simplified scoring based on Lighthouse weights
-    const fcpScore = scoringUtils.scoreMetric(metrics.fcp, 1800, 3000);
+    const fcpScore = scoringUtils.scoreMetric(metrics.fcp, 1800, 3000)
     const lcpScore = scoringUtils.scoreMetric(metrics.lcp, 2500, 4000);
     const fidScore = scoringUtils.scoreMetric(metrics.fid, 100, 300, true);
     const clsScore = scoringUtils.scoreMetric(metrics.cls, 0.1, 0.25, true);
@@ -355,7 +355,7 @@ export const scoringUtils = {
         clsScore * 0.15 +
         ttfbScore * 0.15 +
         85 * 0.15 // Other metrics placeholder
-    );
+    )
   },
 
   // Score individual metric
@@ -365,7 +365,7 @@ export const scoringUtils = {
     lowerIsBetter: boolean = false
   ): number => {
     if (lowerIsBetter) {
-      if (value <= goodThreshold) return 100;
+      if (value <= goodThreshold) return 100
       if (value >= poorThreshold) return 0;
       return Math.round(100 - ((value - goodThreshold) / (poorThreshold - goodThreshold)) * 100);
     } else {
@@ -377,13 +377,13 @@ export const scoringUtils = {
 
   // Get performance grade
   getPerformanceGrade: (score: number): 'A' | 'B' | 'C' | 'D' | 'F' => {
-    if (score >= 90) return 'A';
+    if (score >= 90) return 'A'
     if (score >= 80) return 'B';
     if (score >= 70) return 'C';
     if (score >= 60) return 'D';
     return 'F';
   },
-};
+}
 
 // Export all utilities
 export default {
@@ -395,4 +395,4 @@ export default {
   virtualizationUtils,
   optimizationUtils,
   scoringUtils,
-};
+}

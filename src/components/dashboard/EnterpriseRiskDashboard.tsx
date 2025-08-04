@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   Brain, 
   TrendingUp, 
@@ -23,7 +24,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   ArrowUpRight,
   ArrowDownRight,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface RiskMetric {
   id: string;
@@ -130,22 +131,22 @@ export function EnterpriseRiskDashboard() {
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate AI analysis refresh
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000))
     setRefreshing(false);
-  };
+  }
 
   const getMetricColor = (metric: RiskMetric) => {
     const percentage = (metric.value / metric.target) * 100;
     if (percentage >= 90) return 'text-green-600';
     if (percentage >= 70) return 'text-yellow-600';
     return 'text-red-600';
-  };
+  }
 
   const getTrendIcon = (_trend: 'up' | 'down' | 'stable') => {
     if (trend === 'up') return <ArrowUpRight className="w-4 h-4 text-green-500" />;
     if (trend === 'down') return <ArrowDownRight className="w-4 h-4 text-red-500" />;
     return <Clock className="w-4 h-4 text-gray-500" />;
-  };
+  }
 
   const getInsightIcon = (_type: string) => {
     const iconMap = {
@@ -153,10 +154,10 @@ export function EnterpriseRiskDashboard() {
       recommendation: Sparkles,
       alert: AlertTriangle,
       opportunity: Target
-    };
+    }
     const Icon = iconMap[type as keyof typeof iconMap] || Brain;
     return <Icon className="w-5 h-5" />;
-  };
+  }
 
   const getInsightBadgeColor = (_type: string) => {
     const colorMap = {
@@ -164,9 +165,9 @@ export function EnterpriseRiskDashboard() {
       recommendation: 'bg-purple-100 text-purple-800',
       alert: 'bg-red-100 text-red-800',
       opportunity: 'bg-green-100 text-green-800'
-    };
+    }
     return colorMap[type as keyof typeof colorMap] || 'bg-gray-100 text-gray-800';
-  };
+  }
 
   return (
     <div className="space-y-6">

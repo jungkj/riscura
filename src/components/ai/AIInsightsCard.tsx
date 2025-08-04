@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   Brain,
   TrendingUp,
@@ -25,7 +26,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   Bookmark,
   Share2,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
 
 interface AIInsight {
@@ -46,7 +47,7 @@ interface AIInsight {
     frameworks?: string[];
     dataPoints?: number;
     accuracy?: number;
-  };
+  }
   actions?: Array<{
     label: string;
     action: string;
@@ -60,7 +61,7 @@ interface AIInsightsCardProps {
     currentPage?: string;
     selectedRisk?: string;
     selectedControl?: string;
-  };
+  }
   onActionTrigger?: (_action: string, parameters?: any) => void;
   onInsightInteraction?: (insightId: string, interaction: 'view' | 'like' | 'dislike' | 'bookmark') => void;
   className?: string;
@@ -76,7 +77,7 @@ export default function AIInsightsCard({
   const { toast } = useToast();
   
   // State management
-  const [insights, setInsights] = useState<AIInsight[]>([]);
+  const [insights, setInsights] = useState<AIInsight[]>([])
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
   const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(null);
@@ -84,7 +85,7 @@ export default function AIInsightsCard({
 
   // Fetch insights on component mount
   useEffect(() => {
-    fetchInsights();
+    fetchInsights()
   }, [organizationId]);
 
   const fetchInsights = async () => {
@@ -215,14 +216,14 @@ export default function AIInsightsCard({
             { label: 'Run Diagnostics', action: 'run_diagnostics' }
           ]
         }
-      ];
+      ]
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000))
       
       setInsights(mockInsights);
     } catch (error) {
-      // console.error('Error fetching insights:', error);
+      // console.error('Error fetching insights:', error)
       toast({
         title: 'Error',
         description: 'Failed to load AI insights. Please try again.',
@@ -231,11 +232,11 @@ export default function AIInsightsCard({
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Filter insights based on active tab
   const filteredInsights = insights.filter(insight => {
-    if (activeTab === 'all') return true;
+    if (activeTab === 'all') return true
     if (activeTab === 'high-priority') return ['HIGH', 'CRITICAL'].includes(insight.priority);
     if (activeTab === 'recommendations') return insight.type === 'control_recommendation';
     if (activeTab === 'risks') return insight.type === 'risk_analysis';
@@ -246,19 +247,19 @@ export default function AIInsightsCard({
   // Get priority color
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
+      case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200'
       case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
       case 'MEDIUM': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'LOW': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }
 
   // Get type icon
   const getTypeIcon = (_type: string) => {
     switch (type) {
       case 'risk_analysis': return <DaisyAlertTriangle className="w-4 h-4" >
-  ;
+  
 </DaisyAlertTriangle>
       case 'control_recommendation': return <Target className="w-4 h-4" />;
       case 'compliance_gap': return <CheckCircle2 className="w-4 h-4" />;
@@ -266,13 +267,13 @@ export default function AIInsightsCard({
       case 'anomaly_detection': return <Eye className="w-4 h-4" />;
       default: return <Brain className="w-4 h-4" />;
     }
-  };
+  }
 
   // Handle insight interaction
   const handleInsightInteraction = (insightId: string, interaction: 'view' | 'like' | 'dislike' | 'bookmark') => {
     if (interaction === 'bookmark') {
       setBookmarkedInsights(prev => {
-        const newSet = new Set(prev);
+        const newSet = new Set(prev)
         if (newSet.has(insightId)) {
           newSet.delete(insightId);
         } else {
@@ -283,16 +284,16 @@ export default function AIInsightsCard({
     }
     
     onInsightInteraction?.(insightId, interaction);
-  };
+  }
 
   // Handle action trigger
   const handleActionTrigger = (_action: string, parameters?: any) => {
-    onActionTrigger?.(action, parameters);
-  };
+    onActionTrigger?.(action, parameters)
+  }
 
   // Share insight
   const shareInsight = (insight: AIInsight) => {
-    const shareText = `AI Insight: ${insight.title}\n\n${insight.description}\n\nConfidence: ${Math.round(insight.confidence * 100)}%`;
+    const shareText = `AI Insight: ${insight.title}\n\n${insight.description}\n\nConfidence: ${Math.round(insight.confidence * 100)}%`
     
     if (navigator.share) {
       navigator.share({
@@ -306,7 +307,7 @@ export default function AIInsightsCard({
         description: 'Insight copied to clipboard',
       });
     }
-  };
+  }
 
   if (isLoading) {
 
@@ -333,7 +334,7 @@ export default function AIInsightsCard({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <DaisyCard className={className} >

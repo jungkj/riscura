@@ -1,5 +1,5 @@
 // Environment validation specifically for authentication
-import { env } from '@/config/env';
+import { env } from '@/config/env'
 
 export interface AuthEnvCheck {
   isValid: boolean;
@@ -9,17 +9,17 @@ export interface AuthEnvCheck {
     configured: boolean;
     valid: boolean;
     issues: string[];
-  };
+  }
   nextAuth: {
     configured: boolean;
     valid: boolean;
     issues: string[];
-  };
+  }
   database: {
     configured: boolean;
     reachable: boolean;
     issues: string[];
-  };
+  }
 }
 
 export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
@@ -31,7 +31,7 @@ export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
     configured: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
     valid: false,
     issues: [] as string[],
-  };
+  }
 
   if (!env.GOOGLE_CLIENT_ID) {
     googleOAuth.issues.push('GOOGLE_CLIENT_ID is not set');
@@ -52,7 +52,7 @@ export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
     configured: !!(env.NEXTAUTH_SECRET && env.NEXTAUTH_URL),
     valid: false,
     issues: [] as string[],
-  };
+  }
 
   if (!env.NEXTAUTH_SECRET) {
     nextAuth.issues.push('NEXTAUTH_SECRET is not set');
@@ -85,7 +85,7 @@ export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
     configured: !!env.DATABASE_URL,
     reachable: false,
     issues: [] as string[],
-  };
+  }
 
   if (!env.DATABASE_URL) {
     database.issues.push('DATABASE_URL is not set');
@@ -106,7 +106,7 @@ export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
   // Test database connection
   if (database.configured) {
     try {
-      const { db } = await import('@/lib/db');
+      const { db } = await import('@/lib/db')
       const healthCheck = await db.healthCheck().catch(() => ({ isHealthy: false }));
       database.reachable = healthCheck.isHealthy;
 
@@ -129,5 +129,5 @@ export async function checkAuthEnvironment(): Promise<AuthEnvCheck> {
     googleOAuth,
     nextAuth,
     database,
-  };
+  }
 }

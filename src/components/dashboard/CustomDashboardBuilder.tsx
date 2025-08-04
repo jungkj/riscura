@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -13,6 +13,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   BarChart3,
   PieChart,
@@ -36,23 +37,23 @@ import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
   EyeOff,
   Palette,
   Layout as LayoutIcon
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
 
 // Make ResponsiveGridLayout responsive
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const ResponsiveGridLayout = WidthProvider(Responsive)
 
 // Widget types and configurations
 interface WidgetConfig {
-  id: string;
+  id: string
   type: string;
   name: string;
   description: string;
   icon: React.ReactNode;
   category: string;
-  defaultSize: { w: number; h: number };
-  minSize: { w: number; h: number };
-  maxSize?: { w: number; h: number };
+  defaultSize: { w: number; h: number }
+  minSize: { w: number; h: number }
+  maxSize?: { w: number; h: number }
   configurable: boolean;
   component: React.ComponentType<any>;
 }
@@ -67,7 +68,7 @@ interface DashboardWidget {
     y: number;
     w: number;
     h: number;
-  };
+  }
   visible: boolean;
 }
 
@@ -76,7 +77,7 @@ interface DashboardLayout {
   name: string;
   description?: string;
   widgets: DashboardWidget[];
-  layouts: { [key: string]: Layout[] };
+  layouts: { [key: string]: Layout[] }
   isDefault?: boolean;
   isShared?: boolean;
   createdAt: Date;
@@ -229,12 +230,12 @@ const widgetLibrary: WidgetConfig[] = [
     configurable: true,
     component: SampleTableWidget
   }
-];
+]
 
 // Drag and drop types
 const ItemTypes = {
   WIDGET: 'widget'
-};
+}
 
 // Draggable widget from library
 const DraggableWidget = ({ widget }: { widget: WidgetConfig }) => {
@@ -244,7 +245,7 @@ const DraggableWidget = ({ widget }: { widget: WidgetConfig }) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }));
+  }))
 
   return (
     <div
@@ -264,11 +265,11 @@ const DraggableWidget = ({ widget }: { widget: WidgetConfig }) => {
       </div>
     </div>
   );
-};
+}
 
 // Dashboard builder props
 interface CustomDashboardBuilderProps {
-  initialLayout?: DashboardLayout;
+  initialLayout?: DashboardLayout
   onSave?: (layout: DashboardLayout) => void;
   onLoad?: (layoutId: string) => void;
   onShare?: (layout: DashboardLayout) => void;
@@ -297,7 +298,7 @@ export default function CustomDashboardBuilder({
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  );
+  )
   
   const [isEditMode, setIsEditMode] = useState(true);
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
@@ -306,12 +307,12 @@ export default function CustomDashboardBuilder({
   const [breakpoint, setBreakpoint] = useState('lg');
   
   // Breakpoint configurations
-  const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
-  const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
+  const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
+  const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
   
   // Widget categories
   const _categories = useMemo(() => {
-    const cats = new Set(widgetLibrary.map(w => w.category));
+    const cats = new Set(widgetLibrary.map(w => w.category))
     return Array.from(cats);
   }, []);
   
@@ -320,7 +321,7 @@ export default function CustomDashboardBuilder({
     accept: ItemTypes.WIDGET,
     drop: (item: { widget: WidgetConfig }, monitor) => {
       if (!monitor.didDrop()) {
-        addWidget(item.widget);
+        addWidget(item.widget)
       }
     },
   }));
@@ -339,7 +340,7 @@ export default function CustomDashboardBuilder({
         h: widgetConfig.defaultSize.h
       },
       visible: true
-    };
+    }
     
     setCurrentLayout(prev => ({
       ...prev,
@@ -359,7 +360,7 @@ export default function CustomDashboardBuilder({
       ...prev,
       widgets: prev.widgets.filter(w => w.id !== widgetId),
       updatedAt: new Date()
-    }));
+    }))
     
     if (selectedWidget === widgetId) {
       setSelectedWidget(null);
@@ -377,7 +378,7 @@ export default function CustomDashboardBuilder({
       ...prev,
       widgets: prev.widgets.map(w => w.id === widgetId ? { ...w, ...updates } : w),
       updatedAt: new Date()
-    }));
+    }))
   }, []);
   
   // Handle layout change
@@ -386,16 +387,16 @@ export default function CustomDashboardBuilder({
       ...prev,
       layouts,
       updatedAt: new Date()
-    }));
+    }))
   }, []);
   
   // Save dashboard
   const saveDashboard = useCallback(() => {
     if (onSave) {
-      onSave(currentLayout);
+      onSave(currentLayout)
     } else {
       // Default save to localStorage
-      const savedLayouts = JSON.parse(localStorage.getItem('dashboardLayouts') || '[]');
+      const savedLayouts = JSON.parse(localStorage.getItem('dashboardLayouts') || '[]')
       const existingIndex = savedLayouts.findIndex((l: DashboardLayout) => l.id === currentLayout.id);
       
       if (existingIndex >= 0) {
@@ -415,7 +416,7 @@ export default function CustomDashboardBuilder({
   
   // Export dashboard
   const exportDashboard = useCallback(() => {
-    const dataStr = JSON.stringify(currentLayout, null, 2);
+    const dataStr = JSON.stringify(currentLayout, null, 2)
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -434,7 +435,7 @@ export default function CustomDashboardBuilder({
   
   // Render widget
   const renderWidget = useCallback((widget: DashboardWidget) => {
-    const widgetConfig = widgetLibrary.find(w => w.id === widget.type);
+    const widgetConfig = widgetLibrary.find(w => w.id === widget.type)
     if (!widgetConfig) return null;
     
     const WidgetComponent = widgetConfig.component;

@@ -1,8 +1,9 @@
 // Comprehensive Help System with Tooltips and Guided Tours
-'use client';
+'use client'
 
 import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { 
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyButton, DaisyBadge, DaisyInput, DaisyTabs, DaisyTabsList, DaisyTabsTrigger, DaisyTabsContent, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyTooltip, DaisyPopover, DaisyScrollArea } from '@/components/ui/daisy-components';
   HelpCircle, 
   Info, 
   X, 
@@ -21,7 +22,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
 import { Badge } from './badge';
 import { Input } from './input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
@@ -43,7 +44,7 @@ import { Separator } from './separator';
 
 // Tooltip Component
 interface TooltipProps {
-  content: string | React.ReactNode;
+  content: string | React.ReactNode
   children: React.ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
   delay?: number;
@@ -68,28 +69,28 @@ export const Tooltip: React.FC<DaisyTooltipProps> = ({
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
     }, delay);
-  };
+  }
 
   const hideTooltip = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     setIsVisible(false);
-  };
+  }
 
   const sideClasses = {
     top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
     right: 'left-full top-1/2 transform -translate-y-1/2 ml-2',
     bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
     left: 'right-full top-1/2 transform -translate-y-1/2 mr-2'
-  };
+  }
 
   const arrowClasses = {
     top: 'top-full left-1/2 transform -translate-x-1/2 border-l-transparent border-r-transparent border-b-transparent border-t-gray-900',
     right: 'right-full top-1/2 transform -translate-y-1/2 border-t-transparent border-b-transparent border-l-transparent border-r-gray-900',
     bottom: 'bottom-full left-1/2 transform -translate-x-1/2 border-l-transparent border-r-transparent border-t-transparent border-b-gray-900',
     left: 'left-full top-1/2 transform -translate-y-1/2 border-t-transparent border-b-transparent border-r-transparent border-l-gray-900'
-  };
+  }
 
   return (
     <div 
@@ -121,11 +122,11 @@ export const Tooltip: React.FC<DaisyTooltipProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Guided Tour Types
 export interface TourStep {
-  id: string;
+  id: string
   target: string; // CSS selector
   title: string;
   content: string | React.ReactNode;
@@ -134,7 +135,7 @@ export interface TourStep {
     type: 'click' | 'input' | 'hover';
     element?: string;
     value?: string;
-  };
+  }
   beforeStep?: () => void | Promise<void>;
   afterStep?: () => void | Promise<void>;
   optional?: boolean;
@@ -153,7 +154,7 @@ export interface Tour {
 
 // Tour Context
 interface TourContextType {
-  currentTour: Tour | null;
+  currentTour: Tour | null
   currentStepIndex: number;
   isActive: boolean;
   startTour: (tour: Tour) => void;
@@ -170,7 +171,7 @@ const TourContext = createContext<TourContextType | undefined>(undefined);
 
 // Tour Provider
 export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentTour, setCurrentTour] = useState<Tour | null>(null);
+  const [currentTour, setCurrentTour] = useState<Tour | null>(null)
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -180,7 +181,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentStepIndex(0);
     setIsActive(true);
     setIsPaused(false);
-  };
+  }
 
   const nextStep = async () => {
     if (!currentTour) return;
@@ -202,7 +203,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       endTour();
     }
-  };
+  }
 
   const previousStep = async () => {
     if (currentStepIndex > 0) {
@@ -215,7 +216,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       setCurrentStepIndex(prevStepIndex);
     }
-  };
+  }
 
   const skipStep = () => {
     if (!currentTour) return;
@@ -225,22 +226,22 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       endTour();
     }
-  };
+  }
 
   const endTour = () => {
     setCurrentTour(null);
     setCurrentStepIndex(0);
     setIsActive(false);
     setIsPaused(false);
-  };
+  }
 
   const pauseTour = () => {
     setIsPaused(true);
-  };
+  }
 
   const resumeTour = () => {
     setIsPaused(false);
-  };
+  }
 
   return (
     <TourContext.Provider value={{
@@ -260,20 +261,20 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
       <TourOverlay />
     </TourContext.Provider>
   );
-};
+}
 
 // Tour Hook
 export const useTour = () => {
-  const context = useContext(TourContext);
+  const context = useContext(TourContext)
   if (!context) {
     throw new Error('useTour must be used within a TourProvider');
   }
   return context;
-};
+}
 
 // Tour Overlay Component
 const TourOverlay: React.FC = () => {
-  const { currentTour, currentStepIndex, isActive, isPaused } = useTour();
+  const { currentTour, currentStepIndex, isActive, isPaused } = useTour()
   const [highlightElement, setHighlightElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -292,7 +293,7 @@ const TourOverlay: React.FC = () => {
       element.scrollIntoView({ 
         behavior: 'smooth', 
         block: 'center' 
-      });
+      })
     }
   }, [isActive, currentTour, currentStepIndex, isPaused]);
 
@@ -324,11 +325,11 @@ const TourOverlay: React.FC = () => {
       <TourStepCard step={currentStep} />
     </>
   );
-};
+}
 
 // Tour Step Card
 interface TourStepCardProps {
-  step: TourStep;
+  step: TourStep
 }
 
 const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
@@ -424,11 +425,11 @@ const TourStepCard: React.FC<TourStepCardProps> = ({ step }) => {
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Help Documentation Component
 interface HelpArticle {
-  id: string;
+  id: string
   title: string;
   content: string;
   category: string;
@@ -658,11 +659,11 @@ setSearchTerm(e.target.value)}
           </DaisyDialog>
         )}
   );
-};
+}
 
 // Quick Help Button
 interface QuickHelpProps {
-  tooltip?: string;
+  tooltip?: string
   helpText?: string;
   className?: string;
 }
@@ -692,7 +693,7 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
         </DaisyPopoverContent>
       </DaisyPopover>
     );
-  };
+  }
 
   return (
     <DaisyTooltip content={tooltip}>
@@ -702,6 +703,6 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({
       </DaisyButton>
     </DaisyTooltip>
   );
-};
+}
 
 // All components are exported as named exports above 

@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Brain, Sparkles, Shield, Target, AlertTriangle, FileCheck } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface AIControlGeneratorProps {
   riskId: string;
@@ -31,12 +32,12 @@ export default function AIControlGenerator({
     setIsGenerating(true);
     // Simulate generation
     setTimeout(() => {
-      setIsGenerating(false);
+      setIsGenerating(false)
       if (onControlsGenerated) {
         onControlsGenerated([], []);
       }
     }, 2000);
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -51,7 +52,7 @@ export default function AIControlGenerator({
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -150,4 +151,4 @@ export default function AIControlGenerator({
 }
 
 // Export the component
-export { AIControlGenerator };
+export { AIControlGenerator }

@@ -30,11 +30,11 @@ export async function POST(_request: NextRequest) {
       timestamp: errorReport.timestamp,
       userAgent: errorReport.userAgent,
       retryCount: errorReport.retryCount,
-    });
+    })
 
     // If it's a critical error, you might want to send additional alerts
     if (errorReport.level === 'critical') {
-      // console.error('CRITICAL ERROR DETECTED:', errorReport);
+      // console.error('CRITICAL ERROR DETECTED:', errorReport)
     }
 
     return NextResponse.json({
@@ -42,7 +42,7 @@ export async function POST(_request: NextRequest) {
       message: 'Error report received',
     });
   } catch (error) {
-    // console.error('Failed to process error report:', error);
+    // console.error('Failed to process error report:', error)
 
     return NextResponse.json(
       {

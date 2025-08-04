@@ -19,7 +19,7 @@ interface UploadedFile {
 
 // Rate limiting function
 const checkRateLimit = (clientIP: string): boolean {
-  const now = Date.now();
+  const now = Date.now()
   const userLimit = rateLimitStore.get(clientIP);
 
   if (!userLimit || now > userLimit.resetTime) {
@@ -27,7 +27,7 @@ const checkRateLimit = (clientIP: string): boolean {
     rateLimitStore.set(clientIP, {
       count: 1,
       resetTime: now + RATE_LIMIT_WINDOW,
-    });
+    })
     return true;
   }
 
@@ -42,7 +42,7 @@ const checkRateLimit = (clientIP: string): boolean {
 // Text extraction functions
 async function extractTextFromPDF(buffer: Buffer): Promise<string> {
   try {
-    const pdfParse = (await import('pdf-parse')).default;
+    const pdfParse = (await import('pdf-parse')).default
     const data = await pdfParse(buffer);
     return data.text;
   } catch (error) {
@@ -128,18 +128,18 @@ ${text}`,
           text: control.text || '',
           confidence: 0.85, // Default confidence score
         })) || [],
-    };
+    }
 
     return extractedContent;
   } catch (parseError) {
-    // console.error('Failed to parse AI response:', parseError);
-    // console.error('AI Response:', responseText);
+    // console.error('Failed to parse AI response:', parseError)
+    // console.error('AI Response:', responseText)
 
     // Return empty structure if parsing fails
     return {
       risks: [],
       controls: [],
-    };
+    }
   }
 }
 
@@ -147,7 +147,7 @@ ${text}`,
 async function parseUploadedFile(_request: NextRequest): Promise<UploadedFile> {
   return new Promise(async (resolve, reject) => {
     try {
-      const formData = await request.formData();
+      const formData = await request.formData()
       const file = formData.get('file') as File;
 
       if (!file) {
@@ -160,7 +160,7 @@ async function parseUploadedFile(_request: NextRequest): Promise<UploadedFile> {
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/msword',
         'text/plain',
-      ];
+      ]
 
       if (!allowedTypes.includes(file.type)) {
         return reject(
@@ -170,7 +170,7 @@ async function parseUploadedFile(_request: NextRequest): Promise<UploadedFile> {
 
       // Check file size (10MB limit)
       if (file.size > 10 * 1024 * 1024) {
-        return reject(new Error('File too large. Maximum size is 10MB.'));
+        return reject(new Error('File too large. Maximum size is 10MB.'))
       }
 
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -190,7 +190,7 @@ export async function POST(_request: NextRequest) {
   try {
     // Rate limiting
     const clientIP =
-      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
     if (!checkRateLimit(clientIP)) {
       return NextResponse.json(
         {
@@ -202,11 +202,11 @@ export async function POST(_request: NextRequest) {
     }
 
     // Parse uploaded file
-    const uploadedFile = await parseUploadedFile(request);
-    // console.log(`Processing file: ${uploadedFile.filename} (${uploadedFile.mimetype})`);
+    const uploadedFile = await parseUploadedFile(request)
+    // console.log(`Processing file: ${uploadedFile.filename} (${uploadedFile.mimetype})`)
 
     // Extract text based on file type
-    let extractedText: string;
+    let extractedText: string
 
     switch (uploadedFile.mimetype) {
       case 'application/pdf':
@@ -233,7 +233,7 @@ export async function POST(_request: NextRequest) {
       );
     }
 
-    // console.log(`Extracted ${extractedText.length} characters from document`);
+    // console.log(`Extracted ${extractedText.length} characters from document`)
 
     // Check for API key and perform AI analysis
     if (process.env.ANTHROPIC_API_KEY) {
@@ -241,17 +241,17 @@ export async function POST(_request: NextRequest) {
         const extractedContent = await extractRisksAndControls(
           extractedText,
           uploadedFile.filename
-        );
+        )
 
         // console.log(
           `AI extracted ${extractedContent.risks.length} risks and ${extractedContent.controls.length} controls`
-        );
+        )
 
         // Get organization ID (demo mode for now)
-        const organizationId = 'demo-org-id';
+        const organizationId = 'demo-org-id'
 
         // Persist to database
-        let savedRisks = 0;
+        let savedRisks = 0
         let savedControls = 0;
 
         try {
@@ -270,7 +270,7 @@ export async function POST(_request: NextRequest) {
                     confidence: risk.confidence,
                     organizationId,
                   },
-                });
+                })
                 savedRisks++;
               }
 
@@ -284,7 +284,7 @@ export async function POST(_request: NextRequest) {
                     confidence: control.confidence,
                     organizationId,
                   },
-                });
+                })
                 savedControls++;
               }
             });
@@ -293,7 +293,7 @@ export async function POST(_request: NextRequest) {
 
             // console.log(
               `Successfully saved ${savedRisks} risks and ${savedControls} controls to database`
-            );
+            )
 
             return NextResponse.json({
               success: true,
@@ -308,10 +308,10 @@ export async function POST(_request: NextRequest) {
             throw dbError;
           }
         } catch (error) {
-          // console.error('Database error:', error);
+          // console.error('Database error:', error)
 
           // Fallback to returning extracted data without database save
-          // console.log('Database not available, returning extracted data without persistence');
+          // console.log('Database not available, returning extracted data without persistence')
 
           return NextResponse.json({
             success: true,
@@ -324,7 +324,7 @@ export async function POST(_request: NextRequest) {
           });
         }
       } catch (aiError) {
-        // console.error('AI analysis failed:', aiError);
+        // console.error('AI analysis failed:', aiError)
         // Fall back to mock data if AI fails
       }
     }
@@ -365,11 +365,11 @@ export async function POST(_request: NextRequest) {
           confidence: 0.91,
         },
       ],
-    };
+    }
 
     // console.log(
       `Mock extracted ${mockExtractedContent.risks.length} risks and ${mockExtractedContent.controls.length} controls`
-    );
+    )
 
     // Return extracted data without database persistence for now
     return NextResponse.json({
@@ -386,9 +386,9 @@ export async function POST(_request: NextRequest) {
         size: uploadedFile.buffer.length,
         textLength: extractedText.length,
       },
-    });
+    })
   } catch (error) {
-    // console.error('Policy upload error:', error);
+    // console.error('Policy upload error:', error)
 
     return NextResponse.json(
       {

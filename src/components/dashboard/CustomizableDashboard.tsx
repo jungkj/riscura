@@ -2,20 +2,21 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
+import { Plus } from 'lucide-react';
 // import {
   ActionIcons,
   StatusIcons,
   DataIcons,
   RiskManagementIcons,
   NavigationIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { Brain, X, Plus } from 'lucide-react';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
 // Dashboard types and interfaces
 interface DashboardWidget {
-  id: string;
+  id: string
   type: string;
   title: string;
   description?: string;
@@ -38,7 +39,7 @@ interface WidgetSize {
 interface WidgetInstance {
   id: string;
   widgetId: string;
-  position: { x: number; y: number };
+  position: { x: number; y: number }
   size: WidgetSize;
   config: any;
   visible: boolean;
@@ -161,7 +162,7 @@ const sampleWidgets: DashboardWidget[] = [
     priority: 6,
     userTypes: ['executive', 'risk-manager'],
   },
-];
+]
 
 // Widget Components (simplified for demonstration)
 const RiskOverviewWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
@@ -187,8 +188,8 @@ const RiskOverviewWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -214,7 +215,7 @@ const ComplianceStatusWidget = ({ config, onConfigChange, size, isEditing }: Wid
       )}
     </div>
   );
-};
+}
 
 const RecentActivitiesWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -244,7 +245,7 @@ const RecentActivitiesWidget = ({ config, onConfigChange, size, isEditing }: Wid
       </div>
     </div>
   );
-};
+}
 
 const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -266,7 +267,7 @@ const AIInsightsWidget = ({ config, onConfigChange, size, isEditing }: WidgetPro
       )}
     </div>
   );
-};
+}
 
 const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -292,7 +293,7 @@ const QuickActionsWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
       )}
     </div>
   );
-};
+}
 
 const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetProps) => {
   return (
@@ -310,7 +311,7 @@ const MetricsChartWidget = ({ config, onConfigChange, size, isEditing }: WidgetP
       )}
     </div>
   );
-};
+}
 
 export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
   userId,
@@ -330,7 +331,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
   // Load user layouts and create smart defaults
   useEffect(() => {
     const loadDashboard = async () => {
-      setIsLoading(true);
+      setIsLoading(true)
       try {
         let layouts: DashboardLayout[] = [];
 
@@ -340,26 +341,26 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
 
         if (layouts.length === 0) {
           // Create smart default layout based on user type
-          const defaultLayout = createSmartDefaultLayout(userType);
+          const defaultLayout = createSmartDefaultLayout(userType)
           layouts = [defaultLayout];
           setCurrentLayout(defaultLayout);
         } else {
           // Use the default layout or the first one
-          const defaultLayout = layouts.find((l) => l.isDefault) || layouts[0];
+          const defaultLayout = layouts.find((l) => l.isDefault) || layouts[0]
           setCurrentLayout(defaultLayout);
         }
 
         setAvailableLayouts(layouts);
       } catch (error) {
-        // console.error('Failed to load dashboard:', error);
+        // console.error('Failed to load dashboard:', error)
         // Fallback to smart default
-        const defaultLayout = createSmartDefaultLayout(userType);
+        const defaultLayout = createSmartDefaultLayout(userType)
         setCurrentLayout(defaultLayout);
         setAvailableLayouts([defaultLayout]);
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     loadDashboard();
   }, [userId, userType, onLayoutLoad]);
@@ -380,7 +381,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
 
       // Check if widget fits in current row
       if (currentX + size.width > 12) {
-        currentX = 0;
+        currentX = 0
         currentY += Math.max(...widgets.slice(-3).map((w) => w.size.height)); // Move to next row
       }
 
@@ -404,18 +405,18 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
       isDefault: true,
       userType,
       lastModified: new Date(),
-    };
-  };
+    }
+  }
 
   // Save current layout
   const saveLayout = async () => {
-    if (!currentLayout || !onLayoutSave) return;
+    if (!currentLayout || !onLayoutSave) return
 
     try {
       const updatedLayout = {
         ...currentLayout,
         lastModified: new Date(),
-      };
+      }
 
       await onLayoutSave(updatedLayout);
       setCurrentLayout(updatedLayout);
@@ -423,21 +424,21 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
       // Update available layouts
       setAvailableLayouts((prev) =>
         prev.map((layout) => (layout.id === updatedLayout.id ? updatedLayout : layout))
-      );
+      )
     } catch (error) {
-      // console.error('Failed to save layout:', error);
+      // console.error('Failed to save layout:', error)
     }
-  };
+  }
 
   // Add widget to dashboard
   const addWidget = (widgetId: string) => {
-    if (!currentLayout) return;
+    if (!currentLayout) return
 
     const widget = sampleWidgets.find((w) => w.id === widgetId);
     if (!widget) return;
 
     // Find available position
-    const position = findAvailablePosition(widget.defaultSize);
+    const position = findAvailablePosition(widget.defaultSize)
 
     const newInstance: WidgetInstance = {
       id: `instance-${widgetId}-${Date.now()}`,
@@ -446,7 +447,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
       size: widget.defaultSize,
       config: {},
       visible: true,
-    };
+    }
 
     setCurrentLayout((prev) =>
       prev
@@ -458,11 +459,11 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
     );
 
     setShowWidgetLibrary(false);
-  };
+  }
 
   // Remove widget from dashboard
   const removeWidget = (instanceId: string) => {
-    if (!currentLayout) return;
+    if (!currentLayout) return
 
     setCurrentLayout((prev) =>
       prev
@@ -472,11 +473,11 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           }
         : null
     );
-  };
+  }
 
   // Find available position for new widget
   const findAvailablePosition = (size: WidgetSize): { x: number; y: number } => {
-    if (!currentLayout) return { x: 0, y: 0 };
+    if (!currentLayout) return { x: 0, y: 0 }
 
     // Simple algorithm to find first available position
     for (let y = 0; y < 20; y++) {
@@ -491,17 +492,17 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
         });
 
         if (!isOccupied) {
-          return { x, y };
+          return { x, y }
         }
       }
     }
 
-    return { x: 0, y: 0 };
-  };
+    return { x: 0, y: 0 }
+  }
 
   // Update widget configuration
   const updateWidgetConfig = (instanceId: string, config: any) => {
-    if (!currentLayout) return;
+    if (!currentLayout) return
 
     setCurrentLayout((prev) =>
       prev
@@ -513,11 +514,11 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
           }
         : null
     );
-  };
+  }
 
   // Render widget instance
   const renderWidget = (instance: WidgetInstance) => {
-    const widget = sampleWidgets.find((w) => w.id === instance.widgetId);
+    const widget = sampleWidgets.find((w) => w.id === instance.widgetId)
     if (!widget || !instance.visible) return null;
 
     const WidgetComponent = widget.component;
@@ -568,7 +569,7 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
         />
       </div>
     );
-  };
+  }
 
   if (isLoading) {
     return (
@@ -740,6 +741,6 @@ export const CustomizableDashboard: React.FC<CustomizableDashboardProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default CustomizableDashboard;

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useImportJob } from '@/hooks/useImportJob';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter } from 'next/navigation';
 import { 
@@ -41,7 +41,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
       onCancel?.();
     }
     setCancelling(false);
-  };
+  }
 
   if (isLoading && !job) {
     return (
@@ -84,7 +84,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
       default:
         return <Loader2 className="h-6 w-6 animate-spin text-blue-500" />;
     }
-  };
+  }
 
   const getStatusColor = () => {
     switch (job.status) {
@@ -97,7 +97,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
       default:
         return 'text-blue-700 bg-blue-50';
     }
-  };
+  }
 
   const formatImportResults = () => {
     if (!job.metadata?.importResult) return null;
@@ -119,7 +119,7 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <DaisyCard className="p-6" >
@@ -223,4 +223,4 @@ export const ImportProgress: React.FC<Props> = ({ jobId, onComplete, onCancel })
       </div>
     </DaisyCard>
   );
-};
+}

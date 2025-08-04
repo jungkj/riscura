@@ -9,6 +9,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import {
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -40,7 +41,7 @@ import {
 
 // Types
 export interface DataTableColumn<T = any> {
-  key: string;
+  key: string
   title: string;
   type: 'text' | 'status' | 'progress' | 'date' | 'user' | 'risk' | 'actions';
   sortable?: boolean;
@@ -79,7 +80,7 @@ interface SortState {
 
 // Sample data interface
 interface RiskRecord {
-  id: string;
+  id: string
   title: string;
   category: string;
   status: 'open' | 'mitigated' | 'closed' | 'monitoring';
@@ -88,7 +89,7 @@ interface RiskRecord {
     name: string;
     avatar: string;
     email: string;
-  };
+  }
   progress: number;
   dueDate: Date;
 }
@@ -100,7 +101,7 @@ const StatusBadgeCell: React.FC<{ value: string }> = ({ value }) => {
     'mitigated': { variant: 'secondary', icon: Shield },
     'closed': { variant: 'default', icon: CheckCircle },
     'monitoring': { variant: 'outline', icon: Eye },
-  };
+  }
 
   const config = statusConfig[value] || statusConfig['open'];
   const IconComponent = config.icon;
@@ -112,7 +113,7 @@ const StatusBadgeCell: React.FC<{ value: string }> = ({ value }) => {
       {value.charAt(0).toUpperCase() + value.slice(1)}
     </DaisyBadge>
   );
-};
+}
 
 const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
   const riskConfig: Record<string, { color: string, bg: string, text: string }> = {
@@ -120,7 +121,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
     'high': { color: 'border-semantic-warning', bg: 'bg-semantic-warning/10', text: 'text-semantic-warning' },
     'medium': { color: 'border-interactive-primary', bg: 'bg-interactive-primary/10', text: 'text-interactive-primary' },
     'low': { color: 'border-semantic-success', bg: 'bg-semantic-success/10', text: 'text-semantic-success' },
-  };
+  }
 
   const config = riskConfig[value] || riskConfig['medium'];
 
@@ -130,7 +131,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
       {value.charAt(0).toUpperCase() + value.slice(1)}
     </div>
   );
-};
+}
 
 const UserAvatarCell: React.FC<{ value: { name: string; email: string } }> = ({ value }) => {
   return (
@@ -144,14 +145,14 @@ const UserAvatarCell: React.FC<{ value: { name: string; email: string } }> = ({ 
       </div>
     </div>
   );
-};
+}
 
 const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
   const getProgressColor = (progress: number) => {
     if (progress >= 80) return 'bg-semantic-success';
     if (progress >= 50) return 'bg-semantic-warning';
     return 'bg-semantic-error';
-  };
+  }
 
   return (
     <div className="flex items-center space-x-enterprise-2">
@@ -165,7 +166,7 @@ const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
       </span>
     </div>
   );
-};
+}
 
 const DateCell: React.FC<{ value: Date }> = ({ value }) => {
   const isOverdue = value < new Date();
@@ -187,7 +188,7 @@ const DateCell: React.FC<{ value: Date }> = ({ value }) => {
       </span>
     </div>
   );
-};
+}
 
 const ActionsCell: React.FC<{ row: any, onAction: (_action: string, row: any) => void }> = ({ row, onAction }) => {
   return (
@@ -225,11 +226,11 @@ const ActionsCell: React.FC<{ row: any, onAction: (_action: string, row: any) =>
       </DaisyDropdownMenuContent>
     </DaisyDropdownMenu>
   );
-};
+}
 
 // Advanced Filters Component
 const AdvancedFilters: React.FC<{
-  columns: DataTableColumn[];
+  columns: DataTableColumn[]
   filters: FilterState;
   onFiltersChange: (_filters: FilterState) => void;
   onClearFilters: () => void;
@@ -270,7 +271,7 @@ const AdvancedFilters: React.FC<{
                 <DaisySelect
                   value={filters[column.key] as string || ''}
                   onValueChange={(value) => {
-                    const newFilters = { ...filters };
+                    const newFilters = { ...filters }
                     if (value) {
                       newFilters[column.key] = value;
                     } else {
@@ -297,7 +298,7 @@ const AdvancedFilters: React.FC<{
                   value={filters[column.key] as string || ''}
                   onChange={(e) = />
 {
-                    const newFilters = { ...filters };
+                    const newFilters = { ...filters }
                     if (e.target.value) {
                       newFilters[column.key] = e.target.value;
                     } else {
@@ -313,7 +314,7 @@ const AdvancedFilters: React.FC<{
       </DaisyInput>
     </DaisyPopover>
   );
-};
+}
 
 // Main Data Table Component
 export const VantaDataTable: React.FC<DataTableProps> = ({
@@ -332,7 +333,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
   onBulkAction,
   className,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<FilterState>({});
   const [sort, setSort] = useState<SortState>({ column: null, direction: null });
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -340,7 +341,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let _result = [...data];
+    let _result = [...data]
 
     // Apply search
     if (searchQuery) {
@@ -348,14 +349,14 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
         Object.values(row).some((value) =>
           String(value).toLowerCase().includes(searchQuery.toLowerCase())
         )
-      );
+      )
     }
 
     // Apply column filters
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         result = result.filter((row) => {
-          const rowValue = row[key as keyof typeof row];
+          const rowValue = row[key as keyof typeof row]
           return String(rowValue).toLowerCase().includes(String(value).toLowerCase());
         });
       }
@@ -364,7 +365,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
     // Apply sorting
     if (sort.column && sort.direction) {
       result.sort((a, b) => {
-        const aValue = a[sort.column as keyof typeof a];
+        const aValue = a[sort.column as keyof typeof a]
         const bValue = b[sort.column as keyof typeof b];
         
         let comparison = 0;
@@ -379,7 +380,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
   }, [data, searchQuery, filters, sort]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / pageSize);
+  const totalPages = Math.ceil(filteredData.length / pageSize)
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedData = pagination 
     ? filteredData.slice(startIndex, startIndex + pageSize)
@@ -393,7 +394,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       column: columnKey,
       direction: prev.column === columnKey && prev.direction === 'asc' ? 'desc' : 'asc'
     }));
-  };
+  }
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -401,7 +402,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
     } else {
       setSelectedRows([]);
     }
-  };
+  }
 
   const handleSelectRow = (rowId: string, checked: boolean) => {
     if (checked) {
@@ -409,12 +410,12 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
     } else {
       setSelectedRows(prev => prev.filter(id => id !== rowId));
     }
-  };
+  }
 
   const getSortIcon = (columnKey: string) => {
     if (sort.column !== columnKey) return <ChevronsUpDown className="h-3 w-3" />;
     return sort.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />;
-  };
+  }
 
   const renderCell = (column: DataTableColumn, value: any, row: any) => {
     if (column.render) {
@@ -437,7 +438,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       default:
         return <span className="text-body-sm text-text-primary">{String(value)}</span>;
     }
-  };
+  }
 
   return (
     <div className={cn("space-y-enterprise-4", className)}>
@@ -488,7 +489,7 @@ setSearchQuery(e.target.value)}
                 size="sm"
                 className="h-3 w-3 p-0 ml-enterprise-1"
                 onClick={() => {
-                  const newFilters = { ...filters };
+                  const newFilters = { ...filters }
                   delete newFilters[key];
                   setFilters(newFilters);
                 }}
@@ -697,6 +698,6 @@ handleSelectRow(row.id, !!checked)} />
       </div>
     </div>
   );
-};
+}
 
 export default VantaDataTable; 

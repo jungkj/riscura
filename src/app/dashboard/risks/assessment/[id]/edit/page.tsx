@@ -2,14 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
+// import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react'
 
 export default function EditAssessmentPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function EditAssessmentPage() {
       'Recommend improvements and remediation actions',
       'Ensure compliance with security frameworks',
     ],
-  });
+  })
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +41,7 @@ export default function EditAssessmentPage() {
       ...prev,
       [field]: value,
     }));
-  };
+  }
 
   const handleObjectiveChange = (_index: number, value: string) => {
     const newObjectives = [...formData.objectives];
@@ -49,14 +50,14 @@ export default function EditAssessmentPage() {
       ...prev,
       objectives: newObjectives,
     }));
-  };
+  }
 
   const addObjective = () => {
     setFormData((prev) => ({
       ...prev,
       objectives: [...prev.objectives, ''],
     }));
-  };
+  }
 
   const removeObjective = (_index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
@@ -64,25 +65,25 @@ export default function EditAssessmentPage() {
       ...prev,
       objectives: newObjectives,
     }));
-  };
+  }
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // console.log('Saving assessment:', formData);
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // console.log('Saving assessment:', formData)
       router.push(`/dashboard/risks/assessment/${assessmentId}`);
     } catch (error) {
-      // console.error('Error saving assessment:', error);
+      // console.error('Error saving assessment:', error)
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const handleCancel = () => {
     router.back();
-  };
+  }
 
   return (
     <div className="p-6 space-y-6">

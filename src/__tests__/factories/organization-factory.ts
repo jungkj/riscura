@@ -138,4 +138,4 @@ export const testOrganizations = {
     name: 'Free Test Org',
     domain: 'free.com',
   }),
-};
+}

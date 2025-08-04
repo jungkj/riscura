@@ -45,15 +45,15 @@ export class MFAService {
     const user = await this.getUserForMFA(userId);
 
     // Generate secret and QR code
-    const secret = authenticator.generateSecret();
+    const secret = authenticator.generateSecret()
     const otpauthUrl = authenticator.keyuri(user.email, appName, secret);
     const qrCode = await this.generateQRCode(otpauthUrl);
 
     // Generate backup codes
-    const backupCodes = this.generateBackupCodes();
+    const backupCodes = this.generateBackupCodes()
 
     // Create setup token for verification
-    const setupToken = this.generateSetupToken(userId, secret);
+    const setupToken = this.generateSetupToken(userId, secret)
 
     // Store encrypted in temporary setup
     await this.storeTempMFASetup(userId, {
@@ -61,14 +61,14 @@ export class MFAService {
       secret: await encrypt(secret),
       backupCodes: await Promise.all(backupCodes.map((code) => encrypt(code))),
       setupToken,
-    });
+    })
 
     return {
       secret,
       qrCode,
       backupCodes,
       setupToken,
-    };
+    }
   }
 
   /**
@@ -79,20 +79,20 @@ export class MFAService {
 
     // Validate phone number format
     if (!this.isValidPhoneNumber(phoneNumber)) {
-      throw new Error('Invalid phone number format');
+      throw new Error('Invalid phone number format')
     }
 
     // Generate verification code
-    const verificationCode = this.generateVerificationCode();
+    const verificationCode = this.generateVerificationCode()
 
     // Send SMS
-    await this.sendSMS(phoneNumber, `Your Riscura verification code: ${verificationCode}`);
+    await this.sendSMS(phoneNumber, `Your Riscura verification code: ${verificationCode}`)
 
     // Generate backup codes
-    const backupCodes = this.generateBackupCodes();
+    const backupCodes = this.generateBackupCodes()
 
     // Create setup token
-    const setupToken = this.generateSetupToken(userId, verificationCode);
+    const setupToken = this.generateSetupToken(userId, verificationCode)
 
     // Store encrypted in temporary setup
     await this.storeTempMFASetup(userId, {
@@ -101,14 +101,14 @@ export class MFAService {
       verificationCode: await encrypt(verificationCode),
       backupCodes: await Promise.all(backupCodes.map((code) => encrypt(code))),
       setupToken,
-    });
+    })
 
     return {
       secret: '', // Not applicable for SMS
       qrCode: '', // Not applicable for SMS
       backupCodes,
       setupToken,
-    };
+    }
   }
 
   /**
@@ -152,13 +152,13 @@ export class MFAService {
       backupCodes: tempSetup.backupCodes,
       createdAt: new Date(),
       metadata: {},
-    };
+    }
 
     // Store the MFA method
-    await this.storeMFAMethod(mfaMethod);
+    await this.storeMFAMethod(mfaMethod)
 
     // Clean up temporary setup
-    await this.cleanupTempMFASetup(userId, setupToken);
+    await this.cleanupTempMFASetup(userId, setupToken)
 
     return true;
   }
@@ -171,7 +171,7 @@ export class MFAService {
 
     // Check if user is locked out
     if (attempts.length >= this.maxAttempts) {
-      const lastAttempt = attempts[0];
+      const lastAttempt = attempts[0]
       const lockoutUntil = new Date(lastAttempt.timestamp.getTime() + this.lockoutDuration);
 
       if (new Date() < lockoutUntil) {
@@ -179,7 +179,7 @@ export class MFAService {
           success: false,
           remainingAttempts: 0,
           lockoutUntil,
-        };
+        }
       }
     }
 
@@ -193,26 +193,26 @@ export class MFAService {
     // Try specific method if provided, otherwise try all
     const methodsToTry = methodId
       ? enabledMethods.filter((m) => m.id === methodId)
-      : enabledMethods;
+      : enabledMethods
 
     for (const method of methodsToTry) {
       const _result = await this.verifyMethodCode(method, code);
       if (result) {
         // Update last used
-        await this.updateMethodLastUsed(method.id);
+        await this.updateMethodLastUsed(method.id)
 
         // Clear failed attempts
-        await this.clearFailedAttempts(userId);
+        await this.clearFailedAttempts(userId)
 
         return {
           success: true,
           methodUsed: method.type,
-        };
+        }
       }
     }
 
     // Record failed attempt
-    await this.recordFailedAttempt(userId);
+    await this.recordFailedAttempt(userId)
 
     const remainingAttempts = Math.max(0, this.maxAttempts - (attempts.length + 1));
 
@@ -221,7 +221,7 @@ export class MFAService {
       remainingAttempts,
       lockoutUntil:
         remainingAttempts === 0 ? new Date(Date.now() + this.lockoutDuration) : undefined,
-    };
+    }
   }
 
   /**
@@ -239,7 +239,7 @@ export class MFAService {
     // Update the method
     await this.updateMFAMethod(methodId, {
       backupCodes: encryptedCodes,
-    });
+    })
 
     return backupCodes;
   }
@@ -252,7 +252,7 @@ export class MFAService {
     verificationCode: string
   ): Promise<boolean> {
     // Verify current MFA before disabling
-    const verification = await this.verifyMFA(userId, verificationCode, methodId);
+    const verification = await this.verifyMFA(userId, verificationCode, methodId)
     if (!verification.success) {
       throw new Error('Invalid verification code');
     }
@@ -263,7 +263,7 @@ export class MFAService {
     }
 
     // Don't allow disabling the last MFA method
-    const userMethods = await this.getUserMFAMethods(userId);
+    const userMethods = await this.getUserMFAMethods(userId)
     const enabledMethods = userMethods.filter((m) => m.isEnabled && m.id !== methodId);
 
     if (enabledMethods.length === 0) {
@@ -271,7 +271,7 @@ export class MFAService {
     }
 
     // Disable the method
-    await this.updateMFAMethod(methodId, { isEnabled: false });
+    await this.updateMFAMethod(methodId, { isEnabled: false })
 
     return true;
   }
@@ -305,13 +305,13 @@ export class MFAService {
         maskedIdentifier: this.getMaskedIdentifier(method),
       })),
       hasBackupCodes: methods.some((m) => m.backupCodes && m.backupCodes.length > 0),
-    };
+    }
   }
 
   // Private helper methods
   private async getUserForMFA(_userId: string) {
     // TODO: Implement with actual database query
-    return { id: userId, email: 'user@example.com' };
+    return { id: userId, email: 'user@example.com' }
   }
 
   private async generateQRCode(otpauthUrl: string): Promise<string> {
@@ -332,7 +332,7 @@ export class MFAService {
       userId,
       secretHash: crypto.createHash('sha256').update(secret).digest('hex'),
       timestamp: Date.now(),
-    };
+    }
     return Buffer.from(JSON.stringify(payload)).toString('base64');
   }
 
@@ -342,23 +342,23 @@ export class MFAService {
 
   private isValidPhoneNumber(phoneNumber: string): boolean {
     // Basic phone number validation
-    const phoneRegex = /^\+[1-9]\d{1,14}$/;
+    const phoneRegex = /^\+[1-9]\d{1,14}$/
     return phoneRegex.test(phoneNumber);
   }
 
   private async sendSMS(phoneNumber: string, message: string): Promise<void> {
     // TODO: Implement SMS sending (Twilio, AWS SNS, etc.)
-    // console.log(`SMS to ${phoneNumber}: ${message}`);
+    // console.log(`SMS to ${phoneNumber}: ${message}`)
   }
 
   private async storeTempMFASetup(_userId: string, setup: any): Promise<void> {
     // TODO: Implement with Redis or database
-    // console.log(`Storing temp MFA setup for user ${userId}`);
+    // console.log(`Storing temp MFA setup for user ${userId}`)
   }
 
   private async getTempMFASetup(_userId: string, setupToken: string): Promise<any> {
     // TODO: Implement with Redis or database
-    return null;
+    return null
   }
 
   private async cleanupTempMFASetup(_userId: string, setupToken: string): Promise<void> {
@@ -366,7 +366,7 @@ export class MFAService {
   }
 
   private async isFirstMFAMethod(_userId: string): Promise<boolean> {
-    const methods = await this.getUserMFAMethods(userId);
+    const methods = await this.getUserMFAMethods(userId)
     return methods.length === 0;
   }
 
@@ -376,12 +376,12 @@ export class MFAService {
 
   private async getUserMFAMethods(_userId: string): Promise<MFAMethod[]> {
     // TODO: Implement with database
-    return [];
+    return []
   }
 
   private async getMFAMethod(methodId: string): Promise<MFAMethod | null> {
     // TODO: Implement with database
-    return null;
+    return null
   }
 
   private async updateMFAMethod(methodId: string, updates: Partial<MFAMethod>): Promise<void> {
@@ -390,7 +390,7 @@ export class MFAService {
 
   private async verifyMethodCode(method: MFAMethod, code: string): Promise<boolean> {
     if (method.type === 'totp' && method.secret) {
-      const secret = await decrypt(method.secret);
+      const secret = await decrypt(method.secret)
       return authenticator.verify({
         token: code,
         secret,
@@ -402,7 +402,7 @@ export class MFAService {
         const backupCode = await decrypt(encryptedCode);
         if (backupCode === code.toUpperCase()) {
           // Remove used backup code
-          const updatedCodes = method.backupCodes.filter((c) => c !== encryptedCode);
+          const updatedCodes = method.backupCodes.filter((c) => c !== encryptedCode)
           await this.updateMFAMethod(method.id, { backupCodes: updatedCodes });
           return true;
         }
@@ -418,7 +418,7 @@ export class MFAService {
 
   private async getRecentAttempts(_userId: string): Promise<Array<{ timestamp: Date }>> {
     // TODO: Implement with database - get attempts from last 15 minutes
-    return [];
+    return []
   }
 
   private async recordFailedAttempt(_userId: string): Promise<void> {
@@ -432,7 +432,7 @@ export class MFAService {
   private getMaskedIdentifier(method: MFAMethod): string {
     if (method.type === 'sms' && method.phoneNumber) {
       // Mask phone number: +1234567890 -> +123***7890
-      const phone = method.phoneNumber;
+      const phone = method.phoneNumber
       return phone.slice(0, 4) + '***' + phone.slice(-4);
     }
     if (method.type === 'totp') {

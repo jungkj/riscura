@@ -88,7 +88,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
     getScrollElement: () => scrollElementRef.current,
     estimateSize: () => 40,
     overscan: 5,
-  });
+  })
 
   // Virtual scrolling for columns (if needed for large datasets)
   const columnVirtualizer = useVirtualizer({
@@ -97,7 +97,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
     estimateSize: (index) => columns[index]?.width || 150,
     overscan: 3,
     horizontal: true,
-  });
+  })
 
   const handleCellClick = useCallback(
     (rowId: string, columnId: string, currentValue: string) => {
@@ -130,7 +130,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
         handleCellSave(editingCell.value);
 
         // Move to next row
-        const currentRowIndex = rows.findIndex((r) => r.id === editingCell.rowId);
+        const currentRowIndex = rows.findIndex((r) => r.id === editingCell.rowId)
         const nextRow = rows[currentRowIndex + 1];
         if (nextRow) {
           setEditingCell({
@@ -144,7 +144,7 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
         handleCellSave(editingCell.value);
 
         // Move to next column
-        const currentColumnIndex = columns.findIndex((c) => c.id === editingCell.columnId);
+        const currentColumnIndex = columns.findIndex((c) => c.id === editingCell.columnId)
         const nextColumn = columns[currentColumnIndex + (e.shiftKey ? -1 : 1)];
         if (nextColumn) {
           setEditingCell({
@@ -164,12 +164,12 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
     const row = rows.find((r) => r.id === rowId);
     const cell = row?.cells.find((c) => c.columnId === columnId);
     return cell?.displayValue || '';
-  };
+  }
 
   const getCell = (rowId: string, columnId: string): Cell | undefined => {
     const row = rows.find((r) => r.id === rowId);
     return row?.cells.find((c) => c.columnId === columnId);
-  };
+  }
 
   // Calculate total width for horizontal scrolling
   const totalWidth = columns.reduce((sum, col) => sum + col.width, 0) + 60; // +60 for row numbers
@@ -339,6 +339,6 @@ export const SpreadsheetGrid: React.FC<SpreadsheetGridProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default SpreadsheetGrid;

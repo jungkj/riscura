@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+import { DaisyCardBody, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
+import { CheckCircle2 } from 'lucide-react';
   Play, 
   Pause, 
   Square, 
@@ -20,7 +22,7 @@ import { AIAction } from './SelectableContent';
 import { ContentAnalysisResult } from './ContentAnalysisPanel';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -83,7 +85,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
   // Toggle item selection
   const toggleItemSelection = useCallback((itemId: string) => {
     setSelectedItems((prev: Set<string>) => {
-      const next = new Set(prev);
+      const next = new Set(prev)
       if (next.has(itemId)) {
         next.delete(itemId);
       } else {
@@ -95,29 +97,29 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   // Select all items
   const selectAll = useCallback(() => {
-    setSelectedItems(new Set(selections.map((item: BatchSelectionItem) => item.id)));
+    setSelectedItems(new Set(selections.map((item: BatchSelectionItem) => item.id)))
   }, [selections]);
 
   // Clear selection
   const clearSelection = useCallback(() => {
-    setSelectedItems(new Set());
+    setSelectedItems(new Set())
   }, []);
 
   // Get priority color
   const getPriorityColor = (priority: BatchSelectionItem['priority']) => {
     switch (priority) {
-      case 'urgent': return 'text-red-600 bg-red-50 dark:bg-red-900/20';
+      case 'urgent': return 'text-red-600 bg-red-50 dark:bg-red-900/20'
       case 'high': return 'text-orange-600 bg-orange-50 dark:bg-orange-900/20';
       case 'medium': return 'text-blue-600 bg-blue-50 dark:bg-blue-900/20';
       case 'low': return 'text-gray-600 bg-gray-50 dark:bg-gray-900/20';
       default: return 'text-gray-600 bg-gray-50 dark:bg-gray-900/20';
     }
-  };
+  }
 
   // Get status icon
   const getStatusIcon = (status: BatchSelectionItem['status']) => {
     switch (status) {
-      case 'completed': return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+      case 'completed': return <CheckCircle2 className="h-4 w-4 text-green-600" />
       case 'error': return <DaisyAlertCircle className="h-4 w-4 text-red-600" >
   ;
 </DaisyAlertCircle>
@@ -125,11 +127,11 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       case 'skipped': return <Square className="h-4 w-4 text-gray-400" />;
       default: return <Square className="h-4 w-4 text-gray-400" />;
     }
-  };
+  }
 
   // Start batch processing
   const startBatchProcessing = useCallback(async () => {
-    const itemsToProcess = selections.filter((item: BatchSelectionItem) => selectedItems.has(item.id));
+    const itemsToProcess = selections.filter((item: BatchSelectionItem) => selectedItems.has(item.id))
     
     if (itemsToProcess.length === 0) {
       toast({
@@ -148,7 +150,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       completedItems: 0,
       status: 'running' as const,
       startTime: new Date(),
-    };
+    }
 
     setProcessingQueue(queue);
     queueRef.current = queue;
@@ -159,7 +161,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       await onProcessBatch(itemsToProcess, [selectedAction]);
       
       // Update queue status
-      queue.status = 'completed' as const;
+      queue.status = 'completed' as const
       queue.endTime = new Date();
       queue.completedItems = itemsToProcess.length;
       setProcessingQueue({ ...queue });
@@ -183,13 +185,13 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
 
   // Pause/Resume processing
   const togglePause = useCallback(() => {
-    setIsPaused(!isPaused);
+    setIsPaused(!isPaused)
     if (processingQueue) {
       const newStatus: 'running' | 'paused' = isPaused ? 'running' : 'paused';
       const updatedQueue = { 
         ...processingQueue, 
         status: newStatus 
-      };
+      }
       setProcessingQueue(updatedQueue);
     }
   }, [isPaused, processingQueue]);
@@ -201,7 +203,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
         ...processingQueue, 
         status: 'idle' as const,
         endTime: new Date(),
-      };
+      }
       setProcessingQueue(updatedQueue);
       setProcessingProgress(0);
       setIsPaused(false);
@@ -225,7 +227,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
         status: item.status,
         results: item.results?.length || 0,
       })),
-    };
+    }
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -251,7 +253,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
     processing: selections.filter((item: BatchSelectionItem) => item.status === 'processing').length,
     completed: selections.filter((item: BatchSelectionItem) => item.status === 'completed').length,
     errors: selections.filter((item: BatchSelectionItem) => item.status === 'error').length,
-  };
+  }
 
   return (
     <AnimatePresence>
@@ -501,4 +503,4 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       )}
     </AnimatePresence>
   );
-}; 
+} 

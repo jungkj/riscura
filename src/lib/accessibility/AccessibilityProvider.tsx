@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 // Types
 interface AccessibilitySettings {
-  highContrast: boolean;
+  highContrast: boolean
   reducedMotion: boolean;
   focusVisible: boolean;
   screenReaderMode: boolean;
@@ -81,19 +81,19 @@ const ariaLabels = {
   'risk.controls': 'Associated controls',
   'risk.assessment': 'Risk assessment',
   'risk.mitigation': 'Risk mitigation',
-};
+}
 
 // Context
-const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
+const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined)
 
 // Custom Hooks
 export const useAccessibility = () => {
-  const context = useContext(AccessibilityContext);
+  const context = useContext(AccessibilityContext)
   if (!context) {
     throw new Error('useAccessibility must be used within AccessibilityProvider');
   }
   return context;
-};
+}
 
 export const useAnnouncements = () => {
   const { announceToScreenReader } = useAccessibility();
@@ -132,8 +132,8 @@ export const useAnnouncements = () => {
     announceAction,
     announceDataUpdate,
     announceError,
-  };
-};
+  }
+}
 
 export const useFocusManagement = () => {
   const { focusElement, trapFocus, currentFocusId } = useAccessibility();
@@ -174,8 +174,8 @@ export const useFocusManagement = () => {
     focusElement,
     trapFocus,
     currentFocusId,
-  };
-};
+  }
+}
 
 export const useKeyboardNavigation = () => {
   const { settings } = useAccessibility();
@@ -236,8 +236,8 @@ export const useKeyboardNavigation = () => {
     [settings.keyboardNavigation]
   );
 
-  return { handleKeyPress };
-};
+  return { handleKeyPress }
+}
 
 // Provider Component
 export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -249,20 +249,20 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     fontSize: 'medium',
     colorBlindMode: 'none',
     keyboardNavigation: true,
-  });
+  })
 
   const [currentFocusId, setCurrentFocusId] = useState<string | null>(null);
   const announcementRef = useRef<HTMLDivElement>(null);
 
   // Initialize settings from system preferences and localStorage
   useEffect(() => {
-    const savedSettings = localStorage.getItem('accessibility-settings');
+    const savedSettings = localStorage.getItem('accessibility-settings')
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
         setSettings((prev) => ({ ...prev, ...parsed }));
       } catch (error) {
-        // console.warn('Failed to parse saved accessibility settings:', error);
+        // console.warn('Failed to parse saved accessibility settings:', error)
       }
     }
 
@@ -270,7 +270,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     const mediaQueries = {
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)'),
       highContrast: window.matchMedia('(prefers-contrast: high)'),
-    };
+    }
 
     const updateFromSystem = () => {
       setSettings((prev) => ({
@@ -278,7 +278,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
         reducedMotion: mediaQueries.reducedMotion.matches,
         highContrast: prev.highContrast || mediaQueries.highContrast.matches,
       }));
-    };
+    }
 
     updateFromSystem();
 
@@ -288,12 +288,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       mediaQueries.reducedMotion.removeListener(updateFromSystem);
       mediaQueries.highContrast.removeListener(updateFromSystem);
-    };
+    }
   }, []);
 
   // Update CSS variables when settings change
   useEffect(() => {
-    const root = document.documentElement;
+    const root = document.documentElement
 
     // Font size
     const fontSizes = {
@@ -301,29 +301,29 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       medium: '16px',
       large: '18px',
       'extra-large': '20px',
-    };
+    }
     root.style.setProperty('--font-size-base', fontSizes[settings.fontSize]);
 
     // High contrast
-    root.classList.toggle('high-contrast', settings.highContrast);
+    root.classList.toggle('high-contrast', settings.highContrast)
 
     // Reduced motion
-    root.classList.toggle('reduced-motion', settings.reducedMotion);
+    root.classList.toggle('reduced-motion', settings.reducedMotion)
 
     // Color blind mode
-    root.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
+    root.classList.remove('protanopia', 'deuteranopia', 'tritanopia')
     if (settings.colorBlindMode !== 'none') {
       root.classList.add(settings.colorBlindMode);
     }
 
     // Focus visible
-    root.classList.toggle('focus-visible', settings.focusVisible);
+    root.classList.toggle('focus-visible', settings.focusVisible)
 
     // Screen reader mode
-    root.classList.toggle('screen-reader-mode', settings.screenReaderMode);
+    root.classList.toggle('screen-reader-mode', settings.screenReaderMode)
 
     // Save to localStorage
-    localStorage.setItem('accessibility-settings', JSON.stringify(settings));
+    localStorage.setItem('accessibility-settings', JSON.stringify(settings))
   }, [settings]);
 
   const updateSettings = useCallback((newSettings: Partial<AccessibilitySettings>) => {
@@ -339,7 +339,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
         // Clear after announcement
         setTimeout(() => {
           if (announcementRef.current) {
-            announcementRef.current.textContent = '';
+            announcementRef.current.textContent = ''
           }
         }, 1000);
       }
@@ -377,13 +377,13 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         }
       }
-    };
+    }
 
     container.addEventListener('keydown', handleKeyDown);
 
     return () => {
       container.removeEventListener('keydown', handleKeyDown);
-    };
+    }
   }, []);
 
   const skipToContent = useCallback(() => {
@@ -409,7 +409,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     isReducedMotion: settings.reducedMotion,
     isHighContrast: settings.highContrast,
     currentFocusId,
-  };
+  }
 
   return (
     <AccessibilityContext.Provider value={value}>
@@ -441,12 +441,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       </div>
     </AccessibilityContext.Provider>
   );
-};
+}
 
 // Accessibility Utility Components
 export const VisuallyHidden: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="sr-only">{children}</span>
-);
+)
 
 export const LiveRegion: React.FC<{
   children: React.ReactNode;
@@ -477,7 +477,7 @@ export const FocusTrap: React.FC<{
       {children}
     </div>
   );
-};
+}
 
 export const AriaLabel: React.FC<{
   labelKey: string;
@@ -487,6 +487,6 @@ export const AriaLabel: React.FC<{
   const { getAriaLabel } = useAccessibility();
   const label = getAriaLabel(labelKey, fallback);
   return <>{children(label)}</>;
-};
+}
 
 export default AccessibilityProvider;

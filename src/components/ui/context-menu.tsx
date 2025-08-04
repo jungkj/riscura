@@ -165,7 +165,7 @@ const ContextMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLS
       {...props}
     />
   );
-};
+}
 ContextMenuShortcut.displayName = 'ContextMenuShortcut';
 
 export {
@@ -184,4 +184,4 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuRadioGroup,
-};
+}

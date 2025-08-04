@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Common schemas
-export const idSchema = z.string().uuid('Invalid ID format');
+export const idSchema = z.string().uuid('Invalid ID format')
 
 export const paginationSchema = z.object({
   page: z.string().optional().default('1'),
@@ -28,7 +28,7 @@ export const createRiskSchema = z.object({
   owner: z.string().optional(),
   dateIdentified: z.string().optional(),
   nextReview: z.string().optional(),
-});
+})
 
 export const updateRiskSchema = createRiskSchema.partial();
 export const riskUpdateSchema = updateRiskSchema; // Alias for backward compatibility
@@ -55,7 +55,7 @@ export const createControlSchema = z.object({
   effectiveness: z.string().optional(),
   frequency: z.string().optional(),
   owner: z.string().optional(),
-});
+})
 
 export const updateControlSchema = createControlSchema.partial();
 
@@ -87,7 +87,7 @@ export const controlQuerySchema = z
     ...data,
     skip: (parseInt(data.page) - 1) * parseInt(data.limit),
     limit: parseInt(data.limit),
-  }));
+  }))
 
 export const controlCreateSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -147,7 +147,7 @@ export const createDocumentSchema = z.object({
   reviewDate: z.string().optional(),
   linkedRiskIds: z.array(z.string()).optional(),
   linkedControlIds: z.array(z.string()).optional(),
-});
+})
 
 export const updateDocumentSchema = createDocumentSchema.partial();
 
@@ -170,7 +170,7 @@ export const fileUploadSchema = z.object({
   documentId: z.string().uuid().optional(),
   category: z.string().optional(),
   description: z.string().max(500).optional(),
-});
+})
 
 // Questionnaire schemas
 export const createQuestionnaireSchema = z.object({
@@ -204,7 +204,7 @@ export const createQuestionnaireSchema = z.object({
   riskIds: z.array(z.string().uuid()).optional().default([]),
   controlIds: z.array(z.string().uuid()).optional().default([]),
   customFields: z.record(z.any()).optional().default({}),
-});
+})
 
 export const updateQuestionnaireSchema = createQuestionnaireSchema.partial();
 
@@ -228,7 +228,7 @@ export const createWorkflowSchema = z.object({
   status: z.string().optional(),
   dueDate: z.string().optional(),
   assigneeId: z.string().optional(),
-});
+})
 
 export const updateWorkflowSchema = createWorkflowSchema.partial();
 
@@ -254,7 +254,7 @@ export const createReportSchema = z.object({
   parameters: z.record(z.any()).optional(),
   sharedWith: z.array(z.string()).optional(),
   exportFormats: z.array(z.string()).optional(),
-});
+})
 
 export const updateReportSchema = createReportSchema.partial();
 
@@ -277,7 +277,7 @@ export const bulkOperationSchema = z.object({
   entityIds: z.array(z.string()),
   data: z.record(z.any()).optional(),
   confirm: z.boolean().default(false),
-});
+})
 
 // Analytics schemas
 export const analyticsQuerySchema = z.object({
@@ -288,7 +288,7 @@ export const analyticsQuerySchema = z.object({
   dateTo: z.string().datetime().optional(),
   groupBy: z.string().optional(),
   filters: z.record(z.any()).optional().default({}),
-});
+})
 
 // Export schemas
 export const exportSchema = z.object({
@@ -296,7 +296,7 @@ export const exportSchema = z.object({
   format: z.enum(['csv', 'xlsx', 'pdf', 'json']),
   filters: z.record(z.any()).optional(),
   includeRelated: z.boolean().optional().default(false),
-});
+})
 
 // API Key schemas
 export const createApiKeySchema = z.object({
@@ -306,7 +306,7 @@ export const createApiKeySchema = z.object({
   expiresAt: z.string().datetime().optional(),
   ipWhitelist: z.array(z.string()).optional().default([]),
   isActive: z.boolean().default(true),
-});
+})
 
 export const updateApiKeySchema = createApiKeySchema.partial().omit({ permissions: true });
 
@@ -327,7 +327,7 @@ export const activityQuerySchema = paginationSchema.extend({
   dateFrom: z.string().datetime().optional(),
   dateTo: z.string().datetime().optional(),
   ipAddress: z.string().optional(),
-});
+})
 
 // Common response schemas
 export const successResponseSchema = z.object({
@@ -348,7 +348,7 @@ export const successResponseSchema = z.object({
       version: z.string(),
     })
     .optional(),
-});
+})
 
 export const errorResponseSchema = z.object({
   success: z.literal(false),
@@ -380,14 +380,14 @@ export const healthCheckSchema = z.object({
       })
     )
     .optional(),
-});
+})
 
 // Validation helpers
 export function validatePagination(params: URLSearchParams) {
-  const page = Math.max(1, parseInt(params.get('page') || '1'));
+  const page = Math.max(1, parseInt(params.get('page') || '1'))
   const limit = Math.min(100, Math.max(1, parseInt(params.get('limit') || '10')));
   const skip = (page - 1) * limit;
-  return { page, limit, skip, take: limit };
+  return { page, limit, skip, take: limit }
 }
 
 export function validateSorting(params: URLSearchParams, allowedFields: string[] = []) {
@@ -396,10 +396,10 @@ export function validateSorting(params: URLSearchParams, allowedFields: string[]
 
   // Validate sort field if allowed fields are specified
   if (allowedFields.length > 0 && !allowedFields.includes(sort)) {
-    return { [allowedFields[0]]: order };
+    return { [allowedFields[0]]: order }
   }
 
-  return { [sort]: order };
+  return { [sort]: order }
 }
 
 export function validateSearch(params: URLSearchParams) {

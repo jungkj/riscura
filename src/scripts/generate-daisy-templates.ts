@@ -119,7 +119,7 @@ export const StandardDialog: React.FC<StandardDialogProps> = ({
     xl: 'max-w-xl',
     '2xl': 'max-w-2xl',
     '4xl': 'max-w-4xl',
-  };
+  }
 
   return (
     <DaisyDialog open={open} onOpenChange={onOpenChange}>
@@ -219,7 +219,7 @@ export const StandardForm: React.FC<StandardFormProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     fields.forEach(field => {
       const value = formData[field.id] || '';
@@ -236,7 +236,7 @@ export const StandardForm: React.FC<StandardFormProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -248,16 +248,16 @@ export const StandardForm: React.FC<StandardFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (error) {
-      // console.error('Form submission error:', error);
+      // console.error('Form submission error:', error)
     }
-  };
+  }
 
   const updateField = (fieldId: string, value: string) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }));
     if (errors[fieldId]) {
       setErrors(prev => ({ ...prev, [fieldId]: '' }));
     }
-  };
+  }
 
   return (
     <DaisyCard className={className}>
@@ -359,7 +359,7 @@ export const StandardTabs: React.FC<StandardTabsProps> = ({
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     onTabChange?.(tabId);
-  };
+  }
 
   return (
     <DaisyTabs 
@@ -448,7 +448,7 @@ export function StandardDataList<T extends DataItem>({
       case 'pending': return 'badge-warning';
       default: return 'badge-ghost';
     }
-  };
+  }
 
   const defaultRenderItem = (item: T) => (
     <div
@@ -534,27 +534,27 @@ class ComponentTemplateGenerator {
   }
 
   async generateAllTemplates(): Promise<void> {
-    // console.log('🏗️  Generating DaisyUI component templates...');
+    // console.log('🏗️  Generating DaisyUI component templates...')
 
     // Ensure output directory exists
     if (!fs.existsSync(this.outputDir)) {
-      fs.mkdirSync(this.outputDir, { recursive: true });
+      fs.mkdirSync(this.outputDir, { recursive: true })
     }
 
     // Generate individual template files
     for (const template of COMPONENT_TEMPLATES) {
-      await this.generateTemplate(template);
+      await this.generateTemplate(template)
     }
 
     // Generate index file
-    await this.generateIndexFile();
+    await this.generateIndexFile()
 
     // Generate README
-    await this.generateReadme();
+    await this.generateReadme()
 
     // console.log(
       `✅ Generated ${COMPONENT_TEMPLATES.length} component templates in ${this.outputDir}`
-    );
+    )
   }
 
   private async generateTemplate(template: ComponentTemplate): Promise<void> {
@@ -575,7 +575,7 @@ ${template.imports.join('\n')}
 
 ${template.template}
 
-export default ${template.name};
+export default ${template.name}
 
 /**
  * Usage Example:
@@ -585,7 +585,7 @@ export default ${template.name};
 `;
 
     fs.writeFileSync(filepath, content);
-    // console.log(`📄 Generated: ${filename}`);
+    // console.log(`📄 Generated: ${filename}`)
   }
 
   private async generateIndexFile(): Promise<void> {
@@ -605,11 +605,11 @@ export default ${template.name};
 ${exports}
 
 // Re-export types for convenience
-export type { ComponentTemplate } from '../scripts/generate-daisy-templates';
+export type { ComponentTemplate } from '../scripts/generate-daisy-templates'
 `;
 
     fs.writeFileSync(indexPath, content);
-    // console.log('📄 Generated: index.ts');
+    // console.log('📄 Generated: index.ts')
   }
 
   private async generateReadme(): Promise<void> {
@@ -636,7 +636,7 @@ ${templateList}
 Import the templates you need:
 
 \`\`\`tsx
-// import { StandardCard, StandardDialog, StandardForm } from '@/components/templates';
+// import { StandardCard, StandardDialog, StandardForm } from '@/components/templates'
 \`\`\`
 
 ## Template Examples
@@ -670,26 +670,26 @@ When adding new templates:
 `;
 
     fs.writeFileSync(readmePath, content);
-    // console.log('📄 Generated: README.md');
+    // console.log('📄 Generated: README.md')
   }
 }
 
 // CLI execution
 async function main() {
-  const generator = new ComponentTemplateGenerator();
+  const generator = new ComponentTemplateGenerator()
 
   try {
     await generator.generateAllTemplates();
-    // console.log('🎉 Template generation completed successfully!');
+    // console.log('🎉 Template generation completed successfully!')
   } catch (error) {
-    // console.error('❌ Template generation failed:', error);
+    // console.error('❌ Template generation failed:', error)
     process.exit(1);
   }
 }
 
 // Run if called directly
 if (import.meta.url === new URL(process.argv[1], 'file://').href) {
-  main().catch(console.error);
+  main().catch(console.error)
 }
 
-export { ComponentTemplateGenerator, COMPONENT_TEMPLATES, type ComponentTemplate };
+export { ComponentTemplateGenerator, COMPONENT_TEMPLATES, type ComponentTemplate }

@@ -1,12 +1,12 @@
 import ExcelJS from 'exceljs';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 import * as XLSX from 'xlsx';
 import fs from 'fs/promises';
 import path from 'path';
 
 // Types for Excel export
 export interface ExcelExportOptions {
-  filename?: string;
+  filename?: string
   fileName?: string;
   worksheetName?: string;
   includeCharts?: boolean;
@@ -32,7 +32,7 @@ export interface ExcelWorkbookData {
     author: string;
     created: Date;
     description?: string;
-  };
+  }
 }
 
 export interface CSVExportOptions {
@@ -50,7 +50,7 @@ export interface ExportResult {
 
 // Excel Generator Class
 export class ExcelExporter {
-  private workbook: ExcelJS.Workbook;
+  private workbook: ExcelJS.Workbook
 
   constructor() {
     this.workbook = new ExcelJS.Workbook();
@@ -64,51 +64,51 @@ export class ExcelExporter {
     data: ExcelTableData,
     options: ExcelExportOptions = {}
   ): ExcelJS.Worksheet {
-    const worksheet = this.workbook.addWorksheet(name);
+    const worksheet = this.workbook.addWorksheet(name)
 
     // Add title if provided
     if (data.title) {
-      worksheet.addRow([data.title]);
+      worksheet.addRow([data.title])
       const titleRow = worksheet.getRow(1);
-      titleRow.font = { bold: true, size: 16 };
-      titleRow.alignment = { horizontal: 'center' };
+      titleRow.font = { bold: true, size: 16 }
+      titleRow.alignment = { horizontal: 'center' }
       worksheet.mergeCells('A1:' + this.getColumnLetter(data.headers.length) + '1');
       worksheet.addRow([]); // Empty row
     }
 
     // Add summary if provided
     if (data.summary && options.includeSummary) {
-      const summaryStartRow = worksheet.rowCount + 1;
+      const summaryStartRow = worksheet.rowCount + 1
       worksheet.addRow(['Summary']);
       const summaryTitleRow = worksheet.getRow(summaryStartRow);
-      summaryTitleRow.font = { bold: true, size: 14 };
+      summaryTitleRow.font = { bold: true, size: 14 }
 
       Object.entries(data.summary).forEach(([key, value]) => {
         const row = worksheet.addRow([this.formatLabel(key), this.formatValue(value)]);
-        row.getCell(1).font = { bold: true };
+        row.getCell(1).font = { bold: true }
       });
 
       worksheet.addRow([]); // Empty row
     }
 
     // Add headers
-    const headerRow = worksheet.addRow(data.headers);
-    headerRow.font = { bold: true };
+    const headerRow = worksheet.addRow(data.headers)
+    headerRow.font = { bold: true }
     headerRow.fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFE5E7EB' },
-    };
+    }
     headerRow.border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
       right: { style: 'thin' },
-    };
+    }
 
     // Add data rows
     data.rows.forEach((row, index) => {
-      const dataRow = worksheet.addRow(row.map((cell) => this.formatCellValue(cell)));
+      const dataRow = worksheet.addRow(row.map((cell) => this.formatCellValue(cell)))
 
       // Alternate row colors
       if (index % 2 === 0) {
@@ -116,7 +116,7 @@ export class ExcelExporter {
           type: 'pattern',
           pattern: 'solid',
           fgColor: { argb: 'FFF9FAFB' },
-        };
+        }
       }
 
       // Add borders
@@ -125,13 +125,13 @@ export class ExcelExporter {
         left: { style: 'thin' },
         bottom: { style: 'thin' },
         right: { style: 'thin' },
-      };
+      }
     });
 
     // Auto-fit columns
     if (options.autoFitColumns !== false) {
       worksheet.columns.forEach((column, index) => {
-        const header = data.headers[index];
+        const header = data.headers[index]
         const maxLength = Math.max(
           header?.length || 0,
           ...data.rows.map((row) => String(row[index] || '').length)
@@ -141,7 +141,7 @@ export class ExcelExporter {
     }
 
     // Freeze header row
-    worksheet.views = [{ state: 'frozen', ySplit: worksheet.rowCount - data.rows.length }];
+    worksheet.views = [{ state: 'frozen', ySplit: worksheet.rowCount - data.rows.length }]
 
     return worksheet;
   }
@@ -149,32 +149,32 @@ export class ExcelExporter {
   // Add chart to worksheet
   addChart(worksheet: ExcelJS.Worksheet, chartData: any): void {
     // Note: ExcelJS chart support is limited, this is a placeholder for future enhancement
-    const chartStartRow = worksheet.rowCount + 2;
+    const chartStartRow = worksheet.rowCount + 2
     worksheet.addRow(['Chart: ' + (chartData.title || 'Data Visualization')]);
     const chartRow = worksheet.getRow(chartStartRow);
-    chartRow.font = { bold: true, size: 12 };
+    chartRow.font = { bold: true, size: 12 }
 
     // Add chart data summary
     if (chartData.data && Array.isArray(chartData.data)) {
       chartData.data.forEach((item: any, index: number) => {
-        worksheet.addRow([`${item.label || `Item ${index + 1}`}`, item.value || 0]);
+        worksheet.addRow([`${item.label || `Item ${index + 1}`}`, item.value || 0])
       });
     }
   }
 
   // Generate buffer for download
   async generateBuffer(): Promise<Buffer> {
-    return (await this.workbook.xlsx.writeBuffer()) as Buffer;
+    return (await this.workbook.xlsx.writeBuffer()) as Buffer
   }
 
   // Save to file (Node.js environment)
   async saveToFile(filename: string): Promise<void> {
-    await this.workbook.xlsx.writeFile(filename);
+    await this.workbook.xlsx.writeFile(filename)
   }
 
   // Utility methods
   private getColumnLetter(columnNumber: number): string {
-    let columnName = '';
+    let columnName = ''
     while (columnNumber > 0) {
       const modulo = (columnNumber - 1) % 26;
       columnName = String.fromCharCode(65 + modulo) + columnName;
@@ -207,11 +207,11 @@ export class ExcelExporter {
 export const exportToExcel = async (_data: ExcelWorkbookData,
   options: ExcelExportOptions = {}
 ): Promise<Buffer> => {
-  const exporter = new ExcelExporter();
+  const exporter = new ExcelExporter()
 
   // Set workbook metadata
   if (data.metadata) {
-    exporter['workbook'].creator = data.metadata.author;
+    exporter['workbook'].creator = data.metadata.author
     exporter['workbook'].created = data.metadata.created;
     if (data.metadata.description) {
       exporter['workbook'].description = data.metadata.description;
@@ -220,16 +220,16 @@ export const exportToExcel = async (_data: ExcelWorkbookData,
 
   // Add worksheets
   data.sheets.forEach((sheet) => {
-    const worksheet = exporter.addWorksheet(sheet.name, sheet.data, options);
+    const worksheet = exporter.addWorksheet(sheet.name, sheet.data, options)
 
     // Add chart if provided
     if (sheet.chartData && options.includeCharts) {
-      exporter.addChart(worksheet, sheet.chartData);
+      exporter.addChart(worksheet, sheet.chartData)
     }
   });
 
   return await exporter.generateBuffer();
-};
+}
 
 // Export single table to Excel
 export const exportTableToExcel = async (
@@ -249,24 +249,24 @@ export const exportTableToExcel = async (
       created: new Date(),
       description: 'Data export from Riscura platform',
     },
-  };
+  }
 
   return await exportToExcel(workbookData, options);
-};
+}
 
 // CSV Export functionality
 export const exportToCSV = (_data: ExcelTableData): string => {
-  const csvRows: string[] = [];
+  const csvRows: string[] = []
 
   // Add title as comment if provided
   if (data.title) {
-    csvRows.push(`# ${data.title}`);
+    csvRows.push(`# ${data.title}`)
     csvRows.push('');
   }
 
   // Add summary as comments if provided
   if (data.summary) {
-    csvRows.push('# Summary');
+    csvRows.push('# Summary')
     Object.entries(data.summary).forEach(([key, value]) => {
       csvRows.push(`# ${formatLabel(key)}: ${formatValue(value)}`);
     });
@@ -274,19 +274,19 @@ export const exportToCSV = (_data: ExcelTableData): string => {
   }
 
   // Add headers
-  csvRows.push(data.headers.map((header) => `"${header}"`).join(','));
+  csvRows.push(data.headers.map((header) => `"${header}"`).join(','))
 
   // Add data rows
   data.rows.forEach((row) => {
     const csvRow = row
       .map((cell) => {
-        const value = formatCellValue(cell);
+        const value = formatCellValue(cell)
         // Escape quotes and wrap in quotes if contains comma, quote, or newline
         if (
           typeof value === 'string' &&
           (value.includes(',') || value.includes('"') || value.includes('\n'))
         ) {
-          return `"${value.replace(/"/g, '""')}"`;
+          return `"${value.replace(/"/g, '""')}"`
         }
         return String(value);
       })
@@ -295,12 +295,12 @@ export const exportToCSV = (_data: ExcelTableData): string => {
   });
 
   return csvRows.join('\n');
-};
+}
 
 // Utility functions for CSV
 const formatLabel = (key: string): string => {
-  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
-};
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
+}
 
 const formatValue = (_value: any): string => {
   if (value === null || value === undefined) return '';
@@ -308,7 +308,7 @@ const formatValue = (_value: any): string => {
   if (typeof value === 'number') return value.toLocaleString();
   if (value instanceof Date) return format(value, 'PP');
   return String(value);
-};
+}
 
 const formatCellValue = (_value: any): string => {
   if (value === null || value === undefined) return '';
@@ -316,7 +316,7 @@ const formatCellValue = (_value: any): string => {
   if (typeof value === 'number') return value.toString();
   if (value instanceof Date) return format(value, 'yyyy-MM-dd');
   return String(value);
-};
+}
 
 // Predefined export templates
 export const createRiskAssessmentExport = (_risks: any[]): ExcelWorkbookData => ({
@@ -375,7 +375,7 @@ export const createRiskAssessmentExport = (_risks: any[]): ExcelWorkbookData => 
     created: new Date(),
     description: 'Comprehensive risk assessment data export',
   },
-});
+})
 
 export const createComplianceExport = (complianceData: any[]): ExcelWorkbookData => ({
   title: 'Compliance Status Export',
@@ -499,30 +499,30 @@ export async function exportDataToExcel(_data: any,
 
   try {
     // Create workbook
-    const workbook = XLSX.utils.book_new();
+    const workbook = XLSX.utils.book_new()
 
     // Handle different data structures
     if (Array.isArray(data)) {
       // Simple array of objects
-      const worksheet = XLSX.utils.json_to_sheet(data);
+      const worksheet = XLSX.utils.json_to_sheet(data)
       XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
     } else if (data.sheets && Array.isArray(data.sheets)) {
       // Multiple sheets
       data.sheets.forEach((sheet: any) => {
-        const worksheet = createWorksheetFromData(sheet.data);
+        const worksheet = createWorksheetFromData(sheet.data)
         XLSX.utils.book_append_sheet(workbook, worksheet, sheet.name);
       });
     } else if (data.summary || data.risks || data.controls) {
       // Report data structure
-      await createReportWorkbook(workbook, data);
+      await createReportWorkbook(workbook, data)
     } else {
       // Generic object
-      const worksheet = XLSX.utils.json_to_sheet([data]);
+      const worksheet = XLSX.utils.json_to_sheet([data])
       XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
     }
 
     // Write file
-    XLSX.writeFile(workbook, filePath);
+    XLSX.writeFile(workbook, filePath)
 
     const _stats = await fs.stat(filePath);
 
@@ -530,9 +530,9 @@ export async function exportDataToExcel(_data: any,
       filePath,
       fileSize: stats.size,
       fileName: options.fileName,
-    };
+    }
   } catch (error) {
-    // console.error('Excel export failed:', error);
+    // console.error('Excel export failed:', error)
     throw new Error(`Excel export failed: ${error.message}`);
   }
 }
@@ -545,7 +545,7 @@ const createWorksheetFromData = (_data: any): XLSX.WorkSheet {
     return XLSX.utils.json_to_sheet(data);
   } else if (data.headers && data.rows) {
     // Table format
-    const tableData = [data.headers, ...data.rows];
+    const tableData = [data.headers, ...data.rows]
     return XLSX.utils.aoa_to_sheet(tableData);
   } else {
     return XLSX.utils.json_to_sheet([data]);
@@ -561,7 +561,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
     const summaryData = Object.entries(data.summary).map(([key, value]) => ({
       Metric: key,
       Value: value,
-    }));
+    }))
     const summarySheet = XLSX.utils.json_to_sheet(summaryData);
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
   }
@@ -583,7 +583,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
         ? new Date(risk.dateIdentified).toLocaleDateString()
         : '',
       'Last Assessed': risk.lastAssessed ? new Date(risk.lastAssessed).toLocaleDateString() : '',
-    }));
+    }))
     const risksSheet = XLSX.utils.json_to_sheet(risksData);
     XLSX.utils.book_append_sheet(workbook, risksSheet, 'Risks');
   }
@@ -603,7 +603,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
         ? new Date(control.implementationDate).toLocaleDateString()
         : '',
       'Last Tested': control.lastTested ? new Date(control.lastTested).toLocaleDateString() : '',
-    }));
+    }))
     const controlsSheet = XLSX.utils.json_to_sheet(controlsData);
     XLSX.utils.book_append_sheet(workbook, controlsSheet, 'Controls');
   }
@@ -620,7 +620,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
         framework.requirements?.filter((req: any) =>
           req.controls?.some((control: any) => control.status === 'IMPLEMENTED')
         ).length || 0,
-    }));
+    }))
     const frameworksSheet = XLSX.utils.json_to_sheet(frameworksData);
     XLSX.utils.book_append_sheet(workbook, frameworksSheet, 'Frameworks');
   }
@@ -630,7 +630,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
     const categoryData = Object.entries(data.categoryDistribution).map(([category, count]) => ({
       Category: category,
       Count: count,
-    }));
+    }))
     const categorySheet = XLSX.utils.json_to_sheet(categoryData);
     XLSX.utils.book_append_sheet(workbook, categorySheet, 'Category Distribution');
   }
@@ -643,7 +643,7 @@ async function createReportWorkbook(workbook: XLSX.WorkBook, data: any): Promise
       'Compliance Score (%)': Math.round(score.score),
       'Met Requirements': score.metRequirements,
       'Total Requirements': score.totalRequirements,
-    }));
+    }))
     const complianceSheet = XLSX.utils.json_to_sheet(complianceData);
     XLSX.utils.book_append_sheet(workbook, complianceSheet, 'Compliance Scores');
   }
@@ -676,11 +676,11 @@ export async function exportMultipleSheetsToExcel(
         const tableData = [
           dataset.headers,
           ...dataset.data.map((row) => dataset.headers!.map((header) => row[header] || '')),
-        ];
+        ]
         worksheet = XLSX.utils.aoa_to_sheet(tableData);
       } else {
         // Auto-generate from data
-        worksheet = XLSX.utils.json_to_sheet(dataset.data);
+        worksheet = XLSX.utils.json_to_sheet(dataset.data)
       }
 
       XLSX.utils.book_append_sheet(workbook, worksheet, dataset.name);
@@ -694,9 +694,9 @@ export async function exportMultipleSheetsToExcel(
       filePath,
       fileSize: stats.size,
       fileName,
-    };
+    }
   } catch (error) {
-    // console.error('Multi-sheet Excel export failed:', error);
+    // console.error('Multi-sheet Excel export failed:', error)
     throw new Error(`Multi-sheet Excel export failed: ${error.message}`);
   }
 }
@@ -722,14 +722,14 @@ export async function exportToExcelWithFormatting(_data: any[],
 
     // Apply column widths
     if (options.columnWidths) {
-      const cols = options.columnWidths.map((width) => ({ width }));
+      const cols = options.columnWidths.map((width) => ({ width }))
       worksheet['!cols'] = cols;
     }
 
     // Apply formatting (basic implementation)
     // Note: Advanced formatting requires additional libraries like xlsx-style
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data');
+    XLSX.utils.book_append_sheet(workbook, worksheet, options.worksheetName || 'Data')
     XLSX.writeFile(workbook, filePath);
 
     const _stats = await fs.stat(filePath);
@@ -738,9 +738,9 @@ export async function exportToExcelWithFormatting(_data: any[],
       filePath,
       fileSize: stats.size,
       fileName: options.fileName,
-    };
+    }
   } catch (error) {
-    // console.error('Formatted Excel export failed:', error);
+    // console.error('Formatted Excel export failed:', error)
     throw new Error(`Formatted Excel export failed: ${error.message}`);
   }
 }
@@ -753,7 +753,7 @@ export function validateExportData(_data: any): { isValid: boolean; errors: stri
 
   if (!data) {
     errors.push('Data is required');
-    return { isValid: false, errors };
+    return { isValid: false, errors }
   }
 
   if (Array.isArray(data)) {
@@ -771,7 +771,7 @@ export function validateExportData(_data: any): { isValid: boolean; errors: stri
   return {
     isValid: errors.length === 0,
     errors,
-  };
+  }
 }
 
 /**
@@ -801,12 +801,12 @@ export function getExportRecommendations(_data: any): {
       recommendedFormat: 'csv',
       reason: 'Large dataset - CSV format recommended for better performance',
       estimatedSize: `~${Math.round(estimatedSizeKB)}KB`,
-    };
+    }
   } else {
     return {
       recommendedFormat: 'excel',
       reason: 'Excel format recommended for rich formatting and multiple sheets',
       estimatedSize: `~${Math.round(estimatedSizeKB * 1.5)}KB`,
-    };
+    }
   }
 }

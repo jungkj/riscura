@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   FileText,
   BarChart3,
@@ -28,11 +29,11 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
   Brain,
   Zap,
   PieChart,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface ReportTemplate {
-  id: string;
+  id: string
   name: string;
   category: 'regulatory' | 'executive' | 'operational';
   description: string;
@@ -94,7 +95,7 @@ const reportTemplates: ReportTemplate[] = [
     recipients: 6,
     icon: CheckCircle,
   },
-];
+]
 
 const automatedInsights: ReportInsight[] = [
   {
@@ -123,14 +124,14 @@ const automatedInsights: ReportInsight[] = [
 
 // Report Templates Grid Component
 const ReportTemplatesGrid: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'outline'> = {
       'active': 'default',
       'draft': 'secondary',
       'generating': 'outline',
-    };
+    }
 
     return (
       <DaisyBadge variant={variants[status]} className="text-caption" >
@@ -138,7 +139,7 @@ const ReportTemplatesGrid: React.FC = () => {
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   const filteredTemplates = selectedCategory === 'all' 
     ? reportTemplates 
@@ -255,19 +256,19 @@ const ReportTemplatesGrid: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 // Automated Insights Panel Component
 const AutomatedInsightsPanel: React.FC = () => {
   const getInsightIcon = (_type: string) => {
     switch (type) {
-      case 'trend': return TrendingUp;
+      case 'trend': return TrendingUp
       case 'anomaly': return AlertCircle;
       case 'recommendation': return Lightbulb;
       case 'benchmark': return Target;
       default: return Brain;
     }
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -276,7 +277,7 @@ const AutomatedInsightsPanel: React.FC = () => {
       case 'low': return 'text-text-secondary border-border bg-surface-secondary/30';
       default: return 'text-text-secondary border-border bg-surface-secondary/30';
     }
-  };
+  }
 
   return (
     <ContentCard 
@@ -330,7 +331,7 @@ const AutomatedInsightsPanel: React.FC = () => {
       </div>
     </ContentCard>
   );
-};
+}
 
 // Report Builder Interface Component
 const ReportBuilderInterface: React.FC = () => {
@@ -373,12 +374,12 @@ const ReportBuilderInterface: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Main Advanced Reporting Platform Component
 export const AdvancedReportingPlatform: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('templates');
+  const [activeTab, setActiveTab] = useState('templates')
 
   return (
     <MainContentArea
@@ -498,6 +499,6 @@ export const AdvancedReportingPlatform: React.FC = () => {
       </DaisyTabsContent>
     </MainContentArea>
   );
-};
+}
 
 export default AdvancedReportingPlatform; 

@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     // Get user's organization
     const organization = await db.client.organization.findUnique({
       where: { id: user.organizationId },
-    });
+    })
 
     if (!organization) {
       return NextResponse.json({ error: 'Organization not found' }, { status: 404 });
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
           organizationId: organization.id,
           userId: user.id,
         },
-      });
+      })
 
       customerId = customer.id;
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       await db.client.organization.update({
         where: { id: organization.id },
         data: { stripeCustomerId: customerId },
-      });
+      })
     }
 
     // Create checkout session
@@ -78,11 +78,11 @@ export async function POST(req: NextRequest) {
               },
             }
           : undefined,
-    });
+    })
 
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
-    // console.error('Error creating checkout session:', error);
+    // console.error('Error creating checkout session:', error)
     return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
   }
 }

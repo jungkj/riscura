@@ -2,17 +2,17 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Lazy initialization variables
-let supabaseStorageInstance: SupabaseClient | null = null;
+let supabaseStorageInstance: SupabaseClient | null = null
 
 // Check if we're in a build environment
 const isBuildTime =
-  process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build';
+  process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build'
 
 // Lazy initialization for Supabase storage client
 export const supabaseStorage: SupabaseClient = new Proxy({} as SupabaseClient, {
   get(target, prop) {
     if (!supabaseStorageInstance && !isBuildTime) {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
       const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
       if (!supabaseUrl || !supabaseServiceKey) {
@@ -37,9 +37,9 @@ export const supabaseStorage: SupabaseClient = new Proxy({} as SupabaseClient, {
           }),
           getBucket: () => Promise.resolve({ data: null, error: null }),
           createBucket: () => Promise.resolve({ error: null }),
-        };
+        }
       }
-      return () => {};
+      return () => {}
     }
 
     return supabaseStorageInstance ? (supabaseStorageInstance as any)[prop] : undefined;
@@ -96,9 +96,9 @@ export class SupabaseStorageService {
         });
 
         if (error) {
-          // console.error(`Failed to create bucket ${bucketName}:`, error);
+          // console.error(`Failed to create bucket ${bucketName}:`, error)
         } else {
-          // console.log(`Created bucket: ${bucketName}`);
+          // console.log(`Created bucket: ${bucketName}`)
         }
       }
     }
@@ -111,7 +111,7 @@ export class SupabaseStorageService {
     const { bucket, file, fileName, organizationId, userId, metadata } = options;
 
     // Generate unique file path
-    const fileExt = file.name ? file.name.split('.').pop() : 'bin';
+    const fileExt = file.name ? file.name.split('.').pop() : 'bin'
     const uniqueFileName = fileName || `${uuidv4()}.${fileExt}`;
     const filePath = `${organizationId}/${userId}/${uniqueFileName}`;
 
@@ -125,14 +125,14 @@ export class SupabaseStorageService {
         userId,
         uploadedAt: new Date().toISOString(),
       },
-    });
+    })
 
     if (error) {
       throw new Error(`Failed to upload file: ${error.message}`);
     }
 
     // Get public URL (with auth)
-    const { data: urlData } = supabaseStorage.storage.from(bucket).getPublicUrl(data.path);
+    const { data: urlData } = supabaseStorage.storage.from(bucket).getPublicUrl(data.path)
 
     return {
       id: data.id,
@@ -144,7 +144,7 @@ export class SupabaseStorageService {
       bucket,
       path: filePath,
       metadata,
-    };
+    }
   }
 
   /**
@@ -225,7 +225,7 @@ export class SupabaseStorageService {
       totalSize: 0,
       fileCount: 0,
       byBucket: {} as Record<string, { size: number; count: number }>,
-    };
+    }
 
     for (const bucket of buckets) {
       const files = await this.listFiles(bucket, organizationId);
@@ -234,7 +234,7 @@ export class SupabaseStorageService {
       stats.byBucket[bucket] = {
         size: bucketSize,
         count: files.length,
-      };
+      }
 
       stats.totalSize += bucketSize;
       stats.fileCount += files.length;
@@ -272,11 +272,11 @@ export class SupabaseStorageService {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       ],
       avatars: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    };
+    }
 
     return mimeTypes[bucket];
   }
 }
 
 // Export singleton instance
-export const _storageService = SupabaseStorageService.getInstance();
+export const _storageService = SupabaseStorageService.getInstance()

@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { stripeService } from './stripe';
 import { notificationManager } from '@/lib/collaboration/notifications';
 import { v4 as uuidv4 } from 'uuid';
-// import { addMonths, addDays } from 'date-fns';
+// import { addMonths, addDays } from 'date-fns'
 import type {
   SubscriptionPlan,
   OrganizationSubscription,
@@ -20,14 +20,14 @@ export class BillingManager {
     const subscription = await db.client.organizationSubscription.findFirst({
       where: { organizationId },
       orderBy: { createdAt: 'desc' },
-    });
+    })
 
     if (!subscription) return null;
 
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   async getActiveSubscription(_organizationId: string): Promise<OrganizationSubscription | null> {
@@ -44,7 +44,7 @@ export class BillingManager {
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   // Subscription Plan Management
@@ -66,13 +66,13 @@ export class BillingManager {
         stripeProductId: plan.stripeProductId,
         stripePriceId: plan.stripePriceId,
       },
-    });
+    })
 
     return {
       ...newPlan,
       features: newPlan.features as any,
       limits: newPlan.limits as any,
-    };
+    }
   }
 
   async getSubscriptionPlans(filters?: {
@@ -80,10 +80,10 @@ export class BillingManager {
     active?: boolean;
     currency?: string;
   }): Promise<SubscriptionPlan[]> {
-    const where: any = {};
+    const where: any = {}
 
     if (filters?.type?.length) {
-      where.type = { in: filters.type };
+      where.type = { in: filters.type }
     }
 
     if (filters?.active !== undefined) {
@@ -110,7 +110,7 @@ export class BillingManager {
   async createSubscription(_organizationId: string,
     planId: string,
     options?: {
-      trialDays?: number;
+      trialDays?: number
       coupon?: string;
       paymentMethodId?: string;
     }
@@ -155,7 +155,7 @@ export class BillingManager {
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   async changeSubscriptionPlan(
@@ -190,7 +190,7 @@ export class BillingManager {
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   async cancelSubscription(
@@ -218,7 +218,7 @@ export class BillingManager {
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   async reactivateSubscription(subscriptionId: string): Promise<OrganizationSubscription> {
@@ -243,7 +243,7 @@ export class BillingManager {
     return {
       ...subscription,
       metadata: subscription.metadata as any,
-    };
+    }
   }
 
   // Usage Tracking
@@ -258,7 +258,7 @@ export class BillingManager {
         status: 'active',
       },
       orderBy: { createdAt: 'desc' },
-    });
+    })
 
     if (!subscription) {
       throw new Error('No active subscription found for organization');
@@ -288,7 +288,7 @@ export class BillingManager {
   ): Promise<PaymentMethod> {
     const organization = await db.client.organization.findUnique({
       where: { id: organizationId },
-    });
+    })
 
     if (!organization) {
       throw new Error('Organization not found');
@@ -304,11 +304,11 @@ export class BillingManager {
         data: {
           isDefault: false,
         },
-      });
+      })
     }
 
     // Get payment method details from Stripe
-    const stripePaymentMethod = await stripeService.getPaymentMethod(stripePaymentMethodId);
+    const stripePaymentMethod = await stripeService.getPaymentMethod(stripePaymentMethodId)
 
     const paymentMethod = await db.client.paymentMethod.create({
       data: {
@@ -343,7 +343,7 @@ export class BillingManager {
       card: paymentMethod.card as any,
       bankAccount: paymentMethod.bankAccount as any,
       metadata: paymentMethod.metadata as any,
-    };
+    }
   }
 
   // Analytics
@@ -359,7 +359,7 @@ export class BillingManager {
         gte: period.start,
         lte: period.end,
       },
-    };
+    }
 
     if (organizationId) {
       subscriptionWhere.organizationId = organizationId;
@@ -436,7 +436,7 @@ export class BillingManager {
       },
       planDistribution,
       paymentMethods: [], // Load payment methods if needed
-    };
+    }
   }
 }
 

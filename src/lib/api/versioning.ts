@@ -9,7 +9,7 @@ export enum ApiVersion {
 
 // Version configuration
 export interface VersionConfig {
-  version: ApiVersion;
+  version: ApiVersion
   isDeprecated?: boolean;
   deprecationDate?: Date;
   sunsetDate?: Date;
@@ -19,7 +19,7 @@ export interface VersionConfig {
 
 // Version registry
 export class ApiVersionRegistry {
-  private versions = new Map<ApiVersion, VersionConfig>();
+  private versions = new Map<ApiVersion, VersionConfig>()
   private defaultVersion: ApiVersion = ApiVersion.V1;
 
   constructor() {
@@ -27,7 +27,7 @@ export class ApiVersionRegistry {
     this.registerVersion({
       version: ApiVersion.V1,
       isDeprecated: false,
-    });
+    })
   }
 
   registerVersion(_config: VersionConfig): void {
@@ -78,12 +78,12 @@ export class ApiVersionRegistry {
       deprecationDate: config.deprecationDate,
       sunsetDate: config.sunsetDate,
       migrationGuide: config.migrationGuide,
-    };
+    }
   }
 }
 
 // Global version registry
-export const versionRegistry = new ApiVersionRegistry();
+export const versionRegistry = new ApiVersionRegistry()
 
 // Version extraction utilities
 export class ApiVersionExtractor {
@@ -91,7 +91,7 @@ export class ApiVersionExtractor {
    * Extract API version from request URL path
    */
   static fromPath(pathname: string): ApiVersion | null {
-    const match = pathname.match(/^\/api\/(v\d+)\//);
+    const match = pathname.match(/^\/api\/(v\d+)\//)
     if (match && versionRegistry.isVersionSupported(match[1])) {
       return match[1] as ApiVersion;
     }
@@ -104,20 +104,20 @@ export class ApiVersionExtractor {
   static fromHeaders(_request: NextRequest): ApiVersion | null {
     // Check X-API-Version header
     const versionHeader =
-      request.headers.get('X-API-Version') || request.headers.get('x-api-version');
+      request.headers.get('X-API-Version') || request.headers.get('x-api-version')
     if (versionHeader && versionRegistry.isVersionSupported(versionHeader)) {
       return versionHeader as ApiVersion;
     }
 
     // Check Accept-Version header
     const acceptVersionHeader =
-      request.headers.get('Accept-Version') || request.headers.get('accept-version');
+      request.headers.get('Accept-Version') || request.headers.get('accept-version')
     if (acceptVersionHeader && versionRegistry.isVersionSupported(acceptVersionHeader)) {
       return acceptVersionHeader as ApiVersion;
     }
 
     // Check Accept header for version (e.g., application/vnd.riscura.v1+json)
-    const acceptHeader = request.headers.get('Accept');
+    const acceptHeader = request.headers.get('Accept')
     if (acceptHeader) {
       const versionMatch = acceptHeader.match(/application\/vnd\.riscura\.(v\d+)\+json/);
       if (versionMatch && versionRegistry.isVersionSupported(versionMatch[1])) {
@@ -151,7 +151,7 @@ export class ApiVersionExtractor {
       this.fromHeaders(request) ||
       this.fromQueryParams(url) ||
       versionRegistry.getDefaultVersion()
-    );
+    )
   }
 }
 
@@ -161,7 +161,7 @@ export class ApiVersionValidator {
    * Validate if the requested version is supported
    */
   static validate(version: string): {
-    isValid: boolean;
+    isValid: boolean
     version?: ApiVersion;
     error?: string;
   } {
@@ -169,7 +169,7 @@ export class ApiVersionValidator {
       return {
         isValid: true,
         version: versionRegistry.getDefaultVersion(),
-      };
+      }
     }
 
     if (!versionRegistry.isVersionSupported(version)) {
@@ -179,7 +179,7 @@ export class ApiVersionValidator {
           .getAllVersions()
           .map((v) => v.version)
           .join(', ')}`,
-      };
+      }
     }
 
     const apiVersion = version as ApiVersion;
@@ -190,13 +190,13 @@ export class ApiVersionValidator {
       return {
         isValid: false,
         error: `API version '${version}' has been sunset and is no longer available`,
-      };
+      }
     }
 
     return {
       isValid: true,
       version: apiVersion,
-    };
+    }
   }
 
   /**
@@ -207,7 +207,7 @@ export class ApiVersionValidator {
     const toConfig = versionRegistry.getVersion(toVersion);
 
     // Simple logic: if target version is marked as breaking, there are breaking changes
-    return toConfig?.breaking || false;
+    return toConfig?.breaking || false
   }
 }
 
@@ -219,12 +219,12 @@ export class ApiVersionMiddleware {
   static addVersionHeaders(_response: NextResponse,
     version: ApiVersion,
     options: {
-      includeDeprecationWarning?: boolean;
+      includeDeprecationWarning?: boolean
       includeSupportedVersions?: boolean;
     } = {}
   ): NextResponse {
     // Add current version header
-    response.headers.set('X-API-Version', version);
+    response.headers.set('X-API-Version', version)
     response.headers.set('X-API-Current-Version', versionRegistry.getDefaultVersion());
 
     // Add supported versions header
@@ -233,13 +233,13 @@ export class ApiVersionMiddleware {
         .getAllVersions()
         .filter((v) => !v.sunsetDate || new Date() < v.sunsetDate)
         .map((v) => v.version)
-        .join(', ');
+        .join(', ')
       response.headers.set('X-API-Supported-Versions', supportedVersions);
     }
 
     // Add deprecation warning if applicable
     if (options.includeDeprecationWarning) {
-      const deprecationInfo = versionRegistry.getDeprecationInfo(version);
+      const deprecationInfo = versionRegistry.getDeprecationInfo(version)
       if (deprecationInfo) {
         response.headers.set('X-API-Deprecated', 'true');
 
@@ -259,7 +259,7 @@ export class ApiVersionMiddleware {
         }
 
         // Add Warning header as per RFC 7234
-        const warningMessage = `299 - "API version ${version} is deprecated"`;
+        const warningMessage = `299 - "API version ${version} is deprecated"`
         response.headers.set('Warning', warningMessage);
       }
     }
@@ -286,20 +286,20 @@ export class ApiVersionMiddleware {
             status: 400,
             requestId: ApiResponseFormatter.getOrCreateRequestId(request),
           }),
-        };
+        }
       }
 
       return {
         success: true,
         version: validation.version!,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         response: ApiResponseFormatter.serverError('Version negotiation failed', {
           requestId: ApiResponseFormatter.getOrCreateRequestId(request),
         }),
-      };
+      }
     }
   }
 }
@@ -316,7 +316,7 @@ export class VersionedResponseFormatter {
     const response = ApiResponseFormatter.success(data, {
       ...options,
       version,
-    });
+    })
 
     return ApiVersionMiddleware.addVersionHeaders(response, version, {
       includeDeprecationWarning: true,
@@ -369,14 +369,14 @@ export function withVersioning<T extends any[], R>(
   handler: (version: ApiVersion, ...args: T) => Promise<R>
 ) {
   return async (_request: NextRequest, ...args: T): Promise<R> => {
-    const negotiation = await ApiVersionMiddleware.negotiateVersion(request);
+    const negotiation = await ApiVersionMiddleware.negotiateVersion(request)
 
     if (!negotiation.success) {
       throw new Error('Version negotiation failed');
     }
 
     return handler(negotiation.version!, request, ...args);
-  };
+  }
 }
 
 export function getApiVersionFromRequest(_request: NextRequest): ApiVersion {
@@ -396,7 +396,7 @@ export function getSupportedVersions(): ApiVersion[] {
 
 // Version-specific feature flags
 export interface VersionFeatures {
-  enhancedValidation?: boolean;
+  enhancedValidation?: boolean
   bulkOperations?: boolean;
   advancedFiltering?: boolean;
   realTimeUpdates?: boolean;
@@ -414,11 +414,11 @@ export class VersionFeatureManager {
       advancedFiltering: true,
       realTimeUpdates: false,
       enhancedSecurity: true,
-    });
+    })
   }
 
   getFeatures(version: ApiVersion): VersionFeatures {
-    return this.features.get(version) || {};
+    return this.features.get(version) || {}
   }
 
   isFeatureEnabled(version: ApiVersion, feature: keyof VersionFeatures): boolean {
@@ -435,7 +435,7 @@ export const versionFeatureManager = new VersionFeatureManager();
 
 // Migration utilities
 export interface MigrationRule {
-  fromVersion: ApiVersion;
+  fromVersion: ApiVersion
   toVersion: ApiVersion;
   transform: (_data: any) => any;
 }
@@ -457,7 +457,7 @@ export class VersionMigrationManager {
     }
 
     // No migration needed or available
-    return data;
+    return data
   }
 
   hasMigration(fromVersion: ApiVersion, toVersion: ApiVersion): boolean {

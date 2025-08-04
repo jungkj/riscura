@@ -12,8 +12,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { useRiskFlow } from '../RiskFlowContext';
-// import { format } from 'date-fns';
+// import { useRiskFlow } from '../RiskFlowContext'
+// import { format } from 'date-fns'
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
@@ -27,14 +27,14 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
   const [isCreating, setIsCreating] = useState(false);
 
   const getRiskLevel = (score: number) => {
-    if (score <= 5) return { level: 'Low', color: 'text-green-600 bg-green-50', icon: '🟢' };
-    if (score <= 10) return { level: 'Medium', color: 'text-yellow-600 bg-yellow-50', icon: '🟡' };
-    if (score <= 15) return { level: 'High', color: 'text-orange-600 bg-orange-50', icon: '🟠' };
-    return { level: 'Critical', color: 'text-red-600 bg-red-50', icon: '🔴' };
-  };
+    if (score <= 5) return { level: 'Low', color: 'text-green-600 bg-green-50', icon: '🟢' }
+    if (score <= 10) return { level: 'Medium', color: 'text-yellow-600 bg-yellow-50', icon: '🟡' }
+    if (score <= 15) return { level: 'High', color: 'text-orange-600 bg-orange-50', icon: '🟠' }
+    return { level: 'Critical', color: 'text-red-600 bg-red-50', icon: '🔴' }
+  }
 
   // Validate and clamp likelihood and impact values
-  const validLikelihood = Math.max(1, Math.min(5, riskData.likelihood || 1));
+  const validLikelihood = Math.max(1, Math.min(5, riskData.likelihood || 1))
   const validImpact = Math.max(1, Math.min(5, riskData.impact || 1));
   const riskScore = validLikelihood * validImpact;
   const riskLevel = getRiskLevel(riskScore);
@@ -72,13 +72,13 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
 
       if (!response.ok) {
         // Try to parse error message from response
-        let errorMessage = 'Failed to create risk';
+        let errorMessage = 'Failed to create risk'
         try {
           const errorData = await response.json();
           errorMessage = errorData.message || errorData.error || errorMessage;
         } catch {
           // If JSON parsing fails, use status text
-          errorMessage = response.statusText || errorMessage;
+          errorMessage = response.statusText || errorMessage
         }
         throw new Error(errorMessage);
       }
@@ -86,7 +86,7 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
       toast.success('Risk created successfully!');
       onSuccess();
     } catch (error) {
-      // console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error)
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to create risk. Please try again.';
       toast.error(errorMessage);
@@ -94,7 +94,7 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
       setIsCreating(false);
       setIsSubmitting(false);
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -240,4 +240,4 @@ export const ReviewStep = ({ onBack, onSuccess }: ReviewStepProps) => {
       </motion.div>
     </div>
   );
-};
+}

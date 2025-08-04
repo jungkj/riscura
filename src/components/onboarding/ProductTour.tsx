@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import { 
   X, 
   ChevronLeft, 
@@ -22,12 +23,12 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
   FileText,
   Settings,
   Star
-} from 'lucide-react';
+} from 'lucide-react'
 import { designTokens } from '@/lib/design-system/tokens';
 
 // Tour step interface
 interface TourStep {
-  id: string;
+  id: string
   element: string;
   title: string;
   content: string;
@@ -37,21 +38,21 @@ interface TourStep {
     type: 'click' | 'hover' | 'scroll' | 'wait';
     duration?: number;
     callback?: () => void;
-  };
+  }
   conditions?: {
     role?: string[];
     feature?: string[];
     skipIf?: () => boolean;
-  };
+  }
   highlight?: {
     type: 'pulse' | 'glow' | 'border' | 'spotlight';
     color?: string;
-  };
+  }
 }
 
 // Tour configuration
 interface TourConfig {
-  id: string;
+  id: string
   title: string;
   description: string;
   steps: TourStep[];
@@ -64,14 +65,14 @@ interface TourConfig {
 
 // User context for role-based tours
 interface UserContext {
-  role: 'admin' | 'analyst' | 'auditor' | 'manager';
+  role: 'admin' | 'analyst' | 'auditor' | 'manager'
   experience: 'beginner' | 'intermediate' | 'advanced';
   features: string[];
   preferences: {
     autoPlay: boolean;
     speed: 'slow' | 'normal' | 'fast';
     showHints: boolean;
-  };
+  }
 }
 
 // Predefined tour configurations
@@ -200,11 +201,11 @@ const TOUR_CONFIGS: Record<string, TourConfig> = {
       }
     ]
   }
-};
+}
 
 // Main ProductTour component
 interface ProductTourProps {
-  tourId?: string;
+  tourId?: string
   userContext?: UserContext;
   onComplete?: () => void;
   onSkip?: () => void;
@@ -229,7 +230,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   // Get tour configuration
-  const tourConfig = TOUR_CONFIGS[tourId];
+  const tourConfig = TOUR_CONFIGS[tourId]
   const filteredSteps = tourConfig?.steps.filter(step => {
     if (!step.conditions) return true;
     if (step.conditions.role && userContext?.role && !step.conditions.role.includes(userContext.role)) {
@@ -246,7 +247,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
   // Start tour
   const startTour = useCallback(() => {
-    setIsActive(true);
+    setIsActive(true)
     setCurrentStep(0);
     if (tourConfig?.autoStart) {
       setIsPlaying(true);
@@ -255,7 +256,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
   // Stop tour
   const stopTour = useCallback(() => {
-    setIsActive(false);
+    setIsActive(false)
     setIsPlaying(false);
     setHighlightedElement(null);
     if (autoPlayRef.current) {
@@ -266,17 +267,17 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
   // Navigate to step
   const goToStep = useCallback((stepIndex: number) => {
-    if (stepIndex < 0 || stepIndex >= filteredSteps.length) return;
+    if (stepIndex < 0 || stepIndex >= filteredSteps.length) return
     setCurrentStep(stepIndex);
   }, [filteredSteps.length]);
 
   // Next step
   const nextStep = useCallback(() => {
     if (currentStep < filteredSteps.length - 1) {
-      goToStep(currentStep + 1);
+      goToStep(currentStep + 1)
     } else {
       // Tour completed
-      stopTour();
+      stopTour()
       onComplete?.();
     }
   }, [currentStep, filteredSteps.length, goToStep, stopTour, onComplete]);
@@ -284,13 +285,13 @@ export const ProductTour: React.FC<ProductTourProps> = ({
   // Previous step
   const previousStep = useCallback(() => {
     if (currentStep > 0) {
-      goToStep(currentStep - 1);
+      goToStep(currentStep - 1)
     }
   }, [currentStep, goToStep]);
 
   // Skip tour
   const skipTour = useCallback(() => {
-    stopTour();
+    stopTour()
     onSkip?.();
   }, [stopTour, onSkip]);
 
@@ -298,23 +299,23 @@ export const ProductTour: React.FC<ProductTourProps> = ({
   useEffect(() => {
     if (isPlaying && isActive && currentStepData) {
       const _duration = userContext?.preferences.speed === 'fast' ? 3000 : 
-                     userContext?.preferences.speed === 'slow' ? 7000 : 5000;
+                     userContext?.preferences.speed === 'slow' ? 7000 : 5000
       
       autoPlayRef.current = setTimeout(() => {
         nextStep();
       }, duration);
-    };
+    }
 
   return () => {
       if (autoPlayRef.current) {
         clearTimeout(autoPlayRef.current);
       }
-    };
+    }
   }, [isPlaying, isActive, currentStepData, nextStep, userContext]);
 
   // Highlight element and position tooltip
   useEffect(() => {
-    if (!isActive || !currentStepData) return;
+    if (!isActive || !currentStepData) return
 
     const element = document.querySelector(currentStepData.element) as HTMLElement;
     if (!element) return;
@@ -322,7 +323,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     setHighlightedElement(element);
 
     // Calculate tooltip position
-    const rect = element.getBoundingClientRect();
+    const rect = element.getBoundingClientRect()
     const tooltipRect = tooltipRef.current?.getBoundingClientRect();
     
     let x = rect.left + rect.width / 2;
@@ -346,7 +347,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     setTooltipPosition({ x, y });
 
     // Add highlight styles
-    element.style.position = 'relative';
+    element.style.position = 'relative'
     element.style.zIndex = '1001';
     
     if (currentStepData.highlight) {
@@ -371,14 +372,14 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     }
 
     // Scroll element into view
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
     // Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'
 
     return () => {
       // Cleanup styles
-      element.style.position = '';
+      element.style.position = ''
       element.style.zIndex = '';
       element.style.animation = '';
       element.style.boxShadow = '';
@@ -386,13 +387,13 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       element.style.borderRadius = '';
       element.style.backgroundColor = '';
       element.style.backdropFilter = '';
-    };
+    }
   }, [isActive, currentStepData]);
 
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isActive) return;
+      if (!isActive) return
 
       switch (e.key) {
         case 'Escape':
@@ -413,7 +414,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
           setIsPlaying(!isPlaying);
           break;
       }
-    };
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -572,11 +573,11 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       </div>
     </>
   );
-};
+}
 
 // Tour manager for handling multiple tours
 export class TourManager {
-  private static instance: TourManager;
+  private static instance: TourManager
   private activeTour: string | null = null;
   private completedTours: Set<string> = new Set();
   private userContext: UserContext | null = null;
@@ -605,7 +606,7 @@ export class TourManager {
     this.activeTour = null;
     
     // Save to localStorage
-    localStorage.setItem('riscura_completed_tours', JSON.stringify([...this.completedTours]));
+    localStorage.setItem('riscura_completed_tours', JSON.stringify([...this.completedTours]))
   }
 
   isCompleted(tourId: string): boolean {
@@ -616,7 +617,7 @@ export class TourManager {
     if (!this.userContext) return 'welcome';
 
     // Role-based tour recommendations
-    if (!this.isCompleted('welcome')) return 'welcome';
+    if (!this.isCompleted('welcome')) return 'welcome'
     
     if (this.userContext.role === 'analyst' && !this.isCompleted('riskManagement')) {
       return 'riskManagement';
@@ -636,14 +637,14 @@ export class TourManager {
         this.completedTours = new Set(JSON.parse(saved));
       }
     } catch (error) {
-      // console.error('Failed to load completed tours:', error);
+      // console.error('Failed to load completed tours:', error)
     }
   }
 }
 
 // Hook for using tours
 export const useTour = () => {
-  const manager = TourManager.getInstance();
+  const manager = TourManager.getInstance()
   
   useEffect(() => {
     manager.loadCompletedTours();
@@ -655,7 +656,7 @@ export const useTour = () => {
     isCompleted: (tourId: string) => manager.isCompleted(tourId),
     getRecommendedTour: () => manager.getRecommendedTour(),
     setUserContext: (_context: UserContext) => manager.setUserContext(context)
-  };
-};
+  }
+}
 
 export default ProductTour; 

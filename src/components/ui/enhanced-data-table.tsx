@@ -8,6 +8,7 @@ import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableH
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import {
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTableRow, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -44,7 +45,7 @@ import {
 
 // Enhanced Types
 export interface EnhancedDataTableColumn<T = any> {
-  key: string;
+  key: string
   title: string;
   type: 'text' | 'status' | 'progress' | 'date' | 'user' | 'risk' | 'actions' | 'number' | 'currency';
   sortable?: boolean;
@@ -94,7 +95,7 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
     'completed': { variant: 'success', icon: CheckCircle },
     'in_progress': { variant: 'default', icon: TrendingUp },
     'draft': { variant: 'secondary', icon: Edit },
-  };
+  }
 
   const config = statusConfig[value] || statusConfig['draft'];
   const IconComponent = config.icon;
@@ -106,7 +107,7 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
       {value.replace('_', ' ').charAt(0).toUpperCase() + value.replace('_', ' ').slice(1)}
     </DaisyBadge>
   );
-};
+}
 
 const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
   const riskConfig: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'success' | 'warning'; className: string }> = {
@@ -114,7 +115,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
     'high': { variant: 'destructive', className: 'bg-red-50 text-red-700 border-red-200' },
     'medium': { variant: 'secondary', className: 'bg-yellow-50 text-yellow-800 border-yellow-200' },
     'low': { variant: 'success', className: 'bg-green-50 text-green-700 border-green-200' },
-  };
+  }
 
   const config = riskConfig[value] || riskConfig['medium'];
 
@@ -123,7 +124,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
       {value}
     </DaisyBadge>
   );
-};
+}
 
 const UserCell: React.FC<{ value: { name: string; email?: string; avatar?: string } }> = ({ value }) => {
   const device = useDevice();
@@ -141,7 +142,7 @@ const UserCell: React.FC<{ value: { name: string; email?: string; avatar?: strin
       </div>
     </div>
   );
-};
+}
 
 const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
   const device = useDevice();
@@ -149,7 +150,7 @@ const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
     if (progress >= 80) return 'bg-green-500';
     if (progress >= 50) return 'bg-yellow-500';
     return 'bg-red-500';
-  };
+  }
 
   return (
     <div className={cn("flex items-center gap-3", device.type === 'mobile' ? "min-w-[100px]" : "")}>
@@ -163,7 +164,7 @@ const ProgressCell: React.FC<{ value: number }> = ({ value }) => {
       </span>
     </div>
   );
-};
+}
 
 const DateCell: React.FC<{ value: Date | string }> = ({ value }) => {
   const device = useDevice();
@@ -188,7 +189,7 @@ const DateCell: React.FC<{ value: Date | string }> = ({ value }) => {
       </span>
     </div>
   );
-};
+}
 
 const NumberCell: React.FC<{ value: number; format?: 'currency' | 'percentage' | 'default' }> = ({ value, format = 'default' }) => {
   const formatNumber = () => {
@@ -200,14 +201,14 @@ const NumberCell: React.FC<{ value: number; format?: 'currency' | 'percentage' |
       default:
         return value.toLocaleString();
     }
-  };
+  }
 
   return (
     <span className="text-sm font-medium text-[#191919] font-inter tabular-nums">
       {formatNumber()}
     </span>
   );
-};
+}
 
 const ActionsCell: React.FC<{ row: any; onAction: (_action: string, row: any) => void }> = ({ row, onAction }) => {
   const device = useDevice();
@@ -253,11 +254,11 @@ const ActionsCell: React.FC<{ row: any; onAction: (_action: string, row: any) =>
       </DaisyDropdownMenuContent>
     </DaisyDropdownMenu>
   );
-};
+}
 
 // Mobile Card View Component
 const MobileCardView: React.FC<{
-  data: any[];
+  data: any[]
   columns: EnhancedDataTableColumn[];
   onRowAction?: (_action: string, row: any) => void;
   selectedRows: string[];
@@ -289,7 +290,7 @@ const MobileCardView: React.FC<{
       default:
         return <span className="text-sm text-[#191919] font-inter">{String(value)}</span>;
     }
-  };
+  }
 
   return (
     <div className="space-y-3 p-4">
@@ -343,11 +344,11 @@ onSelectRow(row.id, !!checked)}
       ))}
     </div>
   );
-};
+}
 
 // Advanced Filters Component (responsive)
 const AdvancedFilters: React.FC<{
-  columns: EnhancedDataTableColumn[];
+  columns: EnhancedDataTableColumn[]
   filters: FilterState;
   onFiltersChange: (_filters: FilterState) => void;
   onClearFilters: () => void;
@@ -397,7 +398,7 @@ const AdvancedFilters: React.FC<{
                   <DaisySelect
                     value={String(filters[column.key] || '')}
                     onValueChange={(value) => {
-                      const newFilters = { ...filters };
+                      const newFilters = { ...filters }
                       if (value) {
                         newFilters[column.key] = value;
                       } else {
@@ -424,7 +425,7 @@ const AdvancedFilters: React.FC<{
                     value={String(filters[column.key] || '')}
                     onChange={(e) = />
 {
-                      const newFilters = { ...filters };
+                      const newFilters = { ...filters }
                       if (e.target.value) {
                         newFilters[column.key] = e.target.value;
                       } else {
@@ -441,7 +442,7 @@ const AdvancedFilters: React.FC<{
       </DaisyInput>
     </DaisyPopover>
   );
-};
+}
 
 // Main Enhanced Data Table Component
 export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
@@ -462,7 +463,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
   emptyMessage = "No data available",
   variant = 'default',
 }) => {
-  const device = useDevice();
+  const device = useDevice()
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>({});
   const [sort, setSort] = useState<SortState>({ column: null, direction: null });
@@ -470,16 +471,16 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   // Responsive page size
-  const responsivePageSize = device.type === 'mobile' ? Math.min(pageSize, 5) : pageSize;
+  const responsivePageSize = device.type === 'mobile' ? Math.min(pageSize, 5) : pageSize
 
   // Filter columns for mobile view
   const visibleColumns = device.type === 'mobile' 
     ? columns.filter(col => !col.mobileHidden)
-    : columns;
+    : columns
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let _result = [...data];
+    let _result = [...data]
 
     // Apply search
     if (searchQuery) {
@@ -487,14 +488,14 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
         Object.values(row).some((value) =>
           String(value).toLowerCase().includes(searchQuery.toLowerCase())
         )
-      );
+      )
     }
 
     // Apply column filters
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         result = result.filter((row) => {
-          const rowValue = row[key as keyof typeof row];
+          const rowValue = row[key as keyof typeof row]
           return String(rowValue).toLowerCase().includes(String(value).toLowerCase());
         });
       }
@@ -503,7 +504,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
     // Apply sorting
     if (sort.column && sort.direction) {
       result.sort((a, b) => {
-        const aValue = a[sort.column as keyof typeof a];
+        const aValue = a[sort.column as keyof typeof a]
         const bValue = b[sort.column as keyof typeof b];
         
         let comparison = 0;
@@ -518,7 +519,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
   }, [data, searchQuery, filters, sort]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / responsivePageSize);
+  const totalPages = Math.ceil(filteredData.length / responsivePageSize)
   const startIndex = (currentPage - 1) * responsivePageSize;
   const paginatedData = filteredData.slice(startIndex, startIndex + responsivePageSize);
 
@@ -527,17 +528,17 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       column: columnKey,
       direction: prev.column === columnKey && prev.direction === 'asc' ? 'desc' : 'asc'
     }));
-  };
+  }
 
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(checked ? paginatedData.map((row: any) => row.id) : []);
-  };
+  }
 
   const handleSelectRow = (rowId: string, checked: boolean) => {
     setSelectedRows(prev => 
       checked ? [...prev, rowId] : prev.filter(id => id !== rowId)
     );
-  };
+  }
 
   const getSortIcon = (columnKey: string) => {
     if (sort.column !== columnKey) {
@@ -546,7 +547,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
     return sort.direction === 'asc' ? 
       <ChevronUp className="h-3 w-3 text-[#199BEC]" /> : 
       <ChevronDown className="h-3 w-3 text-[#199BEC]" />;
-  };
+  }
 
   const renderCell = (column: EnhancedDataTableColumn, value: any, row: any) => {
     if (column.render) {
@@ -573,7 +574,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       default:
         return <span className="text-sm text-[#191919] font-inter">{String(value)}</span>;
     }
-  };
+  }
 
   return (
     <div className={cn("space-y-4 bg-white", device.type === 'mobile' ? 'space-y-3' : 'space-y-6', className)}>
@@ -631,7 +632,7 @@ setSearchQuery(e.target.value)}
                     size="sm"
                     className="h-3 w-3 p-0 ml-1"
                     onClick={() => {
-                      const newFilters = { ...filters };
+                      const newFilters = { ...filters }
                       delete newFilters[key];
                       setFilters(newFilters);
                     }}
@@ -848,7 +849,7 @@ handleSelectRow(row.id, !!checked)} />
             {device.type !== 'mobile' && (
               <div className="flex items-center gap-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const pageNum = i + 1;
+                  const pageNum = i + 1
                   return (
                     <DaisyButton
                       key={pageNum}
@@ -878,4 +879,4 @@ handleSelectRow(row.id, !!checked)} />
       )}
     </div>
   );
-}; 
+} 

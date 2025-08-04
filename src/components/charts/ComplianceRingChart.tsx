@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Shield, 
   CheckCircle, 
   AlertTriangle, 
@@ -146,7 +147,7 @@ const statusConfig = {
     icon: AlertTriangle,
     label: 'Overdue'
   }
-};
+}
 
 export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
   data = defaultData,
@@ -163,7 +164,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
     sm: { radius: 60, strokeWidth: 8, center: 70 },
     md: { radius: 80, strokeWidth: 12, center: 100 },
     lg: { radius: 100, strokeWidth: 16, center: 120 }
-  };
+  }
 
   const config = sizeConfig[size];
   const circumference = 2 * Math.PI * config.radius;
@@ -171,7 +172,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
   // Animate scores on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      const scores: Record<string, number> = {};
+      const scores: Record<string, number> = {}
       data.forEach(framework => {
         scores[framework.id] = framework.score;
       });
@@ -185,7 +186,7 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
     const animatedScore = animatedScores[data.find(f => f.score === score)?.id || ''] || 0;
     const progress = (animatedScore / 100) * circumference;
     return `${progress} ${circumference}`;
-  };
+  }
 
   const getTrendIcon = (current: number, previous?: number) => {
     if (!previous) return <Minus className="w-3 h-3 text-gray-400" />;
@@ -197,21 +198,21 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
     } else {
       return <Minus className="w-3 h-3 text-gray-400" />;
     }
-  };
+  }
 
   const getTrendPercentage = (current: number, previous?: number): string => {
     if (!previous || previous === 0) return '0%';
     
     const change = ((current - previous) / previous) * 100;
     return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`;
-  };
+  }
 
   const getScoreColor = (score: number) => {
     if (score >= 95) return '#10b981'; // green
     if (score >= 85) return '#3b82f6'; // blue
     if (score >= 75) return '#f59e0b'; // amber
     return '#ef4444'; // red
-  };
+  }
 
   const overallScore = Math.round(data.reduce((sum, f) => sum + f.score, 0) / data.length);
   const totalGaps = data.reduce((sum, f) => sum + f.criticalGaps, 0);
@@ -488,4 +489,4 @@ export const ComplianceRingChart: React.FC<ComplianceRingChartProps> = ({
       </DaisyProgress>
     </DaisyCard>
   );
-}; 
+} 

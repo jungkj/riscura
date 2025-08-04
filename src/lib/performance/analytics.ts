@@ -1,5 +1,5 @@
 // Performance Analytics System for Production Monitoring
-import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals'
 import React from 'react';
 
 export interface PerformanceMetric {
@@ -49,7 +49,7 @@ export interface PerformanceReport {
     cores?: number;
     platform: string;
     language: string;
-  };
+  }
   webVitals: PerformanceMetric[];
   interactions: UserInteractionMetric[];
   resources: ResourceMetric[];
@@ -84,7 +84,7 @@ class PerformanceAnalytics {
   private metrics: PerformanceMetric[] = [];
   private interactions: UserInteractionMetric[] = [];
   private resources: ResourceMetric[] = [];
-  private customMetrics: Record<string, number> = {};
+  private customMetrics: Record<string, number> = {}
   private errors: PerformanceReport['errors'] = [];
   private reportQueue: PerformanceReport[] = [];
   private observers: Map<string, PerformanceObserver> = new Map();
@@ -103,7 +103,7 @@ class PerformanceAnalytics {
       enableDebugMode: false,
       enableRealUserMonitoring: true,
       ...config,
-    };
+    }
 
     this.sessionId = this.generateSessionId();
     this.startTime = performance.now();
@@ -116,32 +116,32 @@ class PerformanceAnalytics {
   private initialize(): void {
     // Initialize Web Vitals tracking
     if (this.config.enableWebVitals) {
-      this.setupWebVitals();
+      this.setupWebVitals()
     }
 
     // Initialize user interaction tracking
     if (this.config.enableUserInteractions) {
-      this.setupUserInteractionTracking();
+      this.setupUserInteractionTracking()
     }
 
     // Initialize resource timing tracking
     if (this.config.enableResourceTiming) {
-      this.setupResourceTimingTracking();
+      this.setupResourceTimingTracking()
     }
 
     // Initialize error tracking
     if (this.config.enableErrorTracking) {
-      this.setupErrorTracking();
+      this.setupErrorTracking()
     }
 
     // Initialize reporting
-    this.setupReporting();
+    this.setupReporting()
 
     // Initialize navigation tracking
-    this.setupNavigationTracking();
+    this.setupNavigationTracking()
 
     // Initialize custom performance observers
-    this.setupPerformanceObservers();
+    this.setupPerformanceObservers()
   }
 
   private setupWebVitals(): void {
@@ -158,17 +158,17 @@ class PerformanceAnalytics {
         effectiveConnectionType: this.getConnectionType(),
         deviceMemory: this.getDeviceMemory(),
         hardwareConcurrency: navigator.hardwareConcurrency,
-      };
+      }
 
       this.metrics.push(performanceMetric);
 
       if (this.config.enableDebugMode) {
-        // console.log('Web Vital recorded:', performanceMetric);
+        // console.log('Web Vital recorded:', performanceMetric)
       }
-    };
+    }
 
     // Track Core Web Vitals
-    getCLS(handleMetric);
+    getCLS(handleMetric)
     getFID(handleMetric);
     getFCP(handleMetric);
     getLCP(handleMetric);
@@ -187,11 +187,11 @@ class PerformanceAnalytics {
         path: window.location.pathname,
         userAgent: navigator.userAgent,
         sessionId: this.sessionId,
-      };
+      }
 
       // Add specific data based on interaction type
       if (type === 'scroll') {
-        interaction.value = window.scrollY;
+        interaction.value = window.scrollY
       } else if (type === 'click') {
         interaction.duration = performance.now() - this.startTime;
       }
@@ -199,21 +199,21 @@ class PerformanceAnalytics {
       this.interactions.push(interaction);
 
       if (this.config.enableDebugMode) {
-        // console.log('User interaction recorded:', interaction);
+        // console.log('User interaction recorded:', interaction)
       }
-    };
+    }
 
     // Track clicks
     document.addEventListener(
       'click',
       (event) => {
-        trackInteraction('click', event);
+        trackInteraction('click', event)
       },
       { passive: true }
     );
 
     // Track scrolling (throttled)
-    let scrollTimeout: number;
+    let scrollTimeout: number
     document.addEventListener(
       'scroll',
       (event) => {
@@ -229,7 +229,7 @@ class PerformanceAnalytics {
     document.addEventListener(
       'input',
       (event) => {
-        trackInteraction('input', event);
+        trackInteraction('input', event)
       },
       { passive: true }
     );
@@ -254,12 +254,12 @@ class PerformanceAnalytics {
             decodedBodySize: resourceEntry.decodedBodySize || 0,
             initiatorType: resourceEntry.initiatorType,
             nextHopProtocol: resourceEntry.nextHopProtocol || '',
-          };
+          }
 
           this.resources.push(resource);
 
           if (this.config.enableDebugMode) {
-            // console.log('Resource timing recorded:', resource);
+            // console.log('Resource timing recorded:', resource)
           }
         }
       }
@@ -269,7 +269,7 @@ class PerformanceAnalytics {
       observer.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', observer);
     } catch (error) {
-      // console.warn('Resource timing observation failed:', error);
+      // console.warn('Resource timing observation failed:', error)
     }
   }
 
@@ -283,12 +283,12 @@ class PerformanceAnalytics {
         url: event.filename || window.location.href,
         line: event.lineno,
         column: event.colno,
-      };
+      }
 
       this.errors.push(error);
 
       if (this.config.enableDebugMode) {
-        // console.log('Error recorded:', error);
+        // console.log('Error recorded:', error)
       }
     });
 
@@ -299,12 +299,12 @@ class PerformanceAnalytics {
         stack: event.reason?.stack,
         timestamp: Date.now(),
         url: window.location.href,
-      };
+      }
 
       this.errors.push(error);
 
       if (this.config.enableDebugMode) {
-        // console.log('Promise rejection recorded:', error);
+        // console.log('Promise rejection recorded:', error)
       }
     });
   }
@@ -312,18 +312,18 @@ class PerformanceAnalytics {
   private setupReporting(): void {
     // Send reports at regular intervals
     setInterval(() => {
-      this.sendReport();
+      this.sendReport()
     }, this.config.reportingInterval);
 
     // Send report before page unload
     window.addEventListener('beforeunload', () => {
-      this.sendReport(true);
+      this.sendReport(true)
     });
 
     // Send report when page becomes hidden
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
-        this.sendReport(true);
+        this.sendReport(true)
       }
     });
   }
@@ -333,7 +333,7 @@ class PerformanceAnalytics {
     window.addEventListener('load', () => {
       const navigation = performance.getEntriesByType(
         'navigation'
-      )[0] as PerformanceNavigationTiming;
+      )[0] as PerformanceNavigationTiming
 
       if (navigation) {
         this.recordCustomMetric(
@@ -361,10 +361,10 @@ class PerformanceAnalytics {
     try {
       const longTaskObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          this.recordCustomMetric('long_task', entry.duration);
+          this.recordCustomMetric('long_task', entry.duration)
 
           if (this.config.enableDebugMode) {
-            // console.log('Long task detected:', entry.duration);
+            // console.log('Long task detected:', entry.duration)
           }
         }
       });
@@ -372,7 +372,7 @@ class PerformanceAnalytics {
       longTaskObserver.observe({ entryTypes: ['longtask'] });
       this.observers.set('longtask', longTaskObserver);
     } catch (error) {
-      // console.warn('Long task observation not supported');
+      // console.warn('Long task observation not supported')
     }
 
     // Layout Shift Observer
@@ -380,7 +380,7 @@ class PerformanceAnalytics {
       const layoutShiftObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (!entry.hadRecentInput) {
-            this.recordCustomMetric('layout_shift', (entry as any).value);
+            this.recordCustomMetric('layout_shift', (entry as any).value)
           }
         }
       });
@@ -388,18 +388,18 @@ class PerformanceAnalytics {
       layoutShiftObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.set('layout-shift', layoutShiftObserver);
     } catch (error) {
-      // console.warn('Layout shift observation not supported');
+      // console.warn('Layout shift observation not supported')
     }
   }
 
   // Public methods
   public recordCustomMetric(name: string, value: number): void {
-    if (!this.config.enableCustomMetrics) return;
+    if (!this.config.enableCustomMetrics) return
 
     this.customMetrics[name] = value;
 
     if (this.config.enableDebugMode) {
-      // console.log('Custom metric recorded:', { name, value });
+      // console.log('Custom metric recorded:', { name, value })
     }
   }
 
@@ -409,7 +409,7 @@ class PerformanceAnalytics {
     return () => {
       const _duration = performance.now() - startTime;
       this.recordCustomMetric(name, duration);
-    };
+    }
   }
 
   public trackPageView(path?: string): void {
@@ -419,7 +419,7 @@ class PerformanceAnalytics {
       path: path || window.location.pathname,
       userAgent: navigator.userAgent,
       sessionId: this.sessionId,
-    };
+    }
 
     this.interactions.push(interaction);
   }
@@ -442,14 +442,14 @@ class PerformanceAnalytics {
       resources: [...this.resources],
       customMetrics: { ...this.customMetrics },
       errors: [...this.errors],
-    };
+    }
   }
 
   public clearMetrics(): void {
     this.metrics = [];
     this.interactions = [];
     this.resources = [];
-    this.customMetrics = {};
+    this.customMetrics = {}
     this.errors = [];
   }
 
@@ -464,7 +464,7 @@ class PerformanceAnalytics {
 
     // Limit queue size
     if (this.reportQueue.length > this.config.maxReports) {
-      this.reportQueue.shift();
+      this.reportQueue.shift()
     }
 
     if (this.config.reportingEndpoint) {
@@ -472,7 +472,7 @@ class PerformanceAnalytics {
     }
 
     // Clear metrics after reporting
-    this.clearMetrics();
+    this.clearMetrics()
   }
 
   private async sendToEndpoint(immediate = false): Promise<void> {
@@ -486,11 +486,11 @@ class PerformanceAnalytics {
         reports,
         timestamp: Date.now(),
         userAgent: navigator.userAgent,
-      };
+      }
 
       if (immediate && 'sendBeacon' in navigator) {
         // Use sendBeacon for immediate sending (e.g., page unload)
-        navigator.sendBeacon(this.config.reportingEndpoint!, JSON.stringify(payload));
+        navigator.sendBeacon(this.config.reportingEndpoint!, JSON.stringify(payload))
       } else {
         // Use fetch for regular reporting
         await fetch(this.config.reportingEndpoint!, {
@@ -499,22 +499,22 @@ class PerformanceAnalytics {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
-        });
+        })
       }
 
       if (this.config.enableDebugMode) {
-        // console.log('Performance report sent:', payload);
+        // console.log('Performance report sent:', payload)
       }
     } catch (error) {
-      // console.error('Failed to send performance report:', error);
+      // console.error('Failed to send performance report:', error)
       // Re-add reports to queue for retry
-      this.reportQueue.unshift(...reports);
+      this.reportQueue.unshift(...reports)
     }
   }
 
   // Private utility methods
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
 
   private getRating(metricName: string, value: number): 'good' | 'needs-improvement' | 'poor' {
@@ -524,7 +524,7 @@ class PerformanceAnalytics {
       FCP: [1800, 3000],
       LCP: [2500, 4000],
       TTFB: [800, 1800],
-    };
+    }
 
     const [good, poor] = thresholds[metricName] || [0, Infinity];
 
@@ -577,31 +577,31 @@ class PerformanceAnalytics {
       woff2: 'font',
       ttf: 'font',
       eot: 'font',
-    };
+    }
 
     return typeMap[extension || ''] || 'other';
   }
 
   public disconnect(): void {
     // Disconnect all performance observers
-    this.observers.forEach((observer) => observer.disconnect());
+    this.observers.forEach((observer) => observer.disconnect())
     this.observers.clear();
 
     // Send final report
-    this.sendReport(true);
+    this.sendReport(true)
   }
 }
 
 // Create singleton instance
-export const performanceAnalytics = new PerformanceAnalytics();
+export const performanceAnalytics = new PerformanceAnalytics()
 
 // Export class for custom instances
-export { PerformanceAnalytics };
+export { PerformanceAnalytics }
 
 // Utility functions
 export const trackCustomEvent = (name: string, value?: number): void => {
-  performanceAnalytics.recordCustomMetric(name, value || 1);
-};
+  performanceAnalytics.recordCustomMetric(name, value || 1)
+}
 
 export const timeFunction = <T extends (...args: any[]) => any>(name: string, fn: T): T => {
   return ((...args: any[]) => {
@@ -615,7 +615,7 @@ export const timeFunction = <T extends (...args: any[]) => any>(name: string, fn
       return result;
     }
   }) as T;
-};
+}
 
 export const withPerformanceTracking = <T extends React.ComponentType<any>>(
   Component: T,
@@ -635,4 +635,4 @@ export const withPerformanceTracking = <T extends React.ComponentType<any>>(
   WrappedComponent.displayName = `withPerformanceTracking(${componentName})`;
 
   return WrappedComponent as unknown as T;
-};
+}

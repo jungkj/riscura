@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import { mkdir, writeFile, unlink, stat } from 'fs/promises';
 import { join } from 'path';
 import { env } from '@/config/env';
-
+;
 export interface UploadOptions {
   organizationId: string;
   documentId?: string;
@@ -23,84 +23,84 @@ export interface FileValidationResult {
   errors: string[];
 }
 
-const DEFAULT_MAX_SIZE = 10 * 1024 * 1024; // 10MB
-const DEFAULT_ALLOWED_TYPES = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'text/plain',
-  'text/csv',
-  'image/png',
-  'image/jpeg',
-  'image/gif',
-  'image/webp',
+const DEFAULT_MAX_SIZE = 10 * 1024 * 1024; // 10MB;
+const DEFAULT_ALLOWED_TYPES = [;
+  'application/pdf',;
+  'application/msword',;
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',;
+  'application/vnd.ms-excel',;
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',;
+  'text/plain',;
+  'text/csv',;
+  'image/png',;
+  'image/jpeg',;
+  'image/gif',;
+  'image/webp',;
 ];
-
-/**
- * Upload a file to storage
+;
+/**;
+ * Upload a file to storage;
  */
-export async function uploadFile(_file: File,
-  path: string,
-  metadata?: any
+export async function uploadFile(_file: File,;
+  path: string,;
+  metadata?: any;
 ): Promise<UploadResult & { success: boolean; error?: string; checksum: string }> {
   try {
     // Validate file with basic validation
     const validation = await validateFile(file);
     if (!validation.isValid) {
       return {
-        url: '',
-        path: '',
-        size: 0,
-        hash: '',
-        success: false,
-        error: `File validation failed: ${validation.errors.join(', ')}`,
-        checksum: '',
-      };
+        url: '',;
+        path: '',;
+        size: 0,;
+        hash: '',;
+        success: false,;
+        error: `File validation failed: ${validation.errors.join(', ')}`,;
+        checksum: '',;
+      }
     }
 
     // Generate file hash for deduplication
     const buffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(buffer);
     const hash = createHash('sha256').update(uint8Array).digest('hex');
-
+;
     // Use provided path or generate one
     const fullPath = join(getStorageRoot(), path);
-
+;
     // Ensure directory exists
     const dirPath = join(getStorageRoot(), path.split('/').slice(0, -1).join('/'));
     await mkdir(dirPath, { recursive: true });
-
+;
     // Write file
     await writeFile(fullPath, uint8Array);
-
+;
     // Generate URL
     const url = generateFileUrl(path);
-
+;
     return {
-      url,
-      path,
-      size: file.size,
-      hash,
-      success: true,
-      checksum: hash,
-    };
+      url,;
+      path,;
+      size: file.size,;
+      hash,;
+      success: true,;
+      checksum: hash,;
+    }
   } catch (error) {
-    // console.error('File upload error:', error);
+    // console.error('File upload error:', error)
     throw new Error('Failed to upload file');
   }
 }
 
-/**
- * Delete a file from storage
+/**;
+ * Delete a file from storage;
  */
 export async function deleteFile(path: string): Promise<void> {
   try {
     const fullPath = join(getStorageRoot(), path);
     await unlink(fullPath);
   } catch (error) {
-    // console.error('File deletion error:', error);
+    // console.error('File deletion error:', error)
     // Don't throw error if file doesn't exist
     if ((error as any).code !== 'ENOENT') {
       throw new Error('Failed to delete file');
@@ -108,8 +108,8 @@ export async function deleteFile(path: string): Promise<void> {
   }
 }
 
-/**
- * Check if file exists
+/**;
+ * Check if file exists;
  */
 export async function fileExists(path: string): Promise<boolean> {
   try {
@@ -121,8 +121,8 @@ export async function fileExists(path: string): Promise<boolean> {
   }
 }
 
-/**
- * Get file stats
+/**;
+ * Get file stats;
  */
 export async function getFileStats(path: string) {
   try {
@@ -133,18 +133,18 @@ export async function getFileStats(path: string) {
   }
 }
 
-/**
- * Validate file before upload
+/**;
+ * Validate file before upload;
  */
 export async function validateFile(_file: File): Promise<FileValidationResult> {
   const errors: string[] = [];
   const maxSize = DEFAULT_MAX_SIZE;
   const allowedTypes = DEFAULT_ALLOWED_TYPES;
-
+;
   // Check file size
   if (file.size > maxSize) {
-    errors.push(
-      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`
+    errors.push(;
+      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`;
     );
   }
 
@@ -166,23 +166,23 @@ export async function validateFile(_file: File): Promise<FileValidationResult> {
   }
 
   return {
-    isValid: errors.length === 0,
-    errors,
-  };
+    isValid: errors.length === 0,;
+    errors,;
+  }
 }
 
-/**
- * Validate file before upload (legacy with options)
+/**;
+ * Validate file before upload (legacy with options);
  */
 export function validateFileWithOptions(_file: File, options: UploadOptions): FileValidationResult {
   const errors: string[] = [];
   const maxSize = options.maxSize || DEFAULT_MAX_SIZE;
   const allowedTypes = options.allowedTypes || DEFAULT_ALLOWED_TYPES;
-
+;
   // Check file size
   if (file.size > maxSize) {
-    errors.push(
-      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`
+    errors.push(;
+      `File size ${formatFileSize(file.size)} exceeds maximum allowed size ${formatFileSize(maxSize)}`;
     );
   }
 
@@ -204,42 +204,42 @@ export function validateFileWithOptions(_file: File, options: UploadOptions): Fi
   }
 
   return {
-    isValid: errors.length === 0,
-    errors,
-  };
+    isValid: errors.length === 0,;
+    errors,;
+  }
 }
 
-/**
- * Generate secure file path
+/**;
+ * Generate secure file path;
  */
 const generateFilePath = (_organizationId: string, filename: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-
+;
   return join(organizationId, year.toString(), month, filename);
 }
 
-/**
- * Generate directory path for organization
+/**;
+ * Generate directory path for organization;
  */
 const getDirectoryPath = (_organizationId: string): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-
+;
   return join(organizationId, year.toString(), month);
 }
 
-/**
- * Get storage root directory
+/**;
+ * Get storage root directory;
  */
 const getStorageRoot = (): string {
   return env.STORAGE_PATH || join(process.cwd(), 'storage', 'uploads');
 }
 
-/**
- * Generate public URL for file
+/**;
+ * Generate public URL for file;
  */
 const generateFileUrl = (path: string): string {
   if (env.CDN_URL) {
@@ -248,59 +248,59 @@ const generateFileUrl = (path: string): string {
   return `${env.APP_URL}/api/files/${path}`;
 }
 
-/**
- * Get file extension from filename
+/**;
+ * Get file extension from filename;
  */
 const getFileExtension = (filename: string): string {
   const lastDot = filename.lastIndexOf('.');
   return lastDot === -1 ? '' : filename.substring(lastDot);
 }
 
-/**
- * Format file size for display
+/**;
+ * Format file size for display;
  */
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
-
+;
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-
+;
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-/**
- * Get MIME type from file extension
+/**;
+ * Get MIME type from file extension;
  */
 export function getMimeType(filename: string): string {
   const extension = getFileExtension(filename).toLowerCase();
-
+;
   const mimeTypes: Record<string, string> = {
-    '.pdf': 'application/pdf',
-    '.doc': 'application/msword',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    '.xls': 'application/vnd.ms-excel',
-    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    '.txt': 'text/plain',
-    '.csv': 'text/csv',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-  };
-
+    '.pdf': 'application/pdf',;
+    '.doc': 'application/msword',;
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',;
+    '.xls': 'application/vnd.ms-excel',;
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',;
+    '.txt': 'text/plain',;
+    '.csv': 'text/csv',;
+    '.png': 'image/png',;
+    '.jpg': 'image/jpeg',;
+    '.jpeg': 'image/jpeg',;
+    '.gif': 'image/gif',;
+    '.webp': 'image/webp',;
+  }
+;
   return mimeTypes[extension] || 'application/octet-stream';
 }
 
-/**
- * Generate secure filename
+/**;
+ * Generate secure filename;
  */
 export function generateSecureFilename(originalName: string, hash?: string): string {
   const extension = getFileExtension(originalName);
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-
+;
   if (hash) {
     return `${hash.substring(0, 16)}_${timestamp}${extension}`;
   }
@@ -308,33 +308,33 @@ export function generateSecureFilename(originalName: string, hash?: string): str
   return `${timestamp}_${random}${extension}`;
 }
 
-/**
- * Clean filename for storage
+/**;
+ * Clean filename for storage;
  */
 export function cleanFilename(filename: string): string {
   // Remove or replace dangerous characters
-  return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_')
-    .replace(/_{2,}/g, '_')
-    .replace(/^_+|_+$/g, '')
+  return filename;
+    .replace(/[^a-zA-Z0-9.-]/g, '_');
+    .replace(/_{2,}/g, '_');
+    .replace(/^_+|_+$/g, '');
     .substring(0, 255);
 }
 
-/**
- * Generate secure path for file upload
+/**;
+ * Generate secure path for file upload;
  */
-export function generateSecurePath(_organizationId: string,
-  category: string,
-  filename: string
+export function generateSecurePath(_organizationId: string,;
+  category: string,;
+  filename: string;
 ): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
-
+;
   const cleanName = cleanFilename(filename);
   const timestamp = Date.now();
   const secureFilename = `${timestamp}_${cleanName}`;
-
+;
   return join(organizationId, category, year.toString(), month, day, secureFilename);
 }

@@ -5,8 +5,9 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 // Date range picker would be imported here if available
-import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyProgress } from '@/components/ui/DaisyProgress'
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
@@ -42,11 +43,11 @@ import toast from 'react-hot-toast';
   Minus,
   Eye,
   Settings,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface TrendData {
-  period: string;
+  period: string
   value: number;
   change: number;
   changePercent: number;
@@ -123,7 +124,7 @@ const sampleMetrics: MetricTrend[] = [
       { period: '2024-05', value: 6.2, change: -0.6, changePercent: -8.82 },
     ],
   },
-];
+]
 
 const sampleInsights: PredictiveInsight[] = [
   {
@@ -145,36 +146,36 @@ const getCategoryConfig = (category: string) => {
     compliance: { color: 'text-blue-600', bg: 'bg-blue-50', icon: Shield },
     security: { color: 'text-orange-600', bg: 'bg-orange-50', icon: Shield },
     performance: { color: 'text-green-600', bg: 'bg-green-50', icon: TrendingUp },
-  };
+  }
   return configs[category as keyof typeof configs] || configs.performance;
-};
+}
 
 const getTrendIcon = (_trend: string) => {
   const icons = {
     up: ArrowUpRight,
     down: ArrowDownRight,
     stable: Minus,
-  };
+  }
   return icons[trend as keyof typeof icons] || Minus;
-};
+}
 
 const getStatusConfig = (status: string) => {
   const configs = {
     good: { color: 'text-green-600', bg: 'bg-green-50', label: 'Good' },
     warning: { color: 'text-yellow-600', bg: 'bg-yellow-50', label: 'Warning' },
     critical: { color: 'text-red-600', bg: 'bg-red-50', label: 'Critical' },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.good;
-};
+}
 
 const getImpactConfig = (impact: string) => {
   const configs = {
     high: { color: 'text-red-600', bg: 'bg-red-50', label: 'High Impact' },
     medium: { color: 'text-yellow-600', bg: 'bg-yellow-50', label: 'Medium Impact' },
     low: { color: 'text-green-600', bg: 'bg-green-50', label: 'Low Impact' },
-  };
+  }
   return configs[impact as keyof typeof configs] || configs.medium;
-};
+}
 
 export default function AnalyticsTrendsPage() {
   const [selectedTimeRange, setSelectedTimeRange] = useState('3months');
@@ -188,22 +189,22 @@ export default function AnalyticsTrendsPage() {
 
   const handleRefreshData = () => {
     toast.success('Data refreshed successfully');
-  };
+  }
 
   const handleExportData = () => {
     toast.success('Analytics data exported successfully');
-  };
+  }
 
   const handleCustomDashboard = () => {
     toast.success('Opening custom dashboard builder...');
-  };
+  }
 
   const handleDrillDown = (metricId: string) => {
     const metric = sampleMetrics.find((m) => m.id === metricId);
     if (metric) {
       toast.success(`Drilling down into ${metric.name} details...`);
     }
-  };
+  }
 
   return (
     <ProtectedRoute>

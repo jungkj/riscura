@@ -1,8 +1,8 @@
-// import { Risk, Control, Document } from './index';
+// import { Risk, Control, Document } from './index'
 
 // Base AI Types
 export interface TokenUsage {
-  promptTokens: number;
+  promptTokens: number
   completionTokens: number;
   totalTokens: number;
   estimatedCost: number;
@@ -38,7 +38,7 @@ export type AIRequestType =
 
 // Conversation Management
 export interface Conversation {
-  id: string;
+  id: string
   userId: string;
   title: string;
   agentType: AgentType;
@@ -51,7 +51,7 @@ export interface Conversation {
     totalTokens: number;
     estimatedCost: number;
     relatedEntities: string[];
-  };
+  }
 }
 
 export interface ConversationMessage {
@@ -71,12 +71,12 @@ export interface ConversationContext {
     risks: string[];
     controls: string[];
     documents: string[];
-  };
+  }
   preferences: {
     detailLevel: 'brief' | 'detailed' | 'comprehensive';
     includeReferences: boolean;
     generateVisuals: boolean;
-  };
+  }
 }
 
 export interface MessageAttachment {
@@ -95,19 +95,19 @@ export type AgentType =
 
 // Risk Analysis Types
 export interface RiskAnalysis {
-  id: string;
+  id: string
   riskId: string;
   score: {
     likelihood: number;
     impact: number;
     overall: number;
     confidence: number;
-  };
+  }
   assessment: {
     inherentRisk: number;
     residualRisk: number;
     riskReduction: number;
-  };
+  }
   recommendations: RiskRecommendation[];
   gaps: RiskGap[];
   improvements: RiskImprovement[];
@@ -165,7 +165,7 @@ export interface KeyRiskIndicator {
     green: number;
     amber: number;
     red: number;
-  };
+  }
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   source: string;
 }
@@ -190,7 +190,7 @@ export interface RegulatoryConsideration {
 
 // Control Recommendation Types
 export interface ControlRecommendation {
-  id: string;
+  id: string
   title: string;
   description: string;
   type: 'preventive' | 'detective' | 'corrective';
@@ -270,7 +270,7 @@ export interface ControlMetric {
     target: number;
     acceptable: number;
     critical: number;
-  };
+  }
   frequency: string;
 }
 
@@ -312,7 +312,7 @@ export type ContentType =
   | 'training_material'
   | 'risk_scenario'
   | 'incident_response'
-  | 'assessment_questionnaire';
+  | 'assessment_questionnaire'
 
 export interface ContentGenerationRequest {
   type: ContentType;
@@ -340,7 +340,7 @@ export interface RegenerationOptions {
 
 // Batch Analysis Types
 export interface BatchAnalysisRequest {
-  items: BatchAnalysisItem[];
+  items: BatchAnalysisItem[]
   analysisType: 'risk_assessment' | 'control_effectiveness' | 'gap_analysis' | 'compliance_check';
   options: BatchAnalysisOptions;
 }
@@ -407,7 +407,7 @@ export interface PrioritizedRecommendation {
 
 // Explanation Types
 export interface ExplanationRequest {
-  content: string;
+  content: string
   context: ExplanationContext;
   detailLevel: 'brief' | 'standard' | 'comprehensive';
   audience: 'technical' | 'business' | 'executive';
@@ -419,7 +419,7 @@ export interface ExplanationContext {
     risks?: string[];
     controls?: string[];
     frameworks?: string[];
-  };
+  }
   userRole?: string;
   organizationContext?: string;
 }
@@ -454,7 +454,7 @@ export interface ExplanationReference {
 
 // Rate Limiting Types
 export interface RateLimitStatus {
-  requestsRemaining: number;
+  requestsRemaining: number
   tokensRemaining: number;
   resetTime: Date;
   isLimited: boolean;
@@ -471,7 +471,7 @@ export interface RateLimitViolation {
 
 // Audit and Security Types
 export interface AIAuditLog {
-  id: string;
+  id: string
   userId: string;
   requestType: AIRequestType;
   timestamp: Date;
@@ -496,7 +496,7 @@ export interface SecurityEvent {
 
 // Error Types
 export interface AIError {
-  code: string;
+  code: string
   message: string;
   details?: string;
   timestamp: Date;
@@ -518,7 +518,7 @@ export type AIErrorCode =
 
 // Cache Types
 export interface CacheEntry<T = unknown> {
-  key: string;
+  key: string
   data: T;
   timestamp: Date;
   expiresAt: Date;
@@ -536,7 +536,7 @@ export interface CacheStats {
 
 // Performance Monitoring Types
 export interface PerformanceMetrics {
-  averageResponseTime: number;
+  averageResponseTime: number
   requestsPerMinute: number;
   errorRate: number;
   cacheHitRate: number;
@@ -554,7 +554,7 @@ export interface PerformanceAlert {
 
 // Import OpenAI SDK types when available
 export interface OpenAIAgent {
-  id: string;
+  id: string
   name: string;
   model: string;
   instructions: string;
@@ -592,7 +592,7 @@ export interface OpenAIRun {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
-  };
+  }
 }
 
 export interface OpenAIThread {
@@ -613,7 +613,7 @@ export interface OpenAIMessage {
     text: {
       value: string;
       annotations: unknown[];
-    };
+    }
   }>;
   assistant_id?: string;
   run_id?: string;

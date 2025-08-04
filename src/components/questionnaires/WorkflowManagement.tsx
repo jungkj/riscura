@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -12,6 +12,8 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle, DaisyCalendar } from '@/components/ui/daisy-components';
+import { Download } from 'lucide-react';
 
 // import {
   Workflow, Users, Clock, Bell, CheckCircle, AlertCircle, Calendar,
@@ -19,11 +21,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   ArrowRight, ArrowDown, User, UserCheck, UserX, Mail, Smartphone,
   Filter, Search, MoreVertical, ChevronRight, ChevronDown, Target,
   Activity, Timer, Flag, Send, MessageSquare, FileText, Download
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Mock workflow data
 interface WorkflowStep {
-  id: string;
+  id: string
   name: string;
   type: 'review' | 'approval' | 'assignment' | 'notification' | 'completion' | 'assessment';
   assignees: string[];
@@ -255,7 +257,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
       case 'cancelled': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -265,7 +267,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
       case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
+  }
 
   const getStepIcon = (_type: string) => {
     switch (type) {
@@ -276,7 +278,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
       case 'completion': return Flag;
       default: return Activity;
     }
-  };
+  }
 
   return (
     <div className={className}>
@@ -642,7 +644,7 @@ setSearchQuery(e.target.value)}
 
 // Workflow Instance Card Component
 interface WorkflowInstanceCardProps {
-  instance: WorkflowInstance;
+  instance: WorkflowInstance
   onSelect: () => void;
   getStatusColor: (status: string) => string;
   getPriorityColor: (priority: string) => string;
@@ -708,7 +710,7 @@ const WorkflowInstanceCard = ({
 
 // Workflow Template Card Component
 interface WorkflowTemplateCardProps {
-  template: WorkflowTemplate;
+  template: WorkflowTemplate
   onSelect: () => void;
   getStatusColor: (status: string) => string;
 }
@@ -756,7 +758,7 @@ const WorkflowTemplateCard = ({ template, onSelect, getStatusColor }: WorkflowTe
 
 // Workflow Instance Detail Component
 interface WorkflowInstanceDetailProps {
-  instance: WorkflowInstance;
+  instance: WorkflowInstance
   getStatusColor: (status: string) => string;
   getPriorityColor: (priority: string) => string;
   getStepIcon: (_type: string) => any;

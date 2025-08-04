@@ -1,7 +1,7 @@
 import Bull from 'bull';
 import { ImportJob, ImportJobStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-// import { redis } from '@/lib/redis';
+// import { redis } from '@/lib/redis'
 import { getSharePointFileService } from '../sharepoint/file.service';
 import { getExcelValidatorService } from '../excel/validator.service';
 import { importRCSAData } from './rcsa-importer';
@@ -37,7 +37,7 @@ export class ImportJobService {
 
   constructor() {
     // Validate Redis configuration
-    const redisConfig = this.validateRedisConfig();
+    const redisConfig = this.validateRedisConfig()
 
     // Initialize Bull queue with Redis connection
     this.queue = new Bull<JobData>('import-jobs', {
@@ -51,7 +51,7 @@ export class ImportJobService {
           delay: 2000,
         },
       },
-    });
+    })
 
     this.setupWorkers();
     this.setupEventHandlers();
@@ -66,7 +66,7 @@ export class ImportJobService {
     if (redisUrl) {
       // Parse Redis URL if provided
       try {
-        const url = new URL(redisUrl);
+        const url = new URL(redisUrl)
         return {
           host: url.hostname,
           port: parseInt(url.port || '6379'),
@@ -74,20 +74,20 @@ export class ImportJobService {
           username: url.username || undefined,
           db: parseInt(url.pathname.slice(1) || '0'),
           tls: url.protocol === 'rediss:' ? {} : undefined,
-        };
+        }
       } catch (error) {
-        // console.error('Invalid REDIS_URL format:', error);
+        // console.error('Invalid REDIS_URL format:', error)
         throw new Error('Invalid REDIS_URL configuration');
       }
     }
 
     // Fall back to individual Redis environment variables
-    const host = process.env.REDIS_HOST || 'localhost';
+    const host = process.env.REDIS_HOST || 'localhost'
     const port = parseInt(process.env.REDIS_PORT || '6379');
 
     // Validate port number
     if (isNaN(port) || port < 1 || port > 65535) {
-      throw new Error('Invalid REDIS_PORT: must be a number between 1 and 65535');
+      throw new Error('Invalid REDIS_PORT: must be a number between 1 and 65535')
     }
 
     return {
@@ -96,7 +96,7 @@ export class ImportJobService {
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB || '0'),
       tls: process.env.REDIS_TLS === 'true' ? {} : undefined,
-    };
+    }
   }
 
   /**
@@ -137,7 +137,7 @@ export class ImportJobService {
           progress: 0,
           progressMessage: 'Job queued for processing',
         },
-      });
+      })
 
       // Add job to Bull queue
       const _bullJob = await this.queue.add(
@@ -154,11 +154,11 @@ export class ImportJobService {
         {
           jobId: job.id, // Use same ID for Bull job
         }
-      );
+      )
 
       return job.id;
     } catch (error) {
-      // console.error('Error creating import job:', error);
+      // console.error('Error creating import job:', error)
       throw new Error('Failed to create import job');
     }
   }
@@ -177,17 +177,17 @@ export class ImportJobService {
       }
 
       // Get Bull job for additional details
-      const _bullJob = await this.queue.getJob(jobId);
+      const _bullJob = await this.queue.getJob(jobId)
       if (bullJob) {
         // Update progress from Bull job if available
-        const progress = bullJob.progress();
+        const progress = bullJob.progress()
         if (typeof progress === 'number' && progress !== job.progress) {
           // Use transaction to ensure atomic update with optimistic locking
           const updatedJob = await prisma.$transaction(async (tx) => {
             // Re-fetch the job within transaction to check current state
             const currentJob = await tx.importJob.findUnique({
               where: { id: jobId },
-            });
+            })
 
             if (!currentJob) {
               throw new Error('Job not found');
@@ -201,7 +201,7 @@ export class ImportJobService {
                   progress,
                   updatedAt: new Date(), // Explicit timestamp for version tracking
                 },
-              });
+              })
             }
 
             return currentJob;
@@ -213,7 +213,7 @@ export class ImportJobService {
 
       return job;
     } catch (error) {
-      // console.error('Error getting job status:', error);
+      // console.error('Error getting job status:', error)
       throw new Error('Failed to get job status');
     }
   }
@@ -231,17 +231,17 @@ export class ImportJobService {
           completedAt: new Date(),
           progressMessage: 'Job cancelled by user',
         },
-      });
+      })
 
       // Remove from Bull queue
-      const _bullJob = await this.queue.getJob(jobId);
+      const _bullJob = await this.queue.getJob(jobId)
       if (bullJob) {
         await bullJob.remove();
       }
 
       return true;
     } catch (error) {
-      // console.error('Error cancelling job:', error);
+      // console.error('Error cancelling job:', error)
       return false;
     }
   }
@@ -260,10 +260,10 @@ export class ImportJobService {
           ImportJobStatus.PROCESSING,
           0,
           'Starting import process'
-        );
+        )
 
         // Step 1: Download file from SharePoint (20%)
-        await job.progress(10);
+        await job.progress(10)
         await this.updateProgress(data.jobId, 10, 'Connecting to SharePoint');
 
         const fileService = getSharePointFileService();
@@ -273,7 +273,7 @@ export class ImportJobService {
         await this.updateProgress(data.jobId, 20, 'File downloaded successfully');
 
         // Step 2: Validate Excel file (40%)
-        await job.progress(30);
+        await job.progress(30)
         await this.updateProgress(data.jobId, 30, 'Validating Excel file structure');
 
         const validator = getExcelValidatorService();
@@ -289,7 +289,7 @@ export class ImportJobService {
         await this.updateProgress(data.jobId, 40, 'File validation completed');
 
         // Step 3: Import data (80%)
-        await job.progress(50);
+        await job.progress(50)
         await this.updateProgress(data.jobId, 50, 'Importing risk data');
 
         const importResult = await importRCSAData(fileBuffer, {
@@ -307,7 +307,7 @@ export class ImportJobService {
         await this.updateProgress(data.jobId, 80, 'Data import completed');
 
         // Step 4: Finalize (100%)
-        await job.progress(90);
+        await job.progress(90)
         await this.updateProgress(data.jobId, 90, 'Finalizing import');
 
         // Update job as completed
@@ -320,13 +320,13 @@ export class ImportJobService {
             ...validationResult.metadata,
             importResult,
           }
-        );
+        )
 
         await job.progress(100);
 
-        return { success: true, importResult };
+        return { success: true, importResult }
       } catch (error) {
-        // console.error('Job processing error:', error);
+        // console.error('Job processing error:', error)
 
         // Update job as failed
         await this.updateJobStatus(
@@ -336,7 +336,7 @@ export class ImportJobService {
           error instanceof Error ? error.message : 'Unknown error occurred',
           undefined,
           error instanceof Error ? error.message : 'Unknown error'
-        );
+        )
 
         throw error;
       }
@@ -348,24 +348,24 @@ export class ImportJobService {
    */
   private setupEventHandlers(): void {
     this.queue.on('completed', async (job, result) => {
-      // console.log(`Job ${job.id} completed successfully`);
+      // console.log(`Job ${job.id} completed successfully`)
       // Emit websocket event for real-time updates
-      this.emitJobUpdate(job.id, 'completed', result);
+      this.emitJobUpdate(job.id, 'completed', result)
     });
 
     this.queue.on('failed', async (job, err) => {
-      // console.error(`Job ${job.id} failed:`, err);
+      // console.error(`Job ${job.id} failed:`, err)
       // Emit websocket event for real-time updates
-      this.emitJobUpdate(job.id, 'failed', { error: err.message });
+      this.emitJobUpdate(job.id, 'failed', { error: err.message })
     });
 
     this.queue.on('progress', async (job, progress) => {
       // Emit websocket event for real-time progress updates
-      this.emitJobUpdate(job.id, 'progress', { progress });
+      this.emitJobUpdate(job.id, 'progress', { progress })
     });
 
     this.queue.on('error', (error) => {
-      // console.error('Queue error:', error);
+      // console.error('Queue error:', error)
     });
   }
 
@@ -382,7 +382,7 @@ export class ImportJobService {
         },
       });
     } catch (error) {
-      // console.error('Error updating job progress:', error);
+      // console.error('Error updating job progress:', error)
     }
   }
 
@@ -402,7 +402,7 @@ export class ImportJobService {
         status,
         progress,
         progressMessage: message,
-      };
+      }
 
       if (metadata) {
         updateData.metadata = metadata;
@@ -421,7 +421,7 @@ export class ImportJobService {
         data: updateData,
       });
     } catch (error) {
-      // console.error('Error updating job status:', error);
+      // console.error('Error updating job status:', error)
     }
   }
 
@@ -431,7 +431,7 @@ export class ImportJobService {
   private emitJobUpdate(jobId: string, event: string, data: any): void {
     // TODO: Implement websocket emission for real-time updates
     // This would integrate with your existing websocket infrastructure
-    // console.log(`Job ${jobId} - ${event}:`, data);
+    // console.log(`Job ${jobId} - ${event}:`, data)
   }
 
   /**
@@ -452,7 +452,7 @@ export class ImportJobService {
       this.queue.getDelayedCount(),
     ]);
 
-    return { waiting, active, completed, failed, delayed };
+    return { waiting, active, completed, failed, delayed }
   }
 
   /**
@@ -472,7 +472,7 @@ export class ImportJobService {
           in: [ImportJobStatus.COMPLETED, ImportJobStatus.FAILED, ImportJobStatus.CANCELLED],
         },
       },
-    });
+    })
 
     // Clean Bull queue
     await this.queue.clean(daysToKeep * 24 * 60 * 60 * 1000); // Convert to milliseconds
@@ -481,5 +481,5 @@ export class ImportJobService {
 
 // Export singleton instance getter
 export function getImportJobService(): ImportJobService {
-  return ImportJobService.getInstance();
+  return ImportJobService.getInstance()
 }

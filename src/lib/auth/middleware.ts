@@ -51,7 +51,7 @@ export async function withAuth(
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
       // Get session from NextAuth
-      const session = (await getServerSession(authOptions)) as any;
+      const session = (await getServerSession(authOptions)) as any
 
       if (!session?.user?.email) {
         return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
@@ -69,7 +69,7 @@ export async function withAuth(
             },
           },
         },
-      });
+      })
 
       if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 401 });
@@ -90,7 +90,7 @@ export async function withAuth(
       // Check role permissions
       const userPermissions = [
         ...(ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || []),
-      ];
+      ]
 
       if (options.allowedRoles && !options.allowedRoles.includes(user.role)) {
         return NextResponse.json({ error: 'Insufficient role permissions' }, { status: 403 });
@@ -118,24 +118,24 @@ export async function withAuth(
         avatar: user.avatar,
         isActive: user.isActive,
         lastLoginAt: user.lastLoginAt,
-      };
+      }
 
       // Add user to request
-      const authReq = req as AuthenticatedRequest;
+      const authReq = req as AuthenticatedRequest
       authReq.user = authenticatedUser;
 
       // Update last activity
       await db.client.user.update({
         where: { id: user.id },
         data: { lastLoginAt: new Date() },
-      });
+      })
 
       return handler(authReq);
     } catch (error) {
-      // console.error('Authentication middleware error:', error);
+      // console.error('Authentication middleware error:', error)
       return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
-  };
+  }
 }
 
 /**
@@ -160,45 +160,45 @@ const checkAuthorization = (
 
   // Check if admin (admins have all permissions)
   if (user.role === 'ADMIN') {
-    return { allowed: true };
+    return { allowed: true }
   }
 
   // Check organization requirement
   if (organizationRequired && !user.organizationId) {
-    return { allowed: false, reason: 'User must belong to an organization' };
+    return { allowed: false, reason: 'User must belong to an organization' }
   }
 
   // Check required roles
   if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
-    return { allowed: false, reason: `Required role: ${requiredRoles.join(' or ')}` };
+    return { allowed: false, reason: `Required role: ${requiredRoles.join(' or ')}` }
   }
 
   // Check required permissions
   if (requiredPermissions.length > 0) {
     const hasAllPermissions = requiredPermissions.every(
       (permission) => user.permissions.includes(permission) || user.permissions.includes('*')
-    );
+    )
 
     if (!hasAllPermissions) {
       return {
         allowed: false,
         reason: `Missing required permissions: ${requiredPermissions.join(', ')}`,
-      };
+      }
     }
   }
 
   // Check self-access (for endpoints like /api/users/:id where user can access their own data)
   if (allowSelf) {
-    const url = new URL(req.url);
+    const url = new URL(req.url)
     const pathParts = url.pathname.split('/');
     const userIdInPath = pathParts[pathParts.length - 1];
 
     if (userIdInPath === user.id) {
-      return { allowed: true };
+      return { allowed: true }
     }
   }
 
-  return { allowed: true };
+  return { allowed: true }
 }
 
 /**
@@ -209,7 +209,7 @@ export function requireRole(...roles: string[]) {
     const method = descriptor.value;
 
     descriptor.value = withAuth(method, { requiredRoles: roles });
-  };
+  }
 }
 
 /**
@@ -220,7 +220,7 @@ export function requirePermission(...permissions: string[]) {
     const method = descriptor.value;
 
     descriptor.value = withAuth(method, { requiredPermissions: permissions });
-  };
+  }
 }
 
 export function getAuthenticatedUser(req: AuthenticatedRequest): AuthenticatedUser | null {
@@ -269,7 +269,7 @@ export function rateLimit(
   // Clean expired entries
   for (const [k, v] of rateLimitStore.entries()) {
     if (v.resetTime <= now) {
-      rateLimitStore.delete(k);
+      rateLimitStore.delete(k)
     }
   }
 
@@ -277,15 +277,15 @@ export function rateLimit(
 
   if (!current || current.resetTime <= now) {
     rateLimitStore.set(key, { count: 1, resetTime });
-    return { allowed: true, remaining: limit - 1, resetTime };
+    return { allowed: true, remaining: limit - 1, resetTime }
   }
 
   if (current.count >= limit) {
-    return { allowed: false, remaining: 0, resetTime: current.resetTime };
+    return { allowed: false, remaining: 0, resetTime: current.resetTime }
   }
 
   current.count++;
-  return { allowed: true, remaining: limit - current.count, resetTime: current.resetTime };
+  return { allowed: true, remaining: limit - current.count, resetTime: current.resetTime }
 }
 
 /**
@@ -294,7 +294,7 @@ export function rateLimit(
 export function validateCSRFToken(req: NextRequest): boolean {
   // Skip CSRF validation in demo mode (development only)
   if (!productionGuard.isProduction() && productionGuard.isDemoMode()) {
-    return true;
+    return true
   }
 
   const _token = req.headers.get('x-csrf-token') || req.headers.get('csrf-token');
@@ -318,7 +318,7 @@ export function generateCSRFToken(): string {
 
 const getDefaultRateLimitKey = (req: NextRequest): string {
   // Try to get IP from various headers
-  const forwarded = req.headers.get('x-forwarded-for');
+  const forwarded = req.headers.get('x-forwarded-for')
   const realIp = req.headers.get('x-real-ip');
   const ip = forwarded ? forwarded.split(',')[0] : realIp || req.ip || 'unknown';
 
@@ -327,7 +327,7 @@ const getDefaultRateLimitKey = (req: NextRequest): string {
 
 // CORS middleware
 export interface CORSConfig {
-  origin?: string | string[] | ((origin: string) => boolean);
+  origin?: string | string[] | ((origin: string) => boolean)
   methods?: string[];
   allowedHeaders?: string[];
   credentials?: boolean;
@@ -348,11 +348,11 @@ export function cors(_config: CORSConfig = {}) {
 
     // Handle OPTIONS preflight request
     if (req.method === 'OPTIONS') {
-      const response = new NextResponse(null, { status: 200 });
+      const response = new NextResponse(null, { status: 200 })
 
       // Set CORS headers
       if (typeof origin === 'string') {
-        response.headers.set('Access-Control-Allow-Origin', origin);
+        response.headers.set('Access-Control-Allow-Origin', origin)
       } else if (Array.isArray(origin)) {
         if (origin.includes(requestOrigin)) {
           response.headers.set('Access-Control-Allow-Origin', requestOrigin);
@@ -376,20 +376,20 @@ export function cors(_config: CORSConfig = {}) {
     }
 
     return null; // Continue to next middleware
-  };
+  }
 }
 
 // Security headers middleware
 export function securityHeaders() {
   return (req: NextRequest): NextResponse | null => {
     // This will be applied to the response in the main handler
-    return null;
-  };
+    return null
+  }
 }
 
 export function applySecurityHeaders(_response: NextResponse): NextResponse {
   // Security headers
-  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -414,18 +414,18 @@ export function applySecurityHeaders(_response: NextResponse): NextResponse {
 // Request logging middleware
 export function requestLogger() {
   return (req: NextRequest): NextResponse | null => {
-    const start = Date.now();
+    const start = Date.now()
     const method = req.method;
     const url = req.nextUrl.pathname;
     const userAgent = req.headers.get('user-agent') || 'unknown';
     const ip = req.headers.get('x-forwarded-for') || req.ip || 'unknown';
 
-    // console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`);
+    // console.log(`[${new Date().toISOString()}] ${method} ${url} - ${ip} - ${userAgent}`)
 
     // This would ideally be handled in a response interceptor
     // For now, just log the request
-    return null;
-  };
+    return null
+  }
 }
 
 // Combined middleware composer
@@ -434,19 +434,19 @@ export function composeMiddleware(
 ) {
   return async (req: NextRequest): Promise<NextResponse | null> => {
     for (const middleware of middlewares) {
-      const _result = await middleware(req);
+      const _result = await middleware(req)
       if (result) {
         return result; // Middleware returned a response, stop processing
       }
     }
     return null; // All middleware passed, continue to handler
-  };
+  }
 }
 
 // Organization isolation middleware
 export function requireOrganization() {
   return async (req: AuthenticatedRequest): Promise<NextResponse | null> => {
-    const user = getAuthenticatedUser(req);
+    const user = getAuthenticatedUser(req)
 
     if (!user) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
@@ -457,12 +457,12 @@ export function requireOrganization() {
     }
 
     return null; // Continue
-  };
+  }
 }
 
 // Permission checking utilities
 export function hasAnyPermission(user: AuthenticatedUser, permissions: string[]): boolean {
-  return permissions.some((permission) => hasPermission(user, permission));
+  return permissions.some((permission) => hasPermission(user, permission))
 }
 
 export function hasAllPermissions(user: AuthenticatedUser, permissions: string[]): boolean {
@@ -482,12 +482,12 @@ export function requirePermissions(...permissions: string[]) {
     }
 
     return null; // Continue
-  };
+  }
 }
 
 // Role checking utilities
 export function hasAnyRole(user: AuthenticatedUser, roles: string[]): boolean {
-  return roles.includes(user.role);
+  return roles.includes(user.role)
 }
 
 export function requireRoles(...roles: string[]) {
@@ -503,14 +503,14 @@ export function requireRoles(...roles: string[]) {
     }
 
     return null; // Continue
-  };
+  }
 }
 
 // API key authentication (for external integrations)
 export async function withApiKey(
   handler: (req: NextRequest) => Promise<NextResponse> | NextResponse,
   options: {
-    requiredScopes?: string[];
+    requiredScopes?: string[]
   } = {}
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
@@ -539,7 +539,7 @@ export async function withApiKey(
             },
           },
         },
-      });
+      })
 
       if (!apiKeyRecord || !apiKeyRecord.organization.isActive) {
         return NextResponse.json({ error: 'Invalid or expired API key' }, { status: 401 });
@@ -549,7 +549,7 @@ export async function withApiKey(
       if (options.requiredScopes) {
         const hasRequiredScopes = options.requiredScopes.every(
           (scope) => apiKeyRecord.scopes.includes(scope) || apiKeyRecord.scopes.includes('*')
-        );
+        )
 
         if (!hasRequiredScopes) {
           return NextResponse.json({ error: 'Insufficient API key scopes' }, { status: 403 });
@@ -560,10 +560,10 @@ export async function withApiKey(
       await db.client.aPIKey.update({
         where: { id: apiKeyRecord.id },
         data: { lastUsedAt: new Date() },
-      });
+      })
 
       // Add organization context to request
-      const authReq = req as AuthenticatedRequest;
+      const authReq = req as AuthenticatedRequest
       authReq.user = {
         id: 'api-key',
         email: 'api@system.local',
@@ -573,14 +573,14 @@ export async function withApiKey(
         organizationId: apiKeyRecord.organizationId,
         permissions: apiKeyRecord.scopes,
         isActive: true,
-      };
+      }
 
       return handler(authReq);
     } catch (error) {
-      // console.error('API key authentication error:', error);
+      // console.error('API key authentication error:', error)
       return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
     }
-  };
+  }
 }
 
 // Session validation
@@ -588,7 +588,7 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
   try {
     // This would typically validate a JWT or session token
     // For now, we'll use NextAuth's session validation
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
 
     if (!session?.user?.email) {
       return null;
@@ -618,12 +618,12 @@ export async function validateSession(sessionToken: string): Promise<Authenticat
       avatar: user.avatar,
       isActive: user.isActive,
       lastLoginAt: user.lastLoginAt,
-    };
+    }
   } catch (error) {
-    // console.error('Session validation error:', error);
+    // console.error('Session validation error:', error)
     return null;
   }
 }
 
 // Export types
-export type { AuthenticatedRequest, AuthenticatedUser, RateLimitConfig, CORSConfig };
+export type { AuthenticatedRequest, AuthenticatedUser, RateLimitConfig, CORSConfig }

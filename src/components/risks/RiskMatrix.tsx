@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk } from '@/types';
-// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyTooltip } from '@/components/ui/daisy-components';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk } from '@/types'
+// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils'
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -23,7 +24,7 @@ import {
 } from '@/components/ui/dialog';
 
 // Icons
-import { Info, Maximize2 } from 'lucide-react';
+import { Info, Maximize2 } from 'lucide-react'
 
 interface RiskMatrixProps {
   onRiskClick?: (_risk: Risk) => void;
@@ -52,7 +53,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
 
   // Create 5x5 matrix data
   const matrixData = useMemo(() => {
-    const matrix: MatrixCell[][] = [];
+    const matrix: MatrixCell[][] = []
     
     for (let impact = 5; impact >= 1; impact--) {
       const row: MatrixCell[] = [];
@@ -84,28 +85,28 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
       medium: 'bg-yellow-100 border-yellow-200',
       high: 'bg-orange-100 border-orange-200',
       critical: 'bg-red-100 border-red-200',
-    };
+    }
     
     const hoverColors = {
       low: 'bg-green-200 border-green-300',
       medium: 'bg-yellow-200 border-yellow-300',
       high: 'bg-orange-200 border-orange-300',
       critical: 'bg-red-200 border-red-300',
-    };
+    }
     
     return isHovered ? hoverColors[level as keyof typeof hoverColors] : baseColors[level as keyof typeof baseColors];
-  };
+  }
 
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, risk: Risk) => {
-    setDraggedRisk(risk);
+    setDraggedRisk(risk)
     e.dataTransfer.effectAllowed = 'move';
-  };
+  }
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  };
+  }
 
   const handleDrop = async (e: React.DragEvent, likelihood: number, impact: number) => {
     e.preventDefault();
@@ -119,21 +120,21 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
           riskScore: calculateRiskScore(likelihood, impact),
         });
       } catch (error) {
-        // console.error('Failed to update risk position:', error);
+        // console.error('Failed to update risk position:', error)
       }
     }
     
     setDraggedRisk(null);
     setHoveredCell(null);
-  };
+  }
 
   const handleDragEnter = (likelihood: number, impact: number) => {
     setHoveredCell({ likelihood, impact });
-  };
+  }
 
   const handleDragLeave = () => {
     setHoveredCell(null);
-  };
+  }
 
   // Risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
@@ -192,7 +193,7 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
         <span>Critical (25)</span>
       </div>
     </div>
-  );
+  )
 
   return (
     <DaisyCard className={className} >
@@ -374,4 +375,4 @@ export const RiskMatrix: React.FC<RiskMatrixProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

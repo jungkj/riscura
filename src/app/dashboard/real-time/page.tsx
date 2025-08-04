@@ -7,13 +7,13 @@ import RealTimeDashboard from '@/components/dashboard/RealTimeDashboard';
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard';
+} from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { Database, Zap, Activity, Globe } from 'lucide-react';
 
 // Mock organization and user IDs for demo
-const DEMO_ORGANIZATION_ID = 'org_demo_123';
+const DEMO_ORGANIZATION_ID = 'org_demo_123'
 const DEMO_USER_ID = 'user_demo_123';
 
 export default function RealTimeDashboardPage() {

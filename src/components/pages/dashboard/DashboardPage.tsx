@@ -2,7 +2,7 @@
 
 /** @jsxImportSource react */
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import GuidedTour from '@/components/help/GuidedTour';
 import { DashboardStatsModal } from '@/components/dashboard/DashboardStatsModal';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // import {
   Shield,
@@ -43,17 +44,17 @@ import { DashboardStatsModal } from '@/components/dashboard/DashboardStatsModal'
   Sparkles,
   FileDown,
   Link2
-} from 'lucide-react';
+} from 'lucide-react'
 import Image from 'next/image';
 
 // Import the interactive risk heat map component
-// import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
+// import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap'
 import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
 import EmptyStateWizard from '@/components/dashboard/EmptyStateWizard';
 
 // Types
 interface DashboardStats {
-  totalRisks: number;
+  totalRisks: number
   highRisks: number;
   complianceScore: number;
   activeControls: number;
@@ -103,7 +104,7 @@ const DashboardPage = () {
   const [selectedStatsModal, setSelectedStatsModal] = useState<any>(null);
   
   // Additional state for dynamic data
-  const [criticalRisks, setCriticalRisks] = useState(0);
+  const [criticalRisks, setCriticalRisks] = useState(0)
   const [mediumRisks, setMediumRisks] = useState(0);
   const [lowRisks, setLowRisks] = useState(0);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
@@ -121,7 +122,7 @@ const DashboardPage = () {
           fetch('/api/risks'),
           fetch('/api/compliance/assessments'),
           fetch('/api/controls')
-        ]);
+        ])
         
         if (dashboardRes.ok) {
           const dashboardData = await dashboardRes.json();
@@ -129,7 +130,7 @@ const DashboardPage = () {
             const metrics = dashboardData.data.metrics;
             
             // Get risk details from risks API
-            let highRiskCount = 0;
+            let highRiskCount = 0
             let criticalCount = 0;
             let mediumCount = 0;
             let lowCount = 0;
@@ -172,12 +173,12 @@ const DashboardPage = () {
                 type: item.type || 'risk',
                 priority: item.priority || 'medium',
                 status: item.status || 'Active'
-              })));
+              })))
             }
             
             // Set compliance data
             if (complianceRes.ok) {
-              const compData = await complianceRes.json();
+              const compData = await complianceRes.json()
               if (compData.success && compData.data) {
                 setComplianceData(compData.data.map((item: any) => ({
                   framework: item.framework || item.name,
@@ -188,7 +189,7 @@ const DashboardPage = () {
             
             // Set controls data
             if (controlsRes.ok) {
-              const ctrlData = await controlsRes.json();
+              const ctrlData = await controlsRes.json()
               if (ctrlData.success && ctrlData.data) {
                 setControlsData(ctrlData.data.map((item: any) => ({
                   ...item,
@@ -199,26 +200,26 @@ const DashboardPage = () {
             }
             
             // Mock pending actions for now
-            setPendingActionsData([]);
+            setPendingActionsData([])
           }
         }
       } catch (error) {
-        // console.error('Failed to fetch dashboard data:', error);
+        // console.error('Failed to fetch dashboard data:', error)
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchDashboardData();
   }, []);
 
   // Check if user is new and should see the tour
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem('hasSeenDashboardTour');
+    const hasSeenTour = localStorage.getItem('hasSeenDashboardTour')
     if (!hasSeenTour && !loading) {
       // Auto-start tour for new users after a short delay
       const tourTimer = setTimeout(() => {
-        setShowTour(true);
+        setShowTour(true)
       }, 2000);
       return () => clearTimeout(tourTimer);
     }
@@ -227,17 +228,17 @@ const DashboardPage = () {
   // Load recent imports from localStorage
   useEffect(() => {
     try {
-      const imports = localStorage.getItem('recentExcelImports');
+      const imports = localStorage.getItem('recentExcelImports')
       if (imports) {
         const parsedImports = JSON.parse(imports);
         // Sort by date and take the most recent 3
         const sortedImports = parsedImports
           .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          .slice(0, 3);
+          .slice(0, 3)
         setRecentImports(sortedImports);
       }
     } catch (error) {
-      // console.error('Failed to load recent imports:', error);
+      // console.error('Failed to load recent imports:', error)
     }
   }, []);
 
@@ -324,7 +325,7 @@ const DashboardPage = () {
   ];
 
   // Recent activity is now fetched dynamically
-  const formattedRecentActivity: RecentActivity[] = recentActivity.length > 0 ? recentActivity : [];
+  const formattedRecentActivity: RecentActivity[] = recentActivity.length > 0 ? recentActivity : []
 
   const [insights, setInsights] = useState<Insight[]>([]);
 
@@ -332,7 +333,7 @@ const DashboardPage = () {
   useEffect(() => {
     const fetchInsights = async () => {
       try {
-        const response = await fetch('/api/dashboard/insights');
+        const response = await fetch('/api/dashboard/insights')
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
@@ -340,15 +341,15 @@ const DashboardPage = () {
           }
         }
       } catch (error) {
-        // console.error('Failed to fetch insights:', error);
+        // console.error('Failed to fetch insights:', error)
       }
-    };
+    }
 
     fetchInsights();
   }, []);
 
   // Use fetched insights or empty array
-  const displayInsights = insights.length > 0 ? insights : [];
+  const displayInsights = insights.length > 0 ? insights : []
 
 
 
@@ -365,9 +366,9 @@ const DashboardPage = () {
       toast({
         title: "Risk Creation",
         description: "Opening risk creation form...",
-      });
+      })
     }
-  };
+  }
 
   const handleTourComplete = () => {
     setShowTour(false);
@@ -376,12 +377,12 @@ const DashboardPage = () {
       title: "Tour Complete!",
       description: "You're ready to start managing risks effectively.",
     });
-  };
+  }
 
   const handleTourSkip = () => {
     setShowTour(false);
     localStorage.setItem('hasSeenDashboardTour', 'true');
-  };
+  }
 
   const getStatsModalData = (_type: string) => {
     switch (type) {
@@ -420,7 +421,7 @@ const DashboardPage = () {
             { label: 'Add New Risk', href: '/dashboard/risks/new', variant: 'secondary' as const },
             { label: 'Risk Reports', href: '/dashboard/reporting', variant: 'secondary' as const }
           ]
-        };
+        }
       case 'highRisks':
         return {
           type: 'highRisks' as const,
@@ -451,7 +452,7 @@ const DashboardPage = () {
             { label: 'View High Priority', href: '/dashboard/risks?priority=high', variant: 'default' as const },
             { label: 'Risk Assessment', href: '/dashboard/risks/assessment', variant: 'secondary' as const }
           ]
-        };
+        }
       case 'compliance':
         return {
           type: 'compliance' as const,
@@ -479,7 +480,7 @@ const DashboardPage = () {
             { label: 'Compliance Dashboard', href: '/dashboard/compliance', variant: 'default' as const },
             { label: 'Generate Report', href: '/dashboard/reporting', variant: 'secondary' as const }
           ]
-        };
+        }
       case 'activeControls':
         return {
           type: 'activeControls' as const,
@@ -512,7 +513,7 @@ const DashboardPage = () {
             { label: 'View Controls', href: '/dashboard/controls', variant: 'default' as const },
             { label: 'Control Testing', href: '/dashboard/controls/testing', variant: 'secondary' as const }
           ]
-        };
+        }
       case 'pendingActions':
         return {
           type: 'pendingActions' as const,
@@ -545,16 +546,16 @@ const DashboardPage = () {
             { label: 'View All Actions', href: '/dashboard/actions', variant: 'default' as const },
             { label: 'Create Action', href: '/dashboard/actions/new', variant: 'secondary' as const }
           ]
-        };
+        }
       default:
         return null;
     }
-  };
+  }
 
   const handleStatsCardClick = (_type: string) => {
     const modalData = getStatsModalData(type);
     setSelectedStatsModal(modalData);
-  };
+  }
 
   if (loading) {
     return (
@@ -610,7 +611,7 @@ const DashboardPage = () {
         <EmptyStateWizard 
           onImportComplete={() => {
             // Refresh dashboard data
-            window.location.reload();
+            window.location.reload()
           }}
           onRiskCreated={() => {
             // Navigation handled in component
@@ -1005,7 +1006,7 @@ const DashboardPage = () {
         onClose={() => setSelectedStatsModal(null)}
         data={selectedStatsModal} />
     </div>
-  );
+  )
 }
 
 const QuickActionCard = ({ 
@@ -1078,15 +1079,15 @@ const ActivityItem = ({
   const getTypeConfig = () => {
     switch (type) {
       case 'success':
-        return { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' };
+        return { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' }
       case 'warning':
-        return { icon: AlertTriangle, color: 'text-orange-600', bg: 'bg-orange-100' };
+        return { icon: AlertTriangle, color: 'text-orange-600', bg: 'bg-orange-100' }
       case 'error':
-        return { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-100' };
+        return { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-100' }
       default:
-        return { icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100' };
+        return { icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100' }
     }
-  };
+  }
 
   const getModuleBadgeColor = (module: string) => {
     const moduleLower = module.toLowerCase();
@@ -1104,7 +1105,7 @@ const ActivityItem = ({
       default:
         return 'bg-gray-50 text-gray-700 border-gray-200';
     }
-  };
+  }
 
   const config = getTypeConfig();
   const Icon = config.icon;

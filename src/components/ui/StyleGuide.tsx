@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Shield, 
   CheckCircle, 
   AlertTriangle, 

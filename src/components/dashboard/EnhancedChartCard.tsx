@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, MoreHorizontal, TrendingUp, TrendingDown } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
+import { DaisyCardTitle, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -22,7 +23,7 @@ interface ChartDataItem {
   trend?: {
     value: number;
     isPositive: boolean;
-  };
+  }
 }
 
 interface EnhancedChartCardProps {
@@ -252,4 +253,4 @@ export const EnhancedChartCard: React.FC<EnhancedChartCardProps> = ({
       </DaisyCard>
     </motion.div>
   );
-}; 
+} 

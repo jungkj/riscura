@@ -1,8 +1,8 @@
-// import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types'
 
 // Interfaces for token management
 export interface TokenUsage {
-  promptTokens: number;
+  promptTokens: number
   completionTokens: number;
   totalTokens: number;
   estimatedCost: number;
@@ -149,7 +149,7 @@ export const PRICING_TIERS: Record<string, PricingTier> = {
     features: ['Unlimited usage', 'Custom agents', 'Dedicated support', 'API access', 'SSO'],
     monthlyPrice: 199.99,
   },
-};
+}
 
 // Model pricing configuration (based on OpenAI pricing as of 2024)
 export const MODEL_PRICING: Record<string, ModelPricing> = {
@@ -177,7 +177,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
     name: 'GPT-3.5 Turbo',
     provider: 'openai',
   },
-};
+}
 
 export class TokenManagementService {
   private userUsageCache: Map<string, UserUsage> = new Map();
@@ -186,7 +186,7 @@ export class TokenManagementService {
   private usageAlerts: UsageAlert[] = [];
 
   // Storage keys for persistence
-  private readonly USER_USAGE_KEY = 'riscura_user_usage';
+  private readonly USER_USAGE_KEY = 'riscura_user_usage'
   private readonly CONVERSATION_USAGE_KEY = 'riscura_conversation_usage';
   private readonly TOKEN_TRANSACTIONS_KEY = 'riscura_token_transactions';
   private readonly USAGE_ALERTS_KEY = 'riscura_usage_alerts';
@@ -202,9 +202,9 @@ export class TokenManagementService {
   calculateCost(promptTokens: number, completionTokens: number, model: string): number {
     const pricing = MODEL_PRICING[model];
     if (!pricing) {
-      // console.warn(`Unknown model pricing for: ${model}, using default`);
+      // console.warn(`Unknown model pricing for: ${model}, using default`)
       // Default to gpt-4o-mini pricing
-      const defaultPricing = MODEL_PRICING['gpt-4o-mini'];
+      const defaultPricing = MODEL_PRICING['gpt-4o-mini']
       const promptCost = (promptTokens / 1000) * defaultPricing.inputCostPer1k;
       const completionCost = (completionTokens / 1000) * defaultPricing.outputCostPer1k;
       return promptCost + completionCost;
@@ -241,21 +241,21 @@ export class TokenManagementService {
       timestamp: new Date(),
       messageId,
       duration,
-    };
+    }
 
     this.tokenTransactions.push(transaction);
 
     // Update conversation usage
-    await this.updateConversationUsage(conversationId, agentType, usage, userId);
+    await this.updateConversationUsage(conversationId, agentType, usage, userId)
 
     // Update user usage
-    await this.updateUserUsage(userId, usage);
+    await this.updateUserUsage(userId, usage)
 
     // Check quotas and generate alerts
-    await this.checkQuotasAndGenerateAlerts(userId);
+    await this.checkQuotasAndGenerateAlerts(userId)
 
     // Persist data
-    this.persistData();
+    this.persistData()
   }
 
   /**
@@ -287,7 +287,7 @@ export class TokenManagementService {
       weeklyLimit: number;
       monthlyUsed: number;
       monthlyLimit: number;
-    };
+    }
   } {
     const userUsage = this.getUserUsageOrCreate(userId);
     const quotas = userUsage.tier.quotas;
@@ -299,7 +299,7 @@ export class TokenManagementService {
       weeklyLimit: quotas.weeklyTokenLimit,
       monthlyUsed: userUsage.monthlyTokens,
       monthlyLimit: quotas.monthlyTokenLimit,
-    };
+    }
 
     // Check daily limit
     if (userUsage.dailyTokens + estimatedTokens > quotas.dailyTokenLimit) {
@@ -307,7 +307,7 @@ export class TokenManagementService {
         allowed: false,
         reason: `Daily token limit exceeded (${quotas.dailyTokenLimit.toLocaleString()})`,
         quotaStatus,
-      };
+      }
     }
 
     // Check weekly limit
@@ -316,7 +316,7 @@ export class TokenManagementService {
         allowed: false,
         reason: `Weekly token limit exceeded (${quotas.weeklyTokenLimit.toLocaleString()})`,
         quotaStatus,
-      };
+      }
     }
 
     // Check monthly limit
@@ -325,10 +325,10 @@ export class TokenManagementService {
         allowed: false,
         reason: `Monthly token limit exceeded (${quotas.monthlyTokenLimit.toLocaleString()})`,
         quotaStatus,
-      };
+      }
     }
 
-    return { allowed: true, quotaStatus };
+    return { allowed: true, quotaStatus }
   }
 
   /**
@@ -383,22 +383,22 @@ export class TokenManagementService {
     const periodTransactions = this.tokenTransactions.filter(
       (txn) =>
         txn.userId === userId && txn.timestamp >= reportStartDate && txn.timestamp <= reportEndDate
-    );
+    )
 
     // Calculate totals
-    const totalTokens = periodTransactions.reduce((sum, txn) => sum + txn.totalTokens, 0);
+    const totalTokens = periodTransactions.reduce((sum, txn) => sum + txn.totalTokens, 0)
     const totalCost = periodTransactions.reduce((sum, txn) => sum + txn.cost, 0);
     const conversationCount = new Set(periodTransactions.map((txn) => txn.conversationId)).size;
 
     // Agent breakdown
     const agentBreakdown: Record<AgentType, { tokens: number; cost: number; count: number }> =
       {} as Record<AgentType, { tokens: number; cost: number; count: number }>;
-    const modelBreakdown: Record<string, { tokens: number; cost: number; count: number }> = {};
+    const modelBreakdown: Record<string, { tokens: number; cost: number; count: number }> = {}
 
     periodTransactions.forEach((txn) => {
       // Agent breakdown
       if (!agentBreakdown[txn.agentType]) {
-        agentBreakdown[txn.agentType] = { tokens: 0, cost: 0, count: 0 };
+        agentBreakdown[txn.agentType] = { tokens: 0, cost: 0, count: 0 }
       }
       agentBreakdown[txn.agentType].tokens += txn.totalTokens;
       agentBreakdown[txn.agentType].cost += txn.cost;
@@ -406,7 +406,7 @@ export class TokenManagementService {
 
       // Model breakdown
       if (!modelBreakdown[txn.model]) {
-        modelBreakdown[txn.model] = { tokens: 0, cost: 0, count: 0 };
+        modelBreakdown[txn.model] = { tokens: 0, cost: 0, count: 0 }
       }
       modelBreakdown[txn.model].tokens += txn.totalTokens;
       modelBreakdown[txn.model].cost += txn.cost;
@@ -414,7 +414,7 @@ export class TokenManagementService {
     });
 
     // Cost trend (daily aggregation)
-    const costTrend = this.calculateCostTrend(periodTransactions, reportStartDate, reportEndDate);
+    const costTrend = this.calculateCostTrend(periodTransactions, reportStartDate, reportEndDate)
 
     // Top conversations
     const conversationUsageMap = new Map<string, { tokens: number; cost: number; count: number }>();
@@ -447,7 +447,7 @@ export class TokenManagementService {
       modelBreakdown,
       costTrend,
       topConversations,
-    };
+    }
   }
 
   /**
@@ -458,28 +458,28 @@ export class TokenManagementService {
       tokens: number;
       cost: number;
       duration: number;
-    };
+    }
     today: {
       tokens: number;
       cost: number;
       conversations: number;
-    };
+    }
     quotaStatus: {
-      daily: { used: number; limit: number; percentage: number };
-      weekly: { used: number; limit: number; percentage: number };
-      monthly: { used: number; limit: number; percentage: number };
-    };
+      daily: { used: number; limit: number; percentage: number }
+      weekly: { used: number; limit: number; percentage: number }
+      monthly: { used: number; limit: number; percentage: number }
+    }
     costProjection: {
       dailyProjected: number;
       weeklyProjected: number;
       monthlyProjected: number;
-    };
+    }
   } {
     const userUsage = this.getUserUsageOrCreate(userId);
     const quotas = userUsage.tier.quotas;
 
     // Current session stats (last hour)
-    const _oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const _oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
     const sessionTransactions = this.tokenTransactions.filter(
       (txn) => txn.userId === userId && txn.timestamp >= oneHourAgo
     );
@@ -490,7 +490,7 @@ export class TokenManagementService {
       sessionTransactions.length > 0 ? Date.now() - sessionTransactions[0].timestamp.getTime() : 0;
 
     // Today's stats
-    const today = new Date();
+    const today = new Date()
     today.setHours(0, 0, 0, 0);
     const todayTransactions = this.tokenTransactions.filter(
       (txn) => txn.userId === userId && txn.timestamp >= today
@@ -517,10 +517,10 @@ export class TokenManagementService {
         limit: quotas.monthlyTokenLimit,
         percentage: (userUsage.monthlyTokens / quotas.monthlyTokenLimit) * 100,
       },
-    };
+    }
 
     // Cost projections
-    const hoursInDay = 24;
+    const hoursInDay = 24
     const daysInWeek = 7;
     const daysInMonth = 30;
     const currentHour = new Date().getHours();
@@ -549,7 +549,7 @@ export class TokenManagementService {
         weeklyProjected,
         monthlyProjected,
       },
-    };
+    }
   }
 
   /**
@@ -608,7 +608,7 @@ export class TokenManagementService {
   // Private helper methods
 
   private getUserUsageOrCreate(_userId: string): UserUsage {
-    let userUsage = this.userUsageCache.get(userId);
+    let userUsage = this.userUsageCache.get(userId)
 
     if (!userUsage) {
       userUsage = {
@@ -622,12 +622,12 @@ export class TokenManagementService {
         conversationCount: 0,
         lastReset: new Date(),
         tier: PRICING_TIERS.free,
-      };
+      }
       this.userUsageCache.set(userId, userUsage);
     }
 
     // Reset counters if needed
-    this.resetCountersIfNeeded(userUsage);
+    this.resetCountersIfNeeded(userUsage)
 
     return userUsage;
   }
@@ -650,7 +650,7 @@ export class TokenManagementService {
         startTime: new Date(),
         lastActivity: new Date(),
         userId,
-      };
+      }
     }
 
     convUsage.totalTokens += usage.totalTokens;
@@ -686,7 +686,7 @@ export class TokenManagementService {
         'Daily token usage is at 80%',
         quotas.dailyTokenLimit * 0.8,
         userUsage.dailyTokens
-      );
+      )
     }
 
     if (userUsage.dailyTokens > quotas.dailyTokenLimit) {
@@ -707,7 +707,7 @@ export class TokenManagementService {
         'Weekly token usage is at 80%',
         quotas.weeklyTokenLimit * 0.8,
         userUsage.weeklyTokens
-      );
+      )
     }
 
     // Check cost thresholds
@@ -718,7 +718,7 @@ export class TokenManagementService {
         'Daily cost is approaching limit',
         quotas.dailyCostLimit * 0.9,
         userUsage.dailyCost
-      );
+      )
     }
   }
 
@@ -735,7 +735,7 @@ export class TokenManagementService {
         alert.type === type &&
         !alert.acknowledged &&
         alert.threshold === threshold
-    );
+    )
 
     if (existingAlert) {
       return;
@@ -754,7 +754,7 @@ export class TokenManagementService {
       timestamp: new Date(),
       userId,
       acknowledged: false,
-    };
+    }
 
     this.usageAlerts.push(alert);
   }
@@ -765,19 +765,19 @@ export class TokenManagementService {
 
     // Reset daily counters
     if (!this.isSameDay(now, lastReset)) {
-      userUsage.dailyTokens = 0;
+      userUsage.dailyTokens = 0
       userUsage.dailyCost = 0;
     }
 
     // Reset weekly counters
     if (!this.isSameWeek(now, lastReset)) {
-      userUsage.weeklyTokens = 0;
+      userUsage.weeklyTokens = 0
       userUsage.weeklyCost = 0;
     }
 
     // Reset monthly counters
     if (!this.isSameMonth(now, lastReset)) {
-      userUsage.monthlyTokens = 0;
+      userUsage.monthlyTokens = 0
       userUsage.monthlyCost = 0;
       userUsage.conversationCount = 0;
     }
@@ -874,7 +874,7 @@ export class TokenManagementService {
         report.totalTokens.toString(),
         report.totalCost.toFixed(4),
       ].join(',')
-    );
+    )
 
     // Add agent breakdown
     Object.entries(report.agentBreakdown).forEach(([agent, data]) => {
@@ -889,7 +889,7 @@ export class TokenManagementService {
           data.tokens.toString(),
           data.cost.toFixed(4),
         ].join(',')
-      );
+      )
     });
 
     return rows.join('\n');
@@ -899,15 +899,15 @@ export class TokenManagementService {
     // Clean up old transactions and alerts every hour
     setInterval(
       () => {
-        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 
         // Keep only last 30 days of transactions
         this.tokenTransactions = this.tokenTransactions.filter(
           (txn) => txn.timestamp >= thirtyDaysAgo
-        );
+        )
 
         // Remove acknowledged alerts older than 7 days
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         this.usageAlerts = this.usageAlerts.filter(
           (alert) => !alert.acknowledged || alert.timestamp >= sevenDaysAgo
         );
@@ -922,11 +922,11 @@ export class TokenManagementService {
     try {
       // Only access localStorage in browser environment
       if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-        return;
+        return
       }
 
       // Load user usage
-      const userUsageData = localStorage.getItem(this.USER_USAGE_KEY);
+      const userUsageData = localStorage.getItem(this.USER_USAGE_KEY)
       if (userUsageData) {
         const data = JSON.parse(userUsageData);
         Object.entries(data).forEach(([userId, usage]) => {
@@ -939,7 +939,7 @@ export class TokenManagementService {
       }
 
       // Load conversation usage
-      const conversationUsageData = localStorage.getItem(this.CONVERSATION_USAGE_KEY);
+      const conversationUsageData = localStorage.getItem(this.CONVERSATION_USAGE_KEY)
       if (conversationUsageData) {
         const data = JSON.parse(conversationUsageData);
         Object.entries(data).forEach(([conversationId, usage]) => {
@@ -953,7 +953,7 @@ export class TokenManagementService {
       }
 
       // Load token transactions
-      const transactionsData = localStorage.getItem(this.TOKEN_TRANSACTIONS_KEY);
+      const transactionsData = localStorage.getItem(this.TOKEN_TRANSACTIONS_KEY)
       if (transactionsData) {
         this.tokenTransactions = JSON.parse(transactionsData).map((txn: TokenTransaction) => ({
           ...txn,
@@ -962,7 +962,7 @@ export class TokenManagementService {
       }
 
       // Load usage alerts
-      const alertsData = localStorage.getItem(this.USAGE_ALERTS_KEY);
+      const alertsData = localStorage.getItem(this.USAGE_ALERTS_KEY)
       if (alertsData) {
         this.usageAlerts = JSON.parse(alertsData).map((_alert: UsageAlert) => ({
           ...alert,
@@ -970,7 +970,7 @@ export class TokenManagementService {
         }));
       }
     } catch (error) {
-      // console.error('Error loading stored token management data:', error);
+      // console.error('Error loading stored token management data:', error)
     }
   }
 
@@ -978,30 +978,30 @@ export class TokenManagementService {
     try {
       // Only access localStorage in browser environment
       if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-        return;
+        return
       }
 
       // Persist user usage
-      const userUsageData = Object.fromEntries(this.userUsageCache);
+      const userUsageData = Object.fromEntries(this.userUsageCache)
       localStorage.setItem(this.USER_USAGE_KEY, JSON.stringify(userUsageData));
 
       // Persist conversation usage
-      const conversationUsageData = Object.fromEntries(this.conversationUsageCache);
+      const conversationUsageData = Object.fromEntries(this.conversationUsageCache)
       localStorage.setItem(this.CONVERSATION_USAGE_KEY, JSON.stringify(conversationUsageData));
 
       // Persist token transactions (last 1000 only)
       const recentTransactions = this.tokenTransactions
         .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-        .slice(0, 1000);
+        .slice(0, 1000)
       localStorage.setItem(this.TOKEN_TRANSACTIONS_KEY, JSON.stringify(recentTransactions));
 
       // Persist usage alerts (last 100 only)
       const recentAlerts = this.usageAlerts
         .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-        .slice(0, 100);
+        .slice(0, 100)
       localStorage.setItem(this.USAGE_ALERTS_KEY, JSON.stringify(recentAlerts));
     } catch (error) {
-      // console.error('Error persisting token management data:', error);
+      // console.error('Error persisting token management data:', error)
     }
   }
 
@@ -1011,4 +1011,4 @@ export class TokenManagementService {
 }
 
 // Export singleton instance
-export const tokenManagementService = new TokenManagementService();
+export const tokenManagementService = new TokenManagementService()

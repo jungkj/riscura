@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -10,12 +10,13 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
 // import {
   Brain, Sparkles, Target, Shield, CheckCircle, AlertTriangle,
   Plus, RefreshCw, ThumbsUp, ThumbsDown, Copy, Edit, Wand2,
   Lightbulb, TrendingUp, Eye, Clock, Users, Zap
-} from 'lucide-react';
+} from 'lucide-react'
 
 import type { 
   Questionnaire, 
@@ -52,7 +53,7 @@ export function AIQuestionSuggestions({
   // Initialize with sample suggestions
   useEffect(() => {
     if (questionnaire) {
-      generateContextualSuggestions();
+      generateContextualSuggestions()
     }
   }, [questionnaire]);
 
@@ -60,7 +61,7 @@ export function AIQuestionSuggestions({
     setIsGenerating(true);
     try {
       // Simulate AI processing delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
       const mockSuggestions: GeneratedSuggestion[] = [
         {
@@ -175,11 +176,11 @@ export function AIQuestionSuggestions({
 
       setSuggestions(mockSuggestions);
     } catch (error) {
-      // console.error('Failed to generate suggestions:', error);
+      // console.error('Failed to generate suggestions:', error)
     } finally {
       setIsGenerating(false);
     }
-  };
+  }
 
   const generateCustomSuggestions = async () => {
     if (!customPrompt.trim()) return;
@@ -187,7 +188,7 @@ export function AIQuestionSuggestions({
     setIsGenerating(true);
     try {
       // Simulate AI processing for custom prompt
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 3000))
       
       const customSuggestion: GeneratedSuggestion = {
         id: `ai-custom-${Date.now()}`,
@@ -203,16 +204,16 @@ export function AIQuestionSuggestions({
         config: {
           placeholder: 'Please describe your current measures and their effectiveness...'
         }
-      };
+      }
 
       setSuggestions(prev => [customSuggestion, ...prev]);
       setCustomPrompt('');
     } catch (error) {
-      // console.error('Failed to generate custom suggestion:', error);
+      // console.error('Failed to generate custom suggestion:', error)
     } finally {
       setIsGenerating(false);
     }
-  };
+  }
 
   const filteredSuggestions = suggestions.filter(suggestion => {
     const typeMatch = filterType === 'all' || suggestion.type === filterType;
@@ -227,13 +228,13 @@ export function AIQuestionSuggestions({
       case 'low': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 90) return 'text-green-600';
     if (confidence >= 75) return 'text-yellow-600';
     return 'text-red-600';
-  };
+  }
 
   const SuggestionCard = ({ suggestion }: { suggestion: GeneratedSuggestion }) => (
     <motion.div

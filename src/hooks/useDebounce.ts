@@ -12,13 +12,13 @@ export function useDebounce<T>(_value: T, delay: number): T {
   useEffect(() => {
     // Set up the timeout
     const timeoutId = setTimeout(() => {
-      setDebouncedValue(value);
+      setDebouncedValue(value)
     }, delay);
 
     // Clean up the timeout if value changes (or component unmounts)
     return () => {
-      clearTimeout(timeoutId);
-    };
+      clearTimeout(timeoutId)
+    }
   }, [value, delay]);
 
   return debouncedValue;

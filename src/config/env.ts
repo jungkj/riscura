@@ -1,8 +1,8 @@
 // Environment configuration with validation
-import { z } from 'zod';
+import { z } from 'zod'
 
 // Production guard check
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production'
 const isDemoMode = process.env.DEMO_MODE === 'true' && !isProduction;
 
 // Helper to check if a value looks like a development/test secret
@@ -18,7 +18,7 @@ const isInsecureSecret = (_value: string): boolean {
     'development',
     'testing',
     'secret-key',
-  ];
+  ]
 
   return insecurePatterns.some((pattern) => value.toLowerCase().includes(pattern.toLowerCase()));
 }
@@ -30,7 +30,7 @@ const productionSecretSchema = z
   .refine(
     (value) => !isProduction || !isInsecureSecret(value),
     'Development/test secrets are not allowed in production'
-  );
+  )
 
 // Environment schema with enhanced security
 const envSchema = z.object({
@@ -259,13 +259,13 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_ID_PRO: z.string().optional(),
   STRIPE_PRICE_ID_ENTERPRISE: z.string().optional(),
-});
+})
 
 // Parse and validate environment variables with enhanced error handling
 const validateEnv = () {
   // Skip validation if explicitly requested (useful for builds)
   if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
-    // console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag');
+    // console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag')
     return createMinimalEnv();
   }
 
@@ -273,10 +273,10 @@ const validateEnv = () {
   const isBuildTime =
     process.env.NEXT_PHASE === 'phase-production-build' ||
     process.env.npm_lifecycle_event === 'build' ||
-    process.env.CI === 'true';
+    process.env.CI === 'true'
 
   if (isBuildTime) {
-    // console.log('🔧 Build time detected - using minimal environment validation');
+    // console.log('🔧 Build time detected - using minimal environment validation')
     return createMinimalEnv();
   }
 
@@ -285,7 +285,7 @@ const validateEnv = () {
 
     // Additional production validations (only at runtime, not build time)
     if (isProduction && !isBuildTime) {
-      validateProductionEnvironment(parsed);
+      validateProductionEnvironment(parsed)
     }
 
     return parsed;
@@ -296,19 +296,19 @@ const validateEnv = () {
         return `❌ ${path}: ${err.message}`;
       });
 
-      // console.error('Environment validation failed:');
-      // console.error('Missing required variables:', missingVars);
-      // console.error('Please check your .env.local file and ensure all required variables are set.');
-      // console.error('See env.example for reference values.');
+      // console.error('Environment validation failed:')
+      // console.error('Missing required variables:', missingVars)
+      // console.error('Please check your .env.local file and ensure all required variables are set.')
+      // console.error('See env.example for reference values.')
 
       if (isProduction && !isBuildTime) {
-        // console.error('\n🛡️ Production security requires all secrets to be properly configured.');
-        // console.error('Run `npm run check:env` to validate your environment configuration.');
+        // console.error('\n🛡️ Production security requires all secrets to be properly configured.')
+        // console.error('Run `npm run check:env` to validate your environment configuration.')
         throw new Error('Environment validation failed');
       } else {
         // In development mode or build time, use minimal environment with defaults
-        // console.warn('⚠️ Using default environment values for missing variables.');
-        // console.warn('💡 For full functionality, create a .env.local file with proper values.');
+        // console.warn('⚠️ Using default environment values for missing variables.')
+        // console.warn('💡 For full functionality, create a .env.local file with proper values.')
         return createMinimalEnv();
       }
     }
@@ -440,17 +440,17 @@ const createMinimalEnv = () {
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || '',
     STRIPE_PRICE_ID_PRO: process.env.STRIPE_PRICE_ID_PRO || '',
     STRIPE_PRICE_ID_ENTERPRISE: process.env.STRIPE_PRICE_ID_ENTERPRISE || '',
-  } as any;
+  } as any
 }
 
 // Additional production environment validations
 const validateProductionEnvironment = (env: any) {
-  const errors: string[] = [];
+  const errors: string[] = []
   const warnings: string[] = [];
 
   // Check for required production services
   if (!env.SMTP_HOST) {
-    warnings.push('SMTP_HOST not configured - email notifications will be disabled');
+    warnings.push('SMTP_HOST not configured - email notifications will be disabled')
   }
 
   if (!env.REDIS_URL) {
@@ -461,12 +461,12 @@ const validateProductionEnvironment = (env: any) {
 
   // SENTRY_DSN is now optional
   // if (!env.SENTRY_DSN) {
-  //   errors.push('SENTRY_DSN is required in production for error monitoring');
+  //   errors.push('SENTRY_DSN is required in production for error monitoring')
   // }
 
   // Check SSL/HTTPS configuration
   if (env.APP_URL && env.APP_URL.startsWith('http://') && !env.APP_URL.includes('localhost')) {
-    errors.push('APP_URL must use HTTPS in production');
+    errors.push('APP_URL must use HTTPS in production')
   }
 
   if (
@@ -479,30 +479,30 @@ const validateProductionEnvironment = (env: any) {
 
   // Log warnings
   if (warnings.length > 0) {
-    // console.warn('⚠️ Production warnings:');
+    // console.warn('⚠️ Production warnings:')
     warnings.forEach((warning) => console.warn(`  • ${warning}`));
   }
 
   // Throw on errors
   if (errors.length > 0) {
-    // console.error('❌ Production validation errors:');
+    // console.error('❌ Production validation errors:')
     errors.forEach((error) => console.error(`  • ${error}`));
     throw new Error('Production environment validation failed');
   }
 }
 
 // Export validated environment variables
-export const env = validateEnv();
+export const env = validateEnv()
 
 // Type for environment
-export type Environment = typeof env;
+export type Environment = typeof env
 
 // Configuration helpers with enhanced security
 export const databaseConfig = {
   url: env.DATABASE_URL,
   logging: env.NODE_ENV === 'development' && env.DEBUG_MODE,
   ssl: env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-};
+}
 
 export const authConfig = {
   jwtSecret: env.JWT_SECRET,
@@ -512,7 +512,7 @@ export const authConfig = {
   nextAuthUrl: env.NEXTAUTH_URL || env.APP_URL,
   sessionSecret: env.SESSION_SECRET,
   bcryptRounds: env.BCRYPT_ROUNDS,
-};
+}
 
 export const securityConfig = {
   csrfSecret: env.CSRF_SECRET,
@@ -526,20 +526,20 @@ export const securityConfig = {
   enableSecurityHeaders: env.ENABLE_SECURITY_HEADERS,
   enable2FA: env.ENABLE_2FA,
   enableEmailVerification: env.ENABLE_EMAIL_VERIFICATION,
-};
+}
 
 export const googleConfig = {
   clientId: env.GOOGLE_CLIENT_ID,
   clientSecret: env.GOOGLE_CLIENT_SECRET,
   enabled: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
-};
+}
 
 export const aiConfig = {
   apiKey: env.OPENAI_API_KEY || '',
   organizationId: env.OPENAI_ORG_ID || '',
   encryptionKey: env.AI_ENCRYPTION_KEY,
   enabled: env.ENABLE_AI_FEATURES && !!env.OPENAI_API_KEY,
-};
+}
 
 export const emailConfig = {
   host: env.SMTP_HOST,
@@ -548,7 +548,7 @@ export const emailConfig = {
   pass: env.SMTP_PASS,
   from: env.SMTP_FROM,
   enabled: env.ENABLE_EMAIL_NOTIFICATIONS && !!env.SMTP_HOST,
-};
+}
 
 export const storageConfig = {
   type: env.STORAGE_TYPE,
@@ -560,7 +560,7 @@ export const storageConfig = {
     accessKeyId: env.AWS_ACCESS_KEY_ID,
     secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
   },
-};
+}
 
 export const rateLimitConfig = {
   default: {
@@ -579,17 +579,17 @@ export const rateLimitConfig = {
     max: env.API_RATE_LIMIT_MAX,
     windowMs: env.API_RATE_LIMIT_WINDOW,
   },
-};
+}
 
 export const monitoringConfig = {
   sentryDsn: env.SENTRY_DSN,
   logLevel: env.LOG_LEVEL,
   enabled: !!env.SENTRY_DSN,
-};
+}
 
 // Utility functions
 export function checkRequiredEnvironmentVariables(): {
-  isValid: boolean;
+  isValid: boolean
   missing: string[];
   warnings: string[];
 } {
@@ -597,7 +597,7 @@ export function checkRequiredEnvironmentVariables(): {
   const warnings: string[] = [];
 
   // Critical variables
-  const critical = ['DATABASE_URL', 'JWT_SECRET', 'NEXTAUTH_SECRET'];
+  const critical = ['DATABASE_URL', 'JWT_SECRET', 'NEXTAUTH_SECRET']
   for (const key of critical) {
     if (!process.env[key]) {
       missing.push(key);
@@ -605,7 +605,7 @@ export function checkRequiredEnvironmentVariables(): {
   }
 
   // Recommended variables
-  const recommended = ['SMTP_HOST', 'OPENAI_API_KEY'];
+  const recommended = ['SMTP_HOST', 'OPENAI_API_KEY']
   for (const key of recommended) {
     if (!process.env[key]) {
       warnings.push(key);
@@ -616,7 +616,7 @@ export function checkRequiredEnvironmentVariables(): {
     isValid: missing.length === 0,
     missing,
     warnings,
-  };
+  }
 }
 
 export function isDevelopmentEnvironment(): boolean {
@@ -637,7 +637,7 @@ export function isDemoModeEnabled(): boolean {
 
 // Security validation function
 export function validateSecurityConfiguration(): {
-  isSecure: boolean;
+  isSecure: boolean
   issues: string[];
   recommendations: string[];
 } {
@@ -647,27 +647,27 @@ export function validateSecurityConfiguration(): {
   if (isProductionEnvironment()) {
     // Check for HTTPS
     if (env.APP_URL && !env.APP_URL.startsWith('https://')) {
-      issues.push('APP_URL should use HTTPS in production');
+      issues.push('APP_URL should use HTTPS in production')
     }
 
     // Check for secure database connection
     if (!env.DATABASE_URL.includes('ssl')) {
-      issues.push('Database should use SSL in production');
+      issues.push('Database should use SSL in production')
     }
 
     // Check monitoring
     if (!env.SENTRY_DSN) {
-      issues.push('Error monitoring (Sentry) should be configured in production');
+      issues.push('Error monitoring (Sentry) should be configured in production')
     }
 
     // Check email configuration
     if (!env.SMTP_HOST) {
-      recommendations.push('Configure SMTP for email notifications');
+      recommendations.push('Configure SMTP for email notifications')
     }
 
     // Check Redis for sessions
     if (!env.REDIS_URL) {
-      recommendations.push('Configure Redis for better session and rate limit storage');
+      recommendations.push('Configure Redis for better session and rate limit storage')
     }
   }
 
@@ -675,7 +675,7 @@ export function validateSecurityConfiguration(): {
     isSecure: issues.length === 0,
     issues,
     recommendations,
-  };
+  }
 }
 
 // TODO: Replace with your actual app config
@@ -684,6 +684,6 @@ export const appConfig = {
   DATABASE_URL: process.env.DATABASE_URL || process.env.database_url || '',
   AI_ENCRYPTION_KEY: process.env.AI_ENCRYPTION_KEY || '',
   WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || '',
-};
+}
 
 export default appConfig;

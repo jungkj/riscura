@@ -51,7 +51,7 @@ export function getEntityComplianceFlags(_entity: AuditEntity): string[] {
     INCIDENT: ['SOC2', 'ISO27001'],
     POLICY: ['SOC2', 'ISO27001'],
     PROCEDURE: ['SOC2', 'ISO27001'],
-  };
+  }
 
   return complianceMap[entity] || ['SOC2'];
 }
@@ -66,7 +66,7 @@ export function inferActionFromMethod(method: string): string {
     PUT: 'UPDATE',
     PATCH: 'UPDATE',
     DELETE: 'DELETE',
-  };
+  }
   return methodMap[method.toUpperCase()] || 'READ';
 }
 
@@ -97,11 +97,11 @@ export function inferClientType(userAgent?: string): 'web' | 'mobile' | 'api' | 
 export function generateEventId(): string {
   // Fallback to timestamp-based ID if UUID is not available
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
+    return crypto.randomUUID()
   }
 
   // Fallback implementation
-  return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 }
 
 /**
@@ -116,7 +116,7 @@ export function extractAuditContext(req: NextRequest) {
     requestId: req.headers.get('x-request-id') || `req_${Date.now()}`,
     clientType: inferClientType(req.headers.get('user-agent') || undefined),
     timestamp: new Date(),
-  };
+  }
 }
 
 /**
@@ -131,5 +131,5 @@ export function createAuditMetadata(
     timestamp: new Date().toISOString(),
     auditVersion: '1.0',
     ...additionalData,
-  };
+  }
 }

@@ -33,7 +33,7 @@ export async function getSubscriptionStatus(_organizationId: string): Promise<Su
           take: 1,
         },
       },
-    });
+    })
 
     if (!organization) {
       return createFreeStatus();
@@ -64,7 +64,7 @@ export async function getSubscriptionStatus(_organizationId: string): Promise<Su
     }
 
     // Determine plan from Stripe price ID
-    let plan = organization.plan || 'free';
+    let plan = organization.plan || 'free'
     if (subscription.stripePriceId) {
       if (subscription.stripePriceId.includes('pro')) plan = 'pro';
       else if (subscription.stripePriceId.includes('enterprise')) plan = 'enterprise';
@@ -78,9 +78,9 @@ export async function getSubscriptionStatus(_organizationId: string): Promise<Su
       trialDaysLeft,
       isTrialExpired,
       needsUpgrade: !isActive && plan === 'free',
-    };
+    }
   } catch (error) {
-    // console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error)
     return createFreeStatus();
   }
 }
@@ -94,7 +94,7 @@ const createFreeStatus = (): SubscriptionStatus {
     trialDaysLeft: null,
     isTrialExpired: false,
     needsUpgrade: true,
-  };
+  }
 }
 
 // Check if subscription meets requirements
@@ -104,31 +104,31 @@ export function checkSubscriptionAccess(
 ): { allowed: boolean; reason?: string } {
   if (requirements.requiresActive && !subscription.isActive) {
     if (subscription.status === 'TRIALING' && !requirements.allowTrial) {
-      return { allowed: false, reason: 'Trial access not allowed for this feature' };
+      return { allowed: false, reason: 'Trial access not allowed for this feature' }
     }
     if (!subscription.isActive) {
-      return { allowed: false, reason: 'Active subscription required' };
+      return { allowed: false, reason: 'Active subscription required' }
     }
   }
 
   if (requirements.minPlan) {
-    const planLevels = { free: 0, pro: 1, enterprise: 2 };
+    const planLevels = { free: 0, pro: 1, enterprise: 2 }
     const userLevel = planLevels[subscription.plan as keyof typeof planLevels] || 0;
     const requiredLevel = planLevels[requirements.minPlan];
 
     if (userLevel < requiredLevel) {
-      return { allowed: false, reason: `${requirements.minPlan} plan or higher required` };
+      return { allowed: false, reason: `${requirements.minPlan} plan or higher required` }
     }
   }
 
-  return { allowed: true };
+  return { allowed: true }
 }
 
 // Middleware wrapper for subscription checks
 export function withSubscriptionAuth(requirements: SubscriptionRequirement = {}) {
   return async (req: NextRequest) => {
     try {
-      const session = await getServerSession(authOptions);
+      const session = await getServerSession(authOptions)
 
       if (!session?.user) {
         return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
@@ -153,8 +153,8 @@ export function withSubscriptionAuth(requirements: SubscriptionRequirement = {})
 
       return null; // Allow the request to continue
     } catch (error) {
-      // console.error('Subscription auth error:', error);
+      // console.error('Subscription auth error:', error)
       return NextResponse.json({ error: 'Subscription verification failed' }, { status: 500 });
     }
-  };
+  }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   AlertTriangle, 
   Wifi, 
   WifiOff, 
@@ -11,7 +12,7 @@ import {
   Info,
   X
 } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -56,7 +57,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       default:
         return <Info className="h-5 w-5 text-blue-500" />;
     }
-  };
+  }
 
   const getSeverityVariant = () => {
     switch (error.severity) {
@@ -66,7 +67,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       default:
         return 'default';
     }
-  };
+  }
 
   if (compact) {
     return (
@@ -102,7 +103,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
                 </DaisyAlertDescription>
               </DaisyAlert>
     );
-  };
+  }
 
   return (
     <motion.div
@@ -155,7 +156,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
               </DaisyAlert>
     </motion.div>
   );
-};
+}
 
 interface ConnectionStatusDisplayProps {
   status: ConnectionStatus;
@@ -187,7 +188,7 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
       default:
         return <WifiOff className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   const getStatusText = () => {
     if (isReconnecting) return 'Reconnecting...';
@@ -204,7 +205,7 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
       default:
         return 'Unknown';
     }
-  };
+  }
 
   const getStatusColor = () => {
     if (isReconnecting) return 'text-blue-600';
@@ -221,7 +222,7 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
       default:
         return 'text-gray-600';
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -248,7 +249,7 @@ export const ConnectionStatusDisplay: React.FC<ConnectionStatusDisplayProps> = (
       )}
     </div>
   );
-};
+}
 
 interface FallbackModeDisplayProps {
   isActive: boolean;
@@ -302,7 +303,7 @@ export const FallbackModeDisplay: React.FC<FallbackModeDisplayProps> = ({
               </DaisyAlert>
     </motion.div>
   );
-};
+}
 
 interface RetryCountdownProps {
   retryAfter: Date;
@@ -326,7 +327,7 @@ export const RetryCountdown: React.FC<RetryCountdownProps> = ({
       if (diff === 0 && onRetryAvailable) {
         onRetryAvailable();
       }
-    };
+    }
 
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
@@ -347,7 +348,7 @@ export const RetryCountdown: React.FC<RetryCountdownProps> = ({
       <DaisyProgress value={progress} className="h-2" />
 </div>
   );
-};
+}
 
 interface CircuitBreakerStatusProps {
   state: string;
@@ -373,7 +374,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
       default:
         return 'text-gray-600 bg-gray-50';
     }
-  };
+  }
 
   return (
     <DaisyCard >
@@ -414,7 +415,7 @@ export const CircuitBreakerStatus: React.FC<CircuitBreakerStatusProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 export default {
   ErrorDisplay,
@@ -422,4 +423,4 @@ export default {
   FallbackModeDisplay,
   RetryCountdown,
   CircuitBreakerStatus
-}; 
+} 

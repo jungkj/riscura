@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -9,6 +9,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Send, 
   Mic, 
   MicOff, 
@@ -63,7 +64,7 @@ interface ARIAAssistantProps {
     currentPage?: string;
     selectedRisk?: string;
     selectedControl?: string;
-  };
+  }
   onActionTrigger?: (_action: string, parameters?: any) => void;
 }
 
@@ -76,7 +77,7 @@ export default function ARIAAssistant({
   const { toast } = useToast();
   
   // State management
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -89,14 +90,14 @@ export default function ARIAAssistant({
   });
   
   // Voice and audio state
-  const [isListening, setIsListening] = useState(false);
+  const [isListening, setIsListening] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [speechRecognition, setSpeechRecognition] = useState<any | null>(null);
   const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesis | null>(null);
   
   // Refs
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -104,7 +105,7 @@ export default function ARIAAssistant({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // Initialize Speech Recognition
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
@@ -114,19 +115,19 @@ export default function ARIAAssistant({
         recognition.onstart = () => setIsListening(true);
         recognition.onend = () => setIsListening(false);
         recognition.onerror = (event: Event) => {
-          // console.error('Speech recognition error:', event);
+          // console.error('Speech recognition error:', event)
           setIsListening(false);
           toast({
             title: 'Voice Recognition Error',
             description: 'Unable to process voice input. Please try again.',
             variant: 'destructive',
           });
-        };
+        }
         recognition.onresult = (event: any) => {
           const transcript = event.results[0][0].transcript;
           setInputMessage(transcript);
           setIsListening(false);
-        };
+        }
         
         setSpeechRecognition(recognition);
         setVoiceEnabled(true);
@@ -134,14 +135,14 @@ export default function ARIAAssistant({
       
       // Initialize Speech Synthesis
       if (window.speechSynthesis) {
-        setSpeechSynthesis(window.speechSynthesis);
+        setSpeechSynthesis(window.speechSynthesis)
       }
     }
   }, [toast]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages]);
 
   // Initialize with welcome message
@@ -168,21 +169,21 @@ How can I assist you today?`,
           'Recommend controls for our cybersecurity risks',
           'What are our risk trends this quarter?'
         ]
-      };
+      }
       setMessages([welcomeMessage]);
     }
   }, []);
 
   // Send message to AI
   const sendMessage = async (message: string) => {
-    if (!message.trim() || isLoading) return;
+    if (!message.trim() || isLoading) return
 
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: 'user',
       content: message.trim(),
       timestamp: new Date(),
-    };
+    }
 
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
@@ -190,7 +191,7 @@ How can I assist you today?`,
 
     // Cancel any previous request
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+      abortControllerRef.current.abort()
     }
     abortControllerRef.current = new AbortController();
 
@@ -228,14 +229,14 @@ How can I assist you today?`,
           confidence: data.metadata.confidence,
           actions: data.response.actions,
           followUpQuestions: data.response.followUpQuestions,
-        };
+        }
 
         setMessages(prev => [...prev, assistantMessage]);
         setConversationId(data.conversationId);
 
         // Speak response if voice is enabled
         if (voiceEnabled && speechSynthesis && !isSpeaking) {
-          speakMessage(data.response.message);
+          speakMessage(data.response.message)
         }
       } else {
         throw new Error(data.message || 'Failed to get AI response');
@@ -245,7 +246,7 @@ How can I assist you today?`,
         return; // Request was cancelled
       }
 
-      // console.error('Chat error:', error);
+      // console.error('Chat error:', error)
       
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
@@ -254,7 +255,7 @@ How can I assist you today?`,
         timestamp: new Date(),
         type: 'text',
         confidence: 0,
-      };
+      }
 
       setMessages(prev => [...prev, errorMessage]);
       
@@ -266,25 +267,25 @@ How can I assist you today?`,
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Voice input handling
   const startListening = () => {
     if (speechRecognition && !isListening) {
-      speechRecognition.start();
+      speechRecognition.start()
     }
-  };
+  }
 
   const stopListening = () => {
     if (speechRecognition && isListening) {
       speechRecognition.stop();
     }
-  };
+  }
 
   // Text-to-speech
   const speakMessage = (text: string) => {
     if (speechSynthesis && !isSpeaking) {
-      setIsSpeaking(true);
+      setIsSpeaking(true)
       
       // Clean text for speech
       const cleanText = text
@@ -302,57 +303,57 @@ How can I assist you today?`,
       
       speechSynthesis.speak(utterance);
     }
-  };
+  }
 
   const stopSpeaking = () => {
     if (speechSynthesis && isSpeaking) {
       speechSynthesis.cancel();
       setIsSpeaking(false);
     }
-  };
+  }
 
   // Handle action triggers
   const handleAction = (_action: string, parameters?: any) => {
     if (onActionTrigger) {
-      onActionTrigger(action, parameters);
+      onActionTrigger(action, parameters)
     } else {
       // Default action handling
       switch (action) {
         case 'analyze_risk':
-          sendMessage('Analyze our current risk landscape');
+          sendMessage('Analyze our current risk landscape')
           break;
         case 'get_recommendations':
           sendMessage('What control recommendations do you have?');
           break;
         default:
-          // console.log('Action triggered:', action, parameters);
+          // console.log('Action triggered:', action, parameters)
       }
     }
-  };
+  }
 
   // Handle follow-up questions
   const handleFollowUpQuestion = (question: string) => {
-    sendMessage(question);
-  };
+    sendMessage(question)
+  }
 
   // Copy message to clipboard
   const copyMessage = async (_content: string) => {
     try {
-      await navigator.clipboard.writeText(content);
+      await navigator.clipboard.writeText(content)
       toast({
         title: 'Copied',
         description: 'Message copied to clipboard',
       });
     } catch (error) {
-      // console.error('Copy failed:', error);
+      // console.error('Copy failed:', error)
     }
-  };
+  }
 
   // Export conversation
   const exportConversation = () => {
     const conversationText = messages
       .map(msg => `[${msg.timestamp.toLocaleString()}] ${msg.role.toUpperCase()}: ${msg.content}`)
-      .join('\n\n');
+      .join('\n\n')
     
     const blob = new Blob([conversationText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -363,11 +364,11 @@ How can I assist you today?`,
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
+  }
 
   // Clear conversation
   const clearConversation = () => {
-    setMessages([]);
+    setMessages([])
     setConversationId(null);
     setInputMessage('');
     
@@ -380,26 +381,26 @@ How can I assist you today?`,
         timestamp: new Date(),
         type: 'text',
         confidence: 1.0,
-      };
+      }
       setMessages([welcomeMessage]);
     }, 100);
-  };
+  }
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     sendMessage(inputMessage);
-  };
+  }
 
   // Get message icon
   const getMessageIcon = (type?: string) => {
     switch (type) {
-      case 'data': return <BarChart3 className="w-4 h-4 text-blue-500" />;
+      case 'data': return <BarChart3 className="w-4 h-4 text-blue-500" />
       case 'chart': return <BarChart3 className="w-4 h-4 text-green-500" />;
       case 'recommendation': return <Lightbulb className="w-4 h-4 text-yellow-500" />;
       default: return <MessageSquare className="w-4 h-4 text-gray-500" />;
     }
-  };
+  }
 
   return (
     <DaisyCard className="h-[600px] flex flex-col" >

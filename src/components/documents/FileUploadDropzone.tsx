@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-// import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+// import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -10,9 +10,10 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-// import { formatFileSize } from '@/lib/storage/file-validator';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { formatFileSize } from '@/lib/storage/file-validator'
 import toast from 'react-hot-toast';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
 interface FileUploadItem {
   id: string;
@@ -55,7 +56,7 @@ const FILE_TYPE_ICONS = {
   image: Image,
   archive: Archive,
   unknown: FileText,
-};
+}
 
 export default function FileUploadDropzone({
   onUploadComplete,
@@ -80,7 +81,7 @@ export default function FileUploadDropzone({
     // Handle rejected files
     rejectedFiles.forEach(({ file, errors }) => {
       errors.forEach((__error: any) => {
-        toast.error(`${file.name}: ${error.message}`);
+        toast.error(`${file.name}: ${error.message}`)
       });
     });
 
@@ -91,7 +92,7 @@ export default function FileUploadDropzone({
       preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
       progress: 0,
       status: 'pending',
-    }));
+    }))
 
     setFiles(prev => {
       const updated = [...prev, ...newFiles];
@@ -129,7 +130,7 @@ export default function FileUploadDropzone({
       const updated = prev.filter(f => f.id !== id);
       return updated;
     });
-  };
+  }
 
   const uploadFiles = async () => {
     if (files.length === 0) {
@@ -144,7 +145,7 @@ export default function FileUploadDropzone({
     try {
       // Upload files one by one to track individual progress
       for (const fileItem of files) {
-        if (fileItem.status !== 'pending') continue;
+        if (fileItem.status !== 'pending') continue
 
         setFiles(prev => prev.map(f => 
           f.id === fileItem.id 
@@ -167,7 +168,7 @@ export default function FileUploadDropzone({
           }
 
           // Create XMLHttpRequest for progress tracking
-          const xhr = new XMLHttpRequest();
+          const xhr = new XMLHttpRequest()
           
           const uploadPromise = new Promise((resolve, reject) => {
             xhr.upload.addEventListener('progress', (e) => {
@@ -208,7 +209,7 @@ export default function FileUploadDropzone({
           results.push(result);
 
         } catch (error) {
-          // console.error('Upload error:', error);
+          // console.error('Upload error:', error)
           const errorMessage = error instanceof Error ? error.message : 'Upload failed';
           
           setFiles(prev => prev.map(f => 
@@ -223,7 +224,7 @@ export default function FileUploadDropzone({
 
       // Report results
       if (results.length > 0) {
-        toast.success(`Successfully uploaded ${results.length} file(s)`);
+        toast.success(`Successfully uploaded ${results.length} file(s)`)
         onUploadComplete?.(results);
       }
 
@@ -234,24 +235,24 @@ export default function FileUploadDropzone({
       }
 
     } catch (error) {
-      // console.error('Upload process error:', error);
+      // console.error('Upload process error:', error)
       const errorMessage = 'Upload process failed';
       toast.error(errorMessage);
       onUploadError?.(errorMessage);
     } finally {
       setUploading(false);
     }
-  };
+  }
 
   const clearFiles = () => {
     // Clean up object URLs
     files.forEach(file => {
       if (file.preview) {
-        URL.revokeObjectURL(file.preview);
+        URL.revokeObjectURL(file.preview)
       }
     });
     setFiles([]);
-  };
+  }
 
   const retryUpload = (id: string) => {
     setFiles(prev => prev.map(f => 
@@ -259,7 +260,7 @@ export default function FileUploadDropzone({
         ? { ...f, status: 'pending', error: undefined, progress: 0 }
         : f
     ));
-  };
+  }
 
   const getFileIcon = (_file: File) => {
     if (file.type.startsWith('image/')) return FILE_TYPE_ICONS.image;
@@ -270,7 +271,7 @@ export default function FileUploadDropzone({
     if (file.type.startsWith('text/')) return FILE_TYPE_ICONS.text;
     if (file.type.includes('zip') || file.type.includes('archive')) return FILE_TYPE_ICONS.archive;
     return FILE_TYPE_ICONS.unknown;
-  };
+  }
 
   const getStatusColor = (status: FileUploadItem['status']) => {
     switch (status) {
@@ -280,7 +281,7 @@ export default function FileUploadDropzone({
       case 'error': return 'bg-red-100 text-red-700';
       default: return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   const getStatusIcon = (status: FileUploadItem['status']) => {
     switch (status) {
@@ -291,7 +292,7 @@ export default function FileUploadDropzone({
 </DaisyAlertCircle>
       default: return null;
     }
-  };
+  }
 
   return (
     <DaisyCard className={`w-full ${className}`}>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -62,11 +62,11 @@ import { motion, AnimatePresence } from 'framer-motion';
   AtSign,
   Slash,
   Dot
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface SearchResult {
-  id: string;
+  id: string
   title: string;
   description: string;
   type: 'risk' | 'control' | 'policy' | 'user' | 'report' | 'workflow' | 'page' | 'document' | 'compliance' | 'audit';
@@ -221,7 +221,7 @@ export default function GlobalSearch({
       tags: ['risk-manager', 'it-security'],
       breadcrumb: ['Dashboard', 'Users', 'Risk Management Team']
     }
-  ];
+  ]
 
   const mockSuggestions: SearchSuggestion[] = [
     {
@@ -264,7 +264,7 @@ export default function GlobalSearch({
 
   // Load search history and recent searches
   useEffect(() => {
-    const savedHistory = localStorage.getItem('riscura-search-history');
+    const savedHistory = localStorage.getItem('riscura-search-history')
     const savedRecent = localStorage.getItem('riscura-recent-searches');
     
     if (savedHistory) {
@@ -278,14 +278,14 @@ export default function GlobalSearch({
   // Focus search input when opened
   useEffect(() => {
     if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus()
     }
   }, [isOpen]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isOpen) return;
+      if (!isOpen) return
 
       switch (event.key) {
         case 'Escape':
@@ -324,7 +324,7 @@ export default function GlobalSearch({
           }
           break;
       }
-    };
+    }
 
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
@@ -335,7 +335,7 @@ export default function GlobalSearch({
   // Debounced search
   const debouncedSearch = useCallback((searchQuery: string) => {
     if (searchTimeout.current) {
-      clearTimeout(searchTimeout.current);
+      clearTimeout(searchTimeout.current)
     }
 
     searchTimeout.current = setTimeout(() => {
@@ -350,11 +350,11 @@ export default function GlobalSearch({
 
   // Perform search
   const performSearch = async (searchQuery: string) => {
-    setIsLoading(true);
+    setIsLoading(true)
     
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 200))
       
       // Filter and sort results based on query
       const filteredResults = mockResults
@@ -365,7 +365,7 @@ export default function GlobalSearch({
           result.category.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((a, b) => b.relevanceScore - a.relevanceScore)
-        .slice(0, maxResults);
+        .slice(0, maxResults)
 
       setResults(filteredResults);
       
@@ -374,14 +374,14 @@ export default function GlobalSearch({
         query: searchQuery,
         timestamp: new Date(),
         results: filteredResults.length
-      };
+      }
       
       const updatedHistory = [newHistoryEntry, ...searchHistory.slice(0, 9)];
       setSearchHistory(updatedHistory);
       localStorage.setItem('riscura-search-history', JSON.stringify(updatedHistory));
       
     } catch (error) {
-      // console.error('Search error:', error);
+      // console.error('Search error:', error)
       toast({
         title: 'Search Error',
         description: 'Failed to perform search. Please try again.',
@@ -390,11 +390,11 @@ export default function GlobalSearch({
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Handle query change
   const handleQueryChange = (_value: string) => {
-    setQuery(value);
+    setQuery(value)
     setSelectedIndex(-1);
     
     if (value.trim()) {
@@ -403,12 +403,12 @@ export default function GlobalSearch({
       setResults([]);
       setSuggestions(mockSuggestions);
     }
-  };
+  }
 
   // Handle suggestion select
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'query') {
-      setQuery(suggestion.text);
+      setQuery(suggestion.text)
       performSearch(suggestion.text);
     } else if (suggestion.type === 'filter') {
       setQuery(prev => prev + ' ' + suggestion.text);
@@ -419,22 +419,22 @@ export default function GlobalSearch({
     
     // Add to recent searches
     if (suggestion.type === 'query') {
-      const updatedRecent = [suggestion.text, ...recentSearches.filter(s => s !== suggestion.text)].slice(0, 5);
+      const updatedRecent = [suggestion.text, ...recentSearches.filter(s => s !== suggestion.text)].slice(0, 5)
       setRecentSearches(updatedRecent);
       localStorage.setItem('riscura-recent-searches', JSON.stringify(updatedRecent));
     }
-  };
+  }
 
   // Handle result select
   const handleResultSelect = (result: SearchResult) => {
     // Add to recent searches
-    const updatedRecent = [result.title, ...recentSearches.filter(s => s !== result.title)].slice(0, 5);
+    const updatedRecent = [result.title, ...recentSearches.filter(s => s !== result.title)].slice(0, 5)
     setRecentSearches(updatedRecent);
     localStorage.setItem('riscura-recent-searches', JSON.stringify(updatedRecent));
     
     // Navigate or callback
     if (onResultSelect) {
-      onResultSelect(result);
+      onResultSelect(result)
     } else {
       router.push(result.url);
     }
@@ -445,24 +445,24 @@ export default function GlobalSearch({
       title: 'Opening',
       description: result.title,
     });
-  };
+  }
 
   // Get result type icon and color
   const getResultTypeInfo = (_type: string) => {
     switch (type) {
-      case 'risk': return { icon: Shield, color: '#ef4444' };
-      case 'control': return { icon: CheckCircle, color: '#10b981' };
-      case 'policy': return { icon: FileText, color: '#3b82f6' };
-      case 'user': return { icon: User, color: '#06b6d4' };
-      case 'report': return { icon: BarChart3, color: '#f59e0b' };
-      case 'workflow': return { icon: Target, color: '#8b5cf6' };
-      case 'page': return { icon: Globe, color: '#6b7280' };
-      case 'document': return { icon: File, color: '#84cc16' };
-      case 'compliance': return { icon: CheckCircle, color: '#3b82f6' };
-      case 'audit': return { icon: Eye, color: '#f97316' };
-      default: return { icon: File, color: '#6b7280' };
+      case 'risk': return { icon: Shield, color: '#ef4444' }
+      case 'control': return { icon: CheckCircle, color: '#10b981' }
+      case 'policy': return { icon: FileText, color: '#3b82f6' }
+      case 'user': return { icon: User, color: '#06b6d4' }
+      case 'report': return { icon: BarChart3, color: '#f59e0b' }
+      case 'workflow': return { icon: Target, color: '#8b5cf6' }
+      case 'page': return { icon: Globe, color: '#6b7280' }
+      case 'document': return { icon: File, color: '#84cc16' }
+      case 'compliance': return { icon: CheckCircle, color: '#3b82f6' }
+      case 'audit': return { icon: Eye, color: '#f97316' }
+      default: return { icon: File, color: '#6b7280' }
     }
-  };
+  }
 
   if (!isOpen) return null;
 
@@ -784,7 +784,7 @@ export function SearchTrigger({
   className = '',
   variant = 'default' 
 }: { 
-  className?: string;
+  className?: string
   variant?: 'default' | 'compact' | 'icon';
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -793,10 +793,10 @@ export function SearchTrigger({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-        event.preventDefault();
+        event.preventDefault()
         setIsOpen(true);
       }
-    };
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -835,7 +835,7 @@ export function SearchTrigger({
         <GlobalSearch isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </>
     );
-  };
+  }
 
   return (
     <>

@@ -42,10 +42,10 @@ export class AISecurityMiddleware {
       riskScore: number;
       approved: boolean;
       warnings: string[];
-    };
+    }
   }> {
     // 1. Pre-execution security validation
-    const preValidation = await this.validatePreExecution(context, request);
+    const preValidation = await this.validatePreExecution(context, request)
 
     if (!preValidation.isValid) {
       throw new Error(
@@ -60,7 +60,7 @@ export class AISecurityMiddleware {
       sessionId: context.sessionId,
       action: request.action,
       metadata: request.metadata,
-    });
+    })
 
     if (!securityResult.securityApproved) {
       throw new Error('Request blocked by security filters');
@@ -68,7 +68,7 @@ export class AISecurityMiddleware {
 
     try {
       // 3. Execute the original AI function with sanitized content
-      const modifiedArgs = this.sanitizeArguments(args, securityResult.sanitizedContent);
+      const modifiedArgs = this.sanitizeArguments(args, securityResult.sanitizedContent)
       const _result = await originalFunction(...modifiedArgs);
 
       // 4. Process AI response through security pipeline
@@ -77,14 +77,14 @@ export class AISecurityMiddleware {
         JSON.stringify(result),
         0.85, // Default confidence
         ['ai_service']
-      );
+      )
 
       // 5. Post-execution validation
-      const postValidation = await this.validatePostExecution(context, result, responseResult);
+      const postValidation = await this.validatePostExecution(context, result, responseResult)
 
       if (!postValidation.isValid) {
         // Log security violation but don't block (response already generated)
-        // console.warn('Post-execution security validation failed:', postValidation.violations);
+        // console.warn('Post-execution security validation failed:', postValidation.violations)
       }
 
       return {
@@ -99,10 +99,10 @@ export class AISecurityMiddleware {
             ...postValidation.warnings.map((w) => w.message),
           ],
         },
-      };
+      }
     } catch (error) {
       // Log security incident
-      await this.logSecurityIncident(context, request, error);
+      await this.logSecurityIncident(context, request, error)
       throw error;
     }
   }
@@ -126,7 +126,7 @@ export class AISecurityMiddleware {
         evidence: { context },
         remediation: 'Provide valid user credentials',
         reportable: true,
-      });
+      })
     }
 
     // Check rate limiting
@@ -138,7 +138,7 @@ export class AISecurityMiddleware {
         evidence: { userId: context.userId },
         remediation: 'Reduce request frequency',
         reportable: true,
-      });
+      })
     }
 
     // Check for suspicious patterns
@@ -148,7 +148,7 @@ export class AISecurityMiddleware {
         message: 'Unusual activity pattern detected',
         actionRequired: true,
         deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-      });
+      })
     }
 
     // Security level compliance
@@ -160,7 +160,7 @@ export class AISecurityMiddleware {
         evidence: { securityLevel: context.securityLevel, request },
         remediation: 'Upgrade request security parameters',
         reportable: true,
-      });
+      })
     }
 
     const riskScore = this.calculatePreExecutionRiskScore(context, request, violations, warnings);
@@ -171,7 +171,7 @@ export class AISecurityMiddleware {
       warnings,
       recommendations,
       riskScore,
-    };
+    }
   }
 
   /**
@@ -194,7 +194,7 @@ export class AISecurityMiddleware {
         evidence: { response: result },
         remediation: 'Review and sanitize response content',
         reportable: true,
-      });
+      })
     }
 
     // Check response quality and safety
@@ -203,11 +203,11 @@ export class AISecurityMiddleware {
         type: 'potential_risk' as const,
         message: 'AI response flagged by content filters',
         actionRequired: false,
-      });
+      })
     }
 
     // Compliance validation
-    const complianceIssues = await this.validateResponseCompliance(result, context);
+    const complianceIssues = await this.validateResponseCompliance(result, context)
     violations.push(...complianceIssues);
 
     const riskScore = await this.calculatePostExecutionRiskScore(
@@ -223,7 +223,7 @@ export class AISecurityMiddleware {
       warnings,
       recommendations,
       riskScore,
-    };
+    }
   }
 
   /**
@@ -233,7 +233,7 @@ export class AISecurityMiddleware {
     // Replace the first string argument with sanitized content
     return args.map((arg, index) => {
       if (index === 0 && typeof arg === 'string') {
-        return sanitizedContent;
+        return sanitizedContent
       }
       return arg;
     });
@@ -245,7 +245,7 @@ export class AISecurityMiddleware {
   private sanitizeResponse(originalResult: unknown, filteredResponse: string): unknown {
     // If result is a string, use filtered response
     if (typeof originalResult === 'string') {
-      return filteredResponse;
+      return filteredResponse
     }
 
     // If result is an object with content property, sanitize it
@@ -257,7 +257,7 @@ export class AISecurityMiddleware {
       return {
         ...originalResult,
         content: filteredResponse,
-      };
+      }
     }
 
     return originalResult;
@@ -268,7 +268,7 @@ export class AISecurityMiddleware {
    */
   private async checkRateLimit(_userId: string): Promise<boolean> {
     // Simple rate limiting check (in production, use Redis or similar)
-    const key = `rate_limit_${userId}`;
+    const key = `rate_limit_${userId}`
     const stored = localStorage.getItem(key);
 
     if (!stored) {
@@ -297,7 +297,7 @@ export class AISecurityMiddleware {
 
     if (rateData.count >= 10) {
       // 10 requests per minute
-      return true;
+      return true
     }
 
     rateData.count++;
@@ -318,7 +318,7 @@ export class AISecurityMiddleware {
       /jailbreak/i,
       /bypass\s*filter/i,
       /admin\s*access/i,
-    ];
+    ]
 
     return suspiciousPatterns.some((pattern) => pattern.test(request.content));
   }
@@ -332,7 +332,7 @@ export class AISecurityMiddleware {
       request.content.length < 5000 && // Limit content length
       !this.containsSensitiveKeywords(request.content) &&
       request.action.type !== 'assistance' // No interactive assistance at max security
-    );
+    )
   }
 
   /**
@@ -367,7 +367,7 @@ export class AISecurityMiddleware {
       /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/, // Credit card
       /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/, // Email
       /\b(?:\d{1,3}\.){3}\d{1,3}\b/, // IP address
-    ];
+    ]
 
     return leakagePatterns.some((pattern) => pattern.test(resultString));
   }
@@ -407,7 +407,7 @@ export class AISecurityMiddleware {
         evidence: { result, standard: 'GDPR' },
         remediation: 'Remove or anonymize personal data in response',
         reportable: true,
-      });
+      })
     }
 
     // Check for classification level compliance
@@ -419,7 +419,7 @@ export class AISecurityMiddleware {
         evidence: { result, securityLevel: context.securityLevel },
         remediation: 'Remove classified information from response',
         reportable: true,
-      });
+      })
     }
 
     return violations;
@@ -467,15 +467,15 @@ export class AISecurityMiddleware {
     let score = 0;
 
     // Base score from violations and warnings
-    score += violations.length * 25;
+    score += violations.length * 25
     score += warnings.length * 10;
 
     // Content-based risk factors
-    if (request.content.length > 10000) score += 10;
+    if (request.content.length > 10000) score += 10
     if (this.containsSensitiveKeywords(request.content)) score += 15;
 
     // Context-based risk factors
-    if (context.securityLevel === 'basic') score += 5;
+    if (context.securityLevel === 'basic') score += 5
     if (!context.ipAddress || context.ipAddress === 'unknown') score += 10;
 
     return Math.min(score, 100);
@@ -493,15 +493,15 @@ export class AISecurityMiddleware {
     let score = 0;
 
     // Base score from violations and warnings
-    score += violations.length * 30;
+    score += violations.length * 30
     score += warnings.length * 15;
 
     // Response-based risk factors
-    if (!responseResult.approved) score += 20;
+    if (!responseResult.approved) score += 20
     score += responseResult.warnings.length * 5;
 
     // Content analysis
-    const resultString = JSON.stringify(result);
+    const resultString = JSON.stringify(result)
     if (this.containsPersonalData(resultString)) score += 25;
     if (this.containsClassifiedInfo(resultString)) score += 35;
 
@@ -543,12 +543,12 @@ export class AISecurityMiddleware {
       request,
       error: error instanceof Error ? error.message : String(error),
       resolved: false,
-    };
+    }
 
-    // console.error('Security incident logged:', incident);
+    // console.error('Security incident logged:', incident)
 
     // In production, send to security monitoring system
-    // await securityMonitoringService.reportIncident(incident);
+    // await securityMonitoringService.reportIncident(incident)
   }
 
   /**
@@ -571,7 +571,7 @@ export class AISecurityMiddleware {
       ipAddress,
       userAgent,
       timestamp: new Date(),
-    };
+    }
   }
 
   /**
@@ -587,7 +587,7 @@ export class AISecurityMiddleware {
       if (typeof method === 'function') {
         wrappedService[methodName as keyof T] = (async (...args: unknown[]) => {
           // Extract content from first argument if it's a string or has content property
-          let content = '';
+          let content = ''
           if (args.length > 0) {
             if (typeof args[0] === 'string') {
               content = args[0];
@@ -605,7 +605,7 @@ export class AISecurityMiddleware {
               ipAddress: defaultContext.ipAddress,
               userAgent: defaultContext.userAgent,
             },
-          };
+          }
 
           const secureResult = await this.secureAICall(
             method.bind(service),
@@ -624,4 +624,4 @@ export class AISecurityMiddleware {
 }
 
 // Export singleton instance
-export const aiSecurityMiddleware = AISecurityMiddleware.getInstance();
+export const aiSecurityMiddleware = AISecurityMiddleware.getInstance()

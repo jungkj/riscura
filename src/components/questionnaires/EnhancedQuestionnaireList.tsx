@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -12,6 +12,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from '@/hooks/use-toast';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,11 +28,11 @@ import { AdvancedSearchFilter } from '@/components/search/AdvancedSearchFilter';
   Target, CheckCircle, AlertCircle, Users, Tag, Grid,
   List, SortAsc, SortDesc, Filter, Settings, BookOpen,
   BarChart3, TrendingUp, Activity, MapPin, Shield
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Enhanced questionnaire interface
 interface EnhancedQuestionnaire {
-  id: string;
+  id: string
   title: string;
   description: string;
   category: 'compliance' | 'security' | 'operational' | 'financial' | 'hr' | 'it';
@@ -224,7 +225,7 @@ const mockQuestionnaires: EnhancedQuestionnaire[] = [
     isStarred: false,
     size: 'small'
   }
-];
+]
 
 // Available tags for the system
 const availableTags = [
@@ -237,7 +238,7 @@ const availableTags = [
   { id: 'it', name: 'IT', color: '#84cc16', count: 14 },
   { id: 'audit', name: 'Audit', color: '#f97316', count: 11 },
   { id: 'risk', name: 'Risk', color: '#dc2626', count: 16 },
-];
+]
 
 // Searchable fields configuration
 const searchableFields = [
@@ -256,7 +257,7 @@ const searchableFields = [
   { key: 'size', label: 'Size', type: 'select' as const },
   { key: 'createdAt', label: 'Created Date', type: 'date' as const },
   { key: 'lastModified', label: 'Last Modified', type: 'date' as const },
-];
+]
 
 interface EnhancedQuestionnaireListProps {
   className?: string;
@@ -264,7 +265,7 @@ interface EnhancedQuestionnaireListProps {
 
 export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireListProps) {
   // State management
-  const [questionnaires, setQuestionnaires] = useState<EnhancedQuestionnaire[]>(mockQuestionnaires);
+  const [questionnaires, setQuestionnaires] = useState<EnhancedQuestionnaire[]>(mockQuestionnaires)
   const [filteredQuestionnaires, setFilteredQuestionnaires] = useState<EnhancedQuestionnaire[]>(mockQuestionnaires);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [tags, setTags] = useState(availableTags);
@@ -274,33 +275,33 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
 
   // Handle filtered items change from search component
   const handleFilteredItemsChange = (filtered: EnhancedQuestionnaire[]) => {
-    setFilteredQuestionnaires(filtered);
-  };
+    setFilteredQuestionnaires(filtered)
+  }
 
   // Handle selection change from search component
   const handleSelectionChange = (selected: string[]) => {
-    setSelectedItems(selected);
-  };
+    setSelectedItems(selected)
+  }
 
   // Handle tags change from search component
   const handleTagsChange = (updatedTags: typeof availableTags) => {
-    setTags(updatedTags);
-  };
+    setTags(updatedTags)
+  }
 
   // Sort questionnaires
   const sortedQuestionnaires = useMemo(() => {
     return [...filteredQuestionnaires].sort((a, b) => {
-      let aVal = a[sortField];
+      let aVal = a[sortField]
       let bVal = b[sortField];
 
       // Handle undefined values
-      if (aVal === undefined && bVal === undefined) return 0;
+      if (aVal === undefined && bVal === undefined) return 0
       if (aVal === undefined) return sortDirection === 'asc' ? 1 : -1;
       if (bVal === undefined) return sortDirection === 'asc' ? -1 : 1;
 
       // Handle different data types
       if (aVal instanceof Date && bVal instanceof Date) {
-        aVal = aVal.getTime();
+        aVal = aVal.getTime()
         bVal = bVal.getTime();
       }
 
@@ -321,7 +322,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'published':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 text-green-800'
       case 'draft':
         return 'bg-yellow-100 text-yellow-800';
       case 'in_review':
@@ -331,13 +332,13 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   // Get priority color
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 text-red-800'
       case 'high':
         return 'bg-orange-100 text-orange-800';
       case 'medium':
@@ -347,13 +348,13 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   // Get category icon
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'security':
-        return <Shield className="w-4 h-4" />;
+        return <Shield className="w-4 h-4" />
       case 'compliance':
         return <CheckCircle className="w-4 h-4" />;
       case 'financial':
@@ -367,22 +368,22 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       default:
         return <FileText className="w-4 h-4" />;
     }
-  };
+  }
 
   // Handle questionnaire actions
   const handleView = (id: string) => {
     toast({
       title: 'Opening Questionnaire',
       description: 'Redirecting to questionnaire view...',
-    });
-  };
+    })
+  }
 
   const handleEdit = (id: string) => {
     toast({
       title: 'Editing Questionnaire',
       description: 'Redirecting to questionnaire editor...',
     });
-  };
+  }
 
   const handleDuplicate = (id: string) => {
     const original = questionnaires.find(q => q.id === id);
@@ -398,14 +399,14 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
         version: '1.0',
         responseCount: 0,
         isStarred: false
-      };
+      }
       setQuestionnaires([duplicate, ...questionnaires]);
       toast({
         title: 'Questionnaire Duplicated',
         description: `Created a copy of "${original.title}".`,
       });
     }
-  };
+  }
 
   const handleDelete = (id: string) => {
     setQuestionnaires(questionnaires.filter(q => q.id !== id));
@@ -415,13 +416,13 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       description: 'Questionnaire has been deleted successfully.',
       variant: 'destructive',
     });
-  };
+  }
 
   const toggleStar = (id: string) => {
     setQuestionnaires(questionnaires.map(q => 
       q.id === id ? { ...q, isStarred: !q.isStarred } : q
     ));
-  };
+  }
 
   // Render questionnaire card
   const renderQuestionnaireCard = (_questionnaire: EnhancedQuestionnaire) => {
@@ -448,7 +449,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                     prev.includes(questionnaire.id)
                       ? prev.filter(id => id !== questionnaire.id)
                       : [...prev, questionnaire.id]
-                  );
+                  )
                 }} />
               {getCategoryIcon(questionnaire.category)}
               <DaisyCardTitle className="text-lg font-semibold line-clamp-2" >
@@ -616,7 +617,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
               prev.includes(questionnaire.id)
                 ? prev.filter(id => id !== questionnaire.id)
                 : [...prev, questionnaire.id]
-            );
+            )
           }} />
         
         <div className="flex-1 min-w-0">

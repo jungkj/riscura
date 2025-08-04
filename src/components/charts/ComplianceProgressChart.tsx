@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   BarChart,
   Bar,
   XAxis,
@@ -21,7 +22,7 @@ import {
   Area,
   AreaChart
 } from 'recharts';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -34,8 +35,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
   DataIcons, 
   ActionIcons,
   StatusIcons 
-} from '@/components/icons/IconLibrary';
-// import { format, subDays, subMonths } from 'date-fns';
+} from '@/components/icons/IconLibrary'
+// import { format, subDays, subMonths } from 'date-fns'
 import { useToast } from '@/hooks/use-toast';
 import {
   Shield,
@@ -52,7 +53,7 @@ import {
 
 // Enhanced interfaces for compliance tracking
 interface ComplianceFramework {
-  id: string;
+  id: string
   name: string;
   shortName: string;
   description: string;
@@ -104,8 +105,8 @@ interface ComplianceProgressData {
       implemented: number;
       inProgress: number;
       notStarted: number;
-    };
-  };
+    }
+  }
   overallScore: number;
   totalControls: number;
   implementedControls: number;
@@ -250,25 +251,25 @@ const defaultFrameworks: ComplianceFramework[] = [
     notImplementedControls: 0,
     categories: []
   }
-];
+]
 
 // Generate sample progress data
 const generateProgressData = (frameworks: ComplianceFramework[]): ComplianceProgressData[] => {
-  const data: ComplianceProgressData[] = [];
+  const data: ComplianceProgressData[] = []
   const startDate = subMonths(new Date(), 6);
   
   for (let i = 0; i < 180; i++) {
     const date = subDays(startDate, -i);
     const timestamp = date.getTime();
     
-    const frameworkData: { [key: string]: any } = {};
+    const frameworkData: { [key: string]: any } = {}
     let totalControls = 0;
     let implementedControls = 0;
     let overallScoreSum = 0;
     
     frameworks.forEach(framework => {
       // Simulate gradual improvement over time
-      const baseProgress = framework.implementedControls / framework.totalControls;
+      const baseProgress = framework.implementedControls / framework.totalControls
       const progressGrowth = (i / 180) * 0.1; // 10% improvement over 6 months
       const randomVariation = (Math.random() - 0.5) * 0.02; // ±1% random variation
       
@@ -282,7 +283,7 @@ const generateProgressData = (frameworks: ComplianceFramework[]): ComplianceProg
         implemented,
         inProgress,
         notStarted
-      };
+      }
       
       totalControls += framework.totalControls;
       implementedControls += implemented;
@@ -306,7 +307,7 @@ const generateProgressData = (frameworks: ComplianceFramework[]): ComplianceProg
   }
   
   return data.sort((a, b) => a.timestamp - b.timestamp);
-};
+}
 
 // Color schemes
 const frameworkColors = {
@@ -316,21 +317,21 @@ const frameworkColors = {
   'hipaa': '#f59e0b',
   'pci-dss': '#ef4444',
   'sox': '#06b6d4'
-};
+}
 
 const statusColors = {
   compliant: '#10b981',
   partial: '#f59e0b',
   'non-compliant': '#ef4444',
   'not-assessed': '#6b7280'
-};
+}
 
 const riskColors = {
   low: '#10b981',
   medium: '#f59e0b',
   high: '#ef4444',
   critical: '#7c2d12'
-};
+}
 
 export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = ({
   frameworks = defaultFrameworks,
@@ -349,7 +350,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
   const { toast } = useToast();
   
   // State management
-  const [selectedFramework, setSelectedFramework] = useState<string>('all');
+  const [selectedFramework, setSelectedFramework] = useState<string>('all')
   const [chartType, setChartType] = useState<'progress' | 'trend' | 'comparison' | 'radial'>('progress');
   const [timeRange, setTimeRange] = useState<'30d' | '90d' | '6m' | '1y'>('90d');
   const [showPrediction, setShowPrediction] = useState(false);
@@ -358,7 +359,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
 
   // Filter progress data based on time range
   const filteredProgressData = useMemo(() => {
-    const now = new Date();
+    const now = new Date()
     let cutoffDate: Date;
     
     switch (timeRange) {
@@ -383,7 +384,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
 
   // Calculate summary statistics
   const summaryStats = useMemo(() => {
-    const totalControls = frameworks.reduce((sum, f) => sum + f.totalControls, 0);
+    const totalControls = frameworks.reduce((sum, f) => sum + f.totalControls, 0)
     const implementedControls = frameworks.reduce((sum, f) => sum + f.implementedControls, 0);
     const inProgressControls = frameworks.reduce((sum, f) => sum + f.inProgressControls, 0);
     const notStartedControls = frameworks.reduce((sum, f) => sum + f.notStartedControls, 0);
@@ -402,7 +403,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
       totalFrameworks: frameworks.length,
       criticalGaps,
       averageScore: frameworks.reduce((sum, f) => sum + f.overallScore, 0) / frameworks.length
-    };
+    }
   }, [frameworks]);
 
   // Prepare chart data
@@ -418,7 +419,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
           total: framework.totalControls,
           status: framework.status,
           riskLevel: framework.riskLevel
-        }));
+        }))
         
       case 'trend':
         return filteredProgressData.map(item => ({
@@ -456,7 +457,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
 
   // Custom tooltip component
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || !payload.length) return null;
+    if (!active || !payload || !payload.length) return null
     
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
@@ -469,11 +470,11 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
         ))}
       </div>
     );
-  };
+  }
 
   // Handle framework click
   const handleFrameworkClick = useCallback((_framework: ComplianceFramework) => {
-    setSelectedFramework(framework.id);
+    setSelectedFramework(framework.id)
     onFrameworkClick?.(framework);
   }, [onFrameworkClick]);
 
@@ -488,7 +489,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
       chartType,
       timeRange,
       exportDate: new Date().toISOString()
-    };
+    }
     
     onExport?.(exportData);
     
@@ -515,7 +516,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
               <Bar dataKey="notStarted" stackId="a" fill="#ef4444" name="Not Started" />
             </BarChart>
           </ResponsiveContainer>
-        );
+        )
         
       case 'trend':
         return (
@@ -574,7 +575,7 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
       default:
         return null;
     }
-  };
+  }
 
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
@@ -921,6 +922,6 @@ export const ComplianceProgressChart: React.FC<ComplianceProgressChartProps> = (
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 export default ComplianceProgressChart; 

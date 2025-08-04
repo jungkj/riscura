@@ -3,10 +3,11 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -31,7 +32,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
   Brain,
   BarChart3,
   ShieldCheck,
-} from 'lucide-react';
+} from 'lucide-react'
 
 const ProboPageContent = () => {
   const searchParams = useSearchParams();
@@ -66,7 +67,7 @@ const ProboPageContent = () => {
     const fetchProboData = async () => {
       try {
         // Fetch vendor assessments
-        const vendorRes = await fetch('/api/assessments');
+        const vendorRes = await fetch('/api/assessments')
         if (vendorRes.ok) {
           const vendorData = await vendorRes.json();
           if (vendorData.success && vendorData.data) {
@@ -74,12 +75,12 @@ const ProboPageContent = () => {
             setStats((prev) => ({ ...prev, vendorAssessments: vendorData.data.length }));
           }
         } else {
-          // console.error('Failed to fetch assessments:', vendorRes.status);
+          // console.error('Failed to fetch assessments:', vendorRes.status)
           setVendorAssessmentData([]);
         }
 
         // Fetch controls
-        const controlsRes = await fetch('/api/controls');
+        const controlsRes = await fetch('/api/controls')
         if (controlsRes.ok) {
           const controlsData = await controlsRes.json();
           if (controlsData.success && controlsData.data) {
@@ -87,23 +88,23 @@ const ProboPageContent = () => {
             setStats((prev) => ({ ...prev, securityControls: controlsData.data.length }));
           }
         } else {
-          // console.error('Failed to fetch controls:', controlsRes.status);
+          // console.error('Failed to fetch controls:', controlsRes.status)
           setControlsData([]);
         }
 
         // Fetch compliance score
-        const complianceRes = await fetch('/api/compliance/assessments');
+        const complianceRes = await fetch('/api/compliance/assessments')
         if (complianceRes.ok) {
           const complianceData = await complianceRes.json();
           if (complianceData.success && complianceData.data) {
             // Calculate average compliance score
-            const scores = complianceData.data.map((a) => a.complianceScore || 0);
+            const scores = complianceData.data.map((a) => a.complianceScore || 0)
             const _avgScore =
               scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
             setStats((prev) => ({ ...prev, complianceScore: avgScore }));
 
             // Set SOC2 data if available
-            const soc2Assessment = complianceData.data.find((a) => a.framework === 'SOC2');
+            const soc2Assessment = complianceData.data.find((a) => a.framework === 'SOC2')
             if (soc2Assessment) {
               setSoc2Score({
                 overallScore: soc2Assessment.complianceScore || 0,
@@ -112,15 +113,15 @@ const ProboPageContent = () => {
             }
           }
         } else {
-          // console.error('Failed to fetch compliance assessments:', complianceRes.status);
+          // console.error('Failed to fetch compliance assessments:', complianceRes.status)
           setStats((prev) => ({ ...prev, complianceScore: 0 }));
         }
       } catch (error) {
-        // console.error('Failed to fetch Probo data:', error);
+        // console.error('Failed to fetch Probo data:', error)
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchProboData();
   }, []);
@@ -132,7 +133,7 @@ const ProboPageContent = () => {
       control.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       control.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
       control.framework.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  )
 
   return (
     <ProtectedRoute>
@@ -610,7 +611,7 @@ setSearchQuery(e.target.value)}
       </div>
     </ProtectedRoute>
   );
-};
+}
 
 export default function ProboPage() {
   return (

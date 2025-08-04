@@ -60,7 +60,7 @@ export function generateBlogPostMetadata(post: BlogPostMeta): Metadata {
         'max-snippet': -1,
       },
     },
-  };
+  }
 }
 
 export function generateBlogListingMetadata(category?: string): Metadata {
@@ -97,7 +97,7 @@ export function generateBlogListingMetadata(category?: string): Metadata {
         'application/rss+xml': `${baseUrl}/blog/rss.xml`,
       },
     },
-  };
+  }
 }
 
 export function generateStructuredData(post: BlogPostMeta) {
@@ -130,5 +130,5 @@ export function generateStructuredData(post: BlogPostMeta) {
     keywords: post.tags.join(', '),
     articleSection: post.category,
     wordCount: post.readingTime?.words,
-  };
+  }
 }

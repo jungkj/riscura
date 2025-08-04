@@ -13,7 +13,7 @@ import {
   VisuallyHidden,
   FocusTrap,
   AriaLabel,
-} from '@/lib/accessibility/AccessibilityProvider';
+} from '@/lib/accessibility/AccessibilityProvider'
 
 // Performance Imports
 import {
@@ -22,7 +22,7 @@ import {
   useVirtualScrolling,
   useOfflineData,
   LazyImage,
-} from '@/lib/performance/PerformanceProvider';
+} from '@/lib/performance/PerformanceProvider'
 import Link from 'next/link';
 
 // UX Enhancements
@@ -42,11 +42,11 @@ import {
   useLoadingState,
   useToast,
   useProgressiveEnhancement,
-} from '@/components/ui/UXEnhancements';
+} from '@/components/ui/UXEnhancements'
 
 // Types
 interface Risk {
-  id: string;
+  id: string
   title: string;
   description: string;
   level: 'low' | 'medium' | 'high' | 'critical';
@@ -72,7 +72,7 @@ interface MetricData {
 
 // Sample Data
 const generateSampleRisks = (_count: number): Risk[] => {
-  const _categories = ['Operational', 'Financial', 'Compliance', 'Strategic', 'Technology'];
+  const _categories = ['Operational', 'Financial', 'Compliance', 'Strategic', 'Technology']
   const departments = ['IT', 'Finance', 'Operations', 'Legal', 'Marketing'];
   const owners = ['John Smith', 'Sarah Johnson', 'Mike Chen', 'Lisa Brown', 'David Wilson'];
   const statuses: Risk['status'][] = ['active', 'mitigated', 'monitoring', 'closed'];
@@ -94,7 +94,7 @@ const generateSampleRisks = (_count: number): Risk[] => {
     imageUrl:
       Math.random() > 0.7 ? `https://via.placeholder.com/150x100?text=Risk${index + 1}` : undefined,
   }));
-};
+}
 
 const metricsData: MetricData[] = [
   {
@@ -133,7 +133,7 @@ const metricsData: MetricData[] = [
 
 // Accessibility Settings Panel
 const AccessibilityPanel: React.FC = () => {
-  const { settings, updateSettings } = useAccessibility();
+  const { settings, updateSettings } = useAccessibility()
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -232,16 +232,16 @@ const AccessibilityPanel: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 // Performance Metrics Panel
 const PerformancePanel: React.FC = () => {
-  const { metrics, settings, updateSettings } = usePerformance();
+  const { metrics, settings, updateSettings } = usePerformance()
   const [isOpen, setIsOpen] = useState(false);
 
   const formatMetric = (_value: number, unit: string) => {
     return `${value.toFixed(2)} ${unit}`;
-  };
+  }
 
   return (
     <div className="relative">
@@ -328,7 +328,7 @@ const PerformancePanel: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 // Metric Card Component
 const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, index }) => {
@@ -341,11 +341,11 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
       default:
         return value.toLocaleString();
     }
-  };
+  }
 
   const getChangeColor = (change: number) => {
     return change > 0 ? 'text-success' : change < 0 ? 'text-error' : 'text-text-secondary';
-  };
+  }
 
   return (
     <FadeIn delay={index * 100}>
@@ -385,7 +385,7 @@ const MetricCard: React.FC<{ metric: MetricData; index: number }> = ({ metric, i
       </div>
     </FadeIn>
   );
-};
+}
 
 // Risk Item Component for Virtual Scrolling
 const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
@@ -404,7 +404,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
       default:
         return 'bg-surface-secondary text-text-primary';
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -419,7 +419,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
       default:
         return 'text-text-primary';
     }
-  };
+  }
 
   return (
     <div className="bg-surface-primary border border-surface-tertiary rounded-lg p-4 hover:shadow-notion-sm transition-shadow">
@@ -472,7 +472,7 @@ const RiskItem: React.FC<{ risk: Risk; index: number }> = ({ risk, index }) => {
       </div>
     </div>
   );
-};
+}
 
 const VirtualScrollContainer: React.FC<{
   items: Risk[];
@@ -490,7 +490,7 @@ const VirtualScrollContainer: React.FC<{
 
 // Main Dashboard Component
 const EnhancedRiskDashboard: React.FC = () => {
-  const [risks] = useState(() => generateSampleRisks(1000));
+  const [risks] = useState(() => generateSampleRisks(1000))
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
@@ -507,7 +507,7 @@ const EnhancedRiskDashboard: React.FC = () => {
     return risks.filter((risk) => {
       const matchesSearch =
         risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        risk.description.toLowerCase().includes(searchTerm.toLowerCase());
+        risk.description.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesLevel = selectedLevel === 'all' || risk.level === selectedLevel;
       return matchesSearch && matchesLevel;
     });
@@ -516,7 +516,7 @@ const EnhancedRiskDashboard: React.FC = () => {
   // Simulate data loading
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setIsLoading(false)
       announceDataUpdate(filteredRisks.length, 'risks');
     }, 2000);
 
@@ -525,11 +525,11 @@ const EnhancedRiskDashboard: React.FC = () => {
 
   // Simulate data refresh
   const handleRefresh = useCallback(async () => {
-    startLoading('Refreshing data...');
+    startLoading('Refreshing data...')
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       addToast('Data refreshed successfully', 'success');
     } catch (error) {
       addToast('Failed to refresh data', 'error');
@@ -543,7 +543,7 @@ const EnhancedRiskDashboard: React.FC = () => {
     (event: React.KeyboardEvent) => {
       handleKeyPress(event, {
         onEscape: () => {
-          setSearchTerm('');
+          setSearchTerm('')
           setSelectedLevel('all');
         },
       });
@@ -719,14 +719,14 @@ const EnhancedRiskDashboard: React.FC = () => {
       <ToastContainer />
     </div>
   );
-};
+}
 
 // Wrapped Component with Providers
 const EnhancedRiskDashboardWithProviders: React.FC = () => {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        // console.error('Dashboard Error:', error, errorInfo);
+        // console.error('Dashboard Error:', error, errorInfo)
       }}
     >
       <AccessibilityProvider>
@@ -736,6 +736,6 @@ const EnhancedRiskDashboardWithProviders: React.FC = () => {
       </AccessibilityProvider>
     </ErrorBoundary>
   );
-};
+}
 
 export default EnhancedRiskDashboardWithProviders;

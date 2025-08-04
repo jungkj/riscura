@@ -1,6 +1,7 @@
-// import { Card, CardContent } from "@/components/ui/card";
+// import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DaisyCard, DaisyCardBody, DaisySkeleton } from '@/components/ui/daisy-components';
 
 interface MetricCardProps {
   title: string;

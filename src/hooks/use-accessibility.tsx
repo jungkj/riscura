@@ -23,18 +23,18 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
   useEffect(() => {
     const checkPreferences = () => {
       // Check for high contrast mode
-      const highContrast = window.matchMedia('(prefers-contrast: high)').matches;
+      const highContrast = window.matchMedia('(prefers-contrast: high)').matches
       setIsHighContrastMode(highContrast);
 
       // Check for reduced motion preference
-      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
       setReducedMotion(reducedMotionQuery.matches);
-    };
+    }
 
     checkPreferences();
 
     // Listen for changes
-    const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
+    const highContrastQuery = window.matchMedia('(prefers-contrast: high)')
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     highContrastQuery.addEventListener('change', checkPreferences);
@@ -43,13 +43,13 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
     return () => {
       highContrastQuery.removeEventListener('change', checkPreferences);
       reducedMotionQuery.removeEventListener('change', checkPreferences);
-    };
+    }
   }, []);
 
   // Keyboard navigation handler
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!enableKeyboardNavigation || !containerRef.current) return;
+      if (!enableKeyboardNavigation || !containerRef.current) return
 
       const focusableElements = containerRef.current.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -97,7 +97,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
 
         case 'Escape':
           // Allow parent components to handle escape
-          break;
+          break
       }
     },
     [enableKeyboardNavigation, trapFocus]
@@ -105,7 +105,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
 
   // Focus management
   const focusFirst = useCallback(() => {
-    if (!enableFocusManagement || !containerRef.current) return;
+    if (!enableFocusManagement || !containerRef.current) return
 
     const firstFocusable = containerRef.current.querySelector(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -126,7 +126,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
   // Screen reader announcements
   const announce = useCallback(
     (message: string, priority: 'polite' | 'assertive' = 'polite') => {
-      if (!enableScreenReaderSupport) return;
+      if (!enableScreenReaderSupport) return
 
       const announcement = document.createElement('div');
       announcement.setAttribute('aria-live', priority);
@@ -138,7 +138,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
 
       // Remove after announcement
       setTimeout(() => {
-        document.body.removeChild(announcement);
+        document.body.removeChild(announcement)
       }, 1000);
     },
     [enableScreenReaderSupport]
@@ -146,20 +146,20 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
 
   // Set up event listeners
   useEffect(() => {
-    const container = containerRef.current;
+    const container = containerRef.current
     if (!container) return;
 
     container.addEventListener('keydown', handleKeyDown);
 
     return () => {
       container.removeEventListener('keydown', handleKeyDown);
-    };
+    }
   }, [handleKeyDown, containerRef]);
 
   // ARIA helpers
   const getAriaProps = useCallback(
     (_options: {
-        label?: string;
+        label?: string
         labelledBy?: string;
         describedBy?: string;
         expanded?: boolean;
@@ -171,7 +171,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
         atomic?: boolean;
       } = {}
     ) => {
-      const props: Record<string, unknown> = {};
+      const props: Record<string, unknown> = {}
 
       if (options.label) props['aria-label'] = options.label;
       if (options.labelledBy) props['aria-labelledby'] = options.labelledBy;
@@ -198,7 +198,7 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
           'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded',
         children: text,
         onFocus: () => announce(`Skip link: ${text}`),
-      };
+      }
     },
     [announce]
   );
@@ -212,41 +212,41 @@ export const useAccessibility = (_options: UseAccessibilityOptions = {}) => {
     announce,
     getAriaProps,
     createSkipLink,
-  };
-};
+  }
+}
 
 // Hook for managing focus trap in modals/dialogs
 export const useFocusTrap = (isActive: boolean = true) => {
   const { containerRef, focusFirst, focusLast } = useAccessibility({
     trapFocus: isActive,
     enableKeyboardNavigation: isActive,
-  });
+  })
 
   useEffect(() => {
     if (isActive && containerRef.current) {
       // Focus first element when trap becomes active
-      const timer = setTimeout(focusFirst, 100);
+      const timer = setTimeout(focusFirst, 100)
       return () => clearTimeout(timer);
     }
   }, [isActive, focusFirst]);
 
-  return { containerRef, focusFirst, focusLast };
-};
+  return { containerRef, focusFirst, focusLast }
+}
 
 // Hook for keyboard shortcuts
 export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase();
+      const key = event.key.toLowerCase()
       const modifiers = {
         ctrl: event.ctrlKey,
         alt: event.altKey,
         shift: event.shiftKey,
         meta: event.metaKey,
-      };
+      }
 
       // Create shortcut string (e.g., "ctrl+s", "alt+shift+n")
-      const shortcutParts: string[] = [];
+      const shortcutParts: string[] = []
       if (modifiers.ctrl) shortcutParts.push('ctrl');
       if (modifiers.alt) shortcutParts.push('alt');
       if (modifiers.shift) shortcutParts.push('shift');
@@ -260,16 +260,16 @@ export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
         event.preventDefault();
         handler();
       }
-    };
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [shortcuts]);
-};
+}
 
 // Hook for live region announcements
 export const useLiveRegion = () => {
-  const regionRef = useRef<HTMLDivElement>(null);
+  const regionRef = useRef<HTMLDivElement>(null)
 
   const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     if (regionRef.current) {
@@ -285,5 +285,5 @@ export const useLiveRegion = () => {
     []
   );
 
-  return { announce, LiveRegion };
-};
+  return { announce, LiveRegion }
+}

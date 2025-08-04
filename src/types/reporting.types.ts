@@ -1,7 +1,7 @@
 // === Advanced Reporting & Analytics Types ===
 
 export interface ReportTemplate {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: ReportCategory;
@@ -9,33 +9,33 @@ export interface ReportTemplate {
   version: string;
 
   // Configuration
-  config: ReportConfig;
+  config: ReportConfig
   layout: ReportLayout;
 
   // Content Structure
-  sections: ReportSection[];
+  sections: ReportSection[]
   dataSources: DataSourceConfig[];
   filters: ReportFilter[];
   parameters: ReportParameter[];
 
   // Styling & Branding
-  styling: ReportStyling;
+  styling: ReportStyling
 
   // Access & Permissions
-  permissions: ReportPermissions;
+  permissions: ReportPermissions
 
   // AI Features
-  aiFeatures: AIReportFeatures;
+  aiFeatures: AIReportFeatures
 
   // Metadata
-  createdBy: string;
+  createdBy: string
   createdAt: Date;
   updatedAt: Date;
   lastUsed?: Date;
   usageCount: number;
 
   // Template Management
-  isPublic: boolean;
+  isPublic: boolean
   isSystem: boolean;
   tags: string[];
   organizationId: string;
@@ -80,7 +80,7 @@ export type AggregationLevel = 'raw' | 'hourly' | 'daily' | 'weekly' | 'monthly'
 export interface DateRangeConfig {
   type: 'relative' | 'absolute' | 'dynamic';
   relative?: RelativeDateRange;
-  absolute?: { start: Date; end: Date };
+  absolute?: { start: Date; end: Date }
   dynamic?: DynamicDateRange;
 }
 
@@ -109,7 +109,7 @@ export interface GridTemplate {
   rows: string[];
   columns: string[];
   areas: string[][];
-  gap: { row: number; column: number };
+  gap: { row: number; column: number }
 }
 
 export interface ResponsiveBreakpoint {
@@ -126,24 +126,24 @@ export interface ReportSection {
   order: number;
 
   // Layout
-  position: SectionPosition;
+  position: SectionPosition
   size: SectionSize;
 
   // Configuration
-  config: SectionConfig;
+  config: SectionConfig
 
   // Data Binding
   dataSource: string; // reference to data source
   query: DataQuery;
 
   // Visualization
-  visualization: VisualizationConfig;
+  visualization: VisualizationConfig
 
   // Conditional Display
-  conditions?: DisplayCondition[];
+  conditions?: DisplayCondition[]
 
   // AI Features
-  aiEnhancements?: AISectionEnhancements;
+  aiEnhancements?: AISectionEnhancements
 }
 
 export type SectionType =
@@ -189,7 +189,7 @@ export interface SectionConfig {
     show: boolean;
     text?: string;
     style: TextStyle;
-  };
+  }
   borders: BorderConfig;
   background: BackgroundConfig;
   padding: SpacingConfig;
@@ -301,22 +301,22 @@ export interface AxisConfig {
     show: boolean;
     text?: string;
     style: TextStyle;
-  };
+  }
   labels: {
     show: boolean;
     format?: string;
     rotation?: number;
     style: TextStyle;
-  };
+  }
   grid: {
     show: boolean;
     style: LineStyle;
-  };
+  }
   ticks: {
     show: boolean;
     count?: number;
     style: LineStyle;
-  };
+  }
   scale: ScaleConfig;
 }
 
@@ -386,7 +386,7 @@ export interface TooltipStyle {
 
 // Data Source Configuration
 export interface DataSourceConfig {
-  id: string;
+  id: string
   name: string;
   type: DataSourceType;
   connection: ConnectionConfig;
@@ -490,7 +490,7 @@ export interface CacheConfig {
 
 // Query and Filtering
 export interface DataQuery {
-  select: SelectClause[];
+  select: SelectClause[]
   from: string;
   joins?: JoinClause[];
   where?: WhereClause[];
@@ -553,17 +553,17 @@ export interface ReportFilter {
   description?: string;
 
   // Configuration
-  config: FilterConfig;
+  config: FilterConfig
 
   // Default Values
-  defaultValue?: unknown;
+  defaultValue?: unknown
   required: boolean;
 
   // UI Configuration
-  ui: FilterUIConfig;
+  ui: FilterUIConfig
 
   // Conditional Logic
-  dependencies?: FilterDependency[];
+  dependencies?: FilterDependency[]
   conditions?: FilterCondition[];
 }
 
@@ -583,7 +583,7 @@ export type FilterType =
 
 export interface FilterConfig {
   options?: FilterOption[];
-  range?: { min: number; max: number };
+  range?: { min: number; max: number }
   dateFormat?: string;
   validation?: ValidationRule[];
   caseSensitive?: boolean;
@@ -642,7 +642,7 @@ export type ParameterType = 'string' | 'number' | 'boolean' | 'date' | 'array' |
 
 // Styling and Theming
 export interface ReportStyling {
-  theme: ThemeConfig;
+  theme: ThemeConfig
   typography: TypographyConfig;
   colors: ColorConfig;
   spacing: SpacingConfig;
@@ -669,17 +669,17 @@ export interface TypographyConfig {
     medium: string;
     large: string;
     xlarge: string;
-  };
+  }
   fontWeight: {
     normal: number;
     medium: number;
     bold: number;
-  };
+  }
   lineHeight: {
     tight: number;
     normal: number;
     loose: number;
-  };
+  }
 }
 
 export interface ColorConfig {
@@ -765,7 +765,7 @@ export interface LogoConfig {
   enabled: boolean;
   url: string;
   position: 'top_left' | 'top_right' | 'bottom_left' | 'bottom_right' | 'center';
-  size: { width: number; height: number };
+  size: { width: number; height: number }
   opacity: number;
 }
 
@@ -823,7 +823,7 @@ export interface LineStyle {
 
 // AI-Powered Features
 export interface AIReportFeatures {
-  narrativeGeneration: NarrativeGenerationConfig;
+  narrativeGeneration: NarrativeGenerationConfig
   insightGeneration: InsightGenerationConfig;
   recommendationEngine: RecommendationEngineConfig;
   anomalyDetection: AnomalyDetectionConfig;
@@ -981,29 +981,29 @@ export interface AISectionEnhancements {
 
 // Report Generation and Export
 export interface ReportGeneration {
-  id: string;
+  id: string
   templateId: string;
   status: GenerationStatus;
   progress: number; // 0-100
 
   // Configuration
-  parameters: Record<string, unknown>;
+  parameters: Record<string, unknown>
   filters: Record<string, unknown>;
-  dateRange: { start: Date; end: Date };
+  dateRange: { start: Date; end: Date }
 
   // Output
-  format: ExportFormat[];
+  format: ExportFormat[]
   outputs: GeneratedOutput[];
 
   // Metadata
-  requestedBy: string;
+  requestedBy: string
   requestedAt: Date;
   startedAt?: Date;
   completedAt?: Date;
   error?: string;
 
   // AI Generated Content
-  aiContent?: AIGeneratedContent;
+  aiContent?: AIGeneratedContent
 }
 
 export type GenerationStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'cancelled';
@@ -1100,32 +1100,32 @@ export interface SummaryMetric {
 
 // Scheduling and Distribution
 export interface ReportSchedule {
-  id: string;
+  id: string
   templateId: string;
   name: string;
   description?: string;
 
   // Schedule Configuration
-  frequency: ScheduleFrequency;
+  frequency: ScheduleFrequency
   schedule: CronSchedule;
   timezone: string;
 
   // Generation Options
-  parameters: Record<string, unknown>;
+  parameters: Record<string, unknown>
   filters: Record<string, unknown>;
   formats: ExportFormat[];
 
   // Distribution
-  distribution: DistributionConfig;
+  distribution: DistributionConfig
 
   // Status
-  enabled: boolean;
+  enabled: boolean
   lastRun?: Date;
   nextRun: Date;
   runCount: number;
 
   // Metadata
-  createdBy: string;
+  createdBy: string
   createdAt: Date;
   updatedAt: Date;
 }
@@ -1211,7 +1211,7 @@ export interface DistributionCondition {
 
 // Permissions and Access Control
 export interface ReportPermissions {
-  view: PermissionRule[];
+  view: PermissionRule[]
   edit: PermissionRule[];
   delete: PermissionRule[];
   export: PermissionRule[];
@@ -1233,27 +1233,27 @@ export interface PermissionCondition {
 
 // Analytics and Usage Tracking
 export interface ReportAnalytics {
-  reportId: string;
-  period: { start: Date; end: Date };
+  reportId: string
+  period: { start: Date; end: Date }
 
   // Usage Metrics
-  views: number;
+  views: number
   downloads: number;
   shares: number;
   generationTime: AnalyticsMetric;
 
   // User Engagement
-  userMetrics: UserMetrics;
+  userMetrics: UserMetrics
   sectionMetrics: SectionMetrics[];
 
   // Performance
-  performance: PerformanceMetrics;
+  performance: PerformanceMetrics
 
   // Errors and Issues
-  errors: ErrorMetric[];
+  errors: ErrorMetric[]
 
   // AI Insights
-  aiUsage: AIUsageMetrics;
+  aiUsage: AIUsageMetrics
 }
 
 export interface AnalyticsMetric {
@@ -1320,7 +1320,7 @@ export interface AIUsageMetrics {
 
 // Display and Conditional Logic
 export interface DisplayCondition {
-  type: 'data' | 'parameter' | 'user' | 'time' | 'custom';
+  type: 'data' | 'parameter' | 'user' | 'time' | 'custom'
   condition: ConditionExpression;
   action: 'show' | 'hide' | 'highlight' | 'disable';
 }
@@ -1360,7 +1360,7 @@ export interface DrillDownFilter {
 
 // Helper Types
 export interface DimensionConfig {
-  field: string;
+  field: string
   alias?: string;
   type: 'categorical' | 'temporal' | 'ordinal';
   hierarchy?: string[];
@@ -1395,7 +1395,7 @@ export interface AggregationConfig {
 
 // Backward Compatibility with existing types
 export interface LegacyReportTemplate {
-  id: string;
+  id: string
   name: string;
   description: string;
   type: 'executive_dashboard' | 'risk_register' | 'control_effectiveness' | 'compliance' | 'custom';
@@ -1419,12 +1419,12 @@ export interface LegacyReportSection {
     filters?: Record<string, unknown>;
     columns?: string[];
     aggregation?: 'sum' | 'avg' | 'count' | 'max' | 'min';
-  };
+  }
   styling?: {
     width?: string;
     height?: string;
     backgroundColor?: string;
-  };
+  }
 }
 
 export interface LegacyReportParameter {

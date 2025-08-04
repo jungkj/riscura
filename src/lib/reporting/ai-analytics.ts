@@ -33,7 +33,7 @@ export interface ForecastPoint {
   confidenceInterval: {
     lower: number;
     upper: number;
-  };
+  }
 }
 
 export interface AnomalyDetection {
@@ -56,7 +56,7 @@ export interface RiskCorrelation {
 }
 
 export interface ExecutiveSummary {
-  period: { from: Date; to: Date };
+  period: { from: Date; to: Date }
   keyMetrics: {
     name: string;
     value: number;
@@ -78,32 +78,32 @@ export interface ExecutiveSummary {
 export class AIAnalyticsEngine {
   // Generate automated insights for a report
   async generateInsights(reportId: string, lookbackDays: number = 30): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     // Get report data
-    const reportData = await reportingEngine.generateReportData(reportId);
+    const reportData = await reportingEngine.generateReportData(reportId)
 
     // Analyze trends
-    const trendInsights = await this.analyzeTrends(reportData, lookbackDays);
+    const trendInsights = await this.analyzeTrends(reportData, lookbackDays)
     insights.push(...trendInsights);
 
     // Detect anomalies
-    const anomalyInsights = await this.detectAnomalies(reportData, lookbackDays);
+    const anomalyInsights = await this.detectAnomalies(reportData, lookbackDays)
     insights.push(...anomalyInsights);
 
     // Find correlations
-    const correlationInsights = await this.findCorrelations(reportData);
+    const correlationInsights = await this.findCorrelations(reportData)
     insights.push(...correlationInsights);
 
     // Generate recommendations
-    const recommendations = await this.generateRecommendations(reportData);
+    const recommendations = await this.generateRecommendations(reportData)
     insights.push(...recommendations);
 
     // Store insights
     for (const insight of insights) {
       await db.client.aiInsight.create({
         data: insight,
-      });
+      })
     }
 
     return insights;
@@ -111,7 +111,7 @@ export class AIAnalyticsEngine {
 
   // Analyze trends in the data
   private async analyzeTrends(reportData: any, lookbackDays: number): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     for (const widget of reportData.widgets) {
       if (widget.data.length > 0) {
@@ -143,7 +143,7 @@ export class AIAnalyticsEngine {
   // Calculate trend for time series data
   private calculateTrend(_data: any[], lookbackDays: number): TrendAnalysis {
     // Simple linear regression for trend calculation
-    const timeSeriesData = this.extractTimeSeries(data);
+    const timeSeriesData = this.extractTimeSeries(data)
 
     if (timeSeriesData.length < 2) {
       return {
@@ -154,7 +154,7 @@ export class AIAnalyticsEngine {
         confidence: 0,
         forecast: [],
         drivers: [],
-      };
+      }
     }
 
     const { slope, rSquared } = this.linearRegression(timeSeriesData);
@@ -165,7 +165,7 @@ export class AIAnalyticsEngine {
     }
 
     // Calculate magnitude (percentage change)
-    const firstValue = timeSeriesData[0].value;
+    const firstValue = timeSeriesData[0].value
     const lastValue = timeSeriesData[timeSeriesData.length - 1].value;
     const magnitude = firstValue !== 0 ? ((lastValue - firstValue) / firstValue) * 100 : 0;
 
@@ -180,7 +180,7 @@ export class AIAnalyticsEngine {
       confidence: rSquared,
       forecast,
       drivers: this.identifyTrendDrivers(data),
-    };
+    }
   }
 
   // Extract time series data from widget data
@@ -206,7 +206,7 @@ export class AIAnalyticsEngine {
     const points = data.map((point) => ({
       x: (point.date.getTime() - startTime) / (1000 * 60 * 60 * 24),
       y: point.value,
-    }));
+    }))
 
     const sumX = points.reduce((sum, p) => sum + p.x, 0);
     const sumY = points.reduce((sum, p) => sum + p.y, 0);
@@ -218,7 +218,7 @@ export class AIAnalyticsEngine {
     const intercept = (sumY - slope * sumX) / n;
 
     // Calculate R-squared
-    const meanY = sumY / n;
+    const meanY = sumY / n
     const ssTotal = points.reduce((sum, p) => sum + Math.pow(p.y - meanY, 2), 0);
     const ssResidual = points.reduce((sum, p) => {
       const predicted = slope * p.x + intercept;
@@ -227,7 +227,7 @@ export class AIAnalyticsEngine {
 
     const rSquared = ssTotal !== 0 ? 1 - ssResidual / ssTotal : 0;
 
-    return { slope, rSquared };
+    return { slope, rSquared }
   }
 
   // Generate forecast points
@@ -264,12 +264,12 @@ export class AIAnalyticsEngine {
 
   // Identify trend drivers
   private identifyTrendDrivers(_data: any[]): string[] {
-    const drivers: string[] = [];
+    const drivers: string[] = []
 
     // Analyze data for potential drivers
     // This is a simplified implementation
     if (data.some((item) => item.category === 'high_risk')) {
-      drivers.push('High-risk events increasing');
+      drivers.push('High-risk events increasing')
     }
 
     if (data.some((item) => item.status === 'overdue')) {
@@ -286,14 +286,14 @@ export class AIAnalyticsEngine {
         ? 'upward'
         : trend.direction === 'decreasing'
           ? 'downward'
-          : 'stable';
+          : 'stable'
 
     return `${trend.metric} shows a ${direction} trend over the ${trend.period} with ${trend.magnitude.toFixed(1)}% change (confidence: ${(trend.confidence * 100).toFixed(1)}%)`;
   }
 
   // Get trend severity
   private getTrendSeverity(_trend: TrendAnalysis): 'low' | 'medium' | 'high' | 'critical' {
-    if (trend.magnitude > 50 && trend.confidence > 0.8) return 'critical';
+    if (trend.magnitude > 50 && trend.confidence > 0.8) return 'critical'
     if (trend.magnitude > 25 && trend.confidence > 0.7) return 'high';
     if (trend.magnitude > 10 && trend.confidence > 0.6) return 'medium';
     return 'low';
@@ -301,7 +301,7 @@ export class AIAnalyticsEngine {
 
   // Get trend recommendations
   private getTrendRecommendations(_trend: TrendAnalysis): string[] {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []
 
     if (trend.direction === 'increasing' && trend.magnitude > 20) {
       recommendations.push('Monitor closely for continued growth');
@@ -318,7 +318,7 @@ export class AIAnalyticsEngine {
 
   // Detect anomalies in data
   private async detectAnomalies(reportData: any, lookbackDays: number): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     for (const widget of reportData.widgets) {
       const anomalies = this.findAnomalies(widget.data, lookbackDays);
@@ -346,13 +346,13 @@ export class AIAnalyticsEngine {
 
   // Find anomalies using statistical methods
   private findAnomalies(_data: any[], lookbackDays: number): AnomalyDetection[] {
-    const anomalies: AnomalyDetection[] = [];
+    const anomalies: AnomalyDetection[] = []
     const timeSeriesData = this.extractTimeSeries(data);
 
     if (timeSeriesData.length < 10) return anomalies; // Need sufficient data
 
     // Calculate rolling statistics
-    const windowSize = Math.min(7, Math.floor(timeSeriesData.length / 3));
+    const windowSize = Math.min(7, Math.floor(timeSeriesData.length / 3))
 
     for (let i = windowSize; i < timeSeriesData.length; i++) {
       const window = timeSeriesData.slice(i - windowSize, i);
@@ -366,7 +366,7 @@ export class AIAnalyticsEngine {
 
       // Flag as anomaly if more than 2 standard deviations away
       if (deviation > 2) {
-        let severity: 'low' | 'medium' | 'high' = 'low';
+        let severity: 'low' | 'medium' | 'high' = 'low'
         if (deviation > 4) severity = 'high';
         else if (deviation > 3) severity = 'medium';
 
@@ -391,7 +391,7 @@ export class AIAnalyticsEngine {
 
   // Get anomaly recommendations
   private getAnomalyRecommendations(_anomaly: AnomalyDetection): string[] {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []
 
     if (anomaly.severity === 'high') {
       recommendations.push('Immediate investigation required');
@@ -407,7 +407,7 @@ export class AIAnalyticsEngine {
 
   // Find correlations between different metrics
   private async findCorrelations(reportData: any): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     // Get risk data for correlation analysis
     const risks = await db.client.risk.findMany({
@@ -417,7 +417,7 @@ export class AIAnalyticsEngine {
       include: {
         controls: true,
       },
-    });
+    })
 
     const correlations = this.calculateRiskCorrelations(risks);
 
@@ -444,7 +444,7 @@ export class AIAnalyticsEngine {
 
   // Calculate correlations between risks
   private calculateRiskCorrelations(_risks: any[]): RiskCorrelation[] {
-    const correlations: RiskCorrelation[] = [];
+    const correlations: RiskCorrelation[] = []
 
     for (let i = 0; i < risks.length; i++) {
       for (let j = i + 1; j < risks.length; j++) {
@@ -455,7 +455,7 @@ export class AIAnalyticsEngine {
         const correlation = this.pearsonCorrelation(
           [risk1.likelihood, risk1.impact],
           [risk2.likelihood, risk2.impact]
-        );
+        )
 
         if (Math.abs(correlation) > 0.3) {
           // Only significant correlations
@@ -466,7 +466,7 @@ export class AIAnalyticsEngine {
             significance: 0.05, // Simplified significance
             relationshipType: correlation > 0 ? 'causal' : 'inverse',
             confidence: Math.abs(correlation),
-          });
+          })
         }
       }
     }
@@ -476,7 +476,7 @@ export class AIAnalyticsEngine {
 
   // Calculate Pearson correlation coefficient
   private pearsonCorrelation(x: number[], y: number[]): number {
-    const n = Math.min(x.length, y.length);
+    const n = Math.min(x.length, y.length)
     if (n === 0) return 0;
 
     const sumX = x.reduce((a, b) => a + b, 0);
@@ -493,7 +493,7 @@ export class AIAnalyticsEngine {
 
   // Get correlation recommendations
   private getCorrelationRecommendations(correlation: RiskCorrelation): string[] {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []
 
     if (correlation.relationshipType === 'causal') {
       recommendations.push('Consider consolidated risk treatment strategies');
@@ -508,14 +508,14 @@ export class AIAnalyticsEngine {
 
   // Generate recommendations based on data analysis
   private async generateRecommendations(reportData: any): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     // Analyze control effectiveness
-    const controlInsights = await this.analyzeControlEffectiveness();
+    const controlInsights = await this.analyzeControlEffectiveness()
     insights.push(...controlInsights);
 
     // Analyze risk appetite alignment
-    const riskAppetiteInsights = await this.analyzeRiskAppetiteAlignment();
+    const riskAppetiteInsights = await this.analyzeRiskAppetiteAlignment()
     insights.push(...riskAppetiteInsights);
 
     return insights;
@@ -523,7 +523,7 @@ export class AIAnalyticsEngine {
 
   // Analyze control effectiveness
   private async analyzeControlEffectiveness(): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     const controls = await db.client.control.findMany({
       include: {
@@ -565,7 +565,7 @@ export class AIAnalyticsEngine {
 
   // Analyze risk appetite alignment
   private async analyzeRiskAppetiteAlignment(): Promise<AIInsight[]> {
-    const insights: AIInsight[] = [];
+    const insights: AIInsight[] = []
 
     const risks = await db.client.risk.findMany({
       where: {
@@ -604,17 +604,17 @@ export class AIAnalyticsEngine {
     period: { from: Date; to: Date }
   ): Promise<ExecutiveSummary> {
     // Get key metrics
-    const keyMetrics = await this.calculateKeyMetrics(organizationId, period);
+    const keyMetrics = await this.calculateKeyMetrics(organizationId, period)
 
     // Get top risks
-    const topRisks = await this.getTopRisks(organizationId, 5);
+    const topRisks = await this.getTopRisks(organizationId, 5)
 
     // Generate achievements and concerns
-    const achievements = await this.identifyAchievements(organizationId, period);
+    const achievements = await this.identifyAchievements(organizationId, period)
     const concerns = await this.identifyConcerns(organizationId, period);
 
     // Generate recommendations
-    const recommendations = await this.generateExecutiveRecommendations(organizationId);
+    const recommendations = await this.generateExecutiveRecommendations(organizationId)
 
     return {
       period,
@@ -624,7 +624,7 @@ export class AIAnalyticsEngine {
       concerns,
       recommendations,
       generatedAt: new Date(),
-    };
+    }
   }
 
   // Calculate key metrics for executive summary
@@ -648,7 +648,7 @@ export class AIAnalyticsEngine {
     // Total risks
     const totalRisks = await db.client.risk.count({
       where: { organizationId, createdAt: { gte: period.from, lte: period.to } },
-    });
+    })
 
     const previousPeriodRisks = await db.client.risk.count({
       where: {
@@ -681,7 +681,7 @@ export class AIAnalyticsEngine {
     const controls = await db.client.control.findMany({
       where: { organizationId },
       select: { effectivenessScore: true },
-    });
+    })
 
     const avgEffectiveness =
       controls.length > 0
@@ -703,7 +703,7 @@ export class AIAnalyticsEngine {
     limit: number
   ): Promise<
     {
-      id: string;
+      id: string
       name: string;
       score: number;
       trend: 'increasing' | 'decreasing' | 'stable';
@@ -736,7 +736,7 @@ export class AIAnalyticsEngine {
         status: 'resolved',
         updatedAt: { gte: period.from, lte: period.to },
       },
-    });
+    })
 
     if (resolvedRisks > 0) {
       achievements.push(`Successfully resolved ${resolvedRisks} risks`);
@@ -749,7 +749,7 @@ export class AIAnalyticsEngine {
         effectivenessScore: { gte: 80 },
         updatedAt: { gte: period.from, lte: period.to },
       },
-    });
+    })
 
     if (improvedControls > 0) {
       achievements.push(`${improvedControls} controls achieved high effectiveness scores`);
@@ -771,7 +771,7 @@ export class AIAnalyticsEngine {
         status: { not: 'completed' },
         dueDate: { lt: new Date() },
       },
-    });
+    })
 
     if (overdueItems > 0) {
       concerns.push(`${overdueItems} overdue tasks require attention`);
@@ -785,7 +785,7 @@ export class AIAnalyticsEngine {
         likelihood: { gte: 4 },
         impact: { gte: 4 },
       },
-    });
+    })
 
     if (highRisks > 0) {
       concerns.push(`${highRisks} critical risks require immediate attention`);
@@ -796,7 +796,7 @@ export class AIAnalyticsEngine {
 
   // Generate executive recommendations
   private async generateExecutiveRecommendations(_organizationId: string): Promise<string[]> {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []
 
     // Get recent insights
     const recentInsights = await db.client.aiInsight.findMany({
@@ -805,7 +805,7 @@ export class AIAnalyticsEngine {
         severity: { in: ['high', 'critical'] },
       },
       take: 5,
-    });
+    })
 
     if (recentInsights.length > 0) {
       recommendations.push('Address high-priority insights from AI analysis');
@@ -820,12 +820,12 @@ export class AIAnalyticsEngine {
 
   // Generate natural language report summary
   async generateNaturalLanguageReport(reportData: any): Promise<string> {
-    const insights = await this.generateInsights(reportData.reportId || 'temp');
+    const insights = await this.generateInsights(reportData.reportId || 'temp')
 
     let summary = '## Risk Management Summary\n\n';
 
     // Trends section
-    const trendInsights = insights.filter((i) => i.type === 'trend');
+    const trendInsights = insights.filter((i) => i.type === 'trend')
     if (trendInsights.length > 0) {
       summary += '### Key Trends\n';
       for (const insight of trendInsights.slice(0, 3)) {
@@ -835,7 +835,7 @@ export class AIAnalyticsEngine {
     }
 
     // Anomalies section
-    const anomalyInsights = insights.filter((i) => i.type === 'anomaly');
+    const anomalyInsights = insights.filter((i) => i.type === 'anomaly')
     if (anomalyInsights.length > 0) {
       summary += '### Anomalies Detected\n';
       for (const insight of anomalyInsights.slice(0, 3)) {
@@ -845,7 +845,7 @@ export class AIAnalyticsEngine {
     }
 
     // Recommendations section
-    const recommendations = insights.filter((i) => i.type === 'recommendation');
+    const recommendations = insights.filter((i) => i.type === 'recommendation')
     if (recommendations.length > 0) {
       summary += '### Recommendations\n';
       for (const insight of recommendations.slice(0, 5)) {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   Brain, 
   Database,
   TrendingUp,
@@ -91,14 +92,14 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
   // Fetch training data
   const fetchTrainingData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       
       // Get training jobs for organization
-      const jobs = await customModelTrainingService.getOrganizationModels(organizationId);
+      const jobs = await customModelTrainingService.getOrganizationModels(organizationId)
       setTrainingJobs(jobs);
       
       // Generate mock data for other components
-      const mockKnowledgeBases = await generateMockKnowledgeBases();
+      const mockKnowledgeBases = await generateMockKnowledgeBases()
       setKnowledgeBases(mockKnowledgeBases);
       
       const mockExperiments = await generateMockExperiments();
@@ -111,19 +112,19 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       setPerformance(mockPerformance);
       
       // Calculate metrics
-      const trainingMetrics = calculateTrainingMetrics(jobs, mockKnowledgeBases, mockExperiments, mockDeployments);
+      const trainingMetrics = calculateTrainingMetrics(jobs, mockKnowledgeBases, mockExperiments, mockDeployments)
       setMetrics(trainingMetrics);
       
       // Generate model overviews
-      const overviews = generateModelOverviews(jobs, mockDeployments);
+      const overviews = generateModelOverviews(jobs, mockDeployments)
       setModelOverviews(overviews);
       
     } catch (error) {
-      // console.error('Error fetching training data:', error);
+      // console.error('Error fetching training data:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Generate mock knowledge bases
   const generateMockKnowledgeBases = async (): Promise<KnowledgeBase[]> => {
@@ -153,8 +154,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         updatedAt: new Date()
       }
-    ];
-  };
+    ]
+  }
 
   // Generate mock experiments
   const generateMockExperiments = async (): Promise<ABTestExperiment[]> => {
@@ -204,8 +205,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         },
         createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
       }
-    ];
-  };
+    ]
+  }
 
   // Generate mock deployments
   const generateMockDeployments = async (): Promise<ModelDeployment[]> => {
@@ -253,8 +254,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         deployedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         lastHealthCheck: new Date()
       }
-    ];
-  };
+    ]
+  }
 
   // Generate mock performance data
   const generateMockPerformance = async (): Promise<ModelPerformance[]> => {
@@ -309,8 +310,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
           }
         ]
       }
-    ];
-  };
+    ]
+  }
 
   // Calculate training metrics
   const calculateTrainingMetrics = (
@@ -328,8 +329,8 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       deployedModels: deps.filter(dep => dep.status === 'deployed').length,
       knowledgeBases: kbs.length,
       activeExperiments: exps.filter(exp => exp.status === 'running').length
-    };
-  };
+    }
+  }
 
   // Generate model overviews
   const generateModelOverviews = (
@@ -339,7 +340,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
     return jobs
       .filter(job => job.status === 'completed')
       .map(job => {
-        const deployment = deployments.find(dep => dep.modelId === `model-${job.id}`);
+        const deployment = deployments.find(dep => dep.modelId === `model-${job.id}`)
         return {
           id: job.id,
           name: job.name,
@@ -348,23 +349,23 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
           lastUpdated: job.completedAt || job.createdAt,
           version: '1.0.0',
           deploymentStatus: deployment?.status || 'not_deployed'
-        };
+        }
       });
-  };
+  }
 
   // Start training job
   const handleStartTraining = async (jobId: string) => {
     try {
-      await customModelTrainingService.startTraining(jobId);
+      await customModelTrainingService.startTraining(jobId)
       await fetchTrainingData();
     } catch (error) {
-      // console.error('Error starting training:', error);
+      // console.error('Error starting training:', error)
     }
-  };
+  }
 
   // Auto-refresh data
   useEffect(() => {
-    fetchTrainingData();
+    fetchTrainingData()
     
     const interval = setInterval(fetchTrainingData, refreshInterval);
     return () => clearInterval(interval);
@@ -383,7 +384,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       case 'unhealthy': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -397,7 +398,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
 </DaisyAlertTriangle>
       default: return <Monitor className="h-4 w-4 text-gray-600" />;
     }
-  };
+  }
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -425,7 +426,7 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -1076,4 +1077,4 @@ export const CustomModelTrainingDashboard: React.FC<CustomModelTrainingDashboard
       </DaisyTabs>
     </div>
   );
-}; 
+} 

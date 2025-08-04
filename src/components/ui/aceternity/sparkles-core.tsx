@@ -52,7 +52,7 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width;
       canvas.height = rect.height;
-    };
+    }
 
     const createParticle = (): Particle => {
       const colors = [
@@ -74,12 +74,12 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
         life: 0,
         maxLife: Math.random() * 100 + 50,
         color: colors[Math.floor(Math.random() * colors.length)],
-      };
-    };
+      }
+    }
 
     const initParticles = () => {
       particlesRef.current = Array.from({ length: particleDensity }, createParticle);
-    };
+    }
 
     const drawParticle = (particle: Particle) => {
       const gradient = ctx.createRadialGradient(
@@ -113,11 +113,11 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       // Core sparkle
       ctx.fillStyle = `${particle.color}${Math.floor(particle.opacity * 255)
         .toString(16)
-        .padStart(2, '0')}`;
+        .padStart(2, '0')}`
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
       ctx.fill();
-    };
+    }
 
     const updateParticle = (particle: Particle) => {
       particle.x += particle.speedX;
@@ -125,19 +125,19 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       particle.life++;
 
       // Fade out as life progresses
-      particle.opacity = Math.max(0, 1 - particle.life / particle.maxLife);
+      particle.opacity = Math.max(0, 1 - particle.life / particle.maxLife)
 
       // Wrap around edges
-      if (particle.x < 0) particle.x = canvas.width;
+      if (particle.x < 0) particle.x = canvas.width
       if (particle.x > canvas.width) particle.x = 0;
       if (particle.y < 0) particle.y = canvas.height;
       if (particle.y > canvas.height) particle.y = 0;
 
       // Reset particle if it's dead
       if (particle.life >= particle.maxLife) {
-        Object.assign(particle, createParticle());
+        Object.assign(particle, createParticle())
       }
-    };
+    }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -148,7 +148,7 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       });
 
       animationRef.current = requestAnimationFrame(animate);
-    };
+    }
 
     updateDimensions();
     initParticles();
@@ -162,7 +162,7 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
       resizeObserver.disconnect();
-    };
+    }
   }, [minSize, maxSize, particleDensity, particleColor, particleSpeed]);
 
   return (
@@ -175,7 +175,7 @@ export const SparklesCore: React.FC<SparklesCoreProps> = ({
       {Boolean(children) && <div className="relative z-10">{children}</div>}
     </div>
   );
-};
+}
 
 interface SparklesTextProps {
   text: string;
@@ -200,4 +200,4 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
       <span className="relative z-10">{text}</span>
     </div>
   );
-};
+}

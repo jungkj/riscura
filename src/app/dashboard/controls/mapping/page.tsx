@@ -4,10 +4,11 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { Network, Shield, Link, Target, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+// import { Network, Shield, Link, Target, FileText, CheckCircle, AlertTriangle } from 'lucide-react'
 
 export default function ControlsMappingPage() {
   // Mock data for control mappings
@@ -48,7 +49,7 @@ export default function ControlsMappingPage() {
       coverage: 45,
       lastUpdated: '2025-01-03',
     },
-  ];
+  ]
 
   const frameworkStats = [
     { name: 'ISO 27001', controls: 12, coverage: 89 },
@@ -68,7 +69,7 @@ export default function ControlsMappingPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -81,7 +82,7 @@ export default function ControlsMappingPage() {
       default:
         return <AlertTriangle className="w-4 h-4 text-gray-600" />;
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F1E9] p-6">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DaisyLoadingSpinner } from '@/components/ui/daisy-components';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
@@ -12,7 +13,7 @@ const sizeClasses = {
   sm: 'loading-sm',
   md: 'loading-md',
   lg: 'loading-lg',
-};
+}
 
 export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
@@ -25,7 +26,7 @@ export const DaisyLoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       {Boolean(text) && <span className="ml-2 text-sm text-base-content/70">{text}</span>}
     </div>
   );
-};
+}
 
 export const LoadingSpinner = DaisyLoadingSpinner;
 

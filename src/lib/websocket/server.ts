@@ -25,12 +25,12 @@ export interface PresenceInfo {
     x: number;
     y: number;
     elementId?: string;
-  };
+  }
   selection?: {
     start: number;
     end: number;
     elementId: string;
-  };
+  }
   isTyping: boolean;
   currentDocument?: string;
   lastActivity: Date;
@@ -84,7 +84,7 @@ export class CollaborationServer {
       }
 
       // Verify JWT token
-      const decoded = jwt.verify(token, env.JWT_SECRET) as any;
+      const decoded = jwt.verify(token, env.JWT_SECRET) as any
 
       // Get user from database
       const user = await db.client.user.findUnique({
@@ -101,7 +101,7 @@ export class CollaborationServer {
             },
           },
         },
-      });
+      })
 
       if (!user) {
         return false;
@@ -118,11 +118,11 @@ export class CollaborationServer {
         isOnline: true,
         lastSeen: new Date(),
         permissions: user.userRoles.flatMap((ur) => ur.role.permissions.map((p) => p.name)),
-      };
+      }
 
       return true;
     } catch (error) {
-      // console.error('WebSocket verification failed:', error);
+      // console.error('WebSocket verification failed:', error)
       return false;
     }
   }
@@ -136,17 +136,17 @@ export class CollaborationServer {
         return;
       }
 
-      // console.log(`User ${user.email} connected to collaboration server`);
+      // console.log(`User ${user.email} connected to collaboration server`)
 
       // Store user-socket mapping
-      this.socketUsers.set(ws, user);
+      this.socketUsers.set(ws, user)
       if (!this.userSockets.has(user.id)) {
         this.userSockets.set(user.id, []);
       }
       this.userSockets.get(user.id)!.push(ws);
 
       // Set user as online
-      this.updateUserPresence(user.id, { isOnline: true, lastSeen: new Date() });
+      this.updateUserPresence(user.id, { isOnline: true, lastSeen: new Date() })
 
       // Send initial presence data
       this.sendToUser(user.id, {
@@ -154,18 +154,18 @@ export class CollaborationServer {
         payload: { user },
         timestamp: new Date(),
         userId: user.id,
-      });
+      })
 
       // Handle incoming messages
       ws.on('message', (_data: Buffer) => {
         try {
-          const message = JSON.parse(data.toString()) as WebSocketMessage;
+          const message = JSON.parse(data.toString()) as WebSocketMessage
           message.userId = user.id;
           message.timestamp = new Date();
 
           this.handleMessage(ws, message);
         } catch (error) {
-          // console.error('Invalid WebSocket message:', error);
+          // console.error('Invalid WebSocket message:', error)
           this.sendToSocket(ws, {
             type: 'error',
             payload: { message: 'Invalid message format' },
@@ -177,11 +177,11 @@ export class CollaborationServer {
 
       // Handle disconnection
       ws.on('close', () => {
-        this.handleDisconnection(ws, user);
+        this.handleDisconnection(ws, user)
       });
 
       ws.on('error', (error) => {
-        // console.error('WebSocket error:', error);
+        // console.error('WebSocket error:', error)
         this.handleDisconnection(ws, user);
       });
     });
@@ -242,7 +242,7 @@ export class CollaborationServer {
         break;
 
       default:
-        // console.warn('Unknown message type:', message.type);
+        // console.warn('Unknown message type:', message.type)
     }
   }
 
@@ -261,7 +261,7 @@ export class CollaborationServer {
         participants: new Map(),
         createdAt: new Date(),
         lastActivity: new Date(),
-      });
+      })
     }
 
     const room = this.rooms.get(roomId)!;
@@ -272,7 +272,7 @@ export class CollaborationServer {
       user,
       isTyping: false,
       lastActivity: new Date(),
-    });
+    })
 
     room.lastActivity = new Date();
 
@@ -286,7 +286,7 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
 
     // Send current room state to user
     this.sendToUser(user.id, {
@@ -297,9 +297,9 @@ export class CollaborationServer {
       },
       timestamp: new Date(),
       userId: user.id,
-    });
+    })
 
-    // console.log(`User ${user.email} joined room ${roomId}`);
+    // console.log(`User ${user.email} joined room ${roomId}`)
   }
 
   private handleLeaveRoom(user: CollaborationUser, payload: { roomId: string }): void {
@@ -309,7 +309,7 @@ export class CollaborationServer {
     if (!room) return;
 
     // Remove user from room
-    room.participants.delete(user.id);
+    room.participants.delete(user.id)
 
     // Notify other participants
     this.broadcastToRoom(
@@ -321,14 +321,14 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
 
     // Clean up empty rooms
     if (room.participants.size === 0) {
-      this.rooms.delete(roomId);
+      this.rooms.delete(roomId)
     }
 
-    // console.log(`User ${user.email} left room ${roomId}`);
+    // console.log(`User ${user.email} left room ${roomId}`)
   }
 
   private handlePresenceUpdate(
@@ -352,7 +352,7 @@ export class CollaborationServer {
             userId: user.id,
           },
           user.id
-        );
+        )
       }
     }
   }
@@ -367,7 +367,7 @@ export class CollaborationServer {
     if (!room || !room.participants.has(user.id)) return;
 
     // Update user's cursor position
-    const participant = room.participants.get(user.id)!;
+    const participant = room.participants.get(user.id)!
     participant.cursor = cursor;
     participant.lastActivity = new Date();
 
@@ -381,7 +381,7 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
   }
 
   private handleSelectionChange(
@@ -394,7 +394,7 @@ export class CollaborationServer {
     if (!room || !room.participants.has(user.id)) return;
 
     // Update user's selection
-    const participant = room.participants.get(user.id)!;
+    const participant = room.participants.get(user.id)!
     participant.selection = selection;
     participant.lastActivity = new Date();
 
@@ -408,7 +408,7 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
   }
 
   private handleTypingStatus(user: CollaborationUser, message: WebSocketMessage): void {
@@ -432,7 +432,7 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
   }
 
   private async handleCreateComment(user: CollaborationUser, payload: any): Promise<void> {
@@ -473,10 +473,10 @@ export class CollaborationServer {
             },
           },
         },
-      });
+      })
 
       // Broadcast to relevant rooms
-      const roomId = `${payload.entityType}:${payload.entityId}`;
+      const roomId = `${payload.entityType}:${payload.entityId}`
       this.broadcastToRoom(roomId, {
         type: 'comment:created',
         payload: { comment },
@@ -486,7 +486,7 @@ export class CollaborationServer {
 
       // Handle mentions
       if (payload.mentions && payload.mentions.length > 0) {
-        await this.handleMentions(user, comment, payload.mentions);
+        await this.handleMentions(user, comment, payload.mentions)
       }
 
       // Log activity
@@ -505,9 +505,9 @@ export class CollaborationServer {
           },
           isPublic: true,
         },
-      });
+      })
     } catch (error) {
-      // console.error('Failed to create comment:', error);
+      // console.error('Failed to create comment:', error)
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to create comment' },
@@ -543,7 +543,7 @@ export class CollaborationServer {
       });
 
       // Broadcast update
-      const roomId = `${comment.entityType}:${comment.entityId}`;
+      const roomId = `${comment.entityType}:${comment.entityId}`
       this.broadcastToRoom(roomId, {
         type: 'comment:updated',
         payload: { comment },
@@ -551,7 +551,7 @@ export class CollaborationServer {
         userId: user.id,
       });
     } catch (error) {
-      // console.error('Failed to update comment:', error);
+      // console.error('Failed to update comment:', error)
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to update comment' },
@@ -576,7 +576,7 @@ export class CollaborationServer {
       });
 
       // Broadcast deletion
-      const roomId = `${comment.entityType}:${comment.entityId}`;
+      const roomId = `${comment.entityType}:${comment.entityId}`
       this.broadcastToRoom(roomId, {
         type: 'comment:deleted',
         payload: { commentId: payload.commentId },
@@ -584,7 +584,7 @@ export class CollaborationServer {
         userId: user.id,
       });
     } catch (error) {
-      // console.error('Failed to delete comment:', error);
+      // console.error('Failed to delete comment:', error)
       this.sendToUser(user.id, {
         type: 'error',
         payload: { message: 'Failed to delete comment' },
@@ -607,7 +607,7 @@ export class CollaborationServer {
         userId: user.id,
       },
       user.id
-    );
+    )
   }
 
   private async handleTaskUpdate(user: CollaborationUser, payload: any): Promise<void> {
@@ -638,7 +638,7 @@ export class CollaborationServer {
       });
 
       // Broadcast task update
-      const roomId = `task:${task.id}`;
+      const roomId = `task:${task.id}`
       this.broadcastToRoom(roomId, {
         type: 'task:updated',
         payload: { task },
@@ -656,10 +656,10 @@ export class CollaborationServer {
           entityId: task.id,
           title: 'Task Assigned',
           message: `${user.firstName} ${user.lastName} assigned you a task: ${task.title}`,
-        });
+        })
       }
     } catch (error) {
-      // console.error('Failed to update task:', error);
+      // console.error('Failed to update task:', error)
     }
   }
 
@@ -694,10 +694,10 @@ export class CollaborationServer {
   }
 
   private handleDisconnection(ws: WebSocket, user: CollaborationUser): void {
-    // console.log(`User ${user.email} disconnected from collaboration server`);
+    // console.log(`User ${user.email} disconnected from collaboration server`)
 
     // Remove from socket mappings
-    this.socketUsers.delete(ws);
+    this.socketUsers.delete(ws)
     const userSockets = this.userSockets.get(user.id) || [];
     const socketIndex = userSockets.indexOf(ws);
     if (socketIndex > -1) {
@@ -706,13 +706,13 @@ export class CollaborationServer {
 
     // If no more sockets for this user, mark as offline
     if (userSockets.length === 0) {
-      this.updateUserPresence(user.id, { isOnline: false, lastSeen: new Date() });
+      this.updateUserPresence(user.id, { isOnline: false, lastSeen: new Date() })
       this.userSockets.delete(user.id);
 
       // Remove from all rooms
       for (const [roomId, room] of this.rooms.entries()) {
         if (room.participants.has(user.id)) {
-          room.participants.delete(user.id);
+          room.participants.delete(user.id)
 
           // Notify other participants
           this.broadcastToRoom(roomId, {
@@ -720,11 +720,11 @@ export class CollaborationServer {
             payload: { user, roomId },
             timestamp: new Date(),
             userId: user.id,
-          });
+          })
 
           // Clean up empty rooms
           if (room.participants.size === 0) {
-            this.rooms.delete(roomId);
+            this.rooms.delete(roomId)
           }
         }
       }
@@ -734,7 +734,7 @@ export class CollaborationServer {
   private updateUserPresence(_userId: string, updates: Partial<CollaborationUser>): void {
     // Update in-memory presence
     for (const room of this.rooms.values()) {
-      const participant = room.participants.get(userId);
+      const participant = room.participants.get(userId)
       if (participant) {
         Object.assign(participant.user, updates);
       }
@@ -750,7 +750,7 @@ export class CollaborationServer {
         },
       })
       .catch((error) => {
-        // console.error('Failed to update user presence:', error);
+        // console.error('Failed to update user presence:', error)
       });
   }
 
@@ -810,9 +810,9 @@ export class CollaborationServer {
         payload: { notification: dbNotification },
         timestamp: new Date(),
         userId: notification.senderId,
-      });
+      })
     } catch (error) {
-      // console.error('Failed to create notification:', error);
+      // console.error('Failed to create notification:', error)
     }
   }
 
@@ -825,16 +825,16 @@ export class CollaborationServer {
           payload: { timestamp: new Date() },
           timestamp: new Date(),
           userId: user.id,
-        });
+        })
       }
 
       // Clean up inactive rooms
-      const now = new Date();
+      const now = new Date()
       for (const [roomId, room] of this.rooms.entries()) {
         const timeSinceActivity = now.getTime() - room.lastActivity.getTime();
         if (timeSinceActivity > 30 * 60 * 1000) {
           // 30 minutes
-          this.rooms.delete(roomId);
+          this.rooms.delete(roomId)
         }
       }
     }, 30000); // 30 seconds

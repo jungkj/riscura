@@ -13,7 +13,7 @@ export interface MemoryConfig {
     maxFileUploadSize: number; // MB
     maxCacheSize: number; // MB
     maxEventListeners: number;
-  };
+  }
 }
 
 export interface MemoryMetrics {
@@ -28,7 +28,7 @@ export interface MemoryMetrics {
     timeouts: number;
     webSockets: number;
     fileHandles: number;
-  };
+  }
 }
 
 export interface ResourceLeak {
@@ -65,7 +65,7 @@ export const DEFAULT_MEMORY_CONFIG: MemoryConfig = {
     maxCacheSize: 200, // 200MB
     maxEventListeners: 1000,
   },
-};
+}
 
 export class MemoryManager {
   private config: MemoryConfig;
@@ -82,7 +82,7 @@ export class MemoryManager {
       webSockets: 0,
       fileHandles: 0,
     },
-  };
+  }
   private resourceHandles: Map<string, ResourceHandle> = new Map();
   private memoryLeaks: ResourceLeak[] = [];
   private monitoringInterval: NodeJS.Timeout | null = null;
@@ -90,12 +90,12 @@ export class MemoryManager {
   private finalizationRegistry: any;
 
   constructor(_config: Partial<MemoryConfig> = {}) {
-    this.config = { ...DEFAULT_MEMORY_CONFIG, ...config };
+    this.config = { ...DEFAULT_MEMORY_CONFIG, ...config }
 
     // Initialize finalization registry for cleanup if available
     if (typeof FinalizationRegistry !== 'undefined') {
       this.finalizationRegistry = new FinalizationRegistry((id: string) => {
-        this.handleResourceFinalization(id);
+        this.handleResourceFinalization(id)
       });
     }
 
@@ -110,15 +110,15 @@ export class MemoryManager {
 
     // Start monitoring if enabled
     if (this.config.enableMemoryProfiling) {
-      this.startMemoryMonitoring();
+      this.startMemoryMonitoring()
     }
 
     // Set up global error handlers for resource leaks
-    this.setupLeakDetection();
+    this.setupLeakDetection()
 
     // Set up automatic cleanup
     if (this.config.autoCleanup) {
-      this.setupAutoCleanup();
+      this.setupAutoCleanup()
     }
   }
 
@@ -134,14 +134,14 @@ export class MemoryManager {
 
       // Trigger GC if memory usage is high
       if (this.metrics.memoryUsagePercent > 80) {
-        this.requestGarbageCollection();
+        this.requestGarbageCollection()
       }
     }, this.config.monitoringInterval);
 
     // Register cleanup for the monitoring interval
     this.registerResource('monitoring-interval', 'interval', 'MemoryManager', () => {
       if (this.monitoringInterval) {
-        clearInterval(this.monitoringInterval);
+        clearInterval(this.monitoringInterval)
       }
     });
   }
@@ -154,7 +154,7 @@ export class MemoryManager {
 
     // Use performance.memory if available
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as any).memory
       this.metrics.usedJSHeapSize = memory.usedJSHeapSize;
       this.metrics.totalJSHeapSize = memory.totalJSHeapSize;
       this.metrics.jsHeapSizeLimit = memory.jsHeapSizeLimit;
@@ -162,7 +162,7 @@ export class MemoryManager {
     }
 
     // Update resource counts
-    this.updateResourceCounts();
+    this.updateResourceCounts()
   }
 
   /**
@@ -175,7 +175,7 @@ export class MemoryManager {
       timeouts: this.countResourcesByType('timeout'),
       webSockets: this.countResourcesByType('webSocket'),
       fileHandles: this.countResourcesByType('fileHandle'),
-    };
+    }
   }
 
   /**
@@ -196,21 +196,21 @@ export class MemoryManager {
     if (typeof window === 'undefined') return;
 
     // Override addEventListener to track event listeners
-    const originalAddEventListener = EventTarget.prototype.addEventListener;
+    const originalAddEventListener = EventTarget.prototype.addEventListener
     EventTarget.prototype.addEventListener = function (type, listener, options) {
       const _result = originalAddEventListener.call(this, type, listener, options);
 
       // Track this event listener
-      const id = `listener-${Date.now()}-${Math.random()}`;
+      const id = `listener-${Date.now()}-${Math.random()}`
       memoryManager.registerResource(id, 'eventListener', 'EventTarget', () => {
         this.removeEventListener(type, listener as EventListener, options);
       });
 
       return result;
-    };
+    }
 
     // Override setTimeout and setInterval
-    const originalSetTimeout = window.setTimeout;
+    const originalSetTimeout = window.setTimeout
     const originalSetInterval = window.setInterval;
     const originalClearTimeout = window.clearTimeout;
     const originalClearInterval = window.clearInterval;
@@ -246,19 +246,19 @@ export class MemoryManager {
 
     // Clean up on page unload
     window.addEventListener('beforeunload', () => {
-      this.cleanup();
+      this.cleanup()
     });
 
     // Clean up on visibility change
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        this.performPartialCleanup();
+        this.performPartialCleanup()
       }
     });
 
     // Periodic cleanup
     setInterval(() => {
-      this.performPeriodicCleanup();
+      this.performPeriodicCleanup()
     }, 300000); // Every 5 minutes
   }
 
@@ -272,12 +272,12 @@ export class MemoryManager {
       source,
       cleanup,
       createdAt: new Date(),
-    };
+    }
 
     this.resourceHandles.set(id, handle);
 
     // Check resource limits
-    this.checkResourceLimits(type);
+    this.checkResourceLimits(type)
   }
 
   /**
@@ -289,7 +289,7 @@ export class MemoryManager {
       try {
         handle.cleanup();
       } catch (error) {
-        // console.error(`Error cleaning up resource ${id}:`, error);
+        // console.error(`Error cleaning up resource ${id}:`, error)
       }
       this.resourceHandles.delete(id);
     }
@@ -323,7 +323,7 @@ export class MemoryManager {
 
       // Auto-cleanup oldest resources if enabled
       if (this.config.autoCleanup) {
-        this.cleanupOldestResources(type, count - limit);
+        this.cleanupOldestResources(type, count - limit)
       }
     }
   }
@@ -357,11 +357,11 @@ export class MemoryManager {
           usedMemory: this.metrics.usedJSHeapSize,
         },
         severity: 'critical',
-      });
+      })
     }
 
     // Check for resource leaks
-    this.detectResourceLeaks();
+    this.detectResourceLeaks()
   }
 
   /**
@@ -383,7 +383,7 @@ export class MemoryManager {
             age: now.getTime() - handle.createdAt.getTime(),
           },
           severity: 'medium',
-        });
+        })
       }
     }
   }
@@ -396,14 +396,14 @@ export class MemoryManager {
 
     // Keep only recent leaks
     if (this.memoryLeaks.length > 100) {
-      this.memoryLeaks = this.memoryLeaks.slice(-50);
+      this.memoryLeaks = this.memoryLeaks.slice(-50)
     }
 
     // Log critical leaks
     if (leak.severity === 'critical') {
-      // console.error('Critical resource leak detected:', leak);
+      // console.error('Critical resource leak detected:', leak)
     } else if (this.config.enableMemoryProfiling) {
-      // console.warn('Resource leak detected:', leak);
+      // console.warn('Resource leak detected:', leak)
     }
   }
 
@@ -421,15 +421,15 @@ export class MemoryManager {
     // Try to trigger GC if available
     if ('gc' in window && typeof (window as any).gc === 'function') {
       try {
-        (window as any).gc();
+        (window as any).gc()
         this.metrics.gcCount++;
       } catch (error) {
-        // console.warn('Unable to trigger garbage collection:', error);
+        // console.warn('Unable to trigger garbage collection:', error)
       }
     }
 
     // Clean up weak references
-    this.cleanupWeakRefs();
+    this.cleanupWeakRefs()
   }
 
   /**
@@ -456,13 +456,13 @@ export class MemoryManager {
    */
   private performPartialCleanup(): void {
     // Clean up caches
-    this.clearOldCacheEntries();
+    this.clearOldCacheEntries()
 
     // Clean up event listeners from hidden elements
-    this.cleanupHiddenElementListeners();
+    this.cleanupHiddenElementListeners()
 
     // Request garbage collection
-    this.requestGarbageCollection();
+    this.requestGarbageCollection()
   }
 
   /**
@@ -470,7 +470,7 @@ export class MemoryManager {
    */
   private performPeriodicCleanup(): void {
     // Clean up old resources
-    const _oneHourAgo = new Date(Date.now() - 3600000);
+    const _oneHourAgo = new Date(Date.now() - 3600000)
 
     for (const [id, handle] of this.resourceHandles.entries()) {
       if (handle.createdAt < oneHourAgo) {
@@ -481,7 +481,7 @@ export class MemoryManager {
     // Clear old memory leaks
     this.memoryLeaks = this.memoryLeaks.filter(
       (leak) => leak.timestamp.getTime() > oneHourAgo.getTime()
-    );
+    )
   }
 
   /**
@@ -496,13 +496,13 @@ export class MemoryManager {
    * Clean up event listeners from hidden elements
    */
   private cleanupHiddenElementListeners(): void {
-    const hiddenElements = document.querySelectorAll('[style*="display: none"], .hidden');
+    const hiddenElements = document.querySelectorAll('[style*="display: none"], .hidden')
 
     hiddenElements.forEach((element) => {
       // Remove resources associated with hidden elements
       for (const [id, handle] of this.resourceHandles.entries()) {
         if (handle.source.includes(element.tagName)) {
-          this.unregisterResource(id);
+          this.unregisterResource(id)
         }
       }
     });
@@ -512,7 +512,7 @@ export class MemoryManager {
    * Get current metrics
    */
   getMetrics(): MemoryMetrics {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   /**
@@ -536,16 +536,16 @@ export class MemoryManager {
     // Clean up all registered resources
     for (const [id, handle] of this.resourceHandles.entries()) {
       try {
-        handle.cleanup();
+        handle.cleanup()
       } catch (error) {
-        // console.error(`Error cleaning up resource ${id}:`, error);
+        // console.error(`Error cleaning up resource ${id}:`, error)
       }
     }
     this.resourceHandles.clear();
 
     // Stop monitoring
     if (this.monitoringInterval) {
-      clearInterval(this.monitoringInterval);
+      clearInterval(this.monitoringInterval)
       this.monitoringInterval = null;
     }
 
@@ -563,10 +563,10 @@ export class MemoryManager {
         webSockets: 0,
         fileHandles: 0,
       },
-    };
+    }
 
     // Clear leaks
-    this.memoryLeaks = [];
+    this.memoryLeaks = []
   }
 }
 
@@ -581,13 +581,13 @@ export const useMemoryCleanup = (
   cleanup: CleanupFunction
 ): void => {
   useEffect(() => {
-    memoryManager.registerResource(resourceId, type, 'React Hook', cleanup);
+    memoryManager.registerResource(resourceId, type, 'React Hook', cleanup)
 
     return () => {
       memoryManager.unregisterResource(resourceId);
-    };
+    }
   }, [resourceId, type, cleanup]);
-};
+}
 
 /**
  * Hook for tracking component memory usage
@@ -600,21 +600,21 @@ export const useMemoryTracking = (componentName: string) => {
     renderCount.current++;
 
     // Register component for tracking
-    const id = `component-${componentName}-${Date.now()}`;
+    const id = `component-${componentName}-${Date.now()}`
     memoryManager.registerResource(id, 'component', componentName, () => {
       // Component cleanup logic
-    });
+    })
 
     return () => {
       memoryManager.unregisterResource(id);
-    };
+    }
   }, [componentName]);
 
   return {
     renderCount: renderCount.current,
     age: Date.now() - createdAt.current.getTime(),
-  };
-};
+  }
+}
 
 /**
  * Hook for managing intervals with automatic cleanup
@@ -644,10 +644,10 @@ export const useManagedInterval = (
       return () => {
         clearInterval(id);
         memoryManager.unregisterResource(resourceId);
-      };
+      }
     }
   }, [delay, ...deps]);
-};
+}
 
 /**
  * Hook for managing event listeners with automatic cleanup
@@ -678,9 +678,9 @@ export const useManagedEventListener = <T extends Event>(
     return () => {
       element.removeEventListener(eventType, eventHandler, options);
       memoryManager.unregisterResource(resourceId);
-    };
+    }
   }, [element, eventType, options]);
-};
+}
 
 /**
  * Hook for optimized memoization with memory tracking
@@ -695,17 +695,17 @@ export const useOptimizedMemo = <T>(
 
     // Track large objects
     if (debugName && typeof value === 'object' && value !== null) {
-      const resourceId = `memo-${debugName}-${Date.now()}`;
+      const resourceId = `memo-${debugName}-${Date.now()}`
       memoryManager.registerResource(resourceId, 'memoization', debugName, () => {
         // Cleanup logic for memoized value if needed
-      });
+      })
     }
 
     return value;
   }, deps);
 
   return memoValue;
-};
+}
 
 /**
  * Hook for memory metrics monitoring
@@ -731,15 +731,15 @@ export const useMemoryMetrics = (): {
     metrics,
     leaks,
     isMemoryHigh: metrics.memoryUsagePercent > 80,
-  };
-};
+  }
+}
 
 // Global memory manager instance
-export const memoryManager = new MemoryManager();
+export const memoryManager = new MemoryManager()
 
 // Initialize memory manager
 if (typeof window !== 'undefined') {
-  (window as any).__RISCURA_MEMORY_MANAGER__ = memoryManager;
+  (window as any).__RISCURA_MEMORY_MANAGER__ = memoryManager
 }
 
 export default MemoryManager;

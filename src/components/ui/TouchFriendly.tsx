@@ -5,7 +5,7 @@ import { designTokens } from '@/lib/design-system/tokens';
 
 // Touch-friendly button with larger touch targets
 interface TouchButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg';
   touchSize?: 'default' | 'large';
   children: React.ReactNode;
@@ -27,13 +27,13 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500',
     ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-  };
+  }
 
   const sizeClasses = {
     sm: touchSize === 'large' ? 'px-4 py-3 text-sm min-h-[44px]' : 'px-3 py-2 text-sm',
     md: touchSize === 'large' ? 'px-6 py-4 text-base min-h-[48px]' : 'px-4 py-2 text-base',
     lg: touchSize === 'large' ? 'px-8 py-5 text-lg min-h-[52px]' : 'px-6 py-3 text-lg',
-  };
+  }
 
   return (
     <button
@@ -43,11 +43,11 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       {children}
     </button>
   );
-};
+}
 
 // Touch-friendly card with tap feedback
 interface TouchCardProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
@@ -70,17 +70,17 @@ export const TouchCard: React.FC<TouchCardProps> = ({
         navigator.vibrate(10); // Light haptic feedback
       }
     }
-  };
+  }
 
   const handleTouchEnd = () => {
     setIsPressed(false);
-  };
+  }
 
   const handleClick = () => {
     if (!disabled && onClick) {
       onClick();
     }
-  };
+  }
 
   return (
     <div
@@ -109,11 +109,11 @@ export const TouchCard: React.FC<TouchCardProps> = ({
       {children}
     </div>
   );
-};
+}
 
 // Swipeable container for mobile gestures
 interface SwipeableProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
@@ -136,9 +136,9 @@ export const Swipeable: React.FC<SwipeableProps> = ({
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
-    startPos.current = { x: touch.clientX, y: touch.clientY };
+    startPos.current = { x: touch.clientX, y: touch.clientY }
     setIsDragging(true);
-  };
+  }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!startPos.current || !isDragging) return;
@@ -154,14 +154,14 @@ export const Swipeable: React.FC<SwipeableProps> = ({
       if (absDeltaX > absDeltaY) {
         // Horizontal swipe
         if (deltaX > 0 && onSwipeRight) {
-          onSwipeRight();
+          onSwipeRight()
         } else if (deltaX < 0 && onSwipeLeft) {
           onSwipeLeft();
         }
       } else {
         // Vertical swipe
         if (deltaY > 0 && onSwipeDown) {
-          onSwipeDown();
+          onSwipeDown()
         } else if (deltaY < 0 && onSwipeUp) {
           onSwipeUp();
         }
@@ -170,7 +170,7 @@ export const Swipeable: React.FC<SwipeableProps> = ({
 
     startPos.current = null;
     setIsDragging(false);
-  };
+  }
 
   return (
     <div
@@ -181,11 +181,11 @@ export const Swipeable: React.FC<SwipeableProps> = ({
       {children}
     </div>
   );
-};
+}
 
 // Touch-friendly input with larger touch targets
 interface TouchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: string
   error?: string;
   touchSize?: 'default' | 'large';
 }
@@ -213,11 +213,11 @@ export const TouchInput: React.FC<TouchInputProps> = ({
       {Boolean(error) && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
-};
+}
 
 // Touch-friendly select dropdown
 interface TouchSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
+  label?: string
   error?: string;
   options: Array<{ value: string; label: string }>;
   touchSize?: 'default' | 'large';
@@ -253,11 +253,11 @@ export const TouchSelect: React.FC<TouchSelectProps> = ({
       {Boolean(error) && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
-};
+}
 
 // Touch-friendly toggle switch
 interface TouchToggleProps {
-  checked: boolean;
+  checked: boolean
   onChange: (checked: boolean) => void;
   label?: string;
   description?: string;
@@ -277,7 +277,7 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
     sm: { switch: 'w-8 h-5', thumb: 'w-4 h-4', translate: 'translate-x-3' },
     md: { switch: 'w-11 h-6', thumb: 'w-5 h-5', translate: 'translate-x-5' },
     lg: { switch: 'w-14 h-8', thumb: 'w-6 h-6', translate: 'translate-x-6' },
-  };
+  }
 
   const { switch: switchClass, thumb: thumbClass, translate: translateClass } = sizeClasses[size];
 
@@ -311,7 +311,7 @@ export const TouchToggle: React.FC<TouchToggleProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Touch-friendly tab navigation
 interface TouchTabsProps {
@@ -356,11 +356,11 @@ export const TouchTabs: React.FC<TouchTabsProps> = ({
       <div className="mt-4">{tabs.find((tab) => tab.id === activeTab)?.content}</div>
     </div>
   );
-};
+}
 
 // Progressive loading component for mobile
 interface ProgressiveLoaderProps {
-  isLoading: boolean;
+  isLoading: boolean
   hasMore: boolean;
   onLoadMore: () => void;
   children: React.ReactNode;
@@ -385,7 +385,7 @@ export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps />= ({
       if (scrollHeight - scrollTop - clientHeight < threshold && hasMore && !isLoading) {
         onLoadMore();
       }
-    };
+    }
 
     container.addEventListener('scroll', handleScroll);
     return () => container.removeEventListener('scroll', handleScroll);
@@ -404,7 +404,7 @@ export const ProgressiveLoader: React.FC<DaisyProgressiveLoaderProps />= ({
       )}
     </div>
   );
-};
+}
 
 export default {
   TouchButton,
@@ -415,4 +415,4 @@ export default {
   TouchToggle,
   TouchTabs,
   ProgressiveLoader,
-};
+}

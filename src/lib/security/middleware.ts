@@ -4,7 +4,7 @@ import { documentEncryption } from './document-encryption';
 
 // Rate limiting configuration
 interface RateLimitConfig {
-  windowMs: number;
+  windowMs: number
   maxRequests: number;
   keyGenerator?: (_request: NextRequest) => string;
 }
@@ -32,7 +32,7 @@ const SECURITY_HEADERS = {
     "form-action 'self'",
     "base-uri 'self'",
   ].join('; '),
-};
+}
 
 // Rate limiting store (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -67,7 +67,7 @@ export class SecurityMiddleware {
     try {
       // 1. Apply rate limiting
       if (options.rateLimit) {
-        const rateLimitResult = this.checkRateLimit(request, options.rateLimit);
+        const rateLimitResult = this.checkRateLimit(request, options.rateLimit)
         if (!rateLimitResult.allowed) {
           return this.createErrorResponse('Too Many Requests', 429, {
             'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
@@ -79,14 +79,14 @@ export class SecurityMiddleware {
       }
 
       // 2. Validate request origin and security headers
-      const securityCheckResult = this.performSecurityChecks(request);
+      const securityCheckResult = this.performSecurityChecks(request)
       if (!securityCheckResult.passed) {
         return this.createErrorResponse('Security Check Failed', 403);
       }
 
       // 3. Handle CORS if enabled
       if (options.allowCors) {
-        const corsResponse = this.handleCors(request, options.corsOrigins);
+        const corsResponse = this.handleCors(request, options.corsOrigins)
         if (corsResponse) {
           return corsResponse;
         }
@@ -94,7 +94,7 @@ export class SecurityMiddleware {
 
       // 4. Authentication and authorization
       if (options.requireAuth) {
-        const authResult = await this.authenticateRequest(request);
+        const authResult = await this.authenticateRequest(request)
         if (!authResult.authenticated) {
           return this.createErrorResponse('Authentication Required', 401);
         }
@@ -103,7 +103,7 @@ export class SecurityMiddleware {
         if (options.requiredPermissions && options.requiredPermissions.length > 0) {
           const hasPermission = options.requiredPermissions.some((perm) =>
             accessControl.hasPermission(authResult.permissions, perm)
-          );
+          )
 
           if (!hasPermission) {
             return this.createErrorResponse('Insufficient Permissions', 403);
@@ -112,9 +112,9 @@ export class SecurityMiddleware {
       }
 
       // If all checks pass, return null to continue processing
-      return null;
+      return null
     } catch (error) {
-      // console.error('Security middleware error:', error);
+      // console.error('Security middleware error:', error)
       return this.createErrorResponse('Internal Security Error', 500);
     }
   }
@@ -132,19 +132,19 @@ export class SecurityMiddleware {
     const now = Date.now();
     const windowKey = `${key}:${Math.floor(now / config.windowMs)}`;
 
-    const current = rateLimitStore.get(windowKey) || { count: 0, resetTime: now + config.windowMs };
+    const current = rateLimitStore.get(windowKey) || { count: 0, resetTime: now + config.windowMs }
 
     if (current.count >= config.maxRequests) {
-      return { allowed: false, resetTime: current.resetTime };
+      return { allowed: false, resetTime: current.resetTime }
     }
 
     current.count++;
     rateLimitStore.set(windowKey, current);
 
     // Cleanup old entries
-    this.cleanupRateLimit();
+    this.cleanupRateLimit()
 
-    return { allowed: true, resetTime: current.resetTime };
+    return { allowed: true, resetTime: current.resetTime }
   }
 
   /**
@@ -170,13 +170,13 @@ export class SecurityMiddleware {
       /drop.*table/gi,
       /insert.*into/gi,
       /delete.*from/gi,
-    ];
+    ]
 
     // Check URL for suspicious patterns
-    const fullUrl = url.pathname + url.search;
+    const fullUrl = url.pathname + url.search
     for (const pattern of suspiciousPatterns) {
       if (pattern.test(fullUrl)) {
-        return { passed: false, reason: 'Suspicious URL pattern detected' };
+        return { passed: false, reason: 'Suspicious URL pattern detected' }
       }
     }
 
@@ -190,11 +190,11 @@ export class SecurityMiddleware {
       /burp/i,
       /acunetix/i,
       /netsparker/i,
-    ];
+    ]
 
     for (const pattern of suspiciousUserAgents) {
       if (pattern.test(userAgent)) {
-        return { passed: false, reason: 'Suspicious user agent detected' };
+        return { passed: false, reason: 'Suspicious user agent detected' }
       }
     }
 
@@ -205,14 +205,14 @@ export class SecurityMiddleware {
         'application/x-www-form-urlencoded',
         'multipart/form-data',
         'text/plain',
-      ];
+      ]
 
       if (!allowedContentTypes.some((type) => contentType.startsWith(type))) {
-        return { passed: false, reason: 'Invalid content type' };
+        return { passed: false, reason: 'Invalid content type' }
       }
     }
 
-    return { passed: true };
+    return { passed: true }
   }
 
   /**
@@ -223,7 +223,7 @@ export class SecurityMiddleware {
 
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
-      const response = new NextResponse(null, { status: 200 });
+      const response = new NextResponse(null, { status: 200 })
 
       if (origin && this.isOriginAllowed(origin, allowedOrigins)) {
         response.headers.set('Access-Control-Allow-Origin', origin);
@@ -252,12 +252,12 @@ export class SecurityMiddleware {
 
     // Check exact match
     if (allowedOrigins.includes(origin)) {
-      return true;
+      return true
     }
 
     // Check wildcard patterns
     return allowedOrigins.some((allowed) => {
-      if (allowed === '*') return true;
+      if (allowed === '*') return true
       if (allowed.startsWith('*.')) {
         const domain = allowed.slice(2);
         return origin.endsWith(domain);
@@ -278,7 +278,7 @@ export class SecurityMiddleware {
     // Try different authentication methods
 
     // 1. Check for API key in headers
-    const apiKey = request.headers.get('x-api-key');
+    const apiKey = request.headers.get('x-api-key')
     if (apiKey) {
       const apiAuthResult = await this.authenticateApiKey(apiKey);
       if (apiAuthResult.valid) {
@@ -287,12 +287,12 @@ export class SecurityMiddleware {
           userId: apiAuthResult.userId,
           role: apiAuthResult.role,
           permissions: apiAuthResult.permissions,
-        };
+        }
       }
     }
 
     // 2. Check for Bearer token
-    const authorization = request.headers.get('authorization');
+    const authorization = request.headers.get('authorization')
     if (authorization?.startsWith('Bearer ')) {
       const _token = authorization.slice(7);
       const tokenResult = documentEncryption.verifySecureToken(token);
@@ -302,26 +302,26 @@ export class SecurityMiddleware {
           userId: tokenResult.payload.userId,
           role: tokenResult.payload.role || 'USER',
           permissions: tokenResult.payload.permissions || [],
-        };
+        }
       }
     }
 
     // 3. Check for session cookies
-    const refreshToken = request.cookies.get('refreshToken')?.value;
+    const refreshToken = request.cookies.get('refreshToken')?.value
     const demoUser = request.cookies.get('demo-user')?.value;
 
     if (refreshToken || demoUser) {
       // In a real implementation, validate these against the database
-      const permissions = demoUser ? ['*'] : ['document:read'];
+      const permissions = demoUser ? ['*'] : ['document:read']
       return {
         authenticated: true,
         userId: 'demo-user-id',
         role: 'ADMIN',
         permissions: permissions as Permission[],
-      };
+      }
     }
 
-    return { authenticated: false, permissions: [] };
+    return { authenticated: false, permissions: [] }
   }
 
   /**
@@ -335,7 +335,7 @@ export class SecurityMiddleware {
   }> {
     try {
       // Import database connection
-      const { db } = await import('@/lib/database/connection');
+      const { db } = await import('@/lib/database/connection')
 
       // Query database for valid API key
       const apiKeyRecord = await db.aPIKey.findFirst({
@@ -350,27 +350,27 @@ export class SecurityMiddleware {
           organization: true,
           user: true,
         },
-      });
+      })
 
       if (!apiKeyRecord) {
-        return { valid: false, permissions: [] };
+        return { valid: false, permissions: [] }
       }
 
       // Update last used timestamp
       await db.aPIKey.update({
         where: { id: apiKeyRecord.id },
         data: { lastUsedAt: new Date() },
-      });
+      })
 
       return {
         valid: true,
         userId: apiKeyRecord.userId || undefined,
         role: apiKeyRecord.user?.role || 'USER',
         permissions: apiKeyRecord.permissions as Permission[],
-      };
+      }
     } catch (error) {
-      // console.error('API key authentication error:', error);
-      return { valid: false, permissions: [] };
+      // console.error('API key authentication error:', error)
+      return { valid: false, permissions: [] }
     }
   }
 
@@ -393,12 +393,12 @@ export class SecurityMiddleware {
 
     // Apply security headers
     Object.entries(SECURITY_HEADERS).forEach(([key, value]) => {
-      response.headers.set(key, value);
+      response.headers.set(key, value)
     });
 
     // Apply additional headers
     Object.entries(additionalHeaders).forEach(([key, value]) => {
-      response.headers.set(key, value);
+      response.headers.set(key, value)
     });
 
     return response;
@@ -469,12 +469,12 @@ export class SecurityMiddleware {
     });
 
     // Apply security headers
-    return this.applySecurityHeaders(response);
+    return this.applySecurityHeaders(response)
   }
 }
 
 // Export singleton instance
-export const securityMiddleware = SecurityMiddleware.getInstance();
+export const securityMiddleware = SecurityMiddleware.getInstance()
 
 // Utility function to create rate limit key generators
 export function createRateLimitKeyGenerator(_type: 'ip' | 'user' | 'api-key' | 'custom',
@@ -483,7 +483,7 @@ export function createRateLimitKeyGenerator(_type: 'ip' | 'user' | 'api-key' | '
   return (_request: NextRequest): string => {
     switch (type) {
       case 'ip':
-        return securityMiddleware['getClientIP'](request);
+        return securityMiddleware['getClientIP'](request)
       case 'user':
         const userId = request.headers.get('x-user-id') || 'anonymous';
         return `user:${userId}`;
@@ -495,7 +495,7 @@ export function createRateLimitKeyGenerator(_type: 'ip' | 'user' | 'api-key' | '
       default:
         return 'default';
     }
-  };
+  }
 }
 
 // Pre-configured rate limits for different endpoints
@@ -527,11 +527,11 @@ export const RATE_LIMITS = {
     maxRequests: 50,
     keyGenerator: createRateLimitKeyGenerator('user'),
   },
-};
+}
 
 // CORS configurations for different environments
 export const CORS_CONFIGS = {
   DEVELOPMENT: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3004'],
   STAGING: ['https://staging.riscura.com'],
   PRODUCTION: ['https://app.riscura.com', 'https://riscura.com'],
-};
+}

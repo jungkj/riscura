@@ -5,8 +5,9 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -54,11 +55,11 @@ import toast from 'react-hot-toast';
   Video,
   Download,
   ExternalLink,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface Notification {
-  id: string;
+  id: string
   type:
     | 'task_assigned'
     | 'task_completed'
@@ -81,13 +82,13 @@ interface Notification {
     id: string;
     name: string;
     avatar?: string;
-  };
+  }
   metadata?: {
     taskId?: string;
     channelId?: string;
     documentId?: string;
     auditId?: string;
-  };
+  }
 }
 
 interface NotificationPreferences {
@@ -98,7 +99,7 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  };
+  }
   push: {
     taskAssignments: boolean;
     deadlineReminders: boolean;
@@ -106,7 +107,7 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  };
+  }
   inApp: {
     taskAssignments: boolean;
     deadlineReminders: boolean;
@@ -114,13 +115,13 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  };
+  }
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   quietHours: {
     enabled: boolean;
     start: string;
     end: string;
-  };
+  }
 }
 
 // Sample data
@@ -228,7 +229,7 @@ const sampleNotifications: Notification[] = [
     actionUrl: '/dashboard/compliance',
     actionLabel: 'View Dashboard',
   },
-];
+]
 
 const defaultPreferences: NotificationPreferences = {
   email: {
@@ -261,7 +262,7 @@ const defaultPreferences: NotificationPreferences = {
     start: '22:00',
     end: '08:00',
   },
-};
+}
 
 const getNotificationIcon = (_type: string) => {
   const icons = {
@@ -273,9 +274,9 @@ const getNotificationIcon = (_type: string) => {
     system: Settings,
     compliance: FileText,
     audit: Users,
-  };
+  }
   return icons[type as keyof typeof icons] || Bell;
-};
+}
 
 const getPriorityConfig = (priority: string) => {
   const configs = {
@@ -283,9 +284,9 @@ const getPriorityConfig = (priority: string) => {
     high: { color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
     medium: { color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-200' },
     low: { color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-  };
+  }
   return configs[priority as keyof typeof configs] || configs.medium;
-};
+}
 
 const formatTimeAgo = (date: Date) => {
   const now = new Date();
@@ -301,7 +302,7 @@ const formatTimeAgo = (date: Date) => {
   if (diffInDays < 7) return `${diffInDays}d ago`;
 
   return date.toLocaleDateString();
-};
+}
 
 export default function TeamNotificationsPage() {
   const [activeTab, setActiveTab] = useState('all');
@@ -315,7 +316,7 @@ export default function TeamNotificationsPage() {
   const filteredNotifications = notifications.filter((notification) => {
     const matchesSearch =
       notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notification.message.toLowerCase().includes(searchQuery.toLowerCase());
+      notification.message.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory =
       filterCategory === 'all' ||
       notification.category.toLowerCase() === filterCategory.toLowerCase();
@@ -337,36 +338,36 @@ export default function TeamNotificationsPage() {
       prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n))
     );
     toast.success('Notification marked as read');
-  };
+  }
 
   const handleMarkAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     toast.success('All notifications marked as read');
-  };
+  }
 
   const handleToggleStar = (notificationId: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === notificationId ? { ...n, isStarred: !n.isStarred } : n))
     );
     toast.success('Notification starred');
-  };
+  }
 
   const handleDeleteNotification = (notificationId: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification deleted');
-  };
+  }
 
   const handleArchiveNotification = (notificationId: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification archived');
-  };
+  }
 
   const handleNotificationAction = (notification: Notification) => {
     if (notification.actionUrl) {
       toast.success(`Navigating to ${notification.actionLabel}...`);
       handleMarkAsRead(notification.id);
     }
-  };
+  }
 
   const handlePreferenceChange = (
     category: keyof NotificationPreferences['email'],
@@ -380,11 +381,11 @@ export default function TeamNotificationsPage() {
         [category]: value,
       },
     }));
-  };
+  }
 
   const handleSavePreferences = () => {
     toast.success('Notification preferences saved successfully!');
-  };
+  }
 
   return (
     <ProtectedRoute>

@@ -7,7 +7,7 @@ import RiskAssessmentWizard from '@/components/RiskAssessmentWizard';
 // Mock external dependencies
 jest.mock('@/hooks/use-toast', () => ({
   toast: jest.fn(),
-}));
+}))
 
 jest.mock('react-dropzone', () => ({
   useDropzone: jest.fn(),
@@ -22,14 +22,14 @@ jest.mock('framer-motion', () => ({
 }));
 
 // Mock API calls
-global.fetch = jest.fn();
+global.fetch = jest.fn()
 
 describe('RiskAssessmentWizard', () => {
   const defaultProps = {
     organizationId: 'test-org-1',
     userId: 'test-user-1',
     onComplete: jest.fn(),
-  };
+  }
 
   let user: ReturnType<typeof userEvent.setup>;
 
@@ -38,7 +38,7 @@ describe('RiskAssessmentWizard', () => {
     jest.clearAllMocks();
 
     // Mock useDropzone implementation
-    const mockUseDropzone = require('react-dropzone').useDropzone;
+    const mockUseDropzone = require('react-dropzone').useDropzone
     mockUseDropzone.mockReturnValue({
       getRootProps: () => ({
         'data-testid': 'dropzone',
@@ -54,7 +54,7 @@ describe('RiskAssessmentWizard', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true, data: {} }),
-    });
+    })
   });
 
   afterEach(() => {
@@ -84,22 +84,22 @@ describe('RiskAssessmentWizard', () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Fill out required fields
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
 
       // Select assessment type
-      const assessmentTypeSelect = screen.getByLabelText(/assessment type/i);
+      const assessmentTypeSelect = screen.getByLabelText(/assessment type/i)
       await user.click(assessmentTypeSelect);
       await user.click(screen.getByText('Self Assessment'));
 
       // Set due date
-      const dueDateInput = screen.getByLabelText(/due date/i);
+      const dueDateInput = screen.getByLabelText(/due date/i)
       await user.type(dueDateInput, '2024-12-31');
 
       // Go to next step
-      const nextButton = screen.getByRole('button', { name: /next/i });
+      const nextButton = screen.getByRole('button', { name: /next/i })
       await user.click(nextButton);
 
       await waitFor(() => {
@@ -114,14 +114,14 @@ describe('RiskAssessmentWizard', () => {
       await user.click(nextButton);
 
       // Should still be on first step
-      expect(screen.getByText('Configure your risk assessment parameters')).toBeInTheDocument();
+      expect(screen.getByText('Configure your risk assessment parameters')).toBeInTheDocument()
     });
 
     it('should allow going back to previous step', async () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Fill out form and go to next step
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
@@ -134,7 +134,7 @@ describe('RiskAssessmentWizard', () => {
       });
 
       // Go back
-      const backButton = screen.getByRole('button', { name: /back/i });
+      const backButton = screen.getByRole('button', { name: /back/i })
       await user.click(backButton);
 
       expect(screen.getByText('Configure your risk assessment parameters')).toBeInTheDocument();
@@ -159,14 +159,14 @@ describe('RiskAssessmentWizard', () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Add a stakeholder
-      const stakeholderInput = screen.getByPlaceholderText(/add stakeholder/i);
+      const stakeholderInput = screen.getByPlaceholderText(/add stakeholder/i)
       await user.type(stakeholderInput, 'john.doe@example.com');
       await user.click(screen.getByRole('button', { name: /add stakeholder/i }));
 
       expect(screen.getByText('john.doe@example.com')).toBeInTheDocument();
 
       // Remove the stakeholder
-      const removeButton = screen.getByLabelText(/remove stakeholder/i);
+      const removeButton = screen.getByLabelText(/remove stakeholder/i)
       await user.click(removeButton);
 
       expect(screen.queryByText('john.doe@example.com')).not.toBeInTheDocument();
@@ -212,14 +212,14 @@ describe('RiskAssessmentWizard', () => {
         title: 'Invalid email',
         description: 'Please enter a valid email address',
         variant: 'destructive',
-      });
+      })
     });
   });
 
   describe('File Upload', () => {
     beforeEach(async () => {
       // Navigate to file upload step
-      render(<RiskAssessmentWizard {...defaultProps} />);
+      render(<RiskAssessmentWizard {...defaultProps} />)
 
       await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
@@ -252,7 +252,7 @@ describe('RiskAssessmentWizard', () => {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         }),
         new File(['policy content'], 'policy.pdf', { type: 'application/pdf' }),
-      ];
+      ]
 
       const mockUseDropzone = require('react-dropzone').useDropzone;
       mockUseDropzone.mockReturnValue({
@@ -266,10 +266,10 @@ describe('RiskAssessmentWizard', () => {
       });
 
       // Re-render component to trigger file addition
-      const { rerender } = render(<RiskAssessmentWizard {...defaultProps} />);
+      const { rerender } = render(<RiskAssessmentWizard {...defaultProps} />)
 
       // Simulate file drop
-      const dropzoneCallback = mockUseDropzone.mock.calls[0][0].onDrop;
+      const dropzoneCallback = mockUseDropzone.mock.calls[0][0].onDrop
       dropzoneCallback(mockFiles, []);
 
       rerender(<RiskAssessmentWizard {...defaultProps} />);
@@ -283,7 +283,7 @@ describe('RiskAssessmentWizard', () => {
     it('should allow removing uploaded files', async () => {
       // This would need to be implemented in the actual component
       // For now, we'll test the UI elements exist
-      expect(screen.getByTestId('dropzone')).toBeInTheDocument();
+      expect(screen.getByTestId('dropzone')).toBeInTheDocument()
     });
 
     it('should show file size limits', () => {
@@ -294,10 +294,10 @@ describe('RiskAssessmentWizard', () => {
   describe('AI Analysis Step', () => {
     beforeEach(async () => {
       // Navigate to AI analysis step
-      const { rerender } = render(<RiskAssessmentWizard {...defaultProps} />);
+      const { rerender } = render(<RiskAssessmentWizard {...defaultProps} />)
 
       // Go through previous steps
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
@@ -329,7 +329,7 @@ describe('RiskAssessmentWizard', () => {
       await user.click(startButton);
 
       // Should show processing state
-      expect(screen.getByText(/analyzing documents/i)).toBeInTheDocument();
+      expect(screen.getByText(/analyzing documents/i)).toBeInTheDocument()
     });
   });
 
@@ -351,12 +351,12 @@ describe('RiskAssessmentWizard', () => {
           { id: '1', title: 'Access Control', effectiveness: 85 },
           { id: '2', title: 'Data Encryption', effectiveness: 92 },
         ],
-      };
+      }
 
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Navigate to final step (simplified navigation for testing)
-      const nextButtons = screen.getAllByRole('button', { name: /next/i });
+      const nextButtons = screen.getAllByRole('button', { name: /next/i })
       for (const button of nextButtons) {
         await user.click(button);
         await waitFor(() => {}, { timeout: 100 });
@@ -395,7 +395,7 @@ describe('RiskAssessmentWizard', () => {
       expect(progressBar).toHaveAttribute('aria-valuenow', '25'); // 1/4 steps
 
       // Complete first step
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
@@ -415,7 +415,7 @@ describe('RiskAssessmentWizard', () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Try to proceed with analysis
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
@@ -443,11 +443,11 @@ describe('RiskAssessmentWizard', () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Try to proceed without filling required fields
-      const nextButton = screen.getByRole('button', { name: /next/i });
+      const nextButton = screen.getByRole('button', { name: /next/i })
       await user.click(nextButton);
 
       // Should still be on first step
-      expect(screen.getByText('Configure your risk assessment parameters')).toBeInTheDocument();
+      expect(screen.getByText('Configure your risk assessment parameters')).toBeInTheDocument()
     });
   });
 
@@ -467,7 +467,7 @@ describe('RiskAssessmentWizard', () => {
       nameInput.focus();
 
       // Tab should move to next input
-      await user.tab();
+      await user.tab()
       expect(screen.getByLabelText(/description/i)).toHaveFocus();
     });
 
@@ -475,7 +475,7 @@ describe('RiskAssessmentWizard', () => {
       render(<RiskAssessmentWizard {...defaultProps} />);
 
       // Fill form and proceed
-      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment');
+      await user.type(screen.getByLabelText(/assessment name/i), 'Test Assessment')
       await user.type(screen.getByLabelText(/description/i), 'Test Description');
       await user.type(screen.getByLabelText(/scope/i), 'Test Scope');
       await user.type(screen.getByLabelText(/department/i), 'IT Department');
@@ -487,7 +487,7 @@ describe('RiskAssessmentWizard', () => {
       });
 
       // Check for accessibility announcements
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Document Upload');
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Document Upload')
     });
   });
 });

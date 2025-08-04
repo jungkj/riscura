@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,6 +11,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import { DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 
 // Icons
 // import {
@@ -18,7 +19,7 @@ import { toast } from '@/hooks/use-toast';
   Plus, Brain, Zap, FileText, Users, Clock, Target, AlertTriangle,
   Eye, Edit, Copy, Share, Archive, Trash2, Play, Settings, ChevronDown,
   LineChart, Activity, DollarSign, Shield, Globe, Layers, Database
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 import type { 
@@ -28,7 +29,7 @@ import type {
   ReportGeneration,
   GenerationStatus,
   ExportFormat
-} from '@/types/reporting.types';
+} from '@/types/reporting.types'
 
 interface ReportingPageProps {
   view?: 'dashboard' | 'builder' | 'library' | 'scheduled' | 'analytics';
@@ -38,7 +39,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
   const router = useRouter();
   
   // State Management
-  const [activeView, setActiveView] = useState<string>(view);
+  const [activeView, setActiveView] = useState<string>(view)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ReportCategory | 'all'>('all');
   const [selectedType, setSelectedType] = useState<ReportType | 'all'>('all');
@@ -48,7 +49,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
   const [showFilters, setShowFilters] = useState(false);
 
   // Data
-  const [reports, setReports] = useState<ReportTemplate[]>([]);
+  const [reports, setReports] = useState<ReportTemplate[]>([])
   const [generations, setGenerations] = useState<ReportGeneration[]>([]);
   const [analytics, setAnalytics] = useState({
     totalReports: 0,
@@ -61,7 +62,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
 
   // Initialize
   useEffect(() => {
-    initializeData();
+    initializeData()
   }, []);
 
   const initializeData = async () => {
@@ -490,12 +491,12 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
           tags: ['risk', 'trends', 'ai', 'predictive'],
           organizationId: 'org-1'
         }
-      ];
+      ]
 
       setReports(demoReports);
       
       // Calculate analytics
-      const totalViews = demoReports.reduce((sum, r) => sum + r.usageCount, 0);
+      const totalViews = demoReports.reduce((sum, r) => sum + r.usageCount, 0)
       const aiEnabled = demoReports.filter(r => r.aiFeatures.narrativeGeneration.enabled).length;
 
       setAnalytics({
@@ -514,7 +515,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
         description: `${demoReports.length} report templates loaded with AI intelligence`,
       });
     } catch (error) {
-      // console.error('Failed to load reports:', error);
+      // console.error('Failed to load reports:', error)
       setIsLoading(false);
       toast({
         title: 'Loading Failed',
@@ -522,12 +523,12 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   // Filtering
   const filteredReports = reports.filter(r => {
     const matchesSearch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         r.description.toLowerCase().includes(searchQuery.toLowerCase());
+                         r.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || r.category === selectedCategory;
     const matchesType = selectedType === 'all' || r.type === selectedType;
     
@@ -536,14 +537,14 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
 
   // Actions
   const handleCreateReport = () => {
-    setActiveView('builder');
+    setActiveView('builder')
     setSelectedReport(null);
-  };
+  }
 
   const handleEditReport = (report: ReportTemplate) => {
     setSelectedReport(report);
     setActiveView('builder');
-  };
+  }
 
   const handleGenerateReport = async (reportId: string, format: ExportFormat = 'pdf') => {
     try {
@@ -565,12 +566,12 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
         outputs: [],
         requestedBy: 'current-user',
         requestedAt: new Date()
-      };
+      }
       
       setGenerations(prev => [generation, ...prev]);
       
       // Simulate progress
-      let progress = 0;
+      let progress = 0
       const interval = setInterval(() => {
         progress += Math.random() * 20;
         if (progress >= 100) {
@@ -613,7 +614,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
         variant: 'destructive',
       });
     }
-  };
+  }
 
   if (isLoading) {
 
@@ -622,7 +623,7 @@ const ReportingPage = ({ view = 'dashboard' }: ReportingPageProps) {
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="p-6 space-y-6">

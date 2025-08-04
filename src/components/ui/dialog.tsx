@@ -226,4 +226,4 @@ export {
   DialogDescription,
   DialogLarge,
   DialogFullscreen,
-};
+}

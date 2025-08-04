@@ -126,7 +126,7 @@ const SANITIZATION_CONFIGS: Record<string, SanitizationConfig> = {
     allowDataAttributes: false,
     allowCustomElements: false,
   },
-};
+}
 
 /**
  * Input Sanitizer class
@@ -158,13 +158,13 @@ export class InputSanitizer {
           inputLength: input.length,
           maxLength: config.maxLength,
           truncated: true,
-        });
+        })
         input = input.substring(0, config.maxLength);
       }
 
       if (config.stripHtml) {
         // Strip all HTML tags
-        return validator.stripLow(validator.escape(input));
+        return validator.stripLow(validator.escape(input))
       }
 
       // Configure DOMPurify
@@ -172,7 +172,7 @@ export class InputSanitizer {
         ALLOWED_TAGS: config.allowedTags,
         ALLOWED_ATTR: Object.keys(config.allowedAttributes).reduce((acc, tag) => {
           if (tag === '*') {
-            acc.push(...config.allowedAttributes[tag]);
+            acc.push(...config.allowedAttributes[tag])
           } else {
             acc.push(...config.allowedAttributes[tag].map((attr) => `${tag}:${attr}`));
           }
@@ -189,7 +189,7 @@ export class InputSanitizer {
         FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select'],
         FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
         USE_PROFILES: { html: true },
-      };
+      }
 
       // Custom hook to log blocked content
       DOMPurify.addHook('uponSanitizeElement', (node: any, data: any) => {
@@ -197,7 +197,7 @@ export class InputSanitizer {
           productionGuard.logSecurityEvent('html_tag_blocked', {
             tagName: data.tagName,
             context: 'sanitization',
-          });
+          })
         }
       });
 
@@ -214,11 +214,11 @@ export class InputSanitizer {
       const sanitized = DOMPurify.sanitize(input, purifyConfig);
 
       // Convert TrustedHTML to string
-      const sanitizedString = typeof sanitized === 'string' ? sanitized : sanitized.toString();
+      const sanitizedString = typeof sanitized === 'string' ? sanitized : sanitized.toString()
 
       // Encode entities if requested
       if (config.encodeEntities) {
-        return validator.escape(sanitizedString);
+        return validator.escape(sanitizedString)
       }
 
       return sanitizedString;
@@ -229,7 +229,7 @@ export class InputSanitizer {
       });
 
       // Fallback to basic escaping
-      return validator.escape(input.substring(0, 1000));
+      return validator.escape(input.substring(0, 1000))
     }
   }
 
@@ -245,16 +245,16 @@ export class InputSanitizer {
       let sanitized = input;
 
       // Trim whitespace
-      sanitized = sanitized.trim();
+      sanitized = sanitized.trim()
 
       // Check required field
       if (options.required && !sanitized) {
-        throw new Error('Required field cannot be empty');
+        throw new Error('Required field cannot be empty')
       }
 
       // Check length constraints
       if (options.minLength && sanitized.length < options.minLength) {
-        throw new Error(`Input must be at least ${options.minLength} characters`);
+        throw new Error(`Input must be at least ${options.minLength} characters`)
       }
 
       if (options.maxLength && sanitized.length > options.maxLength) {
@@ -267,22 +267,22 @@ export class InputSanitizer {
 
       // Apply pattern validation
       if (options.pattern && !options.pattern.test(sanitized)) {
-        throw new Error('Input does not match required pattern');
+        throw new Error('Input does not match required pattern')
       }
 
       // Custom validation
       if (options.customValidator && !options.customValidator(sanitized)) {
-        throw new Error('Input failed custom validation');
+        throw new Error('Input failed custom validation')
       }
 
       // Remove null bytes and control characters
-      sanitized = sanitized.replace(/\0/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+      sanitized = sanitized.replace(/\0/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
 
       // Escape HTML entities
-      sanitized = validator.escape(sanitized);
+      sanitized = validator.escape(sanitized)
 
       // Remove potentially dangerous sequences
-      sanitized = this.removeDangerousPatterns(sanitized);
+      sanitized = this.removeDangerousPatterns(sanitized)
 
       return sanitized;
     } catch (error) {
@@ -312,7 +312,7 @@ export class InputSanitizer {
     if (sanitized.includes('<script') || sanitized.includes('javascript:')) {
       productionGuard.logSecurityEvent('malicious_email_blocked', {
         email: sanitized.substring(0, 20) + '...',
-      });
+      })
       throw new Error('Invalid email address');
     }
 
@@ -337,11 +337,11 @@ export class InputSanitizer {
         allow_underscores: false,
       })
     ) {
-      throw new Error('Invalid URL format');
+      throw new Error('Invalid URL format')
     }
 
     // Check for dangerous protocols
-    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'];
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:']
     const lowerUrl = trimmed.toLowerCase();
 
     for (const protocol of dangerousProtocols) {
@@ -366,12 +366,12 @@ export class InputSanitizer {
     try {
       // Check file size
       if (file.size > options.maxSize) {
-        errors.push(`File size ${file.size} exceeds maximum allowed size ${options.maxSize}`);
+        errors.push(`File size ${file.size} exceeds maximum allowed size ${options.maxSize}`)
       }
 
       // Check file type
       if (options.allowedTypes.length > 0 && !options.allowedTypes.includes(file.type)) {
-        errors.push(`File type ${file.type} is not allowed`);
+        errors.push(`File type ${file.type} is not allowed`)
         productionGuard.logSecurityEvent('file_type_blocked', {
           fileName: file.name,
           fileType: file.type,
@@ -380,7 +380,7 @@ export class InputSanitizer {
       }
 
       // Check file extension
-      const extension = file.name.split('.').pop()?.toLowerCase();
+      const extension = file.name.split('.').pop()?.toLowerCase()
       if (
         extension &&
         options.allowedExtensions.length > 0 &&
@@ -391,7 +391,7 @@ export class InputSanitizer {
 
       // Check for dangerous file names
       if (this.isDangerousFileName(file.name)) {
-        errors.push('File name contains dangerous characters');
+        errors.push('File name contains dangerous characters')
         productionGuard.logSecurityEvent('dangerous_filename_blocked', {
           fileName: file.name,
         });
@@ -412,7 +412,7 @@ export class InputSanitizer {
           /\.vbs$/i,
           /\.js$/i,
           /\.jar$/i,
-        ];
+        ]
 
         for (const pattern of suspiciousPatterns) {
           if (pattern.test(file.name)) {
@@ -429,7 +429,7 @@ export class InputSanitizer {
       return {
         isValid: errors.length === 0,
         errors,
-      };
+      }
     } catch (error) {
       productionGuard.logSecurityEvent('file_validation_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -439,7 +439,7 @@ export class InputSanitizer {
       return {
         isValid: false,
         errors: ['File validation failed'],
-      };
+      }
     }
   }
 
@@ -465,7 +465,7 @@ export class InputSanitizer {
       /\0/g,
       // LDAP injection patterns
       /[()&|!]/g,
-    ];
+    ]
 
     let sanitized = input;
 
@@ -511,11 +511,11 @@ export class InputSanitizer {
       return obj.map((item) => this.sanitizeObject(item, config));
     }
 
-    const sanitized: any = {};
+    const sanitized: any = {}
 
     for (const [key, value] of Object.entries(obj)) {
       // Sanitize key
-      const sanitizedKey = this.sanitizeText(key, { maxLength: 100 });
+      const sanitizedKey = this.sanitizeText(key, { maxLength: 100 })
 
       if (typeof value === 'string') {
         sanitized[sanitizedKey] = this.sanitizeHtml(value, config);
@@ -545,10 +545,10 @@ export class InputSanitizer {
       .trim();
 
     // Limit length
-    sanitized = sanitized.substring(0, 200);
+    sanitized = sanitized.substring(0, 200)
 
     // Escape special characters for safe database queries
-    sanitized = validator.escape(sanitized);
+    sanitized = validator.escape(sanitized)
 
     productionGuard.logSecurityEvent('search_query_sanitized', {
       originalLength: query.length,
@@ -566,7 +566,7 @@ export class InputSanitizer {
     inputs: Record<string, any>,
     config: SanitizationConfig = SANITIZATION_CONFIGS.basic
   ): Record<string, any> {
-    const sanitized: Record<string, any> = {};
+    const sanitized: Record<string, any> = {}
 
     for (const [key, value] of Object.entries(inputs)) {
       try {
@@ -583,7 +583,7 @@ export class InputSanitizer {
           error: error instanceof Error ? error.message : 'Unknown error',
         });
         // Skip invalid inputs
-        continue;
+        continue
       }
     }
 
@@ -603,19 +603,19 @@ export class InputSanitizer {
       totalSanitized: 0,
       blockedPatterns: 0,
       errorCount: 0,
-    };
+    }
   }
 }
 
 // Export singleton instance
-export const inputSanitizer = InputSanitizer.getInstance();
+export const inputSanitizer = InputSanitizer.getInstance()
 
 // Utility functions
 export function sanitizeHtml(
   input: string,
   configName: keyof typeof SANITIZATION_CONFIGS = 'basic'
 ): string {
-  return inputSanitizer.sanitizeHtml(input, SANITIZATION_CONFIGS[configName]);
+  return inputSanitizer.sanitizeHtml(input, SANITIZATION_CONFIGS[configName])
 }
 
 export function sanitizeText(input: string, options?: ValidationOptions): string {
@@ -648,4 +648,4 @@ export function sanitizeSearchQuery(_query: string): string {
 }
 
 // Export configurations for customization
-export { SANITIZATION_CONFIGS };
+export { SANITIZATION_CONFIGS }

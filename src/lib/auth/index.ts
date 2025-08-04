@@ -15,7 +15,7 @@ export {
   getTokenRemainingTime,
   type JWTPayload,
   type TokenPair,
-} from './jwt';
+} from './jwt'
 
 // Password security
 export {
@@ -28,7 +28,7 @@ export {
   getPasswordStrengthColor,
   PASSWORD_REQUIREMENTS,
   type PasswordStrengthResult,
-} from './password';
+} from './password'
 
 // Session management
 export {
@@ -48,7 +48,7 @@ export {
   type SessionData,
   type CreateSessionOptions,
   type SessionWithUser,
-} from './session';
+} from './session'
 
 // Authentication middleware
 export {
@@ -64,7 +64,7 @@ export {
   generateCSRFToken,
   type AuthenticatedRequest,
   type MiddlewareOptions,
-} from './middleware';
+} from './middleware'
 
 // Common authentication errors
 export class AuthenticationError extends Error {
@@ -72,7 +72,7 @@ export class AuthenticationError extends Error {
     message: string,
     public code?: string
   ) {
-    super(message);
+    super(message)
     this.name = 'AuthenticationError';
   }
 }
@@ -105,7 +105,7 @@ export const AUTH_CONSTANTS = {
   LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes in milliseconds
   MAX_SESSIONS_PER_USER: 10,
   TOKEN_REFRESH_INTERVAL: 13 * 60 * 1000, // 13 minutes in milliseconds
-} as const;
+} as const
 
 // Permission constants
 export const PERMISSIONS = {
@@ -171,7 +171,7 @@ export const PERMISSIONS = {
   BULK_EXPORT: 'bulk:export',
   BULK_UPDATE: 'bulk:update',
   BULK_DELETE: 'bulk:delete',
-} as const;
+} as const
 
 // Role definitions with default permissions
 export const ROLE_PERMISSIONS = {
@@ -220,7 +220,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.REPORT_READ,
     PERMISSIONS.AI_CHAT,
   ],
-} as const;
+} as const
 
 /**
  * Check if user has specific permission
@@ -276,7 +276,7 @@ export function getAllPermissions(): string[] {
  * Group permissions by category
  */
 export function getPermissionsByCategory(): Record<string, string[]> {
-  const categories: Record<string, string[]> = {};
+  const categories: Record<string, string[]> = {}
 
   Object.entries(PERMISSIONS).forEach(([key, permission]) => {
     const category = permission.split(':')[0];
@@ -323,11 +323,11 @@ export function getEffectivePermissions(
   const allPermissions = [...rolePermissions, ...explicitPermissions];
 
   // Remove duplicates and return
-  return [...new Set(allPermissions)];
+  return [...new Set(allPermissions)]
 }
 
 // Type exports
-export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
+export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]
 export type Role = keyof typeof ROLE_PERMISSIONS;
 
 export * from './auth-options';

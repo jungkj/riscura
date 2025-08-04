@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -11,6 +11,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   Shield,
   AlertTriangle,
@@ -46,7 +47,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
   BarChart3,
   Settings,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 import RiskCard, { RiskData } from './RiskCard';
 
 interface RiskScenario {
@@ -187,7 +188,7 @@ const VantaInspiredRiskInterface = () => {
       case 'Low': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -198,7 +199,7 @@ const VantaInspiredRiskInterface = () => {
       case 'Closed': return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -217,14 +218,14 @@ const VantaInspiredRiskInterface = () => {
       default:
         return <Clock className="w-4 h-4" />;
     }
-  };
+  }
 
   const getRiskScoreColor = (score: number) => {
     if (score >= 15) return 'text-red-600 bg-red-50';
     if (score >= 10) return 'text-orange-600 bg-orange-50';
     if (score >= 5) return 'text-yellow-600 bg-yellow-50';
     return 'text-green-600 bg-green-50';
-  };
+  }
 
   const filteredRisks = risks.filter(risk => {
     const matchesSearch = risk.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -255,7 +256,7 @@ const VantaInspiredRiskInterface = () => {
     if (diffInHours < 24) return `${diffInHours}h ago`;
     
     return date.toLocaleDateString();
-  };
+  }
 
   const getRiskStats = () => {
     const total = risks.length;
@@ -263,25 +264,25 @@ const VantaInspiredRiskInterface = () => {
     const open = risks.filter(r => r.status === 'Active').length;
     const overdue = risks.filter(r => new Date(r.dueDate) < new Date()).length;
     
-    return { total, critical, open, overdue };
-  };
+    return { total, critical, open, overdue }
+  }
 
   const _stats = getRiskStats();
 
   const handleRiskView = useCallback((_risk: RiskData) => {
-    // console.log('View risk:', risk);
+    // console.log('View risk:', risk)
     setSelectedRisk(risk);
   }, []);
 
   const handleRiskEdit = useCallback((_risk: RiskData) => {
-    // console.log('Edit risk:', risk);
+    // console.log('Edit risk:', risk)
     setSelectedRisk(risk);
   }, []);
 
   const handleRiskArchive = useCallback((_risk: RiskData) => {
-    // console.log('Archive risk:', risk);
+    // console.log('Archive risk:', risk)
     // TODO: Archive risk
-  }, []);
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -626,7 +627,7 @@ setSearchQuery(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 export default VantaInspiredRiskInterface;
              

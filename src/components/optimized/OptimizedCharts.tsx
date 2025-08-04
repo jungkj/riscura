@@ -1,8 +1,9 @@
 'use client';
 
 // Optimized Chart Components for High Performance Rendering
-import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
 import {
+import { DaisyTooltip } from '@/components/ui/daisy-components';
   LineChart,
   Line,
   AreaChart,
@@ -26,7 +27,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { debounce, throttle } from 'lodash-es';
 import { cn } from '@/lib/utils';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -77,7 +78,7 @@ export interface ChartConfig {
   lazyLoad?: boolean;
   threshold?: number;
   series?: any[];
-  margin?: { top: number; right: number; bottom: number; left: number };
+  margin?: { top: number; right: number; bottom: number; left: number }
   xAxisKey?: string;
   yAxisKeys?: string[];
   samplingStrategy?: 'none' | 'uniform' | 'lttb' | 'adaptive';
@@ -124,18 +125,18 @@ const processChartData = (_data: ChartDataPoint[],
   maxPoints: number = 1000,
   aggregationMethod: 'sum' | 'avg' | 'max' | 'min' = 'avg'
 ): ChartDataPoint[] => {
-  if (data.length <= maxPoints) return data;
+  if (data.length <= maxPoints) return data
 
   const step = Math.ceil(data.length / maxPoints);
   const processed: ChartDataPoint[] = [];
 
   for (let i = 0; i < data.length; i += step) {
     const chunk = data.slice(i, i + step);
-    const aggregated: ChartDataPoint = {};
+    const aggregated: ChartDataPoint = {}
 
     // Aggregate numeric values
     Object.keys(chunk[0] || {}).forEach((key) => {
-      const values = chunk.map((item) => item[key]).filter((val) => typeof val === 'number');
+      const values = chunk.map((item) => item[key]).filter((val) => typeof val === 'number')
 
       if (values.length > 0) {
         switch (aggregationMethod) {
@@ -154,7 +155,7 @@ const processChartData = (_data: ChartDataPoint[],
         }
       } else {
         // Use first non-numeric value
-        aggregated[key] = chunk[0][key];
+        aggregated[key] = chunk[0][key]
       }
     });
 
@@ -162,11 +163,11 @@ const processChartData = (_data: ChartDataPoint[],
   }
 
   return processed;
-};
+}
 
 // Memoized chart components
 const OptimizedLineChart = React.memo<{
-  config: ChartConfig;
+  config: ChartConfig
   data: ChartDataPoint[];
   onLoad?: () => void;
 }>(({ config, data, onLoad }) => {
@@ -297,7 +298,7 @@ const OptimizedPieChart = React.memo<{
 }>(({ config, data, onLoad }) => {
   const processedData = useMemo(() => {
     // For pie charts, we typically want to show all categories
-    return data.slice(0, config.maxDataPoints || 20);
+    return data.slice(0, config.maxDataPoints || 20)
   }, [data, config.maxDataPoints]);
 
   useEffect(() => {
@@ -386,7 +387,7 @@ const ChartErrorBoundary: React.FC<{
       const error = new Error(event.message);
       setError(error);
       onError(error);
-    };
+    }
 
     window.addEventListener('error', handleError);
     return () => window.removeEventListener('error', handleError);
@@ -410,7 +411,7 @@ const ChartErrorBoundary: React.FC<{
   }
 
   return <>{children}</>;
-};
+}
 
 const LazyChart: React.FC<{
   config: ChartConfig;
@@ -433,20 +434,20 @@ const LazyChart: React.FC<{
   // Handle intersection observer
   useEffect(() => {
     if (enableIntersectionObserver && inView && !state.visible) {
-      setState((prev) => ({ ...prev, visible: true }));
+      setState((prev) => ({ ...prev, visible: true }))
     }
   }, [inView, enableIntersectionObserver, state.visible]);
 
   // Load chart when visible
   useEffect(() => {
-    if (!state.visible || state.loaded) return;
+    if (!state.visible || state.loaded) return
 
     setState((prev) => ({ ...prev, loading: true }));
 
     const loadChart = async () => {
       try {
         // Simulate loading delay
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100))
 
         setState((prev) => ({
           ...prev,
@@ -464,14 +465,14 @@ const LazyChart: React.FC<{
         }));
         onError(err);
       }
-    };
+    }
 
     loadChart();
   }, [state.visible, state.loaded, onLoad, onError]);
 
   // Set up refresh interval
   useEffect(() => {
-    if (!config.refreshInterval || !state.loaded) return;
+    if (!config.refreshInterval || !state.loaded) return
 
     refreshTimeoutRef.current = setTimeout(() => {
       setState((prev) => ({ ...prev, loaded: false }));
@@ -481,7 +482,7 @@ const LazyChart: React.FC<{
       if (refreshTimeoutRef.current) {
         clearTimeout(refreshTimeoutRef.current);
       }
-    };
+    }
   }, [config.refreshInterval, state.loaded, state.lastUpdate]);
 
   if (!state.visible) {
@@ -524,7 +525,7 @@ const LazyChart: React.FC<{
       config,
       data: config.data,
       onLoad,
-    };
+    }
 
     switch (config.type) {
       case 'line':
@@ -540,7 +541,7 @@ const LazyChart: React.FC<{
       default:
         return <div>Unsupported chart type</div>;
     }
-  };
+  }
 
   return (
     <motion.div
@@ -553,7 +554,7 @@ const LazyChart: React.FC<{
       <ChartErrorBoundary onError={onError}>{renderChart()}</ChartErrorBoundary>
     </motion.div>
   );
-};
+}
 
 const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
   charts,
@@ -573,7 +574,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
   // Intersection observer setup
   useEffect(() => {
     if (!enableIntersectionObserver) {
-      setVisibleCharts(new Set(charts.map((_, index) => index)));
+      setVisibleCharts(new Set(charts.map((_, index) => index)))
       return;
     }
 
@@ -603,13 +604,13 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
 
     return () => {
       observers.forEach((observer) => observer.disconnect());
-    };
+    }
   }, [charts, enableIntersectionObserver]);
 
   // Throttled chart loading
   const handleChartLoad = useCallback(
     throttle((chartIndex: number) => {
-      setLoadedCharts((prev) => new Set([...prev, chartIndex]));
+      setLoadedCharts((prev) => new Set([...prev, chartIndex]))
       onChartLoad?.(chartIndex);
     }, 100),
     [onChartLoad]
@@ -630,7 +631,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
           <ChartSkeleton key={index} />
         ))}
       </div>
-    );
+    )
   }
 
   // Error state
@@ -642,7 +643,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
           <div className="text-gray-500 text-sm">{error.message}</div>
         </div>
       </div>
-    );
+    )
   }
 
   // Empty state
@@ -654,7 +655,7 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
           <div className="text-gray-400 text-sm">Add charts to visualize your data</div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -680,13 +681,13 @@ const OptimizedCharts: React.FC<OptimizedChartsProps> = ({
       </AnimatePresence>
     </div>
   );
-};
+}
 
 export default OptimizedCharts;
 
 // Utility hook for chart management
 export const useOptimizedCharts = (initialCharts: ChartConfig[]) => {
-  const [charts, setCharts] = useState(initialCharts);
+  const [charts, setCharts] = useState(initialCharts)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -716,5 +717,5 @@ export const useOptimizedCharts = (initialCharts: ChartConfig[]) => {
     removeChart,
     updateChart,
     refreshCharts,
-  };
-};
+  }
+}

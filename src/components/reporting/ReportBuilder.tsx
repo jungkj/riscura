@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+// import { DatePickerWithRange } from '@/components/ui/date-range-picker'
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   FileText, 
   Download, 
@@ -23,7 +24,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   CheckCircle,
   Clock,
   Users
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
 import { DateRange } from 'react-day-picker';
 
@@ -48,7 +49,7 @@ interface ReportConfig {
     priority?: string[];
     assignedTo?: string[];
     departments?: string[];
-  };
+  }
   parameters: Record<string, any>;
   recipients: string[];
   isScheduled: boolean;
@@ -59,7 +60,7 @@ interface ReportConfig {
     time: string;
     timezone: string;
     enabled: boolean;
-  };
+  }
 }
 
 interface ReportBuilderProps {
@@ -88,7 +89,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
 
   // Load templates on component mount
   useEffect(() => {
-    loadTemplates();
+    loadTemplates()
   }, []);
 
   const loadTemplates = async () => {
@@ -105,7 +106,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleTemplateSelect = (templateId: string) => {
     const template = templates.find(t => t.id === templateId);
@@ -118,7 +119,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         template: template.id,
       }));
     }
-  };
+  }
 
   const handleFormatChange = (format: string, checked: boolean) => {
     setConfig(prev => ({
@@ -127,7 +128,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         ? [...prev.format, format]
         : prev.format.filter(f => f !== format),
     }));
-  };
+  }
 
   const handleFilterChange = (filterType: string, value: any) => {
     setConfig(prev => ({
@@ -137,7 +138,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         [filterType]: value,
       },
     }));
-  };
+  }
 
   const handleParameterChange = (param: string, value: any) => {
     setConfig(prev => ({
@@ -147,7 +148,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         [param]: value,
       },
     }));
-  };
+  }
 
   const addRecipient = () => {
     if (emailInput && isValidEmail(emailInput)) {
@@ -171,18 +172,18 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const removeRecipient = (email: string) => {
     setConfig(prev => ({
       ...prev,
       recipients: prev.recipients.filter(r => r !== email),
     }));
-  };
+  }
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  }
 
   const validateConfig = (): string[] => {
     const errors: string[] = [];
@@ -197,7 +198,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
     }
 
     return errors;
-  };
+  }
 
   const handleGenerate = async () => {
     const errors = validateConfig();
@@ -225,7 +226,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleSchedule = async () => {
     if (!onSchedule) return;
@@ -255,7 +256,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const generatePreview = async () => {
     try {
@@ -271,7 +272,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
           { name: 'Compliance Violation', category: 'Regulatory', score: 7.2 },
           { name: 'System Outage', category: 'Operational', score: 6.8 },
         ],
-      });
+      })
 
       toast({
         title: 'Preview Generated',
@@ -284,7 +285,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
         variant: 'destructive',
       });
     }
-  };
+  }
 
   return (
     <div className="space-y-6">

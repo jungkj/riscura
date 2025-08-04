@@ -29,7 +29,7 @@ export async function GET() {
     sameSite: 'lax' as const,
     maxAge: 60, // 1 minute
     path: '/',
-  });
+  })
 
   return response;
 }

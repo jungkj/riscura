@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -9,6 +9,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from 'sonner';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   Activity,
   AlertTriangle,
   Clock,
@@ -48,23 +49,23 @@ interface PerformanceMetrics {
   ttfb: number; // Time to First Byte
   
   // Application Performance
-  pageLoadTime: number;
+  pageLoadTime: number
   apiResponseTime: number;
   memoryUsage: number;
   cpuUsage: number;
   
   // Network Performance
-  connectionType: string;
+  connectionType: string
   downlink: number;
   rtt: number;
   
   // User Experience
-  bounceRate: number;
+  bounceRate: number
   sessionDuration: number;
   pageViews: number;
   
   // Error Tracking
-  errorRate: number;
+  errorRate: number
   crashRate: number;
   
   timestamp: string;
@@ -92,8 +93,8 @@ interface ResourceTiming {
 // ============================================================================
 
 class PerformanceMonitor {
-  private observers: PerformanceObserver[] = [];
-  private metrics: Partial<PerformanceMetrics> = {};
+  private observers: PerformanceObserver[] = []
+  private metrics: Partial<PerformanceMetrics> = {}
   private listeners: ((metrics: PerformanceMetrics) => void)[] = [];
 
   constructor() {
@@ -106,7 +107,7 @@ class PerformanceMonitor {
     if ('PerformanceObserver' in window) {
       // LCP Observer
       const lcpObserver = new PerformanceObserver((entryList) => {
-        const entries = entryList.getEntries();
+        const entries = entryList.getEntries()
         const lastEntry = entries[entries.length - 1];
         this.metrics.lcp = lastEntry.startTime;
         this.notifyListeners();
@@ -117,7 +118,7 @@ class PerformanceMonitor {
       // FID Observer
       const fidObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries() as any[]) {
-          this.metrics.fid = entry.processingStart - entry.startTime;
+          this.metrics.fid = entry.processingStart - entry.startTime
           this.notifyListeners();
         }
       });
@@ -125,7 +126,7 @@ class PerformanceMonitor {
       this.observers.push(fidObserver);
 
       // CLS Observer
-      let clsValue = 0;
+      let clsValue = 0
       const clsObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries() as any[]) {
           if (!entry.hadRecentInput) {
@@ -141,7 +142,7 @@ class PerformanceMonitor {
       // Navigation Timing
       const navObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
-          const navEntry = entry as PerformanceNavigationTiming;
+          const navEntry = entry as PerformanceNavigationTiming
           this.metrics.fcp = navEntry.responseStart - navEntry.fetchStart;
           this.metrics.ttfb = navEntry.responseStart - navEntry.requestStart;
           this.metrics.pageLoadTime = navEntry.loadEventEnd - navEntry.fetchStart;
@@ -157,7 +158,7 @@ class PerformanceMonitor {
     // Monitor memory usage
     if ('memory' in performance) {
       setInterval(() => {
-        const memInfo = (performance as any).memory;
+        const memInfo = (performance as any).memory
         this.metrics.memoryUsage = (memInfo.usedJSHeapSize / memInfo.totalJSHeapSize) * 100;
         this.notifyListeners();
       }, 5000);
@@ -165,7 +166,7 @@ class PerformanceMonitor {
 
     // Monitor network information
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as any).connection
       this.metrics.connectionType = connection.effectiveType;
       this.metrics.downlink = connection.downlink;
       this.metrics.rtt = connection.rtt;
@@ -205,7 +206,7 @@ class PerformanceMonitor {
       errorRate: this.metrics.errorRate || 0,
       crashRate: this.metrics.crashRate || 0,
       timestamp: new Date().toISOString(),
-    };
+    }
 
     this.listeners.forEach(listener => listener(completeMetrics));
   }
@@ -217,7 +218,7 @@ class PerformanceMonitor {
       if (index > -1) {
         this.listeners.splice(index, 1);
       }
-    };
+    }
   }
 
   public getResourceTimings(): ResourceTiming[] {
@@ -249,7 +250,7 @@ class PerformanceMonitor {
 // ============================================================================
 
 const PerformanceDashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
+  const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null)
   const [historicalData, setHistoricalData] = useState<PerformanceMetrics[]>([]);
   const [alerts, setAlerts] = useState<PerformanceAlert[]>([]);
   const [resourceTimings, setResourceTimings] = useState<ResourceTiming[]>([]);
@@ -267,48 +268,48 @@ const PerformanceDashboard: React.FC = () => {
     memoryUsage: 80, // 80%
     cpuUsage: 70, // 70%
     errorRate: 5, // 5%
-  };
+  }
 
   // Start performance monitoring
   const startMonitoring = () => {
     if (!monitorRef.current) {
-      monitorRef.current = new PerformanceMonitor();
+      monitorRef.current = new PerformanceMonitor()
       
       const unsubscribe = monitorRef.current.subscribe((newMetrics) => {
         setMetrics(newMetrics);
         setHistoricalData(prev => [...prev.slice(-29), newMetrics]); // Keep last 30 entries
         
         // Check for alerts
-        checkForAlerts(newMetrics);
+        checkForAlerts(newMetrics)
       });
 
       // Get initial resource timings
-      setResourceTimings(monitorRef.current.getResourceTimings());
+      setResourceTimings(monitorRef.current.getResourceTimings())
       
       setIsMonitoring(true);
       toast.success('Performance monitoring started');
       
       return unsubscribe;
     }
-  };
+  }
 
   // Stop performance monitoring
   const stopMonitoring = () => {
     if (monitorRef.current) {
-      monitorRef.current.destroy();
+      monitorRef.current.destroy()
       monitorRef.current = null;
       setIsMonitoring(false);
               toast('Performance monitoring stopped');
     }
-  };
+  }
 
   // Check for performance alerts
   const checkForAlerts = (currentMetrics: PerformanceMetrics) => {
-    const newAlerts: PerformanceAlert[] = [];
+    const newAlerts: PerformanceAlert[] = []
 
     // Check each threshold
     Object.entries(thresholds).forEach(([metric, threshold]) => {
-      const value = currentMetrics[metric as keyof PerformanceMetrics] as number;
+      const value = currentMetrics[metric as keyof PerformanceMetrics] as number
       if (value > threshold) {
         newAlerts.push({
           id: `${metric}-${Date.now()}`,
@@ -325,17 +326,17 @@ const PerformanceDashboard: React.FC = () => {
     if (newAlerts.length > 0) {
       setAlerts(prev => [...newAlerts, ...prev.slice(0, 9)]); // Keep last 10 alerts
     }
-  };
+  }
 
   // Clear alerts
   const clearAlerts = () => {
-    setAlerts([]);
+    setAlerts([])
     toast.success('Alerts cleared');
-  };
+  }
 
   // Get performance score
   const getPerformanceScore = (metrics: PerformanceMetrics): number => {
-    if (!metrics) return 0;
+    if (!metrics) return 0
     
     const scores = {
       lcp: Math.max(0, 100 - (metrics.lcp / 4000) * 100),
@@ -343,15 +344,15 @@ const PerformanceDashboard: React.FC = () => {
       cls: Math.max(0, 100 - (metrics.cls / 0.25) * 100),
       fcp: Math.max(0, 100 - (metrics.fcp / 3000) * 100),
       ttfb: Math.max(0, 100 - (metrics.ttfb / 1500) * 100),
-    };
+    }
     
     return Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.keys(scores).length);
-  };
+  }
 
   // Format metric values
   const formatMetric = (_value: number, unit: string): string => {
     if (unit === 'ms') {
-      return `${Math.round(value)}ms`;
+      return `${Math.round(value)}ms`
     }
     if (unit === '%') {
       return `${Math.round(value)}%`;
@@ -360,7 +361,7 @@ const PerformanceDashboard: React.FC = () => {
       return value.toFixed(3);
     }
     return value.toString();
-  };
+  }
 
   useEffect(() => {
     const unsubscribe = startMonitoring();
@@ -368,7 +369,7 @@ const PerformanceDashboard: React.FC = () => {
     return () => {
       if (unsubscribe) unsubscribe();
       stopMonitoring();
-    };
+    }
   }, []);
 
   if (!metrics) {
@@ -658,6 +659,6 @@ const PerformanceDashboard: React.FC = () => {
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default PerformanceDashboard; 

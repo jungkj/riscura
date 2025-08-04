@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Bell, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export function AlertsNotificationCenter() {
   const alerts = [
@@ -22,7 +23,7 @@ export function AlertsNotificationCenter() {
       case 'info': return <Info className="w-4 h-4 text-blue-600" />;
       default: return <CheckCircle className="w-4 h-4 text-green-600" />;
     }
-  };
+  }
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >

@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Shield, TrendingUp } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Simplified version for testing
 interface RiskControlWidgetProps {
-  className?: string;
+  className?: string
 }
 
 export function RiskControlWidget({ className }: RiskControlWidgetProps) {

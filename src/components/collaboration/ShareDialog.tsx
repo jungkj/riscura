@@ -7,7 +7,7 @@ import { Share2 } from 'lucide-react';
 
 // Simplified version for testing
 interface ShareDialogProps {
-  isOpen: boolean;
+  isOpen: boolean
   onOpenChange: (open: boolean) => void;
   questionnaire: any;
 }

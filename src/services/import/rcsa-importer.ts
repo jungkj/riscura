@@ -2,14 +2,14 @@ import * as XLSX from 'xlsx';
 import { prisma } from '@/lib/prisma';
 // import {
   RiskStatus,
-  RiskLikelihood,
-  RiskImpact,
-  ControlType,
-  ControlStatus,
-  ControlFrequency,
+  RiskLikelihood,;
+  RiskImpact,;
+  ControlType,;
+  ControlStatus,;
+  ControlFrequency,;
 } from '@prisma/client';
-// import { parseRiskScore } from '@/lib/utils/risk-score';
-
+// import { parseRiskScore } from '@/lib/utils/risk-score'
+;
 interface ImportOptions {
   organizationId: string;
   userId: string;
@@ -58,38 +58,38 @@ interface AssessmentRow {
   assessor?: string;
 }
 
-/**
- * Import RCSA data from Excel buffer
+/**;
+ * Import RCSA data from Excel buffer;
  */
-export async function importRCSAData(
-  buffer: Buffer,
-  options: ImportOptions
+export async function importRCSAData(;
+  buffer: Buffer,;
+  options: ImportOptions;
 ): Promise<ImportResult> {
   const result: ImportResult = {
-    risksImported: 0,
-    controlsImported: 0,
-    assessmentsImported: 0,
-    errors: [],
-    warnings: [],
-  };
-
+    risksImported: 0,;
+    controlsImported: 0,;
+    assessmentsImported: 0,;
+    errors: [],;
+    warnings: [],;
+  }
+;
   try {
     // Parse Excel file
     const workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true });
-
+;
     // Find sheets (case-insensitive)
     const riskSheet = findSheet(workbook, ['Risk Register', 'Risks', 'Risk_Register']);
     const controlSheet = findSheet(workbook, ['Controls', 'Control', 'Control_Library']);
-    const assessmentSheet = findSheet(workbook, [
-      'Assessments',
-      'Assessment',
-      'Control_Assessments',
+    const assessmentSheet = findSheet(workbook, [;
+      'Assessments',;
+      'Assessment',;
+      'Control_Assessments',;
     ]);
-
+;
     // Create a map to store imported entities
-    const riskIdMap = new Map<string, string>(); // Excel ID -> Database ID
+    const riskIdMap = new Map<string, string>(); // Excel ID -> Database ID;
     const controlIdMap = new Map<string, string>();
-
+;
     // Import risks
     if (riskSheet) {
       await options.onProgress?.(10, 'Importing risks...');
@@ -102,12 +102,12 @@ export async function importRCSAData(
     // Import controls
     if (controlSheet) {
       await options.onProgress?.(40, 'Importing controls...');
-      const controlResult = await importControls(
-        workbook,
-        controlSheet,
-        options,
-        riskIdMap,
-        controlIdMap
+      const controlResult = await importControls(;
+        workbook,;
+        controlSheet,;
+        options,;
+        riskIdMap,;
+        controlIdMap;
       );
       result.controlsImported = controlResult.imported;
       result.errors.push(...controlResult.errors);
@@ -117,11 +117,11 @@ export async function importRCSAData(
     // Import assessments
     if (assessmentSheet) {
       await options.onProgress?.(70, 'Importing assessments...');
-      const assessmentResult = await importAssessments(
-        workbook,
-        assessmentSheet,
-        options,
-        controlIdMap
+      const assessmentResult = await importAssessments(;
+        workbook,;
+        assessmentSheet,;
+        options,;
+        controlIdMap;
       );
       result.assessmentsImported = assessmentResult.imported;
       result.errors.push(...assessmentResult.errors);
@@ -130,16 +130,16 @@ export async function importRCSAData(
 
     return result;
   } catch (error) {
-    // console.error('RCSA import error:', error);
-    result.errors.push(
-      `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+    // console.error('RCSA import error:', error)
+    result.errors.push(;
+      `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
     );
     throw error;
   }
 }
 
-/**
- * Find sheet by name (case-insensitive)
+/**;
+ * Find sheet by name (case-insensitive);
  */
 const findSheet = (workbook: XLSX.WorkBook, names: string[]): string | undefined {
   for (const name of names) {
@@ -149,52 +149,52 @@ const findSheet = (workbook: XLSX.WorkBook, names: string[]): string | undefined
   return undefined;
 }
 
-/**
- * Import risks from Excel
+/**;
+ * Import risks from Excel;
  */
-async function importRisks(
-  workbook: XLSX.WorkBook,
-  sheetName: string,
-  options: ImportOptions,
-  riskIdMap: Map<string, string>
+async function importRisks(;
+  workbook: XLSX.WorkBook,;
+  sheetName: string,;
+  options: ImportOptions,;
+  riskIdMap: Map<string, string>;
 ): Promise<{ imported: number; errors: string[]; warnings: string[] }> {
   const errors: string[] = [];
   const warnings: string[] = [];
   let imported = 0;
-
+;
   try {
     const worksheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json<RiskRow>(worksheet, {
-      raw: false,
-      defval: undefined,
-      blankrows: false,
+      raw: false,;
+      defval: undefined,;
+      blankrows: false,;
     });
-
+;
     for (const [index, row] of data.entries()) {
       try {
         const riskName = row.riskName || row.riskId || `Risk ${index + 1}`;
-
+;
         // Create risk
         const risk = await prisma.risk.create({
           data: {
-            organizationId: options.organizationId,
-            name: riskName,
-            description: row.riskDescription || '',
-            category: mapRiskCategory(row.category),
-            likelihood: mapLikelihood(row.likelihood),
-            impact: mapImpact(row.impact),
-            status: RiskStatus.ACTIVE,
-            department: row.department,
-            owner: row.owner,
-            createdBy: options.userId,
+            organizationId: options.organizationId,;
+            name: riskName,;
+            description: row.riskDescription || '',;
+            category: mapRiskCategory(row.category),;
+            likelihood: mapLikelihood(row.likelihood),;
+            impact: mapImpact(row.impact),;
+            status: RiskStatus.ACTIVE,;
+            department: row.department,;
+            owner: row.owner,;
+            createdBy: options.userId,;
             metadata: {
-              sourceFile: options.fileName,
-              originalId: row.riskId,
-              importedAt: new Date(),
-            },
-          },
+              sourceFile: options.fileName,;
+              originalId: row.riskId,;
+              importedAt: new Date(),;
+            },;
+          },;
         });
-
+;
         // Store mapping
         if (row.riskId) {
           riskIdMap.set(row.riskId, risk.id);
@@ -202,46 +202,46 @@ async function importRisks(
 
         imported++;
       } catch (error) {
-        errors.push(
-          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        errors.push(;
+          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`;
         );
       }
     }
   } catch (error) {
-    errors.push(
-      `Failed to read risks: ${error instanceof Error ? error.message : 'Unknown error'}`
+    errors.push(;
+      `Failed to read risks: ${error instanceof Error ? error.message : 'Unknown error'}`;
     );
   }
 
-  return { imported, errors, warnings };
+  return { imported, errors, warnings }
 }
 
-/**
- * Import controls from Excel
+/**;
+ * Import controls from Excel;
  */
-async function importControls(
-  workbook: XLSX.WorkBook,
-  sheetName: string,
-  options: ImportOptions,
-  riskIdMap: Map<string, string>,
-  controlIdMap: Map<string, string>
+async function importControls(;
+  workbook: XLSX.WorkBook,;
+  sheetName: string,;
+  options: ImportOptions,;
+  riskIdMap: Map<string, string>,;
+  controlIdMap: Map<string, string>;
 ): Promise<{ imported: number; errors: string[]; warnings: string[] }> {
   const errors: string[] = [];
   const warnings: string[] = [];
   let imported = 0;
-
+;
   try {
     const worksheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json<ControlRow>(worksheet, {
-      raw: false,
-      defval: undefined,
-      blankrows: false,
+      raw: false,;
+      defval: undefined,;
+      blankrows: false,;
     });
-
+;
     for (const [index, row] of data.entries()) {
       try {
         const controlName = row.controlName || row.controlId || `Control ${index + 1}`;
-
+;
         // Map risk ID
         let riskIds: string[] = [];
         if (row.riskId) {
@@ -256,30 +256,30 @@ async function importControls(
         // Create control
         const control = await prisma.control.create({
           data: {
-            organizationId: options.organizationId,
-            name: controlName,
-            description: row.controlDescription || '',
-            type: mapControlType(row.controlType),
-            status: ControlStatus.ACTIVE,
-            frequency: mapControlFrequency(row.frequency),
-            effectiveness: mapEffectiveness(row.effectiveness),
-            owner: row.owner,
-            createdBy: options.userId,
+            organizationId: options.organizationId,;
+            name: controlName,;
+            description: row.controlDescription || '',;
+            type: mapControlType(row.controlType),;
+            status: ControlStatus.ACTIVE,;
+            frequency: mapControlFrequency(row.frequency),;
+            effectiveness: mapEffectiveness(row.effectiveness),;
+            owner: row.owner,;
+            createdBy: options.userId,;
             metadata: {
-              sourceFile: options.fileName,
-              originalId: row.controlId,
-              importedAt: new Date(),
-            },
+              sourceFile: options.fileName,;
+              originalId: row.controlId,;
+              importedAt: new Date(),;
+            },;
             // Connect to risks if available
-            risks:
-              riskIds.length > 0
+            // risks: // Fixed expression expected error
+              riskIds.length > 0;
                 ? {
-                    connect: riskIds.map((id) => ({ id })),
+                    connect: riskIds.map((id) => ({ id })),;
                   }
-                : undefined,
-          },
+                : undefined,;
+          },;
         });
-
+;
         // Store mapping
         if (row.controlId) {
           controlIdMap.set(row.controlId, control.id);
@@ -287,41 +287,41 @@ async function importControls(
 
         imported++;
       } catch (error) {
-        errors.push(
-          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        errors.push(;
+          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`;
         );
       }
     }
   } catch (error) {
-    errors.push(
-      `Failed to read controls: ${error instanceof Error ? error.message : 'Unknown error'}`
+    errors.push(;
+      `Failed to read controls: ${error instanceof Error ? error.message : 'Unknown error'}`;
     );
   }
 
-  return { imported, errors, warnings };
+  return { imported, errors, warnings }
 }
 
-/**
- * Import assessments from Excel
+/**;
+ * Import assessments from Excel;
  */
-async function importAssessments(
-  workbook: XLSX.WorkBook,
-  sheetName: string,
-  options: ImportOptions,
-  controlIdMap: Map<string, string>
+async function importAssessments(;
+  workbook: XLSX.WorkBook,;
+  sheetName: string,;
+  options: ImportOptions,;
+  controlIdMap: Map<string, string>;
 ): Promise<{ imported: number; errors: string[]; warnings: string[] }> {
   const errors: string[] = [];
   const warnings: string[] = [];
   let imported = 0;
-
+;
   try {
     const worksheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json<AssessmentRow>(worksheet, {
-      raw: false,
-      defval: undefined,
-      blankrows: false,
+      raw: false,;
+      defval: undefined,;
+      blankrows: false,;
     });
-
+;
     for (const [index, row] of data.entries()) {
       try {
         // Map control ID
@@ -346,136 +346,135 @@ async function importAssessments(
         // Create control assessment
         await prisma.controlAssessment.create({
           data: {
-            organizationId: options.organizationId,
-            controlId: mappedControlId,
-            assessmentDate,
-            status: mapAssessmentStatus(row.status),
-            findings: row.findings || '',
-            recommendations: row.recommendations || '',
-            assessedBy: row.assessor || options.userId,
-            createdBy: options.userId,
+            organizationId: options.organizationId,;
+            controlId: mappedControlId,;
+            assessmentDate,;
+            status: mapAssessmentStatus(row.status),;
+            findings: row.findings || '',;
+            recommendations: row.recommendations || '',;
+            assessedBy: row.assessor || options.userId,;
+            createdBy: options.userId,;
             metadata: {
-              sourceFile: options.fileName,
-              originalId: row.assessmentId,
-              importedAt: new Date(),
-            },
-          },
+              sourceFile: options.fileName,;
+              originalId: row.assessmentId,;
+              importedAt: new Date(),;
+            },;
+          },;
         });
-
+;
         imported++;
       } catch (error) {
-        errors.push(
-          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        errors.push(;
+          `Row ${index + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`;
         );
       }
     }
   } catch (error) {
-    errors.push(
-      `Failed to read assessments: ${error instanceof Error ? error.message : 'Unknown error'}`
+    errors.push(;
+      `Failed to read assessments: ${error instanceof Error ? error.message : 'Unknown error'}`;
     );
   }
 
-  return { imported, errors, warnings };
+  return { imported, errors, warnings }
 }
 
 // Mapping functions
-
 const mapRiskCategory = (category?: string): string {
   if (!category) return 'OPERATIONAL';
-
+;
   const normalized = category.toUpperCase();
   const validCategories = ['OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'REPUTATIONAL'];
-
+;
   return validCategories.includes(normalized) ? normalized : 'OPERATIONAL';
 }
 
 const mapLikelihood = (value?: string | number): RiskLikelihood {
   if (!value) return RiskLikelihood.MEDIUM;
-
+;
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
-
+;
   switch (numValue) {
-    case 1:
+    case 1:;
       return RiskLikelihood.VERY_LOW;
-    case 2:
+    case 2:;
       return RiskLikelihood.LOW;
-    case 3:
+    case 3:;
       return RiskLikelihood.MEDIUM;
-    case 4:
+    case 4:;
       return RiskLikelihood.HIGH;
-    case 5:
+    case 5:;
       return RiskLikelihood.VERY_HIGH;
-    default:
+    // default: // Fixed expression expected error
       return RiskLikelihood.MEDIUM;
   }
 }
 
 const mapImpact = (value?: string | number): RiskImpact {
   if (!value) return RiskImpact.MODERATE;
-
+;
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
-
+;
   switch (numValue) {
-    case 1:
+    case 1:;
       return RiskImpact.NEGLIGIBLE;
-    case 2:
+    case 2:;
       return RiskImpact.MINOR;
-    case 3:
+    case 3:;
       return RiskImpact.MODERATE;
-    case 4:
+    case 4:;
       return RiskImpact.MAJOR;
-    case 5:
+    case 5:;
       return RiskImpact.SEVERE;
-    default:
+    // default: // Fixed expression expected error
       return RiskImpact.MODERATE;
   }
 }
 
 const mapControlType = (type?: string): ControlType {
   if (!type) return ControlType.DETECTIVE;
-
+;
   const normalized = type.toUpperCase();
-
+;
   if (normalized.includes('PREVENT')) return ControlType.PREVENTIVE;
   if (normalized.includes('DETECT')) return ControlType.DETECTIVE;
   if (normalized.includes('CORRECT')) return ControlType.CORRECTIVE;
-
+;
   return ControlType.DETECTIVE;
 }
 
 const mapControlFrequency = (frequency?: string): ControlFrequency {
   if (!frequency) return ControlFrequency.MONTHLY;
-
+;
   const normalized = frequency.toUpperCase();
-
+;
   if (normalized.includes('DAILY')) return ControlFrequency.DAILY;
   if (normalized.includes('WEEKLY')) return ControlFrequency.WEEKLY;
   if (normalized.includes('MONTHLY')) return ControlFrequency.MONTHLY;
   if (normalized.includes('QUARTERLY')) return ControlFrequency.QUARTERLY;
-  if (normalized.includes('ANNUAL') || normalized.includes('YEARLY'))
+  if (normalized.includes('ANNUAL') || normalized.includes('YEARLY'));
     return ControlFrequency.ANNUALLY;
-  if (normalized.includes('CONTINUOUS') || normalized.includes('REAL'))
+  if (normalized.includes('CONTINUOUS') || normalized.includes('REAL'));
     return ControlFrequency.CONTINUOUS;
-
+;
   return ControlFrequency.MONTHLY;
 }
 
 const mapEffectiveness = (value?: string | number): number {
   if (!value) return 3;
-
+;
   const numValue = typeof value === 'number' ? value : parseRiskScore(value);
   return Math.max(1, Math.min(5, numValue));
 }
 
 const mapAssessmentStatus = (status?: string): string {
   if (!status) return 'SATISFACTORY';
-
+;
   const normalized = status.toUpperCase();
-
+;
   if (normalized.includes('SATISF') || normalized.includes('EFFECT')) return 'SATISFACTORY';
-  if (normalized.includes('NEEDS') || normalized.includes('IMPROVEMENT'))
+  if (normalized.includes('NEEDS') || normalized.includes('IMPROVEMENT'));
     return 'NEEDS_IMPROVEMENT';
   if (normalized.includes('UNSATISF') || normalized.includes('INEFFECT')) return 'UNSATISFACTORY';
-
+;
   return 'SATISFACTORY';
 }

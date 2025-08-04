@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
 import { LoginStatus } from '@/components/auth/LoginStatus';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export default function TestLoginPage() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -29,13 +30,13 @@ export default function TestLoginPage() {
         localStorageToken: localStorage.getItem('accessToken'),
         sessionStorageToken: sessionStorage.getItem('accessToken'),
         rememberMeCookie: localStorage.getItem('remember-me'),
-      });
+      })
     }
   }, []);
 
   const handleLogout = async () => {
     await logout();
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">

@@ -30,7 +30,7 @@ export class MemoryCache {
     });
 
     // Check if we should persist to database
-    this.persistToDB = process.env.CACHE_PERSIST === 'true';
+    this.persistToDB = process.env.CACHE_PERSIST === 'true'
   }
 
   static getInstance(): MemoryCache {
@@ -45,7 +45,7 @@ export class MemoryCache {
    */
   async get<T>(key: string): Promise<T | null> {
     // Try memory cache first
-    const _cached = this.cache.get(key);
+    const _cached = this.cache.get(key)
     if (cached !== undefined) {
       return cached;
     }
@@ -55,21 +55,21 @@ export class MemoryCache {
       try {
         const dbCache = await prisma.cache.findUnique({
           where: { key },
-        });
+        })
 
         if (dbCache && dbCache.expiresAt > new Date()) {
           const value = JSON.parse(dbCache.value);
           // Restore to memory cache
-          this.cache.set(key, value);
+          this.cache.set(key, value)
           return value;
         }
 
         // Clean up expired entry
         if (dbCache) {
-          await prisma.cache.delete({ where: { key } });
+          await prisma.cache.delete({ where: { key } })
         }
       } catch (error) {
-        // console.error('Cache DB read error:', error);
+        // console.error('Cache DB read error:', error)
       }
     }
 
@@ -83,7 +83,7 @@ export class MemoryCache {
     const ttl = ttlMs || 1000 * 60 * 5; // 5 minutes default
 
     // Set in memory cache
-    this.cache.set(key, value, { ttl });
+    this.cache.set(key, value, { ttl })
 
     // Persist to database if enabled
     if (this.persistToDB) {
@@ -99,9 +99,9 @@ export class MemoryCache {
             value: JSON.stringify(value),
             expiresAt: new Date(Date.now() + ttl),
           },
-        });
+        })
       } catch (error) {
-        // console.error('Cache DB write error:', error);
+        // console.error('Cache DB write error:', error)
       }
     }
   }
@@ -125,7 +125,7 @@ export class MemoryCache {
           where: { key },
         });
       } catch (error) {
-        // console.error('Cache DB delete error:', error);
+        // console.error('Cache DB delete error:', error)
       }
     }
   }
@@ -148,7 +148,7 @@ export class MemoryCache {
         });
         return count > 0;
       } catch (error) {
-        // console.error('Cache DB exists error:', error);
+        // console.error('Cache DB exists error:', error)
       }
     }
 
@@ -175,7 +175,7 @@ export class MemoryCache {
         const allKeys = new Set([...memoryKeys, ...dbKeys.map((item) => item.key)]);
         return Array.from(allKeys).filter((key) => regex.test(key));
       } catch (error) {
-        // console.error('Cache DB keys error:', error);
+        // console.error('Cache DB keys error:', error)
       }
     }
 
@@ -192,7 +192,7 @@ export class MemoryCache {
       try {
         await prisma.cache.deleteMany({});
       } catch (error) {
-        // console.error('Cache DB clear error:', error);
+        // console.error('Cache DB clear error:', error)
       }
     }
   }
@@ -205,7 +205,7 @@ export class MemoryCache {
       size: this.cache.size,
       maxSize: this.cache.max,
       calculatedSize: this.cache.calculatedSize,
-    };
+    }
   }
 
   /**
@@ -219,16 +219,16 @@ export class MemoryCache {
             expiresAt: { lt: new Date() },
           },
         });
-        // console.log(`Cleaned up ${deleted.count} expired cache entries`);
+        // console.log(`Cleaned up ${deleted.count} expired cache entries`)
       } catch (error) {
-        // console.error('Cache cleanup error:', error);
+        // console.error('Cache cleanup error:', error)
       }
     }
   }
 }
 
 // Create a singleton instance that mimics Redis API
-export const cache = MemoryCache.getInstance();
+export const cache = MemoryCache.getInstance()
 
 // Redis-compatible exports
 export const _redis = {
@@ -239,4 +239,4 @@ export const _redis = {
   exists: (key: string) => cache.exists(key),
   keys: (_pattern: string) => cache.keys(pattern),
   flushall: () => cache.clear(),
-};
+}

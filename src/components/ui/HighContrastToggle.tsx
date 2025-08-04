@@ -25,13 +25,13 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
 
   // Ensure we're on the client side
   useEffect(() => {
-    setIsClient(true);
+    setIsClient(true)
     // Check for saved preference
-    const saved = localStorage.getItem('riscura-high-contrast');
+    const saved = localStorage.getItem('riscura-high-contrast')
     const preferredHighContrast = saved === 'true';
 
     // Check for system preference
-    const systemPreference = window.matchMedia('(prefers-contrast: high)').matches;
+    const systemPreference = window.matchMedia('(prefers-contrast: high)').matches
 
     const shouldUseHighContrast = preferredHighContrast || systemPreference;
 
@@ -43,7 +43,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
 
   // Listen for system preference changes
   useEffect(() => {
-    if (!isClient) return;
+    if (!isClient) return
 
     const mediaQuery = window.matchMedia('(prefers-contrast: high)');
     const handleChange = (e: MediaQueryListEvent) => {
@@ -56,7 +56,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
         }
         onToggle?.(e.matches);
       }
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
@@ -67,23 +67,23 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
     setIsHighContrast(newValue);
 
     // Save preference
-    localStorage.setItem('riscura-high-contrast', newValue.toString());
+    localStorage.setItem('riscura-high-contrast', newValue.toString())
 
     // Apply to document
     if (newValue) {
-      document.documentElement.classList.add('high-contrast');
+      document.documentElement.classList.add('high-contrast')
     } else {
       document.documentElement.classList.remove('high-contrast');
     }
 
     // Announce change to screen readers
-    const announcement = document.getElementById('accessibility-announcements');
+    const announcement = document.getElementById('accessibility-announcements')
     if (announcement) {
       announcement.textContent = `High contrast mode ${newValue ? 'enabled' : 'disabled'}`;
     }
 
     onToggle?.(newValue);
-  };
+  }
 
   const getSizeClasses = () => {
     switch (size) {
@@ -94,7 +94,7 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       default:
         return 'h-10 px-4 text-sm';
     }
-  };
+  }
 
   const getIconSize = () => {
     switch (size) {
@@ -105,11 +105,11 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
       default:
         return 'w-4 h-4';
     }
-  };
+  }
 
   if (!isClient) {
     // Prevent hydration mismatch
-    return null;
+    return null
   }
 
   if (variant === 'switch') {
@@ -200,12 +200,12 @@ export const HighContrastToggle: React.FC<HighContrastToggleProps> = ({
         High contrast mode is {isHighContrast ? 'enabled' : 'disabled'}
       </span>
     </DaisyButton>
-  );
-};
+  )
+}
 
 // Accessibility preferences panel component
 export const AccessibilityPanel: React.FC<{
-  className?: string;
+  className?: string
   onClose?: () => void;
 }> = ({ className = '', onClose }) => {
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -216,18 +216,18 @@ export const AccessibilityPanel: React.FC<{
     setIsClient(true);
 
     // Check for saved preferences
-    const savedMotion = localStorage.getItem('riscura-reduced-motion') === 'true';
+    const savedMotion = localStorage.getItem('riscura-reduced-motion') === 'true'
     const savedFontSize = localStorage.getItem('riscura-font-size') || 'medium';
 
     // Check for system preferences
-    const systemReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const systemReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     setReducedMotion(savedMotion || systemReducedMotion);
     setFontSize(savedFontSize);
 
     // Apply preferences
     if (savedMotion || systemReducedMotion) {
-      document.documentElement.classList.add('reduced-motion');
+      document.documentElement.classList.add('reduced-motion')
     }
 
     document.documentElement.setAttribute('data-font-size', savedFontSize);
@@ -243,13 +243,13 @@ export const AccessibilityPanel: React.FC<{
     } else {
       document.documentElement.classList.remove('reduced-motion');
     }
-  };
+  }
 
   const changeFontSize = (size: string) => {
     setFontSize(size);
     localStorage.setItem('riscura-font-size', size);
     document.documentElement.setAttribute('data-font-size', size);
-  };
+  }
 
   if (!isClient) return null;
 
@@ -355,7 +355,7 @@ export const AccessibilityPanel: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Announcement region for accessibility updates
 export const AccessibilityAnnouncements: React.FC = () => {
@@ -366,7 +366,7 @@ export const AccessibilityAnnouncements: React.FC = () => {
       aria-atomic="true"
       className="sr-only"
     />
-  );
-};
+  )
+}
 
 export default HighContrastToggle;

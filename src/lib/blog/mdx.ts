@@ -18,7 +18,7 @@ export interface BlogPostMeta {
     avatar: string;
     bio: string;
     linkedin?: string;
-  };
+  }
   publishedAt: string;
   updatedAt?: string;
   category: string;
@@ -27,18 +27,18 @@ export interface BlogPostMeta {
     src: string;
     alt: string;
     blurDataURL?: string;
-  };
+  }
   seo: {
     metaDescription: string;
     keywords: string[];
     canonicalUrl?: string;
-  };
+  }
   readingTime?: {
     text: string;
     minutes: number;
     time: number;
     words: number;
-  };
+  }
 }
 
 export interface BlogPost extends BlogPostMeta {
@@ -85,7 +85,7 @@ export async function getSerializedPost(slug: string) {
   return {
     ...post,
     mdxSource,
-  };
+  }
 }
 
 export function getAllPosts(): BlogPost[] {
@@ -110,16 +110,16 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
 
   // Score posts based on shared tags and category
   const scoredPosts = allPosts.map((post) => {
-    let score = 0;
+    let score = 0
 
     // Same category gets higher score
-    if (post.category === currentPost.category) score += 3;
+    if (post.category === currentPost.category) score += 3
 
     // Shared tags
-    const sharedTags = post.tags.filter((tag) => currentPost.tags.includes(tag));
+    const sharedTags = post.tags.filter((tag) => currentPost.tags.includes(tag))
     score += sharedTags.length * 2;
 
-    return { post, score };
+    return { post, score }
   });
 
   return scoredPosts

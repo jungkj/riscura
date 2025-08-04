@@ -1,12 +1,13 @@
 "use client";
 
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components';
   Shield, 
   TrendingUp, 
   Calendar, 
@@ -18,7 +19,7 @@ import {
   Edit,
   ExternalLink
 } from 'lucide-react';
-// import { Risk, Control, RiskLevel } from '@/types/rcsa.types';
+// import { Risk, Control, RiskLevel } from '@/types/rcsa.types'
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaHelpers } from '@/lib/api/rcsa-client';
 
@@ -31,7 +32,7 @@ interface RiskOverviewTabProps {
 const getRiskLevelColor = (level: RiskLevel): string {
   switch (level) {
     case 'LOW':
-      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
     case 'MEDIUM':
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
     case 'HIGH':
@@ -47,7 +48,7 @@ const getRiskLevelColor = (level: RiskLevel): string {
 const getStatusColor = (status: Risk['status']): string {
   switch (status) {
     case 'IDENTIFIED':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
     case 'ASSESSED':
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
     case 'MITIGATED':
@@ -63,24 +64,24 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
   const { navigateToControl } = useRCSA();
 
   // Calculate risk metrics
-  const riskScore = rcsaHelpers.calculateRiskScore(risk.likelihood, risk.impact);
+  const riskScore = rcsaHelpers.calculateRiskScore(risk.likelihood, risk.impact)
   const riskLevel = rcsaHelpers.calculateRiskLevel(riskScore);
   
   // Calculate control effectiveness
   const averageEffectiveness = relatedControls.length > 0
     ? relatedControls.reduce((sum, control) => sum + control.effectiveness, 0) / relatedControls.length
-    : 0;
+    : 0
 
   // Count controls by status
   const controlCounts = relatedControls.reduce((counts, control) => {
-    counts[control.status] = (counts[control.status] || 0) + 1;
+    counts[control.status] = (counts[control.status] || 0) + 1
     return counts;
   }, {} as Record<string, number>);
 
   const formatDate = (date: Date | string | undefined) => {
     if (!date) return 'Not set';
     return new Date(date).toLocaleDateString();
-  };
+  }
 
   const handleControlClick = (controlId: string) => {
     navigateToControl(controlId, {
@@ -88,7 +89,7 @@ export function RiskOverviewTab({ risk, relatedControls }: RiskOverviewTabProps)
       fromId: risk.id,
       maintainContext: true
     });
-  };
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

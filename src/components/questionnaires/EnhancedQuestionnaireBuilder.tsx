@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -15,6 +15,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
 import {
+import { DaisySelectItem, DaisyTabsTrigger } from '@/components/ui/daisy-components';
   Dialog as DaisyDialog,
   DialogContent as DaisyDialogContent,
   DialogDescription as DaisyDialogDescription,
@@ -40,7 +41,7 @@ import {
   MoreVertical, ArrowRight, ArrowDown, FileJson, 
   FileSpreadsheet, CheckCircle2, AlertTriangle,
   Grid3X3, MapPin, PenTool, Code2, Image
-} from 'lucide-react';
+} from 'lucide-react'
 
 import { 
   ADVANCED_QUESTION_TYPES,
@@ -60,7 +61,7 @@ import {
 
 // Enhanced types for advanced features
 interface ConditionalRule {
-  id: string;
+  id: string
   type: 'show_if' | 'hide_if' | 'require_if';
   sourceQuestionId: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
@@ -107,7 +108,7 @@ interface EnhancedQuestion {
     estimatedTime?: number;
     category?: string;
     version?: string;
-  };
+  }
 }
 
 interface EnhancedSection {
@@ -121,7 +122,7 @@ interface EnhancedSection {
   metadata?: {
     estimatedTime?: number;
     category?: string;
-  };
+  }
 }
 
 interface PreviewResponse {
@@ -142,13 +143,13 @@ export function EnhancedQuestionnaireBuilder({
   onCancel 
 }: EnhancedQuestionnaireBuilderProps) {
   // Core form state
-  const [title, setTitle] = useState(questionnaire?.title || '');
+  const [title, setTitle] = useState(questionnaire?.title || '')
   const [description, setDescription] = useState(questionnaire?.description || '');
   const [category, setCategory] = useState(questionnaire?.category || 'risk_assessment');
   const [sections, setSections] = useState<EnhancedSection[]>(questionnaire?.sections || []);
   
   // UI state
-  const [activeTab, setActiveTab] = useState('builder');
+  const [activeTab, setActiveTab] = useState('builder')
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const [showQuestionEditor, setShowQuestionEditor] = useState(false);
@@ -159,12 +160,12 @@ export function EnhancedQuestionnaireBuilder({
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Preview state
-  const [previewResponses, setPreviewResponses] = useState<PreviewResponse[]>([]);
+  const [previewResponses, setPreviewResponses] = useState<PreviewResponse[]>([])
   const [previewCurrentSection, setPreviewCurrentSection] = useState(0);
 
   // Drag and drop state
   const [draggedItem, setDraggedItem] = useState<{
-    type: 'section' | 'question';
+    type: 'section' | 'question'
     id: string;
     sourceIndex: number;
   } | null>(null);
@@ -179,14 +180,14 @@ export function EnhancedQuestionnaireBuilder({
     validation: [],
     conditionalRules: [],
     tags: []
-  });
+  })
 
   // File input ref for import
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Calculate visible questions based on conditional rules and preview responses
   const getVisibleQuestions = useCallback((sectionId: string): EnhancedQuestion[] => {
-    const section = sections.find(s => s.id === sectionId);
+    const section = sections.find(s => s.id === sectionId)
     if (!section) return [];
 
     if (!isPreviewMode) return section.questions;
@@ -235,12 +236,12 @@ export function EnhancedQuestionnaireBuilder({
 
   // Drag and drop handlers
   const handleDragStart = (_type: 'section' | 'question', id: string, index: number) => {
-    setDraggedItem({ type, id, sourceIndex: index });
-  };
+    setDraggedItem({ type, id, sourceIndex: index })
+  }
 
   const handleDragEnd = () => {
     setDraggedItem(null);
-  };
+  }
 
   const handleSectionReorder = (newSections: EnhancedSection[]) => {
     const reorderedSections = newSections.map((section, index) => ({
@@ -248,7 +249,7 @@ export function EnhancedQuestionnaireBuilder({
       order: index
     }));
     setSections(reorderedSections);
-  };
+  }
 
   const handleQuestionReorder = (sectionId: string, newQuestions: EnhancedQuestion[]) => {
     setSections(prev => prev.map(section => 
@@ -262,11 +263,11 @@ export function EnhancedQuestionnaireBuilder({
           }
         : section
     ));
-  };
+  }
 
   // Question management
   const addQuestion = (sectionId: string, questionType: string = 'text') => {
-    const section = sections.find(s => s.id === sectionId);
+    const section = sections.find(s => s.id === sectionId)
     if (!section) return;
 
     const newQuestion: EnhancedQuestion = {
@@ -282,7 +283,7 @@ export function EnhancedQuestionnaireBuilder({
       conditionalRules: [],
       aiGenerated: false,
       tags: []
-    };
+    }
 
     setSections(prev => prev.map(s => 
       s.id === sectionId 
@@ -293,7 +294,7 @@ export function EnhancedQuestionnaireBuilder({
     setSelectedQuestion(newQuestion.id);
     setQuestionForm(newQuestion);
     setShowQuestionEditor(true);
-  };
+  }
 
   const duplicateQuestion = (questionId: string) => {
     const question = sections
@@ -306,7 +307,7 @@ export function EnhancedQuestionnaireBuilder({
         id: `question-${Date.now()}`,
         text: `${question.text} (Copy)`,
         order: question.order + 1
-      };
+      }
 
       setSections(prev => prev.map(section => 
         section.id === question.sectionId
@@ -321,7 +322,7 @@ export function EnhancedQuestionnaireBuilder({
           : section
       ));
     }
-  };
+  }
 
   const deleteQuestion = (questionId: string) => {
     setSections(prev => prev.map(section => ({
@@ -335,7 +336,7 @@ export function EnhancedQuestionnaireBuilder({
       setSelectedQuestion(null);
       setShowQuestionEditor(false);
     }
-  };
+  }
 
   // Section management
   const addSection = () => {
@@ -347,10 +348,10 @@ export function EnhancedQuestionnaireBuilder({
       required: false,
       questions: [],
       conditionalRules: []
-    };
+    }
     setSections([...sections, newSection]);
     setSelectedSection(newSection.id);
-  };
+  }
 
   const deleteSection = (sectionId: string) => {
     setSections(prev => prev
@@ -361,14 +362,14 @@ export function EnhancedQuestionnaireBuilder({
     if (selectedSection === sectionId) {
       setSelectedSection(null);
     }
-  };
+  }
 
   // Validation management
   const addValidationRule = (questionId: string, rule: Omit<ValidationRule, 'id'>) => {
     const newRule: ValidationRule = {
       id: `validation-${Date.now()}`,
       ...rule
-    };
+    }
 
     setSections(prev => prev.map(section => ({
       ...section,
@@ -378,14 +379,14 @@ export function EnhancedQuestionnaireBuilder({
           : question
       )
     })));
-  };
+  }
 
   // Conditional rules management
   const addConditionalRule = (questionId: string, rule: Omit<ConditionalRule, 'id'>) => {
     const newRule: ConditionalRule = {
       id: `conditional-${Date.now()}`,
       ...rule
-    };
+    }
 
     setSections(prev => prev.map(section => ({
       ...section,
@@ -395,14 +396,14 @@ export function EnhancedQuestionnaireBuilder({
           : question
       )
     })));
-  };
+  }
 
   // Branching logic management
   const addBranchingLogic = (questionId: string, logic: Omit<BranchingLogic, 'id'>) => {
     const newLogic: BranchingLogic = {
       id: `branching-${Date.now()}`,
       ...logic
-    };
+    }
 
     setSections(prev => prev.map(section => ({
       ...section,
@@ -412,7 +413,7 @@ export function EnhancedQuestionnaireBuilder({
           : question
       )
     })));
-  };
+  }
 
   // Import/Export functionality
   const exportQuestionnaire = (format: 'json' | 'csv') => {
@@ -423,7 +424,7 @@ export function EnhancedQuestionnaireBuilder({
       sections,
       exportedAt: new Date(),
       version: '1.0'
-    };
+    }
 
     if (format === 'json') {
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -460,7 +461,7 @@ export function EnhancedQuestionnaireBuilder({
       title: 'Export Successful',
       description: `Questionnaire exported as ${format.toUpperCase()}`,
     });
-  };
+  }
 
   const importQuestionnaire = (_file: File) => {
     const reader = new FileReader();
@@ -480,7 +481,7 @@ export function EnhancedQuestionnaireBuilder({
           const headers = lines[0].split(',');
           const rows = lines.slice(1);
 
-          const importedSections: { [key: string]: EnhancedSection } = {};
+          const importedSections: { [key: string]: EnhancedSection } = {}
           
           rows.forEach((row, index) => {
             const values = row.split(',').map(v => v.replace(/"/g, ''));
@@ -497,7 +498,7 @@ export function EnhancedQuestionnaireBuilder({
                 required: false,
                 questions: [],
                 conditionalRules: []
-              };
+              }
             }
 
             const question: EnhancedQuestion = {
@@ -513,7 +514,7 @@ export function EnhancedQuestionnaireBuilder({
               conditionalRules: [],
               aiGenerated: false,
               tags: []
-            };
+            }
 
             importedSections[sectionTitle].questions.push(question);
           });
@@ -533,19 +534,19 @@ export function EnhancedQuestionnaireBuilder({
           variant: 'destructive',
         });
       }
-    };
+    }
     reader.readAsText(file);
-  };
+  }
 
   // Preview functionality
   const handlePreviewResponse = (questionId: string, value: any) => {
     setPreviewResponses(prev => {
-      const existingIndex = prev.findIndex(r => r.questionId === questionId);
+      const existingIndex = prev.findIndex(r => r.questionId === questionId)
       const newResponse: PreviewResponse = {
         questionId,
         value,
         timestamp: new Date()
-      };
+      }
 
       if (existingIndex >= 0) {
         const updated = [...prev];
@@ -554,17 +555,17 @@ export function EnhancedQuestionnaireBuilder({
       }
       return [...prev, newResponse];
     });
-  };
+  }
 
   const resetPreview = () => {
     setPreviewResponses([]);
     setPreviewCurrentSection(0);
-  };
+  }
 
   // Question type icons
   const getQuestionTypeIcon = (_type: string) => {
     switch (type) {
-      case 'text': return <Type className="w-4 h-4" />;
+      case 'text': return <Type className="w-4 h-4" />
       case 'textarea': return <FileText className="w-4 h-4" />;
       case 'number': return <Hash className="w-4 h-4" />;
       case 'single_choice': return <CheckSquare className="w-4 h-4" />;
@@ -581,7 +582,7 @@ export function EnhancedQuestionnaireBuilder({
       case 'custom_html': return <Code2 className="w-4 h-4" />;
       default: return <Type className="w-4 h-4" />;
     }
-  };
+  }
 
   // Save questionnaire
   const handleSave = () => {
@@ -590,7 +591,7 @@ export function EnhancedQuestionnaireBuilder({
         title: 'Title Required',
         description: 'Please enter a questionnaire title',
         variant: 'destructive',
-      });
+      })
       return;
     }
 
@@ -611,7 +612,7 @@ export function EnhancedQuestionnaireBuilder({
       status: questionnaire?.status || 'draft',
       createdAt: questionnaire?.createdAt || new Date(),
       updatedAt: new Date(),
-    };
+    }
 
     onSave(savedQuestionnaire);
 
@@ -619,7 +620,7 @@ export function EnhancedQuestionnaireBuilder({
       title: 'Questionnaire Saved',
       description: 'Your questionnaire has been saved successfully',
     });
-  };
+  }
 
   return (
     <div className="min-h-screen bg-notion-bg-primary">
@@ -857,7 +858,7 @@ setDescription(e.target.value)}
                 accept=".json,.csv"
                 onChange={(e) = />
 {
-                  const file = e.target.files?.[0];
+                  const file = e.target.files?.[0]
                   if (file) importQuestionnaire(file);
                 }} />
             </div>
@@ -1048,7 +1049,7 @@ const BuilderContent = ({
         ))}
       </Reorder.Group>
     </div>
-  );
+  )
 }
 
 const LogicContent = ({ sections, selectedQuestion, onAddConditionalRule, onAddBranchingLogic }: any) {

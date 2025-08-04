@@ -6,8 +6,9 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { cn } from '@/lib/utils';
-// import { Calendar, Star, User, Calculator } from 'lucide-react';
+// import { Calendar, Star, User, Calculator } from 'lucide-react'
 import { Cell, Column } from './SpreadsheetGrid';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
 interface SpreadsheetCellProps {
   cell: Cell;
@@ -45,7 +46,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
       // Focus the input when editing starts
       setTimeout(() => {
         if (inputRef.current) {
-          inputRef.current.focus();
+          inputRef.current.focus()
           inputRef.current.select();
         } else if (textareaRef.current) {
           textareaRef.current.focus();
@@ -58,7 +59,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
   const handleInputChange = (_value: string) => {
     setLocalValue(value);
     onValueChange(value);
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -69,7 +70,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
       setLocalValue(cell.displayValue);
       onSave(cell.displayValue);
     }
-  };
+  }
 
   const formatDisplayValue = (_value: any, dataType: string): React.ReactNode => {
     if (!value && value !== 0) return null;
@@ -142,7 +143,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
       default:
         return value;
     }
-  };
+  }
 
   const renderEditingInput = () => {
     switch (column.dataType) {
@@ -239,7 +240,7 @@ handleInputChange(e.target.value)}
 
       default:
         // Check if it's a multi-line text field
-        const isMultiLine = localValue.length > 50 || localValue.includes('\n');
+        const isMultiLine = localValue.length > 50 || localValue.includes('\n')
         
         if (isMultiLine) {
           return (
@@ -253,7 +254,7 @@ handleInputChange(e.target.value)}
               className="min-h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500 resize-none"
               rows={1} />
           );
-        };
+        }
 
   return (
           <DaisyInput
@@ -266,7 +267,7 @@ handleInputChange(e.target.value)}
             className="h-8 border-0 bg-blue-50 focus:ring-2 focus:ring-blue-500" />
         );
     }
-  };
+  }
 
   if (isEditing && !isReadOnly) {
     return (
@@ -274,7 +275,7 @@ handleInputChange(e.target.value)}
         {renderEditingInput()}
       </div>
     );
-  };
+  }
 
   return (
     <div
@@ -303,6 +304,6 @@ handleInputChange(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 export default SpreadsheetCell; 

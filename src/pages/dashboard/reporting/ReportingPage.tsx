@@ -9,6 +9,6 @@ const ReportingPage = () => {
       <p className="text-gray-600">Reporting feature is being updated.</p>
     </div>
   );
-};
+}
 
 export default ReportingPage;

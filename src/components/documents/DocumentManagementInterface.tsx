@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import { 
   Upload, 
   Search, 
@@ -23,10 +24,10 @@ import { motion, AnimatePresence } from 'framer-motion';
   SortAsc,
   SortDesc,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -36,7 +37,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
 import FileUploadDropzone from './FileUploadDropzone';
 import EnhancedDocumentViewer from './EnhancedDocumentViewer';
 import toast from 'react-hot-toast';
-// import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns'
 
 interface Document {
   id: string;
@@ -52,14 +53,14 @@ interface Document {
     firstName: string;
     lastName: string;
     email: string;
-  };
+  }
   aiAnalysis?: {
     fileType: string;
     isImage: boolean;
     isDocument: boolean;
     warnings: string[];
     thumbnailUrl?: string;
-  };
+  }
 }
 
 interface DocumentManagementInterfaceProps {
@@ -92,7 +93,7 @@ export default function DocumentManagementInterface({
   const [bulkOperating, setBulkOperating] = useState(false);
 
   // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocuments, setTotalDocuments] = useState(0);
   const itemsPerPage = 20;
@@ -124,18 +125,18 @@ export default function DocumentManagementInterface({
       setTotalDocuments(data.meta?.total || 0);
       setTotalPages(Math.ceil((data.meta?.total || 0) / itemsPerPage));
     } catch (error) {
-      // console.error('Load documents error:', error);
+      // console.error('Load documents error:', error)
       toast.error('Failed to load documents');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleUploadComplete = (_results: any[]) => {
     toast.success(`Successfully uploaded ${results.length} file(s)`);
     setShowUpload(false);
     loadDocuments();
-  };
+  }
 
   const handleDocumentDelete = async (documentId: string) => {
     if (!window.confirm('Are you sure you want to delete this document?')) return;
@@ -151,10 +152,10 @@ export default function DocumentManagementInterface({
       setDocuments(prev => prev.filter(doc => doc.id !== documentId));
       setSelectedDocuments(prev => prev.filter(id => id !== documentId));
     } catch (error) {
-      // console.error('Delete error:', error);
+      // console.error('Delete error:', error)
       toast.error('Failed to delete document');
     }
-  };
+  }
 
   const handleBulkDelete = async () => {
     if (selectedDocuments.length === 0) return;
@@ -173,12 +174,12 @@ export default function DocumentManagementInterface({
       setDocuments(prev => prev.filter(doc => !selectedDocuments.includes(doc.id)));
       setSelectedDocuments([]);
     } catch (error) {
-      // console.error('Bulk delete error:', error);
+      // console.error('Bulk delete error:', error)
       toast.error('Failed to delete some documents');
     } finally {
       setBulkOperating(false);
     }
-  };
+  }
 
   const handleBulkDownload = async () => {
     if (selectedDocuments.length === 0) return;
@@ -204,12 +205,12 @@ export default function DocumentManagementInterface({
 
       toast.success(`Downloaded ${selectedDocuments.length} file(s)`);
     } catch (error) {
-      // console.error('Bulk download error:', error);
+      // console.error('Bulk download error:', error)
       toast.error('Failed to download some files');
     } finally {
       setBulkOperating(false);
     }
-  };
+  }
 
   const formatFileSize = (bytes: number): string => {
     const units = ['B', 'KB', 'MB', 'GB'];
@@ -222,14 +223,14 @@ export default function DocumentManagementInterface({
     }
 
     return `${size.toFixed(1)} ${units[unitIndex]}`;
-  };
+  }
 
   const getFileIcon = (_type: string) => {
     if (type.startsWith('image/')) return <Image className="w-5 h-5" />;
     if (type === 'application/pdf') return <FileText className="w-5 h-5" />;
     if (type.includes('archive') || type.includes('zip')) return <Archive className="w-5 h-5" />;
     return <FileText className="w-5 h-5" />;
-  };
+  }
 
   const getFileTypeColor = (_type: string): string => {
     if (type.startsWith('image/')) return 'bg-green-100 text-green-800';
@@ -238,7 +239,7 @@ export default function DocumentManagementInterface({
     if (type.includes('excel') || type.includes('sheet')) return 'bg-emerald-100 text-emerald-800';
     if (type.includes('archive') || type.includes('zip')) return 'bg-purple-100 text-purple-800';
     return 'bg-gray-100 text-gray-800';
-  };
+  }
 
   const renderGridView = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

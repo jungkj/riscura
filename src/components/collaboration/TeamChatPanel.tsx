@@ -19,7 +19,7 @@ interface Message {
     name: string;
     avatar?: string;
     initials: string;
-  };
+  }
   timestamp: string;
   isCurrentUser: boolean;
 }
@@ -74,19 +74,19 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
         },
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isCurrentUser: true
-      };
+      }
       
       setMessages([...messages, newMsg]);
       setNewMessage('');
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }
 
   return (
     <div 

@@ -84,23 +84,23 @@ export interface FrameworkMapping {
 export class ComplianceFrameworkManager {
   // Get all available frameworks
   async getFrameworks(filters?: {
-    type?: string;
+    type?: string
     industry?: string[];
     geography?: string[];
     mandatory?: boolean;
   }): Promise<ComplianceFramework[]> {
-    const where: any = { isActive: true };
+    const where: any = { isActive: true }
 
     if (filters?.type) {
       where.type = filters.type;
     }
 
     if (filters?.industry) {
-      where.industry = { hasSome: filters.industry };
+      where.industry = { hasSome: filters.industry }
     }
 
     if (filters?.geography) {
-      where.geography = { hasSome: filters.geography };
+      where.geography = { hasSome: filters.geography }
     }
 
     if (filters?.mandatory !== undefined) {
@@ -129,27 +129,27 @@ export class ComplianceFrameworkManager {
         controlObjectives: true,
         mappings: true,
       },
-    });
+    })
   }
 
   // Get framework requirements
   async getFrameworkRequirements(
     frameworkId: string,
     filters?: {
-      category?: string;
+      category?: string
       priority?: string[];
       mandatory?: boolean;
       testable?: boolean;
     }
   ): Promise<ComplianceRequirement[]> {
-    const where: any = { frameworkId };
+    const where: any = { frameworkId }
 
     if (filters?.category) {
       where.category = filters.category;
     }
 
     if (filters?.priority) {
-      where.priority = { in: filters.priority };
+      where.priority = { in: filters.priority }
     }
 
     if (filters?.mandatory !== undefined) {
@@ -170,7 +170,7 @@ export class ComplianceFrameworkManager {
   async createFrameworkMapping(mapping: Omit<FrameworkMapping, 'id'>): Promise<FrameworkMapping> {
     return await db.client.frameworkMapping.create({
       data: mapping,
-    });
+    })
   }
 
   // Get framework mappings
@@ -178,7 +178,7 @@ export class ComplianceFrameworkManager {
     sourceFramework: string,
     targetFramework?: string
   ): Promise<FrameworkMapping[]> {
-    const where: any = { sourceFramework };
+    const where: any = { sourceFramework }
 
     if (targetFramework) {
       where.targetFramework = targetFramework;
@@ -207,14 +207,14 @@ export class ComplianceFrameworkManager {
       this.createSOC2Framework(),
       this.createPCIDSSFramework(),
       this.createHIPAAFramework(),
-    ];
+    ]
 
     for (const framework of frameworks) {
       await this.upsertFramework(framework);
     }
 
     // Create cross-framework mappings
-    await this.initializeFrameworkMappings();
+    await this.initializeFrameworkMappings()
   }
 
   // Upsert framework
@@ -223,7 +223,7 @@ export class ComplianceFrameworkManager {
       where: { id: framework.id },
       update: framework,
       create: framework,
-    });
+    })
   }
 
   // Create SOX framework
@@ -341,7 +341,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'U.S. Congress',
       website: 'https://www.congress.gov/bill/107th-congress/house-bill/3763',
-    };
+    }
   }
 
   // Create ISO 27001 framework
@@ -489,7 +489,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'ISO/IEC',
       website: 'https://www.iso.org/standard/27001',
-    };
+    }
   }
 
   // Create NIST Cybersecurity Framework
@@ -638,7 +638,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'NIST',
       website: 'https://www.nist.gov/cyberframework',
-    };
+    }
   }
 
   // Create GDPR framework
@@ -738,7 +738,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'European Union',
       website: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj',
-    };
+    }
   }
 
   // Additional frameworks (COSO, SOC 2, PCI DSS, HIPAA) would be implemented similarly...
@@ -761,7 +761,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'COSO',
       website: 'https://www.coso.org',
-    };
+    }
   }
 
   private createSOC2Framework(): ComplianceFramework {
@@ -784,7 +784,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'AICPA',
       website: 'https://www.aicpa.org',
-    };
+    }
   }
 
   private createPCIDSSFramework(): ComplianceFramework {
@@ -806,7 +806,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'PCI Security Standards Council',
       website: 'https://www.pcisecuritystandards.org',
-    };
+    }
   }
 
   private createHIPAAFramework(): ComplianceFramework {
@@ -828,7 +828,7 @@ export class ComplianceFrameworkManager {
       isActive: true,
       source: 'U.S. Department of Health and Human Services',
       website: 'https://www.hhs.gov/hipaa',
-    };
+    }
   }
 
   // Initialize cross-framework mappings
@@ -854,7 +854,7 @@ export class ComplianceFrameworkManager {
         confidence: 0.8,
         notes: 'Both address risk assessment requirements',
       },
-    ];
+    ]
 
     for (const mapping of mappings) {
       await this.createFrameworkMapping(mapping);
@@ -864,7 +864,7 @@ export class ComplianceFrameworkManager {
   // Search frameworks and requirements
   async searchFrameworks(_query: string,
     filters?: {
-      frameworks?: string[];
+      frameworks?: string[]
       categories?: string[];
       priorities?: string[];
     }
@@ -881,10 +881,10 @@ export class ComplianceFrameworkManager {
         { name: { contains: query, mode: 'insensitive' } },
         { description: { contains: query, mode: 'insensitive' } },
       ],
-    };
+    }
 
     if (filters?.frameworks) {
-      frameworkWhere.id = { in: filters.frameworks };
+      frameworkWhere.id = { in: filters.frameworks }
     }
 
     const frameworks = await db.client.complianceFramework.findMany({
@@ -899,18 +899,18 @@ export class ComplianceFrameworkManager {
         { description: { contains: query, mode: 'insensitive' } },
         { code: { contains: query, mode: 'insensitive' } },
       ],
-    };
+    }
 
     if (filters?.frameworks) {
-      requirementWhere.frameworkId = { in: filters.frameworks };
+      requirementWhere.frameworkId = { in: filters.frameworks }
     }
 
     if (filters?.categories) {
-      requirementWhere.category = { in: filters.categories };
+      requirementWhere.category = { in: filters.categories }
     }
 
     if (filters?.priorities) {
-      requirementWhere.priority = { in: filters.priorities };
+      requirementWhere.priority = { in: filters.priorities }
     }
 
     const requirements = await db.client.complianceRequirement.findMany({
@@ -921,7 +921,7 @@ export class ComplianceFrameworkManager {
       take: 20,
     });
 
-    return { frameworks, requirements };
+    return { frameworks, requirements }
   }
 }
 

@@ -40,7 +40,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
         impact: 5,
       },
     ],
-  };
+  }
 
   const org2Data = {
     id: 'org-2',
@@ -65,21 +65,21 @@ test.describe('Multi-Tenant Data Isolation', () => {
         impact: 3,
       },
     ],
-  };
+  }
 
   test.beforeEach(async ({ page, request }) => {
     // Clear and seed test data for both organizations
-    const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
+    const apiUrl = process.env.API_URL || 'http://localhost:3000/api'
 
     // Clear database via API call
-    await request.post(`${apiUrl}/test/clear-database`);
+    await request.post(`${apiUrl}/test/clear-database`)
 
     // Seed multi-tenant data
     await request.post(`${apiUrl}/test/seed-multi-tenant`, {
       data: {
         organizations: [org1Data, org2Data],
       },
-    });
+    })
   });
 
   test.describe('Data Isolation', () => {
@@ -94,7 +94,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
             user: org1Data.users[0],
             token: 'org1-user-token',
           }),
-        });
+        })
       });
 
       await page.route('/api/risks*', async (route) => {
@@ -115,23 +115,23 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       // Login as user from organization 1
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Navigate to risks page
-      await page.goto('/dashboard/risks');
+      await page.goto('/dashboard/risks')
 
       // Verify only org1 risks are displayed
-      const riskCards = page.locator('[data-testid="risk-card"]');
+      const riskCards = page.locator('[data-testid="risk-card"]')
       await expect(riskCards).toHaveCount(2);
 
       await expect(riskCards.first()).toContainText('Org 1 Security Risk');
       await expect(riskCards.last()).toContainText('Org 1 Compliance Risk');
 
       // Verify org2 risks are not visible
-      await expect(riskCards).not.toContainText('Org 2 Operational Risk');
+      await expect(riskCards).not.toContainText('Org 2 Operational Risk')
     });
 
     test('should prevent cross-organization data access via API', async ({ request }) => {
@@ -143,7 +143,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
           email: 'user1@org1.com',
           password: 'password123',
         },
-      });
+      })
 
       const loginData = await loginResponse.json();
       const _token = loginData.token;
@@ -153,10 +153,10 @@ test.describe('Multi-Tenant Data Isolation', () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
 
       // Should return 404 (not found) due to organization isolation
-      expect(riskResponse.status()).toBe(404);
+      expect(riskResponse.status()).toBe(404)
 
       const responseData = await riskResponse.json();
       expect(responseData.success).toBe(false);
@@ -174,7 +174,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
             user: { ...org1Data.users[0], role: 'ADMIN' },
             token: 'org1-admin-token',
           }),
-        });
+        })
       });
 
       await page.route('/api/users*', async (route) => {
@@ -189,16 +189,16 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       // Login as org1 admin
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Navigate to users page
-      await page.goto('/dashboard/admin/users');
+      await page.goto('/dashboard/admin/users')
 
       // Verify only org1 users are displayed
-      const userRows = page.locator('[data-testid="user-row"]');
+      const userRows = page.locator('[data-testid="user-row"]')
       await expect(userRows).toHaveCount(2);
 
       await expect(userRows).toContainText('user1@org1.com');
@@ -219,29 +219,29 @@ test.describe('Multi-Tenant Data Isolation', () => {
             user: org1Data.users[0],
             token: 'org1-user-token',
           }),
-        });
+        })
       });
 
       // Login as org1 user
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Try to manually access org2 data via URL manipulation
-      await page.goto(`/dashboard/organizations/${org2Data.id}`);
+      await page.goto(`/dashboard/organizations/${org2Data.id}`)
 
       // Should be redirected or show access denied
-      await expect(page.locator('[data-testid="access-denied"]')).toBeVisible();
+      await expect(page.locator('[data-testid="access-denied"]')).toBeVisible()
 
       // Alternatively, check for redirect to proper organization
-      expect(page.url()).not.toContain(org2Data.id);
+      expect(page.url()).not.toContain(org2Data.id)
     });
 
     test('should maintain session isolation between organizations', async ({ page }) => {
       // Setup mocks for org1
       await page.route('/api/auth/login', async (route) => {
-        const request = route.request();
+        const request = route.request()
         const body = await request.postDataJSON();
 
         if (body.email === 'user1@org1.com') {
@@ -268,25 +268,25 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       // Login as org1 user
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Verify org1 context
-      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org1Data.name);
+      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org1Data.name)
 
       // Logout
-      await page.locator('[data-testid="logout-button"]').click();
+      await page.locator('[data-testid="logout-button"]').click()
 
       // Login as org2 user
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org2.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Verify org2 context (should not show org1 data)
-      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org2Data.name);
+      await expect(page.locator('[data-testid="organization-name"]')).toContainText(org2Data.name)
       await expect(page.locator('[data-testid="organization-name"]')).not.toContainText(
         org1Data.name
       );
@@ -303,7 +303,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
           email: 'user1@org1.com',
           password: 'password123',
         },
-      });
+      })
 
       const loginData = await loginResponse.json();
       const _token = loginData.token;
@@ -313,7 +313,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
 
       const risksData = await risksResponse.json();
       expect(risksData.success).toBe(true);
@@ -321,7 +321,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
 
       // Verify all returned risks belong to org1
       risksData.data.forEach((_risk: any) => {
-        expect(risk.id).toContain('org1');
+        expect(risk.id).toContain('org1')
       });
     });
 
@@ -336,13 +336,13 @@ test.describe('Multi-Tenant Data Isolation', () => {
           email: 'user1@org1.com',
           password: 'password123',
         },
-      });
+      })
 
       const loginData = await loginResponse.json();
       const _token = loginData.token;
 
       // Attempt SQL injection to access org2 data
-      const maliciousQuery = `' OR organizationId='${org2Data.id}' --`;
+      const maliciousQuery = `' OR organizationId='${org2Data.id}' --`
 
       const response = await request.get(
         `${apiUrl}/risks?search=${encodeURIComponent(maliciousQuery)}`,
@@ -356,7 +356,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       const data = await response.json();
 
       // Should still only return org1 data
-      expect(data.success).toBe(true);
+      expect(data.success).toBe(true)
       data.data?.forEach((_risk: any) => {
         expect(risk.id).toContain('org1');
         expect(risk.id).not.toContain('org2');
@@ -369,7 +369,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
 
       // Create a malicious token with org2 context
-      const maliciousToken = 'Bearer fake-token-with-org2-context';
+      const maliciousToken = 'Bearer fake-token-with-org2-context'
 
       const response = await request.get(`${apiUrl}/risks`, {
         headers: {
@@ -378,7 +378,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       // Should return 401 Unauthorized
-      expect(response.status()).toBe(401);
+      expect(response.status()).toBe(401)
     });
 
     test('should prevent token replay attacks across organizations', async ({ request }) => {
@@ -390,7 +390,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
           email: 'user1@org1.com',
           password: 'password123',
         },
-      });
+      })
 
       const org1Token = (await org1LoginResponse.json()).token;
 
@@ -399,10 +399,10 @@ test.describe('Multi-Tenant Data Isolation', () => {
         headers: {
           Authorization: `Bearer ${org1Token}`,
         },
-      });
+      })
 
       // Should return 403 Forbidden or 404 Not Found
-      expect([403, 404]).toContain(response.status());
+      expect([403, 404]).toContain(response.status())
     });
   });
 
@@ -418,20 +418,20 @@ test.describe('Multi-Tenant Data Isolation', () => {
             user: org1Data.users[0],
             token: 'org1-user-token',
           }),
-        });
+        })
       });
 
       // Login as org1 user
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
 
       // Try to access org2 specific route
-      await page.goto(`/dashboard/organizations/${org2Data.id}/reports`);
+      await page.goto(`/dashboard/organizations/${org2Data.id}/reports`)
 
       // Should be redirected or show error
-      const currentUrl = page.url();
+      const currentUrl = page.url()
       expect(currentUrl).not.toContain(`/organizations/${org2Data.id}`);
     });
 
@@ -446,7 +446,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
             user: org1Data.users[0],
             token: 'org1-user-token',
           }),
-        });
+        })
       });
 
       await page.route('/api/organizations/current', async (route) => {
@@ -461,7 +461,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       });
 
       // Login and navigate
-      await page.goto('/auth/login');
+      await page.goto('/auth/login')
       await page.locator('[data-testid="email-input"]').fill('user1@org1.com');
       await page.locator('[data-testid="password-input"]').fill('password123');
       await page.locator('[data-testid="login-button"]').click();
@@ -471,7 +471,7 @@ test.describe('Multi-Tenant Data Isolation', () => {
       // Verify organization context is correct
       await expect(page.locator('[data-testid="organization-selector"]')).toContainText(
         org1Data.name
-      );
+      )
       await expect(page.locator('[data-testid="organization-selector"]')).not.toContainText(
         org2Data.name
       );

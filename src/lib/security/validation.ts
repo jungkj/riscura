@@ -34,7 +34,7 @@ export class InputSanitizer {
           '"': '&quot;',
           "'": '&#x27;',
           '&': '&amp;',
-        };
+        }
         return entities[char] || char;
       })
       .trim();
@@ -63,13 +63,13 @@ export class InputSanitizer {
 
       // Only allow HTTP and HTTPS
       if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-        return null;
+        return null
       }
 
       // Check against allowed domains if provided
       if (allowedDomains.length > 0) {
         if (!allowedDomains.some((domain) => parsedUrl.hostname.endsWith(domain))) {
-          return null;
+          return null
         }
       }
 
@@ -149,7 +149,7 @@ export const ApiValidationSchemas = {
     sortBy: z.string().max(50).optional(),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   }),
-};
+}
 
 /**
  * Request Validator Middleware
@@ -166,13 +166,13 @@ export class RequestValidator {
       const _result = schema.safeParse(data);
 
       if (result.success) {
-        return { success: true, data: result.data };
+        return { success: true, data: result.data }
       } else {
         const errors = result.error.errors.map((err) => `${err.path.join('.')}: ${err.message}`);
-        return { success: false, errors };
+        return { success: false, errors }
       }
     } catch (error) {
-      return { success: false, errors: ['Validation error occurred'] };
+      return { success: false, errors: ['Validation error occurred'] }
     }
   }
 
@@ -185,7 +185,7 @@ export class RequestValidator {
     sanitizeHtml: boolean = true
   ): { success: true; data: T } | { success: false; errors: string[] } {
     // First validate structure
-    const validation = this.validateBody(schema, data);
+    const validation = this.validateBody(schema, data)
 
     if (!validation.success) {
       return validation;
@@ -193,8 +193,8 @@ export class RequestValidator {
 
     // Then sanitize string fields if requested
     if (sanitizeHtml && typeof validation.data === 'object' && validation.data !== null) {
-      const sanitized = this.sanitizeObject(validation.data);
-      return { success: true, data: sanitized as T };
+      const sanitized = this.sanitizeObject(validation.data)
+      return { success: true, data: sanitized as T }
     }
 
     return validation;
@@ -213,7 +213,7 @@ export class RequestValidator {
     }
 
     if (typeof obj === 'object' && obj !== null) {
-      const sanitized: any = {};
+      const sanitized: any = {}
       for (const [key, value] of Object.entries(obj)) {
         sanitized[key] = this.sanitizeObject(value);
       }
@@ -253,11 +253,11 @@ export class FileUploadValidator {
 
     // Check file name
     if (!file.name || file.name.length > 255) {
-      errors.push('Invalid file name');
+      errors.push('Invalid file name')
     }
 
     // Check file extension
-    const allowedExtensions = ['.pdf', '.docx', '.xlsx', '.jpg', '.jpeg', '.png', '.txt', '.csv'];
+    const allowedExtensions = ['.pdf', '.docx', '.xlsx', '.jpg', '.jpeg', '.png', '.txt', '.csv']
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
 
     if (!allowedExtensions.includes(fileExtension)) {
@@ -266,20 +266,20 @@ export class FileUploadValidator {
 
     // Check MIME type
     if (!this.ALLOWED_MIME_TYPES.has(file.type)) {
-      errors.push(`MIME type ${file.type} not allowed`);
+      errors.push(`MIME type ${file.type} not allowed`)
     }
 
     // Check file size
     if (file.size > this.MAX_FILE_SIZE) {
       errors.push(
         `File size exceeds maximum allowed size of ${this.MAX_FILE_SIZE / 1024 / 1024}MB`
-      );
+      )
     }
 
     if (errors.length > 0) {
-      return { valid: false, errors };
+      return { valid: false, errors }
     }
 
-    return { valid: true };
+    return { valid: true }
   }
 }

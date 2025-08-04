@@ -8,14 +8,14 @@ export const breakpoints = {
   lg: 1024,
   xl: 1280,
   '2xl': 1536,
-} as const;
+} as const
 
 export type Breakpoint = keyof typeof breakpoints;
 
 // Media query utilities
 export class MediaQueryUtils {
   public static getMediaQuery(breakpoint: Breakpoint, type: 'min' | 'max' = 'min'): string {
-    const value = breakpoints[breakpoint];
+    const value = breakpoints[breakpoint]
     return `(${type}-width: ${value}px)`;
   }
 
@@ -29,7 +29,7 @@ export class MediaQueryUtils {
     callback: (matches: boolean) => void,
     type: 'min' | 'max' = 'min'
   ): () => void {
-    if (typeof window === 'undefined') return () => {};
+    if (typeof window === 'undefined') return () => {}
 
     const mediaQuery = window.matchMedia(this.getMediaQuery(breakpoint, type));
     const handleChange = (e: MediaQueryListEvent) => callback(e.matches);
@@ -54,7 +54,7 @@ export class MediaQueryUtils {
 // Device detection utilities
 export class DeviceUtils {
   public static isMobile(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === 'undefined') return false
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
@@ -75,11 +75,11 @@ export class DeviceUtils {
   }
 
   public static getViewportSize(): { width: number; height: number } {
-    if (typeof window === 'undefined') return { width: 1024, height: 768 };
+    if (typeof window === 'undefined') return { width: 1024, height: 768 }
     return {
       width: window.innerWidth,
       height: window.innerHeight,
-    };
+    }
   }
 
   public static getOrientation(): 'portrait' | 'landscape' {
@@ -94,11 +94,11 @@ export class ResponsiveUtils {
     breakpointValues: Partial<Record<Breakpoint, T>>,
     fallback: T
   ): T {
-    const currentBreakpoint = MediaQueryUtils.getCurrentBreakpoint();
+    const currentBreakpoint = MediaQueryUtils.getCurrentBreakpoint()
     const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
 
     // Find the largest breakpoint that has a value and is <= current breakpoint
-    const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
+    const currentIndex = breakpointOrder.indexOf(currentBreakpoint)
 
     for (let i = currentIndex; i < breakpointOrder.length; i++) {
       const bp = breakpointOrder[i];
@@ -147,7 +147,7 @@ export class ResponsiveUtils {
     }
 
     // Linear interpolation between breakpoints
-    const ratio = (currentWidth - toWidth) / (fromWidth - toWidth);
+    const ratio = (currentWidth - toWidth) / (fromWidth - toWidth)
     return value * (scaleFactor + ratio * (1 - scaleFactor));
   }
 }
@@ -155,7 +155,7 @@ export class ResponsiveUtils {
 // Touch and gesture utilities
 export class TouchUtils {
   public static addTouchSupport(element: HTMLElement): () => void {
-    if (!DeviceUtils.isTouchDevice()) return () => {};
+    if (!DeviceUtils.isTouchDevice()) return () => {}
 
     let startX = 0;
     let startY = 0;
@@ -165,7 +165,7 @@ export class TouchUtils {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
       isScrolling = false;
-    };
+    }
 
     const handleTouchMove = (e: TouchEvent) => {
       const currentX = e.touches[0].clientX;
@@ -179,9 +179,9 @@ export class TouchUtils {
 
       // Prevent horizontal scrolling if vertical scrolling is detected
       if (!isScrolling && deltaX > 10) {
-        e.preventDefault();
+        e.preventDefault()
       }
-    };
+    }
 
     element.addEventListener('touchstart', handleTouchStart, { passive: true });
     element.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -189,7 +189,7 @@ export class TouchUtils {
     return () => {
       element.removeEventListener('touchstart', handleTouchStart);
       element.removeEventListener('touchmove', handleTouchMove);
-    };
+    }
   }
 
   public static addSwipeGesture(
@@ -197,7 +197,7 @@ export class TouchUtils {
     onSwipe: (direction: 'left' | 'right' | 'up' | 'down') => void,
     threshold: number = 50
   ): () => void {
-    if (!DeviceUtils.isTouchDevice()) return () => {};
+    if (!DeviceUtils.isTouchDevice()) return () => {}
 
     let startX = 0;
     let startY = 0;
@@ -207,7 +207,7 @@ export class TouchUtils {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
       startTime = Date.now();
-    };
+    }
 
     const handleTouchEnd = (e: TouchEvent) => {
       const endX = e.changedTouches[0].clientX;
@@ -220,17 +220,17 @@ export class TouchUtils {
 
       // Ignore if too slow or too short
       if (deltaTime > 300 || (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold)) {
-        return;
+        return
       }
 
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         // Horizontal swipe
-        onSwipe(deltaX > 0 ? 'right' : 'left');
+        onSwipe(deltaX > 0 ? 'right' : 'left')
       } else {
         // Vertical swipe
-        onSwipe(deltaY > 0 ? 'down' : 'up');
+        onSwipe(deltaY > 0 ? 'down' : 'up')
       }
-    };
+    }
 
     element.addEventListener('touchstart', handleTouchStart, { passive: true });
     element.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -238,7 +238,7 @@ export class TouchUtils {
     return () => {
       element.removeEventListener('touchstart', handleTouchStart);
       element.removeEventListener('touchend', handleTouchEnd);
-    };
+    }
   }
 }
 
@@ -246,12 +246,12 @@ export class TouchUtils {
 export function useBreakpoint(): Breakpoint {
   const [breakpoint, setBreakpoint] = React.useState<Breakpoint>(() =>
     MediaQueryUtils.getCurrentBreakpoint()
-  );
+  )
 
   React.useEffect(() => {
     const handleResize = () => {
       setBreakpoint(MediaQueryUtils.getCurrentBreakpoint());
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -276,7 +276,7 @@ export function useViewportSize() {
   React.useEffect(() => {
     const handleResize = () => {
       setSize(DeviceUtils.getViewportSize());
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -291,7 +291,7 @@ export function useOrientation() {
   React.useEffect(() => {
     const handleResize = () => {
       setOrientation(DeviceUtils.getOrientation());
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -316,7 +316,7 @@ export function useDeviceType() {
         isDesktop: DeviceUtils.isDesktop(),
         isTouchDevice: DeviceUtils.isTouchDevice(),
       });
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -353,7 +353,7 @@ export function useSwipeGesture(
 
 // Responsive component utilities
 export interface ResponsiveProps {
-  xs?: React.ReactNode;
+  xs?: React.ReactNode
   sm?: React.ReactNode;
   md?: React.ReactNode;
   lg?: React.ReactNode;
@@ -366,7 +366,7 @@ export const ResponsiveRender: React.FC<ResponsiveProps> = (props) => {
   const breakpointOrder: Breakpoint[] = ['2xl', 'xl', 'lg', 'md', 'sm', 'xs'];
 
   // Find the best matching breakpoint
-  const currentIndex = breakpointOrder.indexOf(breakpoint);
+  const currentIndex = breakpointOrder.indexOf(breakpoint)
 
   for (let i = currentIndex; i < breakpointOrder.length; i++) {
     const bp = breakpointOrder[i];
@@ -376,14 +376,14 @@ export const ResponsiveRender: React.FC<ResponsiveProps> = (props) => {
   }
 
   return null;
-};
+}
 
 // CSS-in-JS responsive utilities
 export function generateResponsiveStyles(
   property: string,
   values: Partial<Record<Breakpoint, string | number>>
 ): Record<string, any> {
-  const styles: Record<string, any> = {};
+  const styles: Record<string, any> = {}
 
   Object.entries(values).forEach(([breakpoint, value]) => {
     const bp = breakpoint as Breakpoint;
@@ -393,7 +393,7 @@ export function generateResponsiveStyles(
     } else {
       const mediaQuery = MediaQueryUtils.getMediaQuery(bp);
       if (!styles[`@media ${mediaQuery}`]) {
-        styles[`@media ${mediaQuery}`] = {};
+        styles[`@media ${mediaQuery}`] = {}
       }
       styles[`@media ${mediaQuery}`][property] = value;
     }

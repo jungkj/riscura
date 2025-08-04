@@ -9,7 +9,7 @@ import nodemailer from 'nodemailer';
 
 // Email payload interface
 interface EmailPayload {
-  to: string | string[];
+  to: string | string[]
   subject: string;
   body: string;
   html?: string;
@@ -24,7 +24,7 @@ interface EmailPayload {
 
 // Email response interface
 interface EmailResponse {
-  success: boolean;
+  success: boolean
   messageId?: string;
   error?: string;
   delivered: number;
@@ -41,7 +41,7 @@ const createTransporter = () => {
         user: 'apikey',
         pass: process.env.SENDGRID_API_KEY,
       },
-    });
+    })
   } else if (process.env.SMTP_HOST) {
     // Use custom SMTP
     return nodemailer.createTransport({
@@ -52,11 +52,11 @@ const createTransporter = () => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-    });
+    })
   } else {
     throw new Error('No email configuration found');
   }
-};
+}
 
 export async function POST(_request: NextRequest) {
   try {
@@ -67,11 +67,11 @@ export async function POST(_request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields: to, subject, body' },
         { status: 400 }
-      );
+      )
     }
 
     // Rate limiting check
-    const rateLimitResult = await checkRateLimit(request);
+    const rateLimitResult = await checkRateLimit(request)
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {
@@ -84,7 +84,7 @@ export async function POST(_request: NextRequest) {
     }
 
     // Validate email addresses
-    const recipients = Array.isArray(payload.to) ? payload.to : [payload.to];
+    const recipients = Array.isArray(payload.to) ? payload.to : [payload.to]
     const validEmails = recipients.filter((email) => isValidEmail(email));
 
     if (validEmails.length === 0) {
@@ -99,7 +99,7 @@ export async function POST(_request: NextRequest) {
       success: false,
       delivered: 0,
       failed: 0,
-    };
+    }
 
     // Send emails individually to track delivery status
     for (const email of validEmails) {
@@ -116,7 +116,7 @@ export async function POST(_request: NextRequest) {
             'X-Email-Category': payload.category || 'system',
             'X-Email-Source': 'RISCURA',
           },
-        };
+        }
 
         const info = await transporter.sendMail(mailOptions);
         results.delivered++;
@@ -136,10 +136,10 @@ export async function POST(_request: NextRequest) {
             category: payload.category,
             messageId: info.messageId,
           },
-        });
+        })
       } catch (emailError) {
         results.failed++;
-        // console.error(`Failed to send email to ${email}:`, emailError);
+        // console.error(`Failed to send email to ${email}:`, emailError)
 
         // Log failed delivery
         Sentry.captureException(emailError, {
@@ -151,7 +151,7 @@ export async function POST(_request: NextRequest) {
             subject: payload.subject,
             error: emailError instanceof Error ? emailError.message : String(emailError),
           },
-        });
+        })
       }
     }
 
@@ -163,11 +163,11 @@ export async function POST(_request: NextRequest) {
       delivered: results.delivered,
       failed: results.failed,
       subject: payload.subject,
-    });
+    })
 
     return NextResponse.json(results);
   } catch (error) {
-    // console.error('Email notification error:', error);
+    // console.error('Email notification error:', error)
 
     Sentry.captureException(error, {
       tags: {
@@ -202,13 +202,13 @@ async function checkRateLimit(_request: NextRequest): Promise<{
     request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
   // Simple in-memory rate limiting (in production, use Redis)
-  const rateLimitKey = `email_rate_limit:${ip}`;
+  const rateLimitKey = `email_rate_limit:${ip}`
   const maxRequests = 50; // 50 emails per hour per IP
   const windowMs = 60 * 60 * 1000; // 1 hour
 
   // This is a simplified implementation
   // In production, implement proper rate limiting with Redis
-  return { allowed: true };
+  return { allowed: true }
 }
 
 /**
@@ -228,7 +228,7 @@ const generateHTML = (text: string, subject: string): string {
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/__(.*?)__/g, '<em>$1</em>');
+    .replace(/__(.*?)__/g, '<em>$1</em>')
 
   return `
     <!DOCTYPE html>
@@ -310,7 +310,7 @@ async function trackEmailMetrics(metrics: {
         subject_line: metrics.subject,
         timestamp: Date.now(),
       },
-    };
+    }
 
     // Send to internal analytics endpoint
     if (typeof fetch !== 'undefined') {
@@ -320,10 +320,10 @@ async function trackEmailMetrics(metrics: {
         body: JSON.stringify({ events: [analyticsPayload] }),
       }).catch(() => {
         // Silently fail - don't break email sending for analytics
-      });
+      })
     }
   } catch (error) {
     // Don't throw - email sending is more important than metrics
-    // console.error('Failed to track email metrics:', error);
+    // console.error('Failed to track email metrics:', error)
   }
 }

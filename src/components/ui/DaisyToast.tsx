@@ -25,12 +25,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const addToast = React.useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substring(7);
-    const newToast = { ...toast, id };
+    const newToast = { ...toast, id }
     setToasts((prev) => [...prev, newToast]);
 
     // Auto-remove after 5 seconds
     setTimeout(() => {
-      removeToast(id);
+      removeToast(id)
     }, 5000);
   }, []);
 
@@ -44,7 +44,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       <ToastViewport />
     </ToastContext.Provider>
   );
-};
+}
 
 export const useToast = () => {
   const context = React.useContext(ToastContext);
@@ -56,8 +56,8 @@ export const useToast = () => {
     toast: context.addToast,
     toasts: context.toasts,
     dismiss: context.removeToast,
-  };
-};
+  }
+}
 
 const ToastViewport: React.FC = () => {
   const context = React.useContext(ToastContext);
@@ -90,7 +90,7 @@ const ToastViewport: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 // Compatibility exports
 export const ToastAction: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
@@ -101,7 +101,7 @@ export const ToastAction: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
   <button className={cn('btn btn-sm', className)} {...props}>
     {children}
   </button>
-);
+)
 
 export const ToastClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
   className,

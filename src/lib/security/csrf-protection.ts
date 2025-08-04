@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
 import React from 'react';
-
+;
 export interface CSRFConfig {
   tokenLength: number;
   cookieName: string;
@@ -16,7 +16,7 @@ export interface CSRFConfig {
     maxAge: number;
     path: string;
     domain?: string;
-  };
+  }
   exemptMethods: string[];
   exemptPaths: string[];
   doubleSubmitCookie: boolean;
@@ -51,43 +51,43 @@ class CSRFProtection {
   private config: CSRFConfig;
   private tokenStore: Map<string, { token: string; timestamp: number; used: boolean }> = new Map();
   private metrics: CSRFMetrics = {
-    totalRequests: 0,
-    validRequests: 0,
-    invalidRequests: 0,
-    tokensGenerated: 0,
-    tokensValidated: 0,
-    suspiciousActivity: 0,
-    topInvalidReasons: {},
-    byIP: {},
-  };
+    totalRequests: 0,;
+    validRequests: 0,;
+    invalidRequests: 0,;
+    tokensGenerated: 0,;
+    tokensValidated: 0,;
+    suspiciousActivity: 0,;
+    topInvalidReasons: {},;
+    byIP: {},;
+  }
   private secretKey: string;
-
+;
   constructor(config?: Partial<CSRFConfig>) {
     this.config = {
-      tokenLength: 32,
-      cookieName: '__Host-csrf-token',
-      headerName: 'X-CSRF-Token',
-      fieldName: '_csrf',
+      tokenLength: 32,;
+      cookieName: '__Host-csrf-token',;
+      headerName: 'X-CSRF-Token',;
+      fieldName: '_csrf',;
       cookieOptions: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24, // 24 hours
-        path: '/',
-      },
-      exemptMethods: ['GET', 'HEAD', 'OPTIONS'],
-      exemptPaths: ['/api/health', '/api/metrics', '/api/csrf-token'],
-      doubleSubmitCookie: true,
-      enableOriginCheck: true,
-      trustedOrigins: [],
-      rotationInterval: 60 * 60 * 1000, // 1 hour
-      enableMetrics: true,
-      ...config,
-    };
-
+        httpOnly: true,;
+        secure: process.env.NODE_ENV === 'production',;
+        sameSite: 'strict',;
+        maxAge: 60 * 60 * 24, // 24 hours;
+        path: '/',;
+      },;
+      exemptMethods: ['GET', 'HEAD', 'OPTIONS'],;
+      exemptPaths: ['/api/health', '/api/metrics', '/api/csrf-token'],;
+      doubleSubmitCookie: true,;
+      enableOriginCheck: true,;
+      trustedOrigins: [],;
+      rotationInterval: 60 * 60 * 1000, // 1 hour;
+      enableMetrics: true,;
+      ...config,;
+    }
+;
     // Generate or retrieve secret key
     this.secretKey = process.env.CSRF_SECRET || this.generateSecretKey();
-
+;
     // Setup token rotation
     this.setupTokenRotation();
   }
@@ -102,21 +102,21 @@ class CSRFProtection {
     const timestamp = Date.now();
     const randomBytes = crypto.randomBytes(this.config.tokenLength);
     const payload = `${timestamp}:${sessionId || 'anonymous'}:${randomBytes.toString('hex')}`;
-
+;
     // Create HMAC signature
     const hmac = crypto.createHmac('sha256', this.secretKey);
     hmac.update(payload);
     const signature = hmac.digest('hex');
-
+;
     const _token = `${Buffer.from(payload).toString('base64')}.${signature}`;
-
+;
     // Store token for validation
     this.tokenStore.set(token, {
-      token,
-      timestamp,
-      used: false,
+      token,;
+      timestamp,;
+      used: false,;
     });
-
+;
     if (this.config.enableMetrics) {
       this.metrics.tokensGenerated++;
     }
@@ -127,23 +127,23 @@ class CSRFProtection {
   // Validate CSRF token
   public validateToken(token: string, sessionId?: string): boolean {
     if (!token) return false;
-
+;
     try {
       const [payloadBase64, signature] = token.split('.');
       if (!payloadBase64 || !signature) return false;
-
+;
       const payload = Buffer.from(payloadBase64, 'base64').toString();
-
+;
       // Verify HMAC signature
       const hmac = crypto.createHmac('sha256', this.secretKey);
       hmac.update(payload);
       const expectedSignature = hmac.digest('hex');
-
-      if (
-        !crypto.timingSafeEqual(
-          Buffer.from(signature, 'hex'),
-          Buffer.from(expectedSignature, 'hex')
-        )
+;
+      if (;
+        !crypto.timingSafeEqual(;
+          Buffer.from(signature, 'hex'),;
+          Buffer.from(expectedSignature, 'hex');
+        );
       ) {
         return false;
       }
@@ -151,7 +151,7 @@ class CSRFProtection {
       // Parse payload
       const [timestampStr, tokenSessionId, randomHex] = payload.split(':');
       const timestamp = parseInt(timestampStr, 10);
-
+;
       // Check token age
       const maxAge = this.config.cookieOptions.maxAge * 1000;
       if (Date.now() - timestamp > maxAge) {
@@ -180,7 +180,7 @@ class CSRFProtection {
 
       return true;
     } catch (error) {
-      // console.error('CSRF token validation error:', error);
+      // console.error('CSRF token validation error:', error)
       return false;
     }
   }
@@ -196,7 +196,7 @@ class CSRFProtection {
     const clientIP = this.getClientIP(request);
     const origin = request.headers.get('origin');
     const userAgent = request.headers.get('user-agent') || '';
-
+;
     // Skip exempt methods
     if (this.config.exemptMethods.includes(method)) {
       return null;
@@ -208,13 +208,13 @@ class CSRFProtection {
     }
 
     const validationResult: CSRFValidationResult = {
-      isValid: false,
-      timestamp: Date.now(),
-      clientIP,
-      userAgent,
-      origin: origin || undefined,
-    };
-
+      isValid: false,;
+      timestamp: Date.now(),;
+      clientIP,;
+      userAgent,;
+      origin: origin || undefined,;
+    }
+;
     // Origin check
     if (this.config.enableOriginCheck && origin) {
       if (!this.isOriginTrusted(origin, request)) {
@@ -233,11 +233,11 @@ class CSRFProtection {
     }
 
     validationResult.token = token;
-
+;
     // Validate token
     const sessionId = this.extractSessionId(request);
     const isValidToken = this.validateToken(token, sessionId);
-
+;
     if (!isValidToken) {
       validationResult.reason = 'Invalid CSRF token';
       this.recordInvalidRequest(validationResult);
@@ -257,8 +257,8 @@ class CSRFProtection {
     // Valid request
     validationResult.isValid = true;
     this.recordValidRequest(validationResult);
-
-    return null; // Continue processing
+;
+    return null; // Continue processing;
   }
 
   // Extract CSRF token from request
@@ -266,7 +266,7 @@ class CSRFProtection {
     // Check header first
     const headerToken = request.headers.get(this.config.headerName);
     if (headerToken) return headerToken;
-
+;
     // Check form data for POST requests
     if (request.method === 'POST') {
       const contentType = request.headers.get('content-type') || '';
@@ -290,7 +290,7 @@ class CSRFProtection {
     // Try to get session ID from cookie or header
     const sessionCookie = request.cookies.get('session-id')?.value;
     const sessionHeader = request.headers.get('x-session-id');
-
+;
     return sessionCookie || sessionHeader || undefined;
   }
 
@@ -299,9 +299,9 @@ class CSRFProtection {
     // Always trust same origin
     const requestUrl = new URL(request.url);
     const requestOrigin = `${requestUrl.protocol}//${requestUrl.host}`;
-
+;
     if (origin === requestOrigin) return true;
-
+;
     // Check configured trusted origins
     return this.config.trustedOrigins.some((trustedOrigin) => {
       if (trustedOrigin.includes('*')) {
@@ -317,11 +317,11 @@ class CSRFProtection {
     const forwarded = request.headers.get('x-forwarded-for');
     const realIP = request.headers.get('x-real-ip');
     const cfConnectingIP = request.headers.get('cf-connecting-ip');
-
+;
     if (cfConnectingIP) return cfConnectingIP;
     if (realIP) return realIP;
     if (forwarded) return forwarded.split(',')[0].trim();
-
+;
     // NextRequest doesn't have ip property, use a fallback
     return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
   }
@@ -329,23 +329,23 @@ class CSRFProtection {
   // Create error response
   private createErrorResponse(message: string, status: number): NextResponse {
     return new NextResponse(JSON.stringify({ error: message, code: 'CSRF_PROTECTION' }), {
-      status,
+      status,;
       headers: {
-        'Content-Type': 'application/json',
-        'X-Content-Type-Options': 'nosniff',
-      },
+        'Content-Type': 'application/json',;
+        'X-Content-Type-Options': 'nosniff',;
+      },;
     });
   }
 
   // Record valid request
   private recordValidRequest(result: CSRFValidationResult): void {
     if (!this.config.enableMetrics) return;
-
+;
     this.metrics.validRequests++;
-
+;
     // Update IP statistics
     if (!this.metrics.byIP[result.clientIP]) {
-      this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 };
+      this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 }
     }
     this.metrics.byIP[result.clientIP].valid++;
   }
@@ -353,30 +353,30 @@ class CSRFProtection {
   // Record invalid request
   private recordInvalidRequest(result: CSRFValidationResult): void {
     if (!this.config.enableMetrics) return;
-
+;
     this.metrics.invalidRequests++;
-
+;
     // Update reason statistics
     if (result.reason) {
-      this.metrics.topInvalidReasons[result.reason] =
+      this.metrics.topInvalidReasons[result.reason] =;
         (this.metrics.topInvalidReasons[result.reason] || 0) + 1;
     }
 
     // Update IP statistics
     if (!this.metrics.byIP[result.clientIP]) {
-      this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 };
+      this.metrics.byIP[result.clientIP] = { valid: 0, invalid: 0 }
     }
     this.metrics.byIP[result.clientIP].invalid++;
-
+;
     // Check for suspicious activity
     const ipStats = this.metrics.byIP[result.clientIP];
     if (ipStats.invalid > 10 && ipStats.invalid > ipStats.valid * 2) {
       this.metrics.suspiciousActivity++;
       // console.warn('Suspicious CSRF activity detected:', {
         ip: result.clientIP,
-        invalidCount: ipStats.invalid,
-        validCount: ipStats.valid,
-        reason: result.reason,
+        invalidCount: ipStats.invalid,;
+        validCount: ipStats.valid,;
+        reason: result.reason,;
       });
     }
   }
@@ -392,7 +392,7 @@ class CSRFProtection {
   private rotateTokens(): void {
     const now = Date.now();
     const maxAge = this.config.cookieOptions.maxAge * 1000;
-
+;
     for (const [token, data] of this.tokenStore.entries()) {
       if (now - data.timestamp > maxAge) {
         this.tokenStore.delete(token);
@@ -403,13 +403,13 @@ class CSRFProtection {
   // Create CSRF token cookie
   public createTokenCookie(token: string): string {
     const options = this.config.cookieOptions;
-    const cookieParts = [
-      `${this.config.cookieName}=${token}`,
-      `Max-Age=${options.maxAge}`,
-      `Path=${options.path}`,
-      `SameSite=${options.sameSite}`,
+    const cookieParts = [;
+      `${this.config.cookieName}=${token}`,;
+      `Max-Age=${options.maxAge}`,;
+      `Path=${options.path}`,;
+      `SameSite=${options.sameSite}`,;
     ];
-
+;
     if (options.domain) {
       cookieParts.push(`Domain=${options.domain}`);
     }
@@ -434,53 +434,53 @@ class CSRFProtection {
     const _token = this.generateToken(sessionId);
     const cookie = this.createTokenCookie(token);
     const expires = Date.now() + this.config.cookieOptions.maxAge * 1000;
-
-    return { token, cookie, expires };
+;
+    return { token, cookie, expires }
   }
 
   // Validate token from API request
-  public validateTokenFromAPI(
-    token: string,
-    cookieToken?: string,
-    sessionId?: string
+  public validateTokenFromAPI(;
+    token: string,;
+    cookieToken?: string,;
+    sessionId?: string;
   ): { isValid: boolean; reason?: string } {
     if (!token) {
-      return { isValid: false, reason: 'Missing token' };
+      return { isValid: false, reason: 'Missing token' }
     }
 
     if (!this.validateToken(token, sessionId)) {
-      return { isValid: false, reason: 'Invalid token' };
+      return { isValid: false, reason: 'Invalid token' }
     }
 
     if (this.config.doubleSubmitCookie && cookieToken && token !== cookieToken) {
-      return { isValid: false, reason: 'Token mismatch' };
+      return { isValid: false, reason: 'Token mismatch' }
     }
 
-    return { isValid: true };
+    return { isValid: true }
   }
 
   // Get metrics
   public getMetrics(): CSRFMetrics {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   // Clear metrics
   public clearMetrics(): void {
     this.metrics = {
-      totalRequests: 0,
-      validRequests: 0,
-      invalidRequests: 0,
-      tokensGenerated: 0,
-      tokensValidated: 0,
-      suspiciousActivity: 0,
-      topInvalidReasons: {},
-      byIP: {},
-    };
+      totalRequests: 0,;
+      validRequests: 0,;
+      invalidRequests: 0,;
+      tokensGenerated: 0,;
+      tokensValidated: 0,;
+      suspiciousActivity: 0,;
+      topInvalidReasons: {},;
+      byIP: {},;
+    }
   }
 
   // Update configuration
   public updateConfig(updates: Partial<CSRFConfig>): void {
-    this.config = { ...this.config, ...updates };
+    this.config = { ...this.config, ...updates }
   }
 
   // Add trusted origin
@@ -502,7 +502,7 @@ class CSRFProtection {
   public needsProtection(_request: NextRequest): boolean {
     const method = request.method;
     const pathname = new URL(request.url).pathname;
-
+;
     // Skip exempt methods
     if (this.config.exemptMethods.includes(method)) {
       return false;
@@ -521,47 +521,45 @@ class CSRFProtection {
 export const csrfConfigs = {
   development: {
     cookieOptions: {
-      secure: false,
-      sameSite: 'lax' as const,
-    },
-    trustedOrigins: ['http://localhost:3000', 'http://localhost:*', 'https://localhost:*'],
-    enableOriginCheck: false,
-  },
-
+      secure: false,;
+      sameSite: 'lax' as const,;
+    },;
+    trustedOrigins: ['http://localhost:3000', 'http://localhost:*', 'https://localhost:*'],;
+    enableOriginCheck: false,;
+  },;
   staging: {
     cookieOptions: {
-      secure: true,
-      sameSite: 'strict' as const,
-      domain: 'staging.riscura.com',
-    },
-    trustedOrigins: ['https://staging.riscura.com', 'https://*.staging.riscura.com'],
-    enableOriginCheck: true,
-  },
-
+      secure: true,;
+      sameSite: 'strict' as const,;
+      domain: 'staging.riscura.com',;
+    },;
+    trustedOrigins: ['https://staging.riscura.com', 'https://*.staging.riscura.com'],;
+    enableOriginCheck: true,;
+  },;
   production: {
     cookieOptions: {
-      secure: true,
-      sameSite: 'strict' as const,
-      domain: 'riscura.com',
-    },
-    trustedOrigins: ['https://riscura.com', 'https://*.riscura.com'],
-    enableOriginCheck: true,
-    rotationInterval: 30 * 60 * 1000, // 30 minutes in production
-  },
-};
-
+      secure: true,;
+      sameSite: 'strict' as const,;
+      domain: 'riscura.com',;
+    },;
+    trustedOrigins: ['https://riscura.com', 'https://*.riscura.com'],;
+    enableOriginCheck: true,;
+    rotationInterval: 30 * 60 * 1000, // 30 minutes in production;
+  },;
+}
+;
 // Create singleton instance
 export const csrfProtection = new CSRFProtection();
-
+;
 // Utility functions for Next.js API routes
 export function getCSRFToken(sessionId?: string): string {
   return csrfProtection.generateToken(sessionId);
 }
 
-export function validateCSRFToken(
-  token: string,
-  cookieToken?: string,
-  sessionId?: string
+export function validateCSRFToken(;
+  token: string,;
+  cookieToken?: string,;
+  sessionId?: string;
 ): boolean {
   const _result = csrfProtection.validateTokenFromAPI(token, cookieToken, sessionId);
   return result.isValid;
@@ -574,14 +572,14 @@ export function useCSRFToken(): {
   validateToken: (token: string) => boolean;
 } {
   const [token, setToken] = React.useState<string | null>(null);
-
+;
   const generateToken = async (): Promise<string> => {
     try {
       const response = await fetch('/api/csrf-token', {
-        method: 'GET',
-        credentials: 'include',
+        method: 'GET',;
+        credentials: 'include',;
       });
-
+;
       if (!response.ok) {
         throw new Error('Failed to generate CSRF token');
       }
@@ -590,25 +588,26 @@ export function useCSRFToken(): {
       setToken(data.token);
       return data.token;
     } catch (error) {
-      // console.error('Error generating CSRF token:', error);
+      // console.error('Error generating CSRF token:', error)
       throw error;
     }
-  };
-
+  }
+;
   const validateToken = (tokenToValidate: string): boolean => {
     return csrfProtection.validateTokenFromAPI(tokenToValidate).isValid;
-  };
-
+  }
+;
   React.useEffect(() => {
     generateToken().catch(console.error);
   }, []);
-
+;
   return {
-    token,
-    generateToken,
-    validateToken,
-  };
+    token,;
+    generateToken,;
+    validateToken,;
+  }
 }
 
 // Export class for custom instances
-export { CSRFProtection };
+export { CSRFProtection }
+;

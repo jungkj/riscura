@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
           take: 1,
         },
       },
-    });
+    })
 
     if (!organization) {
       return NextResponse.json({
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Determine plan from metadata or organization plan
-    let plan = organization.plan || 'free';
+    let plan = organization.plan || 'free'
     const stripePriceId = (subscription.metadata as any)?.stripePriceId;
     if (stripePriceId) {
       if (stripePriceId.includes('pro')) plan = 'pro';
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
       limits: getPlanLimits(plan),
     });
   } catch (error) {
-    // console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error)
     return NextResponse.json({ error: 'Failed to get subscription status' }, { status: 500 });
   }
 }
@@ -114,7 +114,7 @@ const getPlanFeatures = (plan: string) {
       'SSO',
       'API access',
     ],
-  };
+  }
   return features[plan as keyof typeof features] || features.free;
 }
 
@@ -123,6 +123,6 @@ const getPlanLimits = (plan: string) {
     free: { users: 3, risks: 10, storage: '100MB', aiQueries: 50 },
     pro: { users: 25, risks: -1, storage: '10GB', aiQueries: 1000 },
     enterprise: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 },
-  };
+  }
   return limits[plan as keyof typeof limits] || limits.free;
 }

@@ -15,17 +15,17 @@ interface HealthCheckResult {
     storage?: ServiceStatus;
     ai?: ServiceStatus;
     billing?: ServiceStatus;
-  };
+  }
   system: {
     memory: {
       used: number;
       total: number;
       percentage: number;
-    };
+    }
     cpu?: {
       usage: number;
-    };
-  };
+    }
+  }
 }
 
 interface ServiceStatus {
@@ -37,19 +37,19 @@ interface ServiceStatus {
 
 // Main health check endpoint
 export async function GET(_request: NextRequest): Promise<NextResponse> {
-  const startTime = Date.now();
+  const startTime = Date.now()
 
   try {
     const dbHealth = await checkDatabase();
 
     // Calculate system metrics
-    const memoryUsage = process.memoryUsage();
+    const memoryUsage = process.memoryUsage()
     const uptime = process.uptime();
 
     // Determine overall health status
     const services = {
       database: dbHealth,
-    };
+    }
 
     const hasError = Object.values(services).some((s) => s.status === 'error');
     const hasWarning = Object.values(services).some((s) => s.status === 'warning');
@@ -71,11 +71,11 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
           percentage: Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100),
         },
       },
-    };
+    }
 
     // Add optional services if configured
     if (process.env.AWS_S3_BUCKET) {
-      healthResponse.services.storage = await checkStorage();
+      healthResponse.services.storage = await checkStorage()
     }
 
     if (process.env.OPENAI_API_KEY) {
@@ -96,7 +96,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    // console.error('Health check failed:', error);
+    // console.error('Health check failed:', error)
 
     return NextResponse.json(
       {
@@ -121,29 +121,29 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
 // Database health check
 async function checkDatabase(): Promise<ServiceStatus> {
-  const start = Date.now();
+  const start = Date.now()
 
   try {
     // Test database connection with a simple query
-    await db.client.$queryRaw`SELECT 1 as health_check`;
+    await db.client.$queryRaw`SELECT 1 as health_check`
 
     return {
       status: 'ok',
       message: 'Database is healthy',
       responseTime: Date.now() - start,
-    };
+    }
   } catch (error) {
     return {
       status: 'error',
       message: error instanceof Error ? error.message : 'Database check failed',
       responseTime: Date.now() - start,
-    };
+    }
   }
 }
 
 // Storage health check (S3)
 async function checkStorage(): Promise<ServiceStatus> {
-  const start = Date.now();
+  const start = Date.now()
 
   try {
     // For now, just check if configured
@@ -152,7 +152,7 @@ async function checkStorage(): Promise<ServiceStatus> {
         status: 'warning',
         message: 'Storage not configured',
         responseTime: Date.now() - start,
-      };
+      }
     }
 
     return {
@@ -163,19 +163,19 @@ async function checkStorage(): Promise<ServiceStatus> {
         bucket: process.env.AWS_S3_BUCKET,
         region: process.env.AWS_REGION,
       },
-    };
+    }
   } catch (error) {
     return {
       status: 'error',
       message: error instanceof Error ? error.message : 'Storage check failed',
       responseTime: Date.now() - start,
-    };
+    }
   }
 }
 
 // AI service health check
 async function checkAI(): Promise<ServiceStatus> {
-  const start = Date.now();
+  const start = Date.now()
 
   try {
     if (!process.env.OPENAI_API_KEY) {
@@ -183,7 +183,7 @@ async function checkAI(): Promise<ServiceStatus> {
         status: 'warning',
         message: 'AI service not configured',
         responseTime: Date.now() - start,
-      };
+      }
     }
 
     return {
@@ -194,19 +194,19 @@ async function checkAI(): Promise<ServiceStatus> {
         model: process.env.AI_MODEL || 'gpt-4',
         maxTokens: process.env.AI_MAX_TOKENS || '2000',
       },
-    };
+    }
   } catch (error) {
     return {
       status: 'error',
       message: error instanceof Error ? error.message : 'AI service check failed',
       responseTime: Date.now() - start,
-    };
+    }
   }
 }
 
 // Billing service health check
 async function checkBilling(): Promise<ServiceStatus> {
-  const start = Date.now();
+  const start = Date.now()
 
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -214,7 +214,7 @@ async function checkBilling(): Promise<ServiceStatus> {
         status: 'warning',
         message: 'Billing service not configured',
         responseTime: Date.now() - start,
-      };
+      }
     }
 
     return {
@@ -225,13 +225,13 @@ async function checkBilling(): Promise<ServiceStatus> {
         provider: 'Stripe',
         webhookConfigured: !!process.env.STRIPE_WEBHOOK_SECRET,
       },
-    };
+    }
   } catch (error) {
     return {
       status: 'error',
       message: error instanceof Error ? error.message : 'Billing service check failed',
       responseTime: Date.now() - start,
-    };
+    }
   }
 }
 
@@ -239,7 +239,7 @@ async function checkBilling(): Promise<ServiceStatus> {
 export async function HEAD() {
   try {
     // Quick check for essential services
-    await db.client.$queryRaw`SELECT 1`;
+    await db.client.$queryRaw`SELECT 1`
     return new Response(null, { status: 200 });
   } catch {
     return new Response(null, { status: 503 });

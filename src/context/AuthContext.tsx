@@ -5,11 +5,11 @@ import { User } from '@/types';
 
 // Enhanced User interface with all required fields
 interface AuthUser extends User {
-  updatedAt?: string;
+  updatedAt?: string
   organization?: {
     id: string;
     name: string;
-  };
+  }
 }
 
 interface AuthState {
@@ -49,7 +49,7 @@ type AuthAction =
   | { type: 'AUTH_LOGOUT' }
   | { type: 'AUTH_INITIALIZE'; payload: { user: AuthUser; token: string } | null }
   | { type: 'UPDATE_USER'; payload: AuthUser }
-  | { type: 'CLEAR_ERROR' };
+  | { type: 'CLEAR_ERROR' }
 
 // Initial state
 const initialState: AuthState = {
@@ -59,7 +59,7 @@ const initialState: AuthState = {
   error: null,
   isAuthenticated: false,
   isInitialized: false,
-};
+}
 
 // Auth reducer
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
@@ -69,7 +69,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         ...state,
         isLoading: true,
         error: null,
-      };
+      }
     case 'AUTH_SUCCESS':
       return {
         ...state,
@@ -79,7 +79,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         error: null,
         isAuthenticated: true,
         isInitialized: true,
-      };
+      }
     case 'AUTH_ERROR':
       return {
         ...state,
@@ -89,12 +89,12 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         error: action.payload,
         isAuthenticated: false,
         isInitialized: true,
-      };
+      }
     case 'AUTH_LOGOUT':
       return {
         ...initialState,
         isInitialized: true,
-      };
+      }
     case 'AUTH_INITIALIZE':
       if (action.payload) {
         return {
@@ -104,7 +104,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
           isAuthenticated: true,
           isInitialized: true,
           isLoading: false,
-        };
+        }
       } else {
         return {
           ...state,
@@ -113,7 +113,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
           isAuthenticated: false,
           isInitialized: true,
           isLoading: false,
-        };
+        }
       }
     case 'UPDATE_USER':
       return {
@@ -121,16 +121,16 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         user: action.payload,
         isLoading: false,
         error: null,
-      };
+      }
     case 'CLEAR_ERROR':
       return {
         ...state,
         error: null,
-      };
+      }
     default:
       return state;
   }
-};
+}
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -140,7 +140,7 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
-};
+}
 
 // Real authentication service
 const authService = {
@@ -150,7 +150,7 @@ const authService = {
     password: string,
     rememberMe: boolean = false
   ): Promise<{ user: AuthUser; token: string }> => {
-    // console.log('AuthContext: Attempting login for:', email);
+    // console.log('AuthContext: Attempting login for:', email)
 
     const response = await fetch('/api/auth/login', {
       method: 'POST',
@@ -160,33 +160,33 @@ const authService = {
       body: JSON.stringify({ email, password, rememberMe }),
     });
 
-    // console.log('AuthContext: Response status:', response.status);
-    // console.log('AuthContext: Response headers:', Object.fromEntries(response.headers.entries()));
+    // console.log('AuthContext: Response status:', response.status)
+    // console.log('AuthContext: Response headers:', Object.fromEntries(response.headers.entries()))
 
     // Check if response is JSON or HTML
-    const contentType = response.headers.get('content-type');
+    const contentType = response.headers.get('content-type')
 
     let data;
     try {
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
-        // console.log('AuthContext: Parsed JSON response:', data);
+        // console.log('AuthContext: Parsed JSON response:', data)
       } else {
         // If not JSON, try to read as text to see what we got
-        const text = await response.text();
-        // console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500));
+        const text = await response.text()
+        // console.error('AuthContext: API returned non-JSON response:', text.substring(0, 500))
 
         // Check if it's an HTML error page
         if (text.includes('<!DOCTYPE html>')) {
           throw new Error(
             'Server error: The login API is not responding correctly. Please check the server logs or use demo credentials (admin@riscura.com / admin123)'
-          );
+          )
         } else {
           throw new Error(`Server returned unexpected content: ${text.substring(0, 100)}...`);
         }
       }
     } catch (parseError) {
-      // console.error('AuthContext: Failed to parse response:', parseError);
+      // console.error('AuthContext: Failed to parse response:', parseError)
       if (parseError instanceof Error && parseError.message.includes('Server error:')) {
         throw parseError; // Re-throw our custom error
       }
@@ -196,31 +196,31 @@ const authService = {
     }
 
     if (!response.ok) {
-      // console.error('AuthContext: Login failed:', data);
+      // console.error('AuthContext: Login failed:', data)
       throw new Error(data.error || 'Login failed');
     }
 
-    // console.log('AuthContext: Login successful:', data);
+    // console.log('AuthContext: Login successful:', data)
 
     // Store token based on rememberMe preference
     if (data.tokens?.accessToken) {
       if (rememberMe) {
         // Store in localStorage for persistent login
-        localStorage.setItem('accessToken', data.tokens.accessToken);
+        localStorage.setItem('accessToken', data.tokens.accessToken)
         // Clear any existing sessionStorage token
-        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('accessToken')
       } else {
         // Store in sessionStorage for session-only login
-        sessionStorage.setItem('accessToken', data.tokens.accessToken);
+        sessionStorage.setItem('accessToken', data.tokens.accessToken)
         // Clear any existing localStorage token
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('accessToken')
       }
     }
 
     return {
       user: data.user,
       token: data.tokens.accessToken,
-    };
+    }
   },
 
   // Register new user
@@ -241,23 +241,23 @@ const authService = {
 
     // If registration requires email verification
     if (data.requiresVerification) {
-      throw new Error('Please check your email to verify your account before logging in.');
+      throw new Error('Please check your email to verify your account before logging in.')
     }
 
     // Store token if login is immediate (default to session storage for registration)
     if (data.tokens?.accessToken) {
-      sessionStorage.setItem('accessToken', data.tokens.accessToken);
+      sessionStorage.setItem('accessToken', data.tokens.accessToken)
     }
 
     return {
       user: data.user,
       token: data.tokens?.accessToken || '',
-    };
+    }
   },
 
   // Logout user
   logout: async (logoutType: 'current' | 'all' = 'current'): Promise<void> => {
-    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
     try {
       if (token && token !== 'oauth-session') {
@@ -269,14 +269,14 @@ const authService = {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ logoutType }),
-        });
+        })
       } else {
         // OAuth session logout
-        await fetch('/api/google-oauth/logout');
+        await fetch('/api/google-oauth/logout')
       }
     } finally {
       // Always clear both storage locations, even if API call fails
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem('accessToken')
       sessionStorage.removeItem('accessToken');
     }
   },
@@ -300,7 +300,7 @@ const authService = {
 
       if (data.tokens?.accessToken) {
         // Check if user has remember me preference and store accordingly
-        const rememberMe = localStorage.getItem('remember-me') === 'true';
+        const rememberMe = localStorage.getItem('remember-me') === 'true'
         if (rememberMe) {
           localStorage.setItem('accessToken', data.tokens.accessToken);
         } else {
@@ -311,7 +311,7 @@ const authService = {
       return {
         user: data.user,
         token: data.tokens.accessToken,
-      };
+      }
     } catch {
       return null;
     }
@@ -319,7 +319,7 @@ const authService = {
 
   // Get current user profile
   getCurrentUser: async (): Promise<AuthUser | null> => {
-    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
     if (!token) {
       return null;
@@ -345,7 +345,7 @@ const authService = {
 
   // Update user profile
   updateProfile: async (_userId: string, userData: Partial<AuthUser>): Promise<AuthUser> => {
-    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
     if (!token) {
       throw new Error('No access token found');
@@ -371,7 +371,7 @@ const authService = {
 
   // Change password
   changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
-    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
     if (!token) {
       throw new Error('No access token found');
@@ -392,7 +392,7 @@ const authService = {
       throw new Error(data.error || 'Failed to change password');
     }
   },
-};
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -402,10 +402,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initializeAuth = async () => {
       // First, always check for OAuth session (priority check)
       try {
-        // console.log('[AuthContext] Checking OAuth session first...');
+        // console.log('[AuthContext] Checking OAuth session first...')
         const oauthResponse = await fetch('/api/google-oauth/session');
         const oauthData = await oauthResponse.json();
-        // console.log('[AuthContext] OAuth session response:', oauthData);
+        // console.log('[AuthContext] OAuth session response:', oauthData)
 
         if (oauthData && oauthData.user) {
           // Convert simple OAuth user to AuthUser format
@@ -423,7 +423,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             avatar: oauthData.user.picture,
             createdAt: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
-          };
+          }
 
           dispatch({
             type: 'AUTH_INITIALIZE',
@@ -432,11 +432,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return;
         }
       } catch (error) {
-        // console.log('[AuthContext] No OAuth session found:', error);
+        // console.log('[AuthContext] No OAuth session found:', error)
       }
 
       // If no OAuth session, check for JWT token
-      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      const _token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
       if (!token) {
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
@@ -445,30 +445,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       try {
         // Try to get current user with existing token
-        const user = await authService.getCurrentUser();
+        const user = await authService.getCurrentUser()
 
         if (user) {
           dispatch({ type: 'AUTH_INITIALIZE', payload: { user, token } });
         } else {
           // Token might be expired, try to refresh
-          const refreshResult = await authService.refreshToken();
+          const refreshResult = await authService.refreshToken()
 
           if (refreshResult) {
             dispatch({ type: 'AUTH_INITIALIZE', payload: refreshResult });
           } else {
             // Refresh failed, clear auth state
-            localStorage.removeItem('accessToken');
+            localStorage.removeItem('accessToken')
             sessionStorage.removeItem('accessToken');
             dispatch({ type: 'AUTH_INITIALIZE', payload: null });
           }
         }
       } catch (error) {
-        // console.error('Auth initialization error:', error);
+        // console.error('Auth initialization error:', error)
         localStorage.removeItem('accessToken');
         sessionStorage.removeItem('accessToken');
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
       }
-    };
+    }
 
     initializeAuth();
   }, []);
@@ -476,22 +476,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Auto-refresh token before expiration (reduced frequency)
   useEffect(() => {
     if (!state.isAuthenticated || !state.token) {
-      return;
+      return
     }
 
     // Set up token refresh interval (25 minutes - less frequent)
     const refreshInterval = setInterval(
       async () => {
         try {
-          const _result = await authService.refreshToken();
+          const _result = await authService.refreshToken()
           if (result) {
             dispatch({ type: 'AUTH_SUCCESS', payload: result });
           } else {
             // Refresh failed, logout user
-            dispatch({ type: 'AUTH_LOGOUT' });
+            dispatch({ type: 'AUTH_LOGOUT' })
           }
         } catch (error) {
-          // console.error('Token refresh error:', error);
+          // console.error('Token refresh error:', error)
           // Don't logout on refresh error, just log it
         }
       },
@@ -510,7 +510,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
       throw error;
     }
-  };
+  }
 
   const register = async (userData: RegisterData) => {
     dispatch({ type: 'AUTH_START' });
@@ -521,17 +521,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
       throw error;
     }
-  };
+  }
 
   const logout = async (logoutType: 'current' | 'all' = 'current') => {
     try {
       await authService.logout(logoutType);
     } catch (error) {
-      // console.error('Logout error:', error);
+      // console.error('Logout error:', error)
     } finally {
       dispatch({ type: 'AUTH_LOGOUT' });
     }
-  };
+  }
 
   const updateProfile = async (userData: Partial<AuthUser>) => {
     if (!state.user) {
@@ -546,7 +546,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
       throw error;
     }
-  };
+  }
 
   const changePassword = async (currentPassword: string, newPassword: string) => {
     dispatch({ type: 'AUTH_START' });
@@ -557,7 +557,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'AUTH_ERROR', payload: (error as Error).message });
       throw error;
     }
-  };
+  }
 
   const refreshToken = async () => {
     try {
@@ -568,14 +568,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         dispatch({ type: 'AUTH_LOGOUT' });
       }
     } catch (error) {
-      // console.error('Manual token refresh error:', error);
+      // console.error('Manual token refresh error:', error)
       dispatch({ type: 'AUTH_LOGOUT' });
     }
-  };
+  }
 
   const clearError = () => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }
 
   return (
     <AuthContext.Provider
@@ -593,4 +593,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
-};
+}

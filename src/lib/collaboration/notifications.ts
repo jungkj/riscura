@@ -7,33 +7,33 @@ export interface NotificationPreferences {
     enabled: boolean;
     frequency: 'instant' | 'daily' | 'weekly' | 'never';
     types: string[];
-  };
+  }
   push: {
     enabled: boolean;
     types: string[];
-  };
+  }
   sms: {
     enabled: boolean;
     types: string[];
-  };
+  }
   slack: {
     enabled: boolean;
     webhookUrl?: string;
     channel?: string;
     types: string[];
-  };
+  }
   inApp: {
     enabled: boolean;
     playSound: boolean;
     showDesktop: boolean;
     types: string[];
-  };
+  }
   quietHours: {
     enabled: boolean;
     startTime: string; // HH:mm format
     endTime: string; // HH:mm format
     timezone: string;
-  };
+  }
 }
 
 export interface NotificationTemplate {
@@ -74,11 +74,11 @@ export class NotificationManager {
   async getUserPreferences(_userId: string): Promise<NotificationPreferences> {
     const preferences = await db.client.notificationPreferences.findUnique({
       where: { userId },
-    });
+    })
 
     if (!preferences) {
       // Return default preferences
-      return this.createDefaultPreferences(userId);
+      return this.createDefaultPreferences(userId)
     }
 
     return preferences;
@@ -95,13 +95,13 @@ export class NotificationManager {
         ...(await this.createDefaultPreferences(userId)),
         ...preferences,
       },
-    });
+    })
 
     // Get organization ID from user
     const user = await db.client.user.findUnique({
       where: { id: userId },
       select: { organizationId: true },
-    });
+    })
 
     // Log preference change
     // NOTE: Activity logging for user events is temporarily disabled
@@ -117,14 +117,14 @@ export class NotificationManager {
         changedFields: Object.keys(preferences),
       },
       timestamp: new Date(),
-    });
+    })
 
     return updated;
   }
 
   // Send notification through multiple channels
   async sendNotification(notification: {
-    recipientId: string;
+    recipientId: string
     type: string;
     title: string;
     message: string;
@@ -145,12 +145,12 @@ export class NotificationManager {
     }
 
     // Get user preferences
-    const preferences = await this.getUserPreferences(notification.recipientId);
+    const preferences = await this.getUserPreferences(notification.recipientId)
 
     // Determine which channels to use
     const channels =
       notification.channels ||
-      this.determineChannels(notification.type, notification.urgency || 'medium', preferences);
+      this.determineChannels(notification.type, notification.urgency || 'medium', preferences)
 
     // Create notification record
     const dbNotification = await db.client.notification.create({
@@ -165,12 +165,12 @@ export class NotificationManager {
         isRead: false,
         createdAt: new Date(),
       },
-    });
+    })
 
     // Check quiet hours
     if (this.isQuietHours(preferences) && notification.urgency !== 'urgent') {
       // Schedule for after quiet hours
-      const scheduleAt = this.calculateAfterQuietHours(preferences);
+      const scheduleAt = this.calculateAfterQuietHours(preferences)
       channels.forEach((channel) => {
         this.queueNotification({
           recipientId: notification.recipientId,
@@ -196,7 +196,7 @@ export class NotificationManager {
       try {
         switch (channel) {
           case 'in_app':
-            await this.sendInAppNotification(dbNotification, preferences);
+            await this.sendInAppNotification(dbNotification, preferences)
             break;
           case 'email':
             await this.sendEmailNotification(dbNotification, preferences);
@@ -204,7 +204,7 @@ export class NotificationManager {
           case 'push':
             // The rest of the push notification code won't execute since pushSubscription is always null
             // This is intentional until the pushSubscription model is implemented
-            break;
+            break
           case 'sms':
             await this.sendSMSNotification(dbNotification, preferences);
             break;
@@ -213,7 +213,7 @@ export class NotificationManager {
             break;
         }
       } catch (error) {
-        // console.error(`Failed to send ${channel} notification:`, error);
+        // console.error(`Failed to send ${channel} notification:`, error)
 
         // Queue for retry if critical
         if (notification.urgency === 'urgent' || notification.urgency === 'high') {
@@ -231,7 +231,7 @@ export class NotificationManager {
               ...notification.data,
             },
             scheduledAt: new Date(Date.now() + 5 * 60 * 1000), // Retry in 5 minutes
-          });
+          })
         }
       }
     }
@@ -243,7 +243,7 @@ export class NotificationManager {
     preferences: NotificationPreferences
   ): Promise<void> {
     if (!preferences.inApp.enabled || !preferences.inApp.types.includes(notification.type)) {
-      return;
+      return
     }
 
     // Send real-time notification via WebSocket
@@ -259,14 +259,14 @@ export class NotificationManager {
         },
         timestamp: new Date(),
         userId: notification.senderId,
-      });
+      })
     }
 
     // Update notification as delivered
     await db.client.notification.update({
       where: { id: notification.id },
       data: { deliveredAt: new Date() },
-    });
+    })
   }
 
   // Send email notification
@@ -275,13 +275,13 @@ export class NotificationManager {
     preferences: NotificationPreferences
   ): Promise<void> {
     if (!preferences.email.enabled || !preferences.email.types.includes(notification.type)) {
-      return;
+      return
     }
 
     // Check frequency settings
     if (preferences.email.frequency !== 'instant' && preferences.email.frequency !== 'never') {
       // Add to digest queue
-      await this.addToDigest(notification.recipientId, notification, preferences.email.frequency);
+      await this.addToDigest(notification.recipientId, notification, preferences.email.frequency)
       return;
     }
 
@@ -290,9 +290,9 @@ export class NotificationManager {
     }
 
     // Get email template
-    const template = await this.getNotificationTemplate(notification.type, 'email');
+    const template = await this.getNotificationTemplate(notification.type, 'email')
     if (!template) {
-      // console.warn(`No email template found for notification type: ${notification.type}`);
+      // console.warn(`No email template found for notification type: ${notification.type}`)
       return;
     }
 
@@ -304,7 +304,7 @@ export class NotificationManager {
       entityType: notification.entityType,
       entityId: notification.entityId,
       timestamp: notification.createdAt,
-    });
+    })
 
     // Queue email for sending
     await this.queueNotification({
@@ -319,7 +319,7 @@ export class NotificationManager {
         notificationId: notification.id,
       },
       scheduledAt: new Date(),
-    });
+    })
   }
 
   // Send push notification
@@ -349,7 +349,7 @@ export class NotificationManager {
     //     },
     //   },
     //   scheduledAt: new Date(),
-    // });
+    // })
   }
 
   // Send SMS notification
@@ -358,7 +358,7 @@ export class NotificationManager {
     preferences: NotificationPreferences
   ): Promise<void> {
     if (!preferences.sms.enabled || !preferences.sms.types.includes(notification.type)) {
-      return;
+      return
     }
 
     const user = await db.client.user.findUnique({
@@ -370,7 +370,7 @@ export class NotificationManager {
     }
 
     // Format SMS message
-    const smsMessage = `${notification.title}: ${notification.message}`;
+    const smsMessage = `${notification.title}: ${notification.message}`
 
     // Queue SMS
     await this.queueNotification({
@@ -384,7 +384,7 @@ export class NotificationManager {
         notificationId: notification.id,
       },
       scheduledAt: new Date(),
-    });
+    })
   }
 
   // Send Slack notification
@@ -397,7 +397,7 @@ export class NotificationManager {
       !preferences.slack.types.includes(notification.type) ||
       !preferences.slack.webhookUrl
     ) {
-      return;
+      return
     }
 
     // Format Slack message
@@ -426,7 +426,7 @@ export class NotificationManager {
           ts: Math.floor(new Date(notification.createdAt).getTime() / 1000),
         },
       ],
-    };
+    }
 
     // Queue Slack notification
     await this.queueNotification({
@@ -440,12 +440,12 @@ export class NotificationManager {
         notificationId: notification.id,
       },
       scheduledAt: new Date(),
-    });
+    })
   }
 
   // Queue notification for later delivery
   private async queueNotification(queueItem: {
-    recipientId: string;
+    recipientId: string
     type: string;
     channel: 'email' | 'push' | 'sms' | 'slack' | 'in_app';
     priority: 'low' | 'medium' | 'high' | 'urgent';
@@ -461,7 +461,7 @@ export class NotificationManager {
     //     maxAttempts: queueItem.priority === 'urgent' ? 5 : 3,
     //     createdAt: new Date(),
     //   },
-    // });
+    // })
 
     // Return mock queue item for now
     return {
@@ -471,7 +471,7 @@ export class NotificationManager {
       attempts: 0,
       maxAttempts: queueItem.priority === 'urgent' ? 5 : 3,
       createdAt: new Date(),
-    };
+    }
   }
 
   // Process notification queue
@@ -488,10 +488,10 @@ export class NotificationManager {
     //     { scheduledAt: 'asc' },
     //   ],
     //   take: 100, // Process in batches
-    // });
+    // })
 
     // Mock empty pending notifications for now
-    const pendingNotifications: any[] = [];
+    const pendingNotifications: any[] = []
 
     for (const notification of pendingNotifications) {
       try {
@@ -503,9 +503,9 @@ export class NotificationManager {
         //     status: 'sent',
         //     sentAt: new Date(),
         //   },
-        // });
+        // })
       } catch (error) {
-        // console.error(`Failed to deliver queued notification ${notification.id}:`, error);
+        // console.error(`Failed to deliver queued notification ${notification.id}:`, error)
 
         const newAttempts = notification.attempts + 1;
         if (newAttempts >= notification.maxAttempts) {
@@ -516,7 +516,7 @@ export class NotificationManager {
           //     attempts: newAttempts,
           //     failureReason: error instanceof Error ? error.message : 'Unknown error',
           //   },
-          // });
+          // })
         } else {
           // Exponential backoff for retry
           const retryDelay = Math.pow(2, newAttempts) * 60 * 1000; // 2^n minutes
@@ -527,7 +527,7 @@ export class NotificationManager {
           //     scheduledAt: new Date(Date.now() + retryDelay),
           //     failureReason: error instanceof Error ? error.message : 'Unknown error',
           //   },
-          // });
+          // })
         }
       }
     }
@@ -537,7 +537,7 @@ export class NotificationManager {
   private async deliverQueuedNotification(notification: NotificationQueue): Promise<void> {
     switch (notification.channel) {
       case 'email':
-        await this.deliverEmail(notification.data);
+        await this.deliverEmail(notification.data)
         break;
       case 'push':
         await this.deliverPush(notification.data);
@@ -550,7 +550,7 @@ export class NotificationManager {
         break;
       case 'in_app':
         // In-app notifications don't need queued delivery as they're sent immediately
-        break;
+        break
     }
   }
 
@@ -561,7 +561,7 @@ export class NotificationManager {
       to: data.to,
       subject: data.subject,
       html: data.html,
-    });
+    })
 
     // Simulated email delivery
     // In real implementation:
@@ -569,7 +569,7 @@ export class NotificationManager {
     //   to: data.to,
     //   subject: data.subject,
     //   html: data.html,
-    // });
+    // })
   }
 
   // Deliver push notification
@@ -585,7 +585,7 @@ export class NotificationManager {
         tag: data.tag,
         data: data.data,
       },
-    });
+    })
 
     // In real implementation:
     // await webpush.sendNotification(data.subscription, JSON.stringify({
@@ -595,7 +595,7 @@ export class NotificationManager {
     //   badge: data.badge,
     //   tag: data.tag,
     //   data: data.data,
-    // }));
+    // }))
   }
 
   // Deliver SMS
@@ -604,13 +604,13 @@ export class NotificationManager {
     // console.log('Sending SMS:', {
       to: data.to,
       message: data.message,
-    });
+    })
 
     // In real implementation:
     // await smsService.send({
     //   to: data.to,
     //   message: data.message,
-    // });
+    // })
   }
 
   // Deliver Slack notification
@@ -619,14 +619,14 @@ export class NotificationManager {
     // console.log('Sending Slack notification:', {
       webhookUrl: data.webhookUrl,
       message: data.message,
-    });
+    })
 
     // In real implementation:
     // await fetch(data.webhookUrl, {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(data.message),
-    // });
+    // })
   }
 
   // Generate notification digests
@@ -644,7 +644,7 @@ export class NotificationManager {
       include: {
         notificationPreferences: true,
       },
-    });
+    })
 
     for (const user of users) {
       await this.generateUserDigest(user.id, frequency);
@@ -656,7 +656,7 @@ export class NotificationManager {
     const since =
       frequency === 'daily'
         ? new Date(Date.now() - 24 * 60 * 60 * 1000)
-        : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
 
     const _notifications = await db.client.notification.findMany({
       where: {
@@ -683,7 +683,7 @@ export class NotificationManager {
     // Group notifications by type
     const groupedNotifications = notifications.reduce(
       (acc, notification) => {
-        const type = notification.type;
+        const type = notification.type
         if (!acc[type]) {
           acc[type] = [];
         }
@@ -694,7 +694,7 @@ export class NotificationManager {
     );
 
     // Generate digest content
-    const digestContent = this.generateDigestContent(groupedNotifications, frequency);
+    const digestContent = this.generateDigestContent(groupedNotifications, frequency)
 
     // Send digest email
     await this.queueNotification({
@@ -708,7 +708,7 @@ export class NotificationManager {
         notificationCount: notifications.length,
       },
       scheduledAt: new Date(),
-    });
+    })
 
     // Mark notifications as included in digest
     await db.client.notification.updateMany({
@@ -719,7 +719,7 @@ export class NotificationManager {
         includeInDigest: true,
         digestSentAt: new Date(),
       },
-    });
+    })
   }
 
   // Create default preferences for new user
@@ -755,7 +755,7 @@ export class NotificationManager {
         endTime: '08:00',
         timezone: 'UTC',
       },
-    };
+    }
   }
 
   // Determine appropriate channels based on type and urgency
@@ -763,17 +763,17 @@ export class NotificationManager {
     urgency: string,
     preferences: NotificationPreferences
   ): ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] {
-    const channels: ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] = [];
+    const channels: ('email' | 'push' | 'sms' | 'slack' | 'in_app')[] = []
 
     // Always try in-app first
     if (preferences.inApp.enabled && preferences.inApp.types.includes(type)) {
-      channels.push('in_app');
+      channels.push('in_app')
     }
 
     // Add other channels based on urgency and preferences
     if (urgency === 'urgent') {
       if (preferences.sms.enabled && preferences.sms.types.includes(type)) {
-        channels.push('sms');
+        channels.push('sms')
       }
       if (preferences.push.enabled && preferences.push.types.includes(type)) {
         channels.push('push');
@@ -799,7 +799,7 @@ export class NotificationManager {
   // Check if current time is within quiet hours
   private isQuietHours(preferences: NotificationPreferences): boolean {
     if (!preferences.quietHours.enabled) {
-      return false;
+      return false
     }
 
     const now = new Date();
@@ -811,13 +811,13 @@ export class NotificationManager {
       return currentTime >= startTime && currentTime <= endTime;
     } else {
       // Quiet hours span midnight
-      return currentTime >= startTime || currentTime <= endTime;
+      return currentTime >= startTime || currentTime <= endTime
     }
   }
 
   // Calculate when quiet hours end
   private calculateAfterQuietHours(preferences: NotificationPreferences): Date {
-    const now = new Date();
+    const now = new Date()
     const endTime = this.parseTime(preferences.quietHours.endTime);
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
@@ -825,7 +825,7 @@ export class NotificationManager {
 
     if (currentTime > endTime) {
       // Schedule for next day
-      scheduleTime.setDate(scheduleTime.getDate() + 1);
+      scheduleTime.setDate(scheduleTime.getDate() + 1)
     }
 
     scheduleTime.setHours(Math.floor(endTime / 60));
@@ -838,7 +838,7 @@ export class NotificationManager {
 
   // Parse time string (HH:mm) to minutes since midnight
   private parseTime(timeStr: string): number {
-    const [hours, minutes] = timeStr.split(':').map(Number);
+    const [hours, minutes] = timeStr.split(':').map(Number)
     return hours * 60 + minutes;
   }
 
@@ -853,10 +853,10 @@ export class NotificationManager {
     //     channel,
     //     isActive: true,
     //   },
-    // });
+    // })
 
     // Return null for now
-    return null;
+    return null
   }
 
   // Render template with variables
@@ -869,12 +869,12 @@ export class NotificationManager {
 
     // Replace variables in subject and content
     for (const [key, value] of Object.entries(variables)) {
-      const regex = new RegExp(`{{${key}}}`, 'g');
+      const regex = new RegExp(`{{${key}}}`, 'g')
       subject = subject.replace(regex, String(value));
       content = content.replace(regex, String(value));
     }
 
-    return { subject, content };
+    return { subject, content }
   }
 
   // Add notification to digest queue
@@ -889,7 +889,7 @@ export class NotificationManager {
         pendingDigest: true,
         digestFrequency: frequency,
       },
-    });
+    })
   }
 
   // Generate digest content HTML
@@ -931,7 +931,7 @@ export class NotificationManager {
             ${notification.message}<br>
             <small>${new Date(notification.createdAt).toLocaleString()}</small>
           </div>
-        `;
+        `
       }
 
       if (notifications.length > 10) {
@@ -964,7 +964,7 @@ export class NotificationManager {
       DOCUMENT_SHARED: 'Shared Documents',
       RISK_UPDATED: 'Risk Updates',
       CONTROL_UPDATED: 'Control Updates',
-    };
+    }
 
     return displayNames[type] || type.replace(/_/g, ' ').toLowerCase();
   }
@@ -979,7 +979,7 @@ export class NotificationManager {
       DOCUMENT_SHARED: '#607d8b',
       RISK_UPDATED: '#f44336',
       CONTROL_UPDATED: '#4caf50',
-    };
+    }
 
     return colors[type] || '#757575';
   }
@@ -991,7 +991,7 @@ export class NotificationManager {
         id: notificationId,
         recipientId: userId,
       },
-    });
+    })
 
     if (!notification) {
       throw new Error('Notification not found');
@@ -1012,7 +1012,7 @@ export class NotificationManager {
         payload: { notificationId },
         timestamp: new Date(),
         userId,
-      });
+      })
     }
   }
 
@@ -1027,7 +1027,7 @@ export class NotificationManager {
         isRead: true,
         readAt: new Date(),
       },
-    });
+    })
 
     // Send real-time update
     if (collaborationServer) {
@@ -1036,7 +1036,7 @@ export class NotificationManager {
         payload: {},
         timestamp: new Date(),
         userId,
-      });
+      })
     }
   }
 
@@ -1047,13 +1047,13 @@ export class NotificationManager {
         recipientId: userId,
         isRead: false,
       },
-    });
+    })
   }
 
   // Get user notifications with pagination
   async getUserNotifications(_userId: string,
     options: {
-      limit?: number;
+      limit?: number
       offset?: number;
       unreadOnly?: boolean;
       types?: string[];
@@ -1061,14 +1061,14 @@ export class NotificationManager {
   ): Promise<{ notifications: any[]; total: number; unreadCount: number }> {
     const where: any = {
       recipientId: userId,
-    };
+    }
 
     if (options.unreadOnly) {
       where.isRead = false;
     }
 
     if (options.types && options.types.length > 0) {
-      where.type = { in: options.types };
+      where.type = { in: options.types }
     }
 
     const [notifications, total, unreadCount] = await Promise.all([
@@ -1098,7 +1098,7 @@ export class NotificationManager {
       }),
     ]);
 
-    return { notifications, total, unreadCount };
+    return { notifications, total, unreadCount }
   }
 }
 
@@ -1109,14 +1109,14 @@ export function startNotificationProcessor(): void {
   // Process queue every minute
   setInterval(async () => {
     try {
-      await notificationManager.processQueue();
+      await notificationManager.processQueue()
     } catch (error) {
-      // console.error('Error processing notification queue:', error);
+      // console.error('Error processing notification queue:', error)
     }
   }, 60 * 1000);
 
   // Generate daily digests at 8 AM
-  const dailyDigestTime = new Date();
+  const dailyDigestTime = new Date()
   dailyDigestTime.setHours(8, 0, 0, 0);
   const msUntilDailyDigest = dailyDigestTime.getTime() - Date.now();
   const dailyDigestDelay =
@@ -1135,7 +1135,7 @@ export function startNotificationProcessor(): void {
   }, dailyDigestDelay);
 
   // Generate weekly digests on Monday at 8 AM
-  const weeklyDigestTime = new Date();
+  const weeklyDigestTime = new Date()
   weeklyDigestTime.setDate(weeklyDigestTime.getDate() + ((1 - weeklyDigestTime.getDay() + 7) % 7)); // Next Monday
   weeklyDigestTime.setHours(8, 0, 0, 0);
   const msUntilWeeklyDigest = weeklyDigestTime.getTime() - Date.now();

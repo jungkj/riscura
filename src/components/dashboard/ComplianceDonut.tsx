@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle, DaisyTooltip } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 
 interface ComplianceDonutProps {
   isLoading?: boolean;
@@ -37,7 +38,7 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
   useEffect(() => {
     if (!isLoading) {
       const timer = setTimeout(() => {
-        setAnimatedData(data);
+        setAnimatedData(data)
       }, 500);
       
       return () => clearTimeout(timer);
@@ -55,11 +56,11 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
       );
     }
     return null;
-  };
+  }
 
   if (isLoading) {
     return <DaisySkeleton className="h-[280px] w-full" />;
-  };
+  }
 
   return (
     <DaisyCard >
@@ -105,4 +106,4 @@ export const ComplianceDonut: React.FC<ComplianceDonutProps> = ({ isLoading = fa
       </DaisyTooltip>
     </DaisyCard>
   );
-};
+}

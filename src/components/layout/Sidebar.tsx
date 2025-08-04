@@ -61,7 +61,7 @@ import { User as UserType } from '@/types';
   FileBarChart,
   Compass,
   Grid3X3,
-} from 'lucide-react';
+} from 'lucide-react'
 import { useState, useEffect, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -295,14 +295,14 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         },
       ],
     },
-  ];
+  ]
 
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey) {
         if (e.key === 'k') {
-          e.preventDefault();
+          e.preventDefault()
           setShowSearch(!showSearch);
         }
         if (e.key === 'b') {
@@ -314,7 +314,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         setShowSearch(false);
         setSearchQuery('');
       }
-    };
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -323,7 +323,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
   // Focus search input when shown
   useEffect(() => {
     if (showSearch && searchInputRef.current) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus()
     }
   }, [showSearch]);
 
@@ -331,11 +331,11 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     setExpandedSections((prev) =>
       prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId]
     );
-  };
+  }
 
   const isExpanded = (sectionId: string) => {
     return expandedSections.includes(sectionId);
-  };
+  }
 
   const isItemActive = (href: string) => {
     if (!pathname) return false;
@@ -344,18 +344,18 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     }
 
     // Exact match first
-    if (pathname === href) return true;
+    if (pathname === href) return true
 
     // For nested routes, only match if the current path is a direct child
     // This prevents '/dashboard/risks' from matching '/dashboard/risks/assessment'
     if (pathname.startsWith(href + '/')) {
       // Check if it's a direct child (no additional slashes after the href)
-      const remainder = pathname.slice(href.length + 1);
+      const remainder = pathname.slice(href.length + 1)
       return !remainder.includes('/');
     }
 
     return false;
-  };
+  }
 
   const getBadgeVariant = (variant?: string) => {
     switch (variant) {
@@ -370,7 +370,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       default:
         return 'secondary';
     }
-  };
+  }
 
   const toggleFavorite = (item: NavItem) => {
     const quickAccessItem: QuickAccessItem = {
@@ -379,7 +379,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
       href: item.href,
       icon: item.icon,
       type: 'favorite',
-    };
+    }
 
     setFavorites((prev) => {
       const exists = prev.find((fav) => fav.id === item.id);
@@ -389,11 +389,11 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
         return [...prev, quickAccessItem].slice(0, 5); // Limit to 5 favorites
       }
     });
-  };
+  }
 
   const isFavorite = (itemId: string) => {
     return favorites.some((fav) => fav.id === itemId);
-  };
+  }
 
   const formatTimeAgo = (timestamp: Date) => {
     const now = new Date();
@@ -408,7 +408,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
     } else {
       return timestamp.toLocaleDateString();
     }
-  };
+  }
 
   // Filter items based on search
   const filteredSections = searchQuery
@@ -422,7 +422,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
           ),
         }))
         .filter((section) => section.items.length > 0)
-    : navigationSections;
+    : navigationSections
 
   // Collapsed sidebar view
   if (!isOpen) {
@@ -469,7 +469,7 @@ export default function Sidebar({ isOpen, user, onToggle }: SidebarProps) {
                   >
                     {section.items[0] &&
                       (() => {
-                        const IconComponent = section.items[0].icon;
+                        const IconComponent = section.items[0].icon
                         return <IconComponent className="w-5 h-5" />;
                       })()}
                   </DaisyButton>

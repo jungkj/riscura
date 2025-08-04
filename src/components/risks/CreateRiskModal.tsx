@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyDialog,
   DaisyDialogContent,
   DaisyDialogDescription,
@@ -21,7 +22,7 @@ import {
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -32,7 +33,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-// import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
+// import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react'
 
 interface CreateRiskModalProps {
   open: boolean;
@@ -70,7 +71,7 @@ const initialFormData: RiskFormData = {
   businessUnit: '',
   department: '',
   customFields: {},
-};
+}
 
 const riskCategories = [
   'Cyber Security',
@@ -128,17 +129,17 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
   const calculateRiskScore = (likelihood: number, impact: number) => {
     return likelihood * impact;
-  };
+  }
 
   const getRiskLevel = (score: number) => {
-    if (score >= 20) return { level: 'critical', color: 'text-red-600', bg: 'bg-red-50' };
-    if (score >= 15) return { level: 'high', color: 'text-orange-600', bg: 'bg-orange-50' };
-    if (score >= 10) return { level: 'medium', color: 'text-yellow-600', bg: 'bg-yellow-50' };
-    return { level: 'low', color: 'text-green-600', bg: 'bg-green-50' };
-  };
+    if (score >= 20) return { level: 'critical', color: 'text-red-600', bg: 'bg-red-50' }
+    if (score >= 15) return { level: 'high', color: 'text-orange-600', bg: 'bg-orange-50' }
+    if (score >= 10) return { level: 'medium', color: 'text-yellow-600', bg: 'bg-yellow-50' }
+    return { level: 'low', color: 'text-green-600', bg: 'bg-green-50' }
+  }
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!formData.title.trim()) {
       newErrors.title = 'Risk title is required';
@@ -162,7 +163,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -186,25 +187,25 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
         lastUpdated: new Date(),
         controls: 0,
         progress: 0,
-      };
+      }
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       onRiskCreated(newRisk);
       toast.success('Risk created successfully!');
 
       // Reset form
-      setFormData(initialFormData);
+      setFormData(initialFormData)
       setActiveTab('basic');
       onOpenChange(false);
     } catch (error) {
-      // console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error)
       toast.error('Failed to create risk. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   const handleFrameworkToggle = (_framework: string) => {
     setFormData((prev) => ({
@@ -213,7 +214,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
         ? prev.framework.filter((f) => f !== framework)
         : [...prev.framework, framework],
     }));
-  };
+  }
 
   const currentRiskScore = calculateRiskScore(formData.likelihood, formData.impact);
   const currentRiskLevel = getRiskLevel(currentRiskScore);
@@ -485,4 +486,4 @@ setFormData((prev) => ({ ...prev, department: e.target.value }))} />
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}

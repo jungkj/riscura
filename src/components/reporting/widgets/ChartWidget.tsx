@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+import { DaisyCardTitle, DaisyTooltip } from '@/components/ui/daisy-components';
   BarChart,
   Bar,
   LineChart,
@@ -20,7 +21,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { MoreVertical, Copy, Trash2 } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
@@ -55,7 +56,7 @@ export function ChartWidget({
   const loadData = async () => {
     if (!widget.dataSource.source) {
       // Use sample data if no source configured
-      setData(getSampleData());
+      setData(getSampleData())
       return;
     }
 
@@ -72,7 +73,7 @@ export function ChartWidget({
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getSampleData = () => {
     const chartType = widget.visualization.chartType || 'bar';
@@ -95,7 +96,7 @@ export function ChartWidget({
           { name: 'Jun', value: 239, risk: 380 },
         ];
     }
-  };
+  }
 
   const renderChart = () => {
     const chartType = widget.visualization.chartType || 'bar';
@@ -105,7 +106,7 @@ export function ChartWidget({
     const commonProps = {
       data,
       margin: { top: 20, right: 30, left: 20, bottom: 5 },
-    };
+    }
 
     switch (chartType) {
       case 'bar':
@@ -184,7 +185,7 @@ export function ChartWidget({
       default:
         return <div className="text-center text-gray-500">Unknown chart type</div>;
     }
-  };
+  }
 
   return (
     <DaisyCard 

@@ -97,7 +97,7 @@ const isValidAuditAction = (_value: string): value is AuditAction {
     'PROBO_ANALYSIS',
     'RISK_PREDICTION',
     'CONTROL_GENERATION',
-  ];
+  ]
   return validActions.includes(value as AuditAction);
 }
 
@@ -144,7 +144,7 @@ const isValidAuditEntity = (_value: string): value is AuditEntity {
 // ============================================================================
 
 export interface AuditMiddlewareOptions {
-  action?: AuditAction;
+  action?: AuditAction
   entity?: AuditEntity;
   entityId?: string | ((req: NextRequest, context?: any) => string);
   resource?: string;
@@ -167,32 +167,32 @@ export function withAuditLogging<T extends any[]>(
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     // Extract basic request information
-    const method = req.method;
+    const method = req.method
     const path = req.nextUrl.pathname;
     const userAgent = req.headers.get('user-agent') || undefined;
     const ipAddress = extractIpAddress(req);
     const organizationId = req.headers.get('organization-id') || 'unknown';
 
     // Get session information
-    let session;
+    let session
     let userId: string | undefined;
     try {
       session = await getServerSession(authOptions);
       userId = session?.user?.id;
     } catch (error) {
       // Session retrieval failed, continue without user context
-      // console.warn('Failed to retrieve session for audit logging:', error);
+      // console.warn('Failed to retrieve session for audit logging:', error)
     }
 
     const auditLogger = getAuditLogger(prisma);
 
     // Determine entity ID
-    let entityId = options.entityId;
+    let entityId = options.entityId
     if (typeof entityId === 'function') {
       try {
         entityId = entityId(req, args[0]);
       } catch (error) {
-        // console.warn('Failed to extract entity ID for audit logging:', error);
+        // console.warn('Failed to extract entity ID for audit logging:', error)
         entityId = undefined;
       }
     }
@@ -204,7 +204,7 @@ export function withAuditLogging<T extends any[]>(
       action:
         options.action ||
         (() => {
-          const inferredAction = inferActionFromMethod(method);
+          const inferredAction = inferActionFromMethod(method)
           return isValidAuditAction(inferredAction) ? inferredAction : 'READ';
         })(),
       entity:
@@ -224,14 +224,14 @@ export function withAuditLogging<T extends any[]>(
       clientType: inferClientType(userAgent),
       severity: options.severity || 'MEDIUM',
       complianceFlags: options.complianceFlags || ['SOC2'],
-    };
+    }
 
     let response: NextResponse;
     let error: Error | null = null;
 
     try {
       // Execute the handler
-      response = await handler(req, ...args);
+      response = await handler(req, ...args)
 
       // Log successful operation if not skipped
       if (!options.skipSuccessLogging) {
@@ -244,7 +244,7 @@ export function withAuditLogging<T extends any[]>(
             responseSize: response.headers.get('content-length'),
             ...options.customMetadata?.(req, args[0]),
           },
-        });
+        })
       }
 
       return response;
@@ -264,12 +264,12 @@ export function withAuditLogging<T extends any[]>(
             errorType: error.constructor.name,
             ...options.customMetadata?.(req, args[0]),
           },
-        });
+        })
       }
 
       throw error;
     }
-  };
+  }
 }
 
 // ============================================================================
@@ -297,8 +297,8 @@ export function withAuthAudit(_action: Extract<
         authenticationMethod: req.headers.get('authorization') ? 'bearer' : 'session',
         loginAttempt: action === 'LOGIN' || action === 'LOGIN_FAILED',
       }),
-    });
-  };
+    })
+  }
 }
 
 /**
@@ -325,7 +325,7 @@ export function withDataAudit(_entity: AuditEntity,
         contextData: context ? JSON.stringify(context) : undefined,
       }),
     });
-  };
+  }
 }
 
 /**
@@ -347,7 +347,7 @@ export function withPermissionAudit(requiredPermission: string, entity: AuditEnt
         endpoint: req.nextUrl.pathname,
       }),
     });
-  };
+  }
 }
 
 /**
@@ -373,7 +373,7 @@ export function withSystemAudit(_action: Extract<
         timestamp: new Date().toISOString(),
       }),
     });
-  };
+  }
 }
 
 /**
@@ -401,7 +401,7 @@ export function withComplianceAudit(_action: Extract<
         regulatoryImplications: true,
       }),
     });
-  };
+  }
 }
 
 // ============================================================================
@@ -418,7 +418,7 @@ export function withComplianceAudit(_action: Extract<
 export async function logBatchAuditEvents(
   events: Array<Omit<AuditEvent, 'id' | 'timestamp'>>
 ): Promise<void> {
-  const auditLogger = getAuditLogger(prisma);
+  const auditLogger = getAuditLogger(prisma)
 
   for (const event of events) {
     await auditLogger.log(event);

@@ -13,7 +13,7 @@ interface Activity {
     name: string;
     avatar?: string;
     initials: string;
-  };
+  }
   type: 'risk' | 'control' | 'document' | 'workflow';
 }
 
@@ -79,13 +79,13 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
       },
       type: 'control'
     }
-  ]);
+  ])
 
   // Get icon for activity type
   const getActivityTypeClass = (_type: Activity['type']) => {
     switch (type) {
       case 'risk':
-        return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+        return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
       case 'control':
         return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
       case 'document':
@@ -95,7 +95,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
       default:
         return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
     }
-  };
+  }
 
   if (isLoading) {
 
@@ -112,7 +112,7 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
         ))}
       </div>
     );
-  };
+  }
 
   return (
     <DaisyScrollArea className="h-[350px] pr-3" >

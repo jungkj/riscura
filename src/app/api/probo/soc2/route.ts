@@ -16,7 +16,7 @@ export async function GET(_request: NextRequest) {
 
     return NextResponse.json(framework);
   } catch (error) {
-    // console.error('SOC 2 framework API error:', error);
+    // console.error('SOC 2 framework API error:', error)
     return NextResponse.json({ error: 'Failed to fetch SOC 2 framework' }, { status: 500 });
   }
 }
@@ -44,7 +44,7 @@ export async function POST(_request: NextRequest) {
         name: framework.name,
         version: framework.version,
       },
-    });
+    })
 
     if (existingFramework) {
       return NextResponse.json(
@@ -62,7 +62,7 @@ export async function POST(_request: NextRequest) {
         type: 'SOC2',
         organizationId,
       },
-    });
+    })
 
     // Create framework requirements
     for (const requirement of framework.requirements) {
@@ -75,7 +75,7 @@ export async function POST(_request: NextRequest) {
           category: 'SOC2',
           criticality: 'HIGH',
         },
-      });
+      })
     }
 
     // Link existing controls or create new ones
@@ -86,7 +86,7 @@ export async function POST(_request: NextRequest) {
           organizationId,
           title: control.name,
         },
-      });
+      })
 
       // Create control if it doesn't exist
       if (!existingControl) {
@@ -101,7 +101,7 @@ export async function POST(_request: NextRequest) {
             createdBy: (session.user as any).id || 'system',
             status: 'PLANNED',
           },
-        });
+        })
       }
 
       // TODO: Create framework control mapping
@@ -114,11 +114,11 @@ export async function POST(_request: NextRequest) {
       include: {
         requirements: true,
       },
-    });
+    })
 
     return NextResponse.json(completeFramework);
   } catch (error) {
-    // console.error('SOC 2 import error:', error);
+    // console.error('SOC 2 import error:', error)
     return NextResponse.json({ error: 'Failed to import SOC 2 framework' }, { status: 500 });
   }
 }

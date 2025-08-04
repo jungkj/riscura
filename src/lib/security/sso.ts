@@ -24,7 +24,7 @@ export class SSOService {
     samlResponse: string,
     relayState?: string
   ): Promise<SSOLoginResult> {
-    const provider = this.getProvider(providerId);
+    const provider = this.getProvider(providerId)
     if (!provider || provider.type !== 'saml') {
       throw new Error('Invalid SAML provider');
     }
@@ -33,23 +33,23 @@ export class SSOService {
 
     try {
       // Parse and validate SAML response
-      const assertion = await this.parseSAMLAssertion(samlResponse, samlConfig);
+      const assertion = await this.parseSAMLAssertion(samlResponse, samlConfig)
 
       // Validate signature if required
       if (samlConfig.wantAssertionsSigned || samlConfig.wantResponseSigned) {
         if (!(await this.validateSAMLSignature(samlResponse, samlConfig.certificate))) {
-          throw new Error('Invalid SAML signature');
+          throw new Error('Invalid SAML signature')
         }
       }
 
       // Extract user attributes
-      const userAttributes = assertion.attributes;
+      const userAttributes = assertion.attributes
 
       // Map attributes to user profile
-      const userProfile = this.mapAttributes(userAttributes, provider);
+      const userProfile = this.mapAttributes(userAttributes, provider)
 
       // Provision or update user
-      const user = await this.provisionUser(userProfile, provider);
+      const user = await this.provisionUser(userProfile, provider)
 
       return {
         success: true,
@@ -60,13 +60,13 @@ export class SSOService {
           nameId: assertion.nameId,
           nameIdFormat: assertion.nameIdFormat,
         },
-      };
+      }
     } catch (error) {
-      // console.error('SAML authentication failed:', error);
+      // console.error('SAML authentication failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'SAML authentication failed',
-      };
+      }
     }
   }
 
@@ -90,14 +90,14 @@ export class SSOService {
     });
 
     // Store request for validation
-    await this.storeSAMLRequest(requestId, providerId, returnUrl);
+    await this.storeSAMLRequest(requestId, providerId, returnUrl)
 
     return {
       requestId,
       authnRequest,
       redirectUrl: samlConfig.ssoUrl,
       relayState: returnUrl,
-    };
+    }
   }
 
   // OIDC Integration
@@ -106,7 +106,7 @@ export class SSOService {
     authorizationCode: string,
     state: string
   ): Promise<SSOLoginResult> {
-    const provider = this.getProvider(providerId);
+    const provider = this.getProvider(providerId)
     if (!provider || provider.type !== 'oidc') {
       throw new Error('Invalid OIDC provider');
     }
@@ -115,28 +115,28 @@ export class SSOService {
 
     try {
       // Validate state
-      const storedState = await this.getStoredState(state);
+      const storedState = await this.getStoredState(state)
       if (!storedState) {
         throw new Error('Invalid state parameter');
       }
 
       // Exchange authorization code for tokens
-      const tokenResponse = await this.exchangeOIDCCode(authorizationCode, oidcConfig);
+      const tokenResponse = await this.exchangeOIDCCode(authorizationCode, oidcConfig)
 
       // Validate ID token
-      const userInfo = await this.validateOIDCToken(tokenResponse.id_token, oidcConfig);
+      const userInfo = await this.validateOIDCToken(tokenResponse.id_token, oidcConfig)
 
       // Get additional user info if needed
       if (tokenResponse.access_token && oidcConfig.scopes.includes('profile')) {
-        const additionalInfo = await this.getOIDCUserInfo(tokenResponse.access_token, oidcConfig);
+        const additionalInfo = await this.getOIDCUserInfo(tokenResponse.access_token, oidcConfig)
         Object.assign(userInfo, additionalInfo);
       }
 
       // Map attributes to user profile
-      const userProfile = this.mapAttributes(userInfo, provider);
+      const userProfile = this.mapAttributes(userInfo, provider)
 
       // Provision or update user
-      const user = await this.provisionUser(userProfile, provider);
+      const user = await this.provisionUser(userProfile, provider)
 
       return {
         success: true,
@@ -147,13 +147,13 @@ export class SSOService {
           refreshToken: tokenResponse.refresh_token,
           expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
         },
-      };
+      }
     } catch (error) {
-      // console.error('OIDC authentication failed:', error);
+      // console.error('OIDC authentication failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'OIDC authentication failed',
-      };
+      }
     }
   }
 
@@ -168,7 +168,7 @@ export class SSOService {
     const nonce = uuidv4();
 
     // Store state for validation
-    await this.storeState(state, providerId, returnUrl, nonce);
+    await this.storeState(state, providerId, returnUrl, nonce)
 
     const params = new URLSearchParams({
       response_type: oidcConfig.responseType,
@@ -188,7 +188,7 @@ export class SSOService {
     authorizationCode: string,
     state: string
   ): Promise<SSOLoginResult> {
-    const provider = this.getProvider(providerId);
+    const provider = this.getProvider(providerId)
     if (!provider || provider.type !== 'oauth2') {
       throw new Error('Invalid OAuth2 provider');
     }
@@ -197,22 +197,22 @@ export class SSOService {
 
     try {
       // Validate state
-      const storedState = await this.getStoredState(state);
+      const storedState = await this.getStoredState(state)
       if (!storedState) {
         throw new Error('Invalid state parameter');
       }
 
       // Exchange authorization code for access token
-      const tokenResponse = await this.exchangeOAuth2Code(authorizationCode, oauth2Config);
+      const tokenResponse = await this.exchangeOAuth2Code(authorizationCode, oauth2Config)
 
       // Get user info
-      const userInfo = await this.getOAuth2UserInfo(tokenResponse.access_token, oauth2Config);
+      const userInfo = await this.getOAuth2UserInfo(tokenResponse.access_token, oauth2Config)
 
       // Map attributes to user profile
-      const userProfile = this.mapAttributes(userInfo, provider);
+      const userProfile = this.mapAttributes(userInfo, provider)
 
       // Provision or update user
-      const user = await this.provisionUser(userProfile, provider);
+      const user = await this.provisionUser(userProfile, provider)
 
       return {
         success: true,
@@ -222,13 +222,13 @@ export class SSOService {
           accessToken: tokenResponse.access_token,
           refreshToken: tokenResponse.refresh_token,
         },
-      };
+      }
     } catch (error) {
-      // console.error('OAuth2 authentication failed:', error);
+      // console.error('OAuth2 authentication failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'OAuth2 authentication failed',
-      };
+      }
     }
   }
 
@@ -242,7 +242,7 @@ export class SSOService {
     const state = uuidv4();
 
     // Store state for validation
-    await this.storeState(state, providerId, returnUrl);
+    await this.storeState(state, providerId, returnUrl)
 
     const params = new URLSearchParams({
       response_type: 'code',
@@ -261,7 +261,7 @@ export class SSOService {
     username: string,
     password: string
   ): Promise<SSOLoginResult> {
-    const provider = this.getProvider(providerId);
+    const provider = this.getProvider(providerId)
     if (!provider || provider.type !== 'ldap') {
       throw new Error('Invalid LDAP provider');
     }
@@ -270,28 +270,28 @@ export class SSOService {
 
     try {
       // Create LDAP client
-      const ldapClient = await this.createLDAPClient(ldapConfig);
+      const ldapClient = await this.createLDAPClient(ldapConfig)
 
       // Search for user
-      const userDN = await this.findLDAPUser(ldapClient, username, ldapConfig);
+      const userDN = await this.findLDAPUser(ldapClient, username, ldapConfig)
       if (!userDN) {
         throw new Error('User not found in LDAP');
       }
 
       // Authenticate user
-      await this.bindLDAPUser(ldapClient, userDN, password);
+      await this.bindLDAPUser(ldapClient, userDN, password)
 
       // Get user attributes
-      const userAttributes = await this.getLDAPUserAttributes(ldapClient, userDN, ldapConfig);
+      const userAttributes = await this.getLDAPUserAttributes(ldapClient, userDN, ldapConfig)
 
       // Close LDAP connection
-      await ldapClient.unbind();
+      await ldapClient.unbind()
 
       // Map attributes to user profile
-      const userProfile = this.mapAttributes(userAttributes, provider);
+      const userProfile = this.mapAttributes(userAttributes, provider)
 
       // Provision or update user
-      const user = await this.provisionUser(userProfile, provider);
+      const user = await this.provisionUser(userProfile, provider)
 
       return {
         success: true,
@@ -300,13 +300,13 @@ export class SSOService {
         sessionData: {
           ldapDN: userDN,
         },
-      };
+      }
     } catch (error) {
-      // console.error('LDAP authentication failed:', error);
+      // console.error('LDAP authentication failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'LDAP authentication failed',
-      };
+      }
     }
   }
 
@@ -316,7 +316,7 @@ export class SSOService {
       // Check if user exists
       const existingUser = await db.client.user.findUnique({
         where: { email: userProfile.email },
-      });
+      })
 
       if (!existingUser) {
         throw new Error('User not found and auto-provisioning is disabled');
@@ -340,7 +340,7 @@ export class SSOService {
         ssoAttributes: userProfile.attributes,
         ssoProvider: provider.name,
       },
-    };
+    }
 
     const user = await db.client.user.upsert({
       where: { email: userProfile.email },
@@ -361,14 +361,14 @@ export class SSOService {
       userId: user.id,
       provider: provider.name,
       action: 'auto_provisioned',
-    });
+    })
 
     return user;
   }
 
   // Attribute Mapping
   private mapAttributes(attributes: Record<string, any>, provider: SSOProvider): UserProfile {
-    const mapping = this.config.attributeMapping;
+    const mapping = this.config.attributeMapping
 
     return {
       subject: attributes[mapping.subject || 'sub'] || attributes.nameId || attributes.username,
@@ -381,7 +381,7 @@ export class SSOService {
         attributes[mapping.lastName || 'family_name'] || attributes.surname || attributes.lastName,
       groups: this.extractGroups(attributes, mapping),
       attributes,
-    };
+    }
   }
 
   private extractGroups(
@@ -415,7 +415,7 @@ export class SSOService {
 
   // Provider Management
   private getProvider(providerId: string): SSOProvider | null {
-    return this.config.providers.find((p) => p.id === providerId && p.enabled) || null;
+    return this.config.providers.find((p) => p.id === providerId && p.enabled) || null
   }
 
   async updateProvider(providerId: string, updates: Partial<SSOProvider>): Promise<SSOProvider> {
@@ -427,10 +427,10 @@ export class SSOService {
     this.config.providers[providerIndex] = {
       ...this.config.providers[providerIndex],
       ...updates,
-    };
+    }
 
     // Save to database
-    await this.saveConfiguration();
+    await this.saveConfiguration()
 
     return this.config.providers[providerIndex];
   }
@@ -438,7 +438,7 @@ export class SSOService {
   async testProvider(providerId: string): Promise<ProviderTestResult> {
     const provider = this.getProvider(providerId);
     if (!provider) {
-      return { success: false, error: 'Provider not found' };
+      return { success: false, error: 'Provider not found' }
     }
 
     try {
@@ -452,13 +452,13 @@ export class SSOService {
         case 'ldap':
           return await this.testLDAPProvider(provider.configuration as LDAPConfig);
         default:
-          return { success: false, error: 'Unsupported provider type' };
+          return { success: false, error: 'Unsupported provider type' }
       }
     } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Provider test failed',
-      };
+      }
     }
   }
 
@@ -468,7 +468,7 @@ export class SSOService {
     config: SAMLConfig
   ): Promise<SAMLAssertion> {
     // Simplified SAML parsing - in production, use a proper SAML library
-    const decoded = Buffer.from(samlResponse, 'base64').toString('utf8');
+    const decoded = Buffer.from(samlResponse, 'base64').toString('utf8')
 
     // Extract assertion data (this is a simplified implementation)
     return {
@@ -476,7 +476,7 @@ export class SSOService {
       nameIdFormat: this.extractXMLAttribute(decoded, 'NameID', 'Format'),
       sessionIndex: this.extractXMLAttribute(decoded, 'AuthnStatement', 'SessionIndex'),
       attributes: this.extractSAMLAttributesFromXML(decoded),
-    };
+    }
   }
 
   private extractXMLValue(xml: string, tagName: string): string {
@@ -493,7 +493,7 @@ export class SSOService {
 
   private extractSAMLAttributesFromXML(xml: string): Record<string, any> {
     // Simplified attribute extraction
-    const attributes: Record<string, any> = {};
+    const attributes: Record<string, any> = {}
     const attrRegex =
       /<saml:Attribute[^>]*Name="([^"]*)"[^>]*>[\s\S]*?<saml:AttributeValue[^>]*>([^<]*)<\/saml:AttributeValue>/gi;
 
@@ -509,7 +509,7 @@ export class SSOService {
     // Simplified signature validation - use proper SAML library in production
     try {
       // Extract signature from SAML response
-      const decoded = Buffer.from(samlResponse, 'base64').toString('utf8');
+      const decoded = Buffer.from(samlResponse, 'base64').toString('utf8')
       const signatureValue = this.extractXMLValue(decoded, 'SignatureValue');
 
       if (!signatureValue) {
@@ -517,7 +517,7 @@ export class SSOService {
       }
 
       // Verify signature with certificate
-      const verify = crypto.createVerify('RSA-SHA256');
+      const verify = crypto.createVerify('RSA-SHA256')
       verify.update(decoded);
 
       return verify.verify(certificate, signatureValue, 'base64');
@@ -568,12 +568,12 @@ export class SSOService {
 
   private async validateOIDCToken(idToken: string, config: OIDCConfig): Promise<any> {
     // Simplified token validation - use proper JWT library in production
-    const [header, payload, signature] = idToken.split('.');
+    const [header, payload, signature] = idToken.split('.')
     const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
 
     // Basic validation
     if (decodedPayload.iss !== config.issuer) {
-      throw new Error('Invalid token issuer');
+      throw new Error('Invalid token issuer')
     }
 
     if (decodedPayload.aud !== config.clientId) {
@@ -609,12 +609,12 @@ export class SSOService {
       },
       search: async (baseDN: string, filter: string, attributes: string[]) => {
         // LDAP search implementation
-        return [];
+        return []
       },
       unbind: async () => {
         // LDAP unbind implementation
       },
-    };
+    }
   }
 
   // State Management
@@ -633,7 +633,7 @@ export class SSOService {
         expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
         createdAt: new Date(),
       },
-    });
+    })
   }
 
   private async getStoredState(state: string): Promise<any> {
@@ -648,7 +648,7 @@ export class SSOService {
     // Clean up used state
     await db.client.ssoState.delete({
       where: { state },
-    });
+    })
 
     return stateRecord;
   }
@@ -684,7 +684,7 @@ export class SSOService {
         lastUpdated: new Date(),
         updatedBy: 'system',
       },
-    });
+    })
   }
 
   // Logging and Monitoring
@@ -707,28 +707,28 @@ export class SSOService {
         },
         tags: ['sso', eventType],
       },
-    });
+    })
   }
 
   // Test Methods
   private async testSAMLProvider(_config: SAMLConfig): Promise<ProviderTestResult> {
     try {
       // Test SAML metadata endpoint
-      const response = await fetch(config.ssoUrl);
+      const response = await fetch(config.ssoUrl)
       if (response.ok) {
-        return { success: true, message: 'SAML provider accessible' };
+        return { success: true, message: 'SAML provider accessible' }
       } else {
-        return { success: false, error: 'SAML provider not accessible' };
+        return { success: false, error: 'SAML provider not accessible' }
       }
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : 'SAML test failed' };
+      return { success: false, error: error instanceof Error ? error.message : 'SAML test failed' }
     }
   }
 
   private async testOIDCProvider(_config: OIDCConfig): Promise<ProviderTestResult> {
     try {
       // Test OIDC discovery endpoint
-      const response = await fetch(`${config.issuer}/.well-known/openid_configuration`);
+      const response = await fetch(`${config.issuer}/.well-known/openid_configuration`)
       if (response.ok) {
         const metadata = await response.json();
         return {
@@ -741,43 +741,43 @@ export class SSOService {
               userinfo: metadata.userinfo_endpoint,
             },
           },
-        };
+        }
       } else {
-        return { success: false, error: 'OIDC provider not accessible' };
+        return { success: false, error: 'OIDC provider not accessible' }
       }
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : 'OIDC test failed' };
+      return { success: false, error: error instanceof Error ? error.message : 'OIDC test failed' }
     }
   }
 
   private async testOAuth2Provider(_config: OAuth2Config): Promise<ProviderTestResult> {
     try {
       // Test OAuth2 authorization endpoint
-      const response = await fetch(config.authorizationUrl, { method: 'HEAD' });
+      const response = await fetch(config.authorizationUrl, { method: 'HEAD' })
       if (response.ok || response.status === 405) {
         // 405 is OK for HEAD request
-        return { success: true, message: 'OAuth2 provider accessible' };
+        return { success: true, message: 'OAuth2 provider accessible' }
       } else {
-        return { success: false, error: 'OAuth2 provider not accessible' };
+        return { success: false, error: 'OAuth2 provider not accessible' }
       }
     } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'OAuth2 test failed',
-      };
+      }
     }
   }
 
   private async testLDAPProvider(_config: LDAPConfig): Promise<ProviderTestResult> {
     try {
       // Test LDAP connection
-      const client = await this.createLDAPClient(config);
+      const client = await this.createLDAPClient(config)
       await client.bind(config.bindDN, config.bindPassword);
       await client.unbind();
 
-      return { success: true, message: 'LDAP provider accessible' };
+      return { success: true, message: 'LDAP provider accessible' }
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : 'LDAP test failed' };
+      return { success: false, error: error instanceof Error ? error.message : 'LDAP test failed' }
     }
   }
 
@@ -804,7 +804,7 @@ export class SSOService {
     const attributes = Object.values(config.attributes);
     const results = await client.search(userDN, '(objectClass=*)', attributes);
 
-    return results.length > 0 ? results[0] : {};
+    return results.length > 0 ? results[0] : {}
   }
 
   private async exchangeOAuth2Code(code: string, config: OAuth2Config): Promise<any> {
@@ -845,7 +845,7 @@ export class SSOService {
 
 // Types
 export interface SSOLoginResult {
-  success: boolean;
+  success: boolean
   user?: any;
   provider?: string;
   sessionData?: Record<string, any>;
@@ -893,8 +893,8 @@ export interface ProviderTestResult {
 
 // Factory function
 export const createSSOService = (_config: SSOConfiguration): SSOService => {
-  return new SSOService(config);
-};
+  return new SSOService(config)
+}
 
 // Default SSO configuration
 export const createDefaultSSOConfig = (): SSOConfiguration => ({
@@ -915,4 +915,4 @@ export const createDefaultSSOConfig = (): SSOConfiguration => ({
   sessionTimeout: 8 * 60 * 60, // 8 hours
   enforceSSO: false,
   fallbackToLocal: true,
-});
+})

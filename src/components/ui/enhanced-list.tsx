@@ -7,6 +7,7 @@ import { DaisyAvatar, DaisyAvatarFallback } from '@/components/ui/DaisyAvatar';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import {
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -42,11 +43,11 @@ import { useDevice } from '@/lib/responsive/hooks';
   Mail,
   X,
   ChevronDown,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 export interface EnhancedListItem {
-  id: string;
+  id: string
   title: string;
   description?: string;
   status: 'active' | 'inactive' | 'pending' | 'completed' | 'error' | 'draft';
@@ -56,7 +57,7 @@ export interface EnhancedListItem {
     email?: string;
     avatar?: string;
     role?: string;
-  };
+  }
   dueDate?: Date | string;
   progress?: number;
   tags?: string[];
@@ -67,7 +68,7 @@ export interface EnhancedListItem {
     lastActivity?: Date | string;
     completedTasks?: number;
     totalTasks?: number;
-  };
+  }
   riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   category?: string;
   createdAt?: Date | string;
@@ -109,7 +110,7 @@ const statusConfig = {
   completed: { variant: 'success' as const, icon: CheckCircle, label: 'Completed' },
   error: { variant: 'destructive' as const, icon: AlertTriangle, label: 'Error' },
   draft: { variant: 'secondary' as const, icon: Edit, label: 'Draft' },
-};
+}
 
 // Priority Configuration
 const priorityConfig = {
@@ -117,7 +118,7 @@ const priorityConfig = {
   medium: { variant: 'default' as const, label: 'MEDIUM', color: 'text-yellow-800' },
   high: { variant: 'destructive' as const, label: 'HIGH', color: 'text-red-700' },
   critical: { variant: 'destructive' as const, label: 'CRITICAL', color: 'text-red-800' },
-};
+}
 
 // Risk Level Configuration
 const riskConfig = {
@@ -125,11 +126,11 @@ const riskConfig = {
   medium: { variant: 'default' as const, color: 'text-blue-600' },
   high: { variant: 'warning' as const, color: 'text-orange-600' },
   critical: { variant: 'destructive' as const, color: 'text-red-600' },
-};
+}
 
 // Status Badge Component
 const StatusBadge: React.FC<{ status: EnhancedListItem['status'] }> = ({ status }) => {
-  const config = statusConfig[status];
+  const config = statusConfig[status]
   const IconComponent = config.icon;
   
   return (
@@ -139,11 +140,11 @@ const StatusBadge: React.FC<{ status: EnhancedListItem['status'] }> = ({ status 
       {config.label}
     </DaisyBadge>
   );
-};
+}
 
 // Priority Badge Component
 const PriorityBadge: React.FC<{ priority: NonNullable<EnhancedListItem['priority']> }> = ({ priority }) => {
-  const config = priorityConfig[priority];
+  const config = priorityConfig[priority]
   
   return (
     <DaisyBadge variant={config.variant} className="text-xs font-medium" >
@@ -151,11 +152,11 @@ const PriorityBadge: React.FC<{ priority: NonNullable<EnhancedListItem['priority
 </DaisyBadge>
     </DaisyBadge>
   );
-};
+}
 
 // Risk Level Badge Component
 const RiskBadge: React.FC<{ riskLevel: NonNullable<EnhancedListItem['riskLevel']> }> = ({ riskLevel }) => {
-  const config = riskConfig[riskLevel];
+  const config = riskConfig[riskLevel]
   
   return (
     <div className="flex items-center gap-1">
@@ -165,11 +166,11 @@ const RiskBadge: React.FC<{ riskLevel: NonNullable<EnhancedListItem['riskLevel']
       </span>
     </div>
   );
-};
+}
 
 // User Avatar Component (responsive)
 const UserAvatar: React.FC<{ 
-  user: NonNullable<EnhancedListItem['assignee']>; 
+  user: NonNullable<EnhancedListItem['assignee']> 
   showDetails?: boolean;
   size?: 'sm' | 'md' | 'lg';
 }> = ({ user, showDetails = true, size = 'md' }) => {
@@ -178,7 +179,7 @@ const UserAvatar: React.FC<{
     sm: 'h-6 w-6',
     md: 'h-8 w-8',
     lg: 'h-10 w-10'
-  };
+  }
 
   return (
     <div className="flex items-center gap-2">
@@ -201,11 +202,11 @@ const UserAvatar: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Contact Information Component (responsive)
 const ContactInfo: React.FC<{ 
-  user: NonNullable<EnhancedListItem['assignee']>;
+  user: NonNullable<EnhancedListItem['assignee']>
   metadata?: EnhancedListItem['metadata'];
 }> = ({ user, metadata }) => {
   const device = useDevice();
@@ -227,7 +228,7 @@ const ContactInfo: React.FC<{
         )}
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-1">
@@ -251,11 +252,11 @@ const ContactInfo: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Progress Component (responsive)
 const ProgressIndicator: React.FC<{ 
-  progress: number;
+  progress: number
   metadata?: EnhancedListItem['metadata'];
 }> = ({ progress, metadata }) => {
   const device = useDevice();
@@ -264,7 +265,7 @@ const ProgressIndicator: React.FC<{
     if (prog >= 80) return 'bg-green-500';
     if (prog >= 50) return 'bg-yellow-500';
     return 'bg-red-500';
-  };
+  }
 
   return (
     <div className="space-y-2">
@@ -285,7 +286,7 @@ const ProgressIndicator: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Date Display Component (responsive)
 const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, label }) => {
@@ -318,11 +319,11 @@ const DateDisplay: React.FC<{ date: Date | string; label?: string }> = ({ date, 
       </div>
     </div>
   );
-};
+}
 
 // Tags Component (responsive)
 const TagsDisplay: React.FC<{ tags: string[] }> = ({ tags }) => {
-  const device = useDevice();
+  const device = useDevice()
   const displayTags = device.type === 'mobile' ? tags.slice(0, 2) : tags.slice(0, 3);
   const remainingCount = tags.length - displayTags.length;
 
@@ -342,11 +343,11 @@ const TagsDisplay: React.FC<{ tags: string[] }> = ({ tags }) => {
       )}
     </div>
   );
-};
+}
 
 // Actions Menu Component (responsive)
 const ActionsMenu: React.FC<{ 
-  item: EnhancedListItem; 
+  item: EnhancedListItem 
   onAction: (_action: string, item: EnhancedListItem) => void;
 }> = ({ item, onAction }) => {
   const device = useDevice();
@@ -392,11 +393,11 @@ const ActionsMenu: React.FC<{
       </DaisyDropdownMenuContent>
     </DaisyDropdownMenu>
   );
-};
+}
 
 // Compact List Item Component (mobile-first)
 const CompactListItem: React.FC<{
-  item: EnhancedListItem;
+  item: EnhancedListItem
   onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
@@ -440,11 +441,11 @@ const CompactListItem: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Default List Item Component
 const DefaultListItem: React.FC<{
-  item: EnhancedListItem;
+  item: EnhancedListItem
   onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
@@ -525,11 +526,11 @@ const DefaultListItem: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Detailed List Item Component
 const DetailedListItem: React.FC<{
-  item: EnhancedListItem;
+  item: EnhancedListItem
   onItemAction?: (_action: string, item: EnhancedListItem) => void;
   onItemSelect?: (item: EnhancedListItem) => void;
 }> = ({ item, onItemAction, onItemSelect }) => {
@@ -655,7 +656,7 @@ const DetailedListItem: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Main Enhanced List Component
 export const EnhancedList: React.FC<EnhancedListProps> = ({
@@ -674,7 +675,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
   loading = false,
   showHeader = true,
 }) => {
-  const device = useDevice();
+  const device = useDevice()
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<string>('title');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -683,7 +684,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
 
   // Filter and sort data
   const filteredAndSortedItems = useMemo(() => {
-    let _result = [...items];
+    let _result = [...items]
 
     // Apply search
     if (searchQuery) {
@@ -691,22 +692,22 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (item.assignee && item.assignee.name.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+      )
     }
 
     // Apply status filter
     if (statusFilter !== 'all') {
-      result = result.filter(item => item.status === statusFilter);
+      result = result.filter(item => item.status === statusFilter)
     }
 
     // Apply priority filter
     if (priorityFilter !== 'all') {
-      result = result.filter(item => item.priority === priorityFilter);
+      result = result.filter(item => item.priority === priorityFilter)
     }
 
     // Apply sorting
     result.sort((a, b) => {
-      let aValue: any;
+      let aValue: any
       let bValue: any;
 
       switch (sortBy) {
@@ -803,7 +804,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
             onItemSelect={onItemSelect} />
         );
     }
-  };
+  }
 
   const hasActiveFilters = statusFilter !== 'all' || priorityFilter !== 'all';
 
@@ -973,4 +974,4 @@ setSearchQuery(e.target.value)}
       )}
     </div>
   );
-}; 
+} 

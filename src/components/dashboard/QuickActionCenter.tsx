@@ -2,16 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useRouter } from 'next/navigation';
+import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components';
 
 // import {
   Plus, FileText, Shield, BarChart3, AlertTriangle, CheckCircle,
   Settings, Upload, Download, Eye, Target, Users, Calendar, Clock,
   Zap, Search, Filter, RefreshCw, Activity
-} from 'lucide-react';
+} from 'lucide-react'
 import Image from 'next/image';
 
 interface QuickActionCenterProps {
@@ -40,7 +41,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
     // Fetch recent actions from API
     const fetchRecentActions = async () => {
       try {
-        const response = await fetch('/api/dashboard/recent-actions');
+        const response = await fetch('/api/dashboard/recent-actions')
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
@@ -48,11 +49,11 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
           }
         }
       } catch (error) {
-        // console.error('Failed to fetch recent actions:', error);
+        // console.error('Failed to fetch recent actions:', error)
       } finally {
         setLoading(false);
       }
-    };
+    }
     fetchRecentActions();
   }, []);
 
@@ -220,7 +221,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
   // Filter actions based on user role
   const filteredActions = allActions.filter(action => 
     action.roles.includes(viewMode)
-  );
+  )
 
   // Prioritize actions based on role with Probo integration
   const getPrioritizedActions = () => {
@@ -229,14 +230,14 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
       analyst: ['controls-library', 'soc2-assessment', 'create-risk', 'control-testing', 'ai-analysis', 'generate-report', 'review-alerts'],
       operator: ['controls-library', 'create-control', 'control-testing', 'upload-document', 'create-risk', 'review-alerts'],
       auditor: ['soc2-assessment', 'generate-report', 'upload-document', 'schedule-audit', 'export-data', 'dashboard-config']
-    };
+    }
 
     const priority = roleBasedOrder[viewMode] || [];
     const prioritized = priority.map(id => filteredActions.find(action => action.id === id)).filter((action): action is QuickAction => action !== undefined);
     const remaining = filteredActions.filter(action => !priority.includes(action.id));
     
     return [...prioritized, ...remaining].slice(0, 8); // Limit to 8 actions
-  };
+  }
 
   const handleActionClick = (_action: QuickAction) => {
     if (action.onClick) {
@@ -244,7 +245,7 @@ export function QuickActionCenter({ viewMode }: QuickActionCenterProps) {
     } else if (action.href) {
       router.push(action.href);
     }
-  };
+  }
 
   return (
     <DaisyCard className="bg-[#FAFAFA] border-[#D8C3A5]" >

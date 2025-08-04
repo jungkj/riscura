@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -24,7 +25,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   Download,
   Upload,
   Plus,
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 interface SOC2Control {
@@ -94,11 +95,11 @@ export function SOC2Assessment() {
         setFramework(data);
       }
     } catch (error) {
-      // console.error('Failed to load SOC 2 framework:', error);
+      // console.error('Failed to load SOC 2 framework:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const importSOC2Framework = async () => {
     setImporting(true);
@@ -115,11 +116,11 @@ export function SOC2Assessment() {
         setFramework(data);
       }
     } catch (error) {
-      // console.error('Failed to import SOC 2 framework:', error);
+      // console.error('Failed to import SOC 2 framework:', error)
     } finally {
       setImporting(false);
     }
-  };
+  }
 
   const calculateProgress = () => {
     if (!framework) return;
@@ -136,7 +137,7 @@ export function SOC2Assessment() {
       failedControls,
       percentage: totalControls > 0 ? (assessedControls / totalControls) * 100 : 0,
     });
-  };
+  }
 
   const getStatusIcon = (status: SOC2Control['status']) => {
     switch (status) {
@@ -150,7 +151,7 @@ export function SOC2Assessment() {
       default:
         return <div className="h-4 w-4 rounded-full bg-gray-300" />;
     }
-  };
+  }
 
   const getStatusBadge = (status: SOC2Control['status']) => {
     const variants = {
@@ -169,12 +170,12 @@ export function SOC2Assessment() {
       UNDER_REVIEW: 'bg-purple-100 text-purple-700',
       PASSED: 'bg-green-100 text-green-700',
       FAILED: 'bg-red-100 text-red-700',
-    };
+    }
 
     return (
       <DaisyBadge className={cn('text-xs', colors[status])}>{status.replace('_', ' ')}</DaisyBadge>
     );
-  };
+  }
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
@@ -189,7 +190,7 @@ export function SOC2Assessment() {
       default:
         return <Database className="h-4 w-4" />;
     }
-  };
+  }
 
   const filteredControls =
     framework?.controls.filter(

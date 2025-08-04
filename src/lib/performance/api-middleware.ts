@@ -6,7 +6,7 @@ import { apiMonitor } from './monitoring';
 // ============================================================================
 
 interface PerformanceOptions {
-  enableCompression?: boolean;
+  enableCompression?: boolean
   enableCaching?: boolean;
   cacheTTL?: number;
   enableProfiling?: boolean;
@@ -23,10 +23,10 @@ export function withPerformance(
 
     try {
       // Execute the handler
-      const response = await handler(req);
+      const response = await handler(req)
 
       // Track performance
-      const _duration = performance.now() - startTime;
+      const _duration = performance.now() - startTime
       apiMonitor.trackRequest(endpoint, duration);
 
       // Add performance headers
@@ -34,7 +34,7 @@ export function withPerformance(
         status: response.status,
         statusText: response.statusText,
         headers: response.headers,
-      });
+      })
 
       enhancedResponse.headers.set('X-Response-Time', `${duration.toFixed(2)}ms`);
       enhancedResponse.headers.set('X-Powered-By', 'RISCURA');
@@ -48,7 +48,7 @@ export function withPerformance(
 
       // Add compression headers
       if (options.enableCompression) {
-        enhancedResponse.headers.set('Content-Encoding', 'gzip');
+        enhancedResponse.headers.set('Content-Encoding', 'gzip')
       }
 
       return enhancedResponse;
@@ -56,10 +56,10 @@ export function withPerformance(
       const _duration = performance.now() - startTime;
       apiMonitor.trackRequest(`${endpoint} (ERROR)`, duration);
 
-      // console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error);
+      // console.error(`API Error in ${endpoint} after ${duration.toFixed(2)}ms:`, error)
       throw error;
     }
-  };
+  }
 }
 
 // ============================================================================
@@ -68,7 +68,7 @@ export function withPerformance(
 
 export function optimizeResponse(_data: any,
   options: {
-    fields?: string[];
+    fields?: string[]
     limit?: number;
     compress?: boolean;
   } = {}
@@ -77,28 +77,28 @@ export function optimizeResponse(_data: any,
 
   // Field selection (GraphQL-style)
   if (options.fields && Array.isArray(data)) {
-    optimizedData = data.map((item) => selectFields(item, options.fields!));
+    optimizedData = data.map((item) => selectFields(item, options.fields!))
   } else if (options.fields && typeof data === 'object') {
     optimizedData = selectFields(data, options.fields);
   }
 
   // Limit results
   if (options.limit && Array.isArray(optimizedData)) {
-    optimizedData = optimizedData.slice(0, options.limit);
+    optimizedData = optimizedData.slice(0, options.limit)
   }
 
   return optimizedData;
 }
 
 const selectFields = (obj: any, fields: string[]): any {
-  const result: any = {};
+  const result: any = {}
   for (const field of fields) {
     if (field.includes('.')) {
       // Nested field selection
-      const [parent, ...nested] = field.split('.');
+      const [parent, ...nested] = field.split('.')
       if (obj[parent]) {
-        if (!result[parent]) result[parent] = {};
-        result[parent] = { ...result[parent], ...selectFields(obj[parent], [nested.join('.')]) };
+        if (!result[parent]) result[parent] = {}
+        result[parent] = { ...result[parent], ...selectFields(obj[parent], [nested.join('.')]) }
       }
     } else {
       if (obj[field] !== undefined) {
@@ -114,7 +114,7 @@ const selectFields = (obj: any, fields: string[]): any {
 // ============================================================================
 
 export interface PaginationOptions {
-  page?: number;
+  page?: number
   pageSize?: number;
   maxPageSize?: number;
 }
@@ -128,7 +128,7 @@ export function optimizePagination(_options: PaginationOptions) {
     pageSize,
     skip: (page - 1) * pageSize,
     take: pageSize,
-  };
+  }
 }
 
 export function createPaginatedResponse<T>(_data: T[],
@@ -148,7 +148,7 @@ export function createPaginatedResponse<T>(_data: T[],
       hasNext: page < totalPages,
       hasPrev: page > 1,
     },
-  };
+  }
 }
 
 // ============================================================================
@@ -156,14 +156,14 @@ export function createPaginatedResponse<T>(_data: T[],
 // ============================================================================
 
 export function shouldCompress(req: NextRequest): boolean {
-  const acceptEncoding = req.headers.get('accept-encoding') || '';
+  const acceptEncoding = req.headers.get('accept-encoding') || ''
   return acceptEncoding.includes('gzip') || acceptEncoding.includes('deflate');
 }
 
 export function generateETag(_content: any): string {
   const str = typeof content === 'string' ? content : JSON.stringify(content);
   // Simple hash function for ETag
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = (hash << 5) - hash + char;
@@ -190,18 +190,18 @@ class RateLimiter {
     const keyRequests = this.requests.get(key)!;
 
     // Remove old requests outside the window
-    const validRequests = keyRequests.filter((req) => req.timestamp > windowStart);
+    const validRequests = keyRequests.filter((req) => req.timestamp > windowStart)
     this.requests.set(key, validRequests);
 
     // Count total requests in window
-    const totalRequests = validRequests.reduce((sum, req) => sum + req.count, 0);
+    const totalRequests = validRequests.reduce((sum, req) => sum + req.count, 0)
 
     if (totalRequests >= limit) {
       return false;
     }
 
     // Add current request
-    validRequests.push({ timestamp: now, count: 1 });
+    validRequests.push({ timestamp: now, count: 1 })
     return true;
   }
 
@@ -224,7 +224,7 @@ export const rateLimiter = new RateLimiter();
 // ============================================================================
 
 export async function getPerformanceHealth() {
-  const _stats = apiMonitor.getMetrics();
+  const _stats = apiMonitor.getMetrics()
 
   return {
     timestamp: new Date().toISOString(),
@@ -236,7 +236,7 @@ export async function getPerformanceHealth() {
     slowEndpoints: Object.entries(stats)
       .filter(([, stat]: [string, any]) => stat?.avg > 1000)
       .map(([endpoint]) => endpoint),
-  };
+  }
 }
 
 // ============================================================================
@@ -253,26 +253,26 @@ export function createLazyLoader<T>(
   return async (): Promise<T> => {
     // Return cached data if valid
     if (cache && Date.now() < cache.expires) {
-      return cache.data;
+      return cache.data
     }
 
     // Return existing loading promise if in progress
     if (loading) {
-      return loading;
+      return loading
     }
 
     // Start loading
-    loading = loadFn();
+    loading = loadFn()
 
     try {
       const data = await loading;
       cache = {
         data,
         expires: Date.now() + ttl,
-      };
+      }
       return data;
     } finally {
       loading = null;
     }
-  };
+  }
 }

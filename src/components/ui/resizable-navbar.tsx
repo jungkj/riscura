@@ -69,7 +69,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
       )}
     </motion.div>
   );
-};
+}
 
 export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   return (
@@ -100,7 +100,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       {children}
     </motion.div>
   );
-};
+}
 
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -132,7 +132,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       ))}
     </motion.div>
   );
-};
+}
 
 export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
   return (
@@ -162,7 +162,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       {children}
     </motion.div>
   );
-};
+}
 
 export const MobileNavHeader = ({ children, className }: MobileNavHeaderProps) => {
   return (
@@ -170,7 +170,7 @@ export const MobileNavHeader = ({ children, className }: MobileNavHeaderProps) =
       {children}
     </div>
   );
-};
+}
 
 export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNavMenuProps) => {
   return (
@@ -190,7 +190,7 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNa
       )}
     </AnimatePresence>
   );
-};
+}
 
 export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
   return (
@@ -202,7 +202,7 @@ export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick:
       )}
     </button>
   );
-};
+}
 
 export const NavbarLogo = () => {
   return (
@@ -223,7 +223,7 @@ export const NavbarLogo = () => {
       </span>
     </a>
   );
-};
+}
 
 export const NavbarButton = ({
   href,
@@ -244,7 +244,7 @@ export const NavbarButton = ({
   // Create clean button props by excluding href and as
   const buttonProps = Object.fromEntries(
     Object.entries(restProps).filter(([key]) => key !== 'href' && key !== 'as')
-  );
+  )
 
   if (variant === 'primary') {
     return (
@@ -284,4 +284,4 @@ export const NavbarButton = ({
       {children}
     </ModernButton>
   );
-};
+}

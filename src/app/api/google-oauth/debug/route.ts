@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const redirectUri = `${baseUrl}/api/google-oauth/callback`;
 
   // Check cookies
-  const cookies = req.cookies.getAll();
+  const cookies = req.cookies.getAll()
   const sessionToken = req.cookies.get('session-token')?.value;
 
   let sessionData = null;

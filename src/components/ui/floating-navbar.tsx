@@ -23,7 +23,7 @@ export const FloatingNavbar = ({
   useMotionValueEvent(scrollYProgress, 'change', (current) => {
     // Check if current is not undefined and is a number
     if (typeof current === 'number') {
-      let direction = current! - scrollYProgress.getPrevious()!;
+      let direction = current! - scrollYProgress.getPrevious()!
 
       if (scrollYProgress.get() < 0.05) {
         setVisible(false);
@@ -75,4 +75,4 @@ export const FloatingNavbar = ({
       </motion.div>
     </AnimatePresence>
   );
-};
+}

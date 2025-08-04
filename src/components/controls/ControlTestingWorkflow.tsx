@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -13,6 +13,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle } from '@/components/ui/daisy-components';
 // import {
   Upload,
   File,
@@ -35,12 +36,12 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Clipboard,
   BarChart3,
   MessageSquare,
-} from 'lucide-react';
-// import { format } from 'date-fns';
+} from 'lucide-react'
+// import { format } from 'date-fns'
 
 // Types
 interface TestingWorkflow {
-  id: string;
+  id: string
   controlId: string;
   controlTitle: string;
   testingType: 'design' | 'operating' | 'combined';
@@ -48,11 +49,11 @@ interface TestingWorkflow {
   tester: {
     name: string;
     email: string;
-  };
+  }
   reviewer?: {
     name: string;
     email: string;
-  };
+  }
   scheduledDate: Date;
   actualStartDate?: Date;
   completedDate?: Date;
@@ -140,7 +141,7 @@ const sampleWorkflows: TestingWorkflow[] = [
     evidence: [],
     progress: 0,
   },
-];
+]
 
 // Evidence Type Configuration
 const getEvidenceTypeConfig = (_type: string) => {
@@ -150,9 +151,9 @@ const getEvidenceTypeConfig = (_type: string) => {
     'video': { icon: Video, color: 'text-purple-600', bg: 'bg-purple-50' },
     'config': { icon: File, color: 'text-orange-600', bg: 'bg-orange-50' },
     'log': { icon: Clipboard, color: 'text-gray-600', bg: 'bg-gray-50' },
-  };
+  }
   return configs[type as keyof typeof configs] || configs.document;
-};
+}
 
 // Status Configuration
 const getWorkflowStatusConfig = (status: string) => {
@@ -162,22 +163,22 @@ const getWorkflowStatusConfig = (status: string) => {
     'review': { variant: 'outline' as const, color: 'text-semantic-warning' },
     'completed': { variant: 'default' as const, color: 'text-semantic-success' },
     'overdue': { variant: 'destructive' as const, color: 'text-semantic-error' },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.scheduled;
-};
+}
 
 // Format file size
 const formatFileSize = (bytes: number) => {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return '0 Bytes'
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
+}
 
 // Evidence Upload Component
 const EvidenceUpload: React.FC<{
-  workflow: TestingWorkflow;
+  workflow: TestingWorkflow
   onEvidenceUpload: (files: File[]) => void;
 }> = ({ workflow, onEvidenceUpload }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -301,11 +302,11 @@ const EvidenceUpload: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Testing Form Component
 const TestingForm: React.FC<{
-  workflow: TestingWorkflow;
+  workflow: TestingWorkflow
   onSave: (_data: Partial<TestingWorkflow>) => void;
   onSubmit: (_data: Partial<TestingWorkflow>) => void;
 }> = ({ workflow, onSave, onSubmit }) => {
@@ -319,15 +320,15 @@ const TestingForm: React.FC<{
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  }
 
   const handleSave = () => {
     onSave(formData);
-  };
+  }
 
   const handleSubmit = () => {
     onSubmit({ ...formData, status: 'review', completedDate: new Date() });
-  };
+  }
 
   return (
     <div className="space-y-enterprise-6">
@@ -478,11 +479,11 @@ handleInputChange('recommendations', e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 // Workflow Card Component
 const WorkflowCard: React.FC<{
-  workflow: TestingWorkflow;
+  workflow: TestingWorkflow
   onAction: (_action: string, workflow: TestingWorkflow) => void;
 }> = ({ workflow, onAction }) => {
   const statusConfig = getWorkflowStatusConfig(workflow.status);
@@ -599,11 +600,11 @@ const WorkflowCard: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Main Control Testing Workflow Component
 export const ControlTestingWorkflow: React.FC = () => {
-  const [workflows] = useState<TestingWorkflow[]>(sampleWorkflows);
+  const [workflows] = useState<TestingWorkflow[]>(sampleWorkflows)
   const [selectedWorkflow, setSelectedWorkflow] = useState<TestingWorkflow | null>(null);
   const [testingDialogOpen, setTestingDialogOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -617,20 +618,20 @@ export const ControlTestingWorkflow: React.FC = () => {
       setSelectedWorkflow(workflow);
       setTestingDialogOpen(true);
     }
-  };
+  }
 
   const handleEvidenceUpload = (files: File[]) => {
-    // console.log('Uploading evidence files:', files);
-  };
+    // console.log('Uploading evidence files:', files)
+  }
 
   const handleTestingSave = (_data: Partial<TestingWorkflow>) => {
-    // console.log('Saving testing data:', data);
-  };
+    // console.log('Saving testing data:', data)
+  }
 
   const handleTestingSubmit = (_data: Partial<TestingWorkflow>) => {
-    // console.log('Submitting testing data:', data);
+    // console.log('Submitting testing data:', data)
     setTestingDialogOpen(false);
-  };
+  }
 
   const statuses = [...new Set(workflows.map(w => w.status))];
 
@@ -724,6 +725,6 @@ export const ControlTestingWorkflow: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 export default ControlTestingWorkflow;

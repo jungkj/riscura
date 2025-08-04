@@ -48,7 +48,7 @@ export function useStripeCheckout() {
       // Redirect to Stripe Checkout
       const { error: redirectError } = await stripe.redirectToCheckout({
         sessionId: data.sessionId,
-      });
+      })
 
       if (redirectError) {
         throw new Error(redirectError.message);
@@ -56,32 +56,32 @@ export function useStripeCheckout() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
-      // console.error('Stripe checkout error:', err);
+      // console.error('Stripe checkout error:', err)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const startFreeTrial = () => {
     return createCheckoutSession({
       plan: 'PRO',
       isTrial: true,
     });
-  };
+  }
 
   const upgradeToPro = () => {
     return createCheckoutSession({
       plan: 'PRO',
       isTrial: false,
     });
-  };
+  }
 
   const upgradeToEnterprise = () => {
     return createCheckoutSession({
       plan: 'ENTERPRISE',
       isTrial: false,
     });
-  };
+  }
 
   return {
     loading,
@@ -90,5 +90,5 @@ export function useStripeCheckout() {
     startFreeTrial,
     upgradeToPro,
     upgradeToEnterprise,
-  };
+  }
 }

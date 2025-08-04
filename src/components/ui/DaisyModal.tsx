@@ -44,7 +44,7 @@ export const DaisyModal = ({
       </form>
     </dialog>
   );
-};
+}
 
 export const DaisyModalAction = ({
   className,
@@ -56,4 +56,4 @@ export const DaisyModalAction = ({
       {children}
     </div>
   );
-};
+}

@@ -1,4 +1,4 @@
-// import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types'
 
 export interface ISO31000Process {
   id: string;
@@ -161,7 +161,7 @@ export class ISO31000FrameworkService {
           evidenceRequired: ['Communication strategy', 'Stakeholder feedback analysis'],
         },
       ],
-    };
+    }
 
     // Scope, Context and Criteria
     const scopeContext: ISO31000Process = {
@@ -199,7 +199,7 @@ export class ISO31000FrameworkService {
           evidenceRequired: ['Comprehensive context analysis', 'Risk criteria matrix'],
         },
       ],
-    };
+    }
 
     // Risk Assessment
     const riskAssessment: ISO31000Process = {
@@ -247,7 +247,7 @@ export class ISO31000FrameworkService {
           evidenceRequired: ['Comprehensive risk assessment', 'Quantitative models'],
         },
       ],
-    };
+    }
 
     this.processes.set('communication-consultation', communication);
     this.processes.set('scope-context-criteria', scopeContext);
@@ -263,26 +263,26 @@ export class ISO31000FrameworkService {
 
     // Assess each process
     for (const [processId, process] of this.processes) {
-      const assessment = await this.assessProcess(process, risks, controls);
+      const assessment = await this.assessProcess(process, risks, controls)
       processAssessments.push(assessment);
     }
 
     // Calculate overall maturity
     const overallMaturity = Math.round(
       processAssessments.reduce((sum, p) => sum + p.maturityLevel, 0) / processAssessments.length
-    );
+    )
 
     // Assess principle compliance
-    const principleCompliance = await this.assessPrincipleCompliance(risks, controls);
+    const principleCompliance = await this.assessPrincipleCompliance(risks, controls)
 
     // Identify gaps
-    const gaps = this.identifyProcessGaps(processAssessments);
+    const gaps = this.identifyProcessGaps(processAssessments)
 
     // Generate recommendations
-    const recommendations = await this.generateISO31000Recommendations(processAssessments, gaps);
+    const recommendations = await this.generateISO31000Recommendations(processAssessments, gaps)
 
     // Create improvement plan
-    const improvementPlan = this.createImprovementPlan(recommendations);
+    const improvementPlan = this.createImprovementPlan(recommendations)
 
     return {
       organizationId,
@@ -295,7 +295,7 @@ export class ISO31000FrameworkService {
       gaps,
       recommendations,
       improvementPlan,
-    };
+    }
   }
 
   async performGapAnalysis(
@@ -318,29 +318,29 @@ export class ISO31000FrameworkService {
         impact: this.determineGapImpact(targetMaturity - assessment.maturityLevel),
         effort: this.determineGapEffort(targetMaturity - assessment.maturityLevel),
         priority: this.calculateGapPriority(assessment, targetMaturity),
-      };
+      }
       processGaps.push(gap);
     });
 
     // Identify priority areas
     const priorityAreas = processGaps
       .filter((gap) => gap.impact === 'high' && gap.gap > 1)
-      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId);
+      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId)
 
     // Identify quick wins
     const quickWins = processGaps
       .filter((gap) => gap.effort === 'low' && gap.gap > 0)
-      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId);
+      .map((gap) => this.processes.get(gap.processId)?.name || gap.processId)
 
     // Create improvement roadmap
-    const roadmap = this.createImprovementRoadmap(processGaps);
+    const roadmap = this.createImprovementRoadmap(processGaps)
 
     return {
       processGaps,
       priorityAreas,
       quickWins,
       roadmap,
-    };
+    }
   }
 
   private async assessProcess(
@@ -349,12 +349,12 @@ export class ISO31000FrameworkService {
     controls: Control[]
   ): Promise<ProcessAssessment> {
     // Simplified assessment logic
-    let maturityLevel = 1;
+    let maturityLevel = 1
     let score = 20;
 
     // Assess based on available evidence
     if (risks.length > 0) {
-      maturityLevel = Math.min(3, maturityLevel + 1);
+      maturityLevel = Math.min(3, maturityLevel + 1)
       score += 30;
     }
 
@@ -389,7 +389,7 @@ export class ISO31000FrameworkService {
       weaknesses,
       evidence,
       recommendations,
-    };
+    }
   }
 
   private async assessPrincipleCompliance(_risks: Risk[],
@@ -401,7 +401,7 @@ export class ISO31000FrameworkService {
 
       // Simplified compliance assessment
       if (risks.length > 10 && controls.length > 5) {
-        compliance = 'partial';
+        compliance = 'partial'
         score = 60;
       }
 
@@ -416,7 +416,7 @@ export class ISO31000FrameworkService {
         score,
         evidence: ['Risk register', 'Control documentation'],
         gaps: compliance === 'full' ? [] : [`Improve ${principle.toLowerCase()} implementation`],
-      };
+      }
     });
   }
 
@@ -510,12 +510,12 @@ export class ISO31000FrameworkService {
         'Stakeholder satisfaction',
         'Compliance scores',
       ],
-    };
+    }
   }
 
   private createImprovementRoadmap(gaps: ProcessGap[]): ImprovementPhase[] {
     // Sort gaps by priority
-    const sortedGaps = gaps.sort((a, b) => b.priority - a.priority);
+    const sortedGaps = gaps.sort((a, b) => b.priority - a.priority)
 
     const phases: ImprovementPhase[] = [];
     let currentPhase = 1;
@@ -543,7 +543,7 @@ export class ISO31000FrameworkService {
 
   // Helper methods
   private determineGapImpact(gap: number): 'high' | 'medium' | 'low' {
-    if (gap >= 3) return 'high';
+    if (gap >= 3) return 'high'
     if (gap >= 2) return 'medium';
     return 'low';
   }

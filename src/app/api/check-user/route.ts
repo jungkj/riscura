@@ -17,10 +17,10 @@ export async function GET(req: Request) {
     const user = await db.client.user.findUnique({
       where: { email },
       include: { organization: true },
-    });
+    })
 
     // Check if organization exists
-    let org = null;
+    let org = null
     if (!user) {
       const orgDomain = email.split('@')[1];
       org = await db.client.organization.findFirst({

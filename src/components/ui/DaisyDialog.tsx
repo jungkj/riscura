@@ -22,7 +22,7 @@ export const DaisyDialog = ({ open, onOpenChange, children, className }: DialogP
 
   const handleClose = () => {
     onOpenChange(false);
-  };
+  }
 
   return (
     <dialog ref={dialogRef} className="modal" onClose={handleClose}>
@@ -32,7 +32,7 @@ export const DaisyDialog = ({ open, onOpenChange, children, className }: DialogP
       </form>
     </dialog>
   );
-};
+}
 
 export const DaisyDialogContent = ({
   className,
@@ -44,7 +44,7 @@ export const DaisyDialogContent = ({
       {children}
     </div>
   );
-};
+}
 
 export const DaisyDialogHeader = ({
   className,
@@ -56,7 +56,7 @@ export const DaisyDialogHeader = ({
       {children}
     </div>
   );
-};
+}
 
 export const DaisyDialogTitle = ({
   className,
@@ -68,7 +68,7 @@ export const DaisyDialogTitle = ({
       {children}
     </h3>
   );
-};
+}
 
 export const DaisyDialogDescription = ({
   className,
@@ -80,7 +80,7 @@ export const DaisyDialogDescription = ({
       {children}
     </p>
   );
-};
+}
 
 export const DaisyDialogFooter = ({
   className,
@@ -92,7 +92,7 @@ export const DaisyDialogFooter = ({
       {children}
     </div>
   );
-};
+}
 
 export const DaisyDialogClose = ({
   className,
@@ -106,4 +106,4 @@ export const DaisyDialogClose = ({
       </button>
     </form>
   );
-};
+}

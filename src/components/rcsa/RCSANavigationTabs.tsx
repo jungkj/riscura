@@ -7,6 +7,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter, usePathname } from 'next/navigation';
 import { useRCSA } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';
+import { DaisyTabs, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   Shield, 
   BarChart3, 
@@ -19,7 +20,7 @@ import { cn } from '@/lib/utils';
   TrendingUp,
   Users,
   Settings
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface TabDefinition {
   value: string;
@@ -219,19 +220,19 @@ export function RCSANavigationTabs({
       default:
         return [];
     }
-  };
+  }
 
   const tabs = getTabsForEntityType();
   
   // Determine current tab from pathname if not explicitly provided
-  const currentTab = activeTab || tabs.find(tab => pathname === tab.href)?.value || 'overview';
+  const currentTab = activeTab || tabs.find(tab => pathname === tab.href)?.value || 'overview'
 
   const handleTabChange = (_value: string) => {
     const tab = tabs.find(t => t.value === value);
     if (tab && !tab.disabled) {
       router.push(tab.href);
     }
-  };
+  }
 
   const getBadgeVariant = (badge: number | string | undefined) => {
     if (typeof badge === 'number') {
@@ -249,7 +250,7 @@ export function RCSANavigationTabs({
       if (badge === 'Due') return 'destructive';
     }
     return 'default';
-  };
+  }
 
   const getTabContent = (tab: TabDefinition) => (
     <div className="flex items-center gap-2">
@@ -288,7 +289,7 @@ export function RCSANavigationTabs({
         {children}
       </div>
     );
-  };
+  }
 
   return (
     <div className={cn("border-b border-border mb-6", className)}>
@@ -336,7 +337,7 @@ export function RCSAQuickNavigation({
   currentEntityId,
   className 
 }: { 
-  currentEntityType: 'risk' | 'control';
+  currentEntityType: 'risk' | 'control'
   currentEntityId: string;
   className?: string;
 }) {
@@ -354,15 +355,15 @@ export function RCSAQuickNavigation({
         type: 'controls' as const,
         entities: getRelatedControls(currentEntityId),
         navigateTo: navigateToControl
-      };
+      }
     } else {
       return {
         type: 'risks' as const,
         entities: getRelatedRisks(currentEntityId),
         navigateTo: navigateToRisk
-      };
+      }
     }
-  };
+  }
 
   const { type, entities, navigateTo } = getRelatedEntities();
 
@@ -429,7 +430,7 @@ export function RCSATabContent({
   actions,
   className 
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
   title?: string;
   description?: string;
   actions?: React.ReactNode;

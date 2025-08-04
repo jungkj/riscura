@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -27,11 +28,11 @@ import {
   Image,
   File,
   Clock,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== FORM FIELD TYPES ==========
 export interface FormFieldConfig {
-  id: string;
+  id: string
   label: string;
   type: 'text' | 'email' | 'password' | 'textarea' | 'select' | 'file' | 'toggle';
   placeholder?: string;
@@ -54,7 +55,7 @@ export interface FormSectionConfig {
 
 // ========== FLOATING LABEL INPUT ==========
 const FloatingLabelInput: React.FC<{
-  field: FormFieldConfig;
+  field: FormFieldConfig
   value: any;
   onChange: (_value: any) => void;
   error?: string;
@@ -78,7 +79,7 @@ const FloatingLabelInput: React.FC<{
           : "border-border hover:border-border-hover",
       field.disabled && "bg-surface-secondary cursor-not-allowed opacity-60"
     );
-  };
+  }
 
   const getLabelClasses = () => {
     return cn(
@@ -89,7 +90,7 @@ const FloatingLabelInput: React.FC<{
       focused && !error && "text-interactive-primary",
       error && "text-semantic-error"
     );
-  };
+  }
 
   return (
     <div className={cn("space-y-enterprise-1", field.width === 'half' ? 'md:col-span-1' : 'md:col-span-2')}>
@@ -163,11 +164,11 @@ const FloatingLabelInput: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // ========== SELECT COMPONENT ==========
 const NotionSelect: React.FC<{
-  field: FormFieldConfig;
+  field: FormFieldConfig
   value: any;
   onChange: (_value: any) => void;
   error?: string;
@@ -221,11 +222,11 @@ const NotionSelect: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // ========== TOGGLE SWITCH ==========
 const NotionToggle: React.FC<{
-  field: FormFieldConfig;
+  field: FormFieldConfig
   value: boolean;
   onChange: (_value: boolean) => void;
   error?: string;
@@ -274,11 +275,11 @@ const NotionToggle: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // ========== FILE UPLOAD ==========
 const NotionFileUpload: React.FC<{
-  field: FormFieldConfig;
+  field: FormFieldConfig
   value: File[];
   onChange: (files: File[]) => void;
   error?: string;
@@ -289,25 +290,25 @@ const NotionFileUpload: React.FC<{
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     onChange([...value, ...files]);
-  };
+  }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
     const files = Array.from(e.dataTransfer.files);
     onChange([...value, ...files]);
-  };
+  }
 
   const removeFile = (_index: number) => {
     const newFiles = value.filter((_, i) => i !== index);
     onChange(newFiles);
-  };
+  }
 
   const getFileIcon = (_file: File) => {
     if (file.type.startsWith('image/')) return <Image className="h-4 w-4" />;
     if (file.type.includes('pdf')) return <FileText className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
-  };
+  }
 
   return (
     <div className={cn("space-y-enterprise-3", field.width === 'half' ? 'md:col-span-1' : 'md:col-span-2')}>
@@ -385,11 +386,11 @@ const NotionFileUpload: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // ========== FORM SECTION ==========
 const FormSection: React.FC<{
-  section: FormSectionConfig;
+  section: FormSectionConfig
   values: Record<string, any>;
   errors: Record<string, string>;
   onChange: (fieldId: string, value: any) => void;
@@ -441,7 +442,7 @@ const FormSection: React.FC<{
             autoSaved={autoSaved} />
         );
     }
-  };
+  }
 
   return (
     <div className="space-y-enterprise-4">
@@ -482,11 +483,11 @@ const FormSection: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // ========== MAIN FORM COMPONENT ==========
 export const NotionForm: React.FC<{
-  title: string;
+  title: string
   description?: string;
   sections: FormSectionConfig[];
   values: Record<string, any>;
@@ -519,25 +520,25 @@ export const NotionForm: React.FC<{
     if (autoSave) {
       // Simulate auto-save
       setTimeout(() => {
-        setAutoSavedFields(prev => new Set([...prev, fieldId]));
+        setAutoSavedFields(prev => new Set([...prev, fieldId]))
         setLastSaved(new Date());
         
         // Remove auto-save indicator after 2 seconds
         setTimeout(() => {
           setAutoSavedFields(prev => {
-            const newSet = new Set(prev);
+            const newSet = new Set(prev)
             newSet.delete(fieldId);
             return newSet;
           });
         }, 2000);
       }, 1000);
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(values);
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className={cn("space-y-enterprise-8", className)}>
@@ -607,6 +608,6 @@ export const NotionForm: React.FC<{
       </div>
     </form>
   );
-};
+}
 
 export default NotionForm; 

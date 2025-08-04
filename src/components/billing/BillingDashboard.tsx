@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -9,6 +9,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   CreditCard, 
   Calendar, 
@@ -24,9 +25,9 @@ import { toast } from 'sonner';
   AlertTriangle,
   Settings,
   ExternalLink,
-} from 'lucide-react';
+} from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 
 interface BillingData {
   subscription: {
@@ -40,16 +41,16 @@ interface BillingData {
     currency: string;
     interval: 'month' | 'year';
     nextBillingDate: string;
-  };
+  }
   usage: {
-    users: { current: number; limit: number };
-    risks: { current: number; limit: number };
-    controls: { current: number; limit: number };
-    documents: { current: number; limit: number };
-    apiCalls: { current: number; limit: number };
+    users: { current: number; limit: number }
+    risks: { current: number; limit: number }
+    controls: { current: number; limit: number }
+    documents: { current: number; limit: number }
+    apiCalls: { current: number; limit: number }
     storage: { current: number; limit: number }; // in MB
-    aiRequests: { current: number; limit: number };
-  };
+    aiRequests: { current: number; limit: number }
+  }
   invoices: Array<{
     id: string;
     number: string;
@@ -76,7 +77,7 @@ interface BillingData {
     periodStart: string;
     periodEnd: string;
     dueDate: string;
-  };
+  }
 }
 
 interface PlanFeature {
@@ -110,28 +111,28 @@ class BillingService {
   // Get billing data
   async getBillingData(): Promise<BillingData> {
     try {
-      const response = await fetch('/api/billing/data');
+      const response = await fetch('/api/billing/data')
       if (!response.ok) {
         throw new Error('Failed to fetch billing data');
       }
       return await response.json();
     } catch (error) {
-      // console.error('Billing service error:', error);
+      // console.error('Billing service error:', error)
       // Return mock data for development
-      return this.getMockBillingData();
+      return this.getMockBillingData()
     }
   }
 
   // Get available plans
   async getAvailablePlans(): Promise<PricingPlan[]> {
     try {
-      const response = await fetch('/api/billing/plans');
+      const response = await fetch('/api/billing/plans')
       if (!response.ok) {
         throw new Error('Failed to fetch plans');
       }
       return await response.json();
     } catch (error) {
-      // console.error('Plans service error:', error);
+      // console.error('Plans service error:', error)
       return this.getMockPlans();
     }
   }
@@ -151,7 +152,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      // console.error('Subscription update error:', error);
+      // console.error('Subscription update error:', error)
       throw error;
     }
   }
@@ -161,7 +162,7 @@ class BillingService {
     try {
       const response = await fetch('/api/billing/subscription', {
         method: 'DELETE',
-      });
+      })
       
       if (!response.ok) {
         throw new Error('Failed to cancel subscription');
@@ -169,7 +170,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      // console.error('Subscription cancellation error:', error);
+      // console.error('Subscription cancellation error:', error)
       throw error;
     }
   }
@@ -181,7 +182,7 @@ class BillingService {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentMethodId }),
-      });
+      })
       
       if (!response.ok) {
         throw new Error('Failed to add payment method');
@@ -189,7 +190,7 @@ class BillingService {
       
       return await response.json();
     } catch (error) {
-      // console.error('Payment method error:', error);
+      // console.error('Payment method error:', error)
       throw error;
     }
   }
@@ -197,7 +198,7 @@ class BillingService {
   // Download invoice
   async downloadInvoice(invoiceId: string): Promise<void> {
     try {
-      const response = await fetch(`/api/billing/invoices/${invoiceId}/download`);
+      const response = await fetch(`/api/billing/invoices/${invoiceId}/download`)
       if (!response.ok) {
         throw new Error('Failed to download invoice');
       }
@@ -212,7 +213,7 @@ class BillingService {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      // console.error('Invoice download error:', error);
+      // console.error('Invoice download error:', error)
       throw error;
     }
   }
@@ -281,7 +282,7 @@ class BillingService {
         periodEnd: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
         dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
       },
-    };
+    }
   }
 
   private getMockPlans(): PricingPlan[] {
@@ -361,7 +362,7 @@ const BillingDashboard: React.FC = () => {
   // Load billing data
   const loadBillingData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const [billing, plans] = await Promise.all([
         billingService.getBillingData(),
         billingService.getAvailablePlans(),
@@ -370,17 +371,17 @@ const BillingDashboard: React.FC = () => {
       setBillingData(billing);
       setAvailablePlans(plans);
     } catch (error) {
-      // console.error('Failed to load billing data:', error);
+      // console.error('Failed to load billing data:', error)
       toast.error('Failed to load billing information');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Handle plan upgrade
   const handlePlanUpgrade = async (planId: string) => {
     try {
-      const _result = await billingService.updateSubscription(planId);
+      const _result = await billingService.updateSubscription(planId)
       if (result.success) {
         toast.success('Subscription updated successfully');
         loadBillingData();
@@ -390,12 +391,12 @@ const BillingDashboard: React.FC = () => {
     } catch (error) {
       toast.error('Failed to update subscription');
     }
-  };
+  }
 
   // Handle subscription cancellation
   const handleCancelSubscription = async () => {
     if (!confirm('Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your billing period.')) {
-      return;
+      return
     }
 
     try {
@@ -409,38 +410,38 @@ const BillingDashboard: React.FC = () => {
     } catch (error) {
       toast.error('Failed to cancel subscription');
     }
-  };
+  }
 
   // Handle invoice download
   const handleDownloadInvoice = async (invoiceId: string) => {
     try {
-      await billingService.downloadInvoice(invoiceId);
+      await billingService.downloadInvoice(invoiceId)
       toast.success('Invoice downloaded successfully');
     } catch (error) {
       toast.error('Failed to download invoice');
     }
-  };
+  }
 
   // Format currency
   const formatCurrency = (amount: number, currency: string = 'USD'): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency,
-    }).format(amount);
-  };
+    }).format(amount)
+  }
 
   // Get usage percentage
   const getUsagePercentage = (current: number, limit: number): number => {
-    if (limit === 0) return 0;
+    if (limit === 0) return 0
     return Math.min((current / limit) * 100, 100);
-  };
+  }
 
   // Get usage color
   const getUsageColor = (percentage: number): string => {
-    if (percentage >= 90) return 'text-red-600';
+    if (percentage >= 90) return 'text-red-600'
     if (percentage >= 75) return 'text-yellow-600';
     return 'text-green-600';
-  };
+  }
 
   useEffect(() => {
     loadBillingData();
@@ -826,6 +827,6 @@ const BillingDashboard: React.FC = () => {
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default BillingDashboard; 

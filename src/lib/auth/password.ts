@@ -16,7 +16,7 @@ export const PASSWORD_REQUIREMENTS = {
   requireNumbers: true,
   requireSpecialChars: true,
   minScore: 3, // Minimum acceptable strength score
-};
+}
 
 /**
  * Hash a password using bcrypt
@@ -33,7 +33,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   try {
     return await bcrypt.compare(password, hash);
   } catch (error) {
-    // console.error('Password verification error:', error);
+    // console.error('Password verification error:', error)
     return false;
   }
 }
@@ -47,7 +47,7 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
 
   // Length check
   if (password.length < 8) {
-    feedback.push('Password must be at least 8 characters long');
+    feedback.push('Password must be at least 8 characters long')
   } else if (password.length >= 8) {
     score += 1;
   }
@@ -58,7 +58,7 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
 
   // Character variety checks
   if (!/[a-z]/.test(password)) {
-    feedback.push('Password must contain at least one lowercase letter');
+    feedback.push('Password must contain at least one lowercase letter')
   } else {
     score += 1;
   }
@@ -83,7 +83,7 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
 
   // Common patterns
   if (/(.)\1{2,}/.test(password)) {
-    feedback.push('Password should not contain repeated characters');
+    feedback.push('Password should not contain repeated characters')
     score -= 1;
   }
 
@@ -104,7 +104,7 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
     'letmein',
     'welcome',
     'monkey',
-  ];
+  ]
 
   if (commonPasswords.some((common) => password.toLowerCase().includes(common))) {
     feedback.push('Password should not contain common words');
@@ -117,7 +117,7 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
     isValid,
     score: Math.max(0, Math.min(6, score)),
     feedback,
-  };
+  }
 }
 
 /**
@@ -129,7 +129,7 @@ export function generateSecurePassword(length: number = 16): string {
   let password = '';
 
   // Ensure at least one character from each required type
-  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz'
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
   const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
@@ -148,7 +148,7 @@ export function generateSecurePassword(length: number = 16): string {
   return password
     .split('')
     .sort(() => Math.random() - 0.5)
-    .join('');
+    .join('')
 }
 
 /**
@@ -180,7 +180,7 @@ export async function checkPasswordCompromised(password: string): Promise<boolea
     'master',
     '123123',
     'football',
-  ];
+  ]
 
   return compromisedPasswords.includes(password.toLowerCase());
 }

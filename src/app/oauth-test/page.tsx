@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export default function OAuthTestPage() {
   const [envData, setEnvData] = useState<any>(null);
@@ -20,12 +21,12 @@ export default function OAuthTestPage() {
       setLoading(true);
 
       // Fetch environment data
-      const envResponse = await fetch('/api/check-env');
+      const envResponse = await fetch('/api/check-env')
       const envJson = await envResponse.json();
       setEnvData(envJson);
 
       // Fetch database test data
-      const dbResponse = await fetch('/api/test-db');
+      const dbResponse = await fetch('/api/test-db')
       const dbJson = await dbResponse.json();
       setDbTestData(dbJson);
     } catch (err) {
@@ -33,11 +34,11 @@ export default function OAuthTestPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const testGoogleLogin = () => {
     window.location.href = '/api/google-oauth/login?redirect=/dashboard';
-  };
+  }
 
   if (loading) {
     return (

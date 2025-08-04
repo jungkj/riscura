@@ -1,13 +1,14 @@
 'use client';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { ComplianceDonut } from './ComplianceDonut';
 import { ComplianceRingChart } from '@/components/charts/ComplianceRingChart';
-// import { VisualMetricCard } from '@/components/widgets/VisualMetricCard';
+// import { VisualMetricCard } from '@/components/widgets/VisualMetricCard'
 import { useRouter } from 'next/navigation';
+import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   CheckCircle, 
   AlertTriangle, 
@@ -21,7 +22,7 @@ import { useRouter } from 'next/navigation';
   Activity,
   Zap,
   Database
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ComplianceFramework {
   name: string;
@@ -84,7 +85,7 @@ export default function ComplianceDashboard() {
       case 'needs-review':
         return <DaisyBadge className="bg-red-100 text-red-700 hover:bg-red-100">Needs Review</DaisyBadge>;
     }
-  };
+  }
 
   const getStatusIcon = (status: ComplianceFramework['status']) => {
     switch (status) {
@@ -97,7 +98,7 @@ export default function ComplianceDashboard() {
   ;
 </DaisyAlertTriangle>
     }
-  };
+  }
 
   const handleProboIntegrationClick = (frameworkName: string) => {
     if (frameworkName === 'SOC 2 Type II') {
@@ -105,7 +106,7 @@ export default function ComplianceDashboard() {
     } else {
       router.push('/probo?tab=controls-library');
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -187,10 +188,10 @@ export default function ComplianceDashboard() {
       <div className="mb-8">
         <ComplianceRingChart 
           onFrameworkClick={(framework) => {
-            // console.log('Framework clicked:', framework);
+            // console.log('Framework clicked:', framework)
             // Navigate to appropriate Probo tab based on framework
             if (framework.name.toLowerCase().includes('soc')) {
-              router.push('/probo?tab=soc2-assessment');
+              router.push('/probo?tab=soc2-assessment')
             } else {
               router.push('/probo?tab=controls-library');
             }

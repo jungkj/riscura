@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisyCalendar } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -32,7 +33,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   UserCheck,
   TrendingUp,
   TrendingDown,
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 interface VendorInfo {
@@ -99,11 +100,11 @@ export function VendorAssessmentDashboard() {
         setAssessments(data);
       }
     } catch (error) {
-      // console.error('Failed to load assessments:', error);
+      // console.error('Failed to load assessments:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleAssessVendor = async () => {
     if (!vendorUrl.trim()) return;
@@ -126,28 +127,28 @@ export function VendorAssessmentDashboard() {
         setActiveTab('results');
         await loadAssessments(); // Refresh the list
       } else {
-        // console.error('Assessment failed');
+        // console.error('Assessment failed')
       }
     } catch (error) {
-      // console.error('Assessment error:', error);
+      // console.error('Assessment error:', error)
     } finally {
       setIsAssessing(false);
     }
-  };
+  }
 
   const getRiskColor = (score: number) => {
     if (score <= 25) return 'text-green-600';
     if (score <= 50) return 'text-yellow-600';
     if (score <= 75) return 'text-orange-600';
     return 'text-red-600';
-  };
+  }
 
   const getRiskBadgeColor = (score: number) => {
     if (score <= 25) return 'bg-green-100 text-green-700';
     if (score <= 50) return 'bg-yellow-100 text-yellow-700';
     if (score <= 75) return 'bg-orange-100 text-orange-700';
     return 'bg-red-100 text-red-700';
-  };
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -162,7 +163,7 @@ export function VendorAssessmentDashboard() {
       default:
         return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   const getComplianceStatusColor = (status: string) => {
     switch (status) {
@@ -177,7 +178,7 @@ export function VendorAssessmentDashboard() {
       default:
         return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   const riskCategories: RiskCategory[] = assessment
     ? [

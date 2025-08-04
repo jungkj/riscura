@@ -14,7 +14,7 @@ interface RouteParams {
 
 // GET /api/risks/[id] - Get single risk with full details
 export const GET = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
+  const authReq = req as AuthenticatedRequest
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -23,7 +23,7 @@ export const GET = withAPI(async (req: NextRequest) => {
 
   try {
     // Extract risk ID from URL pathname
-    const pathname = req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname
     const riskId = pathname.split('/').pop();
 
     if (!riskId) {
@@ -31,7 +31,7 @@ export const GET = withAPI(async (req: NextRequest) => {
     }
 
     // Validate UUID format
-    const uuidSchema = z.string().uuid();
+    const uuidSchema = z.string().uuid()
     const validatedId = uuidSchema.parse(riskId);
 
     const risk = await db.client.risk.findFirst({
@@ -149,10 +149,10 @@ export const GET = withAPI(async (req: NextRequest) => {
         },
         take: 10,
       }),
-    ]);
+    ])
 
     // Calculate additional metrics
-    const controlsCount = risk.controls.length;
+    const controlsCount = risk.controls.length
     const implementedControlsCount = risk.controls.filter(
       (c) => c.control.status === 'IMPLEMENTED' || c.control.status === 'OPERATIONAL'
     ).length;
@@ -169,7 +169,7 @@ export const GET = withAPI(async (req: NextRequest) => {
     // Calculate risk trend (simplified - would need historical data for accurate trend)
     const recentActivities = activities.filter(
       (a) => a.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
-    );
+    )
 
     // Map activity types to trend indicators
     const trendIndicators = {
@@ -186,7 +186,7 @@ export const GET = withAPI(async (req: NextRequest) => {
       DOWNLOADED: 0,
       EXPORTED: 0,
       IMPORTED: 1,
-    };
+    }
 
     const trendScore = recentActivities.reduce((score, activity) => {
       return score + (trendIndicators[activity.type as keyof typeof trendIndicators] || 0);
@@ -219,13 +219,13 @@ export const GET = withAPI(async (req: NextRequest) => {
         createdAt: activity.createdAt,
         metadata: activity.metadata,
       })),
-    };
+    }
 
     return createAPIResponse({
       data: enrichedRisk,
     });
   } catch (error) {
-    // console.error('Error fetching risk:', error);
+    // console.error('Error fetching risk:', error)
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk ID format', error.errors);
     }
@@ -235,7 +235,7 @@ export const GET = withAPI(async (req: NextRequest) => {
 
 // PUT /api/risks/[id] - Update risk
 export const PUT = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
+  const authReq = req as AuthenticatedRequest
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -244,7 +244,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
   try {
     // Extract risk ID from URL pathname
-    const pathname = req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname
     const riskId = pathname.split('/').pop();
 
     if (!riskId) {
@@ -252,7 +252,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
     }
 
     // Validate UUID format
-    const uuidSchema = z.string().uuid();
+    const uuidSchema = z.string().uuid()
     const validatedId = uuidSchema.parse(riskId);
 
     const body = await req.json();
@@ -264,7 +264,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
         id: validatedId,
         organizationId: user.organizationId,
       },
-    });
+    })
 
     if (!existingRisk) {
       throw createNotFoundError('Risk');
@@ -277,7 +277,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
           id: validatedData.owner,
           organizationId: user.organizationId,
         },
-      });
+      })
 
       if (!assignedUser) {
         throw new ValidationError('Invalid assigned user ID');
@@ -285,7 +285,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
     }
 
     // Calculate risk score if likelihood or impact changed
-    let riskScore = existingRisk.riskScore;
+    let riskScore = existingRisk.riskScore
     if (validatedData.likelihood !== undefined || validatedData.impact !== undefined) {
       const likelihood = validatedData.likelihood ?? existingRisk.likelihood;
       const impact = validatedData.impact ?? existingRisk.impact;
@@ -293,7 +293,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
     }
 
     // Determine risk level based on score
-    let riskLevel = existingRisk.riskLevel;
+    let riskLevel = existingRisk.riskLevel
     if (riskScore !== existingRisk.riskScore) {
       if (riskScore >= 20) riskLevel = 'CRITICAL';
       else if (riskScore >= 12) riskLevel = 'HIGH';
@@ -359,7 +359,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
           },
         },
       },
-    });
+    })
 
     // Log activity
     await db.client.activity.create({
@@ -378,14 +378,14 @@ export const PUT = withAPI(async (req: NextRequest) => {
           newRiskLevel: riskLevel,
         },
       },
-    });
+    })
 
     return createAPIResponse({
       data: updatedRisk,
       message: 'Risk updated successfully',
     });
   } catch (error) {
-    // console.error('Error updating risk:', error);
+    // console.error('Error updating risk:', error)
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk data', error.errors);
     }
@@ -395,7 +395,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
 // DELETE /api/risks/[id] - Delete risk
 export const DELETE = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest;
+  const authReq = req as AuthenticatedRequest
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -404,7 +404,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
 
   try {
     // Extract risk ID from URL pathname
-    const pathname = req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname
     const riskId = pathname.split('/').pop();
 
     if (!riskId) {
@@ -412,7 +412,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     }
 
     // Validate UUID format
-    const uuidSchema = z.string().uuid();
+    const uuidSchema = z.string().uuid()
     const validatedId = uuidSchema.parse(riskId);
 
     // Check if risk exists and user has access
@@ -426,7 +426,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
         evidence: true,
         tasks: true,
       },
-    });
+    })
 
     if (!existingRisk) {
       throw createNotFoundError('Risk');
@@ -436,7 +436,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     const canDelete =
       existingRisk.createdBy === user.id ||
       user.permissions.includes('risks:delete') ||
-      user.role === 'ADMIN';
+      user.role === 'ADMIN'
 
     if (!canDelete) {
       throw new ForbiddenError('Insufficient permissions to delete this risk');
@@ -447,12 +447,12 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       // Option 1: Prevent deletion if controls are linked
       throw new ValidationError(
         `Cannot delete risk with ${existingRisk.controls.length} linked control(s). Please remove control associations first.`
-      );
+      )
 
       // Option 2: Cascade delete (uncomment if preferred)
       // await db.client.controlRiskMapping.deleteMany({
       //   where: { riskId: validatedId },
-      // });
+      // })
     }
 
     // Delete related records first (if not using cascade delete in schema)
@@ -460,12 +460,12 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       db.client.comment.deleteMany({ where: { entityId: validatedId, entityType: 'RISK' } }),
       db.client.task.deleteMany({ where: { riskId: validatedId } }),
       db.client.activity.deleteMany({ where: { entityId: validatedId, entityType: 'RISK' } }),
-    ]);
+    ])
 
     // Delete the risk
     await db.client.risk.delete({
       where: { id: validatedId },
-    });
+    })
 
     // Log activity
     await db.client.activity.create({
@@ -484,14 +484,14 @@ export const DELETE = withAPI(async (req: NextRequest) => {
           evidenceCount: existingRisk.evidence?.length || 0,
         },
       },
-    });
+    })
 
     return createAPIResponse({
       data: { id: validatedId },
       message: 'Risk deleted successfully',
     });
   } catch (error) {
-    // console.error('Error deleting risk:', error);
+    // console.error('Error deleting risk:', error)
     if (error instanceof z.ZodError) {
       throw new ValidationError('Invalid risk ID format', error.errors);
     }

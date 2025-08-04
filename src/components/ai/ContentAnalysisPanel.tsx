@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { 
+import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-components';
   X, 
   Check,
   RotateCcw,
@@ -16,7 +17,7 @@ import { TextSelection } from '@/hooks/useTextSelection';
 import { AIAction } from './SelectableContent';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -32,7 +33,7 @@ export interface ContentAnalysisResult {
     confidence: number;
     alternatives?: string[];
     metadata?: Record<string, unknown>;
-  };
+  }
   timestamp: Date;
   status: 'pending' | 'completed' | 'error';
   feedback?: 'positive' | 'negative';
@@ -70,7 +71,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
 
   // Handle panel resizing
   const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const deltaX = position === 'right' ? -info.delta.x : info.delta.x;
+    const deltaX = position === 'right' ? -info.delta.x : info.delta.x
     const newWidth = Math.max(300, Math.min(800, panelWidth + deltaX));
     setPanelWidth(newWidth);
     setIsDragging(false);
@@ -79,7 +80,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
   // Copy content to clipboard
   const copyToClipboard = useCallback(async (_content: string) => {
     try {
-      await navigator.clipboard.writeText(content);
+      await navigator.clipboard.writeText(content)
       toast({
         title: "Copied to clipboard",
         description: "Content has been copied to your clipboard.",
@@ -105,7 +106,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
         timestamp: result.timestamp,
         feedback: result.feedback,
       })),
-    };
+    }
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -126,12 +127,12 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isOpen) return;
+      if (!isOpen) return
 
       if (event.key === 'Escape') {
         onClose();
       }
-    };
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -145,7 +146,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
         case 'pending': return 'text-yellow-600';
         default: return 'text-muted-foreground';
       }
-    };
+    }
 
     const getActionLabel = (_action: AIAction) => {
       const labels = {
@@ -157,9 +158,9 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
         'find-related': 'Related Content',
         'analyze-risk': 'Risk Analysis',
         'suggest-controls': 'Control Suggestions',
-      };
+      }
       return labels[action] || action;
-    };
+    }
 
     return (
       <DaisyCard className="mb-4 transition-all duration-200" >
@@ -292,7 +293,7 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <AnimatePresence>
@@ -416,4 +417,4 @@ export const ContentAnalysisPanel: React.FC<ContentAnalysisPanelProps> = ({
       )}
     </AnimatePresence>
   );
-}; 
+} 

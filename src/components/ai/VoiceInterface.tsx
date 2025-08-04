@@ -2,15 +2,16 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { CommunicationIcons, StatusIcons, ActionIcons, NavigationIcons } from '@/components/icons/IconLibrary';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Voice interface configuration
 interface VoiceSettings {
-  language: string;
+  language: string
   continuous: boolean;
   interimResults: boolean;
   maxAlternatives: number;
@@ -41,7 +42,7 @@ const SUPPORTED_LANGUAGES = [
   { code: 'zh-CN', name: 'Chinese (Simplified)', flag: '🇨🇳' },
   { code: 'ja-JP', name: 'Japanese', flag: '🇯🇵' },
   { code: 'ko-KR', name: 'Korean', flag: '🇰🇷' }
-];
+]
 
 export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   onTranscript,
@@ -50,7 +51,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   className = ''
 }) => {
   // State management
-  const [isListening, setIsListening] = useState(false);
+  const [isListening, setIsListening] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState('');
@@ -71,15 +72,15 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Refs
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<any>(null)
   const synthesisRef = useRef<SpeechSynthesis | null>(null);
 
   // Initialize speech recognition and synthesis
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return
 
     // Check for speech recognition support
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     if (SpeechRecognition) {
       setIsSupported(true);
       recognitionRef.current = new SpeechRecognition();
@@ -88,14 +89,14 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     // Check for speech synthesis support
     if ('speechSynthesis' in window) {
-      synthesisRef.current = window.speechSynthesis;
+      synthesisRef.current = window.speechSynthesis
       loadVoices();
       
       // Load voices when they become available
       if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoices;
+        speechSynthesis.onvoiceschanged = loadVoices
       }
-    };
+    }
 
   return () => {
       if (recognitionRef.current) {
@@ -104,12 +105,12 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       if (synthesisRef.current) {
         synthesisRef.current.cancel();
       }
-    };
+    }
   }, []);
 
   // Setup speech recognition configuration
   const setupSpeechRecognition = useCallback(() => {
-    if (!recognitionRef.current) return;
+    if (!recognitionRef.current) return
 
     const recognition = recognitionRef.current;
     
@@ -122,7 +123,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       setIsListening(true);
       setCurrentTranscript('');
       setConfidence(0);
-    };
+    }
 
     recognition.onresult = (event: any) => {
       let finalTranscript = '';
@@ -148,26 +149,26 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
       // Send transcript to parent component
       if (finalTranscript) {
-        onTranscript(finalTranscript, true);
+        onTranscript(finalTranscript, true)
         if (settings.autoSend && maxConfidence >= settings.threshold) {
           // Auto-send if confidence threshold is met
           setTimeout(() => {
-            setCurrentTranscript('');
+            setCurrentTranscript('')
           }, 1000);
         }
       } else if (interimTranscript) {
         onTranscript(interimTranscript, false);
       }
-    };
+    }
 
     recognition.onerror = (event: any) => {
-      // console.error('Speech recognition error:', event.error);
+      // console.error('Speech recognition error:', event.error)
       setIsListening(false);
       
       // Handle specific errors
       switch (event.error) {
         case 'no-speech':
-          setCurrentTranscript('No speech detected. Please try again.');
+          setCurrentTranscript('No speech detected. Please try again.')
           break;
         case 'audio-capture':
           setCurrentTranscript('Microphone access denied or not available.');
@@ -178,31 +179,31 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         default:
           setCurrentTranscript(`Speech recognition error: ${event.error}`);
       }
-    };
+    }
 
     recognition.onend = () => {
       setIsListening(false);
       if (settings.continuous && isListening) {
         // Restart if continuous mode is enabled
-        setTimeout(() => startListening(), 100);
+        setTimeout(() => startListening(), 100)
       }
-    };
+    }
   }, [settings, isListening, onTranscript]);
 
   // Update recognition settings when they change
   useEffect(() => {
-    setupSpeechRecognition();
+    setupSpeechRecognition()
   }, [setupSpeechRecognition]);
 
   // Load available voices
   const loadVoices = useCallback(() => {
     if (synthesisRef.current) {
-      const voices = synthesisRef.current.getVoices();
+      const voices = synthesisRef.current.getVoices()
       setAvailableVoices(voices);
       
       // Set default voice if not already set
       if (!settings.voiceId && voices.length > 0) {
-        const defaultVoice = voices.find(voice => voice.default) || voices[0];
+        const defaultVoice = voices.find(voice => voice.default) || voices[0]
         setSettings(prev => ({ ...prev, voiceId: defaultVoice.name }));
       }
     }
@@ -210,19 +211,19 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
   // Start listening
   const startListening = useCallback(() => {
-    if (!recognitionRef.current || !isSupported || !isEnabled) return;
+    if (!recognitionRef.current || !isSupported || !isEnabled) return
     
     try {
       recognitionRef.current.start();
     } catch (error) {
-      // console.error('Failed to start speech recognition:', error);
+      // console.error('Failed to start speech recognition:', error)
     }
   }, [isSupported, isEnabled]);
 
   // Stop listening
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      recognitionRef.current.stop()
     }
     setIsListening(false);
   }, []);
@@ -230,7 +231,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   // Toggle listening
   const toggleListening = useCallback(() => {
     if (isListening) {
-      stopListening();
+      stopListening()
     } else {
       startListening();
     }
@@ -238,31 +239,31 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
   // Speak text using text-to-speech
   const speakText = useCallback((text: string) => {
-    if (!synthesisRef.current || !text.trim()) return;
+    if (!synthesisRef.current || !text.trim()) return
 
     // Cancel any ongoing speech
-    synthesisRef.current.cancel();
+    synthesisRef.current.cancel()
 
     const utterance = new SpeechSynthesisUtterance(text);
     
     // Find and set the selected voice
-    const selectedVoice = availableVoices.find(voice => voice.name === settings.voiceId);
+    const selectedVoice = availableVoices.find(voice => voice.name === settings.voiceId)
     if (selectedVoice) {
       utterance.voice = selectedVoice;
     }
 
     // Configure speech parameters
-    utterance.rate = settings.speechRate;
+    utterance.rate = settings.speechRate
     utterance.pitch = settings.speechPitch;
     utterance.volume = settings.speechVolume;
 
     // Event handlers
-    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onstart = () => setIsSpeaking(true)
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = (event) => {
-      // console.error('Speech synthesis error:', event.error);
+      // console.error('Speech synthesis error:', event.error)
       setIsSpeaking(false);
-    };
+    }
 
     synthesisRef.current.speak(utterance);
     onSpeech(text);
@@ -271,14 +272,14 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   // Stop speaking
   const stopSpeaking = useCallback(() => {
     if (synthesisRef.current) {
-      synthesisRef.current.cancel();
+      synthesisRef.current.cancel()
       setIsSpeaking(false);
     }
   }, []);
 
   // Update settings
   const updateSetting = useCallback((key: keyof VoiceSettings, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings(prev => ({ ...prev, [key]: value }))
   }, []);
 
   if (!isSupported) {
@@ -294,7 +295,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <DaisyCard className={className} >
@@ -529,4 +530,4 @@ updateSetting('autoSend', checked)} />
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}

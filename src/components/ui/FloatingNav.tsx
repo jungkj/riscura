@@ -32,7 +32,7 @@ export const FloatingNav = ({
 
       // Transform to floating navbar after scrolling 100px
       if (currentScrollY > 100) {
-        setIsFloating(true);
+        setIsFloating(true)
 
         // Hide/show based on scroll direction when floating
         if (currentScrollY > previousScrollY) {
@@ -44,7 +44,7 @@ export const FloatingNav = ({
         setIsFloating(false);
         setHidden(false);
       }
-    };
+    }
 
     const unsubscribe = scrollY.on('change', updateNavbar);
     return () => unsubscribe();
@@ -186,4 +186,4 @@ export const FloatingNav = ({
       </AnimatePresence>
     </>
   );
-};
+}

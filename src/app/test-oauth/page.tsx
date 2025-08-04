@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 const OAuthTestContent = () {
   const router = useRouter();
@@ -16,15 +17,15 @@ const OAuthTestContent = () {
     // Check if Google OAuth is configured
     const checkConfig = async () => {
       try {
-        const response = await fetch('/api/google-oauth/config');
+        const response = await fetch('/api/google-oauth/config')
         if (response.ok) {
           const data = await response.json();
           setGoogleConfig({ configured: data.configured });
         }
       } catch (error) {
-        // console.error('Failed to check OAuth config:', error);
+        // console.error('Failed to check OAuth config:', error)
       }
-    };
+    }
     checkConfig();
   }, []);
 
@@ -40,12 +41,12 @@ const OAuthTestContent = () {
 
   const handleGoogleLogin = () => {
     window.location.href = '/api/google-oauth/login';
-  };
+  }
 
   const handleLogout = async () => {
     await logout();
     router.push('/auth/login');
-  };
+  }
 
   return (
     <DaisyCard className="max-w-2xl mx-auto">

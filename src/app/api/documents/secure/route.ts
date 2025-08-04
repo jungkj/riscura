@@ -19,22 +19,22 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       rateLimit: RATE_LIMITS.UPLOAD,
       allowCors: true,
       corsOrigins: CORS_CONFIGS.DEVELOPMENT,
-    });
+    })
 
     if (securityResult) {
       return securityResult; // Security check failed
     }
 
     // Get authenticated user from middleware (this would be set by middleware in production)
-    const userId = 'demo-user-id';
+    const userId = 'demo-user-id'
     const userRole = 'ADMIN';
     const userPermissions: Permission[] = ['*'];
 
     // Parse multipart form data
-    const formData = await request.formData();
+    const formData = await request.formData()
 
     // Extract document metadata
-    const title = formData.get('title') as string;
+    const title = formData.get('title') as string
     const description = formData.get('description') as string;
     const category = formData.get('category') as string;
     const sensitivity = (formData.get('sensitivity') as string) || 'internal';
@@ -42,17 +42,17 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 
     // Validate required fields
     if (!title || !category) {
-      return NextResponse.json({ error: 'Title and category are required' }, { status: 400 });
+      return NextResponse.json({ error: 'Title and category are required' }, { status: 400 })
     }
 
     // Process files with security scanning
-    const files = formData.getAll('files') as File[];
+    const files = formData.getAll('files') as File[]
     const processedFiles: any[] = [];
 
     for (const file of files) {
       if (file && file.size > 0) {
         // Security validations
-        const fileValidation = await validateFileUpload(file);
+        const fileValidation = await validateFileUpload(file)
         if (!fileValidation.valid) {
           return NextResponse.json(
             { error: `File ${file.name}: ${fileValidation.reason}` },
@@ -61,10 +61,10 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         }
 
         // Read file content
-        const fileBuffer = Buffer.from(await file.arrayBuffer());
+        const fileBuffer = Buffer.from(await file.arrayBuffer())
 
         // Scan for malicious content
-        const scanResult = await scanFileContent(fileBuffer, file.type);
+        const scanResult = await scanFileContent(fileBuffer, file.type)
         if (!scanResult.safe) {
           return NextResponse.json(
             { error: `File ${file.name} failed security scan: ${scanResult.reason}` },
@@ -73,7 +73,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         }
 
         // Encrypt file content
-        const encryptedFile = documentEncryption.encryptFile(fileBuffer, file.name, userId);
+        const encryptedFile = documentEncryption.encryptFile(fileBuffer, file.name, userId)
 
         processedFiles.push({
           id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -99,7 +99,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Create secure document record
-    const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     const watermark = documentEncryption.createWatermark(documentId, userId, 'user@example.com');
 
     const newDocument = {
@@ -137,7 +137,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       _count: {
         versions: 1,
       },
-    };
+    }
 
     // Log the upload for audit trail
     await logSecurityEvent({
@@ -153,7 +153,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         encrypted: true,
       },
       request,
-    });
+    })
 
     return NextResponse.json(
       {
@@ -169,7 +169,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     );
   } catch (error) {
-    // console.error('Secure document upload error:', error);
+    // console.error('Secure document upload error:', error)
 
     // Log security error
     await logSecurityEvent({
@@ -180,7 +180,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       result: 'error',
       metadata: { error: error instanceof Error ? error.message : 'Unknown error' },
       request,
-    });
+    })
 
     return NextResponse.json({ error: 'Failed to upload document securely' }, { status: 500 });
   }
@@ -196,23 +196,23 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       rateLimit: RATE_LIMITS.DOCUMENT,
       allowCors: true,
       corsOrigins: CORS_CONFIGS.DEVELOPMENT,
-    });
+    })
 
     if (securityResult) {
       return securityResult;
     }
 
     // Get authenticated user
-    const userId = 'demo-user-id';
+    const userId = 'demo-user-id'
     const userRole = 'ADMIN';
     const userPermissions: Permission[] = ['*'];
 
     // Parse query parameters
-    const url = new URL(request.url);
+    const url = new URL(request.url)
     const searchParams = url.searchParams;
 
     // Security-aware pagination
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
     const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '10'))); // Max 50 items
     const skip = (page - 1) * limit;
 
@@ -223,7 +223,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       category: searchParams.get('category'),
       sensitivity: searchParams.get('sensitivity'),
       search: searchParams.get('search'),
-    });
+    })
 
     // Log access for audit trail
     await logSecurityEvent({
@@ -241,7 +241,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         },
       },
       request,
-    });
+    })
 
     return NextResponse.json({
       success: true,
@@ -259,7 +259,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    // console.error('Secure document retrieval error:', error);
+    // console.error('Secure document retrieval error:', error)
     return NextResponse.json({ error: 'Failed to retrieve documents securely' }, { status: 500 });
   }
 }
@@ -269,7 +269,7 @@ async function validateFileUpload(_file: File): Promise<{ valid: boolean; reason
   // File size validation (10MB limit)
   const maxSize = 10 * 1024 * 1024; // 10MB
   if (file.size > maxSize) {
-    return { valid: false, reason: `File size exceeds ${maxSize / 1024 / 1024}MB limit` };
+    return { valid: false, reason: `File size exceeds ${maxSize / 1024 / 1024}MB limit` }
   }
 
   // File type validation - strict allowlist
@@ -284,10 +284,10 @@ async function validateFileUpload(_file: File): Promise<{ valid: boolean; reason
     'image/png',
     'image/jpeg',
     'image/gif',
-  ];
+  ]
 
   if (!allowedTypes.includes(file.type)) {
-    return { valid: false, reason: `File type ${file.type} not allowed` };
+    return { valid: false, reason: `File type ${file.type} not allowed` }
   }
 
   // Filename validation
@@ -305,15 +305,15 @@ async function validateFileUpload(_file: File): Promise<{ valid: boolean; reason
     /\.sys$/i,
     /\.\./, // Directory traversal
     /[<>:"|?*]/, // Invalid filename characters
-  ];
+  ]
 
   for (const pattern of dangerousPatterns) {
     if (pattern.test(file.name)) {
-      return { valid: false, reason: 'Filename contains dangerous patterns' };
+      return { valid: false, reason: 'Filename contains dangerous patterns' }
     }
   }
 
-  return { valid: true };
+  return { valid: true }
 }
 
 // Content scanning for malicious content
@@ -325,7 +325,7 @@ async function scanFileContent(
 
   // Check for embedded scripts in PDFs
   if (mimeType === 'application/pdf') {
-    const content = buffer.toString('latin1');
+    const content = buffer.toString('latin1')
     if (content.includes('/JavaScript') || content.includes('/JS')) {
       threats.push('JavaScript detected in PDF');
     }
@@ -340,7 +340,7 @@ async function scanFileContent(
     mimeType.includes('ms-excel') ||
     mimeType.includes('msword')
   ) {
-    const content = buffer.toString('latin1');
+    const content = buffer.toString('latin1')
     if (content.includes('xl/vbaProject.bin') || content.includes('word/vbaProject.bin')) {
       threats.push('VBA macros detected');
     }
@@ -356,7 +356,7 @@ async function scanFileContent(
     'document.write',
     'innerHTML',
     'fromCharCode',
-  ];
+  ]
 
   const content = buffer.toString('utf8').toLowerCase();
   for (const signature of malwareSignatures) {
@@ -366,13 +366,13 @@ async function scanFileContent(
   }
 
   // Check file header/magic numbers
-  const header = buffer.subarray(0, 8).toString('hex');
+  const header = buffer.subarray(0, 8).toString('hex')
   const validHeaders: Record<string, string[]> = {
     'application/pdf': ['25504446'], // %PDF
     'image/jpeg': ['ffd8ff'],
     'image/png': ['89504e47'],
     'application/zip': ['504b0304'], // ZIP-based Office docs
-  };
+  }
 
   if (mimeType in validHeaders) {
     const isValidHeader = validHeaders[mimeType].some((validHeader) =>
@@ -387,7 +387,7 @@ async function scanFileContent(
     safe: threats.length === 0,
     reason: threats.length > 0 ? threats[0] : undefined,
     threats,
-  };
+  }
 }
 
 // Get documents with security filtering
@@ -395,7 +395,7 @@ async function getSecureDocuments(_userId: string,
   userRole: string,
   userPermissions: Permission[],
   filters: {
-    page: number;
+    page: number
     limit: number;
     category?: string | null;
     sensitivity?: string | null;
@@ -488,7 +488,7 @@ async function getSecureDocuments(_userId: string,
         },
       ],
     },
-  ];
+  ]
 
   // Apply security filtering based on user role and permissions
   let filteredDocuments = mockDocuments.filter((doc) => {
@@ -499,30 +499,30 @@ async function getSecureDocuments(_userId: string,
       confidential: 3,
       restricted: 4,
       top_secret: 5,
-    };
+    }
 
     const userAccessLevel = userRole === 'ADMIN' ? 5 : userRole === 'MANAGER' ? 3 : 2;
     const docSensitivityLevel = sensitivityLevels[doc.sensitivity] || 1;
 
     // Super admin can see everything
     if (userPermissions.includes('*')) {
-      return true;
+      return true
     }
 
     // Check access level
     if (docSensitivityLevel > userAccessLevel) {
-      return false;
+      return false
     }
 
     // Check if user owns the document or has admin permissions
-    return doc.ownerId === userId || accessControl.hasPermission(userPermissions, 'document:admin');
+    return doc.ownerId === userId || accessControl.hasPermission(userPermissions, 'document:admin')
   });
 
   // Apply additional filters
   if (filters.category) {
     filteredDocuments = filteredDocuments.filter((doc) =>
       doc.category.toLowerCase().includes(filters.category!.toLowerCase())
-    );
+    )
   }
 
   if (filters.sensitivity) {
@@ -540,7 +540,7 @@ async function getSecureDocuments(_userId: string,
   }
 
   // Apply pagination
-  const total = filteredDocuments.length;
+  const total = filteredDocuments.length
   const paginatedDocuments = filteredDocuments.slice(
     (filters.page - 1) * filters.limit,
     filters.page * filters.limit
@@ -578,18 +578,18 @@ async function getSecureDocuments(_userId: string,
     _count: {
       versions: 1,
     },
-  }));
+  }))
 
   return {
     documents: transformedDocuments,
     totalCount: total,
     hasNextPage: filters.page * filters.limit < total,
-  };
+  }
 }
 
 // Security event logging
 async function logSecurityEvent(event: {
-  userId: string;
+  userId: string
   action: string;
   resource: string;
   resourceId: string;
@@ -611,13 +611,13 @@ async function logSecurityEvent(event: {
       'unknown',
     userAgent: event.request.headers.get('user-agent') || 'unknown',
     metadata: event.metadata || {},
-  };
+  }
 
   // In production, this would be sent to a security logging service
-  // console.log('SECURITY EVENT:', logEntry);
+  // console.log('SECURITY EVENT:', logEntry)
 
   // For critical events, could trigger alerts
   if (event.result === 'denied' || event.result === 'error') {
-    // console.warn('SECURITY ALERT:', logEntry);
+    // console.warn('SECURITY ALERT:', logEntry)
   }
 }

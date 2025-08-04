@@ -31,7 +31,7 @@ export interface InteractionAnimation {
 
 export interface GestureConfig {
   drag?: boolean | 'x' | 'y';
-  dragConstraints?: { top?: number; right?: number; bottom?: number; left?: number };
+  dragConstraints?: { top?: number; right?: number; bottom?: number; left?: number }
   dragElastic?: number;
   dragMomentum?: boolean;
   whileHover?: any;
@@ -83,7 +83,7 @@ export const PHYSICS_PRESETS: Record<string, PhysicsPreset> = {
     description: 'Elastic stretch effect for dynamic interactions',
     spring: { tension: 150, friction: 8, mass: 1 },
   },
-};
+}
 
 // Animation variants for common UI patterns
 export const ANIMATION_VARIANTS: Record<string, Variants> = {
@@ -205,7 +205,7 @@ export const ANIMATION_VARIANTS: Record<string, Variants> = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   },
-};
+}
 
 // Interactive animation variants
 export const INTERACTION_VARIANTS: Record<string, InteractionAnimation> = {
@@ -284,7 +284,7 @@ export const INTERACTION_VARIANTS: Record<string, InteractionAnimation> = {
       transition: { type: 'spring', ...PHYSICS_PRESETS.gentle.spring },
     },
   },
-};
+}
 
 // Page transition variants
 export const PAGE_TRANSITIONS: Record<string, Variants> = {
@@ -329,7 +329,7 @@ export const PAGE_TRANSITIONS: Record<string, Variants> = {
     animate: { rotate: 0, opacity: 1 },
     exit: { rotate: 90, opacity: 0 },
   },
-};
+}
 
 // Gesture configurations
 export const GESTURE_CONFIGS: Record<string, GestureConfig> = {
@@ -367,11 +367,11 @@ export const GESTURE_CONFIGS: Record<string, GestureConfig> = {
     dragElastic: 0.2,
     whileDrag: { scale: 0.95 },
   },
-};
+}
 
 // Animation utility class
 export class AnimationManager {
-  private reducedMotion: boolean = false;
+  private reducedMotion: boolean = false
 
   constructor() {
     this.detectReducedMotion();
@@ -402,14 +402,14 @@ export class AnimationManager {
         duration: 0.1,
         ease: 'linear',
         ...override,
-      };
+      }
     }
 
     return {
       type: 'spring',
       ...config.spring,
       ...override,
-    };
+    }
   }
 
   /**
@@ -423,7 +423,7 @@ export class AnimationManager {
       return {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.1 } },
-      };
+      }
     }
 
     return variants;
@@ -440,7 +440,7 @@ export class AnimationManager {
       return {
         hover: { opacity: 0.8, transition: { duration: 0.1 } },
         tap: { opacity: 0.6, transition: { duration: 0.1 } },
-      };
+      }
     }
 
     return variants;
@@ -454,7 +454,7 @@ export class AnimationManager {
       return {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.1 } },
-      };
+      }
     }
 
     return {
@@ -466,7 +466,7 @@ export class AnimationManager {
           delayChildren: 0.1,
         },
       },
-    };
+    }
   }
 
   /**
@@ -477,7 +477,7 @@ export class AnimationManager {
       return {
         offscreen: { opacity: 0 },
         onscreen: { opacity: 1, transition: { duration: 0.1 } },
-      };
+      }
     }
 
     return {
@@ -494,7 +494,7 @@ export class AnimationManager {
           delay: 0.1,
         },
       },
-    };
+    }
   }
 
   /**
@@ -505,7 +505,7 @@ export class AnimationManager {
       return {
         from: { d: fromPath },
         to: { d: toPath, transition: { duration: 0.1 } },
-      };
+      }
     }
 
     return {
@@ -517,7 +517,7 @@ export class AnimationManager {
           ...PHYSICS_PRESETS.smooth.spring,
         },
       },
-    };
+    }
   }
 
   /**
@@ -536,7 +536,7 @@ export class AnimationManager {
         y: [0],
         opacity: [1],
         scale: [1],
-      }));
+      }))
     }
 
     return Array.from({ length: particleCount }, (_, i) => {
@@ -548,7 +548,7 @@ export class AnimationManager {
         y: [0, Math.sin(angle) * distance, Math.sin(angle) * distance * 1.5],
         opacity: [1, 0.8, 0],
         scale: [0.5, 1, 0.5],
-      };
+      }
     });
   }
 
@@ -559,7 +559,7 @@ export class AnimationManager {
     if (this.reducedMotion) {
       return {
         loading: { opacity: [1, 0.5, 1], transition: { duration: 1, repeat: Infinity } },
-      };
+      }
     }
 
     return {
@@ -588,7 +588,7 @@ export class AnimationManager {
           ease: 'easeInOut',
         },
       },
-    };
+    }
   }
 
   /**
@@ -629,7 +629,7 @@ export const ANIMATION_SEQUENCES: Record<string, AnimationSequence> = {
       { selector: '.step-3', animation: ANIMATION_VARIANTS.slideInRight, delay: 7 },
     ],
   },
-};
+}
 
 // Motion configuration presets
 export const MOTION_PRESETS: Record<string, MotionProps> = {
@@ -665,10 +665,10 @@ export const MOTION_PRESETS: Record<string, MotionProps> = {
     variants: PAGE_TRANSITIONS.fade,
     transition: { type: 'spring', ...PHYSICS_PRESETS.smooth.spring },
   },
-};
+}
 
 // Create global animation manager instance
-export const animationManager = new AnimationManager();
+export const animationManager = new AnimationManager()
 
 // Export default presets
 export default {
@@ -681,4 +681,4 @@ export default {
   MOTION_PRESETS,
   AnimationManager,
   animationManager,
-};
+}

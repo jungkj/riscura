@@ -2,9 +2,9 @@
 
 import React from 'react';
 import MainContentArea from '@/components/layout/MainContentArea';
-// import { ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentSection, ContentCard } from '@/components/layout/MainContentArea'
 import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
-// import { RiskRegisterTable } from '@/components/risk-register-table';
+// import { RiskRegisterTable } from '@/components/risk-register-table'
 // import {
   Shield,
   AlertTriangle,
@@ -19,7 +19,7 @@ import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
   Plus,
   Share,
   BookmarkPlus,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== SAMPLE DATA ==========
 const executiveKPIs = [
@@ -71,7 +71,7 @@ const executiveKPIs = [
     icon: Clock,
     color: 'warning' as const,
   },
-];
+]
 
 const riskTrendsData = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -91,7 +91,7 @@ const riskTrendsData = {
       trend: 'down' as const,
     },
   ],
-};
+}
 
 const complianceData = {
   labels: ['SOC 2', 'ISO 27001', 'GDPR', 'HIPAA', 'PCI DSS'],
@@ -104,7 +104,7 @@ const complianceData = {
       trend: 'up' as const,
     },
   ],
-};
+}
 
 const riskCategoryData = {
   labels: ['Cybersecurity', 'Operational', 'Financial', 'Regulatory', 'Strategic'],
@@ -117,7 +117,7 @@ const riskCategoryData = {
       trend: 'neutral' as const,
     },
   ],
-};
+}
 
 const dashboardWidgets = [
   {
@@ -192,36 +192,36 @@ const dashboardWidgets = [
 // ========== MAIN COMPONENT ==========
 export const ExecutiveDashboard: React.FC = () => {
   const handleWidgetClick = (widget: any) => {
-    // console.log('Widget clicked:', widget.id);
+    // console.log('Widget clicked:', widget.id)
     if (widget.drillDown) {
       window.location.href = widget.drillDown;
     }
-  };
+  }
 
   const handleExport = (widget: any, format: string) => {
-    // console.log('Exporting widget:', widget.id, 'as', format);
+    // console.log('Exporting widget:', widget.id, 'as', format)
     // Implement export logic
-  };
+  }
 
   const handleCreateRisk = () => {
-    // console.log('Creating new risk...');
+    // console.log('Creating new risk...')
     // Navigate to risk creation form
-  };
+  }
 
   const handleExportDashboard = () => {
-    // console.log('Exporting dashboard...');
+    // console.log('Exporting dashboard...')
     // Implement dashboard export
-  };
+  }
 
   const handleShareDashboard = () => {
-    // console.log('Sharing dashboard...');
+    // console.log('Sharing dashboard...')
     // Implement dashboard sharing
-  };
+  }
 
   const handleBookmarkDashboard = () => {
-    // console.log('Bookmarking dashboard...');
+    // console.log('Bookmarking dashboard...')
     // Implement bookmarking
-  };
+  }
 
   return (
     <MainContentArea
@@ -500,6 +500,6 @@ export const ExecutiveDashboard: React.FC = () => {
       </ContentSection>
     </MainContentArea>
   );
-};
+}
 
 export default ExecutiveDashboard;

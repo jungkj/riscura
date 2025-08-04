@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
+import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   TrendingUp, 
   TrendingDown,
   Brain, 
@@ -44,7 +45,7 @@ interface PredictiveAnalyticsChartProps {
   metric: string;
   title: string;
   data?: number[];
-  timeRange?: { start: Date; end: Date };
+  timeRange?: { start: Date; end: Date }
   className?: string;
   showConfidenceInterval?: boolean;
   showFactors?: boolean;
@@ -93,7 +94,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       if (data.length < 10) {
         // Generate mock data if insufficient real data
         const mockData = Array.from({ length: 30 }, (_, i) => {
-          const base = metric.includes('compliance') ? 85 : 10;
+          const base = metric.includes('compliance') ? 85 : 10
           const variance = base * 0.1;
           const trend = Math.sin(i / 7) * 2;
           return base + trend + (Math.random() - 0.5) * variance;
@@ -122,9 +123,9 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
             },
             selectedEntities: []
           }
-        };
+        }
 
-        const metrics = { [metric]: data };
+        const metrics = { [metric]: data }
         const predictions = await dashboardIntelligenceService.generatePredictiveAnalytics(
           metrics,
           config
@@ -135,15 +136,15 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
           prepareChartData(predictions[0]);
         } else {
           // Fallback to generated prediction
-          generateFallbackPrediction();
+          generateFallbackPrediction()
         }
       } catch (error) {
-        // console.error('Error generating prediction:', error);
+        // console.error('Error generating prediction:', error)
         generateFallbackPrediction();
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     generatePrediction();
   }, [metric, data, timeRange]);
@@ -185,11 +186,11 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
         'Review historical patterns for insights'
       ],
       chartData: []
-    };
+    }
 
     setPrediction(mockPrediction);
     prepareChartDataFromMock(mockPrediction);
-  };
+  }
 
   const prepareChartData = (_prediction: PredictiveAnalytics) => {
     const chartPoints: ChartDataPoint[] = prediction.chartData.map(point => ({
@@ -204,7 +205,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     }));
 
     setChartData(chartPoints);
-  };
+  }
 
   const prepareChartDataFromMock = (_prediction: PredictiveAnalytics) => {
     const chartPoints: ChartDataPoint[] = [];
@@ -247,7 +248,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     }
     
     setChartData(chartPoints);
-  };
+  }
 
   const getHorizonFromTimeframe = (timeframe: string): string => {
     switch (timeframe) {
@@ -256,7 +257,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       case '30d': return '30 days';
       default: return '7 days';
     }
-  };
+  }
 
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
@@ -265,7 +266,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       case 'volatile': return <Activity className="h-4 w-4 text-yellow-500" />;
       default: return <Activity className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   const getRiskLevelColor = (riskLevel?: string) => {
     switch (riskLevel) {
@@ -274,7 +275,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }
 
   const CustomTooltip = ({ active, payload, label }: { 
     active?: boolean; 
@@ -295,7 +296,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       );
     }
     return null;
-  };
+  }
 
   const handleExport = () => {
     const dataToExport = {
@@ -303,7 +304,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       prediction,
       chartData,
       exportedAt: new Date().toISOString()
-    };
+    }
     
     const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
       type: 'application/json'
@@ -317,7 +318,7 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
+  }
 
   if (loading) {
     return (
@@ -615,4 +616,4 @@ export const PredictiveAnalyticsChart: React.FC<PredictiveAnalyticsChartProps> =
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

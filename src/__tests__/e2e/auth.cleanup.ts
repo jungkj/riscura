@@ -9,20 +9,20 @@ import path from 'path';
  */
 
 cleanup('cleanup auth files', async () => {
-  // console.log('Cleaning up authentication files...');
+  // console.log('Cleaning up authentication files...')
 
   const authFiles = ['src/__tests__/e2e/.auth/user.json', 'src/__tests__/e2e/.auth/admin.json'];
 
   authFiles.forEach((file) => {
     if (fs.existsSync(file)) {
       fs.unlinkSync(file);
-      // console.log(`Removed auth file: ${file}`);
+      // console.log(`Removed auth file: ${file}`)
     }
   });
 });
 
 cleanup('cleanup test data', async ({ request }) => {
-  // console.log('Cleaning up test data...');
+  // console.log('Cleaning up test data...')
 
   try {
     const response = await request.post('/api/test/cleanup-data', {
@@ -34,11 +34,11 @@ cleanup('cleanup test data', async ({ request }) => {
     });
 
     if (response.status() === 200) {
-      // console.log('Test data cleanup successful');
+      // console.log('Test data cleanup successful')
     } else {
-      // console.log('Test data cleanup API not available - manual cleanup may be needed');
+      // console.log('Test data cleanup API not available - manual cleanup may be needed')
     }
   } catch (error) {
-    // console.log('Test data cleanup API not available - continuing');
+    // console.log('Test data cleanup API not available - continuing')
   }
 });

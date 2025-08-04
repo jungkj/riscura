@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { 
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialogTitle } from '@/components/ui/daisy-components';
   MoreHorizontal, 
   Plus, 
   Sparkles, 
@@ -118,7 +119,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
   const [gridDimensions, setGridDimensions] = useState({ width: 0, height: 0 });
   const [data, setData] = useState(rows.map(row => row.cells.map(cell => ({ ...cell, id: `${row.id}-${cell.columnId}` }))));
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
-    const initialWidths: Record<string, number> = {};
+    const initialWidths: Record<string, number> = {}
     columns.forEach(col => {
       initialWidths[col.id] = col.width;
     });
@@ -136,7 +137,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
 
   // Calculate optimal column widths based on content
   const calculateOptimalColumnWidth = useCallback((column: Column, rows: Row[]) => {
-    const minWidth = column.minWidth || 80;
+    const minWidth = column.minWidth || 80
     const maxWidth = column.maxWidth || 400;
     
     // Calculate content width for header
@@ -144,7 +145,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
     
     // Calculate content width for cells
     const cellWidths = rows.map(row => {
-      const cell = row.cells.find(c => c.columnId === column.id);
+      const cell = row.cells.find(c => c.columnId === column.id)
       if (!cell) return minWidth;
       
       const contentLength = String(cell.displayValue || '').length * 7 + 40; // Character width + padding
@@ -157,7 +158,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
 
   // Auto-resize columns based on content
   const autoResizeColumns = useCallback(() => {
-    if (!autoResize) return;
+    if (!autoResize) return
     
     columns.forEach(column => {
       if (column.autoResize !== false) {
@@ -172,7 +173,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
   // Calculate dynamic row height based on content
   const calculateRowHeight = useCallback((row: Row) => {
     if (!autoResize || row.autoHeight === false) {
-      return row.height || minRowHeight;
+      return row.height || minRowHeight
     }
 
     let maxHeight = minRowHeight;
@@ -193,17 +194,17 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
 
   // Calculate responsive grid layout
   const gridLayout = useMemo(() => {
-    const totalColumns = columns.length;
+    const totalColumns = columns.length
     const totalRows = rows.length;
     const availableWidth = viewportSize.width - 48; // Account for row numbers
     const availableHeight = viewportSize.height - 120; // Account for header/toolbar
     
     // Calculate if we need to adjust column sizes for viewport
-    const totalColumnWidth = columns.reduce((sum, col) => sum + col.width, 0);
+    const totalColumnWidth = columns.reduce((sum, col) => sum + col.width, 0)
     const needsHorizontalScaling = totalColumnWidth > availableWidth;
     
     // Calculate scaling factors
-    const horizontalScale = needsHorizontalScaling ? availableWidth / totalColumnWidth : 1;
+    const horizontalScale = needsHorizontalScaling ? availableWidth / totalColumnWidth : 1
     const minCellSize = 80;
     
     return {
@@ -215,17 +216,17 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       needsHorizontalScaling,
       estimatedRowsVisible: Math.floor(availableHeight / minRowHeight),
       estimatedColumnsVisible: Math.floor(availableWidth / 150) // Average column width
-    };
+    }
   }, [viewportSize, columns, rows, minRowHeight]);
 
   // Update viewport size
   useEffect(() => {
     const updateViewportSize = () => {
       if (gridRef.current) {
-        const rect = gridRef.current.getBoundingClientRect();
+        const rect = gridRef.current.getBoundingClientRect()
         setViewportSize({ width: rect.width, height: rect.height });
       }
-    };
+    }
 
     updateViewportSize();
     window.addEventListener('resize', updateViewportSize);
@@ -236,7 +237,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
   // Auto-resize columns when content changes
   useEffect(() => {
     const timer = setTimeout(() => {
-      autoResizeColumns();
+      autoResizeColumns()
     }, 100); // Debounce
     
     return () => clearTimeout(timer);
@@ -244,7 +245,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
 
   // Handle column resizing
   const handleMouseDown = useCallback((e: React.MouseEvent, columnId: string, currentWidth: number) => {
-    e.preventDefault();
+    e.preventDefault()
     setResizingColumn({
       columnId,
       startX: e.clientX,
@@ -263,21 +264,21 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       const newWidth = Math.min(Math.max(resizingColumn.startWidth + diff, minWidth), maxWidth);
       
       onColumnResize(resizingColumn.columnId, newWidth);
-    };
+    }
 
     const handleMouseUp = () => {
       setResizingColumn(null);
-    };
+    }
 
     if (resizingColumn) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-    };
+    }
 
   return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-    };
+    }
   }, [resizingColumn, onColumnResize, columns]);
 
   const handleCellClick = useCallback((rowId: string, columnId: string, currentValue: string) => {
@@ -310,12 +311,12 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
       "Risk materiality classification aligns with impact assessment. Monitor for changes in business environment.",
       "Control effectiveness rating is positive, but operating effectiveness needs validation through testing.",
       "Consider implementing continuous monitoring for this high-impact risk area."
-    ];
+    ]
     
     setTimeout(() => {
       setAiInsight(insights[Math.floor(Math.random() * insights.length)]);
     }, 1500);
-  };
+  }
 
   return (
     <div className={cn("notion-spreadsheet bg-white h-full flex flex-col", className)}>
@@ -582,7 +583,7 @@ setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
                   value={cellModal.cell.displayValue}
                   onChange={(e) = />
 {
-                    const updatedCell = { ...cellModal.cell, displayValue: e.target.value, value: e.target.value };
+                    const updatedCell = { ...cellModal.cell, displayValue: e.target.value, value: e.target.value }
                     setCellModal({ ...cellModal, cell: updatedCell });
                   }}
                   className="min-h-[100px]"
@@ -682,4 +683,4 @@ setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
       </DaisyDialog>
     </div>
   );
-}; 
+} 

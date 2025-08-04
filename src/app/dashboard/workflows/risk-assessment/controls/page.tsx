@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -26,7 +27,7 @@ import { useToast } from '@/hooks/use-toast';
   FileText,
   Plus,
   Filter,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface Control {
   id: string;
@@ -77,7 +78,7 @@ export default function ReviewRiskControlsPage() {
       setControls(controlsData);
 
       // Calculate stats
-      const implemented = controlsData.filter((c: Control) => c.status === 'implemented').length;
+      const implemented = controlsData.filter((c: Control) => c.status === 'implemented').length
       const partial = controlsData.filter((c: Control) => c.status === 'partial').length;
       const notImplemented = controlsData.filter(
         (c: Control) => c.status === 'not-implemented'
@@ -96,7 +97,7 @@ export default function ReviewRiskControlsPage() {
         averageEffectiveness: Math.round(avgEffectiveness),
       });
     } catch (error) {
-      // console.error('Failed to fetch controls:', error);
+      // console.error('Failed to fetch controls:', error)
       toast({
         title: 'Error',
         description: 'Failed to load controls',
@@ -105,7 +106,7 @@ export default function ReviewRiskControlsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -120,7 +121,7 @@ export default function ReviewRiskControlsPage() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -135,7 +136,7 @@ export default function ReviewRiskControlsPage() {
       default:
         return null;
     }
-  };
+  }
 
   const filteredControls = controls.filter((control) => {
     const categoryMatch = selectedCategory === 'all' || control.category === selectedCategory;

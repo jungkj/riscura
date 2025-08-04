@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription } from '@/components/ui/daisy-components';
   Dialog,
   DialogContent,
   DialogDescription,
@@ -10,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 // import { 
@@ -25,7 +26,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Eye,
   FileText,
   Activity
-} from 'lucide-react';
+} from 'lucide-react'
 import { useRouter } from 'next/navigation';
 
 interface StatsModalData {
@@ -52,7 +53,7 @@ interface StatsModalData {
       text: string;
       type: 'positive' | 'negative' | 'neutral';
     }>;
-  };
+  }
   actions: Array<{
     label: string;
     href: string;
@@ -92,12 +93,12 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
       default:
         return <Activity className="w-6 h-6 text-gray-600" />;
     }
-  };
+  }
 
   const handleNavigation = (href: string) => {
     router.push(href);
     onClose();
-  };
+  }
 
   return (
     <DaisyDialog open={isOpen} onOpenChange={onClose} >
@@ -280,4 +281,4 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}; 
+} 

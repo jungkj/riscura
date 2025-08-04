@@ -8,9 +8,9 @@ export async function POST(_request: NextRequest) {
         error: 'Questionnaire response submission not implemented',
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Submit questionnaire response error:', error);
+    // console.error('Submit questionnaire response error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -24,9 +24,9 @@ export async function GET(_request: NextRequest) {
         data: [],
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Get questionnaire responses error:', error);
+    // console.error('Get questionnaire responses error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -41,7 +41,7 @@ import { cn } from '@/lib/utils';
 // ============================================================================
 
 export interface TableColumn<T = any> {
-  key: string;
+  key: string
   label: string;
   width?: string | number;
   minWidth?: string | number;
@@ -87,7 +87,7 @@ export interface TableProps<T = any> {
     total: number;
     onPageChange: (page: number) => void;
     onPageSizeChange: (pageSize: number) => void;
-  };
+  }
   onRefresh?: () => void;
   onExport?: () => void;
   getRowId?: (row: T) => string | number;
@@ -119,7 +119,7 @@ function DefaultMobileCard<T>({
   columns,
   actions = [],
 }: {
-  row: T;
+  row: T
   columns: TableColumn<T>[];
   actions?: TableAction<T>[];
 }) {
@@ -140,7 +140,7 @@ function DefaultMobileCard<T>({
     }
 
     return (row as any)[column.key];
-  };
+  }
 
   return (
     <motion.div
@@ -290,7 +290,7 @@ export function EnhancedResponsiveTable<T = any>({
   className = '',
   mobileCardComponent: MobileCard = DefaultMobileCard,
 }: TableProps<T>) {
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table')
   const [sortState, setSortState] = useState<SortState>({ column: null, direction: null });
   const [filters, setFilters] = useState<FilterState>({});
   const [searchQuery, setSearchQuery] = useState('');
@@ -303,7 +303,7 @@ export function EnhancedResponsiveTable<T = any>({
   // Automatically switch to card view on mobile
   useEffect(() => {
     if (device.type === 'mobile') {
-      setViewMode('cards');
+      setViewMode('cards')
     } else {
       setViewMode('table');
     }
@@ -314,13 +314,13 @@ export function EnhancedResponsiveTable<T = any>({
   // ============================================================================
 
   const processedData = useMemo(() => {
-    let _result = [...data];
+    let _result = [...data]
 
     // Apply search filter
     if (searchQuery) {
       result = result.filter((row) => {
         return columns.some((column) => {
-          const value = column.accessor ? column.accessor(row) : (row as any)[column.key];
+          const value = column.accessor ? column.accessor(row) : (row as any)[column.key]
           return String(value).toLowerCase().includes(searchQuery.toLowerCase());
         });
       });
@@ -330,7 +330,7 @@ export function EnhancedResponsiveTable<T = any>({
     Object.entries(filters).forEach(([columnKey, filterValue]) => {
       if (filterValue !== undefined && filterValue !== '') {
         result = result.filter((row) => {
-          const column = columns.find((col) => col.key === columnKey);
+          const column = columns.find((col) => col.key === columnKey)
           const value = column?.accessor ? column.accessor(row) : (row as any)[columnKey];
 
           if (Array.isArray(filterValue)) {
@@ -343,7 +343,7 @@ export function EnhancedResponsiveTable<T = any>({
 
     // Apply sorting
     if (sortState.column && sortState.direction) {
-      const column = columns.find((col) => col.key === sortState.column);
+      const column = columns.find((col) => col.key === sortState.column)
       result.sort((a, b) => {
         const aValue = column?.accessor ? column.accessor(a) : (a as any)[sortState.column!];
         const bValue = column?.accessor ? column.accessor(b) : (b as any)[sortState.column!];
@@ -365,14 +365,14 @@ export function EnhancedResponsiveTable<T = any>({
 
   const handleSort = useCallback(
     (columnKey: string) => {
-      if (!sortable) return;
+      if (!sortable) return
 
       setSortState((prev) => {
         if (prev.column === columnKey) {
-          if (prev.direction === 'asc') return { column: columnKey, direction: 'desc' };
-          if (prev.direction === 'desc') return { column: null, direction: null };
+          if (prev.direction === 'asc') return { column: columnKey, direction: 'desc' }
+          if (prev.direction === 'desc') return { column: null, direction: null }
         }
-        return { column: columnKey, direction: 'asc' };
+        return { column: columnKey, direction: 'asc' }
       });
 
       announce(
@@ -425,7 +425,7 @@ export function EnhancedResponsiveTable<T = any>({
 
   const visibleColumns = useMemo(() => {
     if (device.type === 'mobile') {
-      return columns.filter((col) => !col.hiddenOnMobile);
+      return columns.filter((col) => !col.hiddenOnMobile)
     }
     if (device.type === 'tablet') {
       return columns.filter((col) => col.priority !== 'low');
@@ -488,7 +488,7 @@ export function EnhancedResponsiveTable<T = any>({
         )}
       </tr>
     </thead>
-  );
+  )
 
   const renderTableRow = (row: T, index: number) => {
     const rowId = getRowId(row, index);
@@ -549,7 +549,7 @@ export function EnhancedResponsiveTable<T = any>({
         )}
       </tr>
     );
-  };
+  }
 
   // ============================================================================
   // MAIN RENDER
@@ -561,7 +561,7 @@ export function EnhancedResponsiveTable<T = any>({
         <RefreshCw className="w-6 h-6 animate-spin text-blue-500" />
         <span className="ml-2 text-gray-600">Loading...</span>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -757,4 +757,4 @@ export function EnhancedResponsiveTable<T = any>({
 // EXPORT
 // ============================================================================
 
-export default EnhancedResponsiveTable;
+export default EnhancedResponsiveTable

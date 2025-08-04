@@ -35,7 +35,7 @@ export const DaisyAccordion = ({
         current.includes(value) ? current.filter((item) => item !== value) : [...current, value]
       );
     }
-  };
+  }
 
   return (
     <AccordionContext.Provider value={{ openItems, toggleItem, type }}>
@@ -44,7 +44,7 @@ export const DaisyAccordion = ({
       </div>
     </AccordionContext.Provider>
   );
-};
+}
 
 interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
@@ -73,7 +73,7 @@ export const DaisyAccordionItem = ({
       {children}
     </div>
   );
-};
+}
 
 interface AccordionTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -96,7 +96,7 @@ export const DaisyAccordionTrigger = ({ children, className, ...props }: Accordi
       {children}
     </div>
   );
-};
+}
 
 interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -108,4 +108,4 @@ export const DaisyAccordionContent = ({ children, className, ...props }: Accordi
       {children}
     </div>
   );
-};
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   Download, 
   Eye, 
@@ -19,15 +20,15 @@ import React, { useState, useEffect } from 'react';
   RotateCw,
   Maximize,
   X,
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { formatFileSize } from '@/lib/storage/file-validator';
-// import { format } from 'date-fns';
+// import { formatFileSize } from '@/lib/storage/file-validator'
+// import { format } from 'date-fns'
 import toast from 'react-hot-toast';
 
 interface DocumentViewerProps {
@@ -44,7 +45,7 @@ interface DocumentViewerProps {
       id: string;
       name: string;
       email: string;
-    };
+    }
     uploadedAt: string;
     updatedAt: string;
     version: number;
@@ -65,7 +66,7 @@ interface DocumentViewerProps {
     }>;
     commentCount?: number;
     shareCount?: number;
-  };
+  }
   onEdit?: (document: any) => void;
   onDelete?: (documentId: string) => void;
   onShare?: (documentId: string) => void;
@@ -81,7 +82,7 @@ const FILE_TYPE_ICONS = {
   image: Image,
   archive: Archive,
   unknown: FileText,
-};
+}
 
 const CATEGORY_COLORS = {
   evidence: 'bg-blue-100 text-blue-800',
@@ -91,7 +92,7 @@ const CATEGORY_COLORS = {
   audit: 'bg-orange-100 text-orange-800',
   template: 'bg-gray-100 text-gray-800',
   general: 'bg-gray-100 text-gray-800',
-};
+}
 
 export default function DocumentViewer({
   document: documentData,
@@ -112,9 +113,9 @@ export default function DocumentViewer({
     return () => {
       // Clean up preview URL
       if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+        URL.revokeObjectURL(previewUrl)
       }
-    };
+    }
   }, [previewUrl]);
 
   const handleDownload = async () => {
@@ -138,12 +139,12 @@ export default function DocumentViewer({
 
       toast.success('File downloaded successfully');
     } catch (error) {
-      // console.error('Download error:', error);
+      // console.error('Download error:', error)
       toast.error('Failed to download file');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handlePreview = async () => {
     if (!documentData.isImage && documentData.detectedFileType !== 'pdf') {
@@ -164,30 +165,30 @@ export default function DocumentViewer({
       setPreviewUrl(url);
       setPreviewOpen(true);
     } catch (error) {
-      // console.error('Preview error:', error);
+      // console.error('Preview error:', error)
       toast.error('Failed to load preview');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleEdit = () => {
     onEdit?.(documentData);
-  };
+  }
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete "${documentData.originalName}"?`)) {
       onDelete?.(documentData.id);
     }
-  };
+  }
 
   const handleShare = () => {
     onShare?.(documentData.id);
-  };
+  }
 
   const getCategoryColor = (category: string) => {
     return CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || CATEGORY_COLORS.general;
-  };
+  }
 
   const renderPreviewContent = () => {
     if (!previewUrl) return null;
@@ -217,14 +218,14 @@ export default function DocumentViewer({
             title={documentData.originalName} />
         </div>
       );
-    };
+    }
 
   return (
       <div className="flex items-center justify-center h-full">
         <p className="text-gray-500">Preview not available for this file type</p>
       </div>
     );
-  };
+  }
 
   const canPreview = documentData.isImage || documentData.detectedFileType === 'pdf';
 

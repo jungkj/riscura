@@ -14,18 +14,18 @@ export const DaisyAvatar = ({ children, className, size = 'md', ...props }: Avat
     sm: 'w-10',
     md: 'w-12',
     lg: 'w-16',
-  };
+  }
 
   return (
     <div className={cn('avatar', className)} {...props}>
       <div className={cn('rounded-full', sizeClasses[size])}>{children}</div>
     </div>
   );
-};
+}
 
 export const DaisyAvatarImage = ({ className, alt, ...props }: AvatarImageProps) => {
   return <img className={cn(className)} alt={alt} {...props} />;
-};
+}
 
 export const DaisyAvatarFallback = ({ children, className, ...props }: AvatarFallbackProps) => {
   return (
@@ -33,4 +33,4 @@ export const DaisyAvatarFallback = ({ children, className, ...props }: AvatarFal
       {children}
     </div>
   );
-};
+}

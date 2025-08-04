@@ -7,14 +7,16 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
-// import { format, subDays, subMonths, subYears } from 'date-fns';
+// import { format, subDays, subMonths, subYears } from 'date-fns'
 import toast from 'react-hot-toast';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
+import { Plus } from 'lucide-react';
 
 interface SearchFilters {
   query: string;
@@ -25,11 +27,11 @@ interface SearchFilters {
   dateRange: {
     from?: Date;
     to?: Date;
-  };
+  }
   sizeRange: {
     min: number;
     max: number;
-  };
+  }
   linkedEntityType: string;
   linkedEntityId: string;
 }
@@ -114,9 +116,9 @@ export default function DocumentSearch({
         setSavedSearches(data.searches || []);
       }
     } catch (error) {
-      // console.error('Error loading saved searches:', error);
+      // console.error('Error loading saved searches:', error)
     }
-  };
+  }
 
   const handleSearch = async () => {
     try {
@@ -161,12 +163,12 @@ export default function DocumentSearch({
       
       toast.success(`Found ${data.documents.length} document(s)`);
     } catch (error) {
-      // console.error('Search error:', error);
+      // console.error('Search error:', error)
       toast.error('Search failed');
     } finally {
       setSearching(false);
     }
-  };
+  }
 
   const handleSaveSearch = async () => {
     if (!saveSearchName.trim()) {
@@ -178,7 +180,7 @@ export default function DocumentSearch({
       const searchQuery = {
         filters,
         query: filters.query,
-      };
+      }
 
       const response = await fetch('/api/saved-searches', {
         method: 'POST',
@@ -202,10 +204,10 @@ export default function DocumentSearch({
       
       toast.success('Search saved successfully');
     } catch (error) {
-      // console.error('Save search error:', error);
+      // console.error('Save search error:', error)
       toast.error('Failed to save search');
     }
-  };
+  }
 
   const loadSavedSearch = async (search: SavedSearch) => {
     try {
@@ -213,14 +215,14 @@ export default function DocumentSearch({
       setFilters(query.filters || {});
       
       // Update use count
-      await fetch(`/api/saved-searches/${search.id}/use`, { method: 'POST' });
+      await fetch(`/api/saved-searches/${search.id}/use`, { method: 'POST' })
       
       toast.success(`Loaded search: ${search.name}`);
     } catch (error) {
-      // console.error('Load search error:', error);
+      // console.error('Load search error:', error)
       toast.error('Failed to load saved search');
     }
-  };
+  }
 
   const clearFilters = () => {
     setFilters({
@@ -235,7 +237,7 @@ export default function DocumentSearch({
       linkedEntityId: '',
     });
     setTagInput('');
-  };
+  }
 
   const addTag = () => {
     if (tagInput.trim() && !filters.tags.includes(tagInput.trim())) {
@@ -245,21 +247,21 @@ export default function DocumentSearch({
       }));
       setTagInput('');
     }
-  };
+  }
 
   const removeTag = (tag: string) => {
     setFilters(prev => ({
       ...prev,
       tags: prev.tags.filter(t => t !== tag),
     }));
-  };
+  }
 
   const setDateRange = (range: { from?: Date; to?: Date }) => {
     setFilters(prev => ({
       ...prev,
       dateRange: range,
     }));
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>

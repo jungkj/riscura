@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import type { Risk } from '@/types';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface InteractiveRiskLandscapeProps {
   risks: Risk[];

@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload, CheckCircle, Loader2 } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface RCSAImportFlowProps {
   onComplete?: () => void;
@@ -19,7 +20,7 @@ export default function RCSAImportFlow({ onComplete }: RCSAImportFlowProps) {
     setTimeout(() => {
       setStep('complete');
     }, 2000);
-  };
+  }
 
   if (step === 'upload') {
     return (

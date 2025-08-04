@@ -1,24 +1,24 @@
 'use client';
-
+;
 // import {
   EnhancedRisk,
-  AISuggestions,
-  BulkOperation,
-  BulkUpdateData,
-  AdvancedRiskFilters,
-  RiskAnalytics,
-  RiskIntelligence,
-  RiskTemplate,
-  MitigationStrategy,
-  WorkflowTransition,
-  TrendDataPoint,
+  AISuggestions,;
+  BulkOperation,;
+  BulkUpdateData,;
+  AdvancedRiskFilters,;
+  RiskAnalytics,;
+  RiskIntelligence,;
+  RiskTemplate,;
+  MitigationStrategy,;
+  WorkflowTransition,;
+  TrendDataPoint,;
 } from '@/types/enhanced-risk.types';
-// import { Risk } from '@/types';
-// import { RiskAnalysisAIService } from './RiskAnalysisAIService';
-
+// import { Risk } from '@/types'
+// import { RiskAnalysisAIService } from './RiskAnalysisAIService'
+;
 export class EnhancedRiskService {
   private aiService: RiskAnalysisAIService;
-
+;
   constructor() {
     this.aiService = new RiskAnalysisAIService();
   }
@@ -27,42 +27,42 @@ export class EnhancedRiskService {
   async analyzeRiskWithAI(riskData: Partial<EnhancedRisk>): Promise<AISuggestions> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',;
+        headers: { 'Content-Type': 'application/json' },;
         body: JSON.stringify({
-          type: 'risk_analysis',
-          data: riskData,
+          type: 'risk_analysis',;
+          data: riskData,;
           options: {
-            includeCategorization: true,
-            includeScoring: true,
-            includeMitigations: true,
-            includeControls: true,
-          },
-        }),
+            includeCategorization: true,;
+            includeScoring: true,;
+            includeMitigations: true,;
+            includeControls: true,;
+          },;
+        }),;
       });
-
+;
       const _result = await response.json();
-
+;
       return {
-        suggestedCategory: result.suggestedCategory,
-        suggestedLikelihood: result.suggestedLikelihood,
-        suggestedImpact: result.suggestedImpact,
-        suggestedMitigations: result.suggestedMitigations || [],
-        suggestedControls: result.suggestedControls || [],
-        reasoningExplanation: result.reasoning || 'AI analysis completed',
-        confidenceScore: result.confidence || 0.8,
-      };
+        suggestedCategory: result.suggestedCategory,;
+        suggestedLikelihood: result.suggestedLikelihood,;
+        suggestedImpact: result.suggestedImpact,;
+        suggestedMitigations: result.suggestedMitigations || [],;
+        suggestedControls: result.suggestedControls || [],;
+        reasoningExplanation: result.reasoning || 'AI analysis completed',;
+        confidenceScore: result.confidence || 0.8,;
+      }
     } catch (error) {
-      // console.error('AI risk analysis failed:', error);
+      // console.error('AI risk analysis failed:', error)
       return {
-        suggestedCategory: undefined,
-        suggestedLikelihood: undefined,
-        suggestedImpact: undefined,
-        suggestedMitigations: [],
-        suggestedControls: [],
-        reasoningExplanation: 'AI analysis unavailable',
-        confidenceScore: 0,
-      };
+        suggestedCategory: undefined,;
+        suggestedLikelihood: undefined,;
+        suggestedImpact: undefined,;
+        suggestedMitigations: [],;
+        suggestedControls: [],;
+        reasoningExplanation: 'AI analysis unavailable',;
+        confidenceScore: 0,;
+      }
     }
   }
 
@@ -70,18 +70,18 @@ export class EnhancedRiskService {
   async categorizeRisk(description: string, title: string): Promise<string> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',;
+        headers: { 'Content-Type': 'application/json' },;
         body: JSON.stringify({
-          type: 'categorization',
-          data: { description, title },
-        }),
+          type: 'categorization',;
+          data: { description, title },;
+        }),;
       });
-
+;
       const _result = await response.json();
       return result.category || 'operational';
     } catch (error) {
-      // console.error('Risk categorization failed:', error);
+      // console.error('Risk categorization failed:', error)
       return 'operational';
     }
   }
@@ -90,122 +90,122 @@ export class EnhancedRiskService {
   async generateMitigationStrategies(_risk: EnhancedRisk): Promise<MitigationStrategy[]> {
     try {
       const response = await fetch('/api/ai/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',;
+        headers: { 'Content-Type': 'application/json' },;
         body: JSON.stringify({
-          type: 'mitigation_strategies',
+          type: 'mitigation_strategies',;
           data: {
-            title: risk.title,
-            description: risk.description,
-            category: risk.category,
-            riskScore: risk.riskScore,
-            likelihood: risk.likelihood,
-            impact: risk.impact,
-          },
-        }),
+            title: risk.title,;
+            description: risk.description,;
+            category: risk.category,;
+            riskScore: risk.riskScore,;
+            likelihood: risk.likelihood,;
+            impact: risk.impact,;
+          },;
+        }),;
       });
-
+;
       const _result = await response.json();
-
-      return (
+;
+      return (;
         result.strategies?.map((strategy: any, index: number) => ({
-          id: `strategy-${Date.now()}-${index}`,
-          title: strategy.title,
-          description: strategy.description,
-          type: strategy.type || 'preventive',
-          status: 'planned',
-          effectiveness: strategy.effectiveness || 70,
-          cost: strategy.estimatedCost || 0,
-          timeline: strategy.timeline || 30,
-          owner: risk.riskOwner,
-          controls: strategy.relatedControls || [],
-        })) || []
+          id: `strategy-${Date.now()}-${index}`,;
+          title: strategy.title,;
+          description: strategy.description,;
+          type: strategy.type || 'preventive',;
+          status: 'planned',;
+          effectiveness: strategy.effectiveness || 70,;
+          cost: strategy.estimatedCost || 0,;
+          timeline: strategy.timeline || 30,;
+          owner: risk.riskOwner,;
+          controls: strategy.relatedControls || [],;
+        })) || [];
       );
     } catch (error) {
-      // console.error('Mitigation strategy generation failed:', error);
+      // console.error('Mitigation strategy generation failed:', error)
       return [];
     }
   }
 
   // Workflow state transitions
-  async transitionWorkflowState(
-    riskId: string,
-    fromState: string,
-    toState: string,
-    userId: string,
-    reason?: string
+  async transitionWorkflowState(;
+    riskId: string,;
+    fromState: string,;
+    toState: string,;
+    userId: string,;
+    reason?: string;
   ): Promise<WorkflowTransition> {
     const transition: WorkflowTransition = {
-      id: `transition-${Date.now()}`,
-      fromState,
-      toState,
-      transitionDate: new Date(),
-      userId,
-      reason,
-      autoTransition: false,
-    };
-
+      id: `transition-${Date.now()}`,;
+      fromState,;
+      toState,;
+      transitionDate: new Date(),;
+      userId,;
+      reason,;
+      autoTransition: false,;
+    }
+;
     // Here you would typically update the database
     // For now, we'll return the transition object
     return transition;
   }
 
   // Bulk operations
-  async performBulkOperation(
-    operation: BulkOperation
+  async performBulkOperation(;
+    operation: BulkOperation;
   ): Promise<{ success: boolean; errors?: string[] }> {
     try {
       switch (operation.type) {
-        case 'update':
+        case 'update':;
           return await this.bulkUpdate(operation.riskIds, operation.data as BulkUpdateData);
-        case 'delete':
+        case 'delete':;
           return await this.bulkDelete(operation.riskIds);
-        case 'export':
+        case 'export':;
           return await this.bulkExport(operation.riskIds, operation.data);
-        case 'approve':
+        case 'approve':;
           return await this.bulkApprove(operation.riskIds, operation.userId);
-        case 'assign':
+        case 'assign':;
           return await this.bulkAssign(operation.riskIds, operation.data);
-        default:
+        // default: // Fixed expression expected error
           throw new Error(`Unsupported bulk operation: ${operation.type}`);
       }
     } catch (error) {
-      // console.error('Bulk operation failed:', error);
-      return { success: false, errors: [error instanceof Error ? error.message : 'Unknown error'] };
+      // console.error('Bulk operation failed:', error)
+      return { success: false, errors: [error instanceof Error ? error.message : 'Unknown error'] }
     }
   }
 
-  private async bulkUpdate(
-    riskIds: string[],
-    updateData: BulkUpdateData
+  private async bulkUpdate(;
+    riskIds: string[],;
+    updateData: BulkUpdateData;
   ): Promise<{ success: boolean }> {
     // Implementation for bulk update
-    // console.log('Bulk updating risks:', riskIds, updateData);
-    return { success: true };
+    // console.log('Bulk updating risks:', riskIds, updateData)
+    return { success: true }
   }
 
   private async bulkDelete(riskIds: string[]): Promise<{ success: boolean }> {
     // Implementation for bulk delete
-    // console.log('Bulk deleting risks:', riskIds);
-    return { success: true };
+    // console.log('Bulk deleting risks:', riskIds)
+    return { success: true }
   }
 
   private async bulkExport(riskIds: string[], options: any): Promise<{ success: boolean }> {
     // Implementation for bulk export
-    // console.log('Bulk exporting risks:', riskIds, options);
-    return { success: true };
+    // console.log('Bulk exporting risks:', riskIds, options)
+    return { success: true }
   }
 
   private async bulkApprove(riskIds: string[], userId: string): Promise<{ success: boolean }> {
     // Implementation for bulk approve
-    // console.log('Bulk approving risks:', riskIds, 'by user:', userId);
-    return { success: true };
+    // console.log('Bulk approving risks:', riskIds, 'by user:', userId)
+    return { success: true }
   }
 
   private async bulkAssign(riskIds: string[], assignmentData: any): Promise<{ success: boolean }> {
     // Implementation for bulk assign
-    // console.log('Bulk assigning risks:', riskIds, assignmentData);
-    return { success: true };
+    // console.log('Bulk assigning risks:', riskIds, assignmentData)
+    return { success: true }
   }
 
   // Advanced filtering
@@ -250,9 +250,9 @@ export class EnhancedRiskService {
 
       // AI confidence filter
       if (filters.aiConfidenceRange) {
-        if (
-          risk.aiConfidence < filters.aiConfidenceRange.min ||
-          risk.aiConfidence > filters.aiConfidenceRange.max
+        if (;
+          risk.aiConfidence < filters.aiConfidenceRange.min ||;
+          risk.aiConfidence > filters.aiConfidenceRange.max;
         ) {
           return false;
         }
@@ -261,10 +261,10 @@ export class EnhancedRiskService {
       // Search query filter
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
-        const searchableText = [risk.title, risk.description, risk.owner, ...risk.tags]
-          .join(' ')
+        const searchableText = [risk.title, risk.description, risk.owner, ...risk.tags];
+          .join(' ');
           .toLowerCase();
-
+;
         if (!searchableText.includes(query)) return false;
       }
 
@@ -284,15 +284,15 @@ export class EnhancedRiskService {
 
   private getDateFieldValue(_risk: EnhancedRisk, field: string): Date | null {
     switch (field) {
-      case 'createdAt':
+      case 'createdAt':;
         return new Date(risk.createdAt);
-      case 'updatedAt':
+      case 'updatedAt':;
         return new Date(risk.updatedAt);
-      case 'lastAssessed':
+      case 'lastAssessed':;
         return risk.lastAssessed ? new Date(risk.lastAssessed) : null;
-      case 'nextReview':
+      case 'nextReview':;
         return risk.nextReview ? new Date(risk.nextReview) : null;
-      default:
+      // default: // Fixed expression expected error
         return null;
     }
   }
@@ -300,74 +300,74 @@ export class EnhancedRiskService {
   // Analytics and insights
   async generateRiskAnalytics(_risks: EnhancedRisk[]): Promise<RiskAnalytics> {
     const totalRisks = risks.length;
-
-    const risksByCategory = risks.reduce(
+;
+    const risksByCategory = risks.reduce(;
       (acc, risk) => {
         acc[risk.category] = (acc[risk.category] || 0) + 1;
         return acc;
-      },
-      {} as Record<string, number>
+      },;
+      {} as Record<string, number>;
     );
-
-    const risksByStatus = risks.reduce(
+;
+    const risksByStatus = risks.reduce(;
       (acc, risk) => {
         acc[risk.status] = (acc[risk.status] || 0) + 1;
         return acc;
-      },
-      {} as Record<string, number>
+      },;
+      {} as Record<string, number>;
     );
-
-    const risksByPriority = risks.reduce(
+;
+    const risksByPriority = risks.reduce(;
       (acc, risk) => {
         acc[risk.priority] = (acc[risk.priority] || 0) + 1;
         return acc;
-      },
-      {} as Record<string, number>
+      },;
+      {} as Record<string, number>;
     );
-
+;
     const averageRiskScore = risks.reduce((sum, risk) => sum + risk.riskScore, 0) / totalRisks;
-
+;
     const topRisks = risks.sort((a, b) => b.riskScore - a.riskScore).slice(0, 10);
-
+;
     // Calculate trend data (mock implementation)
     const trendData = this.calculateTrendData(risks);
-
+;
     return {
-      totalRisks,
-      risksByCategory,
-      risksByStatus,
-      risksByPriority,
-      averageRiskScore,
-      trendData,
-      topRisks,
-      riskVelocity: this.calculateRiskVelocity(risks),
-      mitigationEffectiveness: this.calculateMitigationEffectiveness(risks),
-      complianceScore: this.calculateComplianceScore(risks),
-    };
+      totalRisks,;
+      risksByCategory,;
+      risksByStatus,;
+      risksByPriority,;
+      averageRiskScore,;
+      trendData,;
+      topRisks,;
+      riskVelocity: this.calculateRiskVelocity(risks),;
+      mitigationEffectiveness: this.calculateMitigationEffectiveness(risks),;
+      complianceScore: this.calculateComplianceScore(risks),;
+    }
   }
 
   private calculateTrendData(_risks: EnhancedRisk[]): TrendDataPoint[] {
     // Mock trend data calculation
     const now = new Date();
     const trendData: TrendDataPoint[] = [];
-
+;
     for (let i = 11; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthRisks = risks.filter((risk) => {
         const riskDate = new Date(risk.createdAt);
-        return (
-          riskDate.getMonth() === date.getMonth() && riskDate.getFullYear() === date.getFullYear()
+        return (;
+          riskDate.getMonth() === date.getMonth() && riskDate.getFullYear() === date.getFullYear();
         );
       });
-
+;
       trendData.push({
-        date,
-        totalRisks: monthRisks.length,
-        averageScore:
-          monthRisks.reduce((sum, risk) => sum + risk.riskScore, 0) / monthRisks.length || 0,
-        newRisks: monthRisks.filter((risk) => risk.status === 'identified').length,
-        mitigatedRisks: monthRisks.filter((risk) => risk.status === 'mitigated').length,
-        criticalRisks: monthRisks.filter((risk) => risk.priority === 'critical').length,
+        date,;
+        totalRisks: monthRisks.length,;
+        // averageScore: // Fixed expression expected error
+          monthRisks.reduce((sum, risk) => sum + risk.riskScore, 0) / monthRisks.length || 0,;
+        newRisks: monthRisks.filter((risk) => risk.status === 'identified').length,;
+        mitigatedRisks: monthRisks.filter((risk) => risk.status === 'mitigated').length,;
+        criticalRisks: monthRisks.filter((risk) => risk.priority === 'critical').length,;
       });
     }
 
@@ -384,20 +384,20 @@ export class EnhancedRiskService {
   private calculateMitigationEffectiveness(_risks: EnhancedRisk[]): number {
     const mitigatedRisks = risks.filter((risk) => risk.status === 'mitigated');
     const totalMitigations = risks.reduce((sum, risk) => sum + risk.mitigationStrategies.length, 0);
-
+;
     if (totalMitigations === 0) return 0;
     return (mitigatedRisks.length / totalMitigations) * 100;
   }
 
   private calculateComplianceScore(_risks: EnhancedRisk[]): number {
-    const complianceRisks = risks.filter(
-      (risk) => risk.category === 'COMPLIANCE' || risk.regulatoryFrameworks.length > 0
+    const complianceRisks = risks.filter(;
+      (risk) => risk.category === 'COMPLIANCE' || risk.regulatoryFrameworks.length > 0;
     );
-
-    const mitigatedComplianceRisks = complianceRisks.filter(
-      (risk) => risk.workflowState === 'mitigated' || risk.workflowState === 'monitored'
+;
+    const mitigatedComplianceRisks = complianceRisks.filter(;
+      (risk) => risk.workflowState === 'mitigated' || risk.workflowState === 'monitored';
     );
-
+;
     if (complianceRisks.length === 0) return 100;
     return (mitigatedComplianceRisks.length / complianceRisks.length) * 100;
   }
@@ -406,18 +406,18 @@ export class EnhancedRiskService {
   async analyzeRiskCorrelations(_risks: EnhancedRisk[]): Promise<any[]> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',;
+        headers: { 'Content-Type': 'application/json' },;
         body: JSON.stringify({
-          type: 'correlation_analysis',
-          data: { risks },
-        }),
+          type: 'correlation_analysis',;
+          data: { risks },;
+        }),;
       });
-
+;
       const _result = await response.json();
       return result.correlations || [];
     } catch (error) {
-      // console.error('Risk correlation analysis failed:', error);
+      // console.error('Risk correlation analysis failed:', error)
       return [];
     }
   }
@@ -426,18 +426,18 @@ export class EnhancedRiskService {
   async generatePredictiveInsights(_risks: EnhancedRisk[]): Promise<RiskIntelligence> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',;
+        headers: { 'Content-Type': 'application/json' },;
         body: JSON.stringify({
-          type: 'predictive_analysis',
-          data: { risks },
-        }),
+          type: 'predictive_analysis',;
+          data: { risks },;
+        }),;
       });
-
+;
       const _result = await response.json();
       return result.intelligence || this.getMockRiskIntelligence();
     } catch (error) {
-      // console.error('Predictive analysis failed:', error);
+      // console.error('Predictive analysis failed:', error)
       return this.getMockRiskIntelligence();
     }
   }
@@ -445,65 +445,65 @@ export class EnhancedRiskService {
   private getMockRiskIntelligence(): RiskIntelligence {
     return {
       predictiveAnalysis: {
-        forecastedRisks: [],
-        trendPredictions: [],
-        seasonalPatterns: [],
-        confidence: 0.7,
-      },
-      correlationInsights: [],
-      emergingRisks: [],
-      industryBenchmarks: [],
-      recommendations: [],
-    };
+        forecastedRisks: [],;
+        trendPredictions: [],;
+        seasonalPatterns: [],;
+        confidence: 0.7,;
+      },;
+      correlationInsights: [],;
+      emergingRisks: [],;
+      industryBenchmarks: [],;
+      recommendations: [],;
+    }
   }
 
   // Risk templates
   async getRiskTemplates(): Promise<RiskTemplate[]> {
     // Mock risk templates - in a real app, these would come from a database
-    return [
+    return [;
       {
-        id: 'cybersecurity-template',
-        name: 'Cybersecurity Risk',
-        description: 'Template for cybersecurity and data breach risks',
-        category: 'technology',
-        defaultLikelihood: 3,
-        defaultImpact: 4,
-        suggestedControls: ['firewall', 'encryption', 'access-control'],
-        commonMitigations: ['Security training', 'System updates', 'Backup procedures'],
-        industryStandards: ['ISO 27001', 'NIST Cybersecurity Framework'],
-      },
+        id: 'cybersecurity-template',;
+        name: 'Cybersecurity Risk',;
+        description: 'Template for cybersecurity and data breach risks',;
+        category: 'technology',;
+        defaultLikelihood: 3,;
+        defaultImpact: 4,;
+        suggestedControls: ['firewall', 'encryption', 'access-control'],;
+        commonMitigations: ['Security training', 'System updates', 'Backup procedures'],;
+        industryStandards: ['ISO 27001', 'NIST Cybersecurity Framework'],;
+      },;
       {
-        id: 'operational-template',
-        name: 'Operational Risk',
-        description: 'Template for operational and process risks',
-        category: 'operational',
-        defaultLikelihood: 2,
-        defaultImpact: 3,
-        suggestedControls: ['process-documentation', 'quality-control', 'monitoring'],
-        commonMitigations: ['Process improvement', 'Staff training', 'Quality assurance'],
-        industryStandards: ['ISO 9001', 'Six Sigma'],
-      },
+        id: 'operational-template',;
+        name: 'Operational Risk',;
+        description: 'Template for operational and process risks',;
+        category: 'operational',;
+        defaultLikelihood: 2,;
+        defaultImpact: 3,;
+        suggestedControls: ['process-documentation', 'quality-control', 'monitoring'],;
+        commonMitigations: ['Process improvement', 'Staff training', 'Quality assurance'],;
+        industryStandards: ['ISO 9001', 'Six Sigma'],;
+      },;
     ];
   }
 
   // Convert regular Risk to EnhancedRisk
   enhanceRisk(_risk: Risk): EnhancedRisk {
     return {
-      ...risk,
-      workflowState: risk.status as any,
-      workflowHistory: [],
-      aiConfidence: 0.8,
-      priority: this.calculatePriority(risk.riskScore),
-      riskOwner: risk.owner,
-      comments: [],
-      riskComments: [],
-      approvals: [],
-      assignments: [],
-      mitigationStrategies: [],
-      tags: [],
-      regulatoryFrameworks: [],
-      complianceRequirements: [],
-    };
+      ...risk,;
+      workflowState: risk.status as any,;
+      workflowHistory: [],;
+      aiConfidence: 0.8,;
+      priority: this.calculatePriority(risk.riskScore),;
+      riskOwner: risk.owner,;
+      comments: [],;
+      riskComments: [],;
+      approvals: [],;
+      assignments: [],;
+      mitigationStrategies: [],;
+      tags: [],;
+      regulatoryFrameworks: [],;
+      complianceRequirements: [],;
+    }
   }
 
   private calculatePriority(riskScore: number): 'critical' | 'high' | 'medium' | 'low' {

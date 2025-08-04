@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
+import { Eye } from 'lucide-react';
 // import { 
   Brain,
   Shield,
@@ -22,10 +24,10 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
   FileText,
   Network,
   Eye
-} from 'lucide-react';
+} from 'lucide-react'
 
 import { aiIntegrationService } from '@/services/AIIntegrationService';
-// import { multiTenantAIService } from '@/services/MultiTenantAIService';
+// import { multiTenantAIService } from '@/services/MultiTenantAIService'
 import { generateId } from '@/lib/utils';
 import type { 
   AIServiceRequest, 
@@ -35,13 +37,13 @@ import type {
 
 // Service health type
 interface ServiceHealthStatus {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: 'healthy' | 'degraded' | 'unhealthy'
   services: Record<string, boolean>;
   uptime: number;
 }
 
 // Analysis type union
-type AnalysisType = 'risk_analysis' | 'compliance_check' | 'control_recommendation' | 'proactive_monitoring' | 'custom_query';
+type AnalysisType = 'risk_analysis' | 'compliance_check' | 'control_recommendation' | 'proactive_monitoring' | 'custom_query'
 
 interface ComprehensiveAIDashboardProps {
   userId: string;
@@ -65,7 +67,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
 
   // Load service health on component mount
   useEffect(() => {
-    loadServiceHealth();
+    loadServiceHealth()
   }, []);
 
   const loadServiceHealth = async () => {
@@ -73,9 +75,9 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
       const health = await aiIntegrationService.getServiceHealth();
       setServiceHealth(health);
     } catch (error) {
-      // console.error('Error loading service health:', error);
+      // console.error('Error loading service health:', error)
     }
-  };
+  }
 
   const processAIQuery = async () => {
     if (!queryText.trim()) return;
@@ -94,7 +96,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           userRole,
           analysisType: selectedAnalysisType
         }
-      };
+      }
 
       const request: AIServiceRequest = {
         type: selectedAnalysisType,
@@ -104,21 +106,21 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
           securityLevel: 'enhanced',
           enableProactiveMonitoring: true
         }
-      };
+      }
 
       const response = await aiIntegrationService.processAIRequest(request);
       setResponses(prev => [response, ...prev]);
       setQueryText('');
     } catch (error) {
-      // console.error('Error processing AI query:', error);
+      // console.error('Error processing AI query:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleAnalysisTypeChange = (_value: string) => {
     setSelectedAnalysisType(value as AnalysisType);
-  };
+  }
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -127,7 +129,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
       case 'unhealthy': return 'text-red-600 bg-red-100';
       default: return 'text-gray-600 bg-gray-100';
     }
-  };
+  }
 
   const getAnalysisTypeIcon = (_type: string) => {
     switch (type) {
@@ -140,7 +142,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
       case 'custom_query': return <Brain className="w-4 h-4" />;
       default: return <Activity className="w-4 h-4" />;
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -444,6 +446,6 @@ setQueryText(e.target.value)}
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default ComprehensiveAIDashboard; 

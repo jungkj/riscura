@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // ============================================================================
 
 export interface OpenAPISpec {
-  openapi: string;
+  openapi: string
   info: {
     title: string;
     version: string;
@@ -21,12 +21,12 @@ export interface OpenAPISpec {
       name: string;
       url: string;
       email: string;
-    };
+    }
     license?: {
       name: string;
       url: string;
-    };
-  };
+    }
+  }
   servers: Array<{
     url: string;
     description: string;
@@ -42,7 +42,7 @@ export interface OpenAPISpec {
     securitySchemes: Record<string, SecuritySchemeObject>;
     links: Record<string, LinkObject>;
     callbacks: Record<string, CallbackObject>;
-  };
+  }
   security?: SecurityRequirement[];
   tags?: TagObject[];
   externalDocs?: ExternalDocumentationObject;
@@ -257,7 +257,7 @@ export interface EncodingObject {
 // ============================================================================
 
 export interface APIEndpointInfo {
-  path: string;
+  path: string
   method: string;
   summary: string;
   description: string;
@@ -271,13 +271,13 @@ export interface APIEndpointInfo {
   rateLimits?: {
     requests: number;
     window: string;
-  };
+  }
   subscriptionRequired?: boolean;
   permissions?: string[];
   examples?: {
     request?: any;
     response?: any;
-  };
+  }
 }
 
 export class APIRegistry {
@@ -325,7 +325,7 @@ export class APIRegistry {
    * Generate OpenAPI specification
    */
   generateOpenAPISpec(): OpenAPISpec {
-    const paths: Record<string, PathItem> = {};
+    const paths: Record<string, PathItem> = {}
     const components = {
       schemas: Object.fromEntries(this.schemas),
       responses: this.generateStandardResponses(),
@@ -336,15 +336,15 @@ export class APIRegistry {
       securitySchemes: this.generateSecuritySchemes(),
       links: {},
       callbacks: {},
-    };
+    }
 
     // Build paths from registered endpoints
     for (const [key, endpoint] of this.endpoints) {
-      const [method, path] = key.split(':');
+      const [method, path] = key.split(':')
       const methodLower = method.toLowerCase() as keyof PathItem;
 
       if (!paths[path]) {
-        paths[path] = {};
+        paths[path] = {}
       }
 
       paths[path][methodLower] = {
@@ -357,7 +357,7 @@ export class APIRegistry {
         responses: endpoint.responses,
         security: endpoint.security,
         deprecated: endpoint.deprecated,
-      };
+      }
     }
 
     return {
@@ -438,7 +438,7 @@ export class APIRegistry {
           description: 'System health and monitoring',
         },
       ],
-    };
+    }
   }
 
   private generateStandardResponses(): Record<string, ResponseObject> {
@@ -597,7 +597,7 @@ export class APIRegistry {
           },
         },
       },
-    };
+    }
   }
 
   private generateStandardParameters(): Record<string, ParameterObject> {
@@ -651,7 +651,7 @@ export class APIRegistry {
         required: false,
         schema: { type: 'string' },
       },
-    };
+    }
   }
 
   private generateSecuritySchemes(): Record<string, SecuritySchemeObject> {
@@ -668,7 +668,7 @@ export class APIRegistry {
         name: 'next-auth.session-token',
         description: 'Session-based authentication',
       },
-    };
+    }
   }
 }
 
@@ -676,7 +676,7 @@ export class APIRegistry {
 // GLOBAL REGISTRY INSTANCE
 // ============================================================================
 
-export const apiRegistry = new APIRegistry();
+export const apiRegistry = new APIRegistry()
 
 // ============================================================================
 // DOCUMENTATION DECORATORS
@@ -687,7 +687,7 @@ export const apiRegistry = new APIRegistry();
  */
 export function ApiEndpoint(info: Partial<APIEndpointInfo>) {
   return function (_target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
+    const originalMethod = descriptor.value
 
     descriptor.value = async function (req: NextRequest, context?: any) {
       // Register endpoint if not already registered
@@ -706,16 +706,16 @@ export function ApiEndpoint(info: Partial<APIEndpointInfo>) {
             '500': { $ref: '#/components/responses/Error' },
           },
           ...info,
-        } as APIEndpointInfo;
+        } as APIEndpointInfo
 
         apiRegistry.registerEndpoint(fullInfo);
       }
 
       return originalMethod.call(this, req, context);
-    };
+    }
 
     return descriptor;
-  };
+  }
 }
 
 /**
@@ -727,7 +727,7 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
       type: 'string',
       ...(schema.minLength !== null && { minLength: schema.minLength }),
       ...(schema.maxLength !== null && { maxLength: schema.maxLength }),
-    };
+    }
   }
 
   if (schema instanceof z.ZodNumber) {
@@ -735,22 +735,22 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
       type: 'number',
       ...(schema.minValue !== null && { minimum: schema.minValue }),
       ...(schema.maxValue !== null && { maximum: schema.maxValue }),
-    };
+    }
   }
 
   if (schema instanceof z.ZodBoolean) {
-    return { type: 'boolean' };
+    return { type: 'boolean' }
   }
 
   if (schema instanceof z.ZodArray) {
     return {
       type: 'array',
       items: zodToOpenAPI(schema.element),
-    };
+    }
   }
 
   if (schema instanceof z.ZodObject) {
-    const properties: Record<string, SchemaObject> = {};
+    const properties: Record<string, SchemaObject> = {}
     const required: string[] = [];
 
     for (const [key, value] of Object.entries(schema.shape)) {
@@ -764,14 +764,14 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
       type: 'object',
       properties,
       required: required.length > 0 ? required : undefined,
-    };
+    }
   }
 
   if (schema instanceof z.ZodEnum) {
     return {
       type: 'string',
       enum: schema.options,
-    };
+    }
   }
 
   if (schema instanceof z.ZodOptional) {
@@ -782,14 +782,14 @@ export function zodToOpenAPI(schema: z.ZodType<any>): SchemaObject {
     return {
       ...zodToOpenAPI(schema.unwrap()),
       nullable: true,
-    };
+    }
   }
 
-  return { type: 'object' };
+  return { type: 'object' }
 }
 
 // ============================================================================
 // EXPORTS
 // ============================================================================
 
-export default apiRegistry;
+export default apiRegistry

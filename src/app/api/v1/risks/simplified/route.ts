@@ -10,7 +10,7 @@ import { db } from '@/lib/db';
 export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -18,14 +18,14 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     // Get user from database
     const user = await db.client.user.findUnique({
       where: { email: session.user.email },
-    });
+    })
 
     if (!user || !user.isActive || !user.organizationId) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
     }
 
     // Parse query parameters
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1');
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 100);
     const search = searchParams.get('search') || '';
@@ -33,7 +33,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     // Build database query
     const where: any = {
       organizationId: user.organizationId,
-    };
+    }
 
     if (search) {
       where.OR = [
@@ -71,7 +71,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         take: limit,
       }),
       db.client.risk.count({ where }),
-    ]);
+    ])
 
     // Transform data
     const transformedRisks = risks.map((risk) => ({
@@ -95,7 +95,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       controlCount: risk._count.controls,
       createdAt: risk.createdAt,
       updatedAt: risk.updatedAt,
-    }));
+    }))
 
     return NextResponse.json({
       success: true,
@@ -110,7 +110,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    // console.error('Error fetching risks:', error);
+    // console.error('Error fetching risks:', error)
     return NextResponse.json({ error: 'Failed to fetch risks' }, { status: 500 });
   }
 }
@@ -122,7 +122,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     // Basic authentication check
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
@@ -130,7 +130,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     // Get user from database
     const user = await db.client.user.findUnique({
       where: { email: session.user.email },
-    });
+    })
 
     if (!user || !user.isActive || !user.organizationId) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
@@ -141,11 +141,11 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 
     // Basic validation
     if (!title || !description || !category || !likelihood || !impact) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     // Calculate risk metrics
-    const riskScore = likelihood * impact;
+    const riskScore = likelihood * impact
     const riskLevel = calculateRiskLevel(riskScore);
 
     // Create risk
@@ -170,7 +170,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           select: { id: true, firstName: true, lastName: true, email: true },
         },
       },
-    });
+    })
 
     return NextResponse.json(
       {
@@ -181,7 +181,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       { status: 201 }
     );
   } catch (error) {
-    // console.error('Error creating risk:', error);
+    // console.error('Error creating risk:', error)
     return NextResponse.json({ error: 'Failed to create risk' }, { status: 500 });
   }
 }

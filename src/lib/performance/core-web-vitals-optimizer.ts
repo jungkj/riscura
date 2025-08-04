@@ -25,7 +25,7 @@ export interface OptimizationConfig {
     enableResponsive: boolean;
     compressionQuality: number;
     enableBlurPlaceholder: boolean;
-  };
+  }
 }
 
 export interface ImageOptimizationConfig {
@@ -34,23 +34,23 @@ export interface ImageOptimizationConfig {
     avif: boolean;
     jpeg: boolean;
     png: boolean;
-  };
+  }
   quality: {
     high: number;
     medium: number;
     low: number;
-  };
+  }
   breakpoints: number[];
   lazyLoading: {
     enabled: boolean;
     rootMargin: string;
     threshold: number;
-  };
+  }
   placeholder: {
     enabled: boolean;
     blurRadius: number;
     quality: number;
-  };
+  }
 }
 
 export interface PerformanceIssue {
@@ -79,7 +79,7 @@ export const DEFAULT_OPTIMIZATION_CONFIG: OptimizationConfig = {
     compressionQuality: 85,
     enableBlurPlaceholder: true,
   },
-};
+}
 
 export const DEFAULT_IMAGE_CONFIG: ImageOptimizationConfig = {
   formats: {
@@ -104,18 +104,18 @@ export const DEFAULT_IMAGE_CONFIG: ImageOptimizationConfig = {
     blurRadius: 10,
     quality: 20,
   },
-};
+}
 
 export class CoreWebVitalsOptimizer {
   private config: OptimizationConfig;
-  private metrics: Partial<WebVitalsMetrics> = {};
+  private metrics: Partial<WebVitalsMetrics> = {}
   private issues: PerformanceIssue[] = [];
   private observers: PerformanceObserver[] = [];
   private intersectionObserver?: IntersectionObserver;
   private isMonitoring: boolean = false;
 
   constructor(_config: Partial<OptimizationConfig> = {}) {
-    this.config = { ...DEFAULT_OPTIMIZATION_CONFIG, ...config };
+    this.config = { ...DEFAULT_OPTIMIZATION_CONFIG, ...config }
     this.initializeOptimizer();
   }
 
@@ -127,16 +127,16 @@ export class CoreWebVitalsOptimizer {
 
     // Start monitoring if enabled
     if (this.config.enableMonitoring) {
-      this.startMonitoring();
+      this.startMonitoring()
     }
 
     // Apply optimizations if enabled
     if (this.config.enableOptimizations) {
-      this.applyOptimizations();
+      this.applyOptimizations()
     }
 
     // Set up image optimization
-    this.initializeImageOptimization();
+    this.initializeImageOptimization()
   }
 
   /**
@@ -149,47 +149,47 @@ export class CoreWebVitalsOptimizer {
 
     // Monitor LCP (Largest Contentful Paint)
     getLCP((metric: Metric) => {
-      this.metrics.lcp = metric.value;
+      this.metrics.lcp = metric.value
       this.checkMetricThreshold('lcp', metric.value, this.config.lcpTarget);
       this.reportMetric('lcp', metric);
     });
 
     // Monitor FID (First Input Delay)
     getFID((metric: Metric) => {
-      this.metrics.fid = metric.value;
+      this.metrics.fid = metric.value
       this.checkMetricThreshold('fid', metric.value, this.config.fidTarget);
       this.reportMetric('fid', metric);
     });
 
     // Monitor CLS (Cumulative Layout Shift)
     getCLS((metric: Metric) => {
-      this.metrics.cls = metric.value;
+      this.metrics.cls = metric.value
       this.checkMetricThreshold('cls', metric.value, this.config.clsTarget);
       this.reportMetric('cls', metric);
     });
 
     // Monitor FCP (First Contentful Paint)
     getFCP((metric: Metric) => {
-      this.metrics.fcp = metric.value;
+      this.metrics.fcp = metric.value
       this.checkMetricThreshold('fcp', metric.value, this.config.fcpTarget);
       this.reportMetric('fcp', metric);
     });
 
     // Monitor TTFB (Time to First Byte)
     getTTFB((metric: Metric) => {
-      this.metrics.ttfb = metric.value;
+      this.metrics.ttfb = metric.value
       this.checkMetricThreshold('ttfb', metric.value, this.config.ttfbTarget);
       this.reportMetric('ttfb', metric);
     });
 
     // Monitor INP (Interaction to Next Paint) using Performance Observer
-    this.monitorINP();
+    this.monitorINP()
 
     // Monitor resource loading
-    this.monitorResourceLoading();
+    this.monitorResourceLoading()
 
     // Monitor layout shifts in real-time
-    this.monitorLayoutShifts();
+    this.monitorLayoutShifts()
   }
 
   /**
@@ -221,7 +221,7 @@ export class CoreWebVitalsOptimizer {
                   'Implement proper debouncing',
                 ],
                 timestamp: new Date(),
-              });
+              })
             }
           }
         });
@@ -230,7 +230,7 @@ export class CoreWebVitalsOptimizer {
       inpObserver.observe({ entryTypes: ['event'] });
       this.observers.push(inpObserver);
     } catch (error) {
-      // console.warn('INP monitoring not supported:', error);
+      // console.warn('INP monitoring not supported:', error)
     }
   }
 
@@ -248,11 +248,11 @@ export class CoreWebVitalsOptimizer {
           // Check for slow loading resources
           if (entry.duration > 1000) {
             // 1 second
-            // console.warn(`Slow resource detected: ${entry.name} (${entry.duration}ms)`);
+            // console.warn(`Slow resource detected: ${entry.name} (${entry.duration}ms)`)
 
             // Suggest optimizations based on resource type
             if (entry.name.includes('.js')) {
-              this.suggestJSOptimization(entry);
+              this.suggestJSOptimization(entry)
             } else if (entry.name.includes('.css')) {
               this.suggestCSSOptimization(entry);
             } else if (this.isImageResource(entry.name)) {
@@ -265,7 +265,7 @@ export class CoreWebVitalsOptimizer {
       resourceObserver.observe({ entryTypes: ['resource'] });
       this.observers.push(resourceObserver);
     } catch (error) {
-      // console.warn('Resource monitoring not supported:', error);
+      // console.warn('Resource monitoring not supported:', error)
     }
   }
 
@@ -281,7 +281,7 @@ export class CoreWebVitalsOptimizer {
 
         entries.forEach((entry: any) => {
           if (entry.value > 0.1) {
-            // console.warn('Large layout shift detected:', entry);
+            // console.warn('Large layout shift detected:', entry)
             this.identifyLayoutShiftCause(entry);
           }
         });
@@ -290,7 +290,7 @@ export class CoreWebVitalsOptimizer {
       clsObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.push(clsObserver);
     } catch (error) {
-      // console.warn('Layout shift monitoring not supported:', error);
+      // console.warn('Layout shift monitoring not supported:', error)
     }
   }
 
@@ -299,16 +299,16 @@ export class CoreWebVitalsOptimizer {
    */
   private applyOptimizations(): void {
     // Optimize LCP
-    this.optimizeLCP();
+    this.optimizeLCP()
 
     // Optimize FID
-    this.optimizeFID();
+    this.optimizeFID()
 
     // Optimize CLS
-    this.optimizeCLS();
+    this.optimizeCLS()
 
     // Optimize resource loading
-    this.optimizeResourceLoading();
+    this.optimizeResourceLoading()
   }
 
   /**
@@ -316,13 +316,13 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeLCP(): void {
     // Preload LCP elements
-    this.preloadLCPElements();
+    this.preloadLCPElements()
 
     // Optimize critical resources
-    this.optimizeCriticalResources();
+    this.optimizeCriticalResources()
 
     // Remove render-blocking resources
-    this.removeRenderBlockingResources();
+    this.removeRenderBlockingResources()
   }
 
   /**
@@ -332,16 +332,16 @@ export class CoreWebVitalsOptimizer {
     // Find potential LCP elements
     const potentialLCPElements = document.querySelectorAll(
       'img[loading="lazy"], img:not([loading]), video, canvas, .hero-image, .banner'
-    );
+    )
 
     potentialLCPElements.forEach((element) => {
       if (element instanceof HTMLImageElement) {
         // Remove lazy loading from above-the-fold images
         if (this.isAboveTheFold(element)) {
-          element.loading = 'eager';
+          element.loading = 'eager'
 
           // Add preload hint
-          const link = document.createElement('link');
+          const link = document.createElement('link')
           link.rel = 'preload';
           link.as = 'image';
           link.href = element.src || element.dataset.src || '';
@@ -356,7 +356,7 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeCriticalResources(): void {
     // Preload critical fonts
-    const fontLinks = document.querySelectorAll('link[href*="font"]');
+    const fontLinks = document.querySelectorAll('link[href*="font"]')
     fontLinks.forEach((link: any) => {
       if (link.rel !== 'preload') {
         const preloadLink = document.createElement('link');
@@ -369,7 +369,7 @@ export class CoreWebVitalsOptimizer {
     });
 
     // Preload critical CSS
-    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]')
     const criticalCSS = Array.from(cssLinks).slice(0, 2); // First 2 stylesheets
 
     criticalCSS.forEach((link: any) => {
@@ -386,19 +386,19 @@ export class CoreWebVitalsOptimizer {
    */
   private removeRenderBlockingResources(): void {
     // Make non-critical CSS non-blocking
-    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]')
     cssLinks.forEach((link: any, index) => {
       if (index > 1) {
         // Keep first 2 stylesheets blocking
-        link.media = 'print';
+        link.media = 'print'
         link.onload = () => {
           link.media = 'all';
-        };
+        }
       }
     });
 
     // Defer non-critical JavaScript
-    const scripts = document.querySelectorAll('script[src]:not([async]):not([defer])');
+    const scripts = document.querySelectorAll('script[src]:not([async]):not([defer])')
     scripts.forEach((script: any) => {
       if (!this.isCriticalScript(script.src)) {
         script.defer = true;
@@ -411,13 +411,13 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeFID(): void {
     // Break up long tasks
-    this.breakUpLongTasks();
+    this.breakUpLongTasks()
 
     // Optimize event handlers
-    this.optimizeEventHandlers();
+    this.optimizeEventHandlers()
 
     // Use scheduler API if available
-    this.useSchedulerAPI();
+    this.useSchedulerAPI()
   }
 
   /**
@@ -428,11 +428,11 @@ export class CoreWebVitalsOptimizer {
     if ('PerformanceObserver' in window) {
       try {
         const longTaskObserver = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
+          const entries = list.getEntries()
           entries.forEach((entry) => {
             if (entry.duration > 50) {
               // Long task threshold
-              // console.warn(`Long task detected: ${entry.duration}ms`);
+              // console.warn(`Long task detected: ${entry.duration}ms`)
               this.suggestTaskOptimization(entry);
             }
           });
@@ -441,7 +441,7 @@ export class CoreWebVitalsOptimizer {
         longTaskObserver.observe({ entryTypes: ['longtask'] });
         this.observers.push(longTaskObserver);
       } catch (error) {
-        // console.warn('Long task monitoring not supported:', error);
+        // console.warn('Long task monitoring not supported:', error)
       }
     }
   }
@@ -451,14 +451,14 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeEventHandlers(): void {
     // Add passive event listeners for better performance
-    const events = ['touchstart', 'touchmove', 'wheel', 'scroll'];
+    const events = ['touchstart', 'touchmove', 'wheel', 'scroll']
 
     events.forEach((eventType) => {
       document.addEventListener(eventType, () => {}, { passive: true });
     });
 
     // Debounce scroll and resize handlers
-    this.debounceScrollHandlers();
+    this.debounceScrollHandlers()
   }
 
   /**
@@ -467,7 +467,7 @@ export class CoreWebVitalsOptimizer {
   private useSchedulerAPI(): void {
     if ('scheduler' in window && 'postTask' in (window as any).scheduler) {
       // Use scheduler.postTask for better task prioritization
-      (window as any).__SCHEDULER_AVAILABLE__ = true;
+      (window as any).__SCHEDULER_AVAILABLE__ = true
     }
   }
 
@@ -476,13 +476,13 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeCLS(): void {
     // Set size attributes for images and videos
-    this.setSizeAttributesForMedia();
+    this.setSizeAttributesForMedia()
 
     // Reserve space for dynamic content
-    this.reserveSpaceForDynamicContent();
+    this.reserveSpaceForDynamicContent()
 
     // Optimize font loading
-    this.optimizeFontLoading();
+    this.optimizeFontLoading()
   }
 
   /**
@@ -494,13 +494,13 @@ export class CoreWebVitalsOptimizer {
     mediaElements.forEach((element: any) => {
       // Set intrinsic size if available
       if (element.naturalWidth && element.naturalHeight) {
-        const aspectRatio = element.naturalWidth / element.naturalHeight;
+        const aspectRatio = element.naturalWidth / element.naturalHeight
         element.style.aspectRatio = aspectRatio.toString();
       }
 
       // Set minimum dimensions
       if (!element.width && !element.style.width) {
-        element.style.width = '100%';
+        element.style.width = '100%'
         element.style.height = 'auto';
       }
     });
@@ -511,7 +511,7 @@ export class CoreWebVitalsOptimizer {
    */
   private reserveSpaceForDynamicContent(): void {
     // Add placeholder dimensions for lazy-loaded content
-    const lazyElements = document.querySelectorAll('[data-lazy], .lazy-load');
+    const lazyElements = document.querySelectorAll('[data-lazy], .lazy-load')
 
     lazyElements.forEach((element: any) => {
       if (!element.style.minHeight) {
@@ -525,7 +525,7 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeFontLoading(): void {
     // Use font-display: swap for custom fonts
-    const style = document.createElement('style');
+    const style = document.createElement('style')
     style.textContent = `
       @font-face {
         font-display: swap;
@@ -534,7 +534,7 @@ export class CoreWebVitalsOptimizer {
     document.head.appendChild(style);
 
     // Preload critical fonts
-    const criticalFonts = ['/fonts/inter-var.woff2', '/fonts/inter-regular.woff2'];
+    const criticalFonts = ['/fonts/inter-var.woff2', '/fonts/inter-regular.woff2']
 
     criticalFonts.forEach((fontUrl) => {
       const link = document.createElement('link');
@@ -552,13 +552,13 @@ export class CoreWebVitalsOptimizer {
    */
   private optimizeResourceLoading(): void {
     // Implement resource hints
-    this.addResourceHints();
+    this.addResourceHints()
 
     // Optimize images
-    this.optimizeImages();
+    this.optimizeImages()
 
     // Enable compression
-    this.enableCompression();
+    this.enableCompression()
   }
 
   /**
@@ -594,7 +594,7 @@ export class CoreWebVitalsOptimizer {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            this.loadImage(entry.target as HTMLImageElement);
+            this.loadImage(entry.target as HTMLImageElement)
             this.intersectionObserver?.unobserve(entry.target);
           }
         });
@@ -606,7 +606,7 @@ export class CoreWebVitalsOptimizer {
     );
 
     // Apply lazy loading to images
-    this.applyLazyLoading();
+    this.applyLazyLoading()
   }
 
   /**
@@ -634,14 +634,14 @@ export class CoreWebVitalsOptimizer {
       width: img.width || 800,
       quality: this.config.imageOptimization.compressionQuality,
       format: 'auto',
-    });
+    })
 
     // Load the image
-    const tempImg = new Image();
+    const tempImg = new Image()
     tempImg.onload = () => {
       img.src = optimizedSrc;
       img.classList.add('loaded');
-    };
+    }
     tempImg.src = optimizedSrc;
   }
 
@@ -654,7 +654,7 @@ export class CoreWebVitalsOptimizer {
   ): string {
     // This would integrate with your image optimization service
     // For now, return the original src
-    return src;
+    return src
   }
 
   /**
@@ -743,7 +743,7 @@ export class CoreWebVitalsOptimizer {
         'Optimize database queries',
         'Use HTTP/2 or HTTP/3',
       ],
-    };
+    }
 
     return recommendations[metric] || [];
   }
@@ -756,14 +756,14 @@ export class CoreWebVitalsOptimizer {
 
     // Keep only recent issues
     if (this.issues.length > 100) {
-      this.issues = this.issues.slice(-50);
+      this.issues = this.issues.slice(-50)
     }
 
     // Log critical issues
     if (issue.severity === 'critical') {
       // console.error(
         `Critical performance issue: ${issue.metric} = ${issue.value}ms (_target: ${issue.target}ms)`
-      );
+      )
     }
   }
 
@@ -788,7 +788,7 @@ export class CoreWebVitalsOptimizer {
           'Content-Type': 'application/json',
         },
       }).catch((error) => {
-        // console.warn('Failed to report metric:', error);
+        // console.warn('Failed to report metric:', error)
       });
     }
   }
@@ -797,15 +797,15 @@ export class CoreWebVitalsOptimizer {
    * Utility methods for optimization suggestions
    */
   private suggestJSOptimization(entry: PerformanceResourceTiming): void {
-    // console.log(`JS Optimization needed for: ${entry.name}`);
+    // console.log(`JS Optimization needed for: ${entry.name}`)
   }
 
   private suggestCSSOptimization(entry: PerformanceResourceTiming): void {
-    // console.log(`CSS Optimization needed for: ${entry.name}`);
+    // console.log(`CSS Optimization needed for: ${entry.name}`)
   }
 
   private suggestImageOptimization(entry: PerformanceResourceTiming): void {
-    // console.log(`Image Optimization needed for: ${entry.name}`);
+    // console.log(`Image Optimization needed for: ${entry.name}`)
   }
 
   private isImageResource(url: string): boolean {
@@ -817,11 +817,11 @@ export class CoreWebVitalsOptimizer {
   }
 
   private identifyLayoutShiftCause(entry: any): void {
-    // console.log('Layout shift cause analysis:', entry);
+    // console.log('Layout shift cause analysis:', entry)
   }
 
   private suggestTaskOptimization(entry: PerformanceEntry): void {
-    // console.log(`Long task optimization needed: ${entry.duration}ms`);
+    // console.log(`Long task optimization needed: ${entry.duration}ms`)
   }
 
   private debounceScrollHandlers(): void {
@@ -840,7 +840,7 @@ export class CoreWebVitalsOptimizer {
    * Get current metrics
    */
   getMetrics(): Partial<WebVitalsMetrics> {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   /**
@@ -867,14 +867,14 @@ export class CoreWebVitalsOptimizer {
       issues: this.issues,
       score,
       recommendations: topRecommendations,
-    };
+    }
   }
 
   /**
    * Calculate overall performance score
    */
   private calculatePerformanceScore(): number {
-    const weights = { lcp: 0.25, fid: 0.25, cls: 0.25, fcp: 0.15, ttfb: 0.1 };
+    const weights = { lcp: 0.25, fid: 0.25, cls: 0.25, fcp: 0.15, ttfb: 0.1 }
     let score = 100;
 
     Object.entries(this.metrics).forEach(([metric, value]) => {
@@ -927,18 +927,18 @@ export class CoreWebVitalsOptimizer {
    */
   cleanup(): void {
     this.stopMonitoring();
-    this.metrics = {};
+    this.metrics = {}
     this.issues = [];
   }
 }
 
 // Global instance
-export const coreWebVitalsOptimizer = new CoreWebVitalsOptimizer();
+export const coreWebVitalsOptimizer = new CoreWebVitalsOptimizer()
 
 // Initialize on load
 if (typeof window !== 'undefined') {
   window.addEventListener('load', () => {
-    (window as any).__CORE_WEB_VITALS_OPTIMIZER__ = coreWebVitalsOptimizer;
+    (window as any).__CORE_WEB_VITALS_OPTIMIZER__ = coreWebVitalsOptimizer
   });
 }
 

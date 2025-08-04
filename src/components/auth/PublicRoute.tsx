@@ -22,14 +22,14 @@ export const PublicRoute = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
       </div>
-    );
+    )
   }
 
   // If user is authenticated, don't render the landing page
   if (isAuthenticated) {
-    return null;
+    return null
   }
 
   // If user is not authenticated, show landing page
-  return <LandingPage />;
-};
+  return <LandingPage />
+}

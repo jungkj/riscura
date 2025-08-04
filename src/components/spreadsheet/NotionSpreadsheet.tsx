@@ -4,8 +4,9 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import {
+import { DaisyCardBody, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   DaisyDialog,
   DaisyDialogContent,
   DaisyDialogDescription,
@@ -36,12 +37,12 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
   Download,
   Upload,
   MoreHorizontal,
-} from 'lucide-react';
+} from 'lucide-react'
 import Image from 'next/image';
 
 // Enhanced data structure
 interface SpreadsheetCell {
-  id: string;
+  id: string
   value: string | number;
   type: 'text' | 'number' | 'date' | 'select' | 'multiselect';
   options?: string[];
@@ -65,7 +66,7 @@ interface SpreadsheetColumn {
 
 // AI Insight interface
 interface AIInsight {
-  id: string;
+  id: string
   type: 'risk' | 'opportunity' | 'trend' | 'anomaly';
   title: string;
   description: string;
@@ -120,7 +121,7 @@ const INITIAL_COLUMNS: SpreadsheetColumn[] = [
     icon: Type,
     options: ['Open', 'In Progress', 'Mitigated', 'Closed', 'On Hold'],
   },
-];
+]
 
 const INITIAL_DATA: SpreadsheetRow[] = [
   {
@@ -189,7 +190,7 @@ export default function NotionSpreadsheet() {
   // Filter data based on search term
   useEffect(() => {
     if (!searchTerm.trim()) {
-      setFilteredRows(rows);
+      setFilteredRows(rows)
       return;
     }
 
@@ -201,10 +202,10 @@ export default function NotionSpreadsheet() {
 
   // Generate AI insights based on current data
   const generateAIInsights = useCallback(async () => {
-    setIsGeneratingInsights(true);
+    setIsGeneratingInsights(true)
 
     // Simulate AI analysis
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     const insights: AIInsight[] = [
       {
@@ -248,7 +249,7 @@ export default function NotionSpreadsheet() {
 
   // Add new row
   const addRow = useCallback(() => {
-    const newRowId = `row${Date.now()}`;
+    const newRowId = `row${Date.now()}`
     const newRow: SpreadsheetRow = {
       id: newRowId,
       isNew: true,
@@ -258,7 +259,7 @@ export default function NotionSpreadsheet() {
         type: col.type,
         options: col.options,
       })),
-    };
+    }
 
     setRows((prev) => [...prev, newRow]);
     setHasUnsavedChanges(true);
@@ -266,13 +267,13 @@ export default function NotionSpreadsheet() {
 
   // Delete row
   const deleteRow = useCallback((rowId: string) => {
-    setRows((prev) => prev.filter((row) => row.id !== rowId));
+    setRows((prev) => prev.filter((row) => row.id !== rowId))
     setHasUnsavedChanges(true);
   }, []);
 
   // Add new column
   const addColumn = useCallback(() => {
-    if (!newColumn.name.trim()) return;
+    if (!newColumn.name.trim()) return
 
     const columnId = newColumn.name.toLowerCase().replace(/\s+/g, '_');
     const column: SpreadsheetColumn = {
@@ -285,7 +286,7 @@ export default function NotionSpreadsheet() {
         newColumn.type === 'select'
           ? newColumn.options.split(',').map((opt) => opt.trim())
           : undefined,
-    };
+    }
 
     setColumns((prev) => [...prev, column]);
 
@@ -303,7 +304,7 @@ export default function NotionSpreadsheet() {
           },
         ],
       }))
-    );
+    )
 
     setNewColumn({ name: '', type: 'text', options: '' });
     setIsAddColumnDialogOpen(false);
@@ -318,7 +319,7 @@ export default function NotionSpreadsheet() {
           return {
             ...row,
             cells: row.cells.map((cell) => (cell.id === columnId ? { ...cell, value } : cell)),
-          };
+          }
         }
         return row;
       })
@@ -328,7 +329,7 @@ export default function NotionSpreadsheet() {
 
   // Save data (simulate API call)
   const saveData = useCallback(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     setHasUnsavedChanges(false);
     setRows((prev) => prev.map((row) => ({ ...row, isNew: false })));
   }, []);
@@ -336,7 +337,7 @@ export default function NotionSpreadsheet() {
   // Render cell based on type
   const renderCell = useCallback(
     (row: SpreadsheetRow, column: SpreadsheetColumn) => {
-      const cell = row.cells.find((c) => c.id === column.id);
+      const cell = row.cells.find((c) => c.id === column.id)
       if (!cell) return null;
 
       const isSelected = selectedCell?.rowId === row.id && selectedCell?.columnId === column.id;
@@ -407,7 +408,7 @@ updateCellValue(row.id, column.id, e.target.value)}
             <DaisyBadge className={`text-xs ${getCategoryColor(String(cell.value))}`}>
               {String(cell.value)}
             </DaisyBadge>
-          );
+          )
         }
         if (column.type === 'select' && column.id === 'status') {
           return (
@@ -420,7 +421,7 @@ updateCellValue(row.id, column.id, e.target.value)}
           return renderStars(Number(cell.value));
         }
         return <span className="text-sm text-gray-900">{String(cell.value)}</span>;
-      };
+      }
 
       return (
         <div
@@ -458,8 +459,8 @@ updateCellValue(row.id, column.id, e.target.value)}
             className={`w-3 h-3 ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
         ))}
       </div>
-    );
-  };
+    )
+  }
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -468,9 +469,9 @@ updateCellValue(row.id, column.id, e.target.value)}
       Mitigated: 'bg-green-100 text-green-800',
       Closed: 'bg-gray-100 text-gray-800',
       'On Hold': 'bg-purple-100 text-purple-800',
-    };
+    }
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+  }
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -479,9 +480,9 @@ updateCellValue(row.id, column.id, e.target.value)}
       Strategic: 'bg-purple-100 text-purple-800',
       Compliance: 'bg-orange-100 text-orange-800',
       Technological: 'bg-indigo-100 text-indigo-800',
-    };
+    }
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+  }
 
   const getInsightSeverityColor = (severity: string) => {
     const colors = {
@@ -489,9 +490,9 @@ updateCellValue(row.id, column.id, e.target.value)}
       medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
       high: 'bg-orange-100 text-orange-800 border-orange-200',
       critical: 'bg-red-100 text-red-800 border-red-200',
-    };
+    }
     return colors[severity as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-200';
-  };
+  }
 
   const getInsightIcon = (_type: string) => {
     switch (type) {
@@ -506,7 +507,7 @@ updateCellValue(row.id, column.id, e.target.value)}
       default:
         return AlertCircle;
     }
-  };
+  }
 
   return (
     <div className="h-screen flex flex-col bg-white">

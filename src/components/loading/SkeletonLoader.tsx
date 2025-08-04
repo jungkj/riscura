@@ -5,7 +5,7 @@ import { designTokens } from '@/lib/design-system/tokens';
 
 // Base skeleton component with animation
 interface SkeletonProps {
-  className?: string;
+  className?: string
   width?: string | number;
   height?: string | number;
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'full';
@@ -25,7 +25,7 @@ const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
     md: 'rounded-md',
     lg: 'rounded-lg',
     full: 'rounded-full',
-  };
+  }
 
   return (
     <div
@@ -35,11 +35,11 @@ const BaseSkeleton: React.FC<DaisySkeletonProps> = ({
         height: typeof height === 'number' ? `${height}px` : height,
       }} />
   );
-};
+}
 
 // Text skeleton with multiple lines
 interface TextSkeletonProps {
-  lines?: number;
+  lines?: number
   className?: string;
   lineHeight?: string;
   lastLineWidth?: string;
@@ -61,11 +61,11 @@ const TextSkeleton: React.FC<TextSkeletonProps> = ({
       ))}
     </div>
   );
-};
+}
 
 // Card skeleton for dashboard widgets
 interface CardSkeletonProps {
-  className?: string;
+  className?: string
   showHeader?: boolean;
   showFooter?: boolean;
   contentLines?: number;
@@ -103,11 +103,11 @@ const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Table skeleton for data tables
 interface TableSkeletonProps {
-  rows?: number;
+  rows?: number
   columns?: number;
   className?: string;
   showHeader?: boolean;
@@ -144,11 +144,11 @@ const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // List skeleton for activity feeds
 interface ListSkeletonProps {
-  items?: number;
+  items?: number
   className?: string;
   showAvatar?: boolean;
   showActions?: boolean;
@@ -189,11 +189,11 @@ const ListSkeleton: React.FC<ListSkeletonProps> = ({
       ))}
     </div>
   );
-};
+}
 
 // Chart skeleton for analytics
 interface ChartSkeletonProps {
-  type?: 'bar' | 'line' | 'pie' | 'area';
+  type?: 'bar' | 'line' | 'pie' | 'area'
   className?: string;
   showLegend?: boolean;
   height?: string;
@@ -259,7 +259,7 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
       default:
         return null;
     }
-  };
+  }
 
   return (
     <div className={`bg-white border border-gray-200 rounded-lg p-4 xs:p-6 ${className}`}>
@@ -284,11 +284,11 @@ const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Form skeleton for wizards and forms
 interface FormSkeletonProps {
-  fields?: number;
+  fields?: number
   className?: string;
   showButtons?: boolean;
   columns?: 1 | 2;
@@ -326,11 +326,11 @@ const FormSkeleton: React.FC<FormSkeletonProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Dashboard skeleton for full page loading
 interface DashboardSkeletonProps {
-  className?: string;
+  className?: string
 }
 
 const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({ className = '' }) => {
@@ -379,11 +379,11 @@ const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({ className = '' })
       <DaisyTableSkeleton rows={8} columns={5} >
       </div>
   );
-};
+}
 
 // Progressive loading skeleton for infinite scroll
 interface ProgressiveSkeletonProps {
-  itemCount?: number;
+  itemCount?: number
   itemHeight?: string;
   className?: string;
 }
@@ -414,7 +414,7 @@ const ProgressiveSkeleton: React.FC<DaisyProgressiveSkeletonProps />= ({
       ))}
     </div>
   );
-};
+}
 
 // Export all skeleton components
 export const SkeletonLoader = {
@@ -427,6 +427,6 @@ export const SkeletonLoader = {
   Form: FormSkeleton,
   Dashboard: DashboardSkeleton,
   Progressive: ProgressiveSkeleton,
-};
+}
 
 export default SkeletonLoader;

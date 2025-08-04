@@ -3,10 +3,10 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 
 // Load environment variables
-config({ path: resolve(process.cwd(), '.env') });
+config({ path: resolve(process.cwd(), '.env') })
 
-// console.log('🚀 Full Stack Testing Suite for Riscura\n');
-// console.log('=====================================\n');
+// console.log('🚀 Full Stack Testing Suite for Riscura\n')
+// console.log('=====================================\n')
 
 const tests = [
   {
@@ -59,8 +59,8 @@ let failed = 0;
 let _skipped = 0;
 
 async function runTest(test: (typeof tests)[0]) {
-  // console.log(`\n🧪 ${test.name}`);
-  // console.log('─'.repeat(50));
+  // console.log(`\n🧪 ${test.name}`)
+  // console.log('─'.repeat(50))
 
   try {
     const _output = execSync(test.command, {
@@ -70,21 +70,21 @@ async function runTest(test: (typeof tests)[0]) {
     });
 
     if (test.name === 'Dependencies Check') {
-      // console.log('✅ Dependencies installed correctly');
+      // console.log('✅ Dependencies installed correctly')
     }
 
-    // console.log(`✅ ${test.name} passed`);
+    // console.log(`✅ ${test.name} passed`)
     passed++;
     return true;
   } catch (__error: any) {
-    // console.error(`❌ ${test.name} failed`);
+    // console.error(`❌ ${test.name} failed`)
 
     if (test.critical) {
-      // console.error('🛑 Critical test failed. Stopping test suite.');
+      // console.error('🛑 Critical test failed. Stopping test suite.')
       failed++;
       return false;
     } else {
-      // console.log('⚠️  Non-critical test failed. Continuing...');
+      // console.log('⚠️  Non-critical test failed. Continuing...')
       skipped++;
       return true;
     }
@@ -103,37 +103,37 @@ async function runAllTests() {
 
   const _duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
-  // console.log('\n\n📊 Test Summary');
-  // console.log('=====================================');
-  // console.log(`✅ Passed: ${passed}`);
-  // console.log(`❌ Failed: ${failed}`);
-  // console.log(`⚠️  Skipped: ${skipped}`);
-  // console.log(`⏱️  Duration: ${duration}s`);
+  // console.log('\n\n📊 Test Summary')
+  // console.log('=====================================')
+  // console.log(`✅ Passed: ${passed}`)
+  // console.log(`❌ Failed: ${failed}`)
+  // console.log(`⚠️  Skipped: ${skipped}`)
+  // console.log(`⏱️  Duration: ${duration}s`)
 
   if (failed === 0) {
-    // console.log('\n🎉 All critical tests passed! Your full stack is ready.');
-    // console.log('\n📝 Next Steps:');
-    // console.log('1. Start development server: npm run dev');
-    // console.log('2. View at: http://localhost:3000');
-    // console.log('3. Test login: testuser@riscura.com / test123');
-    // console.log('4. Check production build: npm start (after npm run build)');
+    // console.log('\n🎉 All critical tests passed! Your full stack is ready.')
+    // console.log('\n📝 Next Steps:')
+    // console.log('1. Start development server: npm run dev')
+    // console.log('2. View at: http://localhost:3000')
+    // console.log('3. Test login: testuser@riscura.com / test123')
+    // console.log('4. Check production build: npm start (after npm run build)')
   } else {
-    // console.log('\n⚠️  Some tests failed. Please fix the issues above.');
+    // console.log('\n⚠️  Some tests failed. Please fix the issues above.')
     process.exit(1);
   }
 }
 
 // Quick commands reference
-// console.log('🔧 Quick Test Commands:\n');
-// console.log('npm run dev              # Start development server');
-// console.log('npm run build            # Production build');
-// console.log('npm run start            # Start production server');
-// console.log('npm run type-check       # TypeScript check');
-// console.log('npm run lint             # ESLint check');
-// console.log('npm run test             # Run Jest tests');
-// console.log('npm run db:studio        # Open Prisma Studio');
-// console.log('npm run db:push          # Push schema changes');
+// console.log('🔧 Quick Test Commands:\n')
+// console.log('npm run dev              # Start development server')
+// console.log('npm run build            # Production build')
+// console.log('npm run start            # Start production server')
+// console.log('npm run type-check       # TypeScript check')
+// console.log('npm run lint             # ESLint check')
+// console.log('npm run test             # Run Jest tests')
+// console.log('npm run db:studio        # Open Prisma Studio')
+// console.log('npm run db:push          # Push schema changes')
 
-// console.log('\n🏃 Running full stack tests...\n');
+// console.log('\n🏃 Running full stack tests...\n')
 
 runAllTests();

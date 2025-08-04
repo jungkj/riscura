@@ -13,7 +13,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check for saved theme preference or default to 'riscura'
-    const savedTheme = localStorage.getItem('theme') || 'riscura';
+    const savedTheme = localStorage.getItem('theme') || 'riscura'
     setTheme(savedTheme);
   }, []);
 
@@ -24,14 +24,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'riscura' ? 'riscuraDark' : 'riscura'));
-  };
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-};
+}
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
@@ -39,4 +39,4 @@ export const useTheme = () => {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
-};
+}

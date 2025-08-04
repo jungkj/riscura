@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -42,11 +42,11 @@ import {
   AlertCircle,
   XCircle,
   CheckCircle2,
-} from 'lucide-react';
+} from 'lucide-react'
 
-// import MetricCards from './MetricCards';
-// import RiskHeatMap from '../risks/RiskHeatMap';
-// import ComplianceProgress from './ComplianceProgress';
+// import MetricCards from './MetricCards'
+// import RiskHeatMap from '../risks/RiskHeatMap'
+// import ComplianceProgress from './ComplianceProgress'
 
 interface RiskItem {
   id: string;
@@ -107,7 +107,7 @@ export default function VantaInspiredDashboard() {
       dueDate: '2024-01-10',
       progress: 100,
     },
-  ];
+  ]
 
   const complianceFrameworks: ComplianceFramework[] = [
     {
@@ -152,7 +152,7 @@ export default function VantaInspiredDashboard() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -173,7 +173,7 @@ export default function VantaInspiredDashboard() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -190,12 +190,12 @@ export default function VantaInspiredDashboard() {
       default:
         return <Clock className="w-4 h-4" />;
     }
-  };
+  }
 
   useEffect(() => {
     // Simulate real-time updates
     const interval = setInterval(() => {
-      setLastUpdated(new Date());
+      setLastUpdated(new Date())
     }, 30000);
 
     return () => clearInterval(interval);
@@ -212,7 +212,7 @@ export default function VantaInspiredDashboard() {
     if (diffInHours < 24) return `${diffInHours}h ago`;
 
     return date.toLocaleDateString();
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

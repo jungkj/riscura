@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 // ============================================================================
 
 export interface ExportJob {
-  id: string;
+  id: string
   organizationId: string;
   userId: string;
   type: ExportType;
@@ -59,31 +59,31 @@ export type ExportStatus =
 
 export interface ExportParameters {
   // Data filters
-  startDate?: Date;
+  startDate?: Date
   endDate?: Date;
   entityIds?: string[];
   includeArchived?: boolean;
   includeDeleted?: boolean;
 
   // Relationship includes
-  includeRelatedData?: boolean;
+  includeRelatedData?: boolean
   includeDocuments?: boolean;
   includeComments?: boolean;
   includeHistory?: boolean;
 
   // Privacy and compliance
-  anonymize?: boolean;
+  anonymize?: boolean
   excludePII?: boolean;
   complianceMode?: 'GDPR' | 'CCPA' | 'HIPAA' | 'SOX';
 
   // Format-specific options
-  csvDelimiter?: string;
+  csvDelimiter?: string
   csvEncoding?: string;
   includeHeaders?: boolean;
   password?: string; // For encrypted exports
 
   // Custom query (for CUSTOM_QUERY type)
-  customQuery?: string;
+  customQuery?: string
   customFields?: string[];
 }
 
@@ -102,7 +102,7 @@ export interface ExportMetadata {
     approvedBy?: string;
     approvalDate?: Date;
     retentionPeriod: number; // days
-  };
+  }
 }
 
 export interface ExportResult {
@@ -113,12 +113,12 @@ export interface ExportResult {
     size: number;
     expiresAt: Date;
     downloadToken: string;
-  };
+  }
   statistics: {
     recordsExported: number;
     processingTime: number;
     fileSize: number;
-  };
+  }
 }
 
 export interface ExportTemplate {
@@ -134,7 +134,7 @@ export interface ExportTemplate {
   usage: {
     totalUses: number;
     lastUsed?: Date;
-  };
+  }
 }
 
 // ============================================================================
@@ -160,7 +160,7 @@ const ExportParametersSchema = z.object({
   password: z.string().optional(),
   customQuery: z.string().optional(),
   customFields: z.array(z.string()).optional(),
-});
+})
 
 const ExportRequestSchema = z.object({
   type: z.enum([
@@ -190,7 +190,7 @@ const ExportRequestSchema = z.object({
 // ============================================================================
 
 export class DataExportService {
-  private prisma: PrismaClient;
+  private prisma: PrismaClient
   private cache: typeof enhancedCache;
   private processingJobs = new Map<string, AbortController>();
 
@@ -210,26 +210,26 @@ export class DataExportService {
     userId: string,
     request: z.infer<typeof ExportRequestSchema>
   ): Promise<ExportJob> {
-    const validatedRequest = ExportRequestSchema.parse(request);
+    const validatedRequest = ExportRequestSchema.parse(request)
 
     // Apply template if specified
-    let parameters = validatedRequest.parameters || {};
+    let parameters = validatedRequest.parameters || {}
     if (validatedRequest.templateId) {
       const template = await this.getExportTemplate(validatedRequest.templateId);
       if (template) {
-        parameters = { ...template.parameters, ...parameters };
+        parameters = { ...template.parameters, ...parameters }
       }
     }
 
     // Validate permissions for export type
-    await this.validateExportPermissions(organizationId, userId, validatedRequest.type);
+    await this.validateExportPermissions(organizationId, userId, validatedRequest.type)
 
     // Estimate job metadata
     const metadata = await this.estimateExportMetadata(
       organizationId,
       validatedRequest.type,
       parameters
-    );
+    )
 
     // Create export job
     const job: ExportJob = {
@@ -243,14 +243,14 @@ export class DataExportService {
       metadata,
       createdAt: new Date(),
       progress: 0,
-    };
+    }
 
     // Store job in database and cache
-    await this.storeExportJob(job);
+    await this.storeExportJob(job)
     await this.cache.set(`export-job:${job.id}`, job, 24 * 60 * 60); // 24 hours
 
     // Start background processing
-    this.processExportJobAsync(job);
+    this.processExportJobAsync(job)
 
     return job;
   }
@@ -260,13 +260,13 @@ export class DataExportService {
    */
   async getExportJob(jobId: string, organizationId: string): Promise<ExportJob | null> {
     // Try cache first
-    const _cached = await this.cache.get<ExportJob>(`export-job:${jobId}`);
+    const _cached = await this.cache.get<ExportJob>(`export-job:${jobId}`)
     if (cached && cached.organizationId === organizationId) {
       return cached;
     }
 
     // Fallback to database
-    return await this.loadExportJob(jobId, organizationId);
+    return await this.loadExportJob(jobId, organizationId)
   }
 
   /**
@@ -283,7 +283,7 @@ export class DataExportService {
   ): Promise<{ jobs: ExportJob[]; totalCount: number }> {
     const { page = 1, limit = 20, status, type, userId } = options;
 
-    const where: any = { organizationId };
+    const where: any = { organizationId }
     if (status) where.status = status;
     if (type) where.type = type;
     if (userId) where.userId = userId;
@@ -293,7 +293,7 @@ export class DataExportService {
       this.countExportJobs(where),
     ]);
 
-    return { jobs, totalCount };
+    return { jobs, totalCount }
   }
 
   /**
@@ -310,14 +310,14 @@ export class DataExportService {
     }
 
     // Cancel processing
-    const controller = this.processingJobs.get(jobId);
+    const controller = this.processingJobs.get(jobId)
     if (controller) {
       controller.abort();
       this.processingJobs.delete(jobId);
     }
 
     // Update job status
-    job.status = 'CANCELLED';
+    job.status = 'CANCELLED'
     job.completedAt = new Date();
 
     await this.updateExportJob(job);
@@ -344,13 +344,13 @@ export class DataExportService {
       !this.validateDownloadToken(jobId, downloadToken) ||
       (job.downloadExpiry && job.downloadExpiry < new Date())
     ) {
-      return null;
+      return null
     }
 
     return {
       url: job.downloadUrl,
       filename: this.generateFilename(job),
-    };
+    }
   }
 
   // ============================================================================
@@ -358,20 +358,20 @@ export class DataExportService {
   // ============================================================================
 
   private async processExportJobAsync(job: ExportJob): Promise<void> {
-    const controller = new AbortController();
+    const controller = new AbortController()
     this.processingJobs.set(job.id, controller);
 
     try {
       // Update job status to processing
-      job.status = 'PROCESSING';
+      job.status = 'PROCESSING'
       job.startedAt = new Date();
       await this.updateExportJob(job);
 
       // Process the export based on type
-      const _result = await this.processExportByType(job, controller.signal);
+      const _result = await this.processExportByType(job, controller.signal)
 
       // Update job with completion
-      job.status = 'COMPLETED';
+      job.status = 'COMPLETED'
       job.completedAt = new Date();
       job.downloadUrl = result.downloadUrl;
       job.downloadExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
@@ -381,14 +381,14 @@ export class DataExportService {
       await this.updateExportJob(job);
     } catch (error) {
       // Handle export failure
-      job.status = 'FAILED';
+      job.status = 'FAILED'
       job.completedAt = new Date();
       job.errorMessage = error instanceof Error ? error.message : 'Unknown error';
       job.progress = 0;
 
       await this.updateExportJob(job);
 
-      // console.error(`Export job ${job.id} failed:`, error);
+      // console.error(`Export job ${job.id} failed:`, error)
     } finally {
       this.processingJobs.delete(job.id);
     }
@@ -435,19 +435,19 @@ export class DataExportService {
     const { organizationId, parameters } = job;
 
     // Build query conditions
-    const where: any = { organizationId };
+    const where: any = { organizationId }
 
     if (parameters.startDate) {
-      where.createdAt = { gte: new Date(parameters.startDate) };
+      where.createdAt = { gte: new Date(parameters.startDate) }
     }
     if (parameters.endDate) {
-      where.createdAt = { ...where.createdAt, lte: new Date(parameters.endDate) };
+      where.createdAt = { ...where.createdAt, lte: new Date(parameters.endDate) }
     }
     if (parameters.entityIds?.length) {
-      where.id = { in: parameters.entityIds };
+      where.id = { in: parameters.entityIds }
     }
     if (!parameters.includeArchived) {
-      where.status = { not: 'ARCHIVED' };
+      where.status = { not: 'ARCHIVED' }
     }
 
     // Fetch risks with related data
@@ -468,25 +468,25 @@ export class DataExportService {
         comments: parameters.includeComments ? true : false,
       },
       orderBy: { createdAt: 'desc' },
-    });
+    })
 
     // Update progress
-    job.progress = 50;
+    job.progress = 50
     await this.updateExportJob(job);
 
     // Apply data transformations
-    const transformedData = this.transformRisksForExport(risks, parameters);
+    const transformedData = this.transformRisksForExport(risks, parameters)
 
     // Generate file
-    const fileBuffer = await this.generateExportFile(transformedData, job.format, parameters);
+    const fileBuffer = await this.generateExportFile(transformedData, job.format, parameters)
 
     // Upload to storage and get URL
-    const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
+    const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format)
 
     return {
       downloadUrl,
       fileSize: fileBuffer.length,
-    };
+    }
   }
 
   private async exportControls(
@@ -495,11 +495,11 @@ export class DataExportService {
   ): Promise<{ downloadUrl: string; fileSize: number }> {
     const { organizationId, parameters } = job;
 
-    const where: any = { organizationId };
+    const where: any = { organizationId }
 
     // Apply filters similar to risks export
     if (parameters.entityIds?.length) {
-      where.id = { in: parameters.entityIds };
+      where.id = { in: parameters.entityIds }
     }
 
     const controls = await this.prisma.control.findMany({
@@ -530,7 +530,7 @@ export class DataExportService {
     const fileBuffer = await this.generateExportFile(transformedData, job.format, parameters);
     const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
 
-    return { downloadUrl, fileSize: fileBuffer.length };
+    return { downloadUrl, fileSize: fileBuffer.length }
   }
 
   private async exportAllData(
@@ -547,7 +547,7 @@ export class DataExportService {
       [],
       this.prisma.document.findMany({ where: { organizationId } }),
       this.prisma.user.findMany({ where: { organizationId } }),
-    ]);
+    ])
 
     job.progress = 70;
     await this.updateExportJob(job);
@@ -568,15 +568,15 @@ export class DataExportService {
         version: '1.0',
         type: 'FULL_BACKUP',
       },
-    };
+    }
 
     const fileBuffer = await this.generateExportFile(exportData, 'JSON', job.parameters);
 
     // For large exports, create ZIP file
-    const compressedBuffer = await this.compressExportData(fileBuffer, job.id);
+    const compressedBuffer = await this.compressExportData(fileBuffer, job.id)
     const downloadUrl = await this.uploadExportFile(job.id, compressedBuffer, 'ZIP');
 
-    return { downloadUrl, fileSize: compressedBuffer.length };
+    return { downloadUrl, fileSize: compressedBuffer.length }
   }
 
   private async exportGDPRData(
@@ -596,7 +596,7 @@ export class DataExportService {
         sessions: true,
         // Include all user-related data
       },
-    });
+    })
 
     if (!userData) {
       throw new Error('User not found for GDPR export');
@@ -606,7 +606,7 @@ export class DataExportService {
     const auditLogs = await this.prisma.auditLog.findMany({
       where: { userId, organizationId },
       orderBy: { timestamp: 'desc' },
-    });
+    })
 
     const gdprData = {
       personalData: {
@@ -635,7 +635,7 @@ export class DataExportService {
         organizationId,
         dataRetentionPolicy: '7_YEARS',
       },
-    };
+    }
 
     job.progress = 80;
     await this.updateExportJob(job);
@@ -643,7 +643,7 @@ export class DataExportService {
     const fileBuffer = await this.generateExportFile(gdprData, job.format, job.parameters);
     const downloadUrl = await this.uploadExportFile(job.id, fileBuffer, job.format);
 
-    return { downloadUrl, fileSize: fileBuffer.length };
+    return { downloadUrl, fileSize: fileBuffer.length }
   }
 
   // ============================================================================
@@ -656,7 +656,7 @@ export class DataExportService {
   ): Promise<Buffer> {
     switch (format) {
       case 'JSON':
-        return Buffer.from(JSON.stringify(data, null, 2), 'utf-8');
+        return Buffer.from(JSON.stringify(data, null, 2), 'utf-8')
 
       case 'CSV':
         return this.generateCSV(data, parameters);
@@ -684,7 +684,7 @@ export class DataExportService {
     const includeHeaders = parameters.includeHeaders !== false;
 
     // Extract headers from first object
-    const headers = Object.keys(data[0]);
+    const headers = Object.keys(data[0])
     const lines: string[] = [];
 
     if (includeHeaders) {
@@ -694,16 +694,16 @@ export class DataExportService {
     // Add data rows
     for (const row of data) {
       const values = headers.map((header) => {
-        const value = row[header];
+        const value = row[header]
         if (value === null || value === undefined) return '';
 
         // Handle objects and arrays
         if (typeof value === 'object') {
-          return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+          return `"${JSON.stringify(value).replace(/"/g, '""')}"`
         }
 
         // Escape quotes in strings
-        return `"${String(value).replace(/"/g, '""')}"`;
+        return `"${String(value).replace(/"/g, '""')}"`
       });
 
       lines.push(values.join(delimiter));
@@ -715,19 +715,19 @@ export class DataExportService {
   private async generateExcel(_data: any, parameters: ExportParameters): Promise<Buffer> {
     // This would use a library like xlsx or exceljs
     // For now, return CSV formatted as Excel
-    const csvBuffer = this.generateCSV(Array.isArray(data) ? data : [data], parameters);
+    const csvBuffer = this.generateCSV(Array.isArray(data) ? data : [data], parameters)
     return csvBuffer; // Placeholder - implement actual Excel generation
   }
 
   private async generatePDF(_data: any, parameters: ExportParameters): Promise<Buffer> {
     // This would use a library like puppeteer or jsPDF
-    const jsonString = JSON.stringify(data, null, 2);
+    const jsonString = JSON.stringify(data, null, 2)
     return Buffer.from(`PDF Export:\n\n${jsonString}`, 'utf-8'); // Placeholder
   }
 
   private generateXML(_data: any, parameters: ExportParameters): Buffer {
     // Simple XML generation
-    const xmlContent = this.objectToXML(data, 'export');
+    const xmlContent = this.objectToXML(data, 'export')
     return Buffer.from(xmlContent, 'utf-8');
   }
 
@@ -758,7 +758,7 @@ export class DataExportService {
       }
 
       return `${indent}<${key}>${String(value)}</${key}>\n`;
-    };
+    }
 
     if (typeof obj === 'object' && obj !== null) {
       Object.entries(obj).forEach(([key, value]) => {
@@ -787,11 +787,11 @@ export class DataExportService {
         status: risk.status,
         createdAt: risk.createdAt,
         updatedAt: risk.updatedAt,
-      };
+      }
 
       // Add related data if requested
       if (parameters.includeRelatedData) {
-        transformed.createdBy = risk.createdBy;
+        transformed.createdBy = risk.createdBy
         transformed.assignedTo = risk.assignedTo;
       }
 
@@ -805,13 +805,13 @@ export class DataExportService {
 
       // Apply privacy filters
       if (parameters.excludePII) {
-        delete transformed.createdBy?.email;
+        delete transformed.createdBy?.email
         delete transformed.assignedTo?.email;
       }
 
       if (parameters.anonymize) {
-        transformed.createdBy = { id: 'anonymized' };
-        transformed.assignedTo = { id: 'anonymized' };
+        transformed.createdBy = { id: 'anonymized' }
+        transformed.assignedTo = { id: 'anonymized' }
       }
 
       return transformed;
@@ -829,7 +829,7 @@ export class DataExportService {
         status: control.status,
         implementationDate: control.implementationDate,
         createdAt: control.createdAt,
-      };
+      }
 
       if (parameters.includeRelatedData) {
         transformed.createdBy = control.createdBy;
@@ -839,7 +839,7 @@ export class DataExportService {
 
       // Apply privacy filters
       if (parameters.excludePII) {
-        delete transformed.createdBy?.email;
+        delete transformed.createdBy?.email
         delete transformed.assignedTo?.email;
       }
 
@@ -858,7 +858,7 @@ export class DataExportService {
     // Check user permissions for export type
     const user = await this.prisma.user.findFirst({
       where: { id: userId, organizationId },
-    });
+    })
 
     if (!user) {
       throw new Error('User not found or not in organization');
@@ -879,7 +879,7 @@ export class DataExportService {
       BACKUP: ['admin:read', 'export:backup'],
       GDPR_DATA: ['gdpr:read', 'export:gdpr'],
       CUSTOM_QUERY: ['admin:read', 'export:custom'],
-    };
+    }
 
     const required = requiredPermissions[exportType] || [];
     const userPermissions = user.permissions || [];
@@ -898,7 +898,7 @@ export class DataExportService {
     parameters: ExportParameters
   ): Promise<ExportMetadata> {
     // Count records for different export types
-    let totalRecords = 0;
+    let totalRecords = 0
 
     switch (type) {
       case 'RISKS':
@@ -933,7 +933,7 @@ export class DataExportService {
         requiresApproval: ['ALL_DATA', 'BACKUP', 'USERS'].includes(type),
         retentionPeriod: 30, // 30 days default
       },
-    };
+    }
   }
 
   private generateFilename(job: ExportJob): string {
@@ -944,14 +944,14 @@ export class DataExportService {
 
   private validateDownloadToken(jobId: string, token: string): boolean {
     // Simple token validation - in production, use proper JWT or signed tokens
-    const expectedToken = `download_${jobId}_${Math.floor(Date.now() / 1000 / 3600)}`;
+    const expectedToken = `download_${jobId}_${Math.floor(Date.now() / 1000 / 3600)}`
     return token === expectedToken;
   }
 
   private async compressExportData(_data: Buffer, jobId: string): Promise<Buffer> {
     // This would use a compression library like zlib or archiver
     // For now, return the original data
-    return data;
+    return data
   }
 
   private async uploadExportFile(
@@ -961,7 +961,7 @@ export class DataExportService {
   ): Promise<string> {
     // This would upload to cloud storage (S3, GCS, etc.)
     // For now, return a mock URL
-    return `https://storage.riscura.com/exports/${jobId}.${format.toLowerCase()}`;
+    return `https://storage.riscura.com/exports/${jobId}.${format.toLowerCase()}`
   }
 
   // ============================================================================
@@ -971,27 +971,27 @@ export class DataExportService {
   private async storeExportJob(job: ExportJob): Promise<void> {
     // Store in database (implement based on your schema)
     // For now, just cache it
-    await this.cache.set(`export-job:${job.id}`, job, 24 * 60 * 60);
+    await this.cache.set(`export-job:${job.id}`, job, 24 * 60 * 60)
   }
 
   private async loadExportJob(jobId: string, organizationId: string): Promise<ExportJob | null> {
     // Load from database
-    return await this.cache.get(`export-job:${jobId}`);
+    return await this.cache.get(`export-job:${jobId}`)
   }
 
   private async loadExportJobs(where: any, page: number, limit: number): Promise<ExportJob[]> {
     // Load from database with pagination
-    return [];
+    return []
   }
 
   private async countExportJobs(where: any): Promise<number> {
     // Count jobs in database
-    return 0;
+    return 0
   }
 
   private async updateExportJob(job: ExportJob): Promise<void> {
     // Update job in database and cache
-    await this.cache.set(`export-job:${job.id}`, job, 24 * 60 * 60);
+    await this.cache.set(`export-job:${job.id}`, job, 24 * 60 * 60)
   }
 
   // ============================================================================
@@ -1010,10 +1010,10 @@ export class DataExportService {
       usage: {
         totalUses: 0,
       },
-    };
+    }
 
     // Store template
-    await this.cache.set(`export-template:${newTemplate.id}`, newTemplate, 30 * 24 * 60 * 60);
+    await this.cache.set(`export-template:${newTemplate.id}`, newTemplate, 30 * 24 * 60 * 60)
 
     return newTemplate;
   }
@@ -1024,7 +1024,7 @@ export class DataExportService {
 
   async listExportTemplates(_organizationId: string): Promise<ExportTemplate[]> {
     // In a real implementation, this would query the database
-    return [];
+    return []
   }
 }
 
@@ -1032,7 +1032,7 @@ export class DataExportService {
 // GLOBAL INSTANCE
 // ============================================================================
 
-let dataExportService: DataExportService | null = null;
+let dataExportService: DataExportService | null = null
 
 export function getDataExportService(prisma: PrismaClient): DataExportService {
   if (!dataExportService) {
@@ -1045,4 +1045,4 @@ export function getDataExportService(prisma: PrismaClient): DataExportService {
 // EXPORTS
 // ============================================================================
 
-export default DataExportService;
+export default DataExportService

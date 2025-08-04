@@ -16,7 +16,7 @@ export const DaisyPopover = ({ children, open: controlledOpen, onOpenChange }: P
       setInternalOpen(newOpen);
     }
     onOpenChange?.(newOpen);
-  };
+  }
 
   return (
     <div className="relative inline-block">
@@ -28,7 +28,7 @@ export const DaisyPopover = ({ children, open: controlledOpen, onOpenChange }: P
       })}
     </div>
   );
-};
+}
 
 interface PopoverTriggerProps {
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export const DaisyPopoverTrigger = ({
 }: PopoverTriggerProps) => {
   const handleClick = () => {
     onOpenChange?.(!open);
-  };
+  }
 
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children, {
@@ -58,7 +58,7 @@ export const DaisyPopoverTrigger = ({
       {children}
     </button>
   );
-};
+}
 
 interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
   align?: 'start' | 'center' | 'end';
@@ -83,7 +83,7 @@ export const DaisyPopoverContent = ({
       if (ref.current && !ref.current.contains(event.target as Node)) {
         onOpenChange?.(false);
       }
-    };
+    }
 
     if (open) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -91,7 +91,7 @@ export const DaisyPopoverContent = ({
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
+    }
   }, [open, onOpenChange]);
 
   if (!open) return null;
@@ -101,7 +101,7 @@ export const DaisyPopoverContent = ({
     right: 'left-full ml-2',
     bottom: 'top-full mt-2',
     left: 'right-full mr-2',
-  };
+  }
 
   const alignClasses = {
     start: side === 'top' || side === 'bottom' ? 'left-0' : 'top-0',
@@ -110,7 +110,7 @@ export const DaisyPopoverContent = ({
         ? 'left-1/2 -translate-x-1/2'
         : 'top-1/2 -translate-y-1/2',
     end: side === 'top' || side === 'bottom' ? 'right-0' : 'bottom-0',
-  };
+  }
 
   return (
     <div
@@ -126,4 +126,4 @@ export const DaisyPopoverContent = ({
       {children}
     </div>
   );
-};
+}

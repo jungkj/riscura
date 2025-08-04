@@ -7,6 +7,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -41,11 +42,11 @@ import {
   FileText,
   UserCheck,
   Timer,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== TYPES ==========
 export interface WorkflowStep {
-  id: string;
+  id: string
   type: 'form-submission' | 'parallel-review' | 'automated-suggestion' | 'approval' | 'notification' | 'integration' | 'condition' | 'timer';
   name: string;
   description?: string;
@@ -54,7 +55,7 @@ export interface WorkflowStep {
   sla?: string;
   escalation?: string;
   validation?: string;
-  position: { x: number; y: number };
+  position: { x: number; y: number }
   config?: any;
   status?: 'pending' | 'active' | 'completed' | 'failed';
   connections?: string[];
@@ -73,7 +74,7 @@ export interface WorkflowDefinition {
     enabled: boolean;
     defaultTimeout: string;
     escalationRules: EscalationRule[];
-  };
+  }
   status: 'draft' | 'active' | 'deprecated';
   createdAt: Date;
   updatedAt: Date;
@@ -150,11 +151,11 @@ const stepTypeConfigs = {
     label: 'Timer',
     description: 'Wait for specified duration',
   },
-};
+}
 
 // ========== WORKFLOW STEP COMPONENT ==========
 const WorkflowStepNode: React.FC<{
-  step: WorkflowStep;
+  step: WorkflowStep
   selected: boolean;
   onSelect: (step: WorkflowStep) => void;
   onEdit: (step: WorkflowStep) => void;
@@ -171,7 +172,7 @@ const WorkflowStepNode: React.FC<{
       case 'failed': return 'border-semantic-error bg-semantic-error/10';
       default: return 'border-border bg-white';
     }
-  };
+  }
 
   return (
     <div 
@@ -249,11 +250,11 @@ const WorkflowStepNode: React.FC<{
       <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-gray-300 rounded-full border-2 border-white" />
     </div>
   );
-};
+}
 
 // ========== STEP PALETTE COMPONENT ==========
 const StepPalette: React.FC<{
-  onAddStep: (_type: string) => void;
+  onAddStep: (_type: string) => void
 }> = ({ onAddStep }) => {
   return (
     <div className="w-80 border-r border-border bg-surface-secondary p-enterprise-4">
@@ -312,11 +313,11 @@ const StepPalette: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // ========== WORKFLOW CANVAS COMPONENT ==========
 const WorkflowCanvas: React.FC<{
-  workflow: WorkflowDefinition;
+  workflow: WorkflowDefinition
   selectedStep: WorkflowStep | null;
   onSelectStep: (step: WorkflowStep | null) => void;
   onEditStep: (step: WorkflowStep) => void;
@@ -338,7 +339,7 @@ const WorkflowCanvas: React.FC<{
     if (e.target === canvasRef.current) {
       onSelectStep(null);
     }
-  };
+  }
 
   const handleAddStepToCanvas = useCallback((_type: string) => {
     const newStep: WorkflowStep = {
@@ -348,12 +349,12 @@ const WorkflowCanvas: React.FC<{
       position: { x: 100, y: 100 },
       status: 'pending',
       connections: [],
-    };
+    }
 
     const updatedWorkflow = {
       ...workflow,
       steps: [...workflow.steps, newStep],
-    };
+    }
 
     onUpdateWorkflow(updatedWorkflow);
   }, [workflow, onUpdateWorkflow]);
@@ -484,11 +485,11 @@ const WorkflowCanvas: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // ========== STEP PROPERTIES PANEL ==========
 const StepPropertiesPanel: React.FC<{
-  step: WorkflowStep | null;
+  step: WorkflowStep | null
   onUpdateStep: (step: WorkflowStep) => void;
   onClose: () => void;
 }> = ({ step, onUpdateStep, onClose }) => {
@@ -672,11 +673,11 @@ const StepPropertiesPanel: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // ========== MAIN WORKFLOW DESIGNER COMPONENT ==========
 export const WorkflowDesigner: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('design');
+  const [activeTab, setActiveTab] = useState('design')
 
   return (
     <div className="h-screen bg-white flex flex-col">
@@ -727,6 +728,6 @@ export const WorkflowDesigner: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default WorkflowDesigner; 

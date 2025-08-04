@@ -1,13 +1,12 @@
 // Proactive Monitoring & Intelligence Types
 // import {
   RiskCategory,
-  RiskImpact,
-  TrendDirection,
-  ConfidenceInterval,
+  RiskImpact,;
+  TrendDirection,;
+  ConfidenceInterval,;
 } from './risk-intelligence.types';
-
+;
 // === Core Monitoring Types ===
-
 export interface ActionRecommendation {
   id: string;
   type: 'immediate' | 'short_term' | 'long_term' | 'ongoing';
@@ -76,30 +75,29 @@ export interface FindingImpact {
   stakeholders: string[];
 }
 
-export type AnalysisType =
-  | 'risk_analysis'
-  | 'control_testing'
-  | 'compliance_check'
-  | 'performance_review'
-  | 'trend_analysis'
-  | 'pattern_detection'
-  | 'health_check'
-  | 'workflow_analysis'
+export type AnalysisType =;
+  | 'risk_analysis';
+  | 'control_testing';
+  | 'compliance_check';
+  | 'performance_review';
+  | 'trend_analysis';
+  | 'pattern_detection';
+  | 'health_check';
+  | 'workflow_analysis';
   | 'external_intelligence';
-
-export type AnalysisFrequency =
-  | 'real_time'
-  | 'hourly'
-  | 'daily'
-  | 'weekly'
-  | 'monthly'
-  | 'quarterly'
+;
+export type AnalysisFrequency =;
+  | 'real_time';
+  | 'hourly';
+  | 'daily';
+  | 'weekly';
+  | 'monthly';
+  | 'quarterly';
   | 'on_demand';
-
+;
 export type TaskPriority = 'critical' | 'high' | 'medium' | 'low';
-
+;
 // === Scheduled Analysis ===
-
 export interface ScheduledAnalysis {
   id: string;
   name: string;
@@ -119,9 +117,9 @@ export interface ScheduledAnalysis {
 export interface AnalysisSchedule {
   frequency: AnalysisFrequency;
   timezone: string;
-  specificTime?: string; // HH:MM format
-  dayOfWeek?: number; // 0-6 (Sunday-Saturday)
-  dayOfMonth?: number; // 1-31
+  specificTime?: string; // HH:MM format;
+  dayOfWeek?: number; // 0-6 (Sunday-Saturday);
+  dayOfMonth?: number; // 1-31;
   startDate: Date;
   endDate?: Date;
   blackoutPeriods: BlackoutPeriod[];
@@ -167,20 +165,19 @@ export interface AnalysisScope {
 export interface TimeWindow {
   duration: number;
   unit: 'hours' | 'days' | 'weeks' | 'months' | 'years';
-  offset?: number; // Offset from current time
+  offset?: number; // Offset from current time;
 }
 
 export interface AnalysisHistory {
   id: string;
   executedAt: Date;
-  duration: number; // milliseconds
+  duration: number; // milliseconds;
   status: 'success' | 'failure' | 'partial';
   results: MonitoringResult;
   notes?: string;
 }
 
 // === Proactive Insights ===
-
 export interface ProactiveInsight {
   id: string;
   type: InsightType;
@@ -203,26 +200,26 @@ export interface ProactiveInsight {
   metadata: Record<string, unknown>;
 }
 
-export type InsightType =
-  | 'risk_increase'
-  | 'control_degradation'
-  | 'compliance_gap'
-  | 'performance_decline'
-  | 'emerging_threat'
-  | 'optimization_opportunity'
-  | 'process_improvement'
-  | 'resource_optimization'
-  | 'workflow_bottleneck'
-  | 'anomaly_detection'
-  | 'trend_deviation'
-  | 'threshold_breach'
-  | 'pattern_change'
+export type InsightType =;
+  | 'risk_increase';
+  | 'control_degradation';
+  | 'compliance_gap';
+  | 'performance_decline';
+  | 'emerging_threat';
+  | 'optimization_opportunity';
+  | 'process_improvement';
+  | 'resource_optimization';
+  | 'workflow_bottleneck';
+  | 'anomaly_detection';
+  | 'trend_deviation';
+  | 'threshold_breach';
+  | 'pattern_change';
   | 'external_intelligence';
-
+;
 export type InsightPriority = 'critical' | 'high' | 'medium' | 'low' | 'info';
-
+;
 export type InsightStatus = 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed';
-
+;
 export interface InsightDetails {
   context: string;
   evidence: Evidence[];
@@ -301,34 +298,33 @@ export interface ActionItem {
   dependencies: string[];
   resources: string[];
   status: ActionStatus;
-  progress: number; // 0-100
+  progress: number; // 0-100;
   notes?: string;
 }
 
-export type ActionType =
-  | 'investigation'
-  | 'mitigation'
-  | 'monitoring'
-  | 'process_change'
-  | 'control_update'
-  | 'training'
-  | 'communication'
-  | 'documentation'
-  | 'automation'
+export type ActionType =;
+  | 'investigation';
+  | 'mitigation';
+  | 'monitoring';
+  | 'process_change';
+  | 'control_update';
+  | 'training';
+  | 'communication';
+  | 'documentation';
+  | 'automation';
   | 'optimization';
-
+;
 export type ActionPriority = 'immediate' | 'urgent' | 'high' | 'medium' | 'low';
-
-export type ActionStatus =
-  | 'pending'
-  | 'assigned'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
+;
+export type ActionStatus =;
+  | 'pending';
+  | 'assigned';
+  | 'in_progress';
+  | 'completed';
+  | 'cancelled';
   | 'blocked';
-
+;
 // === Smart Notifications ===
-
 export interface SmartNotification {
   id: string;
   type: string;
@@ -344,7 +340,7 @@ export interface SmartNotification {
   dismissible: boolean;
   autoExpire: boolean;
   expiresAt?: Date;
-  aggregatedWith?: string[]; // IDs of related notifications
+  aggregatedWith?: string[]; // IDs of related notifications;
   suppressionRules: SuppressionRule[];
   deliveryChannels: DeliveryChannel[];
   personalizedContent: PersonalizedContent;
@@ -377,9 +373,9 @@ export interface WorkingHours {
 }
 
 export interface DailySchedule {
-  dayOfWeek: number; // 0-6
-  startTime: string; // HH:MM
-  endTime: string; // HH:MM
+  dayOfWeek: number; // 0-6;
+  startTime: string; // HH:MM;
+  endTime: string; // HH:MM;
   available: boolean;
 }
 
@@ -391,10 +387,10 @@ export interface VacationPeriod {
 
 export interface QuietHours {
   enabled: boolean;
-  startTime: string; // HH:MM
-  endTime: string; // HH:MM
+  startTime: string; // HH:MM;
+  endTime: string; // HH:MM;
   timezone: string;
-  exceptions: string[]; // Critical notification types
+  exceptions: string[]; // Critical notification types;
 }
 
 export interface HistoricalContext {
@@ -408,8 +404,8 @@ export interface Interaction {
   notificationId: string;
   timestamp: Date;
   action: 'viewed' | 'dismissed' | 'acted' | 'escalated' | 'ignored';
-  timeToAction?: number; // milliseconds
-  satisfactionScore?: number; // 1-5
+  timeToAction?: number; // milliseconds;
+  satisfactionScore?: number; // 1-5;
 }
 
 export interface ResponsePattern {
@@ -429,11 +425,11 @@ export interface EffectivenessMetric {
 export interface IntelligentPriority {
   calculated: InsightPriority;
   factors: PriorityFactor[];
-  urgencyScore: number; // 0-100
-  relevanceScore: number; // 0-100
-  impactScore: number; // 0-100
-  contextScore: number; // 0-100
-  personalizedScore: number; // 0-100
+  urgencyScore: number; // 0-100;
+  relevanceScore: number; // 0-100;
+  impactScore: number; // 0-100;
+  contextScore: number; // 0-100;
+  personalizedScore: number; // 0-100;
 }
 
 export interface PriorityFactor {
@@ -446,7 +442,7 @@ export interface PriorityFactor {
 export interface SuppressionRule {
   id: string;
   condition: string;
-  duration: number; // minutes
+  duration: number; // minutes;
   reason: string;
   enabled: boolean;
 }
@@ -455,21 +451,21 @@ export interface DeliveryChannel {
   channel: NotificationChannel;
   enabled: boolean;
   priority: InsightPriority;
-  delay: number; // seconds
+  delay: number; // seconds;
   retryAttempts: number;
   escalation?: EscalationRule;
 }
 
-export type NotificationChannel =
-  | 'in_app'
-  | 'email'
-  | 'sms'
-  | 'push'
-  | 'slack'
-  | 'teams'
-  | 'webhook'
+export type NotificationChannel =;
+  | 'in_app';
+  | 'email';
+  | 'sms';
+  | 'push';
+  | 'slack';
+  | 'teams';
+  | 'webhook';
   | 'dashboard';
-
+;
 export interface EscalationRule {
   enabled: boolean;
   timeoutMinutes: number;
@@ -488,7 +484,6 @@ export interface PersonalizedContent {
 }
 
 // === Notification Configuration ===
-
 export interface NotificationConfig {
   enabled: boolean;
   channels: NotificationChannelConfig[];
@@ -508,7 +503,7 @@ export interface NotificationChannelConfig {
 export interface NotificationThreshold {
   priority: InsightPriority;
   enabled: boolean;
-  delay: number; // minutes
+  delay: number; // minutes;
 }
 
 export interface BatchingConfig {
@@ -519,8 +514,8 @@ export interface BatchingConfig {
 }
 
 export interface FilteringConfig {
-  duplicateWindow: number; // minutes
-  relevanceThreshold: number; // 0-100
+  duplicateWindow: number; // minutes;
+  relevanceThreshold: number; // 0-100;
   categories: RiskCategory[];
   suppressionRules: string[];
 }
@@ -539,7 +534,6 @@ export interface EscalationLevel {
 }
 
 // === Health Check Types ===
-
 export interface HealthCheckReport {
   id: string;
   type: HealthCheckType;
@@ -554,22 +548,22 @@ export interface HealthCheckReport {
   nextCheck: Date;
 }
 
-export type HealthCheckType =
-  | 'risk_register'
-  | 'control_framework'
-  | 'workflow_efficiency'
-  | 'compliance_posture'
-  | 'data_quality'
-  | 'system_performance'
+export type HealthCheckType =;
+  | 'risk_register';
+  | 'control_framework';
+  | 'workflow_efficiency';
+  | 'compliance_posture';
+  | 'data_quality';
+  | 'system_performance';
   | 'user_experience';
-
+;
 export type HealthStatus = 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
-
+;
 export interface HealthDimension {
   name: string;
-  score: number; // 0-100
+  score: number; // 0-100;
   status: HealthStatus;
-  weight: number; // 0-1
+  weight: number; // 0-1;
   description: string;
   metrics: HealthMetric[];
   trends: HealthTrend[];
@@ -620,7 +614,7 @@ export interface HealthTrend {
   direction: TrendDirection;
   magnitude: number;
   period: string;
-  significance: number; // 0-100
+  significance: number; // 0-100;
 }
 
 export interface HealthHistory {
@@ -631,7 +625,6 @@ export interface HealthHistory {
 }
 
 // === Workflow Optimization ===
-
 export interface ProductivityAnalysis {
   userId: string;
   timeRange: TimeWindow;
@@ -645,7 +638,7 @@ export interface ProductivityAnalysis {
 }
 
 export interface ProductivityScore {
-  overall: number; // 0-100
+  overall: number; // 0-100;
   efficiency: number;
   effectiveness: number;
   quality: number;
@@ -655,16 +648,16 @@ export interface ProductivityScore {
 
 export interface ActivityAnalysis {
   activity: string;
-  timeSpent: number; // minutes
+  timeSpent: number; // minutes;
   percentage: number;
-  efficiency: number; // 0-100
+  efficiency: number; // 0-100;
   value: 'high' | 'medium' | 'low';
   trend: TrendDirection;
   optimization: OptimizationPotential;
 }
 
 export interface OptimizationPotential {
-  score: number; // 0-100
+  score: number; // 0-100;
   methods: OptimizationMethod[];
   effort: 'low' | 'medium' | 'high';
   impact: 'low' | 'medium' | 'high';
@@ -673,9 +666,9 @@ export interface OptimizationPotential {
 export interface OptimizationMethod {
   type: 'automation' | 'delegation' | 'elimination' | 'streamlining' | 'tool_upgrade';
   description: string;
-  effort: number; // hours
+  effort: number; // hours;
   benefit: string;
-  feasibility: number; // 0-100
+  feasibility: number; // 0-100;
 }
 
 export interface ProductivityPattern {
@@ -691,16 +684,16 @@ export interface Bottleneck {
   type: 'process' | 'tool' | 'resource' | 'dependency' | 'knowledge';
   description: string;
   impact: BottleneckImpact;
-  frequency: number; // occurrences per week
-  duration: number; // average minutes lost
+  frequency: number; // occurrences per week;
+  duration: number; // average minutes lost;
   affectedUsers: string[];
   resolution: BottleneckResolution[];
 }
 
 export interface BottleneckImpact {
-  timeDelay: number; // minutes
-  qualityImpact: number; // 0-100
-  frustrationLevel: number; // 0-100
+  timeDelay: number; // minutes;
+  qualityImpact: number; // 0-100;
+  frustrationLevel: number; // 0-100;
   cascadingEffects: string[];
 }
 
@@ -709,8 +702,8 @@ export interface BottleneckResolution {
   effort: 'low' | 'medium' | 'high';
   timeline: string;
   cost: number;
-  effectiveness: number; // 0-100
-  feasibility: number; // 0-100
+  effectiveness: number; // 0-100;
+  feasibility: number; // 0-100;
 }
 
 export interface OptimizationOpportunity {
@@ -720,16 +713,16 @@ export interface OptimizationOpportunity {
   description: string;
   benefit: OptimizationBenefit;
   implementation: ImplementationPlan;
-  priority: number; // 1-100
+  priority: number; // 1-100;
   roi: number;
 }
 
 export interface OptimizationBenefit {
-  timeSavings: number; // hours per week
-  qualityImprovement: number; // 0-100
-  satisfactionIncrease: number; // 0-100
+  timeSavings: number; // hours per week;
+  qualityImprovement: number; // 0-100;
+  satisfactionIncrease: number; // 0-100;
   costReduction: number;
-  riskReduction: number; // 0-100
+  riskReduction: number; // 0-100;
 }
 
 export interface ImplementationPlan {
@@ -757,7 +750,7 @@ export interface ProductivityRecommendation {
   benefits: string[];
   effort: 'low' | 'medium' | 'high';
   impact: 'low' | 'medium' | 'high';
-  priority: number; // 1-100
+  priority: number; // 1-100;
   implementation: string[];
 }
 
@@ -772,7 +765,6 @@ export interface ProductivityBenchmark {
 }
 
 // === External Intelligence ===
-
 export interface ExternalIntelligence {
   type: IntelligenceType;
   source: IntelligenceSource;
@@ -784,22 +776,22 @@ export interface ExternalIntelligence {
   expiresAt?: Date;
 }
 
-export type IntelligenceType =
-  | 'industry_risk_trend'
-  | 'regulatory_update'
-  | 'compliance_alert'
-  | 'threat_intelligence'
-  | 'market_intelligence'
-  | 'technology_trend'
-  | 'best_practice'
-  | 'incident_report'
+export type IntelligenceType =;
+  | 'industry_risk_trend';
+  | 'regulatory_update';
+  | 'compliance_alert';
+  | 'threat_intelligence';
+  | 'market_intelligence';
+  | 'technology_trend';
+  | 'best_practice';
+  | 'incident_report';
   | 'vulnerability_alert';
-
+;
 export interface IntelligenceSource {
   provider: string;
-  reliability: number; // 0-100
-  timeliness: number; // 0-100
-  accuracy: number; // 0-100
+  reliability: number; // 0-100;
+  timeliness: number; // 0-100;
+  accuracy: number; // 0-100;
   coverage: string[];
   lastUpdate: Date;
 }
@@ -813,7 +805,7 @@ export interface IntelligenceData {
   geography: string[];
   industries: string[];
   severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
-  confidence: number; // 0-100
+  confidence: number; // 0-100;
   sources: string[];
   attachments: Attachment[];
 }
@@ -827,7 +819,7 @@ export interface Attachment {
 }
 
 export interface RelevanceAssessment {
-  score: number; // 0-100
+  score: number; // 0-100;
   factors: RelevanceFactor[];
   applicability: string[];
   context: string;
@@ -835,8 +827,8 @@ export interface RelevanceAssessment {
 
 export interface RelevanceFactor {
   factor: string;
-  weight: number; // 0-1
-  score: number; // 0-100
+  weight: number; // 0-1;
+  score: number; // 0-100;
   reasoning: string;
 }
 
@@ -849,7 +841,7 @@ export interface ImpactAssessment {
 }
 
 export interface ActionabilityAssessment {
-  score: number; // 0-100
+  score: number; // 0-100;
   available_actions: AvailableAction[];
   barriers: string[];
   enablers: string[];
@@ -860,13 +852,12 @@ export interface AvailableAction {
   action: string;
   type: ActionType;
   effort: 'low' | 'medium' | 'high';
-  effectiveness: number; // 0-100
+  effectiveness: number; // 0-100;
   timeline: string;
   resources: string[];
 }
 
 // === Background Processing ===
-
 export interface BackgroundTask {
   id: string;
   type: TaskType;
@@ -882,31 +873,31 @@ export interface BackgroundTask {
   completedAt?: Date;
   retryCount: number;
   maxRetries: number;
-  timeout: number; // milliseconds
+  timeout: number; // milliseconds;
   metadata: Record<string, unknown>;
 }
 
-export type TaskType =
-  | 'monitoring'
-  | 'analysis'
-  | 'notification'
-  | 'health_check'
-  | 'optimization'
-  | 'data_sync'
-  | 'report_generation'
-  | 'intelligence_gathering'
-  | 'trend_analysis'
+export type TaskType =;
+  | 'monitoring';
+  | 'analysis';
+  | 'notification';
+  | 'health_check';
+  | 'optimization';
+  | 'data_sync';
+  | 'report_generation';
+  | 'intelligence_gathering';
+  | 'trend_analysis';
   | 'anomaly_detection';
-
-export type TaskStatus =
-  | 'queued'
-  | 'running'
-  | 'completed'
-  | 'failed'
-  | 'cancelled'
-  | 'timeout'
+;
+export type TaskStatus =;
+  | 'queued';
+  | 'running';
+  | 'completed';
+  | 'failed';
+  | 'cancelled';
+  | 'timeout';
   | 'retrying';
-
+;
 export interface TaskPayload {
   operation: string;
   parameters: Record<string, unknown>;
@@ -926,18 +917,18 @@ export interface TaskConfiguration {
 export interface RetryStrategy {
   max_attempts: number;
   backoff_type: 'linear' | 'exponential' | 'fixed';
-  initial_delay: number; // milliseconds
-  max_delay: number; // milliseconds
+  initial_delay: number; // milliseconds;
+  max_delay: number; // milliseconds;
   jitter: boolean;
 }
 
 export interface TaskProgress {
-  percentage: number; // 0-100
+  percentage: number; // 0-100;
   current_step: string;
   total_steps: number;
   completed_steps: number;
-  estimated_remaining: number; // milliseconds
-  throughput: number; // items per second
+  estimated_remaining: number; // milliseconds;
+  throughput: number; // items per second;
   errors: TaskError[];
 }
 
@@ -950,10 +941,10 @@ export interface TaskError {
 }
 
 export interface ResourceRequirements {
-  cpu: number; // percentage
-  memory: number; // MB
-  disk: number; // MB
-  network: number; // MB
+  cpu: number; // percentage;
+  memory: number; // MB;
+  disk: number; // MB;
+  network: number; // MB;
   concurrency: number;
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
@@ -968,19 +959,18 @@ export interface TaskResult {
 }
 
 export interface TaskMetrics {
-  execution_time: number; // milliseconds
-  cpu_usage: number; // percentage
-  memory_usage: number; // MB
-  disk_usage: number; // MB
-  network_usage: number; // MB
+  execution_time: number; // milliseconds;
+  cpu_usage: number; // percentage;
+  memory_usage: number; // MB;
+  disk_usage: number; // MB;
+  network_usage: number; // MB;
   items_processed: number;
-  throughput: number; // items per second
+  throughput: number; // items per second;
   cache_hits: number;
   cache_misses: number;
 }
 
 // === Performance & Resource Management ===
-
 export interface PerformanceMetrics {
   system: SystemMetrics;
   application: ApplicationMetrics;
@@ -991,32 +981,32 @@ export interface PerformanceMetrics {
 }
 
 export interface SystemMetrics {
-  cpu_usage: number; // percentage
-  memory_usage: number; // percentage
-  disk_usage: number; // percentage
-  network_usage: number; // Mbps
+  cpu_usage: number; // percentage;
+  memory_usage: number; // percentage;
+  disk_usage: number; // percentage;
+  network_usage: number; // Mbps;
   active_connections: number;
   load_average: number[];
-  uptime: number; // seconds
+  uptime: number; // seconds;
 }
 
 export interface ApplicationMetrics {
-  response_time: number; // milliseconds
-  throughput: number; // requests per second
-  error_rate: number; // percentage
-  availability: number; // percentage
+  response_time: number; // milliseconds;
+  throughput: number; // requests per second;
+  error_rate: number; // percentage;
+  availability: number; // percentage;
   active_users: number;
   active_sessions: number;
-  cache_hit_rate: number; // percentage
+  cache_hit_rate: number; // percentage;
 }
 
 export interface UserExperienceMetrics {
-  page_load_time: number; // milliseconds
-  time_to_interactive: number; // milliseconds
-  bounce_rate: number; // percentage
-  satisfaction_score: number; // 1-5
-  task_completion_rate: number; // percentage
-  user_engagement: number; // 0-100
+  page_load_time: number; // milliseconds;
+  time_to_interactive: number; // milliseconds;
+  bounce_rate: number; // percentage;
+  satisfaction_score: number; // 1-5;
+  task_completion_rate: number; // percentage;
+  user_engagement: number; // 0-100;
 }
 
 export interface ResourceUtilization {
@@ -1029,48 +1019,48 @@ export interface ResourceUtilization {
 
 export interface WorkerUtilization {
   worker_id: string;
-  cpu_usage: number; // percentage
-  memory_usage: number; // MB
+  cpu_usage: number; // percentage;
+  memory_usage: number; // MB;
   active_tasks: number;
   completed_tasks: number;
-  error_rate: number; // percentage
-  utilization: number; // percentage
+  error_rate: number; // percentage;
+  utilization: number; // percentage;
 }
 
 export interface QueueUtilization {
   queue_name: string;
   size: number;
-  processing_rate: number; // items per second
-  wait_time: number; // seconds
+  processing_rate: number; // items per second;
+  wait_time: number; // seconds;
   backlog: number;
   priority_distribution: Record<string, number>;
 }
 
 export interface CacheUtilization {
-  hit_rate: number; // percentage
-  miss_rate: number; // percentage
-  eviction_rate: number; // items per second
-  memory_usage: number; // MB
+  hit_rate: number; // percentage;
+  miss_rate: number; // percentage;
+  eviction_rate: number; // items per second;
+  memory_usage: number; // MB;
   key_count: number;
-  expiration_rate: number; // items per second
+  expiration_rate: number; // items per second;
 }
 
 export interface DatabaseUtilization {
   connection_count: number;
-  query_rate: number; // queries per second
+  query_rate: number; // queries per second;
   slow_query_count: number;
-  lock_wait_time: number; // milliseconds
-  buffer_hit_ratio: number; // percentage
-  disk_reads: number; // reads per second
+  lock_wait_time: number; // milliseconds;
+  buffer_hit_ratio: number; // percentage;
+  disk_reads: number; // reads per second;
 }
 
 export interface StorageUtilization {
   read_iops: number;
   write_iops: number;
-  read_bandwidth: number; // MB/s
-  write_bandwidth: number; // MB/s
-  disk_usage: number; // percentage
-  available_space: number; // GB
+  read_bandwidth: number; // MB/s;
+  write_bandwidth: number; // MB/s;
+  disk_usage: number; // percentage;
+  available_space: number; // GB;
 }
 
 export interface PerformanceThreshold {
@@ -1095,7 +1085,6 @@ export interface PerformanceAlert {
 }
 
 // === User Context ===
-
 export interface UserContext {
   userId: string;
   organizationId: string;
@@ -1149,7 +1138,7 @@ export interface RecentActivity {
   entityType: string;
   action: string;
   timestamp: Date;
-  duration?: number; // milliseconds
+  duration?: number; // milliseconds;
 }
 
 export interface PendingTask {
@@ -1158,7 +1147,7 @@ export interface PendingTask {
   type: string;
   priority: ActionPriority;
   dueDate?: Date;
-  progress: number; // 0-100
+  progress: number; // 0-100;
 }
 
 export interface Deadline {
@@ -1166,7 +1155,7 @@ export interface Deadline {
   title: string;
   type: string;
   date: Date;
-  urgency: number; // days until due
+  urgency: number; // days until due;
   importance: 'low' | 'medium' | 'high' | 'critical';
 }
 
@@ -1184,12 +1173,11 @@ export interface BehaviorPattern {
   pattern: string;
   frequency: number;
   context: string[];
-  effectiveness: number; // 0-100
+  effectiveness: number; // 0-100;
   last_observed: Date;
 }
 
 // === Dashboard Context ===
-
 export interface DashboardContext {
   organizationId: string;
   userRole: string;

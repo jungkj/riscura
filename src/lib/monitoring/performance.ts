@@ -13,11 +13,11 @@ const PERFORMANCE_THRESHOLDS = {
   CLS: { good: 0.1, poor: 0.25 }, // Cumulative Layout Shift
   FCP: { good: 1800, poor: 3000 }, // First Contentful Paint
   TTFB: { good: 800, poor: 1800 }, // Time to First Byte
-};
+}
 
 // Custom business metrics
 interface BusinessMetrics {
-  userRegistrationTime: number;
+  userRegistrationTime: number
   rcsaCreationTime: number;
   documentProcessingTime: number;
   reportGenerationTime: number;
@@ -27,7 +27,7 @@ interface BusinessMetrics {
 
 // Performance data storage
 interface PerformanceData {
-  webVitals: Record<string, Metric>;
+  webVitals: Record<string, Metric>
   businessMetrics: Partial<BusinessMetrics>;
   pageLoadTimes: Record<string, number>;
   apiMetrics: Record<string, { responseTime: number; errorRate: number }>;
@@ -39,7 +39,7 @@ class PerformanceMonitor {
     businessMetrics: {},
     pageLoadTimes: {},
     apiMetrics: {},
-  };
+  }
 
   private observers: PerformanceObserver[] = [];
 
@@ -70,7 +70,7 @@ class PerformanceMonitor {
           delta: metric.delta,
           id: metric.id,
         },
-      });
+      })
 
       // Send to external analytics
       this.sendToExternalAnalytics('web_vital', {
@@ -79,16 +79,16 @@ class PerformanceMonitor {
         rating: this.getMetricRating(metric),
         page: window.location.pathname,
         timestamp: Date.now(),
-      });
+      })
 
       // Alert on poor performance
       if (this.getMetricRating(metric) === 'poor') {
-        this.alertPoorPerformance(metric);
+        this.alertPoorPerformance(metric)
       }
-    };
+    }
 
     // Track all Core Web Vitals
-    getCLS(sendToAnalytics);
+    getCLS(sendToAnalytics)
     getFID(sendToAnalytics);
     getFCP(sendToAnalytics);
     getLCP(sendToAnalytics);
@@ -103,7 +103,7 @@ class PerformanceMonitor {
     const navigationObserver = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         if (entry.entryType === 'navigation') {
-          const navEntry = entry as PerformanceNavigationTiming;
+          const navEntry = entry as PerformanceNavigationTiming
           const pageLoadTime = navEntry.loadEventEnd - navEntry.navigationStart;
 
           this.performanceData.pageLoadTimes[window.location.pathname] = pageLoadTime;
@@ -125,7 +125,7 @@ class PerformanceMonitor {
     const resourceObserver = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         if (entry.entryType === 'resource') {
-          const resourceEntry = entry as PerformanceResourceTiming;
+          const resourceEntry = entry as PerformanceResourceTiming
 
           // Track slow resources
           if (resourceEntry.duration > 1000) {
@@ -139,7 +139,7 @@ class PerformanceMonitor {
                 duration: resourceEntry.duration,
                 size: resourceEntry.transferSize,
               },
-            });
+            })
           }
         }
       });
@@ -156,7 +156,7 @@ class PerformanceMonitor {
     // Monitor memory usage
     if ('memory' in performance) {
       setInterval(() => {
-        const memory = (performance as any).memory;
+        const memory = (performance as any).memory
 
         this.sendToExternalAnalytics('memory_usage', {
           used_heap: memory.usedJSHeapSize,
@@ -166,7 +166,7 @@ class PerformanceMonitor {
         });
 
         // Alert on high memory usage
-        const memoryUsagePercentage = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
+        const memoryUsagePercentage = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100
         if (memoryUsagePercentage > 80) {
           Sentry.captureMessage('High memory usage detected', {
             level: 'warning',
@@ -182,7 +182,7 @@ class PerformanceMonitor {
 
     // Monitor network connectivity
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as any).connection
 
       this.sendToExternalAnalytics('network_info', {
         effective_type: connection.effectiveType,
@@ -213,7 +213,7 @@ class PerformanceMonitor {
         value,
         context,
       },
-    });
+    })
 
     // Send to external analytics
     this.sendToExternalAnalytics('business_metric', {
@@ -221,10 +221,10 @@ class PerformanceMonitor {
       value,
       context,
       timestamp: Date.now(),
-    });
+    })
 
     // Alert on poor business metrics
-    this.checkBusinessMetricThresholds(name, value);
+    this.checkBusinessMetricThresholds(name, value)
   }
 
   /**
@@ -234,15 +234,15 @@ class PerformanceMonitor {
     const key = `${method} ${endpoint}`;
 
     if (!this.performanceData.apiMetrics[key]) {
-      this.performanceData.apiMetrics[key] = { responseTime: 0, errorRate: 0 };
+      this.performanceData.apiMetrics[key] = { responseTime: 0, errorRate: 0 }
     }
 
     // Update response time (rolling average)
     this.performanceData.apiMetrics[key].responseTime =
-      (this.performanceData.apiMetrics[key].responseTime + responseTime) / 2;
+      (this.performanceData.apiMetrics[key].responseTime + responseTime) / 2
 
     // Update error rate
-    const isError = status >= 400;
+    const isError = status >= 400
     this.performanceData.apiMetrics[key].errorRate =
       (this.performanceData.apiMetrics[key].errorRate + (isError ? 1 : 0)) / 2;
 
@@ -254,7 +254,7 @@ class PerformanceMonitor {
       status,
       is_error: isError,
       timestamp: Date.now(),
-    });
+    })
 
     // Alert on slow APIs
     if (responseTime > 2000) {
@@ -269,7 +269,7 @@ class PerformanceMonitor {
           responseTime,
           status,
         },
-      });
+      })
     }
 
     // Alert on high error rates
@@ -284,7 +284,7 @@ class PerformanceMonitor {
           responseTime,
           status,
         },
-      });
+      })
     }
   }
 
@@ -329,7 +329,7 @@ class PerformanceMonitor {
       reportGenerationTime: 15000, // 15 seconds
       apiResponseTime: 1000, // 1 second
       databaseQueryTime: 500, // 500ms
-    };
+    }
 
     const threshold = thresholds[name];
     if (threshold && value > threshold) {
@@ -353,12 +353,12 @@ class PerformanceMonitor {
   private sendToExternalAnalytics(event: string, data: Record<string, any>): void {
     // Send to Mixpanel
     if (typeof window !== 'undefined' && (window as any).mixpanel) {
-      (window as any).mixpanel.track(event, data);
+      (window as any).mixpanel.track(event, data)
     }
 
     // Send to Google Analytics 4
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', event, data);
+      (window as any).gtag('event', event, data)
     }
 
     // Send to custom analytics endpoint
@@ -376,7 +376,7 @@ class PerformanceMonitor {
         }),
       }).catch(() => {
         // Silently fail - don't break the app for analytics
-      });
+      })
     }
   }
 
@@ -399,7 +399,7 @@ class PerformanceMonitor {
    * Get current performance snapshot
    */
   getPerformanceSnapshot(): PerformanceData {
-    return { ...this.performanceData };
+    return { ...this.performanceData }
   }
 
   /**
@@ -412,14 +412,14 @@ class PerformanceMonitor {
 }
 
 // Singleton instance
-let performanceMonitor: PerformanceMonitor | null = null;
+let performanceMonitor: PerformanceMonitor | null = null
 
 export const getPerformanceMonitor = (): PerformanceMonitor => {
   if (!performanceMonitor) {
     performanceMonitor = new PerformanceMonitor();
   }
   return performanceMonitor;
-};
+}
 
 // Convenience functions
 export const trackBusinessMetric = (
@@ -427,8 +427,8 @@ export const trackBusinessMetric = (
   value: number,
   context?: Record<string, any>
 ) => {
-  getPerformanceMonitor().trackBusinessMetric(name, value, context);
-};
+  getPerformanceMonitor().trackBusinessMetric(name, value, context)
+}
 
 export const trackApiCall = (
   endpoint: string,
@@ -437,17 +437,17 @@ export const trackApiCall = (
   status: number
 ) => {
   getPerformanceMonitor().trackApiCall(endpoint, method, responseTime, status);
-};
+}
 
 export const getPerformanceData = () => {
   return getPerformanceMonitor().getPerformanceSnapshot();
-};
+}
 
-export { PERFORMANCE_THRESHOLDS, type BusinessMetrics, type PerformanceData };
+export { PERFORMANCE_THRESHOLDS, type BusinessMetrics, type PerformanceData }
 
 // TODO: Replace with real web-vitals metrics
 export function getCLS() {
-  return 0;
+  return 0
 }
 export function getFID() {
   return 0;

@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyDialogTitle } from '@/components/ui/daisy-components';
 // import {
   Bell,
   AlertTriangle,
@@ -45,11 +46,11 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   Database,
   Wifi,
   WifiOff,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface SmartNotification {
-  id: string;
+  id: string
   title: string;
   message: string;
   type: 'prediction' | 'alert' | 'recommendation' | 'insight' | 'system';
@@ -69,7 +70,7 @@ interface SmartNotification {
     affectedSystems?: string[];
     severity?: string;
     timeline?: string;
-  };
+  }
   channels: NotificationChannel[];
 }
 
@@ -97,7 +98,7 @@ interface NotificationFilter {
   timeRange?: {
     start: Date;
     end: Date;
-  };
+  }
 }
 
 // Sample Smart Notifications
@@ -268,11 +269,11 @@ const sampleNotifications: SmartNotification[] = [
       { type: 'web', enabled: true, delivered: true },
     ],
   },
-];
+]
 
 // Notification Card Component
 const NotificationCard: React.FC<{
-  notification: SmartNotification;
+  notification: SmartNotification
   onAction: (_action: string, notification: SmartNotification) => void;
   onMarkRead: (id: string) => void;
   onDismiss: (id: string) => void;
@@ -284,9 +285,9 @@ const NotificationCard: React.FC<{
       'recommendation': { icon: Zap, color: 'text-blue-600', bg: 'bg-blue-50' },
       'insight': { icon: TrendingUp, color: 'text-green-600', bg: 'bg-green-50' },
       'system': { icon: Info, color: 'text-gray-600', bg: 'bg-gray-50' },
-    };
+    }
     return configs[type as keyof typeof configs] || configs.system;
-  };
+  }
 
   const getPriorityConfig = (priority: string) => {
     const configs = {
@@ -294,9 +295,9 @@ const NotificationCard: React.FC<{
       'high': { color: 'text-semantic-warning', bg: 'bg-semantic-warning/10', border: 'border-semantic-warning' },
       'medium': { color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
       'low': { color: 'text-semantic-success', bg: 'bg-semantic-success/10', border: 'border-semantic-success' },
-    };
+    }
     return configs[priority as keyof typeof configs] || configs.medium;
-  };
+  }
 
   const typeConfig = getTypeConfig(notification.type);
   const priorityConfig = getPriorityConfig(notification.priority);
@@ -416,11 +417,11 @@ const NotificationCard: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Notification Settings Component
 const NotificationSettings: React.FC<{
-  isOpen: boolean;
+  isOpen: boolean
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
   const [channels, setChannels] = useState({
@@ -586,11 +587,11 @@ const NotificationSettings: React.FC<{
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}
 
 // Main Smart Notifications Component
 export const SmartNotifications: React.FC<{
-  isPanel?: boolean;
+  isPanel?: boolean
   maxHeight?: string;
 }> = ({ isPanel = false, maxHeight = "600px" }) => {
   const [notifications, setNotifications] = useState<SmartNotification[]>(sampleNotifications);
@@ -599,25 +600,25 @@ export const SmartNotifications: React.FC<{
   const [activeTab, setActiveTab] = useState('all');
 
   const handleAction = (_action: string, notification: SmartNotification) => {
-    // console.log(`Action: ${action}`, notification);
+    // console.log(`Action: ${action}`, notification)
     // Handle notification actions here
-  };
+  }
 
   const handleMarkRead = (id: string) => {
     setNotifications(prev => prev.map(n => 
       n.id === id ? { ...n, read: true } : n
     ));
-  };
+  }
 
   const handleDismiss = (id: string) => {
     setNotifications(prev => prev.map(n => 
       n.id === id ? { ...n, dismissed: true } : n
     ));
-  };
+  }
 
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
+  }
 
   const filteredNotifications = notifications.filter(n => {
     if (n.dismissed) return false;
@@ -680,7 +681,7 @@ export const SmartNotifications: React.FC<{
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-enterprise-6">
@@ -830,6 +831,6 @@ export const SmartNotifications: React.FC<{
         onClose={() => setShowSettings(false)} />
     </div>
   );
-};
+}
 
 export default SmartNotifications;

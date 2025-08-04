@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+import { DaisyCardBody } from '@/components/ui/daisy-components';
   DollarSign, 
   Zap, 
   AlertTriangle, 
@@ -9,7 +10,7 @@ import {
   Maximize2,
   Minimize2
 } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -49,7 +50,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
   // Pulse animation when approaching limits
   useEffect(() => {
     if (isNearLimit || hasActiveAlerts) {
-      setPulseAlert(true);
+      setPulseAlert(true)
       const timer = setTimeout(() => setPulseAlert(false), 2000);
       return () => clearTimeout(timer);
     }
@@ -59,7 +60,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
     if (!quotaCheck.allowed || isAtLimit) return 'text-red-500 bg-red-50';
     if (isNearLimit) return 'text-orange-500 bg-orange-50';
     return 'text-green-500 bg-green-50';
-  };
+  }
 
   const getPositionClasses = () => {
     if (position === 'inline') return '';
@@ -69,9 +70,9 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
       'bottom-left': 'fixed bottom-4 left-4',
       'top-right': 'fixed top-4 right-4',
       'top-left': 'fixed top-4 left-4'
-    };
+    }
     return `${positions[position]} z-50`;
-  };
+  }
 
   const formatDuration = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -80,7 +81,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
       return `${minutes}m ${seconds}s`;
     }
     return `${seconds}s`;
-  };
+  }
 
   if (!isVisible) {
     return (
@@ -92,7 +93,7 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
         <Eye className="h-4 w-4" />
       </DaisyButton>
     );
-  };
+  }
 
   return (
     <DaisyTooltipProvider>
@@ -312,6 +313,6 @@ export const RealTimeCostTracker: React.FC<RealTimeCostTrackerProps> = ({
       </motion.div>
     
   );
-};
+}
 
 export default RealTimeCostTracker; 

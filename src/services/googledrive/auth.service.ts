@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-// import { redis } from '@/lib/redis';
+// import { redis } from '@/lib/redis'
 import crypto from 'crypto';
 
 export interface GoogleDriveTokens {
@@ -39,14 +39,14 @@ export class GoogleDriveAuthService {
     ];
 
     // Generate CSRF token
-    const csrfToken = crypto.randomBytes(32).toString('hex');
+    const csrfToken = crypto.randomBytes(32).toString('hex')
 
     // Store CSRF state in Redis with 10 minute expiration
     const stateData: CSRFState = {
       userId,
       token: csrfToken,
       createdAt: Date.now(),
-    };
+    }
 
     const stateKey = `googledrive:csrf:${csrfToken}`;
     await redis.setex(stateKey, 600, JSON.stringify(stateData)); // 10 minute TTL
@@ -79,16 +79,16 @@ export class GoogleDriveAuthService {
 
       // Validate token age (10 minutes max)
       if (Date.now() - state.createdAt > 600000) {
-        await redis.del(stateKey);
+        await redis.del(stateKey)
         return null;
       }
 
       // Delete token after validation (one-time use)
-      await redis.del(stateKey);
+      await redis.del(stateKey)
 
       return state.userId;
     } catch (error) {
-      // console.error('Error parsing CSRF state:', error);
+      // console.error('Error parsing CSRF state:', error)
       return null;
     }
   }
@@ -101,7 +101,7 @@ export class GoogleDriveAuthService {
       const { tokens } = await this.oauth2Client.getToken(code);
       return tokens as GoogleDriveTokens;
     } catch (error) {
-      // console.error('Error exchanging code for tokens:', error);
+      // console.error('Error exchanging code for tokens:', error)
       throw new Error('Failed to authenticate with Google Drive');
     }
   }
@@ -122,10 +122,10 @@ export class GoogleDriveAuthService {
 
       // Store refresh token separately with no expiry
       if (tokens.refresh_token) {
-        await redis.set(`${cacheKey}:refresh`, tokens.refresh_token);
+        await redis.set(`${cacheKey}:refresh`, tokens.refresh_token)
       }
     } catch (error) {
-      // console.error('Error storing tokens:', error);
+      // console.error('Error storing tokens:', error)
     }
   }
 
@@ -139,20 +139,20 @@ export class GoogleDriveAuthService {
       const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`;
 
       // Try to get cached tokens
-      const cachedTokens = await redis.get(cacheKey);
+      const cachedTokens = await redis.get(cacheKey)
       if (cachedTokens) {
         return JSON.parse(cachedTokens);
       }
 
       // Try to refresh using refresh token
-      const refreshToken = await redis.get(`${cacheKey}:refresh`);
+      const refreshToken = await redis.get(`${cacheKey}:refresh`)
       if (refreshToken) {
         return await this.refreshAccessToken(userId, refreshToken);
       }
 
       return null;
     } catch (error) {
-      // console.error('Error getting tokens:', error);
+      // console.error('Error getting tokens:', error)
       return null;
     }
   }
@@ -173,12 +173,12 @@ export class GoogleDriveAuthService {
         scope: credentials.scope!,
         token_type: credentials.token_type!,
         expiry_date: credentials.expiry_date!,
-      };
+      }
 
       await this.storeTokens(userId, tokens);
       return tokens;
     } catch (error) {
-      // console.error('Error refreshing token:', error);
+      // console.error('Error refreshing token:', error)
       return null;
     }
   }
@@ -208,18 +208,18 @@ export class GoogleDriveAuthService {
 
       // Clear cached tokens
       if (redis) {
-        const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`;
+        const cacheKey = `${this.tokenCacheKeyPrefix}${userId}`
         await redis.del(cacheKey);
         await redis.del(`${cacheKey}:refresh`);
       }
     } catch (error) {
-      // console.error('Error revoking access:', error);
+      // console.error('Error revoking access:', error)
     }
   }
 }
 
 // Singleton instance
-let authServiceInstance: GoogleDriveAuthService | null = null;
+let authServiceInstance: GoogleDriveAuthService | null = null
 
 export function getGoogleDriveAuthService(): GoogleDriveAuthService {
   if (!authServiceInstance) {

@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import Link from 'next/link';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function ForgotPasswordPage() {
 
     try {
       // In demo mode, just show success message
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setIsSubmitted(true);
       toast({
         title: 'Reset link sent',
@@ -35,7 +36,7 @@ export default function ForgotPasswordPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   if (isSubmitted) {
     return (

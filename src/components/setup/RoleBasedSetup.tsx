@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   ChevronRight, 
   ChevronLeft,
@@ -24,11 +25,11 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
   Clock,
   Globe,
   Lock
-} from 'lucide-react';
+} from 'lucide-react'
 
 // User role definitions
 interface UserRole {
-  id: string;
+  id: string
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -83,7 +84,7 @@ const USER_ROLES: UserRole[] = [
 
 // Setup step definitions
 interface SetupStep {
-  id: string;
+  id: string
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -99,7 +100,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpd
     size: '',
     riskFramework: '',
     complianceStandards: []
-  });
+  })
 
   const industries = [
     'Financial Services', 'Healthcare', 'Technology', 'Manufacturing', 
@@ -171,7 +172,7 @@ setFormData({ ...formData, name: e.target.value })}
       </div>
     </div>
   );
-};
+}
 
 // Preferences setup component
 const PreferencesSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpdate }) => {
@@ -191,7 +192,7 @@ const PreferencesSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpda
       autoSuggestions: true,
       confidenceThreshold: 'medium'
     }
-  });
+  })
 
   useEffect(() => {
     onUpdate(preferences);
@@ -278,11 +279,11 @@ const PreferencesSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpda
       </div>
     </div>
   );
-};
+}
 
 // Main setup wizard component
 interface RoleBasedSetupProps {
-  onComplete: (setupData: any) => void;
+  onComplete: (setupData: any) => void
   onSkip?: () => void;
 }
 
@@ -305,11 +306,11 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
     setSetupData({ ...setupData, role: role.id });
-  };
+  }
 
   const handleStepData = (stepId: string, data: any) => {
     setSetupData({ ...setupData, [stepId]: data });
-  };
+  }
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -317,26 +318,26 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
     } else {
       completeSetup();
     }
-  };
+  }
 
   const previousStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }
 
   const completeSetup = async () => {
     setIsCompleting(true);
     
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000))
     
     onComplete({
       ...setupData,
       completedAt: new Date().toISOString(),
       version: '1.0'
     });
-  };
+  }
 
   const renderStepContent = () => {
     if (currentStep === 0) {
@@ -422,8 +423,8 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
         <h3 className="text-xl font-semibold mb-2">Step: {stepId}</h3>
         <p className="text-gray-600">This step is being configured...</p>
       </div>
-    );
-  };
+    )
+  }
 
   if (isCompleting) {
     return (
@@ -442,7 +443,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             <DaisyProgress value={100} className="h-2" / / /> </DaisyCard>
       </div>
     );
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -501,6 +502,6 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 export default RoleBasedSetup; 

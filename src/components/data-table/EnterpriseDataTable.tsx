@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -10,6 +10,7 @@ import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableH
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { Search, Download, MoreHorizontal, ChevronDown, Edit, Trash2, Eye, Copy, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { DaisyCardTitle, DaisyDropdownMenuTrigger, DaisyTableRow } from '@/components/ui/daisy-components';
 
 interface TableData {
   id: string;
@@ -108,7 +109,7 @@ export default function EnterpriseDataTable<T extends TableData>({
       key,
       direction: prev?.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
     }));
-  };
+  }
   
   const handleRowSelection = (rowId: string, checked: boolean) => {
     const newSelected = new Set(selectedRows);
@@ -118,7 +119,7 @@ export default function EnterpriseDataTable<T extends TableData>({
       newSelected.delete(rowId);
     }
     setSelectedRows(newSelected);
-  };
+  }
   
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -126,7 +127,7 @@ export default function EnterpriseDataTable<T extends TableData>({
     } else {
       setSelectedRows(new Set());
     }
-  };
+  }
   
   const handleBulkAction = (_action: BulkAction) => {
     const selectedData = data.filter(row => selectedRows.has(row.id));
@@ -137,7 +138,7 @@ export default function EnterpriseDataTable<T extends TableData>({
       title: 'Bulk Action Complete',
       description: `${action.label} applied to ${selectedData.length} item(s).`,
     });
-  };
+  }
   
   const handleExport = (format: string) => {
     const exportData = selectedRows.size > 0
@@ -169,14 +170,14 @@ export default function EnterpriseDataTable<T extends TableData>({
       title: 'Export Complete',
       description: 'Data exported successfully.',
     });
-  };
+  }
   
   const handleReset = () => {
     setSearchTerm('');
     setSortConfig(null);
     setSelectedRows(new Set());
     setCurrentPage(1);
-  };
+  }
   
   const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedRows.has(row.id));
   const isIndeterminate = selectedRows.size > 0 && !isAllSelected;
@@ -405,7 +406,7 @@ handleRowSelection(row.id, checked as boolean)}
                     page = totalPages - 4 + i;
                   } else {
                     page = currentPage - 2 + i;
-                  };
+                  }
 
   return (
                     <DaisyButton
@@ -450,7 +451,7 @@ export function RiskDataTableExample() {
     owner: ['John Smith', 'Sarah Johnson', 'Mike Chen'][i % 3],
     riskScore: Math.floor(Math.random() * 20) + 5,
     lastAssessed: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-  }));
+  }))
   
   const columns: ColumnConfig<any>[] = [
     {

@@ -1,48 +1,48 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-// import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types';
-// import { generateMockRisks } from '@/lib/mockData';
-// import { calculateRiskScore, getRiskLevel } from '@/lib/utils';
+// import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types'
+// import { generateMockRisks } from '@/lib/mockData'
+// import { calculateRiskScore, getRiskLevel } from '@/lib/utils'
 
 interface RiskContextType extends RiskState {
   // CRUD Operations
   createRisk: (
     riskData: Omit<Risk, 'id' | 'createdAt' | 'updatedAt' | 'riskScore'>
-  ) => Promise<Risk>;
+  ) => Promise<Risk>
   updateRisk: (id: string, riskData: Partial<Risk>) => Promise<Risk>;
   deleteRisk: (id: string) => Promise<void>;
   deleteRisks: (ids: string[]) => Promise<void>;
   getRisk: (id: string) => Risk | null;
 
   // Filtering and Search
-  setFilters: (_filters: Partial<RiskFilters>) => void;
+  setFilters: (_filters: Partial<RiskFilters>) => void
   clearFilters: () => void;
   setSearch: (search: string) => void;
 
   // Selection and Bulk Operations
-  selectedRisks: string[];
+  selectedRisks: string[]
   setSelectedRisks: (ids: string[]) => void;
   selectAllRisks: () => void;
   clearSelection: () => void;
 
   // Sorting and Pagination
-  sortBy: string;
+  sortBy: string
   sortDirection: 'asc' | 'desc';
   setSorting: (field: string, direction: 'asc' | 'desc') => void;
 
   // Utility functions
-  getFilteredRisks: () => Risk[];
+  getFilteredRisks: () => Risk[]
   getRisksByCategory: () => Record<RiskCategory, Risk[]>;
   getRiskStats: () => {
     total: number;
     byStatus: Record<Risk['status'], number>;
     byLevel: Record<string, number>;
     averageScore: number;
-  };
+  }
 
   // Error handling
-  clearError: () => void;
+  clearError: () => void
 }
 
 // Risk Actions
@@ -59,11 +59,11 @@ type RiskAction =
   | { type: 'SET_FILTERS'; payload: Partial<RiskFilters> }
   | { type: 'CLEAR_FILTERS' }
   | { type: 'SET_SELECTED_RISKS'; payload: string[] }
-  | { type: 'SET_SORTING'; payload: { field: string; direction: 'asc' | 'desc' } };
+  | { type: 'SET_SORTING'; payload: { field: string; direction: 'asc' | 'desc' } }
 
 // Initial state
 const initialState: RiskState & {
-  selectedRisks: string[];
+  selectedRisks: string[]
   sortBy: string;
   sortDirection: 'asc' | 'desc';
 } = {
@@ -75,29 +75,29 @@ const initialState: RiskState & {
   selectedRisks: [],
   sortBy: 'createdAt',
   sortDirection: 'desc',
-};
+}
 
 // Risk reducer
 const riskReducer = (state: typeof initialState, action: RiskAction): typeof initialState => {
   switch (action.type) {
     case 'SET_LOADING':
-      return { ...state, loading: action.payload };
+      return { ...state, loading: action.payload }
 
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
+      return { ...state, error: action.payload, loading: false }
 
     case 'CLEAR_ERROR':
-      return { ...state, error: null };
+      return { ...state, error: null }
 
     case 'SET_RISKS':
-      return { ...state, risks: action.payload, loading: false };
+      return { ...state, risks: action.payload, loading: false }
 
     case 'ADD_RISK':
       return {
         ...state,
         risks: [action.payload, ...state.risks],
         loading: false,
-      };
+      }
 
     case 'UPDATE_RISK':
       return {
@@ -106,7 +106,7 @@ const riskReducer = (state: typeof initialState, action: RiskAction): typeof ini
         selectedRisk:
           state.selectedRisk?.id === action.payload.id ? action.payload : state.selectedRisk,
         loading: false,
-      };
+      }
 
     case 'DELETE_RISK':
       return {
@@ -115,7 +115,7 @@ const riskReducer = (state: typeof initialState, action: RiskAction): typeof ini
         selectedRisk: state.selectedRisk?.id === action.payload ? null : state.selectedRisk,
         selectedRisks: state.selectedRisks.filter((id) => id !== action.payload),
         loading: false,
-      };
+      }
 
     case 'DELETE_RISKS':
       return {
@@ -126,34 +126,34 @@ const riskReducer = (state: typeof initialState, action: RiskAction): typeof ini
           : state.selectedRisk,
         selectedRisks: [],
         loading: false,
-      };
+      }
 
     case 'SET_SELECTED_RISK':
-      return { ...state, selectedRisk: action.payload };
+      return { ...state, selectedRisk: action.payload }
 
     case 'SET_FILTERS':
       return {
         ...state,
         filters: { ...state.filters, ...action.payload },
-      };
+      }
 
     case 'CLEAR_FILTERS':
-      return { ...state, filters: {} };
+      return { ...state, filters: {} }
 
     case 'SET_SELECTED_RISKS':
-      return { ...state, selectedRisks: action.payload };
+      return { ...state, selectedRisks: action.payload }
 
     case 'SET_SORTING':
       return {
         ...state,
         sortBy: action.payload.field,
         sortDirection: action.payload.direction,
-      };
+      }
 
     default:
       return state;
   }
-};
+}
 
 const RiskContext = createContext<RiskContextType>({} as RiskContextType);
 
@@ -163,12 +163,12 @@ export const useRisks = () => {
     throw new Error('useRisks must be used within RiskProvider');
   }
   return context;
-};
+}
 
 // Mock API service
 const riskService = {
   async getAllRisks(): Promise<Risk[]> {
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800))
     return generateMockRisks();
   },
 
@@ -183,7 +183,7 @@ const riskService = {
       riskScore: calculateRiskScore(riskData.likelihood, riskData.impact),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    };
+    }
 
     return newRisk;
   },
@@ -199,7 +199,7 @@ const riskService = {
           ? calculateRiskScore(riskData.likelihood, riskData.impact)
           : (riskData as Risk).riskScore,
       updatedAt: new Date().toISOString(),
-    };
+    }
 
     return updatedRisk;
   },
@@ -211,7 +211,7 @@ const riskService = {
   async deleteRisks(): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   },
-};
+}
 
 export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(riskReducer, initialState);
@@ -219,14 +219,14 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Load initial risks
   useEffect(() => {
     const loadRisks = async () => {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch({ type: 'SET_LOADING', payload: true })
       try {
         const risks = await riskService.getAllRisks();
         dispatch({ type: 'SET_RISKS', payload: risks });
       } catch {
         dispatch({ type: 'SET_ERROR', payload: 'Failed to load risks' });
       }
-    };
+    }
 
     loadRisks();
   }, []);
@@ -235,7 +235,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const createRisk = async (
     riskData: Omit<Risk, 'id' | 'createdAt' | 'updatedAt' | 'riskScore'>
   ) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_LOADING', payload: true })
     try {
       const newRisk = await riskService.createRisk(riskData);
       dispatch({ type: 'ADD_RISK', payload: newRisk });
@@ -244,7 +244,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_ERROR', payload: 'Failed to create risk' });
       throw error;
     }
-  };
+  }
 
   const updateRisk = async (id: string, riskData: Partial<Risk>) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -256,7 +256,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_ERROR', payload: 'Failed to update risk' });
       throw error;
     }
-  };
+  }
 
   const deleteRisk = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -267,7 +267,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_ERROR', payload: 'Failed to delete risk' });
       throw error;
     }
-  };
+  }
 
   const deleteRisks = async (ids: string[]) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -278,51 +278,51 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_ERROR', payload: 'Failed to delete risks' });
       throw error;
     }
-  };
+  }
 
   const getRisk = (id: string) => {
     return state.risks.find((risk) => risk.id === id) || null;
-  };
+  }
 
   // Filtering and Search
   const setFilters = (_filters: Partial<RiskFilters>) => {
-    dispatch({ type: 'SET_FILTERS', payload: filters });
-  };
+    dispatch({ type: 'SET_FILTERS', payload: filters })
+  }
 
   const clearFilters = () => {
     dispatch({ type: 'CLEAR_FILTERS' });
-  };
+  }
 
   const setSearch = (search: string) => {
     dispatch({ type: 'SET_FILTERS', payload: { search } });
-  };
+  }
 
   // Selection
   const setSelectedRisks = (ids: string[]) => {
-    dispatch({ type: 'SET_SELECTED_RISKS', payload: ids });
-  };
+    dispatch({ type: 'SET_SELECTED_RISKS', payload: ids })
+  }
 
   const selectAllRisks = () => {
     const filteredRisks = getFilteredRisks();
     dispatch({ type: 'SET_SELECTED_RISKS', payload: filteredRisks.map((r) => r.id) });
-  };
+  }
 
   const clearSelection = () => {
     dispatch({ type: 'SET_SELECTED_RISKS', payload: [] });
-  };
+  }
 
   // Sorting
   const setSorting = (field: string, direction: 'asc' | 'desc') => {
-    dispatch({ type: 'SET_SORTING', payload: { field, direction } });
-  };
+    dispatch({ type: 'SET_SORTING', payload: { field, direction } })
+  }
 
   // Utility functions
   const getFilteredRisks = (): Risk[] => {
-    let filtered = [...state.risks];
+    let filtered = [...state.risks]
 
     // Apply filters
     if (state.filters.category) {
-      filtered = filtered.filter((risk) => risk.category === state.filters.category);
+      filtered = filtered.filter((risk) => risk.category === state.filters.category)
     }
 
     if (state.filters.status) {
@@ -353,11 +353,11 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Apply sorting
     filtered.sort((a, b) => {
-      const aVal = a[state.sortBy as keyof Risk];
+      const aVal = a[state.sortBy as keyof Risk]
       const bVal = b[state.sortBy as keyof Risk];
 
       // Handle undefined values
-      if (aVal === undefined && bVal === undefined) return 0;
+      if (aVal === undefined && bVal === undefined) return 0
       if (aVal === undefined) return 1;
       if (bVal === undefined) return -1;
 
@@ -367,7 +367,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     return filtered;
-  };
+  }
 
   const getRisksByCategory = (): Record<RiskCategory, Risk[]> => {
     const categories: RiskCategory[] = [
@@ -384,7 +384,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     return result;
-  };
+  }
 
   const getRiskStats = () => {
     const risks = state.risks;
@@ -410,12 +410,12 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const averageScore =
       risks.length > 0 ? risks.reduce((sum, risk) => sum + risk.riskScore, 0) / risks.length : 0;
 
-    return { total, byStatus, byLevel, averageScore };
-  };
+    return { total, byStatus, byLevel, averageScore }
+  }
 
   const clearError = () => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }
 
   return (
     <RiskContext.Provider
@@ -442,4 +442,4 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </RiskContext.Provider>
   );
-};
+}

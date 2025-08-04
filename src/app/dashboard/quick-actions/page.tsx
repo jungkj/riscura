@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -72,14 +73,14 @@ import GuidedTour from '@/components/help/GuidedTour';
   TrendingDown,
   Video,
   Minus,
-} from 'lucide-react';
+} from 'lucide-react'
 
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { HighContrastToggle } from '@/components/ui/HighContrastToggle';
 
 // Types
 interface WorkflowAction {
-  id: string;
+  id: string
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -132,7 +133,7 @@ export default function QuickActionsPage() {
 
   // Load user preferences
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('riscura-favorite-actions');
+    const savedFavorites = localStorage.getItem('riscura-favorite-actions')
     const savedRecent = localStorage.getItem('riscura-recent-actions');
 
     if (savedFavorites) {
@@ -147,7 +148,7 @@ export default function QuickActionsPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/workflow-stats');
+        const response = await fetch('/api/dashboard/workflow-stats')
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
@@ -155,11 +156,11 @@ export default function QuickActionsPage() {
           }
         }
       } catch (error) {
-        // console.error('Failed to fetch workflow stats:', error);
+        // console.error('Failed to fetch workflow stats:', error)
       } finally {
         setLoading(false);
       }
-    };
+    }
     fetchStats();
   }, []);
 
@@ -197,7 +198,7 @@ export default function QuickActionsPage() {
       icon: Zap,
       color: '#512DA8',
     },
-  ];
+  ]
 
   // Workflow-based action categories
   const workflowCategories: WorkflowCategory[] = [
@@ -450,7 +451,7 @@ export default function QuickActionsPage() {
         },
       ],
     },
-  ];
+  ]
 
   // Filter actions based on search and category
   const filteredCategories = workflowCategories
@@ -461,7 +462,7 @@ export default function QuickActionsPage() {
           searchQuery === '' ||
           action.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           action.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          action.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+          action.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
 
         const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
         const matchesFavorites = !showFavoritesOnly || favorites.includes(action.id);
@@ -474,7 +475,7 @@ export default function QuickActionsPage() {
   // Handle action click
   const handleActionClick = (_action: WorkflowAction) => {
     if (action.id === 'guided-tour') {
-      setShowTour(true);
+      setShowTour(true)
       return;
     }
 
@@ -483,11 +484,11 @@ export default function QuickActionsPage() {
       toast({
         title: 'Feature Coming Soon',
         description: `${action.title} is currently under development.`,
-      });
+      })
     } else {
       router.push(action.href);
     }
-  };
+  }
 
   const handleTourComplete = () => {
     setShowTour(false);
@@ -496,22 +497,22 @@ export default function QuickActionsPage() {
       title: 'Tour Complete!',
       description: "You're ready to start using quick actions effectively.",
     });
-  };
+  }
 
   const handleTourSkip = () => {
     setShowTour(false);
     localStorage.setItem('hasSeenQuickActionsTour', 'true');
-  };
+  }
 
   const startGuidedTour = () => {
     setShowTour(true);
-  };
+  }
 
   // Toggle favorite
   const toggleFavorite = (actionId: string) => {
     const updatedFavorites = favorites.includes(actionId)
       ? favorites.filter((id) => id !== actionId)
-      : [...favorites, actionId];
+      : [...favorites, actionId]
 
     setFavorites(updatedFavorites);
     localStorage.setItem('riscura-favorite-actions', JSON.stringify(updatedFavorites));
@@ -520,13 +521,13 @@ export default function QuickActionsPage() {
       title: favorites.includes(actionId) ? 'Removed from favorites' : 'Added to favorites',
       description: 'Your preferences have been saved.',
     });
-  };
+  }
 
   // Get difficulty badge color
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'beginner':
-        return 'bg-green-100 text-green-700';
+        return 'bg-green-100 text-green-700'
       case 'intermediate':
         return 'bg-yellow-100 text-yellow-700';
       case 'advanced':
@@ -534,13 +535,13 @@ export default function QuickActionsPage() {
       default:
         return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   // Get completion status color
   const getCompletionStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'text-green-600';
+        return 'text-green-600'
       case 'in-progress':
         return 'text-blue-600';
       case 'not-started':
@@ -548,7 +549,7 @@ export default function QuickActionsPage() {
       default:
         return 'text-gray-600';
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-white">

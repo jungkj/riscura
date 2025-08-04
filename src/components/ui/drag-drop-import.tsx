@@ -4,9 +4,10 @@ import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
+import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -52,7 +53,7 @@ import {
   Target,
   Zap,
   ArrowRight
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ProcessedFile {
   file: File;
@@ -64,7 +65,7 @@ interface ProcessedFile {
   results?: {
     type: 'excel-rcsa' | 'policy-document' | 'bulk-upload';
     data: any;
-  };
+  }
 }
 
 interface ImportModeConfig {
@@ -156,14 +157,14 @@ export default function DragDropImport({
     validateData: true,
     createMissing: true,
     previewMode: false
-  });
+  })
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle rejected files
     if (rejectedFiles.length > 0) {
       const errors = rejectedFiles.map(({ file, errors }) => 
         `${file.name}: ${errors.map((e: any) => e.message).join(', ')}`
-      );
+      )
       setProcessingError(`Some files were rejected: ${errors.join('; ')}`);
     }
 
@@ -174,7 +175,7 @@ export default function DragDropImport({
       progress: 0,
       status: 'pending',
       preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-    }));
+    }))
 
     setFiles(prev => {
       const combined = [...prev, ...newFiles];
@@ -201,7 +202,7 @@ export default function DragDropImport({
 
   const removeFile = (fileId: string) => {
     setFiles(prev => prev.filter(f => f.id !== fileId));
-  };
+  }
 
   const processFiles = async () => {
     if (files.length === 0) {
@@ -222,7 +223,7 @@ export default function DragDropImport({
           f.id === fileObj.id 
             ? { ...f, status: 'processing', progress: 10 }
             : f
-        ));
+        ))
 
         const formData = new FormData();
         formData.append('file', fileObj.file);
@@ -253,12 +254,12 @@ export default function DragDropImport({
                   results: result.data
                 }
               : f
-          ));
+          ))
 
           results.push(result.data);
 
         } catch (error) {
-          // console.error(`Error processing ${fileObj.file.name}:`, error);
+          // console.error(`Error processing ${fileObj.file.name}:`, error)
           
           // Update file status with error
           setFiles(prev => prev.map(f => 
@@ -270,7 +271,7 @@ export default function DragDropImport({
                   error: error instanceof Error ? error.message : 'Processing failed'
                 }
               : f
-          ));
+          ))
         }
       }
 
@@ -287,26 +288,26 @@ export default function DragDropImport({
       });
 
     } catch (error) {
-      // console.error('Import processing error:', error);
+      // console.error('Import processing error:', error)
       setProcessingError(error instanceof Error ? error.message : 'Processing failed');
     } finally {
       setIsProcessing(false);
     }
-  };
+  }
 
   const resetImport = () => {
     setFiles([]);
     setProcessingError(null);
     setProcessingResults([]);
     setShowResults(false);
-  };
+  }
 
   const getFileIcon = (_type: string) => {
     if (type.includes('spreadsheet') || type.includes('excel')) return FileSpreadsheet;
     if (type.includes('pdf') || type.includes('document') || type.includes('text')) return FileText;
     if (type.includes('image')) return FileImage;
     return File;
-  };
+  }
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B';
@@ -314,7 +315,7 @@ export default function DragDropImport({
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   return (
     <div className="space-y-6">

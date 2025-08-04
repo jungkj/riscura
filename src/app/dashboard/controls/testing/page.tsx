@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -43,7 +43,7 @@ export default function ControlsTestingPage() {
       effectiveness: 88,
       tester: 'Operations Team',
     },
-  ];
+  ]
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -56,7 +56,7 @@ export default function ControlsTestingPage() {
       default:
         return <Clock className="w-5 h-5 text-gray-600" />;
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -69,7 +69,7 @@ export default function ControlsTestingPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F1E9] p-6">

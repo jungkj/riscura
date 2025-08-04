@@ -1,5 +1,5 @@
 import { ChannelType, ChannelMemberRole, ChatMessageType } from '@prisma/client';
-// import { redis } from '@/lib/cache/memory-cache';
+// import { redis } from '@/lib/cache/memory-cache'
 import { prisma } from '@/lib/prisma';
 
 export interface CreateChannelInput {
@@ -41,7 +41,7 @@ export interface MarkAsReadInput {
 export class ChatService {
   // Channel Management
   async createChannel(input: CreateChannelInput) {
-    const { name, description, type, organizationId, createdBy, members = [] } = input;
+    const { name, description, type, organizationId, createdBy, members = [] } = input
 
     // Create channel
     const channel = await prisma.chatChannel.create({
@@ -89,17 +89,17 @@ export class ChatService {
           },
         },
       },
-    });
+    })
 
     // Cache channel info
-    await redis.setex(`channel:${channel.id}`, 3600, JSON.stringify(channel));
+    await redis.setex(`channel:${channel.id}`, 3600, JSON.stringify(channel))
 
     return channel;
   }
 
   async getChannel(channelId: string, userId: string) {
     // Check cache first
-    const _cached = await redis.get(`channel:${channelId}`);
+    const _cached = await redis.get(`channel:${channelId}`)
     if (cached) {
       return JSON.parse(cached);
     }
@@ -112,7 +112,7 @@ export class ChatService {
           userId,
         },
       },
-    });
+    })
 
     if (!membership) {
       throw new Error('Access denied');
@@ -156,7 +156,7 @@ export class ChatService {
     }
 
     // Cache for 1 hour
-    await redis.setex(`channel:${channelId}`, 3600, JSON.stringify(channel));
+    await redis.setex(`channel:${channelId}`, 3600, JSON.stringify(channel))
 
     return channel;
   }
@@ -213,12 +213,12 @@ export class ChatService {
     // Get unread counts
     const channelsWithUnread = await Promise.all(
       channels.map(async (channel) => {
-        const unreadCount = await this.getUnreadCount(channel.id, userId);
+        const unreadCount = await this.getUnreadCount(channel.id, userId)
         return {
           ...channel,
           unreadCount,
           lastMessage: channel.messages[0] || null,
-        };
+        }
       })
     );
 
@@ -234,7 +234,7 @@ export class ChatService {
           userId: addedBy,
         },
       },
-    });
+    })
 
     if (
       !adderMembership ||
@@ -264,7 +264,7 @@ export class ChatService {
     });
 
     // Invalidate channel cache
-    await redis.del(`channel:${channelId}`);
+    await redis.del(`channel:${channelId}`)
 
     return member;
   }
@@ -279,7 +279,7 @@ export class ChatService {
             userId: removedBy,
           },
         },
-      });
+      })
 
       if (
         !removerMembership ||
@@ -300,7 +300,7 @@ export class ChatService {
     });
 
     // Invalidate channel cache
-    await redis.del(`channel:${channelId}`);
+    await redis.del(`channel:${channelId}`)
   }
 
   // Message Management
@@ -312,7 +312,7 @@ export class ChatService {
       type = ChatMessageType.TEXT,
       attachments,
       parentId,
-    } = input;
+    } = input
 
     // Verify user has access
     const membership = await prisma.chatChannelMember.findUnique({
@@ -322,7 +322,7 @@ export class ChatService {
           userId,
         },
       },
-    });
+    })
 
     if (!membership) {
       throw new Error('Access denied');
@@ -384,13 +384,13 @@ export class ChatService {
           },
         },
       },
-    });
+    })
 
     // Update channel's last activity
     await prisma.chatChannel.update({
       where: { id: channelId },
       data: { updatedAt: new Date() },
-    });
+    })
 
     // Update member's last read
     await prisma.chatChannelMember.update({
@@ -401,13 +401,13 @@ export class ChatService {
         },
       },
       data: { lastReadAt: new Date() },
-    });
+    })
 
     // Invalidate unread counts for other members
     const members = await prisma.chatChannelMember.findMany({
       where: { channelId },
       select: { userId: true },
-    });
+    })
 
     for (const member of members) {
       if (member.userId !== userId) {
@@ -427,7 +427,7 @@ export class ChatService {
           userId,
         },
       },
-    });
+    })
 
     if (!membership) {
       throw new Error('Access denied');
@@ -497,7 +497,7 @@ export class ChatService {
     const message = await prisma.chatMessage.findUnique({
       where: { id: messageId },
       select: { userId: true },
-    });
+    })
 
     if (!message || message.userId !== userId) {
       throw new Error('Access denied');
@@ -542,7 +542,7 @@ export class ChatService {
     const message = await prisma.chatMessage.findUnique({
       where: { id: messageId },
       select: { userId: true, channelId: true },
-    });
+    })
 
     if (!message || message.userId !== userId) {
       throw new Error('Access denied');
@@ -556,18 +556,18 @@ export class ChatService {
       },
     });
 
-    return { success: true };
+    return { success: true }
   }
 
   // Reactions
   async addReaction(input: AddReactionInput) {
-    const { messageId, userId, emoji } = input;
+    const { messageId, userId, emoji } = input
 
     // Verify message exists and user has access
     const message = await prisma.chatMessage.findUnique({
       where: { id: messageId },
       select: { channelId: true },
-    });
+    })
 
     if (!message) {
       throw new Error('Message not found');
@@ -617,12 +617,12 @@ export class ChatService {
       },
     });
 
-    return { success: true };
+    return { success: true }
   }
 
   // Read Receipts
   async markAsRead(input: MarkAsReadInput) {
-    const { channelId, userId, messageId } = input;
+    const { channelId, userId, messageId } = input
 
     // Create read receipt
     await prisma.chatReadReceipt.upsert({
@@ -639,7 +639,7 @@ export class ChatService {
         messageId,
         userId,
       },
-    });
+    })
 
     // Update member's last read
     await prisma.chatChannelMember.update({
@@ -650,17 +650,17 @@ export class ChatService {
         },
       },
       data: { lastReadAt: new Date() },
-    });
+    })
 
     // Clear unread cache
-    await redis.del(`unread:${channelId}:${userId}`);
+    await redis.del(`unread:${channelId}:${userId}`)
 
-    return { success: true };
+    return { success: true }
   }
 
   async getUnreadCount(channelId: string, userId: string): Promise<number> {
     // Check cache first
-    const _cached = await redis.get(`unread:${channelId}:${userId}`);
+    const _cached = await redis.get(`unread:${channelId}:${userId}`)
     if (cached !== null) {
       return parseInt(cached);
     }
@@ -674,7 +674,7 @@ export class ChatService {
         },
       },
       select: { lastReadAt: true },
-    });
+    })
 
     if (!membership) {
       return 0;
@@ -688,10 +688,10 @@ export class ChatService {
         userId: { not: userId },
         isDeleted: false,
       },
-    });
+    })
 
     // Cache for 5 minutes
-    await redis.setex(`unread:${channelId}:${userId}`, 300, unreadCount.toString());
+    await redis.setex(`unread:${channelId}:${userId}`, 300, unreadCount.toString())
 
     return unreadCount;
   }
@@ -702,7 +702,7 @@ export class ChatService {
     const accessibleChannels = await prisma.chatChannelMember.findMany({
       where: { userId },
       select: { channelId: true },
-    });
+    })
 
     const channelIds = accessibleChannels.map((m) => m.channelId);
 
@@ -770,7 +770,7 @@ export class ChatService {
           },
         },
       },
-    });
+    })
 
     if (existingChannel) {
       return existingChannel;
@@ -780,7 +780,7 @@ export class ChatService {
     const users = await prisma.user.findMany({
       where: { id: { in: [userId1, userId2] } },
       select: { firstName: true, lastName: true },
-    });
+    })
 
     const channelName = users.map((u) => `${u.firstName} ${u.lastName}`).join(' - ');
 
@@ -797,16 +797,16 @@ export class ChatService {
 
   // Typing Indicators
   async setTypingStatus(channelId: string, userId: string, isTyping: boolean) {
-    const key = `typing:${channelId}:${userId}`;
+    const key = `typing:${channelId}:${userId}`
 
     if (isTyping) {
       // Set typing status with 5 second expiry
-      await redis.setex(key, 5, '1');
+      await redis.setex(key, 5, '1')
     } else {
       await redis.del(key);
     }
 
-    return { success: true };
+    return { success: true }
   }
 
   async getTypingUsers(channelId: string): Promise<string[]> {
@@ -816,13 +816,13 @@ export class ChatService {
 
     // Use SCAN instead of KEYS for better performance
     do {
-      const _result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      const _result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100)
       cursor = result[0];
       const keys = result[1];
 
       // Extract user IDs from keys
       for (const key of keys) {
-        const parts = key.split(':');
+        const parts = key.split(':')
         if (parts.length >= 3) {
           typingUserIds.push(parts[parts.length - 1]);
         }

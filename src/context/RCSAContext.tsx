@@ -18,7 +18,7 @@ import { rcsaApiClient, rcsaHelpers } from '@/lib/api/rcsa-client';
   TestScript,
   CreateTestScriptRequest,
   UpdateTestScriptRequest,
-} from '@/types/rcsa.types';
+} from '@/types/rcsa.types'
 
 // ============================================================================
 // CONTEXT STATE & ACTIONS
@@ -26,37 +26,37 @@ import { rcsaApiClient, rcsaHelpers } from '@/lib/api/rcsa-client';
 
 interface RCSAContextState {
   // Current selections
-  currentRisk: Risk | null;
+  currentRisk: Risk | null
   currentControl: Control | null;
   currentWorkflow: AssessmentWorkflow | null;
   currentTestScript: TestScript | null;
 
   // Data collections
-  risks: Risk[];
+  risks: Risk[]
   controls: Control[];
   controlRiskMappings: ControlRiskMapping[];
   evidence: AssessmentEvidence[];
   testScripts: TestScript[];
 
   // UI state
-  loading: boolean;
+  loading: boolean
   error: string | null;
 
   // Navigation context
-  navigationContext: NavigationContext;
+  navigationContext: NavigationContext
 
   // Analytics cache
-  analytics: RCSAAnalytics | null;
+  analytics: RCSAAnalytics | null
 }
 
 interface RCSAContextActions {
   // Navigation with context
-  navigateToRisk: (riskId: string, fromContext?: NavigationContext) => Promise<void>;
+  navigateToRisk: (riskId: string, fromContext?: NavigationContext) => Promise<void>
   navigateToControl: (controlId: string, fromContext?: NavigationContext) => Promise<void>;
   navigateToAssessment: (assessmentId: string, fromContext?: NavigationContext) => Promise<void>;
 
   // CRUD operations
-  createRisk: (_risk: CreateRiskRequest) => Promise<Risk>;
+  createRisk: (_risk: CreateRiskRequest) => Promise<Risk>
   updateRisk: (id: string, updates: UpdateRiskRequest) => Promise<Risk>;
   deleteRisk: (id: string) => Promise<void>;
 
@@ -65,7 +65,7 @@ interface RCSAContextActions {
   deleteControl: (id: string) => Promise<void>;
 
   // Relationship management
-  mapControlToRisk: (riskId: string, controlId: string, effectiveness?: number) => Promise<void>;
+  mapControlToRisk: (riskId: string, controlId: string, effectiveness?: number) => Promise<void>
   unmapControlFromRisk: (riskId: string, controlId: string) => Promise<void>;
   updateControlEffectiveness: (
     riskId: string,
@@ -74,22 +74,22 @@ interface RCSAContextActions {
   ) => Promise<void>;
 
   // Bulk operations
-  bulkMapControls: (riskId: string, controlIds: string[]) => Promise<void>;
+  bulkMapControls: (riskId: string, controlIds: string[]) => Promise<void>
   bulkUpdateEffectiveness: (updates: EffectivenessUpdate[]) => Promise<void>;
 
   // Context utilities
-  getRelatedControls: (riskId: string) => Control[];
+  getRelatedControls: (riskId: string) => Control[]
   getRelatedRisks: (controlId: string) => Risk[];
   clearNavigationContext: () => void;
 
   // Test Script operations
-  createTestScript: (testScript: CreateTestScriptRequest) => Promise<TestScript>;
+  createTestScript: (testScript: CreateTestScriptRequest) => Promise<TestScript>
   updateTestScript: (id: string, updates: UpdateTestScriptRequest) => Promise<TestScript>;
   deleteTestScript: (id: string) => Promise<void>;
   navigateToTestScript: (testScriptId: string, fromContext?: NavigationContext) => Promise<void>;
 
   // Data refresh
-  refreshRisks: () => Promise<void>;
+  refreshRisks: () => Promise<void>
   refreshControls: () => Promise<void>;
   refreshMappings: () => Promise<void>;
   refreshAnalytics: () => Promise<void>;
@@ -97,7 +97,7 @@ interface RCSAContextActions {
   refreshData: () => Promise<void>;
 
   // Error handling
-  clearError: () => void;
+  clearError: () => void
 }
 
 type RCSAContextType = RCSAContextState & RCSAContextActions;
@@ -129,7 +129,7 @@ type RCSAAction =
   | { type: 'ADD_CONTROL_RISK_MAPPING'; payload: ControlRiskMapping }
   | { type: 'UPDATE_CONTROL_RISK_MAPPING'; payload: ControlRiskMapping }
   | { type: 'REMOVE_CONTROL_RISK_MAPPING'; payload: { riskId: string; controlId: string } }
-  | { type: 'SET_NAVIGATION_CONTEXT'; payload: NavigationContext };
+  | { type: 'SET_NAVIGATION_CONTEXT'; payload: NavigationContext }
 
 const initialState: RCSAContextState = {
   currentRisk: null,
@@ -143,45 +143,45 @@ const initialState: RCSAContextState = {
   error: null,
   navigationContext: { maintainContext: false },
   analytics: null,
-};
+}
 
 const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextState {
   switch (action.type) {
     case 'SET_LOADING':
-      return { ...state, loading: action.payload };
+      return { ...state, loading: action.payload }
 
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
+      return { ...state, error: action.payload, loading: false }
 
     case 'CLEAR_ERROR':
-      return { ...state, error: null };
+      return { ...state, error: null }
 
     case 'SET_CURRENT_RISK':
-      return { ...state, currentRisk: action.payload };
+      return { ...state, currentRisk: action.payload }
 
     case 'SET_CURRENT_CONTROL':
-      return { ...state, currentControl: action.payload };
+      return { ...state, currentControl: action.payload }
 
     case 'SET_CURRENT_WORKFLOW':
-      return { ...state, currentWorkflow: action.payload };
+      return { ...state, currentWorkflow: action.payload }
 
     case 'SET_RISKS':
-      return { ...state, risks: action.payload };
+      return { ...state, risks: action.payload }
 
     case 'SET_CONTROLS':
-      return { ...state, controls: action.payload };
+      return { ...state, controls: action.payload }
 
     case 'SET_CONTROL_RISK_MAPPINGS':
-      return { ...state, controlRiskMappings: action.payload };
+      return { ...state, controlRiskMappings: action.payload }
 
     case 'SET_EVIDENCE':
-      return { ...state, evidence: action.payload };
+      return { ...state, evidence: action.payload }
 
     case 'SET_ANALYTICS':
-      return { ...state, analytics: action.payload };
+      return { ...state, analytics: action.payload }
 
     case 'ADD_RISK':
-      return { ...state, risks: [action.payload, ...state.risks] };
+      return { ...state, risks: [action.payload, ...state.risks] }
 
     case 'UPDATE_RISK':
       return {
@@ -189,17 +189,17 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
         risks: state.risks.map((risk) => (risk.id === action.payload.id ? action.payload : risk)),
         currentRisk:
           state.currentRisk?.id === action.payload.id ? action.payload : state.currentRisk,
-      };
+      }
 
     case 'REMOVE_RISK':
       return {
         ...state,
         risks: state.risks.filter((risk) => risk.id !== action.payload),
         currentRisk: state.currentRisk?.id === action.payload ? null : state.currentRisk,
-      };
+      }
 
     case 'ADD_CONTROL':
-      return { ...state, controls: [action.payload, ...state.controls] };
+      return { ...state, controls: [action.payload, ...state.controls] }
 
     case 'UPDATE_CONTROL':
       return {
@@ -209,20 +209,20 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
         ),
         currentControl:
           state.currentControl?.id === action.payload.id ? action.payload : state.currentControl,
-      };
+      }
 
     case 'REMOVE_CONTROL':
       return {
         ...state,
         controls: state.controls.filter((control) => control.id !== action.payload),
         currentControl: state.currentControl?.id === action.payload ? null : state.currentControl,
-      };
+      }
 
     case 'ADD_CONTROL_RISK_MAPPING':
       return {
         ...state,
         controlRiskMappings: [...state.controlRiskMappings, action.payload],
-      };
+      }
 
     case 'UPDATE_CONTROL_RISK_MAPPING':
       return {
@@ -232,7 +232,7 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
             ? action.payload
             : mapping
         ),
-      };
+      }
 
     case 'REMOVE_CONTROL_RISK_MAPPING':
       return {
@@ -244,10 +244,10 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
               mapping.controlId === action.payload.controlId
             )
         ),
-      };
+      }
 
     case 'SET_NAVIGATION_CONTEXT':
-      return { ...state, navigationContext: action.payload };
+      return { ...state, navigationContext: action.payload }
 
     default:
       return state;
@@ -258,7 +258,7 @@ const rcsaReducer = (state: RCSAContextState, action: RCSAAction): RCSAContextSt
 // CONTEXT CREATION
 // ============================================================================
 
-const RCSAContext = createContext<RCSAContextType | undefined>(undefined);
+const RCSAContext = createContext<RCSAContextType | undefined>(undefined)
 
 export function useRCSA(): RCSAContextType {
   const context = useContext(RCSAContext);
@@ -273,14 +273,14 @@ export function useRCSA(): RCSAContextType {
 // ============================================================================
 
 export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(rcsaReducer, initialState);
+  const [state, dispatch] = useReducer(rcsaReducer, initialState)
 
   // ============================================================================
   // UTILITY FUNCTIONS
   // ============================================================================
 
   const handleApiError = useCallback((__error: any, context: string) => {
-    // console.error(`RCSA API Error [${context}]:`, error);
+    // console.error(`RCSA API Error [${context}]:`, error)
     const message = error?.message || error?.error?.message || `Failed to ${context}`;
     dispatch({ type: 'SET_ERROR', payload: message });
   }, []);
@@ -295,7 +295,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
   const navigateToRisk = useCallback(
     async (riskId: string, fromContext?: NavigationContext) => {
-      setLoading(true);
+      setLoading(true)
       try {
         const response = await rcsaApiClient.getRisk(riskId);
         if (response.success && response.data) {
@@ -306,7 +306,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
           }
 
           // Load related controls
-          const mappingsResponse = await rcsaApiClient.getControlRiskMappings(riskId);
+          const mappingsResponse = await rcsaApiClient.getControlRiskMappings(riskId)
           if (mappingsResponse.success && mappingsResponse.data) {
             dispatch({ type: 'SET_CONTROL_RISK_MAPPINGS', payload: mappingsResponse.data });
           }
@@ -335,7 +335,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
           }
 
           // Load related risks
-          const mappingsResponse = await rcsaApiClient.getControlRiskMappings(undefined, controlId);
+          const mappingsResponse = await rcsaApiClient.getControlRiskMappings(undefined, controlId)
           if (mappingsResponse.success && mappingsResponse.data) {
             dispatch({ type: 'SET_CONTROL_RISK_MAPPINGS', payload: mappingsResponse.data });
           }
@@ -355,12 +355,12 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
     async (assessmentId: string, fromContext?: NavigationContext) => {
       // Implementation for assessment navigation
       if (fromContext) {
-        dispatch({ type: 'SET_NAVIGATION_CONTEXT', payload: fromContext });
+        dispatch({ type: 'SET_NAVIGATION_CONTEXT', payload: fromContext })
       }
       // TODO: Implement assessment loading when assessment API is available
     },
     []
-  );
+  )
 
   // ============================================================================
   // CRUD OPERATIONS
@@ -368,7 +368,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
   const createRisk = useCallback(
     async (riskData: CreateRiskRequest): Promise<Risk> => {
-      setLoading(true);
+      setLoading(true)
       try {
         const response = await rcsaApiClient.createRisk(riskData);
         if (response.success && response.data) {
@@ -498,7 +498,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
   const mapControlToRisk = useCallback(
     async (riskId: string, controlId: string, effectiveness = 0.5) => {
-      setLoading(true);
+      setLoading(true)
       try {
         const response = await rcsaApiClient.mapControlToRisk({ riskId, controlId, effectiveness });
         if (response.success && response.data) {
@@ -563,7 +563,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
   const bulkMapControls = useCallback(
     async (riskId: string, controlIds: string[]) => {
-      setLoading(true);
+      setLoading(true)
       try {
         const response = await rcsaApiClient.bulkMapControls(riskId, controlIds);
         if (response.success && response.data) {
@@ -609,7 +609,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getRelatedControls = useCallback(
     (riskId: string): Control[] => {
-      const mappings = state.controlRiskMappings.filter((m) => m.riskId === riskId);
+      const mappings = state.controlRiskMappings.filter((m) => m.riskId === riskId)
       return state.controls.filter((control) => mappings.some((m) => m.controlId === control.id));
     },
     [state.controlRiskMappings, state.controls]
@@ -632,7 +632,7 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   // ============================================================================
 
   const refreshRisks = useCallback(async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await rcsaApiClient.getRisks();
       if (response.success && response.data) {
@@ -703,11 +703,11 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       // Check if user is authenticated before loading data
-      const _token = localStorage.getItem('auth-token');
+      const _token = localStorage.getItem('auth-token')
       const sessionToken = sessionStorage.getItem('auth-token');
 
       if (!token && !sessionToken) {
-        // console.log('Skipping RCSA data load - user not authenticated');
+        // console.log('Skipping RCSA data load - user not authenticated')
         return;
       }
 
@@ -718,19 +718,19 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
           refreshControls(),
           refreshMappings(),
           refreshAnalytics(),
-        ]);
+        ])
 
         // Log any failures but don't crash the app
         results.forEach((result, index) => {
           if (result.status === 'rejected') {
-            const operation = ['risks', 'controls', 'mappings', 'analytics'][index];
-            // console.warn(`Failed to load ${operation}:`, result.reason);
+            const operation = ['risks', 'controls', 'mappings', 'analytics'][index]
+            // console.warn(`Failed to load ${operation}:`, result.reason)
           }
         });
       } catch (error) {
-        // console.warn('Initial data load failed:', error);
+        // console.warn('Initial data load failed:', error)
       }
-    };
+    }
 
     loadInitialData();
   }, []); // Empty dependency array for initial load only
@@ -778,9 +778,9 @@ export const RCSAProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Error handling
     clearError,
-  };
+  }
 
   return <RCSAContext.Provider value={contextValue}>{children}</RCSAContext.Provider>;
-};
+}
 
 export default RCSAProvider;

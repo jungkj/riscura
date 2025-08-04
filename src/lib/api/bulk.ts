@@ -33,7 +33,7 @@ export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' |
 ) {
   return withAPI(
     withValidation(bulkOperationSchema)(async (req: NextRequest, data: any) => {
-      const authReq = req as AuthenticatedRequest;
+      const authReq = req as AuthenticatedRequest
       const user = getAuthenticatedUser(authReq);
 
       if (!user) {
@@ -43,7 +43,7 @@ export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' |
       const { operation, ids, data: updateData, confirm } = data;
 
       // Validate entities exist and belong to organization
-      const entityTable = getEntityTable(entityType);
+      const entityTable = getEntityTable(entityType)
       const entities = await db.client[entityTable].findMany({
         where: {
           id: { in: ids },
@@ -68,7 +68,7 @@ export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' |
           entityCount: ids.length,
           entities: entities.map((e: any) => ({ id: e.id, title: e.title })),
           message: `This will ${operation} ${ids.length} ${entityType}(s). Please confirm.`,
-        });
+        })
       }
 
       const result: BulkOperationResult = {
@@ -76,12 +76,12 @@ export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' |
         failed: 0,
         errors: [],
         results: [],
-      };
+      }
 
       // Process each entity
       for (const entity of entities) {
         try {
-          let operationResult;
+          let operationResult
 
           switch (operation) {
             case 'update':
@@ -141,7 +141,7 @@ export function createBulkHandler(_entityType: 'risk' | 'control' | 'document' |
           },
           isPublic: false,
         },
-      });
+      })
       */
 
       return createAPIResponse(result);
@@ -163,7 +163,7 @@ const getEntityTypeEnum = (_entityType: string): string {
     workflow: 'WORKFLOW',
     report: 'REPORT',
     task: 'TASK',
-  };
+  }
 
   return typeMap[entityType] || 'TASK';
 }
@@ -176,7 +176,7 @@ const getEntityTable = (_entityType: string): string {
     questionnaire: 'questionnaire',
     workflow: 'workflow',
     report: 'report',
-  };
+  }
 
   return tableMap[entityType] || entityType;
 }
@@ -198,7 +198,7 @@ async function updateEntity(_table: string,
 
 async function deleteEntity(_table: string, id: string, entityType: string): Promise<any> {
   // Check for dependencies before deletion
-  await checkDependencies(table, id, entityType);
+  await checkDependencies(table, id, entityType)
 
   return await (db.client as any)[table].delete({
     where: { id },
@@ -229,7 +229,7 @@ async function checkDependencies(_table: string, id: string, entityType: string)
   if (entityType === 'risk') {
     const controls = await db.client.control.count({
       where: { riskIds: { has: id } },
-    });
+    })
     
     if (controls > 0) {
       throw new ConflictError('Cannot delete risk with associated controls');
@@ -288,9 +288,9 @@ const getExportIncludes = (_table: string): any {
       owner: true,
       recipients: true,
     },
-  };
+  }
 
-  return includeMap[table] || {};
+  return includeMap[table] || {}
 }
 
 // Bulk validation utilities
@@ -312,7 +312,7 @@ export async function validateBulkIds(
   const valid = entities.map((e: any) => e.id);
   const invalid = ids.filter((id) => !valid.includes(id));
 
-  return { valid, invalid };
+  return { valid, invalid }
 }
 
 // Bulk progress tracking
@@ -320,7 +320,7 @@ export class BulkOperationProgress {
   private progressMap = new Map<
     string,
     {
-      total: number;
+      total: number
       completed: number;
       failed: number;
       status: 'running' | 'completed' | 'failed';

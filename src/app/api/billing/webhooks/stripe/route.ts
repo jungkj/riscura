@@ -12,7 +12,7 @@ export async function POST(_request: NextRequest) {
     }
 
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
-      // console.error('STRIPE_WEBHOOK_SECRET not configured');
+      // console.error('STRIPE_WEBHOOK_SECRET not configured')
       return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
     }
 
@@ -21,14 +21,14 @@ export async function POST(_request: NextRequest) {
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
-    );
+    )
 
     // Handle the webhook event
-    await stripeService.handleWebhook(event);
+    await stripeService.handleWebhook(event)
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    // console.error('Stripe webhook error:', error);
+    // console.error('Stripe webhook error:', error)
 
     if (error instanceof Error && error.message.includes('signature')) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });

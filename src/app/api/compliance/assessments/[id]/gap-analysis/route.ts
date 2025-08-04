@@ -8,7 +8,7 @@ import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params;
+      const { id } = await params
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError('User not authenticated');
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         const analysis = await complianceService.performGapAnalysis(id);
         return ApiResponseFormatter.success(analysis);
       } catch (error) {
-        // console.error('Gap analysis error:', error);
+        // console.error('Gap analysis error:', error)
         if (error instanceof Error) {
           return ApiResponseFormatter.error('SERVER_ERROR', error.message, { status: 500 });
         }

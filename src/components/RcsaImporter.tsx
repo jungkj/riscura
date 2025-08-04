@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Download } from 'lucide-react';
 // import { 
   Upload, 
   FileText, 
@@ -13,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   Loader2,
   X,
   Download
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface FilePreview {
   file: File;
@@ -44,7 +45,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
 
   // Format file size
   const formatFileSize = useCallback((bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes'
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -53,7 +54,7 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
 
   // Handle file drop
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
+    const file = acceptedFiles[0]
     if (file) {
       setFilePreview({
         file,
@@ -80,11 +81,11 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
     maxFiles: 1,
     maxSize: 10 * 1024 * 1024, // 10MB
     disabled: isUploading
-  });
+  })
 
   // Handle file upload
   const onSubmit = async () => {
-    if (!filePreview) return;
+    if (!filePreview) return
 
     setIsUploading(true);
     setImportResult(null);
@@ -112,20 +113,20 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
     } finally {
       setIsUploading(false);
     }
-  };
+  }
 
   // Clear file and reset form
   const handleClear = () => {
-    setFilePreview(null);
+    setFilePreview(null)
     setImportResult(null);
     reset();
-  };
+  }
 
   // Download sample template
   const handleDownloadTemplate = () => {
     // This would typically download a sample RCSA template
-    // console.log('Download RCSA template');
-  };
+    // console.log('Download RCSA template')
+  }
 
   return (
     <div className={`w-full max-w-2xl mx-auto ${className}`}>
@@ -395,6 +396,6 @@ const RcsaImporter: React.FC<RcsaImporterProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default RcsaImporter; 

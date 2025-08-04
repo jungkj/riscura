@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -9,6 +9,7 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   ResponsiveContainer,
   LineChart,
   Line,
@@ -38,7 +39,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 
 interface MonitoringDataPoint {
   timestamp: number;
@@ -83,11 +84,11 @@ const defaultThresholds: AlertThreshold[] = [
   { metric: 'complianceScore', threshold: 75, condition: 'below', severity: 'high', enabled: true },
   { metric: 'threatLevel', threshold: 7, condition: 'above', severity: 'critical', enabled: true },
   { metric: 'errorRate', threshold: 5, condition: 'above', severity: 'medium', enabled: true }
-];
+]
 
 // Simulate real-time data generation
 const generateDataPoint = (previousData?: MonitoringDataPoint): MonitoringDataPoint => {
-  const now = Date.now();
+  const now = Date.now()
   const baseValues = {
     riskScore: 6.5,
     activeIncidents: 2,
@@ -99,14 +100,14 @@ const generateDataPoint = (previousData?: MonitoringDataPoint): MonitoringDataPo
     userActivity: 150,
     networkTraffic: 75,
     errorRate: 2
-  };
+  }
   
   // Add some variance and trends
   const variance = (base: number, range: number) => {
-    const change = (Math.random() - 0.5) * range;
+    const change = (Math.random() - 0.5) * range
     const previous = previousData ? (previousData as any)[Object.keys(baseValues).find(k => (baseValues as any)[k] === base) || ''] || base : base;
     return Math.max(0, previous + change);
-  };
+  }
   
   return {
     timestamp: now,
@@ -121,8 +122,8 @@ const generateDataPoint = (previousData?: MonitoringDataPoint): MonitoringDataPo
     userActivity: Math.round(variance(baseValues.userActivity, 30)),
     networkTraffic: Math.round(variance(baseValues.networkTraffic, 20)),
     errorRate: Math.round(variance(baseValues.errorRate, 1.5) * 10) / 10
-  };
-};
+  }
+}
 
 export default function RealTimeMonitoringChart({
   height = 400,
@@ -136,7 +137,7 @@ export default function RealTimeMonitoringChart({
   const { toast } = useToast();
   
   // State management
-  const [data, setData] = useState<MonitoringDataPoint[]>([]);
+  const [data, setData] = useState<MonitoringDataPoint[]>([])
   const [isConnected, setIsConnected] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [selectedMetrics, setSelectedMetrics] = useState<(keyof MonitoringDataPoint)[]>([
@@ -164,17 +165,17 @@ export default function RealTimeMonitoringChart({
     errorRate: { label: 'Error Rate', color: '#ec4899', unit: '%', format: (v: any) => `${v}%` },
     timestamp: { label: 'Timestamp', color: '#6b7280', unit: '', format: (v: any) => v.toString() },
     time: { label: 'Time', color: '#6b7280', unit: '', format: (v: any) => v.toString() }
-  };
+  }
   
   // Start monitoring
   const startMonitoring = () => {
-    if (intervalRef.current) return;
+    if (intervalRef.current) return
     
     setIsConnected(true);
     setIsPaused(false);
     
     // Add initial data point
-    const initialData = generateDataPoint();
+    const initialData = generateDataPoint()
     setData([initialData]);
     lastDataRef.current = initialData;
     
@@ -189,37 +190,37 @@ export default function RealTimeMonitoringChart({
         });
         
         // Check thresholds
-        checkThresholds(newPoint);
+        checkThresholds(newPoint)
       }
     }, updateInterval);
-  };
+  }
   
   // Stop monitoring
   const stopMonitoring = () => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current)
       intervalRef.current = null;
     }
     setIsConnected(false);
     setIsPaused(false);
-  };
+  }
   
   // Pause/resume monitoring
   const togglePause = () => {
-    setIsPaused(!isPaused);
-  };
+    setIsPaused(!isPaused)
+  }
   
   // Reset data
   const resetData = () => {
-    setData([]);
+    setData([])
     setAlerts([]);
     lastDataRef.current = undefined;
-  };
+  }
   
   // Check alert thresholds
   const checkThresholds = (dataPoint: MonitoringDataPoint) => {
     thresholds.forEach(threshold => {
-      if (!threshold.enabled) return;
+      if (!threshold.enabled) return
       
       const value = dataPoint[threshold.metric] as number;
       const triggered = threshold.condition === 'above' ? value > threshold.threshold : value < threshold.threshold;
@@ -233,7 +234,7 @@ export default function RealTimeMonitoringChart({
           threshold: threshold.threshold,
           severity: threshold.severity,
           timestamp: dataPoint.timestamp
-        };
+        }
         
         setAlerts(prev => [...prev.slice(-9), alert]); // Keep last 10 alerts
         
@@ -244,17 +245,17 @@ export default function RealTimeMonitoringChart({
           title: `Alert: ${metricConfigs[threshold.metric].label}`,
           description: `Value ${metricConfigs[threshold.metric].format(value)} is ${threshold.condition} threshold ${metricConfigs[threshold.metric].format(threshold.threshold)}`,
           variant: threshold.severity === 'critical' || threshold.severity === 'high' ? 'destructive' : 'default',
-        });
+        })
       }
     });
-  };
+  }
   
   // Update threshold
   const updateThreshold = (_index: number, updates: Partial<DaisyAlertThreshold>) => {
     setThresholds(prev => prev.map((threshold, i) => 
       i === index ? { ...threshold, ...updates } : threshold
-    ));
-  };
+    ))
+  }
   
   // Export functionality
   const handleExport = () => {
@@ -274,7 +275,7 @@ export default function RealTimeMonitoringChart({
         maxDataPoints,
         showAlerts
       }
-    };
+    }
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -292,20 +293,20 @@ export default function RealTimeMonitoringChart({
       title: 'Export Complete',
       description: 'Monitoring data has been exported successfully.',
     });
-  };
+  }
   
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current)
       }
-    };
+    }
   }, []);
   
   // Calculate current status
   const currentStatus = useMemo(() => {
-    if (data.length === 0) return null;
+    if (data.length === 0) return null
     
     const latest = data[data.length - 1];
     const criticalAlerts = alerts.filter(a => a.severity === 'critical' && Date.now() - a.timestamp < 300000); // 5 minutes
@@ -320,12 +321,12 @@ export default function RealTimeMonitoringChart({
       latest,
       activeAlerts: criticalAlerts.length + highAlerts.length,
       lastUpdate: latest.time
-    };
+    }
   }, [data, alerts]);
   
   // Custom tooltip
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || !payload.length) return null;
+    if (!active || !payload || !payload.length) return null
 
   return (
     <div className="bg-white p-3 border rounded-lg shadow-lg">
@@ -345,7 +346,7 @@ export default function RealTimeMonitoringChart({
         </div>
       </div>
     );
-  };
+  }
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>

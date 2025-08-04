@@ -24,14 +24,14 @@ export interface TenantProvisioningRequest {
       state: string;
       postalCode: string;
       country: string;
-    };
-  };
+    }
+  }
   trialDays?: number;
   onboardingOptions?: {
     skipWelcome?: boolean;
     autoCreateSampleData?: boolean;
     enabledModules?: string[];
-  };
+  }
 }
 
 export interface TenantProvisioningResult {
@@ -61,7 +61,7 @@ export interface TenantTemplate {
     risks?: any[];
     controls?: any[];
     frameworks?: any[];
-  };
+  }
   configuration: Record<string, any>;
 }
 
@@ -81,40 +81,40 @@ export class TenantProvisioningService {
 
     try {
       // Step 1: Validate request
-      const validation = this.validateProvisioningRequest(request);
+      const validation = this.validateProvisioningRequest(request)
       if (!validation.valid) {
         return {
           success: false,
           errors: validation.errors,
-        };
+        }
       }
 
       // Step 2: Create organization
-      const organizationResult = await this.createOrganization(request);
+      const organizationResult = await this.createOrganization(request)
       if (!organizationResult.success) {
         return {
           success: false,
           errors: organizationResult.errors || ['Failed to create organization'],
-        };
+        }
       }
 
       const organizationId = organizationResult.organizationId!;
 
       // Step 3: Create admin user
-      const adminResult = await this.createAdminUser(request, organizationId);
+      const adminResult = await this.createAdminUser(request, organizationId)
       if (!adminResult.success) {
         // Cleanup organization
-        await this.cleanupOrganization(organizationId);
+        await this.cleanupOrganization(organizationId)
         return {
           success: false,
           errors: adminResult.errors || ['Failed to create admin user'],
-        };
+        }
       }
 
       const adminUserId = adminResult.userId!;
 
       // Step 4: Setup billing
-      let billingStatus = 'pending';
+      let billingStatus = 'pending'
       try {
         const billingResult = await this.setupBilling(request, organizationId);
         billingStatus = billingResult.status;
@@ -129,7 +129,7 @@ export class TenantProvisioningService {
 
       // Step 5: Apply tenant template
       try {
-        await this.applyTenantTemplate(request, organizationId);
+        await this.applyTenantTemplate(request, organizationId)
       } catch (error) {
         warnings.push(
           `Template application incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -138,7 +138,7 @@ export class TenantProvisioningService {
 
       // Step 6: Setup domain and branding
       try {
-        await this.setupCustomDomain(request, organizationId);
+        await this.setupCustomDomain(request, organizationId)
       } catch (error) {
         warnings.push(
           `Custom domain setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -148,7 +148,7 @@ export class TenantProvisioningService {
       // Step 7: Initialize sample data (if requested)
       if (request.onboardingOptions?.autoCreateSampleData) {
         try {
-          await this.createSampleData(organizationId, request.industry);
+          await this.createSampleData(organizationId, request.industry)
         } catch (error) {
           warnings.push(
             `Sample data creation incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -157,11 +157,11 @@ export class TenantProvisioningService {
       }
 
       // Step 8: Generate setup token and temporary password
-      const setupToken = this.generateSetupToken(organizationId, adminUserId);
+      const setupToken = this.generateSetupToken(organizationId, adminUserId)
       const temporaryPassword = this.generateTemporaryPassword();
 
       // Store encrypted temporary password
-      await this.storeTemporaryCredentials(adminUserId, temporaryPassword, setupToken);
+      await this.storeTemporaryCredentials(adminUserId, temporaryPassword, setupToken)
 
       // Step 9: Send welcome email (async)
       this.sendWelcomeEmail(request, {
@@ -170,7 +170,7 @@ export class TenantProvisioningService {
         temporaryPassword,
         setupToken,
       }).catch((error) => {
-        // console.error('Failed to send welcome email:', error);
+        // console.error('Failed to send welcome email:', error)
       });
 
       return {
@@ -182,15 +182,15 @@ export class TenantProvisioningService {
         setupToken,
         billingStatus,
         warnings: warnings.length > 0 ? warnings : undefined,
-      };
+      }
     } catch (error) {
-      // console.error('Tenant provisioning error:', error);
+      // console.error('Tenant provisioning error:', error)
       return {
         success: false,
         errors: [
           `Provisioning failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         ],
-      };
+      }
     }
   }
 
@@ -312,7 +312,7 @@ export class TenantProvisioningService {
         'welcome-email-sent',
       ],
       totalSteps: 6,
-    };
+    }
   }
 
   /**
@@ -329,20 +329,20 @@ export class TenantProvisioningService {
         },
       });
 
-      return { success: true };
+      return { success: true }
     } catch (error) {
       return {
         success: false,
         errors: [
           `Failed to update configuration: ${error instanceof Error ? error.message : 'Unknown error'}`,
         ],
-      };
+      }
     }
   }
 
   // Private helper methods
   private validateProvisioningRequest(_request: TenantProvisioningRequest): {
-    valid: boolean;
+    valid: boolean
     errors: string[];
   } {
     const errors: string[] = [];
@@ -372,7 +372,7 @@ export class TenantProvisioningService {
     return {
       valid: errors.length === 0,
       errors,
-    };
+    }
   }
 
   private async createOrganization(_request: TenantProvisioningRequest): Promise<{
@@ -402,14 +402,14 @@ export class TenantProvisioningService {
       return {
         success: true,
         organizationId: organization.id,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         errors: [
           `Organization creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         ],
-      };
+      }
     }
   }
 
@@ -446,14 +446,14 @@ export class TenantProvisioningService {
       return {
         success: true,
         userId: user.id,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         errors: [
           `User creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         ],
-      };
+      }
     }
   }
 
@@ -471,19 +471,19 @@ export class TenantProvisioningService {
         await this.billingManager.createSubscription(organizationId, request.planId, {
           trialDays: request.trialDays,
           paymentMethodId: request.billingInfo.paymentMethodId,
-        });
-        return { status: 'active' };
+        })
+        return { status: 'active' }
       } else {
         // Start trial without payment method
         await this.billingManager.createSubscription(organizationId, request.planId, {
           trialDays: request.trialDays || 14,
-        });
+        })
         return {
           status: 'trial',
           warnings: [
             'Trial started without payment method - billing setup will be required before trial expires',
           ],
-        };
+        }
       }
     } catch (error) {
       return {
@@ -491,7 +491,7 @@ export class TenantProvisioningService {
         warnings: [
           `Billing setup incomplete: ${error instanceof Error ? error.message : 'Unknown error'}`,
         ],
-      };
+      }
     }
   }
 
@@ -510,7 +510,7 @@ export class TenantProvisioningService {
           organizationId,
           isDefault: roleTemplate.isDefault || false,
         },
-      });
+      })
     }
 
     // Update organization with template configuration
@@ -522,7 +522,7 @@ export class TenantProvisioningService {
           templateId: template.id,
         },
       },
-    });
+    })
   }
 
   private async setupCustomDomain(_request: TenantProvisioningRequest,
@@ -543,13 +543,13 @@ export class TenantProvisioningService {
           },
         },
       },
-    });
+    })
 
     // TODO: Setup DNS verification, SSL certificates, etc.
   }
 
   private async createSampleData(_organizationId: string, industry?: string): Promise<void> {
-    const templates = await this.getTenantTemplates();
+    const templates = await this.getTenantTemplates()
     const template = templates.find((t) => t.industry === industry) || templates[0];
 
     // Create sample risks
@@ -560,7 +560,7 @@ export class TenantProvisioningService {
             ...riskData,
             organizationId,
           },
-        });
+        })
       }
     }
 
@@ -572,7 +572,7 @@ export class TenantProvisioningService {
             ...controlData,
             organizationId,
           },
-        });
+        })
       }
     }
   }
@@ -595,14 +595,14 @@ export class TenantProvisioningService {
 
   private async sendWelcomeEmail(_request: TenantProvisioningRequest,
     provisioningResult: {
-      organizationId: string;
+      organizationId: string
       adminUserId: string;
       temporaryPassword: string;
       setupToken: string;
     }
   ): Promise<void> {
     // TODO: Implement email sending
-    // console.log(`Sending welcome email to ${request.adminEmail}`);
+    // console.log(`Sending welcome email to ${request.adminEmail}`)
   }
 
   private async cleanupOrganization(_organizationId: string): Promise<void> {
@@ -611,13 +611,13 @@ export class TenantProvisioningService {
         where: { id: organizationId },
       });
     } catch (error) {
-      // console.error('Failed to cleanup organization:', error);
+      // console.error('Failed to cleanup organization:', error)
     }
   }
 
   // Utility methods
   private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email);
   }
 
@@ -627,7 +627,7 @@ export class TenantProvisioningService {
       userId,
       timestamp: Date.now(),
       type: 'setup',
-    };
+    }
     return Buffer.from(JSON.stringify(payload)).toString('base64');
   }
 
@@ -645,13 +645,13 @@ export class TenantProvisioningService {
       financial: 'financial-services',
       healthcare: 'healthcare',
       technology: 'technology',
-    };
+    }
     return mapping[industry || ''] || 'technology';
   }
 
   private async hashPassword(password: string): Promise<string> {
     // TODO: Implement proper password hashing
-    return crypto.createHash('sha256').update(password).digest('hex');
+    return crypto.createHash('sha256').update(password).digest('hex')
   }
 
   // Sample data generators
@@ -673,7 +673,7 @@ export class TenantProvisioningService {
         impact: 'high',
         status: 'open',
       },
-    ];
+    ]
   }
 
   private getFinancialSampleControls(): any[] {

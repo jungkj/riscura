@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Bot,
   MessageSquare,
   Shield,
@@ -12,7 +13,7 @@ import {
   TrendingUp,
   CheckCircle,
 } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -46,7 +47,7 @@ const ARIAChat = () => {
       role: 'user',
       content: input,
       timestamp: new Date(),
-    };
+    }
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
@@ -60,11 +61,11 @@ const ARIAChat = () => {
         content:
           "I understand you're asking about risk management. In demo mode, I can help you understand how ARIA would analyze this topic. For full AI capabilities, please contact our team for setup assistance.",
         timestamp: new Date(),
-      };
+      }
       setMessages((prev) => [...prev, aiResponse]);
       setIsLoading(false);
     }, 1500);
-  };
+  }
 
   const quickQuestions = [
     'What are our highest risks?',
@@ -357,7 +358,7 @@ setInput(e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 export default function ARIAPage() {
   return (

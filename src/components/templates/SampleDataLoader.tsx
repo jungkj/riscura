@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import { Sparkles } from 'lucide-react';
 // import { 
   Download,
   FileText,
@@ -19,11 +21,11 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
   Target,
   Database,
   Sparkles
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Sample data templates
 interface DataTemplate {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: 'risks' | 'controls' | 'policies' | 'frameworks' | 'users';
@@ -250,7 +252,7 @@ const SAMPLE_TEMPLATES: DataTemplate[] = [
 
 // Sample data loader component
 interface SampleDataLoaderProps {
-  onDataLoaded?: (_data: any) => void;
+  onDataLoaded?: (_data: any) => void
   userRole?: string;
   industry?: string;
   className?: string;
@@ -270,14 +272,14 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
   // Filter templates based on user role and industry
   const filteredTemplates = SAMPLE_TEMPLATES.filter(template => {
     if (industry && template.industry && !template.industry.includes(industry)) {
-      return false;
+      return false
     }
     return true;
   });
 
   // Auto-select recommended templates based on role
   useEffect(() => {
-    const recommended: string[] = [];
+    const recommended: string[] = []
     
     if (userRole === 'analyst') {
       recommended.push('financial-risks', 'cyber-security-risks', 'operational-controls');
@@ -296,7 +298,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
         ? prev.filter(id => id !== templateId)
         : [...prev, templateId]
     );
-  };
+  }
 
   const loadSampleData = async () => {
     setIsLoading(true);
@@ -317,7 +319,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
 
     setIsLoading(false);
     onDataLoaded?.(selectedData);
-  };
+  }
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -328,7 +330,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
       case 'frameworks': return Target;
       default: return Database;
     }
-  };
+  }
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -339,7 +341,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
       case 'frameworks': return 'bg-orange-100 text-orange-700';
       default: return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   if (isLoading) {
     return (
@@ -359,7 +361,7 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
         </DaisyProgress>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -517,6 +519,6 @@ export const SampleDataLoader: React.FC<SampleDataLoaderProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 export default SampleDataLoader;

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   FileText, 
   Download, 
@@ -21,10 +22,10 @@ import { motion, AnimatePresence } from 'framer-motion';
   X,
   ChevronLeft,
   ChevronRight
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -33,7 +34,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import toast from 'react-hot-toast';
-// import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns'
 
 interface DocumentViewerProps {
   documentId: string;
@@ -58,7 +59,7 @@ interface DocumentData {
     firstName: string;
     lastName: string;
     email: string;
-  };
+  }
   downloadUrl: string;
   previewUrl?: string;
   thumbnailUrl?: string;
@@ -74,7 +75,7 @@ interface DocumentData {
       url: string;
       size: number;
     }>;
-  };
+  }
 }
 
 export default function EnhancedDocumentViewer({
@@ -117,7 +118,7 @@ export default function EnhancedDocumentViewer({
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleDownload = async () => {
     if (!document) return;
@@ -138,10 +139,10 @@ export default function EnhancedDocumentViewer({
 
       toast.success('File downloaded successfully');
     } catch (error) {
-      // console.error('Download error:', error);
+      // console.error('Download error:', error)
       toast.error('Failed to download file');
     }
-  };
+  }
 
   const handleDelete = async () => {
     if (!document || !onDelete) return;
@@ -155,7 +156,7 @@ export default function EnhancedDocumentViewer({
         toast.error('Failed to delete document');
       }
     }
-  };
+  }
 
   const handleAddComment = async () => {
     if (!comment.trim()) return;
@@ -170,7 +171,7 @@ export default function EnhancedDocumentViewer({
           email: 'user@example.com',
         },
         createdAt: new Date().toISOString(),
-      };
+      }
 
       setComments(prev => [newComment, ...prev]);
       setComment('');
@@ -178,7 +179,7 @@ export default function EnhancedDocumentViewer({
     } catch (error) {
       toast.error('Failed to add comment');
     }
-  };
+  }
 
   const formatFileSize = (bytes: number): string => {
     const units = ['B', 'KB', 'MB', 'GB'];
@@ -191,7 +192,7 @@ export default function EnhancedDocumentViewer({
     }
 
     return `${size.toFixed(1)} ${units[unitIndex]}`;
-  };
+  }
 
   const getFileIcon = (_type: string) => {
     if (type.startsWith('image/')) return '🖼️';
@@ -200,7 +201,7 @@ export default function EnhancedDocumentViewer({
     if (type.includes('excel') || type.includes('sheet')) return '📊';
     if (type.includes('powerpoint') || type.includes('presentation')) return '📈';
     return '📄';
-  };
+  }
 
   const canPreview = (_type: string): boolean => {
     return [
@@ -212,7 +213,7 @@ export default function EnhancedDocumentViewer({
       'text/plain',
       'text/csv',
     ].includes(type);
-  };
+  }
 
   const renderPreview = () => {
     if (!document || !canPreview(document.type)) {
@@ -296,7 +297,7 @@ export default function EnhancedDocumentViewer({
           </pre>
         </DaisyScrollArea>
       );
-    };
+    }
 
   return (
       <div className="flex flex-col items-center justify-center h-96 text-gray-500">
@@ -304,7 +305,7 @@ export default function EnhancedDocumentViewer({
         <p>Loading preview...</p>
       </div>
     );
-  };
+  }
 
   const renderMetadata = () => (
     <div className="space-y-4">
@@ -466,7 +467,7 @@ setComment(e.target.value)}
         </DaisyButton>
       </div>
     );
-  };
+  }
 
   return (
     <>

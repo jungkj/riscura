@@ -22,7 +22,7 @@ export interface DataOperation<T = any> {
     skipValidation?: boolean;
     priority?: 'low' | 'medium' | 'high' | 'critical';
     offline?: boolean;
-  };
+  }
 }
 
 export interface DataResult<T = any> {
@@ -36,7 +36,7 @@ export interface DataResult<T = any> {
     version: number;
     lastModified: Date;
     syncStatus: 'synced' | 'pending' | 'error' | 'conflict';
-  };
+  }
 }
 
 export class DataManager {
@@ -44,4 +44,4 @@ export class DataManager {
 }
 
 // Export singleton instance
-export const dataManager = DataManager.getInstance();
+export const dataManager = DataManager.getInstance()

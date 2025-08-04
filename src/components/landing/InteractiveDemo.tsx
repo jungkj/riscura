@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+import { Sparkles } from 'lucide-react';
 // import { 
   Upload, 
   FileText, 
@@ -15,7 +17,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
   Download,
   Eye,
   Sparkles
-} from 'lucide-react';
+} from 'lucide-react'
 
 const InteractiveDemo = () => {
   const [isDragging, setIsDragging] = useState(false);
@@ -26,38 +28,38 @@ const InteractiveDemo = () => {
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
-  };
+  }
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-  };
+  }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     
     // Simulate file upload
-    const files = ['RCSA_Template.xlsx', 'Risk_Policy.pdf', 'Controls_Matrix.xlsx'];
+    const files = ['RCSA_Template.xlsx', 'Risk_Policy.pdf', 'Controls_Matrix.xlsx']
     setUploadedFiles(files);
     
     // Start AI analysis after a brief delay
     setTimeout(() => {
-      setIsAnalyzing(true);
+      setIsAnalyzing(true)
       
       // Show results after analysis
       setTimeout(() => {
-        setIsAnalyzing(false);
+        setIsAnalyzing(false)
         setShowResults(true);
       }, 3000);
     }, 1000);
-  };
+  }
 
   const handleReset = () => {
     setUploadedFiles([]);
     setIsAnalyzing(false);
     setShowResults(false);
-  };
+  }
 
   const mockResults = [
     { id: 1, title: 'Cybersecurity Risk', risk: 'High', score: 18, category: 'Technology' },
@@ -331,6 +333,6 @@ const InteractiveDemo = () => {
       </div>
     </div>
   );
-};
+}
 
 export default InteractiveDemo; 

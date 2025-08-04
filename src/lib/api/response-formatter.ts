@@ -11,7 +11,7 @@ export interface ApiSuccessResponse<T = any> {
     timestamp: string;
     requestId: string;
     version?: string;
-  };
+  }
 }
 
 export interface ApiErrorResponse {
@@ -24,7 +24,7 @@ export interface ApiErrorResponse {
     requestId: string;
     path?: string;
     version?: string;
-  };
+  }
 }
 
 export interface PaginationMeta {
@@ -71,21 +71,21 @@ export class ApiResponseFormatter {
           hasPrevious: options.pagination.hasPrevious,
         }),
       },
-    };
+    }
 
     const nextResponse = NextResponse.json(response, {
       status: options.status || 200,
     });
 
     // Add standard headers
-    nextResponse.headers.set('X-Request-ID', requestId);
+    nextResponse.headers.set('X-Request-ID', requestId)
     nextResponse.headers.set('X-API-Version', options.version || 'v1');
     nextResponse.headers.set('X-Timestamp', timestamp);
 
     // Add custom headers
     if (options.headers) {
       Object.entries(options.headers).forEach(([key, value]) => {
-        nextResponse.headers.set(key, value);
+        nextResponse.headers.set(key, value)
       });
     }
 
@@ -118,21 +118,21 @@ export class ApiResponseFormatter {
         ...(options.details && { details: options.details }),
         ...(options.path && { path: options.path }),
       },
-    };
+    }
 
     const status = options.status || this.getStatusFromErrorCode(code);
 
     const nextResponse = NextResponse.json(response, { status });
 
     // Add standard headers
-    nextResponse.headers.set('X-Request-ID', requestId);
+    nextResponse.headers.set('X-Request-ID', requestId)
     nextResponse.headers.set('X-API-Version', options.version || 'v1');
     nextResponse.headers.set('X-Timestamp', timestamp);
 
     // Add custom headers
     if (options.headers) {
       Object.entries(options.headers).forEach(([key, value]) => {
-        nextResponse.headers.set(key, value);
+        nextResponse.headers.set(key, value)
       });
     }
 
@@ -243,7 +243,7 @@ export class ApiResponseFormatter {
     options: ResponseOptions & { details?: any } = {}
   ): NextResponse<ApiErrorResponse> {
     // Don't expose internal details in production
-    const details = process.env.NODE_ENV === 'development' ? options.details : undefined;
+    const details = process.env.NODE_ENV === 'development' ? options.details : undefined
 
     return this.error('SERVER_ERROR', message, {
       ...options,
@@ -309,7 +309,7 @@ export class ApiResponseFormatter {
       RATE_LIMIT_EXCEEDED: 429,
       SERVER_ERROR: 500,
       SERVICE_UNAVAILABLE: 503,
-    };
+    }
 
     return statusMap[code] || 500;
   }
@@ -335,7 +335,7 @@ export class ApiResponseFormatter {
     return {
       requestId: this.getOrCreateRequestId(request),
       version: this.getApiVersion(request),
-    };
+    }
   }
 }
 
@@ -387,7 +387,7 @@ export function isErrorResponse(_response: ApiSuccessResponse<any> | ApiErrorRes
 
 // TODO: Implement real versioned response formatting
 export function VersionedResponseFormatter(_data: any) {
-  return data;
+  return data
 }
 
 /**

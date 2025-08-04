@@ -9,6 +9,6 @@ const EnhancedControlRegistry = () => {
       <p className="text-gray-600">Control registry is temporarily under maintenance.</p>
     </div>
   );
-};
+}
 
 export default EnhancedControlRegistry;

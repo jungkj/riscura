@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -51,7 +52,7 @@ export default function RiskMonitoringPage() {
 
   // Simulate loading
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
+    const timer = setTimeout(() => setLoading(false), 1000)
     return () => clearTimeout(timer);
   }, []);
 
@@ -121,7 +122,7 @@ export default function RiskMonitoringPage() {
     setLoading(true);
     setLastUpdated(new Date());
     setTimeout(() => setLoading(false), 1000);
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -134,7 +135,7 @@ export default function RiskMonitoringPage() {
       default:
         return 'text-gray-600';
     }
-  };
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -149,7 +150,7 @@ export default function RiskMonitoringPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   return (
     <div className="p-6 space-y-6">

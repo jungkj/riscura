@@ -8,12 +8,12 @@ import { designTokens } from '@/lib/design-system/tokens';
   ActionIcons,
   NavigationIcons,
   CommunicationIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { LoadingStates } from '@/components/states/LoadingState';
 
 // Context types and interfaces
 interface ContextualSuggestion {
-  id: string;
+  id: string
   type: 'tip' | 'action' | 'warning' | 'info' | 'shortcut';
   title: string;
   description: string;
@@ -23,7 +23,7 @@ interface ContextualSuggestion {
   action?: {
     label: string;
     handler: () => void;
-  };
+  }
   dismissible: boolean;
   persistent?: boolean;
 }
@@ -49,7 +49,7 @@ interface ContextualAssistantProps {
 
 // Context-aware suggestions generator
 const generateContextualSuggestions = (_context: WorkflowContext): ContextualSuggestion[] => {
-  const suggestions: ContextualSuggestion[] = [];
+  const suggestions: ContextualSuggestion[] = []
 
   // Page-specific suggestions
   switch (context.page) {
@@ -79,7 +79,7 @@ const generateContextualSuggestions = (_context: WorkflowContext): ContextualSug
           },
           dismissible: true,
         }
-      );
+      )
 
       if (context.timeSpent && context.timeSpent > 300) {
         // 5 minutes
@@ -92,7 +92,7 @@ const generateContextualSuggestions = (_context: WorkflowContext): ContextualSug
           priority: 'low',
           context: 'risk-assessment',
           dismissible: true,
-        });
+        })
       }
       break;
 
@@ -191,7 +191,7 @@ const generateContextualSuggestions = (_context: WorkflowContext): ContextualSug
       priority: 'medium',
       context: 'role-specific',
       dismissible: true,
-    });
+    })
   }
 
   // Task-specific suggestions
@@ -205,7 +205,7 @@ const generateContextualSuggestions = (_context: WorkflowContext): ContextualSug
       priority: 'high',
       context: 'task-specific',
       dismissible: true,
-    });
+    })
   }
 
   // Form-specific suggestions
@@ -220,15 +220,15 @@ const generateContextualSuggestions = (_context: WorkflowContext): ContextualSug
         priority: 'high',
         context: 'form-validation',
         dismissible: false,
-      });
+      })
     }
   }
 
   return suggestions.sort((a, b) => {
-    const priorityOrder = { high: 3, medium: 2, low: 1 };
+    const priorityOrder = { high: 3, medium: 2, low: 1 }
     return priorityOrder[b.priority] - priorityOrder[a.priority];
   });
-};
+}
 
 export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
   context,
@@ -247,18 +247,18 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
   // Load contextual suggestions
   useEffect(() => {
     const loadSuggestions = async () => {
-      setIsLoading(true);
+      setIsLoading(true)
       try {
         // Simulate AI processing time
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800))
         const contextualSuggestions = generateContextualSuggestions(context);
         setSuggestions(contextualSuggestions);
       } catch (error) {
-        // console.error('Failed to load contextual suggestions:', error);
+        // console.error('Failed to load contextual suggestions:', error)
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     loadSuggestions();
   }, [context]);
@@ -267,7 +267,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
   useEffect(() => {
     if (position === 'floating') {
       const timer = setTimeout(() => {
-        setIsVisible(false);
+        setIsVisible(false)
       }, 30000); // Hide after 30 seconds of inactivity
 
       return () => clearTimeout(timer);
@@ -276,13 +276,13 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
 
   const handleDismissSuggestion = (suggestionId: string) => {
     setDismissedSuggestions((prev) => new Set([...prev, suggestionId]));
-  };
+  }
 
   const handleSuggestionAction = (suggestion: ContextualSuggestion) => {
     if (suggestion.action) {
       suggestion.action.handler();
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -299,7 +299,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
       default:
         return StatusIcons.Info;
     }
-  };
+  }
 
   const getTypeColor = (_type: string) => {
     switch (type) {
@@ -316,7 +316,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
       default:
         return 'text-gray-700 bg-gray-100 border-gray-200';
     }
-  };
+  }
 
   const activeSuggestions = suggestions.filter(
     (s) => !dismissedSuggestions.has(s.id) && (s.persistent || !dismissedSuggestions.has(s.id))
@@ -338,7 +338,7 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
     floating: 'fixed bottom-4 right-4 w-80 max-h-96 z-50 shadow-lg',
     sidebar: 'w-full h-full',
     inline: 'w-full',
-  };
+  }
 
   return (
     <div
@@ -461,6 +461,6 @@ export const ContextualAssistant: React.FC<ContextualAssistantProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default ContextualAssistant;

@@ -1,6 +1,6 @@
 'use client';
 
-// import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns'
 // import {
   AlertCircle,
   AlertTriangle,
@@ -14,7 +14,7 @@
   CreditCard,
   Settings,
   X,
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
 
@@ -30,7 +30,7 @@ interface NotificationItemProps {
     createdAt: string;
     actionUrl?: string;
     iconUrl?: string;
-  };
+  }
   onRead: () => void;
   onDismiss: () => void;
 }
@@ -44,7 +44,7 @@ const categoryIcons: Record<string, any> = {
   SYSTEM: Settings,
   SECURITY: Shield,
   TEAM: Users,
-};
+}
 
 const typeColors: Record<string, string> = {
   INFO: 'text-blue-600 bg-blue-50',
@@ -52,7 +52,7 @@ const typeColors: Record<string, string> = {
   WARNING: 'text-yellow-600 bg-yellow-50',
   ERROR: 'text-red-600 bg-red-50',
   ACTION_REQUIRED: 'text-purple-600 bg-purple-50',
-};
+}
 
 const typeIcons: Record<string, any> = {
   INFO: Info,
@@ -60,7 +60,7 @@ const typeIcons: Record<string, any> = {
   WARNING: AlertTriangle,
   ERROR: AlertCircle,
   ACTION_REQUIRED: AlertCircle,
-};
+}
 
 export const NotificationItem = ({ notification, onRead, onDismiss }: NotificationItemProps) => {
   const CategoryIcon = categoryIcons[notification.category] || Info;
@@ -74,7 +74,7 @@ export const NotificationItem = ({ notification, onRead, onDismiss }: Notificati
     if (notification.actionUrl) {
       window.location.href = notification.actionUrl;
     }
-  };
+  }
 
   return (
     <div
@@ -141,4 +141,4 @@ export const NotificationItem = ({ notification, onRead, onDismiss }: Notificati
       )}
     </div>
   );
-};
+}

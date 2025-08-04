@@ -7,11 +7,12 @@ import Link from 'next/link';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, User, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const RegisterForm = () => {
     if (authError) {
       clearError();
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ const RegisterForm = () => {
 
     // Form validation
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      setError('Password must be at least 8 characters long.')
       return;
     }
 
@@ -64,24 +65,24 @@ const RegisterForm = () => {
         lastName: formData.lastName,
         password: formData.password,
         acceptTerms: true,
-      };
+      }
 
       await register(userData);
       // If registration is successful, redirect to onboarding
-      router.push(redirectTo);
+      router.push(redirectTo)
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
     }
-  };
+  }
 
   const handleGoogleSignUp = async () => {
     try {
       // Implement Google OAuth registration
-      window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
+      window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`
     } catch (err) {
       setError('Google sign-up failed. Please try again.');
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
@@ -340,7 +341,7 @@ const RegisterForm = () => {
       </div>
     </div>
   );
-};
+}
 
 export default function RegisterPage() {
   return (

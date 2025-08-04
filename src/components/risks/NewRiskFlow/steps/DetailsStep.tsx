@@ -8,10 +8,12 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext';
-// import { RiskStatus } from '@/types/rcsa.types';
+// import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext'
+// import { RiskStatus } from '@/types/rcsa.types'
 import { cn } from '@/lib/utils';
-// import { format } from 'date-fns';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
+import { AlertCircle } from 'lucide-react';
+// import { format } from 'date-fns'
 
 interface DetailsStepProps {
   onNext: () => void;
@@ -50,7 +52,7 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!riskData.owner.trim()) {
       newErrors.owner = 'Risk owner is required';
@@ -61,13 +63,13 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const handleNext = () => {
     if (validateForm()) {
       onNext();
     }
-  };
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -241,4 +243,4 @@ updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefin
       </motion.div>
     </div>
   );
-};
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   Lightbulb,
   AlertCircle,
   Clock,
@@ -11,7 +12,7 @@ import {
   X
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -32,7 +33,7 @@ const suggestionIcons = {
   related_entity: Link,
   action_item: Clock,
   efficiency_tip: Zap
-};
+}
 
 const suggestionColors = {
   data_insight: 'text-yellow-500 bg-yellow-50 dark:bg-yellow-950/20',
@@ -40,7 +41,7 @@ const suggestionColors = {
   related_entity: 'text-blue-500 bg-blue-50 dark:bg-blue-950/20',
   action_item: 'text-red-500 bg-red-50 dark:bg-red-950/20',
   efficiency_tip: 'text-green-500 bg-green-50 dark:bg-green-950/20'
-};
+}
 
 const SuggestionCard: React.FC<{
   suggestion: SmartContextSuggestion;
@@ -59,13 +60,13 @@ const SuggestionCard: React.FC<{
     } finally {
       setIsApplying(false);
     }
-  };
+  }
 
   const getRelevanceColor = (score: number) => {
     if (score >= 0.8) return 'bg-green-500';
     if (score >= 0.6) return 'bg-yellow-500';
     return 'bg-gray-500';
-  };
+  }
 
   const getTypeLabel = (_type: string) => {
     switch (type) {
@@ -76,7 +77,7 @@ const SuggestionCard: React.FC<{
       case 'efficiency_tip': return 'Efficiency Tip';
       default: return type.replace('_', ' ');
     }
-  };
+  }
 
   if (compact) {
     return (
@@ -129,7 +130,7 @@ const SuggestionCard: React.FC<{
         </div>
       </motion.div>
     );
-  };
+  }
 
   return (
     <motion.div
@@ -225,7 +226,7 @@ const SuggestionCard: React.FC<{
       </DaisyCard>
     </motion.div>
   );
-};
+}
 
 export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = ({
   suggestions,
@@ -243,13 +244,13 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
   const handleDismiss = (suggestionId: string) => {
     setDismissedSuggestions(prev => new Set([...prev, suggestionId]));
     onDismiss?.(suggestionId);
-  };
+  }
 
   const handleApply = async (suggestion: SmartContextSuggestion) => {
     await onApplySuggestion(suggestion);
     // Auto-dismiss after successful application
-    setDismissedSuggestions(prev => new Set([...prev, suggestion.id]));
-  };
+    setDismissedSuggestions(prev => new Set([...prev, suggestion.id]))
+  }
 
   const urgentSuggestions = visibleSuggestions.filter(s => s.actionRequired);
   const otherSuggestions = visibleSuggestions.filter(s => !s.actionRequired);
@@ -283,7 +284,7 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
         )}
       </div>
     );
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -346,4 +347,4 @@ export const SmartContextSuggestions: React.FC<SmartContextSuggestionsProps> = (
       )}
     </div>
   );
-}; 
+} 

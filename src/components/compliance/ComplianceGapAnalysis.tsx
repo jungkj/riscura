@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -9,6 +9,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   BarChart,
   Bar,
   XAxis,
@@ -37,9 +38,9 @@ import {
   Users,
   Download,
   RefreshCw,
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/components/ui/DaisyToast';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 import { ComplianceFrameworkSelector } from './ComplianceFrameworkSelector';
 import { ComplianceGapList } from './ComplianceGapList';
 import { ComplianceRequirementAssessment } from './ComplianceRequirementAssessment';
@@ -63,7 +64,7 @@ interface Assessment {
   _count: {
     items: number;
     gaps: number;
-  };
+  }
 }
 
 interface GapAnalysis {
@@ -85,7 +86,7 @@ const COLORS = {
   partial: '#f59e0b',
   nonCompliant: '#ef4444',
   notAssessed: '#6b7280',
-};
+}
 
 export function ComplianceGapAnalysis() {
   const [frameworks, setFrameworks] = useState<Framework[]>([]);
@@ -99,13 +100,13 @@ export function ComplianceGapAnalysis() {
 
   // Fetch frameworks
   useEffect(() => {
-    fetchFrameworks();
+    fetchFrameworks()
   }, []);
 
   // Fetch assessments when framework is selected
   useEffect(() => {
     if (selectedFramework) {
-      fetchAssessments(selectedFramework);
+      fetchAssessments(selectedFramework)
     }
   }, [selectedFramework]);
 
@@ -117,14 +118,14 @@ export function ComplianceGapAnalysis() {
         setFrameworks(data.data);
       }
     } catch (error) {
-      // console.error('Failed to fetch frameworks:', error);
+      // console.error('Failed to fetch frameworks:', error)
       toast({
         title: 'Error',
         description: 'Failed to load compliance frameworks',
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const fetchAssessments = async (frameworkId: string) => {
     try {
@@ -134,9 +135,9 @@ export function ComplianceGapAnalysis() {
         setAssessments(data.data);
       }
     } catch (error) {
-      // console.error('Failed to fetch assessments:', error);
+      // console.error('Failed to fetch assessments:', error)
     }
-  };
+  }
 
   const performGapAnalysis = async () => {
     if (!selectedAssessment) return;
@@ -154,7 +155,7 @@ export function ComplianceGapAnalysis() {
         });
       }
     } catch (error) {
-      // console.error('Failed to perform gap analysis:', error);
+      // console.error('Failed to perform gap analysis:', error)
       toast({
         title: 'Error',
         description: 'Failed to perform gap analysis',
@@ -163,7 +164,7 @@ export function ComplianceGapAnalysis() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getComplianceData = () => {
     if (!analysis) return [];
@@ -174,7 +175,7 @@ export function ComplianceGapAnalysis() {
       { name: 'Non-Compliant', value: analysis.nonCompliantCount, color: COLORS.nonCompliant },
       { name: 'Not Assessed', value: analysis.notAssessedCount, color: COLORS.notAssessed },
     ];
-  };
+  }
 
   const getGapsBySeverity = () => {
     if (!analysis) return [];
@@ -188,7 +189,7 @@ export function ComplianceGapAnalysis() {
       severity,
       count,
     }));
-  };
+  }
 
   const getGapsByType = () => {
     if (!analysis) return [];
@@ -204,7 +205,7 @@ export function ComplianceGapAnalysis() {
       type,
       count,
     }));
-  };
+  }
 
   const exportReport = async () => {
     if (!selectedAssessment) return;
@@ -226,14 +227,14 @@ export function ComplianceGapAnalysis() {
         window.URL.revokeObjectURL(url);
       }
     } catch (error) {
-      // console.error('Failed to export report:', error);
+      // console.error('Failed to export report:', error)
       toast({
         title: 'Error',
         description: 'Failed to export report',
         variant: 'destructive',
       });
     }
-  };
+  }
 
   return (
     <div className="space-y-6">

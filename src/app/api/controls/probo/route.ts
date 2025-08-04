@@ -44,7 +44,7 @@ export async function GET(_request: NextRequest) {
 
     // TODO: Implement getEnhancedControls method in EnhancedProboService
     // For now, return empty array
-    const controls: any[] = [];
+    const controls: any[] = []
 
     return NextResponse.json({
       success: true,
@@ -55,7 +55,7 @@ export async function GET(_request: NextRequest) {
       },
     });
   } catch (error) {
-    // console.error('Error fetching Probo controls:', error);
+    // console.error('Error fetching Probo controls:', error)
     return NextResponse.json({ error: 'Failed to fetch controls' }, { status: 500 });
   }
 }
@@ -79,7 +79,7 @@ export async function POST(_request: NextRequest) {
         const importResult = {
           imported: 0,
           updated: 0,
-        };
+        }
 
         return NextResponse.json({
           success: true,
@@ -90,7 +90,7 @@ export async function POST(_request: NextRequest) {
       case 'mapRisks':
         const mapData = mapRisksSchema.parse(body);
         // TODO: Implement mapControlsToRisks in EnhancedProboService
-        const mappings: any[] = [];
+        const mappings: any[] = []
 
         return NextResponse.json({
           success: true,
@@ -101,7 +101,7 @@ export async function POST(_request: NextRequest) {
       case 'createTasks':
         const { organizationId, controlId, assignedTo } = body;
         // TODO: Implement createImplementationTasks in EnhancedProboService
-        const taskIds: string[] = [];
+        const taskIds: string[] = []
 
         return NextResponse.json({
           success: true,
@@ -113,7 +113,7 @@ export async function POST(_request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
   } catch (error) {
-    // console.error('Error processing Probo controls request:', error);
+    // console.error('Error processing Probo controls request:', error)
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }

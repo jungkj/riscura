@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle, DaisyDropdownMenuTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
   EnhancedControl, 
   AdvancedControlFilters, 
   ControlAnalytics, 
@@ -15,7 +16,7 @@ import { useControls } from '@/context/ControlContext';
 import { EnhancedControlService } from '@/services/EnhancedControlService';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -31,7 +32,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Plus, Search, Filter, Shield, Brain, BarChart3, TestTube, 
   CheckCircle, AlertTriangle, Clock, Users, Eye, Edit, 
   MoreHorizontal, Zap, Network, Calendar, RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface EnhancedControlRegistryProps {
   className?: string;
@@ -42,7 +43,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   const [enhancedControlService] = useState(() => new EnhancedControlService());
 
   // State management
-  const [enhancedControls, setEnhancedControls] = useState<EnhancedControl[]>([]);
+  const [enhancedControls, setEnhancedControls] = useState<EnhancedControl[]>([])
   const [filteredControls, setFilteredControls] = useState<EnhancedControl[]>([]);
   const [selectedControls, setSelectedControls] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,36 +53,36 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   const [activeTab, setActiveTab] = useState('overview');
 
   // Modal states
-  const [selectedControl, setSelectedControl] = useState<EnhancedControl | null>(null);
+  const [selectedControl, setSelectedControl] = useState<EnhancedControl | null>(null)
   const [showControlDetail, setShowControlDetail] = useState(false);
   const [showFiltersModal, setShowFiltersModal] = useState(false);
 
   // Loading states
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
 
   // Analytics data
-  const [analytics, setAnalytics] = useState<ControlAnalytics | null>(null);
+  const [analytics, setAnalytics] = useState<ControlAnalytics | null>(null)
   const [frameworks, setFrameworks] = useState<ControlFramework[]>([]);
 
   // Convert base controls to enhanced controls
   const convertToEnhancedControls = useCallback((controls: Control[]): EnhancedControl[] => {
-    return controls.map(control => enhancedControlService.enhanceControl(control));
+    return controls.map(control => enhancedControlService.enhanceControl(control))
   }, [enhancedControlService]);
 
   // Initialize enhanced controls
   useEffect(() => {
-    const enhanced = convertToEnhancedControls(baseControls);
+    const enhanced = convertToEnhancedControls(baseControls)
     setEnhancedControls(enhanced);
   }, [baseControls, convertToEnhancedControls]);
 
   // Apply filters and search
   useEffect(() => {
-    let filtered = enhancedControls;
+    let filtered = enhancedControls
 
     // Apply search
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter(control =>
         control.title.toLowerCase().includes(query) ||
         control.description.toLowerCase().includes(query) ||
@@ -91,11 +92,11 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
     }
 
     // Apply advanced filters
-    filtered = enhancedControlService.filterControls(filtered, filters);
+    filtered = enhancedControlService.filterControls(filtered, filters)
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any = a[sortBy];
+      let aValue: any = a[sortBy]
       let bValue: any = b[sortBy];
 
       if (sortBy === 'framework') {
@@ -117,10 +118,10 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   useEffect(() => {
     const generateAnalytics = async () => {
       if (enhancedControls.length > 0) {
-        const analyticsData = await enhancedControlService.generateControlAnalytics(enhancedControls);
+        const analyticsData = await enhancedControlService.generateControlAnalytics(enhancedControls)
         setAnalytics(analyticsData);
       }
-    };
+    }
 
     generateAnalytics();
   }, [enhancedControls, enhancedControlService]);
@@ -128,16 +129,16 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
   // Load control frameworks
   useEffect(() => {
     const loadFrameworks = async () => {
-      const frameworkList = await enhancedControlService.getControlFrameworks();
+      const frameworkList = await enhancedControlService.getControlFrameworks()
       setFrameworks(frameworkList);
-    };
+    }
 
     loadFrameworks();
   }, [enhancedControlService]);
 
   // Handle AI analysis
   const handleAIAnalysis = async (control: EnhancedControl) => {
-    setAiAnalyzing(true);
+    setAiAnalyzing(true)
     try {
       const aiAssessment = await enhancedControlService.analyzeControlWithAI(control);
       const effectivenessScore = await enhancedControlService.calculateEffectivenessScore(control);
@@ -146,54 +147,54 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
         ...control,
         aiAssessment,
         effectivenessScore
-      };
+      }
 
       setEnhancedControls(prev => 
         prev.map(c => c.id === control.id ? updatedControl : c)
       );
 
-      // console.log('AI Assessment completed:', aiAssessment);
+      // console.log('AI Assessment completed:', aiAssessment)
     } catch (error) {
-      // console.error('AI analysis failed:', error);
+      // console.error('AI analysis failed:', error)
     } finally {
       setAiAnalyzing(false);
     }
-  };
+  }
 
   // Handle bulk operations
   const handleBulkOperation = async (operation: ControlBulkOperation) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const _result = await enhancedControlService.performBulkOperation(operation);
       if (result.success) {
-        // console.log('Bulk operation completed successfully');
+        // console.log('Bulk operation completed successfully')
         setSelectedControls([]);
       } else {
-        // console.error('Bulk operation failed:', result.errors);
+        // console.error('Bulk operation failed:', result.errors)
       }
     } catch (error) {
-      // console.error('Bulk operation error:', error);
+      // console.error('Bulk operation error:', error)
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Control status/type colors
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'passed': return 'bg-green-100 text-green-800 border-green-200';
+      case 'passed': return 'bg-green-100 text-green-800 border-green-200'
       case 'failed': return 'bg-red-100 text-red-800 border-red-200';
       case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'overdue': return 'bg-orange-100 text-orange-800 border-orange-200';
       default: return 'bg-secondary/20 text-foreground border-border';
     }
-  };
+  }
 
   const getMaturityColor = (level: number) => {
     if (level >= 4) return 'bg-green-100 text-green-800 border-green-200';
     if (level >= 3) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
     return 'bg-red-100 text-red-800 border-red-200';
-  };
+  }
 
   const getFrameworkColor = (_framework: string) => {
     switch (framework) {
@@ -202,11 +203,11 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
       case 'NIST': return 'bg-secondary/20 text-foreground border-border';
       default: return 'bg-secondary/20 text-foreground border-border';
     }
-  };
+  }
 
   // Control statistics
   const _stats = useMemo(() => {
-    const total = filteredControls.length;
+    const total = filteredControls.length
     const byFramework = filteredControls.reduce((acc, control) => {
       acc[control.framework.category] = (acc[control.framework.category] || 0) + 1;
       return acc;
@@ -223,7 +224,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
     const avgMaturity = total > 0 ?
       filteredControls.reduce((sum, control) => sum + control.maturityLevel, 0) / total : 0;
 
-    return { total, byFramework, byTestingStatus, avgEffectiveness, avgMaturity };
+    return { total, byFramework, byTestingStatus, avgEffectiveness, avgMaturity }
   }, [filteredControls]);
 
   return (
@@ -727,6 +728,6 @@ setSearchQuery(e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 export default EnhancedControlRegistry; 

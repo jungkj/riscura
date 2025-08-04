@@ -15,7 +15,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard';
+} from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 // import {
   AlertTriangle,
@@ -25,7 +25,7 @@ import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
   ExternalLink,
   TrendingUp,
   Shield,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface Risk {
   id: string;
@@ -70,7 +70,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
       default:
         return 'bg-green-500 text-white';
     }
-  };
+  }
 
   const getRiskLevelIcon = (level: string) => {
     switch (level) {
@@ -84,7 +84,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
       default:
         return <Shield className="w-4 h-4" />;
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -99,7 +99,7 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
-  };
+  }
 
   return (
     <DaisyDialog open={isOpen} onOpenChange={onClose}>
@@ -243,4 +243,4 @@ export const RiskDetailsModal: React.FC<RiskDetailsModalProps> = ({
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}

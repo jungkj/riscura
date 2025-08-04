@@ -24,25 +24,25 @@ export const DaisyCalendar = ({
 
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
+  }
 
   const getFirstDayOfMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
+  }
 
   const handlePreviousMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
-  };
+  }
 
   const handleNextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
-  };
+  }
 
   const handleDateClick = (day: number) => {
     const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     if (disabled?.(date)) return;
     onSelect?.(date);
-  };
+  }
 
   const isSelected = (day: number) => {
     if (!selected) return false;
@@ -52,7 +52,7 @@ export const DaisyCalendar = ({
       date.getMonth() === selected.getMonth() &&
       date.getFullYear() === selected.getFullYear()
     );
-  };
+  }
 
   const daysInMonth = getDaysInMonth(currentMonth);
   const firstDayOfWeek = getFirstDayOfMonth(currentMonth);
@@ -117,4 +117,4 @@ export const DaisyCalendar = ({
       </div>
     </div>
   );
-};
+}

@@ -26,7 +26,7 @@ const createTransporter = () => {
         user: 'apikey',
         pass: process.env.SENDGRID_API_KEY,
       },
-    });
+    })
   }
 
   // Use SMTP settings if configured
@@ -39,7 +39,7 @@ const createTransporter = () => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-    });
+    })
   }
 
   // Use Gmail if configured
@@ -50,7 +50,7 @@ const createTransporter = () => {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD,
       },
-    });
+    })
   }
 
   // Fallback to console logging in development
@@ -61,16 +61,16 @@ const createTransporter = () => {
           to: options.to,
           subject: options.subject,
           preview: options.text?.substring(0, 100) || options.html?.substring(0, 100),
-        });
-        return { messageId: 'dev-' + Date.now() };
+        })
+        return { messageId: 'dev-' + Date.now() }
       },
-    };
+    }
   }
 
   throw new Error(
     'No email service configured. Please set up SMTP, SendGrid, or Gmail credentials.'
   );
-};
+}
 
 let transporter: any = null;
 
@@ -78,7 +78,7 @@ let transporter: any = null;
 export async function sendEmail(_options: EmailOptions): Promise<void> {
   try {
     if (!transporter) {
-      transporter = createTransporter();
+      transporter = createTransporter()
     }
 
     const mailOptions = {
@@ -89,12 +89,12 @@ export async function sendEmail(_options: EmailOptions): Promise<void> {
       text: options.text || options.html?.replace(/<[^>]*>/g, ''), // Strip HTML for text version
       replyTo: options.replyTo,
       attachments: options.attachments,
-    };
+    }
 
     const info = await transporter.sendMail(mailOptions);
-    // console.log('Email sent:', info.messageId);
+    // console.log('Email sent:', info.messageId)
   } catch (error) {
-    // console.error('Failed to send email:', error);
+    // console.error('Failed to send email:', error)
     throw error;
   }
 }
@@ -102,7 +102,7 @@ export async function sendEmail(_options: EmailOptions): Promise<void> {
 // Email templates
 export const emailTemplates = {
   notification: (_data: {
-    title: string;
+    title: string
     message: string;
     actionUrl?: string;
     actionText?: string;
@@ -277,4 +277,4 @@ export const emailTemplates = {
       </html>
     `;
   },
-};
+}

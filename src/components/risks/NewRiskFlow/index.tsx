@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyDialog, DaisyDialogContent } from '@/components/ui/DaisyDialog';
-// import { RiskFlowProvider, RiskFlowStep } from './RiskFlowContext';
+// import { RiskFlowProvider, RiskFlowStep } from './RiskFlowContext'
 import { StepIndicator } from './StepIndicator';
 import { BasicInfoStep } from './steps/BasicInfoStep';
-// import { RiskMatrixStep } from './steps/RiskMatrixStep';
+// import { RiskMatrixStep } from './steps/RiskMatrixStep'
 import { DetailsStep } from './steps/DetailsStep';
 import { ReviewStep } from './steps/ReviewStep';
-// import { useRiskFlow } from './RiskFlowContext';
+import { DaisyDialogContent } from '@/components/ui/daisy-components';
+// import { useRiskFlow } from './RiskFlowContext'
 
 interface NewRiskFlowProps {
   open: boolean;
@@ -34,20 +35,20 @@ const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1].id);
     }
-  };
+  }
 
   const handleBack = () => {
     const currentIndex = steps.findIndex((s) => s.id === currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1].id);
     }
-  };
+  }
 
   const handleClose = () => {
     if (!isSubmitting) {
       onOpenChange(false);
     }
-  };
+  }
 
   return (
     <div className="relative h-full flex flex-col">
@@ -129,7 +130,7 @@ const RiskFlowContent = ({ onOpenChange, onSuccess }: Omit<NewRiskFlowProps, 'op
       </div>
     </div>
   );
-};
+}
 
 export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps) => {
   return (
@@ -141,4 +142,4 @@ export const NewRiskFlow = ({ open, onOpenChange, onSuccess }: NewRiskFlowProps)
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}

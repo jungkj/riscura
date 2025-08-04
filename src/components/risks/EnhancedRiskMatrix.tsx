@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useRef } from 'react';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk } from '@/types';
-// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk } from '@/types'
+// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils'
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTooltip } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -48,7 +49,7 @@ import {
   TrendingUp,
   Calendar,
   Settings
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface EnhancedRiskMatrixProps {
   onRiskClick?: (_risk: Risk) => void;
@@ -92,7 +93,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
   const matrixRef = useRef<HTMLDivElement>(null);
   
   // State management
-  const [draggedRisk, setDraggedRisk] = useState<Risk | null>(null);
+  const [draggedRisk, setDraggedRisk] = useState<Risk | null>(null)
   const [hoveredCell, setHoveredCell] = useState<{ likelihood: number; impact: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [viewSettings, setViewSettings] = useState<ViewSettings>({
@@ -110,7 +111,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   // Enhanced matrix data with clustering and density calculations
   const matrixData = useMemo(() => {
-    const matrix: MatrixCell[][] = [];
+    const matrix: MatrixCell[][] = []
     const maxRisksInCell = Math.max(...Array.from({ length: 25 }, (_, i) => {
       const likelihood = (i % 5) + 1;
       const impact = Math.floor(i / 5) + 1;
@@ -146,7 +147,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   // Enhanced cell styling based on view mode
   const getCellStyle = useCallback((cell: MatrixCell, isHovered: boolean = false) => {
-    const baseOpacity = cell.density * 0.8 + 0.2;
+    const baseOpacity = cell.density * 0.8 + 0.2
     
     if (viewMode === 'heatmap') {
       const intensity = Math.min(cell.risks.length / 5, 1);
@@ -154,7 +155,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
         backgroundColor: `hsl(${cell.level === 'critical' ? '0' : cell.level === 'high' ? '25' : cell.level === 'medium' ? '48' : '142'}, 70%, ${85 - intensity * 30}%)`,
         borderColor: `hsl(${cell.level === 'critical' ? '0' : cell.level === 'high' ? '25' : cell.level === 'medium' ? '48' : '142'}, 70%, ${70 - intensity * 20}%)`,
         opacity: isHovered ? 1 : baseOpacity,
-      };
+      }
     }
     
     if (viewMode === 'density') {
@@ -163,7 +164,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
         backgroundColor: `hsl(${hue}, 70%, 85%)`,
         borderColor: `hsl(${hue}, 70%, 70%)`,
         opacity: isHovered ? 1 : baseOpacity,
-      };
+      }
     }
     
     // Default matrix view
@@ -172,25 +173,25 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       medium: { bg: 'rgb(254, 249, 195)', border: 'rgb(254, 240, 138)', hover: 'rgb(254, 240, 138)' },
       high: { bg: 'rgb(255, 237, 213)', border: 'rgb(253, 186, 116)', hover: 'rgb(253, 186, 116)' },
       critical: { bg: 'rgb(254, 226, 226)', border: 'rgb(252, 165, 165)', hover: 'rgb(252, 165, 165)' },
-    };
+    }
     
     const color = colors[cell.level];
     return {
       backgroundColor: isHovered ? color.hover : color.bg,
       borderColor: color.border,
       opacity: baseOpacity,
-    };
+    }
   }, [viewMode]);
 
   // Drag and drop handlers with enhanced feedback
   const handleDragStart = useCallback((e: React.DragEvent, risk: Risk) => {
-    setDraggedRisk(risk);
+    setDraggedRisk(risk)
     setIsDragging(true);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', risk.id);
     
     // Create custom drag image
-    const dragImage = document.createElement('div');
+    const dragImage = document.createElement('div')
     dragImage.innerHTML = risk.title;
     dragImage.style.cssText = `
       position: absolute; top: -1000px; left: -1000px;
@@ -222,7 +223,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           riskScore: newRiskScore,
         });
       } catch (error) {
-        // console.error('Failed to update risk position:', error);
+        // console.error('Failed to update risk position:', error)
       }
     }
     
@@ -242,7 +243,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   // Export functionality
   const exportToPNG = useCallback(async () => {
-    if (!matrixRef.current || isExporting) return;
+    if (!matrixRef.current || isExporting) return
     
     setIsExporting(true);
     try {
@@ -257,7 +258,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       link.href = canvas.toDataURL();
       link.click();
     } catch (error) {
-      // console.error('Export to PNG failed:', error);
+      // console.error('Export to PNG failed:', error)
     } finally {
       setIsExporting(false);
     }
@@ -281,7 +282,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, imgWidth, imgHeight);
       pdf.save(`risk-matrix-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
-      // console.error('Export to PDF failed:', error);
+      // console.error('Export to PDF failed:', error)
     } finally {
       setIsExporting(false);
     }
@@ -289,12 +290,12 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
 
   const exportToSVG = useCallback(() => {
     // SVG export implementation would go here
-    // console.log('SVG export not yet implemented');
+    // console.log('SVG export not yet implemented')
   }, []);
 
   // View controls
   const handleZoomIn = useCallback(() => {
-    setViewSettings(prev => ({ ...prev, zoom: Math.min(prev.zoom * 1.2, 3) }));
+    setViewSettings(prev => ({ ...prev, zoom: Math.min(prev.zoom * 1.2, 3) }))
   }, []);
 
   const handleZoomOut = useCallback(() => {
@@ -322,7 +323,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
           ))}
         </>
       );
-    };
+    }
 
   return (
       <div className="relative">
@@ -342,7 +343,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
         </DaisyButton>
       </div>
     );
-  };
+  }
 
   // Enhanced risk item component
   const RiskItem: React.FC<{ risk: Risk; isSelected: boolean }> = ({ risk, isSelected }) => (
@@ -596,7 +597,7 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
                     high: 'text-orange-600',
                     medium: 'text-yellow-600',
                     low: 'text-green-600',
-                  };
+                  }
                   
                   return (
                     <div key={level} className="text-center">
@@ -663,4 +664,4 @@ export const EnhancedRiskMatrix: React.FC<EnhancedRiskMatrixProps> = ({
       </DaisyDialog>
     </div>
   );
-}; 
+} 

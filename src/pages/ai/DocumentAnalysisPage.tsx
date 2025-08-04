@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-// import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import { Sparkles } from 'lucide-react';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -42,18 +44,18 @@ export default function DocumentAnalysisPage() {
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      setFile(e.target.files[0])
     }
-  };
+  }
 
   // Handle file upload
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file) return
 
     setUploading(true);
 
     // Simulate file upload
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500))
 
     setUploading(false);
     setProcessing(true);
@@ -61,17 +63,17 @@ export default function DocumentAnalysisPage() {
     // Simulate AI processing with progress updates
     const processingInterval = setInterval(() => {
       setProcessingProgress((prev) => {
-        const newProgress = prev + Math.random() * 10;
+        const newProgress = prev + Math.random() * 10
         if (newProgress >= 100) {
           clearInterval(processingInterval);
           // Generate mock results after processing is complete
-          generateMockResults();
+          generateMockResults()
           return 100;
         }
         return newProgress;
       });
     }, 600);
-  };
+  }
 
   // Generate mock AI analysis results
   const generateMockResults = () => {
@@ -81,7 +83,7 @@ export default function DocumentAnalysisPage() {
       size: file?.size || 0,
       type: file?.type || 'application/pdf',
       uploadedAt: new Date().toISOString(),
-    });
+    })
 
     // Mock risk insights
     setRiskInsights([
@@ -125,7 +127,7 @@ export default function DocumentAnalysisPage() {
         confidence: 0.81,
         category: 'Technology',
       },
-    ]);
+    ])
 
     setProcessing(false);
 
@@ -133,37 +135,37 @@ export default function DocumentAnalysisPage() {
       title: 'Analysis Complete',
       description: 'AI has identified potential risks in your document.',
     });
-  };
+  }
 
   // Helper function to get badge color based on confidence
   const getConfidenceBadgeVariant = (confidence: number) => {
-    if (confidence >= 0.9) return 'default';
+    if (confidence >= 0.9) return 'default'
     if (confidence >= 0.7) return 'secondary';
     return 'outline';
-  };
+  }
 
   // Helper function to format file size
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes'
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   // Add risk to register
   const addRiskToRegister = (_risk: RiskInsight) => {
     toast({
       title: 'Risk Added',
       description: `"${risk.title}" has been added to your risk register.`,
-    });
+    })
 
     // In a real app, we would add the risk to the risk register
     // For now, just navigate to the risk list page
     setTimeout(() => {
-      router.push('/risks');
+      router.push('/risks')
     }, 1000);
-  };
+  }
 
   return (
     <div className="space-y-6">

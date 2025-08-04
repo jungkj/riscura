@@ -23,11 +23,11 @@ export async function GET() {
       problemIdentified: false,
       issue: '',
     },
-  };
+  }
 
   // Identify the specific issue
   if (process.env.DIRECT_URL && process.env.DATABASE_URL === process.env.DIRECT_URL) {
-    config.analysis.problemIdentified = true;
+    config.analysis.problemIdentified = true
     config.analysis.issue =
       'DATABASE_URL and DIRECT_URL are the same (both using direct connection)';
   } else if (config.analysis.isDATABASE_URLDirect) {

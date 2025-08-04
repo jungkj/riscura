@@ -36,7 +36,7 @@ export const GET = withApiMiddleware(
           },
           _avg: { effectiveness: true },
         }),
-      ]);
+      ])
 
       const dashboardData = {
         metrics: {
@@ -52,14 +52,14 @@ export const GET = withApiMiddleware(
           role: user.role,
           organization: user.organizationId,
         },
-      };
+      }
 
       return NextResponse.json({
         success: true,
         data: dashboardData,
       });
     } catch (error) {
-      // console.error('Dashboard API error:', error);
+      // console.error('Dashboard API error:', error)
       return NextResponse.json(
         {
           success: false,

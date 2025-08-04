@@ -7,11 +7,12 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
+import { DaisyCardBody, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import {
   MessageSquare,
   Reply,
@@ -41,11 +42,11 @@ import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, Dai
   ChevronDown,
   ChevronRight,
   Dot,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface Comment {
-  id: string;
+  id: string
   content: string;
   author: User;
   entityType: 'risk' | 'control' | 'document' | 'task';
@@ -138,7 +139,7 @@ const sampleUsers: User[] = [
     department: 'Internal Audit',
     isOnline: true,
   },
-];
+]
 
 // Sample Comments
 const sampleComments: Comment[] = [
@@ -200,11 +201,11 @@ const sampleComments: Comment[] = [
     createdAt: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
     updatedAt: new Date(Date.now() - 30 * 60 * 1000),
   },
-];
+]
 
 // Mention Input Component
 const MentionInput: React.FC<{
-  value: string;
+  value: string
   onChange: (_value: string, mentions: Mention[]) => void;
   placeholder?: string;
   users: User[];
@@ -227,7 +228,7 @@ const MentionInput: React.FC<{
     setCursorPosition(cursor);
 
     // Check for @ mentions
-    const beforeCursor = newValue.slice(0, cursor);
+    const beforeCursor = newValue.slice(0, cursor)
     const atIndex = beforeCursor.lastIndexOf('@');
     
     if (atIndex !== -1 && (atIndex === 0 || /\s/.test(beforeCursor[atIndex - 1]))) {
@@ -244,7 +245,7 @@ const MentionInput: React.FC<{
     }
 
     onChange(newValue, []); // TODO: Extract mentions from text
-  };
+  }
 
   const insertMention = (user: User) => {
     if (!textareaRef.current) return;
@@ -258,11 +259,11 @@ const MentionInput: React.FC<{
     
     // Focus back to textarea
     setTimeout(() => {
-      textareaRef.current?.focus();
+      textareaRef.current?.focus()
       const newCursor = mentionPosition + user.name.length + 2;
       textareaRef.current?.setSelectionRange(newCursor, newCursor);
     }, 0);
-  };
+  }
 
   return (
     <div className="relative">
@@ -314,13 +315,13 @@ const MentionInput: React.FC<{
       )}
     </div>
   );
-};
+}
 
 MentionInput.displayName = 'MentionInput';
 
 // Comment Component
 const CommentComponent: React.FC<{
-  comment: Comment;
+  comment: Comment
   replies?: Comment[];
   onReply: (parentId: string) => void;
   onEdit: (commentId: string) => void;
@@ -355,7 +356,7 @@ const CommentComponent: React.FC<{
     if (hours < 24) return `${hours}h ago`;
     if (days < 7) return `${days}d ago`;
     return date.toLocaleDateString();
-  };
+  }
 
   const renderMentions = (_content: string, mentions: string[]) => {
     if (mentions.length === 0) return content;
@@ -372,7 +373,7 @@ const CommentComponent: React.FC<{
     });
 
     return <span dangerouslySetInnerHTML={{ __html: result }} />;
-  };
+  }
 
   const commonReactions = ['👍', '❤️', '😊', '🎯', '✅', '🔥'];
 
@@ -583,13 +584,13 @@ const CommentComponent: React.FC<{
       )}
     </div>
   );
-};
+}
 
 CommentComponent.displayName = 'CommentComponent';
 
 // Main Comment System Component
 export const CommentSystem: React.FC<{
-  entityType: 'risk' | 'control' | 'document' | 'task';
+  entityType: 'risk' | 'control' | 'document' | 'task'
   entityId: string;
   isInline?: boolean;
   showHeader?: boolean;
@@ -620,24 +621,24 @@ export const CommentSystem: React.FC<{
       isPrivate: false,
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    }
 
     setComments(prev => [...prev, comment]);
     setNewComment('');
     setReplyingTo(null);
-  };
+  }
 
   const handleReply = (parentId: string) => {
     setReplyingTo(parentId);
-  };
+  }
 
   const handleEdit = (commentId: string) => {
     setEditingComment(commentId);
-  };
+  }
 
   const handleDelete = (commentId: string) => {
     setComments(prev => prev.filter(c => c.id !== commentId));
-  };
+  }
 
   const handleReact = (commentId: string, emoji: string) => {
     setComments(prev => prev.map(comment => {
@@ -655,7 +656,7 @@ export const CommentSystem: React.FC<{
                 ? { ...r, users: r.users.filter(u => u !== userId), count: r.count - 1 }
                 : r
             ).filter(r => r.count > 0)
-          };
+          }
         } else {
           // Add reaction
           return {
@@ -665,7 +666,7 @@ export const CommentSystem: React.FC<{
                 ? { ...r, users: [...r.users, userId], count: r.count + 1 }
                 : r
             )
-          };
+          }
         }
       } else {
         // New reaction
@@ -676,10 +677,10 @@ export const CommentSystem: React.FC<{
             users: [sampleUsers[0].id],
             count: 1
           }]
-        };
+        }
       }
     }));
-  };
+  }
 
   const handleResolve = (commentId: string) => {
     setComments(prev => prev.map(comment => 
@@ -687,7 +688,7 @@ export const CommentSystem: React.FC<{
         ? { ...comment, isResolved: !comment.isResolved }
         : comment
     ));
-  };
+  }
 
   const handlePin = (commentId: string) => {
     setComments(prev => prev.map(comment => 
@@ -695,17 +696,17 @@ export const CommentSystem: React.FC<{
         ? { ...comment, isPinned: !comment.isPinned }
         : comment
     ));
-  };
+  }
 
   // Organize comments into threads
   const threadedComments = comments.filter(c => !c.parentId).map(comment => ({
     ...comment,
     replies: comments.filter(c => c.parentId === comment.id)
-  }));
+  }))
 
   // Apply filters
   const filteredComments = threadedComments.filter(comment => {
-    if (!showResolved && comment.isResolved) return false;
+    if (!showResolved && comment.isResolved) return false
     
     switch (filterBy) {
       case 'mentions':
@@ -780,7 +781,7 @@ export const CommentSystem: React.FC<{
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-enterprise-6">
@@ -912,6 +913,6 @@ export const CommentSystem: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 export default CommentSystem;

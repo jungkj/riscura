@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   DollarSign,
   TrendingUp,
@@ -18,7 +19,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Users,
   Clock,
   CheckCircle
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ROIMetric {
   id: string;
@@ -123,22 +124,22 @@ export function BusinessImpactAnalyzer() {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
-  };
+  }
 
   const getStatusColor = (status: string) => {
     const colorMap = {
       'realized': 'bg-green-100 text-green-800',
       'projected': 'bg-blue-100 text-blue-800',
       'in-progress': 'bg-yellow-100 text-yellow-800'
-    };
+    }
     return colorMap[status as keyof typeof colorMap] || 'bg-gray-100 text-gray-800';
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     if (trend === 'positive') return <TrendingUp className="w-4 h-4 text-green-500" />;
     if (trend === 'negative') return <TrendingDown className="w-4 h-4 text-red-500" />;
     return <Target className="w-4 h-4 text-gray-500" />;
-  };
+  }
 
   const totalROI = roiMetrics.reduce((sum, metric) => sum + (metric.roi * metric.investment / 100), 0);
   const totalInvestment = roiMetrics.reduce((sum, metric) => sum + metric.investment, 0);

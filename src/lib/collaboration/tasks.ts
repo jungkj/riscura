@@ -15,7 +15,7 @@ import { collaborationServer } from './websocket';
 
 // Use Prisma types but extend for additional functionality
 export interface TaskWithRelations extends Task {
-  assignee?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'> | null;
+  assignee?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'> | null
   creator?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'> | null;
   comments?: Comment[];
 }
@@ -93,7 +93,7 @@ export interface ApprovalAction {
 export class TaskManager {
   // Create a new task
   async createTask(taskData: {
-    title: string;
+    title: string
     description?: string;
     type: TaskType;
     priority?: Priority;
@@ -161,7 +161,7 @@ export class TaskManager {
         },
         isPublic: true,
       },
-    });
+    })
 
     // Send real-time notification to assignee
     if (typeof collaborationServer !== 'undefined' && collaborationServer && taskData.assigneeId) {
@@ -171,9 +171,9 @@ export class TaskManager {
           payload: { task: createdTask },
           timestamp: new Date(),
           userId: taskData.createdBy || 'system',
-        });
+        })
       } catch (error) {
-        // console.warn('Failed to send real-time notification:', error);
+        // console.warn('Failed to send real-time notification:', error)
       }
     }
 
@@ -186,7 +186,7 @@ export class TaskManager {
         taskId: createdTask.id,
         title: 'New Task Assigned',
         message: `${createdTask.creator.firstName} ${createdTask.creator.lastName} assigned you a new task: ${taskData.title}`,
-      });
+      })
     }
 
     return createdTask;
@@ -200,14 +200,14 @@ export class TaskManager {
   ): Promise<TaskWithRelations> {
     const existingTask = await db.client.task.findUnique({
       where: { id: taskId },
-    });
+    })
 
     if (!existingTask) {
       throw new Error('Task not found');
     }
 
     // Track changes for audit
-    const changes: TaskUpdate[] = [];
+    const changes: TaskUpdate[] = []
     for (const [field, newValue] of Object.entries(updates)) {
       if (field in existingTask && (existingTask as any)[field] !== newValue) {
         changes.push({
@@ -249,7 +249,7 @@ export class TaskManager {
           },
         },
       },
-    });
+    })
 
     // Create activity log
     await db.client.activity.create({
@@ -266,11 +266,11 @@ export class TaskManager {
         },
         isPublic: true,
       },
-    });
+    })
 
     // Send real-time updates
     if (collaborationServer) {
-      const roomId = `task:${taskId}`;
+      const roomId = `task:${taskId}`
       collaborationServer.broadcastToRoom(roomId, {
         type: 'task:updated',
         payload: { task: updatedTask, changes },
@@ -286,7 +286,7 @@ export class TaskManager {
         existingTask.status,
         updates.status,
         updatedBy
-      );
+      )
     }
 
     // Send notifications for assignee changes
@@ -298,7 +298,7 @@ export class TaskManager {
         taskId: taskId,
         title: 'Task Reassigned',
         message: `You have been assigned to task: ${existingTask.title}`,
-      });
+      })
     }
 
     return updatedTask;
@@ -332,7 +332,7 @@ export class TaskManager {
           },
         },
       },
-    });
+    })
 
     // Get task info for notifications
     const task = await db.client.task.findUnique({
@@ -342,7 +342,7 @@ export class TaskManager {
         creator: true,
         watchers: true,
       },
-    });
+    })
 
     if (!task) {
       throw new Error('Task not found');
@@ -350,7 +350,7 @@ export class TaskManager {
 
     // Send real-time update
     if (collaborationServer) {
-      const roomId = `task:${taskId}`;
+      const roomId = `task:${taskId}`
       collaborationServer.broadcastToRoom(roomId, {
         type: 'task:comment_added',
         payload: { comment },
@@ -368,7 +368,7 @@ export class TaskManager {
         taskId,
         title: 'You were mentioned in a task',
         message: `${comment.author.firstName} ${comment.author.lastName} mentioned you in task: ${task.title}`,
-      });
+      })
     }
 
     // Notify task participants (excluding comment author)
@@ -376,7 +376,7 @@ export class TaskManager {
       task.assigneeId,
       task.creatorId,
       ...task.watchers.map((w) => w.id),
-    ]);
+    ])
     participantIds.delete(authorId);
 
     for (const participantId of participantIds) {
@@ -397,7 +397,7 @@ export class TaskManager {
   async getUserTasks(_userId: string,
     organizationId: string,
     filters: {
-      status?: string[];
+      status?: string[]
       priority?: string[];
       type?: string[];
       assigned?: boolean;
@@ -416,7 +416,7 @@ export class TaskManager {
     const where: any = {
       organizationId,
       OR: [],
-    };
+    }
 
     if (filters.assigned) {
       where.OR.push({ assigneeId: userId });
@@ -432,20 +432,20 @@ export class TaskManager {
 
     // If no role specified, default to assigned tasks
     if (where.OR.length === 0) {
-      where.OR.push({ assigneeId: userId });
+      where.OR.push({ assigneeId: userId })
     }
 
     // Add filters
     if (filters.status && filters.status.length > 0) {
-      where.status = { in: filters.status };
+      where.status = { in: filters.status }
     }
 
     if (filters.priority && filters.priority.length > 0) {
-      where.priority = { in: filters.priority };
+      where.priority = { in: filters.priority }
     }
 
     if (filters.type && filters.type.length > 0) {
-      where.type = { in: filters.type };
+      where.type = { in: filters.type }
     }
 
     if (filters.entityType) {
@@ -457,13 +457,13 @@ export class TaskManager {
     }
 
     if (filters.dueDateFrom || filters.dueDateTo) {
-      where.dueDate = {};
+      where.dueDate = {}
       if (filters.dueDateFrom) where.dueDate.gte = filters.dueDateFrom;
       if (filters.dueDateTo) where.dueDate.lte = filters.dueDateTo;
     }
 
     if (filters.completedFrom || filters.completedTo) {
-      where.completedAt = {};
+      where.completedAt = {}
       if (filters.completedFrom) where.completedAt.gte = filters.completedFrom;
       if (filters.completedTo) where.completedAt.lte = filters.completedTo;
     }
@@ -528,7 +528,7 @@ export class TaskManager {
       db.client.task.count({ where }),
     ]);
 
-    return { tasks, total };
+    return { tasks, total }
   }
 
   // Handle status change notifications
@@ -543,7 +543,7 @@ export class TaskManager {
       review: 'Task is ready for review',
       completed: 'Task has been completed',
       cancelled: 'Task has been cancelled',
-    };
+    }
 
     const message =
       statusMessages[newStatus as keyof typeof statusMessages] || 'Task status updated';
@@ -557,7 +557,7 @@ export class TaskManager {
         taskId: task.id,
         title: 'Task Status Updated',
         message: `${message}: ${task.title}`,
-      });
+      })
     }
 
     // Notify creator if different from updater and assignee
@@ -569,12 +569,12 @@ export class TaskManager {
         taskId: task.id,
         title: 'Task Status Updated',
         message: `${message}: ${task.title}`,
-      });
+      })
     }
 
     // Special handling for completion
     if (newStatus === 'completed') {
-      await this.handleTaskCompletion(task, updatedBy);
+      await this.handleTaskCompletion(task, updatedBy)
     }
   }
 
@@ -587,7 +587,7 @@ export class TaskManager {
         organizationId: task.organizationId,
         status: { not: 'completed' },
       },
-    });
+    })
 
     // Notify owners of dependent tasks
     for (const dependentTask of dependentTasks) {
@@ -598,11 +598,11 @@ export class TaskManager {
         taskId: dependentTask.id,
         title: 'Dependency Completed',
         message: `Task dependency "${task.title}" has been completed. You can now proceed with "${dependentTask.title}".`,
-      });
+      })
     }
 
     // Check if this completes any workflows or milestones
-    await this.checkWorkflowCompletion(task);
+    await this.checkWorkflowCompletion(task)
   }
 
   // Check if task completion triggers workflow completion
@@ -614,7 +614,7 @@ export class TaskManager {
         entityId: task.entityId,
         organizationId: task.organizationId,
       },
-    });
+    })
 
     const totalTasks = entityTasks.length;
     const completedTasks = entityTasks.filter((t) => t.status === 'completed').length;
@@ -637,10 +637,10 @@ export class TaskManager {
         },
         isPublic: true,
       },
-    });
+    })
 
     // Check for milestone completion (e.g., 50%, 75%, 100%)
-    const completionPercentage = (completedTasks / totalTasks) * 100;
+    const completionPercentage = (completedTasks / totalTasks) * 100
     const milestones = [25, 50, 75, 100];
 
     for (const milestone of milestones) {
@@ -656,7 +656,7 @@ export class TaskManager {
               equals: milestone,
             },
           },
-        });
+        })
 
         if (!existingMilestone) {
           await db.client.activity.create({
@@ -682,7 +682,7 @@ export class TaskManager {
 
   // Create task notification
   private async createTaskNotification(notification: {
-    type: string;
+    type: string
     recipientId: string;
     senderId: string;
     taskId: string;
@@ -722,10 +722,10 @@ export class TaskManager {
           payload: { notification: dbNotification },
           timestamp: new Date(),
           userId: notification.senderId,
-        });
+        })
       }
     } catch (error) {
-      // console.error('Failed to create task notification:', error);
+      // console.error('Failed to create task notification:', error)
     }
   }
 
@@ -738,7 +738,7 @@ export class TaskManager {
         creator: true,
         watchers: true,
       },
-    });
+    })
 
     if (!task) {
       throw new Error('Task not found');
@@ -760,7 +760,7 @@ export class TaskManager {
             },
           },
         },
-      });
+      })
 
       const hasDeletePermission = user?.userRoles.some((ur) =>
         ur.role.permissions.some((p) => p.name === 'TASKS_DELETE')
@@ -777,7 +777,7 @@ export class TaskManager {
       db.client.taskUpdate.deleteMany({ where: { taskId } }),
       db.client.notification.deleteMany({ where: { entityType: 'TASK', entityId: taskId } }),
       db.client.task.delete({ where: { id: taskId } }),
-    ]);
+    ])
 
     // Log activity
     await db.client.activity.create({
@@ -795,14 +795,14 @@ export class TaskManager {
         },
         isPublic: true,
       },
-    });
+    })
 
     // Notify participants
     const participantIds = new Set([
       task.assigneeId,
       task.creatorId,
       ...task.watchers.map((w) => w.id),
-    ]);
+    ])
     participantIds.delete(deletedBy);
 
     for (const participantId of participantIds) {
@@ -818,7 +818,7 @@ export class TaskManager {
 
     // Send real-time update
     if (collaborationServer) {
-      const roomId = `task:${taskId}`;
+      const roomId = `task:${taskId}`
       collaborationServer.broadcastToRoom(roomId, {
         type: 'task:deleted',
         payload: { taskId },

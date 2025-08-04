@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -9,6 +9,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   ResponsiveContainer,
   LineChart,
   Line,
@@ -41,7 +42,7 @@ import {
   AreaChart as AreaChartIcon
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format, subDays, subMonths, subYears, parseISO } from 'date-fns';
+// import { format, subDays, subMonths, subYears, parseISO } from 'date-fns'
 
 interface TrendDataPoint {
   date: string;
@@ -79,7 +80,7 @@ interface TrendAnalysisChartProps {
 
 // Generate sample trend data for demonstration
 const generateSampleData = (days: number = 90): TrendDataPoint[] => {
-  const data: TrendDataPoint[] = [];
+  const data: TrendDataPoint[] = []
   const startDate = subDays(new Date(), days);
   
   for (let i = 0; i < days; i++) {
@@ -104,17 +105,17 @@ const generateSampleData = (days: number = 90): TrendDataPoint[] => {
   }
   
   return data;
-};
+}
 
 // Generate forecast data using simple linear regression
 const generateForecast = (_data: TrendDataPoint[], metric: keyof TrendDataPoint, days: number): ForecastPoint[] => {
-  if (data.length < 2) return [];
+  if (data.length < 2) return []
   
   const values = data.map((d, i) => ({ x: i, y: Number(d[metric]) }));
   const n = values.length;
   
   // Simple linear regression
-  const sumX = values.reduce((sum, v) => sum + v.x, 0);
+  const sumX = values.reduce((sum, v) => sum + v.x, 0)
   const sumY = values.reduce((sum, v) => sum + v.y, 0);
   const sumXY = values.reduce((sum, v) => sum + v.x * v.y, 0);
   const sumXX = values.reduce((sum, v) => sum + v.x * v.x, 0);
@@ -123,7 +124,7 @@ const generateForecast = (_data: TrendDataPoint[], metric: keyof TrendDataPoint,
   const intercept = (sumY - slope * sumX) / n;
   
   // Calculate standard error for confidence intervals
-  const predictions = values.map(v => slope * v.x + intercept);
+  const predictions = values.map(v => slope * v.x + intercept)
   const residuals = values.map((v, i) => v.y - predictions[i]);
   const mse = residuals.reduce((sum, r) => sum + r * r, 0) / (n - 2);
   const standardError = Math.sqrt(mse);
@@ -147,7 +148,7 @@ const generateForecast = (_data: TrendDataPoint[], metric: keyof TrendDataPoint,
   }
   
   return forecast;
-};
+}
 
 export default function TrendAnalysisChart({
   data = generateSampleData(),
@@ -161,7 +162,7 @@ export default function TrendAnalysisChart({
   const { toast } = useToast();
   
   // State management
-  const [selectedMetric, setSelectedMetric] = useState<Exclude<keyof TrendDataPoint, 'date'>>('totalRisks');
+  const [selectedMetric, setSelectedMetric] = useState<Exclude<keyof TrendDataPoint, 'date'>>('totalRisks')
   const [chartType, setChartType] = useState<'line' | 'area' | 'bar' | 'composed'>('line');
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [showMovingAverage, setShowMovingAverage] = useState(true);
@@ -172,13 +173,13 @@ export default function TrendAnalysisChart({
   
   // Filter data based on time range
   const filteredData = useMemo(() => {
-    const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : timeRange === '90d' ? 90 : 365;
+    const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : timeRange === '90d' ? 90 : 365
     return data.slice(-days);
   }, [data, timeRange]);
   
   // Calculate moving average
   const dataWithMovingAverage = useMemo(() => {
-    if (!showMovingAverage) return filteredData;
+    if (!showMovingAverage) return filteredData
     
     const windowSize = 7; // 7-day moving average
     return filteredData.map((point, index) => {
@@ -189,13 +190,13 @@ export default function TrendAnalysisChart({
       return {
         ...point,
         movingAverage: Math.round(average * 10) / 10
-      };
+      }
     });
   }, [filteredData, selectedMetric, showMovingAverage]);
   
   // Generate forecast data
   const forecastData = useMemo(() => {
-    if (!localShowForecast) return [];
+    if (!localShowForecast) return []
     return generateForecast(filteredData, selectedMetric, forecastPeriod);
   }, [filteredData, selectedMetric, localShowForecast, forecastPeriod]);
   
@@ -204,7 +205,7 @@ export default function TrendAnalysisChart({
     const historical = dataWithMovingAverage.map(d => ({
       ...d,
       type: 'historical' as const
-    }));
+    }))
     
     const forecast = forecastData.map(f => ({
       date: f.date,
@@ -220,7 +221,7 @@ export default function TrendAnalysisChart({
   
   // Calculate trend statistics
   const trendStats = useMemo(() => {
-    if (filteredData.length < 2) return null;
+    if (filteredData.length < 2) return null
     
     const firstValue = Number(filteredData[0][selectedMetric]);
     const lastValue = Number(filteredData[filteredData.length - 1][selectedMetric]);
@@ -228,7 +229,7 @@ export default function TrendAnalysisChart({
     const percentChange = (change / firstValue) * 100;
     
     // Calculate trend direction
-    const values = filteredData.map(d => Number(d[selectedMetric]));
+    const values = filteredData.map(d => Number(d[selectedMetric]))
     const midPoint = Math.floor(values.length / 2);
     const firstHalf = values.slice(0, midPoint);
     const secondHalf = values.slice(midPoint);
@@ -245,7 +246,7 @@ export default function TrendAnalysisChart({
       trend,
       current: lastValue,
       previous: firstValue
-    };
+    }
   }, [filteredData, selectedMetric]);
   
   // Metric configurations
@@ -262,11 +263,11 @@ export default function TrendAnalysisChart({
     mitigationEffectiveness: { label: 'Mitigation %', color: '#16a34a', format: (v: number) => `${v.toFixed(1)}%` },
     complianceScore: { label: 'Compliance Score', color: '#2563eb', format: (v: number) => `${v.toFixed(1)}%` },
     controlEffectiveness: { label: 'Control Effectiveness', color: '#7c3aed', format: (v: number) => `${v.toFixed(1)}%` }
-  };
+  }
   
   // Custom tooltip
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || !payload.length) return null;
+    if (!active || !payload || !payload.length) return null
     
     const data = payload[0].payload;
     const config = metricConfigs[selectedMetric];
@@ -312,7 +313,7 @@ export default function TrendAnalysisChart({
         </div>
       </div>
     );
-  };
+  }
   
   // Export functionality
   const handleExport = () => {
@@ -334,7 +335,7 @@ export default function TrendAnalysisChart({
           showForecast: localShowForecast,
           forecastPeriod
         }
-    };
+    }
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -352,16 +353,16 @@ export default function TrendAnalysisChart({
       title: 'Export Complete',
       description: 'Trend analysis data has been exported successfully.',
     });
-  };
+  }
   
   // Render chart based on type
   const renderChart = () => {
-    const config = metricConfigs[selectedMetric];
+    const config = metricConfigs[selectedMetric]
     
     const commonProps = {
       data: combinedData,
       margin: { top: 5, right: 30, left: 20, bottom: 5 }
-    };
+    }
     
     switch (chartType) {
       case 'area':
@@ -470,7 +471,7 @@ export default function TrendAnalysisChart({
           </LineChart>
         );
     }
-  };
+  }
   
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>

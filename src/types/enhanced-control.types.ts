@@ -3,7 +3,7 @@ import { Control } from './index';
 // Enhanced Control Management Types
 export interface EnhancedControl extends Control {
   // Core Control Properties
-  controlId: string;
+  controlId: string
   framework: ControlFramework;
   controlType: 'preventive' | 'detective' | 'corrective' | 'compensating';
   controlNature: 'manual' | 'automated' | 'hybrid';
@@ -22,35 +22,35 @@ export interface EnhancedControl extends Control {
   testingHistory: ControlTest[];
 
   // AI-Powered Features
-  aiAssessment?: ControlAIAssessment;
+  aiAssessment?: ControlAIAssessment
   aiRecommendations: AIControlRecommendation[];
   riskMitigationEffectiveness: RiskMitigationScore[];
 
   // Testing and Validation (use different property names to avoid conflicts)
-  testingSchedule: TestingSchedule;
+  testingSchedule: TestingSchedule
   testingStatus: 'not_tested' | 'scheduled' | 'in_progress' | 'passed' | 'failed' | 'overdue';
   lastTestPerformed?: Date; // renamed from lastTestDate to avoid conflict
   nextTestScheduled?: Date; // renamed from nextTestDate to avoid conflict
   testingEvidence: ControlEvidence[];
 
   // Compliance and Frameworks
-  complianceMapping: ComplianceMapping[];
+  complianceMapping: ComplianceMapping[]
   regulatoryRequirements: string[];
   industryBenchmarks: IndustryBenchmark[];
 
   // Collaboration and Workflow
-  assignments: ControlAssignment[];
+  assignments: ControlAssignment[]
   reviews: ControlReview[];
   approvals: ControlApproval[];
   controlComments: ControlComment[];
 
   // Documentation and Evidence
-  procedures: ControlProcedure[];
+  procedures: ControlProcedure[]
   evidenceRequirements: EvidenceRequirement[];
   auditTrail: ControlAuditEntry[];
 
   // Performance Analytics
-  trendData: ControlTrendData[];
+  trendData: ControlTrendData[]
   benchmarkComparison: BenchmarkComparison;
   costBenefitAnalysis?: CostBenefitAnalysis;
 }
@@ -469,25 +469,25 @@ export interface CostBenefitAnalysis {
 
 // Advanced Filtering and Search
 export interface AdvancedControlFilters {
-  framework?: string[];
+  framework?: string[]
   controlType?: string[];
   controlNature?: string[];
   maturityLevel?: number[];
-  effectivenessRange?: { min: number; max: number };
+  effectivenessRange?: { min: number; max: number }
   testingStatus?: string[];
   complianceStatus?: string[];
   owner?: string[];
-  lastTestDate?: { start: Date; end: Date };
+  lastTestDate?: { start: Date; end: Date }
   riskIds?: string[];
   tags?: string[];
   searchQuery?: string;
   hasDeficiencies?: boolean;
-  automationLevel?: { min: number; max: number };
+  automationLevel?: { min: number; max: number }
 }
 
 // Bulk Operations
 export interface ControlBulkOperation {
-  type: 'test' | 'update' | 'approve' | 'retire' | 'export' | 'assign';
+  type: 'test' | 'update' | 'approve' | 'retire' | 'export' | 'assign'
   controlIds: string[];
   data?: any;
   userId: string;
@@ -496,7 +496,7 @@ export interface ControlBulkOperation {
 
 // Analytics and Reporting
 export interface ControlAnalytics {
-  totalControls: number;
+  totalControls: number
   controlsByFramework: Record<string, number>;
   controlsByType: Record<string, number>;
   controlsByMaturity: Record<number, number>;
@@ -551,7 +551,7 @@ export interface ControlAnalyticsTrend {
 
 // Import/Export
 export interface ControlImportData {
-  controls: Partial<EnhancedControl>[];
+  controls: Partial<EnhancedControl>[]
   mapping: ControlFieldMapping;
   validation: ControlValidationSettings;
 }
@@ -572,6 +572,6 @@ export interface ControlExportOptions {
   includeTests: boolean;
   includeEvidence: boolean;
   includeDeficiencies: boolean;
-  dateRange?: { start: Date; end: Date };
+  dateRange?: { start: Date; end: Date }
   frameworks?: string[];
 }

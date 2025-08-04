@@ -22,7 +22,7 @@ export const GET = withApiMiddleware(
         data: frameworks,
       });
     } catch (error) {
-      // console.error('Get frameworks error:', error);
+      // console.error('Get frameworks error:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to fetch frameworks' },
         { status: 500 }

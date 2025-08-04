@@ -1,4 +1,4 @@
-// import { Risk } from './index';
+// import { Risk } from './index'
 
 // Core Intelligence Types
 export interface RiskQualityAnalysis {
@@ -9,7 +9,7 @@ export interface RiskQualityAnalysis {
     measurability: QualityDimension;
     actionability: QualityDimension;
     relevance: QualityDimension;
-  };
+  }
   improvements: RiskImprovement[];
   benchmarkComparison: BenchmarkComparison;
   timestamp: Date;
@@ -53,7 +53,7 @@ export interface BenchmarkComparison {
 
 // Emerging Risk Analysis
 export interface EmergingRisk {
-  id: string;
+  id: string
   title: string;
   description: string;
   category: RiskCategory;
@@ -102,7 +102,7 @@ export interface ResourceRequirement {
 
 // Risk Relationship Analysis
 export interface RiskRelationshipMap {
-  relationships: RiskRelationship[];
+  relationships: RiskRelationship[]
   clusters: RiskCluster[];
   criticalPaths: CriticalPath[];
   cascadingImpacts: CascadingImpact[];
@@ -164,7 +164,7 @@ export interface NetworkMetrics {
 
 // Risk Appetite Analysis
 export interface RiskAppetite {
-  id: string;
+  id: string
   organizationId: string;
   framework: RiskAppetiteFramework;
   categories: RiskAppetiteCategory[];
@@ -289,7 +289,7 @@ export interface AppetiteScenario {
 
 // Control Intelligence Types
 export interface ControlRecommendation {
-  id: string;
+  id: string
   riskId: string;
   controlType: ControlType;
   category: ControlCategory;
@@ -405,7 +405,7 @@ export type ControlCategory = 'manual' | 'automated' | 'it-dependent' | 'it-gene
 
 // Control Gap Analysis
 export interface ControlGapAnalysis {
-  coverage: CoverageAnalysis;
+  coverage: CoverageAnalysis
   gaps: ControlGap[];
   redundancies: ControlRedundancy[];
   optimization: OptimizationOpportunity[];
@@ -527,7 +527,7 @@ export type RiskCategory =
   | 'technology'
   | 'reputational'
   | 'environmental'
-  | 'human_resources';
+  | 'human_resources'
 
 export type RiskImpact = 'negligible' | 'minor' | 'moderate' | 'major' | 'severe';
 
@@ -675,7 +675,7 @@ export type ContentType =
 
 // Style Guide and Compliance
 export interface StyleGuide {
-  id: string;
+  id: string
   organizationId: string;
   name: string;
   version: string;
@@ -757,7 +757,7 @@ export interface ComplianceRecommendation {
 
 // Predictive Analytics Types
 export interface RiskTrendPrediction {
-  riskId: string;
+  riskId: string
   timeHorizon: number; // Months
   trend: TrendDirection;
   predictions: TrendPrediction[];
@@ -919,7 +919,7 @@ export interface RiskAdjustment {
 
 // Context and Insights
 export interface ContextualInsight {
-  id: string;
+  id: string
   type: 'trend' | 'anomaly' | 'opportunity' | 'threat' | 'benchmark';
   title: string;
   description: string;

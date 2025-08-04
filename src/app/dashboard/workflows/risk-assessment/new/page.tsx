@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -68,19 +68,19 @@ export default function NewRiskAssessmentPage() {
 
   const handleInputChange = (field: keyof RiskFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  }
 
   const handleNext = () => {
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     }
-  };
+  }
 
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -112,7 +112,7 @@ export default function NewRiskAssessmentPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const calculateRiskScore = (likelihood: string, impact: string): string => {
     const scores: { [key: string]: number } = {
@@ -120,14 +120,14 @@ export default function NewRiskAssessmentPage() {
       medium: 2,
       high: 3,
       critical: 4,
-    };
+    }
 
     const score = (scores[likelihood] || 0) * (scores[impact] || 0);
     if (score >= 9) return 'critical';
     if (score >= 6) return 'high';
     if (score >= 3) return 'medium';
     return 'low';
-  };
+  }
 
   const isStepValid = (step: number): boolean => {
     switch (step) {
@@ -142,7 +142,7 @@ export default function NewRiskAssessmentPage() {
       default:
         return false;
     }
-  };
+  }
 
   return (
     <ProtectedRoute>

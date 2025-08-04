@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 
 // Helper function to get OpenAI client
 const getOpenAIClient = () {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
   }
@@ -38,7 +38,7 @@ export interface TemplateVariable {
     min?: number;
     max?: number;
     pattern?: string;
-  };
+  }
 }
 
 export interface GenerationOptions {
@@ -68,7 +68,7 @@ export class DocumentTemplateService {
         { organizationId: null }, // Global templates
       ],
       isActive: true,
-    };
+    }
 
     if (category) {
       where.category = category;
@@ -85,7 +85,7 @@ export class DocumentTemplateService {
 
       return templates;
     } catch (error) {
-      // console.error('Error fetching templates:', error);
+      // console.error('Error fetching templates:', error)
       return [];
     }
   }
@@ -102,7 +102,7 @@ export class DocumentTemplateService {
           createdById: userId,
           updatedById: userId,
         },
-      });
+      })
 
       // Log activity
       await db.client.activity.create({
@@ -120,11 +120,11 @@ export class DocumentTemplateService {
           },
           isPublic: false,
         },
-      });
+      })
 
       return created;
     } catch (error) {
-      // console.error('Error creating template:', error);
+      // console.error('Error creating template:', error)
       throw new Error('Failed to create template');
     }
   }
@@ -134,7 +134,7 @@ export class DocumentTemplateService {
     try {
       const template = await db.client.documentTemplate.findUnique({
         where: { id: options.templateId },
-      });
+      })
 
       if (!template) {
         throw new Error('Template not found');
@@ -142,27 +142,27 @@ export class DocumentTemplateService {
 
       // Check access
       if (template.organizationId && template.organizationId !== options.organizationId) {
-        throw new Error('Access denied to template');
+        throw new Error('Access denied to template')
       }
 
       // Validate variables
-      const validatedVariables = this.validateVariables(template.variables, options.variables);
+      const validatedVariables = this.validateVariables(template.variables, options.variables)
 
       // Generate base content
-      let content = this.interpolateTemplate(template.template, validatedVariables);
+      let content = this.interpolateTemplate(template.template, validatedVariables)
 
       // AI enhancement if requested and available
       if (options.aiEnhanced && process.env.OPENAI_API_KEY) {
-        content = await this.enhanceWithAI(content, template, validatedVariables);
+        content = await this.enhanceWithAI(content, template, validatedVariables)
       }
 
       // Add boilerplate if requested
       if (options.includeBoilerplate) {
-        content = this.addBoilerplate(content, template);
+        content = this.addBoilerplate(content, template)
       }
 
       // Generate title
-      const title = this.generateTitle(template, validatedVariables);
+      const title = this.generateTitle(template, validatedVariables)
 
       // Log activity
       await db.client.activity.create({
@@ -181,7 +181,7 @@ export class DocumentTemplateService {
           },
           isPublic: false,
         },
-      });
+      })
 
       return {
         title,
@@ -199,9 +199,9 @@ export class DocumentTemplateService {
           options.aiEnhanced && process.env.OPENAI_API_KEY
             ? await this.generateSuggestions(content, template)
             : undefined,
-      };
+      }
     } catch (error) {
-      // console.error('Error generating document:', error);
+      // console.error('Error generating document:', error)
       throw new Error('Failed to generate document');
     }
   }
@@ -211,19 +211,19 @@ export class DocumentTemplateService {
     templateVars: TemplateVariable[],
     inputVars: Record<string, any>
   ): Record<string, any> {
-    const validated: Record<string, any> = {};
+    const validated: Record<string, any> = {}
 
     for (const templateVar of templateVars) {
       const value = inputVars[templateVar.name];
 
       // Check required fields
       if (templateVar.required && (value === undefined || value === null || value === '')) {
-        throw new Error(`Required variable '${templateVar.name}' is missing`);
+        throw new Error(`Required variable '${templateVar.name}' is missing`)
       }
 
       // Use default if no value provided
       if (value === undefined || value === null || value === '') {
-        validated[templateVar.name] = templateVar.defaultValue || '';
+        validated[templateVar.name] = templateVar.defaultValue || ''
         continue;
       }
 
@@ -235,7 +235,7 @@ export class DocumentTemplateService {
 
   // Interpolate template with variables
   private interpolateTemplate(template: string, variables: Record<string, any>): string {
-    let _result = template;
+    let _result = template
 
     for (const [key, value] of Object.entries(variables)) {
       const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
@@ -252,7 +252,7 @@ export class DocumentTemplateService {
   ): Promise<string> {
     try {
       if (!process.env.OPENAI_API_KEY) {
-        return content + '\n\n[AI Enhancement: Not available in demo mode]';
+        return content + '\n\n[AI Enhancement: Not available in demo mode]'
       }
 
       const openai = getOpenAIClient();
@@ -274,7 +274,7 @@ export class DocumentTemplateService {
 
       return response.choices[0]?.message?.content || content;
     } catch (error) {
-      // console.error('Error enhancing with AI:', error);
+      // console.error('Error enhancing with AI:', error)
       return content;
     }
   }
@@ -293,17 +293,17 @@ ${content}
 ---
 
 This document was generated using the Riscura platform.
-`;
+`
     return boilerplate;
   }
 
   // Generate document title
   private generateTitle(template: DocumentTemplate, variables: Record<string, any>): string {
-    let title = template.name;
+    let title = template.name
 
     // Try to use common variables for title
     if (variables.title) {
-      title = variables.title;
+      title = variables.title
     } else if (variables.name) {
       title = variables.name;
     } else if (variables.project) {
@@ -319,7 +319,7 @@ This document was generated using the Riscura platform.
   ): Promise<string[]> {
     try {
       if (!process.env.OPENAI_API_KEY) {
-        return ['AI suggestions not available in demo mode'];
+        return ['AI suggestions not available in demo mode']
       }
 
       const openai = getOpenAIClient();
@@ -349,14 +349,14 @@ This document was generated using the Riscura platform.
 
       return suggestions || ['No suggestions available'];
     } catch (error) {
-      // console.error('Error generating suggestions:', error);
+      // console.error('Error generating suggestions:', error)
       return ['Unable to generate suggestions'];
     }
   }
 }
 
 // Default export
-export const documentTemplateService = new DocumentTemplateService();
+export const documentTemplateService = new DocumentTemplateService()
 
 // Predefined templates
 export const BUILTIN_TEMPLATES: Omit<DocumentTemplate, 'id' | 'organizationId'>[] = [
@@ -599,4 +599,4 @@ Compliance with this policy will be monitored through {{monitoringMethod}}.
     ],
     isActive: true,
   },
-];
+]

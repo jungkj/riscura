@@ -33,7 +33,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   List,
   ToggleLeft,
   ToggleRight,
-} from 'lucide-react';
+} from 'lucide-react'
 
 import {
   useDeviceInfo,
@@ -50,7 +50,7 @@ import { cn } from '@/lib/utils';
 // ============================================================================
 
 export interface FormField {
-  id: string;
+  id: string
   name: string;
   label: string;
   type: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea' | 'select' | 'multiselect' | 'checkbox' | 'radio' | 'toggle' | 'date' | 'datetime' | 'time' | 'file' | 'image' | 'location';
@@ -70,12 +70,12 @@ export interface FormField {
     min?: number;
     max?: number;
     custom?: (_value: any) => string | null;
-  };
+  }
   conditional?: {
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
     value: any;
-  };
+  }
   autoComplete?: string;
   inputMode?: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
   rows?: number;
@@ -89,7 +89,7 @@ export interface FormField {
     hapticFeedback?: boolean;
     autoFocus?: boolean;
     predictiveText?: boolean;
-  };
+  }
 }
 
 export interface FormSection {
@@ -102,7 +102,7 @@ export interface FormSection {
     field: string;
     operator: 'equals' | 'not_equals' | 'contains';
     value: any;
-  };
+  }
 }
 
 export interface EnhancedMobileFormProps {
@@ -137,7 +137,7 @@ interface FormTouched {
 // ============================================================================
 
 const TextInputField = ({ field, value, onChange, onBlur, error, touched }: {
-  field: FormField;
+  field: FormField
   value: any;
   onChange: (_value: any) => void;
   onBlur: () => void;
@@ -285,7 +285,7 @@ const SelectField = ({ field, value, onChange, onBlur, error, touched }: {
         ))}
       </div>
     );
-  };
+  }
 
   return (
     <select
@@ -373,7 +373,7 @@ const ToggleField = ({ field, value, onChange, onBlur }: {
           onBlur();
           // Haptic feedback
           if (device.isTouch && 'vibrate' in navigator) {
-            navigator.vibrate(10);
+            navigator.vibrate(10)
           }
         }}
         variant="ghost"
@@ -411,17 +411,17 @@ const FileField = ({ field, value, onChange, onBlur, error, touched }: {
     
     // Validate file size
     if (field.maxFileSize) {
-      const oversizedFiles = fileArray.filter(file => file.size > field.maxFileSize!);
+      const oversizedFiles = fileArray.filter(file => file.size > field.maxFileSize!)
       if (oversizedFiles.length > 0) {
         // Handle error
-        return;
+        return
       }
     }
 
     // Validate file count
     if (field.maxFiles && fileArray.length > field.maxFiles) {
       // Handle error
-      return;
+      return
     }
 
     if (field.multiple) {
@@ -490,14 +490,14 @@ const FileField = ({ field, value, onChange, onBlur, error, touched }: {
                 type="button"
                 onClick={() => {
                   // Create a new file input with camera capture
-                  const cameraInput = document.createElement('input');
+                  const cameraInput = document.createElement('input')
                   cameraInput.type = 'file';
                   cameraInput.accept = 'image/*';
                   cameraInput.capture = 'environment';
                   cameraInput.onchange = (e) => {
                     const target = e.target as HTMLInputElement;
                     handleFileSelect(target.files);
-                  };
+                  }
                   cameraInput.click();
                 }}
                 variant="secondary"
@@ -612,7 +612,7 @@ export function EnhancedMobileForm({
   error = null,
   success = null,
 }: EnhancedMobileFormProps) {
-  const [currentSection, setCurrentSection] = useState(0);
+  const [currentSection, setCurrentSection] = useState(0)
   const [values, setValues] = useState<Record<string, any>>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<FormTouched>({});
@@ -631,7 +631,7 @@ export function EnhancedMobileForm({
   const swipeGestures = useSwipeGesture({
     onSwipeLeft: () => {
       if (enableSectionNavigation && currentSection < sections.length - 1) {
-        goToNextSection();
+        goToNextSection()
       }
     },
     onSwipeRight: () => {
@@ -648,7 +648,7 @@ export function EnhancedMobileForm({
 
   const validateField = useCallback((field: FormField, value: any): string | null => {
     if (field.validation?.required && (!value || (Array.isArray(value) && value.length === 0))) {
-      return `${field.label} is required`;
+      return `${field.label} is required`
     }
 
     if (value && field.validation?.pattern && !field.validation.pattern.test(value)) {
@@ -680,12 +680,12 @@ export function EnhancedMobileForm({
 
   const validateSection = useCallback((sectionIndex: number): FormErrors => {
     const section = sections[sectionIndex];
-    const sectionErrors: FormErrors = {};
+    const sectionErrors: FormErrors = {}
 
     // Validate individual fields
     section.fields.forEach(field => {
       if (shouldShowField(field)) {
-        const error = validateField(field, values[field.name]);
+        const error = validateField(field, values[field.name])
         if (error) {
           sectionErrors[field.name] = error;
         }
@@ -694,7 +694,7 @@ export function EnhancedMobileForm({
 
     // Validate section-level rules
     if (section.validation) {
-      const sectionValidationErrors = section.validation(values);
+      const sectionValidationErrors = section.validation(values)
       Object.assign(sectionErrors, sectionValidationErrors);
     }
 
@@ -702,7 +702,7 @@ export function EnhancedMobileForm({
   }, [sections, values, validateField]);
 
   const validateAllSections = useCallback((): FormErrors => {
-    const allErrors: FormErrors = {};
+    const allErrors: FormErrors = {}
     
     sections.forEach((_, index) => {
       const sectionErrors = validateSection(index);
@@ -717,7 +717,7 @@ export function EnhancedMobileForm({
   // ============================================================================
 
   const shouldShowField = useCallback((field: FormField): boolean => {
-    if (!field.conditional) return true;
+    if (!field.conditional) return true
 
     const { field: conditionField, operator, value: conditionValue } = field.conditional;
     const fieldValue = values[conditionField];
@@ -761,12 +761,12 @@ export function EnhancedMobileForm({
   // ============================================================================
 
   const handleFieldChange = useCallback((fieldName: string, value: any) => {
-    setValues(prev => ({ ...prev, [fieldName]: value }));
+    setValues(prev => ({ ...prev, [fieldName]: value }))
     
     // Clear error when user starts typing
     if (errors[fieldName]) {
       setErrors(prev => {
-        const newErrors = { ...prev };
+        const newErrors = { ...prev }
         delete newErrors[fieldName];
         return newErrors;
       });
@@ -775,7 +775,7 @@ export function EnhancedMobileForm({
     // Schedule auto-save
     if (enableAutoSave) {
       if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
+        clearTimeout(autoSaveTimeoutRef.current)
       }
       
       autoSaveTimeoutRef.current = setTimeout(() => {
@@ -785,7 +785,7 @@ export function EnhancedMobileForm({
 
     // Haptic feedback for touch devices
     if (enableHapticFeedback && device.isTouch && 'vibrate' in navigator) {
-      navigator.vibrate(5);
+      navigator.vibrate(5)
     }
   }, [errors, enableAutoSave, autoSaveInterval, enableHapticFeedback, device.isTouch]);
 
@@ -808,11 +808,11 @@ export function EnhancedMobileForm({
   // ============================================================================
 
   const handleAutoSave = useCallback(async () => {
-    setAutoSaveStatus('saving');
+    setAutoSaveStatus('saving')
     
     try {
       // Save to localStorage
-      localStorage.setItem(`form-autosave-${Date.now()}`, JSON.stringify(values));
+      localStorage.setItem(`form-autosave-${Date.now()}`, JSON.stringify(values))
       setAutoSaveStatus('saved');
       
       setTimeout(() => {
@@ -820,7 +820,7 @@ export function EnhancedMobileForm({
       }, 2000);
     } catch (error) {
       setAutoSaveStatus('error');
-      // console.error('Auto-save failed:', error);
+      // console.error('Auto-save failed:', error)
     }
   }, [values]);
 
@@ -831,7 +831,7 @@ export function EnhancedMobileForm({
   const goToNextSection = useCallback(() => {
     if (currentSection < sections.length - 1) {
       // Validate current section before proceeding
-      const sectionErrors = validateSection(currentSection);
+      const sectionErrors = validateSection(currentSection)
       if (Object.keys(sectionErrors).length > 0) {
         setErrors(prev => ({ ...prev, ...sectionErrors }));
         announce('Please fix the errors before continuing', 'assertive');
@@ -862,13 +862,13 @@ export function EnhancedMobileForm({
   // ============================================================================
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     
     setIsSubmitting(true);
     
     try {
       // Validate all sections
-      const allErrors = validateAllSections();
+      const allErrors = validateAllSections()
       if (Object.keys(allErrors).length > 0) {
         setErrors(allErrors);
         announce('Please fix all errors before submitting', 'assertive');
@@ -880,11 +880,11 @@ export function EnhancedMobileForm({
       
       // Clear auto-save data on successful submit
       if (enableAutoSave) {
-        const keys = Object.keys(localStorage).filter(key => key.startsWith('form-autosave-'));
+        const keys = Object.keys(localStorage).filter(key => key.startsWith('form-autosave-'))
         keys.forEach(key => localStorage.removeItem(key));
       }
     } catch (error) {
-      // console.error('Form submission failed:', error);
+      // console.error('Form submission failed:', error)
       announce('Form submission failed. Please try again.', 'assertive');
     } finally {
       setIsSubmitting(false);
@@ -896,7 +896,7 @@ export function EnhancedMobileForm({
   // ============================================================================
 
   const renderField = useCallback((field: FormField) => {
-    if (!shouldShowField(field)) return null;
+    if (!shouldShowField(field)) return null
 
     const fieldError = errors[field.name];
     const fieldTouched = touched[field.name];
@@ -908,7 +908,7 @@ export function EnhancedMobileForm({
       onBlur: () => handleFieldBlur(field.name),
       error: fieldError,
       touched: fieldTouched,
-    };
+    }
 
     let fieldComponent;
 
@@ -936,7 +936,7 @@ export function EnhancedMobileForm({
 
     if (field.type === 'checkbox' || field.type === 'toggle') {
       return fieldComponent;
-    };
+    }
 
   return (
     <MobileFormField
@@ -957,7 +957,7 @@ export function EnhancedMobileForm({
   // CURRENT SECTION DATA
   // ============================================================================
 
-  const currentSectionData = sections[currentSection];
+  const currentSectionData = sections[currentSection]
   const visibleSections = sections.filter(shouldShowSection);
   const isLastSection = currentSection === visibleSections.length - 1;
   const progressPercentage = ((currentSection + 1) / visibleSections.length) * 100;
@@ -1153,11 +1153,11 @@ export function EnhancedMobileForm({
         )}
       </form>
     </MobileOptimized>
-  );
+  )
 }
 
 // ============================================================================
 // EXPORT
 // ============================================================================
 
-export default EnhancedMobileForm;
+export default EnhancedMobileForm

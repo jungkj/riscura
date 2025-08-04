@@ -19,14 +19,14 @@ const checkoutSchema = z.object({
 // POST /api/stripe/checkout - Create Stripe checkout session
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user;
+    const user = (req as any).user
 
     try {
       const body = await req.json();
       const { plan, isTrial, successUrl, cancelUrl } = checkoutSchema.parse(body);
 
       // Get the subscription plan
-      const selectedPlan = SUBSCRIPTION_PLANS[plan];
+      const selectedPlan = SUBSCRIPTION_PLANS[plan]
       if (!selectedPlan.priceId) {
         throw new ValidationError('Invalid subscription plan');
       }
@@ -39,7 +39,7 @@ export const POST = withApiMiddleware(
             in: ['ACTIVE', 'TRIALING'],
           },
         },
-      });
+      })
 
       if (existingSubscription && !isTrial) {
         throw new ValidationError('Organization already has an active subscription');
@@ -48,7 +48,7 @@ export const POST = withApiMiddleware(
       // Get or create Stripe customer
       const organization = await db.client.organization.findUnique({
         where: { id: user.organizationId },
-      });
+      })
       let stripeCustomerId = organization?.stripeCustomerId;
 
       if (!stripeCustomerId) {
@@ -67,7 +67,7 @@ export const POST = withApiMiddleware(
         await db.client.organization.update({
           where: { id: user.organizationId },
           data: { stripeCustomerId },
-        });
+        })
       }
 
       // Create checkout session
@@ -79,7 +79,7 @@ export const POST = withApiMiddleware(
         successUrl,
         cancelUrl,
         trialPeriodDays: isTrial ? FREE_TRIAL_CONFIG.duration : undefined,
-      });
+      })
 
       // Log the checkout attempt
       await db.client.billingEvent.create({
@@ -94,7 +94,7 @@ export const POST = withApiMiddleware(
             currency: 'USD',
           },
         },
-      });
+      })
 
       return createAPIResponse({
         data: {
@@ -103,7 +103,7 @@ export const POST = withApiMiddleware(
         },
       });
     } catch (error) {
-      // console.error('Error creating checkout session:', error);
+      // console.error('Error creating checkout session:', error)
 
       if (error instanceof z.ZodError) {
         throw new ValidationError('Invalid request data');

@@ -2,19 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
+import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 // import {
   Brain, Sparkles, TrendingUp, AlertTriangle, CheckCircle, Clock,
   Target, Zap, Eye, ArrowRight, ChevronDown, ChevronUp, Play,
   Volume2, Pause, RotateCcw, BookOpen, Lightbulb, Flag, Star, Shield
-} from 'lucide-react';
+} from 'lucide-react'
 
 import type { Risk } from '@/types';
 
@@ -62,7 +63,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
     criticalActions: 3,
     opportunities: 7,
     riskLevel: 'medium'
-  });
+  })
 
   const [briefingInsights] = useState<BriefingInsight[]>([
     {
@@ -122,7 +123,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
-    });
+    })
 
     return `Good morning. Here's your AI-powered briefing for ${today}.
 
@@ -140,25 +141,25 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
     Focus on cybersecurity controls review and consider the automation opportunities identified. Your risk management framework shows strong performance with room for optimization.
 
     AI confidence level: 92% based on current data quality and historical patterns.`;
-  };
+  }
 
   // Simulate text-to-speech
   const handlePlayBriefing = () => {
-    setIsPlaying(!isPlaying);
+    setIsPlaying(!isPlaying)
     
     if (!isPlaying) {
       // Simulate speech synthesis
       setTimeout(() => {
-        setIsPlaying(false);
+        setIsPlaying(false)
       }, 30000); // 30 second demo
     }
-  };
+  }
 
   const handleRefreshBriefing = async () => {
     setRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setRefreshing(false);
-  };
+  }
 
   const getInsightIcon = (_type: string) => {
     switch (type) {
@@ -175,7 +176,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       default:
         return <Sparkles className="w-4 h-4 text-gray-600" />;
     }
-  };
+  }
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
@@ -188,14 +189,14 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return 'text-green-600';
     if (score >= 75) return 'text-blue-600';
     if (score >= 60) return 'text-orange-600';
     return 'text-red-600';
-  };
+  }
 
   if (!enabled) {
 
@@ -218,7 +219,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <motion.div
@@ -471,7 +472,7 @@ export function AIBriefingPanel({ data, risks, enabled }: AIBriefingPanelProps) 
               {briefingInsights
               .filter(insight => insight.actionable)
               .sort((a, b) => {
-                const urgencyOrder = { immediate: 4, 'this-week': 3, 'this-month': 2, 'long-term': 1 };
+                const urgencyOrder = { immediate: 4, 'this-week': 3, 'this-month': 2, 'long-term': 1 }
                 return urgencyOrder[b.urgency] - urgencyOrder[a.urgency];
               })
               .map((insight, index) => (

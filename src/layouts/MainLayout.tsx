@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { User } from '@/types';
 
 // Components
-import Sidebar from '@/components/layout/Sidebar';
+import Sidebar from '@/components/layout/Sidebar'
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export default function MainLayout({ children, showSidebar = true }: MainLayoutP
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Handle sidebar toggle
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   // For dashboard pages, we don't show the traditional layout as they have their own navigation
   if (!showSidebar) {
@@ -26,7 +26,7 @@ export default function MainLayout({ children, showSidebar = true }: MainLayoutP
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
         {children}
       </div>
-    );
+    )
   }
 
   return (

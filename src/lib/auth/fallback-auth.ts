@@ -1,5 +1,5 @@
 // Fallback authentication system when database is unavailable
-import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { env } from '@/config/env';
@@ -32,7 +32,7 @@ const demoUsers = [
     avatar: null,
     isActive: true,
   },
-];
+]
 
 export const fallbackAuthOptions: NextAuthOptions = {
   providers: [
@@ -62,13 +62,13 @@ export const fallbackAuthOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          return null
         }
 
         // Find demo user
         const user = demoUsers.find(
           (u) => u.email === credentials.email && u.password === credentials.password
-        );
+        )
 
         if (user && user.isActive) {
           return {
@@ -78,7 +78,7 @@ export const fallbackAuthOptions: NextAuthOptions = {
             role: user.role,
             organizationId: user.organizationId,
             permissions: user.permissions,
-          };
+          }
         }
 
         return null;
@@ -98,15 +98,15 @@ export const fallbackAuthOptions: NextAuthOptions = {
       // console.log('[FallbackAuth] Sign in attempt:', {
         provider: account?.provider,
         email: user?.email,
-      });
+      })
 
       // Always allow sign in for fallback mode
-      return true;
+      return true
     },
     async jwt({ token, user }) {
       // Add user data to token on first sign in
       if (user) {
-        token.id = user.id;
+        token.id = user.id
         token.role = (user as any).role || 'USER';
         token.organizationId = (user as any).organizationId || 'demo-org-id';
         token.permissions = (user as any).permissions || [];
@@ -118,7 +118,7 @@ export const fallbackAuthOptions: NextAuthOptions = {
     async session({ session, token }) {
       // Send properties to the client
       if (token) {
-        (session.user as any).id = token.id;
+        (session.user as any).id = token.id
         (session.user as any).role = token.role;
         (session.user as any).organizationId = token.organizationId;
         (session.user as any).permissions = token.permissions;
@@ -129,9 +129,9 @@ export const fallbackAuthOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (url.startsWith('/')) return `${baseUrl}${url}`
       // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
+      else if (new URL(url).origin === baseUrl) return url
       return baseUrl + '/dashboard';
     },
   },
@@ -140,11 +140,11 @@ export const fallbackAuthOptions: NextAuthOptions = {
     error: '/auth/error',
   },
   debug: process.env.NODE_ENV === 'development',
-};
+}
 
 export function createFallbackAuth(): NextAuthOptions {
-  // console.log('[FallbackAuth] Creating fallback authentication configuration');
-  // console.log('[FallbackAuth] Available providers:', fallbackAuthOptions.providers.length);
+  // console.log('[FallbackAuth] Creating fallback authentication configuration')
+  // console.log('[FallbackAuth] Available providers:', fallbackAuthOptions.providers.length)
 
   return fallbackAuthOptions;
 }

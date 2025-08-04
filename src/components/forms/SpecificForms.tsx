@@ -12,11 +12,11 @@ import { NotionForm, FormSectionConfig } from './NotionForms';
   UserPlus,
   Cog,
   Save,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== RISK ASSESSMENT FORM ==========
 export const RiskAssessmentForm: React.FC = () => {
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const formSections: FormSectionConfig[] = [
@@ -61,11 +61,11 @@ export const RiskAssessmentForm: React.FC = () => {
 
   const handleFormChange = (fieldId: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [fieldId]: value }));
-  };
+  }
 
   const handleSubmit = (values: Record<string, any>) => {
-    // console.log('Risk Assessment submitted:', values);
-  };
+    // console.log('Risk Assessment submitted:', values)
+  }
 
   return (
     <MainContentArea
@@ -94,11 +94,11 @@ export const RiskAssessmentForm: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
 // ========== CONTROL TESTING FORM ==========
 export const ControlTestingForm: React.FC = () => {
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const formSections: FormSectionConfig[] = [
@@ -254,11 +254,11 @@ export const ControlTestingForm: React.FC = () => {
 
   const handleFormChange = (fieldId: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [fieldId]: value }));
-  };
+  }
 
   const handleSubmit = (values: Record<string, any>) => {
-    // console.log('Control Test submitted:', values);
-  };
+    // console.log('Control Test submitted:', values)
+  }
 
   return (
     <MainContentArea
@@ -287,11 +287,11 @@ export const ControlTestingForm: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
 // ========== USER MANAGEMENT FORM ==========
 export const UserManagementForm: React.FC = () => {
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const formSections: FormSectionConfig[] = [
@@ -432,11 +432,11 @@ export const UserManagementForm: React.FC = () => {
 
   const handleFormChange = (fieldId: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [fieldId]: value }));
-  };
+  }
 
   const handleSubmit = (values: Record<string, any>) => {
-    // console.log('User created:', values);
-  };
+    // console.log('User created:', values)
+  }
 
   return (
     <MainContentArea
@@ -465,7 +465,7 @@ export const UserManagementForm: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
 // ========== SETTINGS FORM ==========
 export const SettingsForm: React.FC = () => {
@@ -474,7 +474,7 @@ export const SettingsForm: React.FC = () => {
     'auto-save': true,
     'email-notifications': true,
     'slack-integration': false,
-  });
+  })
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const formSections: FormSectionConfig[] = [
@@ -599,11 +599,11 @@ export const SettingsForm: React.FC = () => {
 
   const handleFormChange = (fieldId: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [fieldId]: value }));
-  };
+  }
 
   const handleSubmit = (values: Record<string, any>) => {
-    // console.log('Settings saved:', values);
-  };
+    // console.log('Settings saved:', values)
+  }
 
   return (
     <MainContentArea
@@ -629,11 +629,11 @@ export const SettingsForm: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
 export default {
   RiskAssessmentForm,
   ControlTestingForm,
   UserManagementForm,
   SettingsForm,
-};
+}

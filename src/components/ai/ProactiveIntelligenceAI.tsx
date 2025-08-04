@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/components/ui/daisy-components';
   Brain,
   TrendingUp,
   Bell,
@@ -14,7 +15,7 @@ import {
   Pause
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -23,7 +24,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 
-// import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types'
 import { 
   ActionRecommendation,
   SmartNotification,
@@ -36,7 +37,7 @@ import {
   proactiveAIIntegrationService,
   IntelligentInsight,
   PredictiveResult
-} from '@/services/ProactiveAIIntegrationService';
+} from '@/services/ProactiveAIIntegrationService'
 
 interface ProactiveIntelligenceAIProps {
   risks: Risk[];
@@ -98,20 +99,20 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
   const handleToggleMonitoring = async () => {
     try {
       if (isMonitoringActive) {
-        await proactiveAIIntegrationService.stopBackgroundProcessing();
+        await proactiveAIIntegrationService.stopBackgroundProcessing()
         setIsMonitoringActive(false);
       } else {
         await proactiveAIIntegrationService.startBackgroundProcessing();
         setIsMonitoringActive(true);
       }
     } catch (error) {
-      // console.error('Failed to toggle monitoring:', error);
+      // console.error('Failed to toggle monitoring:', error)
     }
-  };
+  }
 
   // Generate intelligent insights for all risks and controls
   const handleGenerateInsights = async () => {
-    setIsGeneratingInsights(true);
+    setIsGeneratingInsights(true)
     try {
       const newInsights: IntelligentInsight[] = [];
 
@@ -122,10 +123,10 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
             risk.id,
             'risk',
             { risk, riskScore: risk.riskScore, category: risk.category }
-          );
+          )
           newInsights.push(...riskInsights);
         } catch (error) {
-          // console.error(`Failed to generate insights for risk ${risk.id}:`, error);
+          // console.error(`Failed to generate insights for risk ${risk.id}:`, error)
         }
       }
 
@@ -136,10 +137,10 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
             control.id,
             'control',
             { control, effectiveness: control.effectiveness, linkedRisks: control.linkedRisks }
-          );
+          )
           newInsights.push(...controlInsights);
         } catch (error) {
-          // console.error(`Failed to generate insights for control ${control.id}:`, error);
+          // console.error(`Failed to generate insights for control ${control.id}:`, error)
         }
       }
 
@@ -147,19 +148,19 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       updateInsightMetrics(newInsights);
 
       // Notify parent component
-      newInsights.forEach(insight => onInsightGenerated?.(insight));
+      newInsights.forEach(insight => onInsightGenerated?.(insight))
 
     } catch (error) {
-      // console.error('Failed to generate insights:', error);
+      // console.error('Failed to generate insights:', error)
     } finally {
       setIsGeneratingInsights(false);
     }
-  };
+  }
 
   // Perform predictive risk modeling
   const handlePredictiveModeling = async () => {
     try {
-      const highRiskEntities = risks.filter(r => r.riskScore >= 12);
+      const highRiskEntities = risks.filter(r => r.riskScore >= 12)
       const predictions = await proactiveAIIntegrationService.performPredictiveRiskModeling(
         highRiskEntities,
         controls,
@@ -167,9 +168,9 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       );
       setPredictions(predictions);
     } catch (error) {
-      // console.error('Failed to perform predictive modeling:', error);
+      // console.error('Failed to perform predictive modeling:', error)
     }
-  };
+  }
 
   // Generate smart notifications
   const handleGenerateNotifications = async () => {
@@ -221,7 +222,7 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
           collaboration_sessions: []
         },
         historicalBehavior: []
-      };
+      }
 
       const newNotifications = await proactiveAIIntegrationService.generateSmartNotifications(
         'current-user',
@@ -231,23 +232,23 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
 
       setNotifications(prev => [...newNotifications, ...prev].slice(0, 20)); // Keep latest 20
     } catch (error) {
-      // console.error('Failed to generate notifications:', error);
+      // console.error('Failed to generate notifications:', error)
     }
-  };
+  }
 
   // Update system status
   const updateSystemStatus = () => {
-    const status = proactiveAIIntegrationService.getQueueStatus();
+    const status = proactiveAIIntegrationService.getQueueStatus()
     setSystemStatus(prev => ({
       ...status,
       lastProcessingTime: prev.lastProcessingTime,
       processingRate: prev.processingRate
     }));
-  };
+  }
 
   // Update insight metrics
   const updateInsightMetrics = (newInsights: IntelligentInsight[]) => {
-    const allInsights = [...insights, ...newInsights];
+    const allInsights = [...insights, ...newInsights]
     const criticalCount = allInsights.filter(i => i.priority === 'critical').length;
     const actionableCount = allInsights.filter(i => i.actionable).length;
     const avgConfidence = allInsights.reduce((sum, i) => sum + i.confidence, 0) / allInsights.length;
@@ -259,24 +260,24 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       averageConfidence: avgConfidence,
       lastGenerated: new Date()
     });
-  };
+  }
 
   // Get priority color
   const getPriorityColor = (priority: InsightPriority) => {
     switch (priority) {
-      case 'critical': return 'text-red-600 bg-red-50';
+      case 'critical': return 'text-red-600 bg-red-50'
       case 'high': return 'text-orange-600 bg-orange-50';
       case 'medium': return 'text-yellow-600 bg-yellow-50';
       case 'low': return 'text-green-600 bg-green-50';
       default: return 'text-muted-foreground bg-secondary/10';
     }
-  };
+  }
 
   // Get category icon
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'risk': return <DaisyAlertTriangle className="h-4 w-4" >
-  ;
+  
 </DaisyAlertTriangle>
       case 'compliance': return <Shield className="h-4 w-4" />;
       case 'performance': return <BarChart3 className="h-4 w-4" />;
@@ -284,13 +285,13 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       case 'trend': return <TrendingUp className="h-4 w-4" />;
       default: return <Brain className="h-4 w-4" />;
     }
-  };
+  }
 
   // Polling for updates
   useEffect(() => {
     if (isMonitoringActive) {
       const interval = setInterval(() => {
-        updateSystemStatus();
+        updateSystemStatus()
       }, 5000); // Update every 5 seconds
 
       return () => clearInterval(interval);
@@ -851,6 +852,6 @@ const ProactiveIntelligenceAI: React.FC<ProactiveIntelligenceAIProps> = ({
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default ProactiveIntelligenceAI; 

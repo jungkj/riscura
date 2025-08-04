@@ -134,10 +134,10 @@ import React from 'react';
   Gamepad2,
   Headphones,
   Webcam,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Type definitions
-export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 export type IconColor =
   | 'primary'
@@ -172,7 +172,7 @@ const createIcon = (LucideIcon: React.ComponentType<any>) => {
         lg: 'w-6 h-6',
         xl: 'w-8 h-8',
         '2xl': 'w-10 h-10',
-      };
+      }
 
       const colorClasses = {
         primary: 'text-blue-600',
@@ -186,7 +186,7 @@ const createIcon = (LucideIcon: React.ComponentType<any>) => {
         info: 'text-blue-500',
         brand: 'text-indigo-600',
         current: 'text-current',
-      };
+      }
 
       const classes = `${sizeClasses[size]} ${colorClasses[color]} ${className}`.trim();
 
@@ -196,7 +196,7 @@ const createIcon = (LucideIcon: React.ComponentType<any>) => {
 
   IconComponent.displayName = `Icon(${LucideIcon.displayName || LucideIcon.name || 'Unknown'})`;
   return IconComponent;
-};
+}
 
 // Icon categories
 export const NavigationIcons = {
@@ -213,7 +213,7 @@ export const NavigationIcons = {
   ArrowDown: createIcon(ArrowDown),
   MoreHorizontal: createIcon(MoreHorizontal),
   MoreVertical: createIcon(MoreVertical),
-};
+}
 
 export const ActionIcons = {
   Plus: createIcon(Plus),
@@ -227,7 +227,7 @@ export const ActionIcons = {
   Search: createIcon(Search),
   Filter: createIcon(Filter),
   Settings: createIcon(Settings),
-};
+}
 
 export const StatusIcons = {
   CheckCircle: createIcon(CheckCircle),
@@ -239,7 +239,7 @@ export const StatusIcons = {
   HelpCircle: createIcon(HelpCircle),
   Eye: createIcon(Eye),
   EyeOff: createIcon(EyeOff),
-};
+}
 
 export const UserIcons = {
   User: createIcon(User),
@@ -247,7 +247,7 @@ export const UserIcons = {
   Lock: createIcon(Lock),
   Unlock: createIcon(Unlock),
   Shield: createIcon(Shield),
-};
+}
 
 export const CommunicationIcons = {
   Bell: createIcon(Bell),
@@ -261,7 +261,7 @@ export const CommunicationIcons = {
   MicrophoneOff: createIcon(MicOff),
   Volume: createIcon(Volume2),
   Speaker: createIcon(Speaker),
-};
+}
 
 export const FileIcons = {
   FileText: createIcon(FileText),
@@ -270,7 +270,7 @@ export const FileIcons = {
   FolderOpen: createIcon(FolderOpen),
   Image: createIcon(Image),
   Archive: createIcon(Archive),
-};
+}
 
 export const DataIcons = {
   Database: createIcon(Database),
@@ -282,12 +282,12 @@ export const DataIcons = {
   BarChart3: createIcon(BarChart3),
   PieChart: createIcon(PieChart),
   LineChart: createIcon(LineChart),
-};
+}
 
 export const TimeIcons = {
   Calendar: createIcon(Calendar),
   Clock: createIcon(Clock),
-};
+}
 
 export const BusinessIcons = {
   Building: createIcon(Building),
@@ -298,7 +298,7 @@ export const BusinessIcons = {
   Target: createIcon(Target),
   Award: createIcon(Award),
   Flag: createIcon(Flag),
-};
+}
 
 export const TechnologyIcons = {
   Wifi: createIcon(WifiIcon),
@@ -308,7 +308,7 @@ export const TechnologyIcons = {
   Monitor: createIcon(Monitor),
   Smartphone: createIcon(Smartphone),
   Laptop: createIcon(Laptop),
-};
+}
 
 export const RiskManagementIcons = {
   Risk: createIcon(AlertTriangle),
@@ -321,7 +321,7 @@ export const RiskManagementIcons = {
   Mitigation: createIcon(Shield),
   Compliance: createIcon(Award),
   Audit: createIcon(Search),
-};
+}
 
 // Combined icon library
 export const IconLibrary = {
@@ -336,6 +336,6 @@ export const IconLibrary = {
   Business: BusinessIcons,
   Technology: TechnologyIcons,
   RiskManagement: RiskManagementIcons,
-};
+}
 
 export default IconLibrary;

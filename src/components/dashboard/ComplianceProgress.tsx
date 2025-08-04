@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -14,7 +14,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Users,
   Calendar,
   TrendingUp
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ComplianceFramework {
   id: string;
@@ -142,7 +142,7 @@ export default function ComplianceProgress() {
       case 'behind': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -151,7 +151,7 @@ export default function ComplianceProgress() {
       case 'behind': return (<AlertTriangle className="w-4 h-4" />);
       default: return (<Shield className="w-4 h-4" />);
     }
-  };
+  }
 
   const overallProgress = Math.round(
     frameworks.reduce((sum, framework) => sum + framework.progress, 0) / frameworks.length

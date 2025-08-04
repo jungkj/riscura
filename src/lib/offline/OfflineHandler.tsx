@@ -3,7 +3,7 @@ import { designTokens } from '@/lib/design-system/tokens';
 
 // Offline storage types and interfaces
 interface OfflineAction {
-  id: string;
+  id: string
   type: string;
   data: any;
   timestamp: Date;
@@ -60,34 +60,34 @@ class OfflineHandler {
       enableEncryption: false,
       criticalActions: ['risk-assessment', 'compliance-update', 'incident-report'],
       ...config,
-    };
+    }
 
     this.initialize();
   }
 
   private initialize(): void {
     // Only initialize in browser environment
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return
 
     // Load persisted data from localStorage
-    this.loadPersistedData();
+    this.loadPersistedData()
 
     // Set up online/offline event listeners
-    window.addEventListener('online', this.handleOnline.bind(this));
+    window.addEventListener('online', this.handleOnline.bind(this))
     window.addEventListener('offline', this.handleOffline.bind(this));
 
     // Set up periodic sync when online
     if (this.isOnline) {
-      this.startPeriodicSync();
+      this.startPeriodicSync()
     }
 
     // Set up storage cleanup
-    this.setupStorageCleanup();
+    this.setupStorageCleanup()
   }
 
   // Online/Offline event handlers
   private handleOnline(): void {
-    this.isOnline = true;
+    this.isOnline = true
     this.emit('online');
     this.startPeriodicSync();
     this.syncPendingActions();
@@ -102,7 +102,7 @@ class OfflineHandler {
   // Event system
   public on(event: string, callback: Function): void {
     if (!this.eventListeners.has(event)) {
-      this.eventListeners.set(event, []);
+      this.eventListeners.set(event, [])
     }
     this.eventListeners.get(event)!.push(callback);
   }
@@ -128,7 +128,7 @@ class OfflineHandler {
   public queueAction(_type: string,
     data: any,
     options: {
-      priority?: 'low' | 'medium' | 'high' | 'critical';
+      priority?: 'low' | 'medium' | 'high' | 'critical'
       maxRetries?: number;
       userId?: string;
       metadata?: Record<string, any>;
@@ -144,27 +144,27 @@ class OfflineHandler {
       priority: options.priority || 'medium',
       userId: options.userId,
       metadata: options.metadata,
-    };
+    }
 
     // Insert action based on priority
-    this.insertActionByPriority(action);
+    this.insertActionByPriority(action)
 
     // Persist to localStorage
-    this.persistActionQueue();
+    this.persistActionQueue()
 
     // Emit event
-    this.emit('actionQueued', action);
+    this.emit('actionQueued', action)
 
     // Try to sync immediately if online
     if (this.isOnline && !this.syncInProgress) {
-      this.syncPendingActions();
+      this.syncPendingActions()
     }
 
     return action.id;
   }
 
   private insertActionByPriority(_action: OfflineAction): void {
-    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 }
     const actionPriority = priorityOrder[action.priority];
 
     let insertIndex = this.actionQueue.length;
@@ -188,7 +188,7 @@ class OfflineHandler {
       expiresAt: expiresIn ? new Date(Date.now() + expiresIn) : undefined,
       version: 1,
       checksum: this.generateChecksum(data),
-    };
+    }
 
     this.offlineData.set(key, offlineData);
     this.persistOfflineData();
@@ -204,7 +204,7 @@ class OfflineHandler {
 
     // Check if data has expired
     if (cachedData.expiresAt && cachedData.expiresAt < new Date()) {
-      this.offlineData.delete(key);
+      this.offlineData.delete(key)
       this.persistOfflineData();
       return null;
     }
@@ -227,7 +227,7 @@ class OfflineHandler {
         failedActions: 0,
         conflicts: 0,
         errors: [],
-      };
+      }
     }
 
     this.syncInProgress = true;
@@ -239,7 +239,7 @@ class OfflineHandler {
       failedActions: 0,
       conflicts: 0,
       errors: [],
-    };
+    }
 
     const actionsToSync = [...this.actionQueue];
 
@@ -285,7 +285,7 @@ class OfflineHandler {
   private async syncAction(_action: OfflineAction): Promise<boolean> {
     try {
       // Simulate API call - replace with actual API integration
-      const response = await this.makeAPICall(action);
+      const response = await this.makeAPICall(action)
 
       if (response.success) {
         this.emit('actionSynced', action);
@@ -297,7 +297,7 @@ class OfflineHandler {
         return false;
       }
     } catch (error) {
-      // console.error('Sync action failed:', error);
+      // console.error('Sync action failed:', error)
       return false;
     }
   }
@@ -307,7 +307,7 @@ class OfflineHandler {
     // For now, simulate different responses
     return new Promise((resolve) => {
       setTimeout(() => {
-        const random = Math.random();
+        const random = Math.random()
         if (random > 0.9) {
           resolve({ success: false, conflict: true, serverData: {} });
         } else if (random > 0.1) {
@@ -336,15 +336,15 @@ class OfflineHandler {
     switch (resolution) {
       case 'local':
         // Keep local version, retry sync
-        action.retryCount = 0;
+        action.retryCount = 0
         break;
       case 'server':
         // Accept server version, remove from queue
-        this.removeActionFromQueue(action.id);
+        this.removeActionFromQueue(action.id)
         break;
       case 'merge':
         // Use merged data, update action and retry
-        action.data = mergedData;
+        action.data = mergedData
         action.retryCount = 0;
         break;
     }
@@ -354,7 +354,7 @@ class OfflineHandler {
 
   // Utility methods
   private removeActionFromQueue(actionId: string): void {
-    this.actionQueue = this.actionQueue.filter((action) => action.id !== actionId);
+    this.actionQueue = this.actionQueue.filter((action) => action.id !== actionId)
   }
 
   private generateId(): string {
@@ -363,7 +363,7 @@ class OfflineHandler {
 
   private generateChecksum(_data: any): string {
     // Simple checksum implementation
-    const str = JSON.stringify(data);
+    const str = JSON.stringify(data)
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
@@ -380,10 +380,10 @@ class OfflineHandler {
 
     // Simple compression - in production, use a proper compression library
     try {
-      const jsonString = JSON.stringify(data);
+      const jsonString = JSON.stringify(data)
       // For now, just return the original data
       // In production, implement actual compression
-      return data;
+      return data
     } catch (error) {
       return data;
     }
@@ -395,12 +395,12 @@ class OfflineHandler {
     }
 
     // Simple decompression - in production, use a proper compression library
-    return data;
+    return data
   }
 
   // Persistence methods
   private persistActionQueue(): void {
-    if (typeof localStorage === 'undefined') return;
+    if (typeof localStorage === 'undefined') return
 
     try {
       const serialized = JSON.stringify(
@@ -411,7 +411,7 @@ class OfflineHandler {
       );
       localStorage.setItem('riscura_offline_actions', serialized);
     } catch (error) {
-      // console.error('Failed to persist action queue:', error);
+      // console.error('Failed to persist action queue:', error)
     }
   }
 
@@ -427,7 +427,7 @@ class OfflineHandler {
       }));
       localStorage.setItem('riscura_offline_data', JSON.stringify(dataArray));
     } catch (error) {
-      // console.error('Failed to persist offline data:', error);
+      // console.error('Failed to persist offline data:', error)
     }
   }
 
@@ -436,7 +436,7 @@ class OfflineHandler {
 
     try {
       // Load action queue
-      const actionsData = localStorage.getItem('riscura_offline_actions');
+      const actionsData = localStorage.getItem('riscura_offline_actions')
       if (actionsData) {
         const actions = JSON.parse(actionsData);
         this.actionQueue = actions.map((_action: any) => ({
@@ -446,7 +446,7 @@ class OfflineHandler {
       }
 
       // Load offline data
-      const offlineData = localStorage.getItem('riscura_offline_data');
+      const offlineData = localStorage.getItem('riscura_offline_data')
       if (offlineData) {
         const dataArray = JSON.parse(offlineData);
         this.offlineData = new Map(
@@ -461,14 +461,14 @@ class OfflineHandler {
         );
       }
     } catch (error) {
-      // console.error('Failed to load persisted data:', error);
+      // console.error('Failed to load persisted data:', error)
     }
   }
 
   // Periodic sync
   private startPeriodicSync(): void {
     if (this.syncInterval) {
-      clearInterval(this.syncInterval);
+      clearInterval(this.syncInterval)
     }
 
     this.syncInterval = setInterval(() => {
@@ -489,7 +489,7 @@ class OfflineHandler {
   private setupStorageCleanup(): void {
     // Clean up expired data every hour
     setInterval(() => {
-      this.cleanupExpiredData();
+      this.cleanupExpiredData()
     }, 3600000); // 1 hour
   }
 
@@ -512,7 +512,7 @@ class OfflineHandler {
 
   // Public API methods
   public getStatus(): {
-    isOnline: boolean;
+    isOnline: boolean
     queuedActions: number;
     cachedDataItems: number;
     syncInProgress: boolean;
@@ -522,7 +522,7 @@ class OfflineHandler {
       queuedActions: this.actionQueue.length,
       cachedDataItems: this.offlineData.size,
       syncInProgress: this.syncInProgress,
-    };
+    }
   }
 
   public clearAllData(): void {
@@ -548,7 +548,7 @@ class OfflineHandler {
     return this.queueAction('risk-assessment', data, {
       priority: 'critical',
       metadata: { type: 'risk-assessment' },
-    });
+    })
   }
 
   public async updateCompliance(_data: any): Promise<string> {
@@ -585,7 +585,7 @@ class OfflineHandler {
 
   // Cleanup
   public destroy(): void {
-    this.stopPeriodicSync();
+    this.stopPeriodicSync()
     if (typeof window !== 'undefined') {
       window.removeEventListener('online', this.handleOnline.bind(this));
       window.removeEventListener('offline', this.handleOffline.bind(this));
@@ -595,18 +595,18 @@ class OfflineHandler {
 }
 
 // Singleton instance
-let offlineHandlerInstance: OfflineHandler | null = null;
+let offlineHandlerInstance: OfflineHandler | null = null
 
 export const getOfflineHandler = (config?: Partial<OfflineConfig>): OfflineHandler => {
   if (!offlineHandlerInstance) {
     offlineHandlerInstance = new OfflineHandler(config);
   }
   return offlineHandlerInstance;
-};
+}
 
 // React hook for offline functionality
 export const useOffline = () => {
-  const offlineHandler = getOfflineHandler();
+  const offlineHandler = getOfflineHandler()
   const [status, setStatus] = React.useState(offlineHandler.getStatus());
 
   React.useEffect(() => {
@@ -622,7 +622,7 @@ export const useOffline = () => {
       offlineHandler.off('offline', updateStatus);
       offlineHandler.off('actionQueued', updateStatus);
       offlineHandler.off('syncCompleted', updateStatus);
-    };
+    }
   }, [offlineHandler]);
 
   return {
@@ -636,7 +636,7 @@ export const useOffline = () => {
     reportIncident: offlineHandler.reportIncident.bind(offlineHandler),
     saveFormData: offlineHandler.saveFormData.bind(offlineHandler),
     getFormData: offlineHandler.getFormData.bind(offlineHandler),
-  };
-};
+  }
+}
 
 export default OfflineHandler;

@@ -7,6 +7,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
+import { DaisyDialogTitle } from '@/components/ui/daisy-components';
 // import {
   Bot,
   User,
@@ -27,11 +28,11 @@ import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } 
   Brain,
   MessageSquare,
   X,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface ChatMessage {
-  id: string;
+  id: string
   type: 'user' | 'ai';
   content: string;
   timestamp: Date;
@@ -89,7 +90,7 @@ const aiSuggestions: AISuggestion[] = [
     category: 'analysis',
     icon: TrendingUp,
   },
-];
+]
 
 // Sample Chat Responses
 const sampleResponses = {
@@ -222,11 +223,11 @@ Based on current trends, I predict:
       { id: 'act-8', label: 'Export Trends', type: 'secondary' as const, action: 'export_trends' },
     ],
   },
-};
+}
 
 // Message Component
 const ChatMessageComponent: React.FC<{
-  message: ChatMessage;
+  message: ChatMessage
   onAction: (_action: string) => void;
 }> = ({ message, onAction }) => {
   const isUser = message.type === 'user';
@@ -336,11 +337,11 @@ const ChatMessageComponent: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // AI Chat Interface Component
 export const AIChatInterface: React.FC<{
-  isOpen: boolean;
+  isOpen: boolean
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -383,7 +384,7 @@ export const AIChatInterface: React.FC<{
       type: 'user',
       content,
       timestamp: new Date(),
-    };
+    }
 
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
@@ -396,15 +397,15 @@ export const AIChatInterface: React.FC<{
       content: '',
       timestamp: new Date(),
       thinking: true,
-    };
+    }
 
     setMessages(prev => [...prev, thinkingMessage]);
 
     // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1500))
 
     // Remove thinking message and add response
-    setMessages(prev => prev.filter(m => !m.thinking));
+    setMessages(prev => prev.filter(m => !m.thinking))
     setIsTyping(false);
 
     // Generate AI response based on input
@@ -427,26 +428,26 @@ export const AIChatInterface: React.FC<{
       content: response.content,
       timestamp: new Date(),
       actions: response.actions,
-    };
+    }
 
     setMessages(prev => [...prev, aiResponse]);
-  };
+  }
 
   const handleSuggestionClick = (suggestion: string) => {
     handleSendMessage(suggestion);
-  };
+  }
 
   const handleAction = (_action: string) => {
-    // console.log('Action triggered:', action);
+    // console.log('Action triggered:', action)
     // Handle specific actions here
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage(inputValue);
     }
-  };
+  }
 
   return (
     <DaisyDialog open={isOpen} onOpenChange={onClose} >
@@ -543,6 +544,6 @@ setInputValue(e.target.value)}
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}
 
 export default AIChatInterface;

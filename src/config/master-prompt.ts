@@ -230,7 +230,7 @@ Recommend immediate escalation when:
 • Requests exceed AI capabilities or require human expertise
 • Conflicting regulatory requirements are identified
 • Implementation recommendations involve significant business disruption`,
-};
+}
 
 // Agent-Specific Prompt Modifiers
 export const AGENT_MODIFIERS = {
@@ -257,14 +257,14 @@ export const AGENT_MODIFIERS = {
     specialization: 'Broad risk management knowledge and best practices',
     tone: 'Helpful and comprehensive',
   },
-};
+}
 
 // Contextual Prompt Enhancement
 export function buildContextualPrompt(
   baseAgent: keyof typeof AGENT_MODIFIERS,
   userQuery: string,
   organizationalContext?: {
-    industry?: string;
+    industry?: string
     size?: string;
     geography?: string;
     riskAppetite?: string;

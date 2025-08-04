@@ -23,7 +23,7 @@ import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform } from '
   HelpCircle,
   LogOut,
   Zap,
-} from 'lucide-react';
+} from 'lucide-react'
 
 import {
   useDeviceInfo,
@@ -40,7 +40,7 @@ import { cn } from '@/lib/utils';
 // ============================================================================
 
 interface NavigationItem {
-  id: string;
+  id: string
   label: string;
   href: string;
   icon: React.ElementType;
@@ -171,14 +171,14 @@ const NAVIGATION_GROUPS: NavigationGroup[] = [
       },
     ],
   },
-];
+]
 
 // ============================================================================
 // ENHANCED MOBILE NAVIGATION COMPONENT
 // ============================================================================
 
 export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNavigationProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [searchResults, setSearchResults] = useState<NavigationItem[]>([]);
@@ -202,7 +202,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
   const swipeGestures = useSwipeGesture({
     onSwipeLeft: () => {
       if (isOpen) {
-        closeMenu();
+        closeMenu()
       }
     },
     onSwipeRight: () => {
@@ -221,7 +221,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
         closeMenu();
       } else {
         // Snap back to open position
-        dragX.set(0);
+        dragX.set(0)
       }
     },
     [dragX]
@@ -232,16 +232,16 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
   // ============================================================================
 
   const openMenu = useCallback(() => {
-    setIsOpen(true);
+    setIsOpen(true)
     announce('Navigation menu opened', 'polite');
 
     // Focus search input when menu opens
     setTimeout(() => {
-      searchInputRef.current?.focus();
+      searchInputRef.current?.focus()
     }, 100);
 
     // Preload navigation data
-    enhancedCache.warmCache().catch(console.error);
+    enhancedCache.warmCache().catch(console.error)
   }, [announce]);
 
   const closeMenu = useCallback(() => {
@@ -267,14 +267,14 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
   const handleNavigate = useCallback(
     (href: string, label: string) => {
-      closeMenu();
+      closeMenu()
       onNavigate?.(href);
       router.push(href);
       announce(`Navigating to ${label}`, 'polite');
 
       // Add haptic feedback
       if (device.isTouch && 'vibrate' in navigator) {
-        navigator.vibrate(10);
+        navigator.vibrate(10)
       }
     },
     [closeMenu, onNavigate, router, announce, device.isTouch]
@@ -299,7 +299,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
   const performSearch = useCallback(
     async (_query: string) => {
       if (!query.trim()) {
-        setSearchResults([]);
+        setSearchResults([])
         setIsSearching(false);
         return;
       }
@@ -310,7 +310,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
       const searchTimeout = setTimeout(() => {
         const allItems = NAVIGATION_GROUPS.flatMap((group) =>
           group.items.flatMap((item) => [item, ...(item.children || [])])
-        );
+        )
 
         const results = allItems.filter(
           (item) =>
@@ -344,14 +344,14 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.altKey && event.key === 'm') {
-        event.preventDefault();
+        event.preventDefault()
         toggleMenu();
       }
 
       if (event.key === 'Escape' && isOpen) {
         closeMenu();
       }
-    };
+    }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -363,7 +363,7 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
 
   const renderNavigationItem = useCallback(
     (item: NavigationItem, level = 0) => {
-      const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+      const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
       const hasChildren = item.children && item.children.length > 0;
       const isExpanded = expandedGroups.has(item.id);
 
@@ -603,11 +603,11 @@ export const EnhancedMobileNavigation = ({ className, onNavigate }: MobileNaviga
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
 // ============================================================================
 // EXPORT
 // ============================================================================
 
-export default EnhancedMobileNavigation;
+export default EnhancedMobileNavigation

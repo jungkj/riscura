@@ -33,7 +33,7 @@ export const CollaborationIndicators = ({ users }: CollaborationIndicatorsProps)
       default:
         return 'bg-gray-400';
     }
-  };
+  }
 
   return (
     <div className="flex items-center space-x-2">
@@ -62,4 +62,4 @@ export const CollaborationIndicators = ({ users }: CollaborationIndicatorsProps)
       )}
     </div>
   );
-};
+}

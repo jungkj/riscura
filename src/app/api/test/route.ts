@@ -22,7 +22,7 @@ async function handler(_request: NextRequest) {
             securityHeadersActive: true,
             csrfProtectionActive: false, // Not required for GET
           },
-        });
+        })
 
       case 'POST':
         const body = await request.json().catch(() => ({}));
@@ -57,7 +57,7 @@ async function handler(_request: NextRequest) {
         return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     }
   } catch (error) {
-    // console.error('Test endpoint error:', error);
+    // console.error('Test endpoint error:', error)
 
     return NextResponse.json(
       {
@@ -70,7 +70,7 @@ async function handler(_request: NextRequest) {
 }
 
 // Apply CSRF protection to POST, PUT, DELETE, PATCH methods
-export const GET = handler;
+export const GET = handler
 export const POST = withCSRFProtection(handler);
 export const PUT = withCSRFProtection(handler);
 export const DELETE = withCSRFProtection(handler);

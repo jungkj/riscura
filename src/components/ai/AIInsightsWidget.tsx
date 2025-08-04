@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   AlertTriangle, 
   TrendingUp, 
   TrendingDown,
@@ -106,12 +107,12 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       },
       selectedEntities: []
     }
-  };
+  }
 
   // Fetch AI insights
   const fetchInsights = useCallback(async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       setError(null);
 
       // Generate insights
@@ -119,13 +120,13 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         config,
         risks,
         controls
-      );
+      )
       
       setInsights(aiInsights.slice(0, maxInsights));
 
       // Generate predictions if enabled
       if (showPredictions) {
-        const mockMetrics = generateMockMetrics();
+        const mockMetrics = generateMockMetrics()
         const aiPredictions = await dashboardIntelligenceService.generatePredictiveAnalytics(
           mockMetrics,
           config
@@ -138,17 +139,17 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         const aiRecommendations = await dashboardIntelligenceService.generateSmartRecommendations(
           config,
           aiInsights
-        );
+        )
         setRecommendations(aiRecommendations);
       }
 
       // Update metrics
-      updateMetrics();
+      updateMetrics()
       setLastUpdate(new Date());
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch AI insights');
-      // console.error('Error fetching AI insights:', err);
+      // console.error('Error fetching AI insights:', err)
     } finally {
       setLoading(false);
     }
@@ -158,7 +159,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
   const startRealTimeUpdates = useCallback(() => {
     dashboardIntelligenceService.startRealTimeUpdates(config, (update: RealTimeUpdate) => {
       if (update.type === 'metric') {
-        updateMetrics();
+        updateMetrics()
       } else if (update.type === 'insight') {
         fetchInsights();
       }
@@ -168,7 +169,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
 
   // Stop real-time updates
   const stopRealTimeUpdates = useCallback(() => {
-    dashboardIntelligenceService.stopRealTimeUpdates();
+    dashboardIntelligenceService.stopRealTimeUpdates()
     setRealtimeEnabled(false);
   }, []);
 
@@ -178,10 +179,10 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       const assistanceData = await dashboardIntelligenceService.getInteractiveAssistance(
         elementType,
         elementData
-      );
+      )
       setAssistance(assistanceData);
     } catch (err) {
-      // console.error('Error getting assistance:', err);
+      // console.error('Error getting assistance:', err)
     }
   }, []);
 
@@ -220,40 +221,40 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         prediction: 92,
         confidence: 0.81
       }
-    ];
+    ]
     setMetrics(mockMetrics);
-  };
+  }
 
   // Generate mock metrics for predictions
   const generateMockMetrics = () => {
-    const metrics: Record<string, number[]> = {};
+    const metrics: Record<string, number[]> = {}
     
     // Generate 30 days of mock data for each metric
     ['riskScore', 'complianceScore', 'incidentCount', 'controlsActive'].forEach(metric => {
       metrics[metric] = Array.from({ length: 30 }, (_, i) => {
-        const base = metric === 'complianceScore' ? 90 : 10;
+        const base = metric === 'complianceScore' ? 90 : 10
         const variance = base * 0.1;
         return base + (Math.random() - 0.5) * variance;
       });
     });
     
     return metrics;
-  };
+  }
 
   // Toggle insight expansion
   const toggleInsightExpansion = (insightId: string) => {
-    const newExpanded = new Set(expandedInsights);
+    const newExpanded = new Set(expandedInsights)
     if (newExpanded.has(insightId)) {
       newExpanded.delete(insightId);
     } else {
       newExpanded.add(insightId);
     }
     setExpandedInsights(newExpanded);
-  };
+  }
 
   // Auto-refresh insights
   useEffect(() => {
-    fetchInsights();
+    fetchInsights()
     
     const interval = setInterval(fetchInsights, refreshInterval);
     return () => clearInterval(interval);
@@ -267,7 +268,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
@@ -281,7 +282,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       case 'low': return <CheckCircle className="h-4 w-4" />;
       default: return <Activity className="h-4 w-4" />;
     }
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -289,7 +290,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
       default: return <Activity className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   const preparePredictionChartData = (_prediction: PredictiveAnalytics) => {
     return prediction.chartData.map(point => ({
@@ -299,7 +300,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       upperBound: point.upperBound,
       lowerBound: point.lowerBound
     }));
-  };
+  }
 
   if (loading && insights.length === 0) {
     return (
@@ -325,7 +326,7 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <DaisyCard className={cn("w-full", className)} >
@@ -702,4 +703,4 @@ export const AIInsightsWidget: React.FC<AIInsightsWidgetProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

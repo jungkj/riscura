@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { 
+import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Area, AreaChart 
 } from 'recharts';
@@ -24,9 +25,9 @@ import {
   TrendingDown,
   DollarSign,
   Activity
-} from 'lucide-react';
+} from 'lucide-react'
 
-// import { multiTenantAIService } from '@/services/MultiTenantAIService';
+// import { multiTenantAIService } from '@/services/MultiTenantAIService'
 import type { 
   Tenant, 
   TenantAnalytics, 
@@ -54,13 +55,13 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
 
   // Load tenants on component mount
   useEffect(() => {
-    loadTenants();
+    loadTenants()
   }, []);
 
   // Load tenant-specific data when tenant is selected
   useEffect(() => {
     if (selectedTenant) {
-      loadTenantData(selectedTenant.id);
+      loadTenantData(selectedTenant.id)
     }
   }, [selectedTenant]);
 
@@ -72,7 +73,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       
       // If currentTenantId is provided, select that tenant
       if (currentTenantId) {
-        const currentTenant = allTenants.find(t => t.id === currentTenantId);
+        const currentTenant = allTenants.find(t => t.id === currentTenantId)
         if (currentTenant) {
           setSelectedTenant(currentTenant);
         }
@@ -81,11 +82,11 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       }
     } catch (err) {
       setError('Failed to load tenants');
-      // console.error('Error loading tenants:', err);
+      // console.error('Error loading tenants:', err)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const loadTenantData = async (_tenantId: string) => {
     try {
@@ -94,7 +95,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         end: new Date(),
         status: 'current' as const
-      };
+      }
       
       const [analyticsData, billingData] = await Promise.all([
         multiTenantAIService.getTenantAnalytics(tenantId, currentPeriod),
@@ -105,11 +106,11 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       setBilling(billingData);
     } catch (err) {
       setError('Failed to load tenant data');
-      // console.error('Error loading tenant data:', err);
+      // console.error('Error loading tenant data:', err)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const createNewTenant = async () => {
     try {
@@ -182,7 +183,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
         },
         startDate: new Date(),
         autoRenew: true
-      };
+      }
 
       const newTenant = await multiTenantAIService.createTenant(
         'New Organization',
@@ -194,9 +195,9 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       setSelectedTenant(newTenant);
     } catch (err) {
       setError('Failed to create tenant');
-      // console.error('Error creating tenant:', err);
+      // console.error('Error creating tenant:', err)
     }
-  };
+  }
 
   const getStatusColor = (status: TenantStatus): string => {
     switch (status) {
@@ -206,14 +207,14 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       case 'inactive': return 'bg-gray-500';
       default: return 'bg-gray-500';
     }
-  };
+  }
 
   const formatCurrency = (amount: number, currency: string = 'USD'): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency
     }).format(amount);
-  };
+  }
 
   if (loading && tenants.length === 0) {
     return (
@@ -224,7 +225,7 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -636,6 +637,6 @@ export const MultiTenantAIDashboard: React.FC<MultiTenantAIDashboardProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default MultiTenantAIDashboard; 

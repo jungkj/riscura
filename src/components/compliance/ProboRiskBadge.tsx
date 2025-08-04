@@ -32,7 +32,7 @@ const getBadgeVariant = (level: string | number) => {
     default:
       return "outline";
   }
-};
+}
 
 const getBadgeColor = (level: string | number) => {
   if (typeof level === "number") {
@@ -59,7 +59,7 @@ const getBadgeColor = (level: string | number) => {
     default:
       return "bg-gray-100 text-gray-800 border-gray-200";
   }
-};
+}
 
 const getLabel = (level: string | number) => {
   if (typeof level === "number") {
@@ -86,7 +86,7 @@ const getLabel = (level: string | number) => {
     default:
       return "Low";
   }
-};
+}
 
 export function ProboRiskBadge({ level, className }: ProboRiskBadgeProps) {
   const label = getLabel(level);

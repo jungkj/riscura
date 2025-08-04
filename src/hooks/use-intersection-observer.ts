@@ -37,14 +37,14 @@ export function useIntersectionObserver(_options: UseIntersectionObserverOptions
 
     return () => {
       observer.unobserve(element);
-    };
+    }
   }, [hasIntersected, freezeOnceVisible, observerOptions]);
 
   return {
     ref: elementRef,
     isIntersecting,
     hasIntersected,
-  };
+  }
 }
 
 export default useIntersectionObserver;

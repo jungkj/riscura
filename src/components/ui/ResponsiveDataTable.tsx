@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -16,7 +16,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   TouchButton, 
   TouchActionMenu,
   TouchChip 
-} from './TouchElements';
+} from './TouchElements'
 // import {
   Search,
   Filter,
@@ -70,11 +70,11 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   DollarSign,
   Percent,
   Calendar as CalendarIcon,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface Column<T = any> {
-  id: string;
+  id: string
   header: string;
   accessor: keyof T | ((item: T) => any);
   sortable?: boolean;
@@ -127,7 +127,7 @@ const useDevice = (): Device => {
     type: 'desktop',
     width: typeof window !== 'undefined' ? window.innerWidth : 1200,
     isTouchDevice: typeof window !== 'undefined' ? 'ontouchstart' in window : false,
-  });
+  })
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -147,7 +147,7 @@ const useDevice = (): Device => {
         width,
         isTouchDevice: 'ontouchstart' in window,
       });
-    };
+    }
 
     updateDevice();
     window.addEventListener('resize', updateDevice);
@@ -155,15 +155,15 @@ const useDevice = (): Device => {
   }, []);
 
   return device;
-};
+}
 
 // Helper Functions
 const getCellValue = <T,>(item: T, column: Column<T>) => {
   if (typeof column.accessor === 'function') {
-    return column.accessor(item);
+    return column.accessor(item)
   }
   return item[column.accessor];
-};
+}
 
 const formatCellValue = (_value: any, type?: string) => {
   if (value === null || value === undefined) return '-';
@@ -178,7 +178,7 @@ const formatCellValue = (_value: any, type?: string) => {
     default:
       return String(value);
   }
-};
+}
 
 // Default Cell Renderers
 const defaultCellRenderers = {
@@ -232,11 +232,11 @@ const defaultCellRenderers = {
         },
       ]} />
   ),
-};
+}
 
 // Mobile Card Layout
 const MobileCardLayout: React.FC<{
-  data: any[];
+  data: any[]
   columns: Column[];
   selectedItems: any[];
   onRowClick?: (item: any, index: number) => void;
@@ -356,11 +356,11 @@ onRowSelect?.(item, checked as boolean)} />
       })}
     </div>
   );
-};
+}
 
 // Tablet List Layout
 const TabletListLayout: React.FC<{
-  data: any[];
+  data: any[]
   columns: Column[];
   selectedItems: any[];
   sortColumn?: string;
@@ -502,11 +502,11 @@ const TabletListLayout: React.FC<{
       </DaisyCheckbox>
     </DaisyCard>
   );
-};
+}
 
 // Desktop Table Layout
 const DesktopTableLayout: React.FC<{
-  data: any[];
+  data: any[]
   columns: Column[];
   selectedItems: any[];
   sortColumn?: string;
@@ -537,7 +537,7 @@ const DesktopTableLayout: React.FC<{
     default: 'py-enterprise-4',
     compact: 'py-enterprise-2',
     comfortable: 'py-enterprise-6',
-  };
+  }
 
   return (
     <DaisyCard >
@@ -685,7 +685,7 @@ onRowSelect?.(item, checked as boolean)}
       </div>
     </DaisyCheckbox>
   );
-};
+}
 
 // Main Data Table Component
 export const ResponsiveDataTable: React.FC<DataTableProps> = ({
@@ -711,7 +711,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
   variant = 'default',
   mobileLayout = 'cards',
 }) => {
-  const device = useDevice();
+  const device = useDevice()
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [sortColumn, setSortColumn] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -722,38 +722,38 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
   const handleRowSelect = (item: any, selected: boolean) => {
     const newSelection = selected
       ? [...selectedItems, item]
-      : selectedItems.filter(selectedItem => selectedItem !== item);
+      : selectedItems.filter(selectedItem => selectedItem !== item)
     
     setSelectedItems(newSelection);
     onRowSelect?.(newSelection);
-  };
+  }
 
   const handleSelectAll = (selected: boolean) => {
     const newSelection = selected ? [...data] : [];
     setSelectedItems(newSelection);
     onRowSelect?.(newSelection);
-  };
+  }
 
   // Handle sorting
   const handleSort = (columnId: string) => {
-    const newDirection = sortColumn === columnId && sortDirection === 'asc' ? 'desc' : 'asc';
+    const newDirection = sortColumn === columnId && sortDirection === 'asc' ? 'desc' : 'asc'
     setSortColumn(columnId);
     setSortDirection(newDirection);
     onSort?.(columnId, newDirection);
-  };
+  }
 
   // Handle search
   const handleSearch = (_query: string) => {
-    setSearchQuery(query);
+    setSearchQuery(query)
     setCurrentPage(1);
     onSearch?.(query);
-  };
+  }
 
   // Filter and paginate data
   const filteredData = searchQuery
     ? data.filter(item =>
         columns.some(column => {
-          if (!column.searchable) return false;
+          if (!column.searchable) return false
           const value = getCellValue(item, column);
           return String(value).toLowerCase().includes(searchQuery.toLowerCase());
         })
@@ -814,7 +814,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className={cn("space-y-enterprise-4", className)}>
@@ -991,6 +991,6 @@ handleSearch(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 export default ResponsiveDataTable;

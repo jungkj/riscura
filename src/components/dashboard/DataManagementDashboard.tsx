@@ -7,6 +7,6 @@ const DataManagementDashboard: React.FC = () => {
       <p>Comprehensive data management features will be displayed here.</p>
     </div>
   );
-};
+}
 
 export default DataManagementDashboard;

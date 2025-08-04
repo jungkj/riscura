@@ -7,12 +7,13 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyDialogTitle, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import {
   Plus,
   MoreHorizontal,
@@ -54,11 +55,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   GitBranch,
   CheckSquare,
   Square,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface WorkflowTask {
-  id: string;
+  id: string
   title: string;
   description: string;
   type: 'risk_assessment' | 'control_testing' | 'audit_finding' | 'compliance_review' | 'documentation' | 'approval';
@@ -166,7 +167,7 @@ const sampleUsers: User[] = [
     department: 'Internal Audit',
     isOnline: true,
   },
-];
+]
 
 const kanbanColumns: KanbanColumn[] = [
   {
@@ -384,7 +385,7 @@ const sampleTasks: WorkflowTask[] = [
 
 // Task Card Component
 const TaskCard: React.FC<{
-  task: WorkflowTask;
+  task: WorkflowTask
   onEdit: (_task: WorkflowTask) => void;
   onDelete: (taskId: string) => void;
   onStatusChange: (taskId: string, newStatus: WorkflowTask['status']) => void;
@@ -399,7 +400,7 @@ const TaskCard: React.FC<{
       case 'low': return 'bg-green-500';
       default: return 'bg-gray-500';
     }
-  };
+  }
 
   const getTypeIcon = (_type: WorkflowTask['type']) => {
     switch (type) {
@@ -411,19 +412,19 @@ const TaskCard: React.FC<{
       case 'approval': return <UserCheck className="h-4 w-4" />;
       default: return <Square className="h-4 w-4" />;
     }
-  };
+  }
 
   const formatDueDate = (date: Date) => {
     const now = new Date();
     const diff = date.getTime() - now.getTime();
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
     
-    if (days < 0) return { text: `${Math.abs(days)}d overdue`, color: 'text-red-600' };
-    if (days === 0) return { text: 'Due today', color: 'text-orange-600' };
-    if (days === 1) return { text: 'Due tomorrow', color: 'text-yellow-600' };
-    if (days <= 7) return { text: `${days}d left`, color: 'text-blue-600' };
-    return { text: date.toLocaleDateString(), color: 'text-text-secondary' };
-  };
+    if (days < 0) return { text: `${Math.abs(days)}d overdue`, color: 'text-red-600' }
+    if (days === 0) return { text: 'Due today', color: 'text-orange-600' }
+    if (days === 1) return { text: 'Due tomorrow', color: 'text-yellow-600' }
+    if (days <= 7) return { text: `${days}d left`, color: 'text-blue-600' }
+    return { text: date.toLocaleDateString(), color: 'text-text-secondary' }
+  }
 
   const dueInfo = formatDueDate(task.dueDate);
   const completedSubtasks = task.subtasks.filter(s => s.completed).length;
@@ -596,11 +597,11 @@ const TaskCard: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Kanban Column Component
 const KanbanColumn: React.FC<{
-  column: KanbanColumn;
+  column: KanbanColumn
   tasks: WorkflowTask[];
   onTaskEdit: (_task: WorkflowTask) => void;
   onTaskDelete: (taskId: string) => void;
@@ -614,17 +615,17 @@ const KanbanColumn: React.FC<{
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(true);
-  };
+  }
 
   const handleDragLeave = () => {
     setIsDragOver(false);
-  };
+  }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
     // Handle task drop logic here
-  };
+  }
 
   return (
     <div className="flex flex-col min-h-0 w-80">
@@ -692,11 +693,11 @@ const KanbanColumn: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Main Workflow Kanban Component
 export const WorkflowKanban: React.FC<{
-  projectId?: string;
+  projectId?: string
   showMetrics?: boolean;
 }> = ({ projectId, showMetrics = true }) => {
   const [tasks, setTasks] = useState<WorkflowTask[]>(sampleTasks);
@@ -712,11 +713,11 @@ export const WorkflowKanban: React.FC<{
   const handleTaskEdit = (_task: WorkflowTask) => {
     setSelectedTask(task);
     setShowTaskDialog(true);
-  };
+  }
 
   const handleTaskDelete = (taskId: string) => {
     setTasks(prev => prev.filter(task => task.id !== taskId));
-  };
+  }
 
   const handleTaskStatusChange = (taskId: string, newStatus: WorkflowTask['status']) => {
     setTasks(prev => prev.map(task => 
@@ -724,7 +725,7 @@ export const WorkflowKanban: React.FC<{
         ? { ...task, status: newStatus, updatedAt: new Date() }
         : task
     ));
-  };
+  }
 
   const handleAddTask = (status: WorkflowTask['status']) => {
     const newTask: WorkflowTask = {
@@ -754,16 +755,16 @@ export const WorkflowKanban: React.FC<{
         approvers: [],
         isCompleted: false,
       },
-    };
+    }
 
     setTasks(prev => [...prev, newTask]);
     setSelectedTask(newTask);
     setShowTaskDialog(true);
-  };
+  }
 
   // Filter tasks
   const filteredTasks = tasks.filter(task => {
-    if (filterBy.assignee && task.assignee?.id !== filterBy.assignee) return false;
+    if (filterBy.assignee && task.assignee?.id !== filterBy.assignee) return false
     if (filterBy.priority && task.priority !== filterBy.priority) return false;
     if (filterBy.type && task.type !== filterBy.type) return false;
     if (filterBy.search && !task.title.toLowerCase().includes(filterBy.search.toLowerCase())) return false;
@@ -772,12 +773,12 @@ export const WorkflowKanban: React.FC<{
 
   // Group tasks by status
   const tasksByStatus = kanbanColumns.reduce((acc, column) => {
-    acc[column.status] = filteredTasks.filter(task => task.status === column.status);
+    acc[column.status] = filteredTasks.filter(task => task.status === column.status)
     return acc;
   }, {} as Record<WorkflowTask['status'], WorkflowTask[]>);
 
   // Calculate metrics
-  const totalTasks = tasks.length;
+  const totalTasks = tasks.length
   const completedTasks = tasks.filter(t => t.status === 'completed').length;
   const overdueTasks = tasks.filter(t => t.dueDate < new Date() && t.status !== 'completed').length;
   const avgProgress = tasks.length > 0 ? Math.round(tasks.reduce((sum, t) => sum + t.progress, 0) / tasks.length) : 0;
@@ -1032,7 +1033,7 @@ setSelectedTask({
                       // Update existing task
                       setTasks(prev => prev.map(task => 
                         task.id === selectedTask.id ? selectedTask : task
-                      ));
+                      ))
                     }
                     setShowTaskDialog(false);
                   }}
@@ -1047,6 +1048,6 @@ setSelectedTask({
       </DaisyDialog>
     </div>
   );
-};
+}
 
 export default WorkflowKanban;

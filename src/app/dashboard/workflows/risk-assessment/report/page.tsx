@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisySelect,
   DaisySelectContent,
   DaisySelectItem,
@@ -32,7 +33,7 @@ import { useToast } from '@/hooks/use-toast';
   Clock,
   Eye,
   Printer,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface ReportConfig {
   reportType: string;
@@ -45,7 +46,7 @@ interface ReportConfig {
     trends: boolean;
     recommendations: boolean;
     appendix: boolean;
-  };
+  }
   format: 'pdf' | 'excel' | 'word';
   recipients: string[];
 }
@@ -106,11 +107,11 @@ export default function GenerateRiskReportPage() {
         });
       }
     } catch (error) {
-      // console.error('Failed to fetch stats:', error);
+      // console.error('Failed to fetch stats:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleSectionToggle = (section: keyof typeof reportConfig.sections) => {
     setReportConfig((prev) => ({
@@ -120,7 +121,7 @@ export default function GenerateRiskReportPage() {
         [section]: !prev.sections[section],
       },
     }));
-  };
+  }
 
   const handleGenerateReport = async () => {
     setGenerating(true);
@@ -134,7 +135,7 @@ export default function GenerateRiskReportPage() {
       if (!response.ok) throw new Error('Failed to generate report');
 
       // In a real implementation, this would return a download URL
-      const blob = await response.blob();
+      const blob = await response.blob()
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -157,14 +158,14 @@ export default function GenerateRiskReportPage() {
     } finally {
       setGenerating(false);
     }
-  };
+  }
 
   const handleSendReport = () => {
     toast({
       title: 'Report Scheduled',
       description: 'The report will be sent to the selected recipients',
     });
-  };
+  }
 
   return (
     <ProtectedRoute>

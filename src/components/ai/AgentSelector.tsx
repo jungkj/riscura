@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-// import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types'
 import { AI_AGENTS, type AgentConfig } from '@/config/ai-agents';
 // import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard';
+} from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -46,9 +46,9 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
       control_advisor: Shield,
       compliance_expert: FileCheck,
       general_assistant: Bot,
-    };
+    }
     return icons[agentType];
-  };
+  }
 
   const getAgentColor = (_agentType: AgentType) => {
     const colors = {
@@ -56,9 +56,9 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
       control_advisor: 'bg-green-500',
       compliance_expert: 'bg-purple-500',
       general_assistant: 'bg-orange-500',
-    };
+    }
     return colors[agentType];
-  };
+  }
 
   const renderAgentCard = (_agentType: AgentType, config: AgentConfig) => {
     const Icon = getAgentIcon(agentType);
@@ -285,7 +285,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
         )}
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -317,6 +317,6 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default AgentSelector;

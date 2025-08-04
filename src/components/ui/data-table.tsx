@@ -53,12 +53,12 @@ import {
   Share,
   Settings,
   RefreshCw,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== INTERFACES ==========
 
 export interface ColumnDefinition<T = any> {
-  key: string;
+  key: string
   label: string;
   type?: 'text' | 'number' | 'date' | 'status-badge' | 'user-avatar' | 'actions' | 'custom';
   width?: number;
@@ -161,7 +161,7 @@ const StatusBadgeCell: React.FC<{ value: any; colorMapping?: Record<string, stri
       return 'success';
     }
     return 'secondary';
-  };
+  }
 
   const customColor = colorMapping[value];
 
@@ -173,7 +173,7 @@ const StatusBadgeCell: React.FC<{ value: any; colorMapping?: Record<string, stri
       {value}
     </DaisyBadge>
   );
-};
+}
 
 const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   if (!value) return <span className="text-text-tertiary">—</span>;
@@ -194,7 +194,7 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
   );
-};
+}
 
 const DateCell: React.FC<{ value: any }> = ({ value }) => {
   if (!value) return <span className="text-text-tertiary">—</span>;
@@ -210,7 +210,7 @@ const DateCell: React.FC<{ value: any }> = ({ value }) => {
       month: 'short',
       day: 'numeric',
     });
-  };
+  }
 
   const getRelativeTime = (days: number) => {
     if (days === 0) return 'Today';
@@ -219,7 +219,7 @@ const DateCell: React.FC<{ value: any }> = ({ value }) => {
     if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
     if (days < 365) return `${Math.floor(days / 30)} months ago`;
     return `${Math.floor(days / 365)} years ago`;
-  };
+  }
 
   return (
     <DaisyTooltip>
@@ -234,7 +234,7 @@ const DateCell: React.FC<{ value: any }> = ({ value }) => {
       </DaisyTooltipContent>
     </DaisyTooltip>
   );
-};
+}
 
 // ========== MAIN COMPONENT ==========
 
@@ -263,7 +263,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   className,
 }: DataTableProps<T>) => {
   // ========== STATE ==========
-  const [columns, setColumns] = useState<ColumnDefinition<T>[]>(initialColumns);
+  const [columns, setColumns] = useState<ColumnDefinition<T>[]>(initialColumns)
   const [sorts, setSorts] = useState<SortState[]>([]);
   const [filters, setFilters] = useState<FilterState[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -278,7 +278,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   const virtualRef = useRef<HTMLDivElement>(null);
 
   // ========== MEMOIZED VALUES ==========
-  const visibleColumns = useMemo(() => columns.filter((col) => !col.hidden), [columns]);
+  const visibleColumns = useMemo(() => columns.filter((col) => !col.hidden), [columns])
 
   const filteredData = useMemo(() => {
     let _result = [...data];
@@ -287,7 +287,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     if (searchQuery) {
       result = result.filter((row) =>
         visibleColumns.some((col) => {
-          if (!col.searchable) return false;
+          if (!col.searchable) return false
           const value = col.accessor ? col.accessor(row) : row[col.key];
           return String(value).toLowerCase().includes(searchQuery.toLowerCase());
         })
@@ -297,7 +297,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     // Apply filters
     filters.forEach((filter) => {
       result = result.filter((row) => {
-        const value = row[filter.column];
+        const value = row[filter.column]
         switch (filter.operator) {
           case 'equals':
             return value === filter.value;
@@ -323,7 +323,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
     if (sorts.length > 0) {
       result.sort((a, b) => {
         for (const sort of sorts) {
-          const aValue = a[sort.column];
+          const aValue = a[sort.column]
           const bValue = b[sort.column];
 
           let comparison = 0;
@@ -345,7 +345,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   const handleSort = useCallback(
     (columnKey: string) => {
       setSorts((prev) => {
-        const existing = prev.find((s) => s.column === columnKey);
+        const existing = prev.find((s) => s.column === columnKey)
         let newSorts: SortState[];
 
         if (existing) {
@@ -435,7 +435,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   // ========== RENDER HELPERS ==========
   const renderCell = useCallback(
     (column: ColumnDefinition<T>, row: T, rowIndex: number) => {
-      const value = column.accessor ? column.accessor(row) : row[column.key];
+      const value = column.accessor ? column.accessor(row) : row[column.key]
 
       if (column.render) {
         return column.render(value, row, column);
@@ -509,7 +509,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
           <div className="text-body-sm text-text-secondary">{error}</div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -883,6 +883,6 @@ handleRowSelect(rowIndex, checked as boolean)}
       )}
     </div>
   );
-};
+}
 
 export default EnterpriseDataTable;

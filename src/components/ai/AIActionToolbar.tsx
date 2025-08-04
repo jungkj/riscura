@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { toast } from 'sonner';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 // import {
   Bot,
   Sparkles,
@@ -25,17 +26,17 @@ import { toast } from 'sonner';
   Target,
   Eye,
   MessageSquare,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Import our AI services
-import { aiService, AIAgent } from '@/lib/mockAI';
+import { aiService, AIAgent } from '@/lib/mockAI'
 
 // ============================================================================
 // TYPES AND INTERFACES
 // ============================================================================
 
 interface AIAction {
-  id: string;
+  id: string
   name: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -159,14 +160,14 @@ const createAIActions = (
     estimatedTime: '90-120s',
     action: onPredictTrends,
   },
-];
+]
 
 // ============================================================================
 // AI ACTION TOOLBAR COMPONENT
 // ============================================================================
 
 interface AIActionToolbarProps {
-  context?: any;
+  context?: any
   selectedData?: any[];
   onActionComplete?: (result: any) => void;
 }
@@ -185,7 +186,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
   // Check if AI is enabled and load agents
   useEffect(() => {
     const checkAIStatus = async () => {
-      const enabled = aiService.isEnabled();
+      const enabled = aiService.isEnabled()
       setIsAIEnabled(enabled);
       
       if (enabled) {
@@ -200,17 +201,17 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
           const _stats = await aiService.usage.getUsageStats('30d');
           setUsageStats(stats);
         } catch (error) {
-          // console.error('Failed to load AI agents:', error);
+          // console.error('Failed to load AI agents:', error)
         }
       }
-    };
+    }
     
     checkAIStatus();
   }, []);
 
   // AI Action Handlers
   const handleAnalyzeRisk = async (actionContext?: any) => {
-    const riskData = actionContext || context;
+    const riskData = actionContext || context
     if (!riskData) {
       toast.error('No risk data available for analysis');
       return;
@@ -230,10 +231,10 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to analyze risk');
       throw error;
     }
-  };
+  }
 
   const handleGenerateReport = async (actionContext?: any) => {
-    const reportData = actionContext || { risks: selectedData, context };
+    const reportData = actionContext || { risks: selectedData, context }
     
     try {
       // For now, we'll create a simple report structure
@@ -257,7 +258,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
           },
         ],
         data: reportData,
-      };
+      }
 
       toast.success('Report generated successfully');
       onActionComplete?.(report);
@@ -265,7 +266,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to generate report');
       throw error;
     }
-  };
+  }
 
   const handleOptimizeControls = async (actionContext?: any) => {
     const controlData = actionContext || context;
@@ -286,10 +287,10 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to optimize controls');
       throw error;
     }
-  };
+  }
 
   const handleGetInsights = async (actionContext?: any) => {
-    const dashboardData = actionContext || { context, selectedData };
+    const dashboardData = actionContext || { context, selectedData }
     
     try {
       const insights = await aiService.insights.generateDashboardInsights(dashboardData);
@@ -300,7 +301,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to generate insights');
       throw error;
     }
-  };
+  }
 
   const handleAnalyzeCompliance = async (actionContext?: any) => {
     const complianceData = actionContext || context;
@@ -317,7 +318,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to analyze compliance');
       throw error;
     }
-  };
+  }
 
   const handleGenerateQuestions = async (actionContext?: any) => {
     const questionContext = actionContext || context;
@@ -334,7 +335,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to generate questions');
       throw error;
     }
-  };
+  }
 
   const handleAnalyzeDocument = async (actionContext?: any) => {
     const documentData = actionContext || context;
@@ -353,10 +354,10 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to analyze document');
       throw error;
     }
-  };
+  }
 
   const handlePredictTrends = async (actionContext?: any) => {
-    const trendData = actionContext || { historicalData: selectedData, context };
+    const trendData = actionContext || { historicalData: selectedData, context }
     
     try {
       const predictions = await aiService.insights.generatePredictiveInsights(
@@ -370,7 +371,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       toast.error('Failed to predict trends');
       throw error;
     }
-  };
+  }
 
   // Create AI actions with handlers
   const aiActions = createAIActions(
@@ -382,12 +383,12 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
     handleGenerateQuestions,
     handleAnalyzeDocument,
     handlePredictTrends
-  );
+  )
 
   // Execute AI action
   const executeAction = async (_action: AIAction) => {
     if (!isAIEnabled) {
-      toast.error('AI features are not enabled');
+      toast.error('AI features are not enabled')
       return;
     }
 
@@ -396,7 +397,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       actionId: action.id,
       status: 'RUNNING',
       startTime: new Date().toISOString(),
-    };
+    }
 
     setRunningActions(prev => new Map(prev.set(actionResult.id, actionResult)));
 
@@ -407,14 +408,14 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
         ...actionResult,
         status: 'COMPLETED' as const,
         endTime: new Date().toISOString(),
-      };
+      }
       
       setRunningActions(prev => new Map(prev.set(actionResult.id, completedResult)));
       
       // Remove completed action after 3 seconds
       setTimeout(() => {
         setRunningActions(prev => {
-          const newMap = new Map(prev);
+          const newMap = new Map(prev)
           newMap.delete(actionResult.id);
           return newMap;
         });
@@ -426,25 +427,25 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
         status: 'FAILED' as const,
         endTime: new Date().toISOString(),
         error: error instanceof Error ? error.message : 'Unknown error',
-      };
+      }
       
       setRunningActions(prev => new Map(prev.set(actionResult.id, failedResult)));
       
       // Remove failed action after 5 seconds
       setTimeout(() => {
         setRunningActions(prev => {
-          const newMap = new Map(prev);
+          const newMap = new Map(prev)
           newMap.delete(actionResult.id);
           return newMap;
         });
       }, 5000);
     }
-  };
+  }
 
   // Get actions by category
   const actionsByCategory = aiActions.reduce((acc, action) => {
     if (!acc[action.category]) {
-      acc[action.category] = [];
+      acc[action.category] = []
     }
     acc[action.category].push(action);
     return acc;
@@ -454,8 +455,8 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
   const isActionRunning = (actionId: string) => {
     return Array.from(runningActions.values()).some(
       result => result.actionId === actionId && result.status === 'RUNNING'
-    );
-  };
+    )
+  }
 
   if (!isAIEnabled) {
     return (
@@ -473,7 +474,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -668,7 +669,7 @@ const AIActionToolbar: React.FC<AIActionToolbarProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 export default AIActionToolbar;
-export { AIActionToolbar }; 
+export { AIActionToolbar } 

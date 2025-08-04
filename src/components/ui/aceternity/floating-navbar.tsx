@@ -18,11 +18,11 @@ export const FloatingNav = ({
   const { scrollYProgress } = useScroll();
 
   // Always show the navbar now
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(true)
 
   useMotionValueEvent(scrollYProgress, 'change', (current) => {
     // Keep navbar visible at all times
-    setVisible(true);
+    setVisible(true)
   });
 
   return (
@@ -66,4 +66,4 @@ export const FloatingNav = ({
       </motion.div>
     </AnimatePresence>
   );
-};
+}

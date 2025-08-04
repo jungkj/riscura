@@ -4,9 +4,10 @@ import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { toast } from '@/hooks/use-toast';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -47,7 +48,7 @@ import {
   FileImage,
   Plus,
   Trash2
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface WizardStep {
   id: string;
@@ -212,11 +213,11 @@ export default function RiskAssessmentWizard({
       return 'evidence';
     }
     return 'framework';
-  };
+  }
 
   const removeFile = (fileId: string) => {
     setFiles(prev => prev.filter(f => f.id !== fileId));
-  };
+  }
 
   const addStakeholder = () => {
     if (newStakeholder.trim()) {
@@ -226,14 +227,14 @@ export default function RiskAssessmentWizard({
       }));
       setNewStakeholder('');
     }
-  };
+  }
 
   const removeStakeholder = (_index: number) => {
     setConfig(prev => ({
       ...prev,
       stakeholders: prev.stakeholders.filter((_, i) => i !== index)
     }));
-  };
+  }
 
   const toggleRiskCategory = (category: string) => {
     setConfig(prev => ({
@@ -242,7 +243,7 @@ export default function RiskAssessmentWizard({
         ? prev.riskCategories.filter(c => c !== category)
         : [...prev.riskCategories, category]
     }));
-  };
+  }
 
   const toggleComplianceFramework = (_framework: string) => {
     setConfig(prev => ({
@@ -251,7 +252,7 @@ export default function RiskAssessmentWizard({
         ? prev.complianceFrameworks.filter(f => f !== framework)
         : [...prev.complianceFrameworks, framework]
     }));
-  };
+  }
 
   const processFiles = async () => {
     setIsProcessing(true);
@@ -305,7 +306,7 @@ export default function RiskAssessmentWizard({
           results.push(result.data);
 
         } catch (error) {
-          // console.error(`Error processing ${fileObj.file.name}:`, error);
+          // console.error(`Error processing ${fileObj.file.name}:`, error)
           
           setFiles(prev => prev.map(f => 
             f.id === fileObj.id 
@@ -331,10 +332,10 @@ export default function RiskAssessmentWizard({
       // Mark analysis step as completed
       setSteps(prev => prev.map(step => 
         step.id === 'analysis' ? { ...step, completed: true } : step
-      ));
+      ))
 
     } catch (error) {
-      // console.error('Analysis failed:', error);
+      // console.error('Analysis failed:', error)
       toast({
         title: "Analysis Failed",
         description: "There was an error processing your files",
@@ -343,23 +344,23 @@ export default function RiskAssessmentWizard({
     } finally {
       setIsProcessing(false);
     }
-  };
+  }
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       // Mark current step as completed
       setSteps(prev => prev.map((step, idx) => 
         idx === currentStep ? { ...step, completed: true } : step
-      ));
+      ))
       setCurrentStep(currentStep + 1);
     }
-  };
+  }
 
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }
 
   const completeAssessment = async () => {
     const assessment = {
@@ -374,7 +375,7 @@ export default function RiskAssessmentWizard({
       createdAt: new Date(),
       organizationId,
       userId
-    };
+    }
 
     if (onComplete) {
       onComplete(assessment);
@@ -384,7 +385,7 @@ export default function RiskAssessmentWizard({
       title: "Assessment Complete",
       description: "Your risk assessment has been successfully created",
     });
-  };
+  }
 
   const getFileIcon = (_type: AssessmentFile['type']) => {
     switch (type) {
@@ -394,7 +395,7 @@ export default function RiskAssessmentWizard({
       case 'framework': return Shield;
       default: return FileText;
     }
-  };
+  }
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B';
@@ -402,7 +403,7 @@ export default function RiskAssessmentWizard({
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   const renderStepContent = () => {
     switch (steps[currentStep].id) {
@@ -788,7 +789,7 @@ toggleComplianceFramework(framework)} />
       default:
         return null;
     }
-  };
+  }
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">

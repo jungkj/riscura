@@ -1,12 +1,13 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Chart Types
 export interface ChartDataPoint {
-  label: string;
+  label: string
   value: number;
   color?: string;
   metadata?: Record<string, any>;
@@ -35,7 +36,7 @@ const chartColors = [
   '#F97316', // Orange
   '#EC4899', // Pink
   '#6B7280', // Gray
-];
+]
 
 // Simple Bar Chart Component
 export const SimpleBarChart: React.FC<ChartProps> = ({
@@ -48,7 +49,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
   height = 300,
   className,
 }) => {
-  const maxValue = Math.max(...data.map(d => d.value));
+  const maxValue = Math.max(...data.map(d => d.value))
   
   return (
     <DaisyCard className={cn("border border-gray-200", className)} >
@@ -117,7 +118,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Simple Donut Chart Component
 export const SimpleDonutChart: React.FC<ChartProps> = ({
@@ -130,7 +131,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
   height = 300,
   className,
 }) => {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const total = data.reduce((sum, item) => sum + item.value, 0)
   const center = height / 2;
   const radius = (height - 40) / 2;
   const innerRadius = radius * 0.6;
@@ -175,7 +176,7 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
       path: donutPath,
       percentage: percentage.toFixed(1),
       color: item.color || chartColors[index % chartColors.length],
-    };
+    }
   });
 
   return (
@@ -268,16 +269,16 @@ export const SimpleDonutChart: React.FC<ChartProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Simple Metric Card
 export interface MetricCardProps {
-  title: string;
+  title: string
   value: string | number;
   change?: {
     value: number;
     period: string;
-  };
+  }
   icon?: React.ElementType;
   trend?: 'up' | 'down' | 'neutral';
   color?: string;
@@ -302,7 +303,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       default:
         return <Activity className="h-3 w-3 text-gray-500" />;
     }
-  };
+  }
 
   const getTrendColor = () => {
     switch (trend) {
@@ -313,7 +314,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       default:
         return 'text-gray-500';
     }
-  };
+  }
 
   return (
     <DaisyCard className={cn("border border-gray-200 hover:shadow-sm transition-all duration-200", className)} >
@@ -349,11 +350,11 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Progress Ring Component
 export interface ProgressRingProps {
-  value: number;
+  value: number
   max?: number;
   size?: number;
   strokeWidth?: number;
@@ -436,7 +437,7 @@ export const ProgressRing: React.FC<DaisyProgressRingProps / />= ({
       </div>
     </DaisyCard>
   );
-};
+}
 
 // Simple Trend Line Component
 export interface TrendLineProps {
@@ -468,7 +469,7 @@ export const SimpleTrendLine: React.FC<TrendLineProps> = ({
   const points = data.map((item, index) => {
     const x = padding + (index / (data.length - 1)) * chartWidth;
     const y = padding + chartHeight - ((item.value - minValue) / range) * chartHeight;
-    return { x, y, ...item };
+    return { x, y, ...item }
   });
 
   const pathData = points.reduce((path, point, index) => {
@@ -503,4 +504,4 @@ export const SimpleTrendLine: React.FC<TrendLineProps> = ({
       </svg>
     </div>
   );
-}; 
+} 

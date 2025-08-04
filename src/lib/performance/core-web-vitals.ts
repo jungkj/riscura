@@ -16,16 +16,16 @@ export interface WebVitalsMetrics {
   si: number | null; // Speed Index
 
   // Performance scores
-  performanceScore: number;
+  performanceScore: number
   timestamp: number;
 }
 
 export interface PerformanceThresholds {
-  lcp: { good: number; needsImprovement: number };
-  fid: { good: number; needsImprovement: number };
-  cls: { good: number; needsImprovement: number };
-  fcp: { good: number; needsImprovement: number };
-  ttfb: { good: number; needsImprovement: number };
+  lcp: { good: number; needsImprovement: number }
+  fid: { good: number; needsImprovement: number }
+  cls: { good: number; needsImprovement: number }
+  fcp: { good: number; needsImprovement: number }
+  ttfb: { good: number; needsImprovement: number }
 }
 
 export interface PerformanceOptimization {
@@ -44,7 +44,7 @@ export interface DeviceCapabilities {
   effectiveType: string;
   deviceMemory: number;
   hardwareConcurrency: number;
-  viewport: { width: number; height: number };
+  viewport: { width: number; height: number }
 }
 
 // Performance thresholds based on Core Web Vitals
@@ -54,10 +54,10 @@ export const PERFORMANCE_THRESHOLDS: PerformanceThresholds = {
   cls: { good: 0.1, needsImprovement: 0.25 }, // score
   fcp: { good: 1800, needsImprovement: 3000 }, // milliseconds
   ttfb: { good: 800, needsImprovement: 1800 }, // milliseconds
-};
+}
 
 export class CoreWebVitalsMonitor {
-  private metrics: Partial<WebVitalsMetrics> = {};
+  private metrics: Partial<WebVitalsMetrics> = {}
   private listeners: ((metrics: WebVitalsMetrics) => void)[] = [];
   private deviceCapabilities: DeviceCapabilities | null = null;
 
@@ -74,36 +74,36 @@ export class CoreWebVitalsMonitor {
 
     // Monitor LCP (Largest Contentful Paint)
     getLCP((metric) => {
-      this.metrics.lcp = metric.value;
+      this.metrics.lcp = metric.value
       this.updateMetrics();
     });
 
     // Monitor FID (First Input Delay)
     getFID((metric) => {
-      this.metrics.fid = metric.value;
+      this.metrics.fid = metric.value
       this.updateMetrics();
     });
 
     // Monitor CLS (Cumulative Layout Shift)
     getCLS((metric) => {
-      this.metrics.cls = metric.value;
+      this.metrics.cls = metric.value
       this.updateMetrics();
     });
 
     // Monitor FCP (First Contentful Paint)
     getFCP((metric) => {
-      this.metrics.fcp = metric.value;
+      this.metrics.fcp = metric.value
       this.updateMetrics();
     });
 
     // Monitor TTFB (Time to First Byte)
     getTTFB((metric) => {
-      this.metrics.ttfb = metric.value;
+      this.metrics.ttfb = metric.value
       this.updateMetrics();
     });
 
     // Custom metrics
-    this.measureTimeToInteractive();
+    this.measureTimeToInteractive()
     this.measureFirstMeaningfulPaint();
     this.measureSpeedIndex();
   }
@@ -134,7 +134,7 @@ export class CoreWebVitalsMonitor {
         width: window.innerWidth,
         height: window.innerHeight,
       },
-    };
+    }
   }
 
   /**
@@ -144,7 +144,7 @@ export class CoreWebVitalsMonitor {
     if (typeof window === 'undefined') return;
 
     // Simplified TTI calculation
-    const startTime = performance.now();
+    const startTime = performance.now()
 
     const checkInteractive = () => {
       if (document.readyState === 'complete') {
@@ -153,7 +153,7 @@ export class CoreWebVitalsMonitor {
       } else {
         requestIdleCallback(checkInteractive);
       }
-    };
+    }
 
     requestIdleCallback(checkInteractive);
   }
@@ -167,7 +167,7 @@ export class CoreWebVitalsMonitor {
     // Use Performance Observer for FMP
     try {
       const observer = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
+        const entries = list.getEntries()
         const fmpEntry = entries.find((entry) => entry.name === 'first-meaningful-paint');
 
         if (fmpEntry) {
@@ -179,7 +179,7 @@ export class CoreWebVitalsMonitor {
 
       observer.observe({ entryTypes: ['paint'] });
     } catch (error) {
-      // console.warn('FMP measurement not supported:', error);
+      // console.warn('FMP measurement not supported:', error)
     }
   }
 
@@ -190,7 +190,7 @@ export class CoreWebVitalsMonitor {
     if (typeof window === 'undefined') return;
 
     // Simplified Speed Index calculation
-    const visualProgress: number[] = [];
+    const visualProgress: number[] = []
     const startTime = performance.now();
 
     const measureVisualProgress = () => {
@@ -209,7 +209,7 @@ export class CoreWebVitalsMonitor {
 
       if (document.readyState === 'complete') {
         // Calculate Speed Index
-        const totalElements = Math.max(...visualProgress);
+        const totalElements = Math.max(...visualProgress)
         let speedIndex = 0;
 
         for (let i = 1; i < visualProgress.length; i++) {
@@ -222,7 +222,7 @@ export class CoreWebVitalsMonitor {
       } else {
         setTimeout(measureVisualProgress, 100);
       }
-    };
+    }
 
     measureVisualProgress();
   }
@@ -242,7 +242,7 @@ export class CoreWebVitalsMonitor {
       si: this.metrics.si || null,
       performanceScore: this.calculatePerformanceScore(),
       timestamp: Date.now(),
-    };
+    }
 
     this.listeners.forEach((listener) => listener(completeMetrics));
   }
@@ -251,7 +251,7 @@ export class CoreWebVitalsMonitor {
    * Calculate overall performance score (0-100)
    */
   private calculatePerformanceScore(): number {
-    const weights = { lcp: 0.25, fid: 0.25, cls: 0.25, fcp: 0.15, ttfb: 0.1 };
+    const weights = { lcp: 0.25, fid: 0.25, cls: 0.25, fcp: 0.15, ttfb: 0.1 }
     let totalScore = 0;
     let totalWeight = 0;
 
@@ -295,18 +295,18 @@ export class CoreWebVitalsMonitor {
 
     // Return unsubscribe function
     return () => {
-      const index = this.listeners.indexOf(listener);
+      const index = this.listeners.indexOf(listener)
       if (index > -1) {
         this.listeners.splice(index, 1);
       }
-    };
+    }
   }
 
   /**
    * Get current metrics
    */
   getCurrentMetrics(): Partial<WebVitalsMetrics> {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   /**
@@ -332,7 +332,7 @@ export class CoreWebVitalsMonitor {
         impact: `LCP is ${this.metrics.lcp}ms (_target: <${PERFORMANCE_THRESHOLDS.lcp.good}ms)`,
         implementation:
           'Optimize hero images, use WebP format, implement lazy loading, preload critical resources',
-      });
+      })
     }
 
     // FID optimizations
@@ -344,7 +344,7 @@ export class CoreWebVitalsMonitor {
         impact: `FID is ${this.metrics.fid}ms (_target: <${PERFORMANCE_THRESHOLDS.fid.good}ms)`,
         implementation:
           'Split JavaScript bundles, use code splitting, defer non-critical scripts, optimize event handlers',
-      });
+      })
     }
 
     // CLS optimizations
@@ -356,7 +356,7 @@ export class CoreWebVitalsMonitor {
         impact: `CLS score is ${this.metrics.cls} (_target: <${PERFORMANCE_THRESHOLDS.cls.good})`,
         implementation:
           'Add size attributes to images, reserve space for ads, avoid inserting content above existing content',
-      });
+      })
     }
 
     // Mobile-specific optimizations
@@ -368,7 +368,7 @@ export class CoreWebVitalsMonitor {
         impact: 'Optimize for mobile network conditions',
         implementation:
           'Use service workers, implement caching strategies, compress resources, use adaptive loading',
-      });
+      })
     }
 
     // Low-end device optimizations
@@ -380,7 +380,7 @@ export class CoreWebVitalsMonitor {
         impact: 'Optimize for low-memory devices',
         implementation:
           'Reduce JavaScript bundle size, implement progressive enhancement, use lighter frameworks',
-      });
+      })
     }
 
     return recommendations;
@@ -395,7 +395,7 @@ export class PerformanceBudgetManager {
     images: 1000, // KB
     fonts: 150, // KB
     total: 1500, // KB
-  };
+  }
 
   /**
    * Check resource size against budget
@@ -414,14 +414,14 @@ export class PerformanceBudgetManager {
 
       // Use Performance API to check resource sizes
       const observer = new PerformanceObserver((list) => {
-        const entries = list.getEntries() as PerformanceResourceTiming[];
+        const entries = list.getEntries() as PerformanceResourceTiming[]
         const resourceSizes = {
           javascript: 0,
           css: 0,
           images: 0,
           fonts: 0,
           total: 0,
-        };
+        }
 
         entries.forEach((entry) => {
           const size = entry.transferSize || 0;
@@ -456,7 +456,7 @@ export class PerformanceBudgetManager {
 
       // Timeout fallback
       setTimeout(() => {
-        observer.disconnect();
+        observer.disconnect()
         resolve({ passed: true, violations: [] });
       }, 5000);
     });
@@ -466,13 +466,13 @@ export class PerformanceBudgetManager {
    * Update performance budgets
    */
   updateBudgets(newBudgets: Partial<typeof this.budgets>): void {
-    this.budgets = { ...this.budgets, ...newBudgets };
+    this.budgets = { ...this.budgets, ...newBudgets }
   }
 }
 
 // React hook for Core Web Vitals
 export const useWebVitals = () => {
-  const [metrics, setMetrics] = React.useState<Partial<WebVitalsMetrics>>({});
+  const [metrics, setMetrics] = React.useState<Partial<WebVitalsMetrics>>({})
   const [monitor] = React.useState(() => new CoreWebVitalsMonitor());
 
   React.useEffect(() => {
@@ -484,12 +484,12 @@ export const useWebVitals = () => {
     metrics,
     deviceCapabilities: monitor.getDeviceCapabilities(),
     recommendations: monitor.generateRecommendations(),
-  };
-};
+  }
+}
 
 // React hook for performance budget
 export const usePerformanceBudget = () => {
-  const [budgetManager] = React.useState(() => new PerformanceBudgetManager());
+  const [budgetManager] = React.useState(() => new PerformanceBudgetManager())
   const [budgetStatus, setBudgetStatus] = React.useState<{
     passed: boolean;
     violations: Array<{ type: string; size: number; budget: number }>;
@@ -502,8 +502,8 @@ export const usePerformanceBudget = () => {
   return {
     budgetStatus,
     updateBudgets: budgetManager.updateBudgets.bind(budgetManager),
-  };
-};
+  }
+}
 
 // Performance optimization utilities
 export const PerformanceOptimizer = {
@@ -545,11 +545,11 @@ export const PerformanceOptimizer = {
       script.src = src;
       script.defer = true;
       document.body.appendChild(script);
-    };
+    }
 
     // Load after main content is ready
     if (document.readyState === 'complete') {
-      scripts.forEach(loadScript);
+      scripts.forEach(loadScript)
     } else {
       window.addEventListener('load', () => {
         scripts.forEach(loadScript);
@@ -581,6 +581,6 @@ export const PerformanceOptimizer = {
 
     images.forEach((img) => imageObserver.observe(img));
   },
-};
+}
 
 export default CoreWebVitalsMonitor;

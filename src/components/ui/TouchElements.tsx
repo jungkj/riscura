@@ -3,10 +3,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import {
   MoreHorizontal,
   ChevronDown,
@@ -53,11 +54,11 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface TouchButtonProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   onClick?: () => void;
   onLongPress?: () => void;
   variant?: 'default' | 'outline' | 'ghost' | 'destructive' | 'secondary';
@@ -76,12 +77,12 @@ interface SwipeableCardProps {
     icon: React.ReactNode;
     label: string;
     color: string;
-  };
+  }
   rightAction?: {
     icon: React.ReactNode;
     label: string;
     color: string;
-  };
+  }
   className?: string;
 }
 
@@ -118,7 +119,7 @@ const useLongPress = (
   callback: () => void,
   ms = 500
 ) => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>()
   const callbackRef = useRef(callback);
 
   useEffect(() => {
@@ -132,16 +133,16 @@ const useLongPress = (
     timeoutRef.current = setTimeout(() => {
       callbackRef.current();
     }, ms);
-  };
+  }
 
   const stop = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-  };
+  }
 
-  return { onTouchStart: start, onTouchEnd: stop, onMouseDown: start, onMouseUp: stop, onMouseLeave: stop };
-};
+  return { onTouchStart: start, onTouchEnd: stop, onMouseDown: start, onMouseUp: stop, onMouseLeave: stop }
+}
 
 const useSwipe = (
   onSwipeLeft?: () => void,
@@ -154,8 +155,8 @@ const useSwipe = (
 
   const onTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
-    touchStart.current = { x: touch.clientX, y: touch.clientY };
-  };
+    touchStart.current = { x: touch.clientX, y: touch.clientY }
+  }
 
   const onTouchEnd = (e: React.TouchEvent) => {
     if (!touchStart.current) return;
@@ -168,7 +169,7 @@ const useSwipe = (
       // Horizontal swipe
       if (Math.abs(deltaX) > threshold) {
         if (deltaX > 0) {
-          onSwipeRight?.();
+          onSwipeRight?.()
         } else {
           onSwipeLeft?.();
         }
@@ -177,7 +178,7 @@ const useSwipe = (
       // Vertical swipe
       if (Math.abs(deltaY) > threshold) {
         if (deltaY > 0) {
-          onSwipeDown?.();
+          onSwipeDown?.()
         } else {
           onSwipeUp?.();
         }
@@ -185,20 +186,20 @@ const useSwipe = (
     }
 
     touchStart.current = null;
-  };
+  }
 
-  return { onTouchStart, onTouchEnd };
-};
+  return { onTouchStart, onTouchEnd }
+}
 
 const useHapticFeedback = () => {
   const vibrate = (pattern?: number | number[]) => {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern || 50);
     }
-  };
+  }
 
-  return { vibrate };
-};
+  return { vibrate }
+}
 
 // Touch Button Component
 export const TouchButton: React.FC<TouchButtonProps> = ({
@@ -212,7 +213,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
   'aria-label': ariaLabel,
   hapticFeedback = false,
 }) => {
-  const [isPressed, setIsPressed] = useState(false);
+  const [isPressed, setIsPressed] = useState(false)
   const { vibrate } = useHapticFeedback();
   
   const longPressProps = useLongPress(() => {
@@ -227,14 +228,14 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       if (hapticFeedback) vibrate(25);
       onClick();
     }
-  };
+  }
 
   const sizeClasses = {
     sm: 'h-9 px-3 text-sm min-w-[36px]',
     md: 'h-11 px-4 text-base min-w-[44px]',
     lg: 'h-14 px-6 text-lg min-w-[56px]',
     xl: 'h-16 px-8 text-xl min-w-[64px]',
-  };
+  }
 
   return (
     <DaisyButton
@@ -261,7 +262,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
     
         </DaisyButton>
   );
-};
+}
 
 // Swipeable Card Component
 export const SwipeableCard: React.FC<SwipeableCardProps> = ({
@@ -272,16 +273,16 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
   rightAction,
   className,
 }) => {
-  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [swipeOffset, setSwipeOffset] = useState(0)
   const [isDragging, setIsDragging] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
-    touchStart.current = { x: touch.clientX, y: touch.clientY };
+    touchStart.current = { x: touch.clientX, y: touch.clientY }
     setIsDragging(true);
-  };
+  }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!touchStart.current || !isDragging) return;
@@ -292,12 +293,12 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
 
     // Only allow horizontal swipe if it's primarily horizontal
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      e.preventDefault();
+      e.preventDefault()
       const maxSwipe = 100;
       const clampedOffset = Math.max(-maxSwipe, Math.min(maxSwipe, deltaX));
       setSwipeOffset(clampedOffset);
     }
-  };
+  }
 
   const handleTouchEnd = () => {
     if (!isDragging) return;
@@ -313,7 +314,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
     setSwipeOffset(0);
     setIsDragging(false);
     touchStart.current = null;
-  };
+  }
 
   const leftActionOpacity = Math.max(0, swipeOffset / 100);
   const rightActionOpacity = Math.max(0, -swipeOffset / 100);
@@ -368,7 +369,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 // Draggable Item Component
 export const DraggableItem: React.FC<DraggableItemProps> = ({
@@ -379,17 +380,17 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({
   dragData,
   className,
 }) => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false)
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const dragRef = useRef<HTMLDivElement>(null);
   const initialPosition = useRef<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
-    initialPosition.current = { x: touch.clientX, y: touch.clientY };
+    initialPosition.current = { x: touch.clientX, y: touch.clientY }
     setIsDragging(true);
     onDragStart?.();
-  };
+  }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || !initialPosition.current) return;
@@ -399,14 +400,14 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({
     const deltaY = touch.clientY - initialPosition.current.y;
 
     setDragPosition({ x: deltaX, y: deltaY });
-  };
+  }
 
   const handleTouchEnd = () => {
     setIsDragging(false);
     setDragPosition({ x: 0, y: 0 });
     initialPosition.current = null;
     onDragEnd?.();
-  };
+  }
 
   return (
     <div
@@ -433,7 +434,7 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Touch Slider Component
 export const TouchSlider: React.FC<TouchSliderProps> = ({
@@ -447,7 +448,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
   className,
   'aria-label': ariaLabel,
 }) => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null);
   const { vibrate } = useHapticFeedback();
 
@@ -456,7 +457,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
       setIsDragging(true);
       vibrate(25);
     }
-  };
+  }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || disabled || !sliderRef.current) return;
@@ -468,11 +469,11 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
     const steppedValue = Math.round(newValue / step) * step;
     
     onChange(Math.max(min, Math.min(max, steppedValue)));
-  };
+  }
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-  };
+  }
 
   const percentage = ((value - min) / (max - min)) * 100;
 
@@ -521,7 +522,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Pull to Refresh Component
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
@@ -530,7 +531,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshThreshold = 80,
   className,
 }) => {
-  const [pullDistance, setPullDistance] = useState(0);
+  const [pullDistance, setPullDistance] = useState(0)
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -543,9 +544,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
     const scrollTop = containerRef.current.scrollTop;
     
     if (scrollTop === 0) {
-      touchStart.current = { y: touch.clientY, scrollTop };
+      touchStart.current = { y: touch.clientY, scrollTop }
     }
-  };
+  }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!touchStart.current || isRefreshing) return;
@@ -559,7 +560,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       setPullDistance(distance);
       setCanRefresh(distance >= refreshThreshold);
     }
-  };
+  }
 
   const handleTouchEnd = async () => {
     if (canRefresh && !isRefreshing) {
@@ -574,7 +575,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
     setPullDistance(0);
     setCanRefresh(false);
     touchStart.current = null;
-  };
+  }
 
   const refreshProgress = Math.min((pullDistance / refreshThreshold) * 100, 100);
 
@@ -622,12 +623,12 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Touch Action Menu Component
 export const TouchActionMenu: React.FC<{
   items: Array<{
-    id: string;
+    id: string
     label: string;
     icon: React.ReactNode;
     onClick: () => void;
@@ -687,11 +688,11 @@ export const TouchActionMenu: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Touch Chip/Tag Component
 export const TouchChip: React.FC<{
-  children: React.ReactNode;
+  children: React.ReactNode
   onRemove?: () => void;
   onClick?: () => void;
   variant?: 'default' | 'secondary' | 'outline';
@@ -709,7 +710,7 @@ export const TouchChip: React.FC<{
     sm: 'h-7 px-2 text-xs',
     md: 'h-9 px-3 text-sm',
     lg: 'h-11 px-4 text-base',
-  };
+  }
 
   return (
     <div
@@ -741,7 +742,7 @@ export const TouchChip: React.FC<{
       )}
     </div>
   );
-};
+}
 
 export default {
   TouchButton,
@@ -751,4 +752,4 @@ export default {
   PullToRefresh,
   TouchActionMenu,
   TouchChip,
-};
+}

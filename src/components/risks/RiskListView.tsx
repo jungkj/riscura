@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk, RiskCategory } from '@/types';
-// import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
+import { DaisyCardBody, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTable, DaisyTableHeader, DaisyTableBody, DaisyTableRow, DaisyTableHead, DaisyTableCell } from '@/components/ui/daisy-components';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk, RiskCategory } from '@/types'
+// import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils'
 
 // UI Components
 import {
@@ -12,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/components/ui/table'
 import {
   Select,
   SelectContent,
@@ -33,7 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
@@ -50,7 +51,7 @@ import {
   Eye,
   Edit,
   X,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface RiskListViewProps {
   onCreateRisk?: () => void;
@@ -89,7 +90,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   // Debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters({ search: searchInput });
+      setFilters({ search: searchInput })
     }, 300);
     
     return () => clearTimeout(timeoutId);
@@ -99,7 +100,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   const _stats = getRiskStats();
 
   // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredRisks.length / itemsPerPage);
   const paginatedRisks = filteredRisks.slice(
@@ -110,11 +111,11 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
   // Selection handlers
   const handleSelectAll = () => {
     if (selectedRisks.length === filteredRisks.length) {
-      clearSelection();
+      clearSelection()
     } else {
       selectAllRisks();
     }
-  };
+  }
 
   const handleSelectRisk = (riskId: string) => {
     if (selectedRisks.includes(riskId)) {
@@ -122,28 +123,28 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
     } else {
       setSelectedRisks([...selectedRisks, riskId]);
     }
-  };
+  }
 
   // Sorting handler
   const handleSort = (field: string) => {
     if (sortBy === field) {
-      setSorting(field, sortDirection === 'asc' ? 'desc' : 'asc');
+      setSorting(field, sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
       setSorting(field, 'asc');
     }
-  };
+  }
 
   // Bulk actions
   const handleBulkDelete = async () => {
     if (selectedRisks.length > 0) {
       try {
-        await deleteRisks(selectedRisks);
+        await deleteRisks(selectedRisks)
         clearSelection();
       } catch (error) {
-        // console.error('Failed to delete risks:', error);
+        // console.error('Failed to delete risks:', error)
       }
     }
-  };
+  }
 
   const handleBulkExport = () => {
     const selectedRiskData = filteredRisks.filter(risk => selectedRisks.includes(risk.id));
@@ -166,11 +167,11 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
     a.download = 'risks-export.csv';
     a.click();
     window.URL.revokeObjectURL(url);
-  };
+  }
 
   // Risk level badge component
   const RiskLevelBadge: React.FC<{ score: number }> = ({ score }) => {
-    const level = getRiskLevel(score);
+    const level = getRiskLevel(score)
     const colorClass = getRiskLevelColor(level);
     
     return (
@@ -179,7 +180,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   // Risk score progress component
   const RiskScoreProgress: React.FC<{ score: number }> = ({ score }) => {
@@ -191,7 +192,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
 <span className="text-sm font-medium">{score}</span>
       </div>
     );
-  };
+  }
 
   if (loading) {
     return <LoadingSpinner text="Loading risks..." />;
@@ -214,7 +215,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -572,4 +573,4 @@ handleSelectRisk(risk.id)} />
       )}
     </div>
   );
-}; 
+} 

@@ -72,7 +72,7 @@ export function useGestures(_config: GestureConfig = {}) {
   // Clear timers
   const clearTimers = useCallback(() => {
     if (tapTimer.current) {
-      clearTimeout(tapTimer.current);
+      clearTimeout(tapTimer.current)
       tapTimer.current = null;
     }
     if (longPressTimer.current) {
@@ -83,7 +83,7 @@ export function useGestures(_config: GestureConfig = {}) {
 
   // Handle tap gestures
   const handleTap = useCallback(() => {
-    if (disabled) return;
+    if (disabled) return
 
     const now = Date.now();
     tapCount.current += 1;
@@ -106,7 +106,7 @@ export function useGestures(_config: GestureConfig = {}) {
 
   // Handle long press
   const startLongPress = useCallback(() => {
-    if (disabled || !onLongPress) return;
+    if (disabled || !onLongPress) return
 
     longPressTimer.current = setTimeout(() => {
       onLongPress();
@@ -131,7 +131,7 @@ export function useGestures(_config: GestureConfig = {}) {
         first,
         last,
       }) => {
-        if (disabled) return;
+        if (disabled) return
 
         const distance = Math.sqrt(mx * mx + my * my);
         const velocityMagnitude = Math.sqrt(vx * vx + vy * vy);
@@ -141,7 +141,7 @@ export function useGestures(_config: GestureConfig = {}) {
           isActive: !last,
           distance,
           velocity: velocityMagnitude,
-        };
+        }
 
         if (first) {
           startLongPress();
@@ -153,7 +153,7 @@ export function useGestures(_config: GestureConfig = {}) {
 
         // Pull to refresh
         if (pullToRefreshEnabled && onPullToRefresh && dy > 0 && my > 0) {
-          gestureState.current.isPulling = true;
+          gestureState.current.isPulling = true
           gestureState.current.pullDistance = my;
 
           if (my > 80 && vy > velocityThreshold) {
@@ -164,13 +164,13 @@ export function useGestures(_config: GestureConfig = {}) {
 
         // Swipe detection
         if (last && distance > swipeThreshold && velocityMagnitude > velocityThreshold) {
-          const absX = Math.abs(mx);
+          const absX = Math.abs(mx)
           const absY = Math.abs(my);
 
           if (absX > absY) {
             // Horizontal swipe
             if (mx > 0) {
-              gestureState.current.direction = 'right';
+              gestureState.current.direction = 'right'
               onSwipeRight?.();
             } else {
               gestureState.current.direction = 'left';
@@ -179,7 +179,7 @@ export function useGestures(_config: GestureConfig = {}) {
           } else {
             // Vertical swipe
             if (my > 0) {
-              gestureState.current.direction = 'down';
+              gestureState.current.direction = 'down'
               onSwipeDown?.();
             } else {
               gestureState.current.direction = 'up';
@@ -213,7 +213,7 @@ export function useGestures(_config: GestureConfig = {}) {
 
         // Only trigger tap if not dragging
         if (gestureState.current.distance < 10) {
-          handleTap();
+          handleTap()
         }
       },
     },
@@ -231,20 +231,20 @@ export function useGestures(_config: GestureConfig = {}) {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      clearTimers();
-    };
+      clearTimers()
+    }
   }, [clearTimers]);
 
   return {
     bind,
     gestureState: gestureState.current,
     clearTimers,
-  };
+  }
 }
 
 // Hook for pull-to-refresh functionality
 export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled = true) {
-  const isRefreshing = useRef(false);
+  const isRefreshing = useRef(false)
   const refreshThreshold = 80;
 
   const bind = useGesture({
@@ -253,12 +253,12 @@ export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled 
 
       // Only trigger on downward pull from top
       if (dy > 0 && my > refreshThreshold && vy > 0.5 && window.scrollY === 0) {
-        isRefreshing.current = true;
+        isRefreshing.current = true
 
         try {
           await onRefresh();
         } catch (error) {
-          // console.error('Pull to refresh failed:', error);
+          // console.error('Pull to refresh failed:', error)
         } finally {
           isRefreshing.current = false;
         }
@@ -271,7 +271,7 @@ export function usePullToRefresh(onRefresh: () => void | Promise<void>, enabled 
   return {
     bind,
     isRefreshing: isRefreshing.current,
-  };
+  }
 }
 
 // Hook for swipe navigation
@@ -357,7 +357,7 @@ export function useLongPress(
     onPointerUp: cancel,
     onPointerLeave: cancel,
     onPointerCancel: cancel,
-  };
+  }
 }
 
 export default useGestures;

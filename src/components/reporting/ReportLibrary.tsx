@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -11,6 +11,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableHeader, DaisyTableRow } from '@/components/ui/DaisyTable';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTableRow, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   FileText, 
   Download, 
@@ -27,9 +28,9 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   CheckCircle,
   AlertCircle,
   Info
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 
 interface Report {
   id: string;
@@ -43,7 +44,7 @@ interface Report {
     id: string;
     name: string;
     email: string;
-  };
+  }
   downloadUrl?: string;
   parameters?: Record<string, any>;
   recipients?: string[];
@@ -51,7 +52,7 @@ interface Report {
   schedule?: {
     frequency: string;
     nextRun?: Date;
-  };
+  }
 }
 
 interface ReportLibraryProps {
@@ -84,7 +85,7 @@ export default function ReportLibrary({
 
   // Load reports on component mount
   useEffect(() => {
-    loadReports();
+    loadReports()
   }, [currentPage, typeFilter, statusFilter, dateFilter]);
 
   // Filter reports based on search term
@@ -92,7 +93,7 @@ export default function ReportLibrary({
     const filtered = reports.filter(report => {
       const matchesSearch = searchTerm === '' || 
         report.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.createdBy.name.toLowerCase().includes(searchTerm.toLowerCase());
+        report.createdBy.name.toLowerCase().includes(searchTerm.toLowerCase())
       
       return matchesSearch;
     });
@@ -148,7 +149,7 @@ export default function ReportLibrary({
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const handleSelectReport = (reportId: string, checked: boolean) => {
     if (checked) {
@@ -156,7 +157,7 @@ export default function ReportLibrary({
     } else {
       setSelectedReports(selectedReports.filter(id => id !== reportId));
     }
-  };
+  }
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -164,7 +165,7 @@ export default function ReportLibrary({
     } else {
       setSelectedReports([]);
     }
-  };
+  }
 
   const handleDownload = async (report: Report) => {
     if (report.status !== 'COMPLETED') {
@@ -181,7 +182,7 @@ export default function ReportLibrary({
         await onDownload(report);
       } else {
         // Default download behavior
-        const response = await fetch(`/api/reports/${report.id}/download`);
+        const response = await fetch(`/api/reports/${report.id}/download`)
         if (response.ok) {
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
@@ -208,7 +209,7 @@ export default function ReportLibrary({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleDelete = async () => {
     if (selectedReports.length === 0) return;
@@ -222,7 +223,7 @@ export default function ReportLibrary({
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reportIds: selectedReports }),
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Delete failed');
@@ -244,7 +245,7 @@ export default function ReportLibrary({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleShare = async (report: Report) => {
     if (onShare) {
@@ -252,14 +253,14 @@ export default function ReportLibrary({
     } else {
       // Default share behavior - copy link to clipboard
       if (report.downloadUrl) {
-        await navigator.clipboard.writeText(report.downloadUrl);
+        await navigator.clipboard.writeText(report.downloadUrl)
         toast({
           title: 'Success',
           description: 'Download link copied to clipboard',
         });
       }
     }
-  };
+  }
 
   const getStatusIcon = (status: Report['status']) => {
     switch (status) {
@@ -277,7 +278,7 @@ export default function ReportLibrary({
       default:
         return <Info className="h-4 w-4 text-gray-600" />;
     }
-  };
+  }
 
   const getStatusBadge = (status: Report['status']) => {
     const variants = {
@@ -294,7 +295,7 @@ export default function ReportLibrary({
         {status}
       </DaisyBadge>
     );
-  };
+  }
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -302,7 +303,7 @@ export default function ReportLibrary({
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   return (
     <div className="space-y-6">

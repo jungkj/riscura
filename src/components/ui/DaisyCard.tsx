@@ -28,7 +28,7 @@ export const DaisyCard = ({
       {children}
     </div>
   );
-};
+}
 
 export const DaisyCardBody = ({
   className,
@@ -40,7 +40,7 @@ export const DaisyCardBody = ({
       {children}
     </div>
   );
-};
+}
 
 export const DaisyCardTitle = ({
   className,
@@ -52,7 +52,7 @@ export const DaisyCardTitle = ({
       {children}
     </h2>
   );
-};
+}
 
 export const DaisyCardActions = ({
   className,
@@ -64,4 +64,4 @@ export const DaisyCardActions = ({
       {children}
     </div>
   );
-};
+}

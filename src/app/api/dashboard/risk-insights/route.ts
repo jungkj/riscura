@@ -8,7 +8,7 @@ export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     try {
       // Get user from request (added by middleware)
-      const user = (req as any).user;
+      const user = (req as any).user
 
       if (!user || !user.organizationId) {
         return NextResponse.json(
@@ -18,7 +18,7 @@ export const GET = withApiMiddleware(
       }
 
       // Fetch all Probo data
-      const proboService = getEnhancedProboService();
+      const proboService = getEnhancedProboService()
       const [metrics, complianceStatus, insights, vendorSummary] = await Promise.all([
         proboService.getLatestMetrics(user.organizationId),
         proboService.getComplianceStatus(user.organizationId),
@@ -37,7 +37,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      // console.error('Probo insights API error:', error);
+      // console.error('Probo insights API error:', error)
       return NextResponse.json(
         {
           success: false,
@@ -64,14 +64,14 @@ const ActionSchema = z.discriminatedUnion('action', [
   z.object({
     action: z.literal('disable'),
   }),
-]);
+])
 
 // POST /api/dashboard/probo-insights - Configure or sync Probo integration
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
     try {
       // Get user from request (added by middleware)
-      const user = (req as any).user;
+      const user = (req as any).user
 
       if (!user || !user.organizationId) {
         return NextResponse.json(
@@ -92,7 +92,7 @@ export const POST = withApiMiddleware(
           );
 
           // Initial sync
-          await EnhancedProboService.syncMetrics(user.organizationId);
+          await EnhancedProboService.syncMetrics(user.organizationId)
 
           return NextResponse.json({
             success: true,
@@ -120,7 +120,7 @@ export const POST = withApiMiddleware(
           return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
       }
     } catch (error) {
-      // console.error('Probo insights POST API error:', error);
+      // console.error('Probo insights POST API error:', error)
 
       if (error instanceof z.ZodError) {
         return NextResponse.json(

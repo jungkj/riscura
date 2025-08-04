@@ -1,0 +1,69 @@
+{
+  "extends": ["next/core-web-vitals", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    // Only critical errors that break functionality
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-no-undef": "error",
+    "react/jsx-no-duplicate-props": "error",
+    "react/no-unknown-property": "error",
+
+    // TypeScript - only unused vars that start without underscore
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+
+    // Warnings only - won't block builds
+    "no-console": "warn",
+    "react/display-name": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-anonymous-default-export": "warn",
+
+    // Disabled for development workflow
+    "react/jsx-sort-props": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-wrap-multilines": "off",
+    "react/jsx-no-leaked-render": "off",
+    "react/jsx-no-constructed-context-values": "off",
+    "react/self-closing-comp": "off",
+    "react/no-unescaped-entities": "off",
+
+    // Completely disabled
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.tsx", "*.jsx"],
+      "rules": {
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
+      }
+    },
+    {
+      "files": ["src/app/api/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
+}

@@ -2,12 +2,13 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -17,7 +18,7 @@ import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/compon
 
 // Chart Components
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, 
-         ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+         ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from 'recharts'
 
 // Icons
 // import {
@@ -25,16 +26,16 @@ import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   MoreHorizontal, Maximize, Minimize, RefreshCw, Download, Settings,
   Brain, Zap, Target, Activity, PieChart as PieChartIcon, LineChart as LineChartIcon,
   AreaChart as AreaChartIcon, Clock, Users, DollarSign, Globe
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
-import type { Risk } from '@/types';
+import type { Risk } from '@/types'
 
 interface DashboardWidget {
   id: string;
   title: string;
   type: 'chart' | 'metric' | 'list' | 'ai' | 'custom';
-  position: { x: number; y: number; w: number; h: number };
+  position: { x: number; y: number; w: number; h: number }
   data?: any;
   config?: any;
   visible: boolean;
@@ -49,8 +50,8 @@ interface DashboardGridProps {
   data: {
     risks: Risk[];
     realTime: any;
-    ai: { enabled: boolean };
-  };
+    ai: { enabled: boolean }
+  }
 }
 
 // Mock chart data
@@ -64,7 +65,7 @@ const generateChartData = (_type: string) => {
         high: Math.floor(Math.random() * 15) + 10,
         medium: Math.floor(Math.random() * 20) + 15,
         low: Math.floor(Math.random() * 25) + 20,
-      }));
+      }))
     case 'compliance-score':
       return [
         { name: 'SOC2', value: 94, color: '#10B981' },
@@ -84,7 +85,7 @@ const generateChartData = (_type: string) => {
     default:
       return [];
   }
-};
+}
 
 export function DashboardGrid({
   widgets,
@@ -190,7 +191,7 @@ export function DashboardGrid({
         </DaisyCard>
       </motion.div>
     );
-  };
+  }
 
   const renderWidgetContent = (widget: DashboardWidget, isExpanded: boolean, data: any) => {
     switch (widget.id) {
@@ -209,7 +210,7 @@ export function DashboardGrid({
       default:
         return <div className="text-[#A8A8A8] font-inter">Widget content not available</div>;
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -341,7 +342,7 @@ const AIInsightsWidget = ({ enabled, expanded }: { enabled: boolean; expanded: b
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-4">

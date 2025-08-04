@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -15,6 +15,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { toast } from '@/hooks/use-toast';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem } from '@/components/ui/daisy-components';
   Dialog,
   DialogContent,
   DialogDescription,
@@ -47,11 +48,11 @@ import {
   Square, MoreVertical, ArrowUpDown, Eye, Copy, Share2,
   FileText, Image, MapPin, Settings, Target, AlertCircle,
   TrendingUp, TrendingDown, BarChart3, Grid3X3, Activity
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types for search and filtering
 interface SearchFilter {
-  id: string;
+  id: string
   field: string;
   operator: 'equals' | 'contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in';
   value: any;
@@ -118,7 +119,7 @@ export function AdvancedSearchFilter({
   className
 }: AdvancedSearchFilterProps) {
   // Search and Filter State
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('')
   const [activeFilters, setActiveFilters] = useState<SearchFilter[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
@@ -157,7 +158,7 @@ export function AdvancedSearchFilter({
       createdBy: 'current-user',
       useCount: 8
     }
-  ]);
+  ])
   
   // Quick Filters
   const quickFilters: QuickFilter[] = useMemo(() => [
@@ -203,10 +204,10 @@ export function AdvancedSearchFilter({
       color: 'bg-green-100 text-green-800',
       count: Math.floor(items.length * 0.4)
     }
-  ], [items.length]);
+  ], [items.length])
 
   // Bulk Operations
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [showBulkActions, setShowBulkActions] = useState(false);
   
   const bulkOperations: BulkOperation[] = [
@@ -242,12 +243,12 @@ export function AdvancedSearchFilter({
   ];
 
   // Tag Management State
-  const [newTagName, setNewTagName] = useState('');
+  const [newTagName, setNewTagName] = useState('')
   const [newTagColor, setNewTagColor] = useState('#3b82f6');
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
   // Saved Search State
-  const [showSaveSearch, setShowSaveSearch] = useState(false);
+  const [showSaveSearch, setShowSaveSearch] = useState(false)
   const [newSearchName, setNewSearchName] = useState('');
   const [newSearchDescription, setNewSearchDescription] = useState('');
   const [newSearchIsPublic, setNewSearchIsPublic] = useState(false);
@@ -257,15 +258,15 @@ export function AdvancedSearchFilter({
     field: '',
     operator: 'contains',
     value: ''
-  });
+  })
 
   // Filtered Items Calculation
   const filteredItems = useMemo(() => {
-    let filtered = [...items];
+    let filtered = [...items]
 
     // Apply text search
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter(item => 
         Object.values(item).some(value => 
           String(value).toLowerCase().includes(query)
@@ -276,7 +277,7 @@ export function AdvancedSearchFilter({
     // Apply filters
     activeFilters.forEach(filter => {
       filtered = filtered.filter(item => {
-        const fieldValue = item[filter.field];
+        const fieldValue = item[filter.field]
         
         switch (filter.operator) {
           case 'equals':
@@ -305,7 +306,7 @@ export function AdvancedSearchFilter({
     if (selectedTags.length > 0) {
       filtered = filtered.filter(item => 
         item.tags && selectedTags.some(tag => item.tags.includes(tag))
-      );
+      )
     }
 
     return filtered;
@@ -313,17 +314,17 @@ export function AdvancedSearchFilter({
 
   // Update parent component when filtered items change
   useEffect(() => {
-    onFilteredItemsChange(filteredItems);
+    onFilteredItemsChange(filteredItems)
   }, [filteredItems, onFilteredItemsChange]);
 
   // Update parent component when selection changes
   useEffect(() => {
-    onSelectionChange?.(selectedItems);
+    onSelectionChange?.(selectedItems)
   }, [selectedItems, onSelectionChange]);
 
   // Bulk Operation Handlers
   const handleBulkExport = async (itemIds: string[]) => {
-    const exportData = filteredItems.filter(item => itemIds.includes(item.id));
+    const exportData = filteredItems.filter(item => itemIds.includes(item.id))
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -336,39 +337,39 @@ export function AdvancedSearchFilter({
       title: 'Export Complete',
       description: `Exported ${itemIds.length} items successfully.`,
     });
-  };
+  }
 
   const handleBulkAddTags = (itemIds: string[]) => {
     // In a real app, this would update the items with new tags
-    // console.log('Adding tags to items:', itemIds);
+    // console.log('Adding tags to items:', itemIds)
     toast({
       title: 'Tags Added',
       description: `Added tags to ${itemIds.length} items.`,
     });
-  };
+  }
 
   const handleBulkArchive = (itemIds: string[]) => {
     // In a real app, this would archive the items
-    // console.log('Archiving items:', itemIds);
+    // console.log('Archiving items:', itemIds)
     toast({
       title: 'Items Archived',
       description: `Archived ${itemIds.length} items.`,
     });
-  };
+  }
 
   const handleBulkDelete = (itemIds: string[]) => {
     // In a real app, this would delete the items
-    // console.log('Deleting items:', itemIds);
+    // console.log('Deleting items:', itemIds)
     toast({
       title: 'Items Deleted',
       description: `Deleted ${itemIds.length} items.`,
       variant: 'destructive',
     });
-  };
+  }
 
   // Filter Management
   const addFilter = () => {
-    if (!newFilter.field || newFilter.value === undefined) return;
+    if (!newFilter.field || newFilter.value === undefined) return
 
     const filter: SearchFilter = {
       id: `filter-${Date.now()}`,
@@ -376,33 +377,33 @@ export function AdvancedSearchFilter({
       operator: newFilter.operator || 'contains',
       value: newFilter.value,
       label: `${searchableFields.find(f => f.key === newFilter.field)?.label} ${newFilter.operator} ${newFilter.value}`
-    };
+    }
 
     setActiveFilters([...activeFilters, filter]);
     setNewFilter({ field: '', operator: 'contains', value: '' });
-  };
+  }
 
   const removeFilter = (filterId: string) => {
     setActiveFilters(activeFilters.filter(f => f.id !== filterId));
-  };
+  }
 
   const clearAllFilters = () => {
     setActiveFilters([]);
     setSelectedTags([]);
     setSearchQuery('');
     setSelectedItems([]);
-  };
+  }
 
   // Quick Filter Application
   const applyQuickFilter = (quickFilter: QuickFilter) => {
-    setActiveFilters(quickFilter.filters);
+    setActiveFilters(quickFilter.filters)
     setSelectedTags([]);
     setSearchQuery('');
-  };
+  }
 
   // Saved Search Management
   const saveCurrentSearch = () => {
-    if (!newSearchName.trim()) return;
+    if (!newSearchName.trim()) return
 
     const savedSearch: SavedSearch = {
       id: `saved-${Date.now()}`,
@@ -416,7 +417,7 @@ export function AdvancedSearchFilter({
       isPublic: newSearchIsPublic,
       createdBy: 'current-user',
       useCount: 0
-    };
+    }
 
     setSavedSearches([...savedSearches, savedSearch]);
     setNewSearchName('');
@@ -428,7 +429,7 @@ export function AdvancedSearchFilter({
       title: 'Search Saved',
       description: `Saved search "${newSearchName}" created successfully.`,
     });
-  };
+  }
 
   const loadSavedSearch = (savedSearch: SavedSearch) => {
     setSearchQuery(savedSearch.query);
@@ -440,13 +441,13 @@ export function AdvancedSearchFilter({
       s.id === savedSearch.id 
         ? { ...s, useCount: s.useCount + 1, updatedAt: new Date() }
         : s
-    ));
+    ))
 
     toast({
       title: 'Search Loaded',
       description: `Loaded saved search "${savedSearch.name}".`,
     });
-  };
+  }
 
   const deleteSavedSearch = (searchId: string) => {
     setSavedSearches(prev => prev.filter(s => s.id !== searchId));
@@ -454,18 +455,18 @@ export function AdvancedSearchFilter({
       title: 'Search Deleted',
       description: 'Saved search deleted successfully.',
     });
-  };
+  }
 
   // Tag Management
   const addTag = () => {
-    if (!newTagName.trim()) return;
+    if (!newTagName.trim()) return
 
     const tag: Tag = {
       id: `tag-${Date.now()}`,
       name: newTagName,
       color: newTagColor,
       count: 0
-    };
+    }
 
     onTagsChange?.([...availableTags, tag]);
     setNewTagName('');
@@ -475,12 +476,12 @@ export function AdvancedSearchFilter({
       title: 'Tag Created',
       description: `Tag "${newTagName}" created successfully.`,
     });
-  };
+  }
 
   const updateTag = (tagId: string, updates: Partial<Tag>) => {
     onTagsChange?.(availableTags.map(t => t.id === tagId ? { ...t, ...updates } : t));
     setEditingTag(null);
-  };
+  }
 
   const deleteTag = (tagId: string) => {
     onTagsChange?.(availableTags.filter(t => t.id !== tagId));
@@ -489,7 +490,7 @@ export function AdvancedSearchFilter({
       title: 'Tag Deleted',
       description: 'Tag deleted successfully.',
     });
-  };
+  }
 
   // Selection Management
   const toggleItemSelection = (itemId: string) => {
@@ -497,16 +498,16 @@ export function AdvancedSearchFilter({
       prev.includes(itemId) 
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
-    );
-  };
+    )
+  }
 
   const selectAllVisible = () => {
     setSelectedItems(filteredItems.map(item => item.id));
-  };
+  }
 
   const clearSelection = () => {
     setSelectedItems([]);
-  };
+  }
 
   return (
     <div className={`space-y-4 ${className}`}>

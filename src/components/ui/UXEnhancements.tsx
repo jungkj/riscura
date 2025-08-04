@@ -16,7 +16,7 @@ import { usePerformance } from '@/lib/performance/PerformanceProvider';
 
 // Types
 interface LoadingState {
-  isLoading: boolean;
+  isLoading: boolean
   progress?: number;
   message?: string;
   type?: 'spinner' | 'skeleton' | 'pulse' | 'dots';
@@ -36,7 +36,7 @@ interface AnimationConfig {
 
 // Error Boundary Component
 interface ErrorBoundaryState {
-  hasError: boolean;
+  hasError: boolean
   error?: Error;
   errorInfo?: ErrorInfo;
 }
@@ -55,11 +55,11 @@ export class ErrorBoundary extends Component<
 
   constructor(props: any) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false }
   }
 
   static getDerivedStateFromError(__error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(__error: Error, errorInfo: ErrorInfo) {
@@ -68,7 +68,7 @@ export class ErrorBoundary extends Component<
 
     // Auto-reset after 5 seconds
     this.resetTimeoutId = window.setTimeout(() => {
-      this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+      this.setState({ hasError: false, error: undefined, errorInfo: undefined })
     }, 5000);
   }
 
@@ -137,14 +137,14 @@ export class ErrorBoundary extends Component<
 
 // Loading Components
 export const LoadingSpinner: React.FC<{
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg'
   className?: string;
 }> = ({ size = 'md', className }) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
     lg: 'w-12 h-12',
-  };
+  }
 
   return (
     <div
@@ -159,7 +159,7 @@ export const LoadingSpinner: React.FC<{
       <span className="sr-only">Loading...</span>
     </div>
   );
-};
+}
 
 export const LoadingDots: React.FC<{
   className?: string;
@@ -213,12 +213,12 @@ export const SkeletonLoader: React.FC<{
     rectangular: 'rounded-md',
     circular: 'rounded-full',
     card: 'h-48 rounded-lg',
-  };
+  }
 
   const style = {
     width: width || (variant === 'circular' ? height : '100%'),
     height: height || (variant === 'text' ? 16 : variant === 'circular' ? width : 192),
-  };
+  }
 
   return (
     <div
@@ -230,7 +230,7 @@ export const SkeletonLoader: React.FC<{
       <span className="sr-only">Loading...</span>
     </div>
   );
-};
+}
 
 export const LoadingOverlay: React.FC<{
   isLoading: boolean;
@@ -251,7 +251,7 @@ export const LoadingOverlay: React.FC<{
 
 // Progress Components
 export const ProgressBar: React.FC<{
-  progress: number;
+  progress: number
   max?: number;
   className?: string;
   showLabel?: boolean;
@@ -264,7 +264,7 @@ export const ProgressBar: React.FC<{
     success: 'bg-success',
     warning: 'bg-warning',
     error: 'bg-error',
-  };
+  }
 
   return (
     <div className={cn('w-full', className)}>
@@ -286,7 +286,7 @@ export const ProgressBar: React.FC<{
       )}
     </div>
   );
-};
+}
 
 export const CircularProgress: React.FC<{
   progress: number;
@@ -315,7 +315,7 @@ export const CircularProgress: React.FC<{
     success: 'stroke-success',
     warning: 'stroke-warning',
     error: 'stroke-error',
-  };
+  }
 
   return (
     <div className={cn('relative', className)}>
@@ -350,11 +350,11 @@ export const CircularProgress: React.FC<{
       )}
     </div>
   );
-};
+}
 
 // Animation Components
 export const FadeIn: React.FC<{
-  children: ReactNode;
+  children: ReactNode
   duration?: number;
   delay?: number;
   className?: string;
@@ -407,7 +407,7 @@ export const FadeIn: React.FC<{
       {children}
     </div>
   );
-};
+}
 
 export const SlideIn: React.FC<{
   children: ReactNode;
@@ -448,7 +448,7 @@ export const SlideIn: React.FC<{
     right: isVisible ? 'translateX(0)' : `translateX(${distance}px)`,
     up: isVisible ? 'translateY(0)' : `translateY(${distance}px)`,
     down: isVisible ? 'translateY(0)' : `translateY(-${distance}px)`,
-  };
+  }
 
   return (
     <div
@@ -464,7 +464,7 @@ export const SlideIn: React.FC<{
       {children}
     </div>
   );
-};
+}
 
 export const StaggeredList: React.FC<{
   children: ReactNode[];
@@ -488,11 +488,11 @@ export const StaggeredList: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 // Notification Components
 export const Toast: React.FC<{
-  message: string;
+  message: string
   type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
   onClose: () => void;
@@ -512,14 +512,14 @@ export const Toast: React.FC<{
     error: 'bg-error text-white',
     warning: 'bg-warning text-black',
     info: 'bg-surface-primary text-text-primary border border-surface-tertiary',
-  };
+  }
 
   const icons = {
     success: '✓',
     error: '✕',
     warning: '⚠',
     info: 'ℹ',
-  };
+  }
 
   return (
     <div
@@ -544,11 +544,11 @@ export const Toast: React.FC<{
       </button>
     </div>
   );
-};
+}
 
 // Hooks for UX Enhancement
 export const useLoadingState = (initialState = false) => {
-  const [isLoading, setIsLoading] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(initialState)
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState<string>();
 
@@ -576,8 +576,8 @@ export const useLoadingState = (initialState = false) => {
     startLoading,
     updateProgress,
     stopLoading,
-  };
-};
+  }
+}
 
 export const useToast = () => {
   const [toasts, setToasts] = useState<
@@ -628,8 +628,8 @@ export const useToast = () => {
     removeToast,
     ToastContainer,
     toasts,
-  };
-};
+  }
+}
 
 export const useProgressiveEnhancement = () => {
   const [isEnhanced, setIsEnhanced] = useState(false);
@@ -644,8 +644,8 @@ export const useProgressiveEnhancement = () => {
     setIsEnhanced(hasJS && hasModernFeatures && hasGoodConnection);
   }, [settings.enableCodeSplitting]);
 
-  return { isEnhanced };
-};
+  return { isEnhanced }
+}
 
 export default {
   ErrorBoundary,
@@ -663,4 +663,4 @@ export default {
   useLoadingState,
   useToast,
   useProgressiveEnhancement,
-};
+}

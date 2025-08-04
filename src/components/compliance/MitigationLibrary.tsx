@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   Search,
   Filter,
@@ -27,7 +28,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
   FileText,
   Globe,
   Cpu
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 interface MitigationControl {
@@ -78,11 +79,11 @@ export function MitigationLibrary() {
         setMitigations(data);
       }
     } catch (error) {
-      // console.error('Failed to load mitigations:', error);
+      // console.error('Failed to load mitigations:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const filterMitigations = () => {
     let filtered = mitigations;
@@ -106,7 +107,7 @@ export function MitigationLibrary() {
     }
 
     setFilteredMitigations(filtered);
-  };
+  }
 
   const importSelectedMitigations = async () => {
     setImporting(true);
@@ -124,15 +125,15 @@ export function MitigationLibrary() {
 
       if (response.ok) {
         const _result = await response.json();
-        // console.log('Import successful:', result);
+        // console.log('Import successful:', result)
         setSelectedMitigations([]);
       }
     } catch (error) {
-      // console.error('Import failed:', error);
+      // console.error('Import failed:', error)
     } finally {
       setImporting(false);
     }
-  };
+  }
 
   const toggleMitigationSelection = (id: string) => {
     setSelectedMitigations(prev => 
@@ -140,16 +141,16 @@ export function MitigationLibrary() {
         ? prev.filter(m => m !== id)
         : [...prev, id]
     );
-  };
+  }
 
   const selectAllFiltered = () => {
     const allFilteredIds = filteredMitigations.map(m => m.id);
     setSelectedMitigations(allFilteredIds);
-  };
+  }
 
   const clearSelection = () => {
     setSelectedMitigations([]);
-  };
+  }
 
   const getImportanceColor = (importance: string) => {
     switch (importance) {
@@ -158,7 +159,7 @@ export function MitigationLibrary() {
       case 'ADVANCED': return 'bg-blue-100 text-blue-700 border-blue-200';
       default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
-  };
+  }
 
   const getImportanceIcon = (importance: string) => {
     switch (importance) {
@@ -169,7 +170,7 @@ export function MitigationLibrary() {
       case 'ADVANCED': return <Zap className="h-3 w-3" />;
       default: return <CheckCircle className="h-3 w-3" />;
     }
-  };
+  }
 
   const getCategoryIcon = (category: string) => {
     const categoryLower = category.toLowerCase();
@@ -181,7 +182,7 @@ export function MitigationLibrary() {
     if (categoryLower.includes('personnel')) return <Users className="h-4 w-4" />;
     if (categoryLower.includes('physical')) return <Shield className="h-4 w-4" />;
     return <Settings className="h-4 w-4" />;
-  };
+  }
 
   const categories: MitigationCategory[] = [
     { name: 'Access Control', count: 45, icon: <Lock className="h-4 w-4" />, color: 'text-blue-600' },
@@ -198,7 +199,7 @@ export function MitigationLibrary() {
     MANDATORY: mitigations.filter(m => m.importance === 'MANDATORY').length,
     PREFERRED: mitigations.filter(m => m.importance === 'PREFERRED').length,
     ADVANCED: mitigations.filter(m => m.importance === 'ADVANCED').length
-  };
+  }
 
   if (loading) {
 
@@ -207,7 +208,7 @@ export function MitigationLibrary() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#199BEC]"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">

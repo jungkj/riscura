@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -30,7 +31,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   Download,
   Plus,
   ArrowRight,
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 interface DashboardStats {
@@ -99,7 +100,7 @@ export function ProboIntegrationDashboard() {
         controlsImplemented: 142,
         totalControls: 200,
         complianceScore: 85,
-      });
+      })
 
       setRecentActivities([
         {
@@ -166,11 +167,11 @@ export function ProboIntegrationDashboard() {
         },
       ]);
     } catch (error) {
-      // console.error('Failed to load dashboard data:', error);
+      // console.error('Failed to load dashboard data:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getActivityIcon = (_type: string) => {
     switch (type) {
@@ -185,7 +186,7 @@ export function ProboIntegrationDashboard() {
       default:
         return <FileText className="h-4 w-4" />;
     }
-  };
+  }
 
   const getSeverityColor = (severity?: string) => {
     switch (severity) {
@@ -200,7 +201,7 @@ export function ProboIntegrationDashboard() {
       default:
         return 'text-gray-600';
     }
-  };
+  }
 
   const getFrameworkStatusColor = (status: string) => {
     switch (status) {
@@ -213,7 +214,7 @@ export function ProboIntegrationDashboard() {
       default:
         return 'bg-gray-100 text-gray-700';
     }
-  };
+  }
 
   if (loading) {
     return (

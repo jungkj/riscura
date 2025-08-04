@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // Types for spreadsheet data
 interface User {
-  id: string;
+  id: string
   firstName: string;
   lastName: string;
   email: string;
@@ -31,7 +31,7 @@ interface Column {
   isRequired?: boolean;
   width: number;
   dropdownOptions?: string[];
-  validationRules?: { min?: number; max?: number };
+  validationRules?: { min?: number; max?: number }
   formula?: string;
   isCalculated?: boolean;
 }
@@ -341,14 +341,14 @@ const mockSpreadsheetData: Record<string, Spreadsheet> = {
     ],
     versions: [],
   },
-};
+}
 
 // GET /api/spreadsheets/[id] - Get spreadsheet by ID
 export async function GET(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const resolvedParams = await params;
+    const resolvedParams = await params
     const { id } = resolvedParams;
     const { searchParams } = new URL(request.url);
     const includeSheets = searchParams.get('includeSheets') === 'true';
@@ -361,7 +361,7 @@ export async function GET(_request: NextRequest,
     }
 
     // If specific sheet requested, filter to that sheet
-    const responseData: Spreadsheet = { ...spreadsheet };
+    const responseData: Spreadsheet = { ...spreadsheet }
     if (sheetId && includeSheets) {
       responseData.sheets = spreadsheet.sheets.filter((sheet) => sheet.id === sheetId);
     } else if (!includeSheets) {
@@ -372,7 +372,7 @@ export async function GET(_request: NextRequest,
         position: sheet.position,
         columns: [] as any[],
         rows: [] as any[],
-      }));
+      }))
     }
 
     return NextResponse.json({
@@ -383,7 +383,7 @@ export async function GET(_request: NextRequest,
       },
     });
   } catch (error) {
-    // console.error('Spreadsheet API error:', error);
+    // console.error('Spreadsheet API error:', error)
     return NextResponse.json({ error: 'Failed to retrieve spreadsheet' }, { status: 500 });
   }
 }
@@ -393,7 +393,7 @@ export async function PUT(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const resolvedParams = await params;
+    const resolvedParams = await params
     const { id } = resolvedParams;
     const body = await request.json();
     const { name, description } = body;
@@ -410,7 +410,7 @@ export async function PUT(_request: NextRequest,
       name: name || spreadsheet.name,
       description: description || spreadsheet.description,
       updatedAt: new Date(),
-    };
+    }
 
     return NextResponse.json({
       success: true,
@@ -418,7 +418,7 @@ export async function PUT(_request: NextRequest,
       data: updatedSpreadsheet,
     });
   } catch (error) {
-    // console.error('Spreadsheet update error:', error);
+    // console.error('Spreadsheet update error:', error)
     return NextResponse.json({ error: 'Failed to update spreadsheet' }, { status: 500 });
   }
 }
@@ -428,7 +428,7 @@ export async function DELETE(_request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const resolvedParams = await params;
+    const resolvedParams = await params
     const { id } = resolvedParams;
 
     const spreadsheet = mockSpreadsheetData[id as keyof typeof mockSpreadsheetData];
@@ -441,9 +441,9 @@ export async function DELETE(_request: NextRequest,
     return NextResponse.json({
       success: true,
       message: 'Spreadsheet deleted successfully (demo mode)',
-    });
+    })
   } catch (error) {
-    // console.error('Spreadsheet deletion error:', error);
+    // console.error('Spreadsheet deletion error:', error)
     return NextResponse.json({ error: 'Failed to delete spreadsheet' }, { status: 500 });
   }
 }

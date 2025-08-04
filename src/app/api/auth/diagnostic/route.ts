@@ -3,7 +3,7 @@ import { checkAuthEnvironment } from '@/lib/auth/env-check';
 
 export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
-    // console.log('[Auth Diagnostic] Running comprehensive authentication diagnostic...');
+    // console.log('[Auth Diagnostic] Running comprehensive authentication diagnostic...')
 
     const startTime = Date.now();
     const diagnostic = await checkAuthEnvironment();
@@ -15,10 +15,10 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       timestamp: new Date().toISOString(),
       duration: `${duration}ms`,
       serverUrl: request.nextUrl.origin,
-    };
+    }
 
     // Test NextAuth initialization
-    let nextAuthStatus = { working: false, error: null as string | null };
+    let nextAuthStatus = { working: false, error: null as string | null }
     try {
       const { authOptions } = await import('@/lib/auth/auth-options-fixed');
       nextAuthStatus.working = true;
@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Test fallback auth
-    let fallbackAuthStatus = { working: false, error: null as string | null };
+    let fallbackAuthStatus = { working: false, error: null as string | null }
     try {
       const { createFallbackAuth } = await import('@/lib/auth/fallback-auth');
       const fallbackOptions = createFallbackAuth();
@@ -53,11 +53,11 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         fallbackAuth: fallbackAuthStatus,
       },
       recommendations: generateRecommendations(diagnostic),
-    };
+    }
 
-    // console.log('[Auth Diagnostic] Completed in', duration, 'ms');
-    // console.log('[Auth Diagnostic] Status:', response.status);
-    // console.log('[Auth Diagnostic] Critical issues:', response.summary.criticalIssues);
+    // console.log('[Auth Diagnostic] Completed in', duration, 'ms')
+    // console.log('[Auth Diagnostic] Status:', response.status)
+    // console.log('[Auth Diagnostic] Critical issues:', response.summary.criticalIssues)
 
     return NextResponse.json(response, {
       status: diagnostic.isValid ? 200 : 207, // 207 Multi-Status for partial success
@@ -68,7 +68,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    // console.error('[Auth Diagnostic] Fatal error:', error);
+    // console.error('[Auth Diagnostic] Fatal error:', error)
 
     return NextResponse.json(
       {

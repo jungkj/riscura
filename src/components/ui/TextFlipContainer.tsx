@@ -18,12 +18,12 @@ export const TextFlipContainer = ({
 
   // Check for prefers-reduced-motion on mount and when it changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
@@ -130,5 +130,5 @@ export const TextFlipContainer = ({
         />
       </motion.div>
     </AnimatePresence>
-  );
-};
+  )
+}

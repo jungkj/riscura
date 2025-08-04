@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 export const performanceMonitor = {
   startMeasure: (name: string) => {
     if (typeof performance !== 'undefined') {
-      performance.mark(`${name}-start`);
+      performance.mark(`${name}-start`)
     }
   },
 
@@ -15,7 +15,7 @@ export const performanceMonitor = {
       const measure = performance.getEntriesByName(name, 'measure')[0];
 
       if (process.env.NODE_ENV === 'development' && measure) {
-        // console.log(`⚡ Performance: ${name} took ${measure.duration.toFixed(2)}ms`);
+        // console.log(`⚡ Performance: ${name} took ${measure.duration.toFixed(2)}ms`)
       }
 
       return measure?.duration || 0;
@@ -35,7 +35,7 @@ export const performanceMonitor = {
       }
     }
   },
-};
+}
 
 // Debounced callback hook with performance tracking
 export const useOptimizedCallback = <T extends (...args: any[]) => any>(
@@ -43,7 +43,7 @@ export const useOptimizedCallback = <T extends (...args: any[]) => any>(
   deps: React.DependencyList,
   delay: number = 0
 ): T => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>()
 
   return useCallback(
     ((...args: Parameters<T>) => {
@@ -63,7 +63,7 @@ export const useOptimizedCallback = <T extends (...args: any[]) => any>(
     }) as T,
     [...deps, delay]
   );
-};
+}
 
 // Memoized value with size tracking
 export const useOptimizedMemo = <T>(
@@ -72,31 +72,31 @@ export const useOptimizedMemo = <T>(
   debugName?: string
 ): T => {
   return useMemo(() => {
-    performanceMonitor.startMeasure(`memo-${debugName || 'anonymous'}`);
+    performanceMonitor.startMeasure(`memo-${debugName || 'anonymous'}`)
     const _result = factory();
     performanceMonitor.endMeasure(`memo-${debugName || 'anonymous'}`);
 
     // Track memory usage in development
     if (process.env.NODE_ENV === 'development' && debugName) {
       try {
-        const size = JSON.stringify(result).length;
+        const size = JSON.stringify(result).length
         if (size > 10000) {
           // Warn about large memoized values
-          // console.warn(`📊 Large memoized value detected: ${debugName} (${size} bytes)`);
+          // console.warn(`📊 Large memoized value detected: ${debugName} (${size} bytes)`)
         }
       } catch (error) {
         // Handle circular references or non-serializable values
-        // console.warn(`📊 Could not measure size for memoized value: ${debugName}`);
+        // console.warn(`📊 Could not measure size for memoized value: ${debugName}`)
       }
     }
 
     return result;
   }, deps);
-};
+}
 
 // Intersection Observer hook for lazy loading
 export const useIntersectionObserver = (_options: IntersectionObserverInit = {}) => {
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false)
   const [hasIntersected, setHasIntersected] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
 
@@ -122,11 +122,11 @@ export const useIntersectionObserver = (_options: IntersectionObserverInit = {})
 
     return () => {
       observer.unobserve(element);
-    };
+    }
   }, [hasIntersected, options]);
 
-  return { ref: elementRef, isIntersecting, hasIntersected };
-};
+  return { ref: elementRef, isIntersecting, hasIntersected }
+}
 
 // Virtual scrolling hook for large lists
 export const useVirtualScrolling = <T>(
@@ -135,7 +135,7 @@ export const useVirtualScrolling = <T>(
   itemHeight: number,
   overscan: number = 5
 ) => {
-  const [scrollTop, setScrollTop] = useState(0);
+  const [scrollTop, setScrollTop] = useState(0)
 
   const visibleItems = useMemo(() => {
     const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
@@ -150,7 +150,7 @@ export const useVirtualScrolling = <T>(
       items: items.slice(startIndex, endIndex + 1),
       totalHeight: items.length * itemHeight,
       offsetY: startIndex * itemHeight,
-    };
+    }
   }, [items, scrollTop, containerHeight, itemHeight, overscan]);
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
@@ -164,12 +164,12 @@ export const useVirtualScrolling = <T>(
       style: { height: containerHeight, overflow: 'auto' },
       onScroll: handleScroll,
     },
-  };
-};
+  }
+}
 
 // Performance metrics tracking
 export interface PerformanceMetrics {
-  renderCount: number;
+  renderCount: number
   lastRenderTime: number;
   totalRenderTime: number;
   avgRenderTime: number;
@@ -205,17 +205,17 @@ export const usePerformanceMetrics = (componentName: string) => {
           renders: metrics.renderCount,
           lastRender: `${renderTime.toFixed(2)}ms`,
           avgRender: `${metrics.avgRenderTime.toFixed(2)}ms`,
-        });
+        })
       }
     }
   });
 
   return metricsRef.current;
-};
+}
 
 // Animation performance utilities
 export const useReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -225,24 +225,24 @@ export const useReducedMotion = () => {
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return prefersReducedMotion;
-};
+}
 
 // Bundle size optimization utilities
 export const preloadRoute = (routePath: string) => {
   if (typeof document !== 'undefined') {
-    const link = document.createElement('link');
+    const link = document.createElement('link')
     link.rel = 'prefetch';
     link.href = routePath;
     document.head.appendChild(link);
   }
-};
+}
 
 export const preloadImage = (src: string): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -251,11 +251,11 @@ export const preloadImage = (src: string): Promise<void> => {
     img.onerror = reject;
     img.src = src;
   });
-};
+}
 
 // Throttled scroll hook
 export const useThrottledScroll = (callback: (scrollY: number) => void, delay: number = 16) => {
-  const lastRan = useRef(Date.now());
+  const lastRan = useRef(Date.now())
 
   const throttledCallback = useCallback(() => {
     if (Date.now() - lastRan.current >= delay) {
@@ -270,11 +270,11 @@ export const useThrottledScroll = (callback: (scrollY: number) => void, delay: n
     window.addEventListener('scroll', throttledCallback);
     return () => window.removeEventListener('scroll', throttledCallback);
   }, [throttledCallback]);
-};
+}
 
 // Device pixel ratio hook for high-DPI displays
 export const useDevicePixelRatio = () => {
-  const [devicePixelRatio, setDevicePixelRatio] = useState(1);
+  const [devicePixelRatio, setDevicePixelRatio] = useState(1)
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -283,23 +283,23 @@ export const useDevicePixelRatio = () => {
 
     const handleChange = () => {
       setDevicePixelRatio(window.devicePixelRatio || 1);
-    };
+    }
 
     // Listen for changes in device pixel ratio
-    const mediaQuery = window.matchMedia(`(_resolution: ${window.devicePixelRatio}dppx)`);
+    const mediaQuery = window.matchMedia(`(_resolution: ${window.devicePixelRatio}dppx)`)
     mediaQuery.addEventListener('change', handleChange);
 
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
-    };
+    }
   }, []);
 
   return devicePixelRatio;
-};
+}
 
 // Hook for component lazy loading
 export const useLazyComponent = () => {
-  const [loadedComponents, setLoadedComponents] = useState<Set<string>>(new Set());
+  const [loadedComponents, setLoadedComponents] = useState<Set<string>>(new Set())
 
   const loadComponent = useCallback(
     (componentName: string) => {
@@ -317,19 +317,19 @@ export const useLazyComponent = () => {
     [loadedComponents]
   );
 
-  return { loadComponent, isComponentLoaded };
-};
+  return { loadComponent, isComponentLoaded }
+}
 
 // Memory usage monitoring hook
 export const useMemoryUsage = () => {
-  const [memoryInfo, setMemoryInfo] = useState<any>(null);
+  const [memoryInfo, setMemoryInfo] = useState<any>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('memory' in performance)) return;
 
     const updateMemoryInfo = () => {
       setMemoryInfo((performance as any).memory);
-    };
+    }
 
     updateMemoryInfo();
     const interval = setInterval(updateMemoryInfo, 5000); // Update every 5 seconds
@@ -338,7 +338,7 @@ export const useMemoryUsage = () => {
   }, []);
 
   return memoryInfo;
-};
+}
 
 // Network status hook for performance adaptation
 export const useNetworkStatus = () => {
@@ -346,7 +346,7 @@ export const useNetworkStatus = () => {
     isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     connectionType: 'unknown',
     effectiveType: 'unknown',
-  });
+  })
 
   useEffect(() => {
     if (typeof navigator === 'undefined') return;
@@ -362,7 +362,7 @@ export const useNetworkStatus = () => {
         connectionType: connection?.type || 'unknown',
         effectiveType: connection?.effectiveType || 'unknown',
       });
-    };
+    }
 
     const handleOnline = () => setNetworkStatus((prev) => ({ ...prev, isOnline: true }));
     const handleOffline = () => setNetworkStatus((prev) => ({ ...prev, isOnline: false }));
@@ -383,8 +383,8 @@ export const useNetworkStatus = () => {
       if (connection) {
         connection.removeEventListener('change', updateNetworkStatus);
       }
-    };
+    }
   }, []);
 
   return networkStatus;
-};
+}

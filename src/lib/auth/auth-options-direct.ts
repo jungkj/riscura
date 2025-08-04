@@ -1,5 +1,5 @@
 // Direct environment variable access for debugging
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
@@ -8,7 +8,7 @@ import { verifyPassword } from '@/lib/auth/password';
 import { UserRole } from '@prisma/client';
 
 // Direct access to environment variables
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
@@ -18,14 +18,14 @@ const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
   GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET',
   NEXTAUTH_SECRET: NEXTAUTH_SECRET ? 'SET' : 'NOT SET',
   NEXTAUTH_URL: NEXTAUTH_URL || 'NOT SET',
-});
+})
 
 // Build providers array
-const providers: any[] = [];
+const providers: any[] = []
 
 // Add Google provider if credentials exist
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
-  // console.log('[NextAuth Direct] Adding Google provider with direct env vars');
+  // console.log('[NextAuth Direct] Adding Google provider with direct env vars')
   providers.push(
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -40,9 +40,9 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     })
   );
 } else {
-  // console.log('[NextAuth Direct] Google provider not added - missing credentials');
-  // console.log('GOOGLE_CLIENT_ID exists:', !!GOOGLE_CLIENT_ID);
-  // console.log('GOOGLE_CLIENT_SECRET exists:', !!GOOGLE_CLIENT_SECRET);
+  // console.log('[NextAuth Direct] Google provider not added - missing credentials')
+  // console.log('GOOGLE_CLIENT_ID exists:', !!GOOGLE_CLIENT_ID)
+  // console.log('GOOGLE_CLIENT_SECRET exists:', !!GOOGLE_CLIENT_SECRET)
 }
 
 // Always add credentials provider
@@ -55,7 +55,7 @@ providers.push(
     },
     async authorize(credentials) {
       if (!credentials?.email || !credentials?.password) {
-        return null;
+        return null
       }
 
       try {
@@ -69,7 +69,7 @@ providers.push(
             lastName: 'Admin',
             role: 'ADMIN',
             organizationId: 'demo-org-id',
-          };
+          }
         }
 
         // Database authentication
@@ -78,7 +78,7 @@ providers.push(
           include: {
             organization: true,
           },
-        });
+        })
 
         if (!user || !user.passwordHash) {
           return null;
@@ -96,7 +96,7 @@ providers.push(
           image: user.avatar,
         } as any;
       } catch (error) {
-        // console.error('Authentication error:', error);
+        // console.error('Authentication error:', error)
         return null;
       }
     },
@@ -117,7 +117,7 @@ export const authOptionsDebug: NextAuthOptions = {
       // console.log('[NextAuth Direct] SignIn callback:', {
         provider: account?.provider,
         userEmail: user?.email,
-      });
+      })
 
       // Handle Google OAuth sign-in
       if (account?.provider === 'google') {
@@ -125,22 +125,22 @@ export const authOptionsDebug: NextAuthOptions = {
           // Check if user exists
           const existingUser = await db.client.user.findUnique({
             where: { email: user.email! },
-          });
+          })
 
           if (!existingUser) {
             // For OAuth, prevent registration without existing account
-            return `/auth/error?error=NoInvite`;
+            return `/auth/error?error=NoInvite`
           }
 
           // Update last login
           await db.client.user.update({
             where: { id: existingUser.id },
             data: { lastLogin: new Date() },
-          });
+          })
 
           return true;
         } catch (error) {
-          // console.error('[NextAuth Direct] Google sign-in error:', error);
+          // console.error('[NextAuth Direct] Google sign-in error:', error)
           return false;
         }
       }
@@ -169,4 +169,4 @@ export const authOptionsDebug: NextAuthOptions = {
     signIn: '/auth/login',
     error: '/auth/error',
   },
-};
+}

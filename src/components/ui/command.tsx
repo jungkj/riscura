@@ -2,6 +2,7 @@ import * as React from 'react';
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Command as CommandPrimitive } from 'cmdk';
+import { DaisyDialogContent } from '@/components/ui/daisy-components';
 
 import { cn } from '@/lib/utils';
 import { DaisyDialog, DaisyDialogContent } from '@/components/ui/DaisyDialog';
@@ -31,7 +32,7 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}
 
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
@@ -128,7 +129,7 @@ const CommandShortcut = ({
       )}
       {...props} />
   );
-};
+}
 CommandShortcut.displayName = 'CommandShortcut';
 
 export {
@@ -141,4 +142,4 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
-};
+}

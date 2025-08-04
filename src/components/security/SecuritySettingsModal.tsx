@@ -8,7 +8,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
@@ -17,6 +17,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle } from '@/components/ui/daisy-components';
   Settings, 
   Shield, 
   Bell, 
@@ -42,7 +43,7 @@ interface SecuritySettingsModalProps {
 interface SecuritySettings {
   // Alert Settings
   alertSettings: {
-    enableEmailAlerts: boolean;
+    enableEmailAlerts: boolean
     enableSMSAlerts: boolean;
     enablePushNotifications: boolean;
     alertThreshold: 'low' | 'medium' | 'high' | 'critical';
@@ -50,46 +51,46 @@ interface SecuritySettings {
       enabled: boolean;
       startTime: string;
       endTime: string;
-    };
-  };
+    }
+  }
   
   // Monitoring Settings
   monitoring: {
-    enableRealTimeMonitoring: boolean;
+    enableRealTimeMonitoring: boolean
     enableAnomalyDetection: boolean;
     enableBehaviorAnalysis: boolean;
     monitoringInterval: number; // minutes
     retentionPeriod: number; // days
     enabledCategories: string[];
-  };
+  }
   
   // Access Control
   accessControl: {
-    enforceStrongPasswords: boolean;
+    enforceStrongPasswords: boolean
     requireMFA: boolean;
     sessionTimeout: number; // minutes
     maxFailedAttempts: number;
     lockoutDuration: number; // minutes
     allowedIPRanges: string[];
-  };
+  }
   
   // Compliance Settings
   compliance: {
-    enableComplianceMonitoring: boolean;
+    enableComplianceMonitoring: boolean
     frameworks: string[];
     autoReporting: boolean;
     reportingFrequency: 'daily' | 'weekly' | 'monthly';
     enableAuditLogging: boolean;
-  };
+  }
   
   // Integration Settings
   integrations: {
-    enableSIEMIntegration: boolean;
+    enableSIEMIntegration: boolean
     siemEndpoint: string;
     enableAPILogging: boolean;
     webhookUrl: string;
     enableThirdPartyScanning: boolean;
-  };
+  }
 }
 
 const defaultSettings: SecuritySettings = {
@@ -134,7 +135,7 @@ const defaultSettings: SecuritySettings = {
     webhookUrl: '',
     enableThirdPartyScanning: false,
   },
-};
+}
 
 const alertThresholds = [
   { value: 'low', label: 'Low', description: 'Alert on all security events' },
@@ -176,11 +177,11 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
   const updateSettings = (path: string, value: any) => {
     setSettings(prev => {
       const keys = path.split('.');
-      const updated = { ...prev };
+      const updated = { ...prev }
       let current: any = updated;
       
       for (let i = 0; i < keys.length - 1; i++) {
-        current[keys[i]] = { ...current[keys[i]] };
+        current[keys[i]] = { ...current[keys[i]] }
         current = current[keys[i]];
       }
       
@@ -188,7 +189,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
       return updated;
     });
     setHasChanges(true);
-  };
+  }
 
   const handleFrameworkToggle = (_framework: string) => {
     const currentFrameworks = settings.compliance.frameworks;
@@ -197,7 +198,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
       : [...currentFrameworks, framework];
     
     updateSettings('compliance.frameworks', updatedFrameworks);
-  };
+  }
 
   const handleCategoryToggle = (categoryId: string) => {
     const currentCategories = settings.monitoring.enabledCategories;
@@ -206,32 +207,32 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
       : [...currentCategories, categoryId];
     
     updateSettings('monitoring.enabledCategories', updatedCategories);
-  };
+  }
 
   const handleSaveSettings = async () => {
     setIsSubmitting(true);
     
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000))
       
       onSettingsUpdated?.(settings);
       toast.success('Security settings updated successfully!');
       setHasChanges(false);
       onOpenChange(false);
     } catch (error) {
-      // console.error('Error updating settings:', error);
+      // console.error('Error updating settings:', error)
       toast.error('Failed to update security settings. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   const handleResetSettings = () => {
     setSettings(defaultSettings);
     setHasChanges(true);
     toast.success('Settings reset to defaults');
-  };
+  }
 
   return (
     <DaisyDialog open={open} onOpenChange={onOpenChange} >
@@ -777,4 +778,4 @@ updateSettings('integrations.enableThirdPartyScanning', checked)} />
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}; 
+} 

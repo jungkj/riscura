@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk } from '@/types';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk } from '@/types'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTooltip } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -71,7 +72,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
   const trendData = useMemo<RiskTrendData[]>(() => {
     const days = selectedTimeRange === '7d' ? 7 : 
                  selectedTimeRange === '30d' ? 30 : 
-                 selectedTimeRange === '90d' ? 90 : 365;
+                 selectedTimeRange === '90d' ? 90 : 365
     
     const data: RiskTrendData[] = [];
     const today = new Date();
@@ -81,7 +82,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
       date.setDate(date.getDate() - i);
       
       // Simulate risk evolution with some randomness but realistic trends
-      const baseRisks = Math.max(0, risks.length + (Math.random() - 0.5) * 10);
+      const baseRisks = Math.max(0, risks.length + (Math.random() - 0.5) * 10)
       const critical = Math.floor(baseRisks * 0.1 * (1 + (Math.random() - 0.5) * 0.5));
       const high = Math.floor(baseRisks * 0.2 * (1 + (Math.random() - 0.5) * 0.5));
       const medium = Math.floor(baseRisks * 0.4 * (1 + (Math.random() - 0.5) * 0.5));
@@ -89,10 +90,10 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
       const total = critical + high + medium + low;
       
       // Calculate average score
-      const _avgScore = (critical * 20 + high * 15 + medium * 8 + low * 3) / Math.max(total, 1);
+      const _avgScore = (critical * 20 + high * 15 + medium * 8 + low * 3) / Math.max(total, 1)
       
       // Simulate new and resolved risks
-      const newRisks = Math.floor(Math.random() * 5);
+      const newRisks = Math.floor(Math.random() * 5)
       const resolvedRisks = Math.floor(Math.random() * 3);
       
       data.push({
@@ -113,7 +114,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
 
   // Calculate trend metrics
   const trendMetrics = useMemo(() => {
-    if (trendData.length < 2) return null;
+    if (trendData.length < 2) return null
     
     const latest = trendData[trendData.length - 1];
     const previous = trendData[trendData.length - 2];
@@ -127,20 +128,20 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
     return {
       total: { change: totalChange, percent: totalPercentChange },
       avgScore: { change: avgScoreChange, percent: avgScorePercentChange },
-    };
+    }
   }, [trendData]);
 
   const getTrendIcon = (change: number) => {
     if (change > 0) return TrendingUp;
     if (change < 0) return TrendingDown;
     return Minus;
-  };
+  }
 
   const getTrendColor = (change: number) => {
     if (change > 0) return 'text-red-600';
     if (change < 0) return 'text-green-600';
     return 'text-slate-500';
-  };
+  }
 
   const customTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -156,13 +157,13 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
       );
     }
     return null;
-  };
+  }
 
   const renderChart = () => {
     const commonProps = {
       data: trendData,
       margin: { top: 5, right: 30, left: 20, bottom: 5 },
-    };
+    }
 
     switch (selectedChartType) {
       case 'area':
@@ -233,7 +234,7 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
           </LineChart>
         );
     }
-  };
+  }
 
   return (
     <DaisyCard className={className} >
@@ -341,4 +342,4 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

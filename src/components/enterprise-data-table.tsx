@@ -8,6 +8,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
 import {
+import { DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyCalendar } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -28,7 +29,7 @@ import {
 
 // ========== TYPES ==========
 export interface ColumnDefinition<T = any> {
-  key: string;
+  key: string
   label: string;
   type?: 'text' | 'status-badge' | 'user-avatar' | 'date' | 'actions';
   sortable?: boolean;
@@ -57,11 +58,11 @@ export interface DataTableProps<T = any> {
 // ========== CELL RENDERERS ==========
 const StatusBadgeCell: React.FC<{ value: any }> = ({ value }) => {
   const getVariant = (status: string) => {
-    const statusLower = status.toLowerCase();
+    const statusLower = status.toLowerCase()
     if (statusLower.includes('high') || statusLower.includes('critical')) return 'destructive';
     if (statusLower.includes('medium') || statusLower.includes('warning')) return 'outline';
     return 'secondary';
-  };
+  }
 
   return (
     <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium" >
@@ -69,7 +70,7 @@ const StatusBadgeCell: React.FC<{ value: any }> = ({ value }) => {
 </DaisyBadge>
     </DaisyBadge>
   );
-};
+}
 
 const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   if (!value) return <span className="text-text-tertiary">—</span>;
@@ -86,7 +87,7 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>
   );
-};
+}
 
 // ========== MAIN COMPONENT ==========
 export const EnterpriseDataTable = <T extends Record<string, any>>({
@@ -99,7 +100,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
   bulkActions = [],
   className,
 }: DataTableProps<T>) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('')
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [sorts, setSorts] = useState<Array<{ column: string; direction: 'asc' | 'desc' }>>([]);
 
@@ -221,7 +222,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className={cn("enterprise-data-table bg-surface-primary rounded-lg border border-border shadow-notion-sm", className)}>
@@ -385,6 +386,6 @@ setSearchQuery(e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 export default EnterpriseDataTable; 

@@ -9,12 +9,12 @@ import { designTokens } from '@/lib/design-system/tokens';
   FileIcons,
   UserIcons,
   RiskManagementIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { LoadingStates, Spinner } from '@/components/states/LoadingState';
 
 // Bulk action types and interfaces
 interface BulkAction {
-  id: string;
+  id: string
   label: string;
   icon: React.ComponentType<any>;
   color: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
@@ -86,7 +86,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       default:
         return 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500';
     }
-  };
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -130,7 +130,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       </div>
     </div>
   );
-};
+}
 
 interface ProgressModalProps {
   isOpen: boolean;
@@ -230,7 +230,7 @@ const ProgressModal: React.FC<DaisyProgressModalProps />= ({
       </div>
     </div>
   );
-};
+}
 
 export function BulkActionBar<T = any>({
   selectedItems,
@@ -265,13 +265,13 @@ export function BulkActionBar<T = any>({
 
   // Handle bulk action execution
   const executeBulkAction = async (_action: BulkAction) => {
-    if (isExecuting) return;
+    if (isExecuting) return
 
     // Check selection constraints
     if (action.minSelection && selectedCount < action.minSelection) {
       alert(
         `Please select at least ${action.minSelection} ${action.minSelection === 1 ? itemName : itemNamePlural}`
-      );
+      )
       return;
     }
 
@@ -288,7 +288,7 @@ export function BulkActionBar<T = any>({
     }
 
     await performBulkAction(action);
-  };
+  }
 
   const performBulkAction = async (_action: BulkAction) => {
     setIsExecuting(true);
@@ -299,7 +299,7 @@ export function BulkActionBar<T = any>({
       total: selectedCount,
       completed: 0,
       errors: [],
-    };
+    }
 
     setProgressModal({
       isOpen: true,
@@ -310,7 +310,7 @@ export function BulkActionBar<T = any>({
     try {
       // For demonstration, we'll simulate progress updates
       // In a real implementation, you'd integrate with your actual bulk operation
-      const _result = await onBulkAction(action.id, selectedItems);
+      const _result = await onBulkAction(action.id, selectedItems)
 
       // Update progress to completion
       setProgressModal((prev) => ({
@@ -320,12 +320,12 @@ export function BulkActionBar<T = any>({
           completed: selectedCount,
           errors: result.errors || [],
         },
-      }));
+      }))
 
       // Clear selection if action was successful
       if (result.success && result.errorCount === 0) {
         setTimeout(() => {
-          onClearSelection();
+          onClearSelection()
         }, 2000);
       }
     } catch (error) {
@@ -342,7 +342,7 @@ export function BulkActionBar<T = any>({
     } finally {
       setIsExecuting(false);
     }
-  };
+  }
 
   const getActionButtonClasses = (_action: BulkAction) => {
     const baseClasses =
@@ -360,13 +360,13 @@ export function BulkActionBar<T = any>({
       default:
         return `${baseClasses} text-blue-700 bg-blue-100 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500`;
     }
-  };
+  }
 
   const positionClasses = {
     top: 'mb-4',
     bottom: 'mt-4',
     floating: 'fixed bottom-4 left-1/2 transform -translate-x-1/2 shadow-lg z-40',
-  };
+  }
 
   if (selectedCount === 0 && position !== 'floating') return null;
 
@@ -568,6 +568,6 @@ export const commonBulkActions = {
       requiresConfirmation: true,
     },
   ],
-};
+}
 
 export default BulkActionBar;

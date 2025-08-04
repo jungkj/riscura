@@ -1,9 +1,9 @@
-// import { Risk, Control, Document } from '@/types';
-// import { AgentType } from '@/types/ai.types';
+// import { Risk, Control, Document } from '@/types'
+// import { AgentType } from '@/types/ai.types'
 
 // Enhanced context interfaces
 export interface IntelligentContext {
-  user: UserContext;
+  user: UserContext
   organizational: OrganizationalContext;
   current: CurrentContext;
   related: RelatedContext;
@@ -21,7 +21,7 @@ export interface UserContext {
   workingHours: {
     timezone: string;
     schedule: Record<string, { start: string; end: string }>;
-  };
+  }
 }
 
 export interface OrganizationalContext {
@@ -31,19 +31,19 @@ export interface OrganizationalContext {
     size: 'small' | 'medium' | 'large' | 'enterprise';
     locations: string[];
     regulations: string[];
-  };
+  }
   riskFramework: {
     methodology: string;
     categories: string[];
     riskAppetite: string;
     toleranceLevel: string;
-  };
+  }
   complianceRequirements: {
     frameworks: string[];
     jurisdictions: string[];
     mandatory: string[];
     voluntary: string[];
-  };
+  }
 }
 
 export interface CurrentContext {
@@ -54,12 +54,12 @@ export interface CurrentContext {
     risks: Risk[];
     controls: Control[];
     documents: Document[];
-  };
+  }
   workingSet: {
     riskIds: string[];
     controlIds: string[];
     documentIds: string[];
-  };
+  }
   activeFilters: Record<string, unknown>;
   viewMode: string;
 }
@@ -71,7 +71,7 @@ export interface RelatedContext {
     upstreamRisks: Risk[];
     downstreamControls: Control[];
     associatedDocuments: Document[];
-  };
+  }
   historicalInteractions: HistoricalContext[];
   patterns: PatternContext[];
 }
@@ -160,7 +160,7 @@ export interface BenchmarkData {
 
 // Context analysis and injection
 export interface ContextAnalysisResult {
-  relevanceScore: number;
+  relevanceScore: number
   keyInsights: string[];
   recommendations: string[];
   dataQuality: 'high' | 'medium' | 'low';
@@ -187,7 +187,7 @@ export interface SmartContextSuggestion {
   quickAction?: {
     label: string;
     action: () => Promise<void>;
-  };
+  }
   metadata: Record<string, unknown>;
 }
 
@@ -203,7 +203,7 @@ export class ContextIntelligenceService {
 
   private initializeService(): void {
     // Initialize context intelligence service
-    // console.log('ContextIntelligenceService initialized');
+    // console.log('ContextIntelligenceService initialized')
   }
 
   /**
@@ -226,7 +226,7 @@ export class ContextIntelligenceService {
       summarizationLevel: 'moderate',
       agentType: 'general_assistant',
       ...options,
-    };
+    }
 
     const context: IntelligentContext = {
       user: await this.getUserContext(userId),
@@ -235,10 +235,10 @@ export class ContextIntelligenceService {
       related: await this.getRelatedContext(selectedEntities, defaultOptions),
       analytics: await this.getAnalyticsContext(selectedEntities, defaultOptions),
       preferences: await this.getUserPreferences(userId),
-    };
+    }
 
     // Cache the context for future reference
-    this.contexts.set(userId, context);
+    this.contexts.set(userId, context)
 
     return context;
   }
@@ -264,7 +264,7 @@ export class ContextIntelligenceService {
       dataQuality,
       completeness,
       freshness,
-    };
+    }
   }
 
   /**
@@ -309,25 +309,25 @@ export class ContextIntelligenceService {
     const suggestions: SmartContextSuggestion[] = [];
 
     // Data insight suggestions
-    suggestions.push(...(await this.generateDataInsightSuggestions(context)));
+    suggestions.push(...(await this.generateDataInsightSuggestions(context)))
 
     // Missing context suggestions
-    suggestions.push(...(await this.generateMissingContextSuggestions(context)));
+    suggestions.push(...(await this.generateMissingContextSuggestions(context)))
 
     // Related entity suggestions
-    suggestions.push(...(await this.generateRelatedEntitySuggestions(context)));
+    suggestions.push(...(await this.generateRelatedEntitySuggestions(context)))
 
     // Action item suggestions
-    suggestions.push(...(await this.generateActionItemSuggestions(context)));
+    suggestions.push(...(await this.generateActionItemSuggestions(context)))
 
     // Efficiency tip suggestions
-    suggestions.push(...(await this.generateEfficiencySuggestions(context)));
+    suggestions.push(...(await this.generateEfficiencySuggestions(context)))
 
     // Sort by relevance score
-    suggestions.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    suggestions.sort((a, b) => b.relevanceScore - a.relevanceScore)
 
     // Cache for 5 minutes
-    this.suggestionCache.set(cacheKey, suggestions);
+    this.suggestionCache.set(cacheKey, suggestions)
     setTimeout(() => this.suggestionCache.delete(cacheKey), 5 * 60 * 1000);
 
     return suggestions.slice(0, 10); // Return top 10
@@ -341,16 +341,16 @@ export class ContextIntelligenceService {
     if (!context) return;
 
     // Add to recent activity
-    context.user.recentActivity.unshift(activity);
+    context.user.recentActivity.unshift(activity)
 
     // Keep only last 50 activities
-    context.user.recentActivity = context.user.recentActivity.slice(0, 50);
+    context.user.recentActivity = context.user.recentActivity.slice(0, 50)
 
     // Update patterns
-    await this.updatePatterns(userId, activity);
+    await this.updatePatterns(userId, activity)
 
     // Update context cache
-    this.contexts.set(userId, context);
+    this.contexts.set(userId, context)
   }
 
   /**
@@ -369,13 +369,13 @@ export class ContextIntelligenceService {
       topic,
       outcome: 'in_progress',
       satisfaction: 0,
-    };
+    }
 
     const history = this.contextHistory.get(userId) || [];
     history.unshift(historicalContext);
 
     // Keep only last 100 conversations
-    this.contextHistory.set(userId, history.slice(0, 100));
+    this.contextHistory.set(userId, history.slice(0, 100))
 
     // Store in localStorage for persistence
     localStorage.setItem(
@@ -384,7 +384,7 @@ export class ContextIntelligenceService {
         context,
         timestamp: new Date().toISOString(),
       })
-    );
+    )
   }
 
   /**
@@ -401,13 +401,13 @@ export class ContextIntelligenceService {
 
       // Context expires after 24 hours
       if (now.getTime() - storedTime.getTime() > 24 * 60 * 60 * 1000) {
-        localStorage.removeItem(`aria_context_${userId}`);
+        localStorage.removeItem(`aria_context_${userId}`)
         return null;
       }
 
       return context;
     } catch (error) {
-      // console.error('Error loading persisted context:', error);
+      // console.error('Error loading persisted context:', error)
       return null;
     }
   }
@@ -432,7 +432,7 @@ export class ContextIntelligenceService {
           friday: { start: '09:00', end: '17:00' },
         },
       },
-    };
+    }
   }
 
   private async getOrganizationalContext(_userId: string): Promise<OrganizationalContext> {
@@ -457,7 +457,7 @@ export class ContextIntelligenceService {
         mandatory: ['SOX', 'GDPR'],
         voluntary: ['ISO 27001', 'NIST'],
       },
-    };
+    }
   }
 
   private async getCurrentContext(_currentPage: string,
@@ -483,7 +483,7 @@ export class ContextIntelligenceService {
       },
       activeFilters: {},
       viewMode: 'list',
-    };
+    }
   }
 
   private async getRelatedContext(_selectedEntities: {
@@ -504,7 +504,7 @@ export class ContextIntelligenceService {
       },
       historicalInteractions: [],
       patterns: [],
-    };
+    }
   }
 
   private async getAnalyticsContext(_selectedEntities: {
@@ -521,7 +521,7 @@ export class ContextIntelligenceService {
       complianceStatus: [],
       kpiMetrics: [],
       benchmarkData: [],
-    };
+    }
   }
 
   private async getUserPreferences(_userId: string): Promise<UserPreferences> {
@@ -533,7 +533,7 @@ export class ContextIntelligenceService {
       includeReferences: true,
       visualPreference: 'mixed',
       languageLevel: 'business',
-    };
+    }
   }
 
   private async calculateRelevanceScore(_context: IntelligentContext,
@@ -541,14 +541,14 @@ export class ContextIntelligenceService {
     agentType: AgentType
   ): Promise<number> {
     // Simple relevance calculation - in reality, this would be more sophisticated
-    let score = 0.5;
+    let score = 0.5
 
     // Check for entity matches
-    if (context.current.selectedEntities.risks.length > 0) score += 0.2;
+    if (context.current.selectedEntities.risks.length > 0) score += 0.2
     if (context.current.selectedEntities.controls.length > 0) score += 0.2;
 
     // Check for recent activity
-    if (context.user.recentActivity.length > 0) score += 0.1;
+    if (context.user.recentActivity.length > 0) score += 0.1
 
     return Math.min(score, 1.0);
   }
@@ -592,7 +592,7 @@ export class ContextIntelligenceService {
     // Simple assessment - in reality, this would be more sophisticated
     const hasSelectedEntities =
       context.current.selectedEntities.risks.length > 0 ||
-      context.current.selectedEntities.controls.length > 0;
+      context.current.selectedEntities.controls.length > 0
 
     return hasSelectedEntities ? 'high' : 'medium';
   }
@@ -611,7 +611,7 @@ export class ContextIntelligenceService {
 
   private calculateFreshness(_context: IntelligentContext): number {
     // Calculate based on how recent the data is
-    const now = new Date();
+    const now = new Date()
     let totalFreshness = 0;
     let count = 0;
 
@@ -658,13 +658,13 @@ export class ContextIntelligenceService {
     const parts: string[] = [];
 
     // User context
-    parts.push(`User Context:`);
+    parts.push(`User Context:`)
     parts.push(`- Role: ${context.user.role} in ${context.user.department}`);
     parts.push(`- Expertise: ${context.user.expertise.join(', ')}`);
 
     // Current context
     if (context.current.selectedEntities.risks.length > 0) {
-      parts.push(`\nCurrent Risks:`);
+      parts.push(`\nCurrent Risks:`)
       context.current.selectedEntities.risks.forEach((risk) => {
         parts.push(`- ${risk.title} (${risk.category}, Score: ${risk.riskScore})`);
       });
@@ -680,7 +680,7 @@ export class ContextIntelligenceService {
     }
 
     // Organizational context
-    parts.push(`\nOrganizational Context:`);
+    parts.push(`\nOrganizational Context:`)
     parts.push(`- Company: ${context.organizational.companyProfile.name}`);
     parts.push(`- Industry: ${context.organizational.companyProfile.industry}`);
     parts.push(`- Risk Framework: ${context.organizational.riskFramework.methodology}`);
@@ -690,7 +690,7 @@ export class ContextIntelligenceService {
 
     // Key insights
     if (analysis.keyInsights.length > 0) {
-      parts.push(`\nKey Insights:`);
+      parts.push(`\nKey Insights:`)
       analysis.keyInsights.forEach((insight) => parts.push(`- ${insight}`));
     }
 
@@ -702,13 +702,13 @@ export class ContextIntelligenceService {
     options: ContextInjectionOptions
   ): string {
     // Start with moderate context
-    const comprehensiveContext = this.generateModerateContext(context, analysis, options);
+    const comprehensiveContext = this.generateModerateContext(context, analysis, options)
 
     const additionalParts: string[] = [];
 
     // Recent activity
     if (context.user.recentActivity.length > 0) {
-      additionalParts.push(`\nRecent Activity:`);
+      additionalParts.push(`\nRecent Activity:`)
       context.user.recentActivity.slice(0, 5).forEach((activity) => {
         additionalParts.push(
           `- ${activity.action} on ${activity.entityType} (${activity.timestamp.toLocaleDateString()})`
@@ -718,14 +718,14 @@ export class ContextIntelligenceService {
 
     // Analytics if available
     if (options.includeAnalytics && context.analytics.riskTrends.length > 0) {
-      additionalParts.push(`\nRisk Trends:`);
+      additionalParts.push(`\nRisk Trends:`)
       context.analytics.riskTrends.slice(0, 3).forEach((trend) => {
         additionalParts.push(`- ${trend.metric}: ${trend.value} (${trend.direction})`);
       });
     }
 
     // User preferences
-    additionalParts.push(`\nUser Preferences:`);
+    additionalParts.push(`\nUser Preferences:`)
     additionalParts.push(`- Communication Style: ${context.preferences.communicationStyle}`);
     additionalParts.push(`- Detail Level: ${context.preferences.detailLevel}`);
     additionalParts.push(`- Language Level: ${context.preferences.languageLevel}`);
@@ -735,7 +735,7 @@ export class ContextIntelligenceService {
 
   private extractSection(_currentPage: string): string {
     // Extract section from page path
-    const parts = currentPage.split('/');
+    const parts = currentPage.split('/')
     return parts[parts.length - 1] || 'unknown';
   }
 
@@ -747,7 +747,7 @@ export class ContextIntelligenceService {
   // Suggestion generation methods
   private async generateDataInsightSuggestions(_context: IntelligentContext
   ): Promise<SmartContextSuggestion[]> {
-    const suggestions: SmartContextSuggestion[] = [];
+    const suggestions: SmartContextSuggestion[] = []
 
     if (context.current.selectedEntities.risks.length > 1) {
       suggestions.push({
@@ -761,7 +761,7 @@ export class ContextIntelligenceService {
           label: 'Analyze Correlations',
           action: async () => {
             // Implement correlation analysis
-            // console.log('Analyzing risk correlations...');
+            // console.log('Analyzing risk correlations...')
           },
         },
         metadata: { riskCount: context.current.selectedEntities.risks.length },
@@ -790,7 +790,7 @@ export class ContextIntelligenceService {
           label: 'Browse Risks',
           action: async () => {
             // Navigate to risk selection
-            // console.log('Opening risk selection...');
+            // console.log('Opening risk selection...')
           },
         },
         metadata: { contextType: 'risk_selection' },
@@ -819,7 +819,7 @@ export class ContextIntelligenceService {
           label: 'View Related Controls',
           action: async () => {
             // Show related controls
-            // console.log('Showing related controls...');
+            // console.log('Showing related controls...')
           },
         },
         metadata: { entityType: 'controls' },
@@ -846,7 +846,7 @@ export class ContextIntelligenceService {
           label: 'View Recent Changes',
           action: async () => {
             // Show recent changes
-            // console.log('Showing recent changes...');
+            // console.log('Showing recent changes...')
           },
         },
         metadata: { actionType: 'review' },
@@ -872,7 +872,7 @@ export class ContextIntelligenceService {
           label: 'Open Bulk Tools',
           action: async () => {
             // Open bulk operations
-            // console.log('Opening bulk operations...');
+            // console.log('Opening bulk operations...')
           },
         },
         metadata: { feature: 'bulk_operations' },
@@ -884,12 +884,12 @@ export class ContextIntelligenceService {
 
   private async updatePatterns(_userId: string, activity: ActivityContext): Promise<void> {
     // Update pattern analysis based on new activity
-    const patterns = this.patternCache.get(userId) || [];
+    const patterns = this.patternCache.get(userId) || []
 
     // Simple pattern detection - in reality, this would be more sophisticated
     if (activity.action === 'view' && activity.entityType === 'risk') {
       // Pattern: frequent risk viewing
-      const existingPattern = patterns.find((p) => p.type === 'risk_correlation');
+      const existingPattern = patterns.find((p) => p.type === 'risk_correlation')
       if (existingPattern) {
         existingPattern.confidence += 0.1;
       } else {

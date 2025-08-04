@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Loader2, Link, Unlink, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 
@@ -31,13 +31,13 @@ export const SharePointIntegration: React.FC = () => {
       setSiteUrl('');
       setShowConnectForm(false);
     }
-  };
+  }
 
   const handleDisconnect = async (integrationId: string) => {
     if (window.confirm('Are you sure you want to disconnect this SharePoint site?')) {
       await disconnect(integrationId);
     }
-  };
+  }
 
   if (isLoading) {
     return (
@@ -49,7 +49,7 @@ export const SharePointIntegration: React.FC = () => {
         </div>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -216,4 +216,4 @@ export const SharePointIntegration: React.FC = () => {
       </DaisyCard>
     </div>
   );
-};
+}

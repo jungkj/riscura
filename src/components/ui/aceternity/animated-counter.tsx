@@ -48,7 +48,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       const progress = Math.min(elapsed / duration, 1);
 
       // Easing function (ease-out cubic)
-      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const easeOut = 1 - Math.pow(1 - progress, 3)
       const currentValue = startValue + (endValue - startValue) * easeOut;
 
       setDisplayValue(currentValue);
@@ -56,7 +56,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
       }
-    };
+    }
 
     animationFrame = requestAnimationFrame(animate);
 
@@ -64,7 +64,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
       }
-    };
+    }
   }, [value, duration, delay, direction, isInView]);
 
   const formatNumber = (num: number): string => {
@@ -72,10 +72,10 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     const parts = rounded.toString().split('.');
 
     // Add thousand separators
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator)
 
     return parts.join('.');
-  };
+  }
 
   return (
     <motion.span
@@ -90,7 +90,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       {suffix}
     </motion.span>
   );
-};
+}
 
 interface CounterCardProps {
   title: string;
@@ -102,7 +102,7 @@ interface CounterCardProps {
   trend?: {
     value: number;
     isPositive: boolean;
-  };
+  }
   className?: string;
 }
 
@@ -159,7 +159,7 @@ export const CounterCard: React.FC<CounterCardProps> = ({
       </div>
     </motion.div>
   );
-};
+}
 
 interface MetricsGridProps {
   metrics: Array<{
@@ -173,7 +173,7 @@ interface MetricsGridProps {
     trend?: {
       value: number;
       isPositive: boolean;
-    };
+    }
   }>;
   className?: string;
 }
@@ -193,4 +193,4 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, className }) 
       ))}
     </div>
   );
-};
+}

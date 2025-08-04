@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   TrendingUp, 
   TrendingDown, 
@@ -12,8 +13,8 @@ import React, { useState } from 'react';
   Eye,
   Calendar,
   Users
-} from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+} from 'lucide-react'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -21,7 +22,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { useAI } from '@/context/AIContext';
 import { PRICING_TIERS } from '@/services/TokenManagementService';
-// import { AgentType } from '@/types/ai.types';
+// import { AgentType } from '@/types/ai.types'
 import { AI_AGENTS } from '@/config/ai-agents';
 
 interface UsageCardProps {
@@ -49,13 +50,13 @@ const UsageCard: React.FC<UsageCardProps> = ({
     orange: 'text-orange-600 bg-orange-50',
     red: 'text-red-600 bg-red-50',
     purple: 'text-purple-600 bg-purple-50'
-  };
+  }
 
   const trendIcons = {
     up: <TrendingUp className="h-3 w-3 text-green-500" />,
     down: <TrendingDown className="h-3 w-3 text-red-500" />,
     stable: <div className="h-3 w-3 bg-gray-400 rounded-full" />
-  };
+  }
 
   return (
     <DaisyCard >
@@ -81,7 +82,7 @@ const UsageCard: React.FC<UsageCardProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 interface QuotaBarProps {
   label: string;
@@ -100,7 +101,7 @@ const QuotaBar: React.FC<QuotaBarProps> = ({ label, used, limit, period, cost })
     if (isCritical) return 'bg-red-500';
     if (isWarning) return 'bg-orange-500';
     return 'bg-blue-500';
-  };
+  }
 
   return (
     <div className="space-y-2">
@@ -128,7 +129,7 @@ const QuotaBar: React.FC<QuotaBarProps> = ({ label, used, limit, period, cost })
       </div>
     </div>
   );
-};
+}
 
 export const TokenUsageAnalytics: React.FC = () => {
   const { 
@@ -147,19 +148,19 @@ export const TokenUsageAnalytics: React.FC = () => {
 
   const handleExportData = (format: 'json' | 'csv') => {
     exportUsageData(format);
-  };
+  }
 
   const handleUpgradeTier = (tierName: string) => {
     const success = upgradeTier(tierName);
     if (success) {
       // Show success message
-      // console.log(`Successfully upgraded to ${tierName}`);
+      // console.log(`Successfully upgraded to ${tierName}`)
     }
-  };
+  }
 
   // Calculate agent usage statistics
   const agentUsageStats = Object.entries(AI_AGENTS).map(([agentType, config]) => {
-    const agentConversations = conversationUsages.filter(conv => conv.agentType === agentType);
+    const agentConversations = conversationUsages.filter(conv => conv.agentType === agentType)
     const totalTokens = agentConversations.reduce((sum, conv) => sum + conv.tokens, 0);
     const totalCost = agentConversations.reduce((sum, conv) => sum + conv.cost, 0);
     const conversationCount = agentConversations.length;
@@ -171,7 +172,7 @@ export const TokenUsageAnalytics: React.FC = () => {
       cost: totalCost,
       conversations: conversationCount,
       percentage: totalTokens > 0 ? (totalTokens / realTimeUsageStats.todayTokens) * 100 : 0
-    };
+    }
   }).sort((a, b) => b.tokens - a.tokens);
 
   return (
@@ -466,6 +467,6 @@ export const TokenUsageAnalytics: React.FC = () => {
       </DaisyTabs>
     </div>
   );
-};
+}
 
 export default TokenUsageAnalytics; 

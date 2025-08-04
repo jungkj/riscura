@@ -8,9 +8,11 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { useRiskFlow } from '../RiskFlowContext';
-// import { RiskCategory } from '@/types/rcsa.types';
+// import { useRiskFlow } from '../RiskFlowContext'
+// import { RiskCategory } from '@/types/rcsa.types'
 import { cn } from '@/lib/utils';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
+import { AlertCircle } from 'lucide-react';
 
 const categories: { value: RiskCategory; label: string; color: string; emoji: string }[] = [
   { value: 'STRATEGIC', label: 'Strategic', color: 'text-purple-600 bg-purple-50', emoji: '🎯' },
@@ -43,7 +45,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!riskData.title.trim()) {
       newErrors.title = 'Risk title is required';
@@ -57,13 +59,13 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const handleNext = () => {
     if (validateForm()) {
       onNext();
     }
-  };
+  }
 
   const generateAISuggestion = async () => {
     if (!riskData.title) return;
@@ -78,7 +80,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
           'Disruption in critical supply chain operations due to vendor dependencies, geopolitical factors, or natural disasters, potentially impacting product delivery and customer satisfaction.',
         Cybersecurity:
           'Risk of sophisticated cyber attacks targeting our infrastructure, including ransomware, phishing, or DDoS attacks that could compromise business continuity.',
-      };
+      }
 
       const suggestion =
         suggestions[riskData.title] ||
@@ -87,7 +89,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
       updateRiskData({ description: suggestion });
       setAiSuggesting(false);
     }, 1000);
-  };
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -201,4 +203,4 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
       </motion.div>
     </div>
   );
-};
+}

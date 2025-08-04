@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -36,11 +36,11 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   Quote,
   Link,
   Flag
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Comment and collaboration types
 interface Comment {
-  id: string;
+  id: string
   content: string;
   author: {
     id: string;
@@ -48,7 +48,7 @@ interface Comment {
     avatar?: string;
     role: string;
     isOnline: boolean;
-  };
+  }
   timestamp: Date;
   edited?: Date;
   parentId?: string; // For threaded replies
@@ -93,18 +93,18 @@ interface Participant {
   permissions: string[];
   joinedAt: Date;
   isOnline: boolean;
-  cursor?: { x: number; y: number };
+  cursor?: { x: number; y: number }
 }
 
 // Real-time collaboration component
 interface RealtimeCommentsProps {
-  reportId: string;
+  reportId: string
   currentUser: {
     id: string;
     name: string;
     avatar?: string;
     role: string;
-  };
+  }
   onCommentAdd?: (comment: Comment) => void;
   onCommentUpdate?: (commentId: string, updates: Partial<Comment>) => void;
   onCommentDelete?: (commentId: string) => void;
@@ -196,7 +196,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
         priority: 'high',
         tags: ['gdpr', 'compliance']
       }
-    ];
+    ]
 
     const sampleParticipants: Participant[] = [
       {
@@ -234,24 +234,24 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
 
   // Auto-scroll to bottom when new comments are added
   useEffect(() => {
-    commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [comments]);
 
   // Simulate typing indicators
   const handleTyping = useCallback(() => {
     if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
+      clearTimeout(typingTimeoutRef.current)
     }
 
     // In a real implementation, this would send typing status to other users
     typingTimeoutRef.current = setTimeout(() => {
       // Stop typing indicator
-    }, 2000);
+    }, 2000)
   }, []);
 
   // Add new comment
   const addComment = useCallback(() => {
-    if (!newComment.trim()) return;
+    if (!newComment.trim()) return
 
     const comment: Comment = {
       id: Date.now().toString(),
@@ -268,7 +268,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
       isResolved: false,
       priority: 'medium',
       tags: extractTags(newComment)
-    };
+    }
 
     setComments(prev => [...prev, comment]);
     setNewComment('');
@@ -278,30 +278,30 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
 
   // Extract mentions from comment content
   const extractMentions = (_content: string): string[] => {
-    const mentionRegex = /@(\w+(?:\.\w+)?)/g;
+    const mentionRegex = /@(\w+(?:\.\w+)?)/g
     const mentions = [];
     let match;
     while ((match = mentionRegex.exec(content)) !== null) {
       mentions.push(match[1]);
     }
     return mentions;
-  };
+  }
 
   // Extract hashtags from comment content
   const extractTags = (_content: string): string[] => {
-    const tagRegex = /#(\w+)/g;
+    const tagRegex = /#(\w+)/g
     const tags = [];
     let match;
     while ((match = tagRegex.exec(content)) !== null) {
       tags.push(match[1]);
     }
     return tags;
-  };
+  }
 
   // Toggle reaction
   const toggleReaction = useCallback((commentId: string, emoji: string) => {
     setComments(prev => prev.map(comment => {
-      if (comment.id !== commentId) return comment;
+      if (comment.id !== commentId) return comment
 
       const existingReaction = comment.reactions.find(r => r.emoji === emoji);
       const userId = currentUser.id;
@@ -316,7 +316,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 ? { ...r, users: r.users.filter(u => u !== userId), count: r.count - 1 }
                 : r
             ).filter(r => r.count > 0)
-          };
+          }
         } else {
           // Add reaction
           return {
@@ -326,14 +326,14 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
                 ? { ...r, users: [...r.users, userId], count: r.count + 1 }
                 : r
             )
-          };
+          }
         }
       } else {
         // New reaction
         return {
           ...comment,
           reactions: [...comment.reactions, { emoji, users: [userId], count: 1 }]
-        };
+        }
       }
     }));
   }, [currentUser.id]);
@@ -344,7 +344,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
       comment.id === commentId 
         ? { ...comment, isPinned: !comment.isPinned }
         : comment
-    ));
+    ))
   }, []);
 
   // Resolve/unresolve comment
@@ -353,18 +353,18 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
       comment.id === commentId 
         ? { ...comment, isResolved: !comment.isResolved }
         : comment
-    ));
+    ))
   }, []);
 
   // Delete comment
   const deleteComment = useCallback((commentId: string) => {
-    setComments(prev => prev.filter(comment => comment.id !== commentId));
+    setComments(prev => prev.filter(comment => comment.id !== commentId))
     onCommentDelete?.(commentId);
   }, [onCommentDelete]);
 
   // Filter comments
   const filteredComments = comments.filter(comment => {
-    if (!showResolved && comment.isResolved) return false;
+    if (!showResolved && comment.isResolved) return false
     if (filterPriority !== 'all' && comment.priority !== filterPriority) return false;
     if (searchQuery && !comment.content.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
@@ -376,14 +376,14 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
       acc.push({
         parent: comment,
         replies: filteredComments.filter(c => c.parentId === comment.id)
-      });
+      })
     }
     return acc;
   }, [] as { parent: Comment; replies: Comment[] }[]);
 
   // Render comment
   const renderComment = (comment: Comment, isReply = false) => {
-    const isAuthor = comment.author.id === currentUser.id;
+    const isAuthor = comment.author.id === currentUser.id
     const isEditing = editingComment === comment.id;
 
     return (
@@ -535,7 +535,7 @@ setNewComment(e.target.value)}
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
@@ -706,6 +706,6 @@ setSearchQuery(e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 export default RealtimeComments; 

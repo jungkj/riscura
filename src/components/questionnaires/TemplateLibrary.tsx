@@ -2,14 +2,16 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisySelect } from '@/components/ui/DaisySelect';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialogTitle } from '@/components/ui/daisy-components';
+import { Download } from 'lucide-react';
 
-// import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';
+// import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react'
 
 // Mock template data
 const templateCategories = [
@@ -19,7 +21,7 @@ const templateCategories = [
   { id: 'security', name: 'Security', icon: Shield, count: 5 },
   { id: 'vendor', name: 'Vendor Management', icon: Building, count: 3 },
   { id: 'audit', name: 'Audit & Review', icon: CheckCircle, count: 2 }
-];
+]
 
 const mockTemplates = [
   {
@@ -102,7 +104,7 @@ interface Template {
   preview: {
     sections: string[];
     sampleQuestions: string[];
-  };
+  }
 }
 
 interface TemplateLibraryProps {
@@ -118,16 +120,16 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
 
   // Filter and sort templates
   const filteredTemplates = useMemo(() => {
-    let filtered = mockTemplates;
+    let filtered = mockTemplates
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(template => template.category === selectedCategory);
+      filtered = filtered.filter(template => template.category === selectedCategory)
     }
 
     // Filter by search query
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter(template =>
         template.title.toLowerCase().includes(query) ||
         template.description.toLowerCase().includes(query) ||
@@ -140,7 +142,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'popular':
-          return b.uses - a.uses;
+          return b.uses - a.uses
         case 'recent':
           return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
         case 'rating':
@@ -158,11 +160,11 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
   const handlePreviewTemplate = (template: Template) => {
     setSelectedTemplate(template);
     setIsPreviewOpen(true);
-  };
+  }
 
   const handleCloneTemplate = (template: Template) => {
-    // console.log(`Cloning template: ${template.title}`);
-  };
+    // console.log(`Cloning template: ${template.title}`)
+  }
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -171,12 +173,12 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
       case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
+  }
 
   const getCategoryIcon = (categoryId: string) => {
     const category = templateCategories.find(cat => cat.id === categoryId);
     return category?.icon || Grid3X3;
-  };
+  }
 
   return (
     <div className={className}>
@@ -423,7 +425,7 @@ setSearchQuery(e.target.value)}
 
 // Template Preview Component
 interface TemplatePreviewProps {
-  template: Template;
+  template: Template
   onClone: () => void;
   getDifficultyColor: (difficulty: string) => string;
   getCategoryIcon: (categoryId: string) => any;

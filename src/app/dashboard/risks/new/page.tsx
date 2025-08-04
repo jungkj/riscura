@@ -8,23 +8,24 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisySelect,
   DaisySelectContent,
   DaisySelectItem,
   DaisySelectTrigger,
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { ArrowLeft, Save, X, Shield, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
-// import { useRisks } from '@/context/RiskContext';
+// import { useRisks } from '@/context/RiskContext'
 import { ToastProvider, useToastHelpers } from '@/components/ui/toast-system';
 import type { Document } from '@/types';
 
 // Internal component that uses toast hooks
 const NewRiskForm = () => {
-  const router = useRouter();
+  const router = useRouter()
   const { createRisk } = useRisks();
   const { success, error } = useToastHelpers();
 
@@ -43,7 +44,7 @@ const NewRiskForm = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +70,7 @@ const NewRiskForm = () => {
           .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
-      };
+      }
 
       await createRisk(riskData);
       success('Risk created successfully!');
@@ -79,11 +80,11 @@ const NewRiskForm = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const handleCancel = () => {
     router.push('/dashboard/risks');
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -334,7 +335,7 @@ handleInputChange('tags', e.target.value)}
       </div>
     </div>
   );
-};
+}
 
 export default function NewRiskPage() {
   return (

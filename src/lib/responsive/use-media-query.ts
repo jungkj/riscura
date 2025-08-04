@@ -18,13 +18,13 @@ export function useMediaQuery(_query: string): boolean {
 
     const handleChange = (event: MediaQueryListEvent) => {
       setMatches(event.matches);
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
 
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
-    };
+    }
   }, [query]);
 
   return matches;

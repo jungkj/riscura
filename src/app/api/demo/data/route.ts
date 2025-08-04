@@ -10,7 +10,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { error: 'Demo data only available in development mode' },
         { status: 403 }
-      );
+      )
     }
 
     const url = new URL(request.url);
@@ -18,7 +18,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     const userEmail = url.searchParams.get('user');
 
     // Get complete demo data
-    const demoData = getDemoData();
+    const demoData = getDemoData()
 
     // If specific data type requested, return only that type
     if (dataType) {
@@ -31,7 +31,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
               total: demoData.risks.length,
               type: 'risks',
             },
-          });
+          })
 
         case 'controls':
           return NextResponse.json({
@@ -96,7 +96,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 
     // Filter data based on user permissions if user is specified
     if (userEmail) {
-      const user = getTestUserByEmail(userEmail);
+      const user = getTestUserByEmail(userEmail)
       if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
@@ -110,7 +110,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         dashboardMetrics: hasPermission(user.id, 'dashboard:read')
           ? demoData.dashboardMetrics
           : null,
-      };
+      }
 
       return NextResponse.json({
         success: true,
@@ -142,9 +142,9 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
         organization: demoData.organization.name,
         demoMode: true,
       },
-    });
+    })
   } catch (error) {
-    // console.error('Demo data API error:', error);
+    // console.error('Demo data API error:', error)
     return NextResponse.json({ error: 'Failed to retrieve demo data' }, { status: 500 });
   }
 }
@@ -156,14 +156,14 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { error: 'Demo operations only available in development mode' },
         { status: 403 }
-      );
+      )
     }
 
     const body = await request.json();
     const { action, type, data, userId } = body;
 
     // Validate user
-    const user = userId ? getTestUserByEmail(userId) : null;
+    const user = userId ? getTestUserByEmail(userId) : null
 
     switch (action) {
       case 'create':
@@ -174,7 +174,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           createdAt: new Date(),
           updatedAt: new Date(),
           ownerId: user?.id || 'demo_user',
-        };
+        }
 
         return NextResponse.json({
           success: true,
@@ -187,7 +187,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         const updatedItem = {
           ...data,
           updatedAt: new Date(),
-        };
+        }
 
         return NextResponse.json({
           success: true,
@@ -201,7 +201,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           success: true,
           message: `${type} deleted successfully (demo mode)`,
           deletedId: data.id,
-        });
+        })
 
       case 'analyze':
         // Simulate AI analysis
@@ -221,7 +221,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           ],
           confidence: 0.85,
           processedAt: new Date(),
-        };
+        }
 
         return NextResponse.json({
           success: true,
@@ -233,7 +233,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
   } catch (error) {
-    // console.error('Demo operation error:', error);
+    // console.error('Demo operation error:', error)
     return NextResponse.json({ error: 'Demo operation failed' }, { status: 500 });
   }
 }

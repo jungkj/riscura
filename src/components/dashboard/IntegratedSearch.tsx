@@ -26,4 +26,4 @@ onChange(e.target.value)}
         className="pl-10 bg-[#FAFAFA] border-[#D8C3A5] focus:border-[#191919] text-[#191919] placeholder:text-[#A8A8A8] font-inter" />
     </div>
   );
-};
+}

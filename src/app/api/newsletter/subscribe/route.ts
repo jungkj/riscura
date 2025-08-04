@@ -18,7 +18,7 @@ export const POST = withApiMiddleware({
     // For example: SendGrid, Mailchimp, ConvertKit, etc.
 
     // For now, we'll just simulate the subscription
-    // console.log(`Newsletter subscription for: ${email}`);
+    // console.log(`Newsletter subscription for: ${email}`)
 
     // In production, you would:
     // 1. Add to your email list
@@ -26,8 +26,8 @@ export const POST = withApiMiddleware({
     // 3. Track the subscription
 
     // Example SendGrid integration:
-    // const sgMail = require('@sendgrid/mail');
-    // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    // const sgMail = require('@sendgrid/mail')
+    // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
     //
     // await sgMail.send({
     //   to: email,
@@ -35,14 +35,14 @@ export const POST = withApiMiddleware({
     //   subject: 'Welcome to Riscura Blog',
     //   text: 'Thank you for subscribing...',
     //   html: '<strong>Thank you for subscribing...</strong>',
-    // });
+    // })
 
     return {
       success: true,
       message: 'Successfully subscribed to newsletter',
-    };
+    }
   } catch (error) {
-    // console.error('Newsletter subscription error:', error);
+    // console.error('Newsletter subscription error:', error)
     throw new Error('Failed to subscribe to newsletter');
   }
 });

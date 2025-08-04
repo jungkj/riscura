@@ -36,7 +36,7 @@ export enum NotificationChannel {
 
 // Alert rule configuration
 interface AlertRule {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: AlertCategory;
@@ -47,19 +47,19 @@ interface AlertRule {
     threshold: number;
     timeWindow: number; // minutes
     minSamples: number;
-  };
+  }
   channels: NotificationChannel[];
   escalation?: {
     timeToEscalate: number; // minutes
     escalationChannels: NotificationChannel[];
-  };
+  }
   enabled: boolean;
   cooldown: number; // minutes between notifications
 }
 
 // Alert instance
 interface Alert {
-  id: string;
+  id: string
   ruleId: string;
   name: string;
   description: string;
@@ -76,7 +76,7 @@ interface Alert {
 
 // Notification payload
 interface Notification {
-  alert: Alert;
+  alert: Alert
   channel: NotificationChannel;
   recipient: string;
   message: string;
@@ -242,7 +242,7 @@ class AlertingSystem {
         enabled: true,
         cooldown: 120,
       },
-    ];
+    ]
 
     defaultRules.forEach((rule) => this.rules.set(rule.id, rule));
   }
@@ -253,12 +253,12 @@ class AlertingSystem {
   private startMonitoring(): void {
     // Check alerts every minute
     setInterval(() => {
-      this.checkAlerts();
+      this.checkAlerts()
     }, 60000);
 
     // Clean up old alerts every hour
     setInterval(() => {
-      this.cleanupOldAlerts();
+      this.cleanupOldAlerts()
     }, 3600000);
   }
 
@@ -283,7 +283,7 @@ class AlertingSystem {
       this.triggerAlert(rule, value, context);
     } else {
       // Check if we should resolve an existing alert
-      this.checkAlertResolution(rule.id, value);
+      this.checkAlertResolution(rule.id, value)
     }
   }
 
@@ -317,7 +317,7 @@ class AlertingSystem {
     );
 
     // Check cooldown period
-    const lastNotification = this.lastNotificationTime.get(rule.id);
+    const lastNotification = this.lastNotificationTime.get(rule.id)
     const cooldownPeriod = rule.cooldown * 60 * 1000; // Convert to milliseconds
 
     if (lastNotification && Date.now() - lastNotification < cooldownPeriod) {
@@ -340,19 +340,19 @@ class AlertingSystem {
         acknowledged: false,
         resolved: false,
         escalated: false,
-      };
+      }
 
       this.activeAlerts.set(alertId, alert);
       this.alertHistory.push(alert);
 
       // Send notifications
-      this.sendNotifications(alert, rule);
+      this.sendNotifications(alert, rule)
 
       // Set up escalation timer
       if (rule.escalation) {
         setTimeout(
           () => {
-            this.escalateAlert(alert, rule);
+            this.escalateAlert(alert, rule)
           },
           rule.escalation.timeToEscalate * 60 * 1000
         );
@@ -371,7 +371,7 @@ class AlertingSystem {
           threshold: rule.condition.threshold,
           context,
         },
-      });
+      })
 
       this.lastNotificationTime.set(rule.id, Date.now());
     }
@@ -385,7 +385,7 @@ class AlertingSystem {
       try {
         await this.sendNotification(alert, channel);
       } catch (error) {
-        // console.error(`Failed to send notification via ${channel}:`, error);
+        // console.error(`Failed to send notification via ${channel}:`, error)
 
         // Log notification failure
         Sentry.captureException(error, {
@@ -393,7 +393,7 @@ class AlertingSystem {
             alert_id: alert.id,
             notification_channel: channel,
           },
-        });
+        })
       }
     }
   }
@@ -432,7 +432,7 @@ class AlertingSystem {
       recipient: this.getRecipientForChannel(channel),
       message,
       timestamp: Date.now(),
-    };
+    }
 
     this.notificationHistory.push(notification);
   }
@@ -481,7 +481,7 @@ Alert ID: ${alert.id}`;
           ts: Math.floor(alert.timestamp / 1000),
         },
       ],
-    };
+    }
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
@@ -505,7 +505,7 @@ Alert ID: ${alert.id}`;
       subject: `${alert.severity.toUpperCase()} Alert: ${alert.name}`,
       body: message,
       html: this.formatEmailHTML(alert, message),
-    };
+    }
 
     const response = await fetch('/api/notifications/email', {
       method: 'POST',
@@ -529,7 +529,7 @@ Alert ID: ${alert.id}`;
     const payload = {
       to: phoneNumbers,
       message: shortMessage,
-    };
+    }
 
     const response = await fetch('/api/notifications/sms', {
       method: 'POST',
@@ -555,7 +555,7 @@ Alert ID: ${alert.id}`;
       alert,
       message,
       timestamp: Date.now(),
-    };
+    }
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
@@ -594,7 +594,7 @@ Alert ID: ${alert.id}`;
           context: alert.context,
         },
       },
-    };
+    }
 
     const response = await fetch('https://events.pagerduty.com/v2/enqueue', {
       method: 'POST',
@@ -630,7 +630,7 @@ Alert ID: ${alert.id}`;
           },
         },
       ],
-    };
+    }
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
@@ -658,7 +658,7 @@ Alert ID: ${alert.id}`;
         try {
           await this.sendNotification(alert, channel);
         } catch (error) {
-          // console.error(`Failed to escalate via ${channel}:`, error);
+          // console.error(`Failed to escalate via ${channel}:`, error)
         }
       }
     }
@@ -670,7 +670,7 @@ Alert ID: ${alert.id}`;
         alert_id: alert.id,
         alert_rule: rule.id,
       },
-    });
+    })
   }
 
   /**
@@ -698,10 +698,10 @@ Alert ID: ${alert.id}`;
       alert.resolved = true;
 
       // Send resolution notification
-      const message = `✅ RESOLVED: ${alert.name}\n\nAlert has been automatically resolved.\nAlert ID: ${alertId}`;
+      const message = `✅ RESOLVED: ${alert.name}\n\nAlert has been automatically resolved.\nAlert ID: ${alertId}`
 
       // Send to Slack only for resolution notifications
-      this.sendSlackNotification(alert, message).catch(console.error);
+      this.sendSlackNotification(alert, message).catch(console.error)
 
       // Log resolution
       Sentry.addBreadcrumb({
@@ -712,7 +712,7 @@ Alert ID: ${alert.id}`;
           alert_id: alertId,
           duration: Date.now() - alert.timestamp,
         },
-      });
+      })
     }
   }
 
@@ -733,7 +733,7 @@ Alert ID: ${alert.id}`;
           alert_id: alertId,
           acknowledged_by: acknowledgedBy,
         },
-      });
+      })
     }
   }
 
@@ -749,22 +749,22 @@ Alert ID: ${alert.id}`;
    * Clean up old alerts
    */
   private cleanupOldAlerts(): void {
-    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
 
     // Remove old resolved alerts
     for (const [id, alert] of this.activeAlerts.entries()) {
       if (alert.resolved && alert.timestamp < sevenDaysAgo) {
-        this.activeAlerts.delete(id);
+        this.activeAlerts.delete(id)
       }
     }
 
     // Trim alert history
-    this.alertHistory = this.alertHistory.filter((alert) => alert.timestamp > sevenDaysAgo);
+    this.alertHistory = this.alertHistory.filter((alert) => alert.timestamp > sevenDaysAgo)
 
     // Trim notification history
     this.notificationHistory = this.notificationHistory.filter(
       (notification) => notification.timestamp > sevenDaysAgo
-    );
+    )
   }
 
   /**
@@ -810,7 +810,7 @@ Alert ID: ${alert.id}`;
       [NotificationChannel.WEBHOOK]: 'Webhook Endpoint',
       [NotificationChannel.PAGERDUTY]: 'PagerDuty Service',
       [NotificationChannel.DISCORD]: 'Discord Channel',
-    };
+    }
 
     return recipients[channel] || 'Unknown';
   }
@@ -870,30 +870,30 @@ Alert ID: ${alert.id}`;
 }
 
 // Singleton instance
-let alertingSystem: AlertingSystem | null = null;
+let alertingSystem: AlertingSystem | null = null
 
 export const getAlertingSystem = (): AlertingSystem => {
   if (!alertingSystem) {
     alertingSystem = new AlertingSystem();
   }
   return alertingSystem;
-};
+}
 
 // Convenience functions
 export const evaluateMetric = (metric: string, value: number, context?: Record<string, any>) => {
-  getAlertingSystem().evaluateMetric(metric, value, context);
-};
+  getAlertingSystem().evaluateMetric(metric, value, context)
+}
 
 export const resolveAlert = (alertId: string) => {
   getAlertingSystem().resolveAlert(alertId);
-};
+}
 
 export const acknowledgeAlert = (alertId: string, acknowledgedBy: string) => {
   getAlertingSystem().acknowledgeAlert(alertId, acknowledgedBy);
-};
+}
 
 export const getActiveAlerts = () => {
   return getAlertingSystem().getActiveAlerts();
-};
+}
 
-export { type AlertRule, type Alert, type Notification };
+export { type AlertRule, type Alert, type Notification }

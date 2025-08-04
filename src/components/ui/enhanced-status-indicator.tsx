@@ -7,11 +7,11 @@ import { motion } from 'framer-motion';
   getConfidenceColor,
   colorClasses,
   dataColors,
-} from '@/lib/design-system/colors';
+} from '@/lib/design-system/colors'
 
 // Status Badge with enhanced visual feedback
 interface StatusBadgeProps {
-  status: string;
+  status: string
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'outline' | 'minimal';
   animated?: boolean;
@@ -35,7 +35,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
     sm: 'px-2 py-1 text-xs',
     md: 'px-3 py-1.5 text-sm',
     lg: 'px-4 py-2 text-base',
-  };
+  }
 
   const getVariantClasses = () => {
     const statusLower = status.toLowerCase();
@@ -51,7 +51,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       identified: 'bg-blue-50 text-blue-700 border-blue-200',
       assessed: 'bg-blue-50 text-blue-700 border-blue-200',
       monitoring: 'bg-slate-50 text-slate-700 border-slate-200',
-    };
+    }
 
     const outlineMapping = {
       low: 'text-green-700 border-green-300 bg-transparent',
@@ -63,7 +63,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       identified: 'text-blue-700 border-blue-300 bg-transparent',
       assessed: 'text-blue-700 border-blue-300 bg-transparent',
       monitoring: 'text-slate-700 border-slate-300 bg-transparent',
-    };
+    }
 
     const baseClasses =
       colorMapping[statusLower as keyof typeof colorMapping] || colorMapping['medium'];
@@ -78,7 +78,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       default:
         return baseClasses;
     }
-  };
+  }
 
   const getStatusIcon = () => {
     const iconSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4';
@@ -96,7 +96,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       default:
         return <div className={`${iconSize} bg-blue-500 rounded-full`} />;
     }
-  };
+  }
 
   const Component = animated ? motion.span : 'span';
   const animationProps = animated
@@ -105,7 +105,7 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
         whileTap: { scale: 0.95 },
         transition: { duration: 0.2 },
       }
-    : {};
+    : {}
 
   return (
     <Component
@@ -123,11 +123,11 @@ export const EnhancedStatusBadge: React.FC<StatusBadgeProps> = ({
       <span className="uppercase font-semibold tracking-wide">{status}</span>
     </Component>
   );
-};
+}
 
 // Risk Level Indicator with confidence visualization
 interface RiskLevelIndicatorProps {
-  level: string | number;
+  level: string | number
   confidence?: number;
   showConfidence?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -152,7 +152,7 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
     sm: 'text-xs',
     md: 'text-sm',
     lg: 'text-base',
-  };
+  }
 
   const getRiskLevelText = () => {
     if (typeof level === 'number') {
@@ -163,11 +163,11 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
       return 'Unknown';
     }
     return level.toString();
-  };
+  }
 
   const getRiskValue = () => {
     return typeof level === 'number' ? level : 0;
-  };
+  }
 
   const Component = animated ? motion.div : 'div';
 
@@ -232,11 +232,11 @@ export const EnhancedRiskLevelIndicator: React.FC<RiskLevelIndicatorProps> = ({
       )}
     </Component>
   );
-};
+}
 
 // Progress Ring with color coding
 interface ProgressRingProps {
-  progress: number;
+  progress: number
   size?: number;
   strokeWidth?: number;
   status?: string;
@@ -295,11 +295,11 @@ export const EnhancedProgressRing: React.FC<DaisyProgressRingProps / />= ({
       )}
     </div>
   );
-};
+}
 
 // Interactive Color Dot with hover effects
 interface ColorDotProps {
-  color: string;
+  color: string
   size?: 'sm' | 'md' | 'lg';
   status?: string;
   interactive?: boolean;
@@ -321,7 +321,7 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
     sm: 'w-2 h-2',
     md: 'w-3 h-3',
     lg: 'w-4 h-4',
-  };
+  }
 
   const getColor = () => {
     if (status) {
@@ -329,7 +329,7 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
       return statusColor.color || statusColor[500] || color;
     }
     return color;
-  };
+  }
 
   const Component = interactive ? motion.div : 'div';
 
@@ -351,11 +351,11 @@ export const EnhancedColorDot: React.FC<ColorDotProps> = ({
           }
         : {})} />
   );
-};
+}
 
 // Multi-color Trend Indicator
 interface TrendIndicatorProps {
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable'
   value?: number;
   showValue?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -375,13 +375,13 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
     sm: 'text-xs',
     md: 'text-sm',
     lg: 'text-base',
-  };
+  }
 
   const iconSizes = {
     sm: 'w-3 h-3',
     md: 'w-4 h-4',
     lg: 'w-5 h-5',
-  };
+  }
 
   const getTrendConfig = () => {
     switch (trend) {
@@ -391,23 +391,23 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
           bgColor: 'bg-green-100',
           icon: '↗',
           label: 'Increasing',
-        };
+        }
       case 'down':
         return {
           color: 'text-red-600',
           bgColor: 'bg-red-100',
           icon: '↘',
           label: 'Decreasing',
-        };
+        }
       default:
         return {
           color: 'text-slate-600',
           bgColor: 'bg-slate-100',
           icon: '→',
           label: 'Stable',
-        };
+        }
     }
-  };
+  }
 
   const trendConfig = getTrendConfig();
   const Component = animated ? motion.div : 'div';
@@ -440,4 +440,4 @@ export const EnhancedTrendIndicator: React.FC<TrendIndicatorProps> = ({
       <span className="font-medium">{trendConfig.label}</span>
     </Component>
   );
-};
+}

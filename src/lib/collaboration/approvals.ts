@@ -1,6 +1,6 @@
 // Temporarily commented out due to Prisma schema issues - needs to be fixed later
 /*
-import { db } from '@/lib/db';
+import { db } from '@/lib/db'
 import { z } from 'zod';
 
 export interface ApprovalWorkflow {
@@ -96,7 +96,7 @@ const approvalWorkflowSchema = z.object({
   })).min(1, 'At least one step is required'),
   organizationId: z.string(),
   isActive: z.boolean().default(true),
-});
+})
 
 const approvalRequestSchema = z.object({
   workflowId: z.string(),
@@ -116,7 +116,7 @@ export class ApprovalWorkflowManager {
   // Create a new approval workflow
   async createWorkflow(workflow: Omit<ApprovalWorkflow, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApprovalWorkflow> {
     // Validate workflow
-    this.validateWorkflow(workflow);
+    this.validateWorkflow(workflow)
 
     const createdWorkflow = await db.client.approvalWorkflow.create({
       data: {
@@ -133,7 +133,7 @@ export class ApprovalWorkflowManager {
   async getWorkflow(id: string): Promise<ApprovalWorkflow | null> {
     return await db.client.approvalWorkflow.findUnique({
       where: { id },
-    });
+    })
   }
 
   // Update workflow
@@ -144,14 +144,14 @@ export class ApprovalWorkflowManager {
         ...updates,
         updatedAt: new Date(),
       },
-    });
+    })
   }
 
   // Delete workflow
   async deleteWorkflow(id: string): Promise<void> {
     await db.client.approvalWorkflow.delete({
       where: { id },
-    });
+    })
   }
 
   // List workflows for organization
@@ -159,18 +159,18 @@ export class ApprovalWorkflowManager {
     return await db.client.approvalWorkflow.findMany({
       where: { organizationId },
       orderBy: { createdAt: 'desc' },
-    });
+    })
   }
 
   // Create approval request
   async createRequest(_request: Omit<ApprovalRequest, 'id' | 'currentStepId' | 'status' | 'approvals' | 'createdAt' | 'updatedAt'>): Promise<ApprovalRequest> {
     // Validate request
-    approvalRequestSchema.parse(request);
+    approvalRequestSchema.parse(request)
 
     // Get workflow
     const workflow = await db.client.approvalWorkflow.findUnique({
       where: { id: request.workflowId },
-    });
+    })
 
     if (!workflow) {
       throw new Error('Workflow not found');
@@ -181,7 +181,7 @@ export class ApprovalWorkflowManager {
     }
 
     // Check if request meets workflow conditions
-    const firstStep = workflow.steps.sort((a, b) => a.order - b.order)[0];
+    const firstStep = workflow.steps.sort((a, b) => a.order - b.order)[0]
     if (!this.checkStepConditions(firstStep, request.data)) {
       throw new Error('Request does not meet workflow conditions');
     }
@@ -198,7 +198,7 @@ export class ApprovalWorkflowManager {
     });
 
     // Send notifications to approvers
-    await this.notifyApprovers(createdRequest, firstStep);
+    await this.notifyApprovers(createdRequest, firstStep)
 
     return createdRequest;
   }
@@ -206,12 +206,12 @@ export class ApprovalWorkflowManager {
   // Process approval action
   async processAction(requestId: string, approverId: string, action: ApprovalAction): Promise<ApprovalRequest> {
     // Validate action
-    approvalActionSchema.parse(action);
+    approvalActionSchema.parse(action)
 
     // Get request
     const request = await db.client.approvalRequest.findUnique({
       where: { id: requestId },
-    });
+    })
 
     if (!request) {
       throw new Error('Request not found');
@@ -224,20 +224,20 @@ export class ApprovalWorkflowManager {
     // Get workflow
     const workflow = await db.client.approvalWorkflow.findUnique({
       where: { id: request.workflowId },
-    });
+    })
 
     if (!workflow) {
       throw new Error('Workflow not found');
     }
 
     // Get current step
-    const currentStep = workflow.steps.find(step => step.id === request.currentStepId);
+    const currentStep = workflow.steps.find(step => step.id === request.currentStepId)
     if (!currentStep) {
       throw new Error('Current step not found');
     }
 
     // Check if user is authorized to approve
-    const isAuthorized = currentStep.approvers.some(approver => approver.userId === approverId);
+    const isAuthorized = currentStep.approvers.some(approver => approver.userId === approverId)
     if (!isAuthorized) {
       throw new Error('User not authorized to approve this step');
     }
@@ -245,7 +245,7 @@ export class ApprovalWorkflowManager {
     // Check if user has already acted on this step
     const existingAction = request.approvals.find(
       approval => approval.stepId === currentStep.id && approval.approverId === approverId
-    );
+    )
     if (existingAction) {
       throw new Error('User has already acted on this step');
     }
@@ -259,12 +259,12 @@ export class ApprovalWorkflowManager {
       comment: action.comment,
       delegatedTo: action.delegatedTo,
       createdAt: new Date(),
-    };
+    }
 
     const updatedApprovals = [...request.approvals, newAction];
 
     // Check if step is complete
-    const stepApprovals = updatedApprovals.filter(approval => approval.stepId === currentStep.id);
+    const stepApprovals = updatedApprovals.filter(approval => approval.stepId === currentStep.id)
     const approveCount = stepApprovals.filter(approval => approval.action === 'approve').length;
     const rejectCount = stepApprovals.filter(approval => approval.action === 'reject').length;
 
@@ -273,20 +273,20 @@ export class ApprovalWorkflowManager {
 
     if (rejectCount > 0) {
       // Any rejection fails the request
-      newStatus = 'rejected';
+      newStatus = 'rejected'
     } else if (approveCount >= currentStep.requiredApprovals) {
       // Step is approved, move to next step or complete
       const nextStep = workflow.steps
         .filter(step => step.order > currentStep.order)
-        .sort((a, b) => a.order - b.order)[0];
+        .sort((a, b) => a.order - b.order)[0]
 
       if (nextStep) {
         nextStepId = nextStep.id;
         // Send notifications to next step approvers
-        await this.notifyApprovers(request, nextStep);
+        await this.notifyApprovers(request, nextStep)
       } else {
         // All steps complete
-        newStatus = 'approved';
+        newStatus = 'approved'
       }
     }
 
@@ -299,11 +299,11 @@ export class ApprovalWorkflowManager {
         approvals: updatedApprovals,
         updatedAt: new Date(),
       },
-    });
+    })
 
     // Send completion notification if request is complete
     if (newStatus === 'approved' || newStatus === 'rejected') {
-      await this.notifyCompletion(updatedRequest, newStatus);
+      await this.notifyCompletion(updatedRequest, newStatus)
     }
 
     return updatedRequest;
@@ -313,7 +313,7 @@ export class ApprovalWorkflowManager {
   async getRequest(id: string): Promise<ApprovalRequest | null> {
     return await db.client.approvalRequest.findUnique({
       where: { id },
-    });
+    })
   }
 
   // List requests for user
@@ -330,7 +330,7 @@ export class ApprovalWorkflowManager {
         ],
       },
       orderBy: { createdAt: 'desc' },
-    });
+    })
   }
 
   // List pending requests for approver
@@ -340,14 +340,14 @@ export class ApprovalWorkflowManager {
     return await db.client.approvalRequest.findMany({
       where: { status: 'pending' },
       orderBy: { createdAt: 'desc' },
-    });
+    })
   }
 
   // Cancel request
   async cancelRequest(requestId: string, userId: string): Promise<ApprovalRequest> {
     const request = await db.client.approvalRequest.findUnique({
       where: { id: requestId },
-    });
+    })
 
     if (!request) {
       throw new Error('Request not found');
@@ -372,7 +372,7 @@ export class ApprovalWorkflowManager {
 
   // Get workflow statistics
   async getWorkflowStats(workflowId: string): Promise<{
-    totalRequests: number;
+    totalRequests: number
     pendingRequests: number;
     approvedRequests: number;
     rejectedRequests: number;
@@ -390,7 +390,7 @@ export class ApprovalWorkflowManager {
     const cancelledRequests = requests.filter(r => r.status === 'cancelled').length;
 
     // Calculate average processing time for completed requests
-    const completedRequests = requests.filter(r => r.status === 'approved' || r.status === 'rejected');
+    const completedRequests = requests.filter(r => r.status === 'approved' || r.status === 'rejected')
     const averageProcessingTime = completedRequests.length > 0
       ? completedRequests.reduce((sum, r) => sum + (r.updatedAt.getTime() - r.createdAt.getTime()), 0) / completedRequests.length
       : 0;
@@ -402,15 +402,15 @@ export class ApprovalWorkflowManager {
       rejectedRequests,
       cancelledRequests,
       averageProcessingTime: averageProcessingTime / (1000 * 60 * 60), // Convert to hours
-    };
+    }
   }
 
   // Private helper methods
   private validateWorkflow(workflow: Omit<ApprovalWorkflow, 'id' | 'createdAt' | 'updatedAt'>): void {
-    approvalWorkflowSchema.parse(workflow);
+    approvalWorkflowSchema.parse(workflow)
 
     // Additional validation
-    const orders = workflow.steps.map(step => step.order);
+    const orders = workflow.steps.map(step => step.order)
     const uniqueOrders = new Set(orders);
     if (orders.length !== uniqueOrders.size) {
       throw new Error('Step orders must be unique');
@@ -419,7 +419,7 @@ export class ApprovalWorkflowManager {
     // Validate that required approvals doesn't exceed available approvers
     for (const step of workflow.steps) {
       if (step.requiredApprovals > step.approvers.length) {
-        throw new Error(`Step "${step.name}" requires more approvals than available approvers`);
+        throw new Error(`Step "${step.name}" requires more approvals than available approvers`)
       }
     }
   }
@@ -456,22 +456,22 @@ export class ApprovalWorkflowManager {
   private async notifyApprovers(_request: ApprovalRequest, step: ApprovalStep): Promise<void> {
     // Implementation would send notifications to approvers
     // This could integrate with email, Slack, or in-app notifications
-    // console.log(`Notifying approvers for step: ${step.name}`);
+    // console.log(`Notifying approvers for step: ${step.name}`)
   }
 
   private async notifyCompletion(_request: ApprovalRequest, status: string): Promise<void> {
     // Implementation would send completion notification to requester
-    // console.log(`Request ${request.id} completed with status: ${status}`);
+    // console.log(`Request ${request.id} completed with status: ${status}`)
   }
 }
 
 // Utility function to generate IDs
 const generateId = (): string {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }
 
 // Export singleton instance
-export const approvalWorkflowManager = new ApprovalWorkflowManager();
+export const approvalWorkflowManager = new ApprovalWorkflowManager()
 
 // Export types for external use
 export type {
@@ -481,12 +481,12 @@ export type {
   ApprovalCondition,
   ApprovalRequest,
   ApprovalAction,
-};
+}
 */
 
 // Temporary placeholder exports to maintain compatibility
 export interface ApprovalWorkflow {
-  id: string;
+  id: string
   name: string;
   description: string;
   steps: any[];

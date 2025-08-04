@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-// import { NewRiskFlow } from '@/components/risks/NewRiskFlow';
-// import { CreateRiskModal } from '@/components/risks/CreateRiskModal';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { NewRiskFlow } from '@/components/risks/NewRiskFlow'
+// import { CreateRiskModal } from '@/components/risks/CreateRiskModal'
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Sparkles,
   Zap,
   MousePointerClick,

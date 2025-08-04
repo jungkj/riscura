@@ -1,6 +1,6 @@
 // Performance Metrics Collection API
-import { NextRequest, NextResponse } from 'next/server';
-// import { redisClient } from '@/lib/cache/redis-client';
+import { NextRequest, NextResponse } from 'next/server'
+// import { redisClient } from '@/lib/cache/redis-client'
 
 interface PerformanceMetric {
   name: string;
@@ -27,16 +27,16 @@ interface PerformancePayload {
 // POST - Collect performance metrics
 export async function POST(_request: NextRequest) {
   try {
-    const payload: PerformancePayload = await request.json();
+    const payload: PerformancePayload = await request.json()
 
     // Validate payload
     if (!payload.metrics || !Array.isArray(payload.metrics)) {
-      return NextResponse.json({ error: 'Invalid metrics data' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid metrics data' }, { status: 400 })
     }
 
     // Process each metric
     const ip =
-      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
 
     const processedMetrics = payload.metrics.map((metric) => ({
       ...metric,
@@ -47,7 +47,7 @@ export async function POST(_request: NextRequest) {
     }));
 
     // Store metrics in Redis with TTL
-    const cacheKey = `performance:${payload.sessionId}:${Date.now()}`;
+    const cacheKey = `performance:${payload.sessionId}:${Date.now()}`
     await redisClient.set(
       cacheKey,
       JSON.stringify({
@@ -58,10 +58,10 @@ export async function POST(_request: NextRequest) {
     );
 
     // Store aggregated metrics for reporting
-    await storeAggregatedMetrics(processedMetrics);
+    await storeAggregatedMetrics(processedMetrics)
 
     // Check for performance alerts
-    await checkPerformanceAlerts(processedMetrics);
+    await checkPerformanceAlerts(processedMetrics)
 
     return NextResponse.json({
       success: true,
@@ -69,7 +69,7 @@ export async function POST(_request: NextRequest) {
       sessionId: payload.sessionId,
     });
   } catch (error) {
-    // console.error('Performance metrics collection error:', error);
+    // console.error('Performance metrics collection error:', error)
     return NextResponse.json({ error: 'Failed to process metrics' }, { status: 500 });
   }
 }
@@ -77,7 +77,7 @@ export async function POST(_request: NextRequest) {
 // GET - Retrieve performance metrics
 export async function GET(_request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId');
     const userId = searchParams.get('userId');
     const timeframe = searchParams.get('timeframe') || '1h';
@@ -87,7 +87,7 @@ export async function GET(_request: NextRequest) {
 
     if (sessionId) {
       // Get metrics for specific session
-      const _pattern = `performance:${sessionId}:*`;
+      const _pattern = `performance:${sessionId}:*`
       const keys = await redisClient.smembers(`pattern:${pattern}`);
 
       for (const key of keys) {
@@ -98,11 +98,11 @@ export async function GET(_request: NextRequest) {
       }
     } else {
       // Get aggregated metrics
-      metrics = await getAggregatedMetrics(timeframe, metricType, userId);
+      metrics = await getAggregatedMetrics(timeframe, metricType, userId)
     }
 
     // Calculate summary statistics
-    const summary = calculateMetricsSummary(metrics);
+    const summary = calculateMetricsSummary(metrics)
 
     return NextResponse.json({
       metrics,
@@ -111,14 +111,14 @@ export async function GET(_request: NextRequest) {
       total: metrics.length,
     });
   } catch (error) {
-    // console.error('Performance metrics retrieval error:', error);
+    // console.error('Performance metrics retrieval error:', error)
     return NextResponse.json({ error: 'Failed to retrieve metrics' }, { status: 500 });
   }
 }
 
 // Store aggregated metrics for reporting
 async function storeAggregatedMetrics(metrics: any[]) {
-  const now = new Date();
+  const now = new Date()
   const hourKey = `metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`;
   const dayKey = `metrics:day:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 
@@ -126,7 +126,7 @@ async function storeAggregatedMetrics(metrics: any[]) {
   const aggregated: Record<
     string,
     { count: number; sum: number; min: number; max: number; values: number[] }
-  > = {};
+  > = {}
 
   metrics.forEach((metric) => {
     if (!aggregated[metric.name]) {
@@ -136,7 +136,7 @@ async function storeAggregatedMetrics(metrics: any[]) {
         min: Infinity,
         max: -Infinity,
         values: [],
-      };
+      }
     }
 
     const agg = aggregated[metric.name];
@@ -149,7 +149,7 @@ async function storeAggregatedMetrics(metrics: any[]) {
 
   // Calculate percentiles and store
   for (const [metricName, data] of Object.entries(aggregated)) {
-    const sortedValues = data.values.sort((a, b) => a - b);
+    const sortedValues = data.values.sort((a, b) => a - b)
     const p50 = calculatePercentile(sortedValues, 50);
     const p75 = calculatePercentile(sortedValues, 75);
     const p95 = calculatePercentile(sortedValues, 95);
@@ -165,21 +165,21 @@ async function storeAggregatedMetrics(metrics: any[]) {
       p95,
       p99,
       timestamp: now.toISOString(),
-    };
+    }
 
     // Store hourly aggregation
-    await redisClient.hset(hourKey, metricName, JSON.stringify(summary));
+    await redisClient.hset(hourKey, metricName, JSON.stringify(summary))
     await redisClient.expire(hourKey, 86400 * 7); // 7 days
 
     // Store daily aggregation
-    await redisClient.hset(dayKey, metricName, JSON.stringify(summary));
+    await redisClient.hset(dayKey, metricName, JSON.stringify(summary))
     await redisClient.expire(dayKey, 86400 * 30); // 30 days
   }
 }
 
 // Check for performance alerts
 async function checkPerformanceAlerts(metrics: any[]) {
-  const alerts: any[] = [];
+  const alerts: any[] = []
   const thresholds = {
     LCP: 2500,
     FID: 100,
@@ -187,7 +187,7 @@ async function checkPerformanceAlerts(metrics: any[]) {
     FCP: 1800,
     TTFB: 600,
     INP: 200,
-  };
+  }
 
   metrics.forEach((metric) => {
     const threshold = thresholds[metric.name as keyof typeof thresholds];
@@ -208,11 +208,11 @@ async function checkPerformanceAlerts(metrics: any[]) {
 
   // Store alerts
   if (alerts.length > 0) {
-    const alertsKey = `alerts:performance:${Date.now()}`;
+    const alertsKey = `alerts:performance:${Date.now()}`
     await redisClient.set(alertsKey, JSON.stringify(alerts), 86400); // 24 hours
 
     // You could also send notifications here
-    // console.warn(`Performance alerts generated:`, alerts);
+    // console.warn(`Performance alerts generated:`, alerts)
   }
 }
 
@@ -222,7 +222,7 @@ async function getAggregatedMetrics(
   metricType?: string | null,
   userId?: string | null
 ) {
-  const now = new Date();
+  const now = new Date()
   const keys: string[] = [];
 
   // Determine which keys to query based on timeframe
@@ -230,7 +230,7 @@ async function getAggregatedMetrics(
     case '1h':
       keys.push(
         `metrics:hour:${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`
-      );
+      )
       break;
     case '24h':
       for (let i = 0; i < 24; i++) {
@@ -265,7 +265,7 @@ async function getAggregatedMetrics(
             key,
           });
         } catch (error) {
-          // console.error('Failed to parse metric data:', error);
+          // console.error('Failed to parse metric data:', error)
         }
       }
     }
@@ -282,7 +282,7 @@ const calculateMetricsSummary = (metrics: any[]) {
       avgLoadTime: 0,
       performanceScore: 0,
       alertsCount: 0,
-    };
+    }
   }
 
   const sessions = new Set(metrics.map((m) => m.sessionId)).size;
@@ -292,7 +292,7 @@ const calculateMetricsSummary = (metrics: any[]) {
     loadTimes.length > 0 ? loadTimes.reduce((sum, time) => sum + time, 0) / loadTimes.length : 0;
 
   // Calculate simplified performance score
-  const lcpMetrics = metrics.filter((m) => m.name === 'LCP');
+  const lcpMetrics = metrics.filter((m) => m.name === 'LCP')
   const fidMetrics = metrics.filter((m) => m.name === 'FID');
   const clsMetrics = metrics.filter((m) => m.name === 'CLS');
 
@@ -306,7 +306,7 @@ const calculateMetricsSummary = (metrics: any[]) {
     clsMetrics.length > 0 ? clsMetrics.reduce((sum, m) => sum + m.value, 0) / clsMetrics.length : 0;
 
   // Simple performance scoring
-  let performanceScore = 100;
+  let performanceScore = 100
   if (avgLCP > 2500) performanceScore -= 20;
   if (avgFID > 100) performanceScore -= 20;
   if (avgCLS > 0.1) performanceScore -= 20;
@@ -320,12 +320,12 @@ const calculateMetricsSummary = (metrics: any[]) {
     avgFID: Math.round(avgFID),
     avgCLS: parseFloat(avgCLS.toFixed(3)),
     metricsCount: metrics.length,
-  };
+  }
 }
 
 // Calculate percentile
 const calculatePercentile = (sortedValues: number[], percentile: number): number {
-  if (sortedValues.length === 0) return 0;
+  if (sortedValues.length === 0) return 0
 
   const index = Math.ceil((percentile / 100) * sortedValues.length) - 1;
   return sortedValues[Math.max(0, index)];
@@ -333,5 +333,5 @@ const calculatePercentile = (sortedValues: number[], percentile: number): number
 
 // Health check endpoint
 export async function HEAD() {
-  return new NextResponse(null, { status: 200 });
+  return new NextResponse(null, { status: 200 })
 }

@@ -69,11 +69,11 @@ export const ariaLabels = {
   'status.error': 'Error message',
   'status.info': 'Information message',
   'status.progress': 'Progress indicator',
-};
+}
 
 // Accessibility Context
 interface AccessibilityContextType {
-  announceMessage: (message: string, priority?: 'polite' | 'assertive') => void;
+  announceMessage: (message: string, priority?: 'polite' | 'assertive') => void
   getAriaLabel: (key: string) => string;
   isHighContrast: boolean;
   reducedMotion: boolean;
@@ -87,15 +87,15 @@ export const useAccessibility = () => {
     throw new Error('useAccessibility must be used within AccessibilityProvider');
   }
   return context;
-};
+}
 
 // Screen Reader Announcements
 export const useScreenReaderAnnouncements = () => {
-  const liveRegionRef = useRef<HTMLDivElement | null>(null);
+  const liveRegionRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     // Create live region for announcements
-    const liveRegion = document.createElement('div');
+    const liveRegion = document.createElement('div')
     liveRegion.setAttribute('aria-live', 'polite');
     liveRegion.setAttribute('aria-atomic', 'true');
     liveRegion.className = 'sr-only';
@@ -106,7 +106,7 @@ export const useScreenReaderAnnouncements = () => {
       if (liveRegionRef.current && document.body.contains(liveRegionRef.current)) {
         document.body.removeChild(liveRegionRef.current);
       }
-    };
+    }
   }, []);
 
   const announceMessage = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
@@ -117,19 +117,19 @@ export const useScreenReaderAnnouncements = () => {
       // Clear after announcement
       setTimeout(() => {
         if (liveRegionRef.current) {
-          liveRegionRef.current.textContent = '';
+          liveRegionRef.current.textContent = ''
         }
       }, 1000);
     }
   }, []);
 
-  return { announceMessage };
-};
+  return { announceMessage }
+}
 
 // Focus Management Hook
 export const useFocusManagement = () => {
   const focusableElementsSelector = 
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
   
   const trapFocus = useCallback((container: HTMLElement) => {
     const focusableElements = container.querySelectorAll(focusableElementsSelector);
@@ -150,18 +150,18 @@ export const useFocusManagement = () => {
           }
         }
       }
-    };
+    }
 
     container.addEventListener('keydown', handleTabKey);
     
     // Focus first element
     if (firstElement) {
-      firstElement.focus();
-    };
+      firstElement.focus()
+    }
 
   return () => {
       container.removeEventListener('keydown', handleTabKey);
-    };
+    }
   }, []);
 
   const restoreFocus = useCallback((element: HTMLElement) => {
@@ -170,8 +170,8 @@ export const useFocusManagement = () => {
     }
   }, []);
 
-  return { trapFocus, restoreFocus };
-};
+  return { trapFocus, restoreFocus }
+}
 
 // Keyboard Navigation Hook
 export const useKeyboardNavigation = () => {
@@ -181,7 +181,7 @@ export const useKeyboardNavigation = () => {
     currentIndex: number,
     orientation: 'horizontal' | 'vertical' = 'vertical'
   ) => {
-    let newIndex = currentIndex;
+    let newIndex = currentIndex
     
     switch (e.key) {
       case 'ArrowDown':
@@ -226,12 +226,12 @@ export const useKeyboardNavigation = () => {
     return currentIndex;
   }, []);
 
-  return { handleArrowNavigation };
-};
+  return { handleArrowNavigation }
+}
 
 // High Contrast Detection
 export const useHighContrast = () => {
-  const [isHighContrast, setIsHighContrast] = useState(false);
+  const [isHighContrast, setIsHighContrast] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-contrast: high)');
@@ -239,18 +239,18 @@ export const useHighContrast = () => {
 
     const handleChange = (e: MediaQueryListEvent) => {
       setIsHighContrast(e.matches);
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return isHighContrast;
-};
+}
 
 // Reduced Motion Detection
 export const useReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -258,14 +258,14 @@ export const useReducedMotion = () => {
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
-    };
+    }
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return prefersReducedMotion;
-};
+}
 
 // Skip Links Component
 export const SkipLinks: React.FC = () => {
@@ -284,12 +284,12 @@ export const SkipLinks: React.FC = () => {
         {ariaLabels['nav.skip-nav']}
       </a>
     </div>
-  );
-};
+  )
+}
 
 // Accessible Modal Component
 interface AccessibleModalProps extends PropsWithChildren {
-  isOpen: boolean;
+  isOpen: boolean
   onClose: () => void;
   title: string;
   className?: string;
@@ -328,7 +328,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
-    };
+    }
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
@@ -368,11 +368,11 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Accessible Tooltip Component
 interface AccessibleTooltipProps extends PropsWithChildren {
-  content: string;
+  content: string
   className?: string;
 }
 
@@ -423,11 +423,11 @@ export const AccessibleTooltip: React.FC<AccessibleTooltipProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Status Message Component
 interface StatusMessageProps {
-  type: 'success' | 'warning' | 'error' | 'info';
+  type: 'success' | 'warning' | 'error' | 'info'
   message: string;
   onClose?: () => void;
   className?: string;
@@ -452,7 +452,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
       case 'error': return AlertTriangle;
       case 'info': return Info;
     }
-  };
+  }
 
   const getColors = () => {
     switch (type) {
@@ -461,7 +461,7 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
       case 'error': return 'bg-red-50 border-red-200 text-red-800';
       case 'info': return 'bg-blue-50 border-blue-200 text-blue-800';
     }
-  };
+  }
 
   const Icon = getIcon();
 
@@ -490,11 +490,11 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Accessibility Provider
 export const AccessibilityProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { announceMessage } = useScreenReaderAnnouncements();
+  const { announceMessage } = useScreenReaderAnnouncements()
   const isHighContrast = useHighContrast();
   const reducedMotion = useReducedMotion();
 
@@ -507,7 +507,7 @@ export const AccessibilityProvider: React.FC<PropsWithChildren> = ({ children })
     getAriaLabel,
     isHighContrast,
     reducedMotion,
-  };
+  }
 
   return (
     <AccessibilityContext.Provider value={contextValue}>
@@ -515,4 +515,4 @@ export const AccessibilityProvider: React.FC<PropsWithChildren> = ({ children })
       {children}
     </AccessibilityContext.Provider>
   );
-}; 
+} 

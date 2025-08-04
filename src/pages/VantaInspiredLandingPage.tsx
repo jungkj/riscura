@@ -9,11 +9,11 @@ import AIFeaturesSection from '@/components/landing/AIFeaturesSection';
 export default function VantaInspiredLandingPage() {
   useEffect(() => {
     // Smooth scrolling behavior
-    document.documentElement.style.scrollBehavior = 'smooth';
+    document.documentElement.style.scrollBehavior = 'smooth'
 
     return () => {
       document.documentElement.style.scrollBehavior = 'auto';
-    };
+    }
   }, []);
 
   return (

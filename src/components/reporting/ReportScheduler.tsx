@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -12,6 +12,7 @@ import { DaisyTable, DaisyTableBody, DaisyTableCell, DaisyTableHead, DaisyTableH
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTableRow, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   Calendar, 
   Clock, 
@@ -27,9 +28,9 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
   CheckCircle,
   Info,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
-// import { format, addDays, addWeeks, addMonths, addQuarters } from 'date-fns';
+// import { format, addDays, addWeeks, addMonths, addQuarters } from 'date-fns'
 
 interface ScheduledReport {
   id: string;
@@ -56,7 +57,7 @@ interface ScheduledReport {
     id: string;
     name: string;
     email: string;
-  };
+  }
 }
 
 interface ReportSchedulerProps {
@@ -102,7 +103,7 @@ export default function ReportScheduler({
     { value: 'CONTROL_EFFECTIVENESS', label: 'Control Effectiveness' },
     { value: 'EXECUTIVE_SUMMARY', label: 'Executive Summary' },
     { value: 'AUDIT_TRAIL', label: 'Audit Trail' },
-  ];
+  ]
 
   const timezones = [
     { value: 'UTC', label: 'UTC' },
@@ -147,7 +148,7 @@ export default function ReportScheduler({
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const calculateNextRun = (schedule: Partial<ScheduledReport>): Date => {
     const now = new Date();
@@ -158,13 +159,13 @@ export default function ReportScheduler({
     
     // If the time has already passed today, start from tomorrow
     if (nextRun <= now) {
-      nextRun = addDays(nextRun, 1);
+      nextRun = addDays(nextRun, 1)
     }
     
     switch (schedule.frequency) {
       case 'daily':
         // Already set to next day if needed
-        break;
+        break
       case 'weekly':
         const targetDay = schedule.dayOfWeek || 1; // Default to Monday
         const currentDay = nextRun.getDay();
@@ -192,7 +193,7 @@ export default function ReportScheduler({
     }
     
     return nextRun;
-  };
+  }
 
   const handleCreate = async () => {
     try {
@@ -201,7 +202,7 @@ export default function ReportScheduler({
         nextRun: calculateNextRun(formData),
         runCount: 0,
         failureCount: 0,
-      };
+      }
 
       if (onSchedule) {
         await onSchedule(scheduleData);
@@ -211,7 +212,7 @@ export default function ReportScheduler({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(scheduleData),
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Failed to create schedule');
@@ -233,7 +234,7 @@ export default function ReportScheduler({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleUpdate = async () => {
     if (!selectedSchedule) return;
@@ -242,7 +243,7 @@ export default function ReportScheduler({
       const scheduleData = {
         ...formData,
         nextRun: calculateNextRun(formData),
-      };
+      }
 
       if (onUpdate) {
         await onUpdate(selectedSchedule.id, scheduleData);
@@ -252,7 +253,7 @@ export default function ReportScheduler({
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(scheduleData),
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Failed to update schedule');
@@ -274,7 +275,7 @@ export default function ReportScheduler({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
     try {
@@ -284,7 +285,7 @@ export default function ReportScheduler({
         // Default delete behavior
         const response = await fetch(`/api/reports/schedule/${id}`, {
           method: 'DELETE',
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Failed to delete schedule');
@@ -304,7 +305,7 @@ export default function ReportScheduler({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleToggle = async (id: string, enabled: boolean) => {
     try {
@@ -316,7 +317,7 @@ export default function ReportScheduler({
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ enabled }),
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Failed to toggle schedule');
@@ -336,7 +337,7 @@ export default function ReportScheduler({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleRunNow = async (id: string) => {
     try {
@@ -346,7 +347,7 @@ export default function ReportScheduler({
         // Default run now behavior
         const response = await fetch(`/api/reports/schedule/${id}/run`, {
           method: 'POST',
-        });
+        })
 
         if (!response.ok) {
           throw new Error('Failed to run report');
@@ -364,7 +365,7 @@ export default function ReportScheduler({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const openEditDialog = (schedule: ScheduledReport) => {
     setSelectedSchedule(schedule);
@@ -385,7 +386,7 @@ export default function ReportScheduler({
       filters: schedule.filters,
     });
     setIsEditDialogOpen(true);
-  };
+  }
 
   const resetForm = () => {
     setFormData({
@@ -403,7 +404,7 @@ export default function ReportScheduler({
       filters: {},
     });
     setSelectedSchedule(null);
-  };
+  }
 
   const getFrequencyBadge = (frequency: string) => {
     const colors = {
@@ -411,7 +412,7 @@ export default function ReportScheduler({
       weekly: 'bg-green-100 text-green-800',
       monthly: 'bg-purple-100 text-purple-800',
       quarterly: 'bg-orange-100 text-orange-800',
-    };
+    }
 
   return (
     <DaisyBadge className={colors[frequency as keyof typeof colors] || 'bg-gray-100 text-gray-800'} >
@@ -419,7 +420,7 @@ export default function ReportScheduler({
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   const getStatusIcon = (schedule: ScheduledReport) => {
     if (!schedule.enabled) {
@@ -433,7 +434,7 @@ export default function ReportScheduler({
     }
     
     return <CheckCircle className="h-4 w-4 text-green-500" />;
-  };
+  }
 
   const ScheduleForm = ({ isEdit = false }: { isEdit?: boolean }) => (
     <div className="space-y-4">

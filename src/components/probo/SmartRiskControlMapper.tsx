@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import {
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisySelect,
   DaisySelectTrigger,
   DaisySelectValue,
@@ -44,7 +45,7 @@ import {
   Unlink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types';
+// import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types'
 import { ProboIntegrationService } from '@/services/ProboIntegrationService';
 
 interface Risk {
@@ -91,7 +92,7 @@ export default function SmartRiskControlMapper({
     return risks.filter((risk) => {
       const matchesSearch =
         risk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        risk.description.toLowerCase().includes(searchTerm.toLowerCase());
+        risk.description.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesSeverity = filterSeverity === 'all' || risk.severity === filterSeverity;
       const matchesCategory = filterCategory === 'all' || risk.category === filterCategory;
 
@@ -101,55 +102,55 @@ export default function SmartRiskControlMapper({
 
   // Get unique categories
   const riskCategories = useMemo(() => {
-    return Array.from(new Set(risks.map((risk) => risk.category)));
+    return Array.from(new Set(risks.map((risk) => risk.category)))
   }, [risks]);
 
   // Get mappings for a specific risk
   const getRiskMappings = (riskId: string) => {
-    return mappings.filter((mapping) => mapping.riskId === riskId);
-  };
+    return mappings.filter((mapping) => mapping.riskId === riskId)
+  }
 
   // Get controls mapped to a specific risk
   const getMappedControls = (riskId: string) => {
-    const riskMappings = getRiskMappings(riskId);
+    const riskMappings = getRiskMappings(riskId)
     return controls.filter((control) =>
       riskMappings.some((mapping) => mapping.controlId === control.id)
     );
-  };
+  }
 
   // Get unmapped controls for a risk
   const getUnmappedControls = (riskId: string) => {
-    const mappedControlIds = getMappedControls(riskId).map((c) => c.id);
+    const mappedControlIds = getMappedControls(riskId).map((c) => c.id)
     return controls.filter((control) => !mappedControlIds.includes(control.id));
-  };
+  }
 
   // Calculate risk coverage
   const calculateRiskCoverage = (riskId: string) => {
-    const riskMappings = getRiskMappings(riskId);
+    const riskMappings = getRiskMappings(riskId)
     if (riskMappings.length === 0) return 0;
 
     const totalCoverage = riskMappings.reduce((sum, mapping) => sum + mapping.coverage, 0);
     return Math.min(100, totalCoverage);
-  };
+  }
 
   // Generate AI mapping suggestions
   const generateAISuggestions = async (_risk: Risk) => {
-    setIsAnalyzing(true);
+    setIsAnalyzing(true)
     try {
       // Simulate AI analysis for control suggestions
-      const suggestions = await analyzeRiskForControlSuggestions(risk);
+      const suggestions = await analyzeRiskForControlSuggestions(risk)
       setAiSuggestions(suggestions);
     } catch (error) {
-      // console.error('Error generating AI suggestions:', error);
+      // console.error('Error generating AI suggestions:', error)
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }
 
   // Simulate AI analysis
   const analyzeRiskForControlSuggestions = async (_risk: Risk): Promise<any[]> => {
     // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     // Generate smart suggestions based on risk characteristics
     const suggestions = controls
@@ -166,18 +167,18 @@ export default function SmartRiskControlMapper({
       .slice(0, 5); // Top 5 suggestions
 
     return suggestions;
-  };
+  }
 
   // Calculate relevance score between risk and control
   const calculateRelevanceScore = (_risk: Risk, control: ProboControl): number => {
-    let score = 0;
+    let score = 0
 
     // Category matching
     if (
       control.category.name.toLowerCase().includes(risk.category.toLowerCase()) ||
       risk.category.toLowerCase().includes(control.category.name.toLowerCase())
     ) {
-      score += 30;
+      score += 30
     }
 
     // Severity/Priority alignment
@@ -185,17 +186,17 @@ export default function SmartRiskControlMapper({
       (risk.severity === 'Critical' && control.priority === 'Critical') ||
       (risk.severity === 'High' && ['Critical', 'High'].includes(control.priority))
     ) {
-      score += 25;
+      score += 25
     }
 
     // Risk mitigation score
-    score += control.riskMitigationScore * 2;
+    score += control.riskMitigationScore * 2
 
     // AI confidence
-    score += control.aiConfidence * 20;
+    score += control.aiConfidence * 20
 
     // Keywords matching
-    const riskKeywords = (risk.title + ' ' + risk.description).toLowerCase();
+    const riskKeywords = (risk.title + ' ' + risk.description).toLowerCase()
     const controlKeywords = (control.title + ' ' + control.description).toLowerCase();
     const commonWords = [
       'access',
@@ -213,11 +214,11 @@ export default function SmartRiskControlMapper({
     });
 
     return Math.min(100, score);
-  };
+  }
 
   // Generate reasoning text
   const generateReasoningText = (_risk: Risk, control: ProboControl): string => {
-    const reasons = [];
+    const reasons = []
 
     if (control.category.name.toLowerCase().includes(risk.category.toLowerCase())) {
       reasons.push(`Directly addresses ${risk.category.toLowerCase()} risks`);
@@ -236,7 +237,7 @@ export default function SmartRiskControlMapper({
     }
 
     return reasons.length > 0 ? reasons.join(', ') : 'General security enhancement';
-  };
+  }
 
   // Suggest mapping type
   const suggestMappingType = (_risk: Risk,
@@ -246,7 +247,7 @@ export default function SmartRiskControlMapper({
       control.category.name.includes('Access') ||
       control.category.name.includes('Authentication')
     ) {
-      return 'Preventive';
+      return 'Preventive'
     }
     if (
       control.category.name.includes('Monitoring') ||
@@ -258,19 +259,19 @@ export default function SmartRiskControlMapper({
       return 'Corrective';
     }
     return 'Preventive';
-  };
+  }
 
   // Estimate effectiveness
   const estimateEffectiveness = (_risk: Risk, control: ProboControl): 'High' | 'Medium' | 'Low' => {
-    const relevanceScore = calculateRelevanceScore(risk, control);
+    const relevanceScore = calculateRelevanceScore(risk, control)
     if (relevanceScore >= 70) return 'High';
     if (relevanceScore >= 40) return 'Medium';
     return 'Low';
-  };
+  }
 
   // Calculate implementation priority
   const calculatePriority = (_risk: Risk, control: ProboControl): number => {
-    let priority = 0;
+    let priority = 0
 
     // Risk severity weight
     const severityWeight = {
@@ -278,22 +279,22 @@ export default function SmartRiskControlMapper({
       High: 3,
       Medium: 2,
       Low: 1,
-    };
+    }
     priority += severityWeight[risk.severity] * 25;
 
     // Control effectiveness
-    priority += control.riskMitigationScore * 5;
+    priority += control.riskMitigationScore * 5
 
     // Implementation complexity (inverse)
     const complexityWeight = {
       Simple: 3,
       Moderate: 2,
       Complex: 1,
-    };
+    }
     priority += complexityWeight[control.implementationComplexity] * 10;
 
     return Math.min(100, priority);
-  };
+  }
 
   // Create a new mapping
   const createMapping = (
@@ -313,23 +314,23 @@ export default function SmartRiskControlMapper({
       aiConfidence: 0.85,
       rationale: 'AI-suggested mapping based on risk-control analysis',
       createdAt: new Date().toISOString(),
-    };
+    }
 
     const updatedMappings = [...mappings, newMapping];
     setMappings(updatedMappings);
     onMappingsUpdate?.(updatedMappings);
-  };
+  }
 
   // Remove a mapping
   const removeMapping = (mappingId: string) => {
-    const updatedMappings = mappings.filter((m) => m.id !== mappingId);
+    const updatedMappings = mappings.filter((m) => m.id !== mappingId)
     setMappings(updatedMappings);
     onMappingsUpdate?.(updatedMappings);
-  };
+  }
 
   // Apply AI suggestion
   const applyAISuggestion = (suggestion: any) => {
-    if (!selectedRisk) return;
+    if (!selectedRisk) return
 
     createMapping(
       selectedRisk.id,
@@ -337,7 +338,7 @@ export default function SmartRiskControlMapper({
       suggestion.suggestedMappingType,
       suggestion.estimatedEffectiveness
     );
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -352,7 +353,7 @@ export default function SmartRiskControlMapper({
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getEffectivenessColor = (effectiveness: string) => {
     switch (effectiveness) {
@@ -365,7 +366,7 @@ export default function SmartRiskControlMapper({
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>

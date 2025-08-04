@@ -10,7 +10,7 @@ export const DaisySwitch = forwardRef<HTMLInputElement, SwitchProps>(
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
       onCheckedChange?.(e.target.checked);
-    };
+    }
 
     return (
       <input

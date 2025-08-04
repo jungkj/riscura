@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   Trophy,
   Star,
@@ -25,11 +26,11 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
   Unlock,
   Gift,
   Flame
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Achievement definitions
 interface Achievement {
-  id: string;
+  id: string
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -42,7 +43,7 @@ interface Achievement {
     actions?: string[];
     features?: string[];
     timeframe?: number; // days
-  };
+  }
   unlocked: boolean;
   progress: number;
   unlockedAt?: Date;
@@ -51,13 +52,13 @@ interface Achievement {
 
 // User progress tracking
 interface UserProgress {
-  totalPoints: number;
+  totalPoints: number
   level: number;
   achievements: Achievement[];
   streaks: {
     daily: number;
     weekly: number;
-  };
+  }
   stats: {
     risksCreated: number;
     controlsAdded: number;
@@ -66,7 +67,7 @@ interface UserProgress {
     featuresExplored: string[];
     daysActive: number;
     collaborations: number;
-  };
+  }
 }
 
 // Achievement definitions
@@ -280,11 +281,11 @@ const ACHIEVEMENTS: Achievement[] = [
     progress: 0,
     hidden: true
   }
-];
+]
 
 // Achievement notification component
 interface AchievementNotificationProps {
-  achievement: Achievement;
+  achievement: Achievement
   onClose: () => void;
 }
 
@@ -298,7 +299,7 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
     silver: 'bg-gray-100 text-gray-700 border-gray-200',
     gold: 'bg-yellow-100 text-yellow-700 border-yellow-200',
     platinum: 'bg-purple-100 text-purple-700 border-purple-200'
-  };
+  }
 
   useEffect(() => {
     const timer = setTimeout(onClose, 5000);
@@ -346,11 +347,11 @@ const AchievementNotification: React.FC<AchievementNotificationProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 // Main achievement system component
 interface AchievementSystemProps {
-  userProgress: UserProgress;
+  userProgress: UserProgress
   onProgressUpdate: (progress: UserProgress) => void;
   className?: string;
 }
@@ -366,34 +367,34 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
   // Calculate user level based on points
   const calculateLevel = (points: number): number => {
-    return Math.floor(points / 100) + 1;
-  };
+    return Math.floor(points / 100) + 1
+  }
 
   // Calculate points needed for next level
   const pointsToNextLevel = (currentPoints: number): number => {
-    const currentLevel = calculateLevel(currentPoints);
+    const currentLevel = calculateLevel(currentPoints)
     const nextLevelPoints = currentLevel * 100;
     return nextLevelPoints - currentPoints;
-  };
+  }
 
   // Track user action
   const trackAction = useCallback((_action: string, metadata?: any) => {
     const updatedAchievements = userProgress.achievements.map(achievement => {
-      if (achievement.unlocked) return achievement;
+      if (achievement.unlocked) return achievement
 
       let newProgress = achievement.progress;
       let unlocked = false;
 
       // Check if this action contributes to the achievement
       if (achievement.requirements.actions?.includes(action)) {
-        newProgress = Math.min(newProgress + 1, achievement.requirements.target);
+        newProgress = Math.min(newProgress + 1, achievement.requirements.target)
         unlocked = newProgress >= achievement.requirements.target;
       }
 
       // Feature usage tracking
       if (achievement.requirements.type === 'feature_usage' && 
           achievement.requirements.features?.includes(action)) {
-        const exploredFeatures = userProgress.stats.featuresExplored;
+        const exploredFeatures = userProgress.stats.featuresExplored
         if (!exploredFeatures.includes(action)) {
           exploredFeatures.push(action);
           newProgress = exploredFeatures.length;
@@ -403,7 +404,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
       // Show notification for newly unlocked achievements
       if (unlocked && !achievement.unlocked) {
-        setShowNotification({ ...achievement, unlocked: true, progress: newProgress });
+        setShowNotification({ ...achievement, unlocked: true, progress: newProgress })
       }
 
       return {
@@ -411,11 +412,11 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
         progress: newProgress,
         unlocked,
         unlockedAt: unlocked && !achievement.unlocked ? new Date() : achievement.unlockedAt
-      };
+      }
     });
 
     // Update user stats
-    const updatedStats = { ...userProgress.stats };
+    const updatedStats = { ...userProgress.stats }
     switch (action) {
       case 'create_risk':
         updatedStats.risksCreated++;
@@ -437,7 +438,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
     // Calculate new total points
     const totalPoints = updatedAchievements
       .filter(a => a.unlocked)
-      .reduce((sum, a) => sum + a.points, 0);
+      .reduce((sum, a) => sum + a.points, 0)
 
     const updatedProgress: UserProgress = {
       ...userProgress,
@@ -445,14 +446,14 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       stats: updatedStats,
       totalPoints,
       level: calculateLevel(totalPoints)
-    };
+    }
 
     onProgressUpdate(updatedProgress);
   }, [userProgress, onProgressUpdate]);
 
   // Filter achievements
   const filteredAchievements = userProgress.achievements.filter(achievement => {
-    if (!showCompleted && achievement.unlocked) return false;
+    if (!showCompleted && achievement.unlocked) return false
     if (selectedCategory !== 'all' && achievement.category !== selectedCategory) return false;
     if (achievement.hidden && !achievement.unlocked) return false;
     return true;
@@ -460,7 +461,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
 
   // Group achievements by category
   const achievementsByCategory = filteredAchievements.reduce((acc, achievement) => {
-    if (!acc[achievement.category]) acc[achievement.category] = [];
+    if (!acc[achievement.category]) acc[achievement.category] = []
     acc[achievement.category].push(achievement);
     return acc;
   }, {} as Record<string, Achievement[]>);
@@ -479,7 +480,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
     silver: 'bg-gray-50 border-gray-200 text-gray-700',
     gold: 'bg-yellow-50 border-yellow-200 text-yellow-700',
     platinum: 'bg-purple-50 border-purple-200 text-purple-700'
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -705,7 +706,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 // Hook for using achievements
 export const useAchievements = () => {
@@ -723,18 +724,18 @@ export const useAchievements = () => {
       daysActive: 0,
       collaborations: 0
     }
-  });
+  })
 
   const trackAction = useCallback((_action: string, metadata?: any) => {
     // This would integrate with the AchievementSystem component
-    // console.log('Action tracked:', action, metadata);
+    // console.log('Action tracked:', action, metadata)
   }, []);
 
   return {
     userProgress,
     setUserProgress,
     trackAction
-  };
-};
+  }
+}
 
 export default AchievementSystem;

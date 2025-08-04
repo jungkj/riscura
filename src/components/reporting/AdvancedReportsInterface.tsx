@@ -2,12 +2,13 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { 
+import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -41,11 +42,11 @@ import {
   Target,
   FileText,
   Activity,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // ========== TYPES ==========
 export interface FilterConfig {
-  id: string;
+  id: string
   label: string;
   type: 'select' | 'multiselect' | 'daterange' | 'search';
   options?: Array<{ value: string; label: string; count?: number }>;
@@ -76,11 +77,11 @@ export interface DataTableConfig {
     page: number;
     pageSize: number;
     total: number;
-  };
+  }
   selection?: {
     enabled: boolean;
     selectedRows: string[];
-  };
+  }
 }
 
 export interface ReportTemplate {
@@ -133,7 +134,7 @@ const sampleFilters: FilterConfig[] = [
     type: 'search',
     placeholder: 'Search reports...',
   },
-];
+]
 
 const sampleCharts: ChartConfig[] = [
   {
@@ -269,11 +270,11 @@ const sampleTableData: DataTableConfig = {
     enabled: true,
     selectedRows: [],
   },
-};
+}
 
 // ========== FILTER BAR COMPONENT ==========
 const FilterBar: React.FC<{
-  filters: FilterConfig[];
+  filters: FilterConfig[]
   onFilterChange: (filterId: string, value: any) => void;
   onExport: () => void;
   onRefresh: () => void;
@@ -367,19 +368,19 @@ const FilterBar: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // ========== CHART COMPONENT ==========
 const ChartPlaceholder: React.FC<{ chart: ChartConfig }> = ({ chart }) => {
   const getChartIcon = (_type: string) => {
     switch (type) {
-      case 'line': return LineChart;
+      case 'line': return LineChart
       case 'bar': return BarChart3;
       case 'donut': return PieChart;
       case 'progress': return Target;
       default: return BarChart3;
     }
-  };
+  }
 
   const ChartIcon = getChartIcon(chart.type);
 
@@ -432,11 +433,11 @@ const ChartPlaceholder: React.FC<{ chart: ChartConfig }> = ({ chart }) => {
       )}
     </ContentCard>
   );
-};
+}
 
 // ========== DATA TABLE COMPONENT ==========
 const DataTable: React.FC<{
-  config: DataTableConfig;
+  config: DataTableConfig
   onSort: (columnId: string, direction: 'asc' | 'desc') => void;
   onRowSelect: (rowId: string, selected: boolean) => void;
   onRowAction: (rowId: string, action: string) => void;
@@ -451,7 +452,7 @@ const DataTable: React.FC<{
     setSortColumn(columnId);
     setSortDirection(newDirection);
     onSort(columnId, newDirection);
-  };
+  }
 
   const getStatusBadge = (_value: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -462,7 +463,7 @@ const DataTable: React.FC<{
       'high': 'destructive',
       'medium': 'secondary',
       'low': 'outline',
-    };
+    }
 
     const colors: Record<string, string> = {
       'compliant': 'text-semantic-success',
@@ -472,7 +473,7 @@ const DataTable: React.FC<{
       'high': 'text-semantic-error',
       'medium': 'text-semantic-warning',
       'low': 'text-text-secondary',
-    };
+    }
 
     return (
       <DaisyBadge variant={variants[value] || 'outline'} className={cn("text-caption", colors[value])} >
@@ -480,7 +481,7 @@ const DataTable: React.FC<{
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   const renderCellContent = (column: any, value: any, row: any) => {
     switch (column.type) {
@@ -519,7 +520,7 @@ const DataTable: React.FC<{
       default:
         return value;
     }
-  };
+  }
 
   return (
     <ContentCard className="shadow-notion-sm">
@@ -675,41 +676,41 @@ const DataTable: React.FC<{
         )}
       </div>
     </ContentCard>
-  );
-};
+  )
+}
 
 // ========== MAIN REPORTS INTERFACE COMPONENT ==========
 export const AdvancedReportsInterface: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('dashboard')
   const [filters, setFilters] = useState<Record<string, any>>({});
 
   const handleFilterChange = (filterId: string, value: any) => {
     setFilters(prev => ({ ...prev, [filterId]: value }));
-  };
+  }
 
   const handleExport = () => {
-    // console.log('Exporting report...');
-  };
+    // console.log('Exporting report...')
+  }
 
   const handleRefresh = () => {
-    // console.log('Refreshing data...');
-  };
+    // console.log('Refreshing data...')
+  }
 
   const handleSort = (columnId: string, direction: 'asc' | 'desc') => {
-    // console.log('Sorting:', columnId, direction);
-  };
+    // console.log('Sorting:', columnId, direction)
+  }
 
   const handleRowSelect = (rowId: string, selected: boolean) => {
-    // console.log('Row selection:', rowId, selected);
-  };
+    // console.log('Row selection:', rowId, selected)
+  }
 
   const handleRowAction = (rowId: string, action: string) => {
-    // console.log('Row action:', rowId, action);
-  };
+    // console.log('Row action:', rowId, action)
+  }
 
   const handlePageChange = (page: number) => {
-    // console.log('Page change:', page);
-  };
+    // console.log('Page change:', page)
+  }
 
   return (
     <MainContentArea
@@ -858,6 +859,6 @@ export const AdvancedReportsInterface: React.FC = () => {
       </DaisyTabs>
     </MainContentArea>
   );
-};
+}
 
 export default AdvancedReportsInterface; 

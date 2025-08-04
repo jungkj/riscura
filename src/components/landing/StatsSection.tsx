@@ -54,7 +54,7 @@ export default function StatsSection() {
           setIsVisible(true);
           // Animate numbers
           stats.forEach((stat, index) => {
-            const numericValue = parseInt(stat.value);
+            const numericValue = parseInt(stat.value)
             let current = 0;
             const increment = numericValue / 50;
             const timer = setInterval(

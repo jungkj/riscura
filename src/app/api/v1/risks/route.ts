@@ -16,7 +16,7 @@ import {
   RiskQuerySchema,
   parseAndValidate,
   validateQueryParams,
-} from '@/lib/api/validation-schemas';
+} from '@/lib/api/validation-schemas'
 import { applyRateLimit, getRateLimiterForEndpoint } from '@/lib/api/rate-limiter';
 import { getApiVersionFromRequest, ApiVersionMiddleware } from '@/lib/api/versioning';
 
@@ -27,26 +27,26 @@ import { getApiVersionFromRequest, ApiVersionMiddleware } from '@/lib/api/versio
 export async function GET(_request: NextRequest) {
   try {
     // 1. Rate limiting
-    const rateLimitResult = await applyRateLimit(request);
+    const rateLimitResult = await applyRateLimit(request)
     if (!rateLimitResult.success) {
       throw rateLimitResult.error;
     }
 
     // 2. Version negotiation
-    const version = getApiVersionFromRequest(request);
+    const version = getApiVersionFromRequest(request)
     const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(request);
     if (!versionNegotiation.success) {
       return versionNegotiation.response!;
     }
 
     // 3. Authentication
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
     if (!session?.user) {
       throw createAuthError();
     }
 
     // 4. Parse and validate query parameters
-    const queryValidation = validateQueryParams(RiskQuerySchema, request.nextUrl.searchParams);
+    const queryValidation = validateQueryParams(RiskQuerySchema, request.nextUrl.searchParams)
 
     if (!queryValidation.success) {
       const errors = (queryValidation as { success: false; errors: any[] }).errors;
@@ -79,14 +79,14 @@ export async function GET(_request: NextRequest) {
     // 5. Build database query
     const where: any = {
       organizationId: (session.user as any).organizationId,
-    };
+    }
 
     // Apply filters
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
-      ];
+      ]
     }
 
     if (category) {
@@ -94,13 +94,13 @@ export async function GET(_request: NextRequest) {
     }
 
     if (likelihood) {
-      where.likelihood = {};
+      where.likelihood = {}
       if (likelihood.min) where.likelihood.gte = likelihood.min;
       if (likelihood.max) where.likelihood.lte = likelihood.max;
     }
 
     if (impact) {
-      where.impact = {};
+      where.impact = {}
       if (impact.min) where.impact.gte = impact.min;
       if (impact.max) where.impact.lte = impact.max;
     }
@@ -116,11 +116,11 @@ export async function GET(_request: NextRequest) {
     if (tags && tags.length > 0) {
       where.tags = {
         hasSome: tags,
-      };
+      }
     }
 
     if (dateRange) {
-      where.createdAt = {};
+      where.createdAt = {}
       if (dateRange.start) where.createdAt.gte = new Date(dateRange.start);
       if (dateRange.end) where.createdAt.lte = new Date(dateRange.end);
     }
@@ -168,7 +168,7 @@ export async function GET(_request: NextRequest) {
         take: limit,
       }),
       prisma.risk.count({ where }),
-    ]);
+    ])
 
     // 7. Transform data for response
     const transformedRisks = risks.map((risk) => ({
@@ -186,7 +186,7 @@ export async function GET(_request: NextRequest) {
       controlCount: risk._count.controls,
       createdAt: risk.createdAt,
       updatedAt: risk.updatedAt,
-    }));
+    }))
 
     // 8. Return paginated response with rate limit headers
     const response = ApiResponseFormatter.paginated(
@@ -200,11 +200,11 @@ export async function GET(_request: NextRequest) {
         version,
         ...ApiResponseFormatter.createResponseOptions(request),
       }
-    );
+    )
 
     // Add rate limit headers
     Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
-      response.headers.set(key, value);
+      response.headers.set(key, value)
     });
 
     return response;
@@ -223,31 +223,31 @@ export async function GET(_request: NextRequest) {
 export async function POST(_request: NextRequest) {
   try {
     // 1. Rate limiting
-    const rateLimitResult = await applyRateLimit(request, ['standard', 'bulk']);
+    const rateLimitResult = await applyRateLimit(request, ['standard', 'bulk'])
     if (!rateLimitResult.success) {
       throw rateLimitResult.error;
     }
 
     // 2. Version negotiation
-    const version = getApiVersionFromRequest(request);
+    const version = getApiVersionFromRequest(request)
     const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(request);
     if (!versionNegotiation.success) {
       return versionNegotiation.response!;
     }
 
     // 3. Authentication
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
     if (!session?.user) {
       throw createAuthError();
     }
 
     // 4. Authorization - check if user can create risks
     if (!['ADMIN', 'RISK_MANAGER'].includes((session.user as any).role)) {
-      throw createForbiddenError('Insufficient permissions to create risks');
+      throw createForbiddenError('Insufficient permissions to create risks')
     }
 
     // 5. Input validation
-    const body = await request.json();
+    const body = await request.json()
     const validation = parseAndValidate(RiskCreateSchema, body);
     if (!validation.success) {
       const errors = (validation as { success: false; errors: any[] }).errors;
@@ -265,7 +265,7 @@ export async function POST(_request: NextRequest) {
       validation.data;
 
     // 6. Business logic validation
-    const riskScore = likelihood * impact;
+    const riskScore = likelihood * impact
     const riskLevel = calculateRiskLevel(riskScore);
 
     // Check if risk owner exists if provided
@@ -275,7 +275,7 @@ export async function POST(_request: NextRequest) {
           id: riskOwner,
           organizationId: (session.user as any).organizationId,
         },
-      });
+      })
       if (!ownerExists) {
         throw createNotFoundError('Risk owner');
       }
@@ -288,7 +288,7 @@ export async function POST(_request: NextRequest) {
           id: { in: linkedControls },
           organizationId: (session.user as any).organizationId,
         },
-      });
+      })
       if (controlsCount !== linkedControls.length) {
         return ApiResponseFormatter.error(
           'INVALID_CONTROLS',
@@ -324,7 +324,7 @@ export async function POST(_request: NextRequest) {
           select: { id: true, firstName: true, lastName: true, email: true },
         },
       },
-    });
+    })
 
     // 8. Link controls if provided
     if (linkedControls && linkedControls.length > 0) {
@@ -333,7 +333,7 @@ export async function POST(_request: NextRequest) {
           riskId: risk.id,
           controlId,
         })),
-      });
+      })
     }
 
     // 9. Fetch complete risk data
@@ -364,7 +364,7 @@ export async function POST(_request: NextRequest) {
           select: { id: true, firstName: true, lastName: true, email: true },
         },
       },
-    });
+    })
 
     // 10. Transform and return response
     const transformedRisk = {
@@ -383,18 +383,18 @@ export async function POST(_request: NextRequest) {
       createdBy: completeRisk!.creator,
       createdAt: completeRisk!.createdAt,
       updatedAt: completeRisk!.updatedAt,
-    };
+    }
 
     // 11. Return success response
     const response = ApiResponseFormatter.success(transformedRisk, {
       version,
       status: 201,
       ...ApiResponseFormatter.createResponseOptions(request),
-    });
+    })
 
     // Add rate limit headers
     Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
-      response.headers.set(key, value);
+      response.headers.set(key, value)
     });
 
     return response;

@@ -2,11 +2,12 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { 
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Activity, 
   Filter, 
   Maximize2, 
@@ -155,14 +156,14 @@ const categoryColors = {
   strategic: '#8b5cf6',
   compliance: '#10b981',
   technology: '#3b82f6'
-};
+}
 
 const statusColors = {
   open: '#ef4444',
   mitigated: '#10b981',
   monitoring: '#f59e0b',
   closed: '#6b7280'
-};
+}
 
 export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
   data = defaultRisks,
@@ -178,7 +179,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
 
   // Generate heatmap data
   const heatmapData = useMemo(() => {
-    const cells: HeatmapCell[] = [];
+    const cells: HeatmapCell[] = []
     
     // Create 5x5 grid
     for (let impact = 1; impact <= 5; impact++) {
@@ -220,7 +221,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
     if (riskLevel >= 15) return `rgba(245, 158, 11, ${0.3 + intensity * 0.7})`; // amber
     if (riskLevel >= 10) return `rgba(59, 130, 246, ${0.3 + intensity * 0.7})`; // blue
     return `rgba(16, 185, 129, ${0.3 + intensity * 0.7})`; // emerald
-  };
+  }
 
   const getCellBorderColor = (cell: HeatmapCell) => {
     const riskLevel = cell.x * cell.y;
@@ -228,7 +229,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
     if (riskLevel >= 15) return '#d97706'; // amber-600
     if (riskLevel >= 10) return '#2563eb'; // blue-600
     return '#059669'; // emerald-600
-  };
+  }
 
   const getRiskLevelLabel = (x: number, y: number) => {
     const riskLevel = x * y;
@@ -236,7 +237,7 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
     if (riskLevel >= 15) return 'High';
     if (riskLevel >= 10) return 'Medium';
     return 'Low';
-  };
+  }
 
   const _categories = [...new Set(data.map(risk => risk.category))];
   const statuses = [...new Set(data.map(risk => risk.status))];
@@ -570,4 +571,4 @@ export const InteractiveHeatmap: React.FC<InteractiveHeatmapProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useGoogleDriveFiles } from '@/hooks/useGoogleDriveFiles';
 import { useGoogleDriveIntegration } from '@/hooks/useGoogleDriveIntegration';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
@@ -54,7 +54,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
     // Check connection and load files when component mounts
     checkConnection().then(() => {
       if (!authRequired) {
-        listFiles();
+        listFiles()
       }
     });
   }, [checkConnection, authRequired, listFiles]);
@@ -65,13 +65,13 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
       return;
     }
     await searchFiles(searchQuery);
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
-  };
+  }
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -79,7 +79,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   // Show auth required state
   if (authRequired || !isConnected) {
@@ -102,7 +102,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
           </DaisyButton>
         </div>
       </DaisyCard>
-    );
+    )
   }
 
   if (isLoading && files.length === 0) {
@@ -115,7 +115,7 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
         </div>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -216,4 +216,4 @@ export const GoogleDriveFileBrowser: React.FC<Props> = ({
       )}
     </div>
   );
-};
+}

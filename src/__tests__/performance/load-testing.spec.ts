@@ -8,7 +8,7 @@ import { performance } from 'perf_hooks';
 
 // Performance metrics collection
 interface PerformanceMetrics {
-  responseTime: number;
+  responseTime: number
   loadTime: number;
   memoryUsage: number;
   cpuUsage: number;
@@ -36,17 +36,17 @@ interface LoadTestResult {
 // Performance utilities
 class PerformanceTestUtils {
   static async measurePageLoad(page: Page, url: string): Promise<PerformanceMetrics> {
-    const startTime = performance.now();
+    const startTime = performance.now()
 
     // Navigate and measure load time
-    await page.goto(url);
+    await page.goto(url)
     await page.waitForLoadState('networkidle');
 
     const loadTime = performance.now() - startTime;
 
     // Get performance metrics from browser
     const metrics = await page.evaluate(() => {
-      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
 
       return {
         url: window.location.href,
@@ -60,17 +60,17 @@ class PerformanceTestUtils {
         responseTime: 0,
         memoryUsage: 0,
         networkLatency: 0,
-      };
+      }
     });
 
-    return { ...metrics, loadTime };
+    return { ...metrics, loadTime }
   }
 
   static async simulateUserWorkflow(page: Page, userIndex: number): Promise<number[]> {
     const responseTimes: number[] = [];
 
     // Login
-    const loginStart = performance.now();
+    const loginStart = performance.now()
     await page.goto('/auth/login');
     await page.fill('[data-testid="email-input"]', `loadtest${userIndex}@example.com`);
     await page.fill('[data-testid="password-input"]', 'TestPassword123!');
@@ -79,13 +79,13 @@ class PerformanceTestUtils {
     responseTimes.push(performance.now() - loginStart);
 
     // Navigate to risks
-    const risksStart = performance.now();
+    const risksStart = performance.now()
     await page.click('[data-testid="risks-menu"]');
     await page.waitForSelector('[data-testid="risks-list"]');
     responseTimes.push(performance.now() - risksStart);
 
     // Create new risk
-    const createRiskStart = performance.now();
+    const createRiskStart = performance.now()
     await page.click('[data-testid="add-risk-button"]');
     await page.fill('[data-testid="risk-title"]', `Load Test Risk ${userIndex}`);
     await page.fill('[data-testid="risk-description"]', 'Risk created during load testing');
@@ -97,7 +97,7 @@ class PerformanceTestUtils {
     responseTimes.push(performance.now() - createRiskStart);
 
     // View reports
-    const reportsStart = performance.now();
+    const reportsStart = performance.now()
     await page.click('[data-testid="reports-menu"]');
     await page.waitForSelector('[data-testid="reports-dashboard"]');
     responseTimes.push(performance.now() - reportsStart);
@@ -116,7 +116,7 @@ class PerformanceTestUtils {
       median: sorted[Math.floor(sorted.length / 2)],
       p95: sorted[Math.floor(sorted.length * 0.95)],
       p99: sorted[Math.floor(sorted.length * 0.99)],
-    };
+    }
   }
 
   static async monitorSystemResources(page: Page, duration: number): Promise<any[]> {
@@ -151,7 +151,7 @@ class PerformanceTestUtils {
 
 // Load test orchestrator
 class LoadTestOrchestrator {
-  private browser: Browser;
+  private browser: Browser
   private contexts: BrowserContext[] = [];
   private pages: Page[] = [];
 
@@ -176,11 +176,11 @@ class LoadTestOrchestrator {
     let totalRequests = 0;
 
     // Start monitoring system resources
-    const resourceMonitoring = PerformanceTestUtils.monitorSystemResources(this.pages[0], duration);
+    const resourceMonitoring = PerformanceTestUtils.monitorSystemResources(this.pages[0], duration)
 
     // Run concurrent user simulations
     const userPromises = this.pages.map(async (page, index) => {
-      const userResponseTimes: number[] = [];
+      const userResponseTimes: number[] = []
       const endTime = startTime + duration;
 
       while (Date.now() < endTime) {
@@ -190,7 +190,7 @@ class LoadTestOrchestrator {
           totalRequests += responseTimes.length;
 
           // Short delay between workflows
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000))
         } catch (error) {
           errors.push({ user: index, error: (error as Error).message, timestamp: Date.now() });
         }
@@ -200,20 +200,20 @@ class LoadTestOrchestrator {
     });
 
     // Wait for all users to complete
-    const allUserResponseTimes = await Promise.all(userPromises);
+    const allUserResponseTimes = await Promise.all(userPromises)
     const resourceMetrics = await resourceMonitoring;
 
     // Flatten all response times
-    allUserResponseTimes.forEach((times) => allResponseTimes.push(...times));
+    allUserResponseTimes.forEach((times) => allResponseTimes.push(...times))
 
     // Calculate statistics
-    const _stats = PerformanceTestUtils.calculateStatistics(allResponseTimes);
+    const _stats = PerformanceTestUtils.calculateStatistics(allResponseTimes)
     const actualDuration = Date.now() - startTime;
 
     // Find peak memory usage
     const memoryPeak = Math.max(
       ...resourceMetrics.filter((m) => m.memory).map((m) => m.memory.used)
-    );
+    )
 
     return {
       userCount: this.pages.length,
@@ -225,7 +225,7 @@ class LoadTestOrchestrator {
       totalRequests,
       successRate: ((totalRequests - errors.length) / totalRequests) * 100,
       memoryPeak,
-    };
+    }
   }
 
   async cleanup(): Promise<void> {
@@ -255,7 +255,7 @@ test.describe('Performance and Load Testing', () => {
       { name: 'Dashboard', url: '/dashboard' },
       { name: 'Risks', url: '/dashboard/risks' },
       { name: 'Reports', url: '/dashboard/reports' },
-    ];
+    ]
 
     for (const pageTest of pages) {
       const metrics = await PerformanceTestUtils.measurePageLoad(page, pageTest.url);
@@ -266,7 +266,7 @@ test.describe('Performance and Load Testing', () => {
 
       // console.log(
         `${pageTest.name} - Load Time: ${metrics.loadTime}ms, Response Time: ${metrics.responseTime}ms`
-      );
+      )
     }
 
     await page.close();
@@ -288,7 +288,7 @@ test.describe('Performance and Load Testing', () => {
       expect(result.successRate).toBeGreaterThan(95); // > 95% success rate
       expect(result.errorCount).toBeLessThan(10); // < 10 errors total
 
-      // console.log('10 User Load Test Results:', result);
+      // console.log('10 User Load Test Results:', result)
     } finally {
       await orchestrator.cleanup();
     }
@@ -309,7 +309,7 @@ test.describe('Performance and Load Testing', () => {
       expect(result.p95ResponseTime).toBeLessThan(10000); // < 10 seconds 95th percentile
       expect(result.successRate).toBeGreaterThan(90); // > 90% success rate
 
-      // console.log('50 User Stress Test Results:', result);
+      // console.log('50 User Stress Test Results:', result)
     } finally {
       await orchestrator.cleanup();
     }
@@ -319,13 +319,13 @@ test.describe('Performance and Load Testing', () => {
     const page = await browser.newPage();
 
     // Login as admin
-    await page.goto('/auth/login');
+    await page.goto('/auth/login')
     await page.fill('[data-testid="email-input"]', 'admin@test.com');
     await page.fill('[data-testid="password-input"]', 'AdminPassword123!');
     await page.click('[data-testid="login-button"]');
 
     // Create large dataset
-    const riskCount = 1000;
+    const riskCount = 1000
     const batchSize = 50;
     const batches = Math.ceil(riskCount / batchSize);
 
@@ -335,7 +335,7 @@ test.describe('Performance and Load Testing', () => {
       const batchStart = performance.now();
 
       // Create batch of risks
-      const promises = [];
+      const promises = []
       for (let i = 0; i < batchSize && batch * batchSize + i < riskCount; i++) {
         const riskIndex = batch * batchSize + i;
         promises.push(
@@ -368,19 +368,19 @@ test.describe('Performance and Load Testing', () => {
       const _successCount = results.filter(Boolean).length;
       expect(successCount).toBe(Math.min(batchSize, riskCount - batch * batchSize));
 
-      // console.log(`Batch ${batch + 1}/${batches}: ${successCount} risks created in ${batchTime}ms`);
+      // console.log(`Batch ${batch + 1}/${batches}: ${successCount} risks created in ${batchTime}ms`)
     }
 
     // Test query performance with large dataset
-    const queryStart = performance.now();
+    const queryStart = performance.now()
     await page.goto('/dashboard/risks');
     await page.waitForSelector('[data-testid="risks-list"]');
     const queryTime = performance.now() - queryStart;
 
     expect(queryTime).toBeLessThan(5000); // Should load within 5 seconds
 
-    // console.log(`Large dataset query time: ${queryTime}ms`);
-    // console.log(`Total creation time for ${riskCount} risks: ${totalCreateTime}ms`);
+    // console.log(`Large dataset query time: ${queryTime}ms`)
+    // console.log(`Total creation time for ${riskCount} risks: ${totalCreateTime}ms`)
 
     await page.close();
   });
@@ -389,7 +389,7 @@ test.describe('Performance and Load Testing', () => {
     const page = await browser.newPage();
 
     // Login and navigate to dashboard
-    await page.goto('/auth/login');
+    await page.goto('/auth/login')
     await page.fill('[data-testid="email-input"]', 'user@test.com');
     await page.fill('[data-testid="password-input"]', 'UserPassword123!');
     await page.click('[data-testid="login-button"]');
@@ -409,7 +409,7 @@ test.describe('Performance and Load Testing', () => {
 
     // Simulate continuous user activity during monitoring
     const activityPromise = (async () => {
-      const endTime = Date.now() + monitoringDuration;
+      const endTime = Date.now() + monitoringDuration
       const pages = ['/dashboard', '/dashboard/risks', '/dashboard/controls', '/dashboard/reports'];
 
       while (Date.now() < endTime) {
@@ -429,14 +429,14 @@ test.describe('Performance and Load Testing', () => {
     });
 
     // Memory growth should be reasonable
-    const memoryGrowth = finalMemory - initialMemory;
+    const memoryGrowth = finalMemory - initialMemory
     const maxAcceptableGrowth = initialMemory * 2; // No more than 2x initial
 
     expect(memoryGrowth).toBeLessThan(maxAcceptableGrowth);
 
     // console.log(
       `Memory usage: Initial: ${initialMemory}, Final: ${finalMemory}, Growth: ${memoryGrowth}`
-    );
+    )
 
     await page.close();
   });
@@ -445,7 +445,7 @@ test.describe('Performance and Load Testing', () => {
     const page = await browser.newPage();
 
     // Get authentication token
-    await page.goto('/auth/login');
+    await page.goto('/auth/login')
     await page.fill('[data-testid="email-input"]', 'api-test@test.com');
     await page.fill('[data-testid="password-input"]', 'ApiTestPassword123!');
     await page.click('[data-testid="login-button"]');
@@ -456,7 +456,7 @@ test.describe('Performance and Load Testing', () => {
       { method: 'GET', url: '/api/controls' },
       { method: 'GET', url: '/api/dashboard/metrics' },
       { method: 'GET', url: '/api/reports' },
-    ];
+    ]
 
     for (const endpoint of endpoints) {
       const concurrentRequests = 50;
@@ -472,7 +472,7 @@ test.describe('Performance and Load Testing', () => {
             return {
               status: response.status,
               responseTime: Date.now(),
-            };
+            }
           }, endpoint)
         );
 
@@ -480,16 +480,16 @@ test.describe('Performance and Load Testing', () => {
       const totalTime = performance.now() - requestStart;
 
       // All requests should succeed
-      const _successCount = responses.filter((r) => r.status === 200).length;
+      const _successCount = responses.filter((r) => r.status === 200).length
       expect(successCount).toBe(concurrentRequests);
 
       // Average response time should be reasonable
-      const avgResponseTime = totalTime / concurrentRequests;
+      const avgResponseTime = totalTime / concurrentRequests
       expect(avgResponseTime).toBeLessThan(1000); // < 1 second average
 
       // console.log(
         `${endpoint.method} ${endpoint.url}: ${successCount}/${concurrentRequests} success, ${avgResponseTime}ms avg`
-      );
+      )
     }
 
     await page.close();
@@ -499,7 +499,7 @@ test.describe('Performance and Load Testing', () => {
     const page = await browser.newPage();
 
     // Login
-    await page.goto('/auth/login');
+    await page.goto('/auth/login')
     await page.fill('[data-testid="email-input"]', 'upload-test@test.com');
     await page.fill('[data-testid="password-input"]', 'UploadTestPassword123!');
     await page.click('[data-testid="login-button"]');
@@ -511,7 +511,7 @@ test.describe('Performance and Load Testing', () => {
       const uploadStart = performance.now();
 
       // Create test file of specified size
-      const fileSize = sizeInMB * 1024 * 1024;
+      const fileSize = sizeInMB * 1024 * 1024
       const fileContent = 'A'.repeat(fileSize);
 
       await page.goto('/dashboard/documents');
@@ -520,7 +520,7 @@ test.describe('Performance and Load Testing', () => {
       // Create blob and upload
       await page.evaluate(
         ({ content, size }) => {
-          const blob = new Blob([content], { type: 'application/pdf' });
+          const blob = new Blob([content], { type: 'application/pdf' })
           const file = new File([blob], `test-${size}mb.pdf`, { type: 'application/pdf' });
 
           const input = document.querySelector('[data-testid="file-input"]') as HTMLInputElement;
@@ -536,18 +536,18 @@ test.describe('Performance and Load Testing', () => {
       await page.click('[data-testid="upload-submit-button"]');
 
       // Wait for upload completion
-      await page.waitForSelector('[data-testid="upload-success"]', { timeout: 60000 });
+      await page.waitForSelector('[data-testid="upload-success"]', { timeout: 60000 })
 
       const uploadTime = performance.now() - uploadStart;
       const expectedMaxTime = sizeInMB * 2000; // 2 seconds per MB
 
       expect(uploadTime).toBeLessThan(expectedMaxTime);
 
-      // console.log(`${sizeInMB}MB file upload: ${uploadTime}ms`);
+      // console.log(`${sizeInMB}MB file upload: ${uploadTime}ms`)
     }
 
     await page.close();
   });
 });
 
-export { PerformanceTestUtils, LoadTestOrchestrator };
+export { PerformanceTestUtils, LoadTestOrchestrator }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
 import { Input } from './input';
 import { Textarea } from './textarea';
 import { Badge } from './badge';
@@ -11,6 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './breadcrumb';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './pagination';
 import { Progress } from './progress';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisyButton, DaisyBadge, DaisyInput, DaisyTextarea, DaisyTabs, DaisyTabsList, DaisyTabsTrigger, DaisyTabsContent, DaisyTable, DaisyTableHeader, DaisyTableBody, DaisyTableRow, DaisyTableHead, DaisyTableCell, DaisyProgress } from '@/components/ui/daisy-components';
+import { Brain } from 'lucide-react';
 // import { 
   Home, 
   Search, 
@@ -24,7 +26,7 @@ import { Progress } from './progress';
   Clock,
   FileText,
   Brain
-} from 'lucide-react';
+} from 'lucide-react'
 
 export function NotionStyleGuide() {
 

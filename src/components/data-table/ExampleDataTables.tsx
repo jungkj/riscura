@@ -8,7 +8,7 @@ import { Plus, Download, Settings } from 'lucide-react';
 
 // Sample Risk Data
 interface RiskRecord {
-  id: string;
+  id: string
   title: string;
   category: string;
   status: 'open' | 'mitigated' | 'closed' | 'monitoring';
@@ -16,7 +16,7 @@ interface RiskRecord {
   owner: {
     name: string;
     email: string;
-  };
+  }
   progress: number;
   dueDate: Date;
 }
@@ -171,15 +171,15 @@ export const RiskRegisterTable: React.FC = () => {
       align: 'center',
       width: '20',
     },
-  ];
+  ]
 
   const handleRowAction = (_action: string, row: RiskRecord) => {
-    // console.log(`Action: ${action}`, row);
-  };
+    // console.log(`Action: ${action}`, row)
+  }
 
   const handleBulkAction = (_action: string, rows: RiskRecord[]) => {
-    // console.log(`Bulk action: ${action}`, rows);
-  };
+    // console.log(`Bulk action: ${action}`, rows)
+  }
 
   return (
     <MainContentArea
@@ -235,11 +235,11 @@ export const RiskRegisterTable: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
 // Controls Table Example
 interface ControlRecord {
-  id: string;
+  id: string
   name: string;
   framework: string;
   status: 'implemented' | 'testing' | 'failed' | 'not-implemented';
@@ -248,7 +248,7 @@ interface ControlRecord {
   owner: {
     name: string;
     email: string;
-  };
+  }
 }
 
 const sampleControlData: ControlRecord[] = [
@@ -380,6 +380,6 @@ export const ControlsTable: React.FC = () => {
       />
     </MainContentArea>
   );
-};
+}
 
-export default { RiskRegisterTable, ControlsTable };
+export default { RiskRegisterTable, ControlsTable }

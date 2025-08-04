@@ -15,6 +15,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import ControlTestingWorkflow from './ControlTestingWorkflow';
 import ComplianceMapping from './ComplianceMapping';
+import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import {
   Plus,
   Shield,
@@ -37,11 +38,11 @@ import ComplianceMapping from './ComplianceMapping';
   Eye,
   Edit,
   MoreHorizontal,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 export interface Control {
-  id: string;
+  id: string
   title: string;
   description: string;
   category: string;
@@ -49,7 +50,7 @@ export interface Control {
   owner: {
     name: string;
     email: string;
-  };
+  }
   effectiveness: 'excellent' | 'satisfactory' | 'needs-improvement' | 'inadequate';
   effectivenessScore: number; // 0-100
   testingFrequency: 'monthly' | 'quarterly' | 'semi-annual' | 'annual';
@@ -63,7 +64,7 @@ export interface Control {
     iso27001: boolean;
     gdpr: boolean;
     nist: boolean;
-  };
+  }
   testingHistory: TestingResult[];
   priority: 'critical' | 'high' | 'medium' | 'low';
 }
@@ -181,7 +182,7 @@ const sampleControls: Control[] = [
     testingHistory: [],
     priority: 'high',
   },
-];
+]
 
 // Sample Framework Data
 const sampleFrameworks: ControlFramework[] = [
@@ -231,7 +232,7 @@ const sampleFrameworks: ControlFramework[] = [
     testedControls: 68,
     compliancePercentage: 73,
   },
-];
+]
 
 // Effectiveness Configuration
 const getEffectivenessConfig = (effectiveness: string) => {
@@ -260,9 +261,9 @@ const getEffectivenessConfig = (effectiveness: string) => {
       border: 'border-semantic-error',
       icon: AlertTriangle 
     },
-  };
+  }
   return configs[effectiveness as keyof typeof configs] || configs.satisfactory;
-};
+}
 
 // Status Configuration
 const getStatusConfig = (status: string) => {
@@ -271,13 +272,13 @@ const getStatusConfig = (status: string) => {
     'draft': { variant: 'secondary' as const, icon: Edit },
     'inactive': { variant: 'outline' as const, icon: Clock },
     'under-review': { variant: 'destructive' as const, icon: AlertTriangle },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.active;
-};
+}
 
 // Control Card Component
 const ControlCard: React.FC<{ 
-  control: Control; 
+  control: Control 
   onAction: (_action: string, control: Control) => void;
 }> = ({ control, onAction }) => {
   const effectivenessConfig = getEffectivenessConfig(control.effectiveness);
@@ -430,11 +431,11 @@ const ControlCard: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Control Library Component
 const ControlLibrary: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedFramework, setSelectedFramework] = useState<string>('all');
@@ -443,7 +444,7 @@ const ControlLibrary: React.FC = () => {
   // Filter controls
   const filteredControls = sampleControls.filter(control => {
     const matchesSearch = control.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         control.description.toLowerCase().includes(searchQuery.toLowerCase());
+                         control.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || control.category === selectedCategory;
     const matchesFramework = selectedFramework === 'all' || control.framework.includes(selectedFramework);
     const matchesStatus = selectedStatus === 'all' || control.status === selectedStatus;
@@ -470,7 +471,7 @@ const ControlLibrary: React.FC = () => {
       default:
         toast(`Action "${action}" not yet implemented for ${control.title}`);
     }
-  };
+  }
 
   const _categories = [...new Set(sampleControls.map(c => c.category))];
   const frameworks = [...new Set(sampleControls.flatMap(c => c.framework))];
@@ -569,11 +570,11 @@ setSearchQuery(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 // Main Controls Management Dashboard
 export const ControlsManagementDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('library');
+  const [activeTab, setActiveTab] = useState('library')
   const [proboControls, setProboControls] = useState<any[]>([]);
   const [isLoadingProbo, setIsLoadingProbo] = useState(false);
   const [isCreateControlModalOpen, setIsCreateControlModalOpen] = useState(false);
@@ -588,29 +589,29 @@ export const ControlsManagementDashboard: React.FC = () => {
     try {
       await ExportService.exportControls(sampleControls, { format });
     } catch (error) {
-      // console.error('Export failed:', error);
+      // console.error('Export failed:', error)
     }
-  };
+  }
 
   const handleCreateControl = () => {
     setIsCreateControlModalOpen(true);
-  };
+  }
 
   const handleControlCreated = (newControl: any) => {
     // In a real app, you would refresh the data
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey(prev => prev + 1)
     toast.success('Control created successfully!');
-  };
+  }
 
   const handleOpenSettings = () => {
     toast.success('Opening controls management settings...');
     // Navigate to settings page or open settings modal
-  };
+  }
 
   // Load Probo controls when tab is active
   useEffect(() => {
     const loadProboControls = async () => {
-      if (activeTab !== 'probo') return;
+      if (activeTab !== 'probo') return
       
       setIsLoadingProbo(true);
       try {
@@ -620,11 +621,11 @@ export const ControlsManagementDashboard: React.FC = () => {
           setProboControls(result.data || []);
         }
       } catch (error) {
-        // console.error('Failed to load Probo controls:', error);
+        // console.error('Failed to load Probo controls:', error)
       } finally {
         setIsLoadingProbo(false);
       }
-    };
+    }
 
     loadProboControls();
   }, [activeTab]);
@@ -838,6 +839,6 @@ export const ControlsManagementDashboard: React.FC = () => {
         onControlCreated={handleControlCreated} />
     </MainContentArea>
   );
-};
+}
 
 export default ControlsManagementDashboard;

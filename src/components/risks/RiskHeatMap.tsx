@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
@@ -11,7 +11,7 @@ import { ZoomIn, ZoomOut, Download, RotateCcw, Grid3X3, Layers } from 'lucide-re
 
 // Types
 interface HeatMapRisk {
-  id: string;
+  id: string
   title: string;
   category: string;
   framework: string;
@@ -24,7 +24,7 @@ interface HeatMapRisk {
   bubble?: {
     size: number;
     opacity: number;
-  };
+  }
 }
 
 // Sample heat map data
@@ -68,7 +68,7 @@ const sampleHeatMapData: HeatMapRisk[] = [
     owner: 'Emma Johnson',
     bubble: { size: 40, opacity: 0.7 },
   },
-];
+]
 
 // Risk color configuration
 const getRiskColor = (level: string) => {
@@ -77,13 +77,13 @@ const getRiskColor = (level: string) => {
     high: 'bg-semantic-warning',
     medium: 'bg-interactive-primary',
     low: 'bg-semantic-success',
-  };
+  }
   return colors[level as keyof typeof colors] || colors.medium;
-};
+}
 
 // Risk Bubble Component
 const RiskBubble: React.FC<{
-  risk: HeatMapRisk;
+  risk: HeatMapRisk
   scale: number;
   onClick: (_risk: HeatMapRisk) => void;
 }> = ({ risk, scale, onClick }) => {
@@ -131,7 +131,7 @@ const RiskBubble: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Heat Map Grid Component
 const HeatMapGrid: React.FC = () => {
@@ -154,12 +154,12 @@ const HeatMapGrid: React.FC = () => {
           style={{ bottom: `${line * 20}%` }} />
       ))}
     </div>
-  );
-};
+  )
+}
 
 // Main Risk Heat Map Component
 export const RiskHeatMap: React.FC = () => {
-  const [selectedRisk, setSelectedRisk] = useState<HeatMapRisk | null>(null);
+  const [selectedRisk, setSelectedRisk] = useState<HeatMapRisk | null>(null)
   const [zoomLevel, setZoomLevel] = useState([100]);
   const [groupBy, setGroupBy] = useState<'none' | 'category' | 'framework' | 'status'>('none');
   const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -169,14 +169,14 @@ export const RiskHeatMap: React.FC = () => {
   // Filter and group data
   const filteredRisks = useMemo(() => {
     return sampleHeatMapData.filter((risk) => {
-      const matchesCategory = filterCategory === 'all' || risk.category === filterCategory;
+      const matchesCategory = filterCategory === 'all' || risk.category === filterCategory
       const matchesFramework = filterFramework === 'all' || risk.framework === filterFramework;
       return matchesCategory && matchesFramework;
     });
   }, [filterCategory, filterFramework]);
 
   const groupedRisks = useMemo(() => {
-    if (groupBy === 'none') return { 'All Risks': filteredRisks };
+    if (groupBy === 'none') return { 'All Risks': filteredRisks }
 
     return filteredRisks.reduce(
       (groups, risk) => {
@@ -193,8 +193,8 @@ export const RiskHeatMap: React.FC = () => {
   const frameworks = [...new Set(sampleHeatMapData.map((r) => r.framework))];
 
   const handleExport = () => {
-    // console.log('Export heat map');
-  };
+    // console.log('Export heat map')
+  }
 
   const handleReset = () => {
     setZoomLevel([100]);
@@ -202,7 +202,7 @@ export const RiskHeatMap: React.FC = () => {
     setFilterCategory('all');
     setFilterFramework('all');
     setSelectedRisk(null);
-  };
+  }
 
   const scale = zoomLevel[0] / 100;
 
@@ -463,6 +463,6 @@ export const RiskHeatMap: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RiskHeatMap;

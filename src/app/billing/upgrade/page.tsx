@@ -3,10 +3,11 @@
 import React from 'react';
 import { useSubscription } from '@/hooks/use-subscription';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Crown, Zap, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
 
 const plans = [
   {
@@ -86,10 +87,10 @@ export default function UpgradePage() {
       const { url } = await response.json();
       window.location.href = url;
     } catch (error) {
-      // console.error('Error creating checkout session:', error);
+      // console.error('Error creating checkout session:', error)
       // You could show a toast notification here
     }
-  };
+  }
 
   if (loading) {
     return (

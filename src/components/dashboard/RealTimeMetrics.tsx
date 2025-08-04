@@ -2,16 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+import { Brain } from 'lucide-react';
 
 // import {
   TrendingUp, TrendingDown, Minus, BarChart3, AlertTriangle, 
   CheckCircle, Shield, Activity, Clock, Target, DollarSign,
   Users, Globe, Zap, Eye, Brain
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface MetricData {
   totalRisks: number;
@@ -36,7 +38,7 @@ interface MetricItem {
   icon: React.ReactNode;
   color: string;
   target?: number;
-  threshold?: { warning: number; critical: number };
+  threshold?: { warning: number; critical: number }
   description?: string;
 }
 
@@ -121,7 +123,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       threshold: { warning: 5, critical: 2 },
       description: 'Active AI-generated recommendations and insights'
     }
-  ];
+  ]
 
   // Animate values on mount and data changes
   useEffect(() => {
@@ -137,7 +139,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
           setAnimatedValues(prev => ({
             ...prev,
             [metric.id]: metric.value
-          }));
+          }))
           resolve();
         }, index * 150); // Reduced delay between animations
       });
@@ -146,7 +148,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     // Wait for all animations to complete
     Promise.all(animationPromises).then(() => {
       setTimeout(() => {
-        setIsAnimating(false);
+        setIsAnimating(false)
       }, 100); // Small delay before allowing new animations
     });
   }, [data, isAnimating]);
@@ -155,7 +157,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
   const formatValue = (_value: number, format: string): string => {
     switch (format) {
       case 'percentage':
-        return `${value.toFixed(1)}%`;
+        return `${value.toFixed(1)}%`
       case 'currency':
         return `$${value.toLocaleString()}`;
       case 'time':
@@ -163,7 +165,7 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
       default:
         return value.toLocaleString();
     }
-  };
+  }
 
   const getTrendIcon = (current: number, previous?: number) => {
     if (!previous) return <Minus className="w-3 h-3" />;
@@ -175,14 +177,14 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     } else {
       return <Minus className="w-3 h-3 text-gray-400" />;
     }
-  };
+  }
 
   const getTrendPercentage = (current: number, previous?: number): string => {
     if (!previous || previous === 0) return '0.0%';
     
     const change = ((current - previous) / previous) * 100;
     return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`;
-  };
+  }
 
   const getStatusColor = (_value: number, threshold?: { warning: number; critical: number }) => {
     if (!threshold) return 'text-gray-600';
@@ -190,12 +192,12 @@ export function RealTimeMetrics({ data }: RealTimeMetricsProps) {
     if (value >= threshold.critical) return 'text-red-600';
     if (value >= threshold.warning) return 'text-orange-600';
     return 'text-green-600';
-  };
+  }
 
   const getProgressValue = (_value: number, target?: number) => {
     if (!target) return 0;
     return Math.min((value / target) * 100, 100);
-  };
+  }
 
   return (
     <div className="space-y-4 font-inter">
@@ -346,7 +348,7 @@ const AnimatedNumber = ({ value, format }: { value: number; format: string }) {
       const progress = Math.min(elapsed / duration, 1);
       
       // Easing function for smooth animation
-      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const easeOut = 1 - Math.pow(1 - progress, 3)
       const currentValue = startValue + (difference * easeOut);
       
       setDisplayValue(currentValue);
@@ -354,7 +356,7 @@ const AnimatedNumber = ({ value, format }: { value: number; format: string }) {
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
-    };
+    }
 
     requestAnimationFrame(animate);
   }, [value]);
@@ -370,7 +372,7 @@ const AnimatedNumber = ({ value, format }: { value: number; format: string }) {
       default:
         return Math.round(val).toLocaleString();
     }
-  };
+  }
 
   return <span>{formatValue(displayValue, format)}</span>;
 } 

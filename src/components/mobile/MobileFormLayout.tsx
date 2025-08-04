@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useGesture } from '@use-gesture/react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -16,6 +16,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -131,7 +132,7 @@ export default function MobileFormLayout({
   
   // Auto-save functionality
   useEffect(() => {
-    if (!autoSave || !isDirty) return;
+    if (!autoSave || !isDirty) return
     
     const interval = setInterval(() => {
       handleAutoSave();
@@ -143,16 +144,16 @@ export default function MobileFormLayout({
   // Swipe gestures for section navigation
   const bind = useGesture({
     onDrag: ({ direction: [dx], velocity: [vx], cancel }) => {
-      if (Math.abs(vx) < 0.5) return;
+      if (Math.abs(vx) < 0.5) return
       
       // Swipe left to go to next section
       if (dx < 0 && currentStep < sections.length - 1) {
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep(prev => prev + 1)
         cancel();
       }
       // Swipe right to go to previous section
       else if (dx > 0 && currentStep > 0) {
-        setCurrentStep(prev => prev - 1);
+        setCurrentStep(prev => prev - 1)
         cancel();
       }
     }
@@ -160,46 +161,46 @@ export default function MobileFormLayout({
   
   // Handle form data changes
   const handleFieldChange = (fieldId: string, value: any) => {
-    const newData = { ...formData, [fieldId]: value };
+    const newData = { ...formData, [fieldId]: value }
     setFormData(newData);
     setIsDirty(true);
     
     // Clear field error when user starts typing
     if (localErrors[fieldId]) {
       setLocalErrors(prev => {
-        const { [fieldId]: removed, ...rest } = prev;
+        const { [fieldId]: removed, ...rest } = prev
         return rest;
       });
     }
     
     // Validate on change if enabled
     if (validationMode === 'onChange') {
-      validateField(fieldId, value);
+      validateField(fieldId, value)
     }
-  };
+  }
   
   // Validate individual field
   const validateField = (fieldId: string, value: any): string | null => {
-    const field = sections.flatMap(s => s.fields).find(f => f.id === fieldId);
+    const field = sections.flatMap(s => s.fields).find(f => f.id === fieldId)
     if (!field) return null;
     
     let error: string | null = null;
     
     // Required validation
     if (field.required && (!value || (typeof value === 'string' && !value.trim()))) {
-      error = `${field.label} is required`;
+      error = `${field.label} is required`
     }
     
     // Custom validation
     if (!error && field.validation && value) {
-      error = field.validation(value);
+      error = field.validation(value)
     }
     
     // Type-specific validation
     if (!error && value) {
       switch (field.type) {
         case 'email':
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
           if (!emailRegex.test(value)) {
             error = 'Please enter a valid email address';
           }
@@ -242,11 +243,11 @@ export default function MobileFormLayout({
     }
     
     return error;
-  };
+  }
   
   // Validate all fields
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
     
     sections.forEach(section => {
       section.fields.forEach(field => {
@@ -261,24 +262,24 @@ export default function MobileFormLayout({
     
     setLocalErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
   
   // Handle auto-save
   const handleAutoSave = async () => {
-    if (!isDirty) return;
+    if (!isDirty) return
     
     try {
       // Here you would typically save to localStorage or send to server
-      localStorage.setItem(`form-draft-${title}`, JSON.stringify(formData));
+      localStorage.setItem(`form-draft-${title}`, JSON.stringify(formData))
       setLastAutoSave(new Date());
     } catch (error) {
-      // console.error('Auto-save failed:', error);
+      // console.error('Auto-save failed:', error)
     }
-  };
+  }
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     
     if (validationMode !== 'onSubmit' || validateForm()) {
       setIsSubmitting(true);
@@ -286,19 +287,19 @@ export default function MobileFormLayout({
         await onSubmit(formData);
         setIsDirty(false);
         // Clear draft on successful submission
-        localStorage.removeItem(`form-draft-${title}`);
+        localStorage.removeItem(`form-draft-${title}`)
       } catch (error) {
-        // console.error('Form submission failed:', error);
+        // console.error('Form submission failed:', error)
       } finally {
         setIsSubmitting(false);
       }
     }
-  };
+  }
   
   // Toggle section expansion
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => {
-      const newSet = new Set(prev);
+      const newSet = new Set(prev)
       if (newSet.has(sectionId)) {
         newSet.delete(sectionId);
       } else {
@@ -306,19 +307,19 @@ export default function MobileFormLayout({
       }
       return newSet;
     });
-  };
+  }
   
   // Toggle password visibility
   const togglePasswordVisibility = (fieldId: string) => {
     setShowPassword(prev => ({
       ...prev,
       [fieldId]: !prev[fieldId]
-    }));
-  };
+    }))
+  }
   
   // Render form field
   const renderField = (field: FormField) => {
-    if (field.hidden) return null;
+    if (field.hidden) return null
     
     const value = formData[field.id] || '';
     const error = localErrors[field.id] || errors[field.id];
@@ -344,7 +345,7 @@ export default function MobileFormLayout({
       min: field.min,
       max: field.max,
       step: field.step
-    };
+    }
     
     const renderInput = () => {
       switch (field.type) {
@@ -494,7 +495,7 @@ handleFieldChange(field.id, checked)}
 </div>
           );
       }
-    };
+    }
     
     return (
       <div key={field.id} className="space-y-2">
@@ -522,10 +523,10 @@ handleFieldChange(field.id, checked)}
         )}
       </div>
     );
-  };
+  }
   
   // Calculate progress
-  const totalFields = sections.flatMap(s => s.fields.filter(f => !f.hidden)).length;
+  const totalFields = sections.flatMap(s => s.fields.filter(f => !f.hidden)).length
   const completedFields = sections.flatMap(s => s.fields.filter(f => !f.hidden))
     .filter(f => {
       const value = formData[f.id];

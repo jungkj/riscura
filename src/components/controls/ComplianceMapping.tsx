@@ -2,13 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   Target,
   Shield,
@@ -28,11 +29,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
   Layers,
   Filter,
   Download,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface ComplianceFramework {
-  id: string;
+  id: string
   name: string;
   version: string;
   description: string;
@@ -76,7 +77,7 @@ interface GapAnalysis {
   highGaps: number;
   mediumGaps: number;
   lowGaps: number;
-  gapsByCategory: { [categoryId: string]: number };
+  gapsByCategory: { [categoryId: string]: number }
   recommendedActions: RecommendedAction[];
 }
 
@@ -197,7 +198,7 @@ const sampleFrameworks: ComplianceFramework[] = [
     nextAssessment: new Date('2024-07-15'),
     status: 'compliant',
   },
-];
+]
 
 // Status Configuration
 const getComplianceStatusConfig = (status: string) => {
@@ -238,13 +239,13 @@ const getComplianceStatusConfig = (status: string) => {
       bg: 'bg-surface-secondary',
       icon: Target 
     },
-  };
+  }
   return configs[status as keyof typeof configs] || configs['not-assessed'];
-};
+}
 
 // Framework Overview Card
 const FrameworkOverviewCard: React.FC<{
-  framework: ComplianceFramework;
+  framework: ComplianceFramework
   onSelect: (_framework: ComplianceFramework) => void;
 }> = ({ framework, onSelect }) => {
   const statusConfig = getComplianceStatusConfig(framework.status);
@@ -315,11 +316,11 @@ const FrameworkOverviewCard: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Requirement Detail Component
 const RequirementDetail: React.FC<{
-  requirement: ComplianceRequirement;
+  requirement: ComplianceRequirement
   onControlMap: (requirementId: string, controlId: string) => void;
 }> = ({ requirement, onControlMap }) => {
   const statusConfig = getComplianceStatusConfig(requirement.status);
@@ -418,11 +419,11 @@ const RequirementDetail: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Category Component
 const CategoryDetail: React.FC<{
-  category: ComplianceCategory;
+  category: ComplianceCategory
   onControlMap: (requirementId: string, controlId: string) => void;
 }> = ({ category, onControlMap }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -470,14 +471,14 @@ const CategoryDetail: React.FC<{
       </Collapsible>
     </div>
   );
-};
+}
 
 // Gap Analysis Component
 const GapAnalysisView: React.FC<{ framework: ComplianceFramework }> = ({ framework }) => {
   const gapAnalysis = useMemo(() => {
     const gaps = framework.categories.flatMap(cat => 
       cat.requirements.filter(req => req.status === 'gap' || req.status === 'non-compliant')
-    );
+    )
     
     return {
       totalGaps: gaps.length,
@@ -485,7 +486,7 @@ const GapAnalysisView: React.FC<{ framework: ComplianceFramework }> = ({ framewo
       highGaps: gaps.filter(g => g.priority === 'high').length,
       mediumGaps: gaps.filter(g => g.priority === 'medium').length,
       lowGaps: gaps.filter(g => g.priority === 'low').length,
-    };
+    }
   }, [framework]);
 
   return (
@@ -535,16 +536,16 @@ const GapAnalysisView: React.FC<{ framework: ComplianceFramework }> = ({ framewo
       </div>
     </div>
   );
-};
+}
 
 // Main Compliance Mapping Component
 export const ComplianceMapping: React.FC = () => {
-  const [selectedFramework, setSelectedFramework] = useState<ComplianceFramework | null>(null);
+  const [selectedFramework, setSelectedFramework] = useState<ComplianceFramework | null>(null)
   const [activeView, setActiveView] = useState<'overview' | 'mapping' | 'gaps'>('overview');
 
   const handleControlMapping = (requirementId: string, controlId: string) => {
-    // console.log(`Mapping control ${controlId} to requirement ${requirementId}`);
-  };
+    // console.log(`Mapping control ${controlId} to requirement ${requirementId}`)
+  }
 
   return (
     <div className="space-y-enterprise-6">
@@ -672,6 +673,6 @@ export const ComplianceMapping: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 export default ComplianceMapping; 

@@ -9,7 +9,7 @@ export interface ReportData {
   period: {
     from: Date;
     to: Date;
-  };
+  }
   sections: ReportSection[];
   summary: ReportSummary;
 }
@@ -78,23 +78,23 @@ export class ReportDataCollector {
         },
         assignedTo: true,
       },
-    });
+    })
 
     // Calculate risk metrics
-    const risksBySeverity = this.groupBy(risks, 'severity');
+    const risksBySeverity = this.groupBy(risks, 'severity')
     const risksByCategory = this.groupBy(risks, 'category');
     const risksByStatus = this.groupBy(risks, 'status');
 
     // High and critical risks
     const highCriticalRisks = risks.filter(
       (r) => r.severity === 'HIGH' || r.severity === 'CRITICAL'
-    );
+    )
 
     // Risks with inadequate controls
     const risksWithInadequateControls = risks.filter(
       (r) =>
         r.controls.length === 0 || r.controls.some((rc) => rc.control.effectiveness !== 'EFFECTIVE')
-    );
+    )
 
     return {
       title: 'Risk Assessment Report',
@@ -177,7 +177,7 @@ export class ReportDataCollector {
           `${Object.keys(risksByCategory).length} risk categories identified`,
         ],
       },
-    };
+    }
   }
 
   private async collectControlEffectivenessData(_organizationId: string,
@@ -223,10 +223,10 @@ export class ReportDataCollector {
           },
         },
       },
-    });
+    })
 
     // Calculate control effectiveness metrics
-    const controlsByType = this.groupBy(controls, 'type');
+    const controlsByType = this.groupBy(controls, 'type')
     const controlsByEffectiveness = this.groupBy(controls, 'effectiveness');
 
     // Controls with recent test failures
@@ -234,14 +234,14 @@ export class ReportDataCollector {
       control.testScripts.some((ts) =>
         ts.testScript.testExecutions.some((te) => te.status === 'FAILED')
       )
-    );
+    )
 
     // Controls without recent testing
     const untestedControls = controls.filter(
       (control) =>
         control.testScripts.length === 0 ||
         control.testScripts.every((ts) => ts.testScript.testExecutions.length === 0)
-    );
+    )
 
     return {
       title: 'Control Effectiveness Report',
@@ -338,7 +338,7 @@ export class ReportDataCollector {
           `${controls.length > 0 ? Math.round(((controls.length - untestedControls.length) / controls.length) * 100) : 0}% control test coverage`,
         ],
       },
-    };
+    }
   }
 
   private async collectComplianceData(_organizationId: string,
@@ -364,7 +364,7 @@ export class ReportDataCollector {
         keyMetrics: {},
         highlights: [],
       },
-    };
+    }
   }
 
   private async collectAuditData(_organizationId: string,
@@ -390,7 +390,7 @@ export class ReportDataCollector {
         keyMetrics: {},
         highlights: [],
       },
-    };
+    }
   }
 
   private async collectExecutiveDashboardData(_organizationId: string,
@@ -408,7 +408,7 @@ export class ReportDataCollector {
           createdAt: { gte: dateFrom, lte: dateTo },
         },
       }),
-    ]);
+    ])
 
     const highCriticalRisks = risks.filter(
       (r) => r.severity === 'HIGH' || r.severity === 'CRITICAL'
@@ -484,14 +484,14 @@ export class ReportDataCollector {
           `${completedTasks.length} tasks completed in reporting period`,
         ],
       },
-    };
+    }
   }
 
   // Helper methods
   private groupBy<T>(items: T[], key: keyof T): Record<string, T[]> {
     return items.reduce(
       (groups, item) => {
-        const groupKey = String(item[key]);
+        const groupKey = String(item[key])
         if (!groups[groupKey]) {
           groups[groupKey] = [];
         }
@@ -510,7 +510,7 @@ export class ReportDataCollector {
       MEDIUM: 2,
       HIGH: 3,
       CRITICAL: 4,
-    };
+    }
 
     const totalScore = risks.reduce((sum, risk) => {
       return sum + (severityScores[risk.severity] || 0);

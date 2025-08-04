@@ -21,7 +21,7 @@ export const TypewriterEffect = ({
     return {
       ...word,
       text: word.text.split(''),
-    };
+    }
   });
 
   const [scope, animate] = useAnimate();
@@ -64,7 +64,7 @@ export const TypewriterEffect = ({
         })}
       </motion.div>
     );
-  };
+  }
   return (
     <div
       className={cn(
@@ -92,7 +92,7 @@ export const TypewriterEffect = ({
       />
     </div>
   );
-};
+}
 
 export const TypewriterEffectSmooth = ({
   words,
@@ -111,7 +111,7 @@ export const TypewriterEffectSmooth = ({
     return {
       ...word,
       text: word.text.split(''),
-    };
+    }
   });
   const renderWords = () => {
     return (
@@ -133,7 +133,7 @@ export const TypewriterEffectSmooth = ({
         })}
       </div>
     );
-  };
+  }
 
   return (
     <div className={cn('flex space-x-1 my-6', className)}>
@@ -177,4 +177,4 @@ export const TypewriterEffectSmooth = ({
       />
     </div>
   );
-};
+}

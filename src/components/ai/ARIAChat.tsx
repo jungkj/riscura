@@ -10,7 +10,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   CommunicationIcons,
   DataIcons,
   TimeIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 import { LoadingStates, DotsLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 
@@ -99,11 +99,11 @@ const smartFeatures = {
     { id: 'save-analysis', label: 'Save Analysis', icon: ActionIcons.Save },
     { id: 'schedule-followup', label: 'Schedule Follow-up', icon: TimeIcons.Calendar },
   ],
-};
+}
 
 // Message types
 interface ChatMessage {
-  id: string;
+  id: string
   type: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
@@ -116,7 +116,7 @@ interface ChatMessage {
       label: string;
       action: () => void;
     }>;
-  };
+  }
 }
 
 type ARIAContext = 'dashboard' | 'risk-assessment' | 'compliance' | 'audit' | 'general';
@@ -144,7 +144,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages]);
 
   // Initialize with welcome message
@@ -158,7 +158,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         metadata: {
           category: 'welcome',
         },
-      };
+      }
       setMessages([welcomeMessage]);
     }
   }, [context, messages.length]);
@@ -166,7 +166,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
   // Handle initial prompt
   useEffect(() => {
     if (initialPrompt && messages.length === 1) {
-      handleSendMessage(initialPrompt);
+      handleSendMessage(initialPrompt)
     }
   }, [initialPrompt, messages.length]);
 
@@ -182,9 +182,9 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         "Hi there! I'm ARIA, your AI risk management assistant. I can provide insights on your current risk posture, compliance status, and recommend actions. What insights would you like?",
       general:
         "Hello! I'm ARIA, your AI-powered risk management assistant. I'm here to help you with risk analysis, compliance reviews, audit preparation, and strategic insights. How can I help you today?",
-    };
+    }
     return contextMessages[context] || contextMessages.general;
-  };
+  }
 
   const handleSendMessage = async (message?: string) => {
     const messageText = message || inputValue.trim();
@@ -196,7 +196,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
       type: 'user',
       content: messageText,
       timestamp: new Date(),
-    };
+    }
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
@@ -204,7 +204,7 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
 
     try {
       // Simulate AI response (replace with actual API call)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
       const aiResponse = await generateAIResponse(messageText, context);
 
@@ -214,13 +214,13 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
         content: aiResponse.content,
         timestamp: new Date(),
         metadata: aiResponse.metadata,
-      };
+      }
 
       setMessages((prev) => [...prev, assistantMessage]);
 
       // Trigger insight callback if provided
       if (onInsightGenerated && aiResponse.metadata?.category !== 'general') {
-        onInsightGenerated(aiResponse);
+        onInsightGenerated(aiResponse)
       }
     } catch (error) {
       const errorMessage: ChatMessage = {
@@ -230,12 +230,12 @@ export const ARIAChat: React.FC<ARIAChatProps> = ({
           "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
         timestamp: new Date(),
         metadata: { category: 'error' },
-      };
+      }
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const generateAIResponse = async (prompt: string, context: string) => {
     // This would be replaced with actual AI API integration
@@ -343,10 +343,10 @@ Which improvements would you like to prioritize?`,
           ],
         },
       },
-    };
+    }
 
     // Simple keyword matching for demo (replace with actual AI)
-    const lowerPrompt = prompt.toLowerCase();
+    const lowerPrompt = prompt.toLowerCase()
     if (lowerPrompt.includes('risk') && lowerPrompt.includes('high')) {
       return responses['analyze-risks'];
     } else if (lowerPrompt.includes('compliance') || lowerPrompt.includes('summary')) {
@@ -375,20 +375,20 @@ Could you provide more specific details about what you'd like to explore? For ex
         confidence: 0.7,
         sources: ['General Knowledge Base'],
       },
-    };
-  };
+    }
+  }
 
   const handleSuggestedPrompt = (prompt: any) => {
     setInputValue(prompt.text);
     handleSendMessage(prompt.text);
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }
 
   const filteredPrompts = selectedCategory
     ? smartFeatures.suggestedPrompts.filter((p) => p.category === selectedCategory)
@@ -407,10 +407,10 @@ Could you provide more specific details about what you'd like to explore? For ex
       dashboard: 'Welcome! I can help you interpret your dashboard data and provide insights.',
       general:
         "Hello! I'm ARIA, your AI assistant for risk management and compliance. How can I help you today?",
-    };
+    }
 
     return contextMessages[context] || contextMessages.general;
-  };
+  }
 
   const getContextKey = (_context: ARIAContext): keyof typeof smartFeatures.contextualAssistance => {
     const contextMap: Record<ARIAContext, keyof typeof smartFeatures.contextualAssistance> = {
@@ -419,10 +419,10 @@ Could you provide more specific details about what you'd like to explore? For ex
       audit: 'auditPreparation',
       dashboard: 'riskAssessment', // fallback
       general: 'riskAssessment', // fallback
-    };
+    }
 
     return contextMap[context] || 'riskAssessment';
-  };
+  }
 
   return (
     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
@@ -668,6 +668,6 @@ Could you provide more specific details about what you'd like to explore? For ex
       </div>
     </div>
   );
-};
+}
 
 export default ARIAChat;

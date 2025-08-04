@@ -11,7 +11,7 @@ import { withAPI } from '@/lib/api/middleware';
 // ============================================================================
 
 async function handleGet(req: NextRequest) {
-  const { origin } = new URL(req.url);
+  const { origin } = new URL(req.url)
   const docsUrl = `${origin}/api/docs`;
 
   const html = `
@@ -201,7 +201,7 @@ async function handleGet(req: NextRequest) {
         tryItOutEnabled: true,
         requestInterceptor: function(request) {
           // Add organization header if available
-          const orgId = localStorage.getItem('organizationId');
+          const orgId = localStorage.getItem('organizationId')
           if (orgId) {
             request.headers['Organization-ID'] = orgId;
           }
@@ -209,14 +209,14 @@ async function handleGet(req: NextRequest) {
         },
         responseInterceptor: function(response) {
           // Log API responses for debugging
-          // console.log('API Response:', response);
+          // console.log('API Response:', response)
           return response;
         },
         onComplete: function() {
-          // console.log('Swagger UI loaded successfully');
+          // console.log('Swagger UI loaded successfully')
         },
         onFailure: function(error) {
-          // console.error('Swagger UI failed to load:', error);
+          // console.error('Swagger UI failed to load:', error)
         },
         docExpansion: 'list',
         operationsSorter: 'alpha',
@@ -256,7 +256,7 @@ async function handleGet(req: NextRequest) {
       // Add custom styling and functionality
       setTimeout(function() {
         // Hide the Swagger UI topbar URL input
-        const topbar = document.querySelector('.swagger-ui .topbar');
+        const topbar = document.querySelector('.swagger-ui .topbar')
         if (topbar) {
           const downloadWrapper = topbar.querySelector('.download-url-wrapper');
           if (downloadWrapper) {
@@ -265,9 +265,9 @@ async function handleGet(req: NextRequest) {
         }
         
         // Add organization ID input
-        addOrganizationIdInput();
+        addOrganizationIdInput()
       }, 1000);
-    };
+    }
     
     const addOrganizationIdInput = () {
       const topbar = document.querySelector('.swagger-ui .topbar');
@@ -330,4 +330,4 @@ export const GET = withAPI(handleGet, {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000, // 1 hour
   },
-});
+})

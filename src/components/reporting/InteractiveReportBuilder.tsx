@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   FileText,
   Plus,
@@ -41,11 +42,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Image,
   Type,
   Zap
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Report component definitions
 interface ReportComponent {
-  id: string;
+  id: string
   type: string;
   title: string;
   description: string;
@@ -58,8 +59,8 @@ interface ReportComponent {
     timeframe?: string;
     groupBy?: string;
     metrics?: string[];
-  };
-  position: { x: number; y: number; width: number; height: number };
+  }
+  position: { x: number; y: number; width: number; height: number }
   data?: any;
 }
 
@@ -160,11 +161,11 @@ const REPORT_COMPONENTS: Omit<ReportComponent, 'id' | 'position' | 'data'>[] = [
       timeframe: '90d'
     }
   }
-];
+]
 
 // Report template definitions
 interface ReportTemplate {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: string;
@@ -209,7 +210,7 @@ const REPORT_TEMPLATES: ReportTemplate[] = [
 
 // Main report builder component
 interface InteractiveReportBuilderProps {
-  onSave?: (report: any) => void;
+  onSave?: (report: any) => void
   onExport?: (report: any, format: string) => void;
   onShare?: (report: any) => void;
   className?: string;
@@ -246,7 +247,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
           lowRisks: 16,
           trend: '+12%',
           riskScore: 3.2
-        };
+        }
       case 'compliance-status':
         return {
           overallScore: 94,
@@ -255,7 +256,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             { name: 'ISO 27001', score: 92, status: 'compliant' },
             { name: 'GDPR', score: 89, status: 'minor-gaps' }
           ]
-        };
+        }
       case 'trend-analysis':
         return {
           data: [
@@ -263,7 +264,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             { month: 'Feb', risks: 45, compliance: 93 },
             { month: 'Mar', risks: 47, compliance: 94 }
           ]
-        };
+        }
       case 'ai-recommendations':
         return {
           recommendations: [
@@ -280,15 +281,15 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               description: 'Quarterly review of cybersecurity risk assessments'
             }
           ]
-        };
+        }
       default:
-        return {};
+        return {}
     }
   }, []);
 
   // Add component to report
   const addComponent = useCallback((componentType: string) => {
-    const template = REPORT_COMPONENTS.find(c => c.type === componentType);
+    const template = REPORT_COMPONENTS.find(c => c.type === componentType)
     if (!template) return;
 
     const newComponent: ReportComponent = {
@@ -301,14 +302,14 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         height: 300
       },
       data: generateSampleData(componentType)
-    };
+    }
 
     setComponents(prev => [...prev, newComponent]);
   }, [generateSampleData]);
 
   // Remove component
   const removeComponent = useCallback((componentId: string) => {
-    setComponents(prev => prev.filter(c => c.id !== componentId));
+    setComponents(prev => prev.filter(c => c.id !== componentId))
     if (selectedComponent === componentId) {
       setSelectedComponent(null);
     }
@@ -318,12 +319,12 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
   const updateComponent = useCallback((componentId: string, updates: Partial<ReportComponent>) => {
     setComponents(prev => prev.map(c => 
       c.id === componentId ? { ...c, ...updates } : c
-    ));
+    ))
   }, []);
 
   // Load template
   const loadTemplate = useCallback((templateId: string) => {
-    const template = REPORT_TEMPLATES.find(t => t.id === templateId);
+    const template = REPORT_TEMPLATES.find(t => t.id === templateId)
     if (!template) return;
 
     setReportTitle(template.name);
@@ -331,11 +332,11 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
     setLayoutMode(template.layout === 'dashboard' ? 'grid' : template.layout);
     
     // Clear existing components
-    setComponents([]);
+    setComponents([])
     
     // Add template components
     template.components.forEach((componentType, index) => {
-      setTimeout(() => addComponent(componentType), index * 100);
+      setTimeout(() => addComponent(componentType), index * 100)
     });
     
     setSelectedTemplate(templateId);
@@ -351,7 +352,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
       template: selectedTemplate,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
-    };
+    }
 
     onSave?.(report);
     setLastSaved(new Date());
@@ -359,18 +360,18 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
 
   // Export report
   const exportReport = useCallback((format: 'pdf' | 'excel' | 'powerpoint') => {
-    setIsGenerating(true);
+    setIsGenerating(true)
     
     const report = {
       title: reportTitle,
       description: reportDescription,
       components,
       format
-    };
+    }
 
     // Simulate export process
     setTimeout(() => {
-      onExport?.(report, format);
+      onExport?.(report, format)
       setIsGenerating(false);
     }, 2000);
   }, [reportTitle, reportDescription, components, onExport]);
@@ -379,7 +380,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
       if (components.length > 0) {
-        saveReport();
+        saveReport()
       }
     }, 30000); // Auto-save every 30 seconds
 
@@ -388,12 +389,12 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
 
   // Drag and drop handlers
   const handleDragStart = (componentType: string) => {
-    draggedComponent.current = componentType;
-  };
+    draggedComponent.current = componentType
+  }
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-  };
+  }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -401,11 +402,11 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
       addComponent(draggedComponent.current);
       draggedComponent.current = null;
     }
-  };
+  }
 
   // Render component preview
   const renderComponentPreview = (component: ReportComponent) => {
-    const Icon = component.icon;
+    const Icon = component.icon
     
     return (
       <DaisyCard
@@ -443,7 +444,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
-                  e.stopPropagation();
+                  e.stopPropagation()
                   removeComponent(component.id);
                 }}
               >
@@ -458,7 +459,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   // Render component content based on type
   const renderComponentContent = (component: ReportComponent) => {
@@ -481,7 +482,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
               <DaisyBadge variant="secondary">{component.data?.riskScore}/5</DaisyBadge>
             </div>
           </div>
-        );
+        )
       
       case 'compliance-status':
         return (
@@ -542,7 +543,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
           </div>
         );
     }
-  };
+  }
 
   return (
     <div className={`h-screen flex bg-gray-50 ${className}`}>
@@ -738,6 +739,6 @@ setReportTitle(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 export default InteractiveReportBuilder; 

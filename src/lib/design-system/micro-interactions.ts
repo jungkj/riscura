@@ -21,7 +21,7 @@ export const timings = {
   slow: 0.8,
   deliberate: 1.0,
   patient: 1.2,
-} as const;
+} as const
 
 // Easing Functions (sophisticated motion curves)
 export const easings = {
@@ -43,7 +43,7 @@ export const easings = {
   slideOut: [0.55, 0.055, 0.675, 0.19],
   modalIn: [0.23, 1, 0.32, 1],
   modalOut: [0.755, 0.05, 0.855, 0.06],
-} as const;
+} as const
 
 // Animation Variants for Common Patterns
 export const variants = {
@@ -333,7 +333,7 @@ export const variants = {
       },
     },
   } as Variants,
-} as const;
+} as const
 
 // Interaction Presets
 export const interactions = {
@@ -402,7 +402,7 @@ export const interactions = {
       repeat: Infinity,
     },
   },
-} as const;
+} as const
 
 // Success/Error Feedback Animations
 export const feedbackAnimations = {
@@ -441,7 +441,7 @@ export const feedbackAnimations = {
       ease: easings.smooth,
     },
   },
-} as const;
+} as const
 
 // Animation Utilities
 export const animationUtils = {
@@ -474,7 +474,7 @@ export const animationUtils = {
     ...animation,
     '@media (prefers-reduced-motion: reduce)': reducedMotion,
   }),
-} as const;
+} as const
 
 // Accessibility Helpers
 export const a11y = {
@@ -500,7 +500,7 @@ export const a11y = {
     error: 'An error occurred while loading content',
     success: 'Action completed successfully',
   },
-} as const;
+} as const
 
 // Performance Optimizations
 export const performance = {
@@ -517,7 +517,7 @@ export const performance = {
     WebkitBackfaceVisibility: 'hidden',
     WebkitPerspective: 1000,
   },
-} as const;
+} as const
 
 // Theme-aware animations
 export const themeAnimations = {
@@ -530,4 +530,4 @@ export const themeAnimations = {
     background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
     color: '#f8fafc',
   },
-} as const;
+} as const

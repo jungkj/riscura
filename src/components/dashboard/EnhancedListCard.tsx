@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, ChevronRight, AlertTriangle, Shield, Target } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface ListItem {
   id: string;
@@ -54,7 +55,7 @@ const priorityStyles = {
     indicator: 'bg-red-500',
     glow: 'shadow-red-500/20',
   },
-};
+}
 
 const LoadingSkeleton: React.FC = () => (
   <div className="space-y-4 animate-pulse">
@@ -189,7 +190,7 @@ const ListItemComponent: React.FC<{
         transition={{ duration: 0.2 }} />
     </motion.div>
   );
-};
+}
 
 export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
   title,
@@ -303,4 +304,4 @@ export const EnhancedListCard: React.FC<EnhancedListCardProps> = ({
       </DaisyCard>
     </motion.div>
   );
-}; 
+} 

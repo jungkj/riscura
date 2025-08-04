@@ -9,22 +9,22 @@ import { designTokens } from '@/lib/design-system/tokens';
   DataIcons,
   UserIcons,
   RiskManagementIcons,
-} from '@/components/icons/IconLibrary';
+} from '@/components/icons/IconLibrary'
 
 // Base empty state component
 interface EmptyStateProps {
-  icon?: React.ComponentType<any>;
+  icon?: React.ComponentType<any>
   title: string;
   description?: string;
   action?: {
     label: string;
     onClick: () => void;
     variant?: 'primary' | 'secondary';
-  };
+  }
   secondaryAction?: {
     label: string;
     onClick: () => void;
-  };
+  }
   illustration?: React.ReactNode;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -62,7 +62,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       description: 'text-lg',
       spacing: 'space-y-6',
     },
-  };
+  }
 
   const classes = sizeClasses[size];
 
@@ -114,11 +114,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Simple illustration components
 const SimpleIllustration: React.FC<{
-  type: 'folder' | 'document' | 'chart' | 'search' | 'shield' | 'users' | 'settings';
+  type: 'folder' | 'document' | 'chart' | 'search' | 'shield' | 'users' | 'settings'
   className?: string;
 }> = ({ type, className = '' }) => {
   const illustrations = {
@@ -185,10 +185,10 @@ const SimpleIllustration: React.FC<{
         <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
       </svg>
     ),
-  };
+  }
 
   return illustrations[type] || null;
-};
+}
 
 // Predefined empty states for common scenarios
 export const EmptyStates = {
@@ -199,7 +199,7 @@ export const EmptyStates = {
     onRefresh,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onRefresh?: () => void;
     className?: string;
@@ -227,7 +227,7 @@ export const EmptyStates = {
     onClearSearch,
     className = '',
   }: {
-    searchTerm?: string;
+    searchTerm?: string
     onClearSearch?: () => void;
     className?: string;
   }) => (
@@ -260,7 +260,7 @@ export const EmptyStates = {
     onCreateFolder,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onAddFile?: () => void;
     onCreateFolder?: () => void;
@@ -298,7 +298,7 @@ export const EmptyStates = {
     onCreate,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onUpload?: () => void;
     onCreate?: () => void;
@@ -335,7 +335,7 @@ export const EmptyStates = {
     onInvite,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onInvite?: () => void;
     className?: string;
@@ -362,7 +362,7 @@ export const EmptyStates = {
     description = "You're all caught up! New notifications will appear here.",
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     className?: string;
   }) => (
@@ -382,7 +382,7 @@ export const EmptyStates = {
     onRequestAccess,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onRequestAccess?: () => void;
     className?: string;
@@ -412,7 +412,7 @@ export const EmptyStates = {
     onReport,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onRetry?: () => void;
     onReport?: () => void;
@@ -449,7 +449,7 @@ export const EmptyStates = {
     onRetry,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onRetry?: () => void;
     className?: string;
@@ -478,7 +478,7 @@ export const EmptyStates = {
     onStartAssessment,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onStartAssessment?: () => void;
     className?: string;
@@ -587,7 +587,7 @@ export const EmptyStates = {
     onStartSetup,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onStartSetup?: () => void;
     className?: string;
@@ -615,7 +615,7 @@ export const EmptyStates = {
     onNotifyMe,
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     onNotifyMe?: () => void;
     className?: string;
@@ -643,7 +643,7 @@ export const EmptyStates = {
     description = 'This feature is temporarily unavailable while we perform maintenance.',
     className = '',
   }: {
-    title?: string;
+    title?: string
     description?: string;
     className?: string;
   }) => (
@@ -654,20 +654,20 @@ export const EmptyStates = {
       className={className}
     />
   ),
-};
+}
 
 // Empty state wrapper for conditional rendering
 export const ConditionalEmptyState: React.FC<{
-  condition: boolean;
+  condition: boolean
   emptyState: React.ReactNode;
   children: React.ReactNode;
 }> = ({ condition, emptyState, children }) => {
   return condition ? <>{emptyState}</> : <>{children}</>;
-};
+}
 
 // Empty state with custom illustration
 export const CustomEmptyState: React.FC<{
-  illustration: React.ReactNode;
+  illustration: React.ReactNode
   title: string;
   description?: string;
   actions?: Array<{
@@ -711,4 +711,4 @@ export default {
   ConditionalEmptyState,
   CustomEmptyState,
   SimpleIllustration,
-};
+}

@@ -2,15 +2,16 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
 // import { 
   usePolicyUpload, 
   usePolicyExtraction, 
   useImportStore,
   ExtractedRisk,
   ExtractedControl 
-} from '@/lib/stores/importStore';
+} from '@/lib/stores/importStore'
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyAccordion, DaisyAccordionContent, DaisyAccordionItem, DaisyAccordionTrigger } from '@/components/ui/DaisyAccordion';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -28,7 +29,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   Square,
   Upload as UploadIcon,
   Loader2
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface PolicyImporterWithStoreProps {
   onComplete?: (extraction: { risks: ExtractedRisk[]; controls: ExtractedControl[] }) => void;
@@ -40,13 +41,13 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
   const clearImports = useImportStore((state) => state.clearImports);
 
   // Local state for editing and approval
-  const [editingItems, setEditingItems] = React.useState<Set<string>>(new Set());
+  const [editingItems, setEditingItems] = React.useState<Set<string>>(new Set())
   const [editedTexts, setEditedTexts] = React.useState<Record<string, string>>({});
   const [approvedItems, setApprovedItems] = React.useState<Set<string>>(new Set());
 
   // File preview state
   const [filePreview, setFilePreview] = React.useState<{
-    name: string;
+    name: string
     size: number;
     type: string;
     icon: string;
@@ -54,7 +55,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
   // Handle file upload
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
+    const file = acceptedFiles[0]
     if (!file) return;
 
     // Set file preview
@@ -63,10 +64,10 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       size: file.size,
       type: file.type,
       icon: getFileIcon(file.type),
-    });
+    })
 
     // Upload file using store
-    await uploadFile(file);
+    await uploadFile(file)
   }, [uploadFile]);
 
   // Dropzone configuration
@@ -80,13 +81,13 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
     },
     maxFiles: 1,
     maxSize: 10 * 1024 * 1024, // 10MB
-  });
+  })
 
   // File icon helper
   const getFileIcon = (mimeType: string): string => {
     switch (mimeType) {
       case 'application/pdf':
-        return '📄';
+        return '📄'
       case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       case 'application/msword':
         return '📝';
@@ -95,22 +96,22 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       default:
         return '📄';
     }
-  };
+  }
 
   // Format file size
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes'
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   // Handle editing
   const startEditing = (id: string, currentText: string) => {
-    setEditingItems(prev => new Set([...prev, id]));
+    setEditingItems(prev => new Set([...prev, id]))
     setEditedTexts(prev => ({ ...prev, [id]: currentText }));
-  };
+  }
 
   const saveEdit = (id: string) => {
     setEditingItems(prev => {
@@ -118,7 +119,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       next.delete(id);
       return next;
     });
-  };
+  }
 
   const cancelEdit = (id: string) => {
     setEditingItems(prev => {
@@ -130,12 +131,12 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       const { [id]: removed, ...rest } = prev;
       return rest;
     });
-  };
+  }
 
   // Handle approval
   const toggleApproval = (id: string) => {
     setApprovedItems(prev => {
-      const next = new Set(prev);
+      const next = new Set(prev)
       if (next.has(id)) {
         next.delete(id);
       } else {
@@ -143,7 +144,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       }
       return next;
     });
-  };
+  }
 
   const approveAll = () => {
     if (!policyExtraction) return;
@@ -152,19 +153,19 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
       ...policyExtraction.controls.map(c => `control-${c.id}`)
     ];
     setApprovedItems(new Set(allIds));
-  };
+  }
 
   // Handle completion callback
   useEffect(() => {
     if (success === true && policyExtraction && onComplete) {
-      onComplete(policyExtraction);
+      onComplete(policyExtraction)
     }
   }, [success, policyExtraction, onComplete]);
 
   // Reset local state when store is cleared
   useEffect(() => {
     if (!policyExtraction) {
-      setEditingItems(new Set());
+      setEditingItems(new Set())
       setEditedTexts({});
       setApprovedItems(new Set());
       setFilePreview(null);
@@ -173,7 +174,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
 
   const handleReset = () => {
     clearImports();
-  };
+  }
 
   const hasResults = policyExtraction && (policyExtraction.risks.length > 0 || policyExtraction.controls.length > 0);
   const allItemsApproved = hasResults && policyExtraction && 

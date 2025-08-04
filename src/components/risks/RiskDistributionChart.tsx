@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-// import { useRisks } from '@/context/RiskContext';
-// import { Risk } from '@/types';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { useRisks } from '@/context/RiskContext'
+// import { Risk } from '@/types'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
+import { DaisyCardTitle, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -20,7 +21,7 @@ import {
   Tag,
   Shield,
   BarChart3,
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface RiskDistributionData {
   name: string;
@@ -48,12 +49,12 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
 
   // Calculate distribution data
   const distributionData = useMemo<RiskDistributionData[]>(() => {
-    const counts: Record<string, number> = {};
-    const colors: Record<string, string> = {};
+    const counts: Record<string, number> = {}
+    const colors: Record<string, string> = {}
     
     // Count items based on distribution type
     risks.forEach(risk => {
-      let key: string;
+      let key: string
       switch (selectedDistribution) {
         case 'category':
           key = risk.category || 'Unknown';
@@ -78,7 +79,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
 
     // Define colors based on distribution type
     if (selectedDistribution === 'level') {
-      colors['Critical'] = '#dc2626';
+      colors['Critical'] = '#dc2626'
       colors['High'] = '#ea580c';
       colors['Medium'] = '#d97706';
       colors['Low'] = '#16a34a';
@@ -92,7 +93,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
       const colorPalette = [
         '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', 
         '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'
-      ];
+      ]
       Object.keys(counts).forEach((key, index) => {
         colors[key] = colorPalette[index % colorPalette.length];
       });
@@ -112,7 +113,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
 
   // Custom Donut Chart Component
   const DonutChart: React.FC<{ data: RiskDistributionData[] }> = ({ data }) => {
-    const total = data.reduce((sum, item) => sum + item.value, 0);
+    const total = data.reduce((sum, item) => sum + item.value, 0)
     const size = 200;
     const strokeWidth = 30;
     const radius = (size - strokeWidth) / 2;
@@ -158,11 +159,11 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
         </div>
       </div>
     );
-  };
+  }
 
   // Custom Bar Chart Component
   const BarChart: React.FC<{ data: RiskDistributionData[] }> = ({ data }) => {
-    const maxValue = Math.max(...data.map(item => item.value));
+    const maxValue = Math.max(...data.map(item => item.value))
     
     return (
       <div className="space-y-3">
@@ -190,7 +191,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
         ))}
       </div>
     );
-  };
+  }
 
   const getDistributionIcon = (_type: string) => {
     switch (type) {
@@ -200,7 +201,7 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
       case 'level': return Shield;
       default: return Shield;
     }
-  };
+  }
 
   const DistributionIcon = getDistributionIcon(selectedDistribution);
 
@@ -302,4 +303,4 @@ export const RiskDistributionChart: React.FC<RiskDistributionChartProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-}; 
+} 

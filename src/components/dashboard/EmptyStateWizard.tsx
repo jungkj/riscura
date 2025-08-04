@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import {
   Upload,
   Zap,
@@ -22,7 +23,7 @@ import Image from 'next/image';
   AlertTriangle,
   BarChart3,
   Users
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface EmptyStateWizardProps {
   onImportComplete?: () => void;
@@ -62,7 +63,7 @@ export default function EmptyStateWizard({
         
         // Save import to recent imports in localStorage
         try {
-          const existingImports = localStorage.getItem('recentExcelImports');
+          const existingImports = localStorage.getItem('recentExcelImports')
           const imports = existingImports ? JSON.parse(existingImports) : [];
           imports.unshift({
             filename: file.name,
@@ -71,9 +72,9 @@ export default function EmptyStateWizard({
             id: Date.now().toString()
           });
           // Keep only the last 10 imports
-          localStorage.setItem('recentExcelImports', JSON.stringify(imports.slice(0, 10)));
+          localStorage.setItem('recentExcelImports', JSON.stringify(imports.slice(0, 10)))
         } catch (error) {
-          // console.error('Failed to save import history:', error);
+          // console.error('Failed to save import history:', error)
         }
         
         toast({
@@ -99,7 +100,7 @@ export default function EmptyStateWizard({
     } finally {
       setUploadingFile(false);
     }
-  };
+  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -115,12 +116,12 @@ export default function EmptyStateWizard({
   const handleStartFresh = () => {
     router.push('/dashboard/risks/new');
     onRiskCreated?.();
-  };
+  }
 
   const handleExploreDemo = () => {
     router.push('/dashboard?demo=true');
     onDemoStarted?.();
-  };
+  }
 
   const onboardingSteps = [
     { id: 'import', label: 'Import/Create', completed: onboardingStep > 0 },

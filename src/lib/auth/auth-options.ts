@@ -1,5 +1,5 @@
 // Fixed NextAuth configuration with proper error handling
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
@@ -13,7 +13,7 @@ import { ROLE_PERMISSIONS } from './index';
 import { db } from '@/lib/db';
 
 // Build providers array conditionally based on available credentials
-const providers: any[] = [];
+const providers: any[] = []
 
 // Debug logging for Google OAuth configuration
 // console.log('[NextAuth] Google OAuth configuration check:', {
@@ -23,11 +23,11 @@ const providers: any[] = [];
   clientSecretLength: env.GOOGLE_CLIENT_SECRET?.length || 0,
   // Log first few chars to verify it's being loaded
   clientIdPreview: env.GOOGLE_CLIENT_ID ? `${env.GOOGLE_CLIENT_ID.substring(0, 10)}...` : 'not set',
-});
+})
 
 // Only add Google provider if credentials are available
 if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-  // console.log('[NextAuth] Adding Google provider');
+  // console.log('[NextAuth] Adding Google provider')
   providers.push(
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -42,7 +42,7 @@ if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
     })
   );
 } else {
-  // console.log('[NextAuth] Google provider not added - missing credentials');
+  // console.log('[NextAuth] Google provider not added - missing credentials')
 }
 
 // Always add credentials provider
@@ -55,7 +55,7 @@ providers.push(
     },
     async authorize(credentials) {
       if (!credentials?.email || !credentials?.password) {
-        return null;
+        return null
       }
 
       try {
@@ -70,14 +70,14 @@ providers.push(
             role: 'ADMIN',
             organizationId: 'demo-org-id',
             permissions: ['*'],
-          };
+          }
         }
 
         // Database authentication with health check
-        const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+        const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
         if (!isHealthy.isHealthy) {
-          // console.warn('[NextAuth] Database not available, falling back to demo mode only');
+          // console.warn('[NextAuth] Database not available, falling back to demo mode only')
           return null;
         }
 
@@ -109,7 +109,7 @@ providers.push(
         await db.client.user.update({
           where: { id: user.id },
           data: { lastLogin: new Date() },
-        });
+        })
 
         return {
           id: user.id,
@@ -118,7 +118,7 @@ providers.push(
           image: user.avatar,
         } as any;
       } catch (error) {
-        // console.error('Authentication error:', error);
+        // console.error('Authentication error:', error)
         return null;
       }
     },
@@ -129,7 +129,7 @@ providers.push(
 async function getDatabaseAdapter() {
   // During build time, skip database initialization
   if (process.env.BUILDING === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
-    // console.log('[NextAuth] Skipping database adapter during build');
+    // console.log('[NextAuth] Skipping database adapter during build')
     return null;
   }
 
@@ -139,17 +139,17 @@ async function getDatabaseAdapter() {
 
   try {
     // Check database connection first
-    const healthCheck = await db.healthCheck().catch(() => ({ isHealthy: false }));
+    const healthCheck = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
     if (healthCheck.isHealthy) {
-      // console.log('[NextAuth] Database adapter initialized successfully');
+      // console.log('[NextAuth] Database adapter initialized successfully')
       return PrismaAdapter(db.client);
     } else {
-      // console.warn('[NextAuth] Database not available, running without adapter');
+      // console.warn('[NextAuth] Database not available, running without adapter')
       return null;
     }
   } catch (error) {
-    // console.error('[NextAuth] Failed to initialize database adapter:', error);
+    // console.error('[NextAuth] Failed to initialize database adapter:', error)
     return null;
   }
 }
@@ -171,7 +171,7 @@ export const authOptions: NextAuthOptions = {
         ...token,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
-      };
+      }
       return jwt.sign(payload, secret, { algorithm: 'HS256' });
     },
     decode: async ({ secret, token }) => {
@@ -184,14 +184,14 @@ export const authOptions: NextAuthOptions = {
   },
   logger: {
     error(code, metadata) {
-      // console.error('[NextAuth Error]', { code, metadata });
+      // console.error('[NextAuth Error]', { code, metadata })
     },
     warn(code) {
-      // console.warn('[NextAuth Warning]', code);
+      // console.warn('[NextAuth Warning]', code)
     },
     debug(code, metadata) {
       if (process.env.NODE_ENV === 'development') {
-        // console.log('[NextAuth Debug]', { code, metadata });
+        // console.log('[NextAuth Debug]', { code, metadata })
       }
     },
   },
@@ -201,29 +201,29 @@ export const authOptions: NextAuthOptions = {
         provider: account?.provider,
         email: user?.email,
         accountId: account?.providerAccountId,
-      });
+      })
 
       // Handle Google OAuth sign-in
       if (account?.provider === 'google') {
         try {
           // Check database connection
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
           if (!isHealthy.isHealthy) {
             // Database not available, allow OAuth login without persistence
-            // console.warn('[NextAuth] Database not available, OAuth login without persistence');
+            // console.warn('[NextAuth] Database not available, OAuth login without persistence')
             return true;
           }
 
           // Check if user exists
           const existingUser = await db.client.user.findUnique({
             where: { email: user.email! },
-          });
+          })
 
           if (!existingUser) {
-            // console.log('[NextAuth] No existing user found for email:', user.email);
+            // console.log('[NextAuth] No existing user found for email:', user.email)
             // For OAuth, we need an organization invite or allow self-registration
-            return `/auth/error?error=NoInvite`;
+            return `/auth/error?error=NoInvite`
           }
 
           // Link OAuth account to existing user
@@ -233,11 +233,11 @@ export const authOptions: NextAuthOptions = {
               emailVerified: new Date(),
               lastLogin: new Date(),
             },
-          });
+          })
 
           return true;
         } catch (error) {
-          // console.error('OAuth sign-in error:', error);
+          // console.error('OAuth sign-in error:', error)
           return false;
         }
       }
@@ -249,7 +249,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         try {
           // Get user data from database for JWT
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
           if (isHealthy.isHealthy) {
             const dbUser = await db.client.user.findUnique({
@@ -268,13 +268,13 @@ export const authOptions: NextAuthOptions = {
             }
           } else {
             // Database not available, use demo data
-            token.id = user.id;
+            token.id = user.id
             token.role = 'USER';
             token.organizationId = 'demo-org-id';
             token.permissions = [];
           }
         } catch (error) {
-          // console.error('JWT callback error:', error);
+          // console.error('JWT callback error:', error)
         }
       }
 
@@ -284,7 +284,7 @@ export const authOptions: NextAuthOptions = {
         (!token.lastRefresh || Date.now() - (token.lastRefresh as number) > 15 * 60 * 1000)
       ) {
         try {
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
           if (isHealthy.isHealthy) {
             const dbUser = await db.client.user.findUnique({
@@ -305,7 +305,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
         } catch (error) {
-          // console.error('Token refresh error:', error);
+          // console.error('Token refresh error:', error)
         }
       }
 
@@ -314,7 +314,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       // Send properties to the client
       if (token) {
-        (session.user as any).id = token.id as string;
+        (session.user as any).id = token.id as string
         (session.user as any).role = token.role as UserRole;
         (session.user as any).organizationId = token.organizationId as string;
         (session.user as any).permissions = token.permissions as string[];
@@ -332,13 +332,13 @@ export const authOptions: NextAuthOptions = {
             Date.now() - (token.lastSessionCheck as number) > 30 * 60 * 1000)
         ) {
           try {
-            const isValid = await validateSession(token.sessionId as string);
+            const isValid = await validateSession(token.sessionId as string)
             if (!isValid) {
               throw new Error('Session expired');
             }
             token.lastSessionCheck = Date.now();
           } catch (error) {
-            // console.error('Session validation error:', error);
+            // console.error('Session validation error:', error)
           }
         }
       }
@@ -347,9 +347,9 @@ export const authOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (url.startsWith('/')) return `${baseUrl}${url}`
       // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
+      else if (new URL(url).origin === baseUrl) return url
       return baseUrl + '/dashboard';
     },
   },
@@ -362,12 +362,12 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, account, isNewUser }) {
       // Log successful sign-in
-      // console.log(`User ${user.email} signed in with ${account?.provider || 'credentials'}`);
+      // console.log(`User ${user.email} signed in with ${account?.provider || 'credentials'}`)
 
       // Create activity log if database is available
       if (user.id && user.id !== 'demo-admin-id') {
         try {
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
           if (isHealthy.isHealthy) {
             await db.client.activity.create({
@@ -385,7 +385,7 @@ export const authOptions: NextAuthOptions = {
             });
           }
         } catch (error) {
-          // console.error('Failed to log sign-in activity:', error);
+          // console.error('Failed to log sign-in activity:', error)
         }
       }
     },
@@ -393,7 +393,7 @@ export const authOptions: NextAuthOptions = {
       // Log sign-out if database is available
       if (token?.id && token.id !== 'demo-admin-id') {
         try {
-          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }));
+          const isHealthy = await db.healthCheck().catch(() => ({ isHealthy: false }))
 
           if (isHealthy.isHealthy) {
             await db.client.activity.create({
@@ -409,23 +409,23 @@ export const authOptions: NextAuthOptions = {
             });
           }
         } catch (error) {
-          // console.error('Failed to log sign-out activity:', error);
+          // console.error('Failed to log sign-out activity:', error)
         }
       }
     },
   },
   debug: env.NODE_ENV === 'development',
-};
+}
 
 // Initialize adapter dynamically
 getDatabaseAdapter()
   .then((adapter) => {
     if (adapter) {
-      authOptions.adapter = adapter;
+      authOptions.adapter = adapter
     }
   })
   .catch((error) => {
-    // console.error('[NextAuth] Failed to set database adapter:', error);
+    // console.error('[NextAuth] Failed to set database adapter:', error)
   });
 
 export default authOptions;

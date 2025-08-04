@@ -33,7 +33,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
   // Fetch integrations
   const fetchIntegrations = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       setError(null);
 
       const response = await api.get('/api/sharepoint/connect');
@@ -43,7 +43,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
         setIntegrations(
           data.integrations.map((integration: any) => {
             // Validate and parse dates safely
-            let lastSyncedAt: Date | undefined;
+            let lastSyncedAt: Date | undefined
             let createdAt: Date | undefined;
 
             if (integration.lastSyncedAt) {
@@ -68,14 +68,14 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
               ...integration,
               lastSyncedAt,
               createdAt,
-            };
+            }
           })
         );
       } else if (data.error) {
         setError(data.error);
       }
     } catch (err) {
-      // console.error('Error fetching integrations:', err);
+      // console.error('Error fetching integrations:', err)
       setError('Failed to load SharePoint connections');
     } finally {
       setIsLoading(false);
@@ -87,7 +87,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
     async (
       siteUrl: string
     ): Promise<{
-      success: boolean;
+      success: boolean
       integration?: SharePointIntegration;
       error?: string;
     }> => {
@@ -110,29 +110,29 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
             createdAt: data.integration.createdAt
               ? new Date(data.integration.createdAt)
               : new Date(),
-          };
+          }
 
           // Update integrations list
           setIntegrations((prev) => {
-            const existing = prev.find((i) => i.id === newIntegration.id);
+            const existing = prev.find((i) => i.id === newIntegration.id)
             if (existing) {
               return prev.map((i) => (i.id === newIntegration.id ? newIntegration : i));
             }
             return [...prev, newIntegration];
           });
 
-          return { success: true, integration: newIntegration };
+          return { success: true, integration: newIntegration }
         } else if (data.error) {
           setError(data.error);
-          return { success: false, error: data.error };
+          return { success: false, error: data.error }
         }
 
-        return { success: false, error: 'Unknown error occurred' };
+        return { success: false, error: 'Unknown error occurred' }
       } catch (err) {
-        // console.error('Error connecting to SharePoint:', err);
+        // console.error('Error connecting to SharePoint:', err)
         const errorMessage = 'Failed to connect to SharePoint';
         setError(errorMessage);
-        return { success: false, error: errorMessage };
+        return { success: false, error: errorMessage }
       } finally {
         setIsConnecting(false);
       }
@@ -143,16 +143,16 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
   // Disconnect from SharePoint
   const disconnect = useCallback(async (integrationId: string): Promise<boolean> => {
     try {
-      setError(null);
+      setError(null)
 
       // Use URLSearchParams to safely encode the integrationId
-      const params = new URLSearchParams({ integrationId });
+      const params = new URLSearchParams({ integrationId })
       const response = await api.delete(`/api/sharepoint/connect?${params.toString()}`);
       const data = await response.json();
 
       if (data.message) {
         // Remove from integrations list
-        setIntegrations((prev) => prev.filter((i) => i.id !== integrationId));
+        setIntegrations((prev) => prev.filter((i) => i.id !== integrationId))
         return true;
       } else if (data.error) {
         setError(data.error);
@@ -161,7 +161,7 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
 
       return false;
     } catch (err) {
-      // console.error('Error disconnecting from SharePoint:', err);
+      // console.error('Error disconnecting from SharePoint:', err)
       setError('Failed to disconnect from SharePoint');
       return false;
     }
@@ -169,12 +169,12 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
 
   // Refresh integrations
   const refresh = useCallback(async () => {
-    await fetchIntegrations();
+    await fetchIntegrations()
   }, [fetchIntegrations]);
 
   // Load integrations on mount
   useEffect(() => {
-    fetchIntegrations();
+    fetchIntegrations()
   }, [fetchIntegrations]);
 
   return {
@@ -185,5 +185,5 @@ export const useSharePointIntegration = (): UseSharePointIntegrationReturn => {
     connect,
     disconnect,
     refresh,
-  };
-};
+  }
+}

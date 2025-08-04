@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
+import { DaisySkeleton } from '@/components/ui/daisy-components';
 // import { 
   Loader2, 
   AlertTriangle, 
@@ -13,11 +14,11 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
   Database,
   Wifi,
   WifiOff
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Skeleton Loader Components
 interface SkeletonProps {
-  className?: string;
+  className?: string
   width?: string | number;
   height?: string | number;
 }
@@ -43,7 +44,7 @@ export const Skeleton: React.FC<DaisySkeletonProps> = ({
       <span className="sr-only">Loading...</span>
     </div>
   );
-};
+}
 
 export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
   lines = 3,
@@ -60,7 +61,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
         ))}
     </div>
   );
-};
+}
 
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => {
   return (
@@ -75,7 +76,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
       <DaisySkeletonText lines={2} >
       </div>
   );
-};
+}
 
 export const SkeletonTable: React.FC<{ 
   rows?: number; 
@@ -105,11 +106,11 @@ export const SkeletonTable: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 // Loading Spinners
 interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg'
   text?: string;
   className?: string;
 }
@@ -123,7 +124,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
     lg: 'h-8 w-8'
-  };
+  }
 
   return (
     <div className={cn('flex items-center justify-center gap-2', className)}>
@@ -135,7 +136,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       )}
     </div>
   );
-};
+}
 
 export const PageLoadingSpinner: React.FC<{ text?: string }> = ({ 
   text = 'Loading...' 
@@ -150,7 +151,7 @@ export const PageLoadingSpinner: React.FC<{ text?: string }> = ({
 
 // Progress Indicators
 interface ProgressBarProps {
-  value: number;
+  value: number
   max?: number;
   label?: string;
   showPercentage?: boolean;
@@ -194,7 +195,7 @@ export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
       </div>
     </div>
   );
-};
+}
 
 export const CircularProgress: React.FC<{
   value: number;
@@ -249,11 +250,11 @@ export const CircularProgress: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Error States
 interface ErrorStateProps {
-  title?: string;
+  title?: string
   message?: string;
   onRetry?: () => void;
   retryText?: string;
@@ -292,7 +293,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -307,7 +308,7 @@ export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-    };
+    }
   }, []);
 
   return (
@@ -341,17 +342,17 @@ export const NetworkErrorState: React.FC<{ onRetry?: () => void }> = ({ onRetry 
       </div>
     </div>
   );
-};
+}
 
 // Empty States
 interface EmptyStateProps {
-  icon?: React.ElementType;
+  icon?: React.ElementType
   title?: string;
   message?: string;
   action?: {
     label: string;
     onClick: () => void;
-  };
+  }
   className?: string;
 }
 
@@ -386,7 +387,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export const SearchEmptyState: React.FC<{ 
   searchTerm?: string;
@@ -405,7 +406,7 @@ export const SearchEmptyState: React.FC<{
         onClick: onClearSearch
       } : undefined} />
   );
-};
+}
 
 export const DataEmptyState: React.FC<{ 
   entityName?: string;
@@ -424,16 +425,16 @@ export const DataEmptyState: React.FC<{
         onClick: onCreateNew
       } : undefined} />
   );
-};
+}
 
 // Success State
 export const SuccessState: React.FC<{
-  title?: string;
+  title?: string
   message?: string;
   action?: {
     label: string;
     onClick: () => void;
-  };
+  }
   className?: string;
 }> = ({
   title = 'Success!',
@@ -465,11 +466,11 @@ export const SuccessState: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Loading Overlay
 export const LoadingOverlay: React.FC<{
-  isLoading: boolean;
+  isLoading: boolean
   children: React.ReactNode;
   message?: string;
 }> = ({ isLoading, children, message = 'Loading...' }) => {
@@ -486,4 +487,4 @@ export const LoadingOverlay: React.FC<{
       )}
     </div>
   );
-}; 
+} 

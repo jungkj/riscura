@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { 
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   ResponsiveContainer, 
   Cell, 
   XAxis, 
@@ -70,7 +71,7 @@ const RISK_COLORS = {
   3: '#eab308', // Medium - Yellow
   4: '#f97316', // High - Orange
   5: '#ef4444', // Critical - Red
-};
+}
 
 const IMPACT_LABELS = ['', 'Insignificant', 'Minor', 'Moderate', 'Major', 'Catastrophic'];
 const LIKELIHOOD_LABELS = ['', 'Rare', 'Unlikely', 'Possible', 'Likely', 'Almost Certain'];
@@ -86,7 +87,7 @@ export default function InteractiveRiskHeatmap({
   const { toast } = useToast();
   
   // State management
-  const [selectedCell, setSelectedCell] = useState<HeatmapCell | null>(null);
+  const [selectedCell, setSelectedCell] = useState<HeatmapCell | null>(null)
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'heatmap' | 'scatter'>('heatmap');
@@ -97,7 +98,7 @@ export default function InteractiveRiskHeatmap({
   // Filter data based on selected filters
   const filteredData = useMemo(() => {
     return data.filter(risk => {
-      const categoryMatch = filterCategory === 'all' || risk.category === filterCategory;
+      const categoryMatch = filterCategory === 'all' || risk.category === filterCategory
       const statusMatch = filterStatus === 'all' || risk.status === filterStatus;
       return categoryMatch && statusMatch;
     });
@@ -105,7 +106,7 @@ export default function InteractiveRiskHeatmap({
 
   // Generate heatmap cells
   const heatmapCells = useMemo(() => {
-    const cells: HeatmapCell[] = [];
+    const cells: HeatmapCell[] = []
     
     // Create 5x5 grid for likelihood vs impact
     for (let likelihood = 1; likelihood <= 5; likelihood++) {
@@ -120,7 +121,7 @@ export default function InteractiveRiskHeatmap({
         // Calculate average residual risk for the cell
         const avgResidualRisk = count > 0 
           ? cellRisks.reduce((sum, risk) => sum + risk.residualRisk, 0) / count 
-          : 0;
+          : 0
 
         cells.push({
           x: likelihood,
@@ -145,12 +146,12 @@ export default function InteractiveRiskHeatmap({
       z: risk.riskScore,
       risk: risk,
       fill: RISK_COLORS[risk.riskScore as keyof typeof RISK_COLORS] || '#gray-400'
-    }));
+    }))
   }, [filteredData]);
 
   // Get unique categories and statuses for filters
   const _categories = useMemo(() => {
-    const uniqueCategories = [...new Set(data.map(risk => risk.category))];
+    const uniqueCategories = [...new Set(data.map(risk => risk.category))]
     return uniqueCategories.sort();
   }, [data]);
 
@@ -161,14 +162,14 @@ export default function InteractiveRiskHeatmap({
 
   // Handle cell click
   const handleCellClick = (cell: HeatmapCell) => {
-    setSelectedCell(cell);
+    setSelectedCell(cell)
     onCellDrillDown?.(cell);
-  };
+  }
 
   // Handle risk selection
   const handleRiskSelect = (_risk: RiskData) => {
-    onRiskSelect?.(risk);
-  };
+    onRiskSelect?.(risk)
+  }
 
   // Export heatmap data
   const exportHeatmap = () => {
@@ -188,7 +189,7 @@ export default function InteractiveRiskHeatmap({
           status: risk.status
         }))
       }))
-    };
+    }
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -204,19 +205,19 @@ export default function InteractiveRiskHeatmap({
       title: 'Export Complete',
       description: 'Risk heatmap data has been exported successfully.',
     });
-  };
+  }
 
   // Reset view
   const resetView = () => {
-    setZoomLevel(1);
+    setZoomLevel(1)
     setSelectedCell(null);
     setFilterCategory('all');
     setFilterStatus('all');
-  };
+  }
 
   // Custom tooltip component
   const CustomTooltip = ({ active, payload }: any) => {
-    if (!active || !payload || !payload[0]) return null;
+    if (!active || !payload || !payload[0]) return null
 
     const data = payload[0].payload;
     
@@ -260,7 +261,7 @@ export default function InteractiveRiskHeatmap({
         </div>
       );
     }
-  };
+  }
 
   // Render heatmap grid
   const renderHeatmapGrid = () => {
@@ -285,7 +286,7 @@ export default function InteractiveRiskHeatmap({
           
           {/* Heatmap cells */}
           {heatmapCells.map((cell, index) => {
-            const x = (cell.x - 1) * 80 + 40;
+            const x = (cell.x - 1) * 80 + 40
             const y = 240 - (cell.y - 1) * 60 - 30;
             const opacity = cell.count === 0 ? 0.1 : Math.min(0.3 + (cell.count * 0.1), 1);
             
@@ -357,7 +358,7 @@ export default function InteractiveRiskHeatmap({
         </svg>
       </div>
     );
-  };
+  }
 
   // Render scatter plot
   const renderScatterPlot = () => {
@@ -391,8 +392,8 @@ export default function InteractiveRiskHeatmap({
           {Boolean(showTooltip) && <CustomTooltip />}
         </ScatterChart>
       </ResponsiveContainer>
-    );
-  };
+    )
+  }
 
   return (
     <DaisyCard className={`${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>

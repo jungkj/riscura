@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
-// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter'
 import { z } from 'zod';
 import { TestScriptType, TestFrequency, UpdateTestScriptRequest } from '@/types/rcsa.types';
 
@@ -29,13 +29,13 @@ const updateTestScriptSchema = z.object({
   automationCapable: z.boolean().optional(),
   automationScript: z.string().optional(),
   tags: z.array(z.string()).optional(),
-});
+})
 
 // GET /api/test-scripts/[id] - Get a single test script
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params;
+      const { id } = await params
       const user = (request as any).user;
       const testScript = await db.client.testScript.findFirst({
         where: {
@@ -100,7 +100,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params;
+      const { id } = await params
       const user = (request as any).user;
       // Verify test script exists and belongs to organization
       const existingTestScript = await db.client.testScript.findFirst({
@@ -108,14 +108,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
           id,
           organizationId: user.organizationId,
         },
-      });
+      })
 
       if (!existingTestScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
       }
 
       // Parse and validate request body
-      const body = await request.json();
+      const body = await request.json()
       const validationResult = updateTestScriptSchema.safeParse(body);
 
       if (!validationResult.success) {
@@ -167,7 +167,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
             },
           },
         },
-      });
+      })
 
       // Log activity
       await db.client.activity.create({
@@ -183,7 +183,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
             changes: Object.keys(data),
           },
         },
-      });
+      })
 
       return ApiResponseFormatter.success(updatedTestScript);
     },
@@ -195,7 +195,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { id } = await params;
+      const { id } = await params
       const user = (request as any).user;
       // Verify test script exists and belongs to organization
       const testScript = await db.client.testScript.findFirst({
@@ -211,7 +211,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
             },
           },
         },
-      });
+      })
 
       if (!testScript) {
         return ApiResponseFormatter.error('NOT_FOUND', 'Test script not found', { status: 404 });
@@ -229,13 +229,13 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
               message: 'Archive the test script instead of deleting it',
             },
           }
-        );
+        )
       }
 
       // Delete test script (cascade will handle relationships)
       await db.client.testScript.delete({
         where: { id },
-      });
+      })
 
       // Log activity
       await db.client.activity.create({
@@ -252,7 +252,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
             controlCount: testScript._count.controls,
           },
         },
-      });
+      })
 
       return ApiResponseFormatter.success({ id });
     },

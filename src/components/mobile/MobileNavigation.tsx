@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet';
@@ -31,7 +31,7 @@ import { useGesture } from '@use-gesture/react';
   Lock,
   HelpCircle,
   LogOut
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface NavigationItem {
   id: string;
@@ -50,7 +50,7 @@ interface MobileNavigationProps {
     email: string;
     role: string;
     avatar?: string;
-  };
+  }
   notifications?: number;
   className?: string;
 }
@@ -169,12 +169,12 @@ export default function MobileNavigation({
     onDrag: ({ direction: [dx], velocity: [vx], cancel }) => {
       // Swipe right to open navigation (from left edge)
       if (dx > 0 && vx > 0.5 && !isOpen) {
-        setIsOpen(true);
+        setIsOpen(true)
         cancel();
       }
       // Swipe left to close navigation
       else if (dx < 0 && vx > 0.5 && isOpen) {
-        setIsOpen(false);
+        setIsOpen(false)
         cancel();
       }
     }
@@ -185,19 +185,19 @@ export default function MobileNavigation({
     const handleKeyDown = (event: KeyboardEvent) => {
       // Alt + M to toggle mobile menu
       if (event.altKey && event.key === 'm') {
-        event.preventDefault();
+        event.preventDefault()
         setIsOpen(!isOpen);
       }
       
       // Alt + S to open search
       if (event.altKey && event.key === 's') {
-        event.preventDefault();
+        event.preventDefault()
         setIsSearchOpen(true);
       }
       
       // Access keys for navigation items
       if (event.altKey) {
-        const item = navigationItems.find(item => item.accessKey === event.key);
+        const item = navigationItems.find(item => item.accessKey === event.key)
         if (item && item.href) {
           event.preventDefault();
           router.push(item.href);
@@ -207,10 +207,10 @@ export default function MobileNavigation({
       
       // Escape to close
       if (event.key === 'Escape') {
-        setIsOpen(false);
+        setIsOpen(false)
         setIsSearchOpen(false);
       }
-    };
+    }
     
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -220,7 +220,7 @@ export default function MobileNavigation({
   const handleItemClick = (item: NavigationItem) => {
     if (item.children) {
       setExpandedItems(prev => {
-        const newSet = new Set(prev);
+        const newSet = new Set(prev)
         if (newSet.has(item.id)) {
           newSet.delete(item.id);
         } else {
@@ -232,7 +232,7 @@ export default function MobileNavigation({
       router.push(item.href);
       setIsOpen(false);
     }
-  };
+  }
   
   // Filter navigation items based on search
   const filteredItems = searchQuery
@@ -244,11 +244,11 @@ export default function MobileNavigation({
           child.description?.toLowerCase().includes(searchQuery.toLowerCase())
         )
       )
-    : navigationItems;
+    : navigationItems
   
   // Render navigation item
   const renderNavigationItem = (item: NavigationItem, level = 0) => {
-    const isActive = pathname === item.href;
+    const isActive = pathname === item.href
     const isExpanded = expandedItems.has(item.id);
     const hasChildren = item.children && item.children.length > 0;
 
@@ -308,7 +308,7 @@ export default function MobileNavigation({
         )}
       </div>
     );
-  };
+  }
   
   return (
     <>
@@ -456,7 +456,7 @@ export default function MobileNavigation({
                 className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                 onClick={() => {
                   // Handle logout
-                  // console.log('Logging out...');
+                  // console.log('Logging out...')
                 }}
               >
                 <LogOut className="w-5 h-5 mr-3" />

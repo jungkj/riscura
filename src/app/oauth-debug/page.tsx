@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 
 export default function OAuthDebugPage() {
   const [debugInfo, setDebugInfo] = useState<any>(null);
@@ -12,7 +13,7 @@ export default function OAuthDebugPage() {
 
   useEffect(() => {
     // Check for error in URL params
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search)
     const errorParam = urlParams.get('error');
     if (errorParam) {
       setError(`OAuth Error: ${errorParam}`);
@@ -27,36 +28,36 @@ export default function OAuthDebugPage() {
     } catch (err) {
       setError('Failed to fetch debug info');
     }
-  };
+  }
 
   const testGoogleSignIn = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // console.log('[OAuth Debug] Starting Google sign-in...');
+      // console.log('[OAuth Debug] Starting Google sign-in...')
 
       const _result = await signIn('google', {
         redirect: false,
         callbackUrl: '/dashboard',
       });
 
-      // console.log('[OAuth Debug] Sign-in result:', result);
+      // console.log('[OAuth Debug] Sign-in result:', result)
 
       if (result?.error) {
         setError(`Sign-in error: ${result.error}`);
-        // console.error('[OAuth Debug] Sign-in error:', result.error);
+        // console.error('[OAuth Debug] Sign-in error:', result.error)
       } else if (result?.url) {
-        // console.log('[OAuth Debug] Redirecting to:', result.url);
+        // console.log('[OAuth Debug] Redirecting to:', result.url)
         window.location.href = result.url;
       }
     } catch (err) {
-      // console.error('[OAuth Debug] Exception during sign-in:', err);
+      // console.error('[OAuth Debug] Exception during sign-in:', err)
       setError(`Exception: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchDebugInfo();

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Bell, X, Check, Filter, Settings } from 'lucide-react';
 import {
+import { DaisyTabsTrigger, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,7 +14,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 import { useToast } from '@/components/ui/DaisyToast';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';
@@ -44,7 +45,7 @@ export function NotificationCenter() {
   // Fetch notifications
   const fetchNotifications = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const params = new URLSearchParams();
       if (filter === 'unread') params.append('read', 'false');
       
@@ -55,7 +56,7 @@ export function NotificationCenter() {
         setNotifications(data.data.notifications);
       }
     } catch (error) {
-      // console.error('Failed to fetch notifications:', error);
+      // console.error('Failed to fetch notifications:', error)
       toast({
         title: 'Error',
         description: 'Failed to load notifications',
@@ -64,28 +65,28 @@ export function NotificationCenter() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Fetch unread count
   const fetchUnreadCount = async () => {
     try {
-      const response = await fetch('/api/notifications/unread');
+      const response = await fetch('/api/notifications/unread')
       const data = await response.json();
       
       if (data.success) {
         setUnreadCount(data.data.count);
       }
     } catch (error) {
-      // console.error('Failed to fetch unread count:', error);
+      // console.error('Failed to fetch unread count:', error)
     }
-  };
+  }
 
   // Mark notification as read
   const markAsRead = async (notificationId: string) => {
     try {
       const response = await fetch(`/api/notifications/${notificationId}`, {
         method: 'PATCH',
-      });
+      })
       
       if (response.ok) {
         setNotifications(prev =>
@@ -94,13 +95,13 @@ export function NotificationCenter() {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
-      // console.error('Failed to mark as read:', error);
+      // console.error('Failed to mark as read:', error)
     }
-  };
+  }
 
   // Mark all as read
   const markAllAsRead = async () => {
-    const unreadIds = notifications.filter(n => !n.read).map(n => n.id);
+    const unreadIds = notifications.filter(n => !n.read).map(n => n.id)
     if (unreadIds.length === 0) return;
 
     try {
@@ -119,21 +120,21 @@ export function NotificationCenter() {
         });
       }
     } catch (error) {
-      // console.error('Failed to mark all as read:', error);
+      // console.error('Failed to mark all as read:', error)
       toast({
         title: 'Error',
         description: 'Failed to mark notifications as read',
         variant: 'destructive',
       });
     }
-  };
+  }
 
   // Dismiss notification
   const dismissNotification = async (notificationId: string) => {
     try {
       const response = await fetch(`/api/notifications/${notificationId}`, {
         method: 'DELETE',
-      });
+      })
       
       if (response.ok) {
         setNotifications(prev => prev.filter(n => n.id !== notificationId));
@@ -143,9 +144,9 @@ export function NotificationCenter() {
         });
       }
     } catch (error) {
-      // console.error('Failed to dismiss notification:', error);
+      // console.error('Failed to dismiss notification:', error)
     }
-  };
+  }
 
   useEffect(() => {
     fetchNotifications();
@@ -153,7 +154,7 @@ export function NotificationCenter() {
     
     // Set up polling for new notifications
     const interval = setInterval(() => {
-      fetchUnreadCount();
+      fetchUnreadCount()
     }, 60000); // Poll every minute
     
     return () => clearInterval(interval);

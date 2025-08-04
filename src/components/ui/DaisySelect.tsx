@@ -19,7 +19,7 @@ export const DaisySelect = forwardRef<HTMLSelectElement, SelectProps>(
       sm: 'select-sm',
       md: 'select-md',
       lg: 'select-lg',
-    };
+    }
 
     const colorClasses = {
       primary: 'select-primary',
@@ -29,7 +29,7 @@ export const DaisySelect = forwardRef<HTMLSelectElement, SelectProps>(
       success: 'select-success',
       warning: 'select-warning',
       error: 'select-error',
-    };
+    }
 
     return (
       <select
@@ -56,7 +56,7 @@ DaisySelect.displayName = 'DaisySelect';
 // Sub-components for compatibility
 export const DaisySelectTrigger = forwardRef<HTMLSelectElement, SelectProps>(
   ({ children, ...props }, ref) => {
-    return <>{children}</>;
+    return <>{children}</>
   }
 );
 
@@ -66,7 +66,7 @@ export const DaisySelectValue = () => null;
 
 export const DaisySelectContent = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
-};
+}
 
 export const DaisySelectItem = ({
   value,
@@ -76,4 +76,4 @@ export const DaisySelectItem = ({
   children: React.ReactNode;
 }) => {
   return <option value={value}>{children}</option>;
-};
+}

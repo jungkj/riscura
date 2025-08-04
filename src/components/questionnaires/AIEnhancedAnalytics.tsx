@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -10,6 +10,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 import {
   AreaChart, Area, LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
@@ -24,11 +25,11 @@ import {
   BarChart3, LineChart as LineIcon, PieChart as PieIcon,
   RefreshCw, Download, Settings, Info, Lightbulb, ArrowUp,
   ArrowDown, Minus, Users, Clock, Star, ThumbsUp, ThumbsDown
-} from 'lucide-react';
+} from 'lucide-react'
 
 // AI Analytics Types
 interface PredictiveMetric {
-  id: string;
+  id: string
   metric: string;
   currentValue: number;
   predictedValue: number;
@@ -138,7 +139,7 @@ const mockPredictiveMetrics: PredictiveMetric[] = [
     impact: 'medium',
     timeframe: '7d'
   }
-];
+]
 
 const mockRiskScores: RiskScore[] = [
   {
@@ -328,7 +329,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       // Simulate AI processing updates
-      // console.log('AI analysis running...');
+      // console.log('AI analysis running...')
     }, 10000);
 
     return () => clearInterval(interval);
@@ -338,7 +339,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
     setRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setRefreshing(false);
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -346,7 +347,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'down': return ArrowDown;
       default: return Minus;
     }
-  };
+  }
 
   const getTrendColor = (_trend: string) => {
     switch (trend) {
@@ -354,7 +355,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'down': return 'text-red-500';
       default: return 'text-gray-500';
     }
-  };
+  }
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -364,7 +365,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
+  }
 
   const getInsightTypeIcon = (_type: string) => {
     switch (type) {
@@ -374,7 +375,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'alert': return Bell;
       default: return Info;
     }
-  };
+  }
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
@@ -382,7 +383,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'negative': return 'text-red-600';
       default: return 'text-gray-600';
     }
-  };
+  }
 
   const getSentimentIcon = (sentiment: string) => {
     switch (sentiment) {
@@ -390,7 +391,7 @@ export function AIEnhancedAnalytics({ className }: AIEnhancedAnalyticsProps) {
       case 'negative': return ThumbsDown;
       default: return Minus;
     }
-  };
+  }
 
   return (
     <div className={className}>

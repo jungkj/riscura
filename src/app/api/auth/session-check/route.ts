@@ -17,7 +17,7 @@ export async function GET(_request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    // console.error('Session check error:', error);
+    // console.error('Session check error:', error)
     return NextResponse.json(
       {
         authenticated: false,

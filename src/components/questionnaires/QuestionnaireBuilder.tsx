@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -14,13 +14,14 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { toast } from '@/hooks/use-toast';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 
 // import {
   Plus, Trash2, GripVertical, Settings, Brain, Save, X, 
   FileText, Type, Hash, ToggleLeft, Calendar, Upload,
   List, Star, Gauge, CheckSquare, AlertCircle, Info,
   Eye, Code, Target, Zap, Layers, Move, Copy
-} from 'lucide-react';
+} from 'lucide-react'
 
 import type { 
   Questionnaire, 
@@ -55,7 +56,7 @@ export function QuestionnaireBuilder({
   onCancel 
 }: QuestionnaireBuilderProps) {
   // Form state
-  const [title, setTitle] = useState(questionnaire?.title || '');
+  const [title, setTitle] = useState(questionnaire?.title || '')
   const [description, setDescription] = useState(questionnaire?.description || '');
   const [category, setCategory] = useState<QuestionnaireCategory>(questionnaire?.category || 'risk_assessment');
   const [sections, setSections] = useState<QuestionnaireSection[]>(
@@ -64,7 +65,7 @@ export function QuestionnaireBuilder({
   const [aiEnabled, setAiEnabled] = useState(questionnaire?.aiSettings.enabled || false);
   
   // UI state
-  const [activeTab, setActiveTab] = useState('builder');
+  const [activeTab, setActiveTab] = useState('builder')
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -79,7 +80,7 @@ export function QuestionnaireBuilder({
     description: '',
     config: {},
     validation: []
-  });
+  })
 
   const getQuestionTypeIcon = (_type: QuestionType) => {
     switch (type) {
@@ -95,7 +96,7 @@ export function QuestionnaireBuilder({
       case 'file_upload': return <Upload className="w-4 h-4" />;
       default: return <Type className="w-4 h-4" />;
     }
-  };
+  }
 
   const addSection = () => {
     const newSection: QuestionnaireSection = {
@@ -105,23 +106,23 @@ export function QuestionnaireBuilder({
       order: sections.length,
       required: false,
       questions: []
-    };
+    }
     setSections([...sections, newSection]);
     setSelectedSection(newSection.id);
-  };
+  }
 
   const updateSection = (sectionId: string, updates: Partial<QuestionnaireSection>) => {
     setSections(prev => prev.map(section => 
       section.id === sectionId ? { ...section, ...updates } : section
     ));
-  };
+  }
 
   const deleteSection = (sectionId: string) => {
     setSections(prev => prev.filter(section => section.id !== sectionId));
     if (selectedSection === sectionId) {
       setSelectedSection(null);
     }
-  };
+  }
 
   const addQuestion = (sectionId: string, questionData?: Partial<Question>) => {
     const section = sections.find(s => s.id === sectionId);
@@ -139,7 +140,7 @@ export function QuestionnaireBuilder({
       aiGenerated: false,
       tags: [],
       ...questionData
-    };
+    }
 
     setSections(prev => prev.map(s => 
       s.id === sectionId 
@@ -157,7 +158,7 @@ export function QuestionnaireBuilder({
       validation: newQuestion.validation
     });
     setShowQuestionEditor(true);
-  };
+  }
 
   const updateQuestion = (questionId: string, updates: Partial<Question>) => {
     setSections(prev => prev.map(section => ({
@@ -166,7 +167,7 @@ export function QuestionnaireBuilder({
         question.id === questionId ? { ...question, ...updates } : question
       )
     })));
-  };
+  }
 
   const deleteQuestion = (questionId: string) => {
     setSections(prev => prev.map(section => ({
@@ -177,7 +178,7 @@ export function QuestionnaireBuilder({
       setSelectedQuestion(null);
       setShowQuestionEditor(false);
     }
-  };
+  }
 
   const duplicateQuestion = (questionId: string) => {
     const question = sections
@@ -190,7 +191,7 @@ export function QuestionnaireBuilder({
         id: generateId('question'),
         text: `${question.text} (Copy)`,
         order: question.order + 1
-      };
+      }
 
       setSections(prev => prev.map(section => 
         section.id === question.sectionId
@@ -205,7 +206,7 @@ export function QuestionnaireBuilder({
           : section
       ));
     }
-  };
+  }
 
   const saveQuestionForm = () => {
     if (!selectedQuestion) return;
@@ -224,7 +225,7 @@ export function QuestionnaireBuilder({
       title: 'Question Updated',
       description: 'Question settings have been saved successfully',
     });
-  };
+  }
 
   const handleSave = () => {
     if (!title.trim()) {
@@ -367,10 +368,10 @@ export function QuestionnaireBuilder({
         approve: ['admin'],
         analytics: ['admin']
       }
-    };
+    }
 
     onSave(savedQuestionnaire);
-  };
+  }
 
   const QuestionEditor = () => (
     <motion.div
@@ -458,7 +459,7 @@ setQuestionForm(prev => ({ ...prev, required: checked }))} />
                     onChange={(e) = />
 {
                       const newOptions = [...(questionForm.config.options || [])];
-                      newOptions[index] = { ...option, text: e.target.value };
+                      newOptions[index] = { ...option, text: e.target.value }
                       setQuestionForm(prev => ({
                         ...prev,
                         config: { ...prev.config, options: newOptions }
@@ -489,7 +490,7 @@ setQuestionForm(prev => ({ ...prev, required: checked }))} />
                     text: '',
                     value: '',
                     order: (questionForm.config.options || []).length
-                  };
+                  }
                   setQuestionForm(prev => ({
                     ...prev,
                     config: {

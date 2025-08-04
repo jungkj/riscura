@@ -3,11 +3,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { cn } from '@/lib/utils';
 import { 
+import { DaisyCardBody } from '@/components/ui/daisy-components';
   getStatusColor, 
   colorClasses,
   interactiveColors,
@@ -36,7 +37,7 @@ interface EnhancedMetricCardProps {
     value: number;
     max: number;
     showProgress?: boolean;
-  };
+  }
   variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
   className?: string;
   onClick?: () => void;
@@ -45,7 +46,7 @@ interface EnhancedMetricCardProps {
   badge?: {
     text: string;
     variant?: 'default' | 'success' | 'warning' | 'danger';
-  };
+  }
 }
 
 const getVariantStyles = (variant: string) => {
@@ -105,8 +106,8 @@ const getVariantStyles = (variant: string) => {
     accent: 'bg-slate-500',
     hover: 'hover:bg-slate-50/80',
     ring: 'focus:ring-slate-500/20',
-  };
-};
+  }
+}
 
 const MiniSparkline: React.FC<{ data: SparklineData }> = ({ data }) => {
   const { values, trend } = data;
@@ -134,7 +135,7 @@ const MiniSparkline: React.FC<{ data: SparklineData }> = ({ data }) => {
       </svg>
     </div>
   );
-};
+}
 
 const LoadingSkeleton: React.FC = () => (
   <div className="animate-pulse">
@@ -300,4 +301,4 @@ export const EnhancedMetricCard: React.FC<EnhancedMetricCardProps> = ({
       </DaisyCard>
     </motion.div>
   );
-}; 
+} 

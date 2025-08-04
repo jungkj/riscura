@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
   BarChart3,
   TrendingUp,
@@ -37,11 +38,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Table,
   Maximize,
   Minimize
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Comparison data types
 interface ComparisonMetric {
-  id: string;
+  id: string
   name: string;
   category: 'risk' | 'compliance' | 'control' | 'incident' | 'financial';
   current: number;
@@ -165,7 +166,7 @@ const SAMPLE_METRICS: ComparisonMetric[] = [
     changeType: 'absolute',
     significance: 'medium'
   }
-];
+]
 
 const COMPARISON_PERIODS: ComparisonPeriod[] = [
   {
@@ -220,7 +221,7 @@ const COMPARISON_DIMENSIONS: ComparisonDimension[] = [
 
 // Main comparative analysis component
 interface ComparativeAnalysisProps {
-  onExport?: (_data: any, format: string) => void;
+  onExport?: (_data: any, format: string) => void
   onSave?: (_config: ComparisonConfig) => void;
   className?: string;
 }
@@ -241,7 +242,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
 
   // Generate comparison data
   const comparisonData = useMemo(() => {
-    return SAMPLE_METRICS.filter(metric => selectedMetrics.includes(metric.id));
+    return SAMPLE_METRICS.filter(metric => selectedMetrics.includes(metric.id))
   }, [selectedMetrics]);
 
   // Format value based on metric format
@@ -253,7 +254,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
           currency: 'USD',
           minimumFractionDigits: 0,
           maximumFractionDigits: 0
-        }).format(value);
+        }).format(value)
       case 'percentage':
         return `${value}${unit}`;
       case 'number':
@@ -263,11 +264,11 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       default:
         return `${value} ${unit}`;
     }
-  };
+  }
 
   // Get trend icon and color
   const getTrendIndicator = (_trend: string, change: number, significance: string) => {
-    const isPositive = change > 0;
+    const isPositive = change > 0
     const isNegative = change < 0;
     
     let icon;
@@ -282,7 +283,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
     } else {
       icon = <Minus className="w-4 h-4" />;
       colorClass = 'text-gray-500';
-    };
+    }
 
   return (
       <div className={`flex items-center space-x-1 ${colorClass}`}>
@@ -300,7 +301,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         )}
       </div>
     );
-  };
+  }
 
   // Render table view
   const renderTableView = () => (
@@ -357,7 +358,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         </tbody>
       </table>
     </div>
-  );
+  )
 
   // Render chart view
   const renderChartView = () => (
@@ -410,7 +411,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         </DaisyCard>
       ))}
     </div>
-  );
+  )
 
   // Render heatmap view
   const renderHeatmapView = () => (
@@ -418,7 +419,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       <div className="grid grid-cols-6 gap-2 text-xs">
         <div />
         {selectedPeriods.map(periodId => {
-          const period = COMPARISON_PERIODS.find(p => p.id === periodId);
+          const period = COMPARISON_PERIODS.find(p => p.id === periodId)
           return (
             <div key={periodId} className="text-center font-medium">
               {period?.name}
@@ -538,7 +539,7 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
         </DaisyCard>
       </div>
     </div>
-  );
+  )
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -732,6 +733,6 @@ export const ComparativeAnalysis: React.FC<ComparativeAnalysisProps> = ({
       </DaisyCard>
     </div>
   );
-};
+}
 
 export default ComparativeAnalysis; 

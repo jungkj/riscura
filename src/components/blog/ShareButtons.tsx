@@ -14,7 +14,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
     twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-  };
+  }
 
   const copyToClipboard = async () => {
     try {
@@ -22,9 +22,9 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      // console.error('Failed to copy:', err);
+      // console.error('Failed to copy:', err)
     }
-  };
+  }
 
   return (
     <div className="flex items-center gap-2">

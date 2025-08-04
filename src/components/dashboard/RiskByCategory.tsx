@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle, DaisyTooltip } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 
 interface ChartDataItem {
   name: string;
@@ -39,7 +40,7 @@ export const RiskByCategory: React.FC = () => {
       );
     }
     return null;
-  };
+  }
 
   return (
     <DaisyCard >
@@ -74,4 +75,4 @@ export const RiskByCategory: React.FC = () => {
       </DaisyTooltip>
     </DaisyCard>
   );
-};
+}

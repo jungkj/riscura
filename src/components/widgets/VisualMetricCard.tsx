@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { 
+import { DaisyCardBody } from '@/components/ui/daisy-components';
   TrendingUp, 
   TrendingDown, 
   Minus, 
@@ -71,7 +72,7 @@ const statusConfig = {
     icon: Minus,
     label: 'Neutral'
   }
-};
+}
 
 const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: number }> = ({ 
   data, 
@@ -137,7 +138,7 @@ const Sparkline: React.FC<{ data: SparklineData[]; color: string; height?: numbe
       </svg>
     </div>
   );
-};
+}
 
 const ProgressRing: React.FC<{ 
   value: number; 
@@ -191,7 +192,7 @@ const ProgressRing: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
   title,
@@ -224,7 +225,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       default:
         return <Minus className="w-4 h-4 text-gray-400" />;
     }
-  };
+  }
 
   const getTrendColor = () => {
     switch (trend) {
@@ -235,7 +236,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       default:
         return 'text-gray-500';
     }
-  };
+  }
 
   const formatValue = (_val: string | number) => {
     if (typeof val === 'number') {
@@ -244,7 +245,7 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       return val.toString();
     }
     return val;
-  };
+  }
 
   return (
     <motion.div
@@ -397,4 +398,4 @@ export const VisualMetricCard: React.FC<VisualMetricCardProps> = ({
       </DaisyCard>
     </motion.div>
   );
-}; 
+} 

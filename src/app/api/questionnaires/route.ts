@@ -14,9 +14,9 @@ export async function GET(_request: NextRequest) {
         },
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Get questionnaires error:', error);
+    // console.error('Get questionnaires error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -29,9 +29,9 @@ export async function POST(_request: NextRequest) {
         error: 'Create questionnaire not implemented',
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Create questionnaire error:', error);
+    // console.error('Create questionnaire error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -44,9 +44,9 @@ export async function PUT(_request: NextRequest) {
         error: 'Update questionnaire not implemented',
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Update questionnaire error:', error);
+    // console.error('Update questionnaire error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -59,9 +59,9 @@ export async function DELETE(_request: NextRequest) {
         error: 'Delete questionnaire not implemented',
       },
       { status: 501 }
-    );
+    )
   } catch (error) {
-    // console.error('Delete questionnaire error:', error);
+    // console.error('Delete questionnaire error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -11,6 +11,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 // import {
   Brain, Lightbulb, Target, TrendingUp, Shield, AlertTriangle,
@@ -18,11 +19,11 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
   MessageSquare, FileText, BarChart3, Settings, HelpCircle,
   Sparkles, Eye, ThumbsUp, ThumbsDown, Copy, Download,
   ArrowRight, ChevronRight, Info, Clock
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types for AI suggestions and insights
 interface QuestionSuggestion {
-  id: string;
+  id: string
   question: string;
   type: 'multiple_choice' | 'text' | 'rating' | 'boolean';
   category: 'security' | 'compliance' | 'risk' | 'operational';
@@ -104,7 +105,7 @@ const mockQuestionSuggestions: QuestionSuggestion[] = [
     reasoning: 'Business continuity depends on reliable backup procedures',
     riskLevel: 'high'
   }
-];
+]
 
 const mockRiskRecommendations: RiskRecommendation[] = [
   {
@@ -253,7 +254,7 @@ export function AIAssistantPanel({
   useEffect(() => {
     const interval = setInterval(() => {
       // Simulate new suggestions or insights
-      setIsGenerating(false);
+      setIsGenerating(false)
     }, 3000);
 
     return () => clearInterval(interval);
@@ -269,7 +270,7 @@ export function AIAssistantPanel({
 
   const getContextualHelp = (tab: string) => {
     return mockContextualHelp.filter(help => help.relevantFor.includes(tab));
-  };
+  }
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
@@ -279,7 +280,7 @@ export function AIAssistantPanel({
       case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
+  }
 
   const getInsightTypeIcon = (_type: string) => {
     switch (type) {
@@ -289,21 +290,21 @@ export function AIAssistantPanel({
       case 'recommendation': return Lightbulb;
       default: return Info;
     }
-  };
+  }
 
   const handleGenerateQuestions = async () => {
     setIsGenerating(true);
     // Simulate AI generation
     setTimeout(() => {
-      setIsGenerating(false);
+      setIsGenerating(false)
     }, 2000);
-  };
+  }
 
   const handleApplySuggestion = (suggestion: any) => {
     if (onApplySuggestion) {
       onApplySuggestion(suggestion);
     }
-  };
+  }
 
   return (
     <div className={`h-full flex flex-col ${className}`}>

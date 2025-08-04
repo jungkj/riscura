@@ -5,7 +5,7 @@ import ProtectedWrapper from '@/components/auth/ProtectedWrapper';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useSession } from 'next-auth/react';
 import { ChannelType, ChatMessageType } from '@prisma/client';
+import { DaisyCardTitle, DaisySelectValue, DaisyDialogTitle } from '@/components/ui/daisy-components';
 // import {
   MessageSquare,
   Send,
@@ -46,11 +47,11 @@ import { ChannelType, ChatMessageType } from '@prisma/client';
   Check,
   CheckCheck,
   AlertCircle,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface ChatChannel {
-  id: string;
+  id: string
   name: string;
   description?: string;
   type: ChannelType;
@@ -68,11 +69,11 @@ interface ChatChannel {
       lastName: string;
       email: string;
       avatar?: string;
-    };
+    }
   }[];
   _count?: {
     messages: number;
-  };
+  }
   lastMessage?: any;
   unreadCount?: number;
 }
@@ -97,7 +98,7 @@ interface ChatMessage {
     lastName: string;
     email: string;
     avatar?: string;
-  };
+  }
   reactions?: {
     messageId: string;
     userId: string;
@@ -106,7 +107,7 @@ interface ChatMessage {
       id: string;
       firstName: string;
       lastName: string;
-    };
+    }
   }[];
   readReceipts?: {
     userId: string;
@@ -115,7 +116,7 @@ interface ChatMessage {
   parent?: any;
   _count?: {
     replies: number;
-  };
+  }
 }
 
 interface TeamMember {
@@ -135,9 +136,9 @@ const getStatusConfig = (status: string) => {
     away: { color: 'bg-yellow-500', label: 'Away' },
     busy: { color: 'bg-red-500', label: 'Busy' },
     offline: { color: 'bg-gray-500', label: 'Offline' },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.offline;
-};
+}
 
 const formatFileSize = (bytes: number) => {
   if (bytes === 0) return '0 Bytes';
@@ -145,7 +146,7 @@ const formatFileSize = (bytes: number) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
+}
 
 const formatTimestamp = (timestamp: string) => {
   const date = new Date(timestamp);
@@ -160,7 +161,7 @@ const formatTimestamp = (timestamp: string) => {
   } else {
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   }
-};
+}
 
 const TeamChatPage: React.FC = () => {
   const { data: session } = useSession();
@@ -188,7 +189,7 @@ const TeamChatPage: React.FC = () => {
     switch (message.type) {
       case 'new_message':
         if (message.payload.channelId === activeChannel) {
-          setMessages(prev => [...prev, message.payload]);
+          setMessages(prev => [...prev, message.payload])
           scrollToBottom();
         }
         // Update unread count for inactive channels
@@ -197,7 +198,7 @@ const TeamChatPage: React.FC = () => {
             ch.id === message.payload.channelId 
               ? { ...ch, unreadCount: (ch.unreadCount || 0) + 1 }
               : ch
-          ));
+          ))
         }
         break;
       
@@ -215,7 +216,7 @@ const TeamChatPage: React.FC = () => {
       case 'user_left':
         // Refresh channel members
         if (message.payload.channelId === activeChannel) {
-          fetchChannel(activeChannel);
+          fetchChannel(activeChannel)
         }
         break;
       
@@ -226,7 +227,7 @@ const TeamChatPage: React.FC = () => {
             // Check if this user already reacted with this emoji
             const existingReactionIndex = reactions.findIndex(
               r => r.userId === message.payload.userId && r.emoji === message.payload.emoji
-            );
+            )
             
             if (existingReactionIndex === -1) {
               // Add new reaction
@@ -239,9 +240,9 @@ const TeamChatPage: React.FC = () => {
                   firstName: message.payload.userFirstName || '',
                   lastName: message.payload.userLastName || '',
                 },
-              });
+              })
             }
-            return { ...msg, reactions };
+            return { ...msg, reactions }
           }
           return msg;
         }));
@@ -253,24 +254,24 @@ const TeamChatPage: React.FC = () => {
 
   // Fetch channels on mount
   useEffect(() => {
-    fetchChannels();
+    fetchChannels()
   }, []);
 
   // Fetch messages when channel changes
   useEffect(() => {
     if (activeChannel) {
-      fetchMessages(activeChannel);
+      fetchMessages(activeChannel)
       ws.joinChannel(activeChannel);
       return () => {
         ws.leaveChannel(activeChannel);
-      };
+      }
     }
     return undefined;
   }, [activeChannel, ws]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom()
   }, [messages]);
 
   const fetchChannels = async () => {
@@ -284,7 +285,7 @@ const TeamChatPage: React.FC = () => {
         }
       }
     } catch (error) {
-      // console.error('Failed to fetch channels:', error);
+      // console.error('Failed to fetch channels:', error)
       toast({
         title: 'Error',
         description: 'Failed to load channels',
@@ -293,7 +294,7 @@ const TeamChatPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const fetchChannel = async (channelId: string) => {
     try {
@@ -303,9 +304,9 @@ const TeamChatPage: React.FC = () => {
         setChannels(prev => prev.map(ch => ch.id === channelId ? data.data : ch));
       }
     } catch (error) {
-      // console.error('Failed to fetch channel:', error);
+      // console.error('Failed to fetch channel:', error)
     }
-  };
+  }
 
   const fetchMessages = async (channelId: string) => {
     try {
@@ -315,27 +316,27 @@ const TeamChatPage: React.FC = () => {
         setMessages(data.data);
         // Mark messages as read
         if (data.data.length > 0) {
-          const lastMessage = data.data[data.data.length - 1];
+          const lastMessage = data.data[data.data.length - 1]
           ws.markAsRead(channelId, lastMessage.id);
         }
         // Clear unread count
         setChannels(prev => prev.map(ch => 
           ch.id === channelId ? { ...ch, unreadCount: 0 } : ch
-        ));
+        ))
       }
     } catch (error) {
-      // console.error('Failed to fetch messages:', error);
+      // console.error('Failed to fetch messages:', error)
       toast({
         title: 'Error',
         description: 'Failed to load messages',
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }
 
   const handleSendMessage = async () => {
     if (!messageInput.trim() || !activeChannel || isSending) return;
@@ -357,12 +358,12 @@ const TeamChatPage: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         // Message will be added via WebSocket
-        ws.sendChatMessage(activeChannel, messageContent);
+        ws.sendChatMessage(activeChannel, messageContent)
       } else {
         throw new Error(data.error || 'Failed to send message');
       }
     } catch (error) {
-      // console.error('Failed to send message:', error);
+      // console.error('Failed to send message:', error)
       toast({
         title: 'Error',
         description: 'Failed to send message',
@@ -372,35 +373,35 @@ const TeamChatPage: React.FC = () => {
     } finally {
       setIsSending(false);
     }
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }
 
   const handleTyping = () => {
     if (!activeChannel || !ws.connected) return;
     
     // Send typing indicator
-    ws.sendTyping(activeChannel, true);
+    ws.sendTyping(activeChannel, true)
     
     // Clear previous timeout
     if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
+      clearTimeout(typingTimeoutRef.current)
     }
     
     // Stop typing after 3 seconds
     typingTimeoutRef.current = setTimeout(() => {
-      ws.sendTyping(activeChannel, false);
+      ws.sendTyping(activeChannel, false)
     }, 3000);
-  };
+  }
 
   const handleFileUpload = () => {
     fileInputRef.current?.click();
-  };
+  }
 
   const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -414,7 +415,7 @@ const TeamChatPage: React.FC = () => {
       
       try {
         // Upload file to Supabase Storage
-        const formData = new FormData();
+        const formData = new FormData()
         formData.append('file', file);
         formData.append('bucket', 'attachments');
         formData.append('metadata', JSON.stringify({
@@ -448,7 +449,7 @@ const TeamChatPage: React.FC = () => {
               path: uploadData.data.path,
             }],
           }),
-        });
+        })
 
         const data = await response.json();
         if (data.success) {
@@ -458,7 +459,7 @@ const TeamChatPage: React.FC = () => {
           });
         }
       } catch (error) {
-        // console.error('Failed to upload file:', error);
+        // console.error('Failed to upload file:', error)
         toast({
           title: 'Error',
           description: 'Failed to upload file',
@@ -466,7 +467,7 @@ const TeamChatPage: React.FC = () => {
         });
       }
     }
-  };
+  }
 
   const handleReaction = async (messageId: string, emoji: string) => {
     try {
@@ -481,9 +482,9 @@ const TeamChatPage: React.FC = () => {
         ws.addReaction(messageId, emoji);
       }
     } catch (error) {
-      // console.error('Failed to add reaction:', error);
+      // console.error('Failed to add reaction:', error)
     }
-  };
+  }
 
   const handleCreateChannel = async () => {
     if (!newChannelData.name.trim()) return;
@@ -509,14 +510,14 @@ const TeamChatPage: React.FC = () => {
         throw new Error(data.error || 'Failed to create channel');
       }
     } catch (error) {
-      // console.error('Failed to create channel:', error);
+      // console.error('Failed to create channel:', error)
       toast({
         title: 'Error',
         description: 'Failed to create channel',
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const activeChannelData = channels.find(c => c.id === activeChannel);
   const channelMessages = messages;
@@ -1013,6 +1014,6 @@ setNewChannelData(prev => ({ ...prev, description: e.target.value }))} />
       </MainContentArea>
     </ProtectedWrapper>
   );
-};
+}
 
 export default TeamChatPage;

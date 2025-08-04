@@ -1,4 +1,4 @@
-// import { drive_v3 } from 'googleapis';
+// import { drive_v3 } from 'googleapis'
 import { getGoogleDriveAuthService } from './auth.service';
 
 export interface GoogleDriveFile {
@@ -23,12 +23,12 @@ export class GoogleDriveFileService {
 
       // Query for Excel files
       let query =
-        "(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel')";
+        "(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel')"
 
       if (folderId) {
         // Validate folderId to prevent injection attacks
         // Google Drive folder IDs are alphanumeric with hyphens and underscores
-        const isValidFolderId = /^[a-zA-Z0-9_-]+$/.test(folderId);
+        const isValidFolderId = /^[a-zA-Z0-9_-]+$/.test(folderId)
         if (!isValidFolderId) {
           throw new Error('Invalid folder ID format');
         }
@@ -44,7 +44,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      // console.error('Error listing Google Drive files:', error);
+      // console.error('Error listing Google Drive files:', error)
       throw new Error('Failed to list files from Google Drive');
     }
   }
@@ -64,7 +64,7 @@ export class GoogleDriveFileService {
 
       return response.data as GoogleDriveFile;
     } catch (error) {
-      // console.error('Error getting file metadata:', error);
+      // console.error('Error getting file metadata:', error)
       throw new Error('Failed to get file information');
     }
   }
@@ -89,7 +89,7 @@ export class GoogleDriveFileService {
 
       return Buffer.from(response.data as ArrayBuffer);
     } catch (error) {
-      // console.error('Error downloading file:', error);
+      // console.error('Error downloading file:', error)
       throw new Error('Failed to download file from Google Drive');
     }
   }
@@ -118,7 +118,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      // console.error('Error listing folders:', error);
+      // console.error('Error listing folders:', error)
       throw new Error('Failed to list folders from Google Drive');
     }
   }
@@ -147,7 +147,7 @@ export class GoogleDriveFileService {
         .replace(/\}/g, '\\}'); // Escape closing braces
 
       // Search for Excel files containing the query
-      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`;
+      const searchQuery = `(mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.ms-excel') and name contains '${sanitizedQuery}'`
 
       const response = await drive.files.list({
         q: searchQuery,
@@ -158,7 +158,7 @@ export class GoogleDriveFileService {
 
       return (response.data.files || []) as GoogleDriveFile[];
     } catch (error) {
-      // console.error('Error searching files:', error);
+      // console.error('Error searching files:', error)
       throw new Error('Failed to search files in Google Drive');
     }
   }
@@ -172,17 +172,17 @@ export class GoogleDriveFileService {
       const drive = await authService.getDriveClient(userId);
 
       // Try to get About information
-      await drive.about.get({ fields: 'user' });
+      await drive.about.get({ fields: 'user' })
       return true;
     } catch (error) {
-      // console.error('Error checking access:', error);
+      // console.error('Error checking access:', error)
       return false;
     }
   }
 }
 
 // Singleton instance
-let fileServiceInstance: GoogleDriveFileService | null = null;
+let fileServiceInstance: GoogleDriveFileService | null = null
 
 export function getGoogleDriveFileService(): GoogleDriveFileService {
   if (!fileServiceInstance) {

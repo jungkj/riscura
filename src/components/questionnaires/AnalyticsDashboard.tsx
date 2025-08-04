@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import {
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTooltip } from '@/components/ui/daisy-components';
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,7 +28,7 @@ import {
   TrendingUp, TrendingDown, BarChart3,
   Download, RefreshCw, Users, Target,
   CheckCircle, ArrowUp, ArrowDown, Minus
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Mock data generation
 const generateMockData = () => {
@@ -36,7 +37,7 @@ const generateMockData = () => {
     responses: Math.floor(Math.random() * 50) + 20,
     completions: Math.floor(Math.random() * 40) + 15,
     abandonments: Math.floor(Math.random() * 10) + 2
-  }));
+  }))
 
   const completionRates = Array.from({ length: 12 }, (_, i) => ({
     questionnaire: `Q${i + 1}`,
@@ -63,8 +64,8 @@ const generateMockData = () => {
     completionRates,
     scoreDistribution,
     performanceMetrics
-  };
-};
+  }
+}
 
 interface AnalyticsDashboardProps {
   className?: string;
@@ -79,7 +80,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setData(generateMockData());
+      setData(generateMockData())
       setLastUpdated(new Date());
     }, 30000); // Update every 30 seconds
 
@@ -92,14 +93,14 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
     setData(generateMockData());
     setLastUpdated(new Date());
     setIsLoading(false);
-  };
+  }
 
   const handleExport = (format: 'csv' | 'pdf' | 'excel') => {
-    // console.log(`Exporting analytics in ${format} format...`);
-  };
+    // console.log(`Exporting analytics in ${format} format...`)
+  }
 
   // Calculate summary metrics
-  const totalResponses = data.responsesTrend.reduce((sum, day) => sum + day.responses, 0);
+  const totalResponses = data.responsesTrend.reduce((sum, day) => sum + day.responses, 0)
   const totalCompletions = data.responsesTrend.reduce((sum, day) => sum + day.completions, 0);
   const avgCompletionRate = Math.round((totalCompletions / totalResponses) * 100);
   const _avgScore = Math.round(data.performanceMetrics.reduce((sum, metric) => sum + metric.avgScore, 0) / data.performanceMetrics.length);
@@ -119,7 +120,7 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
       );
     }
     return null;
-  };
+  }
 
   return (
     <div className={className}>

@@ -1,5 +1,5 @@
-// import { Risk, RiskCategory } from '@/types';
-// import { RiskCategory as PrismaRiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
+// import { Risk, RiskCategory } from '@/types'
+// import { RiskCategory as PrismaRiskCategory, RiskLevel, RiskStatus } from '@prisma/client'
 import { BaseRepository, RepositoryResult, createPaginatedResult } from './base.repository';
 import { PaginationOptions } from '@/lib/db';
 
@@ -24,7 +24,7 @@ export interface RiskWithControls extends Omit<Risk, 'controls'> {
     controls: number;
     comments: number;
     tasks: number;
-  };
+  }
 }
 
 export class RiskRepository extends BaseRepository<Risk> {
@@ -39,11 +39,11 @@ export class RiskRepository extends BaseRepository<Risk> {
   ): Promise<RepositoryResult<Risk>> {
     const where: any = {
       organizationId,
-    };
+    }
 
     // Apply filters
     if (filters.category) {
-      where.category = filters.category;
+      where.category = filters.category
     }
 
     if (filters.riskLevel) {
@@ -66,7 +66,7 @@ export class RiskRepository extends BaseRepository<Risk> {
     }
 
     if (filters.dateFrom || filters.dateTo) {
-      where.dateIdentified = {};
+      where.dateIdentified = {}
       if (filters.dateFrom) {
         where.dateIdentified.gte = filters.dateFrom;
       }
@@ -76,10 +76,10 @@ export class RiskRepository extends BaseRepository<Risk> {
     }
 
     // Get total count
-    const total = await this.model.count({ where });
+    const total = await this.model.count({ where })
 
     // Get paginated data
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc' } = options;
+    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc' } = options
     const skip = (page - 1) * limit;
 
     const data = await this.model.findMany({
@@ -221,7 +221,7 @@ export class RiskRepository extends BaseRepository<Risk> {
           },
         },
       },
-    });
+    })
   }
 
   // Find risks by category with statistics
@@ -229,7 +229,7 @@ export class RiskRepository extends BaseRepository<Risk> {
     category: PrismaRiskCategory,
     options: PaginationOptions = {}
   ): Promise<RepositoryResult<Risk>> {
-    return this.findFiltered(organizationId, { category }, options);
+    return this.findFiltered(organizationId, { category }, options)
   }
 
   // Find high-priority risks
@@ -257,12 +257,12 @@ export class RiskRepository extends BaseRepository<Risk> {
           },
         },
       },
-    });
+    })
   }
 
   // Find risks due for review
   async findDueForReview(_organizationId: string, daysAhead: number = 30): Promise<Risk[]> {
-    const futureDate = new Date();
+    const futureDate = new Date()
     futureDate.setDate(futureDate.getDate() + daysAhead);
 
     return this.model.findMany({
@@ -293,7 +293,7 @@ export class RiskRepository extends BaseRepository<Risk> {
 
   // Get risk statistics by organization
   async getStatistics(_organizationId: string): Promise<{
-    total: number;
+    total: number
     byCategory: Record<PrismaRiskCategory, number>;
     byLevel: Record<'low' | 'medium' | 'high' | 'critical', number>;
     byStatus: Record<RiskStatus, number>;
@@ -339,7 +339,7 @@ export class RiskRepository extends BaseRepository<Risk> {
       ]);
 
     // Transform grouped results into records
-    const categoryStats = {} as Record<PrismaRiskCategory, number>;
+    const categoryStats = {} as Record<PrismaRiskCategory, number>
     byCategory.forEach((item: any) => {
       categoryStats[item.category as PrismaRiskCategory] = item._count._all;
     });
@@ -361,7 +361,7 @@ export class RiskRepository extends BaseRepository<Risk> {
       byStatus: statusStats,
       averageScore: averageScoreResult._avg.riskScore || 0,
       dueForReview,
-    };
+    }
   }
 
   // Update risk score based on likelihood and impact
@@ -372,7 +372,7 @@ export class RiskRepository extends BaseRepository<Risk> {
     impact: number,
     userId?: string
   ): Promise<Risk> {
-    const riskScore = likelihood * impact;
+    const riskScore = likelihood * impact
     let riskLevel: 'low' | 'medium' | 'high' | 'critical';
 
     if (riskScore >= 20) {
@@ -412,7 +412,7 @@ export class RiskRepository extends BaseRepository<Risk> {
         controlId,
         effectiveness,
       },
-    });
+    })
   }
 
   // Unlink control from risk
@@ -425,7 +425,7 @@ export class RiskRepository extends BaseRepository<Risk> {
           organizationId,
         },
       },
-    });
+    })
   }
 
   // Update control effectiveness for a risk
@@ -446,6 +446,6 @@ export class RiskRepository extends BaseRepository<Risk> {
       data: {
         effectiveness,
       },
-    });
+    })
   }
 }

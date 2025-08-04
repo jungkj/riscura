@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -11,6 +11,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogDescription, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   Plus,
   Target,
@@ -31,14 +32,14 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   RotateCcw,
   Minus,
   Info,
-} from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+} from 'lucide-react'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 
 // Import our API services
-// import { api, Risk } from '@/lib/mockData';
+// import { api, Risk } from '@/lib/mockData'
 import { aiService } from '@/lib/mockAI';
 
 // ============================================================================
@@ -46,7 +47,7 @@ import { aiService } from '@/lib/mockAI';
 // ============================================================================
 
 interface RiskPosition {
-  id: string;
+  id: string
   title: string;
   impact: number; // 1-5
   likelihood: number; // 1-5
@@ -67,12 +68,12 @@ interface RiskEvaluation {
     operational: number;
     reputational: number;
     regulatory: number;
-  };
+  }
   likelihoodCriteria: {
     frequency: number;
     probability: number;
     controls: number;
-  };
+  }
   overallImpact: number;
   overallLikelihood: number;
   riskScore: number;
@@ -115,7 +116,7 @@ interface RiskAssessment {
     confidence: number;
     recommendations: string[];
     insights: string[];
-  };
+  }
 }
 
 interface MatrixCell {
@@ -138,14 +139,14 @@ class RiskScoringEngine {
     '3-1': 'LOW', '3-2': 'MEDIUM', '3-3': 'MEDIUM', '3-4': 'HIGH', '3-5': 'HIGH',
     '4-1': 'MEDIUM', '4-2': 'MEDIUM', '4-3': 'HIGH', '4-4': 'HIGH', '4-5': 'CRITICAL',
     '5-1': 'MEDIUM', '5-2': 'HIGH', '5-3': 'HIGH', '5-4': 'CRITICAL', '5-5': 'CRITICAL',
-  };
+  }
 
   private static readonly LEVEL_COLORS = {
     LOW: '#22c55e',
     MEDIUM: '#eab308',
     HIGH: '#f97316',
     CRITICAL: '#dc2626',
-  };
+  }
 
   // Calculate risk score using weighted factors
   static calculateRiskScore(factors: RiskFactor[]): { likelihood: number; impact: number; score: number } {
@@ -156,12 +157,12 @@ class RiskScoringEngine {
     const impact = this.calculateWeightedAverage(impactFactors);
     const score = likelihood * impact;
 
-    return { likelihood, impact, score };
+    return { likelihood, impact, score }
   }
 
   // Calculate weighted average for factors
   private static calculateWeightedAverage(factors: RiskFactor[]): number {
-    if (factors.length === 0) return 1;
+    if (factors.length === 0) return 1
 
     const totalWeight = factors.reduce((sum, factor) => sum + factor.weight, 0);
     const weightedSum = factors.reduce((sum, factor) => sum + (factor.value * factor.weight), 0);
@@ -171,7 +172,7 @@ class RiskScoringEngine {
 
   // Determine risk level from likelihood and impact
   static getRiskLevel(likelihood: number, impact: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-    const likelihoodRounded = Math.round(likelihood);
+    const likelihoodRounded = Math.round(likelihood)
     const impactRounded = Math.round(impact);
     const key = `${likelihoodRounded}-${impactRounded}`;
     return this.RISK_MATRIX[key] || 'LOW';
@@ -179,12 +180,12 @@ class RiskScoringEngine {
 
   // Get color for risk level
   static getRiskColor(level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'): string {
-    return this.LEVEL_COLORS[level];
+    return this.LEVEL_COLORS[level]
   }
 
   // Generate matrix data for visualization
   static generateMatrixData(): MatrixCell[][] {
-    const matrix: MatrixCell[][] = [];
+    const matrix: MatrixCell[][] = []
     
     for (let impact = 5; impact >= 1; impact--) {
       const row: MatrixCell[] = [];
@@ -240,7 +241,7 @@ const DEFAULT_LIKELIHOOD_FACTORS: Omit<RiskFactor, 'id' | 'value' | 'justificati
     category: 'LIKELIHOOD',
     weight: 0.1,
   },
-];
+]
 
 const DEFAULT_IMPACT_FACTORS: Omit<RiskFactor, 'id' | 'value' | 'justification'>[] = [
   {
@@ -297,7 +298,7 @@ const RiskAssessmentMatrix: React.FC = () => {
     nextReviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     assessor: '',
     status: 'DRAFT',
-  });
+  })
 
   const [existingRisks, setExistingRisks] = useState<Risk[]>([]);
   const [selectedTab, setSelectedTab] = useState('basic');
@@ -311,7 +312,7 @@ const RiskAssessmentMatrix: React.FC = () => {
       ...factor,
       id: `likelihood-${index}`,
       value: 1,
-    }));
+    }))
 
     const impactFactors = DEFAULT_IMPACT_FACTORS.map((factor, index) => ({
       ...factor,
@@ -329,20 +330,20 @@ const RiskAssessmentMatrix: React.FC = () => {
   useEffect(() => {
     const loadRisks = async () => {
       try {
-        const response = await api.risks.getRisks({ limit: 1000 });
+        const response = await api.risks.getRisks({ limit: 1000 })
         // Validate and ensure data is an array of Risk objects
-        const risks = Array.isArray(response.data) ? response.data : [];
+        const risks = Array.isArray(response.data) ? response.data : []
         setExistingRisks(risks);
       } catch (error) {
-        // console.error('Failed to load risks:', error);
+        // console.error('Failed to load risks:', error)
       }
-    };
+    }
     loadRisks();
   }, []);
 
   // Calculate risk scores when factors change
   useEffect(() => {
-    const { likelihood, impact, score } = RiskScoringEngine.calculateRiskScore(assessment.factors);
+    const { likelihood, impact, score } = RiskScoringEngine.calculateRiskScore(assessment.factors)
     const riskLevel = RiskScoringEngine.getRiskLevel(likelihood, impact);
 
     setAssessment(prev => ({
@@ -361,16 +362,16 @@ const RiskAssessmentMatrix: React.FC = () => {
       factors: prev.factors.map(factor =>
         factor.id === factorId ? { ...factor, [field]: value } : factor
       ),
-    }));
-  };
+    }))
+  }
 
   // Add mitigating control
   const addMitigatingControl = () => {
     setAssessment(prev => ({
       ...prev,
       mitigatingControls: [...prev.mitigatingControls, ''],
-    }));
-  };
+    }))
+  }
 
   // Update mitigating control
   const updateMitigatingControl = (_index: number, value: string) => {
@@ -379,21 +380,21 @@ const RiskAssessmentMatrix: React.FC = () => {
       mitigatingControls: prev.mitigatingControls.map((control, i) =>
         i === index ? value : control
       ),
-    }));
-  };
+    }))
+  }
 
   // Remove mitigating control
   const removeMitigatingControl = (_index: number) => {
     setAssessment(prev => ({
       ...prev,
       mitigatingControls: prev.mitigatingControls.filter((_, i) => i !== index),
-    }));
-  };
+    }))
+  }
 
   // Get AI analysis
   const getAIAnalysis = async () => {
     if (!assessment.title || !assessment.description) {
-      toast.error('Please provide a title and description before AI analysis');
+      toast.error('Please provide a title and description before AI analysis')
       return;
     }
 
@@ -421,17 +422,17 @@ const RiskAssessmentMatrix: React.FC = () => {
 
       toast.success('AI analysis completed');
     } catch (error) {
-      // console.error('AI analysis failed:', error);
+      // console.error('AI analysis failed:', error)
       toast.error('Failed to get AI analysis');
     } finally {
       setAiAnalyzing(false);
     }
-  };
+  }
 
   // Save assessment
   const saveAssessment = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       
       const riskData = {
         title: assessment.title,
@@ -445,7 +446,7 @@ const RiskAssessmentMatrix: React.FC = () => {
         dateIdentified: assessment.assessmentDate,
         nextReview: new Date(assessment.nextReviewDate),
         owner: assessment.assessor,
-      };
+      }
 
       if (assessment.riskId) {
         await api.risks.updateRisk(assessment.riskId, riskData);
@@ -461,14 +462,14 @@ const RiskAssessmentMatrix: React.FC = () => {
         title: '',
         description: '',
         status: 'DRAFT',
-      }));
+      }))
     } catch (error) {
-      // console.error('Failed to save assessment:', error);
+      // console.error('Failed to save assessment:', error)
       toast.error('Failed to save risk assessment');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Reset assessment
   const resetAssessment = () => {
@@ -481,16 +482,16 @@ const RiskAssessmentMatrix: React.FC = () => {
       comments: '',
       factors: prev.factors.map(factor => ({ ...factor, value: 1, justification: '' })),
       mitigatingControls: [],
-    }));
-  };
+    }))
+  }
 
   // Generate matrix data with current risks
   const matrixData = useMemo(() => {
-    const matrix = RiskScoringEngine.generateMatrixData();
+    const matrix = RiskScoringEngine.generateMatrixData()
     
     // Populate matrix with existing risks
     existingRisks.forEach(risk => {
-      const likelihoodRounded = Math.round(risk.likelihood);
+      const likelihoodRounded = Math.round(risk.likelihood)
       const impactRounded = Math.round(risk.impact);
       
       if (likelihoodRounded >= 1 && likelihoodRounded <= 5 && 
@@ -1005,6 +1006,6 @@ updateMitigatingControl(index, e.target.value)}
       </DaisyDialog>
     </div>
   );
-};
+}
 
 export default RiskAssessmentMatrix; 

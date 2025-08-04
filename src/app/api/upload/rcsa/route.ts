@@ -41,19 +41,19 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
           errors: ['Invalid file format. Please upload an Excel file (.xlsx or .xls)'],
         },
         { status: 400 }
-      );
+      )
     }
 
     // Convert file to buffer
-    const arrayBuffer = await file.arrayBuffer();
+    const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer);
 
     // Parse Excel file using ExcelJS
-    const workbook = new ExcelJS.Workbook();
+    const workbook = new ExcelJS.Workbook()
     await workbook.xlsx.load(buffer);
 
     // Get the first worksheet
-    const worksheet = workbook.getWorksheet(1);
+    const worksheet = workbook.getWorksheet(1)
 
     if (!worksheet) {
       return NextResponse.json(
@@ -69,8 +69,8 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
     const processedData: RCSARow[] = [];
 
     // Find header row and map columns
-    let headerRow: ExcelJS.Row | undefined;
-    let columnMapping: { [key: string]: number } = {};
+    let headerRow: ExcelJS.Row | undefined
+    let columnMapping: { [key: string]: number } = {}
 
     // Look for headers in the first few rows
     for (let rowIndex = 1; rowIndex <= 5; rowIndex++) {
@@ -85,7 +85,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
         // Check if this row contains expected headers
         const riskIdIdx = headers.findIndex(
           (h) => h.includes('risk') && (h.includes('id') || h.includes('identifier'))
-        );
+        )
         const riskDescIdx = headers.findIndex(
           (h) => h.includes('risk') && (h.includes('description') || h.includes('desc'))
         );
@@ -103,7 +103,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
             riskDescription: riskDescIdx >= 0 ? riskDescIdx + 1 : -1,
             controlId: controlIdIdx >= 0 ? controlIdIdx + 1 : -1,
             controlDescription: controlDescIdx >= 0 ? controlDescIdx + 1 : -1,
-          };
+          }
           break;
         }
       }
@@ -127,7 +127,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
 
     // Process data rows
     worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-      if (rowNumber < startRow) return;
+      if (rowNumber < startRow) return
 
       const values = row.values as any[];
       if (!values || values.length <= 1) return;
@@ -147,13 +147,13 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
 
       // Skip empty rows
       if (!riskId && !riskDescription && !controlId && !controlDescription) {
-        return;
+        return
       }
 
       // Check for duplicate Control IDs (Risk IDs can be repeated for multiple controls)
       if (controlId) {
         if (processedControlIds.has(controlId)) {
-          duplicateControlIds.add(controlId);
+          duplicateControlIds.add(controlId)
           errors.push(`Duplicate Control ID found: ${controlId} (row ${rowNumber})`);
         } else {
           processedControlIds.add(controlId);
@@ -176,11 +176,11 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
           errors,
         },
         { status: 400 }
-      );
+      )
     }
 
     // Get organization ID from authenticated user
-    const organizationId = request.user?.organizationId;
+    const organizationId = request.user?.organizationId
     const userId = request.user?.id;
 
     if (!organizationId) {
@@ -199,7 +199,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
       // Process the data in a transaction
       await db.client.$transaction(async (prisma) => {
         // Group processed data by risk ID to create RCSA entries
-        const rcsaEntryMap = new Map<string, RCSARow[]>();
+        const rcsaEntryMap = new Map<string, RCSARow[]>()
 
         for (const row of processedData) {
           if (row.riskId && row.riskDescription) {
@@ -212,7 +212,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
 
         // Create RCSA entries
         for (const [riskId, rows] of rcsaEntryMap.entries()) {
-          const firstRow = rows[0];
+          const firstRow = rows[0]
 
           // Check if RCSA entry already exists
           const existingRcsaEntry = await prisma.rcsaEntry.findFirst({
@@ -220,7 +220,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
               riskId,
               organizationId,
             },
-          });
+          })
 
           let rcsaEntry;
           if (existingRcsaEntry) {
@@ -231,7 +231,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
                 riskDescription: firstRow.riskDescription!,
                 updatedAt: new Date(),
               },
-            });
+            })
           } else {
             // Create new RCSA entry
             rcsaEntry = await prisma.rcsaEntry.create({
@@ -241,7 +241,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
                 organizationId,
                 uploadedBy: userId,
               },
-            });
+            })
             importedRcsaEntries++;
           }
 
@@ -254,7 +254,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
                   controlId: row.controlId,
                   rcsaEntryId: rcsaEntry.id,
                 },
-              });
+              })
 
               if (!existingControlEntry) {
                 await prisma.controlEntry.create({
@@ -270,23 +270,23 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
         }
       });
 
-      // console.log('Successfully processed RCSA file:');
-      // console.log(`- ${importedRcsaEntries} RCSA entries imported`);
-      // console.log(`- Data grouped by Risk ID and stored with associated controls`);
+      // console.log('Successfully processed RCSA file:')
+      // console.log(`- ${importedRcsaEntries} RCSA entries imported`)
+      // console.log(`- Data grouped by Risk ID and stored with associated controls`)
 
       return NextResponse.json({
         success: true,
         importedCount: importedRcsaEntries,
       });
     } catch (error) {
-      // console.error('Database error:', error);
+      // console.error('Database error:', error)
 
       // Fallback to demonstration mode if database is not available
-      const risks = processedData.filter((row) => row.riskId && row.riskDescription);
+      const risks = processedData.filter((row) => row.riskId && row.riskDescription)
       const uniqueRisks = new Set(risks.map((r) => r.riskId)).size;
 
-      // console.log('Database error, returning processed count:');
-      // console.log(`- ${uniqueRisks} unique RCSA entries would be imported`);
+      // console.log('Database error, returning processed count:')
+      // console.log(`- ${uniqueRisks} unique RCSA entries would be imported`)
 
       return NextResponse.json({
         success: true,
@@ -294,7 +294,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
       });
     }
   } catch (error) {
-    // console.error('Upload error:', error);
+    // console.error('Upload error:', error)
     return NextResponse.json(
       {
         success: false,
@@ -309,7 +309,7 @@ async function handleRCSAUpload(_request: AuthenticatedRequest): Promise<NextRes
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   // Apply authentication middleware manually
   try {
-    const session = (await getServerSession(authOptions)) as any;
+    const session = (await getServerSession(authOptions)) as any
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
@@ -327,7 +327,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
           },
         },
       },
-    });
+    })
 
     if (!user || !user.isActive) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
@@ -338,7 +338,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Create authenticated request
-    const authReq = request as AuthenticatedRequest;
+    const authReq = request as AuthenticatedRequest
     authReq.user = {
       id: user.id,
       email: user.email,
@@ -348,11 +348,11 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       organizationId: user.organizationId,
       permissions: [],
       isActive: user.isActive,
-    };
+    }
 
     return await handleRCSAUpload(authReq);
   } catch (error) {
-    // console.error('Authentication error:', error);
+    // console.error('Authentication error:', error)
     return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
   }
 }

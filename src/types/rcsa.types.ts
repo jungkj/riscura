@@ -1,20 +1,20 @@
 // Standardized RCSA types aligned with Prisma schema
 // import {
   RiskCategory as PrismaRiskCategory,
-  RiskStatus as PrismaRiskStatus,
-  RiskLevel as PrismaRiskLevel,
-  ControlType as PrismaControlType,
-  ControlStatus as PrismaControlStatus,
-  ControlCategory as PrismaControlCategory,
-  AutomationLevel as PrismaAutomationLevel,
-  EffectivenessRating as PrismaEffectivenessRating,
-  Priority as PrismaPriority,
-  ControlEffort as PrismaControlEffort,
-  TestScriptType as PrismaTestScriptType,
-  TestFrequency as PrismaTestFrequency,
-  TestStatus as PrismaTestStatus,
+  RiskStatus as PrismaRiskStatus,;
+  RiskLevel as PrismaRiskLevel,;
+  ControlType as PrismaControlType,;
+  ControlStatus as PrismaControlStatus,;
+  ControlCategory as PrismaControlCategory,;
+  AutomationLevel as PrismaAutomationLevel,;
+  EffectivenessRating as PrismaEffectivenessRating,;
+  Priority as PrismaPriority,;
+  ControlEffort as PrismaControlEffort,;
+  TestScriptType as PrismaTestScriptType,;
+  TestFrequency as PrismaTestFrequency,;
+  TestStatus as PrismaTestStatus,;
 } from '@prisma/client';
-
+;
 // Re-export Prisma enums for consistency
 export const RiskCategory = PrismaRiskCategory;
 export const RiskStatus = PrismaRiskStatus;
@@ -29,7 +29,7 @@ export const ControlEffort = PrismaControlEffort;
 export const TestScriptType = PrismaTestScriptType;
 export const TestFrequency = PrismaTestFrequency;
 export const TestStatus = PrismaTestStatus;
-
+;
 export type RiskCategory = PrismaRiskCategory;
 export type RiskStatus = PrismaRiskStatus;
 export type RiskLevel = PrismaRiskLevel;
@@ -43,17 +43,17 @@ export type ControlEffort = PrismaControlEffort;
 export type TestScriptType = PrismaTestScriptType;
 export type TestFrequency = PrismaTestFrequency;
 export type TestStatus = PrismaTestStatus;
-
+;
 // Standardized Risk interface
 export interface Risk {
   id: string;
   title: string;
   description: string;
   category: RiskCategory;
-  likelihood: number; // 1-5 scale
-  impact: number; // 1-5 scale
-  riskScore: number; // calculated: likelihood * impact
-  riskLevel?: RiskLevel; // calculated based on riskScore
+  likelihood: number; // 1-5 scale;
+  impact: number; // 1-5 scale;
+  riskScore: number; // calculated: likelihood * impact;
+  riskLevel?: RiskLevel; // calculated based on riskScore;
   owner?: string;
   status: RiskStatus;
   dateIdentified?: Date;
@@ -64,7 +64,7 @@ export interface Risk {
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-
+;
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -81,38 +81,38 @@ export interface Control {
   category: ControlCategory;
   frequency: string;
   automationLevel: AutomationLevel;
-  effectiveness: number; // 0-1 scale (STANDARDIZED)
+  effectiveness: number; // 0-1 scale (STANDARDIZED);
   effectivenessRating?: EffectivenessRating;
   owner?: string;
   operatorId?: string;
   reviewerId?: string;
   status: ControlStatus;
   priority?: Priority;
-
+;
   // Testing fields
   lastTestDate?: Date;
   nextTestDate?: Date;
   testResults?: string;
-
+;
   // Business context
   businessUnit?: string;
   department?: string;
   location?: string;
   cost?: number;
   effort?: ControlEffort;
-
+;
   // Custom fields
   tags: string[];
   customFields?: Record<string, any>;
-
+;
   // Multi-tenant isolation
   organizationId: string;
-
+;
   // Audit fields
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-
+;
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -126,10 +126,10 @@ export interface ControlRiskMapping {
   id: string;
   riskId: string;
   controlId: string;
-  effectiveness: number; // 0-1 scale (STANDARDIZED)
+  effectiveness: number; // 0-1 scale (STANDARDIZED);
   createdAt: Date;
   updatedAt: Date;
-
+;
   // Populated relationships for UI
   risk?: Risk;
   control?: Control;
@@ -142,11 +142,11 @@ export interface AssessmentEvidence {
   controlId?: string;
   name: string;
   description?: string;
-  evidenceType: string; // DOCUMENT, SCREENSHOT, CONFIGURATION, INTERVIEW
+  evidenceType: string; // DOCUMENT, SCREENSHOT, CONFIGURATION, INTERVIEW;
   fileUrl?: string;
   uploadedBy: string;
   uploadedAt: Date;
-
+;
   // Populated relationships
   control?: Control;
   uploader?: User;
@@ -165,24 +165,24 @@ export interface AssessmentFinding {
   assignedTo?: string;
   createdAt: Date;
   updatedAt: Date;
-
+;
   // Populated relationships
   control?: Control;
   assignee?: User;
 }
 
 export enum FindingSeverity {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  CRITICAL = 'CRITICAL',
+  LOW = 'LOW',;
+  MEDIUM = 'MEDIUM',;
+  HIGH = 'HIGH',;
+  CRITICAL = 'CRITICAL',;
 }
 
 export enum FindingStatus {
-  OPEN = 'OPEN',
-  IN_PROGRESS = 'IN_PROGRESS',
-  RESOLVED = 'RESOLVED',
-  CLOSED = 'CLOSED',
+  OPEN = 'OPEN',;
+  IN_PROGRESS = 'IN_PROGRESS',;
+  RESOLVED = 'RESOLVED',;
+  CLOSED = 'CLOSED',;
 }
 
 // Request/Response types for API
@@ -322,11 +322,11 @@ export interface PaginatedResponse<T> {
     totalPages: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
-  };
+  }
   meta?: {
     filters?: Record<string, any>;
     sorts?: Record<string, 'asc' | 'desc'>;
-  };
+  }
 }
 
 export interface ApiResponse<T> {
@@ -336,7 +336,7 @@ export interface ApiResponse<T> {
     code: string;
     message: string;
     details?: any;
-  };
+  }
   meta?: Record<string, any>;
 }
 
@@ -452,15 +452,15 @@ export interface TestScript {
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;
-
+;
   // Relations
   controls?: ControlTestScript[];
   testExecutions?: TestExecution[];
 }
 
-/**
- * Represents the many-to-many relationship between Controls and Test Scripts
- * This interface is used for both database relations and API responses
+/**;
+ * Represents the many-to-many relationship between Controls and Test Scripts;
+ * This interface is used for both database relations and API responses;
  */
 export interface ControlTestScript {
   id: string;
@@ -469,10 +469,10 @@ export interface ControlTestScript {
   isMandatory: boolean;
   createdAt: Date;
   updatedAt: Date;
-
+;
   // Relations - can be either full objects or partial depending on context
-  control?:
-    | Control
+  control?:;
+    | Control;
     | {
         id: string;
         title: string;
@@ -480,13 +480,13 @@ export interface ControlTestScript {
         status: ControlStatus;
         category?: ControlCategory;
         effectiveness?: number;
-      };
+      }
   testScript?: TestScript;
 }
 
 // Type alias for backward compatibility - will be deprecated
 export type TestScriptControl = ControlTestScript;
-
+;
 export interface TestExecution {
   id: string;
   testScriptId: string;
@@ -500,7 +500,7 @@ export interface TestExecution {
   duration?: number;
   createdAt: Date;
   updatedAt: Date;
-
+;
   // Relations
   testScript?: TestScript;
   executor?: User;
@@ -531,7 +531,7 @@ export interface CreateTestScriptRequest {
   automationCapable?: boolean;
   automationScript?: string;
   tags?: string[];
-  controlIds?: string[]; // Controls to associate with
+  controlIds?: string[]; // Controls to associate with;
 }
 
 export interface UpdateTestScriptRequest {

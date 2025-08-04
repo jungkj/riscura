@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -13,6 +13,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import {
   AlertTriangle,
   Brain,
@@ -43,11 +44,11 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   ChevronRight,
   ChevronDown,
   Info,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface RiskScenario {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: 'cybersecurity' | 'operational' | 'financial' | 'compliance' | 'strategic';
@@ -63,7 +64,7 @@ interface RiskScenario {
     min: number;
     max: number;
     currency: string;
-  };
+  }
   aiConfidence: number;
   lastUpdated: Date;
   status: 'active' | 'monitoring' | 'resolved' | 'archived';
@@ -104,7 +105,7 @@ interface ScenarioSimulation {
 interface SimulationParameters {
   timeframe: number; // days
   iterations: number;
-  variables: { [key: string]: number };
+  variables: { [key: string]: number }
 }
 
 interface SimulationResults {
@@ -259,11 +260,11 @@ const sampleScenarios: RiskScenario[] = [
     lastUpdated: new Date('2024-01-19'),
     status: 'monitoring',
   },
-];
+]
 
 // Scenario Card Component
 const ScenarioCard: React.FC<{
-  scenario: RiskScenario;
+  scenario: RiskScenario
   onView: (scenario: RiskScenario) => void;
   onSimulate: (scenario: RiskScenario) => void;
 }> = ({ scenario, onView, onSimulate }) => {
@@ -274,16 +275,16 @@ const ScenarioCard: React.FC<{
       'financial': { color: 'text-green-600', bg: 'bg-green-50', icon: DollarSign },
       'compliance': { color: 'text-purple-600', bg: 'bg-purple-50', icon: Target },
       'strategic': { color: 'text-orange-600', bg: 'bg-orange-50', icon: TrendingUp },
-    };
+    }
     return configs[category as keyof typeof configs] || configs.operational;
-  };
+  }
 
   const getRiskLevelConfig = (score: number) => {
-    if (score >= 60) return { color: 'text-semantic-error', label: 'Critical' };
-    if (score >= 40) return { color: 'text-semantic-warning', label: 'High' };
-    if (score >= 20) return { color: 'text-semantic-warning', label: 'Medium' };
-    return { color: 'text-semantic-success', label: 'Low' };
-  };
+    if (score >= 60) return { color: 'text-semantic-error', label: 'Critical' }
+    if (score >= 40) return { color: 'text-semantic-warning', label: 'High' }
+    if (score >= 20) return { color: 'text-semantic-warning', label: 'Medium' }
+    return { color: 'text-semantic-success', label: 'Low' }
+  }
 
   const categoryConfig = getCategoryConfig(scenario.category);
   const riskConfig = getRiskLevelConfig(scenario.riskScore);
@@ -394,11 +395,11 @@ const ScenarioCard: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Simulation Interface Component
 const SimulationInterface: React.FC<{
-  scenario: RiskScenario;
+  scenario: RiskScenario
   onClose: () => void;
 }> = ({ scenario, onClose }) => {
   const [isRunning, setIsRunning] = useState(false);
@@ -416,7 +417,7 @@ const SimulationInterface: React.FC<{
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
-          clearInterval(progressInterval);
+          clearInterval(progressInterval)
           return 100;
         }
         return prev + 10;
@@ -424,7 +425,7 @@ const SimulationInterface: React.FC<{
     }, 200);
 
     // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000))
 
     // Generate mock results
     const mockResults: SimulationResults = {
@@ -444,11 +445,11 @@ const SimulationInterface: React.FC<{
         'Increase monitoring frequency by 50%',
         'Conduct employee security awareness training',
       ],
-    };
+    }
 
     setResults(mockResults);
     setIsRunning(false);
-  };
+  }
 
   return (
     <DaisyDialog open onOpenChange={onClose} >
@@ -686,11 +687,11 @@ const SimulationInterface: React.FC<{
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}
 
 // Main Risk Scenario Modeling Component
 export const RiskScenarioModeling: React.FC = () => {
-  const [scenarios] = useState<RiskScenario[]>(sampleScenarios);
+  const [scenarios] = useState<RiskScenario[]>(sampleScenarios)
   const [selectedScenario, setSelectedScenario] = useState<RiskScenario | null>(null);
   const [showSimulation, setShowSimulation] = useState(false);
   const [viewingScenario, setViewingScenario] = useState<RiskScenario | null>(null);
@@ -698,11 +699,11 @@ export const RiskScenarioModeling: React.FC = () => {
   const handleSimulate = (scenario: RiskScenario) => {
     setSelectedScenario(scenario);
     setShowSimulation(true);
-  };
+  }
 
   const handleView = (scenario: RiskScenario) => {
     setViewingScenario(scenario);
-  };
+  }
 
   const activeScenarios = scenarios.filter(s => s.status === 'active').length;
   const avgConfidence = Math.round(scenarios.reduce((sum, s) => sum + s.aiConfidence, 0) / scenarios.length);
@@ -799,6 +800,6 @@ export const RiskScenarioModeling: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 export default RiskScenarioModeling;

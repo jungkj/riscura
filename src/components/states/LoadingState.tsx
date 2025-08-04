@@ -3,10 +3,11 @@
 import React from 'react';
 import { designTokens } from '@/lib/design-system/tokens';
 import { ActionIcons } from '@/components/icons/IconLibrary';
+import { DaisySkeleton } from '@/components/ui/daisy-components';
 
 // Loading spinner component
 interface SpinnerProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   color?: 'primary' | 'secondary' | 'white';
   className?: string;
 }
@@ -22,13 +23,13 @@ export const Spinner: React.FC<SpinnerProps> = ({
     md: 'w-6 h-6',
     lg: 'w-8 h-8',
     xl: 'w-12 h-12',
-  };
+  }
 
   const colorClasses = {
     primary: 'text-blue-600',
     secondary: 'text-gray-600',
     white: 'text-white',
-  };
+  }
 
   return (
     <div
@@ -56,11 +57,11 @@ export const Spinner: React.FC<SpinnerProps> = ({
       </svg>
     </div>
   );
-};
+}
 
 // Pulse loading animation
 interface PulseProps {
-  className?: string;
+  className?: string
   children?: React.ReactNode;
 }
 
@@ -70,7 +71,7 @@ export const Pulse: React.FC<PulseProps> = ({ className = '', children }) => (
 
 // Skeleton loading components
 interface SkeletonProps {
-  className?: string;
+  className?: string
   width?: string | number;
   height?: string | number;
   rounded?: boolean;
@@ -82,7 +83,7 @@ export const Skeleton: React.FC<DaisySkeletonProps> = ({
   height,
   rounded = false,
 }) => {
-  const style: React.CSSProperties = {};
+  const style: React.CSSProperties = {}
   if (width) style.width = typeof width === 'number' ? `${width}px` : width;
   if (height) style.height = typeof height === 'number' ? `${height}px` : height;
 
@@ -93,11 +94,11 @@ export const Skeleton: React.FC<DaisySkeletonProps> = ({
       role="status"
       aria-label="Loading content" />
   );
-};
+}
 
 // Skeleton text lines
 export const SkeletonText: React.FC<{
-  lines?: number;
+  lines?: number
   className?: string;
 }> = ({ lines = 3, className = '' }) => (
   <div className={`space-y-2 ${className}`}>
@@ -109,7 +110,7 @@ export const SkeletonText: React.FC<{
 
 // Card skeleton
 export const SkeletonCard: React.FC<{
-  showAvatar?: boolean;
+  showAvatar?: boolean
   showImage?: boolean;
   className?: string;
 }> = ({ showAvatar = false, showImage = false, className = '' }) => (
@@ -142,7 +143,7 @@ export const SkeletonCard: React.FC<{
 
 // Table skeleton
 export const SkeletonTable: React.FC<{
-  rows?: number;
+  rows?: number
   columns?: number;
   className?: string;
 }> = ({ rows = 5, columns = 4, className = '' }) => (
@@ -173,7 +174,7 @@ export const SkeletonTable: React.FC<{
 
 // Loading overlay
 interface LoadingOverlayProps {
-  isLoading: boolean;
+  isLoading: boolean
   children: React.ReactNode;
   message?: string;
   className?: string;
@@ -220,14 +221,14 @@ export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
     sm: 'h-1',
     md: 'h-2',
     lg: 'h-3',
-  };
+  }
 
   const colorClasses = {
     primary: 'bg-blue-600',
     success: 'bg-green-600',
     warning: 'bg-yellow-600',
     error: 'bg-red-600',
-  };
+  }
 
   const clampedProgress = Math.min(100, Math.max(0, progress));
 
@@ -251,11 +252,11 @@ export const ProgressBar: React.FC<DaisyProgressBarProps />= ({
       </div>
     </div>
   );
-};
+}
 
 // Dots loading animation
 export const DotsLoading: React.FC<{
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg'
   color?: 'primary' | 'secondary' | 'white';
   className?: string;
 }> = ({ size = 'md', color = 'primary', className = '' }) => {
@@ -263,13 +264,13 @@ export const DotsLoading: React.FC<{
     sm: 'w-1 h-1',
     md: 'w-2 h-2',
     lg: 'w-3 h-3',
-  };
+  }
 
   const colorClasses = {
     primary: 'bg-blue-600',
     secondary: 'bg-gray-600',
     white: 'bg-white',
-  };
+  }
 
   return (
     <div className={`flex space-x-1 ${className}`} role="status" aria-label="Loading">
@@ -284,11 +285,11 @@ export const DotsLoading: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 // Loading button state
 interface LoadingButtonProps {
-  isLoading: boolean;
+  isLoading: boolean
   children: React.ReactNode;
   loadingText?: string;
   disabled?: boolean;
@@ -322,7 +323,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
 
 // Page loading component
 export const PageLoading: React.FC<{
-  message?: string;
+  message?: string
   showLogo?: boolean;
   className?: string;
 }> = ({ message = 'Loading page...', showLogo = false, className = '' }) => (
@@ -342,7 +343,7 @@ export const PageLoading: React.FC<{
 
 // Section loading component
 export const SectionLoading: React.FC<{
-  title?: string;
+  title?: string
   description?: string;
   className?: string;
 }> = ({ title = 'Loading...', description, className = '' }) => (
@@ -355,7 +356,7 @@ export const SectionLoading: React.FC<{
 
 // Inline loading component
 export const InlineLoading: React.FC<{
-  text?: string;
+  text?: string
   size?: 'sm' | 'md';
   className?: string;
 }> = ({ text = 'Loading...', size = 'sm', className = '' }) => (
@@ -439,7 +440,7 @@ export const LoadingStates = {
       </div>
     </div>
   ),
-};
+}
 
 export default {
   Spinner,
@@ -456,4 +457,4 @@ export default {
   SectionLoading,
   InlineLoading,
   LoadingStates,
-};
+}

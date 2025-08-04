@@ -6,7 +6,7 @@ import { db } from '@/lib/db';
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     // Get user from request (added by middleware)
-    const user = (req as any).user;
+    const user = (req as any).user
 
     if (!user || !user.organizationId) {
       return NextResponse.json(
@@ -21,11 +21,11 @@ export const GET = withApiMiddleware(
       const timeRange = searchParams.get('timeRange') || '30d';
 
       // Calculate date range
-      const now = new Date();
+      const now = new Date()
       const daysBack = timeRange === '7d' ? 7 : timeRange === '90d' ? 90 : 30;
       const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
 
-      let analyticsData = {};
+      let analyticsData = {}
 
       switch (type) {
         case 'overview':
@@ -59,7 +59,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      // console.error('Error fetching analytics:', error);
+      // console.error('Error fetching analytics:', error)
       return NextResponse.json(
         {
           success: false,
@@ -126,7 +126,7 @@ async function getDashboardAnalytics(_organizationId: string, startDate: Date) {
         where: { organizationId },
         _count: { id: true },
       }),
-    ]);
+    ])
 
   const [risks, controls, documents, questionnaires] = totalCounts;
 
@@ -160,7 +160,7 @@ async function getDashboardAnalytics(_organizationId: string, startDate: Date) {
         count: item._count.id,
       })),
     },
-  };
+  }
 }
 
 async function getRiskAnalytics(_organizationId: string, startDate: Date) {
@@ -217,7 +217,7 @@ async function getRiskAnalytics(_organizationId: string, startDate: Date) {
       level: risk.riskLevel,
       score: risk.riskScore,
     })),
-  };
+  }
 }
 
 async function getControlAnalytics(_organizationId: string, startDate: Date) {
@@ -263,7 +263,7 @@ async function getControlAnalytics(_organizationId: string, startDate: Date) {
       max: effectivenessStats._max?.effectiveness || 0,
       total: effectivenessStats._count || 0,
     },
-  };
+  }
 }
 
 async function getComplianceAnalytics(_organizationId: string, startDate: Date) {
@@ -286,7 +286,7 @@ async function getComplianceAnalytics(_organizationId: string, startDate: Date) 
       const documents = await db.client.document.findMany({
         where: { organizationId },
         select: { type: true },
-      });
+      })
       return documents.reduce(
         (acc, doc) => {
           const type = doc.type || 'Other';
@@ -314,5 +314,5 @@ async function getComplianceAnalytics(_organizationId: string, startDate: Date) 
       category: type,
       count: count,
     })),
-  };
+  }
 }

@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/dashboard');
+      router.replace('/dashboard')
     }
   }, [isAuthenticated, router]);
 

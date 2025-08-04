@@ -8,7 +8,7 @@ export class CloudStorageService {
   constructor() {
     // In production, this would use S3, GCS, or Azure Blob Storage
     // For now, we'll use local filesystem
-    this.baseDir = process.env.STORAGE_PATH || path.join(process.cwd(), 'storage');
+    this.baseDir = process.env.STORAGE_PATH || path.join(process.cwd(), 'storage')
   }
 
   async uploadFile(
@@ -19,27 +19,27 @@ export class CloudStorageService {
   ): Promise<string> {
     try {
       // Ensure storage directory exists
-      const uploadDir = path.join(this.baseDir, folder);
+      const uploadDir = path.join(this.baseDir, folder)
       await fs.mkdir(uploadDir, { recursive: true });
 
       // Generate unique filename
-      const uniqueId = crypto.randomBytes(16).toString('hex');
+      const uniqueId = crypto.randomBytes(16).toString('hex')
       const ext = path.extname(fileName);
       const baseName = path.basename(fileName, ext);
       const uniqueFileName = `${baseName}-${uniqueId}${ext}`;
 
       // Save file
-      const filePath = path.join(uploadDir, uniqueFileName);
+      const filePath = path.join(uploadDir, uniqueFileName)
       await fs.writeFile(filePath, buffer);
 
       // Return relative path that can be used to construct URLs
-      const relativePath = path.relative(this.baseDir, filePath);
+      const relativePath = path.relative(this.baseDir, filePath)
 
       // In production, this would return a CDN URL
       // For now, return a path that can be served by Next.js API
-      return `/api/files/${relativePath.replace(/\\/g, '/')}`;
+      return `/api/files/${relativePath.replace(/\\/g, '/')}`
     } catch (error) {
-      // console.error('Error uploading file:', error);
+      // console.error('Error uploading file:', error)
       throw new Error('Failed to upload file');
     }
   }
@@ -47,11 +47,11 @@ export class CloudStorageService {
   async downloadFile(filePath: string): Promise<Buffer> {
     try {
       // Extract relative path from URL
-      const relativePath = filePath.replace(/^\/api\/files\//, '');
+      const relativePath = filePath.replace(/^\/api\/files\//, '')
       const fullPath = path.join(this.baseDir, relativePath);
 
       // Security check - ensure path doesn't escape base directory
-      const resolvedPath = path.resolve(fullPath);
+      const resolvedPath = path.resolve(fullPath)
       const resolvedBase = path.resolve(this.baseDir);
 
       if (!resolvedPath.startsWith(resolvedBase)) {
@@ -59,10 +59,10 @@ export class CloudStorageService {
       }
 
       // Read and return file
-      const buffer = await fs.readFile(resolvedPath);
+      const buffer = await fs.readFile(resolvedPath)
       return buffer;
     } catch (error) {
-      // console.error('Error downloading file:', error);
+      // console.error('Error downloading file:', error)
       throw new Error('Failed to download file');
     }
   }
@@ -70,11 +70,11 @@ export class CloudStorageService {
   async deleteFile(filePath: string): Promise<void> {
     try {
       // Extract relative path from URL
-      const relativePath = filePath.replace(/^\/api\/files\//, '');
+      const relativePath = filePath.replace(/^\/api\/files\//, '')
       const fullPath = path.join(this.baseDir, relativePath);
 
       // Security check
-      const resolvedPath = path.resolve(fullPath);
+      const resolvedPath = path.resolve(fullPath)
       const resolvedBase = path.resolve(this.baseDir);
 
       if (!resolvedPath.startsWith(resolvedBase)) {
@@ -82,12 +82,12 @@ export class CloudStorageService {
       }
 
       // Delete file
-      await fs.unlink(resolvedPath);
+      await fs.unlink(resolvedPath)
     } catch (error) {
-      // console.error('Error deleting file:', error);
+      // console.error('Error deleting file:', error)
       // Don't throw error if file doesn't exist
       if ((error as any).code !== 'ENOENT') {
-        throw new Error('Failed to delete file');
+        throw new Error('Failed to delete file')
       }
     }
   }
@@ -98,7 +98,7 @@ export class CloudStorageService {
       const fullPath = path.join(this.baseDir, relativePath);
 
       // Security check
-      const resolvedPath = path.resolve(fullPath);
+      const resolvedPath = path.resolve(fullPath)
       const resolvedBase = path.resolve(this.baseDir);
 
       if (!resolvedPath.startsWith(resolvedBase)) {
@@ -122,7 +122,7 @@ export class CloudStorageService {
       const fullPath = path.join(this.baseDir, relativePath);
 
       // Security check
-      const resolvedPath = path.resolve(fullPath);
+      const resolvedPath = path.resolve(fullPath)
       const resolvedBase = path.resolve(this.baseDir);
 
       if (!resolvedPath.startsWith(resolvedBase)) {
@@ -143,15 +143,15 @@ export class CloudStorageService {
         '.jpg': 'image/jpeg',
         '.jpeg': 'image/jpeg',
         '.gif': 'image/gif',
-      };
+      }
 
       return {
         size: stats.size,
         mimeType: mimeTypes[ext] || 'application/octet-stream',
         lastModified: stats.mtime,
-      };
+      }
     } catch (error) {
-      // console.error('Error getting file metadata:', error);
+      // console.error('Error getting file metadata:', error)
       return null;
     }
   }
@@ -160,7 +160,7 @@ export class CloudStorageService {
   async generateSignedUrl(filePath: string, expiresIn: number = 3600): Promise<string> {
     // In production with S3/GCS, this would generate actual signed URLs
     // For now, just return the file path with an expiry timestamp
-    const timestamp = Date.now() + expiresIn * 1000;
+    const timestamp = Date.now() + expiresIn * 1000
     const signature = crypto
       .createHash('sha256')
       .update(`${filePath}:${timestamp}:${process.env.NEXTAUTH_SECRET || 'secret'}`)
@@ -172,7 +172,7 @@ export class CloudStorageService {
   // Verify signed URL (for local implementation)
   verifySignedUrl(url: string): boolean {
     try {
-      const urlObj = new URL(url, 'http://localhost');
+      const urlObj = new URL(url, 'http://localhost')
       const filePath = urlObj.pathname;
       const expires = urlObj.searchParams.get('expires');
       const signature = urlObj.searchParams.get('signature');

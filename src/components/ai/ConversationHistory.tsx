@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   MessageSquare,
   Search,
@@ -25,7 +26,7 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   ChevronDown,
   ChevronRight,
   History
-} from 'lucide-react';
+} from 'lucide-react'
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 
@@ -38,7 +39,7 @@ interface ChatMessage {
     confidence?: number;
     type?: string;
     model?: string;
-  };
+  }
 }
 
 interface Conversation {
@@ -71,7 +72,7 @@ export default function ConversationHistory({
   const { toast } = useToast();
   
   // State management
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([])
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -82,7 +83,7 @@ export default function ConversationHistory({
 
   // Fetch conversations on component mount
   useEffect(() => {
-    fetchConversations();
+    fetchConversations()
   }, [organizationId]);
 
   const fetchConversations = async () => {
@@ -160,14 +161,14 @@ export default function ConversationHistory({
           tags: ['incident-response', 'planning', 'procedures'],
           summary: 'Developed incident response procedures and communication protocols.',
         }
-      ];
+      ]
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise(resolve => setTimeout(resolve, 800))
       
       setConversations(mockConversations);
     } catch (error) {
-      // console.error('Error fetching conversations:', error);
+      // console.error('Error fetching conversations:', error)
       toast({
         title: 'Error',
         description: 'Failed to load conversation history. Please try again.',
@@ -176,14 +177,14 @@ export default function ConversationHistory({
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   // Filter and sort conversations
   const filteredConversations = conversations
     .filter(conv => {
       // Apply search filter
       if (searchQuery) {
-        const query = searchQuery.toLowerCase();
+        const query = searchQuery.toLowerCase()
         return (
           conv.title.toLowerCase().includes(query) ||
           conv.summary?.toLowerCase().includes(query) ||
@@ -196,7 +197,7 @@ export default function ConversationHistory({
       // Apply tab filter
       switch (activeTab) {
         case 'recent':
-          return !conv.isArchived;
+          return !conv.isArchived
         case 'starred':
           return conv.isStarred && !conv.isArchived;
         case 'archived':
@@ -209,7 +210,7 @@ export default function ConversationHistory({
       // Apply additional filter
       switch (selectedFilter) {
         case 'today':
-          return conv.updatedAt.toDateString() === new Date().toDateString();
+          return conv.updatedAt.toDateString() === new Date().toDateString()
         case 'week':
           return conv.updatedAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         case 'month':
@@ -238,8 +239,8 @@ export default function ConversationHistory({
       conv.id === conversationId 
         ? { ...conv, isStarred: !conv.isStarred }
         : conv
-    ));
-  };
+    ))
+  }
 
   const toggleArchive = (conversationId: string) => {
     setConversations(prev => prev.map(conv => 
@@ -247,12 +248,12 @@ export default function ConversationHistory({
         ? { ...conv, isArchived: !conv.isArchived }
         : conv
     ));
-  };
+  }
 
   const deleteConversation = async (conversationId: string) => {
     try {
       // In real implementation, this would call the API
-      setConversations(prev => prev.filter(conv => conv.id !== conversationId));
+      setConversations(prev => prev.filter(conv => conv.id !== conversationId))
       
       toast({
         title: 'Conversation Deleted',
@@ -265,7 +266,7 @@ export default function ConversationHistory({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const deleteSelectedConversations = async () => {
     try {
@@ -283,7 +284,7 @@ export default function ConversationHistory({
         variant: 'destructive',
       });
     }
-  };
+  }
 
   const exportConversations = (conversations: Conversation[]) => {
     const exportData = conversations.map(conv => ({
@@ -305,7 +306,7 @@ export default function ConversationHistory({
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
+  }
 
   const shareConversation = (conversation: Conversation) => {
     const shareText = `ARIA Conversation: ${conversation.title}\n\nSummary: ${conversation.summary}\n\nMessages: ${conversation.messageCount}\nCreated: ${conversation.createdAt.toLocaleDateString()}`;
@@ -322,7 +323,7 @@ export default function ConversationHistory({
         description: 'Conversation details copied to clipboard',
       });
     }
-  };
+  }
 
   const toggleConversationExpansion = (conversationId: string) => {
     setExpandedConversations(prev => {
@@ -334,15 +335,15 @@ export default function ConversationHistory({
       }
       return newSet;
     });
-  };
+  }
 
   const handleConversationSelect = (conversation: Conversation) => {
     onConversationSelect?.(conversation);
-  };
+  }
 
   const restoreConversation = (conversationId: string) => {
     onConversationRestore?.(conversationId);
-  };
+  }
 
   if (isLoading) {
 
@@ -369,7 +370,7 @@ export default function ConversationHistory({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <DaisyCard className={className} >

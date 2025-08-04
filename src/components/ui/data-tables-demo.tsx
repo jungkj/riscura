@@ -1,10 +1,11 @@
 import React from 'react';
 import { EnhancedDataTable, EnhancedDataTableColumn } from './enhanced-data-table';
 import { EnhancedList, EnhancedListItem } from './enhanced-list';
-// import { SimpleBarChart, MetricCard } from './enhanced-charts';
-// import { Card, CardContent, CardHeader, CardTitle } from './card';
+// import { SimpleBarChart, MetricCard } from './enhanced-charts'
+// import { Card, CardContent, CardHeader, CardTitle } from './card'
 import { Badge } from './badge';
 import { 
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyBadge, DaisyTable } from '@/components/ui/daisy-components';
   TrendingUp, 
   Shield, 
   AlertTriangle, 
@@ -67,7 +68,7 @@ const sampleTableData = [
     date: new Date('2024-01-25'),
     category: 'Documentation'
   }
-];
+]
 
 const sampleListData: EnhancedListItem[] = [
   {
@@ -215,20 +216,20 @@ const tableColumns: EnhancedDataTableColumn[] = [
 
 export const DataTablesDemo = () => {
   const handleRowAction = (_action: string, row: any) => {
-    // console.log('Row action:', action, row);
-  };
+    // console.log('Row action:', action, row)
+  }
 
   const handleBulkAction = (_action: string, rows: any[]) => {
-    // console.log('Bulk action:', action, rows);
-  };
+    // console.log('Bulk action:', action, rows)
+  }
 
   const handleListItemClick = (item: EnhancedListItem) => {
-    // console.log('List item clicked:', item);
-  };
+    // console.log('List item clicked:', item)
+  }
 
   const handleListItemAction = (_action: string, item: EnhancedListItem) => {
-    // console.log('List item action:', action, item);
-  };
+    // console.log('List item action:', action, item)
+  }
 
   return (
     <div className="p-8 space-y-8 bg-white min-h-screen">
@@ -444,4 +445,4 @@ export const DataTablesDemo = () => {
       </section>
     </div>
   );
-}; 
+} 

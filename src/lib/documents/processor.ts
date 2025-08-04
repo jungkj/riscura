@@ -4,7 +4,7 @@ import { storage } from '@/lib/storage';
 
 // Helper function to get OpenAI client
 const getOpenAIClient = () {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
     throw new Error('OpenAI API key not configured');
   }
@@ -20,13 +20,13 @@ export interface DocumentAnalysis {
     category: string;
     confidence: number;
     suggestedTags: string[];
-  };
+  }
   extractedContent: {
     text: string;
     risks: ExtractedRisk[];
     controls: ExtractedControl[];
     compliance: ComplianceMapping[];
-  };
+  }
   summary: string;
   anomalies: DocumentAnomaly[];
   language: string;
@@ -77,7 +77,7 @@ export interface DocumentQuality {
     clarity: number;
     structure: number;
     accuracy: number;
-  };
+  }
   recommendations: string[];
 }
 
@@ -90,7 +90,7 @@ export class DocumentProcessor {
         files: true,
         organization: true,
       },
-    });
+    })
 
     if (!document) {
       throw new Error('Document not found');
@@ -101,11 +101,11 @@ export class DocumentProcessor {
     // Process all files attached to the document
     for (const file of document.files) {
       try {
-        const fileBuffer = await storage.download(file.storageId);
+        const fileBuffer = await storage.download(file.storageId)
         const fileText = await this.extractTextFromFile(fileBuffer, file.mimeType);
         extractedText += fileText + '\n\n';
       } catch (error) {
-        // console.error(`Failed to extract text from file ${file.id}:`, error);
+        // console.error(`Failed to extract text from file ${file.id}:`, error)
       }
     }
 
@@ -120,7 +120,7 @@ export class DocumentProcessor {
       this.generateSummary(extractedText),
       this.detectAnomalies(extractedText, document),
       this.assessQuality(extractedText),
-    ]);
+    ])
 
     const language = await this.detectLanguage(extractedText);
 
@@ -136,7 +136,7 @@ export class DocumentProcessor {
         qualityScore: quality.score,
         updatedAt: new Date(),
       },
-    });
+    })
 
     // Log the analysis activity
     await db.client.activity.create({
@@ -156,7 +156,7 @@ export class DocumentProcessor {
         },
         isPublic: false,
       },
-    });
+    })
 
     return {
       classification,
@@ -165,14 +165,14 @@ export class DocumentProcessor {
       anomalies,
       language,
       quality,
-    };
+    }
   }
 
   // Extract text from various file types
   private async extractTextFromFile(fileBuffer: Buffer, mimeType: string): Promise<string> {
     switch (mimeType) {
       case 'text/plain':
-        return fileBuffer.toString('utf-8');
+        return fileBuffer.toString('utf-8')
 
       case 'application/pdf':
         return await this.extractPDFText(fileBuffer);
@@ -197,7 +197,7 @@ export class DocumentProcessor {
   private async extractImageText(imageBuffer: Buffer): Promise<string> {
     try {
       if (!process.env.OPENAI_API_KEY) {
-        throw new Error('OpenAI API key not configured for image processing');
+        throw new Error('OpenAI API key not configured for image processing')
       }
 
       const openai = getOpenAIClient();
@@ -227,7 +227,7 @@ export class DocumentProcessor {
 
       return response.choices[0]?.message?.content || '';
     } catch (error) {
-      // console.error('Failed to extract text from image:', error);
+      // console.error('Failed to extract text from image:', error)
       return '';
     }
   }
@@ -236,19 +236,19 @@ export class DocumentProcessor {
   private async extractPDFText(pdfBuffer: Buffer): Promise<string> {
     // In production, use libraries like pdf-parse
     // For now, return placeholder
-    return '[PDF text extraction requires pdf-parse library]';
+    return '[PDF text extraction requires pdf-parse library]'
   }
 
   private async extractDocxText(docxBuffer: Buffer): Promise<string> {
     // In production, use libraries like mammoth
     // For now, return placeholder
-    return '[DOCX text extraction requires mammoth library]';
+    return '[DOCX text extraction requires mammoth library]'
   }
 
   private async extractXlsxText(xlsxBuffer: Buffer): Promise<string> {
     // In production, use libraries like xlsx
     // For now, return placeholder
-    return '[XLSX text extraction requires xlsx library]';
+    return '[XLSX text extraction requires xlsx library]'
   }
 
   // AI-powered document classification
@@ -256,7 +256,7 @@ export class DocumentProcessor {
     text: string,
     currentCategory?: string
   ): Promise<{
-    category: string;
+    category: string
     confidence: number;
     suggestedTags: string[];
   }> {
@@ -291,7 +291,7 @@ Return a JSON response with:
           category: currentCategory || 'other',
           confidence: 0.8,
           suggestedTags: ['demo', 'auto-classified'],
-        };
+        }
       }
 
       const openai = getOpenAIClient();
@@ -318,20 +318,20 @@ Return a JSON response with:
         category: result.category || currentCategory || 'other',
         confidence: result.confidence || 0.5,
         suggestedTags: result.suggestedTags || [],
-      };
+      }
     } catch (error) {
-      // console.error('Failed to classify document:', error);
+      // console.error('Failed to classify document:', error)
       return {
         category: currentCategory || 'other',
         confidence: 0.0,
         suggestedTags: [],
-      };
+      }
     }
   }
 
   // Extract risks and controls from document content
   private async extractRisksAndControls(text: string): Promise<{
-    text: string;
+    text: string
     risks: ExtractedRisk[];
     controls: ExtractedControl[];
     compliance: ComplianceMapping[];
@@ -372,7 +372,7 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
           risks: [],
           controls: [],
           compliance: [],
-        };
+        }
       }
 
       const openai = getOpenAIClient();
@@ -400,15 +400,15 @@ Return JSON with: { "risks": [...], "controls": [...], "compliance": [...] }
         risks: result.risks || [],
         controls: result.controls || [],
         compliance: result.compliance || [],
-      };
+      }
     } catch (error) {
-      // console.error('Failed to extract risks and controls:', error);
+      // console.error('Failed to extract risks and controls:', error)
       return {
         text,
         risks: [],
         controls: [],
         compliance: [],
-      };
+      }
     }
   }
 
@@ -426,12 +426,12 @@ Keep the summary concise but comprehensive (2-3 paragraphs max).
 
 Document text:
 ${text.substring(0, 4000)}...
-`;
+`
 
     try {
       // Check if OpenAI is configured
       if (!process.env.OPENAI_API_KEY) {
-        return 'Document summary: This is a demo environment where AI-powered document summarization requires OpenAI API configuration.';
+        return 'Document summary: This is a demo environment where AI-powered document summarization requires OpenAI API configuration.'
       }
 
       const openai = getOpenAIClient();
@@ -454,14 +454,14 @@ ${text.substring(0, 4000)}...
 
       return response.choices[0]?.message?.content || 'Summary generation failed';
     } catch (error) {
-      // console.error('Failed to generate summary:', error);
+      // console.error('Failed to generate summary:', error)
       return 'Summary could not be generated';
     }
   }
 
   // Detect document anomalies
   private async detectAnomalies(text: string, document: any): Promise<DocumentAnomaly[]> {
-    const anomalies: DocumentAnomaly[] = [];
+    const anomalies: DocumentAnomaly[] = []
 
     // Check for basic quality issues
     if (text.length < 100) {
@@ -472,7 +472,7 @@ ${text.substring(0, 4000)}...
         location: 'entire document',
         suggestion:
           'Consider adding more detailed content or checking if text extraction was successful',
-      });
+      })
     }
 
     // Check for formatting issues
@@ -486,12 +486,12 @@ ${text.substring(0, 4000)}...
         severity: 'medium',
         location: 'file processing',
         suggestion: 'Install appropriate text extraction libraries for better content analysis',
-      });
+      })
     }
 
     // Add more anomaly detection logic here
 
-    return anomalies;
+    return anomalies
   }
 
   // Assess document quality
@@ -517,13 +517,13 @@ ${text.substring(0, 4000)}...
         clarity < 0.7 ? 'Improve sentence clarity and readability' : '',
         structure < 0.7 ? 'Add better paragraph structure and formatting' : '',
       ].filter(Boolean),
-    };
+    }
   }
 
   // Detect document language
   private async detectLanguage(text: string): Promise<string> {
     // Simple language detection based on common words
-    const sample = text.substring(0, 200).toLowerCase();
+    const sample = text.substring(0, 200).toLowerCase()
 
     if (sample.includes('the ') && sample.includes(' and ') && sample.includes(' of ')) {
       return 'en';
@@ -534,4 +534,4 @@ ${text.substring(0, 4000)}...
 }
 
 // Export singleton instance
-export const documentProcessor = new DocumentProcessor();
+export const documentProcessor = new DocumentProcessor()

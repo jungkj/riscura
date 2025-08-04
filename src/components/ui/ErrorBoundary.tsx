@@ -3,9 +3,10 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
 import { Badge } from './badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisyButton, DaisyBadge } from '@/components/ui/daisy-components';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -42,7 +43,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       reportSent: false,
       showDetails: false,
       retryCount: 0,
-    };
+    }
   }
 
   static getDerivedStateFromError(__error: Error): Partial<ErrorBoundaryState> {
@@ -53,7 +54,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       error,
       errorId,
       showDetails: false,
-    };
+    }
   }
 
   componentDidCatch(__error: Error, errorInfo: ErrorInfo) {
@@ -61,30 +62,30 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.group('🚨 Error Boundary Caught Error');
-      // console.error('Error:', error);
-      // console.error('Error Info:', errorInfo);
-      // console.error('Component Stack:', errorInfo.componentStack);
+      console.group('🚨 Error Boundary Caught Error')
+      // console.error('Error:', error)
+      // console.error('Error Info:', errorInfo)
+      // console.error('Component Stack:', errorInfo.componentStack)
       console.groupEnd();
     }
 
     // Call custom error handler
     if (this.props.onError) {
-      this.props.onError(error, errorInfo);
+      this.props.onError(error, errorInfo)
     }
 
     // Auto-report critical errors
     if (this.props.level === 'critical') {
-      this.reportError();
+      this.reportError()
     }
 
     // Track error in analytics
-    this.trackError(error, errorInfo);
+    this.trackError(error, errorInfo)
   }
 
   componentWillUnmount() {
     // Clear any pending timeouts
-    this.retryTimeouts.forEach((timeout) => clearTimeout(timeout));
+    this.retryTimeouts.forEach((timeout) => clearTimeout(timeout))
   }
 
   private trackError = (__error: Error, errorInfo: ErrorInfo) => {
@@ -95,13 +96,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           description: error.message,
           fatal: this.props.level === 'critical',
           error_id: this.state.errorId,
-        });
+        })
       }
 
       // Send to monitoring service (e.g., Sentry)
       if (typeof window !== 'undefined' && (window as any).Sentry) {
         (window as any).Sentry.withScope((scope: any) => {
-          scope.setTag('errorBoundary', true);
+          scope.setTag('errorBoundary', true)
           scope.setTag('level', this.props.level || 'component');
           scope.setExtra('componentStack', errorInfo.componentStack);
           scope.setExtra('errorId', this.state.errorId);
@@ -109,9 +110,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         });
       }
     } catch (trackingError) {
-      // console.warn('Failed to track error:', trackingError);
+      // console.warn('Failed to track error:', trackingError)
     }
-  };
+  }
 
   private reportError = async () => {
     if (this.state.isReporting || this.state.reportSent) return;
@@ -129,7 +130,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         url: window.location.href,
         level: this.props.level || 'component',
         retryCount: this.state.retryCount,
-      };
+      }
 
       const response = await fetch('/api/errors/report', {
         method: 'POST',
@@ -139,13 +140,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         body: JSON.stringify(errorReport),
         // Add timeout to prevent hanging requests
         signal: AbortSignal.timeout(5000),
-      });
+      })
 
       if (response.ok) {
         this.setState({ reportSent: true, isReporting: false });
       } else {
         // Log the error but don't throw to prevent cascading errors
-        // console.warn('Error report failed with status:', response.status);
+        // console.warn('Error report failed with status:', response.status)
         this.setState({ isReporting: false });
       }
     } catch (reportError) {
@@ -153,10 +154,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       // console.warn(
         'Error reporting failed:',
         reportError instanceof Error ? reportError.message : 'Unknown error'
-      );
+      )
       this.setState({ isReporting: false });
     }
-  };
+  }
 
   private handleRetry = () => {
     const { maxRetries = 3 } = this.props;
@@ -167,7 +168,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     // Exponential backoff for retries
-    const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
+    const delay = Math.min(1000 * Math.pow(2, retryCount), 10000)
 
     const timeout = setTimeout(() => {
       this.setState({
@@ -180,19 +181,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }, delay);
 
     this.retryTimeouts.push(timeout);
-  };
+  }
 
   private handleGoHome = () => {
     window.location.href = '/dashboard';
-  };
+  }
 
   private handleReload = () => {
     window.location.reload();
-  };
+  }
 
   private toggleDetails = () => {
     this.setState({ showDetails: !this.state.showDetails });
-  };
+  }
 
   private getErrorMessage = (): string => {
     const { error } = this.state;
@@ -202,7 +203,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     // Provide user-friendly messages for common errors
     if (error.message.includes('ChunkLoadError')) {
-      return 'Failed to load application resources. This usually happens after an update.';
+      return 'Failed to load application resources. This usually happens after an update.'
     }
 
     if (error.message.includes('Network Error')) {
@@ -218,7 +219,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     return error.message || 'An unexpected error occurred';
-  };
+  }
 
   private getErrorSeverity = (): 'low' | 'medium' | 'high' | 'critical' => {
     const { level } = this.props;
@@ -235,7 +236,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     return 'low';
-  };
+  }
 
   private getSeverityColor = (severity: string): string => {
     switch (severity) {
@@ -250,7 +251,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       default:
         return 'outline';
     }
-  };
+  }
 
   private getRecoveryActions = () => {
     const { error, retryCount } = this.state;
@@ -271,7 +272,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <RefreshCw className="w-4 h-4 mr-2" />
           Try Again {retryCount > 0 && `(${retryCount}/${maxRetries})`}
         </DaisyButton>
-      );
+      )
     }
 
     // Reload page action
@@ -286,7 +287,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <RefreshCw className="w-4 h-4 mr-2" />
           Reload Page
         </DaisyButton>
-      );
+      )
     }
 
     // Go to home action
@@ -301,11 +302,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <Home className="w-4 h-4 mr-2" />
           Go to Dashboard
         </DaisyButton>
-      );
+      )
     }
 
     return actions;
-  };
+  }
 
   render() {
     if (!this.state.hasError) {
@@ -314,7 +315,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     // Use custom fallback if provided
     if (this.props.fallback) {
-      return this.props.fallback;
+      return this.props.fallback
     }
 
     const severity = this.getErrorSeverity();
@@ -442,18 +443,18 @@ export const withErrorBoundary = <P extends object>(
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
     </ErrorBoundary>
-  );
+  )
 
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
   return WrappedComponent;
-};
+}
 
 // Specialized error boundaries for different use cases
 export const PageErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => (
   <ErrorBoundary level="page" showReportButton={true} maxRetries={2}>
     {children}
   </ErrorBoundary>
-);
+)
 
 export const ComponentErrorBoundary: React.FC<{
   children: ReactNode;

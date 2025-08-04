@@ -25,7 +25,7 @@ export interface SubscriptionStatus {
     risks: number;
     storage: string;
     aiQueries: number;
-  };
+  }
 }
 
 export interface SubscriptionRequirement {
@@ -62,7 +62,7 @@ const PLAN_FEATURES = {
     ],
     limits: { users: -1, risks: -1, storage: 'Unlimited', aiQueries: -1 },
   },
-};
+}
 
 // Get subscription status for a user
 export async function getSubscriptionStatus(_userId: string,
@@ -81,7 +81,7 @@ export async function getSubscriptionStatus(_userId: string,
           take: 1,
         },
       },
-    });
+    })
 
     if (!organization) {
       throw new Error('Organization not found');
@@ -91,7 +91,7 @@ export async function getSubscriptionStatus(_userId: string,
     const now = new Date();
 
     // Determine subscription status
-    let status: SubscriptionStatus['status'] = 'FREE';
+    let status: SubscriptionStatus['status'] = 'FREE'
     let isActive = false;
     let trialEnd: Date | null = null;
     let trialDaysLeft: number | null = null;
@@ -116,7 +116,7 @@ export async function getSubscriptionStatus(_userId: string,
 
       // Map Stripe price ID to plan name
       if (subscription.stripePriceId) {
-        if (subscription.stripePriceId.includes('pro')) plan = 'pro';
+        if (subscription.stripePriceId.includes('pro')) plan = 'pro'
         else if (subscription.stripePriceId.includes('enterprise')) plan = 'enterprise';
       }
     }
@@ -134,9 +134,9 @@ export async function getSubscriptionStatus(_userId: string,
       needsUpgrade,
       features: planConfig.features,
       limits: planConfig.limits,
-    };
+    }
   } catch (error) {
-    // console.error('Error getting subscription status:', error);
+    // console.error('Error getting subscription status:', error)
     // Return free plan as fallback
     return {
       isActive: false,
@@ -148,7 +148,7 @@ export async function getSubscriptionStatus(_userId: string,
       needsUpgrade: true,
       features: PLAN_FEATURES.free.features,
       limits: PLAN_FEATURES.free.limits,
-    };
+    }
   }
 }
 
@@ -162,21 +162,21 @@ export function checkSubscriptionRequirements(
   // Check if active subscription is required
   if (requiresActiveSub && !subscriptionStatus.isActive) {
     if (subscriptionStatus.status === 'TRIALING' && !allowTrial) {
-      return { allowed: false, reason: 'Trial access not allowed for this feature' };
+      return { allowed: false, reason: 'Trial access not allowed for this feature' }
     }
     if (!subscriptionStatus.isActive) {
-      return { allowed: false, reason: 'Active subscription required' };
+      return { allowed: false, reason: 'Active subscription required' }
     }
   }
 
   // Check minimum plan requirement
   if (minPlan) {
-    const planHierarchy = { free: 0, pro: 1, enterprise: 2 };
+    const planHierarchy = { free: 0, pro: 1, enterprise: 2 }
     const userPlanLevel = planHierarchy[subscriptionStatus.plan as keyof typeof planHierarchy] || 0;
     const requiredPlanLevel = planHierarchy[minPlan];
 
     if (userPlanLevel < requiredPlanLevel) {
-      return { allowed: false, reason: `${minPlan} plan or higher required` };
+      return { allowed: false, reason: `${minPlan} plan or higher required` }
     }
   }
 
@@ -184,13 +184,13 @@ export function checkSubscriptionRequirements(
   if (requiredFeatures) {
     const missingFeatures = requiredFeatures.filter(
       (feature) => !subscriptionStatus.features.includes(feature)
-    );
+    )
     if (missingFeatures.length > 0) {
-      return { allowed: false, reason: `Missing required features: ${missingFeatures.join(', ')}` };
+      return { allowed: false, reason: `Missing required features: ${missingFeatures.join(', ')}` }
     }
   }
 
-  return { allowed: true };
+  return { allowed: true }
 }
 
 // Middleware to check subscription status
@@ -199,7 +199,7 @@ export async function withSubscription(
   requirements: SubscriptionRequirement = {}
 ) {
   try {
-    import { unstable_getServerSession } from 'next-auth/next';
+    import { unstable_getServerSession } from 'next-auth/next'
 
     if (!session?.user) {
       return NextResponse.json(
@@ -212,7 +212,7 @@ export async function withSubscription(
     const subscriptionStatus = await getSubscriptionStatus(user.id, user.organizationId);
 
     // Check requirements
-    const { allowed, reason } = checkSubscriptionRequirements(subscriptionStatus, requirements);
+    const { allowed, reason } = checkSubscriptionRequirements(subscriptionStatus, requirements)
 
     if (!allowed) {
       return NextResponse.json(
@@ -227,14 +227,14 @@ export async function withSubscription(
     }
 
     // Add subscription status to request headers for use in route handlers
-    const requestHeaders = new Headers(req.headers);
+    const requestHeaders = new Headers(req.headers)
     requestHeaders.set('x-subscription-status', JSON.stringify(subscriptionStatus));
     requestHeaders.set('x-user-id', user.id);
     requestHeaders.set('x-organization-id', user.organizationId);
 
-    return { subscriptionStatus, user, headers: requestHeaders };
+    return { subscriptionStatus, user, headers: requestHeaders }
   } catch (error) {
-    // console.error('Subscription middleware error:', error);
+    // console.error('Subscription middleware error:', error)
     return NextResponse.json(
       { error: 'Failed to verify subscription', code: 'SUBSCRIPTION_ERROR' },
       { status: 500 }
@@ -248,7 +248,7 @@ export function withSubscriptionCheck(
   requirements: SubscriptionRequirement = {}
 ) {
   return async (req: NextRequest, context: any) => {
-    const subscriptionCheck = await withSubscription(req, requirements);
+    const subscriptionCheck = await withSubscription(req, requirements)
 
     if (subscriptionCheck instanceof NextResponse) {
       return subscriptionCheck; // Return error response
@@ -259,22 +259,22 @@ export function withSubscriptionCheck(
       ...context,
       subscription: subscriptionCheck.subscriptionStatus,
       user: subscriptionCheck.user,
-    };
+    }
 
     // Create new request with subscription headers
     const enhancedRequest = new NextRequest(req.url, {
       method: req.method,
       headers: subscriptionCheck.headers,
       body: req.body,
-    });
+    })
 
     return handler(enhancedRequest, enhancedContext);
-  };
+  }
 }
 
 // Utility to get subscription status from session
 export function getSubscriptionFromSession(session: any): SubscriptionStatus | null {
-  if (!session?.user) return null;
+  if (!session?.user) return null
 
   const user = session.user;
   return {
@@ -292,5 +292,5 @@ export function getSubscriptionFromSession(session: any): SubscriptionStatus | n
       PLAN_FEATURES.free.features,
     limits:
       PLAN_FEATURES[user.plan as keyof typeof PLAN_FEATURES]?.limits || PLAN_FEATURES.free.limits,
-  };
+  }
 }

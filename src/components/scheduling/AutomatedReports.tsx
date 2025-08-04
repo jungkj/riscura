@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components';
 // import { 
   Calendar,
   Clock,
@@ -49,11 +50,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Star,
   Archive,
   History
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Scheduling types
 interface ScheduledReport {
-  id: string;
+  id: string
   name: string;
   description: string;
   reportTemplate: string;
@@ -94,7 +95,7 @@ interface Recipient {
     includeCharts: boolean;
     includeRawData: boolean;
     compression: boolean;
-  };
+  }
 }
 
 interface DeliveryOptions {
@@ -117,7 +118,7 @@ interface ReportFilters {
     relativePeriod?: string; // 'last-30-days', 'last-quarter', etc.
     startDate?: Date;
     endDate?: Date;
-  };
+  }
   departments?: string[];
   riskCategories?: string[];
   complianceFrameworks?: string[];
@@ -139,7 +140,7 @@ interface ReportExecution {
     recordsProcessed: number;
     executionTime: number;
     fileSize: number;
-  };
+  }
 }
 
 // Sample data
@@ -245,7 +246,7 @@ const SAMPLE_REPORTS: ScheduledReport[] = [
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-02-01')
   }
-];
+]
 
 const SAMPLE_EXECUTIONS: ReportExecution[] = [
   {
@@ -275,7 +276,7 @@ const SAMPLE_EXECUTIONS: ReportExecution[] = [
 
 // Main automated reports component
 interface AutomatedReportsProps {
-  onCreateReport?: (report: Partial<ScheduledReport>) => void;
+  onCreateReport?: (report: Partial<ScheduledReport>) => void
   onUpdateReport?: (reportId: string, updates: Partial<ScheduledReport>) => void;
   onDeleteReport?: (reportId: string) => void;
   onRunReport?: (reportId: string) => void;
@@ -300,7 +301,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
   // Filter reports
   const filteredReports = reports.filter(report => {
-    if (filterStatus !== 'all' && report.status !== filterStatus) return false;
+    if (filterStatus !== 'all' && report.status !== filterStatus) return false
     if (searchQuery && !report.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
@@ -315,7 +316,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
             updatedAt: new Date()
           }
         : report
-    ));
+    ))
   }, []);
 
   // Run report immediately
@@ -332,13 +333,13 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
         executionTime: 0,
         fileSize: 0
       }
-    };
+    }
 
     setExecutions(prev => [newExecution, ...prev]);
     onRunReport?.(reportId);
 
     // Simulate execution progress
-    let progress = 0;
+    let progress = 0
     const interval = setInterval(() => {
       progress += Math.random() * 20;
       if (progress >= 100) {
@@ -374,24 +375,24 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
 
   // Delete report
   const deleteReport = useCallback((reportId: string) => {
-    setReports(prev => prev.filter(report => report.id !== reportId));
+    setReports(prev => prev.filter(report => report.id !== reportId))
     onDeleteReport?.(reportId);
   }, [onDeleteReport]);
 
   // Get status color
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
+      case 'active': return 'bg-green-100 text-green-800'
       case 'paused': return 'bg-yellow-100 text-yellow-800';
       case 'error': return 'bg-red-100 text-red-800';
       case 'completed': return 'bg-blue-100 text-blue-800';
       default: return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   // Format next run time
   const formatNextRun = (date: Date | undefined) => {
-    if (!date) return 'Not scheduled';
+    if (!date) return 'Not scheduled'
     const now = new Date();
     const diff = date.getTime() - now.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -400,7 +401,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
     if (days > 0) return `In ${days} day${days > 1 ? 's' : ''}`;
     if (hours > 0) return `In ${hours} hour${hours > 1 ? 's' : ''}`;
     return 'Soon';
-  };
+  }
 
   // Render report card
   const renderReportCard = (report: ScheduledReport) => (
@@ -498,7 +499,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
         </div>
       </DaisyCardBody>
     </DaisyCard>
-  );
+  )
 
   // Render execution history
   const renderExecutionHistory = () => (
@@ -515,7 +516,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
   <div className="space-y-4">
 </DaisyCardBody>
           {executions.map(execution => {
-            const report = reports.find(r => r.id === execution.reportId);
+            const report = reports.find(r => r.id === execution.reportId)
             return (
               <div key={execution.id} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
@@ -800,6 +801,6 @@ setSearchQuery(e.target.value)}
       )}
     </div>
   );
-};
+}
 
 export default AutomatedReports; 

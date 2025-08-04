@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -23,19 +24,19 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     alert("Thank you for your inquiry! We'll get back to you within 24 hours.");
     setFormData({ name: '', email: '', company: '', message: '' });
     setIsSubmitting(false);
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">

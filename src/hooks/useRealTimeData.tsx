@@ -33,7 +33,7 @@ export interface RealTimeDataState {
 
 export interface RealTimeDataActions {
   // Data operations
-  refreshData: () => Promise<void>;
+  refreshData: () => Promise<void>
   createRisk: (_risk: Tables['risks']['Insert']) => Promise<Risk>;
   updateRisk: (id: string, updates: Tables['risks']['Update']) => Promise<Risk>;
   deleteRisk: (id: string) => Promise<void>;
@@ -41,11 +41,11 @@ export interface RealTimeDataActions {
   updateControl: (id: string, updates: Tables['controls']['Update']) => Promise<Control>;
 
   // Subscription management
-  subscribe: () => void;
+  subscribe: () => void
   unsubscribe: () => void;
 
   // Metrics
-  getRiskMetrics: () => Promise<any>;
+  getRiskMetrics: () => Promise<any>
   getControlMetrics: () => Promise<any>;
 }
 
@@ -62,21 +62,21 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
     isLoading: true,
     error: null,
     lastUpdated: null,
-  });
+  })
 
   // Refs
-  const serviceRef = useRef<RealTimeDataService>();
+  const serviceRef = useRef<RealTimeDataService>()
   const subscriptionRef = useRef<RealTimeSubscription>();
   const isSubscribedRef = useRef(false);
 
   // Initialize service
   useEffect(() => {
-    serviceRef.current = new RealTimeDataService(organizationId);
+    serviceRef.current = new RealTimeDataService(organizationId)
     return () => {
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
-    };
+    }
   }, [organizationId]);
 
   // Update state helper
@@ -85,13 +85,13 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
       ...prev,
       ...updates,
       lastUpdated: new Date(),
-    }));
+    }))
   }, []);
 
   // Error handler
   const handleError = useCallback(
     (__error: any, context: string) => {
-      // console.error(`Real-time data error (${context}):`, error);
+      // console.error(`Real-time data error (${context}):`, error)
       updateState({
         error: error.message || 'An error occurred',
         isLoading: false,
@@ -104,7 +104,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
   const log = useCallback(
     (message: string, data?: any) => {
       if (enableLogs) {
-        // console.log(`[useRealTimeData] ${message}`, data);
+        // console.log(`[useRealTimeData] ${message}`, data)
       }
     },
     [enableLogs]
@@ -114,7 +114,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
   const callbacks: RealTimeCallbacks = {
     onRiskChange: useCallback(
       (payload: RealtimePostgresChangesPayload<Risk>) => {
-        log('Risk change detected', payload);
+        log('Risk change detected', payload)
 
         setState((prev) => {
           let newRisks = [...prev.risks];
@@ -144,7 +144,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
             ...prev,
             risks: newRisks,
             lastUpdated: new Date(),
-          };
+          }
         });
       },
       [log]
@@ -182,7 +182,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
             ...prev,
             controls: newControls,
             lastUpdated: new Date(),
-          };
+          }
         });
       },
       [log]
@@ -220,7 +220,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
             ...prev,
             documents: newDocuments,
             lastUpdated: new Date(),
-          };
+          }
         });
       },
       [log]
@@ -236,7 +236,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
               ...prev,
               activities: [payload.new as Activity, ...prev.activities.slice(0, 49)], // Keep last 50
               lastUpdated: new Date(),
-            };
+            }
           }
           return prev;
         });
@@ -276,16 +276,16 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
             ...prev,
             users: newUsers,
             lastUpdated: new Date(),
-          };
+          }
         });
       },
       [log]
     ),
-  };
+  }
 
   // Load initial data
   const loadInitialData = useCallback(async () => {
-    if (!serviceRef.current) return;
+    if (!serviceRef.current) return
 
     try {
       updateState({ isLoading: true, error: null });
@@ -317,7 +317,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
 
   // Subscribe to real-time updates
   const subscribe = useCallback(() => {
-    if (!serviceRef.current || isSubscribedRef.current) return;
+    if (!serviceRef.current || isSubscribedRef.current) return
 
     log('Subscribing to real-time updates...');
 
@@ -330,7 +330,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
   // Unsubscribe from real-time updates
   const unsubscribe = useCallback(() => {
     if (subscriptionRef.current) {
-      log('Unsubscribing from real-time updates...');
+      log('Unsubscribing from real-time updates...')
       subscriptionRef.current.unsubscribe();
       subscriptionRef.current = undefined;
       isSubscribedRef.current = false;
@@ -343,7 +343,7 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
     refreshData: loadInitialData,
 
     createRisk: useCallback(async (_risk: Tables['risks']['Insert']) => {
-      if (!serviceRef.current) throw new Error('Service not initialized');
+      if (!serviceRef.current) throw new Error('Service not initialized')
       return serviceRef.current.createRisk(risk);
     }, []),
 
@@ -379,11 +379,11 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
       if (!serviceRef.current) throw new Error('Service not initialized');
       return serviceRef.current.getControlMetrics(organizationId);
     }, [organizationId]),
-  };
+  }
 
   // Load data and subscribe on mount
   useEffect(() => {
-    loadInitialData();
+    loadInitialData()
 
     if (autoSubscribe) {
       subscribe();
@@ -391,13 +391,13 @@ export function useRealTimeData(_options: UseRealTimeDataOptions) {
 
     return () => {
       unsubscribe();
-    };
+    }
   }, [loadInitialData, subscribe, unsubscribe, autoSubscribe]);
 
   return {
     ...state,
     actions,
-  };
+  }
 }
 
 export default useRealTimeData;

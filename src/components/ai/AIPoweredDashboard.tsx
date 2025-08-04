@@ -7,7 +7,8 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 // import {
   Brain,
   TrendingUp,
@@ -34,11 +35,11 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   ArrowRight,
   Lightbulb,
   ChevronRight,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface AIPrediction {
-  id: string;
+  id: string
   title: string;
   description: string;
   type: 'risk' | 'control' | 'compliance' | 'trend';
@@ -144,7 +145,7 @@ const samplePredictions: AIPrediction[] = [
     createdAt: new Date('2024-01-18'),
     lastUpdated: new Date('2024-01-20'),
   },
-];
+]
 
 const sampleRecommendations: AIRecommendation[] = [
   {
@@ -239,7 +240,7 @@ const sampleTrendData: AITrendData[] = [
 
 // AI Prediction Card Component
 const PredictionCard: React.FC<{
-  prediction: AIPrediction;
+  prediction: AIPrediction
   onAction: (_action: string, prediction: AIPrediction) => void;
 }> = ({ prediction, onAction }) => {
   const getTypeConfig = (_type: string) => {
@@ -248,9 +249,9 @@ const PredictionCard: React.FC<{
       'control': { icon: Shield, color: 'text-blue-600', bg: 'bg-blue-50' },
       'compliance': { icon: Target, color: 'text-green-600', bg: 'bg-green-50' },
       'trend': { icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50' },
-    };
+    }
     return configs[type as keyof typeof configs] || configs.risk;
-  };
+  }
 
   const getImpactConfig = (impact: string) => {
     const configs = {
@@ -258,9 +259,9 @@ const PredictionCard: React.FC<{
       'medium': { color: 'text-semantic-warning', badge: 'secondary' },
       'high': { color: 'text-semantic-warning', badge: 'destructive' },
       'critical': { color: 'text-semantic-error', badge: 'destructive' },
-    };
+    }
     return configs[impact as keyof typeof configs] || configs.medium;
-  };
+  }
 
   const typeConfig = getTypeConfig(prediction.type);
   const impactConfig = getImpactConfig(prediction.impact);
@@ -358,11 +359,11 @@ const PredictionCard: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // AI Recommendation Panel Component
 const RecommendationPanel: React.FC<{
-  recommendation: AIRecommendation;
+  recommendation: AIRecommendation
   onAction: (_action: string, recommendation: AIRecommendation) => void;
 }> = ({ recommendation, onAction }) => {
   const getPriorityConfig = (priority: string) => {
@@ -371,9 +372,9 @@ const RecommendationPanel: React.FC<{
       'medium': { color: 'text-semantic-warning', bg: 'bg-semantic-warning/10' },
       'high': { color: 'text-semantic-warning', bg: 'bg-semantic-warning/10' },
       'critical': { color: 'text-semantic-error', bg: 'bg-semantic-error/10' },
-    };
+    }
     return configs[priority as keyof typeof configs] || configs.medium;
-  };
+  }
 
   const priorityConfig = getPriorityConfig(recommendation.priority);
   const completedActions = recommendation.actions.filter(a => a.completed).length;
@@ -481,11 +482,11 @@ const RecommendationPanel: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // Trend Chart Component
 const TrendChart: React.FC<{ trend: AITrendData }> = ({ trend }) => {
-  const TrendIcon = trend.trend === 'up' ? TrendingUp : trend.trend === 'down' ? TrendingDown : Activity;
+  const TrendIcon = trend.trend === 'up' ? TrendingUp : trend.trend === 'down' ? TrendingDown : Activity
   const trendColor = trend.trend === 'up' ? 'text-semantic-success' : 
                      trend.trend === 'down' ? 'text-semantic-error' : 'text-text-secondary';
 
@@ -537,29 +538,29 @@ const TrendChart: React.FC<{ trend: AITrendData }> = ({ trend }) => {
       </div>
     </div>
   );
-};
+}
 
 // Main AI Dashboard Component
 export const AIPoweredDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('overview')
   const [isLoading, setIsLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const handleRefresh = async () => {
     setIsLoading(true);
     // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000))
     setLastRefresh(new Date());
     setIsLoading(false);
-  };
+  }
 
   const handlePredictionAction = (_action: string, prediction: AIPrediction) => {
-    // console.log(`Prediction action: ${action}`, prediction);
-  };
+    // console.log(`Prediction action: ${action}`, prediction)
+  }
 
   const handleRecommendationAction = (_action: string, recommendation: AIRecommendation) => {
-    // console.log(`Recommendation action: ${action}`, recommendation);
-  };
+    // console.log(`Recommendation action: ${action}`, recommendation)
+  }
 
   const activePredictions = samplePredictions.filter(p => p.status === 'active').length;
   const criticalRecommendations = sampleRecommendations.filter(r => r.priority === 'critical').length;
@@ -716,6 +717,6 @@ export const AIPoweredDashboard: React.FC = () => {
       </DaisyTabsContent>
     </MainContentArea>
   );
-};
+}
 
 export default AIPoweredDashboard;

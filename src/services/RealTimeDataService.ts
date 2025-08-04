@@ -1,4 +1,4 @@
-// import { supabase, supabaseAdmin } from '@/lib/supabase/client';
+// import { supabase, supabaseAdmin } from '@/lib/supabase/client'
 import { Database } from '@/lib/supabase/types';
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
@@ -42,10 +42,10 @@ export class RealTimeDataService {
   subscribeToOrganization(_organizationId: string,
     callbacks: RealTimeCallbacks
   ): RealTimeSubscription {
-    const channelName = `org-${organizationId}`;
+    const channelName = `org-${organizationId}`
 
     // Remove existing subscription if any
-    this.unsubscribe(channelName);
+    this.unsubscribe(channelName)
 
     const channel = supabase
       .channel(channelName)
@@ -58,7 +58,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          // console.log('Risk change:', payload);
+          // console.log('Risk change:', payload)
           callbacks.onRiskChange?.(payload as RealtimePostgresChangesPayload<Risk>);
         }
       )
@@ -71,7 +71,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          // console.log('Control change:', payload);
+          // console.log('Control change:', payload)
           callbacks.onControlChange?.(payload as RealtimePostgresChangesPayload<Control>);
         }
       )
@@ -84,7 +84,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          // console.log('Document change:', payload);
+          // console.log('Document change:', payload)
           callbacks.onDocumentChange?.(payload as RealtimePostgresChangesPayload<Document>);
         }
       )
@@ -97,7 +97,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          // console.log('Activity change:', payload);
+          // console.log('Activity change:', payload)
           callbacks.onActivityChange?.(payload as RealtimePostgresChangesPayload<Activity>);
         }
       )
@@ -110,7 +110,7 @@ export class RealTimeDataService {
           filter: `organizationId=eq.${organizationId}`,
         },
         (payload) => {
-          // console.log('User change:', payload);
+          // console.log('User change:', payload)
           callbacks.onUserChange?.(payload as RealtimePostgresChangesPayload<User>);
         }
       )
@@ -122,7 +122,7 @@ export class RealTimeDataService {
         supabase.removeChannel(channel);
         this.subscriptions.delete(channelName);
       },
-    };
+    }
 
     this.subscriptions.set(channelName, subscription);
     return subscription;
@@ -138,7 +138,7 @@ export class RealTimeDataService {
     const channelName = `${table}-${organizationId}`;
 
     // Remove existing subscription if any
-    this.unsubscribe(channelName);
+    this.unsubscribe(channelName)
 
     const channel = supabase
       .channel(channelName)
@@ -160,7 +160,7 @@ export class RealTimeDataService {
         supabase.removeChannel(channel);
         this.subscriptions.delete(channelName);
       },
-    };
+    }
 
     this.subscriptions.set(channelName, subscription);
     return subscription;
@@ -198,10 +198,10 @@ export class RealTimeDataService {
       .from('risks')
       .select('*')
       .eq('organizationId', organizationId)
-      .order('createdAt', { ascending: false });
+      .order('createdAt', { ascending: false })
 
     if (error) {
-      // console.error('Error fetching risks:', error);
+      // console.error('Error fetching risks:', error)
       throw error;
     }
 
@@ -215,7 +215,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('risks').insert(risk).select().single();
 
     if (error) {
-      // console.error('Error creating risk:', error);
+      // console.error('Error creating risk:', error)
       throw error;
     }
 
@@ -227,7 +227,7 @@ export class RealTimeDataService {
       entityId: data.id,
       userId: risk.createdBy!,
       organizationId: risk.organizationId,
-    });
+    })
 
     return data;
   }
@@ -244,7 +244,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      // console.error('Error updating risk:', error);
+      // console.error('Error updating risk:', error)
       throw error;
     }
 
@@ -258,7 +258,7 @@ export class RealTimeDataService {
     const { error } = await supabase.from('risks').delete().eq('id', id);
 
     if (error) {
-      // console.error('Error deleting risk:', error);
+      // console.error('Error deleting risk:', error)
       throw error;
     }
   }
@@ -274,7 +274,7 @@ export class RealTimeDataService {
       .order('createdAt', { ascending: false });
 
     if (error) {
-      // console.error('Error fetching controls:', error);
+      // console.error('Error fetching controls:', error)
       throw error;
     }
 
@@ -288,7 +288,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('controls').insert(control).select().single();
 
     if (error) {
-      // console.error('Error creating control:', error);
+      // console.error('Error creating control:', error)
       throw error;
     }
 
@@ -300,7 +300,7 @@ export class RealTimeDataService {
       entityId: data.id,
       userId: control.createdBy!,
       organizationId: control.organizationId,
-    });
+    })
 
     return data;
   }
@@ -317,7 +317,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      // console.error('Error updating control:', error);
+      // console.error('Error updating control:', error)
       throw error;
     }
 
@@ -335,7 +335,7 @@ export class RealTimeDataService {
       .order('createdAt', { ascending: false });
 
     if (error) {
-      // console.error('Error fetching documents:', error);
+      // console.error('Error fetching documents:', error)
       throw error;
     }
 
@@ -354,7 +354,7 @@ export class RealTimeDataService {
       .limit(limit);
 
     if (error) {
-      // console.error('Error fetching activities:', error);
+      // console.error('Error fetching activities:', error)
       throw error;
     }
 
@@ -368,7 +368,7 @@ export class RealTimeDataService {
     const { data, error } = await supabase.from('activities').insert(activity).select().single();
 
     if (error) {
-      // console.error('Error logging activity:', error);
+      // console.error('Error logging activity:', error)
       throw error;
     }
 
@@ -386,7 +386,7 @@ export class RealTimeDataService {
       .single();
 
     if (error) {
-      // console.error('Error fetching organization:', error);
+      // console.error('Error fetching organization:', error)
       throw error;
     }
 
@@ -405,7 +405,7 @@ export class RealTimeDataService {
       .order('firstName', { ascending: true });
 
     if (error) {
-      // console.error('Error fetching users:', error);
+      // console.error('Error fetching users:', error)
       throw error;
     }
 
@@ -423,10 +423,10 @@ export class RealTimeDataService {
     const { data: risks, error } = await supabase
       .from('risks')
       .select('*')
-      .eq('organizationId', organizationId);
+      .eq('organizationId', organizationId)
 
     if (error) {
-      // console.error('Error fetching risk metrics:', error);
+      // console.error('Error fetching risk metrics:', error)
       throw error;
     }
 
@@ -443,7 +443,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {};
+      ) || {}
 
     const byCategory =
       risks?.reduce(
@@ -452,7 +452,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {};
+      ) || {}
 
     return {
       total,
@@ -460,7 +460,7 @@ export class RealTimeDataService {
       byStatus,
       byCategory,
       averageScore: risks?.reduce((sum, r) => sum + r.riskScore, 0) / total || 0,
-    };
+    }
   }
 
   /**
@@ -473,7 +473,7 @@ export class RealTimeDataService {
       .eq('organizationId', organizationId);
 
     if (error) {
-      // console.error('Error fetching control metrics:', error);
+      // console.error('Error fetching control metrics:', error)
       throw error;
     }
 
@@ -488,7 +488,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {};
+      ) || {}
 
     const byCategory =
       controls?.reduce(
@@ -497,7 +497,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {};
+      ) || {}
 
     const byEffectiveness =
       controls?.reduce(
@@ -508,7 +508,7 @@ export class RealTimeDataService {
           return acc;
         },
         {} as Record<string, number>
-      ) || {};
+      ) || {}
 
     return {
       total,
@@ -518,11 +518,11 @@ export class RealTimeDataService {
       byType,
       byCategory,
       byEffectiveness,
-    };
+    }
   }
 }
 
 // Export singleton instance
-export const realTimeDataService = new RealTimeDataService();
+export const realTimeDataService = new RealTimeDataService()
 
 export default RealTimeDataService;

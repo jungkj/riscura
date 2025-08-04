@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { toast } from '@/hooks/use-toast';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import {
   FileSpreadsheet,
   Download,
@@ -14,7 +15,7 @@ import { toast } from '@/hooks/use-toast';
   FileText,
   ArrowLeft,
   Loader2,
-} from 'lucide-react';
+} from 'lucide-react'
 import { useRouter } from 'next/navigation';
 
 interface Template {
@@ -94,10 +95,10 @@ export default function TemplatesPage() {
       }
 
       // Get the blob from the response
-      const blob = await response.blob();
+      const blob = await response.blob()
 
       // Create a download link
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a');
       a.href = url;
       a.download = `riscura-${templateType}-template.xlsx`;
@@ -111,7 +112,7 @@ export default function TemplatesPage() {
         description: 'Your Excel template has been downloaded successfully.',
       });
     } catch (error) {
-      // console.error('Download error:', error);
+      // console.error('Download error:', error)
       toast({
         title: 'Download Failed',
         description: 'Unable to download the template. Please try again.',
@@ -120,7 +121,7 @@ export default function TemplatesPage() {
     } finally {
       setDownloading(null);
     }
-  };
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

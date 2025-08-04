@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 // Encryption configuration
-const ENCRYPTION_ALGORITHM = 'aes-256-gcm';
+const ENCRYPTION_ALGORITHM = 'aes-256-gcm'
 const KEY_DERIVATION_ITERATIONS = 100000;
 const SALT_LENGTH = 32;
 const IV_LENGTH = 16;
@@ -52,19 +52,19 @@ export class DocumentEncryptionService {
     const iv = crypto.randomBytes(IV_LENGTH);
 
     // Derive encryption key
-    const key = crypto.pbkdf2Sync(this.masterKey, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512');
+    const key = crypto.pbkdf2Sync(this.masterKey, salt, KEY_DERIVATION_ITERATIONS, 32, 'sha512')
 
     try {
       // Try GCM mode first
-      const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+      const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
 
       // Add additional authenticated data if provided
       if (additionalData) {
-        cipher.setAAD(Buffer.from(additionalData, 'utf8'));
+        cipher.setAAD(Buffer.from(additionalData, 'utf8'))
       }
 
       // Encrypt data
-      let encrypted = cipher.update(data);
+      let encrypted = cipher.update(data)
       const final = cipher.final();
       encrypted = Buffer.concat([encrypted, final]);
 
@@ -75,10 +75,10 @@ export class DocumentEncryptionService {
         iv: iv.toString('base64'),
         tag: tag.toString('base64'),
         salt: salt.toString('base64'),
-      };
+      }
     } catch (error) {
       // Fallback to CBC mode if GCM not available
-      return this.encryptDataBasic(data, iv, salt, key, additionalData);
+      return this.encryptDataBasic(data, iv, salt, key, additionalData)
     }
   }
 
@@ -97,15 +97,15 @@ export class DocumentEncryptionService {
     salt: string;
   } {
     // Create cipher with CBC mode
-    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv)
 
     // Encrypt data
-    let encrypted = cipher.update(data);
+    let encrypted = cipher.update(data)
     const final = cipher.final();
     encrypted = Buffer.concat([encrypted, final]);
 
     // Create HMAC tag for authentication
-    const hmac = crypto.createHmac('sha256', key);
+    const hmac = crypto.createHmac('sha256', key)
     hmac.update(encrypted);
     if (additionalData) {
       hmac.update(Buffer.from(additionalData, 'utf8'));
@@ -117,7 +117,7 @@ export class DocumentEncryptionService {
       iv: iv.toString('base64'),
       tag: tag.toString('base64'),
       salt: salt.toString('base64'),
-    };
+    }
   }
 
   /**
@@ -135,7 +135,7 @@ export class DocumentEncryptionService {
     const { encrypted, iv, tag, salt } = encryptedData;
 
     // Convert from base64
-    const encryptedBuffer = Buffer.from(encrypted, 'base64');
+    const encryptedBuffer = Buffer.from(encrypted, 'base64')
     const ivBuffer = Buffer.from(iv, 'base64');
     const tagBuffer = Buffer.from(tag, 'base64');
     const saltBuffer = Buffer.from(salt, 'base64');
@@ -147,27 +147,27 @@ export class DocumentEncryptionService {
       KEY_DERIVATION_ITERATIONS,
       32,
       'sha512'
-    );
+    )
 
     try {
       // Try GCM mode first
-      const decipher = crypto.createDecipheriv('aes-256-gcm', key, ivBuffer);
+      const decipher = crypto.createDecipheriv('aes-256-gcm', key, ivBuffer)
       decipher.setAuthTag(tagBuffer);
 
       // Add additional authenticated data if provided
       if (additionalData) {
-        decipher.setAAD(Buffer.from(additionalData, 'utf8'));
+        decipher.setAAD(Buffer.from(additionalData, 'utf8'))
       }
 
       // Decrypt data
-      let decrypted = decipher.update(encryptedBuffer);
+      let decrypted = decipher.update(encryptedBuffer)
       const final = decipher.final();
       decrypted = Buffer.concat([decrypted, final]);
 
       return decrypted;
     } catch (error) {
       // Fallback to CBC mode decryption
-      return this.decryptDataBasic(encryptedBuffer, ivBuffer, tagBuffer, key, additionalData);
+      return this.decryptDataBasic(encryptedBuffer, ivBuffer, tagBuffer, key, additionalData)
     }
   }
 
@@ -182,7 +182,7 @@ export class DocumentEncryptionService {
     additionalData?: string
   ): Buffer {
     // Verify HMAC tag first
-    const hmac = crypto.createHmac('sha256', key);
+    const hmac = crypto.createHmac('sha256', key)
     hmac.update(encryptedBuffer);
     if (additionalData) {
       hmac.update(Buffer.from(additionalData, 'utf8'));
@@ -194,10 +194,10 @@ export class DocumentEncryptionService {
     }
 
     // Create decipher with CBC mode
-    const decipher = crypto.createDecipheriv('aes-256-cbc', key, ivBuffer);
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, ivBuffer)
 
     // Decrypt data
-    let decrypted = decipher.update(encryptedBuffer);
+    let decrypted = decipher.update(encryptedBuffer)
     const final = decipher.final();
     decrypted = Buffer.concat([decrypted, final]);
 
@@ -223,10 +223,10 @@ export class DocumentEncryptionService {
       fileName: string;
       userId: string;
       timestamp: string;
-    };
+    }
   } {
     // Calculate original file hash for integrity verification
-    const originalHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    const originalHash = crypto.createHash('sha256').update(fileBuffer).digest('hex')
 
     // Create additional authenticated data
     const aad = JSON.stringify({
@@ -234,10 +234,10 @@ export class DocumentEncryptionService {
       userId,
       timestamp: new Date().toISOString(),
       originalHash,
-    });
+    })
 
     // Encrypt file content
-    const encryptionResult = this.encryptData(fileBuffer, aad);
+    const encryptionResult = this.encryptData(fileBuffer, aad)
 
     return {
       encryptedContent: encryptionResult.encrypted,
@@ -252,7 +252,7 @@ export class DocumentEncryptionService {
         userId,
         timestamp: new Date().toISOString(),
       },
-    };
+    }
   }
 
   /**
@@ -278,7 +278,7 @@ export class DocumentEncryptionService {
       userId: metadata.userId,
       timestamp: metadata.timestamp,
       originalHash: hash,
-    });
+    })
 
     // Decrypt content
     const decryptedContent = this.decryptData(
@@ -289,17 +289,17 @@ export class DocumentEncryptionService {
         salt,
       },
       aad
-    );
+    )
 
     // Verify integrity
-    const calculatedHash = crypto.createHash('sha256').update(decryptedContent).digest('hex');
+    const calculatedHash = crypto.createHash('sha256').update(decryptedContent).digest('hex')
     const verified = calculatedHash === hash;
 
     return {
       content: decryptedContent,
       verified,
       metadata,
-    };
+    }
   }
 
   /**
@@ -317,7 +317,7 @@ export class DocumentEncryptionService {
       permissions,
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + expiresIn,
-    };
+    }
 
     const payloadString = JSON.stringify(payload);
     const signature = crypto
@@ -344,7 +344,7 @@ export class DocumentEncryptionService {
       const expectedSignature = crypto
         .createHmac('sha256', this.masterKey)
         .update(JSON.stringify(payload))
-        .digest('hex');
+        .digest('hex')
 
       if (
         !crypto.timingSafeEqual(
@@ -352,18 +352,18 @@ export class DocumentEncryptionService {
           Buffer.from(expectedSignature, 'hex')
         )
       ) {
-        return { valid: false };
+        return { valid: false }
       }
 
       // Check expiration
-      const now = Math.floor(Date.now() / 1000);
+      const now = Math.floor(Date.now() / 1000)
       if (payload.exp < now) {
-        return { valid: false, expired: true, payload };
+        return { valid: false, expired: true, payload }
       }
 
-      return { valid: true, payload };
+      return { valid: true, payload }
     } catch (error) {
-      return { valid: false };
+      return { valid: false }
     }
   }
 
@@ -377,7 +377,7 @@ export class DocumentEncryptionService {
       userEmail,
       timestamp: new Date().toISOString(),
       nonce: crypto.randomBytes(16).toString('hex'),
-    };
+    }
 
     const watermarkString = JSON.stringify(watermarkData);
     const signature = crypto
@@ -415,9 +415,9 @@ export class DocumentEncryptionService {
         )
           ? data
           : undefined,
-      };
+      }
     } catch (error) {
-      return { valid: false };
+      return { valid: false }
     }
   }
 }
@@ -467,17 +467,17 @@ export class FieldEncryption {
 }
 
 // Export singleton instances
-export const documentEncryption = DocumentEncryptionService.getInstance();
+export const documentEncryption = DocumentEncryptionService.getInstance()
 export const fieldEncryption = FieldEncryption.getInstance();
 
 // Utility functions for security
 export function generateSecureId(): string {
-  return crypto.randomBytes(16).toString('hex');
+  return crypto.randomBytes(16).toString('hex')
 }
 
 export function generateSecurePassword(): string {
   // Generate secure password with mixed case, numbers, and symbols
-  const length = 16;
+  const length = 16
   const charset =
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
   let password = '';

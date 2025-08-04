@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import GuidedTour, { TourLauncher } from '@/components/help/GuidedTour';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import {
   HelpCircle,
   Play,
@@ -21,7 +22,7 @@ import GuidedTour, { TourLauncher } from '@/components/help/GuidedTour';
   Settings,
   Clock,
   Star
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface HelpResource {
   id: string;
@@ -131,15 +132,15 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
         window.open(resource.href, '_blank');
       }
     }
-  };
+  }
 
   const handleTourComplete = () => {
     setShowTour(false);
-  };
+  }
 
   const handleTourSkip = () => {
     setShowTour(false);
-  };
+  }
 
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
@@ -148,7 +149,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
       case 'advanced': return 'text-red-600 bg-red-50';
       default: return 'text-gray-600 bg-gray-50';
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -159,7 +160,7 @@ export default function HelpMenu({ onStartTour, className = '' }: HelpMenuProps)
       case 'support': return MessageCircle;
       default: return HelpCircle;
     }
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>

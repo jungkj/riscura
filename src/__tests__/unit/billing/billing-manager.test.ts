@@ -15,7 +15,7 @@ import {
 } from '../../utils/test-helpers';
 
 // Mock the database
-const mockPrisma = createMockPrismaClient();
+const mockPrisma = createMockPrismaClient()
 jest.mock('@/lib/db', () => ({
   db: {
     client: mockPrisma,
@@ -25,7 +25,7 @@ jest.mock('@/lib/db', () => ({
 // Mock the Stripe service
 const mockStripeService = {
   getPaymentMethod: jest.fn<any, any>(),
-};
+}
 jest.mock('@/lib/billing/stripe', () => ({
   stripeService: mockStripeService,
 }));
@@ -43,7 +43,7 @@ describe('BillingManager', () => {
     testSubscription = createTestSubscription();
 
     // Reset all mocks
-    jest.clearAllMocks();
+    jest.clearAllMocks()
   });
 
   afterEach(() => {
@@ -70,7 +70,7 @@ describe('BillingManager', () => {
           trialDays: 30,
           stripeProductId: null,
           stripePriceId: null,
-        };
+        }
 
         mockPrisma.subscriptionPlan.create.mockResolvedValue({
           id: 'plan-123',
@@ -109,7 +109,7 @@ describe('BillingManager', () => {
           trialDays: 0,
           stripeProductId: null,
           stripePriceId: null,
-        };
+        }
 
         mockPrisma.subscriptionPlan.create.mockRejectedValue(new Error('Database error'));
 
@@ -138,7 +138,7 @@ describe('BillingManager', () => {
       });
 
       it('should filter plans by type when specified', async () => {
-        const filters = { type: ['professional'], active: true, currency: 'USD' };
+        const filters = { type: ['professional'], active: true, currency: 'USD' }
         mockPrisma.subscriptionPlan.findMany.mockResolvedValue([testPlan]);
 
         const _result = await billingManager.getSubscriptionPlans(filters);
@@ -172,7 +172,7 @@ describe('BillingManager', () => {
   describe('Organization Subscription Management', () => {
     describe('createSubscription', () => {
       it('should create a subscription for an organization', async () => {
-        mockPrisma.organization.findUnique.mockResolvedValue(testOrg);
+        mockPrisma.organization.findUnique.mockResolvedValue(testOrg)
         mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(testPlan);
         mockPrisma.organizationSubscription.create.mockResolvedValue(testSubscription);
 
@@ -249,7 +249,7 @@ describe('BillingManager', () => {
 
     describe('changeSubscriptionPlan', () => {
       it('should update subscription plan successfully', async () => {
-        const newPlan = { ...testPlan, id: 'new-plan-123', price: 149 };
+        const newPlan = { ...testPlan, id: 'new-plan-123', price: 149 }
         mockPrisma.organizationSubscription.findUnique.mockResolvedValue(testSubscription);
         mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(newPlan);
         mockPrisma.organizationSubscription.update.mockResolvedValue({
@@ -337,7 +337,7 @@ describe('BillingManager', () => {
   describe('Usage Tracking', () => {
     describe('trackUsage', () => {
       it('should track usage for active subscription', async () => {
-        mockPrisma.organizationSubscription.findFirst.mockResolvedValue(testSubscription);
+        mockPrisma.organizationSubscription.findFirst.mockResolvedValue(testSubscription)
         mockPrisma.usageRecord.create.mockResolvedValue({
           id: 'usage-123',
           organizationId: testOrg.id,
@@ -398,7 +398,7 @@ describe('BillingManager', () => {
             exp_year: 2025,
             fingerprint: 'fingerprint123',
           },
-        };
+        }
 
         mockPrisma.organization.findUnique.mockResolvedValue(testOrg);
         mockStripeService.getPaymentMethod.mockResolvedValue(mockPaymentMethod);
@@ -447,7 +447,7 @@ describe('BillingManager', () => {
   describe('Billing Analytics', () => {
     describe('getBillingAnalytics', () => {
       it('should return comprehensive billing analytics', async () => {
-        const mockSubscriptions = [testSubscription];
+        const mockSubscriptions = [testSubscription]
         const mockInvoices = [
           {
             id: 'inv-123',
@@ -504,28 +504,28 @@ describe('BillingManager', () => {
   describe('Integration Tests', () => {
     it('should handle complete subscription lifecycle', async () => {
       // Setup
-      mockPrisma.organization.findUnique.mockResolvedValue(testOrg);
+      mockPrisma.organization.findUnique.mockResolvedValue(testOrg)
       mockPrisma.subscriptionPlan.findUnique.mockResolvedValue(testPlan);
       mockPrisma.organizationSubscription.create.mockResolvedValue(testSubscription);
       mockPrisma.organizationSubscription.findFirst.mockResolvedValue(testSubscription);
       mockPrisma.organizationSubscription.findUnique.mockResolvedValue(testSubscription);
 
       // Create subscription
-      const subscription = await billingManager.createSubscription(testOrg.id, testPlan.id);
+      const subscription = await billingManager.createSubscription(testOrg.id, testPlan.id)
       expect(subscription).toHaveProperty('id');
 
       // Get active subscription
-      const activeSubscription = await billingManager.getActiveSubscription(testOrg.id);
+      const activeSubscription = await billingManager.getActiveSubscription(testOrg.id)
       expect(activeSubscription).not.toBeNull();
 
       // Track usage
-      await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1)).resolves.not.toThrow();
+      await expect(billingManager.trackUsage(testOrg.id, 'aiQueries', 1)).resolves.not.toThrow()
 
       // Cancel subscription
       mockPrisma.organizationSubscription.update.mockResolvedValue({
         ...testSubscription,
         status: 'canceled',
-      });
+      })
 
       const canceledSubscription = await billingManager.cancelSubscription(subscription.id, true);
       expect(canceledSubscription.status).toBe('canceled');

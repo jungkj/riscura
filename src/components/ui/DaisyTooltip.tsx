@@ -17,11 +17,11 @@ interface TooltipContentProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const DaisyTooltip = ({ children }: TooltipProps) => {
   return <>{children}</>;
-};
+}
 
 export const DaisyTooltipTrigger = ({ children, asChild }: TooltipTriggerProps) => {
   return <>{children}</>;
-};
+}
 
 export const DaisyTooltipContent = ({
   children,
@@ -34,7 +34,7 @@ export const DaisyTooltipContent = ({
     right: 'tooltip-right',
     bottom: 'tooltip-bottom',
     left: 'tooltip-left',
-  };
+  }
 
   return (
     <div
@@ -45,7 +45,7 @@ export const DaisyTooltipContent = ({
       <span className={cn('tooltip-text', className)}>{children}</span>
     </div>
   );
-};
+}
 
 // Simplified tooltip wrapper for common use cases
 export const DaisyTooltipWrapper = ({
@@ -54,7 +54,7 @@ export const DaisyTooltipWrapper = ({
   side = 'top',
   className,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
   content: string;
   side?: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
@@ -64,11 +64,11 @@ export const DaisyTooltipWrapper = ({
     right: 'tooltip-right',
     bottom: 'tooltip-bottom',
     left: 'tooltip-left',
-  };
+  }
 
   return (
     <div className={cn('tooltip', positionClasses[side], className)} data-tip={content}>
       {children}
     </div>
   );
-};
+}

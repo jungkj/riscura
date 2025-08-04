@@ -6,7 +6,7 @@ import { db } from '@/lib/db';
 
 // Validate OpenAI API key at startup
 if (!process.env.OPENAI_API_KEY) {
-  // console.error('[Test Scripts Analysis] OpenAI API key is not configured');
+  // console.error('[Test Scripts Analysis] OpenAI API key is not configured')
 }
 
 const openai = process.env.OPENAI_API_KEY
@@ -59,7 +59,7 @@ export const POST = withApiMiddleware({
     return {
       success: false,
       error: 'AI analysis is not available. Please configure OpenAI API key.',
-    };
+    }
   }
 
   try {
@@ -69,13 +69,13 @@ export const POST = withApiMiddleware({
         id: controlId,
         organizationId,
       },
-    });
+    })
 
     if (!control) {
       return {
         success: false,
         error: 'Control not found',
-      };
+      }
     }
 
     // Perform AI analysis
@@ -100,7 +100,7 @@ Determine if this test script provides adequate evidence for control effectivene
       ],
       response_format: { type: 'json_object' },
       temperature: 0.3,
-    });
+    })
 
     // Track token usage
     if (completion.usage) {
@@ -109,11 +109,11 @@ Determine if this test script provides adequate evidence for control effectivene
         completion_tokens: completion.usage.completion_tokens,
         total_tokens: completion.usage.total_tokens,
         estimated_cost: (completion.usage.total_tokens / 1000) * 0.01, // Rough estimate for GPT-4
-      });
+      })
       // TODO: Store token usage in database or monitoring system
     }
 
-    const aiResponse = JSON.parse(completion.choices[0].message.content || '{}');
+    const aiResponse = JSON.parse(completion.choices[0].message.content || '{}')
 
     // Default analysis structure if AI doesn't provide expected format
     const analysis: EvidenceAnalysis = {
@@ -121,7 +121,7 @@ Determine if this test script provides adequate evidence for control effectivene
       confidenceScore: aiResponse.confidenceScore ?? 0,
       findings: aiResponse.findings || [],
       recommendations: aiResponse.recommendations || [],
-    };
+    }
 
     // Store the analysis result
     if (analysis.matchesRequirements && analysis.confidenceScore > 0.7) {
@@ -129,13 +129,13 @@ Determine if this test script provides adequate evidence for control effectivene
       const userHasPermission =
         control.owner === context.user.email ||
         control.createdBy === context.user.id ||
-        context.user.role === 'ADMIN';
+        context.user.role === 'ADMIN'
 
       if (!userHasPermission) {
         return {
           success: false,
           error: 'You do not have permission to update this control',
-        };
+        }
       }
 
       // Update control with positive test results
@@ -145,7 +145,7 @@ Determine if this test script provides adequate evidence for control effectivene
           lastTestDate: new Date(),
           testResults: `AI Analysis: Test script provides adequate evidence (${Math.round(analysis.confidenceScore * 100)}% confidence)`,
         },
-      });
+      })
 
       // Create audit trail
       await db.client.activity.create({
@@ -162,7 +162,7 @@ Determine if this test script provides adequate evidence for control effectivene
           userId: context.user.id,
           organizationId: context.organizationId,
         },
-      });
+      })
     }
 
     return {
@@ -171,16 +171,16 @@ Determine if this test script provides adequate evidence for control effectivene
         analysis,
         controlTitle: control.title,
       },
-    };
+    }
   } catch (error) {
-    // console.error('Test script analysis error:', error);
+    // console.error('Test script analysis error:', error)
 
     // Check if it's a database error
     if (error instanceof Error && error.message.includes('database')) {
       return {
         success: false,
         error: 'Database connection error. Please try again.',
-      };
+      }
     }
 
     // Fallback analysis without AI
@@ -200,7 +200,7 @@ Determine if this test script provides adequate evidence for control effectivene
         'Include frequency and timing of tests',
         'Specify who performs the testing',
       ],
-    };
+    }
 
     return {
       success: true,
@@ -208,6 +208,6 @@ Determine if this test script provides adequate evidence for control effectivene
         analysis: basicAnalysis,
         controlTitle: 'Control', // Fallback title since control may not be available
       },
-    };
+    }
   }
 });

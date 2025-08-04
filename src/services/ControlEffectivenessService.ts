@@ -1,4 +1,4 @@
-// import { Control, Risk } from '@/types';
+// import { Control, Risk } from '@/types'
 
 export interface ControlEffectivenessAssessment {
   controlId: string;
@@ -116,16 +116,16 @@ export class ControlEffectivenessService {
     testingHistory: ControlTestingResult[] = []
   ): Promise<ControlEffectivenessAssessment> {
     // Calculate base effectiveness score
-    const baseScore = this.calculateBaseEffectivenessScore(control);
+    const baseScore = this.calculateBaseEffectivenessScore(control)
 
     // Factor in testing results
-    const testingScore = this.calculateTestingEffectivenessScore(testingHistory);
+    const testingScore = this.calculateTestingEffectivenessScore(testingHistory)
 
     // Analyze control coverage
-    const coverageAnalysis = await this.analyzeControlCoverage(control, relatedRisks);
+    const coverageAnalysis = await this.analyzeControlCoverage(control, relatedRisks)
 
     // Perform gap analysis
-    const gapAnalysis = await this.performControlGapAnalysis(control, relatedRisks, testingHistory);
+    const gapAnalysis = await this.performControlGapAnalysis(control, relatedRisks, testingHistory)
 
     // Generate recommendations
     const recommendations = await this.generateControlRecommendations(
@@ -133,7 +133,7 @@ export class ControlEffectivenessService {
       baseScore,
       testingScore,
       gapAnalysis
-    );
+    )
 
     // Calculate final effectiveness score (weighted average)
     const effectivenessScore = Math.round(
@@ -141,10 +141,10 @@ export class ControlEffectivenessService {
         testingScore * 0.3 +
         coverageAnalysis.coveragePercentage * 0.2 +
         (100 - gapAnalysis.riskExposure) * 0.1
-    );
+    )
 
     // Calculate confidence based on data quality
-    const confidence = this.calculateAssessmentConfidence(control, testingHistory, relatedRisks);
+    const confidence = this.calculateAssessmentConfidence(control, testingHistory, relatedRisks)
 
     return {
       controlId: control.id,
@@ -157,7 +157,7 @@ export class ControlEffectivenessService {
       nextAssessment: this.calculateNextAssessmentDate(control, effectivenessScore),
       assessor: 'ARIA Control Assessment Engine',
       confidence,
-    };
+    }
   }
 
   /**
@@ -171,7 +171,7 @@ export class ControlEffectivenessService {
       preventive: 1.2,
       detective: 1.0,
       corrective: 0.8,
-    };
+    }
 
     score *= typeWeights[control.type] || 1.0;
 
@@ -184,7 +184,7 @@ export class ControlEffectivenessService {
       quarterly: 65,
       annually: 50,
       'ad-hoc': 30,
-    };
+    }
 
     const frequencyScore = frequencyScores[control.frequency.toLowerCase()] || 50;
     score = (score + frequencyScore) / 2;
@@ -194,7 +194,7 @@ export class ControlEffectivenessService {
       active: 1.0,
       inactive: 0.2,
       planned: 0.1,
-    };
+    }
 
     score *= statusMultipliers[control.status] || 0.5;
 
@@ -220,7 +220,7 @@ export class ControlEffectivenessService {
     }
 
     // Weight recent tests more heavily
-    const now = new Date();
+    const now = new Date()
     let weightedScore = 0;
     let totalWeight = 0;
 
@@ -236,7 +236,7 @@ export class ControlEffectivenessService {
         operating: 1.0,
         compliance: 0.9,
         effectiveness: 1.2,
-      };
+      }
 
       const testWeight = (testTypeWeights[test.testType] || 1.0) * recencyWeight;
 
@@ -259,16 +259,16 @@ export class ControlEffectivenessService {
     const coveragePercentage = totalRisks > 0 ? Math.round((coveredRisks / totalRisks) * 100) : 0;
 
     // Identify uncovered risks
-    const linkedRiskIds = new Set(control.linkedRisks || []);
+    const linkedRiskIds = new Set(control.linkedRisks || [])
     const uncoveredRisks = relatedRisks
       .filter((risk) => !linkedRiskIds.has(risk.id))
       .map((risk) => risk.id);
 
     // Analyze overlaps (simplified - would need other controls data)
-    const overlapAnalysis: ControlOverlap[] = [];
+    const overlapAnalysis: ControlOverlap[] = []
 
     // Identify gap areas based on uncovered risks
-    const gapAreas = this.identifyGapAreas(relatedRisks, control.linkedRisks || []);
+    const gapAreas = this.identifyGapAreas(relatedRisks, control.linkedRisks || [])
 
     return {
       totalRisks,
@@ -277,7 +277,7 @@ export class ControlEffectivenessService {
       uncoveredRisks,
       overlapAnalysis,
       gapAreas,
-    };
+    }
   }
 
   /**
@@ -291,7 +291,7 @@ export class ControlEffectivenessService {
     const gaps: ControlGap[] = [];
 
     // Coverage gaps
-    const uncoveredRisks = relatedRisks.filter((risk) => !control.linkedRisks?.includes(risk.id));
+    const uncoveredRisks = relatedRisks.filter((risk) => !control.linkedRisks?.includes(risk.id))
 
     if (uncoveredRisks.length > 0) {
       gaps.push({
@@ -311,7 +311,7 @@ export class ControlEffectivenessService {
 
     // Testing gaps
     const recentTests = testingHistory.filter((test) => {
-      const daysSince = (new Date().getTime() - test.testDate.getTime()) / (1000 * 60 * 60 * 24);
+      const daysSince = (new Date().getTime() - test.testDate.getTime()) / (1000 * 60 * 60 * 24)
       return daysSince <= 365; // Within last year
     });
 
@@ -345,27 +345,27 @@ export class ControlEffectivenessService {
         desiredState: 'Clear ownership defined',
         effort: 'low',
         cost: 500,
-      });
+      })
     }
 
     // Calculate overall risk exposure
-    const totalImpact = gaps.reduce((sum, gap) => sum + gap.impact, 0);
+    const totalImpact = gaps.reduce((sum, gap) => sum + gap.impact, 0)
     const riskExposure = Math.min(100, totalImpact / gaps.length || 0);
 
     // Identify priority gaps
     const priorityGaps = gaps
       .filter((gap) => gap.severity === 'high' || gap.severity === 'critical')
-      .sort((a, b) => b.impact * b.likelihood - a.impact * a.likelihood);
+      .sort((a, b) => b.impact * b.likelihood - a.impact * a.likelihood)
 
     // Generate mitigation suggestions
-    const mitigationSuggestions = this.generateGapMitigationSuggestions(gaps);
+    const mitigationSuggestions = this.generateGapMitigationSuggestions(gaps)
 
     return {
       identifiedGaps: gaps,
       riskExposure,
       priorityGaps,
       mitigationSuggestions,
-    };
+    }
   }
 
   /**
@@ -402,7 +402,7 @@ export class ControlEffectivenessService {
           'Reduced control failures',
           'Improved risk coverage',
         ],
-      });
+      })
     }
 
     // Testing recommendations
@@ -428,7 +428,7 @@ export class ControlEffectivenessService {
           'Testing score > 70%',
           'Issues identified and resolved',
         ],
-      });
+      })
     }
 
     // Gap-based recommendations
@@ -445,11 +445,11 @@ export class ControlEffectivenessService {
         expectedImprovement: Math.round(gap.impact / 5),
         implementation: [`Transition from "${gap.currentState}" to "${gap.desiredState}"`],
         success: ['Gap closed', 'Risk exposure reduced'],
-      });
+      })
     });
 
     return recommendations.sort((a, b) => {
-      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
   }
@@ -478,7 +478,7 @@ export class ControlEffectivenessService {
     const alignmentScore = this.calculateTypeRiskAlignment(
       mappingData.controlType,
       mappingData.riskCategory
-    );
+    )
     factors.push({ factor: 'Type-Risk Alignment', score: alignmentScore, weight: 0.3 });
 
     // Implementation quality
@@ -486,40 +486,40 @@ export class ControlEffectivenessService {
       factor: 'Implementation Quality',
       score: mappingData.implementationQuality,
       weight: 0.25,
-    });
+    })
 
     // Testing effectiveness
     factors.push({
       factor: 'Testing Results',
       score: mappingData.testingResults,
       weight: 0.25,
-    });
+    })
 
     // Frequency appropriateness
     const frequencyScore = this.calculateFrequencyScore(
       mappingData.frequency,
       mappingData.riskCategory
-    );
+    )
     factors.push({ factor: 'Frequency Appropriateness', score: frequencyScore, weight: 0.2 });
 
     // Calculate weighted effectiveness
     const mappingEffectiveness = Math.round(
       factors.reduce((sum, factor) => sum + factor.score * factor.weight, 0)
-    );
+    )
 
     // Generate recommendations
-    const recommendations = this.generateMappingRecommendations(factors, mappingEffectiveness);
+    const recommendations = this.generateMappingRecommendations(factors, mappingEffectiveness)
 
     return {
       mappingEffectiveness,
       factors,
       recommendations,
-    };
+    }
   }
 
   // Helper methods
   private identifyGapAreas(allRisks: Risk[], coveredRiskIds: string[]): string[] {
-    const uncoveredRisks = allRisks.filter((risk) => !coveredRiskIds.includes(risk.id));
+    const uncoveredRisks = allRisks.filter((risk) => !coveredRiskIds.includes(risk.id))
     const _categories = [...new Set(uncoveredRisks.map((risk) => risk.category))];
     return categories.map((cat) => `${cat} risks not adequately covered`);
   }
@@ -544,21 +544,21 @@ export class ControlEffectivenessService {
     let confidence = 50; // base confidence
 
     // More testing history increases confidence
-    if (testingHistory.length > 0) confidence += 20;
+    if (testingHistory.length > 0) confidence += 20
     if (testingHistory.length > 3) confidence += 10;
 
     // Recent testing increases confidence
     const recentTests = testingHistory.filter((test) => {
-      const daysSince = (new Date().getTime() - test.testDate.getTime()) / (1000 * 60 * 60 * 24);
+      const daysSince = (new Date().getTime() - test.testDate.getTime()) / (1000 * 60 * 60 * 24)
       return daysSince <= 90;
     });
     if (recentTests.length > 0) confidence += 15;
 
     // Clear ownership increases confidence
-    if (control.owner) confidence += 10;
+    if (control.owner) confidence += 10
 
     // Evidence availability increases confidence
-    if (control.evidence && control.evidence.length > 0) confidence += 5;
+    if (control.evidence && control.evidence.length > 0) confidence += 5
 
     return Math.min(100, confidence);
   }
@@ -568,13 +568,13 @@ export class ControlEffectivenessService {
     let monthsUntilNext = 12; // default annual
 
     // More frequent assessment for less effective controls
-    if (effectivenessScore < 50) monthsUntilNext = 3;
+    if (effectivenessScore < 50) monthsUntilNext = 3
     else if (effectivenessScore < 70) monthsUntilNext = 6;
     else if (effectivenessScore < 85) monthsUntilNext = 9;
 
     // High-risk controls need more frequent assessment
     if (control.linkedRisks && control.linkedRisks.length > 5) {
-      monthsUntilNext = Math.max(3, monthsUntilNext - 3);
+      monthsUntilNext = Math.max(3, monthsUntilNext - 3)
     }
 
     now.setMonth(now.getMonth() + monthsUntilNext);
@@ -604,7 +604,7 @@ export class ControlEffectivenessService {
         COMPLIANCE: 70,
         TECHNOLOGY: 75,
       },
-    };
+    }
 
     return alignmentMatrix[controlType]?.[riskCategory] || 50;
   }
@@ -617,7 +617,7 @@ export class ControlEffectivenessService {
       monthly: 75,
       quarterly: 65,
       annually: 50,
-    };
+    }
 
     let score = frequencyScores[frequency.toLowerCase()] || 50;
 

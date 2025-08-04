@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 // import { 
   Shield, 
   AlertTriangle, 
@@ -11,7 +12,7 @@ import { useState, useEffect } from 'react';
   Target,
   Users,
   Clock
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface MetricData {
   id: string;
@@ -21,7 +22,7 @@ interface MetricData {
     value: string;
     type: 'increase' | 'decrease' | 'neutral';
     period: string;
-  };
+  }
   icon: React.ComponentType<any>;
   color: string;
   bgColor: string;
@@ -118,7 +119,7 @@ export default function MetricCards() {
     // Animate numeric values
     metrics.forEach((metric, index) => {
       if (typeof metric.value === 'number') {
-        let current = 0;
+        let current = 0
         const target = metric.value;
         const increment = target / 30;
         
@@ -146,16 +147,16 @@ export default function MetricCards() {
       default:
         return null;
     }
-  };
+  }
 
   const getTrendColor = (_type: 'increase' | 'decrease' | 'neutral', metricId: string) => {
     if (type === 'neutral') return 'text-gray-600';
     
     // For metrics where decrease is good (like risks, resolution time)
-    const isDecreaseGood = ['total-risks', 'critical-risks', 'avg-resolution'].includes(metricId);
+    const isDecreaseGood = ['total-risks', 'critical-risks', 'avg-resolution'].includes(metricId)
     const isGoodChange = (type === 'decrease' && isDecreaseGood) || (type === 'increase' && !isDecreaseGood);
     return isGoodChange ? 'text-green-600' : 'text-red-600';
-  };
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

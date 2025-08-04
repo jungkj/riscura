@@ -4,11 +4,12 @@ import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedHeading } from '@/components/ui/enhanced-typography';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-// import { User, CheckCircle, Clock, FileText, Calendar, Target, TrendingUp } from 'lucide-react';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+// import { User, CheckCircle, Clock, FileText, Calendar, Target, TrendingUp } from 'lucide-react'
 
 export default function SelfAssessmentPage() {
   // Mock data for self-assessments
@@ -46,7 +47,7 @@ export default function SelfAssessmentPage() {
       questions: 20,
       timeRequired: '12 minutes',
     },
-  ];
+  ]
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -59,7 +60,7 @@ export default function SelfAssessmentPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  };
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -72,13 +73,13 @@ export default function SelfAssessmentPage() {
       default:
         return <Clock className="w-4 h-4 text-gray-600" />;
     }
-  };
+  }
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-yellow-600';
     return 'text-red-600';
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F1E9] p-6">

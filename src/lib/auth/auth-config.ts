@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-};
+}
 
 export const AUTH_CONFIG: AuthConfig = {
   jwtSecret: process.env.JWT_SECRET || 'default-secret',
@@ -38,6 +38,6 @@ export const AUTH_CONFIG: AuthConfig = {
   nextAuthUrl: process.env.NEXTAUTH_URL || 'http://localhost:3000',
   sessionSecret: process.env.SESSION_SECRET || 'default-secret',
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '12'),
-};
+}
 
 export default AUTH_CONFIG;

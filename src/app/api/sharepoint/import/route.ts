@@ -25,12 +25,12 @@ export const POST = withApiMiddleware({
         organizationId,
         isActive: true,
       },
-    });
+    })
 
     if (!integration) {
       return {
         error: 'SharePoint integration not found or inactive',
-      };
+      }
     }
 
     // Validate driveId before transaction
@@ -38,7 +38,7 @@ export const POST = withApiMiddleware({
       return {
         error:
           'SharePoint integration is missing driveId. Please reconnect to SharePoint and select a document library.',
-      };
+      }
     }
 
     // Use transaction to prevent race condition
@@ -55,14 +55,14 @@ export const POST = withApiMiddleware({
             equals: fileId,
           },
         },
-      });
+      })
 
       if (activeImport) {
         return {
           error: 'This file is already being imported',
           jobId: activeImport.id,
           isError: true,
-        };
+        }
       }
 
       // Create import job within the same transaction
@@ -82,12 +82,12 @@ export const POST = withApiMiddleware({
             importedBy: user.email || user.name || user.id,
           },
         },
-      });
+      })
 
       return {
         jobId: importJob.id,
         isError: false,
-      };
+      }
     });
 
     // Check if transaction returned an error
@@ -95,7 +95,7 @@ export const POST = withApiMiddleware({
       return {
         error: result.error,
         jobId: result.jobId,
-      };
+      }
     }
 
     const jobId = result.jobId;
@@ -104,13 +104,13 @@ export const POST = withApiMiddleware({
       jobId,
       message: 'Import job created successfully',
       status: 'QUEUED',
-    };
+    }
   } catch (error) {
-    // console.error('Error creating import job:', error);
+    // console.error('Error creating import job:', error)
 
     return {
       error: 'Failed to start import. Please try again.',
-    };
+    }
   }
 });
 
@@ -119,7 +119,7 @@ export const GET = withApiMiddleware({
   requireAuth: true,
   rateLimiters: ['standard'],
 })(async (context) => {
-  const { organizationId } = context;
+  const { organizationId } = context
   const { searchParams } = new URL(context.req.url);
   const integrationId = searchParams.get('integrationId');
   const limit = parseInt(searchParams.get('limit') || '10');
@@ -128,13 +128,13 @@ export const GET = withApiMiddleware({
   const where: Prisma.ImportJobWhereInput = {
     organizationId,
     type: 'sharepoint',
-  };
+  }
 
   if (integrationId) {
     where.metadata = {
       path: ['integrationId'],
       equals: integrationId,
-    };
+    }
   }
 
   const [jobs, total] = await Promise.all([
@@ -176,5 +176,5 @@ export const GET = withApiMiddleware({
     total,
     limit,
     offset,
-  };
+  }
 });

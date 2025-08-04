@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import { Sparkles } from 'lucide-react';
 // import { 
   Eye,
   EyeOff,
@@ -20,11 +22,11 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   TrendingUp,
   Settings,
   Sparkles
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Feature definition
 interface Feature {
-  id: string;
+  id: string
   name: string;
   description: string;
   category: 'basic' | 'intermediate' | 'advanced' | 'expert';
@@ -33,7 +35,7 @@ interface Feature {
     type: 'time' | 'actions' | 'achievements' | 'manual';
     requirement: number | string[];
     description: string;
-  };
+  }
   isUnlocked: boolean;
   isVisible: boolean;
   priority: number;
@@ -43,7 +45,7 @@ interface Feature {
 
 // User experience level
 interface UserExperience {
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
   daysActive: number;
   actionsCompleted: number;
   achievementsUnlocked: string[];
@@ -197,11 +199,11 @@ const FEATURES: Feature[] = [
     priority: 9,
     benefits: ['Tailored assessment criteria', 'Industry-specific frameworks', 'Custom scoring models']
   }
-];
+]
 
 // Progressive disclosure component
 interface ProgressiveDisclosureProps {
-  userExperience: UserExperience;
+  userExperience: UserExperience
   onFeatureUnlock?: (featureId: string) => void;
   onFeatureHide?: (featureId: string) => void;
   className?: string;
@@ -219,7 +221,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
 
   // Check unlock criteria
   const checkUnlockCriteria = useCallback((feature: Feature): boolean => {
-    const { type, requirement } = feature.unlockCriteria;
+    const { type, requirement } = feature.unlockCriteria
 
     switch (type) {
       case 'time':
@@ -246,39 +248,39 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
   useEffect(() => {
     setFeatures(prevFeatures => 
       prevFeatures.map(feature => {
-        const shouldUnlock = checkUnlockCriteria(feature);
+        const shouldUnlock = checkUnlockCriteria(feature)
         const shouldShow = shouldUnlock || feature.category === 'basic';
 
         // Notify when feature is newly unlocked
         if (shouldUnlock && !feature.isUnlocked) {
-          onFeatureUnlock?.(feature.id);
+          onFeatureUnlock?.(feature.id)
         }
 
         return {
           ...feature,
           isUnlocked: shouldUnlock,
           isVisible: shouldShow
-        };
+        }
       })
     );
   }, [userExperience, checkUnlockCriteria, onFeatureUnlock]);
 
   // Filter features
   const filteredFeatures = features.filter(feature => {
-    if (!showHidden && !feature.isVisible) return false;
+    if (!showHidden && !feature.isVisible) return false
     if (selectedCategory !== 'all' && feature.category !== selectedCategory) return false;
     return true;
   });
 
   // Group features by category
   const featuresByCategory = filteredFeatures.reduce((acc, feature) => {
-    if (!acc[feature.category]) acc[feature.category] = [];
+    if (!acc[feature.category]) acc[feature.category] = []
     acc[feature.category].push(feature);
     return acc;
   }, {} as Record<string, Feature[]>);
 
   // Calculate progress
-  const totalFeatures = features.length;
+  const totalFeatures = features.length
   const unlockedFeatures = features.filter(f => f.isUnlocked).length;
   const progressPercentage = (unlockedFeatures / totalFeatures) * 100;
 
@@ -298,7 +300,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
       case 'expert': return 'bg-purple-50 border-purple-200 text-purple-700';
       default: return 'bg-gray-50 border-gray-200 text-gray-700';
     }
-  };
+  }
 
   const getUnlockProgress = (feature: Feature): number => {
     const { type, requirement } = feature.unlockCriteria;
@@ -320,7 +322,7 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
       default:
         return 100;
     }
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -562,6 +564,6 @@ export const ProgressiveDisclosure: React.FC<DaisyProgressiveDisclosureProps />=
       })()}
     </div>
   );
-};
+}
 
 export default ProgressiveDisclosure; 

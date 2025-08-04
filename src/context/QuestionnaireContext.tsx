@@ -8,18 +8,18 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
   QuestionnaireState,
   QuestionnaireAnalytics,
   RiskCategory,
-} from '@/types';
+} from '@/types'
 
 interface QuestionnaireContextType extends QuestionnaireState {
   // CRUD Operations
   createQuestionnaire: (_data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
-  ) => Promise<Questionnaire>;
+  ) => Promise<Questionnaire>
   updateQuestionnaire: (id: string, data: Partial<Questionnaire>) => Promise<Questionnaire>;
   deleteQuestionnaire: (id: string) => Promise<void>;
   getQuestionnaire: (id: string) => Questionnaire | null;
 
   // Question Management
-  addQuestion: (_questionnaireId: string, question: Omit<Question, 'id'>) => Promise<Question>;
+  addQuestion: (_questionnaireId: string, question: Omit<Question, 'id'>) => Promise<Question>
   updateQuestion: (_questionnaireId: string,
     questionId: string,
     data: Partial<Question>
@@ -28,38 +28,38 @@ interface QuestionnaireContextType extends QuestionnaireState {
   reorderQuestions: (_questionnaireId: string, questionIds: string[]) => Promise<void>;
 
   // AI Question Generation
-  generateQuestionsForRisk: (riskCategory: RiskCategory, count?: number) => Promise<Question[]>;
+  generateQuestionsForRisk: (riskCategory: RiskCategory, count?: number) => Promise<Question[]>
   generateQuestionsForControl: (controlType: string, count?: number) => Promise<Question[]>;
 
   // Response Management
   submitResponse: (_questionnaireId: string,
     responses: Omit<Response, 'id' | 'createdAt'>[]
-  ) => Promise<void>;
+  ) => Promise<void>
   updateResponse: (responseId: string, data: Partial<Response>) => Promise<Response>;
   getResponses: (_questionnaireId: string, userId?: string) => Response[];
 
   // Analytics
-  getQuestionnaireAnalytics: (_questionnaireId: string) => QuestionnaireAnalytics | null;
-  getCompletionStats: () => { total: number; completed: number; pending: number; overdue: number };
+  getQuestionnaireAnalytics: (_questionnaireId: string) => QuestionnaireAnalytics | null
+  getCompletionStats: () => { total: number; completed: number; pending: number; overdue: number }
   getResponseTrends: (_questionnaireId: string) => { date: string; responses: number }[];
 
   // Distribution
-  distributeQuestionnaire: (_questionnaireId: string, userIds: string[]) => Promise<void>;
+  distributeQuestionnaire: (_questionnaireId: string, userIds: string[]) => Promise<void>
   sendReminders: (_questionnaireId: string) => Promise<void>;
 
   // Conditional Logic
-  evaluateConditions: (question: Question, responses: Response[]) => boolean;
+  evaluateConditions: (question: Question, responses: Response[]) => boolean
   getNextQuestion: (_questionnaireId: string,
     currentQuestionId: string,
     responses: Response[]
   ) => Question | null;
 
   // Utility
-  duplicateQuestionnaire: (_questionnaireId: string, newTitle: string) => Promise<Questionnaire>;
+  duplicateQuestionnaire: (_questionnaireId: string, newTitle: string) => Promise<Questionnaire>
   exportResponses: (_questionnaireId: string, format: 'csv' | 'excel') => Promise<void>;
 
   // Error handling
-  clearError: () => void;
+  clearError: () => void
 }
 
 // Questionnaire Actions
@@ -77,8 +77,8 @@ type QuestionnaireAction =
   | { type: 'UPDATE_RESPONSE'; payload: Response }
   | {
       type: 'SET_ANALYTICS';
-      payload: { questionnaireId: string; analytics: QuestionnaireAnalytics };
-    };
+      payload: { questionnaireId: string; analytics: QuestionnaireAnalytics }
+    }
 
 // Initial state
 const initialState: QuestionnaireState = {
@@ -88,7 +88,7 @@ const initialState: QuestionnaireState = {
   analytics: {},
   loading: false,
   error: null,
-};
+}
 
 // Questionnaire reducer
 const questionnaireReducer = (
@@ -97,23 +97,23 @@ const questionnaireReducer = (
 ): QuestionnaireState => {
   switch (action.type) {
     case 'SET_LOADING':
-      return { ...state, loading: action.payload };
+      return { ...state, loading: action.payload }
 
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
+      return { ...state, error: action.payload, loading: false }
 
     case 'CLEAR_ERROR':
-      return { ...state, error: null };
+      return { ...state, error: null }
 
     case 'SET_QUESTIONNAIRES':
-      return { ...state, questionnaires: action.payload, loading: false };
+      return { ...state, questionnaires: action.payload, loading: false }
 
     case 'ADD_QUESTIONNAIRE':
       return {
         ...state,
         questionnaires: [action.payload, ...state.questionnaires],
         loading: false,
-      };
+      }
 
     case 'UPDATE_QUESTIONNAIRE':
       return {
@@ -126,7 +126,7 @@ const questionnaireReducer = (
             ? action.payload
             : state.selectedQuestionnaire,
         loading: false,
-      };
+      }
 
     case 'DELETE_QUESTIONNAIRE':
       return {
@@ -135,25 +135,25 @@ const questionnaireReducer = (
         selectedQuestionnaire:
           state.selectedQuestionnaire?.id === action.payload ? null : state.selectedQuestionnaire,
         loading: false,
-      };
+      }
 
     case 'SET_SELECTED_QUESTIONNAIRE':
-      return { ...state, selectedQuestionnaire: action.payload };
+      return { ...state, selectedQuestionnaire: action.payload }
 
     case 'SET_RESPONSES':
-      return { ...state, responses: action.payload };
+      return { ...state, responses: action.payload }
 
     case 'ADD_RESPONSE':
       return {
         ...state,
         responses: [...state.responses, action.payload],
-      };
+      }
 
     case 'UPDATE_RESPONSE':
       return {
         ...state,
         responses: state.responses.map((r) => (r.id === action.payload.id ? action.payload : r)),
-      };
+      }
 
     case 'SET_ANALYTICS':
       return {
@@ -162,12 +162,12 @@ const questionnaireReducer = (
           ...state.analytics,
           [action.payload.questionnaireId]: action.payload.analytics,
         },
-      };
+      }
 
     default:
       return state;
   }
-};
+}
 
 const QuestionnaireContext = createContext<QuestionnaireContextType>(
   {} as QuestionnaireContextType
@@ -179,12 +179,12 @@ export const useQuestionnaires = () => {
     throw new Error('useQuestionnaires must be used within QuestionnaireProvider');
   }
   return context;
-};
+}
 
 // Mock API service
 const questionnaireService = {
   async getAllQuestionnaires(): Promise<Questionnaire[]> {
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800))
     return generateMockQuestionnaires();
   },
 
@@ -198,7 +198,7 @@ const questionnaireService = {
       createdAt: new Date().toISOString(),
       responses: [],
       completionRate: 0,
-    };
+    }
 
     return newQuestionnaire;
   },
@@ -209,13 +209,13 @@ const questionnaireService = {
     return {
       ...(data as Questionnaire),
       id,
-    };
+    }
   },
 
   async deleteQuestionnaire(): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 500));
   },
-};
+}
 
 // Mock data generator
 const generateMockQuestionnaires = (): Questionnaire[] => {
@@ -297,10 +297,10 @@ const generateMockQuestionnaires = (): Questionnaire[] => {
       estimatedTime: 10,
       completionRate: 0,
     },
-  ];
+  ]
 
   return questionnaires;
-};
+}
 
 // AI Question Generation
 const generateAIQuestions = (category: RiskCategory | string, count: number = 5): Question[] => {
@@ -340,7 +340,7 @@ const generateAIQuestions = (category: RiskCategory | string, count: number = 5)
       'How often is strategic risk reviewed?',
       'What is the appetite for strategic risk?',
     ],
-  };
+  }
 
   const templates =
     questionTemplates[category as keyof typeof questionTemplates] || questionTemplates.operational;
@@ -362,7 +362,7 @@ const generateAIQuestions = (category: RiskCategory | string, count: number = 5)
     aiGenerated: true,
     options: index % 4 === 1 ? ['Very Low', 'Low', 'Medium', 'High', 'Very High'] : undefined,
   })) as Question[];
-};
+}
 
 export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(questionnaireReducer, initialState);
@@ -370,7 +370,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   // Load initial questionnaires
   useEffect(() => {
     const loadQuestionnaires = async () => {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch({ type: 'SET_LOADING', payload: true })
       try {
         const questionnaires = await questionnaireService.getAllQuestionnaires();
         dispatch({ type: 'SET_QUESTIONNAIRES', payload: questionnaires });
@@ -388,13 +388,13 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
                 .split('T')[0],
               responses: Math.floor(Math.random() * 10),
             })),
-          };
+          }
           dispatch({ type: 'SET_ANALYTICS', payload: { questionnaireId: q.id, analytics } });
         });
       } catch {
         dispatch({ type: 'SET_ERROR', payload: 'Failed to load questionnaires' });
       }
-    };
+    }
 
     loadQuestionnaires();
   }, []);
@@ -402,7 +402,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   // CRUD Operations
   const createQuestionnaire = async (_data: Omit<Questionnaire, 'id' | 'createdAt' | 'responses' | 'analytics'>
   ) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_LOADING', payload: true })
     try {
       const newQuestionnaire = await questionnaireService.createQuestionnaire(data);
       dispatch({ type: 'ADD_QUESTIONNAIRE', payload: newQuestionnaire });
@@ -411,7 +411,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: 'SET_ERROR', payload: 'Failed to create questionnaire' });
       throw error;
     }
-  };
+  }
 
   const updateQuestionnaire = async (id: string, data: Partial<Questionnaire>) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -423,7 +423,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: 'SET_ERROR', payload: 'Failed to update questionnaire' });
       throw error;
     }
-  };
+  }
 
   const deleteQuestionnaire = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -434,30 +434,30 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: 'SET_ERROR', payload: 'Failed to delete questionnaire' });
       throw error;
     }
-  };
+  }
 
   const getQuestionnaire = (id: string) => {
     return state.questionnaires.find((q) => q.id === id) || null;
-  };
+  }
 
   // Question Management
   const addQuestion = async (_questionnaireId: string, question: Omit<Question, 'id'>) => {
-    const questionnaire = getQuestionnaire(questionnaireId);
+    const questionnaire = getQuestionnaire(questionnaireId)
     if (!questionnaire) throw new Error('Questionnaire not found');
 
     const newQuestion: Question = {
       ...question,
       id: `q-${Date.now()}`,
-    };
+    }
 
     const updatedQuestionnaire = {
       ...questionnaire,
       questions: [...questionnaire.questions, newQuestion],
-    };
+    }
 
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
     return newQuestion;
-  };
+  }
 
   const updateQuestion = async (_questionnaireId: string,
     questionId: string,
@@ -473,11 +473,11 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const updatedQuestionnaire = {
       ...questionnaire,
       questions: updatedQuestions,
-    };
+    }
 
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
     return updatedQuestions.find((q) => q.id === questionId)!;
-  };
+  }
 
   const deleteQuestion = async (_questionnaireId: string, questionId: string) => {
     const questionnaire = getQuestionnaire(questionnaireId);
@@ -487,10 +487,10 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const updatedQuestionnaire = {
       ...questionnaire,
       questions: updatedQuestions,
-    };
+    }
 
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
-  };
+  }
 
   const reorderQuestions = async (_questionnaireId: string, questionIds: string[]) => {
     const questionnaire = getQuestionnaire(questionnaireId);
@@ -506,28 +506,28 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const updatedQuestionnaire = {
       ...questionnaire,
       questions: reorderedQuestions,
-    };
+    }
 
     await updateQuestionnaire(questionnaireId, updatedQuestionnaire);
-  };
+  }
 
   // AI Question Generation
   const generateQuestionsForRisk = async (riskCategory: RiskCategory, count = 5) => {
     await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate AI processing
     return generateAIQuestions(riskCategory, count);
-  };
+  }
 
   const generateQuestionsForControl = async (controlType: string, count = 5) => {
     await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate AI processing
     return generateAIQuestions(controlType, count);
-  };
+  }
 
   // Response Management
   const submitResponse = async (
     _questionnaireId: string,
     responses: Omit<Response, 'id' | 'createdAt'>[]
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800))
 
     const newResponses = responses.map((r) => ({
       ...r,
@@ -538,18 +538,18 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     newResponses.forEach((response) => {
       dispatch({ type: 'ADD_RESPONSE', payload: response });
     });
-  };
+  }
 
   const updateResponse = async (responseId: string, data: Partial<Response>) => {
     const updatedResponse = {
       ...state.responses.find((r) => r.id === responseId)!,
       ...data,
       updatedAt: new Date().toISOString(),
-    };
+    }
 
     dispatch({ type: 'UPDATE_RESPONSE', payload: updatedResponse });
     return updatedResponse;
-  };
+  }
 
   const getResponses = (_questionnaireId: string, userId?: string) => {
     const questionnaire = getQuestionnaire(questionnaireId);
@@ -564,12 +564,12 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     return responses;
-  };
+  }
 
   // Analytics
   const getQuestionnaireAnalytics = (_questionnaireId: string) => {
-    return state.analytics[questionnaireId] || null;
-  };
+    return state.analytics[questionnaireId] || null
+  }
 
   const getCompletionStats = () => {
     const total = state.questionnaires.length;
@@ -579,28 +579,28 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       (q) => q.status === 'active' && new Date(q.dueDate) < new Date()
     ).length;
 
-    return { total, completed, pending, overdue };
-  };
+    return { total, completed, pending, overdue }
+  }
 
   const getResponseTrends = (_questionnaireId: string) => {
     const analytics = getQuestionnaireAnalytics(questionnaireId);
     return analytics?.trends || [];
-  };
+  }
 
   // Distribution
   const distributeQuestionnaire = async (_questionnaireId: string, userIds: string[]) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`);
-  };
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // console.log(`Distributed questionnaire ${questionnaireId} to ${userIds.length} users`)
+  }
 
   const sendReminders = async (_questionnaireId: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    // console.log(`Sent reminders for questionnaire ${questionnaireId}`);
-  };
+    // console.log(`Sent reminders for questionnaire ${questionnaireId}`)
+  }
 
   // Conditional Logic
   const evaluateConditions = (question: Question, responses: Response[]) => {
-    if (!question.conditional) return true;
+    if (!question.conditional) return true
 
     const dependentResponse = responses.find(
       (r) => r.questionId === question.conditional!.dependsOn
@@ -608,7 +608,7 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!dependentResponse) return false;
 
     return dependentResponse.answer === question.conditional.showWhen;
-  };
+  }
 
   const getNextQuestion = (_questionnaireId: string,
     currentQuestionId: string,
@@ -628,11 +628,11 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     return null;
-  };
+  }
 
   // Utility
   const duplicateQuestionnaire = async (_questionnaireId: string, newTitle: string) => {
-    const original = getQuestionnaire(questionnaireId);
+    const original = getQuestionnaire(questionnaireId)
     if (!original) throw new Error('Questionnaire not found');
 
     const duplicated = {
@@ -641,19 +641,19 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       status: 'draft' as const,
       responses: [],
       analytics: undefined,
-    };
+    }
 
     return createQuestionnaire(duplicated);
-  };
+  }
 
   const exportResponses = async (_questionnaireId: string, format: 'csv' | 'excel') => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    // console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`);
-  };
+    // console.log(`Exported responses for questionnaire ${questionnaireId} in ${format} format`)
+  }
 
   const clearError = () => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }
 
   return (
     <QuestionnaireContext.Provider
@@ -687,4 +687,4 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </QuestionnaireContext.Provider>
   );
-};
+}

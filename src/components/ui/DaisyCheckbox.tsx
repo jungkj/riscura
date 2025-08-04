@@ -14,7 +14,7 @@ export const DaisyCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
       sm: 'checkbox-sm',
       md: 'checkbox-md',
       lg: 'checkbox-lg',
-    };
+    }
 
     const colorClasses = {
       primary: 'checkbox-primary',
@@ -24,7 +24,7 @@ export const DaisyCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
       success: 'checkbox-success',
       warning: 'checkbox-warning',
       error: 'checkbox-error',
-    };
+    }
 
     return (
       <input

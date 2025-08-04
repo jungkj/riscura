@@ -13,7 +13,7 @@ export interface PDFGenerationOptions {
     right: string;
     bottom: string;
     left: string;
-  };
+  }
   headerTemplate?: string;
   footerTemplate?: string;
   displayHeaderFooter?: boolean;
@@ -35,7 +35,7 @@ const DEFAULT_OPTIONS: Partial<PDFGenerationOptions> = {
     left: '1in',
   },
   displayHeaderFooter: true,
-};
+}
 
 /**
  * Generate PDF from HTML template and data
@@ -45,10 +45,10 @@ export async function generatePDF(
   data: any,
   options: PDFGenerationOptions
 ): Promise<PDFGenerationResult> {
-  const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+  const mergedOptions = { ...DEFAULT_OPTIONS, ...options }
 
   // Ensure reports directory exists
-  const reportsDir = '/tmp/reports';
+  const reportsDir = '/tmp/reports'
   await fs.mkdir(reportsDir, { recursive: true });
 
   const filePath = path.join(reportsDir, options.fileName);
@@ -57,20 +57,20 @@ export async function generatePDF(
 
   try {
     // Generate HTML content
-    const htmlContent = await generateHTMLContent(templateName, data, mergedOptions);
+    const htmlContent = await generateHTMLContent(templateName, data, mergedOptions)
 
     // Launch browser
     browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    })
 
     const page = await browser.newPage();
 
     // Set content
     await page.setContent(htmlContent, {
       waitUntil: 'networkidle0',
-    });
+    })
 
     // Generate PDF
     const pdf = await page.pdf({
@@ -82,7 +82,7 @@ export async function generatePDF(
       headerTemplate: mergedOptions.headerTemplate || getDefaultHeaderTemplate(data),
       footerTemplate: mergedOptions.footerTemplate || getDefaultFooterTemplate(),
       printBackground: true,
-    });
+    })
 
     const _stats = await fs.stat(filePath);
 
@@ -90,9 +90,9 @@ export async function generatePDF(
       filePath,
       fileSize: stats.size,
       fileName: options.fileName,
-    };
+    }
   } catch (error) {
-    // console.error('PDF generation failed:', error);
+    // console.error('PDF generation failed:', error)
     throw new Error(`PDF generation failed: ${error.message}`);
   } finally {
     if (browser) {

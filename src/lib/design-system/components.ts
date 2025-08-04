@@ -464,7 +464,7 @@ export const componentVariants = {
       overflow: 'hidden',
     },
   },
-} as const;
+} as const
 
 // Component composition patterns
 export const componentPatterns = {
@@ -581,7 +581,7 @@ export const componentPatterns = {
       },
     },
   },
-} as const;
+} as const
 
 // Utility classes for common styling patterns
 export const utilityClasses = {
@@ -694,10 +694,10 @@ export const utilityClasses = {
     xl: { borderRadius: designTokens.borderRadius.xl },
     full: { borderRadius: designTokens.borderRadius.full },
   },
-} as const;
+} as const
 
 export default {
   componentVariants,
   componentPatterns,
   utilityClasses,
-};
+}

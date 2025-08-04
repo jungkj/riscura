@@ -9,14 +9,15 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
-// import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle, DaisyCalendar } from '@/components/ui/daisy-components';
+// import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react'
 
 interface CreateControlModalProps {
   open: boolean;
@@ -60,7 +61,7 @@ const initialFormData: ControlFormData = {
   evidenceRequired: true,
   continuousMonitoring: false,
   customFields: {},
-};
+}
 
 const controlCategories = [
   'Access Control',
@@ -145,7 +146,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
   const [activeTab, setActiveTab] = useState('basic');
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!formData.title.trim()) {
       newErrors.title = 'Control title is required';
@@ -169,7 +170,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }
 
   const calculateNextTestingDate = (frequency: string, fromDate: Date = new Date()): Date => {
     const date = new Date(fromDate);
@@ -190,7 +191,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
         date.setMonth(date.getMonth() + 3);
     }
     return date;
-  };
+  }
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -219,26 +220,26 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
           gdpr: formData.framework.includes('GDPR'),
           nist: formData.framework.includes('NIST'),
         },
-      };
+      }
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000))
 
       onControlCreated(newControl);
       toast.success('Control created successfully!');
       
       // Reset form
-      setFormData(initialFormData);
+      setFormData(initialFormData)
       setActiveTab('basic');
       onOpenChange(false);
 
     } catch (error) {
-      // console.error('Error creating control:', error);
+      // console.error('Error creating control:', error)
       toast.error('Failed to create control. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   const handleFrameworkToggle = (_framework: string) => {
     setFormData(prev => ({
@@ -247,7 +248,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
         ? prev.framework.filter(f => f !== framework)
         : [...prev.framework, framework],
     }));
-  };
+  }
 
   const handleFrequencyChange = (frequency: string) => {
     const nextDate = calculateNextTestingDate(frequency);
@@ -256,11 +257,11 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
       testingFrequency: frequency,
       nextTestingDate: nextDate,
     }));
-  };
+  }
 
   const getPriorityConfig = (priority: string) => {
     return priorityLevels.find(p => p.value === priority) || priorityLevels[2];
-  };
+  }
 
   const currentPriorityConfig = getPriorityConfig(formData.priority);
 
@@ -665,4 +666,4 @@ setFormData(prev => ({ ...prev, department: e.target.value }))} />
       </DaisyDialogContent>
     </DaisyDialog>
   );
-}; 
+} 

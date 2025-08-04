@@ -36,8 +36,8 @@ export default function RCSAPage() {
   const handleImportComplete = () => {
     setShowImportDialog(false);
     // Trigger a re-render of child components
-    setRefreshKey((prev) => prev + 1);
-  };
+    setRefreshKey((prev) => prev + 1)
+  }
 
   return (
     <div className="flex flex-col h-full">

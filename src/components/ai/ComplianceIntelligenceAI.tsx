@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
+import { Brain } from 'lucide-react';
 // import {
   Shield,
   FileText,
@@ -14,9 +16,9 @@ import React, { useState } from 'react';
   Settings,
   Eye,
   Brain
-} from 'lucide-react';
+} from 'lucide-react'
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -25,7 +27,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
-// import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types'
 // import { 
   complianceAIService,
   ComplianceAssessment,
@@ -33,7 +35,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   ComplianceRoadmap,
   RegulatoryChange,
   AuditPreparation
-} from '@/services/ComplianceAIService';
+} from '@/services/ComplianceAIService'
 
 interface ComplianceIntelligenceAIProps {
   risks: Risk[];
@@ -54,7 +56,7 @@ const FrameworkSelector: React.FC<{
     gdpr: { name: 'GDPR', icon: <Shield className="h-5 w-5" />, color: 'text-green-600', description: 'General Data Protection Regulation' },
     hipaa: { name: 'HIPAA', icon: <Shield className="h-5 w-5" />, color: 'text-[#191919]', description: 'Health Insurance Portability Act' },
     iso27001: { name: 'ISO 27001', icon: <Target className="h-5 w-5" />, color: 'text-orange-600', description: 'Information Security Management' }
-  };
+  }
 
   return (
     <div className="space-y-3">
@@ -101,7 +103,7 @@ const FrameworkSelector: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 const AssessmentOverview: React.FC<{
   assessment: ComplianceAssessment;
@@ -114,15 +116,15 @@ const AssessmentOverview: React.FC<{
       3: 'Defined',
       4: 'Managed',
       5: 'Optimized'
-    };
+    }
     return labels[level as keyof typeof labels] || 'Unknown';
-  };
+  }
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-yellow-600';
     return 'text-red-600';
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -274,7 +276,7 @@ const AssessmentOverview: React.FC<{
       </DaisyCard>
     </div>
   );
-};
+}
 
 const GapAnalysisView: React.FC<{
   gaps: ComplianceGap[];
@@ -288,7 +290,7 @@ const GapAnalysisView: React.FC<{
       case 'low': return 'bg-green-500';
       default: return 'bg-muted';
     }
-  };
+  }
 
   const getGapTypeIcon = (_type: string) => {
     switch (type) {
@@ -302,7 +304,7 @@ const GapAnalysisView: React.FC<{
   ;
 </DaisyAlertTriangle>
     }
-  };
+  }
 
   const groupedGaps = gaps.reduce((acc, gap) => {
     const framework = gap.framework;
@@ -393,7 +395,7 @@ const GapAnalysisView: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 const RegulatoryChangesView: React.FC<{
   changes: RegulatoryChange[];
@@ -407,7 +409,7 @@ const RegulatoryChangesView: React.FC<{
       case 'low': return 'text-green-600 bg-green-50';
       default: return 'text-gray-600 bg-gray-50';
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -420,7 +422,7 @@ const RegulatoryChangesView: React.FC<{
       case 'deadline': return <Clock className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -499,7 +501,7 @@ const RegulatoryChangesView: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 const RoadmapView: React.FC<{
   roadmap: ComplianceRoadmap;
@@ -609,7 +611,7 @@ const RoadmapView: React.FC<{
       </DaisyCard>
     </div>
   );
-};
+}
 
 export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> = ({
   risks,
@@ -643,7 +645,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
           end: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
         },
         exclusions: []
-      };
+      }
 
       const assessmentResult = await complianceAIService.performComplianceAssessment(
         selectedFrameworks,
@@ -659,7 +661,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       );
 
       // Identify gaps
-      const allGaps: ComplianceGap[] = [];
+      const allGaps: ComplianceGap[] = []
       for (const framework of selectedFrameworks) {
         const frameworkGaps = await complianceAIService.identifyComplianceGaps(
           framework,
@@ -672,7 +674,7 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       // Monitor regulatory changes
       const regulatoryChanges = await complianceAIService.monitorRegulatoryChanges(
         selectedFrameworks
-      );
+      )
 
       setAssessment(assessmentResult);
       setGaps(allGaps);
@@ -681,11 +683,11 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onAssessmentCompleted?.(assessmentResult);
       setActiveTab('overview');
     } catch (error) {
-      // console.error('Failed to perform assessment:', error);
+      // console.error('Failed to perform assessment:', error)
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }
 
   const handleGenerateRoadmap = async () => {
     if (!assessment) return;
@@ -705,9 +707,9 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onRoadmapGenerated?.(roadmapResult);
       setActiveTab('roadmap');
     } catch (error) {
-      // console.error('Failed to generate roadmap:', error);
+      // console.error('Failed to generate roadmap:', error)
     }
-  };
+  }
 
   const handlePrepareAudit = async () => {
     if (selectedFrameworks.length === 0) return;
@@ -727,9 +729,9 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       onAuditPlanCreated?.(auditPrep);
       setActiveTab('audit');
     } catch (error) {
-      // console.error('Failed to prepare audit:', error);
+      // console.error('Failed to prepare audit:', error)
     }
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -909,4 +911,4 @@ export const ComplianceIntelligenceAI: React.FC<ComplianceIntelligenceAIProps> =
       </DaisyTabs>
     </div>
   );
-}; 
+} 

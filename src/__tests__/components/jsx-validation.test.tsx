@@ -13,7 +13,7 @@ import { glob } from 'glob';
 // Mock component for testing JSX validation
 const TestComponent: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <div data-testid="test-component">{children}</div>
-);
+)
 
 const ValidJSXComponent: React.FC = () => (
   <div>
@@ -109,11 +109,11 @@ describe('JSX Validation Tests', () => {
   describe('JSX Syntax Detection Tests', () => {
     // Helper function to validate JSX syntax
     const validateJSXSyntax = (jsxCode: string): string[] => {
-      const errors: string[] = [];
+      const errors: string[] = []
 
       // Check for common JSX mistakes
       if (jsxCode.includes(' class=')) {
-        errors.push('Use "className" instead of "class" in JSX');
+        errors.push('Use "className" instead of "class" in JSX')
       }
 
       if (jsxCode.includes(' for=')) {
@@ -121,7 +121,7 @@ describe('JSX Validation Tests', () => {
       }
 
       // Check for unclosed tags (basic check)
-      const openTags = (jsxCode.match(/(<[A-Za-z][^/>]*[^/]>)/g) || []).length;
+      const openTags = (jsxCode.match(/(<[A-Za-z][^/>]*[^/]>)/g) || []).length
       const closeTags = (jsxCode.match(/<\/[A-Za-z][^>]*>/g) || []).length;
       const selfClosingTags = (jsxCode.match(/<[A-Za-z][^>]*\/>/g) || []).length;
 
@@ -130,7 +130,7 @@ describe('JSX Validation Tests', () => {
       }
 
       return errors;
-    };
+    }
 
     test('should detect invalid HTML attributes in JSX', () => {
       const invalidJSX = '<div class="test" for="input">Invalid</div>';
@@ -154,7 +154,7 @@ describe('JSX Validation Tests', () => {
 
       // Our simple validator may not catch all tag mismatches,
       // but it should at least validate without crashing
-      expect(errors).toBeDefined();
+      expect(errors).toBeDefined()
       expect(Array.isArray(errors)).toBe(true);
     });
 
@@ -165,11 +165,11 @@ describe('JSX Validation Tests', () => {
       // Self-closing tags should not generate bracket mismatch errors
       const bracketErrors = errors.filter((error) =>
         error.includes('Potential unclosed or mismatched tags detected')
-      );
+      )
 
       // Our simple validator counts open/close brackets, not JSX tags specifically
       // So this test checks that we don't have obvious bracket mismatches
-      expect(bracketErrors.length).toBeLessThanOrEqual(1);
+      expect(bracketErrors.length).toBeLessThanOrEqual(1)
     });
   });
 
@@ -195,10 +195,10 @@ describe('JSX Validation Tests', () => {
 
         return [...new Set(files)];
       } catch (error) {
-        // console.warn('Could not find component files:', error);
+        // console.warn('Could not find component files:', error)
         return [];
       }
-    };
+    }
 
     const validateFileJSX = (filePath: string): { errors: string[]; warnings: string[] } => {
       try {
@@ -213,13 +213,13 @@ describe('JSX Validation Tests', () => {
           !content.includes('from "react"') &&
           filePath.endsWith('.jsx')
         ) {
-          warnings.push('Missing React import for JSX usage');
+          warnings.push('Missing React import for JSX usage')
         }
 
         // Check for component naming
         const exportMatches = content.match(
           /export\s+(?:default\s+)?(?:function\s+|const\s+)([A-Za-z_$][A-Za-z0-9_$]*)/g
-        );
+        )
         if (exportMatches) {
           exportMatches.forEach((match) => {
             const componentName = match.split(/\s+/).pop();
@@ -229,26 +229,26 @@ describe('JSX Validation Tests', () => {
           });
         }
 
-        return { errors, warnings };
+        return { errors, warnings }
       } catch (error) {
         return {
           errors: [
             `Could not read file: ${error instanceof Error ? error.message : 'Unknown error'}`,
           ],
           warnings: [],
-        };
+        }
       }
-    };
+    }
 
     test('should validate component files in the project', () => {
       const componentFiles = findComponentFiles();
 
       if (componentFiles.length === 0) {
-        // console.warn('No component files found for validation');
+        // console.warn('No component files found for validation')
         return;
       }
 
-      // console.log(`Validating ${componentFiles.length} component files...`);
+      // console.log(`Validating ${componentFiles.length} component files...`)
 
       let totalErrors = 0;
       let totalWarnings = 0;
@@ -260,24 +260,24 @@ describe('JSX Validation Tests', () => {
         if (errors.length > 0) {
           totalErrors += errors.length;
           problematicFiles.push(file);
-          // console.warn(`Errors in ${file}:`, errors);
+          // console.warn(`Errors in ${file}:`, errors)
         }
 
         if (warnings.length > 0) {
           totalWarnings += warnings.length;
-          // console.warn(`Warnings in ${file}:`, warnings);
+          // console.warn(`Warnings in ${file}:`, warnings)
         }
       });
 
-      // console.log(`Validation complete: ${totalErrors} errors, ${totalWarnings} warnings`);
+      // console.log(`Validation complete: ${totalErrors} errors, ${totalWarnings} warnings`)
 
       // The test should not fail for warnings, only for critical errors
       if (totalErrors > 0) {
-        // console.error(`Found critical JSX errors in ${problematicFiles.length} files`);
+        // console.error(`Found critical JSX errors in ${problematicFiles.length} files`)
 
         // For now, we'll log errors but not fail the test to avoid breaking CI
         // In a stricter environment, you might want to uncomment the line below:
-        // expect(totalErrors).toBe(0);
+        // expect(totalErrors).toBe(0)
       }
 
       expect(componentFiles.length).toBeGreaterThan(0);
@@ -308,7 +308,7 @@ describe('JSX Validation Tests', () => {
       expect(renderTime).toBeLessThan(1000); // 1 second
 
       // Verify first and last items are rendered
-      expect(screen.getByTestId('large-item-0')).toBeInTheDocument();
+      expect(screen.getByTestId('large-item-0')).toBeInTheDocument()
       expect(screen.getByTestId('large-item-999')).toBeInTheDocument();
     });
 
@@ -323,7 +323,7 @@ describe('JSX Validation Tests', () => {
             <NestedComponent depth={depth - 1} />
           </div>
         );
-      };
+      }
 
       const startTime = performance.now();
       render(<NestedComponent depth={10} />);
@@ -363,14 +363,14 @@ describe('JSX Validation Tests', () => {
         <button onClick={handleClick}>×</button>
         <img src="test.jpg" />
         <input type="text" />
-      `;
+      `
 
       // In a real implementation, this would check for:
       // - Missing aria-label on icon buttons
       // - Missing alt attributes on images
       // - Missing labels on form inputs
 
-      expect(inaccessibleJSX).toContain('<button');
+      expect(inaccessibleJSX).toContain('<button')
       expect(inaccessibleJSX).toContain('<img');
       expect(inaccessibleJSX).toContain('<input');
     });

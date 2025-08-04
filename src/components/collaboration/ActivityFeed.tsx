@@ -6,11 +6,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
+import { DaisyDialogTitle, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import {
   Activity,
   Filter,
@@ -70,11 +71,11 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
   Briefcase,
   Globe,
   MoreHorizontal,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface Activity {
-  id: string;
+  id: string
   type: ActivityType;
   action: string;
   actor: User;
@@ -182,7 +183,7 @@ const sampleUsers: User[] = [
     department: 'System',
     isOnline: true,
   },
-];
+]
 
 const sampleActivities: Activity[] = [
   {
@@ -357,7 +358,7 @@ const sampleActivities: Activity[] = [
 
 // Activity Item Component
 const ActivityItem: React.FC<{
-  activity: Activity;
+  activity: Activity
   isCompact?: boolean;
   showDetails?: boolean;
   onMarkAsRead?: (activityId: string) => void;
@@ -394,14 +395,14 @@ const ActivityItem: React.FC<{
       case 'approval_requested': return <UserCheck className="h-4 w-4" />;
       default: return <Activity className="h-4 w-4" />;
     }
-  };
+  }
 
   const getActivityColor = (_type: ActivityType, severity: Activity['severity']) => {
     if (severity === 'critical') return 'text-red-600';
     if (severity === 'high') return 'text-orange-600';
     if (severity === 'medium') return 'text-blue-600';
     return 'text-green-600';
-  };
+  }
 
   const getSeverityBadge = (severity: Activity['severity']) => {
     const colors = {
@@ -409,7 +410,7 @@ const ActivityItem: React.FC<{
       medium: 'bg-blue-100 text-blue-800',
       high: 'bg-orange-100 text-orange-800',
       critical: 'bg-red-100 text-red-800',
-    };
+    }
 
     return (
       <DaisyBadge className={cn('text-caption px-enterprise-1 py-0', colors[severity])} >
@@ -417,7 +418,7 @@ const ActivityItem: React.FC<{
 </DaisyBadge>
       </DaisyBadge>
     );
-  };
+  }
 
   const formatTimestamp = (timestamp: Date) => {
     const now = new Date();
@@ -431,7 +432,7 @@ const ActivityItem: React.FC<{
     if (hours < 24) return `${hours}h ago`;
     if (days < 7) return `${days}d ago`;
     return timestamp.toLocaleDateString();
-  };
+  }
 
   const renderChanges = (changes: ActivityChange[]) => {
     if (!changes || changes.length === 0) return null;
@@ -457,7 +458,7 @@ const ActivityItem: React.FC<{
         ))}
       </div>
     );
-  };
+  }
 
   const renderMetadata = (metadata: Record<string, any>) => {
     if (!metadata || Object.keys(metadata).length === 0) return null;
@@ -475,7 +476,7 @@ const ActivityItem: React.FC<{
         </div>
       </div>
     );
-  };
+  }
 
   if (isCompact) {
     return (
@@ -512,7 +513,7 @@ const ActivityItem: React.FC<{
         )}
       </div>
     );
-  };
+  }
 
   return (
     <DaisyCard className={cn(
@@ -678,11 +679,11 @@ const ActivityItem: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Main Activity Feed Component
 export const ActivityFeed: React.FC<{
-  isCompact?: boolean;
+  isCompact?: boolean
   maxItems?: number;
   showFilters?: boolean;
   showExport?: boolean;
@@ -706,7 +707,7 @@ export const ActivityFeed: React.FC<{
     type?: ActivityType;
     severity?: Activity['severity'];
     actor?: string;
-    dateRange?: { start: Date; end: Date };
+    dateRange?: { start: Date; end: Date }
     search?: string;
     unreadOnly?: boolean;
   }>({});
@@ -714,7 +715,7 @@ export const ActivityFeed: React.FC<{
 
   // Auto-refresh effect
   useEffect(() => {
-    if (!isAutoRefresh) return;
+    if (!isAutoRefresh) return
 
     const interval = setInterval(() => {
       // Simulate new activities
@@ -736,7 +737,7 @@ export const ActivityFeed: React.FC<{
         category: 'risk_management',
         entityType: 'risk',
         entityId: 'RSK-004',
-      };
+      }
 
       setActivities(prev => [newActivity, ...prev.slice(0, 19)]);
     }, 30000); // Every 30 seconds
@@ -746,7 +747,7 @@ export const ActivityFeed: React.FC<{
 
   // Filter activities
   const filteredActivities = activities.filter(activity => {
-    if (entityType && activity.entityType !== entityType) return false;
+    if (entityType && activity.entityType !== entityType) return false
     if (entityId && activity.entityId !== entityId) return false;
     if (userId && activity.actor.id !== userId) return false;
     if (filters.category && activity.category !== filters.category) return false;
@@ -768,17 +769,17 @@ export const ActivityFeed: React.FC<{
     setActivities(prev => prev.map(activity => 
       activity.id === activityId ? { ...activity, isRead: true } : activity
     ));
-  };
+  }
 
   const handleMarkAllAsRead = () => {
     setActivities(prev => prev.map(activity => ({ ...activity, isRead: true })));
-  };
+  }
 
   const handleViewDetails = (activity: Activity) => {
     setSelectedActivity(activity);
     setShowActivityDialog(true);
     handleMarkAsRead(activity.id);
-  };
+  }
 
   const handleExport = (format: 'csv' | 'json' | 'pdf') => {
     // Simulate export functionality
@@ -790,7 +791,7 @@ export const ActivityFeed: React.FC<{
       description: activity.description,
       category: activity.category,
       severity: activity.severity,
-    }));
+    }))
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -799,7 +800,7 @@ export const ActivityFeed: React.FC<{
     a.download = `activity-feed-${new Date().toISOString().split('T')[0]}.${format}`;
     a.click();
     URL.revokeObjectURL(url);
-  };
+  }
 
   const unreadCount = activities.filter(a => !a.isRead).length;
 
@@ -995,6 +996,6 @@ setFilters(prev => ({ ...prev, search: e.target.value }))}
       </DaisyDialog>
     </div>
   );
-};
+}
 
 export default ActivityFeed;

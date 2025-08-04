@@ -14,7 +14,7 @@ export async function GET() {
     },
     urlAnalysis: {},
     pooledTest: null,
-  };
+  }
 
   const dbUrl = process.env.DATABASE_URL || process.env.database_url;
 
@@ -30,13 +30,13 @@ export async function GET() {
           url.hostname.match(/db\.([^.]+)\.supabase\.co/)?.[1] ||
           url.hostname.match(/postgres\.([^:]+)/)?.[1] ||
           'unknown',
-      };
+      }
 
       // If it's a direct URL, show what the pooled URL should be
       if (results.urlAnalysis.isDirectUrl) {
         const match = dbUrl.match(
           /postgresql:\/\/postgres:([^@]+)@db\.([^.]+)\.supabase\.co:5432\/postgres/
-        );
+        )
         if (match) {
           const [, password, projectRef] = match;
           results.suggestedPooledUrl = `postgresql://postgres.${projectRef}:[YOUR-PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres`;
@@ -53,7 +53,7 @@ export async function GET() {
       // Test the pooled connection if URL is already pooled
       if (results.urlAnalysis.isPooledUrl) {
         try {
-          const { PrismaClient } = await import('@prisma/client');
+          const { PrismaClient } = await import('@prisma/client')
           const testUrl = new URL(dbUrl);
           testUrl.searchParams.set('pgbouncer', 'true');
           testUrl.searchParams.set('connection_limit', '1');
@@ -70,13 +70,13 @@ export async function GET() {
           results.pooledTest = {
             success: true,
             result: result,
-          };
+          }
           await prisma.$disconnect();
         } catch (error) {
           results.pooledTest = {
             success: false,
             error: error instanceof Error ? error.message : String(error),
-          };
+          }
         }
       }
     } catch (error) {

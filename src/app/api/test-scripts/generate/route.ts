@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
-// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter';
+// import { ApiResponseFormatter, formatValidationErrors } from '@/lib/api/response-formatter'
 import { z } from 'zod';
 import {
   GenerateTestScriptRequest,
@@ -8,7 +8,7 @@ import {
   TestScriptType,
   TestFrequency,
 } from '@/types/rcsa.types';
-// import { TestScriptGenerationAIService } from '@/services/ai/TestScriptGenerationAIService';
+// import { TestScriptGenerationAIService } from '@/services/ai/TestScriptGenerationAIService'
 
 // Validation schema
 const generateTestScriptSchema = z.object({
@@ -16,15 +16,15 @@ const generateTestScriptSchema = z.object({
   controlDescription: z.string().optional(),
   testObjective: z.string().optional(),
   additionalContext: z.string().optional(),
-});
+})
 
 // POST /api/test-scripts/generate - Generate test script using AI
 export const POST = withApiMiddleware(
   async (req: NextRequest) => {
-    const user = (req as any).user;
+    const user = (req as any).user
 
     // Parse and validate request body
-    const body = await req.json();
+    const body = await req.json()
     const validationResult = generateTestScriptSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -38,14 +38,14 @@ export const POST = withApiMiddleware(
 
     try {
       // Initialize AI service
-      const aiService = new TestScriptGenerationAIService();
+      const aiService = new TestScriptGenerationAIService()
 
       // Generate test script
-      const response = await aiService.generateTestScript(data, user.organizationId, user.id);
+      const response = await aiService.generateTestScript(data, user.organizationId, user.id)
 
       return ApiResponseFormatter.success(response);
     } catch (error) {
-      // console.error('Test script generation error:', error);
+      // console.error('Test script generation error:', error)
 
       return ApiResponseFormatter.error('AI_GENERATION_ERROR', 'Failed to generate test script', {
         status: 500,

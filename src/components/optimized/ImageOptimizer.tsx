@@ -1,5 +1,5 @@
 // Image Optimizer Component with Lazy Loading and Progressive Enhancement
-'use client';
+'use client'
 
 import React, { 
   useState, 
@@ -39,7 +39,7 @@ export interface ImageOptimizerProps {
   decoding?: 'async' | 'auto' | 'sync';
   
   // Progressive enhancement options
-  enableWebP?: boolean;
+  enableWebP?: boolean
   enableAvif?: boolean;
   enableProgressiveJPEG?: boolean;
   enableLazyLoading?: boolean;
@@ -49,37 +49,37 @@ export interface ImageOptimizerProps {
   
   // Responsive options
   breakpoints?: Array<{
-    maxWidth: number;
+    maxWidth: number
     width: number;
     height?: number;
     quality?: number;
   }>;
   
   // Error handling
-  fallbackSrc?: string;
+  fallbackSrc?: string
   showErrorState?: boolean;
   errorComponent?: React.ComponentType<{ error: string; retry: () => void }>;
   
   // Performance options
-  preload?: boolean;
+  preload?: boolean
   prefetch?: boolean;
   critical?: boolean;
   
   // Callbacks
-  onLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
+  onLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onError?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onLoadStart?: () => void;
   onProgress?: (loaded: number, total: number) => void;
   
   // Additional features
-  enableZoom?: boolean;
+  enableZoom?: boolean
   enableDownload?: boolean;
   enableFullscreen?: boolean;
   watermark?: {
     text: string;
     position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
     opacity?: number;
-  };
+  }
 }
 
 export interface ImageOptimizerRef {
@@ -91,11 +91,11 @@ export interface ImageOptimizerRef {
 // Image format detection utility
 const supportsWebP = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    const webP = new (window as any).Image();
+    const webP = new (window as any).Image()
     webP.onload = webP.onerror = () => resolve(webP.height === 2);
     webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
-};
+}
 
 const supportsAvif = (): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -103,14 +103,14 @@ const supportsAvif = (): Promise<boolean> => {
     avif.onload = avif.onerror = () => resolve(avif.height === 2);
     avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
   });
-};
+}
 
 // Intersection Observer hook
 const useIntersectionObserver = (
   ref: React.RefObject<Element>,
   options: IntersectionObserverInit = {}
 ) => {
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false)
 
   useEffect(() => {
     const element = ref.current;
@@ -130,7 +130,7 @@ const useIntersectionObserver = (
   }, [ref, options]);
 
   return isIntersecting;
-};
+}
 
 // Generate responsive image URLs
 const generateResponsiveUrls = (
@@ -147,7 +147,7 @@ const generateResponsiveUrls = (
       avif: enableAvif ? `${src}?w=${bp.width}&q=${bp.quality || 75}&fm=avif` : null,
     }
   }));
-};
+}
 
 // Error boundary component
 const ImageErrorFallback = memo(({ 
@@ -157,7 +157,7 @@ const ImageErrorFallback = memo(({
   alt,
   className 
 }: { 
-  error: string; 
+  error: string 
   retry: () => void;
   fallbackSrc?: string;
   alt: string;
@@ -172,8 +172,8 @@ const ImageErrorFallback = memo(({
         onError={() => {
           // If fallback also fails, show error state
         }} />
-    );
-  };
+    )
+  }
 
   return (
     <div className={cn(
@@ -253,7 +253,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
   enableFullscreen = false,
   watermark,
 }, ref) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadProgress, setLoadProgress] = useState(0);
@@ -277,13 +277,13 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       const [webpSupported, avifSupported] = await Promise.all([
         enableWebP ? supportsWebP() : Promise.resolve(false),
         enableAvif ? supportsAvif() : Promise.resolve(false),
-      ]);
+      ])
 
       setSupportedFormats({
         webp: webpSupported,
         avif: avifSupported,
       });
-    };
+    }
 
     checkFormats();
   }, [enableWebP, enableAvif]);
@@ -291,7 +291,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
   // Preload critical images
   useEffect(() => {
     if (critical || preload) {
-      const link = document.createElement('link');
+      const link = document.createElement('link')
       link.rel = 'preload';
       link.as = 'image';
       link.href = src;
@@ -299,42 +299,42 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
 
       return () => {
         document.head.removeChild(link);
-      };
+      }
     }
   }, [critical, preload, src]);
 
   // Prefetch images
   useEffect(() => {
     if (prefetch) {
-      const link = document.createElement('link');
+      const link = document.createElement('link')
       link.rel = 'prefetch';
       link.href = src;
       document.head.appendChild(link);
 
       return () => {
         document.head.removeChild(link);
-      };
+      }
     }
   }, [prefetch, src]);
 
   // Generate optimized source URL
   const getOptimizedSrc = useCallback(() => {
-    let optimizedSrc = src;
+    let optimizedSrc = src
 
     // Add quality parameter
-    const separator = src.includes('?') ? '&' : '?';
+    const separator = src.includes('?') ? '&' : '?'
     optimizedSrc += `${separator}q=${quality}`;
 
     // Add format parameter based on support
     if (supportedFormats.avif && enableAvif) {
-      optimizedSrc += '&fm=avif';
+      optimizedSrc += '&fm=avif'
     } else if (supportedFormats.webp && enableWebP) {
       optimizedSrc += '&fm=webp';
     }
 
     // Add progressive JPEG
     if (enableProgressiveJPEG) {
-      optimizedSrc += '&progressive=true';
+      optimizedSrc += '&progressive=true'
     }
 
     return optimizedSrc;
@@ -342,7 +342,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
 
   // Handle image loading
   const handleLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
-    setIsLoading(false);
+    setIsLoading(false)
     setHasError(false);
     setLoadProgress(100);
     onLoad?.(event);
@@ -364,7 +364,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
 
   // Retry loading
   const retryLoad = useCallback(() => {
-    setHasError(false);
+    setHasError(false)
     setIsLoading(true);
     if (imageRef.current) {
       imageRef.current.src = getOptimizedSrc();
@@ -374,7 +374,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
   // Download image
   const downloadImage = useCallback(async () => {
     try {
-      const response = await fetch(src);
+      const response = await fetch(src)
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -385,17 +385,17 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      // console.error('Failed to download image:', error);
+      // console.error('Failed to download image:', error)
     }
   }, [src]);
 
   // Get image data
   const getImageData = useCallback(async (): Promise<Blob | null> => {
     try {
-      const response = await fetch(src);
+      const response = await fetch(src)
       return await response.blob();
     } catch (error) {
-      // console.error('Failed to get image data:', error);
+      // console.error('Failed to get image data:', error)
       return null;
     }
   }, [src]);
@@ -405,18 +405,18 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
     reload: retryLoad,
     getImageData,
     downloadImage,
-  }), [retryLoad, getImageData, downloadImage]);
+  }), [retryLoad, getImageData, downloadImage])
 
   // Generate responsive sizes string
   const responsiveSizes = sizes || breakpoints
     .map(bp => `(max-width: ${bp.maxWidth}px) ${bp.width}px`)
-    .join(', ');
+    .join(', ')
 
   // Determine if image should load
   const shouldLoad = !enableIntersectionObserver || 
                     !enableLazyLoading || 
                     isIntersecting || 
-                    priority;
+                    priority
 
   // Render loading placeholder
   if (!shouldLoad || (isLoading && !hasError)) {
@@ -440,7 +440,7 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
           </div>
         )}
       </div>
-    );
+    )
   }
 
   // Render error state
@@ -458,8 +458,8 @@ export const ImageOptimizer = forwardRef<ImageOptimizerRef, ImageOptimizerProps>
             className={className} />
         )}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div 

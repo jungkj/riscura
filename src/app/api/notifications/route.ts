@@ -40,7 +40,7 @@ export const GET = withApiMiddleware(
         },
       });
     } catch (error) {
-      // console.error('Get notifications error:', error);
+      // console.error('Get notifications error:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to fetch notifications' },
         { status: 500 }

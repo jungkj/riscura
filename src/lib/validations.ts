@@ -5,7 +5,7 @@ export const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   rememberMe: z.boolean().optional().default(false),
-});
+})
 
 export const registerSchema = z
   .object({
@@ -37,7 +37,7 @@ export const riskSchema = z.object({
   impact: z.number().min(1).max(5),
   owner: z.string().min(1, 'Owner is required'),
   status: z.enum(['identified', 'assessed', 'mitigated', 'closed']).optional(),
-});
+})
 
 export const controlSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -54,7 +54,7 @@ export const documentUploadSchema = z.object({
   name: z.string().min(1, 'Document name is required'),
   type: z.string().min(1, 'Document type is required'),
   content: z.string().min(1, 'Document content is required'),
-});
+})
 
 // Questionnaire Schemas
 export const questionSchema = z.object({
@@ -62,7 +62,7 @@ export const questionSchema = z.object({
   type: z.enum(['text', 'multiple_choice', 'rating', 'yes_no']),
   options: z.array(z.string()).optional(),
   required: z.boolean(),
-});
+})
 
 export const questionnaireSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -78,7 +78,7 @@ export const workflowStepSchema = z.object({
   type: z.enum(['approval', 'review', 'action']),
   assignee: z.string().min(1, 'Assignee is required'),
   dueDate: z.string().min(1, 'Due date is required'),
-});
+})
 
 export const workflowSchema = z.object({
   name: z.string().min(1, 'Workflow name is required'),
@@ -88,7 +88,7 @@ export const workflowSchema = z.object({
 });
 
 // Type exports for form data
-export type LoginFormData = z.infer<typeof loginSchema>;
+export type LoginFormData = z.infer<typeof loginSchema>
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ProfileUpdateFormData = z.infer<typeof profileUpdateSchema>;
 export type RiskFormData = z.infer<typeof riskSchema>;

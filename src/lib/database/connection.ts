@@ -19,11 +19,11 @@ const DATABASE_CONFIG = {
     query: parseInt(process.env.DATABASE_QUERY_TIMEOUT || '30000'),
     transaction: parseInt(process.env.DATABASE_TRANSACTION_TIMEOUT || '60000'),
   },
-};
+}
 
 // Global connection instance
 declare global {
-  var __prisma: PrismaClient | undefined;
+  var __prisma: PrismaClient | undefined
 }
 
 // Prisma client options for production
@@ -35,11 +35,11 @@ const prismaOptions: Prisma.PrismaClientOptions = {
       url: env.DATABASE_URL,
     },
   },
-};
+}
 
 // Connection pool status interface
 export interface ConnectionPoolStatus {
-  isHealthy: boolean;
+  isHealthy: boolean
   activeConnections: number;
   idleConnections: number;
   totalConnections: number;
@@ -53,7 +53,7 @@ export interface ConnectionPoolStatus {
 
 // Database connection class
 class DatabaseConnection {
-  private client: PrismaClient;
+  private client: PrismaClient
   private connectionStartTime: Date;
   private queryTimes: number[] = [];
   private maxQueryTimes = 100;
@@ -76,9 +76,9 @@ class DatabaseConnection {
   private startHealthChecks() {
     this.healthCheckInterval = setInterval(async () => {
       try {
-        await this.healthCheck();
+        await this.healthCheck()
       } catch (error) {
-        // console.error('Health check failed:', error);
+        // console.error('Health check failed:', error)
       }
     }, 30000);
   }
@@ -92,7 +92,7 @@ class DatabaseConnection {
 
     for (let attempt = 1; attempt <= DATABASE_CONFIG.retry.attempts; attempt++) {
       try {
-        // console.log(`Database connection attempt ${attempt}/${DATABASE_CONFIG.retry.attempts}`);
+        // console.log(`Database connection attempt ${attempt}/${DATABASE_CONFIG.retry.attempts}`)
 
         await this.client.$connect();
         await this.client.$queryRaw`SELECT 1`;
@@ -100,16 +100,16 @@ class DatabaseConnection {
         this.isConnected = true;
         this.connectionAttempts = attempt;
 
-        // console.log(`Database connected successfully on attempt ${attempt}`);
+        // console.log(`Database connected successfully on attempt ${attempt}`)
         return this.client;
       } catch (error) {
         lastError = error as Error;
-        // console.error(`Database connection attempt ${attempt} failed:`, error);
+        // console.error(`Database connection attempt ${attempt} failed:`, error)
 
         if (attempt < DATABASE_CONFIG.retry.attempts) {
           const delay =
             DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
-          // console.log(`Retrying in ${delay}ms...`);
+          // console.log(`Retrying in ${delay}ms...`)
           await this.sleep(delay);
         }
       }
@@ -160,7 +160,7 @@ class DatabaseConnection {
           ? this.queryTimes.reduce((a, b) => a + b, 0) / this.queryTimes.length
           : 0;
 
-      const _stats = dbStats[0] || {};
+      const _stats = dbStats[0] || {}
 
       const status: ConnectionPoolStatus = {
         isHealthy: true,
@@ -172,7 +172,7 @@ class DatabaseConnection {
         avgQueryTime,
         uptime: Date.now() - this.connectionStartTime.getTime(),
         lastHealthCheck: new Date(),
-      };
+      }
 
       this.isConnected = true;
       return status;
@@ -189,7 +189,7 @@ class DatabaseConnection {
         uptime: Date.now() - this.connectionStartTime.getTime(),
         lastHealthCheck: new Date(),
         errors: [error instanceof Error ? error.message : String(error)],
-      };
+      }
     }
   }
 
@@ -212,7 +212,7 @@ class DatabaseConnection {
         return await operation(this.client);
       } catch (error) {
         lastError = error as Error;
-        // console.error(`${operationName} attempt ${attempt} failed:`, error);
+        // console.error(`${operationName} attempt ${attempt} failed:`, error)
 
         if (this.isConnectionError(error)) {
           this.isConnected = false;
@@ -220,7 +220,7 @@ class DatabaseConnection {
           if (attempt < DATABASE_CONFIG.retry.attempts) {
             const delay =
               DATABASE_CONFIG.retry.delay * Math.pow(DATABASE_CONFIG.retry.backoff, attempt - 1);
-            // console.log(`Retrying ${operationName} in ${delay}ms...`);
+            // console.log(`Retrying ${operationName} in ${delay}ms...`)
             await this.sleep(delay);
             continue;
           }
@@ -255,7 +255,7 @@ class DatabaseConnection {
   }
 
   async gracefulShutdown(): Promise<void> {
-    // console.log('Initiating graceful database shutdown...');
+    // console.log('Initiating graceful database shutdown...')
 
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
@@ -263,45 +263,45 @@ class DatabaseConnection {
 
     try {
       await this.client.$disconnect();
-      // console.log('Database disconnected successfully');
+      // console.log('Database disconnected successfully')
     } catch (error) {
-      // console.error('Error during database shutdown:', error);
+      // console.error('Error during database shutdown:', error)
     }
   }
 }
 
 // Create singleton instance
-const databaseConnection = new DatabaseConnection();
+const databaseConnection = new DatabaseConnection()
 
 // Initialize connection on startup
-let initializationPromise: Promise<PrismaClient> | null = null;
+let initializationPromise: Promise<PrismaClient> | null = null
 
 export const initializeDatabase = async (): Promise<PrismaClient> => {
   if (!initializationPromise) {
     initializationPromise = databaseConnection.connect();
   }
   return initializationPromise;
-};
+}
 
 // Export the database client
-export const db = global.__prisma || databaseConnection.getClient();
+export const db = global.__prisma || databaseConnection.getClient()
 
 if (env.NODE_ENV !== 'production') {
   global.__prisma = db;
 }
 
 // Export connection utilities
-export { databaseConnection, DATABASE_CONFIG };
+export { databaseConnection, DATABASE_CONFIG }
 
 // Graceful shutdown handler
 if (typeof process !== 'undefined') {
   process.on('SIGTERM', async () => {
-    // console.log('SIGTERM received, shutting down database connection...');
+    // console.log('SIGTERM received, shutting down database connection...')
     await databaseConnection.gracefulShutdown();
   });
 
   process.on('SIGINT', async () => {
-    // console.log('SIGINT received, shutting down database connection...');
+    // console.log('SIGINT received, shutting down database connection...')
     await databaseConnection.gracefulShutdown();
   });
 }

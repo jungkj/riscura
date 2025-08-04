@@ -5,24 +5,24 @@ export const revalidate = 0;
 
 export async function GET() {
   // Get the raw database URL
-  const rawUrl = process.env.DATABASE_URL || process.env.database_url;
+  const rawUrl = process.env.DATABASE_URL || process.env.database_url
 
   // Check if it needs conversion
-  const needsConversion = rawUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co');
+  const needsConversion = rawUrl?.includes('db.zggstcxinvxsfksssdyr.supabase.co')
 
   let convertedUrl = null;
   let testResult = null;
 
   if (needsConversion && rawUrl) {
     // Apply the same conversion logic
-    const passwordMatch = rawUrl.match(/postgres:([^@]+)@/);
+    const passwordMatch = rawUrl.match(/postgres:([^@]+)@/)
     if (passwordMatch) {
       const password = passwordMatch[1];
       convertedUrl = `postgresql://postgres.zggstcxinvxsfksssdyr:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`;
 
       // Test the converted URL
       try {
-        const { PrismaClient } = await import('@prisma/client');
+        const { PrismaClient } = await import('@prisma/client')
         const prisma = new PrismaClient({
           datasources: {
             db: {
@@ -39,12 +39,12 @@ export async function GET() {
           success: true,
           message: 'Pooled connection works with workaround!',
           result,
-        };
+        }
       } catch (error) {
         testResult = {
           success: false,
           error: error instanceof Error ? error.message : String(error),
-        };
+        }
       }
     }
   }

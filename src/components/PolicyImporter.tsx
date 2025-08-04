@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DaisyCardTitle, DaisyAccordion } from '@/components/ui/daisy-components';
 // import { 
   FileText, 
   Upload, 
@@ -16,9 +17,9 @@ import { motion, AnimatePresence } from 'framer-motion';
   X,
   FileUp,
   FilePlus2
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -57,14 +58,14 @@ interface PolicyAnalysisResult {
   extractedCount: {
     risks: number;
     controls: number;
-  };
+  }
   data: ExtractedContent;
   fileInfo?: {
     name: string;
     type: string;
     size: number;
     textLength: number;
-  };
+  }
   note?: string;
   error?: string;
 }
@@ -91,24 +92,24 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
 
   // File type icons
   const getFileIcon = (_type: string) => {
-    if (type.includes('pdf')) return '📄';
+    if (type.includes('pdf')) return '📄'
     if (type.includes('word') || type.includes('document')) return '📝';
     if (type.includes('text')) return '📃';
     return '📄';
-  };
+  }
 
   // Format file size
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes'
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   // Handle file drop
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setError(null);
+    setError(null)
     const newFiles = acceptedFiles.map(file => ({
       file,
       preview: URL.createObjectURL(file)
@@ -140,7 +141,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
 
   // Upload file to API
   const uploadFile = async () => {
-    if (files.length === 0) return;
+    if (files.length === 0) return
 
     setUploading(true);
     setUploadProgress(0);
@@ -155,7 +156,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
       const progressInterval = setInterval(() => {
         setUploadProgress(prev => {
           if (prev >= 90) {
-            clearInterval(progressInterval);
+            clearInterval(progressInterval)
             return 90;
           }
           return prev + 10;
@@ -182,7 +183,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
           ...risk,
           approved: false,
           editing: false
-        }));
+        }))
         result.data.controls = result.data.controls.map(control => ({
           ...control,
           approved: false,
@@ -199,18 +200,18 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
       setUploading(false);
       setTimeout(() => setUploadProgress(0), 1000);
     }
-  };
+  }
 
   // Remove file
   const removeFile = () => {
-    setFiles([]);
+    setFiles([])
     setAnalysisResult(null);
     setError(null);
-  };
+  }
 
   // Edit risk/control text
   const updateRiskText = (id: string, newText: string) => {
-    if (!analysisResult) return;
+    if (!analysisResult) return
     
     setAnalysisResult({
       ...analysisResult,
@@ -221,7 +222,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   const updateControlText = (id: string, newText: string) => {
     if (!analysisResult) return;
@@ -235,11 +236,11 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   // Toggle editing mode
   const toggleRiskEditing = (id: string) => {
-    if (!analysisResult) return;
+    if (!analysisResult) return
     
     setAnalysisResult({
       ...analysisResult,
@@ -250,7 +251,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   const toggleControlEditing = (id: string) => {
     if (!analysisResult) return;
@@ -264,11 +265,11 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   // Approve/reject items
   const toggleRiskApproval = (id: string) => {
-    if (!analysisResult) return;
+    if (!analysisResult) return
     
     setAnalysisResult({
       ...analysisResult,
@@ -279,7 +280,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   const toggleControlApproval = (id: string) => {
     if (!analysisResult) return;
@@ -293,11 +294,11 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         )
       }
     });
-  };
+  }
 
   // Approve all
   const approveAllRisks = () => {
-    if (!analysisResult) return;
+    if (!analysisResult) return
     
     setAnalysisResult({
       ...analysisResult,
@@ -306,7 +307,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         risks: analysisResult.data.risks.map(risk => ({ ...risk, approved: true }))
       }
     });
-  };
+  }
 
   const approveAllControls = () => {
     if (!analysisResult) return;
@@ -318,12 +319,12 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
         controls: analysisResult.data.controls.map(control => ({ ...control, approved: true }))
       }
     });
-  };
+  }
 
   const approveAll = () => {
     approveAllRisks();
     approveAllControls();
-  };
+  }
 
   return (
     <div className={`w-full max-w-4xl mx-auto space-y-6 ${className}`}>
@@ -749,6 +750,6 @@ updateControlText(control.id, e.target.value)}
       </AnimatePresence>
     </div>
   );
-};
+}
 
 export default PolicyImporter; 

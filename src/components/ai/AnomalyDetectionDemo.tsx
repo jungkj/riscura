@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
 // import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -54,7 +55,7 @@ import {
   type AnomalyAlert,
   type AnomalyPattern,
   type AnomalyDetectionConfig
-} from '@/services/AnomalyDetectionAIService';
+} from '@/services/AnomalyDetectionAIService'
 import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
 
@@ -110,7 +111,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       escalationRules: [],
       suppressionPeriod: 60
     }
-  });
+  })
 
   // Demo risks for testing
   const demoRisks: Risk[] = [
@@ -159,7 +160,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       createdAt: '2024-01-01',
       updatedAt: new Date().toISOString()
     }
-  ];
+  ]
 
   // Initialize real-time metrics
   useEffect(() => {
@@ -204,18 +205,18 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         anomalyScore: 0.2,
         isAnomaly: false
       }
-    ];
+    ]
     
     setRealtimeMetrics(metrics);
   }, []);
 
   // Start anomaly detection
   const startAnomalyDetection = async () => {
-    setIsMonitoring(true);
+    setIsMonitoring(true)
     
     try {
       // Detect anomalies in demo risks
-      const alerts = await anomalyDetectionAIService.detectRiskAnomalies(demoRisks, config);
+      const alerts = await anomalyDetectionAIService.detectRiskAnomalies(demoRisks, config)
       
       // Generate some demo alerts
       const demoAlerts: AnomalyAlert[] = [
@@ -313,7 +314,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
           status: 'new',
           tags: ['market', 'pattern', 'volatility']
         }
-      ];
+      ]
       
       setActiveAlerts([...alerts, ...demoAlerts]);
       
@@ -322,18 +323,18 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       }
       
     } catch (error) {
-      // console.error('Error starting anomaly detection:', error);
+      // console.error('Error starting anomaly detection:', error)
     }
-  };
+  }
 
   // Stop monitoring
   const stopMonitoring = () => {
-    setIsMonitoring(false);
-  };
+    setIsMonitoring(false)
+  }
 
   // Simulate real-time updates
   useEffect(() => {
-    if (!isMonitoring) return;
+    if (!isMonitoring) return
     
     const interval = setInterval(() => {
       setRealtimeMetrics(prev => prev.map(metric => {
@@ -342,7 +343,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
         const change = ((newValue - metric.value) / metric.value) * 100;
         
         // Calculate anomaly score based on deviation
-        const anomalyScore = Math.abs(variance) * 10;
+        const anomalyScore = Math.abs(variance) * 10
         const isAnomaly = anomalyScore > 0.8;
         
         return {
@@ -353,7 +354,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
           anomalyScore: Number(anomalyScore.toFixed(2)),
           isAnomaly,
           trend: change > 1 ? 'up' : change < -1 ? 'down' : 'stable'
-        };
+        }
       }));
     }, 3000); // Update every 3 seconds
     
@@ -362,7 +363,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
 
   // Filter alerts
   const filteredAlerts = activeAlerts.filter(alert => {
-    const typeMatch = selectedAlertType === 'all' || alert.type === selectedAlertType;
+    const typeMatch = selectedAlertType === 'all' || alert.type === selectedAlertType
     const severityMatch = selectedSeverity === 'all' || alert.severity === selectedSeverity;
     return typeMatch && severityMatch;
   });
@@ -374,8 +375,8 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       value: metric.value,
       anomalyScore: metric.anomalyScore * 100,
       isAnomaly: metric.isAnomaly
-    }));
-  };
+    }))
+  }
 
   const prepareTimeSeriesData = () => {
     const data: Array<{ date: string; value: number; anomaly: number }> = [];
@@ -394,7 +395,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
     }
     
     return data;
-  };
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -404,7 +405,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       case 'low': return 'text-blue-600 bg-blue-50';
       default: return 'text-gray-600 bg-gray-50';
     }
-  };
+  }
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -418,7 +419,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       case 'low': return <Eye className="h-4 w-4 text-blue-600" />;
       default: return <Activity className="h-4 w-4 text-gray-600" />;
     }
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -426,7 +427,7 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
       default: return <Activity className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -1034,4 +1035,4 @@ export const AnomalyDetectionDemo: React.FC<DemoProps> = ({
       </DaisyTabs>
     </div>
   );
-}; 
+} 

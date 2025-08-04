@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Copy, Trash2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface KPIWidgetProps {
   widget: ReportWidget;
@@ -47,14 +48,14 @@ export function KPIWidget({
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500))
       setData(getSampleData());
     } catch (err) {
       setError('Failed to load KPI data');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getSampleData = (): KPIData => {
     const kpiType = widget.dataSource.source || 'risks';
@@ -69,7 +70,7 @@ export function KPIWidget({
           status: 'warning',
           format: 'number',
           label: 'Open Risks',
-        };
+        }
       case 'controls':
         return {
           value: 85,
@@ -79,7 +80,7 @@ export function KPIWidget({
           status: 'good',
           format: 'percentage',
           label: 'Control Effectiveness',
-        };
+        }
       case 'incidents':
         return {
           value: 5,
@@ -89,7 +90,7 @@ export function KPIWidget({
           status: 'critical',
           format: 'number',
           label: 'Security Incidents',
-        };
+        }
       case 'compliance':
         return {
           value: 92,
@@ -99,7 +100,7 @@ export function KPIWidget({
           status: 'good',
           format: 'percentage',
           label: 'Compliance Score',
-        };
+        }
       default:
         return {
           value: 42,
@@ -108,9 +109,9 @@ export function KPIWidget({
           status: 'good',
           format: 'number',
           label: 'Metric',
-        };
+        }
     }
-  };
+  }
 
   const formatValue = (_value: number, format: string) => {
     switch (format) {
@@ -121,7 +122,7 @@ export function KPIWidget({
       default:
         return value.toLocaleString();
     }
-  };
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -134,7 +135,7 @@ export function KPIWidget({
       default:
         return 'text-gray-600 bg-gray-100';
     }
-  };
+  }
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -145,12 +146,12 @@ export function KPIWidget({
       default:
         return <Minus className="w-4 h-4 text-gray-600" />;
     }
-  };
+  }
 
   const getChangePercentage = () => {
     if (!data || data.previousValue === 0) return 0;
     return ((data.value - data.previousValue) / data.previousValue) * 100;
-  };
+  }
 
   return (
     <DaisyCard 

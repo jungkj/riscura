@@ -49,4 +49,4 @@ export const BreadcrumbNav: FC<BreadcrumbNavProps> = ({ items, className }) => {
       </ol>
     </nav>
   );
-};
+}

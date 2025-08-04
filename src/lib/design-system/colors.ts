@@ -50,7 +50,7 @@ export const baseColors = {
     900: '#084b80',
     950: '#043765',
   },
-};
+}
 
 // Status Color System (enhanced for clarity and accessibility)
 export const statusColors = {
@@ -161,7 +161,7 @@ export const statusColors = {
     border: '#fed7aa',
     hover: '#fef3c7',
   },
-};
+}
 
 // Interactive State Colors
 export const interactiveColors = {
@@ -197,7 +197,7 @@ export const interactiveColors = {
     border: 'rgba(0, 0, 0, 0.06)',
     opacity: 0.5,
   },
-};
+}
 
 // Data Visualization Color Palette (color-blind friendly)
 export const dataColors = {
@@ -255,7 +255,7 @@ export const dataColors = {
       '#16a34a',
     ],
   },
-};
+}
 
 // Risk-specific Color Mapping
 export const riskColors = {
@@ -284,7 +284,7 @@ export const riskColors = {
     low: statusColors.critical,
     unknown: baseColors.neutral,
   },
-};
+}
 
 // Utility Functions for Color Application
 export const getStatusColor = (status: string) => {
@@ -301,10 +301,10 @@ export const getStatusColor = (status: string) => {
     identified: statusColors.info,
     monitoring: statusColors.medium,
     closed: baseColors.neutral,
-  };
+  }
 
   return statusMap[status.toLowerCase()] || baseColors.neutral;
-};
+}
 
 export const getRiskLevelColor = (level: string | number) => {
   if (typeof level === 'number') {
@@ -316,14 +316,14 @@ export const getRiskLevelColor = (level: string | number) => {
   }
 
   return riskColors.levels[level as keyof typeof riskColors.levels] || riskColors.levels.unknown;
-};
+}
 
 export const getConfidenceColor = (confidence: number) => {
   if (confidence >= 0.8) return riskColors.confidence.high;
   if (confidence >= 0.6) return riskColors.confidence.medium;
   if (confidence >= 0.4) return riskColors.confidence.low;
   return riskColors.confidence.unknown;
-};
+}
 
 // CSS Classes for easy application
 export const colorClasses = {
@@ -354,4 +354,4 @@ export const colorClasses = {
     sunken: 'bg-slate-50 border border-slate-200',
     overlay: 'bg-white/95 backdrop-blur-sm border border-slate-200/60',
   },
-};
+}

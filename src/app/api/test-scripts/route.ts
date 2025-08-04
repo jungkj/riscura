@@ -77,7 +77,7 @@ export const GET = withApiMiddleware(
         data: testScripts,
       });
     } catch (error) {
-      // console.error('Get test scripts error:', error);
+      // console.error('Get test scripts error:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to fetch test scripts' },
         { status: 500 }
@@ -133,7 +133,7 @@ export const POST = withApiMiddleware(
           { status: 400 }
         );
       }
-      // console.error('Create test script error:', error);
+      // console.error('Create test script error:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to create test script' },
         { status: 500 }

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
 // import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -53,7 +54,7 @@ import {
   predictiveRiskModelingService,
   type RiskForecast,
   type MonteCarloSimulation
-} from '@/services/PredictiveRiskModelingService';
+} from '@/services/PredictiveRiskModelingService'
 import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
 
@@ -102,7 +103,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
     evidence: [],
     createdAt: '2024-01-01',
     updatedAt: new Date().toISOString()
-  };
+  }
 
   // Generate historical time series data for demo
   const generateHistoricalData = () => {
@@ -132,13 +133,13 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
     }
     
     return data;
-  };
+  }
 
   const historicalData = generateHistoricalData();
 
   // Generate predictive forecast
   const generateForecast = async () => {
-    setIsGenerating(true);
+    setIsGenerating(true)
     try {
       const forecast = await predictiveRiskModelingService.generateRiskForecast(
         demoRisk,
@@ -163,7 +164,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
           data: forecast,
           generatedAt: new Date()
         }
-      ];
+      ]
       
       setInsights(prev => [...newInsights, ...prev]);
       
@@ -172,15 +173,15 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       }
       
     } catch (error) {
-      // console.error('Error generating forecast:', error);
+      // console.error('Error generating forecast:', error)
     } finally {
       setIsGenerating(false);
     }
-  };
+  }
 
   // Run Monte Carlo simulation
   const runMonteCarloSimulation = async () => {
-    setIsGenerating(true);
+    setIsGenerating(true)
     try {
       // Create simulation variables based on historical data
       const variables = [
@@ -208,7 +209,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
           historicalData: Array.from({length: 100}, () => Math.random() * 10),
           correlatedWith: ['Risk_Score']
         }
-      ];
+      ]
       
       const simulation = await predictiveRiskModelingService.executeMonteCarloSimulation(
         variables,
@@ -228,20 +229,20 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
         timeframe: '3-6 months',
         data: scenario,
         generatedAt: new Date()
-      }));
+      }))
       
       setInsights(prev => [...newInsights, ...prev]);
       
     } catch (error) {
-      // console.error('Error running Monte Carlo simulation:', error);
+      // console.error('Error running Monte Carlo simulation:', error)
     } finally {
       setIsGenerating(false);
     }
-  };
+  }
 
   // Prepare chart data
   const prepareForecastChartData = () => {
-    if (!currentForecast) return [];
+    if (!currentForecast) return []
     
     const historicalPoints = historicalData.slice(-30).map(point => ({
       date: point.timestamp.toLocaleDateString(),
@@ -258,7 +259,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
     }));
     
     return [...historicalPoints, ...forecastPoints];
-  };
+  }
 
   const prepareScenarioChartData = () => {
     if (!currentForecast) return [];
@@ -269,7 +270,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       impact: scenario.impact,
       riskLevel: scenario.riskLevel
     }));
-  };
+  }
 
   const prepareMonteCarloData = () => {
     if (!currentSimulation) return [];
@@ -279,7 +280,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       percentile: `P${percentile}`,
       value: Number(value.toFixed(2))
     }));
-  };
+  }
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
@@ -290,7 +291,7 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       case 'very_high': return 'text-red-500';
       default: return 'text-gray-500';
     }
-  };
+  }
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
@@ -306,11 +307,11 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
 </DaisyAlertTriangle>
       default: return <Info className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   useEffect(() => {
     // Auto-generate initial forecast
-    generateForecast();
+    generateForecast()
   }, []);
 
   return (
@@ -866,4 +867,4 @@ export const PredictiveRiskModelingDemo: React.FC<DemoProps> = ({
       </DaisyTabs>
     </div>
   );
-}; 
+} 

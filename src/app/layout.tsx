@@ -28,7 +28,7 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#199BEC' },
     { media: '(prefers-color-scheme: dark)', color: '#199BEC' },
   ],
-};
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     canonical: 'https://riscura.com',
   },
   category: 'technology',
-};
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

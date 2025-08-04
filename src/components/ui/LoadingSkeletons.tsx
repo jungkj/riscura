@@ -3,14 +3,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 
 // Animation variants for skeletons
-type SkeletonVariant = 'pulse' | 'wave' | 'shimmer';
+type SkeletonVariant = 'pulse' | 'wave' | 'shimmer'
 
 // Base skeleton component with animation variants
 interface BaseSkeletonProps {
-  className?: string;
+  className?: string
   variant?: SkeletonVariant;
   children?: React.ReactNode;
 }
@@ -31,7 +32,7 @@ const BaseSkeleton: React.FC<BaseSkeletonProps> = ({
       default:
         return 'animate-pulse bg-gray-200 dark:bg-gray-700';
     }
-  };
+  }
 
   return (
     <div 
@@ -41,11 +42,11 @@ const BaseSkeleton: React.FC<BaseSkeletonProps> = ({
       {children}
     </div>
   );
-};
+}
 
 // Text skeleton component
 interface TextSkeletonProps extends BaseSkeletonProps {
-  lines?: number;
+  lines?: number
   lineHeight?: 'sm' | 'md' | 'lg';
   lastLineWidth?: string;
 }
@@ -61,7 +62,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
     sm: 'h-3',
     md: 'h-4',
     lg: 'h-5'
-  };
+  }
 
   if (lines === 1) {
     return (
@@ -69,7 +70,7 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
         variant={variant}
         className={cn(heightClasses[lineHeight], 'w-full', className)} />
     );
-  };
+  }
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -84,11 +85,11 @@ export const TextSkeleton: React.FC<TextSkeletonProps> = ({
       ))}
     </div>
   );
-};
+}
 
 // Card skeleton component
 interface CardSkeletonProps extends BaseSkeletonProps {
-  hasImage?: boolean;
+  hasImage?: boolean
   hasHeader?: boolean;
   hasActions?: boolean;
   textLines?: number;
@@ -141,11 +142,11 @@ export const CardSkeleton: React.FC<DaisyCardSkeletonProps> = ({
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 // Table skeleton component
 interface TableSkeletonProps extends BaseSkeletonProps {
-  rows?: number;
+  rows?: number
   columns?: number;
   hasHeader?: boolean;
   hasActions?: boolean;
@@ -222,11 +223,11 @@ export const TableSkeleton: React.FC<DaisyTableSkeletonProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Dashboard skeleton component
 interface DashboardSkeletonProps extends BaseSkeletonProps {
-  statsCards?: number;
+  statsCards?: number
   hasChart?: boolean;
   hasTable?: boolean;
   hasActivity?: boolean;
@@ -324,11 +325,11 @@ export const DashboardSkeleton: React.FC<DashboardSkeletonProps> = ({
       )}
     </div>
   );
-};
+}
 
 // List skeleton component
 interface ListSkeletonProps extends BaseSkeletonProps {
-  items?: number;
+  items?: number
   hasAvatar?: boolean;
   hasActions?: boolean;
   showDividers?: boolean;
@@ -368,11 +369,11 @@ export const ListSkeleton: React.FC<ListSkeletonProps> = ({
       ))}
     </div>
   );
-};
+}
 
 // Form skeleton component
 interface FormSkeletonProps extends BaseSkeletonProps {
-  fields?: number;
+  fields?: number
   hasTextarea?: boolean;
   hasSelect?: boolean;
   hasCheckboxes?: boolean;
@@ -441,11 +442,11 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({
       )}
     </div>
   );
-};
+}
 
 // Chart skeleton component
 interface ChartSkeletonProps extends BaseSkeletonProps {
-  type?: 'bar' | 'line' | 'pie' | 'area';
+  type?: 'bar' | 'line' | 'pie' | 'area'
   showLegend?: boolean;
   showAxes?: boolean;
   height?: string;
@@ -532,7 +533,7 @@ export const ChartSkeleton: React.FC<ChartSkeletonProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // Full page loading skeletons
 export const PageSkeletons = {
@@ -627,11 +628,11 @@ export const PageSkeletons = {
       </div>
     </div>
   )
-};
+}
 
 // Animated skeleton wrapper with staggered loading
 interface AnimatedSkeletonProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   stagger?: boolean;
   delay?: number;
 }
@@ -643,14 +644,14 @@ export const AnimatedSkeleton: React.FC<AnimatedSkeletonProps> = ({
 }) => {
   if (!stagger) {
     return <>{children}</>;
-  };
+  }
 
   return (
     <div className="animate-in fade-in-0 duration-500">
       {children}
     </div>
   );
-};
+}
 
 // Custom CSS for additional animations (to be added to globals.css)
 export const skeletonAnimations = `

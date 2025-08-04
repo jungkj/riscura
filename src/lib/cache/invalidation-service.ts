@@ -1,5 +1,5 @@
 // Cache Invalidation Service for Coordinated Cache Management
-// import { redisClient } from './redis-client';
+// import { redisClient } from './redis-client'
 import { queryCache } from './query-cache';
 import { apiCache } from './api-cache';
 
@@ -10,14 +10,14 @@ export interface InvalidationRule {
     resource?: string;
     operation?: 'CREATE' | 'UPDATE' | 'DELETE' | 'READ';
     condition?: (_data: any) => boolean;
-  };
+  }
   targets: {
     queries?: string[];
     apis?: string[];
     resources?: string[];
     patterns?: string[];
     tags?: string[];
-  };
+  }
   delay?: number; // Delay invalidation in ms
   cascade?: boolean; // Whether to cascade to related resources
 }
@@ -53,7 +53,7 @@ class InvalidationService {
     averageInvalidationTime: 0,
     cacheHitRateImprovement: 0,
     cascadedInvalidations: 0,
-  };
+  }
   private invalidationTimes: number[] = [];
 
   constructor() {
@@ -63,12 +63,12 @@ class InvalidationService {
 
   // Register invalidation rule
   public registerRule(id: string, rule: InvalidationRule): void {
-    this.rules.set(id, rule);
+    this.rules.set(id, rule)
   }
 
   // Remove invalidation rule
   public removeRule(id: string): void {
-    this.rules.delete(id);
+    this.rules.delete(id)
   }
 
   // Trigger invalidation based on database change
@@ -85,19 +85,19 @@ class InvalidationService {
       targets: [],
       status: 'pending',
       retryCount: 0,
-    };
+    }
 
     // Find matching rules
     const matchingRules = this.findMatchingRules({
       table,
       operation,
       data,
-    });
+    })
 
     // Build target list
     for (const rule of matchingRules) {
       if (rule.targets.queries) {
-        event.targets.push(...rule.targets.queries.map((q) => `query:${q}`));
+        event.targets.push(...rule.targets.queries.map((q) => `query:${q}`))
       }
       if (rule.targets.apis) {
         event.targets.push(...rule.targets.apis.map((a) => `api:${a}`));
@@ -114,7 +114,7 @@ class InvalidationService {
     }
 
     // Add to queue
-    this.eventQueue.push(event);
+    this.eventQueue.push(event)
   }
 
   // Trigger invalidation based on API change
@@ -127,19 +127,19 @@ class InvalidationService {
       targets: [],
       status: 'pending',
       retryCount: 0,
-    };
+    }
 
     // Find matching rules
     const matchingRules = this.findMatchingRules({
       endpoint,
       operation: method as any,
       data,
-    });
+    })
 
     // Build target list
     for (const rule of matchingRules) {
       if (rule.targets.queries) {
-        event.targets.push(...rule.targets.queries.map((q) => `query:${q}`));
+        event.targets.push(...rule.targets.queries.map((q) => `query:${q}`))
       }
       if (rule.targets.apis) {
         event.targets.push(...rule.targets.apis.map((a) => `api:${a}`));
@@ -156,12 +156,12 @@ class InvalidationService {
     }
 
     // Add to queue
-    this.eventQueue.push(event);
+    this.eventQueue.push(event)
   }
 
   // Manual invalidation
   public async invalidateManual(targets: {
-    queries?: string[];
+    queries?: string[]
     apis?: string[];
     resources?: string[];
     patterns?: string[];
@@ -175,11 +175,11 @@ class InvalidationService {
       targets: [],
       status: 'pending',
       retryCount: 0,
-    };
+    }
 
     // Build target list
     if (targets.queries) {
-      event.targets.push(...targets.queries.map((q) => `query:${q}`));
+      event.targets.push(...targets.queries.map((q) => `query:${q}`))
     }
     if (targets.apis) {
       event.targets.push(...targets.apis.map((a) => `api:${a}`));
@@ -195,13 +195,13 @@ class InvalidationService {
     }
 
     // Add to queue
-    this.eventQueue.push(event);
+    this.eventQueue.push(event)
   }
 
   // Scheduled invalidation (for time-based cache expiry)
   public async scheduleInvalidation(
     targets: {
-      queries?: string[];
+      queries?: string[]
       apis?: string[];
       resources?: string[];
       patterns?: string[];
@@ -218,11 +218,11 @@ class InvalidationService {
         targets: [],
         status: 'pending',
         retryCount: 0,
-      };
+      }
 
       // Build target list
       if (targets.queries) {
-        event.targets.push(...targets.queries.map((q) => `query:${q}`));
+        event.targets.push(...targets.queries.map((q) => `query:${q}`))
       }
       if (targets.apis) {
         event.targets.push(...targets.apis.map((a) => `api:${a}`));
@@ -238,23 +238,23 @@ class InvalidationService {
       }
 
       // Add to queue
-      this.eventQueue.push(event);
+      this.eventQueue.push(event)
     }, delay);
   }
 
   // Get invalidation metrics
   public getMetrics(): InvalidationMetrics {
-    return { ...this.metrics };
+    return { ...this.metrics }
   }
 
   // Get pending events
   public getPendingEvents(): InvalidationEvent[] {
-    return this.eventQueue.filter((event) => event.status === 'pending');
+    return this.eventQueue.filter((event) => event.status === 'pending')
   }
 
   // Clear all caches
   public async clearAllCaches(): Promise<void> {
-    await Promise.all([redisClient.flush(), queryCache.invalidateAll()]);
+    await Promise.all([redisClient.flush(), queryCache.invalidateAll()])
   }
 
   // Private methods
@@ -272,7 +272,7 @@ class InvalidationService {
         tags: ['user-data'],
       },
       cascade: true,
-    });
+    })
 
     // Risk-related invalidations
     this.registerRule('risk-changes', {
@@ -286,7 +286,7 @@ class InvalidationService {
         tags: ['risk-data', 'dashboard-data'],
       },
       cascade: true,
-    });
+    })
 
     // Compliance-related invalidations
     this.registerRule('compliance-changes', {
@@ -300,7 +300,7 @@ class InvalidationService {
         tags: ['compliance-data', 'dashboard-data'],
       },
       cascade: true,
-    });
+    })
 
     // Document-related invalidations
     this.registerRule('document-changes', {
@@ -313,7 +313,7 @@ class InvalidationService {
         resources: ['documents'],
         tags: ['document-data'],
       },
-    });
+    })
 
     // Settings-related invalidations
     this.registerRule('settings-changes', {
@@ -327,7 +327,7 @@ class InvalidationService {
         tags: ['settings-data'],
       },
       cascade: true,
-    });
+    })
 
     // Dashboard aggregation invalidations
     this.registerRule('dashboard-aggregations', {
@@ -341,7 +341,7 @@ class InvalidationService {
         resources: ['dashboard', 'analytics'],
         tags: ['dashboard-data', 'analytics-data'],
       },
-    });
+    })
   }
 
   private findMatchingRules(trigger: any): InvalidationRule[] {
@@ -361,27 +361,27 @@ class InvalidationService {
 
     // Check table match
     if (ruleTrigger.table && trigger.table !== ruleTrigger.table) {
-      return false;
+      return false
     }
 
     // Check endpoint match
     if (ruleTrigger.endpoint && trigger.endpoint !== ruleTrigger.endpoint) {
-      return false;
+      return false
     }
 
     // Check resource match
     if (ruleTrigger.resource && trigger.resource !== ruleTrigger.resource) {
-      return false;
+      return false
     }
 
     // Check operation match
     if (ruleTrigger.operation && trigger.operation !== ruleTrigger.operation) {
-      return false;
+      return false
     }
 
     // Check condition match
     if (ruleTrigger.condition && !ruleTrigger.condition(trigger.data)) {
-      return false;
+      return false
     }
 
     return true;
@@ -398,8 +398,8 @@ class InvalidationService {
       }
 
       // Schedule next processing cycle
-      setTimeout(processEvents, 100);
-    };
+      setTimeout(processEvents, 100)
+    }
 
     processEvents();
   }
@@ -411,7 +411,7 @@ class InvalidationService {
 
     try {
       // Group targets by type for efficient processing
-      const queryTargets: string[] = [];
+      const queryTargets: string[] = []
       const apiTargets: string[] = [];
       const resourceTargets: string[] = [];
       const patternTargets: string[] = [];
@@ -439,7 +439,7 @@ class InvalidationService {
       }
 
       // Execute invalidations in parallel
-      const promises: Promise<any>[] = [];
+      const promises: Promise<any>[] = []
 
       if (queryTargets.length > 0) {
         promises.push(this.invalidateQueries(queryTargets));
@@ -477,11 +477,11 @@ class InvalidationService {
 
       // Retry logic
       if (event.retryCount < 3) {
-        event.status = 'pending';
+        event.status = 'pending'
         this.eventQueue.push(event);
       }
 
-      // console.error('Invalidation event failed:', error);
+      // console.error('Invalidation event failed:', error)
     }
   }
 
@@ -534,12 +534,12 @@ class InvalidationService {
 
     // Keep only last 1000 processing times
     if (this.invalidationTimes.length > 1000) {
-      this.invalidationTimes.shift();
+      this.invalidationTimes.shift()
     }
 
     // Update average processing time
     this.metrics.averageInvalidationTime =
-      this.invalidationTimes.reduce((sum, time) => sum + time, 0) / this.invalidationTimes.length;
+      this.invalidationTimes.reduce((sum, time) => sum + time, 0) / this.invalidationTimes.length
   }
 
   private generateEventId(): string {
@@ -548,10 +548,10 @@ class InvalidationService {
 }
 
 // Create singleton instance
-export const invalidationService = new InvalidationService();
+export const invalidationService = new InvalidationService()
 
 // Export class for custom instances
-export { InvalidationService };
+export { InvalidationService }
 
 // Utility functions for common invalidation patterns
 export const invalidateUserData = async (userId?: string): Promise<void> => {
@@ -560,8 +560,8 @@ export const invalidateUserData = async (userId?: string): Promise<void> => {
     apis: userId ? [`/api/users/${userId}`] : ['/api/users/*'],
     resources: ['users'],
     tags: ['user-data'],
-  });
-};
+  })
+}
 
 export const invalidateRiskData = async (riskId?: string): Promise<void> => {
   await invalidationService.invalidateManual({
@@ -572,7 +572,7 @@ export const invalidateRiskData = async (riskId?: string): Promise<void> => {
     resources: ['risks', 'dashboard'],
     tags: ['risk-data', 'dashboard-data'],
   });
-};
+}
 
 export const invalidateComplianceData = async (complianceId?: string): Promise<void> => {
   await invalidationService.invalidateManual({
@@ -585,7 +585,7 @@ export const invalidateComplianceData = async (complianceId?: string): Promise<v
     resources: ['compliance', 'dashboard'],
     tags: ['compliance-data', 'dashboard-data'],
   });
-};
+}
 
 export const invalidateDashboardData = async (): Promise<void> => {
   await invalidationService.invalidateManual({
@@ -594,4 +594,4 @@ export const invalidateDashboardData = async (): Promise<void> => {
     resources: ['dashboard', 'analytics'],
     tags: ['dashboard-data', 'analytics-data'],
   });
-};
+}

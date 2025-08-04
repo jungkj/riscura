@@ -1,15 +1,15 @@
 import { Report } from '@prisma/client';
-// import { ReportData, ReportSection } from './data-collector';
+// import { ReportData, ReportSection } from './data-collector'
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 // Extend jsPDF type for autoTable
 declare module 'jspdf' {
   interface jsPDF {
-    autoTable: (_options: any) => jsPDF;
+    autoTable: (_options: any) => jsPDF
     lastAutoTable: {
       finalY: number;
-    };
+    }
   }
 }
 
@@ -30,46 +30,46 @@ export class PDFGenerator {
 
   async generate(report: Report, data: ReportData): Promise<Buffer> {
     // Initialize new document
-    this.doc = new jsPDF();
+    this.doc = new jsPDF()
     this.currentY = this.margin;
 
     // Add header
-    this.addHeader(report, data);
+    this.addHeader(report, data)
 
     // Add executive summary if available
     if (data.summary) {
-      this.addSummary(data.summary);
+      this.addSummary(data.summary)
     }
 
     // Add sections
     for (const section of data.sections) {
-      this.addSection(section);
+      this.addSection(section)
     }
 
     // Add footer on all pages
-    this.addFooter(report);
+    this.addFooter(report)
 
     // Convert to buffer
-    const pdfOutput = this.doc.output('arraybuffer');
+    const pdfOutput = this.doc.output('arraybuffer')
     return Buffer.from(pdfOutput);
   }
 
   private addHeader(report: Report, data: ReportData): void {
     // Title
-    this.doc.setFontSize(24);
+    this.doc.setFontSize(24)
     this.doc.setFont('helvetica', 'bold');
     this.doc.text(data.title, this.margin, this.currentY);
     this.currentY += 10;
 
     // Subtitle with report type
-    this.doc.setFontSize(14);
+    this.doc.setFontSize(14)
     this.doc.setFont('helvetica', 'normal');
     this.doc.setTextColor(100);
     this.doc.text(report.type.replace(/_/g, ' '), this.margin, this.currentY);
     this.currentY += 8;
 
     // Generated date
-    this.doc.setFontSize(10);
+    this.doc.setFontSize(10)
     this.doc.text(
       `Generated: ${data.generatedAt.toLocaleDateString()} ${data.generatedAt.toLocaleTimeString()}`,
       this.margin,
@@ -82,30 +82,30 @@ export class PDFGenerator {
       `Period: ${data.period.from.toLocaleDateString()} - ${data.period.to.toLocaleDateString()}`,
       this.margin,
       this.currentY
-    );
+    )
     this.currentY += 10;
 
     // Divider line
-    this.doc.setDrawColor(200);
+    this.doc.setDrawColor(200)
     this.doc.line(this.margin, this.currentY, this.pageWidth - this.margin, this.currentY);
     this.currentY += 10;
 
     // Reset text color
-    this.doc.setTextColor(0);
+    this.doc.setTextColor(0)
   }
 
   private addSummary(summary: any): void {
     this.checkPageBreak(60);
 
     // Summary title
-    this.doc.setFontSize(16);
+    this.doc.setFontSize(16)
     this.doc.setFont('helvetica', 'bold');
     this.doc.text('Executive Summary', this.margin, this.currentY);
     this.currentY += 10;
 
     // Key metrics
     if (summary.keyMetrics) {
-      this.doc.setFontSize(12);
+      this.doc.setFontSize(12)
       this.doc.setFont('helvetica', 'normal');
 
       Object.entries(summary.keyMetrics).forEach(([key, value]) => {
@@ -120,7 +120,7 @@ export class PDFGenerator {
 
     // Highlights
     if (summary.highlights && summary.highlights.length > 0) {
-      this.currentY += 5;
+      this.currentY += 5
       this.doc.setFontSize(12);
       this.doc.setFont('helvetica', 'bold');
       this.doc.text('Key Highlights:', this.margin, this.currentY);
@@ -147,7 +147,7 @@ export class PDFGenerator {
     this.checkPageBreak(40);
 
     // Section title
-    this.doc.setFontSize(14);
+    this.doc.setFontSize(14)
     this.doc.setFont('helvetica', 'bold');
     this.doc.text(section.title, this.margin, this.currentY);
     this.currentY += 10;
@@ -155,7 +155,7 @@ export class PDFGenerator {
     // Section content based on type
     switch (section.type) {
       case 'text':
-        this.addTextSection(section.data);
+        this.addTextSection(section.data)
         break;
       case 'table':
         this.addTableSection(section.data);
@@ -206,7 +206,7 @@ export class PDFGenerator {
       },
       didDrawPage: (_data: any) => {
         // Update current Y position after table
-        this.currentY = data.cursor.y + 10;
+        this.currentY = data.cursor.y + 10
       },
     });
 
@@ -227,18 +227,18 @@ export class PDFGenerator {
       }
 
       // Metric box
-      this.doc.setFillColor(245, 245, 245);
+      this.doc.setFillColor(245, 245, 245)
       this.doc.rect(currentX, this.currentY, metricWidth - 5, 20, 'F');
 
       // Metric value
-      this.doc.setFontSize(16);
+      this.doc.setFontSize(16)
       this.doc.setFont('helvetica', 'bold');
       const formattedValue =
         typeof value === 'number' && value % 1 !== 0 ? value.toFixed(2) : String(value);
       this.doc.text(formattedValue, currentX + 5, this.currentY + 8);
 
       // Metric label
-      this.doc.setFontSize(9);
+      this.doc.setFontSize(9)
       this.doc.setFont('helvetica', 'normal');
       const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
       this.doc.text(formattedKey, currentX + 5, this.currentY + 16);
@@ -253,7 +253,7 @@ export class PDFGenerator {
   private addChartSection(_data: any): void {
     // Since we can't directly render charts in jsPDF, we'll create a text representation
     // In a real implementation, you might generate chart images server-side
-    this.doc.setFontSize(10);
+    this.doc.setFontSize(10)
     this.doc.setFont('helvetica', 'italic');
     this.doc.text(
       `[${data.type.toUpperCase()} CHART: ${data.data.map((d: any) => `${d.label} (${d.value})`).join(', ')}]`,
@@ -270,7 +270,7 @@ export class PDFGenerator {
       this.doc.setPage(i);
 
       // Footer line
-      this.doc.setDrawColor(200);
+      this.doc.setDrawColor(200)
       this.doc.line(
         this.margin,
         this.pageHeight - 15,
@@ -279,7 +279,7 @@ export class PDFGenerator {
       );
 
       // Page number
-      this.doc.setFontSize(9);
+      this.doc.setFontSize(9)
       this.doc.setFont('helvetica', 'normal');
       this.doc.setTextColor(100);
       this.doc.text(
@@ -289,11 +289,11 @@ export class PDFGenerator {
       );
 
       // Report ID
-      this.doc.text(`Report ID: ${report.id}`, this.margin, this.pageHeight - 8);
+      this.doc.text(`Report ID: ${report.id}`, this.margin, this.pageHeight - 8)
     }
 
     // Reset text color
-    this.doc.setTextColor(0);
+    this.doc.setTextColor(0)
   }
 
   private checkPageBreak(requiredSpace: number): void {

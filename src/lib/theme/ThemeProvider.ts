@@ -2,7 +2,7 @@
 export interface ThemeColors {
   // Primary colors
   primary: {
-    50: string;
+    50: string
     100: string;
     200: string;
     300: string;
@@ -13,44 +13,44 @@ export interface ThemeColors {
     800: string;
     900: string;
     950: string;
-  };
+  }
   // Background colors
   background: {
-    primary: string;
+    primary: string
     secondary: string;
     tertiary: string;
     overlay: string;
     card: string;
-  };
+  }
   // Text colors
   text: {
-    primary: string;
+    primary: string
     secondary: string;
     muted: string;
     disabled: string;
     inverse: string;
-  };
+  }
   // Semantic colors
   semantic: {
-    success: string;
+    success: string
     warning: string;
     error: string;
     info: string;
-  };
+  }
   // Status colors
   status: {
-    online: string;
+    online: string
     offline: string;
     away: string;
     busy: string;
-  };
+  }
   // Border colors
   border: {
-    primary: string;
+    primary: string
     secondary: string;
     focus: string;
     error: string;
-  };
+  }
 }
 
 export interface ThemeSpacing {
@@ -68,7 +68,7 @@ export interface ThemeTypography {
   fontFamily: {
     sans: string[];
     mono: string[];
-  };
+  }
   fontSize: {
     xs: [string, string];
     sm: [string, string];
@@ -78,18 +78,18 @@ export interface ThemeTypography {
     '2xl': [string, string];
     '3xl': [string, string];
     '4xl': [string, string];
-  };
+  }
   fontWeight: {
     normal: string;
     medium: string;
     semibold: string;
     bold: string;
-  };
+  }
   lineHeight: {
     tight: string;
     normal: string;
     relaxed: string;
-  };
+  }
 }
 
 export interface ThemeBorderRadius {
@@ -114,13 +114,13 @@ export interface ThemeAnimations {
     fast: string;
     normal: string;
     slow: string;
-  };
+  }
   easing: {
     linear: string;
     easeIn: string;
     easeOut: string;
     easeInOut: string;
-  };
+  }
 }
 
 export interface Theme {
@@ -248,11 +248,11 @@ export const riscuraTheme: Theme = {
       easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
     },
   },
-};
+}
 
 // Theme utilities
 export class ThemeService {
-  private static currentTheme: Theme = riscuraTheme;
+  private static currentTheme: Theme = riscuraTheme
   private static listeners: Set<(theme: Theme) => void> = new Set();
 
   public static getCurrentTheme(): Theme {
@@ -279,7 +279,7 @@ export class ThemeService {
 
     // Update CSS custom properties
     Object.entries(theme.colors.primary).forEach(([key, value]) => {
-      root.style.setProperty(`--color-primary-${key}`, value);
+      root.style.setProperty(`--color-primary-${key}`, value)
     });
 
     Object.entries(theme.colors.background).forEach(([key, value]) => {
@@ -341,12 +341,12 @@ export class ThemeService {
   // Utility functions for common operations
   public static isDarkMode(): boolean {
     // For now, we only have light mode theme
-    return false;
+    return false
   }
 
   public static getContrastColor(backgroundColor: string): string {
     // Simple contrast calculation - in production, use a proper contrast library
-    const rgb = this.hexToRgb(backgroundColor);
+    const rgb = this.hexToRgb(backgroundColor)
     if (!rgb) return this.currentTheme.colors.text.primary;
 
     const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
@@ -368,13 +368,13 @@ export class ThemeService {
 
   // Initialize theme on load
   public static initialize(): void {
-    this.updateCSSVariables(this.currentTheme);
+    this.updateCSSVariables(this.currentTheme)
   }
 }
 
 // React hook for theme
 export function useTheme() {
-  const [theme, setTheme] = React.useState(ThemeService.getCurrentTheme());
+  const [theme, setTheme] = React.useState(ThemeService.getCurrentTheme())
 
   React.useEffect(() => {
     return ThemeService.addThemeListener(setTheme);
@@ -392,13 +392,13 @@ export function useTheme() {
     getAnimationEasing: ThemeService.getAnimationEasing,
     isDarkMode: ThemeService.isDarkMode,
     getContrastColor: ThemeService.getContrastColor,
-  };
+  }
 }
 
 // Initialize theme when module loads
 if (typeof document !== 'undefined') {
-  ThemeService.initialize();
+  ThemeService.initialize()
 }
 
 // Add React import declaration
-declare const React: typeof import('react');
+declare const React: typeof import('react')

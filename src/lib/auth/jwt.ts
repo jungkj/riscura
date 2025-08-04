@@ -53,7 +53,7 @@ export function verifyAccessToken(token: string): any {
     // Verify signature
     const expectedSignature = createHash('sha256')
       .update(data + env.JWT_SECRET)
-      .digest('hex');
+      .digest('hex')
 
     if (signature !== expectedSignature) {
       throw new Error('Invalid token signature');
@@ -62,7 +62,7 @@ export function verifyAccessToken(token: string): any {
     const payload = JSON.parse(data);
 
     // Check expiration (1 hour default)
-    const now = Date.now();
+    const now = Date.now()
     const maxAge = 3600000; // 1 hour
 
     if (now - payload.iat > maxAge) {
@@ -123,7 +123,7 @@ export function generateTokenPair(payload: Omit<JWTPayload, 'tokenType'>): Token
     refreshToken,
     expiresIn: 15 * 60, // 15 minutes in seconds
     refreshExpiresIn: 7 * 24 * 60 * 60, // 7 days in seconds
-  };
+  }
 }
 
 /**

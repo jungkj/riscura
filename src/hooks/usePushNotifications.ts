@@ -29,7 +29,7 @@ export interface PushSubscriptionInfo {
   keys: {
     p256dh: string;
     auth: string;
-  };
+  }
 }
 
 export interface NotificationPermissionState {
@@ -108,7 +108,7 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     ],
     data: { type: 'system', category: 'update' },
   },
-};
+}
 
 export const usePushNotifications = (vapidPublicKey?: string) => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
@@ -125,14 +125,14 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   useEffect(() => {
     const checkSupport = () => {
       const supported =
-        'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+        'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window
 
       setIsSupported(supported);
 
       if (supported) {
         setPermission(Notification.permission);
       }
-    };
+    }
 
     checkSupport();
   }, []);
@@ -141,7 +141,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   const getServiceWorkerRegistration =
     useCallback(async (): Promise<ServiceWorkerRegistration | null> => {
       if (serviceWorkerRef.current) {
-        return serviceWorkerRef.current;
+        return serviceWorkerRef.current
       }
 
       if ('serviceWorker' in navigator) {
@@ -150,7 +150,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
           serviceWorkerRef.current = registration;
           return registration;
         } catch (error) {
-          // console.error('Failed to get service worker registration:', error);
+          // console.error('Failed to get service worker registration:', error)
           setLastError('Service worker not available');
           return null;
         }
@@ -162,7 +162,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Request notification permission
   const requestPermission = useCallback(async (): Promise<NotificationPermission> => {
     if (!isSupported) {
-      throw new Error('Push notifications are not supported');
+      throw new Error('Push notifications are not supported')
     }
 
     try {
@@ -173,7 +173,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
     } catch (error) {
       const errorMessage = 'Failed to request notification permission';
       setLastError(errorMessage);
-      // console.error('Failed to request notification permission:', error);
+      // console.error('Failed to request notification permission:', error)
       throw new Error(errorMessage);
     }
   }, [isSupported]);
@@ -181,7 +181,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Subscribe to push notifications
   const subscribe = useCallback(async (): Promise<PushSubscription | null> => {
     if (!isSupported || !vapidPublicKey) {
-      throw new Error('Push notifications not supported or VAPID key missing');
+      throw new Error('Push notifications not supported or VAPID key missing')
     }
 
     if (permission !== 'granted') {
@@ -201,7 +201,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       }
 
       // Check if already subscribed
-      const existingSubscription = await registration.pushManager.getSubscription();
+      const existingSubscription = await registration.pushManager.getSubscription()
       if (existingSubscription) {
         setSubscription(existingSubscription);
         processNotificationQueue();
@@ -212,7 +212,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       const newSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
-      });
+      })
 
       setSubscription(newSubscription);
       processNotificationQueue();
@@ -221,7 +221,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to subscribe to push notifications';
       setLastError(errorMessage);
-      // console.error('Failed to subscribe to push notifications:', error);
+      // console.error('Failed to subscribe to push notifications:', error)
       throw new Error(errorMessage);
     } finally {
       setIsSubscribing(false);
@@ -231,14 +231,14 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Unsubscribe from push notifications
   const unsubscribe = useCallback(async (): Promise<void> => {
     if (!subscription) {
-      return;
+      return
     }
 
     try {
       await subscription.unsubscribe();
       setSubscription(null);
     } catch (error) {
-      // console.error('Failed to unsubscribe from push notifications:', error);
+      // console.error('Failed to unsubscribe from push notifications:', error)
       throw error;
     }
   }, [subscription]);
@@ -246,7 +246,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Get subscription info for server
   const getSubscriptionInfo = useCallback((): PushSubscriptionInfo | null => {
     if (!subscription) {
-      return null;
+      return null
     }
 
     const key = subscription.getKey('p256dh');
@@ -262,19 +262,19 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
         p256dh: arrayBufferToBase64(key),
         auth: arrayBufferToBase64(auth),
       },
-    };
+    }
   }, [subscription]);
 
   // Show local notification
   const showNotification = useCallback(
     async (_config: NotificationConfig): Promise<Notification | null> => {
       if (!isSupported) {
-        throw new Error('Notifications not supported');
+        throw new Error('Notifications not supported')
       }
 
       if (permission !== 'granted') {
         // Queue notification if permission not granted
-        notificationQueueRef.current.push(config);
+        notificationQueueRef.current.push(config)
         const newPermission = await requestPermission();
         if (newPermission !== 'granted') {
           throw new Error('Notification permission denied');
@@ -318,14 +318,14 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
             dir: config.dir,
             lang: config.lang,
             // Note: actions, vibrate, and renotify are not supported in regular Notification constructor
-          });
+          })
 
           setNotifications((prev) => [...prev, notification]);
 
           // Auto-close after 5 seconds if not requiring interaction
           if (!config.requireInteraction) {
             setTimeout(() => {
-              notification.close();
+              notification.close()
               setNotifications((prev) => prev.filter((n) => n !== notification));
             }, 5000);
           }
@@ -336,7 +336,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       } catch (error) {
         const errorMessage = 'Failed to show notification';
         setLastError(errorMessage);
-        // console.error('Failed to show notification:', error);
+        // console.error('Failed to show notification:', error)
         throw new Error(errorMessage);
       }
     },
@@ -346,7 +346,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Process queued notifications
   const processNotificationQueue = useCallback(async () => {
     if (notificationQueueRef.current.length === 0 || permission !== 'granted') {
-      return;
+      return
     }
 
     const queue = [...notificationQueueRef.current];
@@ -356,9 +356,9 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       try {
         await showNotification(config);
       } catch (error) {
-        // console.error('Failed to show queued notification:', error);
+        // console.error('Failed to show queued notification:', error)
         // Re-queue failed notifications
-        notificationQueueRef.current.push(config);
+        notificationQueueRef.current.push(config)
       }
     }
   }, [permission, showNotification]);
@@ -369,7 +369,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       templateId: keyof typeof NOTIFICATION_TEMPLATES,
       customData?: Partial<NotificationConfig>
     ): Promise<Notification | null> => {
-      const template = NOTIFICATION_TEMPLATES[templateId];
+      const template = NOTIFICATION_TEMPLATES[templateId]
       if (!template) {
         throw new Error(`Notification template '${templateId}' not found`);
       }
@@ -378,7 +378,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
         ...template,
         ...customData,
         data: { ...template.data, ...customData?.data },
-      };
+      }
 
       return showNotification(config);
     },
@@ -388,7 +388,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
   // Register with server
   const registerWithServer = useCallback(
     async (endpoint: string): Promise<void> => {
-      const subscriptionInfo = getSubscriptionInfo();
+      const subscriptionInfo = getSubscriptionInfo()
       if (!subscriptionInfo) {
         throw new Error('No subscription data available');
       }
@@ -414,12 +414,12 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
         }
 
         const _result = await response.json();
-        // console.log('Successfully registered with server:', result);
+        // console.log('Successfully registered with server:', result)
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : 'Failed to register with server';
         setLastError(errorMessage);
-        // console.error('Failed to register push subscription with server:', error);
+        // console.error('Failed to register push subscription with server:', error)
         throw new Error(errorMessage);
       } finally {
         setIsRegistering(false);
@@ -441,7 +441,7 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
         { action: 'ok', title: 'OK' },
         { action: 'dismiss', title: 'Dismiss' },
       ],
-    });
+    })
   }, [showNotification]);
 
   // Get notification statistics
@@ -454,13 +454,13 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       queuedNotifications: notificationQueueRef.current.length,
       subscriptionEndpoint: subscription?.endpoint || null,
       lastError,
-    };
+    }
   }, [isSupported, permission, subscription, notifications.length, lastError]);
 
   // Clear all notifications
   const clearAllNotifications = useCallback(async (): Promise<void> => {
     try {
-      const registration = await getServiceWorkerRegistration();
+      const registration = await getServiceWorkerRegistration()
 
       if (registration) {
         const _notifications = await registration.getNotifications();
@@ -468,17 +468,17 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
       }
 
       // Clear local notifications
-      notifications.forEach((notification) => notification.close());
+      notifications.forEach((notification) => notification.close())
       setNotifications([]);
     } catch (error) {
-      // console.error('Failed to clear notifications:', error);
+      // console.error('Failed to clear notifications:', error)
     }
   }, [getServiceWorkerRegistration, notifications]);
 
   // Get active notifications
   const getActiveNotifications = useCallback(async (): Promise<Notification[]> => {
     try {
-      const registration = await getServiceWorkerRegistration();
+      const registration = await getServiceWorkerRegistration()
 
       if (registration) {
         return await registration.getNotifications();
@@ -486,33 +486,33 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
 
       return notifications;
     } catch (error) {
-      // console.error('Failed to get active notifications:', error);
+      // console.error('Failed to get active notifications:', error)
       return [];
     }
   }, [getServiceWorkerRegistration, notifications]);
 
   // Set up message listener for service worker
   useEffect(() => {
-    if (!('serviceWorker' in navigator)) return;
+    if (!('serviceWorker' in navigator)) return
 
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'NOTIFICATION_CLICKED') {
         // Handle notification click
-        // console.log('Notification clicked:', event.data);
+        // console.log('Notification clicked:', event.data)
       }
-    };
+    }
 
     navigator.serviceWorker.addEventListener('message', handleMessage);
 
     return () => {
       navigator.serviceWorker.removeEventListener('message', handleMessage);
-    };
+    }
   }, []);
 
   // Check existing subscription on mount
   useEffect(() => {
     const checkExistingSubscription = async () => {
-      if (!isSupported) return;
+      if (!isSupported) return
 
       try {
         const registration = await getServiceWorkerRegistration();
@@ -521,9 +521,9 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
           setSubscription(existingSubscription);
         }
       } catch (error) {
-        // console.error('Failed to check existing subscription:', error);
+        // console.error('Failed to check existing subscription:', error)
       }
-    };
+    }
 
     checkExistingSubscription();
   }, [isSupported, getServiceWorkerRegistration]);
@@ -557,12 +557,12 @@ export const usePushNotifications = (vapidPublicKey?: string) => {
     registerWithServer,
     testNotification,
     getNotificationStats,
-  };
-};
+  }
+}
 
 // Utility functions
 const urlBase64ToUint8Array = (base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
@@ -636,10 +636,10 @@ export const NotificationTemplates = {
     silent: true,
     data: { type: 'system' },
   }),
-};
+}
 
 // Default export for backward compatibility
-export default usePushNotifications;
+export default usePushNotifications
 
 // Template utilities for easy access
 export const useNotificationTemplates = () => {
@@ -659,8 +659,8 @@ export const useNotificationTemplates = () => {
       body: reminderData.message || NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.body,
       data: { ...NOTIFICATION_TEMPLATES.COMPLIANCE_REMINDER.data, ...reminderData },
     }),
-  };
-};
+  }
+}
 
 export const useNotificationScheduler = () => {
   return {
@@ -678,5 +678,5 @@ export const useNotificationScheduler = () => {
         }
       }, interval);
     },
-  };
-};
+  }
+}

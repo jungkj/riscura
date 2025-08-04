@@ -9,13 +9,13 @@ export async function POST(_request: NextRequest) {
       return NextResponse.json(
         { error: 'This endpoint is only available in development' },
         { status: 403 }
-      );
+      )
     }
 
     // Find or create organization
     let organization = await prisma.organization.findFirst({
       where: { domain: 'riscura.com' },
-    });
+    })
 
     if (!organization) {
       organization = await prisma.organization.create({
@@ -39,14 +39,14 @@ export async function POST(_request: NextRequest) {
     }
 
     // Create test user credentials
-    const testUserEmail = 'testuser@riscura.com';
+    const testUserEmail = 'testuser@riscura.com'
     const testUserPassword = 'test123';
     const passwordHash = await bcrypt.hash(testUserPassword, 12);
 
     // Check if user already exists
     let user = await prisma.user.findUnique({
       where: { email: testUserEmail },
-    });
+    })
 
     if (user) {
       // Update existing user
@@ -77,7 +77,7 @@ export async function POST(_request: NextRequest) {
           emailVerified: new Date(),
           lastLogin: new Date(),
         },
-      });
+      })
     } else {
       // Create new user
       user = await prisma.user.create({
@@ -107,7 +107,7 @@ export async function POST(_request: NextRequest) {
           emailVerified: new Date(),
           organizationId: organization.id,
         },
-      });
+      })
     }
 
     return NextResponse.json({
@@ -127,7 +127,7 @@ export async function POST(_request: NextRequest) {
       },
     });
   } catch (error) {
-    // console.error('Error creating test user:', error);
+    // console.error('Error creating test user:', error)
     return NextResponse.json(
       {
         error: 'Failed to create test user',

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
+import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/daisy-components';
 // import { 
   Shield, 
   Eye, 
@@ -19,7 +20,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   TrendingUp,
   Filter,
   Zap
-} from 'lucide-react';
+} from 'lucide-react'
 import {
   AreaChart,
   Area,
@@ -90,10 +91,10 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
   // Fetch security data
   const fetchSecurityData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       
       // Get security metrics
-      const securityMetrics = aiSecurityService.getSecurityMetrics();
+      const securityMetrics = aiSecurityService.getSecurityMetrics()
       setMetrics({
         ...securityMetrics,
         recentAlerts: 5,
@@ -102,7 +103,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       });
       
       // Get audit logs with filters
-      const filters: Parameters<typeof aiSecurityService.getAuditLogs>[0] = {};
+      const filters: Parameters<typeof aiSecurityService.getAuditLogs>[0] = {}
       if (filterUserId) filters.userId = filterUserId;
       if (filterThreatLevel) filters.threatLevel = filterThreatLevel as SecurityAnalysis['threatLevel'];
       
@@ -110,23 +111,23 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       setAuditLogs(logs);
       
       // Generate mock security trends for demo
-      const trends = generateMockSecurityTrends();
+      const trends = generateMockSecurityTrends()
       setSecurityTrends(trends);
       
       // Generate mock security events
-      const events = generateMockSecurityEvents();
+      const events = generateMockSecurityEvents()
       setSecurityEvents(events);
       
     } catch (error) {
-      // console.error('Error fetching security data:', error);
+      // console.error('Error fetching security data:', error)
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Generate mock security trends
   const generateMockSecurityTrends = (): SecurityTrend[] => {
-    const days = parseInt(selectedTimeRange);
+    const days = parseInt(selectedTimeRange)
     const trends: SecurityTrend[] = [];
     
     for (let i = days - 1; i >= 0; i--) {
@@ -143,11 +144,11 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
     }
     
     return trends;
-  };
+  }
 
   // Generate mock security events
   const generateMockSecurityEvents = (): SecurityEvent[] => {
-    const events: SecurityEvent[] = [];
+    const events: SecurityEvent[] = []
     const eventTypes = [
       'authentication_failure',
       'pii_exposure',
@@ -168,17 +169,17 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         resolved: Math.random() > 0.3,
         resolvedAt: Math.random() > 0.5 ? new Date() : undefined,
         resolvedBy: Math.random() > 0.5 ? 'security-admin' : undefined
-      };
+      }
       events.push(event);
     }
     
     return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-  };
+  }
 
   // Export audit logs
   const handleExportAuditLogs = async () => {
     try {
-      const data = await aiSecurityService.exportAuditLogs('csv');
+      const data = await aiSecurityService.exportAuditLogs('csv')
       const blob = new Blob([data], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       
@@ -190,13 +191,13 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      // console.error('Error exporting audit logs:', error);
+      // console.error('Error exporting audit logs:', error)
     }
-  };
+  }
 
   // Auto-refresh data
   useEffect(() => {
-    fetchSecurityData();
+    fetchSecurityData()
     
     const interval = setInterval(fetchSecurityData, refreshInterval);
     return () => clearInterval(interval);
@@ -213,7 +214,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }
 
   const getThreatLevelIcon = (level: string) => {
     switch (level) {
@@ -227,7 +228,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       case 'low': return <CheckCircle className="h-4 w-4 text-green-600" />;
       default: return <Activity className="h-4 w-4 text-gray-600" />;
     }
-  };
+  }
 
   const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'];
 
@@ -255,7 +256,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
         </DaisyCardBody>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -764,4 +765,4 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
       </DaisyTabs>
     </div>
   );
-}; 
+} 

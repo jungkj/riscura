@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
+import { DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import { 
   ChevronDown, 
   Type, 
@@ -18,7 +19,7 @@ import React, { useState, useRef, useCallback } from 'react';
   Plus,
   Trash2,
   Settings
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { cn } from '@/lib/utils';
@@ -46,7 +47,7 @@ const dataTypeIcons = {
   USER_REFERENCE: User,
   CALCULATED: Calculator,
   BOOLEAN: ToggleLeft
-};
+}
 
 export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = ({
   column,
@@ -75,13 +76,13 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
     const handleMouseMove = (e: MouseEvent) => {
       const newWidth = Math.max(60, startWidth + (e.clientX - startX));
       onResize(newWidth);
-    };
+    }
 
     const handleMouseUp = () => {
       setIsResizing(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-    };
+    }
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
@@ -199,6 +200,6 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
       )}
     </div>
   );
-};
+}
 
 export default SpreadsheetColumnHeader; 

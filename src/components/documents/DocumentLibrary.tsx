@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
 // import { 
   Search, 
   Filter, 
@@ -17,18 +18,18 @@ import React, { useState, useEffect, useCallback } from 'react';
   Share2,
   FolderOpen,
   FileText,
-} from 'lucide-react';
+} from 'lucide-react'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { formatFileSize } from '@/lib/storage/file-validator';
-// import { format } from 'date-fns';
+// import { formatFileSize } from '@/lib/storage/file-validator'
+// import { format } from 'date-fns'
 import DocumentViewer from './DocumentViewer';
 import FileUploadDropzone from './FileUploadDropzone';
 import DocumentSearch from './DocumentSearch';
@@ -47,7 +48,7 @@ interface Document {
     id: string;
     name: string;
     email: string;
-  };
+  }
   uploadedAt: string;
   updatedAt: string;
   version: number;
@@ -161,7 +162,7 @@ export default function DocumentLibrary({
       setDocuments(data.documents);
       setPagination(data.pagination);
     } catch (error) {
-      // console.error('Error fetching documents:', error);
+      // console.error('Error fetching documents:', error)
       toast.error('Failed to load documents');
     } finally {
       setLoading(false);
@@ -175,22 +176,22 @@ export default function DocumentLibrary({
   const handleSearch = (_query: string) => {
     setSearchQuery(query);
     setPagination(prev => ({ ...prev, page: 1 }));
-  };
+  }
 
   const handleUploadComplete = (_results: any[]) => {
     toast.success(`Uploaded ${results.length} file(s) successfully`);
     setShowUpload(false);
     fetchDocuments();
-  };
+  }
 
   const handleDocumentView = (document: Document) => {
     setViewingDocument(document);
-  };
+  }
 
   const handleDocumentEdit = (document: Document) => {
     // TODO: Open edit dialog
-    // console.log('Edit document:', document.id);
-  };
+    // console.log('Edit document:', document.id)
+  }
 
   const handleDocumentDelete = async (documentId: string) => {
     try {
@@ -206,16 +207,16 @@ export default function DocumentLibrary({
       fetchDocuments();
       setViewingDocument(null);
     } catch (error) {
-      // console.error('Delete error:', error);
+      // console.error('Delete error:', error)
       toast.error('Failed to delete document');
     }
-  };
+  }
 
   const handleDocumentShare = (documentId: string) => {
     // TODO: Open share dialog
-    // console.log('Share document:', documentId);
+    // console.log('Share document:', documentId)
           toast('Share functionality coming soon');
-  };
+  }
 
   const handleBulkDownload = async () => {
     if (selectedDocuments.length === 0) {
@@ -224,8 +225,8 @@ export default function DocumentLibrary({
     }
 
     // TODO: Implement bulk download
-          toast('Bulk download functionality coming soon');
-  };
+          toast('Bulk download functionality coming soon')
+  }
 
   const handleBulkDelete = async () => {
     if (selectedDocuments.length === 0) {
@@ -248,10 +249,10 @@ export default function DocumentLibrary({
       setSelectedDocuments([]);
       fetchDocuments();
     } catch (error) {
-      // console.error('Bulk delete error:', error);
+      // console.error('Bulk delete error:', error)
       toast.error('Failed to delete some documents');
     }
-  };
+  }
 
   const toggleDocumentSelection = (documentId: string) => {
     setSelectedDocuments(prev => 
@@ -259,15 +260,15 @@ export default function DocumentLibrary({
         ? prev.filter(id => id !== documentId)
         : [...prev, documentId]
     );
-  };
+  }
 
   const selectAllDocuments = () => {
     setSelectedDocuments(documents.map(doc => doc.id));
-  };
+  }
 
   const clearSelection = () => {
     setSelectedDocuments([]);
-  };
+  }
 
   const renderDocumentCard = (document: Document) => (
     <DaisyCard key={document.id} className="group hover:shadow-md transition-shadow" >

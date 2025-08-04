@@ -103,7 +103,7 @@ export const MacbookScroll = ({
       </div>
     </div>
   );
-};
+}
 
 export const Lid = ({
   scaleX,
@@ -131,7 +131,7 @@ export const Lid = ({
         if (entry.isIntersecting) {
           video.play().catch(() => {
             // Handle autoplay restrictions
-            // console.log('Video autoplay was prevented');
+            // console.log('Video autoplay was prevented')
           });
         } else {
           video.pause();
@@ -146,7 +146,7 @@ export const Lid = ({
 
     return () => {
       observer.disconnect();
-    };
+    }
   }, [src]);
 
   return (
@@ -203,7 +203,7 @@ export const Lid = ({
                 // Ensure video is ready to play when in view
                 if (isInView && videoRef.current) {
                   videoRef.current.play().catch(() => {
-                    // console.log('Video autoplay was prevented');
+                    // console.log('Video autoplay was prevented')
                   });
                 }
               }}
@@ -229,7 +229,7 @@ export const Lid = ({
       </motion.div>
     </div>
   );
-};
+}
 
 export const Trackpad = () => {
   return (
@@ -240,7 +240,7 @@ export const Trackpad = () => {
       }}
     />
   );
-};
+}
 
 export const Keypad = () => {
   return (
@@ -599,7 +599,7 @@ export const Keypad = () => {
       </div>
     </div>
   );
-};
+}
 
 export const KBtn = ({
   className,
@@ -640,7 +640,7 @@ export const KBtn = ({
       </div>
     </div>
   );
-};
+}
 
 export const SpeakerGrid = () => {
   return (
@@ -652,7 +652,7 @@ export const SpeakerGrid = () => {
       }}
     />
   );
-};
+}
 
 export const OptionKey = ({ className }: { className: string }) => {
   return (
@@ -673,7 +673,7 @@ export const OptionKey = ({ className }: { className: string }) => {
       <rect id="_Transparent_Rectangle_" className="st0" width="32" height="32" stroke="none" />
     </svg>
   );
-};
+}
 
 const AceternityLogo = () => {
   return (
@@ -694,4 +694,4 @@ const AceternityLogo = () => {
       />
     </svg>
   );
-};
+}

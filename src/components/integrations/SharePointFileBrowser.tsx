@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSharePointFiles } from '@/hooks/useSharePointFiles';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { 
   FileSpreadsheet, 
@@ -50,7 +50,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
 
   useEffect(() => {
     // Load files when component mounts
-    listFiles();
+    listFiles()
   }, [integrationId, listFiles]);
 
   const handleSearch = async () => {
@@ -62,13 +62,13 @@ export const SharePointFileBrowser: React.FC<Props> = ({
 
     setIsSearching(true);
     await searchFiles(searchQuery);
-  };
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
-  };
+  }
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -76,7 +76,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }
 
   if (isLoading && files.length === 0) {
     return (
@@ -88,7 +88,7 @@ export const SharePointFileBrowser: React.FC<Props> = ({
         </div>
       </DaisyCard>
     );
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -199,4 +199,4 @@ export const SharePointFileBrowser: React.FC<Props> = ({
       )}
     </div>
   );
-};
+}

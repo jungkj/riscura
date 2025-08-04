@@ -1,5 +1,5 @@
 // Global Styles and Design System
-'use client';
+'use client'
 
 import React from 'react';
 import { cn } from '@/lib/utils';
@@ -126,7 +126,7 @@ export const designTokens = {
     slow: '350ms ease',
     bounce: '250ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   },
-};
+}
 
 // Animation Keyframes
 export const animations = {
@@ -187,7 +187,7 @@ export const animations = {
       opacity: 0,
     },
   },
-};
+}
 
 // CSS-in-JS Style Generator
 export const generateStyles = () => {
@@ -195,74 +195,74 @@ export const generateStyles = () => {
     /* Global CSS Variables */
     :root {
       /* Colors */
-      --primary-50: ${designTokens.colors.primary[50]};
-      --primary-100: ${designTokens.colors.primary[100]};
-      --primary-200: ${designTokens.colors.primary[200]};
-      --primary-300: ${designTokens.colors.primary[300]};
-      --primary-400: ${designTokens.colors.primary[400]};
-      --primary-500: ${designTokens.colors.primary[500]};
-      --primary-600: ${designTokens.colors.primary[600]};
-      --primary-700: ${designTokens.colors.primary[700]};
-      --primary-800: ${designTokens.colors.primary[800]};
-      --primary-900: ${designTokens.colors.primary[900]};
+      --primary-50: ${designTokens.colors.primary[50]}
+      --primary-100: ${designTokens.colors.primary[100]}
+      --primary-200: ${designTokens.colors.primary[200]}
+      --primary-300: ${designTokens.colors.primary[300]}
+      --primary-400: ${designTokens.colors.primary[400]}
+      --primary-500: ${designTokens.colors.primary[500]}
+      --primary-600: ${designTokens.colors.primary[600]}
+      --primary-700: ${designTokens.colors.primary[700]}
+      --primary-800: ${designTokens.colors.primary[800]}
+      --primary-900: ${designTokens.colors.primary[900]}
       
-      --success-50: ${designTokens.colors.success[50]};
-      --success-500: ${designTokens.colors.success[500]};
-      --success-600: ${designTokens.colors.success[600]};
+      --success-50: ${designTokens.colors.success[50]}
+      --success-500: ${designTokens.colors.success[500]}
+      --success-600: ${designTokens.colors.success[600]}
       
-      --warning-50: ${designTokens.colors.warning[50]};
-      --warning-500: ${designTokens.colors.warning[500]};
-      --warning-600: ${designTokens.colors.warning[600]};
+      --warning-50: ${designTokens.colors.warning[50]}
+      --warning-500: ${designTokens.colors.warning[500]}
+      --warning-600: ${designTokens.colors.warning[600]}
       
-      --error-50: ${designTokens.colors.error[50]};
-      --error-500: ${designTokens.colors.error[500]};
-      --error-600: ${designTokens.colors.error[600]};
+      --error-50: ${designTokens.colors.error[50]}
+      --error-500: ${designTokens.colors.error[500]}
+      --error-600: ${designTokens.colors.error[600]}
       
       /* Spacing */
-      --spacing-xs: ${designTokens.spacing.xs};
-      --spacing-sm: ${designTokens.spacing.sm};
-      --spacing-md: ${designTokens.spacing.md};
-      --spacing-lg: ${designTokens.spacing.lg};
-      --spacing-xl: ${designTokens.spacing.xl};
-      --spacing-2xl: ${designTokens.spacing['2xl']};
-      --spacing-3xl: ${designTokens.spacing['3xl']};
-      --spacing-4xl: ${designTokens.spacing['4xl']};
-      --spacing-5xl: ${designTokens.spacing['5xl']};
+      --spacing-xs: ${designTokens.spacing.xs}
+      --spacing-sm: ${designTokens.spacing.sm}
+      --spacing-md: ${designTokens.spacing.md}
+      --spacing-lg: ${designTokens.spacing.lg}
+      --spacing-xl: ${designTokens.spacing.xl}
+      --spacing-2xl: ${designTokens.spacing['2xl']}
+      --spacing-3xl: ${designTokens.spacing['3xl']}
+      --spacing-4xl: ${designTokens.spacing['4xl']}
+      --spacing-5xl: ${designTokens.spacing['5xl']}
       
       /* Typography */
-      --font-size-xs: ${designTokens.typography.fontSizes.xs};
-      --font-size-sm: ${designTokens.typography.fontSizes.sm};
-      --font-size-base: ${designTokens.typography.fontSizes.base};
-      --font-size-lg: ${designTokens.typography.fontSizes.lg};
-      --font-size-xl: ${designTokens.typography.fontSizes.xl};
-      --font-size-2xl: ${designTokens.typography.fontSizes['2xl']};
-      --font-size-3xl: ${designTokens.typography.fontSizes['3xl']};
-      --font-size-4xl: ${designTokens.typography.fontSizes['4xl']};
-      --font-size-5xl: ${designTokens.typography.fontSizes['5xl']};
+      --font-size-xs: ${designTokens.typography.fontSizes.xs}
+      --font-size-sm: ${designTokens.typography.fontSizes.sm}
+      --font-size-base: ${designTokens.typography.fontSizes.base}
+      --font-size-lg: ${designTokens.typography.fontSizes.lg}
+      --font-size-xl: ${designTokens.typography.fontSizes.xl}
+      --font-size-2xl: ${designTokens.typography.fontSizes['2xl']}
+      --font-size-3xl: ${designTokens.typography.fontSizes['3xl']}
+      --font-size-4xl: ${designTokens.typography.fontSizes['4xl']}
+      --font-size-5xl: ${designTokens.typography.fontSizes['5xl']}
       
       /* Shadows */
-      --shadow-sm: ${designTokens.shadows.sm};
-      --shadow-base: ${designTokens.shadows.base};
-      --shadow-md: ${designTokens.shadows.md};
-      --shadow-lg: ${designTokens.shadows.lg};
-      --shadow-xl: ${designTokens.shadows.xl};
-      --shadow-2xl: ${designTokens.shadows['2xl']};
+      --shadow-sm: ${designTokens.shadows.sm}
+      --shadow-base: ${designTokens.shadows.base}
+      --shadow-md: ${designTokens.shadows.md}
+      --shadow-lg: ${designTokens.shadows.lg}
+      --shadow-xl: ${designTokens.shadows.xl}
+      --shadow-2xl: ${designTokens.shadows['2xl']}
       
       /* Border Radius */
-      --radius-sm: ${designTokens.borderRadius.sm};
-      --radius-base: ${designTokens.borderRadius.base};
-      --radius-md: ${designTokens.borderRadius.md};
-      --radius-lg: ${designTokens.borderRadius.lg};
-      --radius-xl: ${designTokens.borderRadius.xl};
-      --radius-2xl: ${designTokens.borderRadius['2xl']};
-      --radius-3xl: ${designTokens.borderRadius['3xl']};
-      --radius-full: ${designTokens.borderRadius.full};
+      --radius-sm: ${designTokens.borderRadius.sm}
+      --radius-base: ${designTokens.borderRadius.base}
+      --radius-md: ${designTokens.borderRadius.md}
+      --radius-lg: ${designTokens.borderRadius.lg}
+      --radius-xl: ${designTokens.borderRadius.xl}
+      --radius-2xl: ${designTokens.borderRadius['2xl']}
+      --radius-3xl: ${designTokens.borderRadius['3xl']}
+      --radius-full: ${designTokens.borderRadius.full}
       
       /* Transitions */
-      --transition-fast: ${designTokens.transitions.fast};
-      --transition-base: ${designTokens.transitions.base};
-      --transition-slow: ${designTokens.transitions.slow};
-      --transition-bounce: ${designTokens.transitions.bounce};
+      --transition-fast: ${designTokens.transitions.fast}
+      --transition-base: ${designTokens.transitions.base}
+      --transition-slow: ${designTokens.transitions.slow}
+      --transition-bounce: ${designTokens.transitions.bounce}
     }
     
     /* Animation Keyframes */
@@ -571,30 +571,30 @@ export const generateStyles = () => {
   `;
 
   return styles;
-};
+}
 
 // Global Styles Component
 export const GlobalStyles: React.FC = () => {
   React.useEffect(() => {
     // Inject styles into document head
-    const styleElement = document.createElement('style');
+    const styleElement = document.createElement('style')
     styleElement.textContent = generateStyles();
     document.head.appendChild(styleElement);
 
     // Cleanup function
     return () => {
       if (document.head.contains(styleElement)) {
-        document.head.removeChild(styleElement);
+        document.head.removeChild(styleElement)
       }
-    };
+    }
   }, []);
 
   return null;
-};
+}
 
 // Utility Components
 interface ContainerProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   className?: string;
 }
@@ -606,14 +606,14 @@ export const Container: React.FC<ContainerProps> = ({ children, size = 'lg', cla
     lg: 'max-w-6xl',
     xl: 'max-w-7xl',
     full: 'max-w-full',
-  };
+  }
 
   return (
     <div className={cn('mx-auto px-4 sm:px-6 lg:px-8', sizeClasses[size], className)}>
       {children}
     </div>
   );
-};
+}
 
 interface StackProps {
   children: React.ReactNode;
@@ -641,7 +641,7 @@ export const Stack: React.FC<StackProps> = ({
     center: 'items-center',
     end: 'items-end',
     stretch: 'items-stretch',
-  };
+  }
 
   const justifyClasses = {
     start: 'justify-start',
@@ -650,7 +650,7 @@ export const Stack: React.FC<StackProps> = ({
     between: 'justify-between',
     around: 'justify-around',
     evenly: 'justify-evenly',
-  };
+  }
 
   return (
     <div
@@ -666,11 +666,11 @@ export const Stack: React.FC<StackProps> = ({
       {children}
     </div>
   );
-};
+}
 
 interface GridProps {
   children: React.ReactNode;
-  columns?: number | { sm?: number; md?: number; lg?: number; xl?: number };
+  columns?: number | { sm?: number; md?: number; lg?: number; xl?: number }
   gap?: keyof typeof designTokens.spacing;
   className?: string;
 }
@@ -688,13 +688,13 @@ export const Grid: React.FC<GridProps> = ({ children, columns = 1, gap = 'md', c
     if (columns.xl) classes.push(`xl:grid-cols-${columns.xl}`);
 
     return classes.join(' ');
-  };
+  }
 
   const gapValue = designTokens.spacing[gap];
 
   return (
     <div className={cn('grid', getColumnClass(), `gap-[${gapValue}]`, className)}>{children}</div>
   );
-};
+}
 
 // All exports are handled as named exports above

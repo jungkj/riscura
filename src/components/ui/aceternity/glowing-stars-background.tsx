@@ -36,7 +36,7 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    };
+    }
 
     const createStars = () => {
       starsRef.current = Array.from({ length: starCount }, (_, i) => ({
@@ -48,7 +48,7 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
         speed: Math.random() * 0.5 + 0.1,
         glowIntensity: Math.random() * 0.5 + 0.5,
       }));
-    };
+    }
 
     const drawStar = (star: Star) => {
       const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3);
@@ -63,29 +63,29 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
       ctx.fill();
 
       // Core star
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
       ctx.fill();
-    };
+    }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       starsRef.current.forEach((star) => {
         // Animate opacity for twinkling effect
-        star.opacity += (Math.random() - 0.5) * 0.02;
+        star.opacity += (Math.random() - 0.5) * 0.02
         star.opacity = Math.max(0.1, Math.min(1, star.opacity));
 
         // Animate glow intensity
-        star.glowIntensity += (Math.random() - 0.5) * 0.01;
+        star.glowIntensity += (Math.random() - 0.5) * 0.01
         star.glowIntensity = Math.max(0.3, Math.min(1, star.glowIntensity));
 
         drawStar(star);
       });
 
       animationRef.current = requestAnimationFrame(animate);
-    };
+    }
 
     resizeCanvas();
     createStars();
@@ -101,7 +101,7 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
       window.removeEventListener('resize', resizeCanvas);
-    };
+    }
   }, [starCount]);
 
   return (
@@ -116,4 +116,4 @@ export const GlowingStarsBackground: React.FC<GlowingStarsBackgroundProps> = ({
       <div className="relative z-10">{children}</div>
     </div>
   );
-};
+}

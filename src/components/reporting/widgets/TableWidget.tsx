@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Copy, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface TableWidgetProps {
   widget: ReportWidget;
@@ -41,14 +42,14 @@ export function TableWidget({
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500))
       setData(getSampleData());
     } catch (err) {
       setError('Failed to load table data');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const getSampleData = () => [
     { id: 1, risk: 'Data Breach', likelihood: 4, impact: 5, status: 'Open', owner: 'John Doe' },
@@ -68,7 +69,7 @@ export function TableWidget({
       setSortColumn(column);
       setSortDirection('asc');
     }
-  };
+  }
 
   const sortedData = React.useMemo(() => {
     if (!sortColumn) return data;
@@ -109,7 +110,7 @@ export function TableWidget({
       case 'monitored': return 'text-yellow-600 bg-yellow-100';
       default: return 'text-gray-600 bg-gray-100';
     }
-  };
+  }
 
   return (
     <DaisyCard 

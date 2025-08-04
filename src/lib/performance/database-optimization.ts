@@ -22,24 +22,24 @@ class DatabaseOptimizer {
     const { ttl = 300, tags = [] } = options; // Default 5 minutes
 
     // Check cache first
-    const _cached = this.queryCache.get(queryKey);
+    const _cached = this.queryCache.get(queryKey)
     if (cached && Date.now() < cached.expires) {
       return cached.data;
     }
 
     // Execute query
-    const startTime = performance.now();
+    const startTime = performance.now()
     const data = await queryFn();
     const _duration = performance.now() - startTime;
 
     // Log slow queries
     if (duration > 100) {
-      // console.warn(`🐌 Slow database query: ${queryKey} took ${duration.toFixed(2)}ms`);
+      // console.warn(`🐌 Slow database query: ${queryKey} took ${duration.toFixed(2)}ms`)
     }
 
     // Cache result
     if (this.queryCache.size >= this.maxCacheSize) {
-      this.clearExpiredCache();
+      this.clearExpiredCache()
     }
 
     this.queryCache.set(queryKey, {
@@ -55,14 +55,14 @@ class DatabaseOptimizer {
   invalidateByTags(tags: string[]): void {
     for (const [key, entry] of this.queryCache.entries()) {
       if (entry.tags.some((tag) => tags.includes(tag))) {
-        this.queryCache.delete(key);
+        this.queryCache.delete(key)
       }
     }
   }
 
   // Clear expired cache entries
   private clearExpiredCache(): void {
-    const now = Date.now();
+    const now = Date.now()
     for (const [key, entry] of this.queryCache.entries()) {
       if (now >= entry.expires) {
         this.queryCache.delete(key);
@@ -86,18 +86,18 @@ class DatabaseOptimizer {
         .take(pageSize)
         .orderBy(orderBy || { createdAt: 'desc' }),
       baseQuery.count(),
-    ]);
+    ])
 
     return {
       data,
       total,
       hasMore: skip + pageSize < total,
-    };
+    }
   }
 
   // Batch operations
   async batchCreate<T>(_model: any, data: any[], batchSize = 100): Promise<T[]> {
-    const results: T[] = [];
+    const results: T[] = []
 
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
@@ -113,7 +113,7 @@ class DatabaseOptimizer {
 
   // Connection health check
   async healthCheck(): Promise<{
-    connected: boolean;
+    connected: boolean
     latency: number;
     activeConnections?: number;
   }> {
@@ -126,12 +126,12 @@ class DatabaseOptimizer {
       return {
         connected: true,
         latency,
-      };
+      }
     } catch (error) {
       return {
         connected: false,
         latency: performance.now() - start,
-      };
+      }
     }
   }
 }
@@ -163,7 +163,7 @@ export const optimizedQueries = {
           },
         }),
       { ttl: 1800, tags: ['user', 'organization'] } // 30 minutes
-    );
+    )
   },
 
   // Get organization risks with pagination
@@ -187,7 +187,7 @@ export const optimizedQueries = {
           },
         },
       },
-    });
+    })
 
     return dbOptimizer.paginatedQuery(baseQuery, page, pageSize, {
       severity: 'desc',
@@ -220,18 +220,18 @@ export const optimizedQueries = {
                 },
               },
             }),
-          ]);
+          ])
 
         return {
           risks: { total: totalRisks, high: highRisks },
           controls: { total: totalControls, active: activeControls },
           recentActivities,
-        };
+        }
       },
       { ttl: 300, tags: ['dashboard', 'risks', 'controls'] } // 5 minutes
     );
   },
-};
+}
 
 // ============================================================================
 // DATABASE INDEXES (SQL to run)
@@ -266,18 +266,18 @@ export const requiredIndexes = [
 
 // Function to create indexes
 export async function createOptimizationIndexes(): Promise<void> {
-  // console.log('🏗️ Creating database optimization indexes...');
+  // console.log('🏗️ Creating database optimization indexes...')
 
   for (const indexSql of requiredIndexes) {
     try {
       await db.client.$executeRawUnsafe(indexSql);
-      // console.log(`✅ Created index: ${indexSql.split(' ')[5]}`);
+      // console.log(`✅ Created index: ${indexSql.split(' ')[5]}`)
     } catch (error) {
-      // console.warn(`⚠️ Index creation failed: ${error}`);
+      // console.warn(`⚠️ Index creation failed: ${error}`)
     }
   }
 
-  // console.log('✅ Database optimization indexes created');
+  // console.log('✅ Database optimization indexes created')
 }
 
 // ============================================================================
@@ -285,7 +285,7 @@ export async function createOptimizationIndexes(): Promise<void> {
 // ============================================================================
 
 export class DatabasePerformanceMonitor {
-  private queryTimes = new Map<string, number[]>();
+  private queryTimes = new Map<string, number[]>()
 
   trackQuery(operation: string, duration: number): void {
     if (!this.queryTimes.has(operation)) {
@@ -297,7 +297,7 @@ export class DatabasePerformanceMonitor {
 
     // Keep only last 100 measurements
     if (times.length > 100) {
-      times.shift();
+      times.shift()
     }
   }
 
@@ -307,7 +307,7 @@ export class DatabasePerformanceMonitor {
       return this.calculateStats(times);
     }
 
-    const stats: { [key: string]: any } = {};
+    const stats: { [key: string]: any } = {}
     for (const [op, times] of this.queryTimes.entries()) {
       stats[op] = this.calculateStats(times);
     }
@@ -325,7 +325,7 @@ export class DatabasePerformanceMonitor {
       max: sorted[sorted.length - 1],
       p50: sorted[Math.floor(sorted.length * 0.5)],
       p95: sorted[Math.floor(sorted.length * 0.95)],
-    };
+    }
   }
 }
 

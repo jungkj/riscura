@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { toast } from '@/hooks/use-toast';
+import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 // Icons
 // import {
@@ -20,11 +21,11 @@ import { toast } from '@/hooks/use-toast';
   BarChart3,
   Download,
   RefreshCw
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface AnalysisStats {
-  totalDocuments: number;
+  totalDocuments: number
   analyzedDocuments: number;
   risksIdentified: number;
   averageConfidence: number;
@@ -91,7 +92,7 @@ const DocumentAnalysisPage = () {
       title: 'Files Uploaded',
       description: `${files.length} file(s) uploaded and queued for analysis`,
     });
-  };
+  }
 
   const handleRefreshStats = () => {
     // Simulate refreshing stats
@@ -101,13 +102,13 @@ const DocumentAnalysisPage = () {
       risksIdentified: prev.risksIdentified + Math.floor(Math.random() * 3),
       averageConfidence: 85 + Math.floor(Math.random() * 10),
       processingTime: 2.5 + Math.random() * 2
-    }));
+    }))
     
     toast({
       title: 'Stats Updated',
       description: 'Analysis statistics have been refreshed',
     });
-  };
+  }
 
   const getTrendIcon = (_trend: RiskTrend['trend']) => {
     switch (trend) {
@@ -118,7 +119,7 @@ const DocumentAnalysisPage = () {
       case 'stable':
         return <div className="h-4 w-4 bg-muted rounded-full" />;
     }
-  };
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -131,7 +132,7 @@ const DocumentAnalysisPage = () {
       default:
         return <DaisyBadge variant="outline">Unknown</DaisyBadge>;
     }
-  };
+  }
 
   return (
     <motion.div 
@@ -240,14 +241,14 @@ const DocumentAnalysisPage = () {
             <DocumentUpload 
               onUpload={async (formData: FormData) => {
                 // Handle the upload - this would typically send to an API
-                // console.log('Uploading files:', formData);
+                // console.log('Uploading files:', formData)
                 // For now, just simulate the file upload completion
                 const files = Array.from(formData.getAll('files') as File[]).map(file => ({
                   id: Math.random().toString(36).substring(2),
                   name: file.name,
                   size: file.size,
                   type: file.type
-                }));
+                }))
                 handleFilesUploaded(files);
               }}
               organizationId="demo-org"

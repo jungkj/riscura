@@ -1,7 +1,8 @@
 // Comprehensive User Feedback System
-'use client';
+'use client'
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { DaisyButton, DaisyLabel, DaisyInput, DaisyTextarea, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyAlertDialog } from '@/components/ui/daisy-components';
 // import {
   CheckCircle,
   AlertCircle,
@@ -13,10 +14,10 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
   Star,
   Send,
   Loader2,
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
 import { Badge } from './badge';
 import { Textarea } from './textarea';
 import { Input } from './input';
@@ -41,7 +42,7 @@ import {
 } from './alert-dialog';
 
 // Toast Types
-export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading'
 
 export interface Toast {
   id: string;
@@ -52,14 +53,14 @@ export interface Toast {
   action?: {
     label: string;
     onClick: () => void;
-  };
+  }
   dismissible?: boolean;
   persistent?: boolean;
 }
 
 // Toast Context
 interface ToastContextType {
-  toasts: Toast[];
+  toasts: Toast[]
   addToast: (toast: Omit<Toast, 'id'>) => string;
   removeToast: (id: string) => void;
   clearToasts: () => void;
@@ -70,7 +71,7 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 // Toast Provider
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [toasts, setToasts] = useState<Toast[]>([]);
+  const [toasts, setToasts] = useState<Toast[]>([])
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -79,14 +80,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       duration: toast.persistent ? undefined : (toast.duration ?? 5000),
       dismissible: true,
       ...toast,
-    };
+    }
 
     setToasts((prev) => [...prev, newToast]);
 
     // Auto-remove toast after duration
     if (newToast.duration && !newToast.persistent) {
       setTimeout(() => {
-        removeToast(id);
+        removeToast(id)
       }, newToast.duration);
     }
 
@@ -111,11 +112,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       <ToastContainer />
     </ToastContext.Provider>
   );
-};
+}
 
 // Toast Hook
 export const useToast = () => {
-  const context = useContext(ToastContext);
+  const context = useContext(ToastContext)
   if (!context) {
     throw new Error('useToast must be used within a ToastProvider');
   }
@@ -142,7 +143,7 @@ export const useToast = () => {
     promise: async <T,>(
       promise: Promise<T>,
       messages: {
-        loading: string;
+        loading: string
         success: string | ((_data: T) => string);
         error: string | ((__error: any) => string);
       }
@@ -172,14 +173,14 @@ export const useToast = () => {
         throw error;
       }
     },
-  };
+  }
 
-  return { ...context, toast };
-};
+  return { ...context, toast }
+}
 
 // Toast Component
 const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
-  const { removeToast } = useToast();
+  const { removeToast } = useToast()
 
   const getIcon = () => {
     switch (toast.type) {
@@ -194,7 +195,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       case 'loading':
         return <Loader2 className="w-5 h-5 animate-spin text-primary" />;
     }
-  };
+  }
 
   const getBackgroundClass = () => {
     switch (toast.type) {
@@ -209,7 +210,7 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       case 'loading':
         return 'bg-background border-border';
     }
-  };
+  }
 
   return (
     <div
@@ -249,11 +250,11 @@ const ToastComponent: React.FC<{ toast: Toast }> = ({ toast }) => {
       )}
     </div>
   );
-};
+}
 
 // Toast Container
 const ToastContainer: React.FC = () => {
-  const { toasts } = useToast();
+  const { toasts } = useToast()
 
   if (toasts.length === 0) return null;
 
@@ -264,11 +265,11 @@ const ToastContainer: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 // Confirmation Dialog Hook
 interface ConfirmationOptions {
-  title?: string;
+  title?: string
   description?: string;
   confirmText?: string;
   cancelText?: string;
@@ -341,12 +342,12 @@ export const useConfirmation = () => {
     [isOpen, options, handleConfirm, handleCancel]
   );
 
-  return { confirm, ConfirmationDialog };
-};
+  return { confirm, ConfirmationDialog }
+}
 
 // Feedback Form Component
 interface FeedbackFormProps {
-  isOpen: boolean;
+  isOpen: boolean
   onClose: () => void;
   onSubmit: (feedback: FeedbackData) => Promise<void>;
   title?: string;
@@ -404,7 +405,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   const renderStars = () => {
     return (
@@ -425,7 +426,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
         ))}
       </div>
     );
-  };
+  }
 
   return (
     <DaisyDialog open={isOpen} onOpenChange={onClose}>
@@ -523,11 +524,11 @@ setFormData((prev) => ({ ...prev, email: e.target.value }))} />
       </DaisyDialogContent>
     </DaisyDialog>
   );
-};
+}
 
 // Feedback Hook
 export const useFeedback = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const openFeedback = useCallback(() => {
     setIsOpen(true);
@@ -551,7 +552,7 @@ export const useFeedback = () => {
         screenResolution: `${screen.width}x${screen.height}`,
         url: window.location.href,
       }),
-    });
+    })
 
     if (!response.ok) {
       throw new Error('Failed to submit feedback');
@@ -566,17 +567,17 @@ export const useFeedback = () => {
     FeedbackForm: () => (
       <FeedbackForm isOpen={isOpen} onClose={closeFeedback} onSubmit={submitFeedback} />
     ),
-  };
-};
+  }
+}
 
 // Status Banner Component
 interface StatusBannerProps {
-  type: 'info' | 'warning' | 'error' | 'success';
+  type: 'info' | 'warning' | 'error' | 'success'
   message: string;
   action?: {
     label: string;
     onClick: () => void;
-  };
+  }
   dismissible?: boolean;
   onDismiss?: () => void;
   className?: string;
@@ -601,7 +602,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       case 'info':
         return <Info className="w-5 h-5 text-blue-600" />;
     }
-  };
+  }
 
   const getBackgroundClass = () => {
     switch (type) {
@@ -614,7 +615,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       case 'info':
         return 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200';
     }
-  };
+  }
 
   return (
     <div
@@ -655,6 +656,6 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
       </div>
     </div>
   );
-};
+}
 
 // All components and hooks are exported as named exports above

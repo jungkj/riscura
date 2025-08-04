@@ -4,7 +4,7 @@ import { complianceMappingEngine } from '@/lib/compliance/mapping';
 export async function POST(_request: NextRequest) {
   try {
     // Simplified validation for now
-    const body = await request.json();
+    const body = await request.json()
     const { action, organizationId, frameworkIds, frameworkId, includeRecommendations } = body;
 
     if (!organizationId) {
@@ -47,7 +47,7 @@ export async function POST(_request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    // console.error('Error in compliance mapping:', error);
+    // console.error('Error in compliance mapping:', error)
     return NextResponse.json({ error: 'Failed to perform compliance mapping' }, { status: 500 });
   }
 }

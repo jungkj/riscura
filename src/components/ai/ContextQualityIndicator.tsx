@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   CheckCircle,
   AlertTriangle,
   RefreshCw,
@@ -11,7 +12,7 @@ import {
   Zap
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -22,7 +23,7 @@ interface ContextQualityIndicatorProps {
     relevance: number;
     completeness: number;
     freshness: number;
-  };
+  }
   contextMode: 'minimal' | 'moderate' | 'comprehensive';
   onRefreshContext?: () => Promise<void>;
   onChangeMode?: (mode: 'minimal' | 'moderate' | 'comprehensive') => void;
@@ -35,7 +36,7 @@ const QualityMetric: React.FC<{
   value: number;
   icon: React.ReactNode;
   description: string;
-  threshold?: { good: number; warning: number };
+  threshold?: { good: number; warning: number }
 }> = ({ 
   label, 
   value, 
@@ -49,13 +50,13 @@ const QualityMetric: React.FC<{
     if (value >= threshold.good) return 'text-green-600 bg-green-50 dark:bg-green-950/20';
     if (value >= threshold.warning) return 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950/20';
     return 'text-red-600 bg-red-50 dark:bg-red-950/20';
-  };
+  }
 
   const getProgressColor = () => {
     if (value >= threshold.good) return 'bg-green-500';
     if (value >= threshold.warning) return 'bg-yellow-500';
     return 'bg-red-500';
-  };
+  }
 
   return (
     <DaisyTooltipProvider>
@@ -87,7 +88,7 @@ const QualityMetric: React.FC<{
       </DaisyTooltip>
     
   );
-};
+}
 
 const ContextModeSelector: React.FC<{
   currentMode: 'minimal' | 'moderate' | 'comprehensive';
@@ -137,7 +138,7 @@ const ContextModeSelector: React.FC<{
       ))}
     </div>
   );
-};
+}
 
 export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = ({
   contextQuality,
@@ -164,13 +165,13 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
     } finally {
       setIsRefreshing(false);
     }
-  };
+  }
 
   const getOverallStatus = () => {
-    if (overallQuality >= 0.7) return { color: 'text-green-600', label: 'Excellent', icon: CheckCircle };
-    if (overallQuality >= 0.5) return { color: 'text-yellow-600', label: 'Good', icon: Info };
-    return { color: 'text-red-600', label: 'Needs Attention', icon: AlertTriangle };
-  };
+    if (overallQuality >= 0.7) return { color: 'text-green-600', label: 'Excellent', icon: CheckCircle }
+    if (overallQuality >= 0.5) return { color: 'text-yellow-600', label: 'Good', icon: Info }
+    return { color: 'text-red-600', label: 'Needs Attention', icon: AlertTriangle }
+  }
 
   const status = getOverallStatus();
   const StatusIcon = status.icon;
@@ -205,7 +206,7 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
         )}
       </div>
     );
-  };
+  }
 
   return (
     <motion.div
@@ -334,4 +335,4 @@ export const ContextQualityIndicator: React.FC<ContextQualityIndicatorProps> = (
       </DaisyCard>
     </motion.div>
   );
-}; 
+} 

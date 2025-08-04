@@ -3,8 +3,9 @@ import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { cn } from '@/lib/utils';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -21,14 +22,14 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
       url: window.location.href,
-    });
+    })
 
     alert('Error reported successfully. Thank you for helping us improve!');
-  };
+  }
 
   const handleGoHome = () => {
     window.location.href = '/dashboard';
-  };
+  }
 
   return (
     <div className={cn('min-h-[400px] flex items-center justify-center p-4', className)}>
@@ -108,7 +109,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
       </motion.div>
     </div>
   );
-};
+}
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -126,15 +127,15 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   const handleError = (__error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
-      // console.error('Error Boundary caught an error:', error, errorInfo);
+      // console.error('Error Boundary caught an error:', error, errorInfo)
     }
 
     // Call custom error handler if provided
-    onError?.(error, errorInfo);
+    onError?.(error, errorInfo)
 
     // In production, you would send this to your error reporting service
     // Example: Sentry, LogRocket, Bugsnag, etc.
-  };
+  }
 
   return (
     <ReactErrorBoundary
@@ -144,58 +145,58 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
       {children}
     </ReactErrorBoundary>
   );
-};
+}
 
 // Specialized error boundaries for different sections
 export const DashboardErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
-        // console.error('Dashboard Error:', error);
+        // console.error('Dashboard Error:', error)
         // Track dashboard-specific errors
       }}
     >
       {children}
     </ErrorBoundary>
-  );
-};
+  )
+}
 
 export const FormErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
-        // console.error('Form Error:', error);
+        // console.error('Form Error:', error)
         // Track form-specific errors
       }}
     >
       {children}
     </ErrorBoundary>
-  );
-};
+  )
+}
 
 export const DataErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       onError={(error) => {
-        // console.error('Data Loading Error:', error);
+        // console.error('Data Loading Error:', error)
         // Track data loading errors
       }}
     >
       {children}
     </ErrorBoundary>
-  );
-};
+  )
+}
 
 // Hook for manual error reporting
 export const useErrorHandler = () => {
   const reportError = (__error: Error, context?: string) => {
-    // console.error(`Error in ${context || 'unknown context'}:`, error);
+    // console.error(`Error in ${context || 'unknown context'}:`, error)
 
     // In production, send to error reporting service
     if (process.env.NODE_ENV === 'production') {
-      // Example: Sentry.captureException(error, { tags: { context } });
+      // Example: Sentry.captureException(error, { tags: { context } })
     }
-  };
+  }
 
-  return { reportError };
-};
+  return { reportError }
+}

@@ -9,7 +9,7 @@ const TOUCH_TARGET_SIZE = {
   minimum: 44, // px - WCAG minimum
   comfortable: 48, // px - recommended
   large: 56, // px - for primary actions
-};
+}
 
 // Gesture thresholds
 const GESTURE_THRESHOLDS = {
@@ -18,7 +18,7 @@ const GESTURE_THRESHOLDS = {
   tap: 150, // ms maximum duration
   longPress: 500, // ms minimum duration
   doubleTap: 300, // ms maximum time between taps
-};
+}
 
 export interface TouchTargetProps {
   size?: 'minimum' | 'comfortable' | 'large';
@@ -85,7 +85,7 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
   hapticFeedback = true,
   ...props
 }) => {
-  const [isPressed, setIsPressed] = useState(false);
+  const [isPressed, setIsPressed] = useState(false)
   const [lastTap, setLastTap] = useState(0);
   const pressTimer = useRef<NodeJS.Timeout>();
   const tapCount = useRef(0);
@@ -107,7 +107,7 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
     // Start long press timer
     if (onLongPress) {
       pressTimer.current = setTimeout(() => {
-        onLongPress();
+        onLongPress()
         triggerHaptic();
       }, GESTURE_THRESHOLDS.longPress);
     }
@@ -120,11 +120,11 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
 
     // Clear long press timer
     if (pressTimer.current) {
-      clearTimeout(pressTimer.current);
+      clearTimeout(pressTimer.current)
     }
 
     // Handle tap and double tap
-    const now = Date.now();
+    const now = Date.now()
     tapCount.current += 1;
 
     if (tapCount.current === 1) {
@@ -171,7 +171,7 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
       {children}
     </motion.div>
   );
-};
+}
 
 // Swipeable container component
 export const Swipeable: React.FC<SwipeableProps> = ({
@@ -186,13 +186,13 @@ export const Swipeable: React.FC<SwipeableProps> = ({
 }) => {
   const handlePanEnd = useCallback(
     (event: any, info: PanInfo) => {
-      if (disabled) return;
+      if (disabled) return
 
       const { offset, velocity } = info;
       const { x, y } = offset;
 
       // Check if gesture meets threshold requirements
-      const meetsDistanceThreshold = Math.abs(x) > threshold || Math.abs(y) > threshold;
+      const meetsDistanceThreshold = Math.abs(x) > threshold || Math.abs(y) > threshold
       const meetsVelocityThreshold =
         Math.abs(velocity.x) > GESTURE_THRESHOLDS.velocity ||
         Math.abs(velocity.y) > GESTURE_THRESHOLDS.velocity;
@@ -203,14 +203,14 @@ export const Swipeable: React.FC<SwipeableProps> = ({
       if (Math.abs(x) > Math.abs(y)) {
         // Horizontal swipe
         if (x > 0 && onSwipeRight) {
-          onSwipeRight();
+          onSwipeRight()
         } else if (x < 0 && onSwipeLeft) {
           onSwipeLeft();
         }
       } else {
         // Vertical swipe
         if (y > 0 && onSwipeDown) {
-          onSwipeDown();
+          onSwipeDown()
         } else if (y < 0 && onSwipeUp) {
           onSwipeUp();
         }
@@ -231,7 +231,7 @@ export const Swipeable: React.FC<SwipeableProps> = ({
       {children}
     </motion.div>
   );
-};
+}
 
 // Pull to refresh component
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
@@ -241,7 +241,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   className,
   disabled = false,
 }) => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [pullDistance, setPullDistance] = useState(0);
   const y = useMotionValue(0);
   const opacity = useTransform(y, [0, threshold], [0, 1]);
@@ -319,7 +319,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       </motion.div>
     </div>
   );
-};
+}
 
 // Touch-optimized slider
 export const TouchSlider: React.FC<TouchSliderProps> = ({
@@ -332,7 +332,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
   disabled = false,
   showValue = true,
 }) => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const percentage = ((value - min) / (max - min)) * 100;
@@ -393,11 +393,11 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
       {Boolean(showValue) && <div className="mt-2 text-center text-sm text-gray-600">{value}</div>}
     </div>
   );
-};
+}
 
 // Touch-optimized context menu
 export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -413,7 +413,7 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
 
     // Haptic feedback
     if ('vibrate' in navigator) {
-      navigator.vibrate(50);
+      navigator.vibrate(50)
     }
   }, []);
 
@@ -427,7 +427,7 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
-    };
+    }
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -437,7 +437,7 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
-    };
+    }
   }, [isOpen]);
 
   return (
@@ -480,11 +480,11 @@ export const TouchMenu: React.FC<TouchMenuProps> = ({ items, trigger, className 
       )}
     </>
   );
-};
+}
 
 // Mobile navigation drawer
 export interface MobileDrawerProps {
-  isOpen: boolean;
+  isOpen: boolean
   onClose: () => void;
   children: React.ReactNode;
   position?: 'left' | 'right' | 'bottom';
@@ -525,28 +525,28 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   const getInitialPosition = () => {
     switch (position) {
       case 'left':
-        return { x: '-100%' };
+        return { x: '-100%' }
       case 'right':
-        return { x: '100%' };
+        return { x: '100%' }
       case 'bottom':
-        return { y: '100%' };
+        return { y: '100%' }
       default:
-        return { x: '-100%' };
+        return { x: '-100%' }
     }
-  };
+  }
 
   const getAnimatePosition = () => {
     switch (position) {
       case 'left':
-        return { x: 0 };
+        return { x: 0 }
       case 'right':
-        return { x: 0 };
+        return { x: 0 }
       case 'bottom':
-        return { y: 0 };
+        return { y: 0 }
       default:
-        return { x: 0 };
+        return { x: 0 }
     }
-  };
+  }
 
   if (!isOpen) return null;
 
@@ -585,7 +585,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
       </motion.div>
     </div>
   );
-};
+}
 
 // Export all components
 export default {
@@ -597,4 +597,4 @@ export default {
   MobileDrawer,
   TOUCH_TARGET_SIZE,
   GESTURE_THRESHOLDS,
-};
+}

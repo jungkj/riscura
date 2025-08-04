@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { cn } from '@/lib/utils';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import {
   FileText,
   TrendingUp,
@@ -11,7 +12,7 @@ import { cn } from '@/lib/utils';
   Target,
   Settings,
   Shield
-} from 'lucide-react';
+} from 'lucide-react'
 
 interface AnalyticsData {
   totalQuestionnaires: number;
@@ -167,5 +168,5 @@ export function AnalyticsCardsSkeleton({ className }: { className?: string }) {
         </DaisyCard>
       ))}
     </div>
-  );
+  )
 } 

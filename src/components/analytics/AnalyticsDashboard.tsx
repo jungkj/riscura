@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea';
+// import { ContentCard } from '@/components/layout/MainContentArea'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { 
+import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   Select,
   SelectContent,
   SelectItem,
@@ -33,14 +34,14 @@ import {
   Maximize2,
   Share,
   Settings,
-} from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+} from 'lucide-react'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 import { CalendarIcon } from 'lucide-react';
-// import { format } from 'date-fns';
+// import { format } from 'date-fns'
 import {
   BarChart,
   Bar,
@@ -61,11 +62,11 @@ import {
 } from 'recharts';
 
 // Import our API services
-import { api, analyticsAPI } from '@/lib/mockData';
+import { api, analyticsAPI } from '@/lib/mockData'
 
 // ========== TYPES ==========
 export interface ChartData {
-  labels: string[];
+  labels: string[]
   datasets: Array<{
     label: string;
     data: number[];
@@ -113,7 +114,7 @@ export interface DashboardProps {
 
 // ========== KPI CARD COMPONENT ==========
 const KPICard: React.FC<{ 
-  metric: KPIMetric; 
+  metric: KPIMetric 
   onClick?: () => void;
   realTime?: boolean;
 }> = ({ metric, onClick, realTime }) => {
@@ -132,7 +133,7 @@ const KPICard: React.FC<{
       default:
         return new Intl.NumberFormat('en-US').format(value);
     }
-  };
+  }
 
   const getTrendIcon = (trend?: 'up' | 'down' | 'neutral') => {
     switch (trend) {
@@ -141,7 +142,7 @@ const KPICard: React.FC<{
       case 'neutral': return <div className="h-4 w-4" />;
       default: return null;
     }
-  };
+  }
 
   const getColorClass = (color?: string) => {
     switch (color) {
@@ -150,7 +151,7 @@ const KPICard: React.FC<{
       case 'error': return 'text-semantic-error';
       default: return 'text-text-primary';
     }
-  };
+  }
 
   return (
     <div 
@@ -223,11 +224,11 @@ const KPICard: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 // ========== CHART CONTAINER COMPONENT ==========
 const ChartContainer: React.FC<{
-  title: string;
+  title: string
   subtitle?: string;
   children: React.ReactNode;
   onExport?: () => void;
@@ -299,7 +300,7 @@ const ChartContainer: React.FC<{
       </div>
     </ContentCard>
   );
-};
+}
 
 // ========== PLACEHOLDER CHART COMPONENTS ==========
 const BarChartPlaceholder: React.FC<{ data: ChartData }> = ({ data }) => (
@@ -310,7 +311,7 @@ const BarChartPlaceholder: React.FC<{ data: ChartData }> = ({ data }) => (
       <p className="text-caption text-text-tertiary">{data.datasets.length} datasets</p>
     </div>
   </div>
-);
+)
 
 const LineChartPlaceholder: React.FC<{ data: ChartData }> = ({ data }) => (
   <div className="w-full h-full bg-surface-secondary rounded-lg flex items-center justify-center">
@@ -363,13 +364,13 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
   onExport,
   className
 }) => {
-  const [timeRange, setTimeRange] = useState('7d');
+  const [timeRange, setTimeRange] = useState('7d')
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
   // Simulate real-time updates
   useEffect(() => {
-    if (!realTimeEnabled) return;
+    if (!realTimeEnabled) return
 
     const interval = setInterval(() => {
       setLastUpdated(new Date());
@@ -381,10 +382,10 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000))
     setLastUpdated(new Date());
     setRefreshing(false);
-  };
+  }
 
   const getGridCols = (size: string) => {
     switch (size) {
@@ -394,7 +395,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       case 'xl': return 'col-span-4';
       default: return 'col-span-2';
     }
-  };
+  }
 
   const renderWidget = (widget: Widget) => {
     const commonProps = {
@@ -402,7 +403,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       onExpand: () => onWidgetClick?.(widget),
              onDrillDown: widget.drillDown ? () => window.location.href = widget.drillDown! : undefined,
       realTime: widget.realTime && realTimeEnabled,
-    };
+    }
 
     switch (widget.type) {
       case 'kpi-cards':
@@ -462,7 +463,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
           </ContentCard>
         );
     }
-  };
+  }
 
   return (
     <div className={cn("space-y-enterprise-6", className)}>
@@ -552,6 +553,6 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default AnalyticsDashboard; 

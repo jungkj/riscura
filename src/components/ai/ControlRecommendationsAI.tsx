@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
   Shield,
   Settings,
   Play,
@@ -12,7 +13,7 @@ import {
   Calendar
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -22,14 +23,14 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 
-// import { Risk, Control } from '@/types';
+// import { Risk, Control } from '@/types'
 // import { 
   controlRecommendationAIService,
   ControlRecommendation,
   ControlGapAnalysis,
   ImplementationPlan,
   CostBenefitAnalysis
-} from '@/services/ControlRecommendationAIService';
+} from '@/services/ControlRecommendationAIService'
 
 interface ControlRecommendationsAIProps {
   risks: Risk[];
@@ -48,7 +49,7 @@ const FrameworkSelector: React.FC<{
     cobit: { name: 'COBIT 2019', icon: <Target className="h-5 w-5" />, color: 'text-blue-600' },
     itil: { name: 'ITIL 4', icon: <Activity className="h-5 w-5" />, color: 'text-green-600' },
     sox: { name: 'SOX Controls', icon: <Shield className="h-5 w-5" />, color: 'text-[#191919]' }
-  };
+  }
 
   return (
     <div className="space-y-3">
@@ -92,7 +93,7 @@ const FrameworkSelector: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 const RecommendationCard: React.FC<{
   recommendation: ControlRecommendation;
@@ -107,7 +108,7 @@ const RecommendationCard: React.FC<{
       case 'low': return 'bg-green-500';
       default: return 'bg-muted';
     }
-  };
+  }
 
   const getTypeIcon = (_type: string) => {
     switch (type) {
@@ -118,7 +119,7 @@ const RecommendationCard: React.FC<{
       case 'corrective': return <Settings className="h-4 w-4" />;
       default: return <CheckCircle className="h-4 w-4" />;
     }
-  };
+  }
 
   return (
     <DaisyCard >
@@ -205,7 +206,7 @@ const RecommendationCard: React.FC<{
       </DaisyCardBody>
     </DaisyCard>
   );
-};
+}
 
 const GapAnalysisView: React.FC<{ 
   analysis: ControlGapAnalysis;
@@ -301,7 +302,7 @@ const GapAnalysisView: React.FC<{
       </DaisyCard>
     </div>
   );
-};
+}
 
 const CostBenefitView: React.FC<{ 
   analysis: CostBenefitAnalysis;
@@ -531,7 +532,7 @@ const CostBenefitView: React.FC<{
       </DaisyCard>
     </div>
   );
-};
+}
 
 const ImplementationPlanView: React.FC<{ 
   plan: ImplementationPlan;
@@ -649,7 +650,7 @@ const ImplementationPlanView: React.FC<{
       </DaisyCard>
     </div>
   );
-};
+}
 
 export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> = ({
   risks,
@@ -709,11 +710,11 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
       setGapAnalyses(gaps);
       setActiveTab('recommendations');
     } catch (error) {
-      // console.error('Failed to generate recommendations:', error);
+      // console.error('Failed to generate recommendations:', error)
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }
 
   const handleGenerateImplementationPlan = async () => {
     if (recommendations.length === 0) return;
@@ -733,13 +734,13 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
       onImplementationPlanGenerated?.(plan);
       setActiveTab('implementation');
     } catch (error) {
-      // console.error('Failed to generate implementation plan:', error);
+      // console.error('Failed to generate implementation plan:', error)
     }
-  };
+  }
 
   const handleAcceptRecommendation = (_recommendation: ControlRecommendation) => {
     onRecommendationAccepted?.(recommendation);
-  };
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -999,4 +1000,4 @@ export const ControlRecommendationsAI: React.FC<ControlRecommendationsAIProps> =
       </DaisyTabs>
     </div>
   );
-}; 
+} 

@@ -5,28 +5,28 @@ const prisma = new PrismaClient();
 async function seedChatChannels() {
   try {
     // Get the first organization
-    const organization = await prisma.organization.findFirst();
+    const organization = await prisma.organization.findFirst()
     if (!organization) {
-      // console.error('No organization found. Please seed organizations first.');
+      // console.error('No organization found. Please seed organizations first.')
       return;
     }
 
     // Get the first user as the creator
     const user = await prisma.user.findFirst({
       where: { organizationId: organization.id },
-    });
+    })
     if (!user) {
-      // console.error('No user found. Please seed users first.');
+      // console.error('No user found. Please seed users first.')
       return;
     }
 
     // Check if channels already exist
     const existingChannels = await prisma.chatChannel.count({
       where: { organizationId: organization.id },
-    });
+    })
 
     if (existingChannels > 0) {
-      // console.log(`Organization already has ${existingChannels} channels.`);
+      // console.log(`Organization already has ${existingChannels} channels.`)
       return;
     }
 
@@ -82,11 +82,11 @@ async function seedChatChannels() {
           },
         },
       }),
-    ]);
+    ])
 
     // console.log(
       `Created ${channels.length} default channels for organization ${organization.name}`
-    );
+    )
 
     // Add all other users to the general channel
     const otherUsers = await prisma.user.findMany({
@@ -94,7 +94,7 @@ async function seedChatChannels() {
         organizationId: organization.id,
         id: { not: user.id },
       },
-    });
+    })
 
     if (otherUsers.length > 0) {
       const generalChannel = channels.find((ch) => ch.name === 'general');
@@ -106,12 +106,12 @@ async function seedChatChannels() {
             role: 'MEMBER',
           })),
         });
-        // console.log(`Added ${otherUsers.length} members to the general channel`);
+        // console.log(`Added ${otherUsers.length} members to the general channel`)
       }
     }
 
     // Create a welcome message
-    const generalChannel = channels.find((ch) => ch.name === 'general');
+    const generalChannel = channels.find((ch) => ch.name === 'general')
     if (generalChannel) {
       await prisma.chatMessage.create({
         data: {
@@ -122,14 +122,14 @@ async function seedChatChannels() {
           type: 'TEXT',
         },
       });
-      // console.log('Created welcome message in general channel');
+      // console.log('Created welcome message in general channel')
     }
   } catch (error) {
-    // console.error('Error seeding chat channels:', error);
+    // console.error('Error seeding chat channels:', error)
   } finally {
     await prisma.$disconnect();
   }
 }
 
 // Run the seed function
-seedChatChannels();
+seedChatChannels()

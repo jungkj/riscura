@@ -5,8 +5,9 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import {
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -55,11 +56,11 @@ import toast from 'react-hot-toast';
   TrendingUp,
   Plus,
   X,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // Types
 interface TeamMember {
-  id: string;
+  id: string
   name: string;
   email: string;
   role: 'admin' | 'manager' | 'analyst' | 'auditor' | 'viewer';
@@ -147,7 +148,7 @@ const sampleTeamMembers: TeamMember[] = [
     assignedTasks: 3,
     expertise: ['Network Security', 'Vulnerability Management', 'NIST'],
   },
-];
+]
 
 const sampleTasks: DelegatedTask[] = [
   {
@@ -216,18 +217,18 @@ const getRoleConfig = (role: string) => {
     analyst: { color: 'text-green-600', bg: 'bg-green-50', label: 'Analyst' },
     auditor: { color: 'text-orange-600', bg: 'bg-orange-50', label: 'Auditor' },
     viewer: { color: 'text-gray-600', bg: 'bg-gray-50', label: 'Viewer' },
-  };
+  }
   return configs[role as keyof typeof configs] || configs.viewer;
-};
+}
 
 const getStatusConfig = (status: string) => {
   const configs = {
     active: { color: 'text-green-600', bg: 'bg-green-50', label: 'Active' },
     inactive: { color: 'text-gray-600', bg: 'bg-gray-50', label: 'Inactive' },
     busy: { color: 'text-red-600', bg: 'bg-red-50', label: 'Busy' },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.active;
-};
+}
 
 const getPriorityConfig = (priority: string) => {
   const configs = {
@@ -235,9 +236,9 @@ const getPriorityConfig = (priority: string) => {
     high: { color: 'text-orange-600', bg: 'bg-orange-50', label: 'High' },
     medium: { color: 'text-yellow-600', bg: 'bg-yellow-50', label: 'Medium' },
     low: { color: 'text-green-600', bg: 'bg-green-50', label: 'Low' },
-  };
+  }
   return configs[priority as keyof typeof configs] || configs.medium;
-};
+}
 
 const getTaskStatusConfig = (status: string) => {
   const configs = {
@@ -246,9 +247,9 @@ const getTaskStatusConfig = (status: string) => {
     review: { variant: 'outline' as const, icon: Eye, label: 'In Review' },
     completed: { variant: 'default' as const, icon: CheckCircle, label: 'Completed' },
     overdue: { variant: 'destructive' as const, icon: AlertTriangle, label: 'Overdue' },
-  };
+  }
   return configs[status as keyof typeof configs] || configs.pending;
-};
+}
 
 export default function TeamDelegatePage() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -276,11 +277,11 @@ export default function TeamDelegatePage() {
 
   const handleCreateTask = () => {
     setIsCreateTaskModalOpen(true);
-  };
+  }
 
   const handleAssignTask = (taskId: string, memberId: string) => {
     toast.success(`Task ${taskId} assigned to member ${memberId}`);
-  };
+  }
 
   const handleTaskAction = (_action: string, taskId: string) => {
     switch (action) {
@@ -301,7 +302,7 @@ export default function TeamDelegatePage() {
       default:
         toast(`Action "${action}" not yet implemented for task ${taskId}`);
     }
-  };
+  }
 
   const handleCreateNewTask = () => {
     if (!newTask.title || !newTask.assignee || !newTask.dueDate) {
@@ -327,7 +328,7 @@ export default function TeamDelegatePage() {
       tags: newTask.tags,
       attachments: 0,
       comments: 0,
-    };
+    }
 
     toast.success(
       `Task "${task.title}" created and assigned to ${sampleTeamMembers.find((m) => m.id === task.assignee)?.name}`
@@ -344,7 +345,7 @@ export default function TeamDelegatePage() {
       framework: '',
       tags: [],
     });
-  };
+  }
 
   const addTag = (tag: string) => {
     if (tag && !newTask.tags.includes(tag)) {
@@ -353,14 +354,14 @@ export default function TeamDelegatePage() {
         tags: [...prev.tags, tag],
       }));
     }
-  };
+  }
 
   const removeTag = (tagToRemove: string) => {
     setNewTask((prev) => ({
       ...prev,
       tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
-  };
+  }
 
   return (
     <ProtectedRoute>

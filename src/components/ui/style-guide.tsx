@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 // import { 
   Palette,
   Type,
@@ -37,24 +38,24 @@ import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/
   Zap,
   Target,
   TrendingUp
-} from 'lucide-react';
+} from 'lucide-react'
 import { cn } from '@/lib/utils';
 
 // Import design system constants
-import { designSystem } from '@/lib/design-system/constants';
+import { designSystem } from '@/lib/design-system/constants'
 
 // Re-export for backward compatibility
-export { designSystem };
+export { designSystem }
 
 // Color Palette Component
 const ColorPalette: React.FC = () => {
-  const [copiedColor, setCopiedColor] = useState<string | null>(null);
+  const [copiedColor, setCopiedColor] = useState<string | null>(null)
 
   const copyToClipboard = (color: string, value: string) => {
     navigator.clipboard.writeText(value);
     setCopiedColor(color);
     setTimeout(() => setCopiedColor(null), 2000);
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -127,7 +128,7 @@ const ColorPalette: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 // Typography Component
 const Typography: React.FC = () => {
@@ -225,8 +226,8 @@ const Typography: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Spacing Grid Component
 const SpacingGrid: React.FC = () => {
@@ -297,12 +298,12 @@ const SpacingGrid: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Component Variations
 const ComponentVariations: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="space-y-8">
@@ -451,7 +452,7 @@ const ComponentVariations: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 // Icon Patterns Component
 const IconPatterns: React.FC = () => {
@@ -460,7 +461,7 @@ const IconPatterns: React.FC = () => {
     actions: [Star, Heart, Mail, Lock, Calendar],
     content: [FileText, BarChart3, Shield, Zap, Target],
     status: [CheckCircle, AlertTriangle, Loader2, TrendingUp]
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -526,17 +527,17 @@ const IconPatterns: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 // Responsive Preview Component
 const ResponsivePreview: React.FC = () => {
-  const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [selectedDevice, setSelectedDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop')
 
   const deviceSizes = {
     mobile: { width: 375, height: 600 },
     tablet: { width: 768, height: 600 },
     desktop: { width: 1200, height: 600 }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -618,7 +619,7 @@ const ResponsivePreview: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 // Main Style Guide Component
 export const StyleGuide: React.FC = () => {
@@ -795,7 +796,7 @@ export const StyleGuide: React.FC = () => {
         </DaisyCardBody>
       </DaisyCard>
     </div>
-  );
-};
+  )
+}
 
 export default StyleGuide; 

@@ -1,6 +1,6 @@
 // Bundle optimization utilities
 export interface BundleMetrics {
-  bundleSize: number;
+  bundleSize: number
   chunkCount: number;
   loadTime: number;
   cacheHitRate: number;
@@ -14,7 +14,7 @@ export interface ChunkManifest {
     priority: 'high' | 'medium' | 'low';
     lastAccessed: number;
     dependencies: string[];
-  };
+  }
 }
 
 export interface BundleOptimizerConfig {
@@ -27,8 +27,8 @@ export interface BundleOptimizerConfig {
 
 export class BundleOptimizer {
   private config: BundleOptimizerConfig;
-  private metrics: Partial<BundleMetrics> = {};
-  private chunkManifest: ChunkManifest = {};
+  private metrics: Partial<BundleMetrics> = {}
+  private chunkManifest: ChunkManifest = {}
   private loadedChunks: Set<string> = new Set();
   private preloadQueue: string[] = [];
 
@@ -40,7 +40,7 @@ export class BundleOptimizer {
       chunkSizeLimit: 244000, // 244KB
       maxConcurrentChunks: 3,
       ...config,
-    };
+    }
 
     this.initializeOptimizer();
   }
@@ -58,7 +58,7 @@ export class BundleOptimizer {
     if (typeof window === 'undefined' || !window.performance) return;
 
     // Measure bundle size from performance entries
-    const navigationEntries = performance.getEntriesByType('navigation');
+    const navigationEntries = performance.getEntriesByType('navigation')
     if (navigationEntries.length > 0) {
       const navEntry = navigationEntries[0] as PerformanceNavigationTiming;
       this.updateBundleMetrics({
@@ -67,7 +67,7 @@ export class BundleOptimizer {
     }
 
     // Measure resource loading
-    const resourceEntries = performance.getEntriesByType('resource');
+    const resourceEntries = performance.getEntriesByType('resource')
     let totalSize = 0;
     let jsChunkCount = 0;
 
@@ -100,7 +100,7 @@ export class BundleOptimizer {
     if (typeof window === 'undefined') return;
 
     // Monitor route changes for chunk preloading
-    let currentPath = window.location.pathname;
+    let currentPath = window.location.pathname
 
     const observer = new MutationObserver(() => {
       if (window.location.pathname !== currentPath) {
@@ -115,7 +115,7 @@ export class BundleOptimizer {
     });
 
     // Preload on intersection observer for likely navigation
-    const links = document.querySelectorAll('a[href]');
+    const links = document.querySelectorAll('a[href]')
     const linkObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -134,7 +134,7 @@ export class BundleOptimizer {
     const head = document.head;
 
     // Add DNS prefetch for common domains
-    const domains = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+    const domains = ['fonts.googleapis.com', 'fonts.gstatic.com']
     domains.forEach((domain) => {
       const link = document.createElement('link');
       link.rel = 'dns-prefetch';
@@ -143,7 +143,7 @@ export class BundleOptimizer {
     });
 
     // Add preconnect for critical resources
-    const preconnectDomains = ['fonts.googleapis.com'];
+    const preconnectDomains = ['fonts.googleapis.com']
     preconnectDomains.forEach((domain) => {
       const link = document.createElement('link');
       link.rel = 'preconnect';
@@ -158,7 +158,7 @@ export class BundleOptimizer {
 
     // @ts-ignore - Connection API is experimental
     const connection =
-      navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      navigator.connection || navigator.mozConnection || navigator.webkitConnection
 
     if (connection) {
       const updateStrategy = () => {
@@ -166,7 +166,7 @@ export class BundleOptimizer {
 
         // Adjust strategy based on connection
         if (effectiveType === 'slow-2g' || effectiveType === '2g') {
-          this.config.maxConcurrentChunks = 1;
+          this.config.maxConcurrentChunks = 1
           this.config.preloadCritical = false;
         } else if (effectiveType === '3g') {
           this.config.maxConcurrentChunks = 2;
@@ -175,7 +175,7 @@ export class BundleOptimizer {
           this.config.maxConcurrentChunks = 3;
           this.config.preloadCritical = true;
         }
-      };
+      }
 
       updateStrategy();
       connection.addEventListener('change', updateStrategy);
@@ -190,17 +190,17 @@ export class BundleOptimizer {
         priority: 'medium',
         lastAccessed: Date.now(),
         dependencies: [],
-      };
+      }
     }
 
     this.chunkManifest[chunkName] = {
       ...this.chunkManifest[chunkName],
       ...info,
-    };
+    }
   }
 
   private updateBundleMetrics(metrics: Partial<BundleMetrics>): void {
-    this.metrics = { ...this.metrics, ...metrics };
+    this.metrics = { ...this.metrics, ...metrics }
   }
 
   generateAnalysisReport(): {
@@ -213,17 +213,17 @@ export class BundleOptimizer {
 
     // Analyze bundle size
     if (this.metrics.bundleSize && this.metrics.bundleSize > 500000) {
-      recommendations.push('Bundle size is large. Consider code splitting.');
+      recommendations.push('Bundle size is large. Consider code splitting.')
     }
 
     // Analyze chunk count
     if (this.metrics.chunkCount && this.metrics.chunkCount > 10) {
-      recommendations.push('High number of chunks. Consider consolidating smaller chunks.');
+      recommendations.push('High number of chunks. Consider consolidating smaller chunks.')
     }
 
     // Analyze load time
     if (this.metrics.loadTime && this.metrics.loadTime > 3000) {
-      recommendations.push('Load time is slow. Consider preloading critical chunks.');
+      recommendations.push('Load time is slow. Consider preloading critical chunks.')
     }
 
     return {
@@ -231,43 +231,43 @@ export class BundleOptimizer {
       chunkManifest: this.chunkManifest,
       recommendations,
       loadedChunks: Array.from(this.loadedChunks),
-    };
+    }
   }
 
   async optimizeBundles(): Promise<void> {
     // Clean up unused chunks
-    this.cleanupUnusedChunks();
+    this.cleanupUnusedChunks()
 
     // Preload likely chunks
-    await this.preloadLikelyChunks();
+    await this.preloadLikelyChunks()
 
     // Update loading priorities
-    this.updateLoadingPriorities();
+    this.updateLoadingPriorities()
   }
 
   private cleanupUnusedChunks(): void {
     // Implementation for cleaning up unused chunks
     // This would typically involve cache management
-    // console.log('Cleaning up unused chunks...');
+    // console.log('Cleaning up unused chunks...')
   }
 
   private async preloadLikelyChunks(): Promise<void> {
     // Implementation for preloading likely chunks based on user behavior
-    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+    const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
 
     const likelyNextChunks: Record<string, string> = {
       '/dashboard': 'reports',
       '/reports': 'dashboard',
       '/': 'dashboard',
-    };
+    }
 
     const nextChunk = likelyNextChunks[currentPath];
     if (nextChunk && !this.loadedChunks.has(nextChunk)) {
       try {
-        // console.log(`Preloading chunk: ${nextChunk}`);
+        // console.log(`Preloading chunk: ${nextChunk}`)
         // Actual preloading would happen here
       } catch (error) {
-        // console.warn(`Failed to preload chunk ${nextChunk}:`, error);
+        // console.warn(`Failed to preload chunk ${nextChunk}:`, error)
       }
     }
   }
@@ -275,20 +275,20 @@ export class BundleOptimizer {
   private updateLoadingPriorities(): void {
     // Update chunk priorities based on usage patterns
     Object.keys(this.chunkManifest).forEach((chunkName) => {
-      const chunk = this.chunkManifest[chunkName];
+      const chunk = this.chunkManifest[chunkName]
       const timeSinceAccess = Date.now() - chunk.lastAccessed;
 
       // Demote priority for old chunks
       if (timeSinceAccess > 7 * 24 * 60 * 60 * 1000) {
         // 7 days
-        chunk.priority = 'low';
+        chunk.priority = 'low'
       }
     });
   }
 
   private preloadForRoute(href: string): void {
     // Implementation for route-based preloading
-    // console.log(`Considering preload for route: ${href}`);
+    // console.log(`Considering preload for route: ${href}`)
   }
 
   getMetrics(): Partial<BundleMetrics> {

@@ -1,7 +1,7 @@
 // Reporting types for Riscura RCSA Platform
 
 export interface ReportData {
-  id: string;
+  id: string
   title: string;
   type: string;
   organizationName?: string;

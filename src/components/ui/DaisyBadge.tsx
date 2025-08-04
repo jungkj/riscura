@@ -23,14 +23,14 @@ export const DaisyBadge = ({
     success: 'badge-success',
     warning: 'badge-warning',
     error: 'badge-error',
-  };
+  }
 
   const sizeClasses = {
     xs: 'badge-xs',
     sm: 'badge-sm',
     md: 'badge-md',
     lg: 'badge-lg',
-  };
+  }
 
   return (
     <span
@@ -46,4 +46,4 @@ export const DaisyBadge = ({
       {children}
     </span>
   );
-};
+}

@@ -9,7 +9,7 @@ export const AuthDebugger = () => {
 
   useEffect(() => {
     setMounted(true);
-    // console.log('[AuthDebugger] Component mounted, auth state:', auth);
+    // console.log('[AuthDebugger] Component mounted, auth state:', auth)
   }, []);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const AuthDebugger = () => {
         isLoading: auth.isLoading,
         isInitialized: auth.isInitialized,
         user: auth.user,
-      });
+      })
     }
   }, [auth.isAuthenticated, auth.isLoading, auth.isInitialized, auth.user, mounted]);
 
@@ -37,4 +37,4 @@ export const AuthDebugger = () => {
       <div>Role: {auth.user?.role || 'None'}</div>
     </div>
   );
-};
+}

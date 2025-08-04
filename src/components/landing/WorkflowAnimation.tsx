@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCardBody } from '@/components/ui/daisy-components';
+import { Sparkles } from 'lucide-react';
 // import { 
   Upload, 
   Brain, 
@@ -15,7 +17,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
   Zap,
   ArrowRight,
   Sparkles
-} from 'lucide-react';
+} from 'lucide-react'
 
 const WorkflowAnimation = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -343,6 +345,6 @@ const WorkflowAnimation = () => {
       </div>
     </div>
   );
-};
+}
 
 export default WorkflowAnimation; 

@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Target } from 'lucide-react';
-// import { RiskDetailsModal } from './risk-details-modal';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+// import { RiskDetailsModal } from './risk-details-modal'
 
 interface HeatMapData {
   impact: string;
@@ -228,7 +229,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       createdAt: '2024-01-19T08:30:00Z',
       updatedAt: '2024-02-01T16:50:00Z',
     },
-  ];
+  ]
 
   // Sample data - in a real app, this would come from props or API
   const heatMapData: HeatMapData[] = [
@@ -266,14 +267,14 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     { impact: 'Very Low', likelihood: 'Somewhat unlikely', count: 2, level: 'low' },
     { impact: 'Very Low', likelihood: 'Likely', count: 1, level: 'low' },
     { impact: 'Very Low', likelihood: 'Very likely', count: 4, level: 'low' },
-  ];
+  ]
 
   const impactLevels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
   const likelihoodLevels = ['Very unlikely', 'Unlikely', 'Somewhat unlikely', 'Likely', 'Very likely'];
 
   const getCellData = (impact: string, likelihood: string) => {
     return heatMapData.find(d => d.impact === impact && d.likelihood === likelihood);
-  };
+  }
 
   const getCellColor = (level: 'low' | 'medium' | 'high' | 'critical') => {
     switch (level) {
@@ -287,19 +288,19 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       default:
         return 'bg-green-500 text-white';
     }
-  };
+  }
 
   // Map impact and likelihood text to numeric values for filtering risks
   const getImpactValue = (impact: string): number => {
     switch (impact) {
-      case 'Very High': return 5;
+      case 'Very High': return 5
       case 'High': return 4;
       case 'Medium': return 3;
       case 'Low': return 2;
       case 'Very Low': return 1;
       default: return 1;
     }
-  };
+  }
 
   const getLikelihoodValue = (likelihood: string): number => {
     switch (likelihood) {
@@ -310,7 +311,7 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
       case 'Very unlikely': return 1;
       default: return 1;
     }
-  };
+  }
 
   const getRisksForCell = (impact: string, likelihood: string): Risk[] => {
     const impactValue = getImpactValue(impact);
@@ -319,12 +320,12 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
     return sampleRisks.filter(risk => 
       risk.impact === impactValue && risk.likelihood === likelihoodValue
     );
-  };
+  }
 
   const handleCellClick = (impact: string, likelihood: string) => {
     const risks = getRisksForCell(impact, likelihood);
     setSelectedCell({ impact, likelihood, risks });
-  };
+  }
 
   return (
     <>
@@ -432,4 +433,4 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
         likelihood={selectedCell?.likelihood || ''} />
     </>
   );
-}; 
+} 

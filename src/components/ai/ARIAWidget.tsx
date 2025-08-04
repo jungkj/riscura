@@ -10,13 +10,13 @@ import {
 } from 'lucide-react';
 
 import { ARIAChat } from './ARIAChat';
-// import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
+// import { useARIAChat, RiskContext } from '@/hooks/useARIAChat'
 import { useAI } from '@/context/AIContext';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
-// import { DaisyCard } from '@/components/ui/DaisyCard';
+// import { DaisyCard } from '@/components/ui/DaisyCard'
 
 interface ARIAWidgetProps {
   initialContext?: RiskContext;
@@ -50,7 +50,7 @@ const ProactiveSuggestionCard: React.FC<{
       case 'recommendation': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
       default: return <Bot className="h-4 w-4 text-gray-500" />;
     }
-  };
+  }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -59,7 +59,7 @@ const ProactiveSuggestionCard: React.FC<{
       case 'medium': return 'border-blue-500 bg-blue-50 dark:bg-blue-950/20';
       default: return 'border-gray-300 bg-gray-50 dark:bg-gray-950/20';
     }
-  };
+  }
 
   return (
     <motion.div
@@ -115,7 +115,7 @@ const ProactiveSuggestionCard: React.FC<{
       </DaisyCard>
     </motion.div>
   );
-};
+}
 
 export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
   initialContext,
@@ -135,7 +135,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
   const getPositionClasses = () => {
     switch (position) {
       case 'bottom-right':
-        return 'bottom-6 right-6';
+        return 'bottom-6 right-6'
       case 'bottom-left':
         return 'bottom-6 left-6';
       case 'top-right':
@@ -145,22 +145,22 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
       default:
         return 'bottom-6 right-6';
     }
-  };
+  }
 
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ctrl+K to toggle ARIA
       if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-        event.preventDefault();
+        event.preventDefault()
         handleToggleChat();
       }
       
       // Escape to close
       if (event.key === 'Escape' && isOpen) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -168,7 +168,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
 
   // Mock proactive suggestions (in production, these would come from AI analysis)
   useEffect(() => {
-    if (disabled) return;
+    if (disabled) return
 
     // Simulate proactive suggestions
     const suggestionsTimer = setTimeout(() => {
@@ -191,11 +191,11 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
           timestamp: new Date(),
           action: () => handleToggleChat(),
         }
-      ];
+      ]
 
       // Only show suggestions if chat is closed
       if (!isOpen && Math.random() > 0.7) {
-        setSuggestions(prev => [...prev, ...mockSuggestions.slice(0, 1)]);
+        setSuggestions(prev => [...prev, ...mockSuggestions.slice(0, 1)])
       }
     }, 10000); // Show after 10 seconds
 
@@ -205,7 +205,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
   // Check for unread messages
   useEffect(() => {
     if (state.messages.length > 0 && !isOpen) {
-      const lastMessage = state.messages[state.messages.length - 1];
+      const lastMessage = state.messages[state.messages.length - 1]
       if (lastMessage.role === 'assistant') {
         setHasUnreadMessages(true);
       }
@@ -216,14 +216,14 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
 
   // Handle chat toggle
   const handleToggleChat = useCallback(() => {
-    setIsOpen(!isOpen);
+    setIsOpen(!isOpen)
     setHasUnreadMessages(false);
     toggleARIA();
   }, [isOpen, toggleARIA]);
 
   // Handle suggestion acceptance
   const handleAcceptSuggestion = useCallback((suggestion: ProactiveSuggestion) => {
-    setSuggestions(prev => prev.filter(s => s.id !== suggestion.id));
+    setSuggestions(prev => prev.filter(s => s.id !== suggestion.id))
     setIsOpen(true);
     setHasUnreadMessages(false);
     
@@ -233,17 +233,17 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
     }
     
     // Execute suggestion action
-    suggestion.action?.();
+    suggestion.action?.()
   }, []);
 
   // Handle suggestion dismissal
   const handleDismissSuggestion = useCallback((suggestionId: string) => {
-    setSuggestions(prev => prev.filter(s => s.id !== suggestionId));
+    setSuggestions(prev => prev.filter(s => s.id !== suggestionId))
   }, []);
 
   // Auto-hide on scroll (optional)
   useEffect(() => {
-    let lastScrollY = window.scrollY;
+    let lastScrollY = window.scrollY
     
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -256,7 +256,7 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
       }
       
       lastScrollY = currentScrollY;
-    };
+    }
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -399,4 +399,4 @@ export const ARIAWidget: React.FC<ARIAWidgetProps> = ({
       </div>
     
   );
-}; 
+} 

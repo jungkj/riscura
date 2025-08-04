@@ -8,15 +8,15 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-// import { Risk } from '@/types';
-// import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService';
-// import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types';
+// import { Risk } from '@/types'
+// import { AIService, AIServiceError, RateLimitError, ConnectionStatus } from '@/services/AIService'
+// import { AgentType, ConversationMessage, MessageAttachment } from '@/types/ai.types'
 import { AI_AGENTS } from '@/config/ai-agents';
 import { tokenManagementService, type UsageAlert } from '@/services/TokenManagementService';
 
 // Enhanced interfaces for token management integration
 interface TokenUsageMetrics {
-  dailyTokens: number;
+  dailyTokens: number
   dailyLimit: number;
   dailyPercentage: number;
   dailyCost: number;
@@ -42,7 +42,7 @@ interface RealTimeUsageStats {
     daily: number;
     weekly: number;
     monthly: number;
-  };
+  }
 }
 
 interface ConversationUsage {
@@ -69,7 +69,7 @@ interface ExplanationRequest {
 
 // Enhanced conversation interface
 interface Conversation {
-  id: string;
+  id: string
   title: string;
   messages: ConversationMessage[];
   updatedAt: Date;
@@ -78,7 +78,7 @@ interface Conversation {
 
 // Enhanced performance metrics
 interface PerformanceMetrics {
-  averageResponseTime: number;
+  averageResponseTime: number
   cacheHitRate: number;
   totalRequests: number;
   successRate: number;
@@ -88,7 +88,7 @@ interface PerformanceMetrics {
 
 // Enhanced rate limit status
 interface RateLimitStatus {
-  requestsRemaining: number;
+  requestsRemaining: number
   resetTime: Date;
   limit: number;
   isLimited: boolean;
@@ -96,7 +96,7 @@ interface RateLimitStatus {
 
 // Enhanced error interface
 interface EnhancedError {
-  type: string;
+  type: string
   message: string;
   code?: string;
   retryable: boolean;
@@ -126,17 +126,17 @@ interface AIContextType {
   clearError: () => void;
   retryLastRequest: () => Promise<void>;
   // Token management features
-  tokenUsageMetrics: TokenUsageMetrics;
+  tokenUsageMetrics: TokenUsageMetrics
   realTimeUsageStats: RealTimeUsageStats;
   usageAlerts: UsageAlert[];
   acknowledgeAlert: (alertId: string) => void;
   generateUsageReport: (_period: 'daily' | 'weekly' | 'monthly', format?: 'json' | 'csv') => string;
   exportUsageData: (format: 'json' | 'csv') => void;
   upgradeTier: (tierName: string) => boolean;
-  canMakeRequest: () => { allowed: boolean; reason?: string };
+  canMakeRequest: () => { allowed: boolean; reason?: string }
   conversationUsages: ConversationUsage[];
   // Enhanced error handling
-  connectionStatus: ConnectionStatus;
+  connectionStatus: ConnectionStatus
   isReconnecting: boolean;
   lastError: EnhancedError | null;
   errorHistory: EnhancedError[];
@@ -150,7 +150,7 @@ export const useAI = () => {
     throw new Error('useAI must be used within an AIProvider');
   }
   return context;
-};
+}
 
 interface AIProviderProps {
   children: ReactNode;
@@ -183,7 +183,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   // Enhanced error handling state
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     ConnectionStatus.CONNECTED
-  );
+  )
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [lastError, setLastError] = useState<EnhancedError | null>(null);
   const [errorHistory, setErrorHistory] = useState<EnhancedError[]>([]);
@@ -203,7 +203,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     monthlyPercentage: 0,
     monthlyCost: 0,
     currentTier: 'free',
-  });
+  })
 
   const [realTimeUsageStats, setRealTimeUsageStats] = useState<RealTimeUsageStats>({
     sessionTokens: 0,
@@ -234,7 +234,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         retryable: error.retryable,
         severity: error.severity,
         userMessage: error.userMessage,
-      };
+      }
     }
 
     if (error instanceof RateLimitError) {
@@ -246,7 +246,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         severity: error.severity,
         userMessage: error.userMessage,
         retryAfter: error.resetTime,
-      };
+      }
     }
 
     return {
@@ -254,13 +254,13 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       message: error instanceof Error ? error.message : 'An unexpected error occurred',
       retryable: false,
       userMessage: `${context} failed. Please try again or contact support.`,
-    };
+    }
   }, []);
 
   // Initialize AI Service with enhanced error handling
   useEffect(() => {
     // Check if AI features are enabled
-    const aiEnabled = process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES !== 'false';
+    const aiEnabled = process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES !== 'false'
     const hasApiKey =
       process.env.NEXT_PUBLIC_OPENAI_API_KEY &&
       process.env.NEXT_PUBLIC_OPENAI_API_KEY !== 'sk-placeholder' &&
@@ -271,7 +271,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       if (process.env.NODE_ENV === 'development' && !hasApiKey) {
         // console.warn(
           'AI features disabled: Missing OpenAI API key. Set NEXT_PUBLIC_OPENAI_API_KEY in your environment.'
-        );
+        )
       }
 
       setConnectionStatus(ConnectionStatus.DISCONNECTED);
@@ -298,7 +298,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           updatedAt: new Date(),
           agentType: 'risk_analyzer',
         },
-      ]);
+      ])
       return;
     }
 
@@ -330,9 +330,9 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           updatedAt: new Date(),
           agentType: 'risk_analyzer',
         },
-      ]);
+      ])
     } catch (error) {
-      // console.error('Failed to initialize AI Service:', error);
+      // console.error('Failed to initialize AI Service:', error)
       const enhancedError = enhanceError(error, 'AI Service initialization');
       setError(enhancedError);
       setLastError(enhancedError);
@@ -343,7 +343,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
   // Update token usage metrics periodically
   useEffect(() => {
     const updateTokenMetrics = () => {
-      const userUsage = tokenManagementService.getUserUsage(userId);
+      const userUsage = tokenManagementService.getUserUsage(userId)
       const realTimeStats = tokenManagementService.getRealTimeStats(userId);
       const alerts = tokenManagementService.getActiveAlerts(userId);
 
@@ -381,10 +381,10 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       });
 
       setUsageAlerts(alerts);
-    };
+    }
 
     // Update immediately and then every 30 seconds
-    updateTokenMetrics();
+    updateTokenMetrics()
     const interval = setInterval(updateTokenMetrics, 30000);
 
     return () => clearInterval(interval);
@@ -392,7 +392,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
 
   // Update metrics periodically
   useEffect(() => {
-    if (!aiService) return;
+    if (!aiService) return
 
     const updateMetrics = () => {
       try {
@@ -415,7 +415,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           isLimited: rateLimit.isLimited,
         });
       } catch (error) {
-        // console.error('Error updating metrics:', error);
+        // console.error('Error updating metrics:', error)
         // Use default values if methods don't exist
         setPerformanceMetrics({
           averageResponseTime: 0,
@@ -424,7 +424,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           successRate: 1,
           totalCost: 0,
           circuitBreakerState: 'CLOSED',
-        });
+        })
 
         setRateLimitStatus({
           requestsRemaining: 50,
@@ -433,17 +433,17 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           isLimited: false,
         });
       }
-    };
+    }
 
     // Update immediately and then every 30 seconds
-    updateMetrics();
+    updateMetrics()
     const interval = setInterval(updateMetrics, 30000);
 
     return () => clearInterval(interval);
   }, [aiService]);
 
   const handleError = useCallback((__error: unknown, requestFn?: () => Promise<unknown>) => {
-    // console.error('AI Service Error:', error);
+    // console.error('AI Service Error:', error)
 
     if (error instanceof RateLimitError) {
       setError({
@@ -476,7 +476,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
 
   // Token management methods
   const acknowledgeAlert = useCallback((alertId: string) => {
-    tokenManagementService.acknowledgeAlert(alertId);
+    tokenManagementService.acknowledgeAlert(alertId)
     setUsageAlerts((prev) => prev.filter((alert) => alert.id !== alertId));
   }, []);
 
@@ -515,7 +515,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       const success = tokenManagementService.upgradeUserTier(userId, tierName);
       if (success) {
         // Refresh token metrics
-        const userUsage = tokenManagementService.getUserUsage(userId);
+        const userUsage = tokenManagementService.getUserUsage(userId)
         if (userUsage) {
           setTokenUsageMetrics((prev) => ({
             ...prev,
@@ -538,7 +538,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
 
   const canMakeRequest = useCallback((): { allowed: boolean; reason?: string } => {
     const _result = tokenManagementService.canMakeRequest(userId);
-    return { allowed: result.allowed, reason: result.reason };
+    return { allowed: result.allowed, reason: result.reason }
   }, [userId]);
 
   const analyzeRisk = async (_risk: Risk) => {
@@ -547,7 +547,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     }
 
     // Check quota before making request
-    const quotaCheck = canMakeRequest();
+    const quotaCheck = canMakeRequest()
     if (!quotaCheck.allowed) {
       throw new Error(quotaCheck.reason || 'Usage quota exceeded');
     }
@@ -575,17 +575,17 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
             model: 'gpt-4o-mini', // Default model name
           },
           analysis,
-        };
+        }
       } catch (error) {
         handleError(error, requestFn);
         throw error;
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     return requestFn();
-  };
+  }
 
   const recommendControls = async (_risk: Risk) => {
     if (!aiService) {
@@ -615,10 +615,10 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     return requestFn();
-  };
+  }
 
   const generateContent = async (_request: ContentGenerationRequest) => {
     if (!aiService) {
@@ -636,17 +636,17 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           timestamp: result.timestamp,
           usage: result.usage,
           confidence: result.confidence,
-        };
+        }
       } catch (error) {
         handleError(error, requestFn);
         throw error;
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     return requestFn();
-  };
+  }
 
   const explainContent = async (_request: ExplanationRequest) => {
     if (!aiService) {
@@ -664,17 +664,17 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           confidence: explanation.confidence,
           timestamp: explanation.timestamp,
           usage: explanation.usage,
-        };
+        }
       } catch (error) {
         handleError(error, requestFn);
         throw error;
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     return requestFn();
-  };
+  }
 
   const sendMessage = async (_content: string, attachments?: MessageAttachment[]) => {
     if (!aiService) {
@@ -689,8 +689,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       try {
         // Handle streaming response
         const onStream = (chunk: string) => {
-          setStreamingResponse((prev) => prev + chunk);
-        };
+          setStreamingResponse((prev) => prev + chunk)
+        }
 
         const response = await aiService.sendMessage(content, selectedAgent, attachments, onStream);
 
@@ -701,7 +701,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           content,
           timestamp: new Date(),
           attachments,
-        };
+        }
 
         // Add AI response to conversation
         const aiMessage: ConversationMessage = {
@@ -710,7 +710,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
           content: response.content,
           timestamp: response.timestamp,
           usage: response.usage,
-        };
+        }
 
         // Update current conversation
         if (currentConversation) {
@@ -718,13 +718,13 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
             ...currentConversation,
             messages: [...currentConversation.messages, userMessage, aiMessage],
             updatedAt: new Date(),
-          };
+          }
           setCurrentConversation(updatedConversation);
 
           // Update conversations list
           setConversations((prev) =>
             prev.map((conv) => (conv.id === currentConversation.id ? updatedConversation : conv))
-          );
+          )
         }
 
         setStreamingResponse('');
@@ -735,10 +735,10 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     return requestFn();
-  };
+  }
 
   const switchAgent = (_agentType: string) => {
     setSelectedAgent(agentType as AgentType);
@@ -750,10 +750,10 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         ...currentConversation,
         agentType,
         updatedAt: new Date(),
-      };
+      }
       setCurrentConversation(updatedConversation);
     }
-  };
+  }
 
   const startConversation = (_agentType: string, context?: Record<string, unknown>) => {
     const newConversation = {
@@ -771,28 +771,28 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
       context,
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    }
 
     setCurrentConversation(newConversation);
     setConversations((prev) => [newConversation, ...prev]);
     setSelectedAgent(agentType as AgentType);
     setError(null);
-  };
+  }
 
   const getWelcomeMessage = (_agentType: AgentType): string => {
     const agent = AI_AGENTS[agentType];
     return agent?.welcomeMessage || AI_AGENTS.general_assistant.welcomeMessage;
-  };
+  }
 
   const toggleARIA = () => {
     // Toggle ARIA widget visibility - implementation would depend on UI structure
-    // console.log('Toggle ARIA widget');
-  };
+    // console.log('Toggle ARIA widget')
+  }
 
   const clearError = () => {
     setError(null);
     setLastFailedRequest(null);
-  };
+  }
 
   const retryLastRequest = async () => {
     if (lastFailedRequest) {
@@ -803,7 +803,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
         // Error handling is done in the original request function
       }
     }
-  };
+  }
 
   const value: AIContextType = {
     analyzeRisk,
@@ -838,7 +838,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({ children }) => {
     isReconnecting,
     lastError,
     errorHistory,
-  };
+  }
 
   return <AIContext.Provider value={value}>{children}</AIContext.Provider>;
-};
+}

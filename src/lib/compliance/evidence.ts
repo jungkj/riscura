@@ -3,7 +3,7 @@ import { ActivityType, EntityType, User, Control } from '@prisma/client';
 
 // Define the evidence types based on the actual Prisma schema
 type AssessmentEvidence = {
-  id: string;
+  id: string
   assessmentId: string;
   controlId: string | null;
   name: string;
@@ -12,11 +12,11 @@ type AssessmentEvidence = {
   fileUrl: string | null;
   uploadedBy: string;
   uploadedAt: Date;
-};
+}
 
 // Use Prisma types but extend for additional functionality
 export interface AssessmentEvidenceWithRelations extends AssessmentEvidence {
-  control?: Control | null;
+  control?: Control | null
   assessment?: ComplianceAssessment | null;
   uploader?: Pick<User, 'id' | 'firstName' | 'lastName' | 'email'> | null;
 }
@@ -58,7 +58,7 @@ export interface AuditPackage {
   auditPeriod: {
     from: Date;
     to: Date;
-  };
+  }
   status: 'preparing' | 'ready' | 'submitted' | 'under-review' | 'completed';
   evidence: AssessmentEvidence[];
   controls: string[];
@@ -67,7 +67,7 @@ export interface AuditPackage {
     firm?: string;
     leadAuditor?: string;
     email?: string;
-  };
+  }
   deliverables: AuditDeliverable[];
   timeline: AuditMilestone[];
   organizationId: string;
@@ -113,7 +113,7 @@ export interface EvidenceCollection {
     frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
     startDate: Date;
     nextRun?: Date;
-  };
+  }
   sources: EvidenceSource[];
   rules: EvidenceRule[];
   notifications: EvidenceNotification[];
@@ -131,7 +131,7 @@ export interface EvidenceSource {
   schedule?: {
     frequency: string;
     time?: string;
-  };
+  }
 }
 
 export interface EvidenceRule {
@@ -153,7 +153,7 @@ export interface EvidenceNotification {
 export class ComplianceEvidenceManager {
   // Create evidence record
   async createEvidence(evidenceData: {
-    assessmentId: string;
+    assessmentId: string
     controlId?: string;
     name: string;
     description?: string;
@@ -201,7 +201,7 @@ export class ComplianceEvidenceManager {
         },
         isPublic: false,
       },
-    });
+    })
 
     return newEvidence;
   }
@@ -214,7 +214,7 @@ export class ComplianceEvidenceManager {
   ): Promise<AssessmentEvidenceWithRelations> {
     const existing = await db.client.assessmentEvidence.findUnique({
       where: { id: evidenceId },
-    });
+    })
 
     if (!existing) {
       throw new Error('Evidence not found');
@@ -244,14 +244,14 @@ export class ComplianceEvidenceManager {
   async getEvidenceByControl(
     controlId: string,
     filters?: {
-      type?: string[];
+      type?: string[]
       assessmentId?: string;
     }
   ): Promise<AssessmentEvidenceWithRelations[]> {
-    const where: any = { controlId };
+    const where: any = { controlId }
 
     if (filters?.type) {
-      where.evidenceType = { in: filters.type };
+      where.evidenceType = { in: filters.type }
     }
 
     if (filters?.assessmentId) {
@@ -282,14 +282,14 @@ export class ComplianceEvidenceManager {
   async getEvidenceByAssessment(
     assessmentId: string,
     filters?: {
-      type?: string[];
+      type?: string[]
       controlId?: string;
     }
   ): Promise<AssessmentEvidenceWithRelations[]> {
-    const where: any = { assessmentId };
+    const where: any = { assessmentId }
 
     if (filters?.type) {
-      where.evidenceType = { in: filters.type };
+      where.evidenceType = { in: filters.type }
     }
 
     if (filters?.controlId) {
@@ -324,7 +324,7 @@ export class ComplianceEvidenceManager {
         ...request,
         createdAt: new Date(),
       },
-    });
+    })
 
     // Notify assigned users
     for (const userId of request.assignedTo) {
@@ -346,7 +346,7 @@ export class ComplianceEvidenceManager {
           controlId: request.controlId,
           evidenceTypes: request.evidenceTypes,
         },
-      });
+      })
     }
 
     return newRequest;
@@ -365,7 +365,7 @@ export class ComplianceEvidenceManager {
         status,
         updatedAt: new Date(),
       },
-    });
+    })
 
     // Log activity
     await db.client.activity.create({
@@ -382,7 +382,7 @@ export class ComplianceEvidenceManager {
         },
         isPublic: false,
       },
-    });
+    })
 
     return updated;
   }
@@ -396,10 +396,10 @@ export class ComplianceEvidenceManager {
         ...packageData,
         createdAt: new Date(),
       },
-    });
+    })
 
     // Auto-collect relevant evidence
-    await this.collectEvidenceForAudit(auditPackage.id);
+    await this.collectEvidenceForAudit(auditPackage.id)
 
     return auditPackage;
   }
@@ -408,7 +408,7 @@ export class ComplianceEvidenceManager {
   private async collectEvidenceForAudit(auditPackageId: string): Promise<void> {
     const auditPackage = await db.client.auditPackage.findUnique({
       where: { id: auditPackageId },
-    });
+    })
 
     if (!auditPackage) return;
 
@@ -427,7 +427,7 @@ export class ComplianceEvidenceManager {
           lte: auditPackage.auditPeriod.to,
         },
       },
-    });
+    })
 
     // Update audit package with collected evidence
     await db.client.auditPackage.update({
@@ -435,7 +435,7 @@ export class ComplianceEvidenceManager {
       data: {
         evidence: evidence.map((e) => e.id),
       },
-    });
+    })
   }
 
   // Generate audit deliverable
@@ -450,7 +450,7 @@ export class ComplianceEvidenceManager {
         controls: true,
         requirements: true,
       },
-    });
+    })
 
     if (!auditPackage) {
       throw new Error('Audit package not found');
@@ -510,10 +510,10 @@ export class ComplianceEvidenceManager {
       })),
       controls: auditPackage.controls,
       requirements: auditPackage.requirements,
-    };
+    }
 
     // In a real implementation, this would create an actual ZIP file
-    const packageFilename = `audit_evidence_${auditPackage.id}_${Date.now()}.json`;
+    const packageFilename = `audit_evidence_${auditPackage.id}_${Date.now()}.json`
 
     // Store package metadata
     await db.client.file.create({
@@ -527,7 +527,7 @@ export class ComplianceEvidenceManager {
         uploadedBy: auditPackage.createdBy,
         tags: ['audit-package', 'evidence', auditPackage.frameworkId],
       },
-    });
+    })
 
     return packageFilename;
   }
@@ -557,7 +557,7 @@ export class ComplianceEvidenceManager {
           auditPackage.controls.reduce((sum: number, c: any) => sum + c.effectivenessScore, 0) /
           auditPackage.controls.length,
       },
-    };
+    }
 
     const matrixFilename = `control_matrix_${auditPackage.id}_${Date.now()}.json`;
 
@@ -593,7 +593,7 @@ export class ComplianceEvidenceManager {
       gaps: [], // Would be populated from gap analysis
       recommendations: [], // Would be populated
       timeline: [], // Implementation timeline
-    };
+    }
 
     const reportFilename = `gap_analysis_${auditPackage.id}_${Date.now()}.json`;
 
@@ -639,7 +639,7 @@ export class ComplianceEvidenceManager {
         failedTests: 0, // Would be calculated
         deficiencies: 0, // Would be calculated
       },
-    };
+    }
 
     const resultsFilename = `test_results_${auditPackage.id}_${Date.now()}.json`;
 
@@ -665,11 +665,11 @@ export class ComplianceEvidenceManager {
   ): Promise<EvidenceCollection> {
     const newCollection = await db.client.evidenceCollection.create({
       data: collection,
-    });
+    })
 
     // Schedule collection if automated
     if (collection.collectionType === 'automated' && collection.isActive) {
-      await this.scheduleEvidenceCollection(newCollection.id);
+      await this.scheduleEvidenceCollection(newCollection.id)
     }
 
     return newCollection;
@@ -678,7 +678,7 @@ export class ComplianceEvidenceManager {
   // Schedule evidence collection
   private async scheduleEvidenceCollection(collectionId: string): Promise<void> {
     // This would integrate with a job scheduler like node-cron
-    // console.log(`Scheduling evidence collection: ${collectionId}`);
+    // console.log(`Scheduling evidence collection: ${collectionId}`)
 
     // In a real implementation, this would:
     // 1. Set up cron jobs based on collection frequency
@@ -708,7 +708,7 @@ export class ComplianceEvidenceManager {
         approved,
         comments,
       },
-    });
+    })
   }
 
   // Check evidence expiration
@@ -722,7 +722,7 @@ export class ComplianceEvidenceManager {
           gte: new Date(),
         },
       },
-    });
+    })
 
     for (const evidence of expiringEvidence) {
       await notificationManager.sendNotification({
@@ -753,21 +753,21 @@ export class ComplianceEvidenceManager {
         status: 'expired',
         updatedAt: new Date(),
       },
-    });
+    })
   }
 
   // Get evidence statistics
   async getEvidenceStatistics(_organizationId: string,
     frameworkId?: string
   ): Promise<{
-    total: number;
+    total: number
     byType: Record<string, number>;
     byStatus: Record<string, number>;
     byCategory: Record<string, number>;
     expiringCount: number;
     recentlyAdded: number;
   }> {
-    const where: any = { organizationId };
+    const where: any = { organizationId }
     if (frameworkId) {
       where.frameworkId = frameworkId;
     }
@@ -818,7 +818,7 @@ export class ComplianceEvidenceManager {
         (e) => e.metadata.expirationDate && new Date(e.metadata.expirationDate) <= thirtyDaysFromNow
       ).length,
       recentlyAdded: evidence.filter((e) => new Date(e.uploadedAt) >= sevenDaysAgo).length,
-    };
+    }
   }
 }
 

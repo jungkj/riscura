@@ -139,22 +139,22 @@ export const typography = {
     danger: 'text-red-600',
     info: 'text-blue-600',
   },
-};
+}
 
 // Helper functions to combine typography styles
 export const getHeadingClasses = (level: keyof typeof typography.headings) => {
-  const heading = typography.headings[level];
+  const heading = typography.headings[level]
   if (!heading) {
     // console.error(
       `Typography heading level "${level}" not found. Available levels:`,
       Object.keys(typography.headings)
-    );
+    )
     // Fallback to h2 styles
-    const fallback = typography.headings.h2;
+    const fallback = typography.headings.h2
     return `${fallback.size} ${fallback.weight} ${fallback.tracking} ${fallback.leading} ${fallback.color} ${fallback.spacing}`;
   }
   return `${heading.size} ${heading.weight} ${heading.tracking} ${heading.leading} ${heading.color} ${heading.spacing}`;
-};
+}
 
 export const getBodyClasses = (variant: keyof typeof typography.body) => {
   const body = typography.body[variant];
@@ -162,20 +162,20 @@ export const getBodyClasses = (variant: keyof typeof typography.body) => {
     // console.error(
       `Typography body variant "${variant}" not found. Available variants:`,
       Object.keys(typography.body)
-    );
+    )
     // Fallback to normal variant
-    const fallback = typography.body.normal;
+    const fallback = typography.body.normal
     return `${fallback.size} ${fallback.weight} ${fallback.leading} ${fallback.color}`;
   }
   return `${body.size} ${body.weight} ${body.leading} ${body.color}`;
-};
+}
 
 export const getCaptionClasses = (variant: keyof typeof typography.captions) => {
   const caption = typography.captions[variant];
   const transform = 'transform' in caption ? caption.transform : '';
   const tracking = caption.tracking || '';
   return `${caption.size} ${caption.weight} ${caption.color} ${tracking} ${transform}`.trim();
-};
+}
 
 // Spacing Scale for consistent vertical rhythm (48px primary line spacing)
 export const typographySpacing = {
@@ -198,7 +198,7 @@ export const typographySpacing = {
     small: 'gap-2', // 8px for compact inline
     tight: 'gap-1', // 4px for tight inline
   },
-};
+}
 
 // Visual separators and dividers
 export const separators = {
@@ -214,7 +214,7 @@ export const separators = {
     danger: 'border-l-4 border-red-500 pl-4',
     success: 'border-l-4 border-green-500 pl-4',
   },
-};
+}
 
 // Background colors for content sections
 export const backgrounds = {
@@ -231,7 +231,7 @@ export const backgrounds = {
     dark: 'bg-slate-900/80 backdrop-blur-sm',
     subtle: 'bg-slate-50/80 backdrop-blur-sm',
   },
-};
+}
 
 // Export spacing as an alias to typographySpacing for backward compatibility
-export const spacing = typographySpacing;
+export const spacing = typographySpacing

@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 // Simplified version for testing
 interface DocumentUploadProps {
-  onUpload?: (files: File[]) => void;
+  onUpload?: (files: File[]) => void
   acceptedTypes?: string[];
   maxSize?: number;
   className?: string;

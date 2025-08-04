@@ -8,7 +8,7 @@ import { Shield, AlertTriangle, CheckCircle, Clock, Archive, Download, Send } fr
 
 // ========== RISK DATA INTERFACE ==========
 export interface RiskData {
-  id: string;
+  id: string
   title: string;
   description: string;
   category: string;
@@ -20,7 +20,7 @@ export interface RiskData {
     name: string;
     email: string;
     avatar?: string;
-  };
+  }
   department: string;
   status: 'Open' | 'In Review' | 'Mitigated' | 'Accepted' | 'Closed';
   dateIdentified: string;
@@ -155,19 +155,19 @@ const sampleRiskData: RiskData[] = [
     riskTrend: 'Decreasing',
     tags: ['Talent Management', 'Knowledge Transfer'],
   },
-];
+]
 
 // ========== CUSTOM RENDERERS ==========
 const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
   const getVariant = (level: string) => {
     switch (level) {
-      case 'Critical': return 'destructive';
+      case 'Critical': return 'destructive'
       case 'High': return 'destructive';
       case 'Medium': return 'outline';
       case 'Low': return 'secondary';
       default: return 'secondary';
     }
-  };
+  }
 
   const getIcon = (level: string) => {
     switch (level) {
@@ -181,7 +181,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
       case 'Low': return <CheckCircle className="h-3 w-3 mr-1" />;
       default: return null;
     }
-  };
+  }
 
   return (
     <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center" >
@@ -190,7 +190,7 @@ const RiskLevelCell: React.FC<{ value: string }> = ({ value }) => {
       {value}
     </DaisyBadge>
   );
-};
+}
 
 const StatusCell: React.FC<{ value: string }> = ({ value }) => {
   const getVariant = (status: string) => {
@@ -202,7 +202,7 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
       case 'Closed': return 'secondary';
       default: return 'secondary';
     }
-  };
+  }
 
   const getIcon = (status: string) => {
     switch (status) {
@@ -215,7 +215,7 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
       case 'Closed': return <CheckCircle className="h-3 w-3 mr-1" />;
       default: return null;
     }
-  };
+  }
 
   return (
     <DaisyBadge variant={getVariant(value) as any} className="text-xs font-medium flex items-center" >
@@ -224,7 +224,7 @@ const StatusCell: React.FC<{ value: string }> = ({ value }) => {
       {value}
     </DaisyBadge>
   );
-};
+}
 
 const RiskScoreCell: React.FC<{ risk: RiskData }> = ({ risk }) => {
   const getScoreColor = (score: number) => {
@@ -232,7 +232,7 @@ const RiskScoreCell: React.FC<{ risk: RiskData }> = ({ risk }) => {
     if (score >= 10) return 'text-semantic-warning bg-semantic-warning/10';
     if (score >= 5) return 'text-semantic-info bg-semantic-info/10';
     return 'text-semantic-success bg-semantic-success/10';
-  };
+  }
 
   return (
     <div className="flex items-center space-x-enterprise-2">
@@ -244,7 +244,7 @@ const RiskScoreCell: React.FC<{ risk: RiskData }> = ({ risk }) => {
       </div>
     </div>
   );
-};
+}
 
 const OwnerCell: React.FC<{ owner: RiskData['owner'] }> = ({ owner }) => {
   const initials = owner.name.split(' ').map(n => n[0]).join('');
@@ -266,7 +266,7 @@ const OwnerCell: React.FC<{ owner: RiskData['owner'] }> = ({ owner }) => {
       </div>
     </div>
   );
-};
+}
 
 const TrendCell: React.FC<{ value: string }> = ({ value }) => {
   const getColor = (_trend: string) => {
@@ -276,14 +276,14 @@ const TrendCell: React.FC<{ value: string }> = ({ value }) => {
       case 'Decreasing': return 'text-semantic-success';
       default: return 'text-text-tertiary';
     }
-  };
+  }
 
   return (
     <span className={`text-body-sm font-medium ${getColor(value)}`}>
       {value}
     </span>
   );
-};
+}
 
 // ========== MAIN COMPONENT ==========
 export const RiskRegisterTable: React.FC = () => {
@@ -377,7 +377,7 @@ export const RiskRegisterTable: React.FC = () => {
       label: 'Actions',
       type: 'actions',
     },
-  ];
+  ]
 
   const bulkActions = [
     {
@@ -385,7 +385,7 @@ export const RiskRegisterTable: React.FC = () => {
       label: 'Assign',
       icon: Send,
       action: (selectedRows: RiskData[]) => {
-        // console.log('Assigning risks:', selectedRows.map(r => r.id));
+        // console.log('Assigning risks:', selectedRows.map(r => r.id))
       },
     },
     {
@@ -393,7 +393,7 @@ export const RiskRegisterTable: React.FC = () => {
       label: 'Export',
       icon: Download,
       action: (selectedRows: RiskData[]) => {
-        // console.log('Exporting risks:', selectedRows.map(r => r.id));
+        // console.log('Exporting risks:', selectedRows.map(r => r.id))
       },
     },
     {
@@ -402,19 +402,19 @@ export const RiskRegisterTable: React.FC = () => {
       icon: Archive,
       variant: 'destructive' as const,
       action: (selectedRows: RiskData[]) => {
-        // console.log('Archiving risks:', selectedRows.map(r => r.id));
+        // console.log('Archiving risks:', selectedRows.map(r => r.id))
       },
     },
   ];
 
   const handleRowClick = (row: RiskData) => {
-    // console.log('Viewing risk details:', row.id);
+    // console.log('Viewing risk details:', row.id)
     // Navigate to risk details page
-  };
+  }
 
   const handleRowSelect = (selectedRows: RiskData[]) => {
-    // console.log('Selected risks:', selectedRows.map(r => r.id));
-  };
+    // console.log('Selected risks:', selectedRows.map(r => r.id))
+  }
 
   return (
     <div className="space-y-enterprise-6">
@@ -449,6 +449,6 @@ export const RiskRegisterTable: React.FC = () => {
         className="shadow-notion-md" />
     </div>
   );
-};
+}
 
 export default RiskRegisterTable; 

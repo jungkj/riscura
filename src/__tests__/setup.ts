@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
 // Mock DOM APIs
-(global as any).TextDecoder = TextDecoder;
+(global as any).TextDecoder = TextDecoder
 (global as any).TextEncoder = TextEncoder;
 
 // Add Request and Response polyfills for Next.js server components
@@ -12,7 +12,7 @@ if (typeof globalThis.Request === 'undefined') {
       public url: string,
       public init?: RequestInit
     ) {}
-  } as any;
+  } as any
 }
 
 if (typeof globalThis.Response === 'undefined') {
@@ -34,7 +34,7 @@ if (typeof globalThis.Response === 'undefined') {
 }
 
 // Mock Next.js router
-const mockPush = jest.fn();
+const mockPush = jest.fn()
 const mockReplace = jest.fn();
 const mockBack = jest.fn();
 
@@ -58,17 +58,17 @@ jest.mock('next/navigation', () => ({
   }),
   usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(),
-}));
+}))
 
 // Set environment for testing - need to use Object.defineProperty for readonly properties
 Object.defineProperty(process.env, 'NODE_ENV', {
   value: 'test',
   writable: true,
   configurable: true,
-});
+})
 
 // Mock environment variables
-process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test_db';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test_db'
 process.env.JWT_SECRET = 'test-jwt-secret-for-testing-purposes-only';
 process.env.ENCRYPTION_KEY = 'test-encryption-key-32-chars-long!';
 
@@ -104,10 +104,10 @@ jest.mock('@/lib/db', () => ({
       delete: jest.fn(),
     },
   },
-}));
+}))
 
 // Mock console methods in tests
-const originalError = console.error;
+const originalError = console.error
 const originalWarn = console.warn;
 
 beforeAll(() => {
@@ -116,7 +116,7 @@ beforeAll(() => {
       return;
     }
     originalError.call(console, ...args);
-  };
+  }
 
   console.warn = (...args: any[]) => {
     if (
@@ -126,7 +126,7 @@ beforeAll(() => {
       return;
     }
     originalWarn.call(console, ...args);
-  };
+  }
 });
 
 afterAll(() => {
@@ -161,13 +161,13 @@ global.testUtils = {
     updatedAt: new Date(),
     ...overrides,
   }),
-};
+}
 
 // Extend expect matchers
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toBeWithinRange(a: number, b: number): R;
+      toBeWithinRange(a: number, b: number): R
     }
   }
 
@@ -175,23 +175,23 @@ declare global {
     mockApiResponse: (_data: any, status?: number) => any;
     createMockUser: (overrides?: any) => any;
     createMockOrganization: (overrides?: any) => any;
-  };
+  }
 }
 
 // Custom matchers
 expect.extend({
   toBeWithinRange(received: number, floor: number, ceiling: number) {
-    const pass = received >= floor && received <= ceiling;
+    const pass = received >= floor && received <= ceiling
     if (pass) {
       return {
         message: () => `expected ${received} not to be within range ${floor} - ${ceiling}`,
         pass: true,
-      };
+      }
     } else {
       return {
         message: () => `expected ${received} to be within range ${floor} - ${ceiling}`,
         pass: false,
-      };
+      }
     }
   },
 });

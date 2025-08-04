@@ -7,7 +7,7 @@ import { z } from 'zod';
 // PATCH /api/chat/messages/[messageId] - Update a message
 const updateMessageSchema = z.object({
   content: z.string().min(1).max(2000),
-});
+})
 
 export async function PATCH(
   req: NextRequest,
@@ -37,7 +37,7 @@ export async function PATCH(
           return ApiResponseFormatter.validationError(error.errors);
         }
 
-        // console.error('Failed to update message:', error);
+        // console.error('Failed to update message:', error)
         return ApiResponseFormatter.error(
           error instanceof Error && error.message === 'Access denied'
             ? 'ACCESS_DENIED'
@@ -58,7 +58,7 @@ export async function DELETE(
 ) {
   return withApiMiddleware(
     async (_request: NextRequest) => {
-      const { messageId } = await params;
+      const { messageId } = await params
       const user = (request as any).user;
       if (!user) {
         return ApiResponseFormatter.authError();
@@ -69,7 +69,7 @@ export async function DELETE(
 
         return ApiResponseFormatter.success({ message: 'Message deleted successfully' });
       } catch (error) {
-        // console.error('Failed to delete message:', error);
+        // console.error('Failed to delete message:', error)
         return ApiResponseFormatter.error(
           error instanceof Error && error.message === 'Access denied'
             ? 'ACCESS_DENIED'

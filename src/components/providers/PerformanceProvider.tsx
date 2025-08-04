@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-// import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init';
+// import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init'
 
 interface PerformanceContextType {
   isInitialized: boolean;
@@ -17,29 +17,29 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
 
   const refreshMetrics = () => {
     // Disabled to prevent console errors
-    // setMetrics(getPerformanceMetrics());
-    // console.log('Performance metrics refresh disabled for clean development');
-  };
+    // setMetrics(getPerformanceMetrics())
+    // console.log('Performance metrics refresh disabled for clean development')
+  }
 
   useEffect(() => {
     const init = async () => {
       try {
         // Performance monitoring disabled to prevent console errors
-        // console.log('Performance monitoring disabled for clean development experience');
+        // console.log('Performance monitoring disabled for clean development experience')
         setIsInitialized(true);
-        // await initializePerformance();
-        // setIsInitialized(isPerformanceInitialized());
-        // refreshMetrics();
+        // await initializePerformance()
+        // setIsInitialized(isPerformanceInitialized())
+        // refreshMetrics()
       } catch (error) {
-        // console.error('Failed to initialize performance optimizations:', error);
+        // console.error('Failed to initialize performance optimizations:', error)
       }
-    };
+    }
 
     init();
 
     // Disabled metrics refresh to prevent console errors
-    // const interval = setInterval(refreshMetrics, 60000);
-    // return () => clearInterval(interval);
+    // const interval = setInterval(refreshMetrics, 60000)
+    // return () => clearInterval(interval)
   }, []);
 
   return (
@@ -47,7 +47,7 @@ export const PerformanceProvider = ({ children }: { children: React.ReactNode })
       {children}
     </PerformanceContext.Provider>
   );
-};
+}
 
 export function usePerformance() {
   const context = useContext(PerformanceContext);
