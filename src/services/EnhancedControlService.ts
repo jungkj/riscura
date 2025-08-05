@@ -149,16 +149,15 @@ export class EnhancedControlService {
     try {
       // In a real implementation, this would integrate with a scheduling system
       const testId = `test-${Date.now()}`;
-;
+
       // Calculate next test date based on frequency
       const nextTestDate = this.calculateNextTestDate(schedule);
-;
-      // console.log(`Scheduled ${testType} test for control ${controlId}`, {
+
+      /* console.log(`Scheduled ${testType} test for control ${controlId}`, {
         testId,
-        nextTestDate,;
-        schedule,;
-      });
-;
+        nextTestDate,
+        schedule,
+      }); */
       return { success: true, testId }
     } catch (error) {
       // console.error('Control test scheduling failed:', error)

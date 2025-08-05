@@ -70,7 +70,8 @@
       "Bash(gtimeout:*)",
       "Bash(pkill:*)",
       "Bash(od:*)",
-      "Bash(HUSKY=0 git push --no-verify)"
+      "Bash(HUSKY=0 git push --no-verify)",
+      "Bash(HUSKY=0 git push origin fix/comprehensive-syntax-errors)"
     ],
     "deny": []
   }

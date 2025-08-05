@@ -198,12 +198,12 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
 ;
     // Track token usage
     if (completion.usage) {
-      // console.log('[RCSA Analysis] Token usage:', {
+      /* console.log('[RCSA Analysis] Token usage:', {
         prompt_tokens: completion.usage.prompt_tokens,
-        completion_tokens: completion.usage.completion_tokens,;
-        total_tokens: completion.usage.total_tokens,;
-        estimated_cost: (completion.usage.total_tokens / 1000) * 0.01, // Rough estimate for GPT-4;
-      });
+        completion_tokens: completion.usage.completion_tokens,
+        total_tokens: completion.usage.total_tokens,
+        estimated_cost: (completion.usage.total_tokens / 1000) * 0.01, // Rough estimate for GPT-4
+      }); */
       // TODO: Store token usage in database or monitoring system
     }
 

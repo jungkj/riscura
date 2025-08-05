@@ -243,9 +243,9 @@ export async function POST(_request: NextRequest) {
           uploadedFile.filename
         )
 
-        // console.log(
+        /* console.log(
           `AI extracted ${extractedContent.risks.length} risks and ${extractedContent.controls.length} controls`
-        )
+        ) */
 
         // Get organization ID (demo mode for now)
         const organizationId = 'demo-org-id'

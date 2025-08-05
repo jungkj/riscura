@@ -117,12 +117,12 @@ export const GET = withApiMiddleware(
         })
       }
     } catch (error) {
-      // console.error('[Risks API] Critical error:', {
+      /* console.error('[Risks API] Critical error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
         organizationId: user.organizationId,
-      })
+      }) */
 
       return NextResponse.json(
         {

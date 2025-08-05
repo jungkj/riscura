@@ -261,14 +261,13 @@ class CSPManager {
     } as any);
 ;
     // Log violation for monitoring
-    // console.warn('CSP Violation:', {
+    /* console.warn('CSP Violation:', {
       directive: report['csp-report']['violated-directive'],
-      blockedUri: report['csp-report']['blocked-uri'],;
-      documentUri: report['csp-report']['document-uri'],;
-      sourceFile: report['csp-report']['source-file'],;
-      lineNumber: report['csp-report']['line-number'],;
-    });
-;
+      blockedUri: report['csp-report']['blocked-uri'],
+      documentUri: report['csp-report']['document-uri'],
+      sourceFile: report['csp-report']['source-file'],
+      lineNumber: report['csp-report']['line-number'],
+    }); */
     // Send to monitoring service in production
     if (this.config.environment === 'production') {
       this.sendViolationToMonitoring(report);

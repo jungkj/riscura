@@ -372,12 +372,12 @@ class CSRFProtection {
     const ipStats = this.metrics.byIP[result.clientIP];
     if (ipStats.invalid > 10 && ipStats.invalid > ipStats.valid * 2) {
       this.metrics.suspiciousActivity++;
-      // console.warn('Suspicious CSRF activity detected:', {
+      /* console.warn('Suspicious CSRF activity detected:', {
         ip: result.clientIP,
-        invalidCount: ipStats.invalid,;
-        validCount: ipStats.valid,;
-        reason: result.reason,;
-      });
+        invalidCount: ipStats.invalid,
+        validCount: ipStats.valid,
+        reason: result.reason,
+      }); */
     }
   }
 
