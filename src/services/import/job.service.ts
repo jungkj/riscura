@@ -140,7 +140,7 @@ export class ImportJobService {
       });
 
       // Add job to Bull queue
-      const _bullJob = await this.queue.add(
+      await this.queue.add(
         {
           jobId: job.id,
           organizationId: params.organizationId,
@@ -177,7 +177,7 @@ export class ImportJobService {
       }
 
       // Get Bull job for additional details
-      const _bullJob = await this.queue.getJob(jobId);
+      const bullJob = await this.queue.getJob(jobId);
       if (bullJob) {
         // Update progress from Bull job if available
         const progress = bullJob.progress();
@@ -234,7 +234,7 @@ export class ImportJobService {
       });
 
       // Remove from Bull queue
-      const _bullJob = await this.queue.getJob(jobId);
+      const bullJob = await this.queue.getJob(jobId);
       if (bullJob) {
         await bullJob.remove();
       }
