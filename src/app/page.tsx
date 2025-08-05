@@ -29,68 +29,15 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-// New single-word typewriter effect
-const cyclingWords = ["effortless", "intelligent", "automated", "proactive", "streamlined"];
-
-// Single Word Typewriter Component
-function SingleWordTypewriter() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
-    
-    const currentWord = cyclingWords[currentWordIndex];
-    
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        // Typing
-        setDisplayText(currentWord.substring(0, displayText.length + 1));
-        setTypingSpeed(120);
-        
-        if (displayText === currentWord) {
-          // Start deleting after a pause
-          setTimeout(() => setIsDeleting(true), 2500);
-        }
-      } else {
-        // Deleting
-        setDisplayText(currentWord.substring(0, displayText.length - 1));
-        setTypingSpeed(80);
-        
-        if (displayText === '') {
-          setIsDeleting(false);
-          setCurrentWordIndex((prev) => (prev + 1) % cyclingWords.length);
-        }
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, currentWordIndex, typingSpeed, isClient]);
-
+// Static hero headline component (removed typewriter effect)
+function StaticHeadline() {
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">
         Risk management made{' '}
       </span>
-      <span className="relative inline-block min-w-[280px] sm:min-w-[320px] lg:min-w-[400px] text-left">
-        <span className="text-[#191919] font-bold">
-          {isClient ? displayText : 'effortless'}
-        </span>
-        {isClient && (
-          <motion.span
-            className="absolute top-0 w-0.5 h-full bg-[#199BEC] rounded-sm ml-1"
-            style={{ left: `${displayText.length * 0.6}em` }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
+      <span className="text-[#191919] font-bold">
+        effortless
       </span>
     </div>
   );
@@ -191,8 +138,8 @@ function HeroProcessCard() {
                   <div className="space-y-4">
                     <div className="border-2 border-dashed border-[#199BEC]/50 rounded-lg p-6 bg-white/50 text-center">
                       <motion.div
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        animate={{ y: [0, -2, 0] }}
+                        transition={{ duration: 3, repeat: Infinity }}
                       >
                         <Upload className="w-8 h-8 text-[#199BEC] mx-auto mb-3" />
                       </motion.div>
@@ -220,8 +167,8 @@ function HeroProcessCard() {
                   <div className="space-y-4">
                     <div className="bg-white/50 rounded-lg p-6 text-center">
                       <motion.div
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                         className="mb-4"
                       >
                         <Brain className="w-10 h-10 text-purple-600 mx-auto" />
@@ -323,6 +270,17 @@ function HeroProcessCard() {
 
 export default function HomePage() {
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleGetStarted = () => {
     router.push('/auth/register');
@@ -334,10 +292,25 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Enhanced Navigation with Dolphin Logo */}
-      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      {/* Enhanced Navigation with Floating Effect */}
+      <motion.nav 
+        className={`fixed inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/60' 
+            : 'bg-white/90 backdrop-blur-sm border-b border-gray-200'
+        }`}
+        animate={{
+          y: isScrolled ? 0 : 0,
+          scale: isScrolled ? 0.98 : 1,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      >
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+          isScrolled ? 'py-2' : 'py-0'
+        }`}>
+          <div className={`flex items-center justify-between transition-all duration-300 ${
+            isScrolled ? 'h-14' : 'h-16'
+          }`}>
             <div className="flex items-center space-x-3">
               <Image
                 src="/images/logo/riscura.png"
@@ -375,7 +348,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Enhanced Hero Section */}
       <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
@@ -383,9 +356,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
             <div className="text-center lg:text-left space-y-6 md:space-y-8">
-              {/* Enhanced Headline with Single Word Typewriter */}
+              {/* Enhanced Headline */}
               <div>
-                <SingleWordTypewriter />
+                <StaticHeadline />
               </div>
 
               {/* Strong Value Proposition */}
