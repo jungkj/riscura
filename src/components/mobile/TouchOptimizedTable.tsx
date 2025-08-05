@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -314,7 +314,7 @@ export default function TouchOptimizedTable({
                 {Boolean(selectable) && (
                   <DaisyCheckbox
                     checked={isSelected}
-                    onCheckedChange={(checked) = />
+                    onCheckedChange={(checked) =>
 handleRowSelect(row.id, checked as boolean)}
                     onClick={(e) => e.stopPropagation()}
                     aria-label={`Select ${row[columns[0]?.key]}`} />
@@ -428,7 +428,7 @@ handleRowSelect(row.id, checked as boolean)}
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10"
                 aria-label="Search table data" />
@@ -464,7 +464,7 @@ setSearchQuery(e.target.value)}
                         type="text"
                         placeholder={`Filter by ${column.label.toLowerCase()}...`}
                         value={filters[column.key] || ''}
-                        onChange={(e) = />
+                        onChange={(e) =>
 handleFilterChange(column.key, e.target.value)} />
                     </div>
                   ))}

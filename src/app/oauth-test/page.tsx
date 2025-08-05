@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
 

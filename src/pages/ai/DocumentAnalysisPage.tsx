@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-// import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { Upload, AlertCircle, FileText, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';

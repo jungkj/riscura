@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea'
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -32,14 +32,14 @@ import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectCo
   RotateCcw,
   Minus,
   Info,
-} from 'lucide-react'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+} from 'lucide-react';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 
 // Import our API services
-// import { api, Risk } from '@/lib/mockData'
+// import { api, Risk } from '@/lib/mockData';
 import { aiService } from '@/lib/mockAI';
 
 // ============================================================================
@@ -608,7 +608,7 @@ const RiskAssessmentMatrix: React.FC = () => {
                   <DaisyInput
                     id="title"
                     value={assessment.title}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setAssessment(prev => ({ ...prev, title: e.target.value }))}
                     placeholder="Enter a descriptive title for this risk" />
                 </div>
@@ -638,7 +638,7 @@ setAssessment(prev => ({ ...prev, title: e.target.value }))}
                 <DaisyTextarea
                   id="description"
                   value={assessment.description}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setAssessment(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Provide a detailed description of the risk..."
                   rows={4} />
@@ -650,7 +650,7 @@ setAssessment(prev => ({ ...prev, description: e.target.value }))}
                   <DaisyInput
                     id="assessor"
                     value={assessment.assessor}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setAssessment(prev => ({ ...prev, assessor: e.target.value }))}
                     placeholder="Risk assessor name" />
                 </div>
@@ -661,7 +661,7 @@ setAssessment(prev => ({ ...prev, assessor: e.target.value }))}
                     id="assessmentDate"
                     type="date"
                     value={assessment.assessmentDate}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setAssessment(prev => ({ ...prev, assessmentDate: e.target.value }))} />
                 </div>
                 
@@ -671,7 +671,7 @@ setAssessment(prev => ({ ...prev, assessmentDate: e.target.value }))} />
                     id="nextReviewDate"
                     type="date"
                     value={assessment.nextReviewDate}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setAssessment(prev => ({ ...prev, nextReviewDate: e.target.value }))} />
                 </div>
               </div>
@@ -681,7 +681,7 @@ setAssessment(prev => ({ ...prev, nextReviewDate: e.target.value }))} />
                 <DaisyTextarea
                   id="comments"
                   value={assessment.comments || ''}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setAssessment(prev => ({ ...prev, comments: e.target.value }))}
                   placeholder="Any additional comments or notes..."
                   rows={3} />
@@ -740,7 +740,7 @@ setAssessment(prev => ({ ...prev, comments: e.target.value }))}
                           <DaisyLabel>Justification</DaisyLabel>
                           <DaisyTextarea
                             value={factor.justification || ''}
-                            onChange={(e) = />
+                            onChange={(e) =>
 updateFactor(factor.id, 'justification', e.target.value)}
                             placeholder="Explain your scoring rationale..."
                             rows={2} />
@@ -800,7 +800,7 @@ updateFactor(factor.id, 'justification', e.target.value)}
                           <DaisyLabel>Justification</DaisyLabel>
                           <DaisyTextarea
                             value={factor.justification || ''}
-                            onChange={(e) = />
+                            onChange={(e) =>
 updateFactor(factor.id, 'justification', e.target.value)}
                             placeholder="Explain your scoring rationale..."
                             rows={2} />
@@ -834,7 +834,7 @@ updateFactor(factor.id, 'justification', e.target.value)}
                 <div key={index} className="flex items-center gap-2">
                   <DaisyInput
                     value={control}
-                    onChange={(e) = />
+                    onChange={(e) =>
 updateMitigatingControl(index, e.target.value)}
                     placeholder="Describe the mitigating control..."
                     className="flex-1" />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -39,7 +39,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 
 interface MonitoringDataPoint {
   timestamp: number;
@@ -618,7 +618,7 @@ export default function RealTimeMonitoringChart({
                     </span>
                     <DaisySwitch
                       checked={threshold.enabled}
-                      onCheckedChange={(enabled) = />
+                      onCheckedChange={(enabled) =>
 updateThreshold(index, { enabled })} />
                   </div>
                   

@@ -43,7 +43,7 @@ import { useDevice } from '@/lib/responsive/hooks';
   Mail,
   X,
   ChevronDown,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 export interface EnhancedListItem {
@@ -837,7 +837,7 @@ export const EnhancedList: React.FC<EnhancedListProps> = ({
               <DaisyInput
                 placeholder="Search items..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')} />
             </div>

@@ -2,7 +2,7 @@
 
 /** @jsxImportSource react */
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -44,11 +44,11 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Sparkles,
   FileDown,
   Link2
-} from 'lucide-react'
+} from 'lucide-react';
 import Image from 'next/image';
 
 // Import the interactive risk heat map component
-// import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap'
+// import { RiskHeatMap as InteractiveRiskHeatMap } from '@/components/ui/interactive-risk-heatmap';
 import RiskControlWidget from '@/components/dashboard/RiskControlWidget';
 import EmptyStateWizard from '@/components/dashboard/EmptyStateWizard';
 

@@ -38,7 +38,7 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   Eye,
   Edit,
   MoreHorizontal,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 export interface Control {
@@ -488,7 +488,7 @@ const ControlLibrary: React.FC = () => {
             <DaisyInput
               placeholder="Search controls..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchQuery(e.target.value)}
               className="pl-enterprise-8 w-64" />
           </div>

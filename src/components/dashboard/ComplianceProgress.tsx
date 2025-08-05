@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -14,7 +14,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Users,
   Calendar,
   TrendingUp
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ComplianceFramework {
   id: string;

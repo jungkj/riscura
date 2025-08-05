@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -47,7 +47,7 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   BarChart3,
   Settings,
   RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 import RiskCard, { RiskData } from './RiskCard';
 
 interface RiskScenario {
@@ -305,7 +305,7 @@ const VantaInspiredRiskInterface = () => {
               <DaisyInput
                 placeholder="Search risks..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10 w-80 focus:ring-[#199BEC] focus:border-[#199BEC]" />
             </div>

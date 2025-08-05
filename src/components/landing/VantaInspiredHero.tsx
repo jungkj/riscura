@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { Shield, ArrowRight, Play, Star, Award, Sparkles } from 'lucide-react'
+// import { Shield, ArrowRight, Play, Star, Award, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 

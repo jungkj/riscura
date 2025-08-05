@@ -42,7 +42,7 @@ import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, D
   FileText,
   UserCheck,
   Timer,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== TYPES ==========
 export interface WorkflowStep {

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, ChevronRight, AlertTriangle, Shield, Target } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -255,12 +255,12 @@ export default function RiskMonitoringPage() {
                     <span className="text-sm font-medium">Medium</span>
                     <span className="text-sm text-gray-600">8 risks</span>
                   </div>
-                  <DaisyProgress value={35} className="h-2" / />
+                  <DaisyProgress value={35} className="h-2" />
 <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Low</span>
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
-                  <DaisyProgress value={17} className="h-2" / />
+                  <DaisyProgress value={17} className="h-2" />
 </div>
               </DaisyCardBody>
             </DaisyCard>

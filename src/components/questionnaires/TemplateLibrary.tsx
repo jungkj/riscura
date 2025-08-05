@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -11,7 +11,7 @@ import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialogTitle } from '@/components/ui/daisy-components';
 import { Download } from 'lucide-react';
 
-// import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react'
+// import { Search, Eye, Copy, Star, Shield, FileCheck, AlertTriangle, Building, CheckCircle, Tag, TrendingUp, Grid3X3, List, BookOpen, Download } from 'lucide-react';
 
 // Mock template data
 const templateCategories = [
@@ -197,7 +197,7 @@ export function TemplateLibrary({ className }: TemplateLibraryProps) {
             <DaisyInput
               placeholder="Search templates..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchQuery(e.target.value)}
               className="pl-10 w-64" />
           </div>

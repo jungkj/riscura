@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { toast } from '@/hooks/use-toast';
@@ -15,7 +15,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   FileText,
   ArrowLeft,
   Loader2,
-} from 'lucide-react'
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Template {

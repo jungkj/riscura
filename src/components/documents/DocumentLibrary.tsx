@@ -18,18 +18,18 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   Share2,
   FolderOpen,
   FileText,
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { formatFileSize } from '@/lib/storage/file-validator'
-// import { format } from 'date-fns'
+// import { formatFileSize } from '@/lib/storage/file-validator';
+// import { format } from 'date-fns';
 import DocumentViewer from './DocumentViewer';
 import FileUploadDropzone from './FileUploadDropzone';
 import DocumentSearch from './DocumentSearch';
@@ -278,7 +278,7 @@ export default function DocumentLibrary({
           <div className="flex items-start gap-2">
             <DaisyCheckbox
               checked={selectedDocuments.includes(document.id)}
-              onCheckedChange={() = />
+              onCheckedChange={() =>
 toggleDocumentSelection(document.id)} />
             <div className="flex-1 min-w-0">
               <DaisyCardTitle 
@@ -377,7 +377,7 @@ toggleDocumentSelection(document.id)} />
     <div key={document.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50">
       <DaisyCheckbox
         checked={selectedDocuments.includes(document.id)}
-        onCheckedChange={() = />
+        onCheckedChange={() =>
 toggleDocumentSelection(document.id)} />
       
       <div className="flex-shrink-0">
@@ -480,7 +480,7 @@ toggleDocumentSelection(document.id)} />
             <DaisyInput
               placeholder="Search documents..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 handleSearch(e.target.value)}
               className="pl-10" />
           </div>

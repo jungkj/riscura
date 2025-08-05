@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 
 // Animation variants for skeletons
 type SkeletonVariant = 'pulse' | 'wave' | 'shimmer'

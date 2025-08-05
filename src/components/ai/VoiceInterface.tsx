@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
@@ -401,7 +401,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                 <span className="text-sm">Continuous listening</span>
                 <DaisySwitch
                   checked={settings.continuous}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 updateSetting('continuous', checked)} />
               </div>
 
@@ -409,7 +409,7 @@ updateSetting('continuous', checked)} />
                 <span className="text-sm">Show interim results</span>
                 <DaisySwitch
                   checked={settings.interimResults}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 updateSetting('interimResults', checked)} />
               </div>
 
@@ -417,7 +417,7 @@ updateSetting('interimResults', checked)} />
                 <span className="text-sm">Auto-send on confidence</span>
                 <DaisySwitch
                   checked={settings.autoSend}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 updateSetting('autoSend', checked)} />
               </div>
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
@@ -26,7 +26,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Unlock,
   Gift,
   Flame
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Achievement definitions
 interface Achievement {

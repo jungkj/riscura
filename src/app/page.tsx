@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
@@ -35,7 +35,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   Briefcase,
   DollarSign,
   PlayCircle,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // New single-word typewriter effect
 const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined']

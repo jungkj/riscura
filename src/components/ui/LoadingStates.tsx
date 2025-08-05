@@ -5,7 +5,7 @@ import React from 'react';
 import { Loader2, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from './progress';
-// import { Card, CardContent, CardHeader } from './card'
+// import { Card, CardContent, CardHeader } from './card';
 import { Badge } from './badge';
 import { DaisyCard, DaisyCardBody, DaisyBadge, DaisyProgress } from '@/components/ui/daisy-components';
 // Using unique component names to avoid conflicts with skeleton.tsx and loading-spinner.tsx

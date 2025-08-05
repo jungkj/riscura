@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, Reorder, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -533,7 +533,7 @@ export function ImageQuestionComponent({
             <DaisyInput
               type="file"
               accept="image/*"
-              onChange={(e) = />
+              onChange={(e) =>
 {
                 const file = e.target.files?.[0];
                 if (file) handleImageUpload(file);
@@ -780,7 +780,7 @@ export function LocationQuestionComponent({
           <DaisyInput
             placeholder="Search for a location..."
             value={searchQuery}
-            onChange={(e) = />
+            onChange={(e) =>
 setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
             disabled={readonly} />
@@ -983,7 +983,7 @@ export function CustomHTMLQuestionComponent({
                   <DaisyTextarea
                     id={field.name}
                     value={inputValues[field.name] || ''}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange(field.name, e.target.value)}
                     disabled={readonly} />
                 ) : (
@@ -991,7 +991,7 @@ handleInputChange(field.name, e.target.value)}
                     id={field.name}
                     type={field.type}
                     value={inputValues[field.name] || ''}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange(field.name, e.target.value)}
                     disabled={readonly} />
                 )}

@@ -9,7 +9,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   FileIcons,
   UserIcons,
   RiskManagementIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { LoadingStates, Spinner } from '@/components/states/LoadingState';
 
 // Bulk action types and interfaces
@@ -461,7 +461,7 @@ export function BulkActionBar<T = any>({
         isOpen={progressModal.isOpen}
         progress={progressModal.progress!}
         action={progressModal.action!}
-        onClose={() = />setProgressModal({ isOpen: false, progress: null, action: null })} />
+        onClose={() =>setProgressModal({ isOpen: false, progress: null, action: null })} />
     </>
   );
 }

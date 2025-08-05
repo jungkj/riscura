@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useControls } from '@/context/ControlContext';
 import { Control } from '@/types';
 import { DaisyCardTitle, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTable, DaisyTableHeader, DaisyTableBody, DaisyTableRow, DaisyTableHead, DaisyTableCell, DaisyCalendar } from '@/components/ui/daisy-components';
-// import { formatDate } from '@/lib/utils'
+// import { formatDate } from '@/lib/utils';
 
 // UI Components
 import {
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 import {
   Dialog,
@@ -65,7 +65,7 @@ import {
   FileText,
   Calendar,
   TrendingUp,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ControlLibraryViewProps {
   onCreateControl?: () => void;
@@ -383,7 +383,7 @@ export const ControlLibraryView: React.FC<ControlLibraryViewProps> = ({
               <DaisyInput
                 placeholder="Search controls..."
                 value={searchInput}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchInput(e.target.value)}
                 className="pl-10" />
             </div>
@@ -546,7 +546,7 @@ setSearchInput(e.target.value)}
                     <DaisyTableCell >
                       <DaisyCheckbox
                       checked={selectedControls.includes(control.id)}
-                      onCheckedChange={() = />
+                      onCheckedChange={() =>
 handleSelectControl(control.id)} />
                   </DaisyTableBody>
                   <DaisyTableCell >

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -225,7 +225,7 @@ export default function NewRiskAssessmentPage() {
                     <DaisyInput
                       id="title"
                       value={formData.title}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('title', e.target.value)}
                       placeholder="Enter a descriptive title for this risk"
                       className="mt-1" />
@@ -236,7 +236,7 @@ handleInputChange('title', e.target.value)}
                     <DaisyTextarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('description', e.target.value)}
                       placeholder="Provide a detailed description of the risk"
                       rows={4}
@@ -267,7 +267,7 @@ handleInputChange('description', e.target.value)}
                     <DaisyInput
                       id="department"
                       value={formData.department}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('department', e.target.value)}
                       placeholder="Enter the affected department"
                       className="mt-1" />
@@ -342,7 +342,7 @@ handleInputChange('department', e.target.value)}
                     <DaisyInput
                       id="owner"
                       value={formData.owner}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('owner', e.target.value)}
                       placeholder="Enter the name of the risk owner"
                       className="mt-1" />
@@ -353,7 +353,7 @@ handleInputChange('owner', e.target.value)}
                     <DaisyTextarea
                       id="detectionMethod"
                       value={formData.detectionMethod}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('detectionMethod', e.target.value)}
                       placeholder="How was this risk identified?"
                       rows={3}
@@ -370,7 +370,7 @@ handleInputChange('detectionMethod', e.target.value)}
                     <DaisyTextarea
                       id="existingControls"
                       value={formData.existingControls}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('existingControls', e.target.value)}
                       placeholder="Describe current controls in place to manage this risk"
                       rows={4}
@@ -384,7 +384,7 @@ handleInputChange('existingControls', e.target.value)}
                     <DaisyTextarea
                       id="proposedMitigation"
                       value={formData.proposedMitigation}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('proposedMitigation', e.target.value)}
                       placeholder="Describe proposed actions to mitigate this risk"
                       rows={4}

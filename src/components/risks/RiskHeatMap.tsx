@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea'
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';

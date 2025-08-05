@@ -7,7 +7,7 @@ import { toast } from '@/hooks/use-toast';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -48,7 +48,7 @@ import {
   FileImage,
   Plus,
   Trash2
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface WizardStep {
   id: string;
@@ -418,7 +418,7 @@ export default function RiskAssessmentWizard({
                   <DaisyInput
                     id="name"
                     value={config.name}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setConfig(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Q4 2024 Risk Assessment" />
                 </div>
@@ -427,7 +427,7 @@ setConfig(prev => ({ ...prev, name: e.target.value }))}
                   <DaisyInput
                     id="scope"
                     value={config.scope}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setConfig(prev => ({ ...prev, scope: e.target.value }))}
                     placeholder="Enterprise-wide, Department-specific, etc." />
                 </div>
@@ -436,7 +436,7 @@ setConfig(prev => ({ ...prev, scope: e.target.value }))}
                   <DaisyInput
                     id="department"
                     value={config.department}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setConfig(prev => ({ ...prev, department: e.target.value }))}
                     placeholder="IT, Finance, Operations, etc." />
                 </div>
@@ -447,7 +447,7 @@ setConfig(prev => ({ ...prev, department: e.target.value }))}
                   <DaisyTextarea
                     id="description"
                     value={config.description}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setConfig(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Describe the purpose and objectives of this assessment..."
                     rows={3} />
@@ -474,7 +474,7 @@ setConfig(prev => ({ ...prev, description: e.target.value }))}
                     id="dueDate"
                     type="date"
                     value={config.dueDate}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setConfig(prev => ({ ...prev, dueDate: e.target.value }))} />
                 </div>
               </div>
@@ -487,7 +487,7 @@ setConfig(prev => ({ ...prev, dueDate: e.target.value }))} />
                 <div className="flex gap-2 mt-2">
                   <DaisyInput
                     value={newStakeholder}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setNewStakeholder(e.target.value)}
                     placeholder="Add stakeholder email"
                     onKeyPress={(e) => e.key === 'Enter' && addStakeholder()} />
@@ -517,7 +517,7 @@ setNewStakeholder(e.target.value)}
                       <DaisyCheckbox
                         id={`risk-${category}`}
                         checked={config.riskCategories.includes(category)}
-                        onCheckedChange={() = />
+                        onCheckedChange={() =>
 toggleRiskCategory(category)} />
                       <DaisyLabel htmlFor={`risk-${category}`} className="text-sm">
                         {category}
@@ -535,7 +535,7 @@ toggleRiskCategory(category)} />
                       <DaisyCheckbox
                         id={`framework-${framework}`}
                         checked={config.complianceFrameworks.includes(framework)}
-                        onCheckedChange={() = />
+                        onCheckedChange={() =>
 toggleComplianceFramework(framework)} />
                       <DaisyLabel htmlFor={`framework-${framework}`} className="text-sm">
                         {framework}

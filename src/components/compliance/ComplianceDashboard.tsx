@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -15,7 +15,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyTooltip } 
 // import { 
   Shield, AlertTriangle, CheckCircle, Clock, Brain, 
   FileText, Users, Settings, TrendingUp, Target 
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ComplianceFramework {
   id: string;

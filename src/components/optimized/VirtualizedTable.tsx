@@ -1,7 +1,7 @@
 'use client';
 
 // High-Performance Virtualized Table for Large Datasets
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
+import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import { FixedSizeList as List, VariableSizeList, ListChildComponentProps } from 'react-window';
 import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { ChevronUp, ChevronDown, Search, Filter } from 'lucide-react';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard'
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import {
 import { DaisyTableHeader } from '@/components/ui/daisy-components';

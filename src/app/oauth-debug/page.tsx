@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function OAuthDebugPage() {
   const [debugInfo, setDebugInfo] = useState<any>(null);

@@ -10,7 +10,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   Maximize2,
   Minimize2
 } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';

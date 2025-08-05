@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -23,7 +23,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   AlertTriangle,
   BarChart3,
   Users
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface EmptyStateWizardProps {
   onImportComplete?: () => void;
@@ -151,7 +151,7 @@ export default function EmptyStateWizard({
         </div>
         <div className="space-y-3">
           <DaisyProgress 
-            value={(onboardingSteps.filter(s = />s.completed).length / 3) * 100} 
+            value={(onboardingSteps.filter(s =>s.completed).length / 3) * 100} 
             className="h-2" />
           <div className="flex justify-between">
             {onboardingSteps.map((step, index) => (

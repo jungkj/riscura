@@ -22,10 +22,10 @@ import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   X,
   ChevronLeft,
   ChevronRight
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -34,7 +34,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import toast from 'react-hot-toast';
-// import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns';
 
 interface DocumentViewerProps {
   documentId: string;
@@ -404,7 +404,7 @@ export default function EnhancedDocumentViewer({
         <DaisyTextarea
           placeholder="Add a comment..."
           value={comment}
-          onChange={(e) = />
+          onChange={(e) =>
 setComment(e.target.value)}
           className="min-h-[80px]" />
         <DaisyButton onClick={handleAddComment} disabled={!comment.trim()} >

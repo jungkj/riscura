@@ -19,7 +19,7 @@ import { DaisyDropdownMenuTrigger } from '@/components/ui/daisy-components';
   Plus,
   Trash2,
   Settings
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuSeparator, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
 import { cn } from '@/lib/utils';
@@ -160,7 +160,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
               Insert column right
             </DaisyDropdownMenuItem>
             
-            <DaisyDropdownMenuSeparator / />
+            <DaisyDropdownMenuSeparator />
 {/* Column properties */}
             <DaisyDropdownMenuItem >
                 <Settings className="h-4 w-4 mr-2" />
@@ -178,7 +178,7 @@ export const SpreadsheetColumnHeader: React.FC<SpreadsheetColumnHeaderProps> = (
             {/* Delete */}
             {Boolean(onDelete) && (
               <>
-                <DaisyDropdownMenuSeparator / />
+                <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem onClick={onDelete} className="text-red-600" >
                     <Trash2 className="h-4 w-4 mr-2" />
                   Delete column

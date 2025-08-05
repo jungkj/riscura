@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useImportJob } from '@/hooks/useImportJob';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
-// import { DaisyCard } from '@/components/ui/DaisyCard'
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { useRouter } from 'next/navigation';
 import { 

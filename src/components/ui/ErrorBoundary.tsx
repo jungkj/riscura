@@ -3,7 +3,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
 import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisyButton, DaisyBadge } from '@/components/ui/daisy-components';

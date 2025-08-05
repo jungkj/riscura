@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -16,7 +16,7 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   Brain, Sparkles, Target, Shield, CheckCircle, AlertTriangle,
   Plus, RefreshCw, ThumbsUp, ThumbsDown, Copy, Edit, Wand2,
   Lightbulb, TrendingUp, Eye, Clock, Users, Zap
-} from 'lucide-react'
+} from 'lucide-react';
 
 import type { 
   Questionnaire, 
@@ -409,7 +409,7 @@ export function AIQuestionSuggestions({
         <DaisyTextarea
           placeholder="Describe a specific area you want to assess (e.g., 'remote work security challenges', 'third-party data sharing risks')..."
           value={customPrompt}
-          onChange={(e) = />
+          onChange={(e) =>
 setCustomPrompt(e.target.value)}
           rows={3} />
         

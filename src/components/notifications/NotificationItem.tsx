@@ -1,6 +1,6 @@
 'use client';
 
-// import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns';
 // import {
   AlertCircle,
   AlertTriangle,
@@ -14,7 +14,7 @@
   CreditCard,
   Settings,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { cn } from '@/lib/utils';
 

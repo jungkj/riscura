@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -28,7 +28,7 @@ import { AdvancedSearchFilter } from '@/components/search/AdvancedSearchFilter';
   Target, CheckCircle, AlertCircle, Users, Tag, Grid,
   List, SortAsc, SortDesc, Filter, Settings, BookOpen,
   BarChart3, TrendingUp, Activity, MapPin, Shield
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Enhanced questionnaire interface
 interface EnhancedQuestionnaire {
@@ -443,7 +443,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
             <div className="flex items-center space-x-2">
               <DaisyCheckbox
                 checked={selectedItems.includes(questionnaire.id)}
-                onCheckedChange={() = />
+                onCheckedChange={() =>
 {
                   setSelectedItems(prev =>
                     prev.includes(questionnaire.id)
@@ -495,7 +495,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
                       <Download className="w-4 h-4 mr-2" />
                     Export
                   </DaisyDropdownMenuItem>
-                  <DaisyDropdownMenuSeparator / />
+                  <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem 
                     onClick={() => handleDelete(questionnaire.id)}
                     className="text-red-600" />
@@ -611,7 +611,7 @@ export function EnhancedQuestionnaireList({ className }: EnhancedQuestionnaireLi
       <div className="flex items-center space-x-4 p-4 hover:bg-gray-50">
         <DaisyCheckbox
           checked={selectedItems.includes(questionnaire.id)}
-          onCheckedChange={() = />
+          onCheckedChange={() =>
 {
             setSelectedItems(prev =>
               prev.includes(questionnaire.id)

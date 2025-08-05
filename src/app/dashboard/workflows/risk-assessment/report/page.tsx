@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -33,7 +33,7 @@ import { useToast } from '@/hooks/use-toast';
   Clock,
   Eye,
   Printer,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ReportConfig {
   reportType: string;
@@ -342,7 +342,7 @@ export default function GenerateRiskReportPage() {
                         <DaisyCheckbox
                           id={key}
                           checked={value}
-                          onCheckedChange={() = />
+                          onCheckedChange={() =>
 handleSectionToggle(key as keyof typeof reportConfig.sections)
                           } />
                         <DaisyLabel htmlFor={key} className="cursor-pointer">

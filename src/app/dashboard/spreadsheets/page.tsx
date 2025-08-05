@@ -17,7 +17,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyDialog,
   DaisyDialogContent,
@@ -404,7 +404,7 @@ export default function SpreadsheetsPage() {
                       id="name"
                       placeholder="Enter spreadsheet name"
                       value={newSpreadsheet.name}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
                       } />
                   </div>
@@ -414,7 +414,7 @@ setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
                       id="description"
                       placeholder="Enter a brief description"
                       value={newSpreadsheet.description}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
                       } />
                   </div>
@@ -463,7 +463,7 @@ setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
               <DaisyInput
                 placeholder="Search spreadsheets..."
                 value={searchTerm}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchTerm(e.target.value)}
                 className="pl-10" />
             </div>

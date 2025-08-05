@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 export default function RiskDetailPageRoute() {
   const params = useParams();

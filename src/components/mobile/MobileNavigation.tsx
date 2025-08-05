@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/DaisySheet';
@@ -31,7 +31,7 @@ import { useGesture } from '@use-gesture/react';
   Lock,
   HelpCircle,
   LogOut
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface NavigationItem {
   id: string;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { EnhancedDataTable, EnhancedDataTableColumn } from './enhanced-data-table';
 import { EnhancedList, EnhancedListItem } from './enhanced-list';
-// import { SimpleBarChart, MetricCard } from './enhanced-charts'
-// import { Card, CardContent, CardHeader, CardTitle } from './card'
+// import { SimpleBarChart, MetricCard } from './enhanced-charts';
+// import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { 
 import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyBadge, DaisyTable } from '@/components/ui/daisy-components';

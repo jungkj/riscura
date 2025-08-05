@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
@@ -23,7 +23,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   FileText,
   Settings,
   Star
-} from 'lucide-react'
+} from 'lucide-react';
 import { designTokens } from '@/lib/design-system/tokens';
 
 // Tour step interface

@@ -24,10 +24,10 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   SortAsc,
   SortDesc,
   RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -37,7 +37,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
 import FileUploadDropzone from './FileUploadDropzone';
 import EnhancedDocumentViewer from './EnhancedDocumentViewer';
 import toast from 'react-hot-toast';
-// import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns';
 
 interface Document {
   id: string;
@@ -257,7 +257,7 @@ export default function DocumentManagementInterface({
               <div className="flex items-center space-x-2">
                 <DaisyCheckbox
                   checked={selectedDocuments.includes(document.id)}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 {
                     if (checked) {
                       setSelectedDocuments(prev => [...prev, document.id]);
@@ -349,7 +349,7 @@ export default function DocumentManagementInterface({
 </DaisyCard>
               <DaisyCheckbox
                 checked={selectedDocuments.includes(document.id)}
-                onCheckedChange={(checked) = />
+                onCheckedChange={(checked) =>
 {
                   if (checked) {
                     setSelectedDocuments(prev => [...prev, document.id]);
@@ -435,7 +435,7 @@ export default function DocumentManagementInterface({
             <DaisyInput
               placeholder="Search documents..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchQuery(e.target.value)}
               className="pl-10" />
           </div>

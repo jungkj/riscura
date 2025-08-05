@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthStorage } from '@/lib/auth/storage';
 import { LoginStatus } from '@/components/auth/LoginStatus';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { cn } from '@/lib/utils';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import {
@@ -12,7 +12,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   Target,
   Settings,
   Shield
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface AnalyticsData {
   totalQuestionnaires: number;

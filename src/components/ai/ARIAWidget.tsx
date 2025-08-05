@@ -10,13 +10,13 @@ import {
 } from 'lucide-react';
 
 import { ARIAChat } from './ARIAChat';
-// import { useARIAChat, RiskContext } from '@/hooks/useARIAChat'
+// import { useARIAChat, RiskContext } from '@/hooks/useARIAChat';
 import { useAI } from '@/context/AIContext';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
-// import { DaisyCard } from '@/components/ui/DaisyCard'
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 
 interface ARIAWidgetProps {
   initialContext?: RiskContext;

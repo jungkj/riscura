@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import { ErrorBoundary } from 'react-error-boundary';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';

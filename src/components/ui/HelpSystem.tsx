@@ -22,7 +22,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyButton, DaisyBadge, Dais
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Input } from './input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
@@ -501,7 +501,7 @@ export const HelpCenter: React.FC<HelpCenterProps> = ({
             <DaisyInput
               placeholder="Search help articles and tutorials..."
               value={searchTerm}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchTerm(e.target.value)}
               className="pl-10" />
           </div>

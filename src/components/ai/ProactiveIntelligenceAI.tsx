@@ -15,7 +15,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/compon
   Pause
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -24,7 +24,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 
-// import { Risk, Control } from '@/types'
+// import { Risk, Control } from '@/types';
 import { 
   ActionRecommendation,
   SmartNotification,
@@ -37,7 +37,7 @@ import {
   proactiveAIIntegrationService,
   IntelligentInsight,
   PredictiveResult
-} from '@/services/ProactiveAIIntegrationService'
+} from '@/services/ProactiveAIIntegrationService';
 
 interface ProactiveIntelligenceAIProps {
   risks: Risk[];

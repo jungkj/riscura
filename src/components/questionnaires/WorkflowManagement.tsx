@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -21,7 +21,7 @@ import { Download } from 'lucide-react';
   ArrowRight, ArrowDown, User, UserCheck, UserX, Mail, Smartphone,
   Filter, Search, MoreVertical, ChevronRight, ChevronDown, Target,
   Activity, Timer, Flag, Send, MessageSquare, FileText, Download
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Mock workflow data
 interface WorkflowStep {
@@ -480,7 +480,7 @@ export function WorkflowManagement({ className }: WorkflowManagementProps) {
                     <DaisyInput
                       placeholder="Search workflows..."
                       value={searchQuery}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setSearchQuery(e.target.value)}
                       className="pl-10" />
                   </div>

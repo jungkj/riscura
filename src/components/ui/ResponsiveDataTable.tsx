@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
@@ -16,7 +16,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   TouchButton, 
   TouchActionMenu,
   TouchChip 
-} from './TouchElements'
+} from './TouchElements';
 // import {
   Search,
   Filter,
@@ -70,7 +70,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   DollarSign,
   Percent,
   Calendar as CalendarIcon,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface Column<T = any> {
@@ -277,7 +277,7 @@ const MobileCardLayout: React.FC<{
                     {Boolean(selectable) && (
                       <DaisyCheckbox
                         checked={isSelected}
-                        onCheckedChange={(checked) = />
+                        onCheckedChange={(checked) =>
 onRowSelect?.(item, checked as boolean)} />
                     )}
                     <div className="font-medium text-body-sm">
@@ -448,7 +448,7 @@ const TabletListLayout: React.FC<{
                   <div className="col-span-1">
                     <DaisyCheckbox
                       checked={isSelected}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 {
                         onRowSelect?.(item, checked as boolean);
                       }}
@@ -550,7 +550,7 @@ const DesktopTableLayout: React.FC<{
                 <th className="w-12 px-enterprise-4 py-enterprise-3">
                   <DaisyCheckbox
                     checked={allSelected}
-                    ref={(el) = />
+                    ref={(el) =>
 {
                       if (el) el.indeterminate = someSelected;
                     }}
@@ -617,7 +617,7 @@ const DesktopTableLayout: React.FC<{
                     <td className="px-enterprise-4 py-enterprise-3">
                       <DaisyCheckbox
                         checked={isSelected}
-                        onCheckedChange={(checked) = />
+                        onCheckedChange={(checked) =>
 onRowSelect?.(item, checked as boolean)}
                         onClick={(e) => e.stopPropagation()}
                         aria-label={`Select row ${index + 1}`} />
@@ -832,7 +832,7 @@ export const ResponsiveDataTable: React.FC<DataTableProps> = ({
                   <DaisyInput
                     placeholder="Search..."
                     value={searchQuery}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleSearch(e.target.value)}
                     className="pl-10 w-full sm:w-64" />
                 </div>

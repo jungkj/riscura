@@ -15,7 +15,7 @@ import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-comp
   DaisyTabsList,;
   DaisyTabsTrigger,;
 } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 // import {

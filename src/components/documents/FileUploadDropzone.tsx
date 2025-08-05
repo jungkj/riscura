@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-// import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
+// import { Upload, X, FileText, Image, Archive, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -10,8 +10,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
-// import { formatFileSize } from '@/lib/storage/file-validator'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+// import { formatFileSize } from '@/lib/storage/file-validator';
 import toast from 'react-hot-toast';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
@@ -361,7 +361,7 @@ export default function FileUploadDropzone({
             <DaisyInput
               id="tags"
               value={tags}
-              onChange={(e) = />
+              onChange={(e) =>
 setTags(e.target.value)}
               placeholder="compliance, SOC2, audit..." />
           </div>
@@ -372,7 +372,7 @@ setTags(e.target.value)}
           <DaisyTextarea
             id="description"
             value={description}
-            onChange={(e) = />
+            onChange={(e) =>
 setDescription(e.target.value)}
             placeholder="Optional description for the uploaded files..."
             rows={3} />

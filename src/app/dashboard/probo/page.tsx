@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -32,7 +32,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
   Brain,
   BarChart3,
   ShieldCheck,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const ProboPageContent = () => {
   const searchParams = useSearchParams();
@@ -425,7 +425,7 @@ const ProboPageContent = () => {
                     <DaisyInput
                       placeholder="Search controls..."
                       value={searchQuery}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setSearchQuery(e.target.value)}
                       className="pl-10 w-64" />
                   </div>

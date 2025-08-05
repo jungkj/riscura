@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -25,7 +25,7 @@ import {
   BarChart3, LineChart as LineIcon, PieChart as PieIcon,
   RefreshCw, Download, Settings, Info, Lightbulb, ArrowUp,
   ArrowDown, Minus, Users, Clock, Star, ThumbsUp, ThumbsDown
-} from 'lucide-react'
+} from 'lucide-react';
 
 // AI Analytics Types
 interface PredictiveMetric {

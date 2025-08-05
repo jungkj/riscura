@@ -7,13 +7,13 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
-// import { format, subDays, subMonths, subYears } from 'date-fns'
+// import { format, subDays, subMonths, subYears } from 'date-fns';
 import toast from 'react-hot-toast';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 import { Plus } from 'lucide-react';
@@ -286,7 +286,7 @@ export default function DocumentSearch({
                   id="search-query"
                   placeholder="Enter keywords, file names, or phrases..."
                   value={filters.query}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFilters(prev => ({ ...prev, query: e.target.value }))} />
               </div>
 
@@ -347,7 +347,7 @@ setFilters(prev => ({ ...prev, query: e.target.value }))} />
                   <DaisyInput
                     placeholder="Add tag..."
                     value={tagInput}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag()} />
                   <DaisyButton onClick={addTag} size="sm" >
@@ -402,7 +402,7 @@ setTagInput(e.target.value)}
                         <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.from}
-                        onSelect={(date) = />
+                        onSelect={(date) =>
 setDateRange({ ...filters.dateRange, from: date })}
                         initialFocus />
                     </DaisyPopoverContent>
@@ -422,7 +422,7 @@ setDateRange({ ...filters.dateRange, from: date })}
                         <DaisyCalendar
                         mode="single"
                         selected={filters.dateRange.to}
-                        onSelect={(date) = />
+                        onSelect={(date) =>
 setDateRange({ ...filters.dateRange, to: date })}
                         initialFocus />
                     </DaisyPopoverContent>
@@ -477,7 +477,7 @@ setDateRange({ ...filters.dateRange, to: date })}
                   <DaisyInput
                     placeholder="Enter entity ID..."
                     value={filters.linkedEntityId}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))} />
                 </div>
               </div>
@@ -534,7 +534,7 @@ setFilters(prev => ({ ...prev, linkedEntityId: e.target.value }))} />
                     id="search-name"
                     placeholder="Enter a name for this search..."
                     value={saveSearchName}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSaveSearchName(e.target.value)} />
                 </div>
                 <div className="flex items-center gap-2">

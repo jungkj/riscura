@@ -14,7 +14,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 import { useToast } from '@/components/ui/DaisyToast';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';

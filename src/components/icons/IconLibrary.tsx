@@ -134,7 +134,7 @@ import React from 'react';
   Gamepad2,
   Headphones,
   Webcam,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Type definitions
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'

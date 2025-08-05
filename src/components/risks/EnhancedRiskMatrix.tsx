@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useRef } from 'react';
-// import { useRisks } from '@/context/RiskContext'
-// import { Risk } from '@/types'
-// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils'
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { calculateRiskScore, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTooltip } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {
@@ -49,7 +49,7 @@ import {
   TrendingUp,
   Calendar,
   Settings
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface EnhancedRiskMatrixProps {
   onRiskClick?: (_risk: Risk) => void;

@@ -9,9 +9,9 @@ import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-comp
   useImportStore,
   ExtractedRisk,
   ExtractedControl 
-} from '@/lib/stores/importStore'
+} from '@/lib/stores/importStore';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyAccordion, DaisyAccordionContent, DaisyAccordionItem, DaisyAccordionTrigger } from '@/components/ui/DaisyAccordion';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -29,7 +29,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   Square,
   Upload as UploadIcon,
   Loader2
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface PolicyImporterWithStoreProps {
   onComplete?: (extraction: { risks: ExtractedRisk[]; controls: ExtractedControl[] }) => void;
@@ -376,7 +376,7 @@ export default function PolicyImporterWithStore({ onComplete }: PolicyImporterWi
                                     <div className="space-y-2">
                                       <DaisyTextarea
                                         value={editedTexts[itemId] || risk.text}
-                                        onChange={(e) = />
+                                        onChange={(e) =>
 setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
                                         }
                                         className="min-h-[100px]" />
@@ -461,7 +461,7 @@ setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
                                     <div className="space-y-2">
                                       <DaisyTextarea
                                         value={editedTexts[itemId] || control.text}
-                                        onChange={(e) = />
+                                        onChange={(e) =>
 setEditedTexts(prev => ({ ...prev, [itemId]: e.target.value }))
                                         }
                                         className="min-h-[100px]" />

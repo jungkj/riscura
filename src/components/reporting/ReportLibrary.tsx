@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -28,9 +28,9 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   CheckCircle,
   AlertCircle,
   Info
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 
 interface Report {
   id: string;
@@ -344,7 +344,7 @@ export default function ReportLibrary({
                 <DaisyInput
                   placeholder="Search reports..."
                   value={searchTerm}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSearchTerm(e.target.value)}
                   className="pl-8" />
               </div>
@@ -475,7 +475,7 @@ setSearchTerm(e.target.value)}
                       <DaisyTableCell >
                         <DaisyCheckbox
                         checked={selectedReports.includes(report.id)}
-                        onCheckedChange={(checked) = />
+                        onCheckedChange={(checked) =>
 handleSelectReport(report.id, checked as boolean)} />
                     </DaisyTableRow>
                     <DaisyTableCell >

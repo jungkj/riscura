@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import { Users, Share2, UserPlus } from 'lucide-react'
+// import { Users, Share2, UserPlus } from 'lucide-react';
 
 // Simplified version for testing
 interface CollaborationPanelProps {

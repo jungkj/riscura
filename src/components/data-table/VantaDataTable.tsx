@@ -296,7 +296,7 @@ const AdvancedFilters: React.FC<{
                 <DaisyInput
                   placeholder={`Filter by ${column.title.toLowerCase()}`}
                   value={filters[column.key] as string || ''}
-                  onChange={(e) = />
+                  onChange={(e) =>
 {
                     const newFilters = { ...filters }
                     if (e.target.value) {
@@ -430,7 +430,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
       case 'user':
         return <UserAvatarCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} / />;
+        return <DaisyProgressCell value={value} />;
       case 'date':
         return <DateCell value={new Date(value)} />;
       case 'actions':
@@ -464,7 +464,7 @@ export const VantaDataTable: React.FC<DataTableProps> = ({
               <DaisyInput
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-enterprise-8 w-64" />
             </div>
@@ -626,7 +626,7 @@ setSearchQuery(e.target.value)}
                       <td className="px-enterprise-3 py-enterprise-3">
                         <DaisyCheckbox
                           checked={selectedRows.includes(row.id)}
-                          onCheckedChange={(checked) = />
+                          onCheckedChange={(checked) =>
 handleSelectRow(row.id, !!checked)} />
                       </td>
                     )}

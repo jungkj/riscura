@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
@@ -53,7 +53,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Video,
   Mic,
   Camera
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Story types and interfaces
 interface DataStory {

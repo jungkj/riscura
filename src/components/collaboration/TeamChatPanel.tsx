@@ -146,7 +146,7 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
         <div className="flex items-center gap-2">
           <DaisyInput
             value={newMessage}
-            onChange={(e) = />
+            onChange={(e) =>
 setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."

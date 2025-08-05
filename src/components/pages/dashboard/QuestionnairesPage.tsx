@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -14,26 +14,26 @@ import { toast } from '@/hooks/use-toast';
 import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger } from '@/components/ui/daisy-components';
 
 // Components
-import { EnhancedQuestionnaireBuilder } from '@/components/questionnaires/EnhancedQuestionnaireBuilder'
+import { EnhancedQuestionnaireBuilder } from '@/components/questionnaires/EnhancedQuestionnaireBuilder';
 import { QuestionnaireList } from '@/components/questionnaires/QuestionnaireList';
 import { EnhancedQuestionnaireList } from '@/components/questionnaires/EnhancedQuestionnaireList';
 import CollaborativeQuestionnairePage from './CollaborativeQuestionnairePage';
 import { WorkflowProgress } from '@/components/questionnaires/WorkflowProgress';
-// import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards'
+// import { AnalyticsCards, AnalyticsCardsSkeleton } from '@/components/questionnaires/AnalyticsCards';
 import { AnalyticsDashboard } from '@/components/questionnaires/AnalyticsDashboard';
 import { TemplateLibrary } from '@/components/questionnaires/TemplateLibrary';
 import { WorkflowManagement } from '@/components/questionnaires/WorkflowManagement';
 import { AIAssistantPanel } from '@/components/questionnaires/AIAssistantPanel';
 // TODO: Create these components
-// import { ResponseAnalytics } from '@/components/questionnaires/ResponseAnalytics'
-// import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel'
+// import { ResponseAnalytics } from '@/components/questionnaires/ResponseAnalytics';
+// import { CollaborationPanel } from '@/components/questionnaires/CollaborationPanel';
 
 // Icons
 // import {
   Plus, FileText, Brain, BarChart3, Users, 
   Filter, Search, Eye, Star, 
   Activity
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 import type { 
@@ -41,7 +41,7 @@ import type {
   QuestionnaireResponse, 
   QuestionnaireCategory,
   QuestionnaireStatus 
-} from '@/types/questionnaire.types'
+} from '@/types/questionnaire.types';
 
 interface QuestionnairesPageProps {
   view?: 'list' | 'enhanced-search' | 'builder' | 'analytics' | 'templates' | 'collaboration';
@@ -725,7 +725,7 @@ const QuestionnairesPage = ({ view = 'list' }: QuestionnairesPageProps) {
                   <DaisyInput
                     placeholder="Search questionnaires..."
                     value={searchQuery}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSearchQuery(e.target.value)}
                     className="max-w-md" />
                 </div>

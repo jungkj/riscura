@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-// import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init'
+// import { initializePerformance, getPerformanceMetrics, isPerformanceInitialized } from '@/lib/performance/init';
 
 interface PerformanceContextType {
   isInitialized: boolean;

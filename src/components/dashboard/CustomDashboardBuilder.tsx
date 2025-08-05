@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -37,7 +37,7 @@ import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   EyeOff,
   Palette,
   Layout as LayoutIcon
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 // Make ResponsiveGridLayout responsive
@@ -533,7 +533,7 @@ export default function CustomDashboardBuilder({
                   <LayoutIcon className="w-5 h-5 text-blue-600" />
                   <DaisyInput
                     value={currentLayout.name}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                     className="font-semibold border-none p-0 h-auto focus-visible:ring-0" />
                 </div>
@@ -640,7 +640,7 @@ setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                 <label className="text-sm font-medium">Dashboard Name</label>
                 <DaisyInput
                   value={currentLayout.name}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                   className="mt-1" />
               </div>
@@ -649,7 +649,7 @@ setCurrentLayout(prev => ({ ...prev, name: e.target.value }))}
                 <label className="text-sm font-medium">Description</label>
                 <DaisyInput
                   value={currentLayout.description || ''}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setCurrentLayout(prev => ({ ...prev, description: e.target.value }))}
                   className="mt-1"
                   placeholder="Optional description..." />

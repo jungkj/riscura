@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -25,9 +25,9 @@ import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/
   TrendingDown,
   DollarSign,
   Activity
-} from 'lucide-react'
+} from 'lucide-react';
 
-// import { multiTenantAIService } from '@/services/MultiTenantAIService'
+// import { multiTenantAIService } from '@/services/MultiTenantAIService';
 import type { 
   Tenant, 
   TenantAnalytics, 

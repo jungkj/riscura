@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -21,7 +21,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   FileText, Type, Hash, ToggleLeft, Calendar, Upload,
   List, Star, Gauge, CheckSquare, AlertCircle, Info,
   Eye, Code, Target, Zap, Layers, Move, Copy
-} from 'lucide-react'
+} from 'lucide-react';
 
 import type { 
   Questionnaire, 
@@ -396,7 +396,7 @@ export function QuestionnaireBuilder({
           <DaisyTextarea
             id="question-text"
             value={questionForm.text}
-            onChange={(e) = />
+            onChange={(e) =>
 setQuestionForm(prev => ({ ...prev, text: e.target.value }))}
             placeholder="Enter your question..."
             rows={3} />
@@ -431,7 +431,7 @@ setQuestionForm(prev => ({ ...prev, text: e.target.value }))}
           <DaisyTextarea
             id="question-description"
             value={questionForm.description}
-            onChange={(e) = />
+            onChange={(e) =>
 setQuestionForm(prev => ({ ...prev, description: e.target.value }))}
             placeholder="Provide additional context or instructions..."
             rows={2} />
@@ -443,7 +443,7 @@ setQuestionForm(prev => ({ ...prev, description: e.target.value }))}
           <DaisySwitch
             id="question-required"
             checked={questionForm.required}
-            onCheckedChange={(checked) = />
+            onCheckedChange={(checked) =>
 setQuestionForm(prev => ({ ...prev, required: checked }))} />
         </div>
 
@@ -456,7 +456,7 @@ setQuestionForm(prev => ({ ...prev, required: checked }))} />
                 <div key={index} className="flex items-center space-x-2">
                   <DaisyInput
                     value={option.text}
-                    onChange={(e) = />
+                    onChange={(e) =>
 {
                       const newOptions = [...(questionForm.config.options || [])];
                       newOptions[index] = { ...option, text: e.target.value }
@@ -515,7 +515,7 @@ setQuestionForm(prev => ({ ...prev, required: checked }))} />
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.min || 1}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setQuestionForm(prev => ({
                     ...prev,
                     config: {
@@ -535,7 +535,7 @@ setQuestionForm(prev => ({
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.max || 10}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setQuestionForm(prev => ({
                     ...prev,
                     config: {
@@ -555,7 +555,7 @@ setQuestionForm(prev => ({
                 <DaisyInput
                   type="number"
                   value={questionForm.config.scale?.step || 1}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setQuestionForm(prev => ({
                     ...prev,
                     config: {
@@ -645,7 +645,7 @@ setQuestionForm(prev => ({
                       <DaisyInput
                         id="title"
                         value={title}
-                        onChange={(e) = />
+                        onChange={(e) =>
 setTitle(e.target.value)}
                         placeholder="Enter questionnaire title..." />
                     </div>
@@ -670,7 +670,7 @@ setTitle(e.target.value)}
                     <DaisyTextarea
                       id="description"
                       value={description}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setDescription(e.target.value)}
                       placeholder="Describe the purpose and scope of this questionnaire..."
                       rows={3} />
@@ -727,7 +727,7 @@ setDescription(e.target.value)}
                               <div className="flex-1">
                                 <DaisyInput
                                   value={section.title}
-                                  onChange={(e) = />
+                                  onChange={(e) =>
 updateSection(section.id, { title: e.target.value })}
                                   className="font-medium"
                                   placeholder="Section title..." />
@@ -752,7 +752,7 @@ updateSection(section.id, { title: e.target.value })}
                           {/* Section Description */}
                           <DaisyTextarea
                             value={section.description || ''}
-                            onChange={(e) = />
+                            onChange={(e) =>
 updateSection(section.id, { description: e.target.value })}
                             placeholder="Section description (optional)..."
                             className="mb-4"

@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisySe
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -55,7 +55,7 @@ import {
   type AnomalyAlert,
   type AnomalyPattern,
   type AnomalyDetectionConfig
-} from '@/services/AnomalyDetectionAIService'
+} from '@/services/AnomalyDetectionAIService';
 import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
 

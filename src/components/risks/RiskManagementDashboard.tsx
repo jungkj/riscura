@@ -9,14 +9,14 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { EnhancedProboService } from '@/services/EnhancedProboService';
-// import { CreateRiskModal } from './CreateRiskModal'
-// import { NewRiskFlow } from './NewRiskFlow'
+// import { CreateRiskModal } from './CreateRiskModal';
+// import { NewRiskFlow } from './NewRiskFlow';
 import ExportService from '@/services/ExportService';
 import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-components';
 // import {
@@ -41,7 +41,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectCo
   Zap,
   ArrowRight,
   Link2,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 export interface Risk {
@@ -391,7 +391,7 @@ const RiskRegister: React.FC = () => {
             <DaisyInput
               placeholder="Search risks..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchQuery(e.target.value)}
               className="pl-enterprise-8 w-64" />
           </div>

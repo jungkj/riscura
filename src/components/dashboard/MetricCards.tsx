@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 // import { 
   Shield, 
   AlertTriangle, 
@@ -12,7 +12,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   Target,
   Users,
   Clock
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface MetricData {
   id: string;

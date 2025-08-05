@@ -1,7 +1,7 @@
 'use client';
 
 // Optimized Chart Components for High Performance Rendering
-import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react'
+import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import {
 import { DaisyTooltip } from '@/components/ui/daisy-components';
   LineChart,
@@ -27,7 +27,7 @@ import { DaisyTooltip } from '@/components/ui/daisy-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { debounce, throttle } from 'lodash-es';
 import { cn } from '@/lib/utils';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisySlider } from '@/components/ui/DaisySlider';

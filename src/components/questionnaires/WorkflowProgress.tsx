@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
   BookTemplate,
   Workflow as WorkflowIcon,
   ChevronRight,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface WorkflowStep {
   id: string;

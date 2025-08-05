@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Upload } from 'lucide-react';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';

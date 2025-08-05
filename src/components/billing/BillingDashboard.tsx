@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -25,9 +25,9 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyCalendar }
   AlertTriangle,
   Settings,
   ExternalLink,
-} from 'lucide-react'
+} from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 
 interface BillingData {
   subscription: {

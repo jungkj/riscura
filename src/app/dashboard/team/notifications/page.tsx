@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
 import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
@@ -55,7 +55,7 @@ import toast from 'react-hot-toast';
   Video,
   Download,
   ExternalLink,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface Notification {
@@ -473,7 +473,7 @@ export default function TeamNotificationsPage() {
               <DaisyInput
                 placeholder="Search notifications..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>
@@ -838,7 +838,7 @@ setSearchQuery(e.target.value)}
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.email[item.key as keyof typeof preferences.email]}
-                            onCheckedChange={(checked) = />
+                            onCheckedChange={(checked) =>
 handlePreferenceChange(
                                 item.key as keyof typeof preferences.email,
                                 'email',
@@ -850,7 +850,7 @@ handlePreferenceChange(
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.push[item.key as keyof typeof preferences.push]}
-                            onCheckedChange={(checked) = />
+                            onCheckedChange={(checked) =>
 handlePreferenceChange(
                                 item.key as keyof typeof preferences.push,
                                 'push',
@@ -862,7 +862,7 @@ handlePreferenceChange(
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.inApp[item.key as keyof typeof preferences.inApp]}
-                            onCheckedChange={(checked) = />
+                            onCheckedChange={(checked) =>
 handlePreferenceChange(
                                 item.key as keyof typeof preferences.inApp,
                                 'inApp',
@@ -911,7 +911,7 @@ handlePreferenceChange(
                   <div className="flex items-center space-x-2">
                     <DaisySwitch
                       checked={preferences.quietHours.enabled}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 setPreferences((prev) => ({
                           ...prev,
                           quietHours: { ...prev.quietHours, enabled: checked },
@@ -926,7 +926,7 @@ setPreferences((prev) => ({
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.start}
-                          onChange={(e) = />
+                          onChange={(e) =>
 setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, start: e.target.value },
@@ -939,7 +939,7 @@ setPreferences((prev) => ({
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.end}
-                          onChange={(e) = />
+                          onChange={(e) =>
 setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, end: e.target.value },

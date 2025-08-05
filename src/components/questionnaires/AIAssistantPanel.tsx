@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -19,7 +19,7 @@ import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   MessageSquare, FileText, BarChart3, Settings, HelpCircle,
   Sparkles, Eye, ThumbsUp, ThumbsDown, Copy, Download,
   ArrowRight, ChevronRight, Info, Clock
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types for AI suggestions and insights
 interface QuestionSuggestion {
@@ -354,7 +354,7 @@ export function AIAssistantPanel({
                 <DaisyInput
                   placeholder="Search suggestions..."
                   value={searchQuery}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSearchQuery(e.target.value)}
                   className="h-8 text-xs" />
                 <select

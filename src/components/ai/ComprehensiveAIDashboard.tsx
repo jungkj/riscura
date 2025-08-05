@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -24,10 +24,10 @@ import { Eye } from 'lucide-react';
   FileText,
   Network,
   Eye
-} from 'lucide-react'
+} from 'lucide-react';
 
 import { aiIntegrationService } from '@/services/AIIntegrationService';
-// import { multiTenantAIService } from '@/services/MultiTenantAIService'
+// import { multiTenantAIService } from '@/services/MultiTenantAIService';
 import { generateId } from '@/lib/utils';
 import type { 
   AIServiceRequest, 
@@ -213,7 +213,7 @@ export const ComprehensiveAIDashboard: React.FC<ComprehensiveAIDashboardProps> =
                       id="query"
                       placeholder="Describe your risk management question, compliance concern, or analysis request..."
                       value={queryText}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setQueryText(e.target.value)}
                       rows={3} />
                   </div>

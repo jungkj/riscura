@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-// import { useRisks } from '@/context/RiskContext'
-// import { Risk } from '@/types'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -400,7 +400,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <DaisyInput
                 placeholder="Search risks by title or description..."
                 value={filters.search}
-                onChange={(e) = />
+                onChange={(e) =>
 updateFilters({ search: e.target.value })}
                 className="pl-10" />
             </div>
@@ -480,7 +480,7 @@ updateFilters({ search: e.target.value })}
                   min="0"
                   max="25"
                   value={filters.scoreRange[0]}
-                  onChange={(e) = />
+                  onChange={(e) =>
 updateFilters({
                     scoreRange: [parseInt(e.target.value) || 0, filters.scoreRange[1]]
                   })}
@@ -491,7 +491,7 @@ updateFilters({
                   min="0"
                   max="25"
                   value={filters.scoreRange[1]}
-                  onChange={(e) = />
+                  onChange={(e) =>
 updateFilters({
                     scoreRange: [filters.scoreRange[0], parseInt(e.target.value) || 25]
                   })}

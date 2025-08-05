@@ -20,7 +20,7 @@ import { DaisyTabs, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/dais
   TrendingUp,
   Users,
   Settings
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface TabDefinition {
   value: string;

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea'
+// import { MainContentArea, ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -32,7 +32,7 @@ import ExportService from '@/services/ExportService';
   MoreHorizontal,
   Target,
   Zap,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== TYPES ==========
 interface SecurityMetric {

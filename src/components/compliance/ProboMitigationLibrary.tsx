@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -26,7 +26,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/compon
   FileText,
   Globe,
   Cpu
-} from 'lucide-react'
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MitigationControl {
@@ -212,7 +212,7 @@ export function ProboMitigationLibrary() {
                   <DaisyInput
                     placeholder="Search controls by name, description, or standards..."
                     value={searchQuery}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSearchQuery(e.target.value)}
                     className="pl-10 border-[#D8C3A5] focus:border-[#199BEC]" />
                 </div>
@@ -280,7 +280,7 @@ setSearchQuery(e.target.value)}
                     <div className="flex items-start space-x-3">
                       <DaisyCheckbox
                         checked={selectedMitigations.includes(mitigation.id)}
-                        onCheckedChange={() = />
+                        onCheckedChange={() =>
 toggleMitigationSelection(mitigation.id)}
                         className="mt-1" />
                       <div className="flex-1">

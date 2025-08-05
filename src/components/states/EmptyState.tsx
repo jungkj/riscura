@@ -9,7 +9,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   DataIcons,
   UserIcons,
   RiskManagementIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 
 // Base empty state component
 interface EmptyStateProps {

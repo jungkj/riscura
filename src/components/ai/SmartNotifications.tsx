@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -46,7 +46,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyDialogTitl
   Database,
   Wifi,
   WifiOff,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface SmartNotification {

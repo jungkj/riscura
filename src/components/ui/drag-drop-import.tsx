@@ -7,7 +7,7 @@ import { toast } from '@/hooks/use-toast';
 import { DaisyCardTitle, DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogDescription } from '@/components/ui/daisy-components';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -53,7 +53,7 @@ import {
   Target,
   Zap,
   ArrowRight
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ProcessedFile {
   file: File;
@@ -395,7 +395,7 @@ export default function DragDropImport({
                 <DaisyCheckbox
                   id="aiAnalysis"
                   checked={options.aiAnalysis}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
                   } />
                 <DaisyLabel htmlFor="aiAnalysis" className="text-sm" >
@@ -406,7 +406,7 @@ setOptions(prev => ({ ...prev, aiAnalysis: !!checked }))
                 <DaisyCheckbox
                   id="autoMap"
                   checked={options.autoMap}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 setOptions(prev => ({ ...prev, autoMap: !!checked }))
                   } />
                 <DaisyLabel htmlFor="autoMap" className="text-sm" >
@@ -417,7 +417,7 @@ setOptions(prev => ({ ...prev, autoMap: !!checked }))
                 <DaisyCheckbox
                   id="validateData"
                   checked={options.validateData}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 setOptions(prev => ({ ...prev, validateData: !!checked }))
                   } />
                 <DaisyLabel htmlFor="validateData" className="text-sm" >
@@ -428,7 +428,7 @@ setOptions(prev => ({ ...prev, validateData: !!checked }))
                 <DaisyCheckbox
                   id="createMissing"
                   checked={options.createMissing}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 setOptions(prev => ({ ...prev, createMissing: !!checked }))
                   } />
                 <DaisyLabel htmlFor="createMissing" className="text-sm" >
@@ -439,7 +439,7 @@ setOptions(prev => ({ ...prev, createMissing: !!checked }))
                 <DaisyCheckbox
                   id="previewMode"
                   checked={options.previewMode}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 setOptions(prev => ({ ...prev, previewMode: !!checked }))
                   } />
                 <DaisyLabel htmlFor="previewMode" className="text-sm" >

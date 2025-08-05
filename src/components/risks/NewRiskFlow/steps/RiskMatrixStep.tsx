@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { useRiskFlow } from '../RiskFlowContext'
+// import { useRiskFlow } from '../RiskFlowContext';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Info } from 'lucide-react';
 

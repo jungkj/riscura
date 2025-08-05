@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -20,7 +20,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Download,
   Eye,
   Edit,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export default function RiskAssessmentPage() {
   const router = useRouter();
@@ -238,7 +238,7 @@ export default function RiskAssessmentPage() {
                             <span>Progress</span>
                             <span>{assessment.progress}%</span>
                           </div>
-                          <DaisyProgress value={assessment.progress} className="h-2" / />
+                          <DaisyProgress value={assessment.progress} className="h-2" />
 </div>
                       )}
                     </div>

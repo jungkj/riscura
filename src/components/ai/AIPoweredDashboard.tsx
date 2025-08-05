@@ -8,7 +8,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 // import {
   Brain,
   TrendingUp,
@@ -35,7 +35,7 @@ import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   ArrowRight,
   Lightbulb,
   ChevronRight,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface AIPrediction {

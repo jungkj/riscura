@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
@@ -17,7 +17,7 @@ import { Sparkles } from 'lucide-react';
   Download,
   Eye,
   Sparkles
-} from 'lucide-react'
+} from 'lucide-react';
 
 const InteractiveDemo = () => {
   const [isDragging, setIsDragging] = useState(false);

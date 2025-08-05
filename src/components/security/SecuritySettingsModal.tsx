@@ -8,7 +8,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
@@ -284,7 +284,7 @@ export const SecuritySettingsModal: React.FC<SecuritySettingsModalProps> = ({
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enableEmailAlerts}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('alertSettings.enableEmailAlerts', checked)} />
                   </div>
 
@@ -298,7 +298,7 @@ updateSettings('alertSettings.enableEmailAlerts', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enableSMSAlerts}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('alertSettings.enableSMSAlerts', checked)} />
                   </div>
 
@@ -312,7 +312,7 @@ updateSettings('alertSettings.enableSMSAlerts', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.alertSettings.enablePushNotifications}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('alertSettings.enablePushNotifications', checked)} />
                   </div>
                 </div>
@@ -344,7 +344,7 @@ updateSettings('alertSettings.enablePushNotifications', checked)} />
                     <DaisyLabel>Quiet Hours</DaisyLabel>
                     <DaisySwitch
                       checked={settings.alertSettings.quietHours.enabled}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('alertSettings.quietHours.enabled', checked)} />
                   </div>
                   
@@ -355,7 +355,7 @@ updateSettings('alertSettings.quietHours.enabled', checked)} />
                         <DaisyInput
                           type="time"
                           value={settings.alertSettings.quietHours.startTime}
-                          onChange={(e) = />
+                          onChange={(e) =>
 updateSettings('alertSettings.quietHours.startTime', e.target.value)} />
                       </div>
                       <div className="space-y-2">
@@ -363,7 +363,7 @@ updateSettings('alertSettings.quietHours.startTime', e.target.value)} />
                         <DaisyInput
                           type="time"
                           value={settings.alertSettings.quietHours.endTime}
-                          onChange={(e) = />
+                          onChange={(e) =>
 updateSettings('alertSettings.quietHours.endTime', e.target.value)} />
                       </div>
                     </div>
@@ -395,7 +395,7 @@ updateSettings('alertSettings.quietHours.endTime', e.target.value)} />
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableRealTimeMonitoring}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('monitoring.enableRealTimeMonitoring', checked)} />
                   </div>
 
@@ -406,7 +406,7 @@ updateSettings('monitoring.enableRealTimeMonitoring', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableAnomalyDetection}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('monitoring.enableAnomalyDetection', checked)} />
                   </div>
 
@@ -417,7 +417,7 @@ updateSettings('monitoring.enableAnomalyDetection', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.monitoring.enableBehaviorAnalysis}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('monitoring.enableBehaviorAnalysis', checked)} />
                   </div>
                 </div>
@@ -461,7 +461,7 @@ updateSettings('monitoring.enableBehaviorAnalysis', checked)} />
                         <DaisyCheckbox
                           id={category.id}
                           checked={settings.monitoring.enabledCategories.includes(category.id)}
-                          onCheckedChange={() = />
+                          onCheckedChange={() =>
 handleCategoryToggle(category.id)} />
                         <div>
                           <DaisyLabel htmlFor={category.id} className="text-sm font-medium" >
@@ -499,7 +499,7 @@ handleCategoryToggle(category.id)} />
                     </div>
                     <DaisySwitch
                       checked={settings.accessControl.enforceStrongPasswords}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('accessControl.enforceStrongPasswords', checked)} />
                   </div>
 
@@ -510,7 +510,7 @@ updateSettings('accessControl.enforceStrongPasswords', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.accessControl.requireMFA}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('accessControl.requireMFA', checked)} />
                   </div>
                 </div>
@@ -522,7 +522,7 @@ updateSettings('accessControl.requireMFA', checked)} />
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.sessionTimeout}
-                      onChange={(e) = />
+                      onChange={(e) =>
 updateSettings('accessControl.sessionTimeout', parseInt(e.target.value))}
                       min="5"
                       max="480" />
@@ -533,7 +533,7 @@ updateSettings('accessControl.sessionTimeout', parseInt(e.target.value))}
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.maxFailedAttempts}
-                      onChange={(e) = />
+                      onChange={(e) =>
 updateSettings('accessControl.maxFailedAttempts', parseInt(e.target.value))}
                       min="3"
                       max="10" />
@@ -544,7 +544,7 @@ updateSettings('accessControl.maxFailedAttempts', parseInt(e.target.value))}
                     <DaisyInput
                       type="number"
                       value={settings.accessControl.lockoutDuration}
-                      onChange={(e) = />
+                      onChange={(e) =>
 updateSettings('accessControl.lockoutDuration', parseInt(e.target.value))}
                       min="5"
                       max="60" />
@@ -556,7 +556,7 @@ updateSettings('accessControl.lockoutDuration', parseInt(e.target.value))}
                   <DaisyTextarea
                     placeholder="Enter IP ranges (one per line)&#10;192.168.1.0/24&#10;10.0.0.0/8"
                     value={settings.accessControl.allowedIPRanges.join('\n')}
-                    onChange={(e) = />
+                    onChange={(e) =>
 updateSettings('accessControl.allowedIPRanges', e.target.value.split('\n').filter(ip => ip.trim()))}
                     rows={4} />
                   <p className="text-sm text-gray-500">Leave empty to allow all IP addresses</p>
@@ -586,7 +586,7 @@ updateSettings('accessControl.allowedIPRanges', e.target.value.split('\n').filte
                   </div>
                   <DaisySwitch
                     checked={settings.compliance.enableComplianceMonitoring}
-                    onCheckedChange={(checked) = />
+                    onCheckedChange={(checked) =>
 updateSettings('compliance.enableComplianceMonitoring', checked)} />
                 </div>
 
@@ -598,7 +598,7 @@ updateSettings('compliance.enableComplianceMonitoring', checked)} />
                         <DaisyCheckbox
                           id={framework}
                           checked={settings.compliance.frameworks.includes(framework)}
-                          onCheckedChange={() = />
+                          onCheckedChange={() =>
 handleFrameworkToggle(framework)} />
                         <DaisyLabel htmlFor={framework} className="text-sm" >
                             {framework}
@@ -616,7 +616,7 @@ handleFrameworkToggle(framework)} />
                     </div>
                     <DaisySwitch
                       checked={settings.compliance.autoReporting}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('compliance.autoReporting', checked)} />
                   </div>
 
@@ -627,7 +627,7 @@ updateSettings('compliance.autoReporting', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.compliance.enableAuditLogging}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('compliance.enableAuditLogging', checked)} />
                   </div>
                 </div>
@@ -675,7 +675,7 @@ updateSettings('compliance.enableAuditLogging', checked)} />
                     </div>
                     <DaisySwitch
                       checked={settings.integrations.enableSIEMIntegration}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 updateSettings('integrations.enableSIEMIntegration', checked)} />
                   </div>
 
@@ -685,7 +685,7 @@ updateSettings('integrations.enableSIEMIntegration', checked)} />
                       <DaisyInput
                         placeholder="https://siem.company.com/api/events"
                         value={settings.integrations.siemEndpoint}
-                        onChange={(e) = />
+                        onChange={(e) =>
 updateSettings('integrations.siemEndpoint', e.target.value)} />
                     </div>
                   )}
@@ -699,7 +699,7 @@ updateSettings('integrations.siemEndpoint', e.target.value)} />
                   </div>
                   <DaisySwitch
                     checked={settings.integrations.enableAPILogging}
-                    onCheckedChange={(checked) = />
+                    onCheckedChange={(checked) =>
 updateSettings('integrations.enableAPILogging', checked)} />
                 </div>
 
@@ -708,7 +708,7 @@ updateSettings('integrations.enableAPILogging', checked)} />
                   <DaisyInput
                     placeholder="https://your-system.com/webhook"
                     value={settings.integrations.webhookUrl}
-                    onChange={(e) = />
+                    onChange={(e) =>
 updateSettings('integrations.webhookUrl', e.target.value)} />
                   <p className="text-sm text-gray-500">Receive security events via webhook</p>
                 </div>
@@ -720,7 +720,7 @@ updateSettings('integrations.webhookUrl', e.target.value)} />
                   </div>
                   <DaisySwitch
                     checked={settings.integrations.enableThirdPartyScanning}
-                    onCheckedChange={(checked) = />
+                    onCheckedChange={(checked) =>
 updateSettings('integrations.enableThirdPartyScanning', checked)} />
                 </div>
               </DaisySwitch>

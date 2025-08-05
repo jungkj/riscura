@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSubscription } from '@/hooks/use-subscription';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { Check, Crown, Zap, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';

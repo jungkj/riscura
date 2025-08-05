@@ -14,7 +14,7 @@ import { Download } from 'lucide-react';
   Loader2,
   X,
   Download
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface FilePreview {
   file: File;

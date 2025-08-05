@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
   getConfidenceColor,
   colorClasses,
   dataColors,
-} from '@/lib/design-system/colors'
+} from '@/lib/design-system/colors';
 
 // Status Badge with enhanced visual feedback
 interface StatusBadgeProps {
@@ -245,7 +245,7 @@ interface ProgressRingProps {
   className?: string;
 }
 
-export const EnhancedProgressRing: React.FC<DaisyProgressRingProps / />= ({
+export const EnhancedProgressRing: React.FC<DaisyProgressRingProps />= ({
   progress,
   size = 60,
   strokeWidth = 6,

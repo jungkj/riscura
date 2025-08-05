@@ -23,7 +23,7 @@ import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform } from '
   HelpCircle,
   LogOut,
   Zap,
-} from 'lucide-react'
+} from 'lucide-react';
 
 import {
   useDeviceInfo,

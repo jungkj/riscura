@@ -12,7 +12,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Info,
   X
 } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';

@@ -16,9 +16,9 @@ import { Brain } from 'lucide-react';
   Settings,
   Eye,
   Brain
-} from 'lucide-react'
+} from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -27,7 +27,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
-// import { Risk, Control } from '@/types'
+// import { Risk, Control } from '@/types';
 // import { 
   complianceAIService,
   ComplianceAssessment,
@@ -35,7 +35,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   ComplianceRoadmap,
   RegulatoryChange,
   AuditPreparation
-} from '@/services/ComplianceAIService'
+} from '@/services/ComplianceAIService';
 
 interface ComplianceIntelligenceAIProps {
   risks: Risk[];
@@ -140,7 +140,7 @@ const AssessmentOverview: React.FC<{
 </DaisyCardDescription>
               {assessment.overallScore}%
             </div>
-            <DaisyProgress value={assessment.overallScore} className="mt-2" / / /> </DaisyCard>
+            <DaisyProgress value={assessment.overallScore} className="mt-2" /> </DaisyCard>
 
         <DaisyCard >
   <DaisyCardBody className="pb-2" >
@@ -184,7 +184,7 @@ const AssessmentOverview: React.FC<{
 </DaisyCardDescription>
               {assessment.completionPercentage}%
             </div>
-            <DaisyProgress value={assessment.completionPercentage} className="mt-2" / / /> </DaisyCard>
+            <DaisyProgress value={assessment.completionPercentage} className="mt-2" /> </DaisyCard>
       </div>
 
       {/* Audit Readiness */}

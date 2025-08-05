@@ -278,7 +278,7 @@ const MobileCardView: React.FC<{
       case 'risk':
         return <RiskLevelCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} / />;
+        return <DaisyProgressCell value={value} />;
       case 'date':
         return <DateCell value={value} />;
       case 'number':
@@ -302,7 +302,7 @@ const MobileCardView: React.FC<{
               {Boolean(selectable) && (
                 <DaisyCheckbox
                   checked={selectedRows.includes(row.id)}
-                  onCheckedChange={(checked) = />
+                  onCheckedChange={(checked) =>
 onSelectRow(row.id, !!checked)}
                   className="mt-1" />
               )}
@@ -423,7 +423,7 @@ const AdvancedFilters: React.FC<{
                   <DaisyInput
                     placeholder={`Filter by ${column.title.toLowerCase()}...`}
                     value={String(filters[column.key] || '')}
-                    onChange={(e) = />
+                    onChange={(e) =>
 {
                       const newFilters = { ...filters }
                       if (e.target.value) {
@@ -562,7 +562,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
       case 'risk':
         return <RiskLevelCell value={value} />;
       case 'progress':
-        return <DaisyProgressCell value={value} / />;
+        return <DaisyProgressCell value={value} />;
       case 'date':
         return <DateCell value={value} />;
       case 'number':
@@ -605,7 +605,7 @@ export const EnhancedDataTable: React.FC<EnhancedDataTableProps> = ({
               <DaisyInput
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className={cn("pl-10", device.type === 'mobile' ? 'w-full' : 'w-64')} />
             </div>
@@ -803,7 +803,7 @@ setSearchQuery(e.target.value)}
                         <DaisyTableCell >
                             <DaisyCheckbox
                             checked={selectedRows.includes(row.id)}
-                            onCheckedChange={(checked) = />
+                            onCheckedChange={(checked) =>
 handleSelectRow(row.id, !!checked)} />
                         </DaisyTableRow>
                       )}

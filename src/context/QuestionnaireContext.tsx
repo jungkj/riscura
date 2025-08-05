@@ -8,7 +8,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
   QuestionnaireState,
   QuestionnaireAnalytics,
   RiskCategory,
-} from '@/types'
+} from '@/types';
 
 interface QuestionnaireContextType extends QuestionnaireState {
   // CRUD Operations

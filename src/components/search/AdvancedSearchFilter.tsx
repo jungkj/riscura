@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -48,7 +48,7 @@ import {
   Square, MoreVertical, ArrowUpDown, Eye, Copy, Share2,
   FileText, Image, MapPin, Settings, Target, AlertCircle,
   TrendingUp, TrendingDown, BarChart3, Grid3X3, Activity
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types for search and filtering
 interface SearchFilter {
@@ -518,7 +518,7 @@ export function AdvancedSearchFilter({
           <DaisyInput
             placeholder="Search items..."
             value={searchQuery}
-            onChange={(e) = />
+            onChange={(e) =>
 setSearchQuery(e.target.value)}
             className="pl-10" />
           {Boolean(searchQuery) && (
@@ -668,7 +668,7 @@ setSearchQuery(e.target.value)}
                   <DaisyInput
                     placeholder="Value"
                     value={newFilter.value || ''}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setNewFilter({...newFilter, value: e.target.value})} />
 
                   <DaisyButton onClick={addFilter} disabled={!newFilter.field || !newFilter.value} >
@@ -750,7 +750,7 @@ setNewFilter({...newFilter, value: e.target.value})} />
             <div className="flex items-center space-x-2">
               <DaisyCheckbox
                 checked={selectedItems.length === filteredItems.length}
-                onCheckedChange={(checked) = />
+                onCheckedChange={(checked) =>
 {
                   if (checked) {
                     selectAllVisible();
@@ -806,7 +806,7 @@ setNewFilter({...newFilter, value: e.target.value})} />
               <DaisyInput
                 id="search-name"
                 value={newSearchName}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewSearchName(e.target.value)}
                 placeholder="Enter search name" />
             </div>
@@ -816,7 +816,7 @@ setNewSearchName(e.target.value)}
               <DaisyTextarea
                 id="search-description"
                 value={newSearchDescription}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewSearchDescription(e.target.value)}
                 placeholder="Describe this search"
                 rows={2} />
@@ -862,13 +862,13 @@ setNewSearchDescription(e.target.value)}
               <DaisyInput
                 placeholder="Tag name"
                 value={newTagName}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewTagName(e.target.value)}
                 className="flex-1" />
               <DaisyInput
                 type="color"
                 value={newTagColor}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewTagColor(e.target.value)}
                 className="w-16" />
               <DaisyButton onClick={addTag} disabled={!newTagName.trim()} >

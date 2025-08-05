@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -22,7 +22,7 @@ import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/compon
   Play, Pause, Users, Clock, Target, BarChart3, Brain,
   Shield, CheckCircle, AlertTriangle, Calendar, FileText,
   Grid3X3, List, TrendingUp
-} from 'lucide-react'
+} from 'lucide-react';
 
 import type { Questionnaire } from '@/types/questionnaire.types';
 
@@ -156,7 +156,7 @@ export function QuestionnaireList({
                     <Archive className="w-4 h-4 mr-2" />
                   Archive
                 </DaisyDropdownMenuItem>
-                <DaisyDropdownMenuSeparator / />
+                <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem 
                   onClick={() => onDelete(questionnaire.id)}
                   className="text-red-600 dark:text-red-400" />
@@ -422,7 +422,7 @@ export function QuestionnaireList({
                         <Archive className="w-4 h-4 mr-2" />
                       Archive
                     </DaisyDropdownMenuItem>
-                    <DaisyDropdownMenuSeparator / />
+                    <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem 
                       onClick={() => onDelete(questionnaire.id)}
                       className="text-red-600 dark:text-red-400" />

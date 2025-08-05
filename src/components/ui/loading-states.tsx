@@ -14,7 +14,7 @@ import { DaisySkeleton } from '@/components/ui/daisy-components';
   Database,
   Wifi,
   WifiOff
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Skeleton Loader Components
 interface SkeletonProps {

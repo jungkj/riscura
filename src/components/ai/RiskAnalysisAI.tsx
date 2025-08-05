@@ -15,7 +15,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectCo
   Activity
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -25,14 +25,14 @@ import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 
-// import { Risk, Control } from '@/types'
+// import { Risk, Control } from '@/types';
 // import { 
   riskAnalysisAIService, 
   RiskAssessmentReport, 
   RiskCorrelationAnalysis,
   QuantitativeResults,
   RiskRecommendation
-} from '@/services/RiskAnalysisAIService'
+} from '@/services/RiskAnalysisAIService';
 
 interface RiskAnalysisAIProps {
   risks: Risk[];

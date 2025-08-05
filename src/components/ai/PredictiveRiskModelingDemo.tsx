@@ -6,7 +6,7 @@ import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription, DaisySe
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -54,7 +54,7 @@ import {
   predictiveRiskModelingService,
   type RiskForecast,
   type MonteCarloSimulation
-} from '@/services/PredictiveRiskModelingService'
+} from '@/services/PredictiveRiskModelingService';
 import { generateId } from '@/lib/utils';
 import type { Risk } from '@/types';
 

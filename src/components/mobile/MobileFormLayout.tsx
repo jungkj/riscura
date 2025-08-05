@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useGesture } from '@use-gesture/react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -380,7 +380,7 @@ export default function MobileFormLayout({
               <DaisyCheckbox
                 id={field.id}
                 checked={value}
-                onCheckedChange={(checked) = />
+                onCheckedChange={(checked) =>
 handleFieldChange(field.id, checked)}
                 disabled={field.disabled}
                 aria-describedby={error ? `${field.id}-error` : field.description ? `${field.id}-description` : undefined} />
@@ -409,7 +409,7 @@ handleFieldChange(field.id, checked)}
               <DaisySwitch
                 id={field.id}
                 checked={value}
-                onCheckedChange={(checked) = />
+                onCheckedChange={(checked) =>
 handleFieldChange(field.id, checked)}
                 disabled={field.disabled} />
               <DaisyLabel htmlFor={field.id}>{field.label}</DaisySwitch>
@@ -424,7 +424,7 @@ handleFieldChange(field.id, checked)}
                 {...fieldProps}
                 accept={field.accept}
                 multiple={field.multiple}
-                onChange={(e) = />
+                onChange={(e) =>
 {
                   const files = e.target.files;
                   handleFieldChange(field.id, field.multiple ? Array.from(files || []) : files?.[0] || null);

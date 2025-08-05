@@ -234,7 +234,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisyInput
               placeholder="Search data..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchQuery(e.target.value)}
               className="pl-10 w-80 text-body-sm bg-surface-secondary border-0 focus:ring-1 focus:ring-interactive-primary" />
           </div>
@@ -353,7 +353,7 @@ setSearchQuery(e.target.value)}
                   <td className="w-12 p-enterprise-3">
                     <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 {
                         const newSelection = new Set(selectedRows);
                         if (checked) {

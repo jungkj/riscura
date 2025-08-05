@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { DaisySkeleton } from '@/components/ui/DaisySkeleton';
 import { DaisyCardTitle, DaisyTooltip } from '@/components/ui/daisy-components';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 
 interface ComplianceDonutProps {
   isLoading?: boolean;

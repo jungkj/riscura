@@ -21,7 +21,7 @@ import { DaisyCardTitle, DaisyTooltip } from '@/components/ui/daisy-components';
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { MoreVertical, Copy, Trash2 } from 'lucide-react';
 import { ReportWidget } from '@/lib/reporting/engine';

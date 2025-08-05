@@ -12,7 +12,7 @@ import { NotionForm, FormSectionConfig } from './NotionForms';
   UserPlus,
   Cog,
   Save,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== RISK ASSESSMENT FORM ==========
 export const RiskAssessmentForm: React.FC = () => {

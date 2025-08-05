@@ -22,7 +22,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   Area,
   AreaChart
 } from 'recharts';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -35,8 +35,8 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
   DataIcons, 
   ActionIcons,
   StatusIcons 
-} from '@/components/icons/IconLibrary'
-// import { format, subDays, subMonths } from 'date-fns'
+} from '@/components/icons/IconLibrary';
+// import { format, subDays, subMonths } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import {
   Shield,

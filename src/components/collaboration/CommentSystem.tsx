@@ -7,7 +7,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
@@ -42,7 +42,7 @@ import { DaisyCardBody, DaisyDropdownMenuTrigger } from '@/components/ui/daisy-c
   ChevronDown,
   ChevronRight,
   Dot,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface Comment {

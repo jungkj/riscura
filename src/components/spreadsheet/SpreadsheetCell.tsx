@@ -6,7 +6,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { cn } from '@/lib/utils';
-// import { Calendar, Star, User, Calculator } from 'lucide-react'
+// import { Calendar, Star, User, Calculator } from 'lucide-react';
 import { Cell, Column } from './SpreadsheetGrid';
 import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 
@@ -218,7 +218,7 @@ export const SpreadsheetCell: React.FC<SpreadsheetCellProps> = ({
             ref={inputRef}
             type="number"
             value={localValue}
-            onChange={(e) = />
+            onChange={(e) =>
 handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}
@@ -231,7 +231,7 @@ handleInputChange(e.target.value)}
             ref={inputRef}
             type="date"
             value={localValue}
-            onChange={(e) = />
+            onChange={(e) =>
 handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}
@@ -247,7 +247,7 @@ handleInputChange(e.target.value)}
             <DaisyTextarea
               ref={textareaRef}
               value={localValue}
-              onChange={(e) = />
+              onChange={(e) =>
 handleInputChange(e.target.value)}
               onBlur={() => onSave(localValue)}
               onKeyDown={handleKeyDown}
@@ -260,7 +260,7 @@ handleInputChange(e.target.value)}
           <DaisyInput
             ref={inputRef}
             value={localValue}
-            onChange={(e) = />
+            onChange={(e) =>
 handleInputChange(e.target.value)}
             onBlur={() => onSave(localValue)}
             onKeyDown={handleKeyDown}

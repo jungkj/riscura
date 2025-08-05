@@ -17,7 +17,7 @@ import { TextSelection } from '@/hooks/useTextSelection';
 import { AIAction } from './SelectableContent';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';

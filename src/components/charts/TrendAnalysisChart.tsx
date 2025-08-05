@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -42,7 +42,7 @@ import {
   AreaChart as AreaChartIcon
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format, subDays, subMonths, subYears, parseISO } from 'date-fns'
+// import { format, subDays, subMonths, subYears, parseISO } from 'date-fns';
 
 interface TrendDataPoint {
   date: string;

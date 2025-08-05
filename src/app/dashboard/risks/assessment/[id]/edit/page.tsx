@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -10,7 +10,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
-// import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react'
+// import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react';
 
 export default function EditAssessmentPage() {
   const router = useRouter();
@@ -124,7 +124,7 @@ export default function EditAssessmentPage() {
                   <DaisyInput
                     id="title"
                     value={formData.title}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('title', e.target.value)}
                     placeholder="Enter assessment title" />
                 </div>
@@ -134,7 +134,7 @@ handleInputChange('title', e.target.value)}
                   <DaisyTextarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('description', e.target.value)}
                     placeholder="Describe the assessment scope and purpose"
                     rows={4} />
@@ -200,7 +200,7 @@ handleInputChange('description', e.target.value)}
                       id="dueDate"
                       type="date"
                       value={formData.dueDate}
-                      onChange={(e) = />
+                      onChange={(e) =>
 handleInputChange('dueDate', e.target.value)} />
                   </div>
                 </div>
@@ -225,7 +225,7 @@ handleInputChange('dueDate', e.target.value)} />
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter objective"
                     className="flex-1" />

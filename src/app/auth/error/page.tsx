@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { AlertCircle, ArrowLeft } from 'lucide-react';

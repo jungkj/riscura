@@ -9,7 +9,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -17,7 +17,7 @@ import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySwitch } from '@/components/ui/DaisySwitch';
 import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyTabsTrigger, DaisyDialogTitle, DaisyCalendar } from '@/components/ui/daisy-components';
-// import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react'
+// import { Shield, Calendar, Target, Users, FileText, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface CreateControlModalProps {
   open: boolean;
@@ -297,7 +297,7 @@ export const CreateControlModal: React.FC<CreateControlModalProps> = ({
                   id="title"
                   placeholder="Enter control title"
                   value={formData.title}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData(prev => ({ ...prev, title: e.target.value }))}
                   className={errors.title ? 'border-red-500' : ''} />
                 {errors.title && <p className="text-sm text-red-600">{errors.title}</p>}
@@ -330,7 +330,7 @@ setFormData(prev => ({ ...prev, title: e.target.value }))}
                 id="description"
                 placeholder="Describe the control in detail"
                 value={formData.description}
-                onChange={(e) = />
+                onChange={(e) =>
 setFormData(prev => ({ ...prev, description: e.target.value }))}
                 className={errors.description ? 'border-red-500' : ''}
                 rows={4} />
@@ -344,7 +344,7 @@ setFormData(prev => ({ ...prev, description: e.target.value }))}
                   id="owner"
                   placeholder="Enter control owner name"
                   value={formData.owner}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData(prev => ({ ...prev, owner: e.target.value }))}
                   className={errors.owner ? 'border-red-500' : ''} />
                 {errors.owner && <p className="text-sm text-red-600">{errors.owner}</p>}
@@ -480,7 +480,7 @@ setFormData(prev => ({ ...prev, owner: e.target.value }))}
                     </div>
                     <DaisySwitch
                       checked={formData.evidenceRequired}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 setFormData(prev => ({ ...prev, evidenceRequired: checked }))} />
                   </div>
 
@@ -493,7 +493,7 @@ setFormData(prev => ({ ...prev, evidenceRequired: checked }))} />
                     </div>
                     <DaisySwitch
                       checked={formData.continuousMonitoring}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 setFormData(prev => ({ ...prev, continuousMonitoring: checked }))} />
                   </div>
                 </div>
@@ -545,7 +545,7 @@ setFormData(prev => ({ ...prev, continuousMonitoring: checked }))} />
                       <DaisyCheckbox
                         id={framework}
                         checked={formData.framework.includes(framework)}
-                        onCheckedChange={() = />
+                        onCheckedChange={() =>
 handleFrameworkToggle(framework)} />
                       <DaisyLabel htmlFor={framework} className="text-sm" >
                           {framework}
@@ -584,7 +584,7 @@ handleFrameworkToggle(framework)} />
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData(prev => ({ ...prev, department: e.target.value }))} />
               </div>
             </div>

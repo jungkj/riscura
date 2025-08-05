@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-// import { useRisks } from '@/context/RiskContext'
-// import { Risk } from '@/types'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk } from '@/types';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {

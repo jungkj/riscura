@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -231,7 +231,7 @@ export default function EnterpriseDataTable<T extends TableData>({
               <DaisyInput
                 placeholder="Search all columns..."
                 value={searchTerm}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchTerm(e.target.value)}
                 className="max-w-sm" />
             </div>
@@ -267,7 +267,7 @@ setSearchTerm(e.target.value)}
                   <DaisyTableHead className="w-12" >
                       <DaisyCheckbox
                       checked={isAllSelected}
-                      ref={(el) = />
+                      ref={(el) =>
 {
                         if (el && el instanceof HTMLInputElement) {
                           el.indeterminate = isIndeterminate;
@@ -313,7 +313,7 @@ setSearchTerm(e.target.value)}
                       <DaisyTableCell >
                           <DaisyCheckbox
                           checked={selectedRows.has(row.id)}
-                          onCheckedChange={(checked) = />
+                          onCheckedChange={(checked) =>
 handleRowSelection(row.id, checked as boolean)}
                           aria-label="Select row" />
                       </DaisyTableBody>

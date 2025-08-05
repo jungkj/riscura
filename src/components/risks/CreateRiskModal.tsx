@@ -22,7 +22,7 @@ import {
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -33,7 +33,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
-// import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react'
+// import { AlertTriangle, Calendar, Shield, Target, Users, FileText, Loader2 } from 'lucide-react';
 
 interface CreateRiskModalProps {
   open: boolean;
@@ -248,7 +248,7 @@ export const CreateRiskModal: React.FC<CreateRiskModalProps> = ({
                   id="title"
                   placeholder="Enter risk title"
                   value={formData.title}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData((prev) => ({ ...prev, title: e.target.value }))}
                   className={errors.title ? 'border-red-500' : ''} />
                 {errors.title && <p className="text-sm text-red-600">{errors.title}</p>}
@@ -280,7 +280,7 @@ setFormData((prev) => ({ ...prev, title: e.target.value }))}
                 id="description"
                 placeholder="Describe the risk in detail"
                 value={formData.description}
-                onChange={(e) = />
+                onChange={(e) =>
 setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 className={errors.description ? 'border-red-500' : ''}
                 rows={4} />
@@ -294,7 +294,7 @@ setFormData((prev) => ({ ...prev, description: e.target.value }))}
                   id="owner"
                   placeholder="Enter risk owner name"
                   value={formData.owner}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData((prev) => ({ ...prev, owner: e.target.value }))}
                   className={errors.owner ? 'border-red-500' : ''} />
                 {errors.owner && <p className="text-sm text-red-600">{errors.owner}</p>}
@@ -415,7 +415,7 @@ setFormData((prev) => ({ ...prev, owner: e.target.value }))}
                       <DaisyCheckbox
                         id={framework}
                         checked={formData.framework.includes(framework)}
-                        onCheckedChange={() = />
+                        onCheckedChange={() =>
 handleFrameworkToggle(framework)} />
                       <DaisyLabel htmlFor={framework} className="text-sm">
                         {framework}
@@ -455,7 +455,7 @@ handleFrameworkToggle(framework)} />
                   id="department"
                   placeholder="Enter department"
                   value={formData.department}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setFormData((prev) => ({ ...prev, department: e.target.value }))} />
               </div>
             </div>

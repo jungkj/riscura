@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -73,7 +73,7 @@ import GuidedTour from '@/components/help/GuidedTour';
   TrendingDown,
   Video,
   Minus,
-} from 'lucide-react'
+} from 'lucide-react';
 
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { HighContrastToggle } from '@/components/ui/HighContrastToggle';
@@ -650,7 +650,7 @@ export default function QuickActionsPage() {
                   <DaisyInput
                     placeholder="Search workflows, actions, or tags..."
                     value={searchQuery}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSearchQuery(e.target.value)}
                     className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter" />
                 </div>

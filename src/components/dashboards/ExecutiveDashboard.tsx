@@ -2,9 +2,9 @@
 
 import React from 'react';
 import MainContentArea from '@/components/layout/MainContentArea';
-// import { ContentSection, ContentCard } from '@/components/layout/MainContentArea'
+// import { ContentSection, ContentCard } from '@/components/layout/MainContentArea';
 import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
-// import { RiskRegisterTable } from '@/components/risk-register-table'
+// import { RiskRegisterTable } from '@/components/risk-register-table';
 // import {
   Shield,
   AlertTriangle,
@@ -19,7 +19,7 @@ import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
   Plus,
   Share,
   BookmarkPlus,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== SAMPLE DATA ==========
 const executiveKPIs = [

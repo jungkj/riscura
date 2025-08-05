@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-// import { Control, ControlState, ControlFilters, ControlRiskMapping, Document } from '@/types'
+// import { Control, ControlState, ControlFilters, ControlRiskMapping, Document } from '@/types';
 import { generateMockControls } from '@/lib/mockData';
 
 interface ControlContextType extends ControlState {

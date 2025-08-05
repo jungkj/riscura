@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -21,7 +21,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   Target,
   FileCheck,
   AlertCircle,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export default function NewAssessmentPage() {
   const router = useRouter();
@@ -175,7 +175,7 @@ export default function NewAssessmentPage() {
                 <DaisyInput
                   id="title"
                   value={formData.title}
-                  onChange={(e) = />
+                  onChange={(e) =>
 handleInputChange('title', e.target.value)}
                   placeholder="e.g., Annual Security Risk Assessment 2025"
                   className={errors.title ? 'border-red-500' : ''} />
@@ -192,7 +192,7 @@ handleInputChange('title', e.target.value)}
                 <DaisyTextarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) = />
+                  onChange={(e) =>
 handleInputChange('description', e.target.value)}
                   placeholder="Describe the assessment scope, purpose, and key areas to be evaluated..."
                   rows={4}
@@ -308,7 +308,7 @@ handleInputChange('description', e.target.value)}
                     id="dueDate"
                     type="date"
                     value={formData.dueDate}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('dueDate', e.target.value)}
                     className={errors.dueDate ? 'border-red-500' : ''} />
                   {errors.dueDate && (
@@ -328,7 +328,7 @@ handleInputChange('dueDate', e.target.value)}
                     <DaisyCheckbox
                       id="includeThirdParty"
                       checked={formData.includeThirdParty}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 handleInputChange('includeThirdParty', checked as boolean)
                       } />
                     <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal">
@@ -339,7 +339,7 @@ handleInputChange('includeThirdParty', checked as boolean)
                     <DaisyCheckbox
                       id="includeCompliance"
                       checked={formData.includeCompliance}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 handleInputChange('includeCompliance', checked as boolean)
                       } />
                     <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal">
@@ -368,7 +368,7 @@ handleInputChange('includeCompliance', checked as boolean)
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter assessment objective"
                     className="flex-1" />

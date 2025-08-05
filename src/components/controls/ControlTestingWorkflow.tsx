@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea'
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -36,8 +36,8 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   Clipboard,
   BarChart3,
   MessageSquare,
-} from 'lucide-react'
-// import { format } from 'date-fns'
+} from 'lucide-react';
+// import { format } from 'date-fns';
 
 // Types
 interface TestingWorkflow {
@@ -359,7 +359,7 @@ const TestingForm: React.FC<{
         </label>
         <DaisyTextarea
           value={formData.actualResult}
-          onChange={(e) = />
+          onChange={(e) =>
 handleInputChange('actualResult', e.target.value)}
           placeholder="Describe the actual testing results..."
           className="mt-enterprise-1"
@@ -417,7 +417,7 @@ handleInputChange('actualResult', e.target.value)}
             min="0"
             max="100"
             value={formData.effectiveness}
-            onChange={(e) = />
+            onChange={(e) =>
 handleInputChange('effectiveness', parseInt(e.target.value) || 0)}
             className="mt-enterprise-1" />
         </div>
@@ -439,7 +439,7 @@ handleInputChange('effectiveness', parseInt(e.target.value) || 0)}
         </label>
         <DaisyTextarea
           value={formData.findings}
-          onChange={(e) = />
+          onChange={(e) =>
 handleInputChange('findings', e.target.value)}
           placeholder="Document any findings, issues, or observations..."
           className="mt-enterprise-1"
@@ -453,7 +453,7 @@ handleInputChange('findings', e.target.value)}
         </label>
         <DaisyTextarea
           value={formData.recommendations}
-          onChange={(e) = />
+          onChange={(e) =>
 handleInputChange('recommendations', e.target.value)}
           placeholder="Provide recommendations for improvement..."
           className="mt-enterprise-1"

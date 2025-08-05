@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -574,7 +574,7 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardBody>{formatMetric(metrics.memoryUsage, '%')}</div>
-                <DaisyProgress value={metrics.memoryUsage} className="mt-2" / / /> </DaisyCard>
+                <DaisyProgress value={metrics.memoryUsage} className="mt-2" /> </DaisyCard>
 
             <DaisyCard >
   <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >
@@ -585,7 +585,7 @@ const PerformanceDashboard: React.FC = () => {
               <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardBody>{formatMetric(metrics.cpuUsage, '%')}</div>
-                <DaisyProgress value={metrics.cpuUsage} className="mt-2" / / /> </DaisyCard>
+                <DaisyProgress value={metrics.cpuUsage} className="mt-2" /> </DaisyCard>
 
             <DaisyCard >
   <DaisyCardBody className="flex flex-row items-center justify-between space-y-0 pb-2" >

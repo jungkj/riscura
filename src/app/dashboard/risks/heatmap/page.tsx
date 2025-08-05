@@ -2,9 +2,9 @@
 
 import { Suspense } from 'react';
 import { motion } from 'framer-motion';
-// import { RiskHeatMap } from '@/components/risks/RiskHeatMap'
+// import { RiskHeatMap } from '@/components/risks/RiskHeatMap';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { Activity, Plus, Download, Filter } from 'lucide-react';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';

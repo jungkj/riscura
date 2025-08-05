@@ -8,12 +8,12 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext'
-// import { RiskStatus } from '@/types/rcsa.types'
+// import { useRiskFlow, TreatmentStrategy } from '../RiskFlowContext';
+// import { RiskStatus } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 import { AlertCircle } from 'lucide-react';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 
 interface DetailsStepProps {
   onNext: () => void;
@@ -88,7 +88,7 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
             id="owner"
             placeholder="e.g., John Smith, IT Department"
             value={riskData.owner}
-            onChange={(e) = />
+            onChange={(e) =>
 {
               updateRiskData({ owner: e.target.value });
               if (errors.owner) setErrors({ ...errors, owner: '' });
@@ -184,7 +184,7 @@ export const DetailsStep = ({ onNext, onBack }: DetailsStepProps) => {
           id="controls"
           placeholder="Describe any control measures or mitigation actions..."
           value={riskData.controlMeasures}
-          onChange={(e) = />
+          onChange={(e) =>
 updateRiskData({ controlMeasures: e.target.value })}
           rows={3}
           className="mt-1 resize-none" />
@@ -205,7 +205,7 @@ updateRiskData({ controlMeasures: e.target.value })}
             id="dateIdentified"
             type="date"
             value={riskData.dateIdentified ? format(riskData.dateIdentified, 'yyyy-MM-dd') : ''}
-            onChange={(e) = />
+            onChange={(e) =>
 updateRiskData({ dateIdentified: new Date(e.target.value) })}
             className="mt-1" />
         </div>
@@ -219,7 +219,7 @@ updateRiskData({ dateIdentified: new Date(e.target.value) })}
             id="nextReview"
             type="date"
             value={riskData.nextReview ? format(riskData.nextReview, 'yyyy-MM-dd') : ''}
-            onChange={(e) = />
+            onChange={(e) =>
 updateRiskData({ nextReview: e.target.value ? new Date(e.target.value) : undefined })
             }
             className="mt-1" />

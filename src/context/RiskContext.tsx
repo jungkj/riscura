@@ -1,9 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-// import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types'
-// import { generateMockRisks } from '@/lib/mockData'
-// import { calculateRiskScore, getRiskLevel } from '@/lib/utils'
+// import { Risk, RiskState, RiskFilters, RiskCategory } from '@/types';
+// import { generateMockRisks } from '@/lib/mockData';
+// import { calculateRiskScore, getRiskLevel } from '@/lib/utils';
 
 interface RiskContextType extends RiskState {
   // CRUD Operations

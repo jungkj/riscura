@@ -16,7 +16,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Signal
 } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { useToast } from '@/components/ui/UserFeedback';
@@ -523,7 +523,7 @@ export const NetworkErrorHandler: React.FC<NetworkErrorHandlerProps> = ({
         </DaisyCardBody>
         <DaisyCardBody >
   <DaisyProgress 
-                value={(failedRequests.filter(r = />
+                value={(failedRequests.filter(r =>
 </DaisyCardBody> r.retryCount > 0).length / failedRequests.length) * 100} 
                 className="h-2" />
               <p className="text-xs text-muted-foreground mt-2">

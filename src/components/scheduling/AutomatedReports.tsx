@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
@@ -50,7 +50,7 @@ import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components'
   Star,
   Archive,
   History
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Scheduling types
 interface ScheduledReport {
@@ -624,7 +624,7 @@ export const AutomatedReports: React.FC<AutomatedReportsProps> = ({
                 <DaisyInput
                   placeholder="Search reports..."
                   value={searchQuery}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSearchQuery(e.target.value)}
                   className="w-64" />
               </div>

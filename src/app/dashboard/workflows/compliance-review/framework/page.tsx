@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -22,7 +22,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Pause,
   RotateCcw,
   Clock,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface Framework {
   id: string;

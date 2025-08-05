@@ -28,7 +28,7 @@ import { DaisyDialogTitle } from '@/components/ui/daisy-components';
   Brain,
   MessageSquare,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface ChatMessage {
@@ -516,7 +516,7 @@ export const AIChatInterface: React.FC<{
               <DaisyInput
                 ref={inputRef}
                 value={inputValue}
-                onChange={(e) = />
+                onChange={(e) =>
 setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me about risks, controls, compliance, or trends..."

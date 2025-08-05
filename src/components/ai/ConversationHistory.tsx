@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -26,7 +26,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   ChevronDown,
   ChevronRight,
   History
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 
@@ -431,7 +431,7 @@ export default function ConversationHistory({
               <DaisyInput
                 placeholder="Search conversations..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>

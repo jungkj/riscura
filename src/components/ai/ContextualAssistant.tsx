@@ -8,7 +8,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   ActionIcons,
   NavigationIcons,
   CommunicationIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 
 // Context types and interfaces

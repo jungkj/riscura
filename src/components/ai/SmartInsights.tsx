@@ -8,7 +8,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   DataIcons,
   NavigationIcons,
   ActionIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 

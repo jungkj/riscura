@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Input } from './input';
 import { Textarea } from './textarea';
 import { Badge } from './badge';
@@ -26,7 +26,7 @@ import { Brain } from 'lucide-react';
   Clock,
   FileText,
   Brain
-} from 'lucide-react'
+} from 'lucide-react';
 
 export function NotionStyleGuide() {
 

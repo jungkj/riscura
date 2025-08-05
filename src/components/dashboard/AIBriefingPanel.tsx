@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -15,7 +15,7 @@ import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-componen
   Brain, Sparkles, TrendingUp, AlertTriangle, CheckCircle, Clock,
   Target, Zap, Eye, ArrowRight, ChevronDown, ChevronUp, Play,
   Volume2, Pause, RotateCcw, BookOpen, Lightbulb, Flag, Star, Shield
-} from 'lucide-react'
+} from 'lucide-react';
 
 import type { Risk } from '@/types';
 

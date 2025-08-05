@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { cn } from '@/lib/utils';

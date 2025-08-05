@@ -13,7 +13,7 @@ import {
   VisuallyHidden,
   FocusTrap,
   AriaLabel,
-} from '@/lib/accessibility/AccessibilityProvider'
+} from '@/lib/accessibility/AccessibilityProvider';
 
 // Performance Imports
 import {
@@ -22,7 +22,7 @@ import {
   useVirtualScrolling,
   useOfflineData,
   LazyImage,
-} from '@/lib/performance/PerformanceProvider'
+} from '@/lib/performance/PerformanceProvider';
 import Link from 'next/link';
 
 // UX Enhancements
@@ -42,7 +42,7 @@ import {
   useLoadingState,
   useToast,
   useProgressiveEnhancement,
-} from '@/components/ui/UXEnhancements'
+} from '@/components/ui/UXEnhancements';
 
 // Types
 interface Risk {

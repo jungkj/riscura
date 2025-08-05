@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import {
@@ -27,10 +27,10 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   Wifi,
   WifiOff,
   RefreshCw,
-} from 'lucide-react'
+} from 'lucide-react';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { cn } from '@/lib/utils';
-// import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns';
 
 interface RealTimeDashboardProps {
   organizationId: string;

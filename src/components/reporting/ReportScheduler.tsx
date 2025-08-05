@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
@@ -28,9 +28,9 @@ import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectVal
   CheckCircle,
   Info,
   RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-// import { format, addDays, addWeeks, addMonths, addQuarters } from 'date-fns'
+// import { format, addDays, addWeeks, addMonths, addQuarters } from 'date-fns';
 
 interface ScheduledReport {
   id: string;
@@ -444,7 +444,7 @@ export default function ReportScheduler({
           <DaisyInput
             id="name"
             value={formData.name}
-            onChange={(e) = />
+            onChange={(e) =>
 setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g., Weekly Risk Report" />
         </div>
@@ -473,7 +473,7 @@ setFormData({ ...formData, name: e.target.value })}
         <DaisyInput
           id="description"
           value={formData.description}
-          onChange={(e) = />
+          onChange={(e) =>
 setFormData({ ...formData, description: e.target.value })}
           placeholder="Brief description of this scheduled report" />
       </div>
@@ -526,7 +526,7 @@ setFormData({ ...formData, description: e.target.value })}
               min="1"
               max="31"
               value={formData.dayOfMonth}
-              onChange={(e) = />
+              onChange={(e) =>
 setFormData({ ...formData, dayOfMonth: parseInt(e.target.value) })}
               placeholder="1-31" />
           </div>
@@ -539,7 +539,7 @@ setFormData({ ...formData, dayOfMonth: parseInt(e.target.value) })}
           <DaisyInput
             type="time"
             value={formData.time}
-            onChange={(e) = />
+            onChange={(e) =>
 setFormData({ ...formData, time: e.target.value })} />
         </div>
         <div className="space-y-2">
@@ -570,7 +570,7 @@ setFormData({ ...formData, time: e.target.value })} />
               <DaisyCheckbox
                 id={format}
                 checked={formData.format?.includes(format)}
-                onCheckedChange={(checked) = />
+                onCheckedChange={(checked) =>
 {
                   if (checked) {
                     setFormData({ ...formData, format: [...(formData.format || []), format] });
@@ -588,7 +588,7 @@ setFormData({ ...formData, time: e.target.value })} />
         <DaisySwitch
           id="enabled"
           checked={formData.enabled}
-          onCheckedChange={(checked) = />
+          onCheckedChange={(checked) =>
 setFormData({ ...formData, enabled: checked })} />
         <DaisyLabel htmlFor="enabled">Enable this schedule</DaisySwitch>
       </div>

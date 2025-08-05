@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -138,7 +138,7 @@ export default function UpdateRiskAssessmentPage() {
                 <DaisyInput
                   placeholder="Search risks by title, category, or owner..."
                   value={searchQuery}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSearchQuery(e.target.value)}
                   className="pl-10" />
               </div>

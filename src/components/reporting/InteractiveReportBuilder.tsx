@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -42,7 +42,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Image,
   Type,
   Zap
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Report component definitions
 interface ReportComponent {
@@ -616,7 +616,7 @@ export const InteractiveReportBuilder: React.FC<InteractiveReportBuilderProps> =
             <div className="flex items-center space-x-4">
               <DaisyInput
                 value={reportTitle}
-                onChange={(e) = />
+                onChange={(e) =>
 setReportTitle(e.target.value)}
                 className="font-semibold text-lg border-none p-0 h-auto focus:ring-0"
                 placeholder="Report Title" />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -22,7 +22,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Settings,
   Clock,
   Star
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface HelpResource {
   id: string;

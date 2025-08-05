@@ -11,7 +11,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   TimeIcons,
   UserIcons,
   FileIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { LoadingStates, Spinner, InlineLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 

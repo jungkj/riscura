@@ -15,7 +15,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard'
+} from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 // import {
   AlertTriangle,
@@ -25,7 +25,7 @@ import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
   ExternalLink,
   TrendingUp,
   Shield,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface Risk {
   id: string;

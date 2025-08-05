@@ -22,7 +22,7 @@ import { AIAction } from './SelectableContent';
 import { ContentAnalysisResult } from './ContentAnalysisPanel';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
@@ -123,7 +123,7 @@ export const BatchSelectionManager: React.FC<BatchSelectionManagerProps> = ({
       case 'error': return <DaisyAlertCircle className="h-4 w-4 text-red-600" >
   ;
 </DaisyAlertCircle>
-      case 'processing': return <DaisyProgressIcon className="h-4 w-4 text-blue-600 animate-spin" / />;
+      case 'processing': return <DaisyProgressIcon className="h-4 w-4 text-blue-600 animate-spin" />;
       case 'skipped': return <Square className="h-4 w-4 text-gray-400" />;
       default: return <Square className="h-4 w-4 text-gray-400" />;
     }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySlider } from '@/components/ui/DaisySlider';
@@ -44,7 +44,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger } from '@/compon
   ChevronRight,
   ChevronDown,
   Info,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface RiskScenario {

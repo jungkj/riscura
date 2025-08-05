@@ -10,7 +10,7 @@ import { designTokens } from '@/lib/design-system/tokens';
   CommunicationIcons,
   DataIcons,
   TimeIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { LoadingStates, DotsLoading } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';
 

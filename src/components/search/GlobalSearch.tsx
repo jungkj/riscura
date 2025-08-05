@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -62,7 +62,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   AtSign,
   Slash,
   Dot
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface SearchResult {
@@ -485,7 +485,7 @@ export default function GlobalSearch({
                 <DaisyInput
                   ref={searchInputRef}
                   value={query}
-                  onChange={(e) = />
+                  onChange={(e) =>
 handleQueryChange(e.target.value)}
                   placeholder={placeholder}
                   className="pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 bg-transparent" />

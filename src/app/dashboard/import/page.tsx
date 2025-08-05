@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 // Components
 import DragDropImport from '@/components/DragDropImport'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
@@ -24,7 +24,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   ArrowRight,
   Shield,
   Target,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Mock user data - in real app this would come from auth context
 const mockUser = {

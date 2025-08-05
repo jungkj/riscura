@@ -4,7 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import {
 import { DaisyCardBody, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
   DaisyDialog,
@@ -37,7 +37,7 @@ import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
   Download,
   Upload,
   MoreHorizontal,
-} from 'lucide-react'
+} from 'lucide-react';
 import Image from 'next/image';
 
 // Enhanced data structure
@@ -371,7 +371,7 @@ export default function NotionSpreadsheet() {
                 ref={inputRef}
                 type="date"
                 value={String(cell.value)}
-                onChange={(e) = />
+                onChange={(e) =>
 updateCellValue(row.id, column.id, e.target.value)}
                 onBlur={() => setSelectedCell(null)}
                 onKeyDown={(e) => {
@@ -387,7 +387,7 @@ updateCellValue(row.id, column.id, e.target.value)}
               <DaisyInput
                 ref={inputRef}
                 value={String(cell.value)}
-                onChange={(e) = />
+                onChange={(e) =>
 updateCellValue(row.id, column.id, e.target.value)}
                 onBlur={() => setSelectedCell(null)}
                 onKeyDown={(e) => {
@@ -535,7 +535,7 @@ updateCellValue(row.id, column.id, e.target.value)}
             <DaisyInput
               placeholder="Search across all data..."
               value={searchTerm}
-              onChange={(e) = />
+              onChange={(e) =>
 setSearchTerm(e.target.value)}
               className="pl-10 w-64 h-8 text-sm" />
           </div>
@@ -677,7 +677,7 @@ setSearchTerm(e.target.value)}
               <label className="text-sm font-medium">Column Name</label>
               <DaisyInput
                 value={newColumn.name}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewColumn((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="Enter column name"
                 className="mt-1" />
@@ -705,7 +705,7 @@ setNewColumn((prev) => ({ ...prev, name: e.target.value }))}
                 <label className="text-sm font-medium">Options (comma-separated)</label>
                 <DaisyInput
                   value={newColumn.options}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setNewColumn((prev) => ({ ...prev, options: e.target.value }))}
                   placeholder="Option 1, Option 2, Option 3"
                   className="mt-1" />

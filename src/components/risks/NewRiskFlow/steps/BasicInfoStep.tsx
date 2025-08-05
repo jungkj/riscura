@@ -8,8 +8,8 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisySelect } from '@/components/ui/DaisySelect';
-// import { useRiskFlow } from '../RiskFlowContext'
-// import { RiskCategory } from '@/types/rcsa.types'
+// import { useRiskFlow } from '../RiskFlowContext';
+// import { RiskCategory } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 import { DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
 import { AlertCircle } from 'lucide-react';
@@ -103,7 +103,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
           id="title"
           placeholder="e.g., Data breach risk, Supply chain disruption"
           value={riskData.title}
-          onChange={(e) = />
+          onChange={(e) =>
 {
             updateRiskData({ title: e.target.value });
             if (errors.title) setErrors({ ...errors, title: '' });
@@ -140,7 +140,7 @@ export const BasicInfoStep = ({ onNext }: BasicInfoStepProps) => {
           id="description"
           placeholder="Describe the risk, its potential causes, and possible consequences..."
           value={riskData.description}
-          onChange={(e) = />
+          onChange={(e) =>
 {
             updateRiskData({ description: e.target.value });
             if (errors.description) setErrors({ ...errors, description: '' });

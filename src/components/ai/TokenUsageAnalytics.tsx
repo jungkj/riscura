@@ -13,8 +13,8 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyCalendar }
   Eye,
   Calendar,
   Users
-} from 'lucide-react'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+} from 'lucide-react';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
@@ -22,7 +22,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { useAI } from '@/context/AIContext';
 import { PRICING_TIERS } from '@/services/TokenManagementService';
-// import { AgentType } from '@/types/ai.types'
+// import { AgentType } from '@/types/ai.types';
 import { AI_AGENTS } from '@/config/ai-agents';
 
 interface UsageCardProps {

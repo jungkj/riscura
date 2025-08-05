@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -31,7 +31,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   MessageSquare,
   Brain,
   Sparkles,
-} from 'lucide-react'
+} from 'lucide-react';
 import AIControlGenerator from '@/components/probo/AIControlGenerator';
 import SmartRiskControlMapper from '@/components/probo/SmartRiskControlMapper';
 
@@ -243,7 +243,7 @@ export default function AssessmentDetailPage() {
                 <h3 className="text-lg font-semibold">Assessment Progress</h3>
                 <span className="text-sm text-gray-600">{assessment.progress}% Complete</span>
               </div>
-              <DaisyProgress value={assessment.progress} className="h-3" / />
+              <DaisyProgress value={assessment.progress} className="h-3" />
 </div>
           </DaisyCardBody>
         </DaisyCard>

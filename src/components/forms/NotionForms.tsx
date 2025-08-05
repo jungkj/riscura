@@ -28,7 +28,7 @@ import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, D
   Image,
   File,
   Clock,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== FORM FIELD TYPES ==========
 export interface FormFieldConfig {

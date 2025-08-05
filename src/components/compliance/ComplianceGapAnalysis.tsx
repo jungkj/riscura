@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -38,9 +38,9 @@ import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectCo
   Users,
   Download,
   RefreshCw,
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/components/ui/DaisyToast';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 import { ComplianceFrameworkSelector } from './ComplianceFrameworkSelector';
 import { ComplianceGapList } from './ComplianceGapList';
 import { ComplianceRequirementAssessment } from './ComplianceRequirementAssessment';
@@ -321,7 +321,7 @@ export function ComplianceGapAnalysis() {
 </DaisyCardBody>
                     {analysis.overallCompliance.toFixed(1)}%
                   </div>
-                  <DaisyProgress value={analysis.overallCompliance} className="mt-2" / / /> </DaisyCard>
+                  <DaisyProgress value={analysis.overallCompliance} className="mt-2" /> </DaisyCard>
 
               <DaisyCard >
   <DaisyCardBody className="pb-3" >

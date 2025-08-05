@@ -20,15 +20,15 @@ import { DaisyCardTitle, DaisyTabsTrigger } from '@/components/ui/daisy-componen
   RotateCw,
   Maximize,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle, DaisyDialogTrigger } from '@/components/ui/DaisyDialog';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
-// import { formatFileSize } from '@/lib/storage/file-validator'
-// import { format } from 'date-fns'
+// import { formatFileSize } from '@/lib/storage/file-validator';
+// import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
 interface DocumentViewerProps {

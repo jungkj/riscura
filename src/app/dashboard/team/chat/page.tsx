@@ -5,7 +5,7 @@ import ProtectedWrapper from '@/components/auth/ProtectedWrapper';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
@@ -47,7 +47,7 @@ import { DaisyCardTitle, DaisySelectValue, DaisyDialogTitle } from '@/components
   Check,
   CheckCheck,
   AlertCircle,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface ChatChannel {
@@ -582,7 +582,7 @@ const TeamChatPage: React.FC = () => {
               <DaisyInput
                 placeholder="Search channels..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>
@@ -842,7 +842,7 @@ setSearchQuery(e.target.value)}
                     <DaisyTextarea
                       placeholder={`Message ${activeChannelData?.name}...`}
                       value={messageInput}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setMessageInput(e.target.value)}
                       onKeyPress={handleKeyPress}
                       className="min-h-[60px] resize-none" />
@@ -960,7 +960,7 @@ setMessageInput(e.target.value)}
                   id="channel-name"
                   placeholder="e.g., project-alpha"
                   value={newChannelData.name}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setNewChannelData(prev => ({ ...prev, name: e.target.value }))} />
               </div>
               <div className="space-y-2">
@@ -969,7 +969,7 @@ setNewChannelData(prev => ({ ...prev, name: e.target.value }))} />
                   id="channel-description"
                   placeholder="What's this channel about?"
                   value={newChannelData.description}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setNewChannelData(prev => ({ ...prev, description: e.target.value }))} />
               </div>
               <div className="space-y-2">

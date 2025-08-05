@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -36,7 +36,7 @@ import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components
   Quote,
   Link,
   Flag
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Comment and collaboration types
 interface Comment {
@@ -423,7 +423,7 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
             <div className="space-y-2">
               <DaisyTextarea
                 value={newComment}
-                onChange={(e) = />
+                onChange={(e) =>
 setNewComment(e.target.value)}
                 className="text-sm"
                 rows={3} />
@@ -580,7 +580,7 @@ setNewComment(e.target.value)}
           <DaisyInput
             placeholder="Search comments..."
             value={searchQuery}
-            onChange={(e) = />
+            onChange={(e) =>
 setSearchQuery(e.target.value)}
             className="text-sm h-8" />
           <select
@@ -664,7 +664,7 @@ setSearchQuery(e.target.value)}
             <DaisyTextarea
               placeholder="Add a comment... Use @username to mention someone or #tag to add tags"
               value={newComment}
-              onChange={(e) = />
+              onChange={(e) =>
 {
                 setNewComment(e.target.value);
                 handleTyping();

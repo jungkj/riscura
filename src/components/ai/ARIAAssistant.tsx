@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -616,7 +616,7 @@ How can I assist you today?`,
               <DaisyInput
                 ref={inputRef}
                 value={inputMessage}
-                onChange={(e) = />
+                onChange={(e) =>
 setInputMessage(e.target.value)}
                 placeholder="Ask ARIA about risks, controls, compliance..."
                 disabled={isLoading}

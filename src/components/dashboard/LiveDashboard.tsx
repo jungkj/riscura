@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -33,7 +33,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisyTabsTrigger, DaisyTooltip } 
   XCircle,
   Clock,
   AlertCircle
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface DashboardData {
   summary: {
@@ -340,7 +340,7 @@ export function LiveDashboard() {
           <DaisyCardBody >
   <div className="text-2xl font-bold">
 </DaisyCardBody>{data.summary.compliance.overall}%</div>
-            <DaisyProgress value={data.summary.compliance.overall} className="mt-2" / / /> </DaisyCard>
+            <DaisyProgress value={data.summary.compliance.overall} className="mt-2" /> </DaisyCard>
       </div>
 
       {/* Charts and Recent Activity */}

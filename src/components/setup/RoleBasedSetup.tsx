@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -25,7 +25,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Clock,
   Globe,
   Lock
-} from 'lucide-react'
+} from 'lucide-react';
 
 // User role definitions
 interface UserRole {
@@ -121,7 +121,7 @@ const OrganizationSetup: React.FC<{ onUpdate: (_data: any) => void }> = ({ onUpd
         <DaisyInput
           id="orgName"
           value={formData.name}
-          onChange={(e) = />
+          onChange={(e) =>
 setFormData({ ...formData, name: e.target.value })}
           placeholder="Enter your organization name" />
       </div>
@@ -440,7 +440,7 @@ export const RoleBasedSetup: React.FC<RoleBasedSetupProps> = ({
             <p className="text-gray-600 mb-4">
               We're customizing Riscura based on your preferences.
             </p>
-            <DaisyProgress value={100} className="h-2" / / /> </DaisyCard>
+            <DaisyProgress value={100} className="h-2" /> </DaisyCard>
       </div>
     );
   }

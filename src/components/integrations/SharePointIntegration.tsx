@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSharePointIntegration } from '@/hooks/useSharePointIntegration';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard'
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Loader2, Link, Unlink, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 

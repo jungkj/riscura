@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger } from '@/components/ui/DaisyDropdown';
@@ -71,7 +71,7 @@ import { DaisyDialogTitle, DaisyDropdownMenuTrigger } from '@/components/ui/dais
   Briefcase,
   Globe,
   MoreHorizontal,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface Activity {
@@ -832,7 +832,7 @@ export const ActivityFeed: React.FC<{
             <DaisyInput
               placeholder="Search activities..."
               value={filters.search || ''}
-              onChange={(e) = />
+              onChange={(e) =>
 setFilters(prev => ({ ...prev, search: e.target.value }))}
               className="w-48" />
 

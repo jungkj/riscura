@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DocumentUpload from '@/components/documents/DocumentUpload';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -21,7 +21,7 @@ import { DaisyTabsTrigger } from '@/components/ui/daisy-components';
   BarChart3,
   Download,
   RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface AnalysisStats {

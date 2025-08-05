@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -18,7 +18,7 @@ import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/compon
 
 // Chart Components
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, 
-         ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from 'recharts'
+         ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
 // Icons
 // import {
@@ -26,10 +26,10 @@ import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   MoreHorizontal, Maximize, Minimize, RefreshCw, Download, Settings,
   Brain, Zap, Target, Activity, PieChart as PieChartIcon, LineChart as LineChartIcon,
   AreaChart as AreaChartIcon, Clock, Users, DollarSign, Globe
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
-import type { Risk } from '@/types'
+import type { Risk } from '@/types';
 
 interface DashboardWidget {
   id: string;

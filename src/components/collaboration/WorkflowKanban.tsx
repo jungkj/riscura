@@ -7,7 +7,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAvatar, DaisyAvatarFallback, DaisyAvatarImage } from '@/components/ui/DaisyAvatar';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { DaisyDialog, DaisyDialogContent, DaisyDialogHeader, DaisyDialogTitle } from '@/components/ui/DaisyDialog';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
@@ -55,7 +55,7 @@ import { DaisyDialogTitle, DaisyDropdownMenuTrigger } from '@/components/ui/dais
   GitBranch,
   CheckSquare,
   Square,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface WorkflowTask {
@@ -800,7 +800,7 @@ export const WorkflowKanban: React.FC<{
             <DaisyInput
               placeholder="Search tasks..."
               value={filterBy.search || ''}
-              onChange={(e) = />
+              onChange={(e) =>
 setFilterBy(prev => ({ ...prev, search: e.target.value }))}
               className="w-48" />
             
@@ -930,7 +930,7 @@ setFilterBy(prev => ({ ...prev, search: e.target.value }))}
                   <label className="text-body-sm font-medium">Title</label>
                   <DaisyInput 
                     value={selectedTask.title}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSelectedTask({
                       ...selectedTask,
                       title: e.target.value
@@ -981,7 +981,7 @@ setSelectedTask({
                 <label className="text-body-sm font-medium">Description</label>
                 <DaisyTextarea 
                   value={selectedTask.description}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSelectedTask({
                     ...selectedTask,
                     description: e.target.value
@@ -996,7 +996,7 @@ setSelectedTask({
                   <DaisyInput 
                     type="date"
                     value={selectedTask.dueDate.toISOString().split('T')[0]}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSelectedTask({
                       ...selectedTask,
                       dueDate: new Date(e.target.value)
@@ -1009,7 +1009,7 @@ setSelectedTask({
                   <DaisyInput 
                     type="number"
                     value={selectedTask.estimatedHours}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSelectedTask({
                       ...selectedTask,
                       estimatedHours: parseInt(e.target.value) || 0

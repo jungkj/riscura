@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger } from '@/components/ui/DaisyTooltip';
@@ -13,7 +13,7 @@ import { Brain } from 'lucide-react';
   TrendingUp, TrendingDown, Minus, BarChart3, AlertTriangle, 
   CheckCircle, Shield, Activity, Clock, Target, DollarSign,
   Users, Globe, Zap, Eye, Brain
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface MetricData {
   totalRisks: number;

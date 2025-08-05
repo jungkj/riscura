@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { formatDistanceToNow } from 'date-fns'
+// import { formatDistanceToNow } from 'date-fns';
 import { 
   Copy, 
   RotateCcw, 
@@ -19,10 +19,10 @@ import {
 } from 'lucide-react';
 
 import { ChatMessage as ChatMessageType, AISuggestion } from '@/hooks/useARIAChat';
-// import { AgentType } from '@/types/ai.types'
+// import { AgentType } from '@/types/ai.types';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard } from '@/components/ui/DaisyCard'
+// import { DaisyCard } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTooltip, DaisyTooltipContent, DaisyTooltipTrigger, DaisyTooltipWrapper } from '@/components/ui/DaisyTooltip';
 import { DaisyDropdownMenu, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyDropdownMenuTrigger, DaisyDropdownMenuSeparator } from '@/components/ui/DaisyDropdown';

@@ -7,7 +7,7 @@ import RealTimeDashboard from '@/components/dashboard/RealTimeDashboard';
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard'
+} from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { Database, Zap, Activity, Globe } from 'lucide-react';

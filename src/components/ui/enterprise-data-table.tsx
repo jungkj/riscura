@@ -50,7 +50,7 @@ import {
   Share,
   Settings,
   RefreshCw,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ========== TYPES ==========
 export interface ColumnDefinition<T = any> {
@@ -480,7 +480,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
             <DaisyInput
               placeholder="Search across all columns..."
               value={searchQuery}
-              onChange={(e) = />
+              onChange={(e) =>
 {
                 setSearchQuery(e.target.value);
                 onSearch?.(e.target.value);
@@ -690,7 +690,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                           
                           {column.filterable && (
                             <>
-                              <DaisyDropdownMenuSeparator / />
+                              <DaisyDropdownMenuSeparator />
 <DaisyDropdownMenuItem >
                                   <Filter className="h-3 w-3 mr-enterprise-1" />
                                 Add Filter
@@ -746,7 +746,7 @@ export const EnterpriseDataTable = <T extends Record<string, any>>({
                   <td className="w-12 p-enterprise-3">
                     <DaisyCheckbox
                       checked={selectedRows.has(rowIndex)}
-                      onCheckedChange={(checked) = />
+                      onCheckedChange={(checked) =>
 handleRowSelect(rowIndex, checked as boolean)}
                       onClick={(e) => e.stopPropagation()}
                       aria-label={`Select row ${rowIndex + 1}`} />

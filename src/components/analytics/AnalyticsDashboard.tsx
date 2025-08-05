@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-// import { ContentCard } from '@/components/layout/MainContentArea'
+// import { ContentCard } from '@/components/layout/MainContentArea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -34,14 +34,14 @@ import { DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, D
   Maximize2,
   Share,
   Settings,
-} from 'lucide-react'
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+} from 'lucide-react';
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyCalendar } from '@/components/ui/DaisyCalendar';
 import { DaisyPopover, DaisyPopoverContent, DaisyPopoverTrigger } from '@/components/ui/DaisyPopover';
 import { DaisyScrollArea } from '@/components/ui/DaisyScrollArea';
 import { toast } from 'sonner';
 import { CalendarIcon } from 'lucide-react';
-// import { format } from 'date-fns'
+// import { format } from 'date-fns';
 import {
   BarChart,
   Bar,
@@ -62,7 +62,7 @@ import {
 } from 'recharts';
 
 // Import our API services
-import { api, analyticsAPI } from '@/lib/mockData'
+import { api, analyticsAPI } from '@/lib/mockData';
 
 // ========== TYPES ==========
 export interface ChartData {
@@ -450,7 +450,7 @@ export const AnalyticsDashboard: React.FC<DashboardProps> = ({
       case 'progress-rings':
         return (
           <ChartContainer title={widget.title} {...commonProps}>
-            <DaisyProgressRingsPlaceholder data={widget.data} / / />
+            <DaisyProgressRingsPlaceholder data={widget.data} />
 </DaisyProgressRingsPlaceholder>
         );
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity } from 'lucide-react';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
@@ -365,7 +365,7 @@ export interface ProgressRingProps {
   className?: string;
 }
 
-export const ProgressRing: React.FC<DaisyProgressRingProps / />= ({
+export const ProgressRing: React.FC<DaisyProgressRingProps />= ({
   value,
   max = 100,
   size = 120,

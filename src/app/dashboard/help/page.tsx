@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -31,7 +31,7 @@ import {
   Shield,
   BarChart3,
   Users,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface HelpArticle {
   id: string;
@@ -194,7 +194,7 @@ export default function HelpPage() {
                 <DaisyInput
                   placeholder="Search help articles and FAQs..."
                   value={searchQuery}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setSearchQuery(e.target.value)}
                   className="pl-10" />
               </div>

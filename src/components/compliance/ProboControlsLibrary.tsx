@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -36,7 +36,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
   Database,
   Eye,
   Settings,
-} from 'lucide-react'
+} from 'lucide-react';
 import { ProboService, type ProboMitigation } from '@/services/ProboService';
 import { toast } from 'sonner';
 
@@ -242,7 +242,7 @@ export function ProboControlsLibrary() {
                     <DaisyInput
                       placeholder="Search controls by name, description, or category..."
                       value={searchQuery}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setSearchQuery(e.target.value)}
                       className="pl-10" />
                   </div>
@@ -321,7 +321,7 @@ setSearchQuery(e.target.value)}
                       <div className="flex items-start space-x-3">
                         <DaisyCheckbox
                           checked={selectedMitigations.has(mitigation.id)}
-                          onCheckedChange={() = />
+                          onCheckedChange={() =>
 handleMitigationToggle(mitigation.id)}
                           className="mt-1" />
                         <div className="flex-1 space-y-3">

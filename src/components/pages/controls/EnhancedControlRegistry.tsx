@@ -16,7 +16,7 @@ import { useControls } from '@/context/ControlContext';
 import { EnhancedControlService } from '@/services/EnhancedControlService';
 
 // UI Components
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -32,7 +32,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
   Plus, Search, Filter, Shield, Brain, BarChart3, TestTube, 
   CheckCircle, AlertTriangle, Clock, Users, Eye, Edit, 
   MoreHorizontal, Zap, Network, Calendar, RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface EnhancedControlRegistryProps {
   className?: string;
@@ -325,7 +325,7 @@ const EnhancedControlRegistry: React.FC<EnhancedControlRegistryProps> = ({ class
                   <DaisyInput
                     placeholder="Search controls by title, description, framework, or objective..."
                     value={searchQuery}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setSearchQuery(e.target.value)}
                     className="pl-10 notion-input" />
                 </div>
@@ -491,7 +491,7 @@ setSearchQuery(e.target.value)}
                         <div className="flex items-start gap-4">
                           <DaisyCheckbox
                             checked={selectedControls.includes(control.id)}
-                            onCheckedChange={(checked) = />
+                            onCheckedChange={(checked) =>
 {
                               setSelectedControls(prev => 
                                 checked 

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -41,7 +41,7 @@ import {
   MoreVertical, ArrowRight, ArrowDown, FileJson, 
   FileSpreadsheet, CheckCircle2, AlertTriangle,
   Grid3X3, MapPin, PenTool, Code2, Image
-} from 'lucide-react'
+} from 'lucide-react';
 
 import { 
   ADVANCED_QUESTION_TYPES,
@@ -708,7 +708,7 @@ export function EnhancedQuestionnaireBuilder({
                       <DaisyInput
                         id="title"
                         value={title}
-                        onChange={(e) = />
+                        onChange={(e) =>
 setTitle(e.target.value)}
                         placeholder="Enter questionnaire title" />
                     </div>
@@ -718,7 +718,7 @@ setTitle(e.target.value)}
                       <DaisyTextarea
                         id="description"
                         value={description}
-                        onChange={(e) = />
+                        onChange={(e) =>
 setDescription(e.target.value)}
                         placeholder="Enter questionnaire description"
                         rows={3} />
@@ -856,7 +856,7 @@ setDescription(e.target.value)}
                 ref={fileInputRef}
                 type="file"
                 accept=".json,.csv"
-                onChange={(e) = />
+                onChange={(e) =>
 {
                   const file = e.target.files?.[0]
                   if (file) importQuestionnaire(file);
@@ -1236,13 +1236,13 @@ const PreviewComponent = ({
                   {question.type === 'text' && (
                     <DaisyInput
                       placeholder="Enter your response..."
-                      onChange={(e) = />
+                      onChange={(e) =>
 onResponse(question.id, e.target.value)} />
                   )}
                   {question.type === 'textarea' && (
                     <DaisyTextarea
                       placeholder="Enter your response..."
-                      onChange={(e) = />
+                      onChange={(e) =>
 onResponse(question.id, e.target.value)} />
                   )}
                   {question.type === 'boolean' && (

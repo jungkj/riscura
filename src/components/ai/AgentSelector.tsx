@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-// import { AgentType } from '@/types/ai.types'
+// import { AgentType } from '@/types/ai.types';
 import { AI_AGENTS, type AgentConfig } from '@/config/ai-agents';
 // import {
   DaisyCard,
   DaisyCardBody,
   DaisyCardTitle,
   DaisyCardDescription,
-} from '@/components/ui/DaisyCard'
+} from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import {

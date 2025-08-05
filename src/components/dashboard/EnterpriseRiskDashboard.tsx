@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -24,7 +24,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   ArrowUpRight,
   ArrowDownRight,
   RefreshCw
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface RiskMetric {
   id: string;

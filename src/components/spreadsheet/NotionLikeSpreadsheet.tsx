@@ -478,7 +478,7 @@ export const NotionLikeSpreadsheet: React.FC<NotionLikeSpreadsheetProps> = ({
                           ) : (
                             <DaisyTextarea
                               value={editingCell.value}
-                              onChange={(e) = />
+                              onChange={(e) =>
 setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
                               onBlur={() => handleCellSave(editingCell.value)}
                               onKeyDown={(e) => {
@@ -581,7 +581,7 @@ setEditingCell(prev => prev ? { ...prev, value: e.target.value } : null)}
                 </label>
                 <DaisyTextarea
                   value={cellModal.cell.displayValue}
-                  onChange={(e) = />
+                  onChange={(e) =>
 {
                     const updatedCell = { ...cellModal.cell, displayValue: e.target.value, value: e.target.value }
                     setCellModal({ ...cellModal, cell: updatedCell });

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Shield, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';

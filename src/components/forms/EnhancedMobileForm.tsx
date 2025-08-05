@@ -33,7 +33,7 @@ import { motion, AnimatePresence } from 'framer-motion';
   List,
   ToggleLeft,
   ToggleRight,
-} from 'lucide-react'
+} from 'lucide-react';
 
 import {
   useDeviceInfo,

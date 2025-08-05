@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -19,7 +19,7 @@ import { DaisyTabsTrigger, DaisyCalendar } from '@/components/ui/daisy-component
   Plus, Brain, Zap, FileText, Users, Clock, Target, AlertTriangle,
   Eye, Edit, Copy, Share, Archive, Trash2, Play, Settings, ChevronDown,
   LineChart, Activity, DollarSign, Shield, Globe, Layers, Database
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 import type { 
@@ -29,7 +29,7 @@ import type {
   ReportGeneration,
   GenerationStatus,
   ExportFormat
-} from '@/types/reporting.types'
+} from '@/types/reporting.types';
 
 interface ReportingPageProps {
   view?: 'dashboard' | 'builder' | 'library' | 'scheduled' | 'analytics';

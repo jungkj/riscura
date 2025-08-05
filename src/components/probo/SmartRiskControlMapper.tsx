@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -45,7 +45,7 @@ import {
   Unlink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types'
+// import { ProboControl, RiskControlMapping, ProboAIAnalysis } from '@/types/probo-integration.types';
 import { ProboIntegrationService } from '@/services/ProboIntegrationService';
 
 interface Risk {
@@ -470,7 +470,7 @@ export default function SmartRiskControlMapper({
               <DaisyInput
                 placeholder="Search by title or description..."
                 value={searchTerm}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchTerm(e.target.value)} />
             </div>
             <div className="space-y-2">

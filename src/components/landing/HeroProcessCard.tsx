@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
 // import {
@@ -15,7 +15,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   Sparkles,
   AlertTriangle,
   BarChart3,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const HeroProcessCard = () => {
   const [currentStep, setCurrentStep] = useState(0);

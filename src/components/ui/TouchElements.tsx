@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
@@ -54,7 +54,7 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface TouchButtonProps {

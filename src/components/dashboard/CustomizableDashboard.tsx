@@ -9,7 +9,7 @@ import { Plus } from 'lucide-react';
   DataIcons,
   RiskManagementIcons,
   NavigationIcons,
-} from '@/components/icons/IconLibrary'
+} from '@/components/icons/IconLibrary';
 import { Brain, X, Plus } from 'lucide-react';
 import { LoadingStates } from '@/components/states/LoadingState';
 import { EmptyStates } from '@/components/states/EmptyState';

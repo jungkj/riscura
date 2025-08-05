@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -40,7 +40,7 @@ import {
   RadialBar,
   ComposedChart,
 } from 'recharts';
-// import {
+import {
   TrendingUp,
   TrendingDown,
   Activity,
@@ -62,7 +62,7 @@ import {
   Zap,
   Eye,
   Briefcase,
-} from 'lucide-react'
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Enhanced metric card component
@@ -81,7 +81,7 @@ const MetricCard = ({
     orange: 'bg-orange-50 text-orange-600',
     red: 'bg-red-50 text-red-600',
     purple: 'bg-purple-50 text-purple-600',
-  }
+  };
 
   return (
     <motion.div
@@ -125,7 +125,7 @@ const MetricCard = ({
       </DaisyCard>
     </motion.div>
   );
-}
+};
 
 // Chart color palette
 const COLORS = {
@@ -137,7 +137,7 @@ const COLORS = {
   teal: '#00796b',
   amber: '#fbc02d',
   pink: '#e91e63',
-}
+};
 
 export default function AnalyticsPage() {
   const { toast } = useToast();
@@ -168,7 +168,7 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -184,6 +184,7 @@ export default function AnalyticsPage() {
               <DaisySelect value={timeRange} onValueChange={setTimeRange}>
                 <DaisySelectTrigger className="w-40">
                   <DaisySelectValue />
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
                   <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>
@@ -211,7 +212,8 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.risks > 0 ? 'up' : 'down'}
             icon={AlertTriangle}
             color="red"
-            loading={loading} />
+            loading={loading}
+          />
           <MetricCard
             title="Active Controls"
             value={analyticsData?.totals?.controls || 0}
@@ -219,7 +221,8 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.controls > 0 ? 'up' : 'down'}
             icon={Shield}
             color="green"
-            loading={loading} />
+            loading={loading}
+          />
           <MetricCard
             title="Documents"
             value={analyticsData?.totals?.documents || 0}
@@ -227,7 +230,8 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.documents > 0 ? 'up' : 'down'}
             icon={FileText}
             color="blue"
-            loading={loading} />
+            loading={loading}
+          />
           <MetricCard
             title="Questionnaires"
             value={analyticsData?.totals?.questionnaires || 0}
@@ -235,7 +239,8 @@ export default function AnalyticsPage() {
             trend={analyticsData?.changes?.questionnaires > 0 ? 'up' : 'down'}
             icon={CheckCircle}
             color="purple"
-            loading={loading} />
+            loading={loading}
+          />
         </div>
 
         {/* Simplified Analytics Content */}

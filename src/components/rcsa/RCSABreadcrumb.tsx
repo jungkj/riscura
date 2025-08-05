@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-// import { ChevronRight, Home, Shield, BarChart3, FileText } from 'lucide-react'
+// import { ChevronRight, Home, Shield, BarChart3, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { useRCSA } from '@/context/RCSAContext';
 import { cn } from '@/lib/utils';

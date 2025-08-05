@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-// import { DatePickerWithRange } from '@/components/ui/date-range-picker'
+// import { DatePickerWithRange } from '@/components/ui/date-range-picker';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -24,7 +24,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   CheckCircle,
   Clock,
   Users
-} from 'lucide-react'
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { DateRange } from 'react-day-picker';
 
@@ -353,7 +353,7 @@ export default function ReportBuilder({ onGenerate, onSchedule, isGenerating = f
                 <DaisyInput
                   id="reportName"
                   value={config.name}
-                  onChange={(e) = />
+                  onChange={(e) =>
 setConfig(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Enter report name" />
               </div>
@@ -367,7 +367,7 @@ setConfig(prev => ({ ...prev, name: e.target.value }))}
                       <DaisyCheckbox
                         id={format}
                         checked={config.format.includes(format)}
-                        onCheckedChange={(checked) = />
+                        onCheckedChange={(checked) =>
 handleFormatChange(format, checked as boolean)} />
                       <DaisyLabel htmlFor={format} className="capitalize">{format}</DaisyCheckbox>
                     </div>
@@ -385,7 +385,7 @@ handleFormatChange(format, checked as boolean)} />
                         <DaisyCheckbox
                           id={param}
                           checked={config.parameters[param] || false}
-                          onCheckedChange={(checked) = />
+                          onCheckedChange={(checked) =>
 handleParameterChange(param, checked)} />
                         <DaisyLabel htmlFor={param} className="capitalize" >
                             {param.replace(/([A-Z])/g, ' $1').trim()}
@@ -491,7 +491,7 @@ handleParameterChange(param, checked)} />
                 <div className="flex gap-2">
                   <DaisyInput
                     value={emailInput}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setEmailInput(e.target.value)}
                     placeholder="Enter email address"
                     onKeyPress={(e) => e.key === 'Enter' && addRecipient()} />
@@ -517,7 +517,7 @@ setEmailInput(e.target.value)}
                   <DaisyCheckbox
                     id="scheduled"
                     checked={config.isScheduled}
-                    onCheckedChange={(checked) = />
+                    onCheckedChange={(checked) =>
 setConfig(prev => ({ ...prev, isScheduled: checked as boolean }))} />
                   <DaisyLabel htmlFor="scheduled" className="flex items-center gap-2" >
                       <DaisyCalendar className="h-4 w-4" />
@@ -554,7 +554,7 @@ Schedule this report
                         <DaisyLabel>Time</DaisyLabel>
                         <DaisyInput
                           type="time"
-                          onChange={(e) = />
+                          onChange={(e) =>
 setConfig(prev => ({
                               ...prev,
                               schedule: { ...prev.schedule, time: e.target.value, frequency: prev.schedule?.frequency || 'daily', timezone: prev.schedule?.timezone || 'UTC', enabled: prev.schedule?.enabled || false }

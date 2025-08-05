@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -19,7 +19,7 @@ import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components'
   Edit,
   ExternalLink
 } from 'lucide-react';
-// import { Risk, Control, RiskLevel } from '@/types/rcsa.types'
+// import { Risk, Control, RiskLevel } from '@/types/rcsa.types';
 import { useRCSA } from '@/context/RCSAContext';
 import { rcsaHelpers } from '@/lib/api/rcsa-client';
 

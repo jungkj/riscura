@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyTabs, DaisyTabsContent, DaisyTabsList, DaisyTabsTrigger } from '@/components/ui/DaisyTabs';
@@ -20,7 +20,7 @@ import { DaisyCardTitle, DaisyTabsTrigger, DaisyTooltip } from '@/components/ui/
   TrendingUp,
   Filter,
   Zap
-} from 'lucide-react'
+} from 'lucide-react';
 import {
   AreaChart,
   Area,
@@ -297,7 +297,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              <DaisyProgress value={metrics.complianceScore} className="mt-2" / / /> </DaisyCard>
+              <DaisyProgress value={metrics.complianceScore} className="mt-2" /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -310,7 +310,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <BarChart3 className="h-8 w-8 text-orange-600" />
               </div>
-              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" / / /> </DaisyCard>
+              <DaisyProgress value={metrics.avgRiskScore} className="mt-2" /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >
@@ -323,7 +323,7 @@ export const AISecurityDashboard: React.FC<AISecurityDashboardProps> = ({
                 </div>
                 <Eye className="h-8 w-8 text-blue-600" />
               </div>
-              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" / / /> </DaisyCard>
+              <DaisyProgress value={metrics.piiDetectionRate} className="mt-2" /> </DaisyCard>
 
           <DaisyCard >
   <DaisyCardBody className="p-4" >

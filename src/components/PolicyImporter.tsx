@@ -17,9 +17,9 @@ import { DaisyCardTitle, DaisyAccordion } from '@/components/ui/daisy-components
   X,
   FileUp,
   FilePlus2
-} from 'lucide-react'
+} from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyInput } from '@/components/ui/DaisyInput';
@@ -601,7 +601,7 @@ const PolicyImporter: React.FC<PolicyImporterProps> = ({
                               {risk.editing ? (
                                 <DaisyTextarea
                                   value={risk.text}
-                                  onChange={(e) = />
+                                  onChange={(e) =>
 updateRiskText(risk.id, e.target.value)}
                                   className="min-h-[80px]" />
                               ) : (
@@ -704,7 +704,7 @@ updateRiskText(risk.id, e.target.value)}
                               {control.editing ? (
                                 <DaisyTextarea
                                   value={control.text}
-                                  onChange={(e) = />
+                                  onChange={(e) =>
 updateControlText(control.id, e.target.value)}
                                   className="min-h-[80px]" />
                               ) : (

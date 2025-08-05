@@ -3,7 +3,7 @@ import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { cn } from '@/lib/utils';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
 

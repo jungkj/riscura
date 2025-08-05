@@ -1,5 +1,5 @@
 import React from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { 
@@ -19,7 +19,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Eye,
   Layout,
   Hand
-} from 'lucide-react'
+} from 'lucide-react';
 
 export const ResponsiveDesignSummary: React.FC = () => {
   return (

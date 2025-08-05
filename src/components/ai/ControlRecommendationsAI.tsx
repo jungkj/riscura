@@ -13,7 +13,7 @@ import { DaisyCardTitle, DaisyCardDescription, DaisySelectTrigger, DaisySelectCo
   Calendar
 } from 'lucide-react';
 
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
@@ -23,14 +23,14 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisySlider } from '@/components/ui/DaisySlider';
 
-// import { Risk, Control } from '@/types'
+// import { Risk, Control } from '@/types';
 // import { 
   controlRecommendationAIService,
   ControlRecommendation,
   ControlGapAnalysis,
   ImplementationPlan,
   CostBenefitAnalysis
-} from '@/services/ControlRecommendationAIService'
+} from '@/services/ControlRecommendationAIService';
 
 interface ControlRecommendationsAIProps {
   risks: Risk[];

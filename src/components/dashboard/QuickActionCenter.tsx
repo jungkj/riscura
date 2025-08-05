@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,7 @@ import { DaisyCardTitle, DaisyCalendar } from '@/components/ui/daisy-components'
   Plus, FileText, Shield, BarChart3, AlertTriangle, CheckCircle,
   Settings, Upload, Download, Eye, Target, Users, Calendar, Clock,
   Zap, Search, Filter, RefreshCw, Activity
-} from 'lucide-react'
+} from 'lucide-react';
 import Image from 'next/image';
 
 interface QuickActionCenterProps {

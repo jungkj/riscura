@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -33,7 +33,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   UserCheck,
   TrendingUp,
   TrendingDown,
-} from 'lucide-react'
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface VendorInfo {
@@ -247,7 +247,7 @@ export function VendorAssessmentDashboard() {
                     <DaisyInput
                       placeholder="https://example.com"
                       value={vendorUrl}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setVendorUrl(e.target.value)}
                       className="pl-10 border-[#D8C3A5] focus:border-[#199BEC]"
                       onKeyPress={(e) => e.key === 'Enter' && handleAssessVendor()} />

@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
 import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
@@ -56,7 +56,7 @@ import toast from 'react-hot-toast';
   TrendingUp,
   Plus,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface TeamMember {
@@ -569,7 +569,7 @@ export default function TeamDelegatePage() {
               <DaisyInput
                 placeholder="Search tasks..."
                 value={searchQuery}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>
@@ -885,7 +885,7 @@ setSearchQuery(e.target.value)}
                     id="title"
                     placeholder="Enter task title..."
                     value={newTask.title}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
                 </div>
 
@@ -895,7 +895,7 @@ setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
                     id="description"
                     placeholder="Describe the task requirements and objectives..."
                     value={newTask.description}
-                    onChange={(e) = />
+                    onChange={(e) =>
 setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     }
                     rows={3} />
@@ -981,7 +981,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                       id="dueDate"
                       type="date"
                       value={newTask.dueDate}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
                   </div>
                 </div>
@@ -994,7 +994,7 @@ setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
                       type="number"
                       placeholder="8"
                       value={newTask.estimatedHours}
-                      onChange={(e) = />
+                      onChange={(e) =>
 setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
                       } />
                   </div>
@@ -1036,7 +1036,7 @@ setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
                 <div className="flex gap-2">
                   <DaisyInput
                     placeholder="Add tag..."
-                    onKeyDown={(e) = />
+                    onKeyDown={(e) =>
 {
                       if (e.key === 'Enter') {
                         e.preventDefault();

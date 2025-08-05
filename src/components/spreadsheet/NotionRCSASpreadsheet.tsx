@@ -38,7 +38,7 @@ import { rcsaApiClient } from '@/lib/api/rcsa-client';
 //   ControlStatus,
 //   TestFrequency,
 //   AutomationLevel,
-// } from '@/types/rcsa.types'
+// } from '@/types/rcsa.types';
 import { cn } from '@/lib/utils';
 import { AIControlGenerator } from '@/components/probo/AIControlGenerator';
 import { useDebounce } from '@/hooks/useDebounce';

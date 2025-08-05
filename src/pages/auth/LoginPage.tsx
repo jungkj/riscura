@@ -32,8 +32,8 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { Loader2, Eye, EyeOff, Shield } from 'lucide-react';
 ;
 // Enhanced components
-// import { GlowingStarsBackground } from '@/components/ui/aceternity/glowing-stars-background'
-// import { HoverCard } from '@/components/ui/aceternity/hover-effect'
+// import { GlowingStarsBackground } from '@/components/ui/aceternity/glowing-stars-background';
+// import { HoverCard } from '@/components/ui/aceternity/hover-effect';
 import { FormErrorBoundary } from '@/components/ui/error-boundary';
 ;
 // Form schema

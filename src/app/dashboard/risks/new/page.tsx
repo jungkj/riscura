@@ -15,11 +15,11 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisySelectTrigger,
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { ArrowLeft, Save, X, Shield, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
-// import { useRisks } from '@/context/RiskContext'
+// import { useRisks } from '@/context/RiskContext';
 import { ToastProvider, useToastHelpers } from '@/components/ui/toast-system';
 import type { Document } from '@/types';
 
@@ -163,7 +163,7 @@ const NewRiskForm = () => {
                   <label className="text-sm font-medium text-gray-700">Risk Title *</label>
                   <DaisyInput
                     value={formData.title}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('title', e.target.value)}
                     placeholder="Enter a clear, descriptive title"
                     className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg"
@@ -193,7 +193,7 @@ handleInputChange('title', e.target.value)}
                 <label className="text-sm font-medium text-gray-700">Description *</label>
                 <DaisyTextarea
                   value={formData.description}
-                  onChange={(e) = />
+                  onChange={(e) =>
 handleInputChange('description', e.target.value)}
                   placeholder="Provide a detailed description of the risk, including potential causes and consequences"
                   className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg min-h-[120px]"
@@ -205,7 +205,7 @@ handleInputChange('description', e.target.value)}
                   <label className="text-sm font-medium text-gray-700">Risk Owner *</label>
                   <DaisyInput
                     value={formData.riskOwner}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('riskOwner', e.target.value)}
                     placeholder="Assign responsible person"
                     className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg"
@@ -216,7 +216,7 @@ handleInputChange('riskOwner', e.target.value)}
                   <label className="text-sm font-medium text-gray-700">Department</label>
                   <DaisyInput
                     value={formData.department}
-                    onChange={(e) = />
+                    onChange={(e) =>
 handleInputChange('department', e.target.value)}
                     placeholder="Department or business unit"
                     className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg" />
@@ -320,7 +320,7 @@ handleInputChange('department', e.target.value)}
                 <label className="text-sm font-medium text-gray-700">Tags</label>
                 <DaisyInput
                   value={formData.tags}
-                  onChange={(e) = />
+                  onChange={(e) =>
 handleInputChange('tags', e.target.value)}
                   placeholder="Enter tags separated by commas (e.g., cybersecurity, data breach, financial)"
                   className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg" />

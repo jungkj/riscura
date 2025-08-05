@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DaisyCardBody, DaisySelect, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue, DaisyDropdownMenu, DaisyDropdownMenuTrigger, DaisyDropdownMenuContent, DaisyDropdownMenuItem, DaisyTable, DaisyTableHeader, DaisyTableBody, DaisyTableRow, DaisyTableHead, DaisyTableCell } from '@/components/ui/daisy-components';
-// import { useRisks } from '@/context/RiskContext'
-// import { Risk, RiskCategory } from '@/types'
-// import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils'
+// import { useRisks } from '@/context/RiskContext';
+// import { Risk, RiskCategory } from '@/types';
+// import { formatDate, getRiskLevel, getRiskLevelColor } from '@/lib/utils';
 
 // UI Components
 import {
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard'
+// import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
 
 // Icons
@@ -51,7 +51,7 @@ import {
   Eye,
   Edit,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface RiskListViewProps {
   onCreateRisk?: () => void;
@@ -244,7 +244,7 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
               <DaisyInput
                 placeholder="Search risks..."
                 value={searchInput}
-                onChange={(e) = />
+                onChange={(e) =>
 setSearchInput(e.target.value)}
                 className="pl-10" />
             </div>
@@ -432,7 +432,7 @@ setSearchInput(e.target.value)}
                     <DaisyTableCell >
                       <DaisyCheckbox
                       checked={selectedRisks.includes(risk.id)}
-                      onCheckedChange={() = />
+                      onCheckedChange={() =>
 handleSelectRisk(risk.id)} />
                   </DaisyTableBody>
                   <DaisyTableCell >

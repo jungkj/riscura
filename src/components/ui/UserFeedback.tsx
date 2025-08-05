@@ -14,10 +14,10 @@ import { DaisyButton, DaisyLabel, DaisyInput, DaisyTextarea, DaisyDialog, DaisyD
   Star,
   Send,
   Loader2,
-} from 'lucide-react'
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Textarea } from './textarea';
 import { Input } from './input';
@@ -480,7 +480,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               id="message"
               placeholder="Please describe your feedback in detail..."
               value={formData.message}
-              onChange={(e) = />
+              onChange={(e) =>
 setFormData((prev) => ({ ...prev, message: e.target.value }))}
               rows={4}
               required />
@@ -494,7 +494,7 @@ setFormData((prev) => ({ ...prev, message: e.target.value }))}
               type="email"
               placeholder="your@email.com"
               value={formData.email}
-              onChange={(e) = />
+              onChange={(e) =>
 setFormData((prev) => ({ ...prev, email: e.target.value }))} />
             <p className="text-xs text-muted-foreground">
               We'll only use this to follow up on your feedback

@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -17,7 +17,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-// import {
+import {
   AlertTriangle,
   Shield,
   CheckCircle,
@@ -32,11 +32,11 @@ import toast from 'react-hot-toast';
   Plus,
   RefreshCw,
   Download,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface ComplianceGap {
-  id: string
+  id: string;
   framework: string;
   requirement: string;
   description: string;
@@ -116,7 +116,7 @@ const sampleFrameworks: Framework[] = [
     compliancePercentage: 70,
     priority: 'medium',
   },
-]
+];
 
 const sampleGaps: ComplianceGap[] = [
   {
@@ -201,9 +201,9 @@ const getPriorityConfig = (priority: string) => {
     high: { color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
     medium: { color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-200' },
     low: { color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-  }
+  };
   return configs[priority as keyof typeof configs] || configs.medium;
-}
+};
 
 const getStatusConfig = (status: string) => {
   const configs = {
@@ -211,9 +211,9 @@ const getStatusConfig = (status: string) => {
     'in-progress': { variant: 'secondary' as const, icon: Clock },
     resolved: { variant: 'default' as const, icon: CheckCircle },
     accepted: { variant: 'outline' as const, icon: Shield },
-  }
+  };
   return configs[status as keyof typeof configs] || configs.open;
-}
+};
 
 export default function ComplianceGapsPage() {
   const [selectedFramework, setSelectedFramework] = useState<string>('all');
@@ -225,7 +225,7 @@ export default function ComplianceGapsPage() {
   // Filter gaps based on selections
   const filteredGaps = sampleGaps.filter((gap) => {
     const matchesFramework =
-      selectedFramework === 'all' || gap.framework.toLowerCase().includes(selectedFramework)
+      selectedFramework === 'all' || gap.framework.toLowerCase().includes(selectedFramework);
     const matchesPriority = selectedPriority === 'all' || gap.priority === selectedPriority;
     const matchesStatus = selectedStatus === 'all' || gap.status === selectedStatus;
     return matchesFramework && matchesPriority && matchesStatus;
@@ -242,22 +242,22 @@ export default function ComplianceGapsPage() {
     setIsAnalyzing(true);
     try {
       // Simulate AI analysis
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       toast.success('Gap analysis completed! Found 3 new gaps and 5 optimization opportunities.');
     } catch (error) {
       toast.error('Failed to run gap analysis');
     } finally {
       setIsAnalyzing(false);
     }
-  }
+  };
 
   const handleCreateRemediationPlan = (gapId: string) => {
     toast.success(`Creating remediation plan for ${gapId}...`);
-  }
+  };
 
   const handleImplementControl = (controlId: string) => {
     toast.success(`Implementing control ${controlId}...`);
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -350,8 +350,8 @@ export default function ComplianceGapsPage() {
                           <span>Compliance</span>
                           <span className="font-medium">{framework.compliancePercentage}%</span>
                         </div>
-                        <DaisyProgress value={framework.compliancePercentage} className="h-2" / />
-<div className="grid grid-cols-2 gap-2 text-xs">
+                        <DaisyProgress value={framework.compliancePercentage} className="h-2" />
+                        <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <div className="font-medium text-green-600">
                               {framework.implementedRequirements}
@@ -500,8 +500,8 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                       <div className="space-y-4 mt-4">
-                        <DaisyProgress value={framework.compliancePercentage} className="h-3" / />
-<div className="grid grid-cols-3 gap-4 text-sm">
+                        <DaisyProgress value={framework.compliancePercentage} className="h-3" />
+                        <div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
                             <div className="font-medium text-gray-900">
                               {framework.totalRequirements}
