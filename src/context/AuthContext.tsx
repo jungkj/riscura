@@ -267,13 +267,22 @@ const authService = {
           body: JSON.stringify({ logoutType }),
         });
       } else {
-        // OAuth session logout
-        await fetch('/api/google-oauth/logout');
+        // OAuth session logout - also clear the cookie
+        await fetch('/api/google-oauth/logout', {
+          method: 'POST',
+          credentials: 'include', // Include cookies for logout
+        });
       }
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Continue with cleanup even if API fails
     } finally {
-      // Always clear both storage locations, even if API call fails
+      // Always clear both storage locations and force cookie cleanup
       localStorage.removeItem('accessToken');
       sessionStorage.removeItem('accessToken');
+      
+      // Force clear session cookie if it exists (backup cleanup)
+      document.cookie = 'session-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     }
   },
 
@@ -396,43 +405,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize authentication state on app load
   useEffect(() => {
     const initializeAuth = async () => {
-      // Check both localStorage and sessionStorage for token
-      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      console.log('[AuthContext] Starting auth initialization...');
       
-      // Also check for simple OAuth session
-      if (!token) {
-        try {
-          // Only check simple OAuth session (bypassing problematic NextAuth)
-          console.log('[AuthContext] Checking OAuth session...');
-          const oauthResponse = await fetch('/api/google-oauth/session');
+      // First priority: Check for Google OAuth session (cookie-based)
+      try {
+        console.log('[AuthContext] Checking for OAuth session cookie...');
+        const oauthResponse = await fetch('/api/google-oauth/session', {
+          credentials: 'include' // Ensure cookies are included
+        });
+        
+        if (oauthResponse.ok) {
           const oauthData = await oauthResponse.json();
-          console.log('[AuthContext] OAuth session response:', oauthData);
+          console.log('[AuthContext] OAuth session found:', { user: oauthData?.user?.email });
           
           if (oauthData && oauthData.user) {
-            // Convert simple OAuth user to AuthUser format
+            // Convert OAuth user to AuthUser format
             const authUser: AuthUser = {
               id: oauthData.user.id,
               email: oauthData.user.email,
               name: oauthData.user.name,
               firstName: oauthData.user.name?.split(' ')[0] || '',
-              lastName: oauthData.user.name?.split(' ')[1] || '',
-              role: (oauthData.user.role || 'user').toLowerCase() as any,
+              lastName: oauthData.user.name?.split(' ').slice(1).join(' ') || '',
+              role: (oauthData.user.role || 'user').toUpperCase() as any,
               isActive: true,
               emailVerified: true,
               organizationId: oauthData.user.organizationId || 'oauth-org',
-              permissions: [],
+              permissions: ['*'], // Grant full permissions for OAuth users
               avatar: oauthData.user.picture,
               createdAt: new Date().toISOString(),
               lastLogin: new Date().toISOString(),
             };
             
+            console.log('[AuthContext] OAuth user initialized:', { id: authUser.id, email: authUser.email, role: authUser.role });
             dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
             return;
           }
-        } catch (error) {
-          console.log('No OAuth session found:', error);
+        } else {
+          console.log('[AuthContext] No valid OAuth session found');
         }
-        
+      } catch (error) {
+        console.log('[AuthContext] OAuth session check failed:', error);
+      }
+
+      // Second priority: Check localStorage and sessionStorage for regular auth tokens
+      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+      console.log('[AuthContext] Checking for stored tokens:', { hasToken: !!token });
+      
+      if (!token) {
+        console.log('[AuthContext] No authentication found, setting unauthenticated state');
         dispatch({ type: 'AUTH_INITIALIZE', payload: null });
         return;
       }

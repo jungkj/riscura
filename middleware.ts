@@ -150,49 +150,82 @@ export async function middleware(request: NextRequest) {
     
     // Authentication check for protected routes
     if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-      // Check for NextAuth session token or simple OAuth session token
-      const sessionToken = request.cookies.get('next-auth.session-token')?.value || 
-                          request.cookies.get('__Secure-next-auth.session-token')?.value ||
-                          request.cookies.get('session-token')?.value; // Also check simple OAuth token
+      // Check for various session tokens
+      const nextAuthToken = request.cookies.get('next-auth.session-token')?.value || 
+                           request.cookies.get('__Secure-next-auth.session-token')?.value;
+      const oauthToken = request.cookies.get('session-token')?.value;
       
-      // Log for debugging
       console.log(`[Middleware] Auth check for ${pathname}:`, {
-        hasSessionToken: !!sessionToken,
-        cookies: request.cookies.getAll().map(c => c.name),
+        hasNextAuthToken: !!nextAuthToken,
+        hasOAuthToken: !!oauthToken,
+        allCookies: request.cookies.getAll().map(c => c.name),
       });
       
-      if (!sessionToken) {
+      // If no tokens found, redirect to login
+      if (!nextAuthToken && !oauthToken) {
+        console.log(`[Middleware] No valid session found, redirecting to login`);
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
-        url.searchParams.set('redirect', pathname);
+        url.searchParams.set('from', pathname); // Use 'from' parameter for consistency
         return NextResponse.redirect(url);
       }
       
-      // Validate simple OAuth session token
-      if (sessionToken && !sessionToken.includes('.')) {
+      // Validate OAuth session token if present
+      if (oauthToken && !nextAuthToken) {
         try {
-          const sessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
+          const sessionData = JSON.parse(Buffer.from(oauthToken, 'base64').toString());
           const isExpired = new Date(sessionData.expires) < new Date();
           
-          console.log(`[Middleware] Session validation:`, {
+          console.log(`[Middleware] OAuth session validation:`, {
             userEmail: sessionData.user?.email,
             expires: sessionData.expires,
             isExpired,
+            now: new Date().toISOString(),
           });
           
           if (isExpired) {
+            console.log(`[Middleware] OAuth session expired, clearing and redirecting`);
             const url = request.nextUrl.clone();
             url.pathname = '/auth/login';
-            url.searchParams.set('redirect', pathname);
+            url.searchParams.set('from', pathname);
             url.searchParams.set('reason', 'session_expired');
             response = NextResponse.redirect(url);
-            response.cookies.delete('session-token');
+            
+            // Clear expired session cookie
+            response.cookies.set('session-token', '', {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 0,
+              path: '/',
+            });
+            
             return response;
+          } else {
+            console.log(`[Middleware] Valid OAuth session found for ${sessionData.user?.email}`);
           }
         } catch (error) {
-          console.error('[Middleware] Failed to validate session:', error);
+          console.error('[Middleware] Failed to validate OAuth session:', error);
+          // Clear invalid session token
+          const url = request.nextUrl.clone();
+          url.pathname = '/auth/login';
+          url.searchParams.set('from', pathname);
+          url.searchParams.set('reason', 'invalid_session');
+          response = NextResponse.redirect(url);
+          
+          response.cookies.set('session-token', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 0,
+            path: '/',
+          });
+          
+          return response;
         }
       }
+      
+      console.log(`[Middleware] Authentication passed for ${pathname}`);
     }
     
     // Apply security headers
