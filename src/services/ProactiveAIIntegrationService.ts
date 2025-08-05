@@ -1,37 +1,36 @@
-// import {
+import {
   MonitoringTask,
-  MonitoringResult,;
-  ProactiveInsight,;
-  ActionRecommendation,;
-  SmartNotification,;
-  AnalysisType,;
-  InsightPriority,;
-  PerformanceMetrics,;
-  MonitoringFinding,;
-  UserContext,;
-  NotificationChannel,;
-  IntelligentPriority,;
-  PersonalizedContent,;
-  ContextualData,;
+  MonitoringResult,
+  ProactiveInsight,
+  ActionRecommendation,
+  SmartNotification,
+  AnalysisType,
+  InsightPriority,
+  PerformanceMetrics,
+  MonitoringFinding,
+  UserContext,
+  NotificationChannel,
+  IntelligentPriority,
+  PersonalizedContent,
+  ContextualData,
 } from '@/types/proactive-monitoring.types';
 // import { Risk, Control } from '@/types'
 import { generateId } from '@/lib/utils';
-;
 // Import AI services for real integration
 // import { AIService } from './AIService'
 // import { ComplianceAIService } from './ComplianceAIService'
 // import { RiskAnalysisAIService } from './RiskAnalysisAIService'
 // import { ControlRecommendationAIService } from './ControlRecommendationAIService'
-;
+
 // Enhanced AI processing interfaces
 export interface AIProcessingTask {
   id: string;
-  // type: // Fixed expression expected error
-    | 'risk_analysis';
-    | 'trend_analysis';
-    | 'compliance_check';
-    | 'insight_generation';
-    | 'prediction';
+  type:
+    | 'risk_analysis'
+    | 'trend_analysis'
+    | 'compliance_check'
+    | 'insight_generation'
+    | 'prediction'
     | 'notification_generation';
   priority: 'critical' | 'high' | 'medium' | 'low';
   targetEntity: {
@@ -120,26 +119,26 @@ export class ProactiveAIIntegrationService {
   private isProcessing: boolean = false;
 ;
   private config: BackgroundProcessingConfig = {
-    batchSize: 5,;
+    batchSize: 5,
     processingInterval: 10000, // 10 seconds;
-    maxConcurrentTasks: 3,;
+    maxConcurrentTasks: 3,
     retrySettings: {
-      maxRetries: 3,;
-      backoffMultiplier: 2,;
+      maxRetries: 3,
+      backoffMultiplier: 2,
       maxBackoffDelay: 60000, // 1 minute;
-    },;
+    },
     priorityWeights: {
-      critical: 10,;
-      high: 7,;
-      medium: 4,;
-      low: 1,;
-    },;
+      critical: 10,
+      high: 7,
+      medium: 4,
+      low: 1,
+    },
   }
 ;
   constructor(;
-    aiService?: AIService,;
-    complianceAIService?: ComplianceAIService,;
-    riskAnalysisAIService?: RiskAnalysisAIService,;
+    aiService?: AIService,
+    complianceAIService?: ComplianceAIService,
+    riskAnalysisAIService?: RiskAnalysisAIService,
     controlRecommendationAIService?: ControlRecommendationAIService;
   ) {
     this.aiService = aiService || new AIService();
@@ -154,13 +153,13 @@ export class ProactiveAIIntegrationService {
    */
   async startBackgroundProcessing(): Promise<void> {
     if (this.backgroundProcessor) {
-      // console.warn('Background processing is already running')
+      /* console.warn('Background processing is already running') */
       return;
     }
 
-    // console.log('Starting background AI processing...')
+    /* console.log('Starting background AI processing...') */
     this.backgroundProcessor = setInterval(;
-      () => this.processBatch(),;
+      () => this.processBatch(),
       this.config.processingInterval;
     );
   }
@@ -172,7 +171,7 @@ export class ProactiveAIIntegrationService {
     if (this.backgroundProcessor) {
       clearInterval(this.backgroundProcessor);
       this.backgroundProcessor = null;
-      // console.log('Background AI processing stopped')
+      /* console.log('Background AI processing stopped') */
     }
 
     // Wait for active tasks to complete
@@ -184,52 +183,52 @@ export class ProactiveAIIntegrationService {
   /**;
    * Queue a task for AI processing;
    */
-  async queueAITask(_task: Omit<AIProcessingTask, 'id' | 'status' | 'retryCount'>): Promise<string> {
+  async queueAITask(task: Omit<AIProcessingTask, 'id' | 'status' | 'retryCount'>): Promise<string> {
     const aiTask: AIProcessingTask = {
-      ...task,;
-      id: generateId('ai-task'),;
-      status: 'pending',;
-      retryCount: 0,;
+      ...task,
+      id: generateId('ai-task'),
+      status: 'pending',
+      retryCount: 0,
     }
 ;
     this.processingQueue.push(aiTask);
     this.sortQueueByPriority();
 ;
-    // console.log(
-      `Queued AI task: ${aiTask.type} for ${aiTask.targetEntity.type}:${aiTask.targetEntity.id}`;
-    );
+    /* console.log(
+      `Queued AI task: ${aiTask.type} for ${aiTask.targetEntity.type}:${aiTask.targetEntity.id}`
+    ); */
     return aiTask.id;
   }
 
   /**;
    * Generate intelligent insights from data;
    */
-  async generateIntelligentInsights(_entityId: string,;
-    entityType: 'risk' | 'control' | 'process' | 'compliance',;
+  async generateIntelligentInsights(entityId: string,
+    entityType: 'risk' | 'control' | 'process' | 'compliance',
     context: Record<string, unknown> = {}
   ): Promise<IntelligentInsight[]> {
     const taskId = await this.queueAITask({
-      type: 'insight_generation',;
-      priority: 'high',;
+      type: 'insight_generation',
+      priority: 'high',
       targetEntity: {
-        id: entityId,;
-        type: entityType,;
-        data: context,;
-      },;
-      aiModel: 'gpt-4',;
+        id: entityId,
+        type: entityType,
+        data: context,
+      },
+      aiModel: 'gpt-4',
       context: {
-        ...context,;
-        timestamp: new Date().toISOString(),;
-        requestType: 'insight_generation',;
-      },;
-      scheduledAt: new Date(),;
-      maxRetries: 3,;
+        ...context,
+        timestamp: new Date().toISOString(),
+        requestType: 'insight_generation',
+      },
+      scheduledAt: new Date(),
+      maxRetries: 3,
     });
 ;
     // Wait for processing (in real implementation, this would be async)
     await this.waitForTaskCompletion(taskId);
 ;
-    const _result = this.processingResults.get(taskId);
+    const result = this.processingResults.get(taskId);
     if (!result) {
       throw new Error('Failed to generate insights');
     }
@@ -240,34 +239,34 @@ export class ProactiveAIIntegrationService {
   /**;
    * Perform predictive risk modeling;
    */
-  async performPredictiveRiskModeling(_risks: Risk[],;
-    controls: Control[],;
+  async performPredictiveRiskModeling(risks: Risk[],
+    controls: Control[],
     historicalData: unknown[] = [];
   ): Promise<PredictiveResult[]> {
     const predictions: PredictiveResult[] = [];
 ;
     for (const risk of risks) {
       const taskId = await this.queueAITask({
-        type: 'prediction',;
-        priority: 'high',;
+        type: 'prediction',
+        priority: 'high',
         targetEntity: {
-          id: risk.id,;
-          type: 'risk',;
-          data: { risk, controls, historicalData },;
-        },;
-        aiModel: 'gpt-4',;
+          id: risk.id,
+          type: 'risk',
+          data: { risk, controls, historicalData },
+        },
+        aiModel: 'gpt-4',
         context: {
-          riskContext: risk,;
-          controlsContext: controls.filter((c) => c.linkedRisks?.includes(risk.id)),;
-          historicalContext: historicalData,;
-          timestamp: new Date().toISOString(),;
-        },;
-        scheduledAt: new Date(),;
-        maxRetries: 3,;
+          riskContext: risk,
+          controlsContext: controls.filter((c) => c.linkedRisks?.includes(risk.id)),
+          historicalContext: historicalData,
+          timestamp: new Date().toISOString(),
+        },
+        scheduledAt: new Date(),
+        maxRetries: 3,
       });
 ;
       await this.waitForTaskCompletion(taskId);
-      const _result = this.processingResults.get(taskId);
+      const result = this.processingResults.get(taskId);
       if (result) {
         predictions.push(...result.predictions);
       }
@@ -279,39 +278,39 @@ export class ProactiveAIIntegrationService {
   /**;
    * Generate AI-powered smart notifications;
    */
-  async generateSmartNotifications(_userId: string,;
-    context: UserContext,;
+  async generateSmartNotifications(userId: string,
+    context: UserContext,
     triggers: unknown[] = [];
   ): Promise<SmartNotification[]> {
     const taskId = await this.queueAITask({
-      type: 'notification_generation',;
-      priority: 'medium',;
+      type: 'notification_generation',
+      priority: 'medium',
       targetEntity: {
-        id: userId,;
-        type: 'system',;
-        data: { context, triggers },;
-      },;
-      aiModel: 'gpt-3.5-turbo',;
+        id: userId,
+        type: 'system',
+        data: { context, triggers },
+      },
+      aiModel: 'gpt-3.5-turbo',
       context: {
-        userContext: context,;
-        triggers,;
-        timestamp: new Date().toISOString(),;
-      },;
-      scheduledAt: new Date(),;
-      maxRetries: 2,;
+        userContext: context,
+        triggers,
+        timestamp: new Date().toISOString(),
+      },
+      scheduledAt: new Date(),
+      maxRetries: 2,
     });
 ;
     await this.waitForTaskCompletion(taskId);
-    const _result = this.processingResults.get(taskId);
+    const result = this.processingResults.get(taskId);
     return result?.notifications || [];
   }
 
   /**;
    * Analyze trends with AI-powered insights;
    */
-  async analyzeAITrends(_entityId: string,;
-    entityType: string,;
-    timeSeriesData: unknown[],;
+  async analyzeAITrends(entityId: string,
+    entityType: string,
+    timeSeriesData: unknown[],
     context: Record<string, unknown> = {}
   ): Promise<{
     trends: unknown[];
@@ -319,63 +318,63 @@ export class ProactiveAIIntegrationService {
     predictions: PredictiveResult[];
   }> {
     const taskId = await this.queueAITask({
-      type: 'trend_analysis',;
-      priority: 'medium',;
+      type: 'trend_analysis',
+      priority: 'medium',
       targetEntity: {
-        id: entityId,;
-        type: entityType as 'risk' | 'control' | 'process' | 'compliance' | 'system',;
-        data: { timeSeriesData, context },;
-      },;
-      aiModel: 'gpt-4',;
+        id: entityId,
+        type: entityType as 'risk' | 'control' | 'process' | 'compliance' | 'system',
+        data: { timeSeriesData, context },
+      },
+      aiModel: 'gpt-4',
       context: {
-        timeSeriesData,;
-        entityContext: context,;
-        analysisType: 'trend_analysis',;
-        timestamp: new Date().toISOString(),;
-      },;
-      scheduledAt: new Date(),;
-      maxRetries: 3,;
+        timeSeriesData,
+        entityContext: context,
+        analysisType: 'trend_analysis',
+        timestamp: new Date().toISOString(),
+      },
+      scheduledAt: new Date(),
+      maxRetries: 3,
     });
 ;
     await this.waitForTaskCompletion(taskId);
-    const _result = this.processingResults.get(taskId);
+    const result = this.processingResults.get(taskId);
 ;
     return {
       trends: [] as unknown[], // Would be populated by AI analysis;
-      insights: result?.insights || ([] as ProactiveInsight[]),;
-      predictions: result?.predictions || ([] as PredictiveResult[]),;
+      insights: result?.insights || ([] as ProactiveInsight[]),
+      predictions: result?.predictions || ([] as PredictiveResult[]),
     }
   }
 
   /**;
    * Get real-time AI recommendations;
    */
-  async getRealtimeRecommendations(_entityId: string,;
-    entityType: 'risk' | 'control' | 'process' | 'compliance',;
+  async getRealtimeRecommendations(entityId: string,
+    entityType: 'risk' | 'control' | 'process' | 'compliance',
     urgency: 'immediate' | 'high' | 'medium' | 'low' = 'medium';
   ): Promise<ActionRecommendation[]> {
     const priority = this.mapUrgencyToPriority(urgency);
 ;
     const taskId = await this.queueAITask({
-      type: 'insight_generation',;
-      priority,;
+      type: 'insight_generation',
+      priority,
       targetEntity: {
-        id: entityId,;
-        type: entityType,;
-        data: { urgency, timestamp: new Date() },;
-      },;
-      aiModel: urgency === 'immediate' ? 'gpt-4' : 'gpt-3.5-turbo',;
+        id: entityId,
+        type: entityType,
+        data: { urgency, timestamp: new Date() },
+      },
+      aiModel: urgency === 'immediate' ? 'gpt-4' : 'gpt-3.5-turbo',
       context: {
-        urgency,;
-        realtimeRequest: true,;
-        timestamp: new Date().toISOString(),;
-      },;
-      scheduledAt: new Date(),;
-      maxRetries: urgency === 'immediate' ? 1 : 3,;
+        urgency,
+        realtimeRequest: true,
+        timestamp: new Date().toISOString(),
+      },
+      scheduledAt: new Date(),
+      maxRetries: urgency === 'immediate' ? 1 : 3,
     });
 ;
     await this.waitForTaskCompletion(taskId);
-    const _result = this.processingResults.get(taskId);
+    const result = this.processingResults.get(taskId);
     return result?.recommendations || [];
   }
 
@@ -389,7 +388,7 @@ export class ProactiveAIIntegrationService {
 
     this.isProcessing = true;
     const batchSize = Math.min(;
-      this.config.batchSize,;
+      this.config.batchSize,
       this.config.maxConcurrentTasks - this.activeProcessingTasks.size;
     );
 ;
@@ -404,7 +403,7 @@ export class ProactiveAIIntegrationService {
     try {
       await Promise.allSettled(processingPromises);
     } catch (error) {
-      // console.error('Error processing AI batch:', error)
+      /* console.error('Error processing AI batch:', error) */
     } finally {
       this.isProcessing = false;
     }
@@ -413,28 +412,28 @@ export class ProactiveAIIntegrationService {
   /**;
    * Process individual AI task;
    */
-  private async processAITask(_task: AIProcessingTask): Promise<void> {
+  private async processAITask(task: AIProcessingTask): Promise<void> {
     this.activeProcessingTasks.set(task.id, { ...task, status: 'processing' });
     const startTime = Date.now();
 ;
     try {
-      const _result = await this.executeAITask(task);
+      const result = await this.executeAITask(task);
 ;
       const processingResult: AIProcessingResult = {
-        taskId: task.id,;
-        ...result,;
-        processingTime: Date.now() - startTime,;
+        taskId: task.id,
+        ...result,
+        processingTime: Date.now() - startTime,
         tokenUsage: {
-          prompt: 100,;
-          completion: 200,;
-          total: 300,;
-        },;
+          prompt: 100,
+          completion: 200,
+          total: 300,
+        },
       }
 ;
       this.processingResults.set(task.id, processingResult);
-      // console.log(`Completed AI task: ${task.type} in ${processingResult.processingTime}ms`)
+      /* console.log(`Completed AI task: ${task.type} in ${processingResult.processingTime}ms`) */
     } catch (error) {
-      // console.error(`Error processing AI task ${task.id}:`, error)
+      /* console.error(`Error processing AI task ${task.id}:`, error) */
 ;
       if (task.retryCount < task.maxRetries) {
         task.retryCount++;
@@ -442,7 +441,7 @@ export class ProactiveAIIntegrationService {
 ;
         // Add delay before retry
         const delay = Math.min(;
-          this.config.retrySettings.backoffMultiplier ** task.retryCount * 1000,;
+          this.config.retrySettings.backoffMultiplier ** task.retryCount * 1000,
           this.config.retrySettings.maxBackoffDelay;
         );
 ;
@@ -451,9 +450,9 @@ export class ProactiveAIIntegrationService {
           this.sortQueueByPriority();
         }, delay);
 ;
-        // console.log(`Retrying AI task ${task.id} (attempt ${task.retryCount + 1})`)
+        /* console.log(`Retrying AI task ${task.id} (attempt ${task.retryCount + 1})`) */
       } else {
-        // console.error(`Failed AI task ${task.id} after ${task.maxRetries} retries`)
+        /* console.error(`Failed AI task ${task.id} after ${task.maxRetries} retries`) */
       }
     } finally {
       this.activeProcessingTasks.delete(task.id);
@@ -463,7 +462,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute specific AI task based on type;
    */
-  private async executeAITask(_task: AIProcessingTask): Promise<{
+  private async executeAITask(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -489,7 +488,7 @@ export class ProactiveAIIntegrationService {
       case 'notification_generation':;
         return await this.executeNotificationGeneration(task);
 ;
-      // default: // Fixed expression expected error
+      default:
         throw new Error(`Unknown AI task type: ${task.type}`);
     }
   }
@@ -497,7 +496,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute risk analysis with AI;
    */
-  private async executeRiskAnalysis(_task: AIProcessingTask): Promise<{
+  private async executeRiskAnalysis(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -511,7 +510,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute trend analysis with AI;
    */
-  private async executeTrendAnalysis(_task: AIProcessingTask): Promise<{
+  private async executeTrendAnalysis(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -525,7 +524,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute compliance check with AI;
    */
-  private async executeComplianceCheck(_task: AIProcessingTask): Promise<{
+  private async executeComplianceCheck(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -539,7 +538,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute insight generation with AI;
    */
-  private async executeInsightGeneration(_task: AIProcessingTask): Promise<{
+  private async executeInsightGeneration(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -553,7 +552,7 @@ export class ProactiveAIIntegrationService {
   /**;
    * Execute prediction with AI;
    */
-  private async executePrediction(_task: AIProcessingTask): Promise<{
+  private async executePrediction(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -563,30 +562,30 @@ export class ProactiveAIIntegrationService {
     const riskData = task.targetEntity.data as { risk: Risk }
 ;
     return {
-      insights: [] as ProactiveInsight[],;
-      recommendations: [] as ActionRecommendation[],;
+      insights: [] as ProactiveInsight[],
+      recommendations: [] as ActionRecommendation[],
       predictions: [;
         {
-          id: generateId('prediction'),;
-          type: 'risk_emergence',;
-          prediction: `Risk level for ${riskData.risk.title} may increase by 15% over next 3 months`,;
-          probability: 0.7,;
-          timeframe: '3 months',;
-          confidence: 0.8,;
-          factors: ['Historical trend', 'Industry patterns', 'Current risk score'],;
-          mitigation: ['Implement additional controls', 'Increase monitoring frequency'],;
-          impact: 'medium',;
-        },;
-      ],;
-      notifications: [] as SmartNotification[],;
-      confidence: 0.8,;
+          id: generateId('prediction'),
+          type: 'risk_emergence',
+          prediction: `Risk level for ${riskData.risk.title} may increase by 15% over next 3 months`,
+          probability: 0.7,
+          timeframe: '3 months',
+          confidence: 0.8,
+          factors: ['Historical trend', 'Industry patterns', 'Current risk score'],
+          mitigation: ['Implement additional controls', 'Increase monitoring frequency'],
+          impact: 'medium',
+        },
+      ],
+      notifications: [] as SmartNotification[],
+      confidence: 0.8,
     }
   }
 
   /**;
    * Execute notification generation with AI;
    */
-  private async executeNotificationGeneration(_task: AIProcessingTask): Promise<{
+  private async executeNotificationGeneration(task: AIProcessingTask): Promise<{
     insights: ProactiveInsight[];
     recommendations: ActionRecommendation[];
     predictions: PredictiveResult[];
@@ -619,30 +618,30 @@ export class ProactiveAIIntegrationService {
     throw new Error(`Task ${taskId} timed out`);
   }
 
-  private convertToIntelligentInsights(_insights: ProactiveInsight[]): IntelligentInsight[] {
+  private convertToIntelligentInsights(insights: ProactiveInsight[]): IntelligentInsight[] {
     return insights.map((insight) => ({
-      id: insight.id,;
-      category: insight.category as any,;
-      title: insight.title,;
-      description: insight.description,;
-      priority: insight.priority,;
-      confidence: insight.confidence,;
-      evidence: [] as string[],;
-      actionable: true,;
-      recommendations: [] as ActionRecommendation[],;
-      affectedEntities: [] as string[],;
-      timeframe: '1-30 days',;
-      aiGenerated: true,;
-      generatedAt: insight.createdAt,;
+      id: insight.id,
+      category: insight.category as any,
+      title: insight.title,
+      description: insight.description,
+      priority: insight.priority,
+      confidence: insight.confidence,
+      evidence: [] as string[],
+      actionable: true,
+      recommendations: [] as ActionRecommendation[],
+      affectedEntities: [] as string[],
+      timeframe: '1-30 days',
+      aiGenerated: true,
+      generatedAt: insight.createdAt,
     }));
   }
 
   private mapUrgencyToPriority(urgency: string): 'critical' | 'high' | 'medium' | 'low' {
     const mapping: Record<string, 'critical' | 'high' | 'medium' | 'low'> = {
-      immediate: 'critical',;
-      high: 'high',;
-      medium: 'medium',;
-      low: 'low',;
+      immediate: 'critical',
+      high: 'high',
+      medium: 'medium',
+      low: 'low',
     }
     return mapping[urgency] || 'medium';
   }
@@ -656,34 +655,34 @@ export class ProactiveAIIntegrationService {
 
   private convertToActionRecommendation(rec: unknown): ActionRecommendation {
     return {
-      id: generateId('action'),;
-      type: 'short_term',;
-      priority: 'medium',;
-      title: 'AI Recommendation',;
-      description: 'AI-generated recommendation',;
-      rationale: 'Based on AI analysis',;
-      expectedOutcome: 'Improved risk management',;
-      effort: 'medium',;
-      timeline: '2-4 weeks',;
-      resources: [] as string[],;
-      dependencies: [] as string[],;
-      successCriteria: [] as string[],;
+      id: generateId('action'),
+      type: 'short_term',
+      priority: 'medium',
+      title: 'AI Recommendation',
+      description: 'AI-generated recommendation',
+      rationale: 'Based on AI analysis',
+      expectedOutcome: 'Improved risk management',
+      effort: 'medium',
+      timeline: '2-4 weeks',
+      resources: [] as string[],
+      dependencies: [] as string[],
+      successCriteria: [] as string[],
     }
   }
 
-  private generateRiskPredictions(_risk: Risk, analysis: unknown): PredictiveResult[] {
+  private generateRiskPredictions(risk: Risk, analysis: unknown): PredictiveResult[] {
     return [;
       {
-        id: generateId('prediction'),;
-        type: 'risk_emergence',;
-        prediction: `Risk ${risk.title} shows trending patterns`,;
-        probability: 0.7,;
-        timeframe: '3 months',;
-        confidence: 0.8,;
-        factors: ['Historical data', 'Current controls'],;
-        mitigation: ['Enhanced monitoring'],;
-        impact: 'medium',;
-      },;
+        id: generateId('prediction'),
+        type: 'risk_emergence',
+        prediction: `Risk ${risk.title} shows trending patterns`,
+        probability: 0.7,
+        timeframe: '3 months',
+        confidence: 0.8,
+        factors: ['Historical data', 'Current controls'],
+        mitigation: ['Enhanced monitoring'],
+        impact: 'medium',
+      },
     ];
   }
 
@@ -695,11 +694,11 @@ export class ProactiveAIIntegrationService {
     confidence: number;
   } {
     return {
-      insights: [] as ProactiveInsight[],;
-      recommendations: [] as ActionRecommendation[],;
-      predictions: [] as PredictiveResult[],;
-      notifications: [] as SmartNotification[],;
-      confidence: 0,;
+      insights: [] as ProactiveInsight[],
+      recommendations: [] as ActionRecommendation[],
+      predictions: [] as PredictiveResult[],
+      notifications: [] as SmartNotification[],
+      confidence: 0,
     }
   }
 
@@ -711,16 +710,16 @@ export class ProactiveAIIntegrationService {
     isProcessing: boolean;
   } {
     return {
-      queueSize: this.processingQueue.length,;
-      activeTasksCount: this.activeProcessingTasks.size,;
-      completedTasksCount: this.processingResults.size,;
-      isProcessing: this.isProcessing,;
+      queueSize: this.processingQueue.length,
+      activeTasksCount: this.activeProcessingTasks.size,
+      completedTasksCount: this.processingResults.size,
+      isProcessing: this.isProcessing,
     }
   }
 
   getProcessingResults(taskId?: string): AIProcessingResult[] {
     if (taskId) {
-      const _result = this.processingResults.get(taskId);
+      const result = this.processingResults.get(taskId);
       return result ? [result] : [];
     }
     return Array.from(this.processingResults.values());
@@ -737,4 +736,3 @@ export class ProactiveAIIntegrationService {
 
 // Export singleton instance
 export const proactiveAIIntegrationService = new ProactiveAIIntegrationService();
-;

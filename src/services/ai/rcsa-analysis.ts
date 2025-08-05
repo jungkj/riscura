@@ -1,27 +1,25 @@
 import { OpenAI } from 'openai';
 import { RCSARowData, COLUMN_MAPPINGS } from '@/lib/rcsa/parser';
-// import {
+import {
   RiskCategory,
-  RiskStatus,;
-  ControlType,;
-  ControlCategory,;
-  AutomationLevel,;
+  RiskStatus,
+  ControlType,
+  ControlCategory,
+  AutomationLevel,
 } from '@/types/rcsa.types';
-;
 // Validate OpenAI API key at module initialization
 if (!process.env.OPENAI_API_KEY) {
-  // console.error(
-    '[RCSA Analysis] OpenAI API key is not configured. AI analysis features will be unavailable.';
-  );
+  /* console.error(
+    '[RCSA Analysis] OpenAI API key is not configured. AI analysis features will be unavailable.'
+  ); */
 }
 
 // Create OpenAI instance only if API key is available
-const openai = process.env.OPENAI_API_KEY;
+const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,;
-    });
+      apiKey: process.env.OPENAI_API_KEY,
+    })
   : null;
-;
 export interface RCSAGapAnalysis {
   overallAssessment: string;
   completenessScore: number;
@@ -84,23 +82,22 @@ export interface MappedControl {
   sourceRow: number;
 }
 
-const SYSTEM_PROMPT = `You are an expert risk and compliance analyst specializing in RCSA (Risk and Control Self-Assessment) gap analysis.;
-Your task is to analyze RCSA data and provide:;
-1. Comprehensive gap analysis identifying missing or incomplete information;
-2. Risk assessment quality evaluation;
-3. Control effectiveness analysis;
-4. Compliance and regulatory alignment check;
-5. Recommendations for improvement;
-6. Properly mapped and structured risk and control data;
-Focus on:;
-- Data completeness and quality;
-- Risk assessment methodology correctness;
-- Control design and operating effectiveness;
-- Regulatory compliance requirements;
-- Industry best practices;
-- Clear risk-control relationships;
+const SYSTEM_PROMPT = `You are an expert risk and compliance analyst specializing in RCSA (Risk and Control Self-Assessment) gap analysis.
+Your task is to analyze RCSA data and provide:
+1. Comprehensive gap analysis identifying missing or incomplete information
+2. Risk assessment quality evaluation
+3. Control effectiveness analysis
+4. Compliance and regulatory alignment check
+5. Recommendations for improvement
+6. Properly mapped and structured risk and control data
+Focus on:
+- Data completeness and quality
+- Risk assessment methodology correctness
+- Control design and operating effectiveness
+- Regulatory compliance requirements
+- Industry best practices
+- Clear risk-control relationships
 Provide actionable recommendations with specific priorities.`;
-;
 const mapLikelihoodRating = (rating?: string): number {
   if (!rating) return 3;
   const lower = rating.toLowerCase();
@@ -132,9 +129,8 @@ const mapRiskCategory = (category?: string): RiskCategory {
   if (lower.includes('compliance') || lower.includes('regulatory')) return RiskCategory.COMPLIANCE;
   if (lower.includes('strategic')) return RiskCategory.STRATEGIC;
   if (lower.includes('reputation')) return RiskCategory.REPUTATIONAL;
-  if (lower.includes('cyber') || lower.includes('it') || lower.includes('technology'));
+  if (lower.includes('cyber') || lower.includes('it') || lower.includes('technology'))
     return RiskCategory.IT_CYBER;
-;
   return RiskCategory.OPERATIONAL;
 }
 
@@ -169,33 +165,31 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
   try {
     // Check if OpenAI is available
     if (!openai) {
-      // console.warn('[RCSA Analysis] OpenAI not configured, falling back to basic analysis')
+      /* console.warn('[RCSA Analysis] OpenAI not configured, falling back to basic analysis') */
       return performBasicAnalysis(rows);
     }
 
     // Prepare data for AI analysis
     const analysisData = {
-      rowCount: rows.length,;
+      rowCount: rows.length,
       rows: rows.map((row, index) => ({
-        rowNumber: index + 1,;
-        ...row,;
-      })),;
+        rowNumber: index + 1,
+        ...row,
+      })),
     }
-;
     // Call OpenAI for gap analysis
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',;
-      messages: [;
-        { role: 'system', content: SYSTEM_PROMPT },;
+      model: 'gpt-4-turbo-preview',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
         {
-          role: 'user',;
-          content: `Analyze this RCSA data and provide a comprehensive gap analysis:\n\n${JSON.stringify(analysisData, null, 2)}`,;
-        },;
-      ],;
-      response_format: { type: 'json_object' },;
-      temperature: 0.3,;
+          role: 'user',
+          content: `Analyze this RCSA data and provide a comprehensive gap analysis:\n\n${JSON.stringify(analysisData, null, 2)}`,
+        },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.3,
     });
-;
     // Track token usage
     if (completion.usage) {
       /* console.log('[RCSA Analysis] Token usage:', {
@@ -217,28 +211,28 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
       if (row.riskStatement || row.riskEvent) {
         const riskId = `RISK-${index + 1}`;
         const risk: MappedRisk = {
-          externalId: riskId,;
-          title: row.riskStatement || row.riskEvent || 'Untitled Risk',;
+          externalId: riskId,
+          title: row.riskStatement || row.riskEvent || 'Untitled Risk',
           description: [;
-            row.riskDriver && `Driver: ${row.riskDriver}`,;
-            row.riskEvent && `Event: ${row.riskEvent}`,;
-            row.riskImpact && `Impact: ${row.riskImpact}`,;
-            row.riskStatement,;
+            row.riskDriver && `Driver: ${row.riskDriver}`,
+            row.riskEvent && `Event: ${row.riskEvent}`,
+            row.riskImpact && `Impact: ${row.riskImpact}`,
+            row.riskStatement,
           ];
             .filter(Boolean);
-            .join('\n'),;
-          category: mapRiskCategory(row.level1RiskCategory),;
-          likelihood: mapLikelihoodRating(row.likelihoodRating),;
-          impact: mapImpactRating(row.impactRating),;
-          status: RiskStatus.IDENTIFIED,;
-          owner: row.riskOwner,;
+            .join('\n'),
+          category: mapRiskCategory(row.level1RiskCategory),
+          likelihood: mapLikelihoodRating(row.likelihoodRating),
+          impact: mapImpactRating(row.impactRating),
+          status: RiskStatus.IDENTIFIED,
+          owner: row.riskOwner,
           rationale: [;
-            row.likelihoodRationale && `Likelihood: ${row.likelihoodRationale}`,;
-            row.impactRationale && `Impact: ${row.impactRationale}`,;
+            row.likelihoodRationale && `Likelihood: ${row.likelihoodRationale}`,
+            row.impactRationale && `Impact: ${row.impactRationale}`,
           ];
             .filter(Boolean);
-            .join('\n'),;
-          sourceRow: index + 1,;
+            .join('\n'),
+          sourceRow: index + 1,
         }
 ;
         mappedRisks.push(risk);
@@ -254,19 +248,19 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
         const associatedRiskId = mappedRisks.find((r) => r.sourceRow === index + 1)?.externalId;
 ;
         const control: MappedControl = {
-          externalId: row.controlId,;
-          title: `Control ${row.controlId}`,;
-          description: row.controlDescription,;
-          type: mapControlType(row.controlDescription, row.controlFrequency),;
-          category: ControlCategory.OPERATIONAL,;
-          frequency: row.controlFrequency || 'As needed',;
-          automationLevel: mapAutomationLevel(row.controlAutomation),;
-          owner: row.controlOwner,;
-          evidence: row.controlEvidence,;
-          designEffectiveness: row.controlDesignEffectiveness,;
-          operatingEffectiveness: row.controlOperatingEffectiveness,;
-          riskIds: associatedRiskId ? [associatedRiskId] : [],;
-          sourceRow: index + 1,;
+          externalId: row.controlId,
+          title: `Control ${row.controlId}`,
+          description: row.controlDescription,
+          type: mapControlType(row.controlDescription, row.controlFrequency),
+          category: ControlCategory.OPERATIONAL,
+          frequency: row.controlFrequency || 'As needed',
+          automationLevel: mapAutomationLevel(row.controlAutomation),
+          owner: row.controlOwner,
+          evidence: row.controlEvidence,
+          designEffectiveness: row.controlDesignEffectiveness,
+          operatingEffectiveness: row.controlOperatingEffectiveness,
+          riskIds: associatedRiskId ? [associatedRiskId] : [],
+          sourceRow: index + 1,
         }
 ;
         mappedControls.push(control);
@@ -289,11 +283,11 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
 ;
       if (missingFields.length > 0) {
         riskGaps.push({
-          riskId: risk.externalId,;
-          issue: `Missing critical risk assessment fields`,;
-          severity: missingFields.includes('Risk Owner') ? 'high' : 'medium',;
-          recommendation: `Complete missing fields: ${missingFields.join(', ')}`,;
-          missingFields,;
+          riskId: risk.externalId,
+          issue: `Missing critical risk assessment fields`,
+          severity: missingFields.includes('Risk Owner') ? 'high' : 'medium',
+          recommendation: `Complete missing fields: ${missingFields.join(', ')}`,
+          missingFields,
         });
       }
     });
@@ -311,14 +305,14 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
 ;
       if (missingFields.length > 0) {
         controlGaps.push({
-          controlId: control.externalId,;
-          issue: `Incomplete control documentation`,;
+          controlId: control.externalId,
+          issue: `Incomplete control documentation`,
           // severity: // Fixed expression expected error
             missingFields.includes('Control Owner') || missingFields.includes('Control Evidence');
               ? 'high';
-              : 'medium',;
-          recommendation: `Document missing control attributes: ${missingFields.join(', ')}`,;
-          missingFields,;
+              : 'medium',
+          recommendation: `Document missing control attributes: ${missingFields.join(', ')}`,
+          missingFields,
         });
       }
     });
@@ -332,34 +326,34 @@ export async function analyzeRCSAData(rows: RCSARowData[]): Promise<RCSAGapAnaly
 ;
     // Generate recommendations
     const recommendations: Recommendation[] = [;
-      ...(aiResponse.recommendations || []),;
+      ...(aiResponse.recommendations || []),
       {
-        type: 'process',;
-        priority: 'high',;
-        description: 'Establish clear risk and control ownership',;
-        action: 'Assign responsible owners to all risks and controls lacking ownership',;
-      },;
+        type: 'process',
+        priority: 'high',
+        description: 'Establish clear risk and control ownership',
+        action: 'Assign responsible owners to all risks and controls lacking ownership',
+      },
       {
-        type: 'compliance',;
-        priority: 'medium',;
-        description: 'Enhance control testing documentation',;
-        action: 'Document control testing procedures and maintain evidence of testing',;
-      },;
+        type: 'compliance',
+        priority: 'medium',
+        description: 'Enhance control testing documentation',
+        action: 'Document control testing procedures and maintain evidence of testing',
+      },
     ];
 ;
     return {
       // overallAssessment: // Fixed expression expected error
         aiResponse.overallAssessment ||;
-        `RCSA data shows ${completenessScore}% completeness with ${riskGaps.length} risk gaps and ${controlGaps.length} control gaps identified.`,;
-      completenessScore,;
-      riskGaps,;
-      controlGaps,;
-      recommendations,;
-      mappedRisks,;
-      mappedControls,;
+        `RCSA data shows ${completenessScore}% completeness with ${riskGaps.length} risk gaps and ${controlGaps.length} control gaps identified.`,
+      completenessScore,
+      riskGaps,
+      controlGaps,
+      recommendations,
+      mappedRisks,
+      mappedControls,
     }
   } catch (error) {
-    // console.error('Error analyzing RCSA data:', error)
+    /* console.error('Error analyzing RCSA data:', error) */
 ;
     // Fallback analysis without AI
     return performBasicAnalysis(rows);
@@ -383,24 +377,24 @@ const performBasicAnalysis = (rows: RCSARowData[]): RCSAGapAnalysis {
       if (!row.riskOwner) missingFields.push('Risk Owner');
 ;
       mappedRisks.push({
-        externalId: riskId,;
-        title: row.riskStatement || row.riskEvent || 'Untitled Risk',;
-        description: [row.riskDriver, row.riskEvent, row.riskImpact].filter(Boolean).join(' | '),;
-        category: mapRiskCategory(row.level1RiskCategory),;
-        likelihood: mapLikelihoodRating(row.likelihoodRating),;
-        impact: mapImpactRating(row.impactRating),;
-        status: RiskStatus.IDENTIFIED,;
-        owner: row.riskOwner,;
-        sourceRow: index + 1,;
+        externalId: riskId,
+        title: row.riskStatement || row.riskEvent || 'Untitled Risk',
+        description: [row.riskDriver, row.riskEvent, row.riskImpact].filter(Boolean).join(' | '),
+        category: mapRiskCategory(row.level1RiskCategory),
+        likelihood: mapLikelihoodRating(row.likelihoodRating),
+        impact: mapImpactRating(row.impactRating),
+        status: RiskStatus.IDENTIFIED,
+        owner: row.riskOwner,
+        sourceRow: index + 1,
       });
 ;
       if (missingFields.length > 0) {
         riskGaps.push({
-          riskId,;
-          issue: 'Missing essential risk fields',;
-          severity: 'medium',;
-          recommendation: `Complete: ${missingFields.join(', ')}`,;
-          missingFields,;
+          riskId,
+          issue: 'Missing essential risk fields',
+          severity: 'medium',
+          recommendation: `Complete: ${missingFields.join(', ')}`,
+          missingFields,
         });
       }
     }
@@ -413,26 +407,26 @@ const performBasicAnalysis = (rows: RCSARowData[]): RCSAGapAnalysis {
       if (!row.controlEvidence) missingFields.push('Control Evidence');
 ;
       mappedControls.push({
-        externalId: row.controlId,;
-        title: `Control ${row.controlId}`,;
-        description: row.controlDescription,;
-        type: mapControlType(row.controlDescription),;
-        category: ControlCategory.OPERATIONAL,;
-        frequency: row.controlFrequency || 'As needed',;
-        automationLevel: mapAutomationLevel(row.controlAutomation),;
-        owner: row.controlOwner,;
-        evidence: row.controlEvidence,;
-        riskIds: [],;
-        sourceRow: index + 1,;
+        externalId: row.controlId,
+        title: `Control ${row.controlId}`,
+        description: row.controlDescription,
+        type: mapControlType(row.controlDescription),
+        category: ControlCategory.OPERATIONAL,
+        frequency: row.controlFrequency || 'As needed',
+        automationLevel: mapAutomationLevel(row.controlAutomation),
+        owner: row.controlOwner,
+        evidence: row.controlEvidence,
+        riskIds: [],
+        sourceRow: index + 1,
       });
 ;
       if (missingFields.length > 0) {
         controlGaps.push({
-          controlId: row.controlId,;
-          issue: 'Incomplete control documentation',;
-          severity: 'medium',;
-          recommendation: `Document: ${missingFields.join(', ')}`,;
-          missingFields,;
+          controlId: row.controlId,
+          issue: 'Incomplete control documentation',
+          severity: 'medium',
+          recommendation: `Document: ${missingFields.join(', ')}`,
+          missingFields,
         });
       }
     }
@@ -445,25 +439,25 @@ const performBasicAnalysis = (rows: RCSARowData[]): RCSAGapAnalysis {
   const completenessScore = Math.round((filledFields / totalFields) * 100);
 ;
   return {
-    overallAssessment: `Basic analysis complete. Found ${mappedRisks.length} risks and ${mappedControls.length} controls with ${completenessScore}% data completeness.`,;
-    completenessScore,;
-    riskGaps,;
-    controlGaps,;
+    overallAssessment: `Basic analysis complete. Found ${mappedRisks.length} risks and ${mappedControls.length} controls with ${completenessScore}% data completeness.`,
+    completenessScore,
+    riskGaps,
+    controlGaps,
     recommendations: [;
       {
-        type: 'process',;
-        priority: 'high',;
-        description: 'Complete missing risk assessments',;
-        action: 'Fill in all likelihood and impact ratings with supporting rationales',;
-      },;
+        type: 'process',
+        priority: 'high',
+        description: 'Complete missing risk assessments',
+        action: 'Fill in all likelihood and impact ratings with supporting rationales',
+      },
       {
-        type: 'control',;
-        priority: 'high',;
-        description: 'Document control effectiveness',;
-        action: 'Assess and document design and operating effectiveness for all controls',;
-      },;
-    ],;
-    mappedRisks,;
-    mappedControls,;
+        type: 'control',
+        priority: 'high',
+        description: 'Document control effectiveness',
+        action: 'Assess and document design and operating effectiveness for all controls',
+      },
+    ],
+    mappedRisks,
+    mappedControls,
   }
 }

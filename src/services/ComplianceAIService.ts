@@ -1,5 +1,4 @@
-// import { Risk, Control } from '@/types'
-;
+import { Risk, Control } from '@/types'
 // Core compliance interfaces
 export interface RegulatoryFramework {
   id: string;
@@ -738,77 +737,77 @@ export interface RiskArea {
 // Regulatory frameworks data
 const REGULATORY_FRAMEWORKS: Record<string, RegulatoryFramework> = {
   sox: {
-    id: 'sox',;
-    name: 'Sarbanes-Oxley Act',;
-    version: '2002',;
-    description: 'Corporate governance and financial reporting regulations',;
-    jurisdiction: ['US'],;
-    applicableIndustries: ['public_companies', 'financial_services'],;
-    organizationSize: ['large', 'enterprise'],;
+    id: 'sox',
+    name: 'Sarbanes-Oxley Act',
+    version: '2002',
+    description: 'Corporate governance and financial reporting regulations',
+    jurisdiction: ['US'],
+    applicableIndustries: ['public_companies', 'financial_services'],
+    organizationSize: ['large', 'enterprise'],
     requirements: [], // Would be populated with actual requirements;
     penalties: {
-      fines: { minimum: 1000000, maximum: 25000000, calculation: 'Revenue-based' },;
-      nonMonetary: ['Criminal charges', 'Executive ban'],;
-      escalation: ['SEC investigation', 'Criminal prosecution'],;
-      mitigatingFactors: ['Cooperation', 'Self-reporting', 'Remediation'],;
-    },;
-    lastUpdated: new Date('2024-01-01'),;
-    effectiveDate: new Date('2002-07-30'),;
-  },;
+      fines: { minimum: 1000000, maximum: 25000000, calculation: 'Revenue-based' },
+      nonMonetary: ['Criminal charges', 'Executive ban'],
+      escalation: ['SEC investigation', 'Criminal prosecution'],
+      mitigatingFactors: ['Cooperation', 'Self-reporting', 'Remediation'],
+    },
+    lastUpdated: new Date('2024-01-01'),
+    effectiveDate: new Date('2002-07-30'),
+  },
   gdpr: {
-    id: 'gdpr',;
-    name: 'General Data Protection Regulation',;
-    version: '2018',;
-    description: 'EU data protection and privacy regulation',;
-    jurisdiction: ['EU', 'EEA'],;
-    applicableIndustries: ['all'],;
-    organizationSize: ['small', 'medium', 'large', 'enterprise'],;
-    requirements: [],;
+    id: 'gdpr',
+    name: 'General Data Protection Regulation',
+    version: '2018',
+    description: 'EU data protection and privacy regulation',
+    jurisdiction: ['EU', 'EEA'],
+    applicableIndustries: ['all'],
+    organizationSize: ['small', 'medium', 'large', 'enterprise'],
+    requirements: [],
     penalties: {
-      fines: { minimum: 0, maximum: 20000000, calculation: '4% of global revenue or €20M' },;
-      nonMonetary: ['Processing ban', 'Data portability orders'],;
-      escalation: ['Supervisory authority action', 'Court proceedings'],;
-      mitigatingFactors: ['Cooperation', 'Quick remediation', 'Privacy by design'],;
-    },;
-    lastUpdated: new Date('2024-01-01'),;
-    effectiveDate: new Date('2018-05-25'),;
-  },;
+      fines: { minimum: 0, maximum: 20000000, calculation: '4% of global revenue or €20M' },
+      nonMonetary: ['Processing ban', 'Data portability orders'],
+      escalation: ['Supervisory authority action', 'Court proceedings'],
+      mitigatingFactors: ['Cooperation', 'Quick remediation', 'Privacy by design'],
+    },
+    lastUpdated: new Date('2024-01-01'),
+    effectiveDate: new Date('2018-05-25'),
+  },
   hipaa: {
-    id: 'hipaa',;
-    name: 'Health Insurance Portability and Accountability Act',;
-    version: '1996/2013',;
-    description: 'Healthcare data protection and privacy regulations',;
-    jurisdiction: ['US'],;
-    applicableIndustries: ['healthcare', 'health_insurance'],;
-    organizationSize: ['small', 'medium', 'large', 'enterprise'],;
-    requirements: [],;
+    id: 'hipaa',
+    name: 'Health Insurance Portability and Accountability Act',
+    version: '1996/2013',
+    description: 'Healthcare data protection and privacy regulations',
+    jurisdiction: ['US'],
+    applicableIndustries: ['healthcare', 'health_insurance'],
+    organizationSize: ['small', 'medium', 'large', 'enterprise'],
+    requirements: [],
     penalties: {
-      fines: { minimum: 100, maximum: 1500000, calculation: 'Per violation with annual caps' },;
-      nonMonetary: ['Corrective action plans', 'Monitoring agreements'],;
-      escalation: ['Civil monetary penalties', 'Criminal charges'],;
-      mitigatingFactors: ['Willful neglect correction', 'Cooperation'],;
-    },;
-    lastUpdated: new Date('2024-01-01'),;
-    effectiveDate: new Date('2013-09-23'),;
-  },;
+      fines: { minimum: 100, maximum: 1500000, calculation: 'Per violation with annual caps' },
+      nonMonetary: ['Corrective action plans', 'Monitoring agreements'],
+      escalation: ['Civil monetary penalties', 'Criminal charges'],
+      mitigatingFactors: ['Willful neglect correction', 'Cooperation'],
+    },
+    lastUpdated: new Date('2024-01-01'),
+    effectiveDate: new Date('2013-09-23'),
+  },
   iso27001: {
-    id: 'iso27001',;
-    name: 'ISO/IEC 27001',;
-    version: '2013',;
-    description: 'Information security management systems',;
-    jurisdiction: ['international'],;
-    applicableIndustries: ['all'],;
-    organizationSize: ['medium', 'large', 'enterprise'],;
-    requirements: [],;
+    id: 'iso27001',
+    name: 'ISO/IEC 27001',
+    version: '2013',
+    description: 'Information security management systems',
+    jurisdiction: ['international'],
+    applicableIndustries: ['all'],
+    organizationSize: ['medium', 'large', 'enterprise'],
+    requirements: [],
     penalties: {
-      fines: { minimum: 0, maximum: 0, calculation: 'Certification loss' },;
-      nonMonetary: ['Certification suspension', 'Reputational damage'],;
-      escalation: ['Certification revocation', 'Customer loss'],;
-      mitigatingFactors: ['Quick remediation', 'Management commitment'],;
-    },;
-    lastUpdated: new Date('2024-01-01'),;
-    effectiveDate: new Date('2013-10-01'),;
-  },;
+      fines: { minimum: 0, maximum: 0, calculation: 'Certification loss' },
+      nonMonetary: ['Certification suspension', 'Reputational damage'],
+      escalation: ['Certification revocation', 'Customer loss'],
+      mitigatingFactors: ['Quick remediation', 'Management commitment'],
+    },
+    lastUpdated: new Date('2024-01-01'),
+    effectiveDate: new Date('2013-10-01'),
+  },
 }
 ;
 export class ComplianceAIService {
@@ -838,10 +837,10 @@ export class ComplianceAIService {
    * Perform comprehensive compliance assessment;
    */
   async performComplianceAssessment(;
-    frameworks: string[],;
-    scope: AssessmentScope,;
-    existingControls: Control[],;
-    risks: Risk[],;
+    frameworks: string[],
+    scope: AssessmentScope,
+    existingControls: Control[],
+    risks: Risk[],
     options: {
       includeAuditReadiness?: boolean;
       includeRoadmap?: boolean;
@@ -850,60 +849,60 @@ export class ComplianceAIService {
     } = {}
   ): Promise<ComplianceAssessment> {
     const assessment: ComplianceAssessment = {
-      id: `assessment_${Date.now()}`,;
-      framework: frameworks.join(','),;
-      scope,;
-      overallScore: 0,;
-      maturityLevel: 0,;
-      completionPercentage: 0,;
-      gapsIdentified: 0,;
-      criticalGaps: 0,;
-      requirements: [],;
-      recommendations: [],;
-      nextActions: [],;
+      id: `assessment_${Date.now()}`,
+      framework: frameworks.join(','),
+      scope,
+      overallScore: 0,
+      maturityLevel: 0,
+      completionPercentage: 0,
+      gapsIdentified: 0,
+      criticalGaps: 0,
+      requirements: [],
+      recommendations: [],
+      nextActions: [],
       auditReadiness: {
-        overall_score: 0,;
-        documentation: 0,;
-        process_maturity: 0,;
-        evidence_quality: 0,;
-        staff_preparedness: 0,;
-        system_readiness: 0,;
-        gaps: [],;
-        strengths: [],;
-        improvement_areas: [],;
-        estimated_effort: 0,;
-      },;
+        overall_score: 0,
+        documentation: 0,
+        process_maturity: 0,
+        evidence_quality: 0,
+        staff_preparedness: 0,
+        system_readiness: 0,
+        gaps: [],
+        strengths: [],
+        improvement_areas: [],
+        estimated_effort: 0,
+      },
       riskProfile: {
-        overall_risk: 'medium',;
-        risk_factors: [],;
-        exposure_areas: [],;
-        mitigation_priorities: [],;
-        monitoring_requirements: [],;
-      },;
+        overall_risk: 'medium',
+        risk_factors: [],
+        exposure_areas: [],
+        mitigation_priorities: [],
+        monitoring_requirements: [],
+      },
       timeline: {
-        total_duration: 90,;
-        phases: [],;
-        critical_path: [],;
-        dependencies: [],;
-      },;
+        total_duration: 90,
+        phases: [],
+        critical_path: [],
+        dependencies: [],
+      },
       estimatedCosts: {
-        assessment: 25000,;
-        remediation: 150000,;
-        ongoing_compliance: 75000,;
-        audit_preparation: 50000,;
-        total: 300000,;
+        assessment: 25000,
+        remediation: 150000,
+        ongoing_compliance: 75000,
+        audit_preparation: 50000,
+        total: 300000,
         breakdown: {
-          personnel: 180000,;
-          technology: 75000,;
-          training: 25000,;
-          external: 15000,;
-          other: 5000,;
-          total: 300000,;
-        },;
-      },;
-      aiInsights: [],;
-      createdAt: new Date(),;
-      lastUpdated: new Date(),;
+          personnel: 180000,
+          technology: 75000,
+          training: 25000,
+          external: 15000,
+          other: 5000,
+          total: 300000,
+        },
+      },
+      aiInsights: [],
+      createdAt: new Date(),
+      lastUpdated: new Date(),
     }
 ;
     // Perform detailed assessment for each framework
@@ -912,9 +911,9 @@ export class ComplianceAIService {
       if (!framework) continue;
 ;
       const frameworkAssessment = await this.assessFrameworkCompliance(;
-        framework,;
-        existingControls,;
-        risks,;
+        framework,
+        existingControls,
+        risks,
         scope;
       );
 ;
@@ -932,7 +931,7 @@ export class ComplianceAIService {
 ;
     // Generate recommendations
     assessment.recommendations = await this.generateComplianceRecommendations(;
-      assessment.requirements,;
+      assessment.requirements,
       frameworks;
     );
 ;
@@ -942,7 +941,7 @@ export class ComplianceAIService {
     // Audit readiness assessment
     if (options.includeAuditReadiness) {
       assessment.auditReadiness = await this.assessAuditReadiness(;
-        frameworks,;
+        frameworks,
         assessment.requirements;
       );
     }
@@ -959,8 +958,8 @@ export class ComplianceAIService {
   /**;
    * Identify compliance gaps;
    */
-  async identifyComplianceGaps(_framework: string,;
-    existingControls: Control[],;
+  async identifyComplianceGaps(framework: string,
+    existingControls: Control[],
     risks: Risk[];
   ): Promise<ComplianceGap[]> {
     const frameworkData = this.frameworks.get(framework);
@@ -989,9 +988,9 @@ export class ComplianceAIService {
    * Generate compliance roadmap;
    */
   async generateComplianceRoadmap(;
-    frameworks: string[],;
-    currentAssessment: ComplianceAssessment,;
-    targetMaturity: number = 4,;
+    frameworks: string[],
+    currentAssessment: ComplianceAssessment,
+    targetMaturity: number = 4,
     constraints: {
       budget?: number;
       timeline?: number; // months;
@@ -999,35 +998,35 @@ export class ComplianceAIService {
     } = {}
   ): Promise<ComplianceRoadmap> {
     const roadmap: ComplianceRoadmap = {
-      id: `roadmap_${Date.now()}`,;
-      frameworks,;
-      target_maturity: targetMaturity,;
-      current_maturity: currentAssessment.maturityLevel,;
-      timeline: constraints.timeline || 18,;
-      phases: [],;
-      initiatives: [],;
-      budget: constraints.budget || 500000,;
+      id: `roadmap_${Date.now()}`,
+      frameworks,
+      target_maturity: targetMaturity,
+      current_maturity: currentAssessment.maturityLevel,
+      timeline: constraints.timeline || 18,
+      phases: [],
+      initiatives: [],
+      budget: constraints.budget || 500000,
       resources: {
-        personnel: [],;
-        technology: [],;
-        budget_allocation: [],;
-        external_support: [],;
-      },;
-      risks: [],;
-      success_metrics: [],;
+        personnel: [],
+        technology: [],
+        budget_allocation: [],
+        external_support: [],
+      },
+      risks: [],
+      success_metrics: [],
       governance: {
-        steering_committee: [],;
-        working_groups: [],;
-        reporting_structure: [],;
-        decision_authority: [],;
-        escalation_process: [],;
-      },;
+        steering_committee: [],
+        working_groups: [],
+        reporting_structure: [],
+        decision_authority: [],
+        escalation_process: [],
+      },
       communication: {
-        stakeholder_map: [],;
-        communication_channels: [],;
-        key_messages: [],;
-        feedback_mechanisms: [],;
-      },;
+        stakeholder_map: [],
+        communication_channels: [],
+        key_messages: [],
+        feedback_mechanisms: [],
+      },
     }
 ;
     // Generate phases based on maturity gap
@@ -1036,9 +1035,9 @@ export class ComplianceAIService {
 ;
     for (let i = 0; i < maturityGap; i++) {
       const phase = await this.generateRoadmapPhase(;
-        i + 1,;
-        phaseDuration,;
-        currentAssessment,;
+        i + 1,
+        phaseDuration,
+        currentAssessment,
         targetMaturity;
       );
       roadmap.phases.push(phase);
@@ -1046,8 +1045,8 @@ export class ComplianceAIService {
 
     // Generate initiatives from recommendations
     roadmap.initiatives = await this.generateComplianceInitiatives(;
-      currentAssessment.recommendations,;
-      frameworks,;
+      currentAssessment.recommendations,
+      frameworks,
       roadmap.timeline;
     );
 ;
@@ -1104,85 +1103,85 @@ export class ComplianceAIService {
   /**;
    * Prepare for audit;
    */
-  async prepareAudit(_framework: string,;
-    auditType: 'internal' | 'external' | 'regulatory' | 'certification',;
-    scope: string[],;
-    auditDate: Date,;
+  async prepareAudit(framework: string,
+    auditType: 'internal' | 'external' | 'regulatory' | 'certification',
+    scope: string[],
+    auditDate: Date,
     existingControls: Control[];
   ): Promise<AuditPreparation> {
     const preparation: AuditPreparation = {
-      audit_type: auditType,;
-      framework,;
-      scope,;
+      audit_type: auditType,
+      framework,
+      scope,
       timeline: {
-        preparation_start: new Date(),;
-        audit_start: auditDate,;
+        preparation_start: new Date(),
+        audit_start: auditDate,
         audit_end: new Date(auditDate.getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days;
         report_expected: new Date(auditDate.getTime() + 21 * 24 * 60 * 60 * 1000), // 3 weeks;
-        milestones: [],;
-      },;
-      preparation_tasks: [],;
+        milestones: [],
+      },
+      preparation_tasks: [],
       documentation: {
-        documents_required: [],;
-        documentation_gaps: [],;
-        creation_timeline: 30,;
-        review_process: [],;
-        approval_workflow: [],;
-        version_control: 'Version control system required',;
-      },;
+        documents_required: [],
+        documentation_gaps: [],
+        creation_timeline: 30,
+        review_process: [],
+        approval_workflow: [],
+        version_control: 'Version control system required',
+      },
       interviews: {
-        interviewees: [],;
-        topics: [],;
+        interviewees: [],
+        topics: [],
         schedule: {
-          duration: 60,;
-          logistics: [],;
-          preparation_time: 7,;
-          follow_up_required: true,;
-        },;
+          duration: 60,
+          logistics: [],
+          preparation_time: 7,
+          follow_up_required: true,
+        },
         preparation: {
-          briefing_materials: [],;
-          practice_sessions: true,;
-          coaching_needed: [],;
-          key_messages: [],;
-        },;
-      },;
+          briefing_materials: [],
+          practice_sessions: true,
+          coaching_needed: [],
+          key_messages: [],
+        },
+      },
       testing: {
-        controls_to_test: [],;
-        sampling_methodology: 'Risk-based sampling',;
-        testing_procedures: [],;
+        controls_to_test: [],
+        sampling_methodology: 'Risk-based sampling',
+        testing_procedures: [],
         evidence_collection: {
-          collection_methods: [],;
-          storage_requirements: [],;
-          retention_period: 36,;
-          access_controls: [],;
-          backup_procedures: [],;
-        },;
-        documentation_requirements: [],;
-      },;
+          collection_methods: [],
+          storage_requirements: [],
+          retention_period: 36,
+          access_controls: [],
+          backup_procedures: [],
+        },
+        documentation_requirements: [],
+      },
       readiness_assessment: {
-        overall_readiness: 0,;
-        areas_assessed: [],;
-        strengths: [],;
-        weaknesses: [],;
-        recommendations: [],;
-        estimated_additional_effort: 0,;
-      },;
-      risk_areas: [],;
-      success_factors: [],;
+        overall_readiness: 0,
+        areas_assessed: [],
+        strengths: [],
+        weaknesses: [],
+        recommendations: [],
+        estimated_additional_effort: 0,
+      },
+      risk_areas: [],
+      success_factors: [],
     }
 ;
     // Generate preparation tasks
     preparation.preparation_tasks = await this.generatePreparationTasks(;
-      framework,;
-      auditType,;
-      scope,;
+      framework,
+      auditType,
+      scope,
       auditDate;
     );
 ;
     // Identify documentation requirements
     preparation.documentation = await this.identifyDocumentationRequirements(;
-      framework,;
-      scope,;
+      framework,
+      scope,
       existingControls;
     );
 ;
@@ -1214,22 +1213,22 @@ export class ComplianceAIService {
       if (requirement) {
         for (const evidenceReq of requirement.evidenceRequirements) {
           const evidenceItem: Evidence = {
-            id: `evidence_${Date.now()}_${Math.random()}`,;
-            type: evidenceReq.type,;
-            title: `${requirement.title} - ${evidenceReq.description}`,;
-            description: evidenceReq.description,;
-            source: evidenceReq.source,;
-            dateCreated: new Date(),;
-            dateCollected: new Date(),;
-            // expiryDate: // Fixed expression expected error
-              evidenceReq.retention > 0;
-                ? new Date(Date.now() + evidenceReq.retention * 30 * 24 * 60 * 60 * 1000);
-                : undefined,;
-            quality: 'good',;
-            completeness: 0,;
-            relevance: 100,;
-            tags: requirement.keywords,;
-            reviewStatus: 'pending',;
+            id: `evidence_${Date.now()}_${Math.random()}`,
+            type: evidenceReq.type,
+            title: `${requirement.title} - ${evidenceReq.description}`,
+            description: evidenceReq.description,
+            source: evidenceReq.source,
+            dateCreated: new Date(),
+            dateCollected: new Date(),
+            expiryDate:
+              evidenceReq.retention > 0
+                ? new Date(Date.now() + evidenceReq.retention * 30 * 24 * 60 * 60 * 1000)
+                : undefined,
+            quality: 'good',
+            completeness: 0,
+            relevance: 100,
+            tags: requirement.keywords,
+            reviewStatus: 'pending',
           }
 ;
           evidence.push(evidenceItem);
@@ -1241,19 +1240,19 @@ export class ComplianceAIService {
   }
 
   // Private helper methods implementation would continue...
-  private async assessFrameworkCompliance(_framework: RegulatoryFramework,;
-    existingControls: Control[],;
-    risks: Risk[],;
+  private async assessFrameworkCompliance(framework: RegulatoryFramework,
+    existingControls: Control[],
+    risks: Risk[],
     scope: AssessmentScope;
   ): Promise<{ requirements: RequirementAssessment[]; gaps: ComplianceGap[] }> {
     // This would implement detailed framework assessment logic
-    // console.log(
-      'Assessing framework compliance:',;
-      framework.name,;
-      existingControls.length,;
-      risks.length,;
-      scope;
-    );
+    /* console.log(
+      'Assessing framework compliance:',
+      framework.name,
+      existingControls.length,
+      risks.length,
+      scope
+    ); */
     return { requirements: [], gaps: [] }
   }
 
@@ -1294,17 +1293,17 @@ export class ComplianceAIService {
   }
 
   private async generateComplianceRecommendations(;
-    requirements: RequirementAssessment[],;
+    requirements: RequirementAssessment[],
     frameworks: string[];
   ): Promise<ComplianceRecommendation[]> {
     // Implementation for generating AI-powered recommendations
-    // console.log(
-      'Generating recommendations for',;
-      requirements.length,;
-      'requirements across',;
-      frameworks.length,;
-      'frameworks';
-    );
+    /* console.log(
+      'Generating recommendations for',
+      requirements.length,
+      'requirements across',
+      frameworks.length,
+      'frameworks'
+    ); */
     return [];
   }
 
@@ -1315,84 +1314,84 @@ export class ComplianceAIService {
   }
 
   private async assessAuditReadiness(;
-    frameworks: string[],;
+    frameworks: string[],
     requirements: RequirementAssessment[];
   ): Promise<AuditReadiness> {
     // Implementation for audit readiness assessment
-    // console.log(
-      'Assessing audit readiness for',;
-      frameworks.length,;
-      'frameworks,',;
-      requirements.length,;
-      'requirements';
-    );
+    /* console.log(
+      'Assessing audit readiness for',
+      frameworks.length,
+      'frameworks,',
+      requirements.length,
+      'requirements'
+    ); */
     return {
-      overall_score: 75,;
-      documentation: 80,;
-      process_maturity: 70,;
-      evidence_quality: 75,;
-      staff_preparedness: 70,;
-      system_readiness: 80,;
-      gaps: [],;
-      strengths: [],;
-      improvement_areas: [],;
-      estimated_effort: 40,;
+      overall_score: 75,
+      documentation: 80,
+      process_maturity: 70,
+      evidence_quality: 75,
+      staff_preparedness: 70,
+      system_readiness: 80,
+      gaps: [],
+      strengths: [],
+      improvement_areas: [],
+      estimated_effort: 40,
     }
   }
 
-  private async assessReadinessForAudit(_framework: string,;
+  private async assessReadinessForAudit(framework: string,
     scope: string[];
   ): Promise<ReadinessAssessment> {
     // Implementation for detailed audit readiness assessment
-    // console.log(
-      'Assessing detailed readiness for audit of',;
-      framework,;
-      'covering',;
-      scope.length,;
-      'areas';
-    );
+    /* console.log(
+      'Assessing detailed readiness for audit of',
+      framework,
+      'covering',
+      scope.length,
+      'areas'
+    ); */
     return {
-      overall_readiness: 75,;
+      overall_readiness: 75,
       areas_assessed: [;
         {
-          area: 'Documentation',;
-          score: 80,;
+          area: 'Documentation',
+          score: 80,
           criteria: [;
             {
-              criterion: 'Policies documented',;
-              met: true,;
-              evidence: ['Policy repository', 'Document management system'],;
-              gaps: [],;
-            },;
+              criterion: 'Policies documented',
+              met: true,
+              evidence: ['Policy repository', 'Document management system'],
+              gaps: [],
+            },
             {
-              criterion: 'Procedures current',;
-              met: false,;
-              evidence: [],;
-              gaps: ['Some procedures outdated'],;
-            },;
-          ],;
-          gaps: ['Policy updates needed'],;
-          improvements: ['Implement document versioning'],;
-        },;
+              criterion: 'Procedures current',
+              met: false,
+              evidence: [],
+              gaps: ['Some procedures outdated'],
+            },
+          ],
+          gaps: ['Policy updates needed'],
+          improvements: ['Implement document versioning'],
+        },
         {
-          area: 'Process Maturity',;
-          score: 70,;
+          area: 'Process Maturity',
+          score: 70,
           criteria: [;
             {
-              criterion: 'Processes defined',;
-              met: true,;
-              evidence: ['Process maps', 'SOPs'],;
-              gaps: [],;
-            },;
-          ],;
-          gaps: ['Process automation needed'],;
-          improvements: ['Implement workflow automation'],;
-        },;
-      ],;
-      strengths: ['Strong documentation framework', 'Clear process ownership'],;
-      weaknesses: ['Manual processes', 'Outdated procedures'],;
-      recommendations: ['Automate key processes', 'Update documentation'],;
-      estimated_additional_effort: 40,;
+              criterion: 'Processes defined',
+              met: true,
+              evidence: ['Process maps', 'SOPs'],
+              gaps: [],
+            },
+          ],
+          gaps: ['Process automation needed'],
+          improvements: ['Implement workflow automation'],
+        },
+      ],
+      strengths: ['Strong documentation framework', 'Clear process ownership'],
+      weaknesses: ['Manual processes', 'Outdated procedures'],
+      recommendations: ['Automate key processes', 'Update documentation'],
+      estimated_additional_effort: 40,
     }
   }
 
@@ -1403,71 +1402,71 @@ export class ComplianceAIService {
   }
 
   private async analyzeRequirementGap(;
-    requirement: ComplianceRequirement,;
-    existingControls: Control[],;
-    risks: Risk[],;
+    requirement: ComplianceRequirement,
+    existingControls: Control[],
+    risks: Risk[],
     framework: string;
   ): Promise<ComplianceGap | null> {
     // Implementation for requirement gap analysis
     // console.log(
-      'Analyzing gap for requirement:',;
-      requirement.id,;
-      'in framework:',;
-      framework,;
-      'with',;
-      existingControls.length,;
-      'controls and',;
-      risks.length,;
+      'Analyzing gap for requirement:',
+      requirement.id,
+      'in framework:',
+      framework,
+      'with',
+      existingControls.length,
+      'controls and',
+      risks.length,
       'risks';
     );
     return null;
   }
 
   private async generateRoadmapPhase(;
-    phaseNumber: number,;
-    duration: number,;
-    assessment: ComplianceAssessment,;
+    phaseNumber: number,
+    duration: number,
+    assessment: ComplianceAssessment,
     targetMaturity: number;
   ): Promise<RoadmapPhase> {
     // Implementation for roadmap phase generation
-    // console.log(
-      'Generating phase',;
-      phaseNumber,;
-      'duration:',;
-      duration,;
-      'for assessment:',;
-      assessment.id,;
-      'target maturity:',;
-      targetMaturity;
-    );
+    /* console.log(
+      'Generating phase',
+      phaseNumber,
+      'duration:',
+      duration,
+      'for assessment:',
+      assessment.id,
+      'target maturity:',
+      targetMaturity
+    ); */
     return {
-      id: `phase_${phaseNumber}`,;
-      name: `Phase ${phaseNumber}`,;
-      duration,;
-      objectives: [],;
-      deliverables: [],;
-      dependencies: [],;
-      budget: 0,;
-      success_criteria: [],;
-      risks: [],;
+      id: `phase_${phaseNumber}`,
+      name: `Phase ${phaseNumber}`,
+      duration,
+      objectives: [],
+      deliverables: [],
+      dependencies: [],
+      budget: 0,
+      success_criteria: [],
+      risks: [],
     }
   }
 
   private async generateComplianceInitiatives(;
-    recommendations: ComplianceRecommendation[],;
-    frameworks: string[],;
+    recommendations: ComplianceRecommendation[],
+    frameworks: string[],
     timeline: number;
   ): Promise<ComplianceInitiative[]> {
     // Implementation for compliance initiatives generation
-    // console.log(
-      'Generating initiatives for',;
-      recommendations.length,;
-      'recommendations across',;
-      frameworks.length,;
-      'frameworks with',;
-      timeline,;
-      'month timeline';
-    );
+    /* console.log(
+      'Generating initiatives for',
+      recommendations.length,
+      'recommendations across',
+      frameworks.length,
+      'frameworks with',
+      timeline,
+      'month timeline'
+    ); */
     return [];
   }
 
@@ -1475,10 +1474,10 @@ export class ComplianceAIService {
     // Implementation for resource planning
     // console.log('Generating resource plan for', initiatives.length, 'initiatives')
     return {
-      personnel: [],;
-      technology: [],;
-      budget_allocation: [],;
-      external_support: [],;
+      personnel: [],
+      technology: [],
+      budget_allocation: [],
+      external_support: [],
     }
   }
 
@@ -1489,16 +1488,16 @@ export class ComplianceAIService {
   }
 
   private async defineSuccessMetrics(;
-    frameworks: string[],;
+    frameworks: string[],
     targetMaturity: number;
   ): Promise<SuccessMetric[]> {
     // Implementation for success metrics definition
-    // console.log(
-      'Defining success metrics for',;
-      frameworks.length,;
-      'frameworks with target maturity:',;
-      targetMaturity;
-    );
+    /* console.log(
+      'Defining success metrics for',
+      frameworks.length,
+      'frameworks with target maturity:',
+      targetMaturity
+    ); */
     return [];
   }
 
@@ -1515,90 +1514,90 @@ export class ComplianceAIService {
     return change;
   }
 
-  private async generatePreparationTasks(_framework: string,;
-    auditType: string,;
-    scope: string[],;
+  private async generatePreparationTasks(framework: string,
+    auditType: string,
+    scope: string[],
     auditDate: Date;
   ): Promise<PreparationTask[]> {
     // Implementation for audit preparation task generation
-    // console.log(
-      'Generating preparation tasks for',;
-      framework,;
-      auditType,;
-      'audit covering',;
-      scope.length,;
-      'areas on',;
-      auditDate;
-    );
+    /* console.log(
+      'Generating preparation tasks for',
+      framework,
+      auditType,
+      'audit covering',
+      scope.length,
+      'areas on',
+      auditDate
+    ); */
     return [];
   }
 
-  private async identifyDocumentationRequirements(_framework: string,;
-    scope: string[],;
+  private async identifyDocumentationRequirements(framework: string,
+    scope: string[],
     existingControls: Control[];
   ): Promise<DocumentationPlan> {
     // Implementation for documentation requirements identification
-    // console.log(
-      'Identifying documentation requirements for',;
-      framework,;
-      'covering',;
-      scope.length,;
-      'areas with',;
-      existingControls.length,;
-      'controls';
-    );
+    /* console.log(
+      'Identifying documentation requirements for',
+      framework,
+      'covering',
+      scope.length,
+      'areas with',
+      existingControls.length,
+      'controls'
+    ); */
     return {
-      documents_required: [],;
-      documentation_gaps: [],;
-      creation_timeline: 30,;
-      review_process: [],;
-      approval_workflow: [],;
-      version_control: 'Required',;
+      documents_required: [],
+      documentation_gaps: [],
+      creation_timeline: 30,
+      review_process: [],
+      approval_workflow: [],
+      version_control: 'Required',
     }
   }
 
-  private async planAuditInterviews(_framework: string, scope: string[]): Promise<InterviewPlan> {
+  private async planAuditInterviews(framework: string, scope: string[]): Promise<InterviewPlan> {
     // Implementation for audit interview planning
     // console.log('Planning interviews for', framework, 'covering', scope.length, 'areas')
     return {
-      interviewees: [],;
-      topics: [],;
+      interviewees: [],
+      topics: [],
       schedule: {
-        duration: 60,;
-        logistics: [],;
-        preparation_time: 7,;
-        follow_up_required: true,;
-      },;
+        duration: 60,
+        logistics: [],
+        preparation_time: 7,
+        follow_up_required: true,
+      },
       preparation: {
-        briefing_materials: [],;
-        practice_sessions: true,;
-        coaching_needed: [],;
-        key_messages: [],;
-      },;
+        briefing_materials: [],
+        practice_sessions: true,
+        coaching_needed: [],
+        key_messages: [],
+      },
     }
   }
 
-  private async planAuditTesting(_framework: string,;
+  private async planAuditTesting(framework: string,
     existingControls: Control[];
   ): Promise<TestingPlan> {
     // Implementation for audit testing planning
     // console.log('Planning testing for', framework, 'with', existingControls.length, 'controls')
     return {
-      controls_to_test: [],;
-      sampling_methodology: 'Risk-based',;
-      testing_procedures: [],;
+      controls_to_test: [],
+      sampling_methodology: 'Risk-based',
+      testing_procedures: [],
       evidence_collection: {
-        collection_methods: [],;
-        storage_requirements: [],;
-        retention_period: 36,;
-        access_controls: [],;
-        backup_procedures: [],;
-      },;
-      documentation_requirements: [],;
+        collection_methods: [],
+        storage_requirements: [],
+        retention_period: 36,
+        access_controls: [],
+        backup_procedures: [],
+      },
+      documentation_requirements: [],
     }
   }
 
-  private async identifyAuditRiskAreas(_framework: string, scope: string[]): Promise<RiskArea[]> {
+  private async identifyAuditRiskAreas(framework: string, scope: string[]): Promise<RiskArea[]> {
     // Implementation for audit risk area identification
     // console.log('Identifying risk areas for', framework, 'covering', scope.length, 'areas')
     return [];
@@ -1606,4 +1605,3 @@ export class ComplianceAIService {
 }
 
 export const complianceAIService = new ComplianceAIService();
-;
