@@ -713,7 +713,7 @@ export class ProactiveMonitoringService {
     }
 
     // Execute tasks in parallel
-    const taskPromises = tasksToProcess.map((task) =>;
+    const taskPromises = tasksToProcess.map((task) =>
       this.executeMonitoringTask(task).catch((error): MonitoringResult | null => {
         // console.error(`Task ${task.id} failed:`, error)
         return null;

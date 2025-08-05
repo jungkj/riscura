@@ -8,8 +8,8 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { useToast } from '@/hooks/use-toast';
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   ArrowLeft,
   Search,
   Edit2,
@@ -62,7 +62,7 @@ export default function UpdateRiskAssessmentPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const filteredRisks = risks.filter(
     (risk) =>
@@ -74,8 +74,8 @@ export default function UpdateRiskAssessmentPage() {
   const handleRiskSelect = (riskId: string) => {
     setSelectedRisk(riskId);
     // Navigate to the edit page for the specific risk
-    router.push(`/dashboard/risks/${riskId}/edit`)
-  }
+    router.push(`/dashboard/risks/${riskId}/edit`);
+  };
 
   const getRiskScoreColor = (score: string) => {
     switch (score.toLowerCase()) {
@@ -90,7 +90,7 @@ export default function UpdateRiskAssessmentPage() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getTrendIcon = (_trend: string) => {
     switch (trend) {
@@ -101,7 +101,7 @@ export default function UpdateRiskAssessmentPage() {
       default:
         return <Minus className="h-4 w-4 text-gray-600" />;
     }
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -138,9 +138,9 @@ export default function UpdateRiskAssessmentPage() {
                 <DaisyInput
                   placeholder="Search risks by title, category, or owner..."
                   value={searchQuery}
-                  onChange={(e) =>
-setSearchQuery(e.target.value)}
-                  className="pl-10" />
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
               </div>
             </DaisyCardBody>
           </DaisyCard>
@@ -166,12 +166,10 @@ setSearchQuery(e.target.value)}
                 </p>
                 {!searchQuery && (
                   <DaisyButton
-                    onClick={() =>
-          router.push('/dashboard/workflows/risk-assessment/new')}
+                    onClick={() => router.push('/dashboard/workflows/risk-assessment/new')}
                   >
                     Create New Risk
-                  
-        </DaisyButton>
+                  </DaisyButton>
                 )}
               </DaisyCardBody>
             </DaisyCard>

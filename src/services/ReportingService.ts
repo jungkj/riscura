@@ -483,16 +483,16 @@ export class ReportingService {
     // Calculate compliance scores
     const complianceScores = frameworks.map((_framework: any) => {
       const totalRequirements = framework.requirements?.length || 0;
-      const metRequirements =;
-        framework.requirements?.filter(;
-          (req: any) =>;
-            req.controls &&;
-            req.controls.length > 0 &&;
+      const metRequirements =
+        framework.requirements?.filter(
+          (req: any) =>
+            req.controls &&
+            req.controls.length > 0 &&
             req.controls.some((controlId: string) => {
               // Check if any control referenced in the requirement is implemented
-              return framework.assessments.some((assessment: any) =>;
-                assessment.items.some(;
-                  (item: any) => item.controlId === controlId && item.status === 'COMPLIANT';
+              return framework.assessments.some((assessment: any) =>
+                assessment.items.some(
+                  (item: any) => item.controlId === controlId && item.status === 'COMPLIANT'
                 );
               );
             });

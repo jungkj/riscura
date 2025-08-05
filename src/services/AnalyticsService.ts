@@ -152,8 +152,8 @@ export class AnalyticsService {
     const byFrequency = this.groupAndCount(controls, 'frequency');
 ;
     // Calculate testing coverage
-    const testedControls = controls.filter((control) =>;
-      control.testScripts.some((ts) => ts.testScript.testExecutions.length > 0);
+    const testedControls = controls.filter((control) =>
+      control.testScripts.some((ts) => ts.testScript.testExecutions.length > 0)
     );
     const testingCoverage =;
       controls.length > 0 ? (testedControls.length / controls.length) * 100 : 0;

@@ -1,25 +1,23 @@
 'use client';
-;
 // import {
   EnhancedControl,
-  ControlFramework,;
-  ControlAIAssessment,;
-  AIControlRecommendation,;
-  ControlBulkOperation,;
-  AdvancedControlFilters,;
-  ControlAnalytics,;
-  ControlTest,;
-  ControlDeficiency,;
-  TestingSchedule,;
-  RiskCoverageAnalysis,;
-  MaturityAssessment,;
-  AutomationAssessment,;
-  ControlAnalyticsTrend,;
-  MaturityGap,;
-  MaturityRoadmap,;
+  ControlFramework,
+  ControlAIAssessment,
+  AIControlRecommendation,
+  ControlBulkOperation,
+  AdvancedControlFilters,
+  ControlAnalytics,
+  ControlTest,
+  ControlDeficiency,
+  TestingSchedule,
+  RiskCoverageAnalysis,
+  MaturityAssessment,
+  AutomationAssessment,
+  ControlAnalyticsTrend,
+  MaturityGap,
+  MaturityRoadmap,
 } from '@/types/enhanced-control.types';
 import { Control } from '@/types';
-;
 export class EnhancedControlService {
   constructor() {}
 
@@ -27,15 +25,15 @@ export class EnhancedControlService {
   async analyzeControlWithAI(control: EnhancedControl): Promise<ControlAIAssessment> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',;
-        headers: { 'Content-Type': 'application/json' },;
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'control_assessment',;
+          type: 'control_assessment',
           data: {
-            control,;
-            includeMaturity: true,;
-            includeGapAnalysis: true,;
-            includeAutomation: true,;
+            control,
+            includeMaturity: true,
+            includeGapAnalysis: true,
+            includeAutomation: true,
             includeRiskCoverage: true,;
           },;
         }),;
@@ -102,8 +100,8 @@ export class EnhancedControlService {
   async analyzeRiskControlMapping(controlId: string, risks: any[]): Promise<RiskCoverageAnalysis> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',;
-        headers: { 'Content-Type': 'application/json' },;
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'risk_control_mapping',;
           data: { controlId, risks },;
@@ -124,8 +122,8 @@ export class EnhancedControlService {
   ): Promise<AIControlRecommendation[]> {
     try {
       const response = await fetch('/api/ai/generate', {
-        method: 'POST',;
-        headers: { 'Content-Type': 'application/json' },;
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'control_recommendations',;
           data: { risks, existingControls },;
@@ -187,8 +185,8 @@ export class EnhancedControlService {
   async analyzeAutomationPotential(control: EnhancedControl): Promise<AutomationAssessment> {
     try {
       const response = await fetch('/api/ai/analyze', {
-        method: 'POST',;
-        headers: { 'Content-Type': 'application/json' },;
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'automation_analysis',;
           data: { control },;
@@ -307,8 +305,8 @@ export class EnhancedControlService {
 
       // Has deficiencies filter
       if (filters.hasDeficiencies !== undefined) {
-        const hasOpenDeficiencies = control.testingHistory.some((test) =>;
-          test.deficiencies.some((def) => def.status === 'open');
+        const hasOpenDeficiencies = control.testingHistory.some((test) =>
+          test.deficiencies.some((def) => def.status === 'open')
         );
         if (filters.hasDeficiencies && !hasOpenDeficiencies) return false;
         if (!filters.hasDeficiencies && hasOpenDeficiencies) return false;
@@ -663,8 +661,8 @@ export class EnhancedControlService {
   }
 
   private calculateDeficiencyMetrics(controls: EnhancedControl[]): any {
-    const allDeficiencies = controls.flatMap((c) =>;
-      c.testingHistory.flatMap((t) => t.deficiencies);
+    const allDeficiencies = controls.flatMap((c) =>
+      c.testingHistory.flatMap((t) => t.deficiencies)
     );
 ;
     return {

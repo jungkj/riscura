@@ -389,8 +389,8 @@ export class TrendAnalysisService {
         }
 
         // Apply industry factors relevant to this risk
-        const relevantFactors = industryFactors.filter((factor) =>;
-          this.isFactorRelevantToRisk(factor, risk);
+        const relevantFactors = industryFactors.filter((factor) =>
+          this.isFactorRelevantToRisk(factor, risk)
         );
 ;
         // Generate trend prediction

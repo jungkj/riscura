@@ -301,12 +301,11 @@ export class ProboIntegrationService {
     }>;
   }> {
     const mitigations = await this.proboService.getMitigations();
-    const frameworkControls = mitigations.filter((m) =>;
-      m.standards.toLowerCase().includes(framework.toLowerCase());
+    const frameworkControls = mitigations.filter((m) =>
+      m.standards.toLowerCase().includes(framework.toLowerCase())
     );
-;
     const mandatoryControls = frameworkControls.filter((m) => m.importance === 'MANDATORY');
-    const recommendedControls = mandatoryControls.slice(0, 10); // Top 10 recommendations;
+    const recommendedControls = mandatoryControls.slice(0, 10); // Top 10 recommendations
     return {
       totalAvailable: frameworkControls.length,
       implemented: Math.floor(frameworkControls.length * 0.65),
@@ -1127,8 +1126,8 @@ export class ProboIntegrationService {
     techStack: string[];
   ): 'Full' | 'Partial' | 'Manual' {
     const automationFriendlyTech = ['kubernetes', 'docker', 'terraform', 'aws', 'azure', 'gcp'];
-    const hasAutomationTech = techStack.some((tech) =>;
-      automationFriendlyTech.includes(tech.toLowerCase());
+    const hasAutomationTech = techStack.some((tech) =>
+      automationFriendlyTech.includes(tech.toLowerCase())
     );
     return hasAutomationTech ? 'Partial' : 'Manual';
   }
@@ -1309,8 +1308,8 @@ export class ProboIntegrationService {
   private extractFrameworksFromStandards(standards: string): ComplianceFramework[] {
     const frameworks = this.getSupportedFrameworks();
     const standardList = standards.split(';').filter(Boolean);
-    return frameworks.filter((f) =>;
-      standardList.some((s) => s.toUpperCase().includes(f.name.toUpperCase()));
+    return frameworks.filter((f) =>
+      standardList.some((s) => s.toUpperCase().includes(f.name.toUpperCase()))
     );
   }
 
