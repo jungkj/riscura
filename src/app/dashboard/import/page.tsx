@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 // Components
-import DragDropImport from '@/components/DragDropImport'
+import DragDropImport from '@/components/DragDropImport';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 // Icons
-// import {
+import {
   FileSpreadsheet,
   FileText,
   Upload,
@@ -30,7 +30,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 const mockUser = {
   id: 'user_demo_123',
   organizationId: 'org_demo_456',
-}
+};
 
 const FEATURE_HIGHLIGHTS = [
   {
@@ -101,12 +101,12 @@ export default function ImportPage() {
   const handleImportComplete = (_results: any[]) => {
     setImportResults(results);
     setShowResults(true);
-  }
+  };
 
   const downloadSampleTemplate = (templateName: string) => {
     // In a real app, this would download actual templates
     // console.log(`Downloading template: ${templateName}`)
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">

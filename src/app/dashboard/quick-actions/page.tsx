@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -23,7 +23,7 @@ import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import GuidedTour from '@/components/help/GuidedTour';
 
-// import {
+import {
   Shield,
   CheckCircle,
   AlertTriangle,
@@ -80,7 +80,7 @@ import { HighContrastToggle } from '@/components/ui/HighContrastToggle';
 
 // Types
 interface WorkflowAction {
-  id: string
+  id: string;
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -133,7 +133,7 @@ export default function QuickActionsPage() {
 
   // Load user preferences
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('riscura-favorite-actions')
+    const savedFavorites = localStorage.getItem('riscura-favorite-actions');
     const savedRecent = localStorage.getItem('riscura-recent-actions');
 
     if (savedFavorites) {
@@ -148,7 +148,7 @@ export default function QuickActionsPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/workflow-stats')
+        const response = await fetch('/api/dashboard/workflow-stats');
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
@@ -160,7 +160,7 @@ export default function QuickActionsPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchStats();
   }, []);
 
@@ -198,7 +198,7 @@ export default function QuickActionsPage() {
       icon: Zap,
       color: '#512DA8',
     },
-  ]
+  ];
 
   // Workflow-based action categories
   const workflowCategories: WorkflowCategory[] = [
@@ -451,7 +451,7 @@ export default function QuickActionsPage() {
         },
       ],
     },
-  ]
+  ];
 
   // Filter actions based on search and category
   const filteredCategories = workflowCategories
@@ -462,7 +462,7 @@ export default function QuickActionsPage() {
           searchQuery === '' ||
           action.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           action.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          action.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+          action.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
         const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
         const matchesFavorites = !showFavoritesOnly || favorites.includes(action.id);
@@ -475,7 +475,7 @@ export default function QuickActionsPage() {
   // Handle action click
   const handleActionClick = (_action: WorkflowAction) => {
     if (action.id === 'guided-tour') {
-      setShowTour(true)
+      setShowTour(true);
       return;
     }
 
@@ -484,11 +484,11 @@ export default function QuickActionsPage() {
       toast({
         title: 'Feature Coming Soon',
         description: `${action.title} is currently under development.`,
-      })
+      });
     } else {
       router.push(action.href);
     }
-  }
+  };
 
   const handleTourComplete = () => {
     setShowTour(false);
@@ -497,22 +497,22 @@ export default function QuickActionsPage() {
       title: 'Tour Complete!',
       description: "You're ready to start using quick actions effectively.",
     });
-  }
+  };
 
   const handleTourSkip = () => {
     setShowTour(false);
     localStorage.setItem('hasSeenQuickActionsTour', 'true');
-  }
+  };
 
   const startGuidedTour = () => {
     setShowTour(true);
-  }
+  };
 
   // Toggle favorite
   const toggleFavorite = (actionId: string) => {
     const updatedFavorites = favorites.includes(actionId)
       ? favorites.filter((id) => id !== actionId)
-      : [...favorites, actionId]
+      : [...favorites, actionId];
 
     setFavorites(updatedFavorites);
     localStorage.setItem('riscura-favorite-actions', JSON.stringify(updatedFavorites));
@@ -521,13 +521,13 @@ export default function QuickActionsPage() {
       title: favorites.includes(actionId) ? 'Removed from favorites' : 'Added to favorites',
       description: 'Your preferences have been saved.',
     });
-  }
+  };
 
   // Get difficulty badge color
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'beginner':
-        return 'bg-green-100 text-green-700'
+        return 'bg-green-100 text-green-700';
       case 'intermediate':
         return 'bg-yellow-100 text-yellow-700';
       case 'advanced':
@@ -535,13 +535,13 @@ export default function QuickActionsPage() {
       default:
         return 'bg-gray-100 text-gray-700';
     }
-  }
+  };
 
   // Get completion status color
   const getCompletionStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'text-green-600'
+        return 'text-green-600';
       case 'in-progress':
         return 'text-blue-600';
       case 'not-started':
@@ -549,7 +549,7 @@ export default function QuickActionsPage() {
       default:
         return 'text-gray-600';
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -650,9 +650,9 @@ export default function QuickActionsPage() {
                   <DaisyInput
                     placeholder="Search workflows, actions, or tags..."
                     value={searchQuery}
-                    onChange={(e) =>
-setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter" />
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter"
+                  />
                 </div>
               </div>
 
@@ -731,7 +731,8 @@ setSearchQuery(e.target.value)}
                                 : 'neutral'
                           }
                           label={category.completionStatus.replace('-', ' ')}
-                          size="sm" />
+                          size="sm"
+                        />
                       </div>
                     </div>
                   </DaisyCardBody>
@@ -755,7 +756,8 @@ setSearchQuery(e.target.value)}
                                 >
                                   <action.icon
                                     className="w-5 h-5"
-                                    style={{ color: category.color }} />
+                                    style={{ color: category.color }}
+                                  />
                                 </div>
                                 <div className="flex items-center gap-1">
                                   {action.isNew && (
@@ -780,7 +782,8 @@ setSearchQuery(e.target.value)}
                                               favorites.includes(action.id)
                                                 ? 'fill-yellow-400 text-yellow-400'
                                                 : 'text-gray-400'
-                                            }`} />
+                                            }`}
+                                          />
                                         </DaisyButton>
                                       </DaisyTooltipTrigger>
                                       <DaisyTooltipContent>
@@ -873,16 +876,14 @@ setSearchQuery(e.target.value)}
             </p>
             <DaisyButton
               variant="secondary"
-              onClick={() =>
-          {
+              onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('all');
                 setShowFavoritesOnly(false);
               }}
             >
               Clear Filters
-            
-        </DaisyButton>
+            </DaisyButton>
           </motion.div>
         )}
 

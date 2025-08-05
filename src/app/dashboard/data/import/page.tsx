@@ -10,7 +10,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
-// import {
+import {
   ArrowLeft,
   Upload,
   FileSpreadsheet,
@@ -78,7 +78,7 @@ export default function ImportDataPage() {
       // Update status to processing
       setFiles((prev) =>
         prev.map((f, index) => (index === i ? { ...f, status: 'processing' } : f))
-      )
+      );
 
       try {
         const formData = new FormData();
@@ -107,7 +107,7 @@ export default function ImportDataPage() {
                 }
               : f
           )
-        )
+        );
       } catch (__error: any) {
         // Update with error
         setFiles((prev) =>
@@ -120,7 +120,7 @@ export default function ImportDataPage() {
                 }
               : f
           )
-        )
+        );
       }
 
       setImportProgress(((i + 1) / files.length) * 100);
@@ -132,7 +132,7 @@ export default function ImportDataPage() {
       title: 'Import Complete',
       description: 'Check the results below for details',
     });
-  }
+  };
 
   const downloadTemplate = () => {
     // In a real implementation, this would download a template file
@@ -141,17 +141,17 @@ export default function ImportDataPage() {
       controls: 'controls-import-template.csv',
       vendors: 'vendors-import-template.csv',
       assets: 'assets-import-template.csv',
-    }
+    };
 
     toast({
       title: 'Template Downloaded',
       description: `Downloaded ${templates[dataType] || 'template.csv'}`,
     });
-  }
+  };
 
   const removeFile = (_index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
-  }
+  };
 
   const getFileIcon = (fileName: string) => {
     if (fileName.endsWith('.csv')) return <FileText className="h-5 w-5" />;
@@ -159,7 +159,7 @@ export default function ImportDataPage() {
       return <FileSpreadsheet className="h-5 w-5" />;
     if (fileName.endsWith('.json')) return <Database className="h-5 w-5" />;
     return <FileText className="h-5 w-5" />;
-  }
+  };
 
   const getStatusIcon = (status: ImportFile['status']) => {
     switch (status) {
@@ -172,7 +172,7 @@ export default function ImportDataPage() {
       default:
         return <AlertTriangle className="h-5 w-5 text-gray-400" />;
     }
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -327,7 +327,7 @@ export default function ImportDataPage() {
                         <p className="text-sm text-gray-500">{Math.round(importProgress)}%</p>
                       </div>
                       <DaisyProgress value={importProgress} className="h-2" />
-</div>
+                    </div>
                   )}
                 </div>
               </DaisyCard>
@@ -368,13 +368,11 @@ export default function ImportDataPage() {
                     <DaisyButton
                       variant="outline"
                       className="w-full"
-                      onClick={() =>
-          setFiles([])}
+                      onClick={() => setFiles([])}
                       disabled={importing}
                     >
                       Clear All Files
-                    
-        </DaisyButton>
+                    </DaisyButton>
                   </div>
                 </div>
               </DaisyCard>
