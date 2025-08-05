@@ -57,7 +57,7 @@ export class ContrastCalculator {
     const b = parseInt(hex.substr(4, 2), 16) / 255;
 
     // Apply gamma correction
-    const getRGBValue = (_val: number) => {
+    const getRGBValue = (val: number) => {
       return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
     };
 
@@ -427,7 +427,7 @@ export class ScreenReaderOptimizer {
   /**
    * Generate semantic HTML structure for complex components
    */
-  static generateSemanticStructure(_type: 'table' | 'list' | 'navigation' | 'form'): {
+  static generateSemanticStructure(type: 'table' | 'list' | 'navigation' | 'form'): {
     container: string;
     items: string;
     labels: string[];

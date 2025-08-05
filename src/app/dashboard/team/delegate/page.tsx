@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import {
   DaisyTabs,
   DaisyTabsContent,
@@ -60,7 +60,7 @@ import {
 
 // Types
 interface TeamMember {
-  id: string
+  id: string;
   name: string;
   email: string;
   role: 'admin' | 'manager' | 'analyst' | 'auditor' | 'viewer';
@@ -283,7 +283,7 @@ export default function TeamDelegatePage() {
     toast.success(`Task ${taskId} assigned to member ${memberId}`);
   }
 
-  const handleTaskAction = (_action: string, taskId: string) => {
+  const handleTaskAction = (action: string, taskId: string) => {
     switch (action) {
       case 'view':
         toast.success(`Viewing task ${taskId} details...`);
@@ -569,14 +569,14 @@ export default function TeamDelegatePage() {
               <DaisyInput
                 placeholder="Search tasks..."
                 value={searchQuery}
-                onChange={(e) =>
-setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>
 
             <DaisySelect value={selectedStatus} onValueChange={setSelectedStatus}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Status" />
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Status</DaisySelectItem>
                 <DaisySelectItem value="pending">Pending</DaisySelectItem>
@@ -590,6 +590,7 @@ setSearchQuery(e.target.value)}
             <DaisySelect value={selectedPriority} onValueChange={setSelectedPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</DaisySelectItem>
                 <DaisySelectItem value="critical">Critical</DaisySelectItem>
@@ -885,8 +886,7 @@ setSearchQuery(e.target.value)}
                     id="title"
                     placeholder="Enter task title..."
                     value={newTask.title}
-                    onChange={(e) =>
-setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
+                    onChange={(e) => setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
                 </div>
 
                 <div>
@@ -895,9 +895,7 @@ setNewTask((prev) => ({ ...prev, title: e.target.value }))} />
                     id="description"
                     placeholder="Describe the task requirements and objectives..."
                     value={newTask.description}
-                    onChange={(e) =>
-setNewTask((prev) => ({ ...prev, description: e.target.value }))
-                    }
+                    onChange={(e) => setNewTask((prev) => ({ ...prev, description: e.target.value }))}
                     rows={3} />
                 </div>
 
@@ -906,9 +904,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     <DaisyLabel htmlFor="type">Task Type</DaisyLabel>
                     <DaisySelect
                       value={newTask.type}
-                      onValueChange={(_value: any) =>
-                        setNewTask((prev) => ({ ...prev, type: value }))
-                      }
+                      onValueChange={(value: any) => setNewTask((prev) => ({ ...prev, type: value }))}
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
@@ -930,9 +926,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                     <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
                     <DaisySelect
                       value={newTask.priority}
-                      onValueChange={(_value: any) =>
-                        setNewTask((prev) => ({ ...prev, priority: value }))
-                      }
+                      onValueChange={(value: any) => setNewTask((prev) => ({ ...prev, priority: value })))
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
@@ -981,8 +975,7 @@ setNewTask((prev) => ({ ...prev, description: e.target.value }))
                       id="dueDate"
                       type="date"
                       value={newTask.dueDate}
-                      onChange={(e) =>
-setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
+                      onChange={(e) => setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
                   </div>
                 </div>
 
@@ -994,9 +987,7 @@ setNewTask((prev) => ({ ...prev, dueDate: e.target.value }))} />
                       type="number"
                       placeholder="8"
                       value={newTask.estimatedHours}
-                      onChange={(e) =>
-setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
-                      } />
+                      onChange={(e) => setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))} />
                   </div>
 
                   <div>
@@ -1036,8 +1027,7 @@ setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
                 <div className="flex gap-2">
                   <DaisyInput
                     placeholder="Add tag..."
-                    onKeyDown={(e) =>
-{
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                         addTag(e.currentTarget.value);
@@ -1064,8 +1054,7 @@ setNewTask((prev) => ({ ...prev, estimatedHours: e.target.value }))
 
               {/* Action Buttons */}
               <div className="flex justify-end space-x-3 pt-4 border-t">
-                <DaisyButton variant="outline" onClick={() =>
-          setIsCreateTaskModalOpen(false)}>
+                <DaisyButton variant="outline" onClick={() => setIsCreateTaskModalOpen(false)}>
                   Cancel
                 
         </DaisyButton>

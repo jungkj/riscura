@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import {
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   DaisySelect,
   DaisySelectContent,
   DaisySelectItem,
@@ -18,7 +18,7 @@ import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisyRadioGroup, DaisyRadioGroupItem } from '@/components/ui/DaisyRadioGroup';
 import { useToast } from '@/hooks/use-toast';
-// import {
+import {
   ArrowLeft,
   FileText,
   Download,
@@ -46,7 +46,7 @@ interface ReportConfig {
     trends: boolean;
     recommendations: boolean;
     appendix: boolean;
-  }
+  };
   format: 'pdf' | 'excel' | 'word';
   recipients: string[];
 }
@@ -111,7 +111,7 @@ export default function GenerateRiskReportPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleSectionToggle = (section: keyof typeof reportConfig.sections) => {
     setReportConfig((prev) => ({
@@ -121,7 +121,7 @@ export default function GenerateRiskReportPage() {
         [section]: !prev.sections[section],
       },
     }));
-  }
+  };
 
   const handleGenerateReport = async () => {
     setGenerating(true);
@@ -135,7 +135,7 @@ export default function GenerateRiskReportPage() {
       if (!response.ok) throw new Error('Failed to generate report');
 
       // In a real implementation, this would return a download URL
-      const blob = await response.blob()
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -158,14 +158,14 @@ export default function GenerateRiskReportPage() {
     } finally {
       setGenerating(false);
     }
-  }
+  };
 
   const handleSendReport = () => {
     toast({
       title: 'Report Scheduled',
       description: 'The report will be sent to the selected recipients',
     });
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -266,6 +266,7 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="report-type" className="mt-1">
                         <DaisySelectValue />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="comprehensive">
                           Comprehensive Risk Assessment
@@ -288,6 +289,7 @@ export default function GenerateRiskReportPage() {
                     >
                       <DaisySelectTrigger id="time-range" className="mt-1">
                         <DaisySelectValue />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="last-month">Last Month</DaisySelectItem>
                         <DaisySelectItem value="last-quarter">Last Quarter</DaisySelectItem>
@@ -308,20 +310,20 @@ export default function GenerateRiskReportPage() {
                       className="mt-2"
                     >
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="pdf" id="pdf" >
-                          <DaisyLabel htmlFor="pdf" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="pdf" id="pdf" />
+                        <DaisyLabel htmlFor="pdf" className="cursor-pointer">
                           PDF Document
                         </DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="excel" id="excel" >
-                          <DaisyLabel htmlFor="excel" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="excel" id="excel" />
+                        <DaisyLabel htmlFor="excel" className="cursor-pointer">
                           Excel Spreadsheet
                         </DaisyLabel>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <DaisyRadioGroupItem value="word" id="word" >
-                          <DaisyLabel htmlFor="word" className="cursor-pointer">
+                        <DaisyRadioGroupItem value="word" id="word" />
+                        <DaisyLabel htmlFor="word" className="cursor-pointer">
                           Word Document
                         </DaisyLabel>
                       </div>
@@ -343,8 +345,9 @@ export default function GenerateRiskReportPage() {
                           id={key}
                           checked={value}
                           onCheckedChange={() =>
-handleSectionToggle(key as keyof typeof reportConfig.sections)
-                          } />
+                            handleSectionToggle(key as keyof typeof reportConfig.sections)
+                          }
+                        />
                         <DaisyLabel htmlFor={key} className="cursor-pointer">
                           {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                         </DaisyLabel>

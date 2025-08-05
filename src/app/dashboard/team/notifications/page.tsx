@@ -59,7 +59,7 @@ import {
 
 // Types
 interface Notification {
-  id: string
+  id: string;
   type:
     | 'task_assigned'
     | 'task_completed'
@@ -264,7 +264,7 @@ const defaultPreferences: NotificationPreferences = {
   },
 }
 
-const getNotificationIcon = (_type: string) => {
+const getNotificationIcon = (type: string) => {
   const icons = {
     task_assigned: Target,
     task_completed: CheckCircle,
@@ -473,14 +473,14 @@ export default function TeamNotificationsPage() {
               <DaisyInput
                 placeholder="Search notifications..."
                 value={searchQuery}
-                onChange={(e) =>
-setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10" />
             </div>
 
             <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
               <DaisySelectTrigger className="w-40">
                 <DaisySelectValue placeholder="Category" />
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Categories</DaisySelectItem>
                 <DaisySelectItem value="security">Security</DaisySelectItem>
@@ -494,6 +494,7 @@ setSearchQuery(e.target.value)}
             <DaisySelect value={filterPriority} onValueChange={setFilterPriority}>
               <DaisySelectTrigger className="w-32">
                 <DaisySelectValue placeholder="Priority" />
+              </DaisySelectTrigger>
               <DaisySelectContent>
                 <DaisySelectItem value="all">All Priorities</DaisySelectItem>
                 <DaisySelectItem value="critical">Critical</DaisySelectItem>
@@ -838,37 +839,31 @@ setSearchQuery(e.target.value)}
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.email[item.key as keyof typeof preferences.email]}
-                            onCheckedChange={(checked) =>
-handlePreferenceChange(
+                            onCheckedChange={(checked) => handlePreferenceChange(
                                 item.key as keyof typeof preferences.email,
                                 'email',
                                 checked
-                              )
-                            } />
+                              )} />
                           <DaisyLabel className="text-sm">Email</DaisyLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.push[item.key as keyof typeof preferences.push]}
-                            onCheckedChange={(checked) =>
-handlePreferenceChange(
+                            onCheckedChange={(checked) => handlePreferenceChange(
                                 item.key as keyof typeof preferences.push,
                                 'push',
                                 checked
-                              )
-                            } />
+                              )} />
                           <DaisyLabel className="text-sm">Push</DaisyLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.inApp[item.key as keyof typeof preferences.inApp]}
-                            onCheckedChange={(checked) =>
-handlePreferenceChange(
+                            onCheckedChange={(checked) => handlePreferenceChange(
                                 item.key as keyof typeof preferences.inApp,
                                 'inApp',
                                 checked
-                              )
-                            } />
+                              )} />
                           <DaisyLabel className="text-sm">In-App</DaisyLabel>
                         </div>
                       </div>
@@ -911,12 +906,10 @@ handlePreferenceChange(
                   <div className="flex items-center space-x-2">
                     <DaisySwitch
                       checked={preferences.quietHours.enabled}
-                      onCheckedChange={(checked) =>
-setPreferences((prev) => ({
+                      onCheckedChange={(checked) => setPreferences((prev) => ({
                           ...prev,
                           quietHours: { ...prev.quietHours, enabled: checked },
-                        }))
-                      } />
+                        }))} />
                     <DaisyLabel>Enable quiet hours</DaisyLabel>
                   </div>
                   {preferences.quietHours.enabled && (
@@ -926,12 +919,10 @@ setPreferences((prev) => ({
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.start}
-                          onChange={(e) =>
-setPreferences((prev) => ({
+                          onChange={(e) => setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, start: e.target.value },
-                            }))
-                          }
+                            }))}
                           className="mt-1" />
                       </div>
                       <div>
@@ -939,12 +930,10 @@ setPreferences((prev) => ({
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.end}
-                          onChange={(e) =>
-setPreferences((prev) => ({
+                          onChange={(e) => setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, end: e.target.value },
-                            }))
-                          }
+                            })))
                           className="mt-1" />
                       </div>
                     </div>

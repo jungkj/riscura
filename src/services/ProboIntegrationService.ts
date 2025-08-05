@@ -47,12 +47,12 @@ export interface ProboQuickAction {
   category: 'vendor' | 'controls' | 'compliance' | 'assessment';
 }
 
-/**;
- * Probo Integration Service;
- * Integrates with Probo's open-source compliance platform;
- * Based on https://github.com/getprobo/probo;
- *;
- * Enhanced to use actual Probo repository data and logic;
+/**
+ * Probo Integration Service
+ * Integrates with Probo's open-source compliance platform
+ * Based on https://github.com/getprobo/probo
+ *
+ * Enhanced to use actual Probo repository data and logic
  */
 export class ProboIntegrationService {
   private static instance: ProboIntegrationService;
@@ -62,11 +62,10 @@ export class ProboIntegrationService {
   private eventListeners: Map<string, Function[]> = new Map();
   private controlLibrary: ProboControlLibrary | null = null;
   private lastSync: Date = new Date();
-;
+
   // Direct integration with Probo's actual data structures
   private proboMitigations: any[] = [];
   private proboCategories: string[] = [];
-;
   private constructor(_config: ProboIntegrationConfig) {
     this.proboService = ProboService.getInstance();
     this.vendorService = new VendorAssessmentService();
@@ -113,15 +112,14 @@ export class ProboIntegrationService {
       // Load actual Probo mitigations data
       this.proboMitigations = await this.proboService.getMitigations();
       this.proboCategories = await this.proboService.getMitigationCategories();
-;
       // console.log(
-        `Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`;
-      );
+      //   `Loaded ${this.proboMitigations.length} Probo mitigations across ${this.proboCategories.length} categories`
+      // );
     } catch (error) {
       // console.error(
-        'Failed to load Probo repository data:',
-        error instanceof Error ? error.message : String(error);
-      );
+      //   'Failed to load Probo repository data:',
+      //   error instanceof Error ? error.message : String(error)
+      // );
       throw error;
     }
   }
@@ -150,8 +148,8 @@ export class ProboIntegrationService {
     const soc2Controls = mitigations.filter((m) => m.standards.includes('SOC2'));
     const iso27001Controls = mitigations.filter((m) => m.standards.includes('ISO27001'));
     const nistControls = mitigations.filter((m) => m.standards.includes('NIST'));
-;
-    return [;
+
+    return [
       {
         framework: 'SOC 2 Type II',
         score: 96,
@@ -195,13 +193,13 @@ export class ProboIntegrationService {
     ];
   }
 
-  /**;
-   * Get Probo-specific quick actions based on user role and context;
+  /**
+   * Get Probo-specific quick actions based on user role and context
    */
-  getProboQuickActions(;
-    userRole: 'executive' | 'analyst' | 'operator' | 'auditor';
+  getProboQuickActions(
+    userRole: 'executive' | 'analyst' | 'operator' | 'auditor'
   ): ProboQuickAction[] {
-    const baseActions: ProboQuickAction[] = [;
+    const baseActions: ProboQuickAction[] = [
       {
         id: 'probo-hub',
         title: 'Probo Hub',
@@ -248,22 +246,21 @@ export class ProboIntegrationService {
         category: 'assessment',
       },
     ];
-;
     // Filter and prioritize based on user role
     const roleFilters = {
       executive: ['assessment', 'compliance'],
       analyst: ['controls', 'compliance', 'vendor'],
       operator: ['controls', 'vendor'],
       auditor: ['compliance', 'assessment'],
-    }
-;
-    return baseActions;
-      .filter((action) => roleFilters[userRole].includes(action.category));
+    };
+    
+    return baseActions
+      .filter((action) => roleFilters[userRole].includes(action.category))
       .sort((a, b) => a.priority - b.priority);
   }
 
-  /**;
-   * Get Probo insights for dashboard widgets;
+  /**
+   * Get Probo insights for dashboard widgets
    */
   async getProboInsights(): Promise<{
     controlCoverage: number;
@@ -279,8 +276,8 @@ export class ProboIntegrationService {
       controlCoverage: Math.round((mitigations.length / 1000) * 100), // Assuming 1000 total possible controls;
       riskReduction: 78,
       complianceImprovement: 23,
-      vendorRiskScore: 35, // Lower is better;
-      recommendations: [;
+      vendorRiskScore: 35, // Lower is better
+      recommendations: [
         'Implement 15 additional mandatory controls from Probo library',
         'Complete SOC 2 assessment using Probo framework',
         'Assess 5 high-risk vendors using Probo AI assessment',

@@ -84,7 +84,7 @@ export async function generatePDF(
       printBackground: true,
     })
 
-    const _stats = await fs.stat(filePath);
+    const stats = await fs.stat(filePath);
 
     return {
       filePath,
@@ -135,7 +135,7 @@ async function generateHTMLContent(
 /**
  * Generate Risk Assessment Report HTML
  */
-const generateRiskAssessmentHTML = (_data: any, baseStyles: string): string {
+const generateRiskAssessmentHTML = (data: any, baseStyles: string): string {
   const { summary, risks, categoryDistribution, topRisks } = data;
 
   const periodText = data.filters?.dateRange
@@ -266,7 +266,7 @@ const generateRiskAssessmentHTML = (_data: any, baseStyles: string): string {
 /**
  * Generate Compliance Status Report HTML
  */
-const generateComplianceStatusHTML = (_data: any, baseStyles: string): string {
+const generateComplianceStatusHTML = (data: any, baseStyles: string): string {
   const { frameworks, complianceScores, overallCompliance } = data;
 
   return `
@@ -361,7 +361,7 @@ const generateComplianceStatusHTML = (_data: any, baseStyles: string): string {
 /**
  * Generate Control Effectiveness Report HTML
  */
-const generateControlEffectivenessHTML = (_data: any, baseStyles: string): string {
+const generateControlEffectivenessHTML = (data: any, baseStyles: string): string {
   const { controls, effectivenessStats, totalControls, averageEffectiveness } = data;
 
   return `
@@ -447,7 +447,7 @@ const generateControlEffectivenessHTML = (_data: any, baseStyles: string): strin
 /**
  * Generate Executive Summary Report HTML
  */
-const generateExecutiveSummaryHTML = (_data: any, baseStyles: string): string {
+const generateExecutiveSummaryHTML = (data: any, baseStyles: string): string {
   const { executiveSummary } = data;
 
   return `
@@ -515,7 +515,7 @@ const generateExecutiveSummaryHTML = (_data: any, baseStyles: string): string {
 /**
  * Generate Audit Trail Report HTML
  */
-const generateAuditTrailHTML = (_data: any, baseStyles: string): string {
+const generateAuditTrailHTML = (data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -547,7 +547,7 @@ const generateAuditTrailHTML = (_data: any, baseStyles: string): string {
 /**
  * Generate generic report HTML
  */
-const generateGenericReportHTML = (_data: any, baseStyles: string): string {
+const generateGenericReportHTML = (data: any, baseStyles: string): string {
   return `
     <!DOCTYPE html>
     <html>
@@ -932,7 +932,7 @@ const generateCategoryChart = (distribution: Record<string, number>): string {
 /**
  * Get default header template
  */
-const getDefaultHeaderTemplate = (_data: any): string {
+const getDefaultHeaderTemplate = (data: any): string {
   return `
     <div style="font-size: 10px; padding: 10px; border-bottom: 1px solid #e0e0e0; width: 100%; display: flex; justify-content: space-between;">
       <span>Riscura Risk Management Platform</span>

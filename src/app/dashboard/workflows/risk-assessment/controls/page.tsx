@@ -3,19 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
 import { useToast } from '@/hooks/use-toast';
-// import {
+import {
   ArrowLeft,
   Shield,
   CheckCircle2,
@@ -78,7 +78,7 @@ export default function ReviewRiskControlsPage() {
       setControls(controlsData);
 
       // Calculate stats
-      const implemented = controlsData.filter((c: Control) => c.status === 'implemented').length
+      const implemented = controlsData.filter((c: Control) => c.status === 'implemented').length;
       const partial = controlsData.filter((c: Control) => c.status === 'partial').length;
       const notImplemented = controlsData.filter(
         (c: Control) => c.status === 'not-implemented'
@@ -106,7 +106,7 @@ export default function ReviewRiskControlsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -121,7 +121,7 @@ export default function ReviewRiskControlsPage() {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -136,7 +136,7 @@ export default function ReviewRiskControlsPage() {
       default:
         return null;
     }
-  }
+  };
 
   const filteredControls = controls.filter((control) => {
     const categoryMatch = selectedCategory === 'all' || control.category === selectedCategory;
@@ -144,7 +144,7 @@ export default function ReviewRiskControlsPage() {
     return categoryMatch && statusMatch;
   });
 
-  const _categories = Array.from(new Set(controls.map((c) => c.category)));
+  const categories = Array.from(new Set(controls.map((c) => c.category)));
 
   return (
     <ProtectedRoute>
