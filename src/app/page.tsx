@@ -8,6 +8,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
+import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
+import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
 
 // Icons
 import {
@@ -270,17 +272,6 @@ function HeroProcessCard() {
 
 export default function HomePage() {
   const router = useRouter();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleGetStarted = () => {
     router.push('/auth/register');
@@ -290,65 +281,20 @@ export default function HomePage() {
     router.push('/auth/register');
   };
 
+  const navItems = [
+    { name: "Platform", link: "#platform" },
+    { name: "Enterprise", link: "#enterprise" },
+    { name: "Pricing", link: "#pricing" },
+    { name: "Demo", link: "#demo" },
+  ];
+
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Enhanced Navigation with Floating Effect */}
-      <motion.nav 
-        className={`fixed inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/60' 
-            : 'bg-white/90 backdrop-blur-sm border-b border-gray-200'
-        }`}
-        animate={{
-          y: isScrolled ? 0 : 0,
-          scale: isScrolled ? 0.98 : 1,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      >
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
-          isScrolled ? 'py-2' : 'py-0'
-        }`}>
-          <div className={`flex items-center justify-between transition-all duration-300 ${
-            isScrolled ? 'h-14' : 'h-16'
-          }`}>
-            <div className="flex items-center space-x-3">
-              <Image
-                src="/images/logo/riscura.png"
-                alt="Riscura Logo"
-                width={32}
-                height={32}
-                className="object-contain"
-                priority
-              />
-              <span className="text-2xl font-bold text-[#199BEC] font-inter">Riscura</span>
-            </div>
-            
-            {/* Center Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8">
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Platform</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Enterprise</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Pricing</button>
-              <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Demo</button>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline"
-                onClick={() => router.push('/auth/login')}
-                className="px-4 py-2 text-sm border-[#199BEC] text-[#199BEC] hover:bg-[#199BEC] hover:text-white"
-              >
-                Login
-              </Button>
-              <Button 
-                onClick={handleGetStarted}
-                className="px-4 py-2 text-sm bg-[#199BEC] hover:bg-[#199BEC]/80"
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </motion.nav>
+      {/* Static Navbar */}
+      <StaticNav />
+      
+      {/* Floating Navbar */}
+      <FloatingNav navItems={navItems} />
 
       {/* Enhanced Hero Section */}
       <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
@@ -387,21 +333,6 @@ export default function HomePage() {
                   </Button>
                 </div>
 
-              {/* Social Proof Stats */}
-              <div className="grid grid-cols-3 gap-6 md:gap-8 max-w-md mx-auto lg:mx-0">
-                <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">Enterprise</p>
-                  <p className="text-sm text-[#A8A8A8] font-inter">Grade Security</p>
-                </div>
-                <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">Quick</p>
-                  <p className="text-sm text-[#A8A8A8] font-inter">Setup</p>
-                </div>
-                <div className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-[#191919] font-inter">Expert</p>
-                  <p className="text-sm text-[#A8A8A8] font-inter">Support</p>
-                </div>
-              </div>
             </div>
 
             {/* Right Column - Advanced Process Showcase */}
@@ -416,6 +347,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Integrations Carousel */}
+      <IntegrationsCarousel />
 
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
