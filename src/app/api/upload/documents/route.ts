@@ -244,8 +244,8 @@ export const PUT = withAPI(async (req: NextRequest) => {
       const validation = await validateFile(extractedFile.file)
       if (!validation.isValid) {
         // console.warn(
-          `Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`
-        )
+        //   `Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`
+        // )
         continue;
       }
 

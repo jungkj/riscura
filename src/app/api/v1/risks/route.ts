@@ -11,7 +11,7 @@ import {
   createForbiddenError,
   createNotFoundError,
 } from '@/lib/api/error-handler';
-// import {
+import {
   RiskCreateSchema,
   RiskQuerySchema,
   parseAndValidate,
@@ -27,14 +27,14 @@ import { getApiVersionFromRequest, ApiVersionMiddleware } from '@/lib/api/versio
 export async function GET(_request: NextRequest) {
   try {
     // 1. Rate limiting
-    const rateLimitResult = await applyRateLimit(request)
+    const rateLimitResult = await applyRateLimit(_request)
     if (!rateLimitResult.success) {
       throw rateLimitResult.error;
     }
 
     // 2. Version negotiation
-    const version = getApiVersionFromRequest(request)
-    const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(request);
+    const version = getApiVersionFromRequest(_request)
+    const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(_request);
     if (!versionNegotiation.success) {
       return versionNegotiation.response!;
     }
@@ -46,7 +46,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // 4. Parse and validate query parameters
-    const queryValidation = validateQueryParams(RiskQuerySchema, request.nextUrl.searchParams)
+    const queryValidation = validateQueryParams(RiskQuerySchema, _request.nextUrl.searchParams)
 
     if (!queryValidation.success) {
       const errors = (queryValidation as { success: false; errors: any[] }).errors;
@@ -56,7 +56,7 @@ export async function GET(_request: NextRequest) {
           message: error.message,
           code: error.code,
         })),
-        ApiResponseFormatter.createResponseOptions(request)
+        ApiResponseFormatter.createResponseOptions(_request)
       );
     }
 
@@ -198,7 +198,7 @@ export async function GET(_request: NextRequest) {
       },
       {
         version,
-        ...ApiResponseFormatter.createResponseOptions(request),
+        ...ApiResponseFormatter.createResponseOptions(_request),
       }
     )
 
@@ -209,7 +209,7 @@ export async function GET(_request: NextRequest) {
 
     return response;
   } catch (error) {
-    return globalErrorHandler.handleError(error, request, {
+    return globalErrorHandler.handleError(error, _request, {
       endpoint: 'GET /api/v1/risks',
       action: 'list_risks',
     });
@@ -223,14 +223,14 @@ export async function GET(_request: NextRequest) {
 export async function POST(_request: NextRequest) {
   try {
     // 1. Rate limiting
-    const rateLimitResult = await applyRateLimit(request, ['standard', 'bulk'])
+    const rateLimitResult = await applyRateLimit(_request, ['standard', 'bulk'])
     if (!rateLimitResult.success) {
       throw rateLimitResult.error;
     }
 
     // 2. Version negotiation
-    const version = getApiVersionFromRequest(request)
-    const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(request);
+    const version = getApiVersionFromRequest(_request)
+    const versionNegotiation = await ApiVersionMiddleware.negotiateVersion(_request);
     if (!versionNegotiation.success) {
       return versionNegotiation.response!;
     }
@@ -247,7 +247,7 @@ export async function POST(_request: NextRequest) {
     }
 
     // 5. Input validation
-    const body = await request.json()
+    const body = await _request.json()
     const validation = parseAndValidate(RiskCreateSchema, body);
     if (!validation.success) {
       const errors = (validation as { success: false; errors: any[] }).errors;
@@ -257,7 +257,7 @@ export async function POST(_request: NextRequest) {
           message: error.message,
           code: error.code,
         })),
-        ApiResponseFormatter.createResponseOptions(request)
+        ApiResponseFormatter.createResponseOptions(_request)
       );
     }
 
@@ -295,7 +295,7 @@ export async function POST(_request: NextRequest) {
           'One or more linked controls do not exist',
           {
             status: 400,
-            ...ApiResponseFormatter.createResponseOptions(request),
+            ...ApiResponseFormatter.createResponseOptions(_request),
           }
         );
       }
@@ -389,7 +389,7 @@ export async function POST(_request: NextRequest) {
     const response = ApiResponseFormatter.success(transformedRisk, {
       version,
       status: 201,
-      ...ApiResponseFormatter.createResponseOptions(request),
+      ...ApiResponseFormatter.createResponseOptions(_request),
     })
 
     // Add rate limit headers
@@ -399,7 +399,7 @@ export async function POST(_request: NextRequest) {
 
     return response;
   } catch (error) {
-    return globalErrorHandler.handleError(error, request, {
+    return globalErrorHandler.handleError(error, _request, {
       endpoint: 'POST /api/v1/risks',
       action: 'create_risk',
     });
@@ -409,7 +409,7 @@ export async function POST(_request: NextRequest) {
 /**
  * Helper function to calculate risk level from risk score
  */
-const calculateRiskLevel = (riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+const calculateRiskLevel = (riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' => {
   if (riskScore <= 8) return 'LOW';
   if (riskScore <= 15) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';

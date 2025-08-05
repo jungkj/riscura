@@ -6,15 +6,15 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
 import { DaisyInput } from '@/components/ui/DaisyInput';
-// import {
+import {
   Shield,
   Target,
   Search,
@@ -32,7 +32,7 @@ import { DaisyInput } from '@/components/ui/DaisyInput';
   Brain,
   BarChart3,
   ShieldCheck,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const ProboPageContent = () => {
   const searchParams = useSearchParams();
@@ -67,7 +67,7 @@ const ProboPageContent = () => {
     const fetchProboData = async () => {
       try {
         // Fetch vendor assessments
-        const vendorRes = await fetch('/api/assessments')
+        const vendorRes = await fetch('/api/assessments');
         if (vendorRes.ok) {
           const vendorData = await vendorRes.json();
           if (vendorData.success && vendorData.data) {
@@ -80,7 +80,7 @@ const ProboPageContent = () => {
         }
 
         // Fetch controls
-        const controlsRes = await fetch('/api/controls')
+        const controlsRes = await fetch('/api/controls');
         if (controlsRes.ok) {
           const controlsData = await controlsRes.json();
           if (controlsData.success && controlsData.data) {
@@ -93,18 +93,18 @@ const ProboPageContent = () => {
         }
 
         // Fetch compliance score
-        const complianceRes = await fetch('/api/compliance/assessments')
+        const complianceRes = await fetch('/api/compliance/assessments');
         if (complianceRes.ok) {
           const complianceData = await complianceRes.json();
           if (complianceData.success && complianceData.data) {
             // Calculate average compliance score
-            const scores = complianceData.data.map((a) => a.complianceScore || 0)
-            const _avgScore =
+            const scores = complianceData.data.map((a) => a.complianceScore || 0);
+            const avgScore =
               scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
             setStats((prev) => ({ ...prev, complianceScore: avgScore }));
 
             // Set SOC2 data if available
-            const soc2Assessment = complianceData.data.find((a) => a.framework === 'SOC2')
+            const soc2Assessment = complianceData.data.find((a) => a.framework === 'SOC2');
             if (soc2Assessment) {
               setSoc2Score({
                 overallScore: soc2Assessment.complianceScore || 0,
@@ -121,7 +121,7 @@ const ProboPageContent = () => {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchProboData();
   }, []);
@@ -425,9 +425,9 @@ const ProboPageContent = () => {
                     <DaisyInput
                       placeholder="Search controls..."
                       value={searchQuery}
-                      onChange={(e) = />
-setSearchQuery(e.target.value)}
-                      className="pl-10 w-64" />
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 w-64"
+                    />
                   </div>
                   <DaisyButton className="bg-green-600 hover:bg-green-700">
                     <Plus className="h-4 w-4 mr-2" />

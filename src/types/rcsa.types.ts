@@ -81,19 +81,15 @@ export interface Control {
   location?: string;
   cost?: number;
   effort?: ControlEffort;
-;
   // Custom fields
   tags: string[];
   customFields?: Record<string, any>;
-;
   // Multi-tenant isolation
   organizationId: string;
-;
   // Audit fields
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
-;
   // Computed fields for UI
   evidence?: Document[];
   comments?: Comment[];
@@ -107,10 +103,9 @@ export interface ControlRiskMapping {
   id: string;
   riskId: string;
   controlId: string;
-  effectiveness: number; // 0-1 scale (STANDARDIZED);
+  effectiveness: number; // 0-1 scale (STANDARDIZED)
   createdAt: Date;
   updatedAt: Date;
-;
   // Populated relationships for UI
   risk?: Risk;
   control?: Control;
@@ -123,11 +118,10 @@ export interface AssessmentEvidence {
   controlId?: string;
   name: string;
   description?: string;
-  evidenceType: string; // DOCUMENT, SCREENSHOT, CONFIGURATION, INTERVIEW;
+  evidenceType: string; // DOCUMENT, SCREENSHOT, CONFIGURATION, INTERVIEW
   fileUrl?: string;
   uploadedBy: string;
   uploadedAt: Date;
-;
   // Populated relationships
   control?: Control;
   uploader?: User;
@@ -146,24 +140,23 @@ export interface AssessmentFinding {
   assignedTo?: string;
   createdAt: Date;
   updatedAt: Date;
-;
   // Populated relationships
   control?: Control;
   assignee?: User;
 }
 
 export enum FindingSeverity {
-  LOW = 'LOW',;
-  MEDIUM = 'MEDIUM',;
-  HIGH = 'HIGH',;
-  CRITICAL = 'CRITICAL',;
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
 }
 
 export enum FindingStatus {
-  OPEN = 'OPEN',;
-  IN_PROGRESS = 'IN_PROGRESS',;
-  RESOLVED = 'RESOLVED',;
-  CLOSED = 'CLOSED',;
+  OPEN = 'OPEN',
+  IN_PROGRESS = 'IN_PROGRESS',
+  RESOLVED = 'RESOLVED',
+  CLOSED = 'CLOSED',
 }
 
 // Request/Response types for API
@@ -433,15 +426,15 @@ export interface TestScript {
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;
-;
+
   // Relations
   controls?: ControlTestScript[];
   testExecutions?: TestExecution[];
 }
 
-/**;
- * Represents the many-to-many relationship between Controls and Test Scripts;
- * This interface is used for both database relations and API responses;
+/**
+ * Represents the many-to-many relationship between Controls and Test Scripts
+ * This interface is used for both database relations and API responses
  */
 export interface ControlTestScript {
   id: string;
@@ -450,10 +443,10 @@ export interface ControlTestScript {
   isMandatory: boolean;
   createdAt: Date;
   updatedAt: Date;
-;
+
   // Relations - can be either full objects or partial depending on context
-  control?:;
-    | Control;
+  control?:
+    | Control
     | {
         id: string;
         title: string;
@@ -461,7 +454,7 @@ export interface ControlTestScript {
         status: ControlStatus;
         category?: ControlCategory;
         effectiveness?: number;
-      }
+      };
   testScript?: TestScript;
 }
 
@@ -480,7 +473,6 @@ export interface TestExecution {
   duration?: number;
   createdAt: Date;
   updatedAt: Date;
-;
   // Relations
   testScript?: TestScript;
   executor?: User;
@@ -511,7 +503,7 @@ export interface CreateTestScriptRequest {
   automationCapable?: boolean;
   automationScript?: string;
   tags?: string[];
-  controlIds?: string[]; // Controls to associate with;
+  controlIds?: string[]; // Controls to associate with
 }
 
 export interface UpdateTestScriptRequest {

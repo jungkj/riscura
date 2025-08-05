@@ -1,11 +1,10 @@
 // Proactive Monitoring & Intelligence Types
-// import {
+import {
   RiskCategory,
-  RiskImpact,;
-  TrendDirection,;
-  ConfidenceInterval,;
+  RiskImpact,
+  TrendDirection,
+  ConfidenceInterval,
 } from './risk-intelligence.types';
-;
 // === Core Monitoring Types ===
 export interface ActionRecommendation {
   id: string;
@@ -75,28 +74,25 @@ export interface FindingImpact {
   stakeholders: string[];
 }
 
-export type AnalysisType =;
-  | 'risk_analysis';
-  | 'control_testing';
-  | 'compliance_check';
-  | 'performance_review';
-  | 'trend_analysis';
-  | 'pattern_detection';
-  | 'health_check';
-  | 'workflow_analysis';
+export type AnalysisType =
+  | 'risk_analysis'
+  | 'control_testing'
+  | 'compliance_check'
+  | 'performance_review'
+  | 'trend_analysis'
+  | 'pattern_detection'
+  | 'health_check'
+  | 'workflow_analysis'
   | 'external_intelligence';
-;
-export type AnalysisFrequency =;
-  | 'real_time';
-  | 'hourly';
-  | 'daily';
-  | 'weekly';
-  | 'monthly';
-  | 'quarterly';
+export type AnalysisFrequency =
+  | 'real_time'
+  | 'hourly'
+  | 'daily'
+  | 'weekly'
+  | 'monthly'
+  | 'quarterly'
   | 'on_demand';
-;
 export type TaskPriority = 'critical' | 'high' | 'medium' | 'low';
-;
 // === Scheduled Analysis ===
 export interface ScheduledAnalysis {
   id: string;
@@ -200,26 +196,25 @@ export interface ProactiveInsight {
   metadata: Record<string, unknown>;
 }
 
-export type InsightType =;
-  | 'risk_increase';
-  | 'control_degradation';
-  | 'compliance_gap';
-  | 'performance_decline';
-  | 'emerging_threat';
-  | 'optimization_opportunity';
-  | 'process_improvement';
-  | 'resource_optimization';
-  | 'workflow_bottleneck';
-  | 'anomaly_detection';
-  | 'trend_deviation';
-  | 'threshold_breach';
-  | 'pattern_change';
+export type InsightType =
+  | 'risk_increase'
+  | 'control_degradation'
+  | 'compliance_gap'
+  | 'performance_decline'
+  | 'emerging_threat'
+  | 'optimization_opportunity'
+  | 'process_improvement'
+  | 'resource_optimization'
+  | 'workflow_bottleneck'
+  | 'anomaly_detection'
+  | 'trend_deviation'
+  | 'threshold_breach'
+  | 'pattern_change'
   | 'external_intelligence';
-;
+
 export type InsightPriority = 'critical' | 'high' | 'medium' | 'low' | 'info';
-;
+
 export type InsightStatus = 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed';
-;
 export interface InsightDetails {
   context: string;
   evidence: Evidence[];
@@ -302,28 +297,27 @@ export interface ActionItem {
   notes?: string;
 }
 
-export type ActionType =;
-  | 'investigation';
-  | 'mitigation';
-  | 'monitoring';
-  | 'process_change';
-  | 'control_update';
-  | 'training';
-  | 'communication';
-  | 'documentation';
-  | 'automation';
+export type ActionType =
+  | 'investigation'
+  | 'mitigation'
+  | 'monitoring'
+  | 'process_change'
+  | 'control_update'
+  | 'training'
+  | 'communication'
+  | 'documentation'
+  | 'automation'
   | 'optimization';
-;
+
 export type ActionPriority = 'immediate' | 'urgent' | 'high' | 'medium' | 'low';
-;
-export type ActionStatus =;
-  | 'pending';
-  | 'assigned';
-  | 'in_progress';
-  | 'completed';
-  | 'cancelled';
+
+export type ActionStatus =
+  | 'pending'
+  | 'assigned'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled'
   | 'blocked';
-;
 // === Smart Notifications ===
 export interface SmartNotification {
   id: string;
@@ -456,16 +450,15 @@ export interface DeliveryChannel {
   escalation?: EscalationRule;
 }
 
-export type NotificationChannel =;
-  | 'in_app';
-  | 'email';
-  | 'sms';
-  | 'push';
-  | 'slack';
-  | 'teams';
-  | 'webhook';
+export type NotificationChannel =
+  | 'in_app'
+  | 'email'
+  | 'sms'
+  | 'push'
+  | 'slack'
+  | 'teams'
+  | 'webhook'
   | 'dashboard';
-;
 export interface EscalationRule {
   enabled: boolean;
   timeoutMinutes: number;
@@ -548,17 +541,15 @@ export interface HealthCheckReport {
   nextCheck: Date;
 }
 
-export type HealthCheckType =;
-  | 'risk_register';
-  | 'control_framework';
-  | 'workflow_efficiency';
-  | 'compliance_posture';
-  | 'data_quality';
-  | 'system_performance';
+export type HealthCheckType =
+  | 'risk_register'
+  | 'control_framework'
+  | 'workflow_efficiency'
+  | 'compliance_posture'
+  | 'data_quality'
+  | 'system_performance'
   | 'user_experience';
-;
 export type HealthStatus = 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
-;
 export interface HealthDimension {
   name: string;
   score: number; // 0-100;
@@ -776,17 +767,16 @@ export interface ExternalIntelligence {
   expiresAt?: Date;
 }
 
-export type IntelligenceType =;
-  | 'industry_risk_trend';
-  | 'regulatory_update';
-  | 'compliance_alert';
-  | 'threat_intelligence';
-  | 'market_intelligence';
-  | 'technology_trend';
-  | 'best_practice';
-  | 'incident_report';
+export type IntelligenceType =
+  | 'industry_risk_trend'
+  | 'regulatory_update'
+  | 'compliance_alert'
+  | 'threat_intelligence'
+  | 'market_intelligence'
+  | 'technology_trend'
+  | 'best_practice'
+  | 'incident_report'
   | 'vulnerability_alert';
-;
 export interface IntelligenceSource {
   provider: string;
   reliability: number; // 0-100;
@@ -877,27 +867,25 @@ export interface BackgroundTask {
   metadata: Record<string, unknown>;
 }
 
-export type TaskType =;
-  | 'monitoring';
-  | 'analysis';
-  | 'notification';
-  | 'health_check';
-  | 'optimization';
-  | 'data_sync';
-  | 'report_generation';
-  | 'intelligence_gathering';
-  | 'trend_analysis';
+export type TaskType =
+  | 'monitoring'
+  | 'analysis'
+  | 'notification'
+  | 'health_check'
+  | 'optimization'
+  | 'data_sync'
+  | 'report_generation'
+  | 'intelligence_gathering'
+  | 'trend_analysis'
   | 'anomaly_detection';
-;
-export type TaskStatus =;
-  | 'queued';
-  | 'running';
-  | 'completed';
-  | 'failed';
-  | 'cancelled';
-  | 'timeout';
+export type TaskStatus =
+  | 'queued'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'timeout'
   | 'retrying';
-;
 export interface TaskPayload {
   operation: string;
   parameters: Record<string, unknown>;

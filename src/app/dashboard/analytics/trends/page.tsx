@@ -6,8 +6,8 @@ import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
+import { DaisyCard, DaisyCardBody, DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -19,7 +19,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress'
 import { DaisyAlert, DaisyAlertDescription } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-// import {
+import {
   TrendingUp,
   TrendingDown,
   BarChart3,
@@ -43,7 +43,7 @@ import toast from 'react-hot-toast';
   Minus,
   Eye,
   Settings,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface TrendData {
@@ -150,7 +150,7 @@ const getCategoryConfig = (category: string) => {
   return configs[category as keyof typeof configs] || configs.performance;
 }
 
-const getTrendIcon = (_trend: string) => {
+const getTrendIcon = (trend: string) => {
   const icons = {
     up: ArrowUpRight,
     down: ArrowDownRight,
@@ -331,7 +331,8 @@ export default function AnalyticsTrendsPage() {
                             : metric.trend === 'down'
                               ? 'text-red-600'
                               : 'text-gray-600'
-                        )} />
+                        )}
+                      />
                     </div>
                     <DaisyCardTitle className="text-sm font-medium">{metric.name}</DaisyCardTitle>
                   </DaisyCardBody>
@@ -365,7 +366,8 @@ export default function AnalyticsTrendsPage() {
                           </div>
                           <DaisyProgress
                             value={(metric.currentValue / metric.target) * 100}
-                            className="h-2" / />
+                            className="h-2"
+                          />
 </div>
                       )}
 
@@ -499,7 +501,7 @@ export default function AnalyticsTrendsPage() {
                   </DaisyCardBody>
                   <DaisyCardBody>
                     <div className="space-y-4">
-                      <DaisyProgress value={insight.confidence} className="h-2" / />
+                      <DaisyProgress value={insight.confidence} className="h-2" />
 <div className="p-3 bg-blue-50 rounded-lg">
                         <h4 className="font-medium text-sm text-blue-900 mb-1">
                           Recommended Action

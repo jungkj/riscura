@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-const getPlanFeatures = (plan: string) {
+const getPlanFeatures = (plan: string) => {
   const features = {
     free: ['Basic risk management', 'Up to 10 risks', 'Basic reporting'],
     pro: [
@@ -118,7 +118,7 @@ const getPlanFeatures = (plan: string) {
   return features[plan as keyof typeof features] || features.free;
 }
 
-const getPlanLimits = (plan: string) {
+const getPlanLimits = (plan: string) => {
   const limits = {
     free: { users: 3, risks: 10, storage: '100MB', aiQueries: 50 },
     pro: { users: 25, risks: -1, storage: '10GB', aiQueries: 1000 },

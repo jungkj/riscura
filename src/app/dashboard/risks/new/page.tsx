@@ -7,8 +7,8 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   DaisySelect,
   DaisySelectContent,
   DaisySelectItem,
@@ -163,8 +163,7 @@ const NewRiskForm = () => {
                   <label className="text-sm font-medium text-gray-700">Risk Title *</label>
                   <DaisyInput
                     value={formData.title}
-                    onChange={(e) = />
-handleInputChange('title', e.target.value)}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
                     placeholder="Enter a clear, descriptive title"
                     className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg"
                     required />
@@ -178,6 +177,7 @@ handleInputChange('title', e.target.value)}
                   >
                     <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
                       <DaisySelectValue placeholder="Select category" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
                       <DaisySelectItem value="OPERATIONAL">Operational</DaisySelectItem>
                       <DaisySelectItem value="FINANCIAL">Financial</DaisySelectItem>
@@ -193,8 +193,7 @@ handleInputChange('title', e.target.value)}
                 <label className="text-sm font-medium text-gray-700">Description *</label>
                 <DaisyTextarea
                   value={formData.description}
-                  onChange={(e) = />
-handleInputChange('description', e.target.value)}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Provide a detailed description of the risk, including potential causes and consequences"
                   className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg min-h-[120px]"
                   required />
@@ -205,8 +204,7 @@ handleInputChange('description', e.target.value)}
                   <label className="text-sm font-medium text-gray-700">Risk Owner *</label>
                   <DaisyInput
                     value={formData.riskOwner}
-                    onChange={(e) = />
-handleInputChange('riskOwner', e.target.value)}
+                    onChange={(e) => handleInputChange('riskOwner', e.target.value))
                     placeholder="Assign responsible person"
                     className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg"
                     required />
@@ -242,6 +240,7 @@ handleInputChange('department', e.target.value)}
                   >
                     <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
                       <DaisySelectValue />
+                    </DaisySelectTrigger>
                     <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
                       <DaisySelectItem value="1">1 - Very Low</DaisySelectItem>
                       <DaisySelectItem value="2">2 - Low</DaisySelectItem>
@@ -260,6 +259,7 @@ handleInputChange('department', e.target.value)}
                   >
                     <DaisySelectTrigger className="border-gray-200 focus:border-blue-500 bg-white rounded-lg">
                       <DaisySelectValue />
+                    </DaisySelectTrigger>
                     <DaisySelectContent className="bg-white border-gray-200 rounded-lg shadow-lg">
                       <DaisySelectItem value="1">1 - Very Low</DaisySelectItem>
                       <DaisySelectItem value="2">2 - Low</DaisySelectItem>
@@ -320,8 +320,7 @@ handleInputChange('department', e.target.value)}
                 <label className="text-sm font-medium text-gray-700">Tags</label>
                 <DaisyInput
                   value={formData.tags}
-                  onChange={(e) = />
-handleInputChange('tags', e.target.value)}
+                  onChange={(e) => handleInputChange('tags', e.target.value)}
                   placeholder="Enter tags separated by commas (e.g., cybersecurity, data breach, financial)"
                   className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white rounded-lg" />
                 <p className="text-xs text-gray-500">

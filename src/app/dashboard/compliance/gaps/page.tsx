@@ -17,7 +17,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-// import {
+import {
   AlertTriangle,
   Shield,
   CheckCircle,
@@ -32,7 +32,7 @@ import toast from 'react-hot-toast';
   Plus,
   RefreshCw,
   Download,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Types
 interface ComplianceGap {
@@ -350,7 +350,7 @@ export default function ComplianceGapsPage() {
                           <span>Compliance</span>
                           <span className="font-medium">{framework.compliancePercentage}%</span>
                         </div>
-                        <DaisyProgress value={framework.compliancePercentage} className="h-2" / />
+                        <DaisyProgress value={framework.compliancePercentage} className="h-2" />
 <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <div className="font-medium text-green-600">
@@ -500,7 +500,7 @@ export default function ComplianceGapsPage() {
                         </div>
                       </div>
                       <div className="space-y-4 mt-4">
-                        <DaisyProgress value={framework.compliancePercentage} className="h-3" / />
+                        <DaisyProgress value={framework.compliancePercentage} className="h-3" />
 <div className="grid grid-cols-3 gap-4 text-sm">
                           <div>
                             <div className="font-medium text-gray-900">

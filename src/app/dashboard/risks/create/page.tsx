@@ -9,8 +9,8 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 // import { NewRiskFlow } from '@/components/risks/NewRiskFlow'
 // import { CreateRiskModal } from '@/components/risks/CreateRiskModal'
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   Sparkles,
   Zap,
   MousePointerClick,

@@ -13,7 +13,7 @@ import {
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
-// import {
+import {
   ArrowLeft,
   Search,
   Book,
@@ -31,7 +31,7 @@ import {
   Shield,
   BarChart3,
   Users,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface HelpArticle {
   id: string;
@@ -194,8 +194,7 @@ export default function HelpPage() {
                 <DaisyInput
                   placeholder="Search help articles and FAQs..."
                   value={searchQuery}
-                  onChange={(e) = />
-setSearchQuery(e.target.value)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10" />
               </div>
             </div>

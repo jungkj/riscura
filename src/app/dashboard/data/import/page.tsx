@@ -10,7 +10,7 @@ import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { useToast } from '@/hooks/use-toast';
 import { useDropzone } from 'react-dropzone';
-// import {
+import {
   ArrowLeft,
   Upload,
   FileSpreadsheet,
@@ -22,7 +22,7 @@ import { useDropzone } from 'react-dropzone';
   Download,
   Eye,
   Clock,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface ImportFile {
   file: File;
@@ -326,7 +326,7 @@ export default function ImportDataPage() {
                         <p className="text-sm font-medium">Import Progress</p>
                         <p className="text-sm text-gray-500">{Math.round(importProgress)}%</p>
                       </div>
-                      <DaisyProgress value={importProgress} className="h-2" / />
+                      <DaisyProgress value={importProgress} className="h-2" />
 </div>
                   )}
                 </div>

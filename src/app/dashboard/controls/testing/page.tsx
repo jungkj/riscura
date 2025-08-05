@@ -209,7 +209,7 @@ export default function ControlsTestingPage() {
                               {test.effectiveness}%
                             </span>
                           </div>
-                          <DaisyProgress value={test.effectiveness} className="h-2" / />
+                          <DaisyProgress value={test.effectiveness} className="h-2" />
 </div>
                       </div>
 

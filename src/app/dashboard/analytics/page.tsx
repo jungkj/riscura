@@ -5,8 +5,8 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -40,7 +40,7 @@ import {
   RadialBar,
   ComposedChart,
 } from 'recharts';
-// import {
+import {
   TrendingUp,
   TrendingDown,
   Activity,
@@ -62,7 +62,7 @@ import {
   Zap,
   Eye,
   Briefcase,
-} from 'lucide-react'
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Enhanced metric card component
@@ -184,6 +184,7 @@ export default function AnalyticsPage() {
               <DaisySelect value={timeRange} onValueChange={setTimeRange}>
                 <DaisySelectTrigger className="w-40">
                   <DaisySelectValue />
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="7d">Last 7 days</DaisySelectItem>
                   <DaisySelectItem value="30d">Last 30 days</DaisySelectItem>

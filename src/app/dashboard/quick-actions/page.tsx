@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyInput } from '@/components/ui/DaisyInput';
+import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -23,7 +23,7 @@ import { toast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import GuidedTour from '@/components/help/GuidedTour';
 
-// import {
+import {
   Shield,
   CheckCircle,
   AlertTriangle,
@@ -73,14 +73,14 @@ import GuidedTour from '@/components/help/GuidedTour';
   TrendingDown,
   Video,
   Minus,
-} from 'lucide-react'
+} from 'lucide-react';
 
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { HighContrastToggle } from '@/components/ui/HighContrastToggle';
 
 // Types
 interface WorkflowAction {
-  id: string
+  id: string;
   title: string;
   description: string;
   icon: React.ComponentType<any>;
@@ -133,7 +133,7 @@ export default function QuickActionsPage() {
 
   // Load user preferences
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('riscura-favorite-actions')
+    const savedFavorites = localStorage.getItem('riscura-favorite-actions');
     const savedRecent = localStorage.getItem('riscura-recent-actions');
 
     if (savedFavorites) {
@@ -148,7 +148,7 @@ export default function QuickActionsPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/workflow-stats')
+        const response = await fetch('/api/dashboard/workflow-stats');
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
@@ -198,7 +198,7 @@ export default function QuickActionsPage() {
       icon: Zap,
       color: '#512DA8',
     },
-  ]
+  ];
 
   // Workflow-based action categories
   const workflowCategories: WorkflowCategory[] = [
@@ -473,9 +473,9 @@ export default function QuickActionsPage() {
     .filter((category) => category.actions.length > 0);
 
   // Handle action click
-  const handleActionClick = (_action: WorkflowAction) => {
+  const handleActionClick = (action: WorkflowAction) => {
     if (action.id === 'guided-tour') {
-      setShowTour(true)
+      setShowTour(true);
       return;
     }
 
@@ -484,7 +484,7 @@ export default function QuickActionsPage() {
       toast({
         title: 'Feature Coming Soon',
         description: `${action.title} is currently under development.`,
-      })
+      });
     } else {
       router.push(action.href);
     }
@@ -650,9 +650,9 @@ export default function QuickActionsPage() {
                   <DaisyInput
                     placeholder="Search workflows, actions, or tags..."
                     value={searchQuery}
-                    onChange={(e) = />
-setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter" />
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:border-interactive-primary focus:ring-interactive-primary/20 rounded-lg font-inter"
+                  />
                 </div>
               </div>
 
@@ -755,7 +755,8 @@ setSearchQuery(e.target.value)}
                                 >
                                   <action.icon
                                     className="w-5 h-5"
-                                    style={{ color: category.color }} />
+                                    style={{ color: category.color }}
+                                  />
                                 </div>
                                 <div className="flex items-center gap-1">
                                   {action.isNew && (
@@ -780,7 +781,8 @@ setSearchQuery(e.target.value)}
                                               favorites.includes(action.id)
                                                 ? 'fill-yellow-400 text-yellow-400'
                                                 : 'text-gray-400'
-                                            }`} />
+                                            }`}
+                                          />
                                         </DaisyButton>
                                       </DaisyTooltipTrigger>
                                       <DaisyTooltipContent>
@@ -873,16 +875,14 @@ setSearchQuery(e.target.value)}
             </p>
             <DaisyButton
               variant="secondary"
-              onClick={() =>
-          {
+              onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('all');
                 setShowFavoritesOnly(false);
               }}
             >
               Clear Filters
-            
-        </DaisyButton>
+            </DaisyButton>
           </motion.div>
         )}
 

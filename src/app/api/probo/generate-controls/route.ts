@@ -22,7 +22,7 @@ export async function POST(_request: NextRequest) {
     }
 
     // Parse request body
-    const body: ControlGenerationRequest = await request.json()
+    const body: ControlGenerationRequest = await _request.json()
 
     // Validate required fields
     if (!body.riskId || !body.riskTitle || !body.riskSeverity) {
@@ -51,7 +51,7 @@ export async function POST(_request: NextRequest) {
     const response = await proboService.generateControlsForRisk(body)
 
     // Log the generation for analytics
-    // console.log(
+    console.log(
       `Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`
     )
 

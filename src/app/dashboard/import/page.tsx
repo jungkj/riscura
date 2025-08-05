@@ -11,7 +11,7 @@ import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 
 // Icons
-// import {
+import {
   FileSpreadsheet,
   FileText,
   Upload,
@@ -24,7 +24,7 @@ import { DaisyAlert } from '@/components/ui/DaisyAlert';
   ArrowRight,
   Shield,
   Target,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Mock user data - in real app this would come from auth context
 const mockUser = {

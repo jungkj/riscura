@@ -8,7 +8,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import {
+import {
   FileCheck,
   AlertTriangle,
   TrendingUp,
@@ -20,7 +20,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Download,
   Eye,
   Edit,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export default function RiskAssessmentPage() {
   const router = useRouter();

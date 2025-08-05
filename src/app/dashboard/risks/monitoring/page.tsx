@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
-import {
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,

@@ -70,7 +70,10 @@
       "Bash(gtimeout:*)",
       "Bash(pkill:*)",
       "Bash(od:*)",
-      "Bash(HUSKY=0 git push --no-verify)"
+      "Bash(HUSKY=0 git push --no-verify)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": []
   }

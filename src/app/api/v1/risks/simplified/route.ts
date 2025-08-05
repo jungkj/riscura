@@ -186,7 +186,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
   }
 }
 
-const calculateRiskLevel = (riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+const calculateRiskLevel = (riskScore: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' => {
   if (riskScore <= 6) return 'LOW';
   if (riskScore <= 12) return 'MEDIUM';
   if (riskScore <= 20) return 'HIGH';

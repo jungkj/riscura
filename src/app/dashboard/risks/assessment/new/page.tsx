@@ -10,7 +10,7 @@ import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
 import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
-// import {
+import {
   ArrowLeft,
   Save,
   X,
@@ -21,7 +21,7 @@ import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem
   Target,
   FileCheck,
   AlertCircle,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export default function NewAssessmentPage() {
   const router = useRouter();
@@ -175,10 +175,10 @@ export default function NewAssessmentPage() {
                 <DaisyInput
                   id="title"
                   value={formData.title}
-                  onChange={(e) = />
-handleInputChange('title', e.target.value)}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
                   placeholder="e.g., Annual Security Risk Assessment 2025"
-                  className={errors.title ? 'border-red-500' : ''} />
+                  className={errors.title ? 'border-red-500' : ''}
+                />
                 {errors.title && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
                     <AlertCircle className="h-4 w-4" />
@@ -192,11 +192,11 @@ handleInputChange('title', e.target.value)}
                 <DaisyTextarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) = />
-handleInputChange('description', e.target.value)}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Describe the assessment scope, purpose, and key areas to be evaluated..."
                   rows={4}
-                  className={errors.description ? 'border-red-500' : ''} />
+                  className={errors.description ? 'border-red-500' : ''}
+                />
                 {errors.description && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
                     <AlertCircle className="h-4 w-4" />
@@ -214,6 +214,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger className={errors.assessmentType ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assessment type" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="security">Security Assessment</DaisySelectItem>
                       <DaisySelectItem value="operational">
@@ -247,6 +248,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select framework" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="iso27001">ISO 27001</DaisySelectItem>
                       <DaisySelectItem value="nist">NIST Cybersecurity Framework</DaisySelectItem>
@@ -269,6 +271,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select priority" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Low">Low</DaisySelectItem>
                       <DaisySelectItem value="Medium">Medium</DaisySelectItem>
@@ -286,6 +289,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger className={errors.assignee ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assignee" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
                       <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
@@ -308,9 +312,9 @@ handleInputChange('description', e.target.value)}
                     id="dueDate"
                     type="date"
                     value={formData.dueDate}
-                    onChange={(e) = />
-handleInputChange('dueDate', e.target.value)}
-                    className={errors.dueDate ? 'border-red-500' : ''} />
+                    onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                    className={errors.dueDate ? 'border-red-500' : ''}
+                  />
                   {errors.dueDate && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
                       <AlertCircle className="h-4 w-4" />
@@ -328,9 +332,10 @@ handleInputChange('dueDate', e.target.value)}
                     <DaisyCheckbox
                       id="includeThirdParty"
                       checked={formData.includeThirdParty}
-                      onCheckedChange={(checked) = />
-handleInputChange('includeThirdParty', checked as boolean)
-                      } />
+                      onCheckedChange={(checked) => 
+                        handleInputChange('includeThirdParty', checked as boolean)
+                      }
+                    />
                     <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal">
                       Include third-party vendor assessment
                     </DaisyLabel>
@@ -339,9 +344,10 @@ handleInputChange('includeThirdParty', checked as boolean)
                     <DaisyCheckbox
                       id="includeCompliance"
                       checked={formData.includeCompliance}
-                      onCheckedChange={(checked) = />
-handleInputChange('includeCompliance', checked as boolean)
-                      } />
+                      onCheckedChange={(checked) => 
+                        handleInputChange('includeCompliance', checked as boolean)
+                      }
+                    />
                     <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal">
                       Include compliance requirements evaluation
                     </DaisyLabel>
@@ -368,8 +374,7 @@ handleInputChange('includeCompliance', checked as boolean)
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) = />
-handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter assessment objective"
                     className="flex-1" />
                   {formData.objectives.length > 1 && (

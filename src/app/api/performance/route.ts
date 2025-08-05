@@ -275,7 +275,7 @@ async function getAggregatedMetrics(
 }
 
 // Calculate metrics summary
-const calculateMetricsSummary = (metrics: any[]) {
+const calculateMetricsSummary = (metrics: any[]) => {
   if (metrics.length === 0) {
     return {
       totalSessions: 0,
@@ -324,7 +324,7 @@ const calculateMetricsSummary = (metrics: any[]) {
 }
 
 // Calculate percentile
-const calculatePercentile = (sortedValues: number[], percentile: number): number {
+const calculatePercentile = (sortedValues: number[], percentile: number): number => {
   if (sortedValues.length === 0) return 0
 
   const index = Math.ceil((percentile / 100) * sortedValues.length) - 1;

@@ -220,7 +220,7 @@ export default function SelfAssessmentPage() {
                                 {assessment.score}%
                               </span>
                             </div>
-                            <DaisyProgress value={assessment.score} className="h-2" / />
+                            <DaisyProgress value={assessment.score} className="h-2" />
 <p className="text-xs text-[#6B5B47]">
                               Completed on {assessment.completedDate}
                             </p>

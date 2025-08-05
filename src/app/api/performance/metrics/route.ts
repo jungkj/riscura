@@ -101,7 +101,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
   return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }
 
-const calculateStats = (values: number[]) {
+const calculateStats = (values: number[]) => {
   if (values.length === 0) return null;
 
   const sorted = [...values].sort((a, b) => a - b);

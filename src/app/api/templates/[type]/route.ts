@@ -7,7 +7,7 @@ const TEMPLATE_TYPES = ['rcsa', 'controls', 'vendor-assessment'] as const
 type TemplateType = (typeof TEMPLATE_TYPES)[number];
 
 // Generate template based on type
-const generateTemplate = (_type: TemplateType) {
+const generateTemplate = (type: TemplateType) => {
   const workbook = XLSX.utils.book_new()
 
   switch (type) {

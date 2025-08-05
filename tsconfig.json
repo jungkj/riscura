@@ -39,8 +39,7 @@
     "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": false,
-    "removeComments": true,
-    "preserveConstEnums": false
+    "removeComments": true
   },
   "include": [
     "next-env.d.ts",

@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Bot,
   MessageSquare,
   Shield,
@@ -13,6 +12,7 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   TrendingUp,
   CheckCircle,
 } from 'lucide-react';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard'
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
@@ -293,8 +293,7 @@ const ARIAChat = () => {
                 <DaisyInput
                   placeholder="Ask ARIA about risks, controls, or compliance..."
                   value={input}
-                  onChange={(e) = />
-setInput(e.target.value)}
+                  onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   disabled={isLoading}
                   className="flex-1 text-sm" />

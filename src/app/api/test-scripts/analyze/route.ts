@@ -105,11 +105,11 @@ Determine if this test script provides adequate evidence for control effectivene
     // Track token usage
     if (completion.usage) {
       // console.log('[Test Script Analysis] Token usage:', {
-        prompt_tokens: completion.usage.prompt_tokens,
-        completion_tokens: completion.usage.completion_tokens,
-        total_tokens: completion.usage.total_tokens,
-        estimated_cost: (completion.usage.total_tokens / 1000) * 0.01, // Rough estimate for GPT-4
-      })
+      //   prompt_tokens: completion.usage.prompt_tokens,
+      //   completion_tokens: completion.usage.completion_tokens,
+      //   total_tokens: completion.usage.total_tokens,
+      //   estimated_cost: (completion.usage.total_tokens / 1000) * 0.01, // Rough estimate for GPT-4
+      // })
       // TODO: Store token usage in database or monitoring system
     }
 

@@ -18,7 +18,7 @@ interface UploadedFile {
 }
 
 // Rate limiting function
-const checkRateLimit = (clientIP: string): boolean {
+const checkRateLimit = (clientIP: string): boolean => {
   const now = Date.now()
   const userLimit = rateLimitStore.get(clientIP);
 
@@ -243,7 +243,7 @@ export async function POST(_request: NextRequest) {
           uploadedFile.filename
         )
 
-        // console.log(
+        console.log(
           `AI extracted ${extractedContent.risks.length} risks and ${extractedContent.controls.length} controls`
         )
 
@@ -291,7 +291,7 @@ export async function POST(_request: NextRequest) {
 
             await prisma.$disconnect();
 
-            // console.log(
+            console.log(
               `Successfully saved ${savedRisks} risks and ${savedControls} controls to database`
             )
 
@@ -367,7 +367,7 @@ export async function POST(_request: NextRequest) {
       ],
     }
 
-    // console.log(
+    console.log(
       `Mock extracted ${mockExtractedContent.risks.length} risks and ${mockExtractedContent.controls.length} controls`
     )
 
