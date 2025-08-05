@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
 import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
+import { ContainerTextFlip } from '@/components/ui/container-text-flip';
 
 // Icons
 import {
@@ -31,16 +32,30 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-// Static hero headline component (removed typewriter effect)
+// Hero headline component with text flip animation
 function StaticHeadline() {
+  const words = [
+    "effortless",
+    "intelligent", 
+    "automated",
+    "simple",
+    "powerful"
+  ];
+
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">
         Risk management made{' '}
       </span>
-      <span className="text-[#191919] font-bold">
-        effortless
-      </span>
+      <div className="inline-block">
+        <ContainerTextFlip 
+          words={words}
+          interval={2500}
+          className="text-[#191919] bg-gradient-to-b from-[#199BEC]/10 to-[#199BEC]/20 shadow-[inset_0_-1px_theme(colors.blue.300),inset_0_1px_theme(colors.white)]"
+          textClassName="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#199BEC] to-[#0066CC]"
+          animationDuration={0.5}
+        />
+      </div>
     </div>
   );
 }
