@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 import {
   Activity,
   AlertTriangle,
@@ -52,7 +52,7 @@ export default function RiskMonitoringPage() {
 
   // Simulate loading
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000)
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -122,7 +122,7 @@ export default function RiskMonitoringPage() {
     setLoading(true);
     setLastUpdated(new Date());
     setTimeout(() => setLoading(false), 1000);
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -135,7 +135,7 @@ export default function RiskMonitoringPage() {
       default:
         return 'text-gray-600';
     }
-  }
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -150,7 +150,7 @@ export default function RiskMonitoringPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -246,22 +246,22 @@ export default function RiskMonitoringPage() {
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
                   <DaisyProgress value={17} className="h-2" />
-<div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">High</span>
                     <span className="text-sm text-gray-600">7 risks</span>
                   </div>
                   <DaisyProgress value={30} className="h-2" />
-<div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Medium</span>
                     <span className="text-sm text-gray-600">8 risks</span>
                   </div>
                   <DaisyProgress value={35} className="h-2" />
-<div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Low</span>
                     <span className="text-sm text-gray-600">4 risks</span>
                   </div>
                   <DaisyProgress value={17} className="h-2" />
-</div>
+                </div>
               </DaisyCardBody>
             </DaisyCard>
 
@@ -330,9 +330,8 @@ export default function RiskMonitoringPage() {
                       </DaisyButton>
                       {alert.status === 'active' && (
                         <DaisyButton variant="outline" size="sm">
-          Acknowledge
-                        
-        </DaisyButton>
+                          Acknowledge
+                        </DaisyButton>
                       )}
                     </div>
                   </div>

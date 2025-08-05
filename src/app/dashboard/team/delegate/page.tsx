@@ -7,12 +7,12 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 import {
-import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
+import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import {

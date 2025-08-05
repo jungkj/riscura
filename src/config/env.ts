@@ -1,12 +1,12 @@
 // Environment configuration with validation
-import { z } from 'zod'
+import { z } from 'zod';
 
 // Production guard check
 const isProduction = process.env.NODE_ENV === 'production'
 const isDemoMode = process.env.DEMO_MODE === 'true' && !isProduction;
 
 // Helper to check if a value looks like a development/test secret
-const isInsecureSecret = (_value: string): boolean {
+const isInsecureSecret = (value: string): boolean {
   const insecurePatterns = [
     'dev-',
     'test-',
@@ -262,7 +262,7 @@ const envSchema = z.object({
 })
 
 // Parse and validate environment variables with enhanced error handling
-const validateEnv = () {
+const validateEnv = () => {
   // Skip validation if explicitly requested (useful for builds)
   if (process.env.SKIP_ENV_VALIDATION === '1' || process.env.SKIP_ENV_VALIDATION === 'true') {
     // console.warn('⚠️ Environment validation skipped due to SKIP_ENV_VALIDATION flag')

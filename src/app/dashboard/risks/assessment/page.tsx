@@ -3,12 +3,12 @@
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/DaisyLoadingSpinner';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import {
+import {
   FileCheck,
   AlertTriangle,
   TrendingUp,
@@ -58,7 +58,7 @@ export default function RiskAssessmentPage() {
       priority: 'High',
       riskCount: 15,
     },
-  ]
+  ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -71,7 +71,7 @@ export default function RiskAssessmentPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -84,33 +84,33 @@ export default function RiskAssessmentPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const handleViewDetails = (assessmentId: number) => {
     // Navigate to assessment detail page
-    router.push(`/dashboard/risks/assessment/${assessmentId}`)
-  }
+    router.push(`/dashboard/risks/assessment/${assessmentId}`);
+  };
 
   const handleEditAssessment = (assessmentId: number) => {
     // Navigate to assessment edit page
-    router.push(`/dashboard/risks/assessment/${assessmentId}/edit`)
-  }
+    router.push(`/dashboard/risks/assessment/${assessmentId}/edit`);
+  };
 
   const handleNewAssessment = () => {
     router.push('/dashboard/risks/assessment/new');
-  }
+  };
 
   const handleExportAssessments = () => {
     // Mock export functionality
     // console.log('Exporting assessments...')
     // In a real app, this would trigger a download
-  }
+  };
 
   const handleFilterAssessments = () => {
     // Mock filter functionality
     // console.log('Opening filter modal...')
     // In a real app, this would open a filter modal
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -239,7 +239,7 @@ export default function RiskAssessmentPage() {
                             <span>{assessment.progress}%</span>
                           </div>
                           <DaisyProgress value={assessment.progress} className="h-2" />
-</div>
+                        </div>
                       )}
                     </div>
 

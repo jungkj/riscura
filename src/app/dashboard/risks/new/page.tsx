@@ -8,14 +8,14 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisySelect,
   DaisySelectContent,
   DaisySelectItem,
   DaisySelectTrigger,
   DaisySelectValue,
 } from '@/components/ui/DaisySelect';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { ArrowLeft, Save, X, Shield, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';

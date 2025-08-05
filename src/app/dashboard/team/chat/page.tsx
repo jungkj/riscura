@@ -51,7 +51,7 @@ import { DaisyCardTitle, DaisySelectValue, DaisyDialogTitle } from '@/components
 
 // Types
 interface ChatChannel {
-  id: string
+  id: string;
   name: string;
   description?: string;
   type: ChannelType;

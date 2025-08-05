@@ -334,7 +334,7 @@ class ComprehensiveTestRunner {
       // console.log('\n   Action: Add more test cases to improve coverage')
     }
 
-    const slowSuites = this.results.filter((r) => r.duration > 30000); / /> 30s
+    const slowSuites = this.results.filter((r) => r.duration > 30000); // > 30s
     if (slowSuites.length > 0) {
       // console.log('\n🐌 Slow Test Suites:')
       slowSuites.forEach((suite) => {

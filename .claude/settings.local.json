@@ -71,7 +71,11 @@
       "Bash(pkill:*)",
       "Bash(od:*)",
       "Bash(HUSKY=0 git push --no-verify)",
-      "Bash(HUSKY=0 git push origin fix/comprehensive-syntax-errors)"
+      "Bash(HUSKY=0 git push origin fix/comprehensive-syntax-errors)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build)",
+      "Bash(python3:*)",
+      "Bash(cp:*)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" NEXT_TELEMETRY_DISABLED=1 npx next build)"
     ],
     "deny": []
   }

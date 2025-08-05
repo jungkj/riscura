@@ -2,15 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyCheckbox } from '@/components/ui/DaisyCheckbox';
-import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
-// import {
+import {
+  DaisyCardTitle,
+  DaisySelectTrigger,
+  DaisySelectContent,
+  DaisySelectItem,
+  DaisySelectValue,
+} from '@/components/ui/daisy-components';
+import {
   ArrowLeft,
   Save,
   X,
@@ -39,7 +45,7 @@ export default function NewAssessmentPage() {
     framework: '',
     includeThirdParty: false,
     includeCompliance: false,
-  })
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -54,36 +60,36 @@ export default function NewAssessmentPage() {
       setErrors((prev) => ({
         ...prev,
         [field]: '',
-      }))
+      }));
     }
-  }
+  };
 
-  const handleObjectiveChange = (_index: number, value: string) => {
+  const handleObjectiveChange = (index: number, value: string) => {
     const newObjectives = [...formData.objectives];
     newObjectives[index] = value;
     setFormData((prev) => ({
       ...prev,
       objectives: newObjectives,
     }));
-  }
+  };
 
   const addObjective = () => {
     setFormData((prev) => ({
       ...prev,
       objectives: [...prev.objectives, ''],
     }));
-  }
+  };
 
-  const removeObjective = (_index: number) => {
+  const removeObjective = (index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       objectives: newObjectives,
     }));
-  }
+  };
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     if (!formData.title.trim()) {
       newErrors.title = 'Assessment title is required';
@@ -106,7 +112,7 @@ export default function NewAssessmentPage() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }
+  };
 
   const handleSave = async () => {
     if (!validateForm()) {
@@ -116,22 +122,22 @@ export default function NewAssessmentPage() {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       // console.log('Creating new assessment:', formData)
 
       // Generate a mock ID and redirect to the new assessment
-      const newAssessmentId = Math.floor(Math.random() * 1000) + 1
+      const newAssessmentId = Math.floor(Math.random() * 1000) + 1;
       router.push(`/dashboard/risks/assessment/${newAssessmentId}`);
     } catch (error) {
       // console.error('Error creating assessment:', error)
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleCancel = () => {
     router.push('/dashboard/risks/assessment');
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -175,10 +181,10 @@ export default function NewAssessmentPage() {
                 <DaisyInput
                   id="title"
                   value={formData.title}
-                  onChange={(e) =>
-handleInputChange('title', e.target.value)}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
                   placeholder="e.g., Annual Security Risk Assessment 2025"
-                  className={errors.title ? 'border-red-500' : ''} />
+                  className={errors.title ? 'border-red-500' : ''}
+                />
                 {errors.title && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
                     <AlertCircle className="h-4 w-4" />
@@ -192,11 +198,11 @@ handleInputChange('title', e.target.value)}
                 <DaisyTextarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) =>
-handleInputChange('description', e.target.value)}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Describe the assessment scope, purpose, and key areas to be evaluated..."
                   rows={4}
-                  className={errors.description ? 'border-red-500' : ''} />
+                  className={errors.description ? 'border-red-500' : ''}
+                />
                 {errors.description && (
                   <p className="text-sm text-red-600 flex items-center gap-1">
                     <AlertCircle className="h-4 w-4" />
@@ -214,6 +220,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger className={errors.assessmentType ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assessment type" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="security">Security Assessment</DaisySelectItem>
                       <DaisySelectItem value="operational">
@@ -247,6 +254,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select framework" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="iso27001">ISO 27001</DaisySelectItem>
                       <DaisySelectItem value="nist">NIST Cybersecurity Framework</DaisySelectItem>
@@ -269,6 +277,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger>
                       <DaisySelectValue placeholder="Select priority" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Low">Low</DaisySelectItem>
                       <DaisySelectItem value="Medium">Medium</DaisySelectItem>
@@ -286,6 +295,7 @@ handleInputChange('description', e.target.value)}
                   >
                     <DaisySelectTrigger className={errors.assignee ? 'border-red-500' : ''}>
                       <DaisySelectValue placeholder="Select assignee" />
+                    </DaisySelectTrigger>
                     <DaisySelectContent>
                       <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
                       <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
@@ -308,9 +318,9 @@ handleInputChange('description', e.target.value)}
                     id="dueDate"
                     type="date"
                     value={formData.dueDate}
-                    onChange={(e) =>
-handleInputChange('dueDate', e.target.value)}
-                    className={errors.dueDate ? 'border-red-500' : ''} />
+                    onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                    className={errors.dueDate ? 'border-red-500' : ''}
+                  />
                   {errors.dueDate && (
                     <p className="text-sm text-red-600 flex items-center gap-1">
                       <AlertCircle className="h-4 w-4" />
@@ -329,8 +339,9 @@ handleInputChange('dueDate', e.target.value)}
                       id="includeThirdParty"
                       checked={formData.includeThirdParty}
                       onCheckedChange={(checked) =>
-handleInputChange('includeThirdParty', checked as boolean)
-                      } />
+                        handleInputChange('includeThirdParty', checked as boolean)
+                      }
+                    />
                     <DaisyLabel htmlFor="includeThirdParty" className="text-sm font-normal">
                       Include third-party vendor assessment
                     </DaisyLabel>
@@ -340,8 +351,9 @@ handleInputChange('includeThirdParty', checked as boolean)
                       id="includeCompliance"
                       checked={formData.includeCompliance}
                       onCheckedChange={(checked) =>
-handleInputChange('includeCompliance', checked as boolean)
-                      } />
+                        handleInputChange('includeCompliance', checked as boolean)
+                      }
+                    />
                     <DaisyLabel htmlFor="includeCompliance" className="text-sm font-normal">
                       Include compliance requirements evaluation
                     </DaisyLabel>
@@ -368,10 +380,10 @@ handleInputChange('includeCompliance', checked as boolean)
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) =>
-handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter assessment objective"
-                    className="flex-1" />
+                    className="flex-1"
+                  />
                   {formData.objectives.length > 1 && (
                     <DaisyButton
                       onClick={() => removeObjective(index)}

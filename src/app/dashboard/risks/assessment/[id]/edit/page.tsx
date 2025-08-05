@@ -2,15 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyInput } from '@/components/ui/DaisyInput';
 import { DaisyTextarea } from '@/components/ui/DaisyTextarea';
 import { DaisyLabel } from '@/components/ui/DaisyLabel';
 import { DaisySelect } from '@/components/ui/DaisySelect';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
-import { DaisyCardTitle, DaisySelectTrigger, DaisySelectContent, DaisySelectItem, DaisySelectValue } from '@/components/ui/daisy-components';
-// import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react';
+import {
+  DaisyCardTitle,
+  DaisySelectTrigger,
+  DaisySelectContent,
+  DaisySelectItem,
+  DaisySelectValue,
+} from '@/components/ui/daisy-components';
+import { ArrowLeft, Save, X, Plus, Trash2, Calendar, Users, Target } from 'lucide-react';
 
 export default function EditAssessmentPage() {
   const router = useRouter();
@@ -32,7 +38,7 @@ export default function EditAssessmentPage() {
       'Recommend improvements and remediation actions',
       'Ensure compliance with security frameworks',
     ],
-  })
+  });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,37 +47,37 @@ export default function EditAssessmentPage() {
       ...prev,
       [field]: value,
     }));
-  }
+  };
 
-  const handleObjectiveChange = (_index: number, value: string) => {
+  const handleObjectiveChange = (index: number, value: string) => {
     const newObjectives = [...formData.objectives];
     newObjectives[index] = value;
     setFormData((prev) => ({
       ...prev,
       objectives: newObjectives,
     }));
-  }
+  };
 
   const addObjective = () => {
     setFormData((prev) => ({
       ...prev,
       objectives: [...prev.objectives, ''],
     }));
-  }
+  };
 
-  const removeObjective = (_index: number) => {
+  const removeObjective = (index: number) => {
     const newObjectives = formData.objectives.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       objectives: newObjectives,
     }));
-  }
+  };
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
       // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       // console.log('Saving assessment:', formData)
       router.push(`/dashboard/risks/assessment/${assessmentId}`);
     } catch (error) {
@@ -79,11 +85,11 @@ export default function EditAssessmentPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleCancel = () => {
     router.back();
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -124,9 +130,9 @@ export default function EditAssessmentPage() {
                   <DaisyInput
                     id="title"
                     value={formData.title}
-                    onChange={(e) =>
-handleInputChange('title', e.target.value)}
-                    placeholder="Enter assessment title" />
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    placeholder="Enter assessment title"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -134,10 +140,10 @@ handleInputChange('title', e.target.value)}
                   <DaisyTextarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) =>
-handleInputChange('description', e.target.value)}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
                     placeholder="Describe the assessment scope and purpose"
-                    rows={4} />
+                    rows={4}
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -149,6 +155,7 @@ handleInputChange('description', e.target.value)}
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select status" />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Pending">Pending</DaisySelectItem>
                         <DaisySelectItem value="In Progress">In Progress</DaisySelectItem>
@@ -166,6 +173,7 @@ handleInputChange('description', e.target.value)}
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select priority" />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Low">Low</DaisySelectItem>
                         <DaisySelectItem value="Medium">Medium</DaisySelectItem>
@@ -185,6 +193,7 @@ handleInputChange('description', e.target.value)}
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select assignee" />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="Security Team">Security Team</DaisySelectItem>
                         <DaisySelectItem value="Risk Team">Risk Team</DaisySelectItem>
@@ -200,8 +209,8 @@ handleInputChange('description', e.target.value)}
                       id="dueDate"
                       type="date"
                       value={formData.dueDate}
-                      onChange={(e) =>
-handleInputChange('dueDate', e.target.value)} />
+                      onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -225,10 +234,10 @@ handleInputChange('dueDate', e.target.value)} />
                   <Target className="h-4 w-4 text-blue-600 flex-shrink-0" />
                   <DaisyInput
                     value={objective}
-                    onChange={(e) =>
-handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
                     placeholder="Enter objective"
-                    className="flex-1" />
+                    className="flex-1"
+                  />
                   {formData.objectives.length > 1 && (
                     <DaisyButton
                       onClick={() => removeObjective(index)}

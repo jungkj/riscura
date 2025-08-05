@@ -7,13 +7,14 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { DaisyProgress } from '@/components/ui/DaisyProgress';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
   DaisyTabsTrigger,
 } from '@/components/ui/DaisyTabs';
-// import {
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
+import {
   ArrowLeft,
   FileCheck,
   AlertTriangle,
@@ -102,7 +103,7 @@ export default function AssessmentDetailPage() {
         type: 'milestone',
       },
     ],
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -115,7 +116,7 @@ export default function AssessmentDetailPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -128,7 +129,7 @@ export default function AssessmentDetailPage() {
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -141,15 +142,15 @@ export default function AssessmentDetailPage() {
       default:
         return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  }
+  };
 
   const handleEdit = () => {
     router.push(`/dashboard/risks/assessment/${assessmentId}/edit`);
-  }
+  };
 
   const handleExport = () => {
     // console.log('Exporting assessment...')
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -244,7 +245,7 @@ export default function AssessmentDetailPage() {
                 <span className="text-sm text-gray-600">{assessment.progress}% Complete</span>
               </div>
               <DaisyProgress value={assessment.progress} className="h-3" />
-</div>
+            </div>
           </DaisyCardBody>
         </DaisyCard>
       )}
@@ -400,7 +401,8 @@ export default function AssessmentDetailPage() {
                 riskSeverity={risk.severity as 'Critical' | 'High' | 'Medium' | 'Low'}
                 onControlsGenerated={(controls, mappings) => {
                   // console.log('Generated controls for risk:', risk.id, controls, mappings)
-                }} />
+                }}
+              />
             ))}
 
             {/* Smart Risk-Control Mapper */}
@@ -419,7 +421,8 @@ export default function AssessmentDetailPage() {
               existingMappings={[]} // Would be populated from existing mappings
               onMappingsUpdate={(mappings) => {
                 // console.log('Updated mappings:', mappings)
-              }} />
+              }}
+            />
           </div>
         </DaisyTabsContent>
 

@@ -6,11 +6,9 @@ import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
-// import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
 // import { NewRiskFlow } from '@/components/risks/NewRiskFlow';
 // import { CreateRiskModal } from '@/components/risks/CreateRiskModal';
 import {
-import { DaisyCardTitle } from '@/components/ui/daisy-components';
   Sparkles,
   Zap,
   MousePointerClick,
@@ -19,6 +17,8 @@ import { DaisyCardTitle } from '@/components/ui/daisy-components';
   ChevronRight,
   Rocket,
 } from 'lucide-react';
+import { DaisyCard, DaisyCardBody } from '@/components/ui/DaisyCard';
+import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
 export default function CreateRiskPage() {
   const router = useRouter();
