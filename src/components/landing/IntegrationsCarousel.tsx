@@ -75,15 +75,15 @@ export function IntegrationsCarousel() {
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
-                <div className="w-24 h-24 flex items-center justify-center p-4 rounded-xl border border-gray-200 bg-white hover:shadow-lg transition-all duration-300">
-                  <div className={`w-full h-full flex items-center justify-center rounded-lg transition-all duration-300 ${
-                    hoveredIndex === index ? 'grayscale-0' : 'grayscale'
+                <div className="w-24 h-24 flex items-center justify-center p-4 transition-all duration-300">
+                  <div className={`w-full h-full flex items-center justify-center transition-all duration-300 ${
+                    hoveredIndex === index ? 'grayscale-0 scale-110' : 'grayscale scale-100'
                   }`}>
                     <Image
                       src={integration.logo}
                       alt={`${integration.name} logo`}
-                      width={48}
-                      height={48}
+                      width={56}
+                      height={56}
                       className="object-contain max-w-full max-h-full"
                     />
                   </div>
