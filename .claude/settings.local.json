@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(NODE_OPTIONS=\"--max-old-space-size=8192\" npx next build)"
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=8192\" npx next build)",
+      "Bash(HUSKY=0 git push origin main --force)"
     ],
     "deny": []
   }
